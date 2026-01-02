@@ -1,4 +1,4 @@
-name: Auto Merge Claude Branches
+name: Auto Merge and Deploy
 
 on:
   push:
@@ -38,3 +38,44 @@ jobs:
 
           # Пушим изменения в main
           git push origin main
+
+  deploy:
+    needs: auto-merge
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: mbstring, xml, ctype, json, bcmath
+
+      - name: Install Composer Dependencies
+        run: composer install --no-dev --optimize-autoloader --no-interaction
+
+      - name: Deploy to Timeweb via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./
+          server-dir: /home/c/cw95865/OGE/public_html/
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.github/**
+            **/.vscode/**
+            **/.idea/**
+            **/tests/**
+            **/phpunit.xml
+            **/*.md
+            **/.DS_Store
+            **/docs/oge_project_package.zip
