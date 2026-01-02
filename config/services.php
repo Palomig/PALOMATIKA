@@ -31,4 +31,34 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | OAuth Providers
+    |--------------------------------------------------------------------------
+    */
+
+    'vkontakte' => [
+        'client_id' => env('VK_CLIENT_ID'),
+        'client_secret' => env('VK_CLIENT_SECRET'),
+        'redirect' => env('VK_REDIRECT_URI'),
+    ],
+
+    'telegram' => [
+        'bot_token' => env('TELEGRAM_BOT_TOKEN'),
+        'bot_username' => env('TELEGRAM_BOT_USERNAME'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Robokassa Payment
+    |--------------------------------------------------------------------------
+    */
+
+    'robokassa' => [
+        'merchant_login' => env('ROBOKASSA_MERCHANT_LOGIN'),
+        'password_1' => env('ROBOKASSA_PASSWORD_1'),
+        'password_2' => env('ROBOKASSA_PASSWORD_2'),
+        'test_mode' => env('ROBOKASSA_TEST_MODE', false),
+    ],
+
 ];
