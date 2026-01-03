@@ -45,6 +45,31 @@ Route::middleware(['auth'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
+    // Student pages
+    Route::get('/topics', function () {
+        return view('student.topics');
+    })->name('topics');
+
+    Route::get('/topics/{id}', function ($id) {
+        return view('student.topics', ['topicId' => $id]);
+    })->name('topics.show');
+
+    Route::get('/practice', function () {
+        return view('student.practice');
+    })->name('practice');
+
+    Route::get('/leaderboard', function () {
+        return view('student.leaderboard');
+    })->name('leaderboard');
+
+    Route::get('/badges', function () {
+        return view('student.badges');
+    })->name('badges');
+
+    Route::get('/duels', function () {
+        return view('student.duels');
+    })->name('duels');
+
     // Logout
     Route::post('/logout', function () {
         auth()->logout();
