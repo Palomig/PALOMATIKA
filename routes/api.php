@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\OAuthController;
 use App\Http\Controllers\Api\BadgeController;
 use App\Http\Controllers\Api\DuelController;
 use App\Http\Controllers\Api\HomeworkController;
@@ -20,6 +21,11 @@ use Illuminate\Support\Facades\Route;
 // Public routes
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/register', [AuthController::class, 'register']);
+
+// OAuth
+Route::get('/oauth/{provider}/redirect', [OAuthController::class, 'redirect']);
+Route::post('/oauth/{provider}/callback', [OAuthController::class, 'callback']);
+Route::post('/referral/track', [OAuthController::class, 'trackReferral']);
 
 Route::get('/topics', [TopicController::class, 'index']);
 Route::get('/topics/{topic}', [TopicController::class, 'show']);
