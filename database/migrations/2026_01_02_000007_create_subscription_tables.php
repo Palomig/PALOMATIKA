@@ -25,8 +25,8 @@ return new class extends Migration
             $table->foreignId('referred_by_user_id')->nullable()->constrained('users')->nullOnDelete();
 
             // Даты
-            $table->timestamp('starts_at');
-            $table->timestamp('ends_at');
+            $table->dateTime('starts_at');
+            $table->dateTime('ends_at');
 
             // Статус
             $table->enum('status', ['active', 'cancelled', 'expired'])->default('active');
