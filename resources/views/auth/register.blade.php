@@ -113,19 +113,34 @@
     </div>
 
     <!-- Social login buttons -->
-    <div class="grid grid-cols-2 gap-4">
-        <a href="{{ route('auth.social.redirect', 'vkontakte') }}" class="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
+    <div class="space-y-3">
+        <!-- VK Button -->
+        <a href="{{ route('auth.social.redirect', 'vkontakte') }}" class="flex items-center justify-center w-full px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
             <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="#4C75A3">
                 <path d="M12.785 16.241s.288-.032.436-.194c.136-.148.132-.427.132-.427s-.02-1.304.587-1.496c.596-.19 1.362 1.259 2.175 1.815.615.42 1.082.328 1.082.328l2.175-.03s1.137-.07.598-.964c-.044-.073-.314-.661-1.618-1.869-1.366-1.263-1.182-1.059.462-3.245.999-1.33 1.399-2.141 1.274-2.489-.12-.332-.858-.244-.858-.244l-2.451.015s-.181-.025-.316.056c-.131.08-.216.265-.216.265s-.387 1.028-.902 1.902c-1.087 1.848-1.522 1.946-1.7 1.832-.415-.267-.311-1.073-.311-1.645 0-1.789.272-2.535-.53-2.729-.266-.064-.462-.107-1.144-.114-.874-.008-1.615.002-2.035.208-.279.137-.494.442-.363.459.163.022.53.099.726.364.253.343.244 1.113.244 1.113s.146 2.106-.339 2.368c-.333.18-.789-.188-1.769-1.868-.502-.86-.88-1.811-.88-1.811s-.072-.177-.202-.272c-.157-.114-.377-.151-.377-.151l-2.328.015s-.35.01-.478.161c-.114.134-.009.412-.009.412s1.82 4.258 3.882 6.401c1.888 1.964 4.032 1.835 4.032 1.835h.973z"/>
             </svg>
-            <span class="text-gray-700 font-medium">ВКонтакте</span>
+            <span class="text-gray-700 font-medium">Регистрация через ВКонтакте</span>
         </a>
-        <a href="{{ route('auth.social.redirect', 'telegram') }}" class="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
-            <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="#0088CC">
+
+        <!-- Telegram Widget -->
+        @if(config('services.telegram.bot_username'))
+        <div class="flex justify-center">
+            <script async src="https://telegram.org/js/telegram-widget.js?22"
+                    data-telegram-login="{{ config('services.telegram.bot_username') }}"
+                    data-size="large"
+                    data-radius="8"
+                    data-auth-url="{{ route('auth.telegram.callback') }}"
+                    data-request-access="write">
+            </script>
+        </div>
+        @else
+        <div class="flex items-center justify-center w-full px-4 py-3 border border-gray-200 rounded-lg bg-gray-50 text-gray-400">
+            <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
             </svg>
-            <span class="text-gray-700 font-medium">Telegram</span>
-        </a>
+            <span class="text-sm">Telegram (не настроен)</span>
+        </div>
+        @endif
     </div>
 
     <!-- Login link -->
