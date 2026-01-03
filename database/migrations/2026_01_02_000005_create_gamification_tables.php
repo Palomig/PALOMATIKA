@@ -147,8 +147,8 @@ return new class extends Migration
             $table->enum('challenge_type', ['class_vs_class', 'school_vs_school', 'marathon']);
 
             // Период
-            $table->timestamp('starts_at');
-            $table->timestamp('ends_at');
+            $table->dateTime('starts_at');
+            $table->dateTime('ends_at');
 
             // Настройки
             $table->foreignId('topic_id')->nullable()->constrained()->nullOnDelete();
