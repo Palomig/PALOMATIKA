@@ -45,11 +45,11 @@ class TaskSeeder extends Seeder
             ]);
 
             StepBlock::insert([
-                ['task_step_id' => $step1->id, 'content' => '1', 'is_correct' => true, 'is_trap' => false, 'sort_order' => 0],
-                ['task_step_id' => $step1->id, 'content' => '-5', 'is_correct' => true, 'is_trap' => false, 'sort_order' => 1],
-                ['task_step_id' => $step1->id, 'content' => '6', 'is_correct' => true, 'is_trap' => false, 'sort_order' => 2],
+                ['task_step_id' => $step1->id, 'content' => '1', 'is_correct' => true, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 0],
+                ['task_step_id' => $step1->id, 'content' => '-5', 'is_correct' => true, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 1],
+                ['task_step_id' => $step1->id, 'content' => '6', 'is_correct' => true, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 2],
                 ['task_step_id' => $step1->id, 'content' => '5', 'is_correct' => false, 'is_trap' => true, 'trap_explanation' => 'Знак b отрицательный!', 'sort_order' => 3],
-                ['task_step_id' => $step1->id, 'content' => '-6', 'is_correct' => false, 'is_trap' => true, 'sort_order' => 4],
+                ['task_step_id' => $step1->id, 'content' => '-6', 'is_correct' => false, 'is_trap' => true, 'trap_explanation' => null, 'sort_order' => 4],
             ]);
 
             $step2 = TaskStep::create([
@@ -61,11 +61,11 @@ class TaskSeeder extends Seeder
             ]);
 
             StepBlock::insert([
-                ['task_step_id' => $step2->id, 'content' => '25', 'is_correct' => true, 'is_trap' => false, 'sort_order' => 0],
-                ['task_step_id' => $step2->id, 'content' => '24', 'is_correct' => true, 'is_trap' => false, 'sort_order' => 1],
-                ['task_step_id' => $step2->id, 'content' => '1', 'is_correct' => true, 'is_trap' => false, 'sort_order' => 2],
-                ['task_step_id' => $step2->id, 'content' => '-25', 'is_correct' => false, 'is_trap' => true, 'sort_order' => 3],
-                ['task_step_id' => $step2->id, 'content' => '49', 'is_correct' => false, 'is_trap' => false, 'sort_order' => 4],
+                ['task_step_id' => $step2->id, 'content' => '25', 'is_correct' => true, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 0],
+                ['task_step_id' => $step2->id, 'content' => '24', 'is_correct' => true, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 1],
+                ['task_step_id' => $step2->id, 'content' => '1', 'is_correct' => true, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 2],
+                ['task_step_id' => $step2->id, 'content' => '-25', 'is_correct' => false, 'is_trap' => true, 'trap_explanation' => null, 'sort_order' => 3],
+                ['task_step_id' => $step2->id, 'content' => '49', 'is_correct' => false, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 4],
             ]);
 
             $step3 = TaskStep::create([
@@ -77,10 +77,10 @@ class TaskSeeder extends Seeder
             ]);
 
             StepBlock::insert([
-                ['task_step_id' => $step3->id, 'content' => '3', 'is_correct' => true, 'is_trap' => false, 'sort_order' => 0],
-                ['task_step_id' => $step3->id, 'content' => '2', 'is_correct' => true, 'is_trap' => false, 'sort_order' => 1],
-                ['task_step_id' => $step3->id, 'content' => '4', 'is_correct' => false, 'is_trap' => false, 'sort_order' => 2],
-                ['task_step_id' => $step3->id, 'content' => '6', 'is_correct' => false, 'is_trap' => false, 'sort_order' => 3],
+                ['task_step_id' => $step3->id, 'content' => '3', 'is_correct' => true, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 0],
+                ['task_step_id' => $step3->id, 'content' => '2', 'is_correct' => true, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 1],
+                ['task_step_id' => $step3->id, 'content' => '4', 'is_correct' => false, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 2],
+                ['task_step_id' => $step3->id, 'content' => '6', 'is_correct' => false, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 3],
             ]);
 
             // Attach skills
@@ -109,10 +109,10 @@ class TaskSeeder extends Seeder
             ]);
 
             StepBlock::insert([
-                ['task_step_id' => $step1->id, 'content' => 'a²', 'is_correct' => true, 'is_trap' => false, 'sort_order' => 0],
-                ['task_step_id' => $step1->id, 'content' => 'b²', 'is_correct' => true, 'is_trap' => false, 'sort_order' => 1],
+                ['task_step_id' => $step1->id, 'content' => 'a²', 'is_correct' => true, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 0],
+                ['task_step_id' => $step1->id, 'content' => 'b²', 'is_correct' => true, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 1],
                 ['task_step_id' => $step1->id, 'content' => 'a + b', 'is_correct' => false, 'is_trap' => true, 'trap_explanation' => 'Нужны квадраты катетов!', 'sort_order' => 2],
-                ['task_step_id' => $step1->id, 'content' => '2ab', 'is_correct' => false, 'is_trap' => false, 'sort_order' => 3],
+                ['task_step_id' => $step1->id, 'content' => '2ab', 'is_correct' => false, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 3],
             ]);
 
             $step2 = TaskStep::create([
@@ -124,9 +124,9 @@ class TaskSeeder extends Seeder
             ]);
 
             StepBlock::insert([
-                ['task_step_id' => $step2->id, 'content' => '9', 'is_correct' => true, 'is_trap' => false, 'sort_order' => 0],
-                ['task_step_id' => $step2->id, 'content' => '16', 'is_correct' => true, 'is_trap' => false, 'sort_order' => 1],
-                ['task_step_id' => $step2->id, 'content' => '25', 'is_correct' => true, 'is_trap' => false, 'sort_order' => 2],
+                ['task_step_id' => $step2->id, 'content' => '9', 'is_correct' => true, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 0],
+                ['task_step_id' => $step2->id, 'content' => '16', 'is_correct' => true, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 1],
+                ['task_step_id' => $step2->id, 'content' => '25', 'is_correct' => true, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 2],
                 ['task_step_id' => $step2->id, 'content' => '12', 'is_correct' => false, 'is_trap' => true, 'trap_explanation' => '3² = 9, не 3×4', 'sort_order' => 3],
                 ['task_step_id' => $step2->id, 'content' => '7', 'is_correct' => false, 'is_trap' => true, 'trap_explanation' => 'Это сумма катетов, нужны квадраты', 'sort_order' => 4],
             ]);
@@ -140,9 +140,9 @@ class TaskSeeder extends Seeder
             ]);
 
             StepBlock::insert([
-                ['task_step_id' => $step3->id, 'content' => '5', 'is_correct' => true, 'is_trap' => false, 'sort_order' => 0],
+                ['task_step_id' => $step3->id, 'content' => '5', 'is_correct' => true, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 0],
                 ['task_step_id' => $step3->id, 'content' => '25', 'is_correct' => false, 'is_trap' => true, 'trap_explanation' => 'Забыли извлечь корень!', 'sort_order' => 1],
-                ['task_step_id' => $step3->id, 'content' => '12.5', 'is_correct' => false, 'is_trap' => false, 'sort_order' => 2],
+                ['task_step_id' => $step3->id, 'content' => '12.5', 'is_correct' => false, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 2],
             ]);
 
             if ($skillPythagoras) {
@@ -170,9 +170,9 @@ class TaskSeeder extends Seeder
             ]);
 
             StepBlock::insert([
-                ['task_step_id' => $step1->id, 'content' => '12', 'is_correct' => true, 'is_trap' => false, 'sort_order' => 0],
+                ['task_step_id' => $step1->id, 'content' => '12', 'is_correct' => true, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 0],
                 ['task_step_id' => $step1->id, 'content' => '7', 'is_correct' => false, 'is_trap' => true, 'trap_explanation' => '7 = 3+4, но нам нужен НОК', 'sort_order' => 1],
-                ['task_step_id' => $step1->id, 'content' => '24', 'is_correct' => false, 'is_trap' => false, 'sort_order' => 2],
+                ['task_step_id' => $step1->id, 'content' => '24', 'is_correct' => false, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 2],
             ]);
 
             $step2 = TaskStep::create([
@@ -184,10 +184,10 @@ class TaskSeeder extends Seeder
             ]);
 
             StepBlock::insert([
-                ['task_step_id' => $step2->id, 'content' => '8', 'is_correct' => true, 'is_trap' => false, 'sort_order' => 0],
-                ['task_step_id' => $step2->id, 'content' => '3', 'is_correct' => true, 'is_trap' => false, 'sort_order' => 1],
-                ['task_step_id' => $step2->id, 'content' => '6', 'is_correct' => false, 'is_trap' => false, 'sort_order' => 2],
-                ['task_step_id' => $step2->id, 'content' => '4', 'is_correct' => false, 'is_trap' => false, 'sort_order' => 3],
+                ['task_step_id' => $step2->id, 'content' => '8', 'is_correct' => true, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 0],
+                ['task_step_id' => $step2->id, 'content' => '3', 'is_correct' => true, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 1],
+                ['task_step_id' => $step2->id, 'content' => '6', 'is_correct' => false, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 2],
+                ['task_step_id' => $step2->id, 'content' => '4', 'is_correct' => false, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 3],
             ]);
 
             $step3 = TaskStep::create([
@@ -199,7 +199,7 @@ class TaskSeeder extends Seeder
             ]);
 
             StepBlock::insert([
-                ['task_step_id' => $step3->id, 'content' => '11', 'is_correct' => true, 'is_trap' => false, 'sort_order' => 0],
+                ['task_step_id' => $step3->id, 'content' => '11', 'is_correct' => true, 'is_trap' => false, 'trap_explanation' => null, 'sort_order' => 0],
                 ['task_step_id' => $step3->id, 'content' => '24', 'is_correct' => false, 'is_trap' => true, 'trap_explanation' => 'Знаменатели не складываются!', 'sort_order' => 1],
             ]);
 
