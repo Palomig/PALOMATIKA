@@ -14,6 +14,17 @@ Route::get('/', function () {
     return view('welcome');
 })->name('landing');
 
+// Auth pages (guest only)
+Route::middleware('guest')->group(function () {
+    Route::get('/login', function () {
+        return view('auth.login');
+    })->name('login');
+
+    Route::get('/register', function () {
+        return view('auth.register');
+    })->name('register');
+});
+
 // OAuth
 Route::get('/auth/{provider}', [SocialAuthController::class, 'redirect'])
     ->name('auth.social.redirect');
