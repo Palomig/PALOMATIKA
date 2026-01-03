@@ -70,6 +70,37 @@ Route::middleware(['auth'])->group(function () {
         return view('student.duels');
     })->name('duels');
 
+    // Teacher pages
+    Route::prefix('teacher')->name('teacher.')->group(function () {
+        Route::get('/', function () {
+            return view('teacher.dashboard');
+        })->name('dashboard');
+
+        Route::get('/students', function () {
+            return view('teacher.students');
+        })->name('students');
+
+        Route::get('/students/{id}', function ($id) {
+            return view('teacher.students', ['studentId' => $id]);
+        })->name('students.show');
+
+        Route::get('/homework', function () {
+            return view('teacher.homework');
+        })->name('homework');
+
+        Route::get('/homework/create', function () {
+            return view('teacher.homework');
+        })->name('homework.create');
+
+        Route::get('/analytics', function () {
+            return view('teacher.analytics');
+        })->name('analytics');
+
+        Route::get('/earnings', function () {
+            return view('teacher.earnings');
+        })->name('earnings');
+    });
+
     // Logout
     Route::post('/logout', function () {
         auth()->logout();
