@@ -89,6 +89,46 @@ class User extends Authenticatable
         return $this->hasMany(Subscription::class);
     }
 
+    public function homeworks(): HasMany
+    {
+        return $this->hasMany(Homework::class, 'teacher_id');
+    }
+
+    public function homeworkAssignments(): HasMany
+    {
+        return $this->hasMany(HomeworkAssignment::class, 'student_id');
+    }
+
+    public function leagueParticipations(): HasMany
+    {
+        return $this->hasMany(LeagueParticipant::class);
+    }
+
+    public function challengerDuels(): HasMany
+    {
+        return $this->hasMany(Duel::class, 'challenger_id');
+    }
+
+    public function opponentDuels(): HasMany
+    {
+        return $this->hasMany(Duel::class, 'opponent_id');
+    }
+
+    public function students(): HasMany
+    {
+        return $this->hasMany(TeacherStudent::class, 'teacher_id');
+    }
+
+    public function teachers(): HasMany
+    {
+        return $this->hasMany(TeacherStudent::class, 'student_id');
+    }
+
+    public function dailyStats(): HasMany
+    {
+        return $this->hasMany(UserDailyStat::class);
+    }
+
     // Helpers
 
     public function isStudent(): bool
