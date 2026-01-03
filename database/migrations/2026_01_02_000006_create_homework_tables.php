@@ -32,7 +32,7 @@ return new class extends Migration
         // Конкретные задачи ДЗ (если specific_tasks)
         Schema::create('homework_tasks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('homework_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('homework_id')->constrained('homeworks')->cascadeOnDelete();
             $table->foreignId('task_id')->constrained()->cascadeOnDelete();
             $table->integer('task_order')->default(0);
         });
@@ -40,7 +40,7 @@ return new class extends Migration
         // Назначение ДЗ ученикам
         Schema::create('homework_assignments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('homework_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('homework_id')->constrained('homeworks')->cascadeOnDelete();
             $table->foreignId('student_id')->constrained('users')->cascadeOnDelete();
 
             // Прогресс
