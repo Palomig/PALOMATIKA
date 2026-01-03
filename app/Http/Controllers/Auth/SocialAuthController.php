@@ -56,17 +56,26 @@ class SocialAuthController extends Controller
      */
     public function telegramCallback(Request $request)
     {
+        \Log::info('Telegram callback received', $request->all());
+
         $authData = $request->only([
             'id', 'first_name', 'last_name', 'username',
             'photo_url', 'auth_date', 'hash'
         ]);
 
+        \Log::info('Telegram auth data', $authData);
+
         if (!$this->verifyTelegramAuth($authData)) {
+            \Log::error('Telegram auth verification failed');
             return redirect()->route('login')
                 ->with('error', 'Ошибка авторизации Telegram.');
         }
 
+        \Log::info('Telegram auth verified successfully');
+
         $user = $this->findOrCreateTelegramUser($authData);
+
+        \Log::info('User found/created', ['user_id' => $user->id]);
 
         Auth::login($user, true);
 

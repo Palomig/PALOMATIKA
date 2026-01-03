@@ -25,13 +25,14 @@ Route::middleware('guest')->group(function () {
     })->name('register');
 });
 
-// OAuth
+// OAuth - Telegram callback MUST be before generic {provider} routes
+Route::get('/auth/telegram/callback', [SocialAuthController::class, 'telegramCallback'])
+    ->name('auth.telegram.callback');
+
 Route::get('/auth/{provider}', [SocialAuthController::class, 'redirect'])
     ->name('auth.social.redirect');
 Route::get('/auth/{provider}/callback', [SocialAuthController::class, 'callback'])
     ->name('auth.social.callback');
-Route::get('/auth/telegram/callback', [SocialAuthController::class, 'telegramCallback'])
-    ->name('auth.telegram.callback');
 
 // Referral tracking
 Route::get('/ref/{code}', function ($code) {
