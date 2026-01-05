@@ -11,6 +11,10 @@
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
             onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
 
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
     <style>
         * {
             margin: 0;
@@ -19,73 +23,83 @@
         }
 
         body {
-            font-family: 'Times New Roman', Times, serif;
-            font-size: 14px;
-            line-height: 1.5;
-            padding: 30px 50px;
-            max-width: 850px;
+            font-family: 'PT Serif', Georgia, 'Times New Roman', serif;
+            font-size: 18px;
+            line-height: 1.6;
+            padding: 40px 60px;
+            max-width: 1000px;
             margin: 0 auto;
-            background: #fff;
-            color: #000;
+            background: #fefefe;
+            color: #1a1a1a;
         }
 
         .page {
-            margin-bottom: 40px;
+            margin-bottom: 60px;
+            padding-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
         }
 
         .header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 15px;
-            font-size: 11px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #666;
             font-style: italic;
         }
 
         .title {
             text-align: center;
-            font-weight: bold;
-            font-size: 15px;
-            margin-bottom: 3px;
+            font-weight: 700;
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: #2c3e50;
         }
 
         .subtitle {
             text-align: center;
-            font-weight: bold;
-            font-size: 13px;
-            margin-bottom: 20px;
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #34495e;
         }
 
         .zadanie {
-            margin-bottom: 20px;
+            margin-bottom: 35px;
         }
 
         .zadanie-header {
-            font-weight: bold;
-            margin-bottom: 5px;
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #2c3e50;
         }
 
-        .zadanie-instruction {
-            margin-bottom: 10px;
+        .zadanie-header span {
+            font-weight: 400;
         }
 
         /* Grid for fraction tasks - 4 columns */
         .tasks-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 5px 10px;
-            margin-bottom: 10px;
+            gap: 12px 20px;
+            margin-bottom: 15px;
         }
 
         .task-item {
             display: flex;
-            align-items: baseline;
-            font-size: 13px;
-            line-height: 1.8;
+            align-items: center;
+            font-size: 18px;
+            line-height: 2;
+            padding: 4px 0;
         }
 
         .task-number {
-            min-width: 22px;
+            min-width: 30px;
             flex-shrink: 0;
+            font-weight: 500;
+            color: #555;
         }
 
         .task-expression {
@@ -94,40 +108,68 @@
 
         /* Zadanie 3 - paragraph style */
         .zadanie-paragraph {
-            margin-bottom: 8px;
-            text-indent: 0;
+            margin-bottom: 15px;
         }
 
         .zadanie-paragraph p {
-            margin-bottom: 5px;
+            margin-bottom: 12px;
+            font-size: 17px;
+            line-height: 1.8;
         }
 
-        /* Make KaTeX slightly smaller to fit */
+        /* KaTeX font size */
         .katex {
-            font-size: 1em !important;
+            font-size: 1.1em !important;
         }
 
         /* Info box */
         .info-box {
-            margin-top: 30px;
-            padding: 15px;
-            background: #f0f8ff;
-            border: 1px solid #4a90d9;
-            border-radius: 5px;
-            font-family: Arial, sans-serif;
-            font-size: 12px;
+            margin-top: 40px;
+            padding: 20px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 14px;
         }
 
         .info-box h4 {
-            color: #2563eb;
-            margin-bottom: 10px;
+            color: #495057;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .info-box p {
+            margin-bottom: 8px;
+            color: #6c757d;
         }
 
         .info-box code {
-            background: #e5e7eb;
-            padding: 2px 5px;
-            border-radius: 3px;
-            font-size: 11px;
+            background: #e9ecef;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #495057;
+        }
+
+        .info-box ul {
+            margin-left: 20px;
+            margin-top: 8px;
+            color: #6c757d;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            body {
+                padding: 20px;
+                font-size: 16px;
+            }
+            .tasks-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .title {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
@@ -147,17 +189,17 @@
 
     @foreach($block['zadaniya'] as $zadanie)
         <div class="zadanie">
-            <p class="zadanie-header">Задание {{ $zadanie['number'] }}. <span style="font-weight: normal">{{ $zadanie['instruction'] }}</span></p>
+            <p class="zadanie-header">Задание {{ $zadanie['number'] }}. <span>{{ $zadanie['instruction'] }}</span></p>
 
-            @if($zadanie['number'] == 3)
-                {{-- Zadanie 3 - Special paragraph format --}}
+            @if(isset($zadanie['tasks'][0]['denominator']))
+                {{-- Zadanie with denominator - paragraph format --}}
                 <div class="zadanie-paragraph">
                     @foreach($zadanie['tasks'] as $task)
                         <p><strong>{{ $task['id'] }})</strong> Представьте выражение ${{ $task['expression'] }}$ в виде дроби со знаменателем {{ $task['denominator'] }}. В ответ запишите числитель полученной дроби.</p>
                     @endforeach
                 </div>
             @else
-                {{-- Zadanie 1 & 2 - Grid layout --}}
+                {{-- Grid layout --}}
                 <div class="tasks-grid">
                     @foreach($zadanie['tasks'] as $task)
                         <div class="task-item">
@@ -179,12 +221,10 @@
     <p><strong>PDF файл:</strong> <code>storage/app/pdf/task_06.pdf</code></p>
     <p><strong>Парсер:</strong> <code>app/Services/PdfTaskParser.php</code></p>
     <p><strong>Структура данных:</strong></p>
-    <ul style="margin-left: 20px; margin-top: 5px;">
+    <ul>
         <li>Блок → Задание → Задачи</li>
         <li>Каждая задача: id, expression (LaTeX), answer, [denominator]</li>
     </ul>
-    <p style="margin-top: 10px;"><strong>Git команда для извлечения PDF:</strong></p>
-    <code style="display: block; margin-top: 5px; padding: 8px; background: #e5e7eb;">git show "b8c1426:РиР_ ОГЭ (тренажер)/ОГЭ 2026 Задание №06 (трен) v2.pdf" > storage/app/pdf/task_06.pdf</code>
 </div>
 
 </body>
