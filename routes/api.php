@@ -44,6 +44,10 @@ Route::get('/badges', [BadgeController::class, 'index']);
 Route::get('/leaderboard/all-time', [LeaderboardController::class, 'allTime']);
 Route::get('/leaderboard/leagues', [LeaderboardController::class, 'leagues']);
 
+// Tasks (public for practice, auth optional for tracking)
+Route::get('/tasks/next', [TaskController::class, 'getNext']);
+Route::get('/tasks/{task}', [TaskController::class, 'show']);
+
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
     // Auth
@@ -54,9 +58,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Topics progress
     Route::get('/topics/{topic}/progress', [TopicController::class, 'progress']);
 
-    // Tasks
-    Route::get('/tasks/next', [TaskController::class, 'getNext']);
-    Route::get('/tasks/{task}', [TaskController::class, 'show']);
+    // Tasks (protected actions)
     Route::post('/tasks/{task}/start', [TaskController::class, 'startAttempt']);
     Route::post('/attempts/{attempt}/submit', [TaskController::class, 'submitAttempt']);
 
