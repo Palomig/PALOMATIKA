@@ -141,19 +141,313 @@ class GenerateOgeTasks extends Command
 
     /**
      * Task 06: Fractions and powers
-     * Найдите значение выражения: a/b · c/d или a/b : c/d
+     * Multiple complexity levels
      */
     private function generateTask06(): array
     {
-        $type = rand(0, 2); // 0 = multiply, 1 = divide, 2 = add/subtract
+        $type = rand(0, 5);
 
-        if ($type === 0) {
-            return $this->generateFractionMultiply();
-        } elseif ($type === 1) {
-            return $this->generateFractionDivide();
-        } else {
-            return $this->generateFractionAddSubtract();
+        return match ($type) {
+            0 => $this->generateFractionMultiply(),
+            1 => $this->generateFractionDivide(),
+            2 => $this->generateFractionAddSubtract(),
+            3 => $this->generateBracketExpression(),      // (a/b ± c/d) · e/f
+            4 => $this->generateMixedNumberExpression(),  // (m n/p ± k) · q
+            5 => $this->generateComplexBracket(),         // (a/b ± c/d) · e/f with harder numbers
+            default => $this->generateFractionMultiply(),
+        };
+    }
+
+    /**
+     * (a/b ± c/d) · e/f - bracket expressions
+     */
+    private function generateBracketExpression(): array
+    {
+        // Pick numbers that work nicely
+        // We want (a/b + c/d) * e/f where the bracket simplifies nicely
+
+        // Common denominator approach
+        $commonDen = [10, 12, 15, 20, 24, 30][rand(0, 5)];
+
+        $b = [2, 4, 5, 10, 20][rand(0, 4)];
+        while ($commonDen % $b !== 0) {
+            $b = [2, 4, 5, 10][rand(0, 3)];
         }
+
+        $d = [2, 4, 5, 10, 20][rand(0, 4)];
+        while ($commonDen % $d !== 0 || $d === $b) {
+            $d = [2, 4, 5, 10][rand(0, 3)];
+        }
+
+        $a = rand(1, $b * 2);
+        $c = rand(1, $d * 2);
+
+        $isAdd = rand(0, 1) === 1;
+
+        // Calculate bracket result
+        $mult1 = $commonDen / $b;
+        $mult2 = $commonDen / $d;
+        $bracketNum = $isAdd ? ($a * $mult1 + $c * $mult2) : ($a * $mult1 - $c * $mult2);
+
+        // Make sure positive
+        if ($bracketNum <= 0) {
+            [$a, $b, $c, $d] = [$c, $d, $a, $b];
+            $bracketNum = abs($bracketNum);
+            if ($bracketNum === 0) $bracketNum = rand(1, 10);
+        }
+
+        // Pick multiplier that simplifies with commonDen
+        $gcdBracket = $this->gcd($bracketNum, $commonDen);
+        $bracketSimplifiedNum = $bracketNum / $gcdBracket;
+        $bracketSimplifiedDen = $commonDen / $gcdBracket;
+
+        // Multiplier fraction
+        $f = $bracketSimplifiedDen; // This will cancel nicely
+        $e = rand(1, 5);
+
+        $finalNum = $bracketSimplifiedNum * $e;
+        $finalDen = 1; // f cancels with bracketSimplifiedDen
+
+        // Simplify final
+        if ($finalDen === 1) {
+            $answer = (string) $finalNum;
+        } else {
+            $gcd = $this->gcd($finalNum, $finalDen);
+            $answer = ($finalDen / $gcd === 1)
+                ? (string) ($finalNum / $gcd)
+                : ($finalNum / $gcd) . '/' . ($finalDen / $gcd);
+        }
+
+        $op = $isAdd ? '+' : '-';
+        $expressionText = "({$a}/{$b} {$op} {$c}/{$d}) · {$e}/{$f}";
+
+        return [
+            'text' => "Найдите значение выражения: {$expressionText}",
+            'text_html' => "Найдите значение выражения: <span class=\"math\">\\left(\\frac{{$a}}{{$b}} {$op} \\frac{{$c}}{{$d}}\\right) \\cdot \\frac{{$e}}{{$f}}</span>",
+            'answer' => $answer,
+            'answer_type' => 'number',
+            'difficulty' => 3,
+            'steps' => [
+                [
+                    'instruction' => 'Вычислите выражение в скобках (приведите к общему знаменателю)',
+                    'template' => "\\frac{{$a}}{{$b}} {$op} \\frac{{$c}}{{$d}} = \\frac{[___]}{[___]}",
+                    'correct_answers' => [(string) $bracketNum, (string) $commonDen],
+                    'blocks' => $this->shuffleBlocks([
+                        ['content' => (string) $bracketNum, 'is_correct' => true],
+                        ['content' => (string) $commonDen, 'is_correct' => true],
+                        ['content' => (string) ($bracketNum + rand(1, 5)), 'is_trap' => true],
+                        ['content' => (string) ($commonDen * 2), 'is_trap' => true, 'trap_explanation' => 'Знаменатель удвоился — проверьте приведение'],
+                        ['content' => (string) abs($a * $mult1 - $c * $mult2 + rand(1, 3)), 'is_trap' => true],
+                    ]),
+                ],
+                [
+                    'instruction' => 'Умножьте на дробь',
+                    'template' => "\\frac{{$bracketNum}}{{$commonDen}} \\cdot \\frac{{$e}}{{$f}} = [___]",
+                    'correct_answers' => [$answer],
+                    'blocks' => $this->shuffleBlocks([
+                        ['content' => $answer, 'is_correct' => true],
+                        ['content' => (string) ($finalNum + 1), 'is_trap' => true],
+                        ['content' => (string) max(1, $finalNum - 1), 'is_trap' => true],
+                        ['content' => (string) ($e + $f), 'is_trap' => true],
+                    ]),
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Mixed number expressions: (9/16 + 2 3/8) · 4
+     */
+    private function generateMixedNumberExpression(): array
+    {
+        // Generate a mixed number m n/p
+        $whole = rand(1, 5);           // Whole part: 1-5
+        $p = [2, 3, 4, 5, 6, 8][rand(0, 5)];  // Denominator
+        $n = rand(1, $p - 1);          // Numerator < denominator
+
+        // Convert to improper fraction: (whole * p + n) / p
+        $mixedNum = $whole * $p + $n;
+        $mixedDen = $p;
+
+        // First fraction a/b with same or related denominator
+        $b = $p * rand(1, 2);
+        $a = rand(1, $b - 1);
+
+        $isAdd = rand(0, 1) === 1;
+
+        // Common denominator
+        $commonDen = $this->lcm($b, $mixedDen);
+        $mult1 = $commonDen / $b;
+        $mult2 = $commonDen / $mixedDen;
+
+        $num1 = $a * $mult1;
+        $num2 = $mixedNum * $mult2;
+
+        $bracketNum = $isAdd ? ($num1 + $num2) : abs($num1 - $num2);
+        if (!$isAdd && $num1 < $num2) {
+            // Swap so we get positive result
+            $bracketNum = $num2 - $num1;
+        }
+
+        // Multiplier (often whole number for cleaner answer)
+        $multiplier = rand(2, 6);
+
+        // Choose multiplier that simplifies nicely
+        $gcd = $this->gcd($bracketNum, $commonDen);
+        $simplifiedNum = $bracketNum / $gcd;
+        $simplifiedDen = $commonDen / $gcd;
+
+        // Final answer
+        $finalNum = $simplifiedNum * $multiplier;
+        $finalDen = $simplifiedDen;
+
+        $gcdFinal = $this->gcd($finalNum, $finalDen);
+        $finalNum = $finalNum / $gcdFinal;
+        $finalDen = $finalDen / $gcdFinal;
+
+        if ($finalDen === 1) {
+            $answer = (string) $finalNum;
+        } else {
+            $answer = "{$finalNum}/{$finalDen}";
+        }
+
+        $op = $isAdd ? '+' : '-';
+        $mixedStr = "{$whole} {$n}/{$p}";  // e.g., "2 3/8"
+        $expressionText = "({$a}/{$b} {$op} {$mixedStr}) · {$multiplier}";
+
+        return [
+            'text' => "Найдите значение выражения: {$expressionText}",
+            'text_html' => "Найдите значение выражения: <span class=\"math\">\\left(\\frac{{$a}}{{$b}} {$op} {$whole}\\frac{{$n}}{{$p}}\\right) \\cdot {$multiplier}</span>",
+            'answer' => $answer,
+            'answer_type' => 'number',
+            'difficulty' => 3,
+            'steps' => [
+                [
+                    'instruction' => "Переведите смешанное число {$whole} {$n}/{$p} в неправильную дробь",
+                    'template' => "{$whole}\\frac{{$n}}{{$p}} = \\frac{[___]}{{$p}}",
+                    'correct_answers' => [(string) $mixedNum],
+                    'blocks' => $this->shuffleBlocks([
+                        ['content' => (string) $mixedNum, 'is_correct' => true],
+                        ['content' => (string) ($whole + $n), 'is_trap' => true, 'trap_explanation' => 'Нужно умножить целую часть на знаменатель и прибавить числитель'],
+                        ['content' => (string) ($whole * $n), 'is_trap' => true, 'trap_explanation' => 'Умножать нужно на знаменатель, не на числитель'],
+                        ['content' => (string) ($mixedNum + $p), 'is_trap' => true],
+                    ]),
+                ],
+                [
+                    'instruction' => 'Вычислите скобки и умножьте',
+                    'template' => "Ответ = [___]",
+                    'correct_answers' => [$answer],
+                    'blocks' => $this->shuffleBlocks([
+                        ['content' => $answer, 'is_correct' => true],
+                        ['content' => (string) (intval($answer) + rand(1, 3)), 'is_trap' => true],
+                        ['content' => (string) max(1, intval($answer) - rand(1, 2)), 'is_trap' => true],
+                        ['content' => (string) ($multiplier * $whole), 'is_trap' => true],
+                    ]),
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * More complex bracket: (a/b ± c/d) · e/f with larger numbers
+     */
+    private function generateComplexBracket(): array
+    {
+        // Like (17/10 - 1/20) · 2/15
+
+        // Pick denominators with common factors
+        $bases = [5, 10, 15, 20, 25, 26, 30];
+        $b = $bases[array_rand($bases)];
+        $d = $bases[array_rand($bases)];
+
+        $a = rand(1, min(20, $b + 10));
+        $c = rand(1, min(10, $d));
+
+        $isAdd = rand(0, 1) === 1;
+        $op = $isAdd ? '+' : '-';
+
+        // Calculate
+        $commonDen = $this->lcm($b, $d);
+        $num1 = $a * ($commonDen / $b);
+        $num2 = $c * ($commonDen / $d);
+
+        $bracketNum = $isAdd ? $num1 + $num2 : $num1 - $num2;
+
+        if ($bracketNum <= 0) {
+            // Swap
+            [$a, $b, $c, $d] = [$c, $d, $a, $b];
+            $bracketNum = abs($bracketNum);
+            if ($bracketNum === 0) return $this->generateBracketExpression(); // Retry
+        }
+
+        // Pick nice multiplier
+        $gcd = $this->gcd($bracketNum, $commonDen);
+        $simpNum = $bracketNum / $gcd;
+        $simpDen = $commonDen / $gcd;
+
+        // e/f should partially cancel
+        $e = rand(1, 5);
+        $f = $simpDen * rand(1, 3);
+
+        $finalNum = $simpNum * $e;
+        $finalDen = $f / $this->gcd($simpDen, $f) * $simpDen / $this->gcd($simpDen, $f);
+
+        // Recalculate properly
+        $finalNum = $bracketNum * $e;
+        $finalDen = $commonDen * $f;
+        $gcdFinal = $this->gcd($finalNum, $finalDen);
+        $finalNum /= $gcdFinal;
+        $finalDen /= $gcdFinal;
+
+        if ($finalDen === 1) {
+            $answer = (string) (int) $finalNum;
+        } else {
+            $answer = ((int) $finalNum) . '/' . ((int) $finalDen);
+        }
+
+        $expressionText = "({$a}/{$b} {$op} {$c}/{$d}) · {$e}/{$f}";
+
+        return [
+            'text' => "Найдите значение выражения: {$expressionText}",
+            'text_html' => "Найдите значение выражения: <span class=\"math\">\\left(\\frac{{$a}}{{$b}} {$op} \\frac{{$c}}{{$d}}\\right) \\cdot \\frac{{$e}}{{$f}}</span>",
+            'answer' => $answer,
+            'answer_type' => 'fraction',
+            'difficulty' => 4,
+            'steps' => [
+                [
+                    'instruction' => 'Приведите дроби в скобках к общему знаменателю',
+                    'template' => "\\frac{{$a}}{{$b}} {$op} \\frac{{$c}}{{$d}} = \\frac{[___]}{{$commonDen}}",
+                    'correct_answers' => [(string) $bracketNum],
+                    'blocks' => $this->shuffleBlocks([
+                        ['content' => (string) $bracketNum, 'is_correct' => true],
+                        ['content' => (string) ($bracketNum + rand(1, 10)), 'is_trap' => true],
+                        ['content' => (string) max(1, $bracketNum - rand(1, 5)), 'is_trap' => true],
+                        ['content' => (string) ($a + $c), 'is_trap' => true, 'trap_explanation' => 'Нельзя складывать числители напрямую без общего знаменателя'],
+                    ]),
+                ],
+                [
+                    'instruction' => 'Умножьте результат на дробь и сократите',
+                    'template' => "\\frac{{$bracketNum}}{{$commonDen}} \\cdot \\frac{{$e}}{{$f}} = [___]",
+                    'correct_answers' => [$answer],
+                    'blocks' => $this->shuffleBlocks([
+                        ['content' => $answer, 'is_correct' => true],
+                        ['content' => (string) ($bracketNum * $e), 'is_trap' => true, 'trap_explanation' => 'Не забудьте разделить на знаменатели'],
+                        ['content' => strval(intval($finalNum) + 1) . ($finalDen > 1 ? "/{$finalDen}" : ''), 'is_trap' => true],
+                    ]),
+                ],
+            ],
+        ];
+    }
+
+    private function lcm(int $a, int $b): int
+    {
+        return abs($a * $b) / $this->gcd($a, $b);
+    }
+
+    private function shuffleBlocks(array $blocks): array
+    {
+        shuffle($blocks);
+        return $blocks;
     }
 
     private function generateFractionMultiply(): array
