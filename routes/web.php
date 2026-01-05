@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\Auth\TelegramBotAuthController;
+use App\Http\Controllers\TestPdfController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -118,4 +119,10 @@ Route::middleware(['auth'])->group(function () {
         request()->session()->regenerateToken();
         return redirect('/');
     })->name('logout');
+});
+
+// Test pages for PDF parsing (public for development)
+Route::prefix('test')->group(function () {
+    Route::get('/6', [TestPdfController::class, 'topic06'])->name('test.topic06');
+    Route::post('/parse-pdf', [TestPdfController::class, 'parsePdf'])->name('test.parsePdf');
 });
