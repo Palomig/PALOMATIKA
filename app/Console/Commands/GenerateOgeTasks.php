@@ -145,7 +145,7 @@ class GenerateOgeTasks extends Command
      */
     private function generateTask06(): array
     {
-        $type = rand(0, 5);
+        $type = rand(0, 8);
 
         return match ($type) {
             0 => $this->generateFractionMultiply(),
@@ -154,6 +154,9 @@ class GenerateOgeTasks extends Command
             3 => $this->generateBracketExpression(),      // (a/b ± c/d) · e/f
             4 => $this->generateMixedNumberExpression(),  // (m n/p ± k) · q
             5 => $this->generateComplexBracket(),         // (a/b ± c/d) · e/f with harder numbers
+            6 => $this->generatePowerExpression(),        // a·(1/n)² - b·(1/n)
+            7 => $this->generateDecimalExpression(),      // 2.1/(6.6-2.4)
+            8 => $this->generateDivisionByBracket(),      // 0.9/(1 + 1/5)
             default => $this->generateFractionMultiply(),
         };
     }
@@ -448,6 +451,363 @@ class GenerateOgeTasks extends Command
     {
         shuffle($blocks);
         return $blocks;
+    }
+
+    /**
+     * Задание 3: a·(1/n)² - b·(1/n) - power expressions
+     * Example: 10·(1/5)² - 12·(1/5)
+     */
+    private function generatePowerExpression(): array
+    {
+        $n = [3, 4, 5, 6, 7, 8, 9][rand(0, 6)];
+
+        // a·(1/n)² ± b·(1/n) = a/n² ± b/n = (a ± b·n) / n²
+        $a = rand(5, 25);
+        $b = rand(5, 20);
+
+        $isSubtract = rand(0, 1) === 1;
+        $op = $isSubtract ? '-' : '+';
+
+        // Result: a/n² ± b/n = a/n² ± (b·n)/n² = (a ± b·n) / n²
+        $nSquared = $n * $n;
+        $term1 = $a;           // a/n² -> numerator a
+        $term2 = $b * $n;      // b/n = b·n/n² -> numerator b·n
+
+        $resultNum = $isSubtract ? $term1 - $term2 : $term1 + $term2;
+        $resultDen = $nSquared;
+
+        // Handle negative results
+        $isNegative = $resultNum < 0;
+        $resultNum = abs($resultNum);
+
+        $gcd = $this->gcd($resultNum, $resultDen);
+        $finalNum = $resultNum / $gcd;
+        $finalDen = $resultDen / $gcd;
+
+        if ($finalDen === 1) {
+            $answer = ($isNegative ? '-' : '') . (string) $finalNum;
+        } else {
+            $answer = ($isNegative ? '-' : '') . "{$finalNum}/{$finalDen}";
+        }
+
+        // Decimal answer
+        $decimalAnswer = round(($isNegative ? -1 : 1) * $finalNum / $finalDen, 2);
+
+        $expressionText = "{$a}·(1/{$n})² {$op} {$b}·(1/{$n})";
+
+        return [
+            'text' => "Найдите значение выражения: {$expressionText}",
+            'text_html' => "Найдите значение выражения: <span class=\"math\">{$a} \\cdot \\left(\\frac{1}{{$n}}\\right)^2 {$op} {$b} \\cdot \\frac{1}{{$n}}</span>",
+            'answer' => (string) $decimalAnswer,
+            'answer_type' => 'number',
+            'difficulty' => 3,
+            'steps' => [
+                [
+                    'instruction' => "Вычислите (1/{$n})² = 1/{$nSquared}",
+                    'template' => "\\left(\\frac{1}{{$n}}\\right)^2 = \\frac{1}{[___]}",
+                    'correct_answers' => [(string) $nSquared],
+                    'blocks' => $this->shuffleBlocks([
+                        ['content' => (string) $nSquared, 'is_correct' => true],
+                        ['content' => (string) ($n * 2), 'is_trap' => true, 'trap_explanation' => 'При возведении в квадрат нужно умножить на себя, а не на 2'],
+                        ['content' => (string) $n, 'is_trap' => true],
+                        ['content' => (string) ($nSquared + $n), 'is_trap' => true],
+                    ]),
+                ],
+                [
+                    'instruction' => 'Подставьте и вычислите',
+                    'template' => "{$a} \\cdot \\frac{1}{{$nSquared}} {$op} {$b} \\cdot \\frac{1}{{$n}} = [___]",
+                    'correct_answers' => [(string) $decimalAnswer],
+                    'blocks' => $this->shuffleBlocks([
+                        ['content' => (string) $decimalAnswer, 'is_correct' => true],
+                        ['content' => (string) ($decimalAnswer + 0.1), 'is_trap' => true],
+                        ['content' => (string) abs($decimalAnswer - 0.2), 'is_trap' => true],
+                        ['content' => (string) round($a / $nSquared, 2), 'is_trap' => true, 'trap_explanation' => 'Не забудьте второе слагаемое'],
+                    ]),
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Задание 4: Decimal expressions
+     * Examples: 2.1/(6.6-2.4), (9.5+8.9)/2.3, 27/(3·4.5)
+     */
+    private function generateDecimalExpression(): array
+    {
+        $type = rand(0, 2);
+
+        if ($type === 0) {
+            // a/(b-c) or a/(b+c)
+            return $this->generateDecimalDivision();
+        } elseif ($type === 1) {
+            // (a+b)/c or (a-b)/c
+            return $this->generateDecimalNumerator();
+        } else {
+            // a/(b·c) or (a·b)/c
+            return $this->generateDecimalMultiply();
+        }
+    }
+
+    private function generateDecimalDivision(): array
+    {
+        // a/(b±c) where result is clean
+        $isAdd = rand(0, 1) === 1;
+        $op = $isAdd ? '+' : '-';
+
+        // Pick b and c so b±c gives nice number
+        $result = [2, 2.5, 3, 4, 4.2, 5, 6, 7, 8][rand(0, 8)];
+        $b = round(rand(30, 90) / 10, 1);
+        $c = $isAdd ? round($result - $b + rand(10, 50) / 10, 1) : round($b - $result, 1);
+
+        if ($c <= 0) $c = round(rand(10, 30) / 10, 1);
+
+        $denominator = $isAdd ? $b + $c : $b - $c;
+        if ($denominator <= 0) {
+            $denominator = abs($denominator) + 0.1;
+        }
+
+        // Pick a so a/denominator is clean
+        $answer = round(rand(5, 30) / 10, 1);
+        $a = round($answer * $denominator, 1);
+
+        // Recalculate for precision
+        $answer = round($a / $denominator, 2);
+
+        $expressionText = "{$a}/({$b}{$op}{$c})";
+
+        return [
+            'text' => "Найдите значение выражения: {$expressionText}",
+            'text_html' => "Найдите значение выражения: <span class=\"math\">\\frac{{$a}}{{$b}{$op}{$c}}</span>",
+            'answer' => (string) $answer,
+            'answer_type' => 'number',
+            'difficulty' => 2,
+            'steps' => [
+                [
+                    'instruction' => "Вычислите знаменатель: {$b} {$op} {$c}",
+                    'template' => "{$b} {$op} {$c} = [___]",
+                    'correct_answers' => [(string) $denominator],
+                    'blocks' => $this->shuffleBlocks([
+                        ['content' => (string) $denominator, 'is_correct' => true],
+                        ['content' => (string) ($b + $c), 'is_trap' => !$isAdd, 'trap_explanation' => 'Проверьте знак операции'],
+                        ['content' => (string) abs($b - $c), 'is_trap' => $isAdd, 'trap_explanation' => 'Проверьте знак операции'],
+                        ['content' => (string) ($denominator + 1), 'is_trap' => true],
+                    ]),
+                ],
+                [
+                    'instruction' => 'Разделите',
+                    'template' => "{$a} : {$denominator} = [___]",
+                    'correct_answers' => [(string) $answer],
+                    'blocks' => $this->shuffleBlocks([
+                        ['content' => (string) $answer, 'is_correct' => true],
+                        ['content' => (string) round($answer + 0.5, 1), 'is_trap' => true],
+                        ['content' => (string) round($a / ($denominator + 1), 1), 'is_trap' => true],
+                    ]),
+                ],
+            ],
+        ];
+    }
+
+    private function generateDecimalNumerator(): array
+    {
+        // (a±b)/c
+        $isAdd = rand(0, 1) === 1;
+        $op = $isAdd ? '+' : '-';
+
+        $c = [2, 2.2, 2.3, 2.5, 3, 4, 5][rand(0, 6)];
+        $answer = round(rand(20, 80) / 10, 1);
+
+        $numerator = round($answer * $c, 1);
+
+        // Split numerator into a and b
+        $a = round(rand(50, 120) / 10, 1);
+        $b = $isAdd ? round($numerator - $a, 1) : round($a - $numerator, 1);
+
+        if ($b <= 0) {
+            $b = round(rand(10, 50) / 10, 1);
+            $numerator = $isAdd ? $a + $b : $a - $b;
+            $answer = round($numerator / $c, 2);
+        }
+
+        $expressionText = "({$a}{$op}{$b})/{$c}";
+
+        return [
+            'text' => "Найдите значение выражения: {$expressionText}",
+            'text_html' => "Найдите значение выражения: <span class=\"math\">\\frac{{$a}{$op}{$b}}{{$c}}</span>",
+            'answer' => (string) $answer,
+            'answer_type' => 'number',
+            'difficulty' => 2,
+            'steps' => [
+                [
+                    'instruction' => "Вычислите числитель: {$a} {$op} {$b}",
+                    'template' => "{$a} {$op} {$b} = [___]",
+                    'correct_answers' => [(string) round($isAdd ? $a + $b : $a - $b, 1)],
+                    'blocks' => $this->shuffleBlocks([
+                        ['content' => (string) round($isAdd ? $a + $b : $a - $b, 1), 'is_correct' => true],
+                        ['content' => (string) round($isAdd ? $a - $b : $a + $b, 1), 'is_trap' => true],
+                        ['content' => (string) round($a * $b, 1), 'is_trap' => true],
+                    ]),
+                ],
+                [
+                    'instruction' => 'Разделите на ' . $c,
+                    'template' => round($isAdd ? $a + $b : $a - $b, 1) . " : {$c} = [___]",
+                    'correct_answers' => [(string) $answer],
+                    'blocks' => $this->shuffleBlocks([
+                        ['content' => (string) $answer, 'is_correct' => true],
+                        ['content' => (string) round($answer + 1, 1), 'is_trap' => true],
+                        ['content' => (string) round($answer * $c, 1), 'is_trap' => true, 'trap_explanation' => 'Нужно делить, а не умножать'],
+                    ]),
+                ],
+            ],
+        ];
+    }
+
+    private function generateDecimalMultiply(): array
+    {
+        // (a·b)/c or a/(b·c)
+        $isNumerator = rand(0, 1) === 1;
+
+        if ($isNumerator) {
+            // (a·b)/c
+            $a = round(rand(20, 90) / 10, 1);
+            $b = round(rand(10, 20) / 10, 1);
+            $c = round(rand(5, 15) / 10, 1);
+
+            $numerator = round($a * $b, 2);
+            $answer = round($numerator / $c, 2);
+
+            $expressionText = "({$a}·{$b})/{$c}";
+
+            return [
+                'text' => "Найдите значение выражения: {$expressionText}",
+                'text_html' => "Найдите значение выражения: <span class=\"math\">\\frac{{$a} \\cdot {$b}}{{$c}}</span>",
+                'answer' => (string) $answer,
+                'answer_type' => 'number',
+                'difficulty' => 2,
+                'steps' => [
+                    [
+                        'instruction' => "Вычислите числитель: {$a} · {$b}",
+                        'template' => "{$a} · {$b} = [___]",
+                        'correct_answers' => [(string) $numerator],
+                        'blocks' => $this->shuffleBlocks([
+                            ['content' => (string) $numerator, 'is_correct' => true],
+                            ['content' => (string) round($a + $b, 1), 'is_trap' => true, 'trap_explanation' => 'Нужно умножить, а не сложить'],
+                            ['content' => (string) round($numerator + 1, 1), 'is_trap' => true],
+                        ]),
+                    ],
+                    [
+                        'instruction' => "Разделите на {$c}",
+                        'template' => "{$numerator} : {$c} = [___]",
+                        'correct_answers' => [(string) $answer],
+                        'blocks' => $this->shuffleBlocks([
+                            ['content' => (string) $answer, 'is_correct' => true],
+                            ['content' => (string) round($answer + 2, 1), 'is_trap' => true],
+                        ]),
+                    ],
+                ],
+            ];
+        } else {
+            // a/(b·c)
+            $b = round(rand(20, 50) / 10, 1);
+            $c = round(rand(10, 30) / 10, 1);
+            $denominator = round($b * $c, 2);
+
+            $answer = rand(2, 8);
+            $a = $answer * $denominator;
+
+            $expressionText = "{$a}/({$b}·{$c})";
+
+            return [
+                'text' => "Найдите значение выражения: {$expressionText}",
+                'text_html' => "Найдите значение выражения: <span class=\"math\">\\frac{{$a}}{{$b} \\cdot {$c}}</span>",
+                'answer' => (string) $answer,
+                'answer_type' => 'number',
+                'difficulty' => 2,
+                'steps' => [
+                    [
+                        'instruction' => "Вычислите знаменатель: {$b} · {$c}",
+                        'template' => "{$b} · {$c} = [___]",
+                        'correct_answers' => [(string) $denominator],
+                        'blocks' => $this->shuffleBlocks([
+                            ['content' => (string) $denominator, 'is_correct' => true],
+                            ['content' => (string) round($b + $c, 1), 'is_trap' => true],
+                            ['content' => (string) round($denominator * 2, 1), 'is_trap' => true],
+                        ]),
+                    ],
+                    [
+                        'instruction' => "Разделите {$a} на {$denominator}",
+                        'template' => "{$a} : {$denominator} = [___]",
+                        'correct_answers' => [(string) $answer],
+                        'blocks' => $this->shuffleBlocks([
+                            ['content' => (string) $answer, 'is_correct' => true],
+                            ['content' => (string) ($answer + 1), 'is_trap' => true],
+                            ['content' => (string) ($answer - 1), 'is_trap' => true],
+                        ]),
+                    ],
+                ],
+            ];
+        }
+    }
+
+    /**
+     * Задание 5: a/(1 ± 1/n)
+     * Example: 0.9/(1 + 1/5), 2.6/(1 - 1/14)
+     */
+    private function generateDivisionByBracket(): array
+    {
+        $n = [2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14][rand(0, 10)];
+
+        $isAdd = rand(0, 1) === 1;
+        $op = $isAdd ? '+' : '-';
+
+        // 1 ± 1/n = (n ± 1)/n
+        $bracketNum = $isAdd ? $n + 1 : $n - 1;
+        $bracketDen = $n;
+
+        // Pick 'a' so that a / ((n±1)/n) = a * n / (n±1) is clean
+        // a * n should be divisible by (n±1)
+        $multiplier = rand(1, 5);
+        $a = round($multiplier * $bracketNum / $n, 1);
+
+        // Result: a / ((n±1)/n) = a * n / (n±1)
+        $answer = round($a * $n / $bracketNum, 2);
+
+        // Clean up if possible
+        if (abs($answer - round($answer)) < 0.01) {
+            $answer = (int) round($answer);
+        }
+
+        $expressionText = "{$a}/(1 {$op} 1/{$n})";
+
+        return [
+            'text' => "Найдите значение выражения: {$expressionText}",
+            'text_html' => "Найдите значение выражения: <span class=\"math\">\\frac{{$a}}{1 {$op} \\frac{1}{{$n}}}</span>",
+            'answer' => (string) $answer,
+            'answer_type' => 'number',
+            'difficulty' => 3,
+            'steps' => [
+                [
+                    'instruction' => "Вычислите знаменатель: 1 {$op} 1/{$n}",
+                    'template' => "1 {$op} \\frac{1}{{$n}} = \\frac{[___]}{{$n}}",
+                    'correct_answers' => [(string) $bracketNum],
+                    'blocks' => $this->shuffleBlocks([
+                        ['content' => (string) $bracketNum, 'is_correct' => true],
+                        ['content' => (string) $n, 'is_trap' => true, 'trap_explanation' => 'Не забудьте прибавить/вычесть 1'],
+                        ['content' => (string) ($isAdd ? $n - 1 : $n + 1), 'is_trap' => true, 'trap_explanation' => 'Проверьте знак'],
+                        ['content' => (string) ($n + 2), 'is_trap' => true],
+                    ]),
+                ],
+                [
+                    'instruction' => "Разделите {$a} на {$bracketNum}/{$n} (умножьте на перевёрнутую дробь)",
+                    'template' => "{$a} \\cdot \\frac{{$n}}{{$bracketNum}} = [___]",
+                    'correct_answers' => [(string) $answer],
+                    'blocks' => $this->shuffleBlocks([
+                        ['content' => (string) $answer, 'is_correct' => true],
+                        ['content' => (string) round($a * $bracketNum / $n, 1), 'is_trap' => true, 'trap_explanation' => 'Дробь нужно перевернуть при делении'],
+                        ['content' => (string) round($answer + 0.5, 1), 'is_trap' => true],
+                    ]),
+                ],
+            ],
+        ];
     }
 
     private function generateFractionMultiply(): array
