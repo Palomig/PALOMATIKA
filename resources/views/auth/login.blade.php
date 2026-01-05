@@ -238,7 +238,8 @@ function telegramAuth() {
 
                     if (data.status === 'authenticated') {
                         this.stopPolling();
-                        window.location.href = data.redirect || '/dashboard';
+                        // Redirect to login URL which handles session
+                        window.location.href = data.login_url;
                     } else if (data.status === 'expired' || data.status === 'not_found') {
                         this.stopPolling();
                         this.waiting = false;

@@ -39,7 +39,7 @@ class TelegramBotAuthController extends Controller
     }
 
     /**
-     * Check auth token status
+     * Check auth token status (API - just returns status, no login)
      */
     public function checkToken(Request $request, string $token)
     {
@@ -54,22 +54,41 @@ class TelegramBotAuthController extends Controller
         }
 
         if ($authToken->isAuthenticated()) {
-            // Create or find user and log them in
-            $user = $this->findOrCreateUser($authToken);
-
-            // Mark token as used
-            $authToken->update(['status' => 'used']);
-
-            // Log in the user
-            Auth::login($user, true);
-
+            // Return authenticated status with login URL
+            // Frontend will redirect to this URL for actual login
             return response()->json([
                 'status' => 'authenticated',
-                'redirect' => '/dashboard',
+                'login_url' => route('telegram.login', ['token' => $token]),
             ]);
         }
 
         return response()->json(['status' => 'pending']);
+    }
+
+    /**
+     * Perform actual login (Web route with session)
+     */
+    public function login(string $token)
+    {
+        $authToken = TelegramAuthToken::where('token', $token)
+            ->where('status', 'authenticated')
+            ->first();
+
+        if (!$authToken || $authToken->isExpired()) {
+            return redirect()->route('login')
+                ->with('error', 'Сессия авторизации истекла. Попробуйте снова.');
+        }
+
+        // Create or find user
+        $user = $this->findOrCreateUser($authToken);
+
+        // Mark token as used
+        $authToken->update(['status' => 'used']);
+
+        // Log in the user with session
+        Auth::login($user, true);
+
+        return redirect()->intended('/dashboard');
     }
 
     /**
