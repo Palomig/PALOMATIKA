@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
             SkillSeeder::class,
             BadgeSeeder::class,
             TaskSeeder::class,
+            OgeTaskSeeder::class,
         ]);
     }
 }

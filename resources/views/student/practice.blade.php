@@ -7,35 +7,35 @@
 <div x-data="practicePage()">
     <!-- No active task - show selection -->
     <div x-show="!currentTask && !loading">
-        <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
-            <h2 class="text-xl font-semibold text-gray-900 mb-4">Выберите тему для тренировки</h2>
+        <div class="bg-dark-light rounded-2xl p-6 border border-gray-800 mb-6">
+            <h2 class="text-xl font-semibold text-white mb-4">Выберите тему для тренировки</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <button @click="startPractice('all')"
-                        class="p-4 border-2 border-purple-600 rounded-xl text-left hover:bg-purple-50 transition">
-                    <div class="text-purple-600 font-semibold mb-1">Все темы</div>
-                    <div class="text-gray-500 text-sm">Случайные задачи по всем темам</div>
+                        class="p-4 border-2 border-coral rounded-xl text-left hover:bg-coral/10 transition">
+                    <div class="text-coral font-semibold mb-1">Все темы</div>
+                    <div class="text-gray-400 text-sm">Случайные задачи по всем темам</div>
                 </button>
                 <button @click="startPractice('weak')"
-                        class="p-4 border-2 border-orange-500 rounded-xl text-left hover:bg-orange-50 transition">
-                    <div class="text-orange-500 font-semibold mb-1">Слабые места</div>
-                    <div class="text-gray-500 text-sm">Навыки с низкой точностью</div>
+                        class="p-4 border-2 border-amber-500 rounded-xl text-left hover:bg-amber-500/10 transition">
+                    <div class="text-amber-500 font-semibold mb-1">Слабые места</div>
+                    <div class="text-gray-400 text-sm">Навыки с низкой точностью</div>
                 </button>
                 <button @click="startPractice('smart')"
-                        class="p-4 border-2 border-green-600 rounded-xl text-left hover:bg-green-50 transition">
-                    <div class="text-green-600 font-semibold mb-1">Умный подбор</div>
-                    <div class="text-gray-500 text-sm">AI подберёт задачи для вас</div>
+                        class="p-4 border-2 border-green-500 rounded-xl text-left hover:bg-green-500/10 transition">
+                    <div class="text-green-500 font-semibold mb-1">Умный подбор</div>
+                    <div class="text-gray-400 text-sm">AI подберёт задачи для вас</div>
                 </button>
             </div>
         </div>
 
         <!-- Topics selection -->
-        <div class="bg-white rounded-2xl p-6 shadow-sm">
-            <h3 class="font-semibold text-gray-900 mb-4">Или выберите конкретную тему:</h3>
+        <div class="bg-dark-light rounded-2xl p-6 border border-gray-800">
+            <h3 class="font-semibold text-white mb-4">Или выберите конкретную тему:</h3>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                 <template x-for="topic in topics" :key="topic.id">
                     <button @click="startPractice('topic', topic.id)"
-                            class="p-3 border border-gray-200 rounded-lg text-left hover:border-purple-300 hover:bg-purple-50 transition">
-                        <div class="text-sm font-medium text-gray-900" x-text="topic.name"></div>
+                            class="p-3 border border-gray-700 rounded-lg text-left hover:border-coral/50 hover:bg-coral/5 transition">
+                        <div class="text-sm font-medium text-gray-200" x-text="topic.name"></div>
                         <div class="text-xs text-gray-500" x-text="'№' + topic.oge_number"></div>
                     </button>
                 </template>
@@ -45,46 +45,53 @@
 
     <!-- Loading task -->
     <div x-show="loading" class="text-center py-12">
-        <svg class="animate-spin h-12 w-12 mx-auto text-purple-600" fill="none" viewBox="0 0 24 24">
+        <svg class="animate-spin h-12 w-12 mx-auto text-coral" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
         </svg>
-        <p class="text-gray-500 mt-4">Загрузка задачи...</p>
+        <p class="text-gray-400 mt-4">Загрузка задачи...</p>
     </div>
 
     <!-- Active task -->
     <div x-show="currentTask && !loading" x-cloak>
         <!-- Task header -->
-        <div class="bg-white rounded-t-2xl p-4 border-b border-gray-200 flex items-center justify-between">
+        <div class="bg-dark-light rounded-t-2xl p-4 border-b border-gray-700 flex items-center justify-between">
             <div class="flex items-center">
-                <span class="bg-purple-100 text-purple-600 text-sm font-medium px-2 py-1 rounded"
+                <span class="bg-coral/20 text-coral text-sm font-medium px-2 py-1 rounded"
                       x-text="'№' + (currentTask?.topic?.oge_number || '?')"></span>
-                <span class="ml-3 text-gray-500" x-text="currentTask?.topic?.name"></span>
+                <span class="ml-3 text-gray-400" x-text="currentTask?.topic?.name"></span>
             </div>
-            <button @click="skipTask" class="text-gray-400 hover:text-gray-600">
+            <button @click="skipTask" class="text-gray-500 hover:text-gray-300 transition">
                 Пропустить
             </button>
         </div>
 
         <!-- Task content -->
-        <div class="bg-white p-6 shadow-sm">
-            <div class="text-lg text-gray-900 mb-6" x-html="currentTask?.text_html || currentTask?.text"></div>
+        <div class="bg-dark-light p-6 border-x border-gray-800">
+            <div class="text-lg text-white mb-6" x-html="currentTask?.text_html || currentTask?.text"></div>
+
+            <!-- Task image if exists -->
+            <template x-if="currentTask?.image_url">
+                <div class="mb-6">
+                    <img :src="currentTask.image_url" alt="Изображение задачи" class="max-w-full rounded-lg border border-gray-700">
+                </div>
+            </template>
 
             <!-- Puzzle steps -->
             <div x-show="currentTask?.steps?.length > 0" class="space-y-6">
                 <template x-for="(step, stepIndex) in currentTask?.steps" :key="step.id">
-                    <div class="border rounded-lg p-4" :class="currentStep === stepIndex ? 'border-purple-300 bg-purple-50' : 'border-gray-200'">
+                    <div class="border rounded-lg p-4" :class="currentStep === stepIndex ? 'border-coral/50 bg-coral/5' : 'border-gray-700'">
                         <div class="flex items-center mb-3">
                             <span class="w-6 h-6 rounded-full flex items-center justify-center text-sm font-medium"
                                   :class="stepResults[stepIndex] === true ? 'bg-green-500 text-white' :
                                          stepResults[stepIndex] === false ? 'bg-red-500 text-white' :
-                                         currentStep === stepIndex ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-600'"
+                                         currentStep === stepIndex ? 'bg-coral text-white' : 'bg-gray-700 text-gray-400'"
                                   x-text="stepIndex + 1"></span>
-                            <span class="ml-2 text-gray-700" x-text="step.instruction"></span>
+                            <span class="ml-2 text-gray-300" x-text="step.instruction"></span>
                         </div>
 
                         <!-- Step template with blanks -->
-                        <div class="text-lg mb-4" x-show="currentStep >= stepIndex">
+                        <div class="text-lg mb-4 text-white" x-show="currentStep >= stepIndex">
                             <template x-for="(part, i) in parseTemplate(step.template)" :key="i">
                                 <span>
                                     <template x-if="part.type === 'text'">
@@ -93,7 +100,7 @@
                                     <template x-if="part.type === 'blank'">
                                         <span class="inline-block min-w-[60px] px-3 py-1 mx-1 border-2 rounded text-center"
                                               :class="stepAnswers[stepIndex]?.[part.index] ?
-                                                     'border-purple-500 bg-purple-50' : 'border-dashed border-gray-300'"
+                                                     'border-coral bg-coral/20' : 'border-dashed border-gray-600'"
                                               x-text="stepAnswers[stepIndex]?.[part.index] || '___'"></span>
                                     </template>
                                 </span>
@@ -105,7 +112,7 @@
                             <template x-for="block in getAvailableBlocks(stepIndex)" :key="block.id">
                                 <button @click="selectBlock(stepIndex, block)"
                                         class="px-4 py-2 rounded-lg font-medium transition"
-                                        :class="block.selected ? 'bg-purple-600 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'"
+                                        :class="block.selected ? 'bg-coral text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-200'"
                                         x-text="block.content"></button>
                             </template>
                         </div>
@@ -113,16 +120,16 @@
                         <!-- Check button -->
                         <button x-show="currentStep === stepIndex && stepResults[stepIndex] === undefined && isStepComplete(stepIndex)"
                                 @click="checkStep(stepIndex)"
-                                class="bg-purple-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-purple-700 transition">
+                                class="bg-coral text-white px-6 py-2 rounded-lg font-medium hover:bg-coral-dark transition">
                             Проверить
                         </button>
 
                         <!-- Feedback -->
                         <div x-show="stepResults[stepIndex] !== undefined" class="mt-3">
-                            <div x-show="stepResults[stepIndex] === true" class="text-green-600 font-medium">
+                            <div x-show="stepResults[stepIndex] === true" class="text-green-400 font-medium">
                                 ✓ Правильно!
                             </div>
-                            <div x-show="stepResults[stepIndex] === false" class="text-red-600">
+                            <div x-show="stepResults[stepIndex] === false" class="text-red-400">
                                 ✗ Неправильно. <span x-text="stepFeedback[stepIndex]"></span>
                             </div>
                         </div>
@@ -132,31 +139,33 @@
 
             <!-- Simple answer input -->
             <div x-show="!currentTask?.steps?.length" class="mt-6">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Ваш ответ:</label>
-                <input type="text" x-model="answer"
-                       class="w-full max-w-xs px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                       placeholder="Введите ответ"
-                       @keyup.enter="submitAnswer">
-                <button @click="submitAnswer"
-                        class="ml-4 bg-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-purple-700 transition">
-                    Проверить
-                </button>
+                <label class="block text-sm font-medium text-gray-300 mb-2">Ваш ответ:</label>
+                <div class="flex flex-wrap gap-4">
+                    <input type="text" x-model="answer"
+                           class="flex-1 min-w-[200px] px-4 py-3 bg-dark border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-coral focus:border-transparent"
+                           placeholder="Введите ответ"
+                           @keyup.enter="submitAnswer">
+                    <button @click="submitAnswer"
+                            class="bg-coral text-white px-6 py-3 rounded-lg font-medium hover:bg-coral-dark transition">
+                        Проверить
+                    </button>
+                </div>
             </div>
         </div>
 
         <!-- Task footer with result -->
-        <div x-show="taskResult !== null" class="bg-white rounded-b-2xl p-6 border-t border-gray-200">
+        <div x-show="taskResult !== null" class="bg-dark-light rounded-b-2xl p-6 border-t border-gray-700">
             <div class="flex items-center justify-between">
                 <div>
-                    <div x-show="taskResult === true" class="text-xl font-semibold text-green-600">
-                        🎉 Отлично! +<span x-text="xpEarned"></span> XP
+                    <div x-show="taskResult === true" class="text-xl font-semibold text-green-400">
+                        Отлично! +<span x-text="xpEarned"></span> XP
                     </div>
-                    <div x-show="taskResult === false" class="text-xl font-semibold text-red-600">
+                    <div x-show="taskResult === false" class="text-xl font-semibold text-red-400">
                         Неправильно. Правильный ответ: <span x-text="currentTask?.correct_answer"></span>
                     </div>
                 </div>
                 <button @click="nextTask"
-                        class="bg-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-purple-700 transition">
+                        class="bg-coral text-white px-6 py-3 rounded-lg font-medium hover:bg-coral-dark transition">
                     Следующая задача
                 </button>
             </div>

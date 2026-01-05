@@ -6,19 +6,19 @@
 @section('content')
 <div x-data="leaderboardPage()">
     <!-- Tabs -->
-    <div class="bg-white rounded-xl p-1 mb-6 inline-flex shadow-sm">
+    <div class="bg-dark-light rounded-xl p-1 mb-6 inline-flex border border-gray-800">
         <button @click="activeTab = 'weekly'"
-                :class="activeTab === 'weekly' ? 'bg-purple-600 text-white' : 'text-gray-600 hover:text-gray-900'"
+                :class="activeTab === 'weekly' ? 'bg-coral text-white' : 'text-gray-400 hover:text-white'"
                 class="px-4 py-2 rounded-lg font-medium transition">
             Неделя
         </button>
         <button @click="activeTab = 'alltime'"
-                :class="activeTab === 'alltime' ? 'bg-purple-600 text-white' : 'text-gray-600 hover:text-gray-900'"
+                :class="activeTab === 'alltime' ? 'bg-coral text-white' : 'text-gray-400 hover:text-white'"
                 class="px-4 py-2 rounded-lg font-medium transition">
             Всё время
         </button>
         <button @click="activeTab = 'leagues'"
-                :class="activeTab === 'leagues' ? 'bg-purple-600 text-white' : 'text-gray-600 hover:text-gray-900'"
+                :class="activeTab === 'leagues' ? 'bg-coral text-white' : 'text-gray-400 hover:text-white'"
                 class="px-4 py-2 rounded-lg font-medium transition">
             Лиги
         </button>
@@ -27,14 +27,14 @@
     <!-- Weekly/All-time leaderboard -->
     <div x-show="activeTab !== 'leagues'">
         <!-- User position card -->
-        <div class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl p-6 text-white mb-6">
+        <div class="bg-gradient-to-r from-coral to-coral-dark rounded-2xl p-6 text-white mb-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <div class="text-purple-200 text-sm mb-1">Твоё место</div>
+                    <div class="text-white/70 text-sm mb-1">Твоё место</div>
                     <div class="text-4xl font-bold" x-text="'#' + (userPosition || '—')"></div>
                 </div>
                 <div class="text-right">
-                    <div class="text-purple-200 text-sm mb-1">Очков</div>
+                    <div class="text-white/70 text-sm mb-1">Очков</div>
                     <div class="text-2xl font-bold" x-text="userPoints || 0"></div>
                 </div>
             </div>
@@ -43,49 +43,49 @@
         <!-- Top 3 -->
         <div class="grid grid-cols-3 gap-4 mb-6">
             <!-- 2nd place -->
-            <div class="bg-white rounded-xl p-4 text-center shadow-sm order-1">
+            <div class="bg-dark-light rounded-xl p-4 text-center border border-gray-800 order-1">
                 <div class="text-3xl mb-2">🥈</div>
-                <div class="w-12 h-12 bg-gray-200 rounded-full mx-auto mb-2 flex items-center justify-center">
-                    <span class="text-gray-600 font-medium" x-text="leaders[1]?.name?.charAt(0) || '?'"></span>
+                <div class="w-12 h-12 bg-gray-700 rounded-full mx-auto mb-2 flex items-center justify-center">
+                    <span class="text-gray-300 font-medium" x-text="leaders[1]?.name?.charAt(0) || '?'"></span>
                 </div>
-                <div class="font-medium text-gray-900 truncate" x-text="leaders[1]?.name || '—'"></div>
-                <div class="text-gray-500 text-sm" x-text="(leaders[1]?.points || 0) + ' очков'"></div>
+                <div class="font-medium text-white truncate" x-text="leaders[1]?.name || '—'"></div>
+                <div class="text-gray-400 text-sm" x-text="(leaders[1]?.points || 0) + ' очков'"></div>
             </div>
             <!-- 1st place -->
-            <div class="bg-yellow-50 border-2 border-yellow-400 rounded-xl p-4 text-center shadow-sm transform scale-105 order-0 md:order-1">
+            <div class="bg-amber-500/10 border-2 border-amber-500 rounded-xl p-4 text-center transform scale-105 order-0 md:order-1">
                 <div class="text-4xl mb-2">🥇</div>
-                <div class="w-14 h-14 bg-yellow-200 rounded-full mx-auto mb-2 flex items-center justify-center">
-                    <span class="text-yellow-700 font-medium text-lg" x-text="leaders[0]?.name?.charAt(0) || '?'"></span>
+                <div class="w-14 h-14 bg-amber-500/30 rounded-full mx-auto mb-2 flex items-center justify-center">
+                    <span class="text-amber-400 font-medium text-lg" x-text="leaders[0]?.name?.charAt(0) || '?'"></span>
                 </div>
-                <div class="font-semibold text-gray-900 truncate" x-text="leaders[0]?.name || '—'"></div>
-                <div class="text-gray-500 text-sm" x-text="(leaders[0]?.points || 0) + ' очков'"></div>
+                <div class="font-semibold text-white truncate" x-text="leaders[0]?.name || '—'"></div>
+                <div class="text-gray-400 text-sm" x-text="(leaders[0]?.points || 0) + ' очков'"></div>
             </div>
             <!-- 3rd place -->
-            <div class="bg-white rounded-xl p-4 text-center shadow-sm order-2">
+            <div class="bg-dark-light rounded-xl p-4 text-center border border-gray-800 order-2">
                 <div class="text-3xl mb-2">🥉</div>
-                <div class="w-12 h-12 bg-orange-100 rounded-full mx-auto mb-2 flex items-center justify-center">
-                    <span class="text-orange-600 font-medium" x-text="leaders[2]?.name?.charAt(0) || '?'"></span>
+                <div class="w-12 h-12 bg-orange-500/20 rounded-full mx-auto mb-2 flex items-center justify-center">
+                    <span class="text-orange-400 font-medium" x-text="leaders[2]?.name?.charAt(0) || '?'"></span>
                 </div>
-                <div class="font-medium text-gray-900 truncate" x-text="leaders[2]?.name || '—'"></div>
-                <div class="text-gray-500 text-sm" x-text="(leaders[2]?.points || 0) + ' очков'"></div>
+                <div class="font-medium text-white truncate" x-text="leaders[2]?.name || '—'"></div>
+                <div class="text-gray-400 text-sm" x-text="(leaders[2]?.points || 0) + ' очков'"></div>
             </div>
         </div>
 
         <!-- Rest of leaderboard -->
-        <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
+        <div class="bg-dark-light rounded-2xl border border-gray-800 overflow-hidden">
             <template x-for="(user, index) in leaders.slice(3)" :key="user.id">
-                <div class="flex items-center p-4 border-b border-gray-100 last:border-b-0"
-                     :class="user.is_current_user ? 'bg-purple-50' : ''">
+                <div class="flex items-center p-4 border-b border-gray-800 last:border-b-0"
+                     :class="user.is_current_user ? 'bg-coral/10' : ''">
                     <div class="w-8 text-center font-medium text-gray-500" x-text="index + 4"></div>
-                    <div class="w-10 h-10 bg-gray-100 rounded-full mx-4 flex items-center justify-center">
-                        <span class="text-gray-600 font-medium" x-text="user.name?.charAt(0) || '?'"></span>
+                    <div class="w-10 h-10 bg-gray-700 rounded-full mx-4 flex items-center justify-center">
+                        <span class="text-gray-300 font-medium" x-text="user.name?.charAt(0) || '?'"></span>
                     </div>
                     <div class="flex-1">
-                        <div class="font-medium text-gray-900" x-text="user.name"></div>
+                        <div class="font-medium text-white" x-text="user.name"></div>
                         <div class="text-sm text-gray-500" x-text="'Уровень ' + (user.level || 1)"></div>
                     </div>
                     <div class="text-right">
-                        <div class="font-semibold text-gray-900" x-text="user.points"></div>
+                        <div class="font-semibold text-white" x-text="user.points"></div>
                         <div class="text-xs text-gray-500">очков</div>
                     </div>
                 </div>
@@ -96,43 +96,43 @@
     <!-- Leagues -->
     <div x-show="activeTab === 'leagues'">
         <!-- Current league -->
-        <div class="bg-white rounded-2xl p-6 shadow-sm mb-6">
+        <div class="bg-dark-light rounded-2xl p-6 border border-gray-800 mb-6">
             <div class="flex items-center">
                 <div class="text-5xl mr-4" x-text="currentLeague?.icon || '🏆'"></div>
                 <div>
-                    <div class="text-xl font-semibold text-gray-900" x-text="currentLeague?.name || 'Бронзовая лига'"></div>
-                    <div class="text-gray-500">Ваша текущая лига</div>
+                    <div class="text-xl font-semibold text-white" x-text="currentLeague?.name || 'Бронзовая лига'"></div>
+                    <div class="text-gray-400">Ваша текущая лига</div>
                 </div>
                 <div class="ml-auto text-right">
-                    <div class="text-2xl font-bold text-purple-600" x-text="'#' + (leaguePosition || '—')"></div>
+                    <div class="text-2xl font-bold text-coral" x-text="'#' + (leaguePosition || '—')"></div>
                     <div class="text-gray-500 text-sm">место в лиге</div>
                 </div>
             </div>
 
             <!-- Promotion/demotion info -->
             <div class="mt-4 flex gap-4">
-                <div class="flex-1 bg-green-50 rounded-lg p-3">
-                    <div class="text-green-600 font-medium text-sm">Повышение</div>
-                    <div class="text-green-800">Топ <span x-text="currentLeague?.promote_top || 10"></span></div>
+                <div class="flex-1 bg-green-500/10 rounded-lg p-3 border border-green-500/20">
+                    <div class="text-green-400 font-medium text-sm">Повышение</div>
+                    <div class="text-green-300">Топ <span x-text="currentLeague?.promote_top || 10"></span></div>
                 </div>
-                <div class="flex-1 bg-red-50 rounded-lg p-3">
-                    <div class="text-red-600 font-medium text-sm">Понижение</div>
-                    <div class="text-red-800">Последние <span x-text="currentLeague?.demote_bottom || 5"></span></div>
+                <div class="flex-1 bg-red-500/10 rounded-lg p-3 border border-red-500/20">
+                    <div class="text-red-400 font-medium text-sm">Понижение</div>
+                    <div class="text-red-300">Последние <span x-text="currentLeague?.demote_bottom || 5"></span></div>
                 </div>
             </div>
         </div>
 
         <!-- League leaderboard -->
-        <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
-            <div class="p-4 border-b border-gray-200">
-                <h3 class="font-semibold text-gray-900">Участники лиги</h3>
+        <div class="bg-dark-light rounded-2xl border border-gray-800 overflow-hidden">
+            <div class="p-4 border-b border-gray-700">
+                <h3 class="font-semibold text-white">Участники лиги</h3>
             </div>
             <template x-for="(user, index) in leagueParticipants" :key="user.id">
-                <div class="flex items-center p-4 border-b border-gray-100 last:border-b-0"
+                <div class="flex items-center p-4 border-b border-gray-800 last:border-b-0"
                      :class="{
-                         'bg-green-50': index < (currentLeague?.promote_top || 10),
-                         'bg-red-50': index >= leagueParticipants.length - (currentLeague?.demote_bottom || 5),
-                         'bg-purple-50': user.is_current_user
+                         'bg-green-500/10': index < (currentLeague?.promote_top || 10),
+                         'bg-red-500/10': index >= leagueParticipants.length - (currentLeague?.demote_bottom || 5),
+                         'bg-coral/10': user.is_current_user
                      }">
                     <div class="w-8 text-center font-medium text-gray-500" x-text="index + 1"></div>
                     <div class="w-10 h-10 rounded-full mx-4 flex items-center justify-center"
@@ -141,22 +141,22 @@
                               x-text="user.name?.charAt(0) || '?'"></span>
                     </div>
                     <div class="flex-1">
-                        <div class="font-medium text-gray-900" x-text="user.name"></div>
+                        <div class="font-medium text-white" x-text="user.name"></div>
                     </div>
-                    <div class="text-right font-semibold text-gray-900" x-text="user.weekly_xp + ' XP'"></div>
+                    <div class="text-right font-semibold text-white" x-text="user.weekly_xp + ' XP'"></div>
                 </div>
             </template>
         </div>
 
         <!-- All leagues -->
         <div class="mt-6">
-            <h3 class="font-semibold text-gray-900 mb-4">Все лиги</h3>
+            <h3 class="font-semibold text-white mb-4">Все лиги</h3>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 <template x-for="league in allLeagues" :key="league.id">
-                    <div class="bg-white rounded-xl p-4 text-center shadow-sm"
-                         :class="league.id === currentLeague?.id ? 'ring-2 ring-purple-500' : ''">
+                    <div class="bg-dark-light rounded-xl p-4 text-center border border-gray-800"
+                         :class="league.id === currentLeague?.id ? 'ring-2 ring-coral' : ''">
                         <div class="text-3xl mb-2" x-text="league.icon"></div>
-                        <div class="font-medium text-gray-900 text-sm" x-text="league.name"></div>
+                        <div class="font-medium text-white text-sm" x-text="league.name"></div>
                     </div>
                 </template>
             </div>

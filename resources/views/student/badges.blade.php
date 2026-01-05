@@ -6,10 +6,10 @@
 @section('content')
 <div x-data="badgesPage()">
     <!-- Summary -->
-    <div class="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-2xl p-6 text-white mb-6">
+    <div class="bg-gradient-to-r from-amber-500 to-orange-500 rounded-2xl p-6 text-white mb-6">
         <div class="flex items-center justify-between">
             <div>
-                <div class="text-yellow-100 text-sm mb-1">Получено бейджей</div>
+                <div class="text-amber-100 text-sm mb-1">Получено бейджей</div>
                 <div class="text-4xl font-bold" x-text="earnedCount + ' / ' + totalCount"></div>
             </div>
             <div class="text-6xl">🏆</div>
@@ -17,12 +17,12 @@
     </div>
 
     <!-- Showcased badges -->
-    <div class="bg-white rounded-2xl p-6 shadow-sm mb-6" x-show="showcasedBadges.length > 0">
-        <h3 class="font-semibold text-gray-900 mb-4">Витрина (до 5 бейджей)</h3>
+    <div class="bg-dark-light rounded-2xl p-6 border border-gray-800 mb-6" x-show="showcasedBadges.length > 0">
+        <h3 class="font-semibold text-white mb-4">Витрина (до 5 бейджей)</h3>
         <div class="flex flex-wrap gap-4">
             <template x-for="badge in showcasedBadges" :key="badge.id">
                 <div class="relative group">
-                    <div class="w-16 h-16 bg-gradient-to-br from-yellow-100 to-orange-100 rounded-xl flex items-center justify-center text-3xl cursor-pointer"
+                    <div class="w-16 h-16 bg-gradient-to-br from-amber-500/20 to-orange-500/20 rounded-xl flex items-center justify-center text-3xl cursor-pointer border border-amber-500/30"
                          @click="toggleShowcase(badge)">
                         <span x-text="badge.badge?.icon || '🏅'"></span>
                     </div>
@@ -38,19 +38,19 @@
     <!-- Earned badges by category -->
     <div class="space-y-6">
         <!-- Streak badges -->
-        <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <div class="bg-dark-light rounded-2xl p-6 border border-gray-800">
             <div class="flex items-center mb-4">
                 <span class="text-2xl mr-2">🔥</span>
-                <h3 class="font-semibold text-gray-900">Стрики</h3>
+                <h3 class="font-semibold text-white">Стрики</h3>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 <template x-for="badge in getBadgesByType('streak')" :key="badge.id">
                     <div class="text-center cursor-pointer" @click="showBadgeDetails(badge)">
                         <div class="w-16 h-16 mx-auto rounded-xl flex items-center justify-center text-3xl mb-2 transition"
-                             :class="badge.earned ? 'bg-gradient-to-br from-orange-100 to-red-100' : 'bg-gray-100 grayscale opacity-50'">
+                             :class="badge.earned ? 'bg-gradient-to-br from-orange-500/20 to-red-500/20 border border-orange-500/30' : 'bg-gray-800 grayscale opacity-50'">
                             <span x-text="badge.icon"></span>
                         </div>
-                        <div class="text-sm font-medium text-gray-900" x-text="badge.name"></div>
+                        <div class="text-sm font-medium text-white" x-text="badge.name"></div>
                         <div class="text-xs text-gray-500" x-text="badge.description"></div>
                     </div>
                 </template>
@@ -58,19 +58,19 @@
         </div>
 
         <!-- Task badges -->
-        <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <div class="bg-dark-light rounded-2xl p-6 border border-gray-800">
             <div class="flex items-center mb-4">
                 <span class="text-2xl mr-2">📝</span>
-                <h3 class="font-semibold text-gray-900">Задачи</h3>
+                <h3 class="font-semibold text-white">Задачи</h3>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 <template x-for="badge in getBadgesByType('tasks')" :key="badge.id">
                     <div class="text-center cursor-pointer" @click="showBadgeDetails(badge)">
                         <div class="w-16 h-16 mx-auto rounded-xl flex items-center justify-center text-3xl mb-2 transition"
-                             :class="badge.earned ? 'bg-gradient-to-br from-green-100 to-emerald-100' : 'bg-gray-100 grayscale opacity-50'">
+                             :class="badge.earned ? 'bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30' : 'bg-gray-800 grayscale opacity-50'">
                             <span x-text="badge.icon"></span>
                         </div>
-                        <div class="text-sm font-medium text-gray-900" x-text="badge.name"></div>
+                        <div class="text-sm font-medium text-white" x-text="badge.name"></div>
                         <div class="text-xs text-gray-500" x-text="badge.description"></div>
                     </div>
                 </template>
@@ -78,19 +78,19 @@
         </div>
 
         <!-- Duel badges -->
-        <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <div class="bg-dark-light rounded-2xl p-6 border border-gray-800">
             <div class="flex items-center mb-4">
                 <span class="text-2xl mr-2">⚔️</span>
-                <h3 class="font-semibold text-gray-900">Дуэли</h3>
+                <h3 class="font-semibold text-white">Дуэли</h3>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 <template x-for="badge in getBadgesByType('duel')" :key="badge.id">
                     <div class="text-center cursor-pointer" @click="showBadgeDetails(badge)">
                         <div class="w-16 h-16 mx-auto rounded-xl flex items-center justify-center text-3xl mb-2 transition"
-                             :class="badge.earned ? 'bg-gradient-to-br from-purple-100 to-indigo-100' : 'bg-gray-100 grayscale opacity-50'">
+                             :class="badge.earned ? 'bg-gradient-to-br from-purple-500/20 to-indigo-500/20 border border-purple-500/30' : 'bg-gray-800 grayscale opacity-50'">
                             <span x-text="badge.icon"></span>
                         </div>
-                        <div class="text-sm font-medium text-gray-900" x-text="badge.name"></div>
+                        <div class="text-sm font-medium text-white" x-text="badge.name"></div>
                         <div class="text-xs text-gray-500" x-text="badge.description"></div>
                     </div>
                 </template>
@@ -98,19 +98,19 @@
         </div>
 
         <!-- League badges -->
-        <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <div class="bg-dark-light rounded-2xl p-6 border border-gray-800">
             <div class="flex items-center mb-4">
                 <span class="text-2xl mr-2">🏆</span>
-                <h3 class="font-semibold text-gray-900">Лиги</h3>
+                <h3 class="font-semibold text-white">Лиги</h3>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 <template x-for="badge in getBadgesByType('league')" :key="badge.id">
                     <div class="text-center cursor-pointer" @click="showBadgeDetails(badge)">
                         <div class="w-16 h-16 mx-auto rounded-xl flex items-center justify-center text-3xl mb-2 transition"
-                             :class="badge.earned ? 'bg-gradient-to-br from-yellow-100 to-amber-100' : 'bg-gray-100 grayscale opacity-50'">
+                             :class="badge.earned ? 'bg-gradient-to-br from-yellow-500/20 to-amber-500/20 border border-yellow-500/30' : 'bg-gray-800 grayscale opacity-50'">
                             <span x-text="badge.icon"></span>
                         </div>
-                        <div class="text-sm font-medium text-gray-900" x-text="badge.name"></div>
+                        <div class="text-sm font-medium text-white" x-text="badge.name"></div>
                         <div class="text-xs text-gray-500" x-text="badge.description"></div>
                     </div>
                 </template>
@@ -118,19 +118,19 @@
         </div>
 
         <!-- Special badges -->
-        <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <div class="bg-dark-light rounded-2xl p-6 border border-gray-800">
             <div class="flex items-center mb-4">
                 <span class="text-2xl mr-2">✨</span>
-                <h3 class="font-semibold text-gray-900">Особые</h3>
+                <h3 class="font-semibold text-white">Особые</h3>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 <template x-for="badge in getBadgesByType('special')" :key="badge.id">
                     <div class="text-center cursor-pointer" @click="showBadgeDetails(badge)">
                         <div class="w-16 h-16 mx-auto rounded-xl flex items-center justify-center text-3xl mb-2 transition"
-                             :class="badge.earned ? 'bg-gradient-to-br from-pink-100 to-rose-100' : 'bg-gray-100 grayscale opacity-50'">
+                             :class="badge.earned ? 'bg-gradient-to-br from-pink-500/20 to-rose-500/20 border border-pink-500/30' : 'bg-gray-800 grayscale opacity-50'">
                             <span x-text="badge.icon"></span>
                         </div>
-                        <div class="text-sm font-medium text-gray-900" x-text="badge.name"></div>
+                        <div class="text-sm font-medium text-white" x-text="badge.name"></div>
                         <div class="text-xs text-gray-500" x-text="badge.description"></div>
                     </div>
                 </template>
@@ -140,25 +140,25 @@
 
     <!-- Badge detail modal -->
     <div x-show="selectedBadge" x-cloak
-         class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+         class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4"
          @click.self="selectedBadge = null">
-        <div class="bg-white rounded-2xl p-6 max-w-sm w-full">
+        <div class="bg-dark-light rounded-2xl p-6 max-w-sm w-full border border-gray-700">
             <div class="text-center">
                 <div class="w-24 h-24 mx-auto rounded-2xl flex items-center justify-center text-5xl mb-4"
-                     :class="selectedBadge?.earned ? 'bg-gradient-to-br from-yellow-100 to-orange-100' : 'bg-gray-100'">
+                     :class="selectedBadge?.earned ? 'bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/30' : 'bg-gray-800'">
                     <span x-text="selectedBadge?.icon"></span>
                 </div>
-                <h3 class="text-xl font-semibold text-gray-900 mb-2" x-text="selectedBadge?.name"></h3>
-                <p class="text-gray-500 mb-4" x-text="selectedBadge?.description"></p>
+                <h3 class="text-xl font-semibold text-white mb-2" x-text="selectedBadge?.name"></h3>
+                <p class="text-gray-400 mb-4" x-text="selectedBadge?.description"></p>
 
                 <div x-show="selectedBadge?.earned" class="mb-4">
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-500/20 text-green-400 border border-green-500/30">
                         ✓ Получено <span class="ml-1" x-text="formatDate(selectedBadge?.earned_at)"></span>
                     </span>
                 </div>
 
                 <div x-show="!selectedBadge?.earned" class="mb-4">
-                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-600">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-700 text-gray-400">
                         Ещё не получено
                     </span>
                 </div>
@@ -168,10 +168,10 @@
                     Редкость:
                     <span class="font-medium"
                           :class="{
-                              'text-gray-600': selectedBadge?.rarity === 'common',
-                              'text-blue-600': selectedBadge?.rarity === 'rare',
-                              'text-purple-600': selectedBadge?.rarity === 'epic',
-                              'text-yellow-600': selectedBadge?.rarity === 'legendary'
+                              'text-gray-400': selectedBadge?.rarity === 'common',
+                              'text-blue-400': selectedBadge?.rarity === 'rare',
+                              'text-purple-400': selectedBadge?.rarity === 'epic',
+                              'text-amber-400': selectedBadge?.rarity === 'legendary'
                           }"
                           x-text="rarityNames[selectedBadge?.rarity] || 'Обычный'"></span>
                 </div>
@@ -179,12 +179,12 @@
                 <!-- Add to showcase button -->
                 <button x-show="selectedBadge?.earned && !selectedBadge?.is_showcased && showcasedBadges.length < 5"
                         @click="toggleShowcase(selectedBadge)"
-                        class="w-full bg-purple-600 text-white py-2 rounded-lg font-medium hover:bg-purple-700 transition">
+                        class="w-full bg-coral text-white py-2 rounded-lg font-medium hover:bg-coral-dark transition">
                     Добавить в витрину
                 </button>
 
                 <button @click="selectedBadge = null"
-                        class="w-full mt-2 text-gray-500 py-2 hover:text-gray-700">
+                        class="w-full mt-2 text-gray-400 py-2 hover:text-white transition">
                     Закрыть
                 </button>
             </div>
