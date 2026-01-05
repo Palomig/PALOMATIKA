@@ -124,5 +124,6 @@ Route::middleware(['auth'])->group(function () {
 // Test pages for PDF parsing (public for development)
 Route::prefix('test')->group(function () {
     Route::get('/6', [TestPdfController::class, 'topic06'])->name('test.topic06');
+    Route::get('/7', [TestPdfController::class, 'topic07'])->name('test.topic07');
     Route::post('/parse-pdf', [TestPdfController::class, 'parsePdf'])->name('test.parsePdf');
 });
