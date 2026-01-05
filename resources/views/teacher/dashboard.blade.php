@@ -7,53 +7,53 @@
 <div x-data="teacherDashboard()">
     <!-- Stats -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <div class="bg-white rounded-xl p-6 shadow-sm">
+        <div class="bg-dark-light rounded-xl p-6 border border-gray-800">
             <div class="flex items-center justify-between">
                 <div>
-                    <div class="text-3xl font-bold text-indigo-600" x-text="stats.total_students || 0"></div>
-                    <div class="text-gray-500 text-sm">учеников</div>
+                    <div class="text-3xl font-bold text-blue-400" x-text="stats.total_students || 0"></div>
+                    <div class="text-gray-400 text-sm">учеников</div>
                 </div>
-                <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
-                    <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
                     </svg>
                 </div>
             </div>
         </div>
-        <div class="bg-white rounded-xl p-6 shadow-sm">
+        <div class="bg-dark-light rounded-xl p-6 border border-gray-800">
             <div class="flex items-center justify-between">
                 <div>
-                    <div class="text-3xl font-bold text-green-600" x-text="stats.active_subscriptions || 0"></div>
-                    <div class="text-gray-500 text-sm">активных подписок</div>
+                    <div class="text-3xl font-bold text-green-400" x-text="stats.active_subscriptions || 0"></div>
+                    <div class="text-gray-400 text-sm">активных подписок</div>
                 </div>
-                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </div>
             </div>
         </div>
-        <div class="bg-white rounded-xl p-6 shadow-sm">
+        <div class="bg-dark-light rounded-xl p-6 border border-gray-800">
             <div class="flex items-center justify-between">
                 <div>
-                    <div class="text-3xl font-bold text-orange-500" x-text="stats.pending_homework || 0"></div>
-                    <div class="text-gray-500 text-sm">невыполненных ДЗ</div>
+                    <div class="text-3xl font-bold text-amber-400" x-text="stats.pending_homework || 0"></div>
+                    <div class="text-gray-400 text-sm">невыполненных ДЗ</div>
                 </div>
-                <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                    <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-12 h-12 bg-amber-500/20 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </div>
             </div>
         </div>
-        <div class="bg-white rounded-xl p-6 shadow-sm">
+        <div class="bg-dark-light rounded-xl p-6 border border-gray-800">
             <div class="flex items-center justify-between">
                 <div>
-                    <div class="text-3xl font-bold text-purple-600" x-text="formatMoney(stats.monthly_earnings || 0)"></div>
-                    <div class="text-gray-500 text-sm">заработок за месяц</div>
+                    <div class="text-3xl font-bold text-coral" x-text="formatMoney(stats.monthly_earnings || 0)"></div>
+                    <div class="text-gray-400 text-sm">заработок за месяц</div>
                 </div>
-                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-12 h-12 bg-coral/20 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-coral" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </div>
@@ -64,22 +64,22 @@
     <!-- Two columns -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <!-- Recent activity -->
-        <div class="bg-white rounded-xl shadow-sm">
-            <div class="p-4 border-b border-gray-200 flex items-center justify-between">
-                <h3 class="font-semibold text-gray-900">Последняя активность учеников</h3>
-                <a href="/teacher/students" class="text-indigo-600 text-sm hover:underline">Все</a>
+        <div class="bg-dark-light rounded-xl border border-gray-800">
+            <div class="p-4 border-b border-gray-700 flex items-center justify-between">
+                <h3 class="font-semibold text-white">Последняя активность учеников</h3>
+                <a href="/teacher/students" class="text-coral text-sm hover:text-coral-light transition">Все</a>
             </div>
-            <div class="divide-y divide-gray-100">
+            <div class="divide-y divide-gray-800">
                 <template x-for="activity in recentActivity" :key="activity.id">
                     <div class="flex items-center p-4">
-                        <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
-                            <span class="text-gray-600 font-medium" x-text="activity.student?.name?.charAt(0) || '?'"></span>
+                        <div class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center">
+                            <span class="text-gray-300 font-medium" x-text="activity.student?.name?.charAt(0) || '?'"></span>
                         </div>
                         <div class="ml-3 flex-1">
-                            <div class="text-sm font-medium text-gray-900" x-text="activity.student?.name"></div>
+                            <div class="text-sm font-medium text-white" x-text="activity.student?.name"></div>
                             <div class="text-xs text-gray-500" x-text="activity.description"></div>
                         </div>
-                        <div class="text-xs text-gray-400" x-text="activity.time_ago"></div>
+                        <div class="text-xs text-gray-500" x-text="activity.time_ago"></div>
                     </div>
                 </template>
                 <div x-show="recentActivity.length === 0" class="p-8 text-center text-gray-500">
@@ -89,26 +89,26 @@
         </div>
 
         <!-- Students needing attention -->
-        <div class="bg-white rounded-xl shadow-sm">
-            <div class="p-4 border-b border-gray-200">
-                <h3 class="font-semibold text-gray-900">Требуют внимания</h3>
+        <div class="bg-dark-light rounded-xl border border-gray-800">
+            <div class="p-4 border-b border-gray-700">
+                <h3 class="font-semibold text-white">Требуют внимания</h3>
             </div>
-            <div class="divide-y divide-gray-100">
+            <div class="divide-y divide-gray-800">
                 <template x-for="student in needsAttention" :key="student.id">
                     <div class="flex items-center p-4">
                         <div class="w-10 h-10 rounded-full flex items-center justify-center"
-                             :class="student.issue === 'inactive' ? 'bg-red-100' : 'bg-yellow-100'">
-                            <span :class="student.issue === 'inactive' ? 'text-red-600' : 'text-yellow-600'"
+                             :class="student.issue === 'inactive' ? 'bg-red-500/20' : 'bg-amber-500/20'">
+                            <span :class="student.issue === 'inactive' ? 'text-red-400' : 'text-amber-400'"
                                   x-text="student.name?.charAt(0) || '?'"></span>
                         </div>
                         <div class="ml-3 flex-1">
-                            <div class="text-sm font-medium text-gray-900" x-text="student.name"></div>
+                            <div class="text-sm font-medium text-white" x-text="student.name"></div>
                             <div class="text-xs"
-                                 :class="student.issue === 'inactive' ? 'text-red-500' : 'text-yellow-500'"
+                                 :class="student.issue === 'inactive' ? 'text-red-400' : 'text-amber-400'"
                                  x-text="student.issue_text"></div>
                         </div>
                         <a :href="'/teacher/students/' + student.id"
-                           class="text-indigo-600 text-sm hover:underline">Подробнее</a>
+                           class="text-coral text-sm hover:text-coral-light transition">Подробнее</a>
                     </div>
                 </template>
                 <div x-show="needsAttention.length === 0" class="p-8 text-center text-gray-500">
@@ -119,14 +119,14 @@
     </div>
 
     <!-- Homework overview -->
-    <div class="mt-6 bg-white rounded-xl shadow-sm">
-        <div class="p-4 border-b border-gray-200 flex items-center justify-between">
-            <h3 class="font-semibold text-gray-900">Домашние задания</h3>
-            <a href="/teacher/homework" class="text-indigo-600 text-sm hover:underline">Все задания</a>
+    <div class="mt-6 bg-dark-light rounded-xl border border-gray-800">
+        <div class="p-4 border-b border-gray-700 flex items-center justify-between">
+            <h3 class="font-semibold text-white">Домашние задания</h3>
+            <a href="/teacher/homework" class="text-coral text-sm hover:text-coral-light transition">Все задания</a>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full">
-                <thead class="bg-gray-50">
+                <thead class="bg-dark">
                     <tr>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Задание</th>
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ученики</th>
@@ -135,24 +135,24 @@
                         <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Статус</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-100">
+                <tbody class="divide-y divide-gray-800">
                     <template x-for="hw in recentHomework" :key="hw.id">
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-4 py-3 text-sm text-gray-900" x-text="hw.title"></td>
-                            <td class="px-4 py-3 text-sm text-gray-500" x-text="hw.assigned_count"></td>
+                        <tr class="hover:bg-gray-800/50">
+                            <td class="px-4 py-3 text-sm text-white" x-text="hw.title"></td>
+                            <td class="px-4 py-3 text-sm text-gray-400" x-text="hw.assigned_count"></td>
                             <td class="px-4 py-3">
                                 <div class="flex items-center">
-                                    <div class="w-24 bg-gray-200 rounded-full h-2 mr-2">
+                                    <div class="w-24 bg-gray-700 rounded-full h-2 mr-2">
                                         <div class="bg-green-500 rounded-full h-2"
                                              :style="'width: ' + hw.completion_rate + '%'"></div>
                                     </div>
-                                    <span class="text-sm text-gray-500" x-text="hw.completion_rate + '%'"></span>
+                                    <span class="text-sm text-gray-400" x-text="hw.completion_rate + '%'"></span>
                                 </div>
                             </td>
-                            <td class="px-4 py-3 text-sm text-gray-500" x-text="hw.due_date"></td>
+                            <td class="px-4 py-3 text-sm text-gray-400" x-text="hw.due_date"></td>
                             <td class="px-4 py-3">
                                 <span class="px-2 py-1 text-xs rounded-full"
-                                      :class="hw.is_overdue ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'"
+                                      :class="hw.is_overdue ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'"
                                       x-text="hw.is_overdue ? 'Просрочено' : 'Активно'"></span>
                             </td>
                         </tr>
@@ -177,7 +177,6 @@ function teacherDashboard() {
         },
 
         async loadData() {
-            // Mock data for demo
             this.stats = {
                 total_students: 24,
                 active_subscriptions: 18,

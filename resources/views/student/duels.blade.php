@@ -7,34 +7,34 @@
 <div x-data="duelsPage()">
     <!-- Stats -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div class="bg-white rounded-xl p-4 shadow-sm">
-            <div class="text-2xl font-bold text-green-600" x-text="stats.wins || 0"></div>
-            <div class="text-gray-500 text-sm">Побед</div>
+        <div class="bg-dark-light rounded-xl p-4 border border-gray-800">
+            <div class="text-2xl font-bold text-green-400" x-text="stats.wins || 0"></div>
+            <div class="text-gray-400 text-sm">Побед</div>
         </div>
-        <div class="bg-white rounded-xl p-4 shadow-sm">
-            <div class="text-2xl font-bold text-red-600" x-text="stats.losses || 0"></div>
-            <div class="text-gray-500 text-sm">Поражений</div>
+        <div class="bg-dark-light rounded-xl p-4 border border-gray-800">
+            <div class="text-2xl font-bold text-red-400" x-text="stats.losses || 0"></div>
+            <div class="text-gray-400 text-sm">Поражений</div>
         </div>
-        <div class="bg-white rounded-xl p-4 shadow-sm">
-            <div class="text-2xl font-bold text-purple-600" x-text="stats.winrate + '%'"></div>
-            <div class="text-gray-500 text-sm">Винрейт</div>
+        <div class="bg-dark-light rounded-xl p-4 border border-gray-800">
+            <div class="text-2xl font-bold text-coral" x-text="stats.winrate + '%'"></div>
+            <div class="text-gray-400 text-sm">Винрейт</div>
         </div>
-        <div class="bg-white rounded-xl p-4 shadow-sm">
-            <div class="text-2xl font-bold text-orange-500" x-text="stats.current_streak || 0"></div>
-            <div class="text-gray-500 text-sm">Побед подряд</div>
+        <div class="bg-dark-light rounded-xl p-4 border border-gray-800">
+            <div class="text-2xl font-bold text-amber-400" x-text="stats.current_streak || 0"></div>
+            <div class="text-gray-400 text-sm">Побед подряд</div>
         </div>
     </div>
 
     <!-- Start duel -->
-    <div class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl p-6 text-white mb-6">
+    <div class="bg-gradient-to-r from-coral to-coral-dark rounded-2xl p-6 text-white mb-6">
         <div class="flex items-center justify-between">
             <div>
                 <h2 class="text-2xl font-bold mb-2">Начать дуэль</h2>
-                <p class="text-purple-100">Соревнуйся с другими учениками в решении задач!</p>
+                <p class="text-white/70">Соревнуйся с другими учениками в решении задач!</p>
             </div>
             <button @click="startMatchmaking"
                     :disabled="isSearching"
-                    class="bg-white text-purple-600 px-6 py-3 rounded-xl font-semibold hover:bg-purple-50 transition disabled:opacity-50">
+                    class="bg-white text-coral px-6 py-3 rounded-xl font-semibold hover:bg-white/90 transition disabled:opacity-50">
                 <span x-show="!isSearching">Найти соперника</span>
                 <span x-show="isSearching" class="flex items-center">
                     <svg class="animate-spin h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24">
@@ -49,25 +49,25 @@
 
     <!-- Active duels -->
     <div x-show="activeDuels.length > 0" class="mb-6">
-        <h3 class="font-semibold text-gray-900 mb-4">Активные дуэли</h3>
+        <h3 class="font-semibold text-white mb-4">Активные дуэли</h3>
         <div class="space-y-4">
             <template x-for="duel in activeDuels" :key="duel.id">
-                <div class="bg-white rounded-xl p-4 shadow-sm flex items-center">
+                <div class="bg-dark-light rounded-xl p-4 border border-gray-800 flex items-center">
                     <div class="flex-1 flex items-center">
-                        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                            <span class="text-purple-600 font-medium" x-text="duel.opponent?.name?.charAt(0) || '?'"></span>
+                        <div class="w-12 h-12 bg-coral/20 rounded-full flex items-center justify-center">
+                            <span class="text-coral font-medium" x-text="duel.opponent?.name?.charAt(0) || '?'"></span>
                         </div>
                         <div class="ml-4">
-                            <div class="font-medium text-gray-900" x-text="'vs ' + (duel.opponent?.name || 'Соперник')"></div>
+                            <div class="font-medium text-white" x-text="'vs ' + (duel.opponent?.name || 'Соперник')"></div>
                             <div class="text-sm text-gray-500" x-text="duel.topic?.name || 'Все темы'"></div>
                         </div>
                     </div>
                     <div class="text-center mx-4">
-                        <div class="text-2xl font-bold" x-text="duel.your_score + ' : ' + duel.opponent_score"></div>
+                        <div class="text-2xl font-bold text-white" x-text="duel.your_score + ' : ' + duel.opponent_score"></div>
                         <div class="text-xs text-gray-500">Вопрос <span x-text="duel.current_question"></span>/<span x-text="duel.total_questions"></span></div>
                     </div>
                     <a :href="'/duels/' + duel.id"
-                       class="bg-purple-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-purple-700 transition">
+                       class="bg-coral text-white px-4 py-2 rounded-lg font-medium hover:bg-coral-dark transition">
                         Продолжить
                     </a>
                 </div>
@@ -76,26 +76,26 @@
     </div>
 
     <!-- Recent duels -->
-    <div class="bg-white rounded-2xl shadow-sm">
-        <div class="p-4 border-b border-gray-200">
-            <h3 class="font-semibold text-gray-900">История дуэлей</h3>
+    <div class="bg-dark-light rounded-2xl border border-gray-800">
+        <div class="p-4 border-b border-gray-700">
+            <h3 class="font-semibold text-white">История дуэлей</h3>
         </div>
         <div x-show="recentDuels.length === 0" class="p-8 text-center text-gray-500">
             У вас пока нет завершённых дуэлей
         </div>
         <template x-for="duel in recentDuels" :key="duel.id">
-            <div class="flex items-center p-4 border-b border-gray-100 last:border-b-0">
+            <div class="flex items-center p-4 border-b border-gray-800 last:border-b-0">
                 <div class="w-10 h-10 rounded-full flex items-center justify-center"
-                     :class="duel.is_winner ? 'bg-green-100' : 'bg-red-100'">
-                    <span :class="duel.is_winner ? 'text-green-600' : 'text-red-600'"
+                     :class="duel.is_winner ? 'bg-green-500/20' : 'bg-red-500/20'">
+                    <span :class="duel.is_winner ? 'text-green-400' : 'text-red-400'"
                           x-text="duel.is_winner ? 'W' : 'L'"></span>
                 </div>
                 <div class="ml-4 flex-1">
-                    <div class="font-medium text-gray-900" x-text="'vs ' + (duel.opponent?.name || 'Соперник')"></div>
+                    <div class="font-medium text-white" x-text="'vs ' + (duel.opponent?.name || 'Соперник')"></div>
                     <div class="text-sm text-gray-500" x-text="duel.finished_at"></div>
                 </div>
                 <div class="text-right">
-                    <div class="font-semibold" :class="duel.is_winner ? 'text-green-600' : 'text-red-600'"
+                    <div class="font-semibold" :class="duel.is_winner ? 'text-green-400' : 'text-red-400'"
                          x-text="duel.your_score + ' : ' + duel.opponent_score"></div>
                     <div class="text-sm" :class="duel.is_winner ? 'text-green-500' : 'text-red-500'"
                          x-text="(duel.is_winner ? '+' : '') + duel.xp_change + ' XP'"></div>
