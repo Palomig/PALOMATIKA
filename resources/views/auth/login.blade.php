@@ -97,9 +97,22 @@
                     data-telegram-login="{{ config('services.telegram.bot_username') }}"
                     data-size="large"
                     data-radius="12"
-                    data-auth-url="{{ route('auth.telegram.callback') }}">
+                    data-onauth="onTelegramAuth(user)">
             </script>
         </div>
+        <script>
+        function onTelegramAuth(user) {
+            // Build callback URL with user data
+            const params = new URLSearchParams();
+            for (const key in user) {
+                if (user[key] !== null && user[key] !== undefined) {
+                    params.append(key, user[key]);
+                }
+            }
+            // Redirect to callback with auth data
+            window.location.href = '{{ route('auth.telegram.callback') }}?' + params.toString();
+        }
+        </script>
         @else
         <div class="flex items-center justify-center w-full px-4 py-3 bg-dark border border-gray-700 rounded-xl text-gray-500">
             <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor">
