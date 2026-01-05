@@ -90,29 +90,26 @@
             <span class="text-gray-300 font-medium">Войти через ВКонтакте</span>
         </a>
 
-        <!-- Telegram Widget -->
+        <!-- Telegram Deep Link Button -->
         @if(config('services.telegram.bot_username'))
-        <div class="flex justify-center py-2">
-            <script async src="https://telegram.org/js/telegram-widget.js?22"
-                    data-telegram-login="{{ config('services.telegram.bot_username') }}"
-                    data-size="large"
-                    data-radius="12"
-                    data-onauth="onTelegramAuth(user)">
-            </script>
+        <div x-data="telegramAuth()">
+            <button
+                @click="startAuth"
+                :disabled="loading"
+                class="flex items-center justify-center w-full px-4 py-3 bg-[#0088cc] border border-[#0088cc] rounded-xl hover:bg-[#0077b5] transition disabled:opacity-50"
+            >
+                <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="white">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
+                </svg>
+                <span x-show="!loading && !waiting" class="text-white font-medium">Войти через Telegram</span>
+                <span x-show="loading" class="text-white font-medium">Подготовка...</span>
+                <span x-show="waiting" class="text-white font-medium">Ожидание подтверждения...</span>
+            </button>
+            <p x-show="waiting" class="text-center text-gray-400 text-sm mt-2">
+                Откройте Telegram и нажмите "Start" в боте
+            </p>
+            <p x-show="error" class="text-center text-red-400 text-sm mt-2" x-text="error"></p>
         </div>
-        <script>
-        function onTelegramAuth(user) {
-            // Build callback URL with user data
-            const params = new URLSearchParams();
-            for (const key in user) {
-                if (user[key] !== null && user[key] !== undefined) {
-                    params.append(key, user[key]);
-                }
-            }
-            // Redirect to callback with auth data
-            window.location.href = '{{ route('auth.telegram.callback') }}?' + params.toString();
-        }
-        </script>
         @else
         <div class="flex items-center justify-center w-full px-4 py-3 bg-dark border border-gray-700 rounded-xl text-gray-500">
             <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor">
@@ -170,6 +167,93 @@ function loginForm() {
                 this.error = err.message;
             } finally {
                 this.loading = false;
+            }
+        }
+    }
+}
+
+function telegramAuth() {
+    return {
+        loading: false,
+        waiting: false,
+        error: '',
+        token: null,
+        pollInterval: null,
+
+        async startAuth() {
+            this.loading = true;
+            this.error = '';
+
+            try {
+                // Generate auth token
+                const response = await fetch('/api/telegram/generate-token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Ошибка генерации токена');
+                }
+
+                this.token = data.token;
+                this.loading = false;
+                this.waiting = true;
+
+                // Open Telegram app with deep link
+                window.open(data.deep_link, '_blank');
+
+                // Start polling for auth status
+                this.startPolling();
+
+            } catch (err) {
+                this.error = err.message;
+                this.loading = false;
+            }
+        },
+
+        startPolling() {
+            // Poll every 2 seconds for up to 5 minutes
+            let attempts = 0;
+            const maxAttempts = 150; // 5 minutes
+
+            this.pollInterval = setInterval(async () => {
+                attempts++;
+
+                if (attempts > maxAttempts) {
+                    this.stopPolling();
+                    this.waiting = false;
+                    this.error = 'Время ожидания истекло. Попробуйте снова.';
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`/api/telegram/check-token/${this.token}`);
+                    const data = await response.json();
+
+                    if (data.status === 'authenticated') {
+                        this.stopPolling();
+                        window.location.href = data.redirect || '/dashboard';
+                    } else if (data.status === 'expired' || data.status === 'not_found') {
+                        this.stopPolling();
+                        this.waiting = false;
+                        this.error = 'Сессия истекла. Попробуйте снова.';
+                    }
+                } catch (err) {
+                    console.error('Polling error:', err);
+                }
+            }, 2000);
+        },
+
+        stopPolling() {
+            if (this.pollInterval) {
+                clearInterval(this.pollInterval);
+                this.pollInterval = null;
             }
         }
     }
