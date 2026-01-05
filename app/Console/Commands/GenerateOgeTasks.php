@@ -414,7 +414,7 @@ class GenerateOgeTasks extends Command
             'text' => "Найдите значение выражения: {$expressionText}",
             'text_html' => "Найдите значение выражения: <span class=\"math\">\\left(\\frac{{$a}}{{$b}} {$op} \\frac{{$c}}{{$d}}\\right) \\cdot \\frac{{$e}}{{$f}}</span>",
             'answer' => $answer,
-            'answer_type' => 'fraction',
+            'answer_type' => 'number',
             'difficulty' => 4,
             'steps' => [
                 [
@@ -869,7 +869,7 @@ class GenerateOgeTasks extends Command
             'text' => "Найдите значение выражения: {$expressionText}",
             'text_html' => "Найдите значение выражения: <span class=\"math\">\${$expression}\$</span>",
             'answer' => $answer,
-            'answer_type' => 'fraction',
+            'answer_type' => 'number',
             'difficulty' => 2,
             'steps' => [
                 [
@@ -919,7 +919,7 @@ class GenerateOgeTasks extends Command
             'text' => "Найдите значение выражения: {$expressionText}",
             'text_html' => "Найдите значение выражения: <span class=\"math\">\${$expression}\$</span>",
             'answer' => $answer,
-            'answer_type' => 'fraction',
+            'answer_type' => 'number',
             'difficulty' => 2,
             'steps' => [
                 [
@@ -996,7 +996,7 @@ class GenerateOgeTasks extends Command
             'text' => "Найдите значение выражения: {$expressionText}",
             'text_html' => "Найдите значение выражения: <span class=\"math\">\${$expression}\$</span>",
             'answer' => $answer,
-            'answer_type' => 'fraction',
+            'answer_type' => 'number',
             'difficulty' => 2,
             'steps' => [
                 [
