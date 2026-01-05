@@ -175,14 +175,16 @@
 <!-- Info box about parsing -->
 <div class="info-box">
     <h4>📊 Информация о парсинге</h4>
-    <p><strong>Источник данных:</strong> Ручной ввод на основе скриншотов PDF</p>
-    <p><strong>Файл:</strong> <code>app/Http/Controllers/TestPdfController.php</code></p>
+    <p><strong>Источник данных:</strong> {{ $source ?? 'Manual' }}</p>
+    <p><strong>PDF файл:</strong> <code>storage/app/pdf/task_06.pdf</code></p>
+    <p><strong>Парсер:</strong> <code>app/Services/PdfTaskParser.php</code></p>
     <p><strong>Структура данных:</strong></p>
     <ul style="margin-left: 20px; margin-top: 5px;">
         <li>Блок → Задание → Задачи</li>
         <li>Каждая задача: id, expression (LaTeX), answer, [denominator]</li>
     </ul>
-    <p style="margin-top: 10px;"><strong>Для парсинга PDF:</strong> Загрузите PDF в <code>storage/app/pdf/</code> и реализуйте парсер</p>
+    <p style="margin-top: 10px;"><strong>Git команда для извлечения PDF:</strong></p>
+    <code style="display: block; margin-top: 5px; padding: 8px; background: #e5e7eb;">git show "b8c1426:РиР_ ОГЭ (тренажер)/ОГЭ 2026 Задание №06 (трен) v2.pdf" > storage/app/pdf/task_06.pdf</code>
 </div>
 
 </body>
