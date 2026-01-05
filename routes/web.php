@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\SocialAuthController;
+use App\Http\Controllers\Auth\TelegramBotAuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 })->name('landing');
+
+// Telegram Bot Webhook (excluded from CSRF in VerifyCsrfToken middleware)
+Route::post('/telegram/webhook', [TelegramBotAuthController::class, 'webhook'])
+    ->name('telegram.webhook');
 
 // Auth pages (guest only)
 Route::middleware('guest')->group(function () {
