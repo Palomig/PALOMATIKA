@@ -3,10 +3,56 @@
 @section('title', 'Тренировка')
 @section('header', 'Тренировка')
 
+@push('styles')
+<style>
+    .drop-zone {
+        min-width: 70px;
+        min-height: 40px;
+        border: 2px dashed #4b5563;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 4px;
+        padding: 4px 12px;
+        transition: all 0.2s;
+        vertical-align: middle;
+    }
+    .drop-zone.drag-over {
+        border-color: #ff6b6b;
+        background: rgba(255, 107, 107, 0.1);
+    }
+    .drop-zone.filled {
+        border-style: solid;
+        border-color: #ff6b6b;
+        background: rgba(255, 107, 107, 0.2);
+    }
+    .puzzle-block {
+        cursor: grab;
+        user-select: none;
+        transition: all 0.2s;
+    }
+    .puzzle-block:active {
+        cursor: grabbing;
+    }
+    .puzzle-block.dragging {
+        opacity: 0.5;
+        transform: scale(0.95);
+    }
+    .puzzle-block.used {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+    .math-display {
+        font-size: 1.25rem;
+    }
+</style>
+@endpush
+
 @section('content')
-<div x-data="practicePage()">
-    <!-- No active task - show selection -->
-    <div x-show="!currentTask && !loading">
+<div x-data="practicePage()" x-init="init()">
+    <!-- Topic selection -->
+    <div x-show="!currentTask && !loading && !error">
         <div class="bg-dark-light rounded-2xl p-6 border border-gray-800 mb-6">
             <h2 class="text-xl font-semibold text-white mb-4">Выберите тему для тренировки</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -28,7 +74,6 @@
             </div>
         </div>
 
-        <!-- Topics selection -->
         <div class="bg-dark-light rounded-2xl p-6 border border-gray-800">
             <h3 class="font-semibold text-white mb-4">Или выберите конкретную тему:</h3>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
@@ -43,7 +88,7 @@
         </div>
     </div>
 
-    <!-- Loading task -->
+    <!-- Loading -->
     <div x-show="loading" class="text-center py-12">
         <svg class="animate-spin h-12 w-12 mx-auto text-coral" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -52,7 +97,7 @@
         <p class="text-gray-400 mt-4">Загрузка задачи...</p>
     </div>
 
-    <!-- Error message -->
+    <!-- Error -->
     <div x-show="error && !loading" class="text-center py-12">
         <div class="bg-red-500/10 border border-red-500/50 rounded-2xl p-8 max-w-md mx-auto">
             <svg class="h-16 w-16 mx-auto text-red-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -66,12 +111,12 @@
         </div>
     </div>
 
-    <!-- Active task -->
+    <!-- Active Task -->
     <div x-show="currentTask && !loading" x-cloak>
-        <!-- Task header -->
+        <!-- Header -->
         <div class="bg-dark-light rounded-t-2xl p-4 border-b border-gray-700 flex items-center justify-between">
             <div class="flex items-center">
-                <span class="bg-coral/20 text-coral text-sm font-medium px-2 py-1 rounded"
+                <span class="bg-coral/20 text-coral text-sm font-medium px-3 py-1 rounded"
                       x-text="'№' + (currentTask?.topic?.oge_number || '?')"></span>
                 <span class="ml-3 text-gray-400" x-text="currentTask?.topic?.name"></span>
             </div>
@@ -80,67 +125,66 @@
             </button>
         </div>
 
-        <!-- Task content -->
+        <!-- Content -->
         <div class="bg-dark-light p-6 border-x border-gray-800">
-            <div class="text-lg text-white mb-6" x-html="currentTask?.text_html || currentTask?.text"></div>
+            <!-- Task text -->
+            <div class="text-xl text-white mb-6 math-display" x-ref="taskText"></div>
 
-            <!-- Task image if exists -->
+            <!-- Image -->
             <template x-if="currentTask?.image_url">
                 <div class="mb-6">
-                    <img :src="currentTask.image_url" alt="Изображение задачи" class="max-w-full rounded-lg border border-gray-700">
+                    <img :src="currentTask.image_url" alt="Задача" class="max-w-full rounded-lg border border-gray-700">
                 </div>
             </template>
 
-            <!-- Puzzle steps -->
+            <!-- Puzzle Steps -->
             <div x-show="currentTask?.steps?.length > 0" class="space-y-6">
                 <template x-for="(step, stepIndex) in currentTask?.steps" :key="step.id">
-                    <div class="border rounded-lg p-4" :class="currentStep === stepIndex ? 'border-coral/50 bg-coral/5' : 'border-gray-700'">
-                        <div class="flex items-center mb-3">
-                            <span class="w-6 h-6 rounded-full flex items-center justify-center text-sm font-medium"
+                    <div class="border rounded-xl p-5 transition-all"
+                         :class="currentStep === stepIndex ? 'border-coral/50 bg-coral/5' : 'border-gray-700 bg-dark-lighter/50'">
+
+                        <!-- Step header -->
+                        <div class="flex items-center mb-4">
+                            <span class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
                                   :class="stepResults[stepIndex] === true ? 'bg-green-500 text-white' :
                                          stepResults[stepIndex] === false ? 'bg-red-500 text-white' :
                                          currentStep === stepIndex ? 'bg-coral text-white' : 'bg-gray-700 text-gray-400'"
                                   x-text="stepIndex + 1"></span>
-                            <span class="ml-2 text-gray-300" x-text="step.instruction"></span>
+                            <span class="ml-3 text-gray-300 font-medium" x-text="step.instruction"></span>
                         </div>
 
-                        <!-- Step template with blanks -->
-                        <div class="text-lg mb-4 text-white" x-show="currentStep >= stepIndex">
-                            <template x-for="(part, i) in parseTemplate(step.template)" :key="i">
-                                <span>
-                                    <template x-if="part.type === 'text'">
-                                        <span x-text="part.content"></span>
-                                    </template>
-                                    <template x-if="part.type === 'blank'">
-                                        <span class="inline-block min-w-[60px] px-3 py-1 mx-1 border-2 rounded text-center"
-                                              :class="stepAnswers[stepIndex]?.[part.index] ?
-                                                     'border-coral bg-coral/20' : 'border-dashed border-gray-600'"
-                                              x-text="stepAnswers[stepIndex]?.[part.index] || '___'"></span>
-                                    </template>
-                                </span>
-                            </template>
+                        <!-- Template with drop zones -->
+                        <div class="text-xl mb-5 text-white flex flex-wrap items-center gap-1"
+                             x-show="currentStep >= stepIndex"
+                             x-ref="'stepTemplate' + stepIndex">
                         </div>
 
-                        <!-- Blocks to drag -->
-                        <div x-show="currentStep === stepIndex && stepResults[stepIndex] === undefined" class="flex flex-wrap gap-2 mb-4">
+                        <!-- Draggable blocks -->
+                        <div x-show="currentStep === stepIndex && stepResults[stepIndex] === undefined"
+                             class="flex flex-wrap gap-3 mb-4 p-4 bg-dark rounded-lg border border-gray-700">
+                            <span class="text-gray-500 text-sm mr-2">Перетащите:</span>
                             <template x-for="block in getAvailableBlocks(stepIndex)" :key="block.id">
-                                <button @click="selectBlock(stepIndex, block)"
-                                        class="px-4 py-2 rounded-lg font-medium transition"
-                                        :class="block.selected ? 'bg-coral text-white' : 'bg-gray-700 hover:bg-gray-600 text-gray-200'"
-                                        x-text="block.content"></button>
+                                <div class="puzzle-block px-5 py-2.5 rounded-lg font-medium text-lg"
+                                     :class="isBlockUsed(stepIndex, block.content) ? 'bg-gray-800 text-gray-500 used' : 'bg-coral text-white hover:bg-coral-dark'"
+                                     :draggable="!isBlockUsed(stepIndex, block.content)"
+                                     @dragstart="dragStart($event, stepIndex, block)"
+                                     @dragend="dragEnd($event)"
+                                     x-text="block.content">
+                                </div>
                             </template>
                         </div>
 
                         <!-- Check button -->
                         <button x-show="currentStep === stepIndex && stepResults[stepIndex] === undefined && isStepComplete(stepIndex)"
                                 @click="checkStep(stepIndex)"
-                                class="bg-coral text-white px-6 py-2 rounded-lg font-medium hover:bg-coral-dark transition">
+                                class="bg-green-500 text-white px-8 py-3 rounded-lg font-medium hover:bg-green-600 transition text-lg">
                             Проверить
                         </button>
 
                         <!-- Feedback -->
-                        <div x-show="stepResults[stepIndex] !== undefined" class="mt-3">
-                            <div x-show="stepResults[stepIndex] === true" class="text-green-400 font-medium">
+                        <div x-show="stepResults[stepIndex] !== undefined" class="mt-4 p-3 rounded-lg"
+                             :class="stepResults[stepIndex] ? 'bg-green-500/20' : 'bg-red-500/20'">
+                            <div x-show="stepResults[stepIndex] === true" class="text-green-400 font-medium text-lg">
                                 ✓ Правильно!
                             </div>
                             <div x-show="stepResults[stepIndex] === false" class="text-red-400">
@@ -151,12 +195,12 @@
                 </template>
             </div>
 
-            <!-- Simple answer input -->
+            <!-- Simple answer (no steps) -->
             <div x-show="!currentTask?.steps?.length" class="mt-6">
                 <label class="block text-sm font-medium text-gray-300 mb-2">Ваш ответ:</label>
                 <div class="flex flex-wrap gap-4">
                     <input type="text" x-model="answer"
-                           class="flex-1 min-w-[200px] px-4 py-3 bg-dark border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-coral focus:border-transparent"
+                           class="flex-1 min-w-[200px] px-4 py-3 bg-dark border border-gray-700 rounded-lg text-white text-lg"
                            placeholder="Введите ответ"
                            @keyup.enter="submitAnswer">
                     <button @click="submitAnswer"
@@ -167,7 +211,7 @@
             </div>
         </div>
 
-        <!-- Task footer with result -->
+        <!-- Result footer -->
         <div x-show="taskResult !== null" class="bg-dark-light rounded-b-2xl p-6 border-t border-gray-700">
             <div class="flex items-center justify-between">
                 <div>
@@ -175,11 +219,11 @@
                         Отлично! +<span x-text="xpEarned"></span> XP
                     </div>
                     <div x-show="taskResult === false" class="text-xl font-semibold text-red-400">
-                        Неправильно. Правильный ответ: <span x-text="currentTask?.correct_answer"></span>
+                        Неправильно. Ответ: <span x-text="currentTask?.correct_answer"></span>
                     </div>
                 </div>
                 <button @click="nextTask"
-                        class="bg-coral text-white px-6 py-3 rounded-lg font-medium hover:bg-coral-dark transition">
+                        class="bg-coral text-white px-8 py-3 rounded-lg font-medium hover:bg-coral-dark transition text-lg">
                     Следующая задача
                 </button>
             </div>
@@ -200,12 +244,11 @@ function practicePage() {
         answer: '',
         taskResult: null,
         xpEarned: 0,
-
-        // Puzzle state
         currentStep: 0,
         stepAnswers: {},
         stepResults: {},
         stepFeedback: {},
+        draggedBlock: null,
 
         async init() {
             await this.loadTopics();
@@ -237,27 +280,18 @@ function practicePage() {
             try {
                 let url = '/api/tasks/next';
                 const params = new URLSearchParams();
-
-                if (this.topicId) {
-                    params.append('topic_id', this.topicId);
-                }
-                if (this.practiceMode === 'weak') {
-                    params.append('mode', 'weak');
-                }
-
-                if (params.toString()) {
-                    url += '?' + params.toString();
-                }
+                if (this.topicId) params.append('topic_id', this.topicId);
+                if (this.practiceMode === 'weak') params.append('mode', 'weak');
+                if (params.toString()) url += '?' + params.toString();
 
                 const response = await fetch(url);
-
                 if (response.ok) {
                     const data = await response.json();
                     this.currentTask = data.task;
+                    this.$nextTick(() => this.renderTask());
                 } else {
                     const errorData = await response.json().catch(() => ({}));
                     this.error = errorData.message || 'Не удалось загрузить задачу';
-                    console.error('API error:', errorData);
                 }
             } catch (e) {
                 console.error('Failed to load task', e);
@@ -265,6 +299,161 @@ function practicePage() {
             }
 
             this.loading = false;
+        },
+
+        renderTask() {
+            // Render task text with KaTeX
+            if (this.$refs.taskText && this.currentTask) {
+                const text = this.currentTask.text_html || this.currentTask.text;
+                this.$refs.taskText.innerHTML = text;
+                if (window.renderMathInElement) {
+                    renderMathInElement(this.$refs.taskText, {
+                        delimiters: [
+                            {left: '$$', right: '$$', display: true},
+                            {left: '$', right: '$', display: false},
+                            {left: '\\(', right: '\\)', display: false},
+                            {left: '\\[', right: '\\]', display: true}
+                        ]
+                    });
+                }
+            }
+
+            // Render step templates
+            if (this.currentTask?.steps) {
+                this.currentTask.steps.forEach((step, i) => {
+                    this.$nextTick(() => this.renderStepTemplate(i));
+                });
+            }
+        },
+
+        renderStepTemplate(stepIndex) {
+            const step = this.currentTask?.steps?.[stepIndex];
+            if (!step) return;
+
+            const container = document.querySelector(`[x-ref="stepTemplate${stepIndex}"]`);
+            if (!container) {
+                setTimeout(() => this.renderStepTemplate(stepIndex), 100);
+                return;
+            }
+
+            container.innerHTML = '';
+            const template = step.template || '';
+            const parts = template.split('[___]');
+
+            parts.forEach((part, i) => {
+                // Add text part
+                if (part) {
+                    const textSpan = document.createElement('span');
+                    textSpan.innerHTML = part;
+                    container.appendChild(textSpan);
+                }
+
+                // Add drop zone (except after last part)
+                if (i < parts.length - 1) {
+                    const dropZone = document.createElement('div');
+                    dropZone.className = 'drop-zone';
+                    dropZone.dataset.stepIndex = stepIndex;
+                    dropZone.dataset.blankIndex = i;
+                    dropZone.textContent = '?';
+
+                    dropZone.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                        dropZone.classList.add('drag-over');
+                    });
+
+                    dropZone.addEventListener('dragleave', () => {
+                        dropZone.classList.remove('drag-over');
+                    });
+
+                    dropZone.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        dropZone.classList.remove('drag-over');
+                        this.handleDrop(stepIndex, i);
+                    });
+
+                    // Click to remove
+                    dropZone.addEventListener('click', () => {
+                        if (this.stepAnswers[stepIndex]?.[i]) {
+                            delete this.stepAnswers[stepIndex][i];
+                            this.stepAnswers = {...this.stepAnswers};
+                            this.updateDropZone(stepIndex, i, null);
+                        }
+                    });
+
+                    container.appendChild(dropZone);
+                }
+            });
+
+            // Render math in template
+            if (window.renderMathInElement) {
+                renderMathInElement(container, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '$', right: '$', display: false},
+                        {left: '\\(', right: '\\)', display: false},
+                        {left: '\\[', right: '\\]', display: true}
+                    ]
+                });
+            }
+        },
+
+        dragStart(event, stepIndex, block) {
+            if (this.isBlockUsed(stepIndex, block.content)) {
+                event.preventDefault();
+                return;
+            }
+            this.draggedBlock = { stepIndex, block };
+            event.target.classList.add('dragging');
+            event.dataTransfer.effectAllowed = 'move';
+        },
+
+        dragEnd(event) {
+            event.target.classList.remove('dragging');
+            this.draggedBlock = null;
+        },
+
+        handleDrop(stepIndex, blankIndex) {
+            if (!this.draggedBlock || this.draggedBlock.stepIndex !== stepIndex) return;
+
+            const block = this.draggedBlock.block;
+
+            if (!this.stepAnswers[stepIndex]) {
+                this.stepAnswers[stepIndex] = {};
+            }
+
+            // Remove from previous position if exists
+            Object.entries(this.stepAnswers[stepIndex]).forEach(([k, v]) => {
+                if (v === block.content) {
+                    delete this.stepAnswers[stepIndex][k];
+                    this.updateDropZone(stepIndex, parseInt(k), null);
+                }
+            });
+
+            // Clear current position if occupied
+            if (this.stepAnswers[stepIndex][blankIndex]) {
+                const oldValue = this.stepAnswers[stepIndex][blankIndex];
+                delete this.stepAnswers[stepIndex][blankIndex];
+            }
+
+            // Place in new position
+            this.stepAnswers[stepIndex][blankIndex] = block.content;
+            this.stepAnswers = {...this.stepAnswers};
+
+            this.updateDropZone(stepIndex, blankIndex, block.content);
+            this.draggedBlock = null;
+        },
+
+        updateDropZone(stepIndex, blankIndex, value) {
+            const dropZone = document.querySelector(`[data-step-index="${stepIndex}"][data-blank-index="${blankIndex}"]`);
+            if (dropZone) {
+                if (value) {
+                    dropZone.textContent = value;
+                    dropZone.classList.add('filled');
+                } else {
+                    dropZone.textContent = '?';
+                    dropZone.classList.remove('filled');
+                }
+            }
         },
 
         resetTaskState() {
@@ -276,65 +465,17 @@ function practicePage() {
             this.stepAnswers = {};
             this.stepResults = {};
             this.stepFeedback = {};
-        },
-
-        parseTemplate(template) {
-            if (!template) return [];
-            const parts = [];
-            let blankIndex = 0;
-            const regex = /\[___\]/g;
-            let lastIndex = 0;
-            let match;
-
-            while ((match = regex.exec(template)) !== null) {
-                if (match.index > lastIndex) {
-                    parts.push({ type: 'text', content: template.slice(lastIndex, match.index) });
-                }
-                parts.push({ type: 'blank', index: blankIndex++ });
-                lastIndex = regex.lastIndex;
-            }
-
-            if (lastIndex < template.length) {
-                parts.push({ type: 'text', content: template.slice(lastIndex) });
-            }
-
-            return parts;
+            this.draggedBlock = null;
         },
 
         getAvailableBlocks(stepIndex) {
             const step = this.currentTask?.steps?.[stepIndex];
-            if (!step?.blocks) return [];
-
-            const usedBlocks = Object.values(this.stepAnswers[stepIndex] || {});
-            return step.blocks.map(b => ({
-                ...b,
-                selected: usedBlocks.includes(b.content)
-            }));
+            return step?.blocks || [];
         },
 
-        selectBlock(stepIndex, block) {
-            if (!this.stepAnswers[stepIndex]) {
-                this.stepAnswers[stepIndex] = {};
-            }
-
-            const answers = this.stepAnswers[stepIndex];
-            const step = this.currentTask?.steps?.[stepIndex];
-            const blanksCount = (step?.template?.match(/\[___\]/g) || []).length;
-
-            // Find next empty slot or toggle
-            const existingSlot = Object.entries(answers).find(([k, v]) => v === block.content);
-            if (existingSlot) {
-                delete answers[existingSlot[0]];
-            } else {
-                for (let i = 0; i < blanksCount; i++) {
-                    if (!answers[i]) {
-                        answers[i] = block.content;
-                        break;
-                    }
-                }
-            }
-
-            this.stepAnswers[stepIndex] = { ...answers };
+        isBlockUsed(stepIndex, content) {
+            const answers = this.stepAnswers[stepIndex] || {};
+            return Object.values(answers).includes(content);
         },
 
         isStepComplete(stepIndex) {
@@ -347,33 +488,36 @@ function practicePage() {
         checkStep(stepIndex) {
             const step = this.currentTask?.steps?.[stepIndex];
             const answers = this.stepAnswers[stepIndex] || {};
-            const userAnswers = Object.keys(answers)
-                .sort((a, b) => a - b)
-                .map(k => answers[k]);
+            const userAnswers = [];
+
+            const blanksCount = (step?.template?.match(/\[___\]/g) || []).length;
+            for (let i = 0; i < blanksCount; i++) {
+                userAnswers.push(answers[i] || '');
+            }
 
             const isCorrect = JSON.stringify(userAnswers) === JSON.stringify(step.correct_answers);
             this.stepResults[stepIndex] = isCorrect;
+            this.stepResults = {...this.stepResults};
 
             if (!isCorrect) {
-                // Find trap feedback
                 const wrongAnswer = userAnswers.find(a => !step.correct_answers.includes(a));
                 const trapBlock = step.blocks?.find(b => b.content === wrongAnswer && b.trap_explanation);
-                this.stepFeedback[stepIndex] = trapBlock?.trap_explanation || 'Попробуй ещё раз';
+                this.stepFeedback[stepIndex] = trapBlock?.trap_explanation || 'Попробуйте ещё раз';
+                this.stepFeedback = {...this.stepFeedback};
             }
 
             if (isCorrect) {
-                // Move to next step or complete task
                 if (stepIndex < this.currentTask.steps.length - 1) {
                     this.currentStep = stepIndex + 1;
+                    this.$nextTick(() => this.renderStepTemplate(this.currentStep));
                 } else {
                     this.completeTask(true);
                 }
             }
         },
 
-        async submitAnswer() {
+        submitAnswer() {
             if (!this.answer.trim()) return;
-
             const isCorrect = this.answer.trim().toLowerCase() === this.currentTask?.correct_answer?.toLowerCase();
             this.completeTask(isCorrect);
         },
@@ -381,9 +525,6 @@ function practicePage() {
         completeTask(isCorrect) {
             this.taskResult = isCorrect;
             this.xpEarned = isCorrect ? 10 : 0;
-
-            // Submit to API
-            // fetch('/api/attempts/' + attemptId + '/submit', ...)
         },
 
         nextTask() {
