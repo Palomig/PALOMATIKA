@@ -97,8 +97,7 @@
                     data-telegram-login="{{ config('services.telegram.bot_username') }}"
                     data-size="large"
                     data-radius="12"
-                    data-auth-url="{{ route('auth.telegram.callback') }}"
-                    data-request-access="write">
+                    data-auth-url="{{ route('auth.telegram.callback') }}">
             </script>
         </div>
         @else
