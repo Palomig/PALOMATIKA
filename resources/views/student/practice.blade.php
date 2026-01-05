@@ -52,6 +52,20 @@
         <p class="text-gray-400 mt-4">Загрузка задачи...</p>
     </div>
 
+    <!-- Error message -->
+    <div x-show="error && !loading" class="text-center py-12">
+        <div class="bg-red-500/10 border border-red-500/50 rounded-2xl p-8 max-w-md mx-auto">
+            <svg class="h-16 w-16 mx-auto text-red-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+            <p class="text-red-400 text-lg mb-4" x-text="error"></p>
+            <button @click="error = null; practiceMode = null; topicId = null;"
+                    class="bg-coral text-white px-6 py-2 rounded-lg hover:bg-coral-dark transition">
+                Выбрать тему
+            </button>
+        </div>
+    </div>
+
     <!-- Active task -->
     <div x-show="currentTask && !loading" x-cloak>
         <!-- Task header -->
@@ -180,6 +194,7 @@ function practicePage() {
         topics: [],
         currentTask: null,
         loading: false,
+        error: null,
         practiceMode: null,
         topicId: null,
         answer: '',
@@ -216,62 +231,37 @@ function practicePage() {
 
         async loadNextTask() {
             this.loading = true;
+            this.error = null;
             this.resetTaskState();
 
             try {
                 let url = '/api/tasks/next';
+                const params = new URLSearchParams();
+
                 if (this.topicId) {
-                    url += '?topic_id=' + this.topicId;
-                } else if (this.practiceMode === 'weak') {
-                    url += '?mode=weak';
+                    params.append('topic_id', this.topicId);
+                }
+                if (this.practiceMode === 'weak') {
+                    params.append('mode', 'weak');
                 }
 
-                const response = await fetch(url, {
-                    headers: this.$root.getAuthHeaders()
-                });
+                if (params.toString()) {
+                    url += '?' + params.toString();
+                }
+
+                const response = await fetch(url);
 
                 if (response.ok) {
                     const data = await response.json();
                     this.currentTask = data.task;
+                } else {
+                    const errorData = await response.json().catch(() => ({}));
+                    this.error = errorData.message || 'Не удалось загрузить задачу';
+                    console.error('API error:', errorData);
                 }
             } catch (e) {
                 console.error('Failed to load task', e);
-                // Mock task for demo
-                this.currentTask = {
-                    id: 1,
-                    text: 'Решите уравнение x² - 5x + 6 = 0',
-                    text_html: 'Решите уравнение x² - 5x + 6 = 0',
-                    correct_answer: '2;3',
-                    topic: { oge_number: '08', name: 'Уравнения' },
-                    steps: [
-                        {
-                            id: 1,
-                            instruction: 'Определите коэффициенты a, b, c',
-                            template: 'a = [___], b = [___], c = [___]',
-                            correct_answers: ['1', '-5', '6'],
-                            blocks: [
-                                { id: 1, content: '1', is_correct: true },
-                                { id: 2, content: '-5', is_correct: true },
-                                { id: 3, content: '6', is_correct: true },
-                                { id: 4, content: '5', is_trap: true, trap_explanation: 'Знак b отрицательный!' },
-                                { id: 5, content: '-6', is_trap: true }
-                            ]
-                        },
-                        {
-                            id: 2,
-                            instruction: 'Вычислите дискриминант',
-                            template: 'D = [___] - [___] = [___]',
-                            correct_answers: ['25', '24', '1'],
-                            blocks: [
-                                { id: 6, content: '25', is_correct: true },
-                                { id: 7, content: '24', is_correct: true },
-                                { id: 8, content: '1', is_correct: true },
-                                { id: 9, content: '-25', is_trap: true },
-                                { id: 10, content: '49' }
-                            ]
-                        }
-                    ]
-                };
+                this.error = 'Ошибка сети. Попробуйте позже.';
             }
 
             this.loading = false;

@@ -28,7 +28,8 @@ class TaskController extends Controller
 
         $user = $request->user();
 
-        $query = Task::active();
+        $query = Task::active()
+            ->whereHas('steps'); // Only get tasks with puzzle steps
 
         if ($request->topic_id) {
             $query->where('topic_id', $request->topic_id);
@@ -38,29 +39,37 @@ class TaskController extends Controller
             $query->where('difficulty', $request->difficulty);
         }
 
-        // Exclude recently attempted tasks
-        $recentTaskIds = $user->attempts()
-            ->where('created_at', '>', now()->subHours(2))
-            ->pluck('task_id');
+        // Exclude recently attempted tasks (only for authenticated users)
+        if ($user) {
+            $recentTaskIds = $user->attempts()
+                ->where('created_at', '>', now()->subHours(2))
+                ->pluck('task_id');
 
-        $query->whereNotIn('id', $recentTaskIds);
+            $query->whereNotIn('id', $recentTaskIds);
+        }
 
-        // Order by times_shown (prioritize less shown tasks)
-        $task = $query->orderBy('times_shown')->first();
+        // Order by times_shown (prioritize less shown tasks), then random
+        $task = $query->orderBy('times_shown')->inRandomOrder()->first();
 
         if (!$task) {
-            // If no task found, get any task
+            // If no task found with steps, get any task with steps
             $task = Task::active()
+                ->whereHas('steps')
                 ->when($request->topic_id, fn($q) => $q->where('topic_id', $request->topic_id))
                 ->inRandomOrder()
                 ->first();
         }
 
         if (!$task) {
-            return response()->json(['message' => 'Задачи не найдены'], 404);
+            return response()->json(['message' => 'Задачи не найдены. Запустите php artisan oge:generate-puzzles'], 404);
         }
 
         $task->load(['topic', 'steps.blocks', 'skills']);
+
+        // Add image URL if exists
+        if ($task->image_path) {
+            $task->image_url = asset('images/tasks/' . $task->image_path);
+        }
 
         return response()->json(['task' => $task]);
     }
