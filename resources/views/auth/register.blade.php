@@ -281,7 +281,7 @@ function telegramAuth() {
 
                     if (data.status === 'authenticated') {
                         this.stopPolling();
-                        window.location.href = data.redirect || '/dashboard';
+                        window.location.href = data.login_url;
                     } else if (data.status === 'expired' || data.status === 'not_found') {
                         this.stopPolling();
                         this.waiting = false;

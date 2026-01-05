@@ -19,6 +19,10 @@ Route::get('/', function () {
 Route::post('/telegram/webhook', [TelegramBotAuthController::class, 'webhook'])
     ->name('telegram.webhook');
 
+// Telegram login via token (performs actual login with session)
+Route::get('/auth/telegram/login/{token}', [TelegramBotAuthController::class, 'login'])
+    ->name('telegram.login');
+
 // Auth pages (guest only)
 Route::middleware('guest')->group(function () {
     Route::get('/login', function () {
