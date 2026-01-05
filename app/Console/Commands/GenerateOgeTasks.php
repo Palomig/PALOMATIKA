@@ -166,21 +166,23 @@ class GenerateOgeTasks extends Command
      */
     private function generateBracketExpression(): array
     {
-        // Pick numbers that work nicely
-        // We want (a/b + c/d) * e/f where the bracket simplifies nicely
+        // Pick compatible denominators
+        $configs = [
+            ['commonDen' => 10, 'b' => 2, 'd' => 5],
+            ['commonDen' => 10, 'b' => 5, 'd' => 2],
+            ['commonDen' => 12, 'b' => 3, 'd' => 4],
+            ['commonDen' => 12, 'b' => 4, 'd' => 6],
+            ['commonDen' => 15, 'b' => 3, 'd' => 5],
+            ['commonDen' => 20, 'b' => 4, 'd' => 5],
+            ['commonDen' => 20, 'b' => 5, 'd' => 10],
+            ['commonDen' => 24, 'b' => 4, 'd' => 6],
+            ['commonDen' => 30, 'b' => 5, 'd' => 6],
+        ];
 
-        // Common denominator approach
-        $commonDen = [10, 12, 15, 20, 24, 30][rand(0, 5)];
-
-        $b = [2, 4, 5, 10, 20][rand(0, 4)];
-        while ($commonDen % $b !== 0) {
-            $b = [2, 4, 5, 10][rand(0, 3)];
-        }
-
-        $d = [2, 4, 5, 10, 20][rand(0, 4)];
-        while ($commonDen % $d !== 0 || $d === $b) {
-            $d = [2, 4, 5, 10][rand(0, 3)];
-        }
+        $config = $configs[array_rand($configs)];
+        $commonDen = $config['commonDen'];
+        $b = $config['b'];
+        $d = $config['d'];
 
         $a = rand(1, $b * 2);
         $c = rand(1, $d * 2);
@@ -940,22 +942,25 @@ class GenerateOgeTasks extends Command
 
     private function generateFractionAddSubtract(): array
     {
-        // a/b - c/d with common denominator
-        $commonDen = rand(2, 10) * rand(2, 5); // 4-50
-        $b = $commonDen / rand(1, 3);
-        if ($b < 2) $b = $commonDen;
-        $b = (int) $b;
+        // Use predefined compatible pairs
+        $configs = [
+            ['b' => 2, 'd' => 3, 'commonDen' => 6],
+            ['b' => 2, 'd' => 5, 'commonDen' => 10],
+            ['b' => 3, 'd' => 4, 'commonDen' => 12],
+            ['b' => 4, 'd' => 5, 'commonDen' => 20],
+            ['b' => 3, 'd' => 5, 'commonDen' => 15],
+            ['b' => 2, 'd' => 7, 'commonDen' => 14],
+            ['b' => 3, 'd' => 8, 'commonDen' => 24],
+            ['b' => 5, 'd' => 6, 'commonDen' => 30],
+        ];
 
-        $d = $commonDen / rand(1, 3);
-        if ($d < 2) $d = $commonDen;
-        $d = (int) $d;
+        $config = $configs[array_rand($configs)];
+        $b = $config['b'];
+        $d = $config['d'];
+        $commonDen = $config['commonDen'];
 
-        // Ensure b and d divide commonDen
-        while ($commonDen % $b !== 0) $b++;
-        while ($commonDen % $d !== 0) $d++;
-
-        $a = rand(1, $b - 1);
-        $c = rand(1, $d - 1);
+        $a = rand(1, $b - 1) ?: 1;
+        $c = rand(1, $d - 1) ?: 1;
 
         $isSubtract = rand(0, 1) === 1;
 
