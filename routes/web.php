@@ -123,7 +123,18 @@ Route::middleware(['auth'])->group(function () {
 
 // Test pages for PDF parsing (public for development)
 Route::prefix('test')->group(function () {
+    // Static parsed pages
     Route::get('/6', [TestPdfController::class, 'topic06'])->name('test.topic06');
     Route::get('/7', [TestPdfController::class, 'topic07'])->name('test.topic07');
+
+    // PDF Parser Web Interface
+    Route::get('/pdf', [TestPdfController::class, 'pdfParserIndex'])->name('test.pdf.index');
+    Route::post('/pdf/upload', [TestPdfController::class, 'uploadPdf'])->name('test.pdf.upload');
+    Route::get('/pdf/json/{topicId}', [TestPdfController::class, 'downloadJson'])->name('test.pdf.download-json');
+
+    // Dynamic parsed pages
+    Route::get('/parsed/{topicId}', [TestPdfController::class, 'showParsedPage'])->name('test.parsed');
+
+    // Legacy
     Route::post('/parse-pdf', [TestPdfController::class, 'parsePdf'])->name('test.parsePdf');
 });
