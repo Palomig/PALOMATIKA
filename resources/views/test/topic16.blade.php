@@ -264,6 +264,254 @@
                                         </div>
                                         @break
 
+                                    @case(6)
+                                        {{-- Вписанная окружность в трапецию --}}
+                                        <div x-data="inscribedTrapezoidSVG()">
+                                            <svg viewBox="0 0 200 160" class="w-full h-36">
+                                                {{-- Трапеция ABCD --}}
+                                                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
+                                                    fill="none" stroke="#dc2626" stroke-width="2" stroke-linejoin="round"/>
+                                                {{-- Вписанная окружность --}}
+                                                <circle :cx="O.x" :cy="O.y" :r="r" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+                                                {{-- Высота (радиус × 2) --}}
+                                                <line :x1="O.x" :y1="A.y" :x2="O.x" :y2="B.y" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,3"/>
+                                                {{-- Радиус r --}}
+                                                <line :x1="O.x" :y1="O.y" :x2="O.x" :y2="O.y + r" stroke="#10b981" stroke-width="2"/>
+                                                {{-- Точки --}}
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="D.x" :cy="D.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="O.x" :cy="O.y" r="3" fill="#8b5cf6"/>
+                                                {{-- Метки --}}
+                                                <text :x="A.x - 10" :y="A.y + 15" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="end">A</text>
+                                                <text :x="B.x - 10" :y="B.y - 5" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="end">B</text>
+                                                <text :x="C.x + 10" :y="C.y - 5" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="start">C</text>
+                                                <text :x="D.x + 10" :y="D.y + 15" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="start">D</text>
+                                                <text :x="O.x + 12" :y="O.y + 5" fill="#8b5cf6" font-size="12" class="geo-label" text-anchor="start">O</text>
+                                                <text :x="O.x + 8" :y="O.y + r/2 + 5" fill="#10b981" font-size="12" class="geo-label" text-anchor="start">r</text>
+                                            </svg>
+                                        </div>
+                                        @break
+
+                                    @case(7)
+                                        {{-- Вписанная окружность в квадрат --}}
+                                        <div x-data="inscribedSquareSVG()">
+                                            <svg viewBox="0 0 200 160" class="w-full h-36">
+                                                {{-- Квадрат --}}
+                                                <rect :x="A.x" :y="B.y" :width="side" :height="side"
+                                                    fill="none" stroke="#dc2626" stroke-width="2"/>
+                                                {{-- Вписанная окружность --}}
+                                                <circle :cx="O.x" :cy="O.y" :r="r" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+                                                {{-- Радиус --}}
+                                                <line :x1="O.x" :y1="O.y" :x2="O.x + r" :y2="O.y" stroke="#10b981" stroke-width="2"/>
+                                                {{-- Диагональ (для задач с диагональю) --}}
+                                                <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,3"/>
+                                                {{-- Точки вершин --}}
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="D.x" :cy="D.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="O.x" :cy="O.y" r="3" fill="#8b5cf6"/>
+                                                {{-- Метки --}}
+                                                <text :x="A.x - 10" :y="A.y + 15" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="end">A</text>
+                                                <text :x="B.x - 10" :y="B.y - 5" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="end">B</text>
+                                                <text :x="C.x + 10" :y="C.y - 5" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="start">C</text>
+                                                <text :x="D.x + 10" :y="D.y + 15" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="start">D</text>
+                                                <text :x="O.x" :y="O.y - 10" fill="#8b5cf6" font-size="12" class="geo-label" text-anchor="middle">O</text>
+                                                <text :x="O.x + r/2" :y="O.y - 6" fill="#10b981" font-size="11" class="geo-label" text-anchor="middle">r</text>
+                                            </svg>
+                                        </div>
+                                        @break
+
+                                    @case(8)
+                                        {{-- Четырёхугольник описан около окружности --}}
+                                        <div x-data="circumscribedQuadSVG()">
+                                            <svg viewBox="0 0 200 160" class="w-full h-36">
+                                                {{-- Четырёхугольник ABCD --}}
+                                                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
+                                                    fill="none" stroke="#dc2626" stroke-width="2" stroke-linejoin="round"/>
+                                                {{-- Вписанная окружность --}}
+                                                <circle :cx="O.x" :cy="O.y" :r="r" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+                                                {{-- Метки сторон --}}
+                                                <text :x="(A.x + B.x)/2 - 15" :y="(A.y + B.y)/2" fill="#f59e0b" font-size="11" class="geo-label" text-anchor="end">AB</text>
+                                                <text :x="(B.x + C.x)/2" :y="(B.y + C.y)/2 - 10" fill="#f59e0b" font-size="11" class="geo-label" text-anchor="middle">BC</text>
+                                                <text :x="(C.x + D.x)/2 + 15" :y="(C.y + D.y)/2" fill="#f59e0b" font-size="11" class="geo-label" text-anchor="start">CD</text>
+                                                <text :x="(D.x + A.x)/2" :y="(D.y + A.y)/2 + 15" fill="#10b981" font-size="11" class="geo-label" text-anchor="middle">AD=?</text>
+                                                {{-- Точки --}}
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="D.x" :cy="D.y" r="4" fill="#dc2626"/>
+                                                {{-- Метки вершин --}}
+                                                <text :x="A.x - 10" :y="A.y + 5" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="end">A</text>
+                                                <text :x="B.x" :y="B.y - 10" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="middle">B</text>
+                                                <text :x="C.x + 10" :y="C.y + 5" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="start">C</text>
+                                                <text :x="D.x" :y="D.y + 18" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="middle">D</text>
+                                            </svg>
+                                        </div>
+                                        @break
+
+                                    @case(9)
+                                        {{-- Треугольник с вписанной окружностью --}}
+                                        <div x-data="inscribedTriangleSVG()">
+                                            <svg viewBox="0 0 200 160" class="w-full h-36">
+                                                {{-- Треугольник --}}
+                                                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                                    fill="none" stroke="#dc2626" stroke-width="2"/>
+                                                {{-- Вписанная окружность --}}
+                                                <circle :cx="O.x" :cy="O.y" :r="r" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+                                                {{-- Радиус --}}
+                                                <line :x1="O.x" :y1="O.y" :x2="O.x" :y2="O.y + r" stroke="#10b981" stroke-width="2"/>
+                                                {{-- Точки --}}
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="O.x" :cy="O.y" r="3" fill="#8b5cf6"/>
+                                                {{-- Метки --}}
+                                                <text :x="A.x - 12" :y="A.y + 15" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="end">A</text>
+                                                <text :x="B.x + 12" :y="B.y + 15" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="start">B</text>
+                                                <text :x="C.x" :y="C.y - 10" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="middle">C</text>
+                                                <text :x="O.x + 10" :y="O.y" fill="#8b5cf6" font-size="12" class="geo-label" text-anchor="start">O</text>
+                                                <text :x="O.x + 8" :y="O.y + r/2 + 5" fill="#10b981" font-size="11" class="geo-label" text-anchor="start">r</text>
+                                            </svg>
+                                        </div>
+                                        @break
+
+                                    @case(10)
+                                        {{-- Четырёхугольник вписан в окружность (углы) --}}
+                                        <div x-data="inscribedQuadAngleSVG()">
+                                            <svg viewBox="0 0 200 170" class="w-full h-40">
+                                                {{-- Окружность --}}
+                                                <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+                                                {{-- Четырёхугольник ABCD --}}
+                                                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
+                                                    fill="none" stroke="#dc2626" stroke-width="2" stroke-linejoin="round"/>
+                                                {{-- Диагональ AC --}}
+                                                <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,3"/>
+                                                {{-- Угол ABC --}}
+                                                <path :d="makeAngleArc(B, A, C, 15)" fill="none" stroke="#10b981" stroke-width="2"/>
+                                                {{-- Угол CAD --}}
+                                                <path :d="makeAngleArc(A, C, D, 18)" fill="none" stroke="#ec4899" stroke-width="2"/>
+                                                {{-- Точки --}}
+                                                <circle :cx="O.x" :cy="O.y" r="3" fill="#8b5cf6"/>
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="D.x" :cy="D.y" r="4" fill="#dc2626"/>
+                                                {{-- Метки --}}
+                                                <text :x="A.x - 12" :y="A.y + 5" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="end">A</text>
+                                                <text :x="B.x" :y="B.y + 18" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="middle">B</text>
+                                                <text :x="C.x + 12" :y="C.y + 5" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="start">C</text>
+                                                <text :x="D.x" :y="D.y - 12" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="middle">D</text>
+                                            </svg>
+                                        </div>
+                                        @break
+
+                                    @case(11)
+                                        {{-- Центр окружности на стороне треугольника --}}
+                                        <div x-data="centerOnSideSVG()">
+                                            <svg viewBox="0 0 200 170" class="w-full h-40">
+                                                {{-- Окружность --}}
+                                                <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+                                                {{-- Треугольник ABC (прямоугольный в C) --}}
+                                                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                                    fill="none" stroke="#dc2626" stroke-width="2"/>
+                                                {{-- Прямой угол в C --}}
+                                                <path :d="rightAnglePath(C, A, B, 12)" fill="none" stroke="#10b981" stroke-width="2"/>
+                                                {{-- Радиус R --}}
+                                                <line :x1="O.x" :y1="O.y" :x2="C.x" :y2="C.y" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,3"/>
+                                                {{-- Точки --}}
+                                                <circle :cx="O.x" :cy="O.y" r="4" fill="#8b5cf6"/>
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
+                                                {{-- Метки --}}
+                                                <text :x="A.x - 12" :y="A.y + 5" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="end">A</text>
+                                                <text :x="B.x + 12" :y="B.y + 5" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="start">B</text>
+                                                <text :x="C.x" :y="C.y + 18" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="middle">C</text>
+                                                <text :x="O.x" :y="O.y - 10" fill="#8b5cf6" font-size="12" class="geo-label" text-anchor="middle">O</text>
+                                                <text :x="(O.x + C.x)/2 + 8" :y="(O.y + C.y)/2" fill="#f59e0b" font-size="11" class="geo-label" text-anchor="start">R</text>
+                                            </svg>
+                                        </div>
+                                        @break
+
+                                    @case(12)
+                                        {{-- Трапеция вписана в окружность --}}
+                                        <div x-data="inscribedTrapezoidInCircleSVG()">
+                                            <svg viewBox="0 0 200 170" class="w-full h-40">
+                                                {{-- Окружность --}}
+                                                <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+                                                {{-- Трапеция ABCD (равнобедренная) --}}
+                                                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
+                                                    fill="none" stroke="#dc2626" stroke-width="2" stroke-linejoin="round"/>
+                                                {{-- Углы A и C --}}
+                                                <path :d="makeAngleArc(A, D, B, 18)" fill="none" stroke="#10b981" stroke-width="2"/>
+                                                <path :d="makeAngleArc(C, B, D, 18)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                                                {{-- Точки --}}
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="D.x" :cy="D.y" r="4" fill="#dc2626"/>
+                                                {{-- Метки --}}
+                                                <text :x="A.x - 12" :y="A.y + 5" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="end">A</text>
+                                                <text :x="B.x - 8" :y="B.y - 10" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="end">B</text>
+                                                <text :x="C.x + 8" :y="C.y - 10" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="start">C</text>
+                                                <text :x="D.x + 12" :y="D.y + 5" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="start">D</text>
+                                            </svg>
+                                        </div>
+                                        @break
+
+                                    @case(13)
+                                        {{-- Описанная окружность (квадрат/равносторонний) --}}
+                                        <div x-data="circumscribedCircleSVG()">
+                                            <svg viewBox="0 0 200 170" class="w-full h-40">
+                                                {{-- Окружность --}}
+                                                <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+                                                {{-- Квадрат или равносторонний треугольник --}}
+                                                <polygon :points="shapePoints"
+                                                    fill="none" stroke="#dc2626" stroke-width="2" stroke-linejoin="round"/>
+                                                {{-- Радиус R --}}
+                                                <line :x1="O.x" :y1="O.y" :x2="vertexX" :y2="vertexY" stroke="#f59e0b" stroke-width="2"/>
+                                                {{-- Центр --}}
+                                                <circle :cx="O.x" :cy="O.y" r="3" fill="#8b5cf6"/>
+                                                {{-- Метка радиуса --}}
+                                                <text :x="O.x" :y="O.y - 10" fill="#8b5cf6" font-size="12" class="geo-label" text-anchor="middle">O</text>
+                                                <text :x="(O.x + vertexX)/2 + 8" :y="(O.y + vertexY)/2" fill="#f59e0b" font-size="12" class="geo-label" text-anchor="start">R</text>
+                                            </svg>
+                                        </div>
+                                        @break
+
+                                    @case(14)
+                                        {{-- Расширенная теорема синусов --}}
+                                        <div x-data="sineLawSVG()">
+                                            <svg viewBox="0 0 200 170" class="w-full h-40">
+                                                {{-- Окружность --}}
+                                                <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+                                                {{-- Треугольник ABC --}}
+                                                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                                    fill="none" stroke="#dc2626" stroke-width="2"/>
+                                                {{-- Сторона AB (противолежит углу C) --}}
+                                                <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#f59e0b" stroke-width="3"/>
+                                                {{-- Угол C --}}
+                                                <path :d="makeAngleArc(C, A, B, 20)" fill="none" stroke="#10b981" stroke-width="2.5"/>
+                                                {{-- Радиус R --}}
+                                                <line :x1="O.x" :y1="O.y" :x2="A.x" :y2="A.y" stroke="#ec4899" stroke-width="1.5" stroke-dasharray="4,3"/>
+                                                {{-- Точки --}}
+                                                <circle :cx="O.x" :cy="O.y" r="3" fill="#8b5cf6"/>
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
+                                                {{-- Метки --}}
+                                                <text :x="A.x - 12" :y="A.y + 15" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="end">A</text>
+                                                <text :x="B.x + 12" :y="B.y + 15" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="start">B</text>
+                                                <text :x="C.x" :y="C.y - 12" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="middle">C</text>
+                                                <text :x="(A.x + B.x)/2" :y="(A.y + B.y)/2 + 18" fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">AB</text>
+                                                <text :x="O.x + 10" :y="O.y" fill="#8b5cf6" font-size="12" class="geo-label" text-anchor="start">O</text>
+                                            </svg>
+                                        </div>
+                                        @break
+
                                     @default
                                         <div class="text-slate-500 text-center py-8">Изображение</div>
                                 @endswitch
@@ -284,9 +532,13 @@
             <p><strong class="text-slate-300">Источник:</strong> {{ $source ?? 'Manual' }}</p>
             <p><strong class="text-slate-300">Контроллер:</strong> <code class="bg-slate-700 px-2 py-1 rounded text-xs">TestPdfController::getAllBlocksData16()</code></p>
             <ul class="list-disc list-inside mt-3 space-y-1">
-                <li>Блок 1: ФИПИ (касательные, вписанные углы, диаметры)</li>
+                <li>Блок 1: ФИПИ (касательные, вписанные углы, диаметры, вписанные и описанные окружности)</li>
+                <li>Задания 1-5: Базовые задачи на окружности (касательные, вписанные углы)</li>
+                <li>Задания 6-9: Вписанные окружности (трапеция, квадрат, четырёхугольник)</li>
+                <li>Задания 10-12: Описанные окружности (четырёхугольники в окружности)</li>
+                <li>Задания 13-14: Радиусы описанных окружностей, теорема синусов</li>
                 <li>Всего: {{ $totalTasks }} задач с SVG изображениями</li>
-                <li>Все изображения генерируются программно</li>
+                <li>Все изображения генерируются программно через Alpine.js</li>
             </ul>
         </div>
     </div>
@@ -482,6 +734,181 @@
             O, R, A, B, M, N,
             makeAngleArc: (v, p1, p2, r) => makeAngleArc(v, p1, p2, r),
             rightAnglePath: (v, p1, p2, s) => rightAnglePath(v, p1, p2, s)
+        };
+    }
+
+    // 6. Вписанная окружность в трапецию
+    function inscribedTrapezoidSVG() {
+        // Равнобедренная трапеция с вписанной окружностью
+        const r = 30;  // Радиус вписанной окружности
+        const h = 2 * r;  // Высота трапеции = 2r
+        const topBase = 60;  // Верхнее основание
+        const bottomBase = 120;  // Нижнее основание
+
+        const centerX = 100;
+        const centerY = 80;
+
+        const O = { x: centerX, y: centerY };  // Центр окружности
+
+        // Вершины трапеции (A - левый нижний, B - левый верхний, C - правый верхний, D - правый нижний)
+        const A = { x: centerX - bottomBase/2, y: centerY + r };
+        const B = { x: centerX - topBase/2, y: centerY - r };
+        const C = { x: centerX + topBase/2, y: centerY - r };
+        const D = { x: centerX + bottomBase/2, y: centerY + r };
+
+        return { A, B, C, D, O, r };
+    }
+
+    // 7. Вписанная окружность в квадрат
+    function inscribedSquareSVG() {
+        const side = 90;
+        const r = side / 2;  // Радиус вписанной окружности = половина стороны
+        const startX = 55;
+        const startY = 35;
+
+        const A = { x: startX, y: startY + side };  // Левый нижний
+        const B = { x: startX, y: startY };          // Левый верхний
+        const C = { x: startX + side, y: startY };   // Правый верхний
+        const D = { x: startX + side, y: startY + side }; // Правый нижний
+
+        const O = { x: startX + side/2, y: startY + side/2 };  // Центр
+
+        return { A, B, C, D, O, r, side };
+    }
+
+    // 8. Четырёхугольник описан около окружности
+    function circumscribedQuadSVG() {
+        const r = 30;  // Радиус вписанной окружности
+        const O = { x: 100, y: 80 };
+
+        // Произвольный выпуклый четырёхугольник, описанный около окружности
+        // (сумма противоположных сторон равна)
+        const A = { x: 35, y: 110 };   // Левый
+        const B = { x: 50, y: 30 };    // Верхний левый
+        const C = { x: 160, y: 45 };   // Верхний правый
+        const D = { x: 140, y: 130 };  // Нижний
+
+        return { A, B, C, D, O, r };
+    }
+
+    // 9. Треугольник с вписанной окружностью
+    function inscribedTriangleSVG() {
+        const O = { x: 100, y: 95 };  // Центр вписанной окружности (инцентр)
+        const r = 25;  // Радиус вписанной окружности
+
+        // Равносторонний или близкий к нему треугольник
+        const A = { x: 40, y: 140 };   // Левый нижний
+        const B = { x: 160, y: 140 };  // Правый нижний
+        const C = { x: 100, y: 30 };   // Верхний
+
+        return { A, B, C, O, r };
+    }
+
+    // 10. Четырёхугольник вписан в окружность (углы)
+    function inscribedQuadAngleSVG() {
+        const O = { x: 100, y: 85 };
+        const R = 60;
+
+        // Четырёхугольник ABCD вписан в окружность
+        const angleA = Math.PI;           // Слева
+        const angleB = Math.PI * 1.4;     // Внизу слева
+        const angleC = 0;                 // Справа
+        const angleD = -Math.PI * 0.4;    // Вверху
+
+        const A = { x: O.x + R * Math.cos(angleA), y: O.y + R * Math.sin(angleA) };
+        const B = { x: O.x + R * Math.cos(angleB), y: O.y + R * Math.sin(angleB) };
+        const C = { x: O.x + R * Math.cos(angleC), y: O.y + R * Math.sin(angleC) };
+        const D = { x: O.x + R * Math.cos(angleD), y: O.y + R * Math.sin(angleD) };
+
+        return {
+            O, R, A, B, C, D,
+            makeAngleArc: (v, p1, p2, r) => makeAngleArc(v, p1, p2, r)
+        };
+    }
+
+    // 11. Центр окружности на стороне треугольника (прямоугольный треугольник)
+    function centerOnSideSVG() {
+        const O = { x: 100, y: 85 };
+        const R = 60;
+
+        // Прямоугольный треугольник ABC с прямым углом в C
+        // AB - гипотенуза и диаметр окружности, центр O лежит на AB
+        const A = { x: O.x - R, y: O.y };  // Слева на диаметре
+        const B = { x: O.x + R, y: O.y };  // Справа на диаметре
+
+        // C - на окружности, образует прямой угол (угол, опирающийся на диаметр = 90°)
+        const angleC = Math.PI * 0.7;  // Снизу
+        const C = { x: O.x + R * Math.cos(angleC), y: O.y + R * Math.sin(angleC) };
+
+        return {
+            O, R, A, B, C,
+            rightAnglePath: (v, p1, p2, s) => rightAnglePath(v, p1, p2, s)
+        };
+    }
+
+    // 12. Трапеция вписана в окружность (равнобедренная)
+    function inscribedTrapezoidInCircleSVG() {
+        const O = { x: 100, y: 85 };
+        const R = 60;
+
+        // Равнобедренная трапеция ABCD вписана в окружность
+        // AD - нижнее основание, BC - верхнее основание
+        const angleA = Math.PI * 0.85;     // Левый нижний
+        const angleB = Math.PI * 0.65;     // Левый верхний
+        const angleC = Math.PI * 0.35;     // Правый верхний
+        const angleD = Math.PI * 0.15;     // Правый нижний
+
+        const A = { x: O.x + R * Math.cos(angleA), y: O.y + R * Math.sin(angleA) };
+        const B = { x: O.x + R * Math.cos(angleB), y: O.y - R * Math.sin(angleB) };
+        const C = { x: O.x + R * Math.cos(angleC), y: O.y - R * Math.sin(angleC) };
+        const D = { x: O.x + R * Math.cos(angleD), y: O.y + R * Math.sin(angleD) };
+
+        return {
+            O, R, A, B, C, D,
+            makeAngleArc: (v, p1, p2, r) => makeAngleArc(v, p1, p2, r)
+        };
+    }
+
+    // 13. Описанная окружность (квадрат или равносторонний треугольник)
+    function circumscribedCircleSVG() {
+        const O = { x: 100, y: 85 };
+        const R = 55;
+
+        // Используем квадрат для демонстрации
+        const side = R * Math.sqrt(2);  // Сторона квадрата, вписанного в окружность
+        const angle = -Math.PI / 4;  // Начальный угол для вершин
+
+        // 4 вершины квадрата на окружности
+        const vertices = [];
+        for (let i = 0; i < 4; i++) {
+            const a = angle + (Math.PI / 2) * i;
+            vertices.push({ x: O.x + R * Math.cos(a), y: O.y + R * Math.sin(a) });
+        }
+
+        const shapePoints = vertices.map(v => `${v.x},${v.y}`).join(' ');
+        const vertexX = vertices[0].x;
+        const vertexY = vertices[0].y;
+
+        return { O, R, shapePoints, vertexX, vertexY };
+    }
+
+    // 14. Расширенная теорема синусов (треугольник вписан в окружность)
+    function sineLawSVG() {
+        const O = { x: 100, y: 85 };
+        const R = 60;
+
+        // Треугольник ABC вписан в окружность
+        const angleA = Math.PI * 0.8;    // Левый нижний
+        const angleB = Math.PI * 0.2;    // Правый нижний
+        const angleC = -Math.PI * 0.5;   // Вверху
+
+        const A = { x: O.x + R * Math.cos(angleA), y: O.y + R * Math.sin(angleA) };
+        const B = { x: O.x + R * Math.cos(angleB), y: O.y + R * Math.sin(angleB) };
+        const C = { x: O.x + R * Math.cos(angleC), y: O.y + R * Math.sin(angleC) };
+
+        return {
+            O, R, A, B, C,
+            makeAngleArc: (v, p1, p2, r) => makeAngleArc(v, p1, p2, r)
         };
     }
 </script>
