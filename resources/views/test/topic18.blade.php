@@ -235,6 +235,10 @@
                     @if (($zadanie['type'] ?? '') === 'grid_image' || ($zadanie['type'] ?? '') === 'grid_image_with_question')
                         <div class="tasks-grid {{ count($zadanie['tasks'] ?? []) <= 4 ? 'cols-2' : '' }}">
                             @foreach ($zadanie['tasks'] ?? [] as $task)
+                                @php
+                                    // Generate image path: task18_b{block}_z{zadanie}_{task}.png
+                                    $imagePath = '/images/tasks/18/task18_b' . $block['number'] . '_z' . $zadanie['number'] . '_' . $task['id'] . '.png';
+                                @endphp
                                 <div class="task-card">
                                     <div class="task-number">{{ $task['id'] }})</div>
 
@@ -242,14 +246,12 @@
                                         <div class="task-question">{{ $task['question'] }}</div>
                                     @endif
 
-                                    @if (!empty($task['image']))
-                                        <div class="task-image-container">
-                                            <img src="/images/tasks/{{ $task['image'] }}"
-                                                 alt="Задание {{ $task['id'] }}"
-                                                 class="task-image"
-                                                 onerror="this.style.display='none'; this.parentNode.innerHTML='<span style=\'color:#999;\'>Изображение не найдено</span>';">
-                                        </div>
-                                    @endif
+                                    <div class="task-image-container">
+                                        <img src="{{ $imagePath }}"
+                                             alt="Задание {{ $task['id'] }}"
+                                             class="task-image"
+                                             onerror="this.style.display='none'; this.parentNode.innerHTML='<span style=\'color:#999;\'>Изображение: {{ basename($imagePath) }}</span>';">
+                                    </div>
                                 </div>
                             @endforeach
                         </div>
