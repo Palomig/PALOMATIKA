@@ -410,6 +410,116 @@
                                         </div>
                                         @break
 
+                                    @case(19)
+                                        {{-- Трапеция с углом 30° (страница 18 PDF) --}}
+                                        <div x-data="trapezoid30AngleSVG()">
+                                            <svg viewBox="0 0 200 130" class="w-full h-32">
+                                                {{-- Трапеция ABCD --}}
+                                                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
+                                                    fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" stroke-width="2" stroke-linejoin="round"/>
+                                                {{-- Высота BH --}}
+                                                <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4,3"/>
+                                                {{-- Прямой угол при H --}}
+                                                <path :d="rightAnglePath(H, B, A, 10)" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+                                                {{-- Угол 30° при A --}}
+                                                <path :d="makeAngleArc(A, D, B, 25)" fill="none" stroke="#ec4899" stroke-width="2"/>
+                                                <text :x="A.x + 30" :y="A.y - 8" fill="#ec4899" font-size="11" class="geo-label">30°</text>
+                                                {{-- Точки вершин --}}
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#10b981"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#10b981"/>
+                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#10b981"/>
+                                                <circle :cx="D.x" :cy="D.y" r="4" fill="#10b981"/>
+                                                {{-- Метки --}}
+                                                <text :x="A.x - 12" :y="A.y + 15" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="end">A</text>
+                                                <text :x="B.x - 8" :y="B.y - 8" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="end">B</text>
+                                                <text :x="C.x + 8" :y="C.y - 8" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="start">C</text>
+                                                <text :x="D.x + 12" :y="D.y + 15" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="start">D</text>
+                                                {{-- Метка боковой стороны --}}
+                                                <text :x="(A.x + B.x)/2 - 12" :y="(A.y + B.y)/2" fill="#3b82f6" font-size="11" class="geo-label" text-anchor="end">a</text>
+                                            </svg>
+                                        </div>
+                                        @break
+
+                                    @case(20)
+                                        {{-- Прямоугольник с точкой E на BC (страница 18 PDF) --}}
+                                        <div x-data="rectangleWithPointESVG()">
+                                            <svg viewBox="0 0 200 130" class="w-full h-32">
+                                                {{-- Прямоугольник ABCD --}}
+                                                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
+                                                    fill="none" stroke="#10b981" stroke-width="2" stroke-linejoin="round"/>
+                                                {{-- Отрезок AE --}}
+                                                <line :x1="A.x" :y1="A.y" :x2="E.x" :y2="E.y" stroke="#f59e0b" stroke-width="2"/>
+                                                {{-- Отрезок ED --}}
+                                                <line :x1="E.x" :y1="E.y" :x2="D.x" :y2="D.y" stroke="#ec4899" stroke-width="2.5"/>
+                                                {{-- Угол EAB = 45° --}}
+                                                <path :d="makeAngleArc(A, B, E, 20)" fill="none" stroke="#3b82f6" stroke-width="2"/>
+                                                <text :x="A.x + 22" :y="A.y - 25" fill="#3b82f6" font-size="11" class="geo-label">45°</text>
+                                                {{-- Прямые углы --}}
+                                                <path :d="rightAnglePath(A, D, B, 10)" fill="none" stroke="#10b981" stroke-width="1.5"/>
+                                                <path :d="rightAnglePath(B, A, C, 10)" fill="none" stroke="#10b981" stroke-width="1.5"/>
+                                                {{-- Точки вершин --}}
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#10b981"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#10b981"/>
+                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#10b981"/>
+                                                <circle :cx="D.x" :cy="D.y" r="4" fill="#10b981"/>
+                                                <circle :cx="E.x" :cy="E.y" r="4" fill="#f59e0b"/>
+                                                {{-- Метки --}}
+                                                <text :x="A.x - 12" :y="A.y + 15" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="end">A</text>
+                                                <text :x="B.x - 12" :y="B.y - 5" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="end">B</text>
+                                                <text :x="C.x + 12" :y="C.y - 5" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="start">C</text>
+                                                <text :x="D.x + 12" :y="D.y + 15" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="start">D</text>
+                                                <text :x="E.x" :y="E.y - 10" fill="#f59e0b" font-size="14" class="geo-label" text-anchor="middle">E</text>
+                                                {{-- Метка ED --}}
+                                                <text :x="(E.x + D.x)/2 + 10" :y="(E.y + D.y)/2" fill="#ec4899" font-size="11" class="geo-label">?</text>
+                                            </svg>
+                                        </div>
+                                        @break
+
+                                    @case(21)
+                                        {{-- Трапеция на координатной сетке (задание 61) --}}
+                                        <div x-data="gridTrapezoidSVG('a')">
+                                            <svg viewBox="0 0 200 140" class="w-full h-32">
+                                                {{-- Сетка --}}
+                                                <template x-for="line in gridLines">
+                                                    <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
+                                                        stroke="#475569" stroke-width="0.5"/>
+                                                </template>
+                                                {{-- Трапеция --}}
+                                                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
+                                                    fill="rgba(16, 185, 129, 0.2)" stroke="#10b981" stroke-width="2" stroke-linejoin="round"/>
+                                                {{-- Точки вершин --}}
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#10b981"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#10b981"/>
+                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#10b981"/>
+                                                <circle :cx="D.x" :cy="D.y" r="4" fill="#10b981"/>
+                                            </svg>
+                                        </div>
+                                        @break
+
+                                    @case(22)
+                                        {{-- Квадрат с площадью по диагонали --}}
+                                        <div x-data="squareAreaSVG()">
+                                            <svg viewBox="0 0 200 130" class="w-full h-32">
+                                                {{-- Квадрат --}}
+                                                <rect :x="A.x" :y="B.y" :width="side" :height="side"
+                                                    fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" stroke-width="2"/>
+                                                {{-- Обе диагонали --}}
+                                                <line :x1="d1.x1" :y1="d1.y1" :x2="d1.x2" :y2="d1.y2" stroke="#f59e0b" stroke-width="2"/>
+                                                <line :x1="d2.x1" :y1="d2.y1" :x2="d2.x2" :y2="d2.y2" stroke="#f59e0b" stroke-width="2"/>
+                                                {{-- Центр O --}}
+                                                <circle :cx="O.x" :cy="O.y" r="3" fill="#ec4899"/>
+                                                {{-- Точки вершин --}}
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#10b981"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#10b981"/>
+                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#10b981"/>
+                                                <circle :cx="D.x" :cy="D.y" r="4" fill="#10b981"/>
+                                                {{-- Метка диагонали --}}
+                                                <text :x="(d1.x1 + d1.x2)/2 + 10" :y="(d1.y1 + d1.y2)/2 - 5" fill="#f59e0b" font-size="12" class="geo-label">d</text>
+                                                <text :x="O.x + 8" :y="O.y + 12" fill="#ec4899" font-size="11" class="geo-label">O</text>
+                                            </svg>
+                                        </div>
+                                        @break
+
                                     @default
                                         <div class="text-slate-500 text-center py-8">Изображение</div>
                                 @endswitch
@@ -437,6 +547,10 @@
                 <li>V) Площадь: параллелограмм, трапеция, ромб</li>
                 <li>VI) Теорема Пифагора: диагональ квадрата</li>
                 <li>VII) Средняя линия трапеции</li>
+                <li>VIII) Площадь трапеции с углом 30°</li>
+                <li>IX) Прямоугольник с точкой E (теорема Пифагора)</li>
+                <li>X) Трапеция на координатной сетке</li>
+                <li>XI) Площадь квадрата по диагонали</li>
                 <li>Всего: {{ $totalTasks }} задач с SVG изображениями</li>
             </ul>
         </div>
@@ -655,6 +769,137 @@
         return {
             A, B, C, D, M, N, P
         };
+    }
+
+    // 12. Трапеция с углом 30° для площади (страница 18 PDF)
+    function trapezoid30AngleSVG() {
+        // Трапеция с боковой стороной и углом 30° при основании
+        const A = { x: 25, y: 105 };  // нижний левый
+        const D = { x: 175, y: 105 }; // нижний правый
+        // Боковая сторона наклонена под углом 30°
+        const sideLen = 60;
+        const angle30 = 30 * Math.PI / 180;
+        const B = { x: A.x + sideLen * Math.cos(angle30), y: A.y - sideLen * Math.sin(angle30) };
+        const C = { x: 145, y: B.y }; // верхняя правая на той же высоте
+
+        // Высота трапеции
+        const H = { x: B.x, y: A.y };
+
+        return {
+            A, B, C, D, H,
+            sideLen,
+            makeAngleArc: (v, p1, p2, r) => makeAngleArc(v, p1, p2, r),
+            rightAnglePath: (v, p1, p2, s) => rightAnglePath(v, p1, p2, s)
+        };
+    }
+
+    // 13. Прямоугольник с точкой E на BC (страница 18 PDF)
+    function rectangleWithPointESVG() {
+        // Прямоугольник ABCD с точкой E на стороне BC
+        const A = { x: 30, y: 110 };  // нижний левый
+        const B = { x: 30, y: 35 };   // верхний левый
+        const C = { x: 170, y: 35 };  // верхний правый
+        const D = { x: 170, y: 110 }; // нижний правый
+
+        // Точка E на BC такая, что угол EAB = 45°
+        // При угле 45° и AB вертикальном, AE образует угол 45° с AB
+        // BE = AB (т.к. угол 45°)
+        const AB = A.y - B.y; // высота
+        const E = { x: B.x + AB, y: B.y }; // E на BC на расстоянии AB от B
+
+        return {
+            A, B, C, D, E,
+            makeAngleArc: (v, p1, p2, r) => makeAngleArc(v, p1, p2, r),
+            rightAnglePath: (v, p1, p2, s) => rightAnglePath(v, p1, p2, s)
+        };
+    }
+
+    // 14. Трапеция на координатной сетке (страница 18 PDF, задание 61)
+    function gridTrapezoidSVG(variant = 'a') {
+        const gridSize = 20;
+        const offsetX = 10;
+        const offsetY = 10;
+
+        // Разные варианты трапеций для (a), (b), (c), (d)
+        const variants = {
+            'a': { // Типичная трапеция
+                A: { gx: 1, gy: 5 },
+                B: { gx: 2, gy: 2 },
+                C: { gx: 6, gy: 2 },
+                D: { gx: 8, gy: 5 }
+            },
+            'b': { // Другая трапеция
+                A: { gx: 0, gy: 4 },
+                B: { gx: 2, gy: 1 },
+                C: { gx: 7, gy: 1 },
+                D: { gx: 9, gy: 4 }
+            },
+            'c': { // Узкая трапеция
+                A: { gx: 1, gy: 5 },
+                B: { gx: 3, gy: 1 },
+                C: { gx: 5, gy: 1 },
+                D: { gx: 7, gy: 5 }
+            },
+            'd': { // Широкая трапеция
+                A: { gx: 0, gy: 4 },
+                B: { gx: 1, gy: 1 },
+                C: { gx: 8, gy: 1 },
+                D: { gx: 9, gy: 4 }
+            }
+        };
+
+        const v = variants[variant] || variants['a'];
+
+        // Преобразуем grid координаты в SVG координаты
+        const toSVG = (gx, gy) => ({
+            x: offsetX + gx * gridSize,
+            y: offsetY + gy * gridSize
+        });
+
+        const A = toSVG(v.A.gx, v.A.gy);
+        const B = toSVG(v.B.gx, v.B.gy);
+        const C = toSVG(v.C.gx, v.C.gy);
+        const D = toSVG(v.D.gx, v.D.gy);
+
+        // Grid lines
+        const gridLines = [];
+        for (let i = 0; i <= 9; i++) {
+            // Вертикальные
+            gridLines.push({ x1: offsetX + i * gridSize, y1: offsetY, x2: offsetX + i * gridSize, y2: offsetY + 6 * gridSize });
+            // Горизонтальные
+            if (i <= 6) {
+                gridLines.push({ x1: offsetX, y1: offsetY + i * gridSize, x2: offsetX + 9 * gridSize, y2: offsetY + i * gridSize });
+            }
+        }
+
+        return {
+            A, B, C, D,
+            gridLines,
+            gridSize,
+            offsetX,
+            offsetY
+        };
+    }
+
+    // 15. Квадрат с площадью (для задач "площадь = d²/2")
+    function squareAreaSVG() {
+        const side = 80;
+        const startX = 60;
+        const startY = 30;
+
+        const A = { x: startX, y: startY + side };
+        const B = { x: startX, y: startY };
+        const C = { x: startX + side, y: startY };
+        const D = { x: startX + side, y: startY + side };
+
+        // Диагонали
+        const d1 = { x1: A.x, y1: A.y, x2: C.x, y2: C.y };
+        const d2 = { x1: B.x, y1: B.y, x2: D.x, y2: D.y };
+
+        // Центр
+        const O = { x: (A.x + C.x) / 2, y: (A.y + C.y) / 2 };
+
+        return { A, B, C, D, O, d1, d2, side };
     }
 </script>
 
