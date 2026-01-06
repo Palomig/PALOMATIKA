@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\PdfParserService;
 use App\Services\PdfTaskParser;
+use App\Services\TaskGeneratorService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -11,10 +12,149 @@ use Illuminate\Support\Facades\Storage;
 class TestPdfController extends Controller
 {
     protected PdfParserService $pdfParser;
+    protected TaskGeneratorService $taskGenerator;
 
-    public function __construct(PdfParserService $pdfParser)
+    public function __construct(PdfParserService $pdfParser, TaskGeneratorService $taskGenerator)
     {
         $this->pdfParser = $pdfParser;
+        $this->taskGenerator = $taskGenerator;
+    }
+
+    /**
+     * Show test generator interface
+     */
+    public function testGenerator()
+    {
+        $availableTopics = $this->taskGenerator->getAvailableTopics();
+
+        // Add manual topics (06, 07) which have structured data in controller
+        $manualTopics = [
+            ['topic_id' => '06', 'title' => 'Вычисления', 'tasks_count' => 174],
+            ['topic_id' => '07', 'title' => 'Числа, координатная прямая', 'tasks_count' => 85],
+        ];
+
+        // Merge, avoiding duplicates
+        $allTopics = $manualTopics;
+        foreach ($availableTopics as $topic) {
+            $exists = false;
+            foreach ($allTopics as $t) {
+                if ($t['topic_id'] === $topic['topic_id']) {
+                    $exists = true;
+                    break;
+                }
+            }
+            if (!$exists) {
+                $allTopics[] = $topic;
+            }
+        }
+
+        usort($allTopics, fn($a, $b) => $a['topic_id'] <=> $b['topic_id']);
+
+        return view('test.generator', compact('allTopics'));
+    }
+
+    /**
+     * Generate a random test
+     */
+    public function generateRandomTest(Request $request)
+    {
+        $request->validate([
+            'topics' => 'required|array|min:1',
+            'topics.*' => 'string|max:10',
+            'tasks_per_topic' => 'integer|min:1|max:10',
+        ]);
+
+        $topicIds = $request->input('topics');
+        $tasksPerTopic = $request->input('tasks_per_topic', 1);
+
+        $testTasks = [];
+
+        foreach ($topicIds as $topicId) {
+            $topicId = str_pad($topicId, 2, '0', STR_PAD_LEFT);
+
+            // Check if it's a manual topic (06, 07)
+            if ($topicId === '06') {
+                $tasks = $this->getRandomTasksFromManualData06($tasksPerTopic);
+            } elseif ($topicId === '07') {
+                $tasks = $this->getRandomTasksFromManualData07($tasksPerTopic);
+            } else {
+                $tasks = $this->taskGenerator->getRandomTasksFromTopic($topicId, $tasksPerTopic);
+            }
+
+            $testTasks = array_merge($testTasks, $tasks);
+        }
+
+        shuffle($testTasks);
+
+        // Add sequential test numbers
+        foreach ($testTasks as $index => &$task) {
+            $task['test_number'] = $index + 1;
+        }
+
+        return view('test.random-test', compact('testTasks'));
+    }
+
+    /**
+     * Get random tasks from manual topic 06 data
+     */
+    protected function getRandomTasksFromManualData06(int $count): array
+    {
+        $blocks = $this->getAllBlocksData();
+        return $this->extractRandomTasks($blocks, '06', 'Вычисления', $count);
+    }
+
+    /**
+     * Get random tasks from manual topic 07 data
+     */
+    protected function getRandomTasksFromManualData07(int $count): array
+    {
+        $blocks = $this->getAllBlocksData07();
+        return $this->extractRandomTasks($blocks, '07', 'Числа, координатная прямая', $count);
+    }
+
+    /**
+     * Extract random tasks from block structure
+     */
+    protected function extractRandomTasks(array $blocks, string $topicId, string $topicTitle, int $count): array
+    {
+        $allTasks = [];
+
+        foreach ($blocks as $block) {
+            foreach ($block['zadaniya'] ?? [] as $zadanie) {
+                if (!empty($zadanie['tasks'])) {
+                    foreach ($zadanie['tasks'] as $task) {
+                        $allTasks[] = [
+                            'topic_id' => $topicId,
+                            'topic_title' => $topicTitle,
+                            'block_number' => $block['number'],
+                            'block_title' => $block['title'],
+                            'zadanie_number' => $zadanie['number'],
+                            'instruction' => $zadanie['instruction'] ?? '',
+                            'type' => $zadanie['type'] ?? 'expression',
+                            'task' => $task,
+                        ];
+                    }
+                } else {
+                    // Simple zadanie without tasks array
+                    $allTasks[] = [
+                        'topic_id' => $topicId,
+                        'topic_title' => $topicTitle,
+                        'block_number' => $block['number'],
+                        'block_title' => $block['title'],
+                        'zadanie_number' => $zadanie['number'],
+                        'instruction' => $zadanie['instruction'] ?? '',
+                        'type' => $zadanie['type'] ?? 'simple_choice',
+                        'task' => [
+                            'options' => $zadanie['options'] ?? [],
+                            'image' => $zadanie['image'] ?? null,
+                        ],
+                    ];
+                }
+            }
+        }
+
+        shuffle($allTasks);
+        return array_slice($allTasks, 0, min($count, count($allTasks)));
     }
 
     /**

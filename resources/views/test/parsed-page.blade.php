@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $data['title'] ?? "Задание {$topicId}" }} - Результат парсинга</title>
+    <title>{{ $topicId }}. {{ $data['title'] ?? 'Результат парсинга' }}</title>
 
     <!-- KaTeX for math rendering -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
@@ -64,6 +64,8 @@
             text-decoration: none;
             transition: all 0.2s;
             font-family: 'Inter', sans-serif;
+            border: none;
+            cursor: pointer;
         }
 
         .btn-primary {
@@ -165,10 +167,128 @@
             display: block;
         }
 
+        /* Block styles (like topic07) */
+        .block-section {
+            margin-bottom: 50px;
+            padding-bottom: 40px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .block-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .block-title {
+            text-align: center;
+            font-weight: 700;
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+
+        .block-subtitle {
+            text-align: center;
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #34495e;
+        }
+
+        /* Zadanie styles */
+        .zadanie {
+            margin-bottom: 35px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .zadanie-header {
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .zadanie-header span {
+            font-weight: 400;
+        }
+
+        .zadanie-content {
+            padding: 10px 0;
+        }
+
+        /* Task row */
+        .task-row {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            padding: 12px;
+            background: #fff;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .task-number {
+            min-width: 35px;
+            font-weight: 600;
+            color: #ff6b6b;
+            flex-shrink: 0;
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-text {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        /* Task images */
+        .task-image {
+            margin: 10px 0;
+            max-width: 400px;
+        }
+
+        .task-image img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            background: #fff;
+        }
+
+        /* Options */
+        .task-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .option {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 5px 12px;
+            background: #e9ecef;
+            border-radius: 4px;
+        }
+
+        .option-num {
+            color: #666;
+            font-size: 14px;
+        }
+
         /* Images Grid */
         .images-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 15px;
         }
 
@@ -207,40 +327,6 @@
             line-height: 1.4;
         }
 
-        /* Blocks */
-        .block {
-            margin-bottom: 30px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 8px;
-        }
-
-        .block h3 {
-            font-size: 18px;
-            color: #2c3e50;
-            margin-bottom: 15px;
-        }
-
-        /* Zadaniya list */
-        .zadaniya-list {
-            list-style: none;
-        }
-
-        .zadaniya-list li {
-            padding: 12px 0;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .zadaniya-list li:last-child {
-            border-bottom: none;
-        }
-
-        .zadanie-num {
-            font-weight: 700;
-            color: #ff6b6b;
-            margin-right: 10px;
-        }
-
         /* KaTeX */
         .katex {
             font-size: 1.1em !important;
@@ -275,6 +361,23 @@
             font-size: 13px;
         }
 
+        /* Edit mode notice */
+        .edit-notice {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            color: #856404;
+        }
+
+        .edit-notice strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
         /* Responsive */
         @media (max-width: 900px) {
             body {
@@ -288,6 +391,9 @@
                 flex-direction: column;
                 gap: 15px;
                 text-align: center;
+            }
+            .images-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -328,13 +434,190 @@
 
 <!-- Tabs -->
 <div class="tabs">
-    <div class="tab active" data-tab="images">📷 Изображения</div>
+    <div class="tab active" data-tab="preview">📝 Предпросмотр</div>
+    <div class="tab" data-tab="images">📷 Изображения</div>
     <div class="tab" data-tab="text">📄 Текст</div>
-    <div class="tab" data-tab="structure">🏗️ Структура</div>
+</div>
+
+<!-- Tab: Preview (formatted like topic07) -->
+<div class="tab-content active" id="tab-preview">
+    @if(!empty($data['structured_blocks']))
+        {{-- If we have fully structured data (like topic07) --}}
+        @foreach($data['structured_blocks'] as $block)
+            <div class="block-section">
+                <div class="block-header">
+                    <span>Е. А. Ширяева</span>
+                    <span>Задачник ОГЭ 2026 (тренажер)</span>
+                </div>
+
+                <div class="block-title">{{ $topicId }}. {{ $data['title'] ?? 'Задание' }}</div>
+                <div class="block-subtitle">Блок {{ $block['number'] }}. {{ $block['title'] }}</div>
+
+                @foreach($block['zadaniya'] as $zadanie)
+                    <div class="zadanie">
+                        <p class="zadanie-header">Задание {{ $zadanie['number'] }}. <span>{{ $zadanie['instruction'] ?? '' }}</span></p>
+
+                        <div class="zadanie-content">
+                            @if(isset($zadanie['tasks']))
+                                @foreach($zadanie['tasks'] as $task)
+                                    <div class="task-row">
+                                        <span class="task-number">{{ $task['id'] ?? $loop->iteration }}</span>
+                                        <div class="task-content">
+                                            @if(isset($task['image']))
+                                                <div class="task-image">
+                                                    <img src="/images/tasks/{{ $topicId }}/{{ $task['image'] }}" alt="Задание">
+                                                </div>
+                                            @endif
+
+                                            @if(isset($task['expression']))
+                                                <div class="task-text">${{ $task['expression'] }}$</div>
+                                            @endif
+
+                                            @if(isset($task['options']))
+                                                <div class="task-options">
+                                                    @foreach($task['options'] as $i => $option)
+                                                        <span class="option">
+                                                            <span class="option-num">{{ $i + 1 }})</span>
+                                                            <span>{{ $option }}</span>
+                                                        </span>
+                                                    @endforeach
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @elseif(isset($zadanie['options']))
+                                <div class="task-options">
+                                    @foreach($zadanie['options'] as $i => $option)
+                                        <span class="option">
+                                            <span class="option-num">{{ $i + 1 }})</span>
+                                            <span>{{ $option }}</span>
+                                        </span>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endforeach
+    @else
+        {{-- Basic parsed data - show blocks and zadaniya with images --}}
+        <div class="edit-notice">
+            <strong>Автоматический парсинг</strong>
+            Данные извлечены автоматически из PDF. Для полноценного использования заданий в тестах
+            необходимо структурировать данные (добавить типы заданий, варианты ответов и связать изображения с задачами).
+        </div>
+
+        @php
+            $images = $data['images'] ?? [];
+            $imageIndex = 0;
+            $blocksData = $data['blocks'] ?? [];
+            $zadaniyaData = $data['zadaniya'] ?? [];
+        @endphp
+
+        @if(count($blocksData) > 0)
+            @foreach($blocksData as $blockIdx => $block)
+                <div class="block-section">
+                    <div class="block-header">
+                        <span>Е. А. Ширяева</span>
+                        <span>Задачник ОГЭ 2026 (тренажер)</span>
+                    </div>
+
+                    <div class="block-title">{{ $topicId }}. {{ $data['title'] ?? 'Задание' }}</div>
+                    <div class="block-subtitle">Блок {{ $block['number'] }}. {{ $block['title'] }}</div>
+
+                    {{-- Find zadaniya for this block --}}
+                    @php
+                        // Calculate line ranges for this block
+                        $blockStart = $block['line'] ?? 0;
+                        $nextBlockLine = isset($blocksData[$blockIdx + 1]) ? $blocksData[$blockIdx + 1]['line'] : PHP_INT_MAX;
+
+                        $blockZadaniya = array_filter($zadaniyaData, function($z) use ($blockStart, $nextBlockLine) {
+                            $zLine = $z['line'] ?? 0;
+                            return $zLine >= $blockStart && $zLine < $nextBlockLine;
+                        });
+                    @endphp
+
+                    @forelse($blockZadaniya as $zadanie)
+                        <div class="zadanie">
+                            <p class="zadanie-header">Задание {{ $zadanie['number'] }}. <span>{{ $zadanie['instruction'] ?? '' }}</span></p>
+
+                            <div class="zadanie-content">
+                                {{-- Show a few images that might belong to this zadanie --}}
+                                @if($imageIndex < count($images))
+                                    <div class="task-row">
+                                        <span class="task-number">1</span>
+                                        <div class="task-content">
+                                            <div class="task-image">
+                                                <img src="/images/tasks/{{ $topicId }}/{{ $images[$imageIndex] }}" alt="Изображение задания">
+                                            </div>
+                                            <p class="task-text" style="color: #888; font-size: 14px;">
+                                                Изображение: {{ $images[$imageIndex] }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    @php $imageIndex++; @endphp
+                                @endif
+
+                                @if(isset($zadanie['content']))
+                                    <div class="task-text">{{ Str::limit($zadanie['content'], 500) }}</div>
+                                @endif
+                            </div>
+                        </div>
+                    @empty
+                        <p style="color: #888; padding: 20px;">Задания для этого блока не найдены</p>
+                    @endforelse
+                </div>
+            @endforeach
+        @else
+            {{-- No blocks found, show zadaniya directly --}}
+            @if(count($zadaniyaData) > 0)
+                <div class="block-section">
+                    <div class="block-title">{{ $topicId }}. {{ $data['title'] ?? 'Задание' }}</div>
+
+                    @foreach($zadaniyaData as $zadanie)
+                        <div class="zadanie">
+                            <p class="zadanie-header">Задание {{ $zadanie['number'] }}. <span>{{ $zadanie['instruction'] ?? '' }}</span></p>
+
+                            <div class="zadanie-content">
+                                @if($imageIndex < count($images))
+                                    <div class="task-row">
+                                        <span class="task-number">1</span>
+                                        <div class="task-content">
+                                            <div class="task-image">
+                                                <img src="/images/tasks/{{ $topicId }}/{{ $images[$imageIndex] }}" alt="Изображение задания">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @php $imageIndex++; @endphp
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                {{-- No structure found, show all images --}}
+                <div class="block-section">
+                    <div class="block-title">{{ $topicId }}. {{ $data['title'] ?? 'Задание' }}</div>
+                    <p style="color: #888; margin-bottom: 20px;">Структура не определена. Показаны все извлечённые изображения.</p>
+
+                    @foreach($images as $index => $image)
+                        <div class="zadanie">
+                            <p class="zadanie-header">Изображение {{ $index + 1 }}</p>
+                            <div class="task-image">
+                                <img src="/images/tasks/{{ $topicId }}/{{ $image }}" alt="{{ $image }}">
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        @endif
+    @endif
 </div>
 
 <!-- Tab: Images -->
-<div class="tab-content active" id="tab-images">
+<div class="tab-content" id="tab-images">
     @if(!empty($data['images']))
         <div class="images-grid">
             @foreach($data['images'] as $image)
@@ -354,31 +637,6 @@
     <div class="text-preview">{{ $data['text'] ?? 'Текст не извлечён' }}</div>
 </div>
 
-<!-- Tab: Structure -->
-<div class="tab-content" id="tab-structure">
-    @if(!empty($data['blocks']))
-        <h3 style="margin-bottom: 15px;">Найденные блоки:</h3>
-        @foreach($data['blocks'] as $block)
-            <div class="block">
-                <h3>Блок {{ $block['number'] }}. {{ $block['title'] }}</h3>
-                <p style="color: #888; font-size: 14px;">Строка {{ $block['line'] }}</p>
-            </div>
-        @endforeach
-    @endif
-
-    @if(!empty($data['zadaniya']))
-        <h3 style="margin: 20px 0 15px;">Найденные задания ({{ count($data['zadaniya']) }}):</h3>
-        <ul class="zadaniya-list">
-            @foreach($data['zadaniya'] as $z)
-                <li>
-                    <span class="zadanie-num">Задание {{ $z['number'] }}.</span>
-                    {{ Str::limit($z['instruction'], 100) }}
-                </li>
-            @endforeach
-        </ul>
-    @endif
-</div>
-
 <!-- Info box -->
 <div class="info-box">
     <h4>📊 Информация о парсинге</h4>
@@ -386,17 +644,15 @@
     <p><strong>Дата парсинга:</strong> {{ $data['created_at'] ?? 'неизвестно' }}</p>
     <p><strong>JSON данные:</strong> <code>storage/app/parsed/topic_{{ $topicId }}.json</code></p>
     <p><strong>Изображения:</strong> <code>public/images/tasks/{{ $topicId }}/</code></p>
+    <p><strong>Для генерации тестов:</strong> Необходимо добавить <code>structured_blocks</code> в JSON с типами заданий и вариантами ответов.</p>
 </div>
 
 <script>
     // Tab switching
     document.querySelectorAll('.tab').forEach(tab => {
         tab.addEventListener('click', () => {
-            // Remove active from all tabs and contents
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-
-            // Add active to clicked tab and corresponding content
             tab.classList.add('active');
             document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
         });
