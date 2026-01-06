@@ -112,17 +112,17 @@
                                     @case(1)
                                         {{-- Прямоугольный треугольник - найти больший катет --}}
                                         <div x-data="rightTriangleOnGrid({{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 bg-slate-100 rounded">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
                                                 {{-- Сетка как клетчатая бумага --}}
                                                 <template x-for="line in gridLines">
                                                     <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#94a3b8" stroke-width="1"/>
+                                                        stroke="#475569" stroke-width="1"/>
                                                 </template>
                                                 {{-- Треугольник --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                                    fill="none" stroke="#991b1b" stroke-width="2.5" stroke-linejoin="round"/>
+                                                    fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
                                                 {{-- Прямой угол --}}
-                                                <path :d="rightAngleMark" fill="none" stroke="#991b1b" stroke-width="2"/>
+                                                <path :d="rightAngleMark" fill="none" stroke="#10b981" stroke-width="2"/>
                                             </svg>
                                         </div>
                                         @break
@@ -130,15 +130,15 @@
                                     @case(2)
                                         {{-- Ромб - найти большую диагональ --}}
                                         <div x-data="rhombusOnGrid({{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 bg-slate-100 rounded">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
                                                 <template x-for="line in gridLines">
                                                     <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#94a3b8" stroke-width="1"/>
+                                                        stroke="#475569" stroke-width="1"/>
                                                 </template>
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
-                                                    fill="none" stroke="#991b1b" stroke-width="2.5" stroke-linejoin="round"/>
-                                                <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#991b1b" stroke-width="2" stroke-dasharray="4,3"/>
-                                                <line :x1="B.x" :y1="B.y" :x2="D.x" :y2="D.y" stroke="#991b1b" stroke-width="2" stroke-dasharray="4,3"/>
+                                                    fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
+                                                <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#10b981" stroke-width="2" stroke-dasharray="4,3"/>
+                                                <line :x1="B.x" :y1="B.y" :x2="D.x" :y2="D.y" stroke="#10b981" stroke-width="2" stroke-dasharray="4,3"/>
                                             </svg>
                                         </div>
                                         @break
@@ -146,18 +146,18 @@
                                     @case(3)
                                         {{-- Треугольник ABC с точкой M (теорема Фалеса) --}}
                                         <div x-data="triangleWithPointM({{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 bg-slate-100 rounded">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
                                                 <template x-for="line in gridLines">
                                                     <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#94a3b8" stroke-width="1"/>
+                                                        stroke="#475569" stroke-width="1"/>
                                                 </template>
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                                    fill="none" stroke="#991b1b" stroke-width="2.5" stroke-linejoin="round"/>
-                                                <circle :cx="M.x" :cy="M.y" r="4" fill="#991b1b"/>
-                                                <text :x="A.x - 12" :y="A.y + 4" fill="#1e3a5f" font-size="13" font-weight="bold" font-style="italic">A</text>
-                                                <text :x="B.x + 4" :y="B.y - 6" fill="#1e3a5f" font-size="13" font-weight="bold" font-style="italic">B</text>
-                                                <text :x="C.x + 4" :y="C.y + 14" fill="#1e3a5f" font-size="13" font-weight="bold" font-style="italic">C</text>
-                                                <text :x="M.x + 4" :y="M.y - 6" fill="#1e3a5f" font-size="13" font-weight="bold" font-style="italic">M</text>
+                                                    fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
+                                                <circle :cx="M.x" :cy="M.y" r="4" fill="#f59e0b"/>
+                                                <text :x="A.x - 12" :y="A.y + 4" fill="#60a5fa" font-size="13" font-weight="bold" font-style="italic">A</text>
+                                                <text :x="B.x + 4" :y="B.y - 6" fill="#60a5fa" font-size="13" font-weight="bold" font-style="italic">B</text>
+                                                <text :x="C.x + 4" :y="C.y + 14" fill="#60a5fa" font-size="13" font-weight="bold" font-style="italic">C</text>
+                                                <text :x="M.x + 4" :y="M.y - 6" fill="#f59e0b" font-size="13" font-weight="bold" font-style="italic">M</text>
                                             </svg>
                                         </div>
                                         @break
@@ -168,13 +168,13 @@
                                     @case(7)
                                         {{-- Многоугольник для нахождения площади --}}
                                         <div x-data="polygonOnGrid({{ $zadanie['number'] }}, {{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 bg-slate-100 rounded">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
                                                 <template x-for="line in gridLines">
                                                     <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#94a3b8" stroke-width="1"/>
+                                                        stroke="#475569" stroke-width="1"/>
                                                 </template>
                                                 <polygon :points="pointsString"
-                                                    fill="none" stroke="#991b1b" stroke-width="2.5" stroke-linejoin="round"/>
+                                                    fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
                                             </svg>
                                         </div>
                                         @break
@@ -182,14 +182,14 @@
                                     @case(8)
                                         {{-- Две точки на сетке - найти расстояние --}}
                                         <div x-data="twoPointsOnGrid({{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 bg-slate-100 rounded">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
                                                 <template x-for="line in gridLines">
                                                     <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#94a3b8" stroke-width="1"/>
+                                                        stroke="#475569" stroke-width="1"/>
                                                 </template>
-                                                <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#991b1b" stroke-width="2.5"/>
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#991b1b"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#991b1b"/>
+                                                <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#10b981" stroke-width="2.5"/>
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#10b981"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#10b981"/>
                                             </svg>
                                         </div>
                                         @break
@@ -197,17 +197,17 @@
                                     @case(9)
                                         {{-- Треугольник ABC - найти среднюю линию --}}
                                         <div x-data="triangleWithMidline({{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 bg-slate-100 rounded">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
                                                 <template x-for="line in gridLines">
                                                     <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#94a3b8" stroke-width="1"/>
+                                                        stroke="#475569" stroke-width="1"/>
                                                 </template>
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                                    fill="none" stroke="#991b1b" stroke-width="2.5" stroke-linejoin="round"/>
-                                                <line :x1="M1.x" :y1="M1.y" :x2="M2.x" :y2="M2.y" stroke="#991b1b" stroke-width="2" stroke-dasharray="5,3"/>
-                                                <text :x="A.x - 12" :y="A.y + 14" fill="#1e3a5f" font-size="13" font-weight="bold" font-style="italic">A</text>
-                                                <text :x="B.x - 2" :y="B.y - 8" fill="#1e3a5f" font-size="13" font-weight="bold" font-style="italic">B</text>
-                                                <text :x="C.x + 4" :y="C.y + 14" fill="#1e3a5f" font-size="13" font-weight="bold" font-style="italic">C</text>
+                                                    fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
+                                                <line :x1="M1.x" :y1="M1.y" :x2="M2.x" :y2="M2.y" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,3"/>
+                                                <text :x="A.x - 12" :y="A.y + 14" fill="#60a5fa" font-size="13" font-weight="bold" font-style="italic">A</text>
+                                                <text :x="B.x - 2" :y="B.y - 8" fill="#60a5fa" font-size="13" font-weight="bold" font-style="italic">B</text>
+                                                <text :x="C.x + 4" :y="C.y + 14" fill="#60a5fa" font-size="13" font-weight="bold" font-style="italic">C</text>
                                             </svg>
                                         </div>
                                         @break
@@ -215,16 +215,16 @@
                                     @case(10)
                                         {{-- Фигура с отрезком AB --}}
                                         <div x-data="figureWithSegmentAB({{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 bg-slate-100 rounded">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
                                                 <template x-for="line in gridLines">
                                                     <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#94a3b8" stroke-width="1"/>
+                                                        stroke="#475569" stroke-width="1"/>
                                                 </template>
                                                 <polygon :points="shapePoints"
-                                                    fill="none" stroke="#991b1b" stroke-width="2.5" stroke-linejoin="round"/>
-                                                <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#991b1b" stroke-width="2.5"/>
-                                                <text :x="labelA.x" :y="labelA.y" fill="#1e3a5f" font-size="13" font-weight="bold" font-style="italic">A</text>
-                                                <text :x="labelB.x" :y="labelB.y" fill="#1e3a5f" font-size="13" font-weight="bold" font-style="italic">B</text>
+                                                    fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
+                                                <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#f59e0b" stroke-width="2.5"/>
+                                                <text :x="labelA.x" :y="labelA.y" fill="#60a5fa" font-size="13" font-weight="bold" font-style="italic">A</text>
+                                                <text :x="labelB.x" :y="labelB.y" fill="#60a5fa" font-size="13" font-weight="bold" font-style="italic">B</text>
                                             </svg>
                                         </div>
                                         @break
@@ -232,14 +232,14 @@
                                     @case(11)
                                         {{-- Трапеция - найти среднюю линию --}}
                                         <div x-data="trapezoidWithMidline({{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 bg-slate-100 rounded">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
                                                 <template x-for="line in gridLines">
                                                     <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#94a3b8" stroke-width="1"/>
+                                                        stroke="#475569" stroke-width="1"/>
                                                 </template>
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
-                                                    fill="none" stroke="#991b1b" stroke-width="2.5" stroke-linejoin="round"/>
-                                                <line :x1="M1.x" :y1="M1.y" :x2="M2.x" :y2="M2.y" stroke="#991b1b" stroke-width="2" stroke-dasharray="5,3"/>
+                                                    fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
+                                                <line :x1="M1.x" :y1="M1.y" :x2="M2.x" :y2="M2.y" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,3"/>
                                             </svg>
                                         </div>
                                         @break
@@ -247,15 +247,15 @@
                                     @case(12)
                                         {{-- Два круга - сравнить площади --}}
                                         <div x-data="twoCirclesOnGrid({{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 bg-slate-100 rounded">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
                                                 <template x-for="line in gridLines">
                                                     <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#94a3b8" stroke-width="1"/>
+                                                        stroke="#475569" stroke-width="1"/>
                                                 </template>
-                                                <circle :cx="c1.x" :cy="c1.y" :r="r1" fill="none" stroke="#991b1b" stroke-width="2.5"/>
-                                                <circle :cx="c2.x" :cy="c2.y" :r="r2" fill="none" stroke="#991b1b" stroke-width="2.5"/>
-                                                <circle :cx="c1.x" :cy="c1.y" r="3" fill="#991b1b"/>
-                                                <circle :cx="c2.x" :cy="c2.y" r="3" fill="#991b1b"/>
+                                                <circle :cx="c1.x" :cy="c1.y" :r="r1" fill="none" stroke="#10b981" stroke-width="2.5"/>
+                                                <circle :cx="c2.x" :cy="c2.y" :r="r2" fill="none" stroke="#10b981" stroke-width="2.5"/>
+                                                <circle :cx="c1.x" :cy="c1.y" r="3" fill="#10b981"/>
+                                                <circle :cx="c2.x" :cy="c2.y" r="3" fill="#10b981"/>
                                             </svg>
                                         </div>
                                         @break
