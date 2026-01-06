@@ -46,14 +46,16 @@
                     :stroke-width="isHighlighted('sides') ? 5 : 3.5"
                     stroke-linejoin="round" class="geo-line"/>
 
-                {{-- Биссектриса BD --}}
-                <g x-show="isHighlighted('bisector')">
-                    <line :x1="B.x" :y1="B.y" :x2="D.x" :y2="D.y"
-                        stroke="#10b981" stroke-width="2.5" stroke-dasharray="8,5"/>
-                    <circle :cx="D.x" :cy="D.y" r="4" fill="#10b981"/>
-                </g>
+                {{-- Биссектриса BD - всегда видна, подсвечивается при hint --}}
+                <line :x1="B.x" :y1="B.y" :x2="D.x" :y2="D.y"
+                    :stroke="isHighlighted('bisector') ? '#10b981' : '#dc2626'"
+                    :stroke-width="isHighlighted('bisector') ? 3 : 2"
+                    :stroke-dasharray="isHighlighted('bisector') ? '8,5' : 'none'"
+                    class="geo-line"/>
+                <circle :cx="D.x" :cy="D.y" r="4"
+                    :fill="isHighlighted('bisector') ? '#10b981' : '#dc2626'"/>
 
-                {{-- Дуги равных углов --}}
+                {{-- Дуги равных углов - только при подсветке --}}
                 <g x-show="isHighlighted('bisector')">
                     <path :d="makeAngleArc(B, A, D, 28)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
                     <path :d="makeAngleArc(B, D, C, 32)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
@@ -73,7 +75,7 @@
                 <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                 <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
                 <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
-                <text x-show="isHighlighted('bisector')" :x="D.x" :y="D.y + 20" fill="#10b981" font-size="18" class="geo-label" text-anchor="middle">D</text>
+                <text :x="D.x" :y="D.y + 20" :fill="isHighlighted('bisector') ? '#10b981' : '#60a5fa'" font-size="18" class="geo-label" text-anchor="middle">D</text>
             </svg>
 
             <div class="flex flex-wrap gap-2 mb-3">
@@ -99,12 +101,16 @@
                     :stroke-width="isHighlighted('sides') ? 5 : 3.5"
                     stroke-linejoin="round" class="geo-line"/>
 
-                {{-- Медиана BM --}}
+                {{-- Медиана BM - всегда видна --}}
+                <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
+                    :stroke="isHighlighted('median') ? '#10b981' : '#dc2626'"
+                    :stroke-width="isHighlighted('median') ? 3 : 2"
+                    :stroke-dasharray="isHighlighted('median') ? '8,5' : 'none'"
+                    class="geo-line"/>
+                <circle :cx="M.x" :cy="M.y" r="4"
+                    :fill="isHighlighted('median') ? '#10b981' : '#dc2626'"/>
+                {{-- Маркеры равных отрезков - только при подсветке --}}
                 <g x-show="isHighlighted('median')">
-                    <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
-                        stroke="#10b981" stroke-width="2.5" stroke-dasharray="8,5"/>
-                    <circle :cx="M.x" :cy="M.y" r="5" fill="#10b981"/>
-                    {{-- Маркеры равных отрезков --}}
                     <line :x1="(A.x + M.x)/2 - 5" :y1="A.y - 5" :x2="(A.x + M.x)/2 + 5" :y2="A.y + 5" stroke="#3b82f6" stroke-width="3"/>
                     <line :x1="(M.x + C.x)/2 - 5" :y1="A.y - 5" :x2="(M.x + C.x)/2 + 5" :y2="A.y + 5" stroke="#3b82f6" stroke-width="3"/>
                 </g>
@@ -116,7 +122,7 @@
                 <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                 <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
                 <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
-                <text x-show="isHighlighted('median')" :x="M.x" :y="M.y + 20" fill="#10b981" font-size="18" class="geo-label" text-anchor="middle">M</text>
+                <text :x="M.x" :y="M.y + 20" :fill="isHighlighted('median') ? '#10b981' : '#60a5fa'" font-size="18" class="geo-label" text-anchor="middle">M</text>
             </svg>
 
             <div class="flex flex-wrap gap-2 mb-3">
@@ -357,12 +363,17 @@
                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                     fill="none" stroke="#dc2626" stroke-width="3.5" stroke-linejoin="round"/>
 
-                {{-- Высота BH --}}
+                {{-- Высота BH - всегда видна --}}
+                <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y"
+                    :stroke="isHighlighted('height') ? '#3b82f6' : '#dc2626'"
+                    :stroke-width="isHighlighted('height') ? 3 : 2"
+                    :stroke-dasharray="isHighlighted('height') ? '8,5' : 'none'"
+                    class="geo-line"/>
+                <circle :cx="H.x" :cy="H.y" r="4"
+                    :fill="isHighlighted('height') ? '#3b82f6' : '#dc2626'"/>
+                {{-- Прямой угол - только при подсветке --}}
                 <g x-show="isHighlighted('height')">
-                    <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y"
-                        stroke="#3b82f6" stroke-width="2.5" stroke-dasharray="8,5"/>
                     <path :d="rightAnglePath(H, A, B, 12)" fill="none" stroke="#3b82f6" stroke-width="2"/>
-                    <circle :cx="H.x" :cy="H.y" r="4" fill="#3b82f6"/>
                 </g>
 
                 {{-- Угол BAC --}}
@@ -382,7 +393,7 @@
                 <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                 <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
                 <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
-                <text x-show="isHighlighted('height')" :x="H.x + 15" :y="H.y - 5" fill="#3b82f6" font-size="18" class="geo-label">H</text>
+                <text :x="H.x + 15" :y="H.y - 5" :fill="isHighlighted('height') ? '#3b82f6' : '#60a5fa'" font-size="18" class="geo-label">H</text>
             </svg>
 
             <div class="flex flex-wrap gap-2 mb-3">
