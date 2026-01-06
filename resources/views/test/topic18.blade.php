@@ -113,11 +113,13 @@
                                         {{-- Прямоугольный треугольник - найти больший катет --}}
                                         <div x-data="rightTriangleOnGrid({{ $index }})">
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
-                                                {{-- Сетка как клетчатая бумага --}}
-                                                <template x-for="line in gridLines">
-                                                    <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#475569" stroke-width="1"/>
-                                                </template>
+                                                {{-- Сетка через pattern --}}
+                                                <defs>
+                                                    <pattern id="grid1-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
+                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    </pattern>
+                                                </defs>
+                                                <rect x="0" y="0" :width="width" :height="height" fill="url(#grid1-{{ $index }})"/>
                                                 {{-- Треугольник --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                                                     fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
@@ -131,10 +133,12 @@
                                         {{-- Ромб - найти большую диагональ --}}
                                         <div x-data="rhombusOnGrid({{ $index }})">
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
-                                                <template x-for="line in gridLines">
-                                                    <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#475569" stroke-width="1"/>
-                                                </template>
+                                                <defs>
+                                                    <pattern id="grid2-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
+                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    </pattern>
+                                                </defs>
+                                                <rect x="0" y="0" :width="width" :height="height" fill="url(#grid2-{{ $index }})"/>
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
                                                     fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
                                                 <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#10b981" stroke-width="2" stroke-dasharray="4,3"/>
@@ -147,10 +151,12 @@
                                         {{-- Треугольник ABC с точкой M (теорема Фалеса) --}}
                                         <div x-data="triangleWithPointM({{ $index }})">
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
-                                                <template x-for="line in gridLines">
-                                                    <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#475569" stroke-width="1"/>
-                                                </template>
+                                                <defs>
+                                                    <pattern id="grid3-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
+                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    </pattern>
+                                                </defs>
+                                                <rect x="0" y="0" :width="width" :height="height" fill="url(#grid3-{{ $index }})"/>
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                                                     fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
                                                 <circle :cx="M.x" :cy="M.y" r="4" fill="#f59e0b"/>
@@ -169,10 +175,12 @@
                                         {{-- Многоугольник для нахождения площади --}}
                                         <div x-data="polygonOnGrid({{ $zadanie['number'] }}, {{ $index }})">
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
-                                                <template x-for="line in gridLines">
-                                                    <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#475569" stroke-width="1"/>
-                                                </template>
+                                                <defs>
+                                                    <pattern id="grid4-{{ $zadanie['number'] }}-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
+                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    </pattern>
+                                                </defs>
+                                                <rect x="0" y="0" :width="width" :height="height" fill="url(#grid4-{{ $zadanie['number'] }}-{{ $index }})"/>
                                                 <polygon :points="pointsString"
                                                     fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
                                             </svg>
@@ -183,10 +191,12 @@
                                         {{-- Две точки на сетке - найти расстояние --}}
                                         <div x-data="twoPointsOnGrid({{ $index }})">
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
-                                                <template x-for="line in gridLines">
-                                                    <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#475569" stroke-width="1"/>
-                                                </template>
+                                                <defs>
+                                                    <pattern id="grid8-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
+                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    </pattern>
+                                                </defs>
+                                                <rect x="0" y="0" :width="width" :height="height" fill="url(#grid8-{{ $index }})"/>
                                                 <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#10b981" stroke-width="2.5"/>
                                                 <circle :cx="A.x" :cy="A.y" r="4" fill="#10b981"/>
                                                 <circle :cx="B.x" :cy="B.y" r="4" fill="#10b981"/>
@@ -198,10 +208,12 @@
                                         {{-- Треугольник ABC - найти среднюю линию --}}
                                         <div x-data="triangleWithMidline({{ $index }})">
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
-                                                <template x-for="line in gridLines">
-                                                    <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#475569" stroke-width="1"/>
-                                                </template>
+                                                <defs>
+                                                    <pattern id="grid9-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
+                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    </pattern>
+                                                </defs>
+                                                <rect x="0" y="0" :width="width" :height="height" fill="url(#grid9-{{ $index }})"/>
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                                                     fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
                                                 <line :x1="M1.x" :y1="M1.y" :x2="M2.x" :y2="M2.y" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,3"/>
@@ -216,10 +228,12 @@
                                         {{-- Фигура с отрезком AB --}}
                                         <div x-data="figureWithSegmentAB({{ $index }})">
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
-                                                <template x-for="line in gridLines">
-                                                    <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#475569" stroke-width="1"/>
-                                                </template>
+                                                <defs>
+                                                    <pattern id="grid10-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
+                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    </pattern>
+                                                </defs>
+                                                <rect x="0" y="0" :width="width" :height="height" fill="url(#grid10-{{ $index }})"/>
                                                 <polygon :points="shapePoints"
                                                     fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
                                                 <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#f59e0b" stroke-width="2.5"/>
@@ -233,10 +247,12 @@
                                         {{-- Трапеция - найти среднюю линию --}}
                                         <div x-data="trapezoidWithMidline({{ $index }})">
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
-                                                <template x-for="line in gridLines">
-                                                    <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#475569" stroke-width="1"/>
-                                                </template>
+                                                <defs>
+                                                    <pattern id="grid11-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
+                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    </pattern>
+                                                </defs>
+                                                <rect x="0" y="0" :width="width" :height="height" fill="url(#grid11-{{ $index }})"/>
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
                                                     fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
                                                 <line :x1="M1.x" :y1="M1.y" :x2="M2.x" :y2="M2.y" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,3"/>
@@ -248,10 +264,12 @@
                                         {{-- Два круга - сравнить площади --}}
                                         <div x-data="twoCirclesOnGrid({{ $index }})">
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
-                                                <template x-for="line in gridLines">
-                                                    <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#475569" stroke-width="1"/>
-                                                </template>
+                                                <defs>
+                                                    <pattern id="grid12-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
+                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    </pattern>
+                                                </defs>
+                                                <rect x="0" y="0" :width="width" :height="height" fill="url(#grid12-{{ $index }})"/>
                                                 <circle :cx="c1.x" :cy="c1.y" :r="r1" fill="none" stroke="#10b981" stroke-width="2.5"/>
                                                 <circle :cx="c2.x" :cy="c2.y" :r="r2" fill="none" stroke="#10b981" stroke-width="2.5"/>
                                                 <circle :cx="c1.x" :cy="c1.y" r="3" fill="#10b981"/>
