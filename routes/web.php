@@ -134,6 +134,7 @@ Route::prefix('test')->group(function () {
     Route::get('/13', [TestPdfController::class, 'topic13'])->name('test.topic13');
     Route::get('/14', [TestPdfController::class, 'topic14'])->name('test.topic14');
     Route::get('/15', [TestPdfController::class, 'topic15'])->name('test.topic15');
+    Route::get('/new/15', [TestPdfController::class, 'topic15Interactive'])->name('test.topic15.interactive');
     Route::get('/16', [TestPdfController::class, 'topic16'])->name('test.topic16');
     Route::get('/18', [TestPdfController::class, 'topic18'])->name('test.topic18');
     Route::get('/19', [TestPdfController::class, 'topic19'])->name('test.topic19');

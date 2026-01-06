@@ -3334,6 +3334,17 @@ class TestPdfController extends Controller
     }
 
     /**
+     * Display Topic 15 Interactive - Треугольники с интерактивными изображениями
+     */
+    public function topic15Interactive()
+    {
+        $blocks = $this->getAllBlocksData15();
+        $source = 'Interactive SVG';
+
+        return view('test.topic15-interactive', compact('blocks', 'source'));
+    }
+
+    /**
      * Get all blocks data for Topic 15 - Треугольники
      */
     protected function getAllBlocksData15(): array
