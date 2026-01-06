@@ -240,6 +240,9 @@
             <a href="{{ route('test.topic11') }}" style="color: #60a5fa; text-decoration: none; font-size: 14px;">11</a> |
             <a href="{{ route('test.topic12') }}" style="color: #60a5fa; text-decoration: none; font-size: 14px;">12</a> |
             <a href="{{ route('test.topic13') }}" style="color: #60a5fa; text-decoration: none; font-size: 14px;">13</a> |
+            <a href="{{ route('test.topic14') }}" style="color: #60a5fa; text-decoration: none; font-size: 14px;">14</a> |
+            <a href="{{ route('test.topic15') }}" style="color: #60a5fa; text-decoration: none; font-size: 14px;">15</a> |
+            <a href="{{ route('test.topic16') }}" style="color: #60a5fa; text-decoration: none; font-size: 14px;">16</a> |
             <a href="{{ route('test.topic18') }}" style="color: #60a5fa; text-decoration: none; font-size: 14px;">18</a> |
             <strong>19</strong>
         </div>
