@@ -33,10 +33,11 @@ class TestPdfController extends Controller
     {
         $availableTopics = $this->taskGenerator->getAvailableTopics();
 
-        // Add manual topics (06, 07) which have structured data in controller
+        // Add manual topics (06, 07, 08) which have structured data in controller
         $manualTopics = [
             ['topic_id' => '06', 'title' => 'Вычисления', 'tasks_count' => 174],
             ['topic_id' => '07', 'title' => 'Числа, координатная прямая', 'tasks_count' => 85],
+            ['topic_id' => '08', 'title' => 'Квадратные корни и степени', 'tasks_count' => 278],
         ];
 
         // Merge, avoiding duplicates
@@ -78,11 +79,13 @@ class TestPdfController extends Controller
         foreach ($topicIds as $topicId) {
             $topicId = str_pad($topicId, 2, '0', STR_PAD_LEFT);
 
-            // Check if it's a manual topic (06, 07)
+            // Check if it's a manual topic (06, 07, 08)
             if ($topicId === '06') {
                 $tasks = $this->getRandomTasksFromManualData06($tasksPerTopic);
             } elseif ($topicId === '07') {
                 $tasks = $this->getRandomTasksFromManualData07($tasksPerTopic);
+            } elseif ($topicId === '08') {
+                $tasks = $this->getRandomTasksFromManualData08($tasksPerTopic);
             } else {
                 $tasks = $this->taskGenerator->getRandomTasksFromTopic($topicId, $tasksPerTopic);
             }
@@ -116,6 +119,15 @@ class TestPdfController extends Controller
     {
         $blocks = $this->getAllBlocksData07();
         return $this->extractRandomTasks($blocks, '07', 'Числа, координатная прямая', $count);
+    }
+
+    /**
+     * Get random tasks from manual topic 08 data
+     */
+    protected function getRandomTasksFromManualData08(int $count): array
+    {
+        $blocks = $this->getAllBlocksData08();
+        return $this->extractRandomTasks($blocks, '08', 'Квадратные корни и степени', $count);
     }
 
     /**
@@ -1197,5 +1209,662 @@ class TestPdfController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * Display parsed tasks from PDF for topic 08
+     */
+    public function topic08()
+    {
+        $blocks = $this->getAllBlocksData08();
+        $source = 'Manual (все блоки из PDF)';
+
+        return view('test.topic08', compact('blocks', 'source'));
+    }
+
+    /**
+     * Get all blocks data for Topic 08 - Квадратные корни и степени
+     */
+    protected function getAllBlocksData08(): array
+    {
+        return [
+            // =====================
+            // БЛОК 1. ФИПИ
+            // =====================
+            [
+                'number' => 1,
+                'title' => 'ФИПИ',
+                'zadaniya' => [
+                    // I) Иррациональные числа и выражения
+                    // Задание 1 - Корни с параметрами
+                    [
+                        'number' => 1,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\sqrt{\frac{16a^{14}}{a^8}} \text{ при } a = 3'],
+                            ['id' => 2, 'expression' => '\sqrt{\frac{36a^{21}}{a^{15}}} \text{ при } a = 2'],
+                            ['id' => 3, 'expression' => '\sqrt{\frac{25a^{19}}{a^{11}}} \text{ при } a = 2'],
+                            ['id' => 4, 'expression' => '\sqrt{\frac{64a^{17}}{a^{15}}} \text{ при } a = 7'],
+                            ['id' => 5, 'expression' => '\sqrt{\frac{9a^{14}}{a^8}} \text{ при } a = 2'],
+                            ['id' => 6, 'expression' => '\sqrt{\frac{16a^{12}}{a^{10}}} \text{ при } a = 5'],
+                            ['id' => 7, 'expression' => '\sqrt{\frac{9a^{19}}{a^9}} \text{ при } a = 2'],
+                            ['id' => 8, 'expression' => '\sqrt{\frac{4a^{16}}{a^{12}}} \text{ при } a = 5'],
+                            ['id' => 9, 'expression' => '\sqrt{\frac{36x^4}{y^2}} \text{ при } x = 6, y = 9'],
+                            ['id' => 10, 'expression' => '\sqrt{\frac{25x^2}{y^4}} \text{ при } x = 10, y = 5'],
+                            ['id' => 11, 'expression' => '\sqrt{\frac{4x^2}{y^6}} \text{ при } x = 8, y = 2'],
+                            ['id' => 12, 'expression' => '\sqrt{\frac{16x^4}{y^6}} \text{ при } x = 4, y = 2'],
+                            ['id' => 13, 'expression' => '\sqrt{\frac{25x^4}{y^6}} \text{ при } x = 10, y = 5'],
+                            ['id' => 14, 'expression' => '\sqrt{\frac{36x^2}{y^4}} \text{ при } x = 6, y = 2'],
+                            ['id' => 15, 'expression' => '\sqrt{\frac{16x^8}{y^6}} \text{ при } x = 2, y = 4'],
+                            ['id' => 16, 'expression' => '\sqrt{\frac{9x^4}{y^6}} \text{ при } x = 9, y = 3'],
+                        ]
+                    ],
+                    // Задание 2 - Корни со степенями xy
+                    [
+                        'number' => 2,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\sqrt{\frac{1}{16}x^6y^4} \text{ при } x = 2, y = 5'],
+                            ['id' => 2, 'expression' => '\sqrt{\frac{1}{25}x^8y^2} \text{ при } x = 3, y = 5'],
+                            ['id' => 3, 'expression' => '\sqrt{\frac{1}{4}x^2y^8} \text{ при } x = 5, y = 2'],
+                            ['id' => 4, 'expression' => '\sqrt{\frac{1}{9}x^4y^{10}} \text{ при } x = 3, y = 2'],
+                            ['id' => 5, 'expression' => '\sqrt{\frac{1}{4}x^8y^4} \text{ при } x = 2, y = 3'],
+                            ['id' => 6, 'expression' => '\sqrt{\frac{1}{25}x^4y^8} \text{ при } x = 5, y = 2'],
+                            ['id' => 7, 'expression' => '\sqrt{\frac{1}{9}x^2y^6} \text{ при } x = 7, y = 3'],
+                            ['id' => 8, 'expression' => '\sqrt{\frac{1}{16}x^{10}y^2} \text{ при } x = 2, y = 3'],
+                        ]
+                    ],
+                    // Задание 3 - Корни с отрицательными числами
+                    [
+                        'number' => 3,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\sqrt{a^2 \cdot (-a)^2} \text{ при } a = 4'],
+                            ['id' => 2, 'expression' => '\sqrt{a^6 \cdot (-a)^4} \text{ при } a = 2'],
+                            ['id' => 3, 'expression' => '\sqrt{a^6 \cdot (-a)^2} \text{ при } a = 3'],
+                            ['id' => 4, 'expression' => '\sqrt{a^2 \cdot (-a)^4} \text{ при } a = 4'],
+                            ['id' => 5, 'expression' => '\sqrt{(-a)^4 \cdot a^2} \text{ при } a = 5'],
+                            ['id' => 6, 'expression' => '\sqrt{(-a)^8 \cdot a^2} \text{ при } a = 2'],
+                            ['id' => 7, 'expression' => '\sqrt{(-a)^2 \cdot a^4} \text{ при } a = 3'],
+                            ['id' => 8, 'expression' => '\sqrt{(-a)^2 \cdot a^2} \text{ при } a = 5'],
+                        ]
+                    ],
+                    // Задание 4 - Полные квадраты
+                    [
+                        'number' => 4,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\sqrt{a^2 + 8ab + 16b^2} \text{ при } a = 3\frac{3}{7}, b = \frac{1}{7}'],
+                            ['id' => 2, 'expression' => '\sqrt{a^2 + 12ab + 36b^2} \text{ при } a = 7\frac{2}{5}, b = \frac{3}{5}'],
+                            ['id' => 3, 'expression' => '\sqrt{a^2 + 10ab + 25b^2} \text{ при } a = 1\frac{6}{13}, b = \frac{4}{13}'],
+                            ['id' => 4, 'expression' => '\sqrt{a^2 + 8ab + 16b^2} \text{ при } a = 3\frac{2}{3}, b = \frac{1}{3}'],
+                            ['id' => 5, 'expression' => '\sqrt{9a^2 + 6ab + b^2} \text{ при } a = \frac{5}{13}, b = 6\frac{11}{13}'],
+                            ['id' => 6, 'expression' => '\sqrt{16a^2 + 8ab + b^2} \text{ при } a = \frac{3}{11}, b = 5\frac{10}{11}'],
+                            ['id' => 7, 'expression' => '\sqrt{25a^2 + 10ab + b^2} \text{ при } a = \frac{4}{9}, b = 3\frac{7}{9}'],
+                            ['id' => 8, 'expression' => '\sqrt{36a^2 + 12ab + b^2} \text{ при } a = \frac{4}{5}, b = 8\frac{1}{5}'],
+                            ['id' => 9, 'expression' => '\sqrt{a^2 - 6ab + 9b^2} \text{ при } a = 3, b = 6'],
+                            ['id' => 10, 'expression' => '\sqrt{a^2 - 12ab + 36b^2} \text{ при } a = 8, b = 3'],
+                            ['id' => 11, 'expression' => '\sqrt{a^2 - 8ab + 16b^2} \text{ при } a = 4, b = 3'],
+                            ['id' => 12, 'expression' => '\sqrt{a^2 - 10ab + 25b^2} \text{ при } a = 7, b = 2'],
+                            ['id' => 13, 'expression' => '\sqrt{a^2 + 10ab + 25b^2} \text{ при } a = 8, b = -2'],
+                            ['id' => 14, 'expression' => '\sqrt{a^2 + 6ab + 9b^2} \text{ при } a = 5, b = -4'],
+                            ['id' => 15, 'expression' => '\sqrt{a^2 + 12ab + 36b^2} \text{ при } a = 7, b = -3'],
+                            ['id' => 16, 'expression' => '\sqrt{a^2 + 4ab + 4b^2} \text{ при } a = 2, b = -4'],
+                        ]
+                    ],
+                    // Задание 5 - Упрощение радикалов
+                    [
+                        'number' => 5,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '(\sqrt{20} - \sqrt{5}) \cdot \sqrt{5}'],
+                            ['id' => 2, 'expression' => '(\sqrt{18} - \sqrt{2}) \cdot \sqrt{2}'],
+                            ['id' => 3, 'expression' => '(\sqrt{48} - \sqrt{3}) \cdot \sqrt{3}'],
+                            ['id' => 4, 'expression' => '(\sqrt{50} + \sqrt{2}) \cdot \sqrt{2}'],
+                            ['id' => 5, 'expression' => '(\sqrt{45} + \sqrt{5}) \cdot \sqrt{5}'],
+                            ['id' => 6, 'expression' => '(\sqrt{27} + \sqrt{3}) \cdot \sqrt{3}'],
+                            ['id' => 7, 'expression' => '\sqrt{5} \cdot \sqrt{18} \cdot \sqrt{10}'],
+                            ['id' => 8, 'expression' => '\sqrt{7} \cdot \sqrt{12} \cdot \sqrt{21}'],
+                            ['id' => 9, 'expression' => '\sqrt{2} \cdot \sqrt{45} \cdot \sqrt{10}'],
+                            ['id' => 10, 'expression' => '\sqrt{7} \cdot \sqrt{45} \cdot \sqrt{35}'],
+                            ['id' => 11, 'expression' => '\sqrt{11} \cdot \sqrt{32} \cdot \sqrt{22}'],
+                            ['id' => 12, 'expression' => '\sqrt{13} \cdot \sqrt{18} \cdot \sqrt{26}'],
+                        ]
+                    ],
+                    // Задание 6 - Дроби с радикалами
+                    [
+                        'number' => 6,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{\sqrt{21} \cdot \sqrt{14}}{\sqrt{6}}'],
+                            ['id' => 2, 'expression' => '\frac{\sqrt{35} \cdot \sqrt{21}}{\sqrt{15}}'],
+                            ['id' => 3, 'expression' => '\frac{\sqrt{22} \cdot \sqrt{33}}{\sqrt{6}}'],
+                            ['id' => 4, 'expression' => '\frac{\sqrt{65} \cdot \sqrt{13}}{\sqrt{5}}'],
+                            ['id' => 5, 'expression' => '\frac{\sqrt{8} \cdot \sqrt{192}}{\sqrt{24}}'],
+                            ['id' => 6, 'expression' => '\frac{\sqrt{75} \cdot \sqrt{10}}{\sqrt{30}}'],
+                        ]
+                    ],
+                    // Задание 7 - Сложные радикальные выражения
+                    [
+                        'number' => 7,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '5\sqrt{11} \cdot 2\sqrt{2} \cdot \sqrt{22}'],
+                            ['id' => 2, 'expression' => '7\sqrt{15} \cdot 2\sqrt{2} \cdot \sqrt{30}'],
+                            ['id' => 3, 'expression' => '4\sqrt{17} \cdot 5\sqrt{2} \cdot \sqrt{34}'],
+                            ['id' => 4, 'expression' => '4\sqrt{5} \cdot 3\sqrt{3} \cdot \sqrt{15}'],
+                            ['id' => 5, 'expression' => '10\sqrt{7} \cdot 2\sqrt{6} \cdot \sqrt{42}'],
+                            ['id' => 6, 'expression' => '5\sqrt{13} \cdot 2\sqrt{3} \cdot \sqrt{39}'],
+                        ]
+                    ],
+                    // Задание 8 - Степени и корни
+                    [
+                        'number' => 8,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\sqrt{6^4}'],
+                            ['id' => 2, 'expression' => '\sqrt{5^6}'],
+                            ['id' => 3, 'expression' => '\sqrt{4^5}'],
+                            ['id' => 4, 'expression' => '\sqrt{9^3}'],
+                            ['id' => 5, 'expression' => '\sqrt{8^4}'],
+                            ['id' => 6, 'expression' => '\sqrt{3^6}'],
+                            ['id' => 7, 'expression' => '\frac{(2\sqrt{10})^2}{160}'],
+                            ['id' => 8, 'expression' => '\frac{(3\sqrt{5})^2}{30}'],
+                            ['id' => 9, 'expression' => '\frac{(4\sqrt{2})^2}{64}'],
+                            ['id' => 10, 'expression' => '\frac{72}{(2\sqrt{3})^2}'],
+                            ['id' => 11, 'expression' => '\frac{160}{(2\sqrt{5})^2}'],
+                            ['id' => 12, 'expression' => '\frac{200}{(5\sqrt{2})^2}'],
+                        ]
+                    ],
+                    // Задание 9 - Сопряжённые выражения
+                    [
+                        'number' => 9,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '(\sqrt{17} - 3)(\sqrt{17} + 3)'],
+                            ['id' => 2, 'expression' => '(\sqrt{23} - 2)(\sqrt{23} + 2)'],
+                            ['id' => 3, 'expression' => '(\sqrt{47} - 5)(\sqrt{47} + 5)'],
+                            ['id' => 4, 'expression' => '(\sqrt{29} - 4)(\sqrt{29} + 4)'],
+                            ['id' => 5, 'expression' => '(\sqrt{41} - 3)(\sqrt{41} + 3)'],
+                            ['id' => 6, 'expression' => '(\sqrt{13} - 2)(\sqrt{13} + 2)'],
+                            ['id' => 7, 'expression' => '(\sqrt{7} - 3)(\sqrt{7} + 3)'],
+                            ['id' => 8, 'expression' => '(\sqrt{13} - 2)(\sqrt{13} + 2)'],
+                            ['id' => 9, 'expression' => '(\sqrt{17} - 5)(\sqrt{17} + 5)'],
+                            ['id' => 10, 'expression' => '(\sqrt{19} - 2)(\sqrt{19} + 2)'],
+                            ['id' => 11, 'expression' => '(\sqrt{5} - 3)(\sqrt{5} + 3)'],
+                            ['id' => 12, 'expression' => '(\sqrt{7} - 5)(\sqrt{7} + 5)'],
+                            ['id' => 13, 'expression' => '(\sqrt{19} - 7)^2 + 14\sqrt{19}'],
+                            ['id' => 14, 'expression' => '(\sqrt{13} - 3)^2 + 6\sqrt{13}'],
+                            ['id' => 15, 'expression' => '(\sqrt{11} - 7)^2 + 14\sqrt{11}'],
+                            ['id' => 16, 'expression' => '(\sqrt{5} + 9)^2 - 18\sqrt{5}'],
+                            ['id' => 17, 'expression' => '(\sqrt{17} + 2)^2 - 4\sqrt{17}'],
+                            ['id' => 18, 'expression' => '(\sqrt{3} + 8)^2 - 16\sqrt{3}'],
+                        ]
+                    ],
+                    // Задание 10 - Суммы дробей с радикалами
+                    [
+                        'number' => 10,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{1}{2 + \sqrt{3}} + \frac{1}{2 - \sqrt{3}}'],
+                            ['id' => 2, 'expression' => '\frac{1}{5 + \sqrt{23}} + \frac{1}{5 - \sqrt{23}}'],
+                            ['id' => 3, 'expression' => '\frac{1}{6 + \sqrt{35}} + \frac{1}{6 - \sqrt{35}}'],
+                            ['id' => 4, 'expression' => '\frac{1}{4 + \sqrt{15}} + \frac{1}{4 - \sqrt{15}}'],
+                            ['id' => 5, 'expression' => '\frac{1}{7 + \sqrt{47}} + \frac{1}{7 - \sqrt{47}}'],
+                            ['id' => 6, 'expression' => '\frac{1}{3 + \sqrt{7}} + \frac{1}{3 - \sqrt{7}}'],
+                        ]
+                    ],
+                    // Задание 11 - Разности дробей с радикалами
+                    [
+                        'number' => 11,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{1}{\sqrt{5} - 2} - \frac{1}{\sqrt{5} + 2}'],
+                            ['id' => 2, 'expression' => '\frac{1}{\sqrt{10} - 3} - \frac{1}{\sqrt{10} + 3}'],
+                            ['id' => 3, 'expression' => '\frac{1}{\sqrt{37} - 6} - \frac{1}{\sqrt{37} + 6}'],
+                            ['id' => 4, 'expression' => '\frac{1}{\sqrt{17} - 4} - \frac{1}{\sqrt{17} + 4}'],
+                            ['id' => 5, 'expression' => '\frac{1}{\sqrt{13} - 3} - \frac{1}{\sqrt{13} + 3}'],
+                            ['id' => 6, 'expression' => '\frac{1}{\sqrt{27} - 5} - \frac{1}{\sqrt{27} + 5}'],
+                        ]
+                    ],
+                    // II) Степенные выражения
+                    // Задание 12 - Степени с параметрами
+                    [
+                        'number' => 12,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{a^9 \cdot a^{12}}{a^{18}} \text{ при } a = 4'],
+                            ['id' => 2, 'expression' => '\frac{a^{12} \cdot a^6}{a^{14}} \text{ при } a = 3'],
+                            ['id' => 3, 'expression' => '\frac{a^{11} \cdot a^9}{a^{18}} \text{ при } a = 7'],
+                            ['id' => 4, 'expression' => '\frac{a^9 \cdot a^8}{a^{12}} \text{ при } a = 2'],
+                            ['id' => 5, 'expression' => '\frac{a^{16} \cdot a^{-7}}{a^8} \text{ при } a = 3'],
+                            ['id' => 6, 'expression' => '\frac{a^{18} \cdot a^{-6}}{a^{10}} \text{ при } a = 5'],
+                            ['id' => 7, 'expression' => '\frac{a^{17} \cdot a^{-6}}{a^9} \text{ при } a = 4'],
+                            ['id' => 8, 'expression' => '\frac{a^{19} \cdot a^{-11}}{a^5} \text{ при } a = 5'],
+                            ['id' => 9, 'expression' => '\frac{(a^4)^5}{a^{18}} \text{ при } a = 6'],
+                            ['id' => 10, 'expression' => '\frac{(a^8)^2}{a^{11}} \text{ при } a = 2'],
+                            ['id' => 11, 'expression' => '\frac{(a^8)^2}{a^{13}} \text{ при } a = 5'],
+                            ['id' => 12, 'expression' => '\frac{(a^3)^5}{a^{11}} \text{ при } a = 3'],
+                        ]
+                    ],
+                    // Задание 13 - Степени с делением
+                    [
+                        'number' => 13,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => 'a^6 \cdot a^{18} : a^{20} \text{ при } a = 2'],
+                            ['id' => 2, 'expression' => 'a^{14} \cdot a^{-5} : a^7 \text{ при } a = 3'],
+                            ['id' => 3, 'expression' => 'a^{15} \cdot a^{-8} : a^4 \text{ при } a = 4'],
+                            ['id' => 4, 'expression' => 'a^{20} \cdot a^{-9} : a^8 \text{ при } a = 2'],
+                            ['id' => 5, 'expression' => 'a^{21} \cdot a^{-8} : a^{11} \text{ при } a = 5'],
+                            ['id' => 6, 'expression' => 'a^{17} \cdot a^{-4} : a^{10} \text{ при } a = 6'],
+                        ]
+                    ],
+                    // Задание 14 - Степени со скобками
+                    [
+                        'number' => 14,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '(a^5)^3 \cdot a^{-8} \text{ при } a = 2'],
+                            ['id' => 2, 'expression' => '(a^4)^5 \cdot a^{-12} \text{ при } a = 3'],
+                            ['id' => 3, 'expression' => '(a^3)^7 \cdot a^{-15} \text{ при } a = 2'],
+                            ['id' => 4, 'expression' => '(a^6)^3 \cdot a^{-11} \text{ при } a = 4'],
+                            ['id' => 5, 'expression' => '(a^2)^9 \cdot a^{-14} \text{ при } a = 5'],
+                            ['id' => 6, 'expression' => '(a^4)^4 \cdot a^{-9} \text{ при } a = 3'],
+                        ]
+                    ],
+                    // Задание 15 - Сложные степени
+                    [
+                        'number' => 15,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{(a^3)^4}{a^5 \cdot a^4} \text{ при } a = 7'],
+                            ['id' => 2, 'expression' => '\frac{(a^5)^3}{a^8 \cdot a^4} \text{ при } a = 5'],
+                            ['id' => 3, 'expression' => '\frac{(a^4)^4}{a^9 \cdot a^5} \text{ при } a = 3'],
+                            ['id' => 4, 'expression' => '\frac{(a^2)^7}{a^6 \cdot a^5} \text{ при } a = 6'],
+                            ['id' => 5, 'expression' => '\frac{(a^6)^2}{a^3 \cdot a^6} \text{ при } a = 8'],
+                            ['id' => 6, 'expression' => '\frac{(a^3)^5}{a^7 \cdot a^4} \text{ при } a = 4'],
+                        ]
+                    ],
+                    // Задание 16 - Степени с xy
+                    [
+                        'number' => 16,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{x^5 \cdot y^4}{(xy)^3} \text{ при } x = 3, y = 4'],
+                            ['id' => 2, 'expression' => '\frac{x^6 \cdot y^5}{(xy)^4} \text{ при } x = 2, y = 5'],
+                            ['id' => 3, 'expression' => '\frac{x^7 \cdot y^3}{(xy)^4} \text{ при } x = 4, y = 3'],
+                            ['id' => 4, 'expression' => '\frac{x^4 \cdot y^6}{(xy)^3} \text{ при } x = 5, y = 2'],
+                            ['id' => 5, 'expression' => '\frac{x^8 \cdot y^4}{(xy)^5} \text{ при } x = 3, y = 6'],
+                            ['id' => 6, 'expression' => '\frac{x^5 \cdot y^7}{(xy)^4} \text{ при } x = 6, y = 3'],
+                        ]
+                    ],
+                    // Задание 17 - Степенные дроби
+                    [
+                        'number' => 17,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{6^4 \cdot 9^5}{54^4}'],
+                            ['id' => 2, 'expression' => '\frac{4^5 \cdot 16^3}{64^3}'],
+                            ['id' => 3, 'expression' => '\frac{8^3 \cdot 27^2}{72^2}'],
+                            ['id' => 4, 'expression' => '\frac{9^4 \cdot 4^6}{6^8}'],
+                            ['id' => 5, 'expression' => '\frac{25^3 \cdot 8^4}{20^4}'],
+                            ['id' => 6, 'expression' => '\frac{16^3 \cdot 27^2}{36^3}'],
+                        ]
+                    ],
+                    // Задание 18 - Степени с произведениями
+                    [
+                        'number' => 18,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{4^8 \cdot 11^{10}}{44^8}'],
+                            ['id' => 2, 'expression' => '\frac{7^8 \cdot 10^6}{70^6}'],
+                            ['id' => 3, 'expression' => '\frac{3^8 \cdot 10^5}{30^5}'],
+                            ['id' => 4, 'expression' => '\frac{5^4 \cdot 7^5}{35^4}'],
+                            ['id' => 5, 'expression' => '\frac{4^4 \cdot 7^5}{28^4}'],
+                            ['id' => 6, 'expression' => '\frac{2^6 \cdot 3^5}{6^5}'],
+                            ['id' => 7, 'expression' => '\frac{2^9 \cdot 12^{11}}{24^9}'],
+                            ['id' => 8, 'expression' => '\frac{3^{13} \cdot 7^{10}}{21^{10}}'],
+                            ['id' => 9, 'expression' => '\frac{5^9 \cdot 8^{11}}{40^9}'],
+                            ['id' => 10, 'expression' => '\frac{6^9 \cdot 11^7}{66^7}'],
+                            ['id' => 11, 'expression' => '\frac{8^7 \cdot 9^5}{72^5}'],
+                            ['id' => 12, 'expression' => '\frac{7^6 \cdot 8^4}{56^4}'],
+                            ['id' => 13, 'expression' => '\frac{(4 \cdot 5)^8}{4^6 \cdot 5^8}'],
+                            ['id' => 14, 'expression' => '\frac{(2 \cdot 6)^7}{2^5 \cdot 6^6}'],
+                            ['id' => 15, 'expression' => '\frac{(3 \cdot 10)^8}{3^6 \cdot 10^7}'],
+                            ['id' => 16, 'expression' => '\frac{(5 \cdot 7)^6}{5^4 \cdot 7^6}'],
+                            ['id' => 17, 'expression' => '\frac{(6 \cdot 7)^5}{6^5 \cdot 7^3}'],
+                            ['id' => 18, 'expression' => '\frac{(4 \cdot 9)^6}{4^4 \cdot 9^6}'],
+                            ['id' => 19, 'expression' => '\frac{(3 \cdot 8)^7}{3^7 \cdot 8^5}'],
+                            ['id' => 20, 'expression' => '\frac{(2 \cdot 10)^5}{2^2 \cdot 10^4}'],
+                        ]
+                    ],
+                    // Задание 19 - Отрицательные степени
+                    [
+                        'number' => 19,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '5^{-7} \cdot (5^5)^2'],
+                            ['id' => 2, 'expression' => '2^{-7} \cdot (2^4)^3'],
+                            ['id' => 3, 'expression' => '9^{-6} \cdot (9^2)^4'],
+                            ['id' => 4, 'expression' => '3^{-8} \cdot (3^6)^2'],
+                            ['id' => 5, 'expression' => '2^{-9} \cdot (2^7)^2'],
+                            ['id' => 6, 'expression' => '11^{-5} \cdot (11^3)^2'],
+                            ['id' => 7, 'expression' => '\frac{(8^3)^{-7}}{8^{-23}}'],
+                            ['id' => 8, 'expression' => '\frac{(3^7)^{-2}}{3^{-16}}'],
+                            ['id' => 9, 'expression' => '\frac{(2^9)^{-3}}{2^{-29}}'],
+                            ['id' => 10, 'expression' => '\frac{(5^2)^{-8}}{5^{-18}}'],
+                            ['id' => 11, 'expression' => '\frac{(7^7)^{-3}}{7^{-23}}'],
+                            ['id' => 12, 'expression' => '\frac{(6^2)^{-9}}{6^{-20}}'],
+                            ['id' => 13, 'expression' => '\frac{1}{5^{-8} \cdot 5^6}'],
+                            ['id' => 14, 'expression' => '\frac{1}{7^{-14}} \cdot \frac{1}{7^{13}}'],
+                            ['id' => 15, 'expression' => '\frac{1}{2^{-19}} \cdot \frac{1}{2^{16}}'],
+                            ['id' => 16, 'expression' => '\frac{1}{8^{-7} \cdot 8^6}'],
+                            ['id' => 17, 'expression' => '\frac{1}{3^{-10}} \cdot \frac{1}{3^8}'],
+                            ['id' => 18, 'expression' => '\frac{1}{4^{-10}} \cdot \frac{1}{4^9}'],
+                        ]
+                    ],
+                    // Задание 20 - Степенные выражения
+                    [
+                        'number' => 20,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{7^{-3} \cdot 7^{13}}{7^8}'],
+                            ['id' => 2, 'expression' => '\frac{9^{-6} \cdot 9^{15}}{9^7}'],
+                            ['id' => 3, 'expression' => '\frac{3^{-5} \cdot 3^{15}}{3^7}'],
+                            ['id' => 4, 'expression' => '\frac{2^{-3} \cdot 2^{19}}{2^{13}}'],
+                            ['id' => 5, 'expression' => '\frac{11^{-3} \cdot 11^{12}}{11^8}'],
+                            ['id' => 6, 'expression' => '\frac{13^{-4} \cdot 13^{16}}{13^{11}}'],
+                        ]
+                    ],
+                ]
+            ],
+
+            // =====================
+            // БЛОК 2. ФИПИ. Расширенная версия
+            // =====================
+            [
+                'number' => 2,
+                'title' => 'ФИПИ. Расширенная версия',
+                'zadaniya' => [
+                    // Задание 1 - Упрощение радикалов
+                    [
+                        'number' => 1,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{\sqrt{54}}{\sqrt{6}}'],
+                            ['id' => 2, 'expression' => '\frac{\sqrt{28}}{\sqrt{7}}'],
+                            ['id' => 3, 'expression' => '\frac{\sqrt{48}}{\sqrt{3}}'],
+                            ['id' => 4, 'expression' => '\frac{\sqrt{75}}{\sqrt{3}}'],
+                            ['id' => 5, 'expression' => '\frac{\sqrt{72}}{\sqrt{2}}'],
+                            ['id' => 6, 'expression' => '\frac{\sqrt{60}}{\sqrt{15}}'],
+                            ['id' => 7, 'expression' => '\sqrt{45} \cdot \sqrt{60} \cdot \sqrt{12}'],
+                            ['id' => 8, 'expression' => '\sqrt{24} \cdot \sqrt{75} \cdot \sqrt{8}'],
+                            ['id' => 9, 'expression' => '\sqrt{66} \cdot \sqrt{110} \cdot \sqrt{15}'],
+                            ['id' => 10, 'expression' => '\sqrt{42} \cdot \sqrt{75} \cdot \sqrt{14}'],
+                            ['id' => 11, 'expression' => '\sqrt{63} \cdot \sqrt{80} \cdot \sqrt{35}'],
+                            ['id' => 12, 'expression' => '\sqrt{54} \cdot \sqrt{90} \cdot \sqrt{15}'],
+                        ]
+                    ],
+                    // Задание 2 - Радикалы с числами
+                    [
+                        'number' => 2,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\sqrt{9} \cdot \sqrt{54}'],
+                            ['id' => 2, 'expression' => '\sqrt{25} \cdot \sqrt{72}'],
+                            ['id' => 3, 'expression' => '\sqrt{9} \cdot \sqrt{82}'],
+                            ['id' => 4, 'expression' => '\sqrt{4} \cdot \sqrt{36}'],
+                            ['id' => 5, 'expression' => '\sqrt{16} \cdot \sqrt{34}'],
+                            ['id' => 6, 'expression' => '\sqrt{25} \cdot \sqrt{26}'],
+                            ['id' => 7, 'expression' => '\sqrt{3} \cdot \sqrt{72} - \sqrt{3} \cdot \sqrt{24}'],
+                            ['id' => 8, 'expression' => '\sqrt{7} \cdot \sqrt{34} - \sqrt{7} \cdot \sqrt{22}'],
+                            ['id' => 9, 'expression' => '\sqrt{11} \cdot \sqrt{36} - \sqrt{11} \cdot \sqrt{22}'],
+                            ['id' => 10, 'expression' => '\sqrt{2} \cdot \sqrt{492} - \sqrt{2} \cdot \sqrt{54}'],
+                            ['id' => 11, 'expression' => '\sqrt{17} \cdot \sqrt{54} - \sqrt{17} \cdot \sqrt{22}'],
+                            ['id' => 12, 'expression' => '\sqrt{13} \cdot \sqrt{54} - \sqrt{13} \cdot \sqrt{62}'],
+                            ['id' => 13, 'expression' => '\sqrt{26} \cdot \sqrt{72} - \sqrt{102}'],
+                            ['id' => 14, 'expression' => '\sqrt{54} \cdot \sqrt{62} - \sqrt{132}'],
+                            ['id' => 15, 'expression' => '\sqrt{22} \cdot \sqrt{54} - \sqrt{492}'],
+                            ['id' => 16, 'expression' => '\sqrt{26} \cdot \sqrt{32} - \sqrt{52}'],
+                            ['id' => 17, 'expression' => '\sqrt{34} \cdot \sqrt{42} - \sqrt{22}'],
+                            ['id' => 18, 'expression' => '\sqrt{54} \cdot \sqrt{82} - \sqrt{212}'],
+                        ]
+                    ],
+                    // Задание 3 - Корни с параметрами xy
+                    [
+                        'number' => 3,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\sqrt{36x^4y^{10}} \text{ при } x = 3, y = 2'],
+                            ['id' => 2, 'expression' => '\sqrt{4x^6y^4} \text{ при } x = 3, y = 5'],
+                            ['id' => 3, 'expression' => '\sqrt{25x^6y^4} \text{ при } x = 2, y = 6'],
+                            ['id' => 4, 'expression' => '\sqrt{16x^4y^6} \text{ при } x = 6, y = 2'],
+                            ['id' => 5, 'expression' => '\sqrt{9x^8y^6} \text{ при } x = 2, y = 3'],
+                            ['id' => 6, 'expression' => '\sqrt{25x^4y^4} \text{ при } x = 3, y = 7'],
+                            ['id' => 7, 'expression' => '\sqrt{9x^4y^6} \text{ при } x = 5, y = 3'],
+                            ['id' => 8, 'expression' => '\sqrt{49x^8y^4} \text{ при } x = 2, y = 3'],
+                        ]
+                    ],
+                    // Задание 4 - Сложные корни с дробями
+                    [
+                        'number' => 4,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\sqrt{\frac{25a^9 \cdot 16b^8}{a^5b^8}} \text{ при } a = 4, b = 7'],
+                            ['id' => 2, 'expression' => '\sqrt{\frac{16a^9 \cdot 4b^3}{a^5b^3}} \text{ при } a = 9, b = 11'],
+                            ['id' => 3, 'expression' => '\sqrt{\frac{4a^{11} \cdot 9b^4}{a^7b^4}} \text{ при } a = 7, b = 9'],
+                            ['id' => 4, 'expression' => '\sqrt{\frac{25a^5 \cdot 36b^6}{a^5b^4}} \text{ при } a = 4, b = 9'],
+                            ['id' => 5, 'expression' => '\sqrt{\frac{16a^5 \cdot 36b}{ab}} \text{ при } a = 7, b = 5'],
+                            ['id' => 6, 'expression' => '\sqrt{\frac{4a^6 \cdot 25b^7}{a^2b^7}} \text{ при } a = 9, b = 7'],
+                            ['id' => 7, 'expression' => '\sqrt{\frac{36a \cdot 9b^5}{ab}} \text{ при } a = 9, b = 4'],
+                            ['id' => 8, 'expression' => '\sqrt{\frac{25a^8 \cdot 9b^5}{a^4b^5}} \text{ при } a = 7, b = 10'],
+                        ]
+                    ],
+                    // Задание 5 - Квадраты сумм и разностей
+                    [
+                        'number' => 5,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '(5 + \sqrt{2})^2 + (5 - \sqrt{2})^2'],
+                            ['id' => 2, 'expression' => '(4 + \sqrt{7})^2 + (4 - \sqrt{7})^2'],
+                            ['id' => 3, 'expression' => '(3 + \sqrt{2})^2 + (3 - \sqrt{2})^2'],
+                            ['id' => 4, 'expression' => '(4 + \sqrt{5})^2 + (4 - \sqrt{5})^2'],
+                            ['id' => 5, 'expression' => '(5 + \sqrt{7})^2 + (5 - \sqrt{7})^2'],
+                            ['id' => 6, 'expression' => '(3 + \sqrt{5})^2 + (3 - \sqrt{5})^2'],
+                            ['id' => 7, 'expression' => '\sqrt{(-17)^2}'],
+                            ['id' => 8, 'expression' => '\sqrt{(-11)^2}'],
+                            ['id' => 9, 'expression' => '\sqrt{(-19)^2}'],
+                            ['id' => 10, 'expression' => '\sqrt{(-23)^2}'],
+                            ['id' => 11, 'expression' => '\sqrt{(-5)^2}'],
+                            ['id' => 12, 'expression' => '\sqrt{(-29)^2}'],
+                            ['id' => 13, 'expression' => '(3\sqrt{2} - 5)^2 + 3\sqrt{2}'],
+                            ['id' => 14, 'expression' => '(5\sqrt{2} - 8)^2 + 5\sqrt{2}'],
+                            ['id' => 15, 'expression' => '(4\sqrt{2} - 7)^2 + 4\sqrt{2}'],
+                            ['id' => 16, 'expression' => '(6\sqrt{3} - 11)^2 + 6\sqrt{3}'],
+                            ['id' => 17, 'expression' => '(2\sqrt{3} - 5)^2 + 2\sqrt{3}'],
+                            ['id' => 18, 'expression' => '(5\sqrt{3} - 9)^2 + 5\sqrt{3}'],
+                        ]
+                    ],
+                    // Задание 6 - Степенные выражения
+                    [
+                        'number' => 6,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{(2^2 \cdot 2^4)^7}{(2 \cdot 2^6)^6}'],
+                            ['id' => 2, 'expression' => '\frac{(3^3 \cdot 3^5)^6}{(3 \cdot 3^8)^5}'],
+                            ['id' => 3, 'expression' => '\frac{(5^2 \cdot 5^3)^4}{(5 \cdot 5^5)^3}'],
+                            ['id' => 4, 'expression' => '\frac{(7^2 \cdot 7^4)^5}{(7 \cdot 7^6)^4}'],
+                            ['id' => 5, 'expression' => '\frac{(2^2 \cdot 2^6)^5}{(2 \cdot 2^8)^4}'],
+                            ['id' => 6, 'expression' => '\frac{(3^2 \cdot 3^7)^9}{(3 \cdot 3^9)^8}'],
+                            ['id' => 7, 'expression' => '\frac{16^4}{8^6}'],
+                            ['id' => 8, 'expression' => '\frac{8^{15}}{27^6}'],
+                            ['id' => 9, 'expression' => '\frac{125^3}{25^5}'],
+                            ['id' => 10, 'expression' => '\frac{64^2}{16^3}'],
+                            ['id' => 11, 'expression' => '\frac{27^3}{9^4}'],
+                            ['id' => 12, 'expression' => '\frac{8^3}{4^5}'],
+                            ['id' => 13, 'expression' => '2^{-7} \cdot 2^{-8} : 2^{-16}'],
+                            ['id' => 14, 'expression' => '9^{-5} \cdot 9^{-8} : 9^{-15}'],
+                            ['id' => 15, 'expression' => '3^{-4} \cdot 3^{-8} : 3^{-14}'],
+                            ['id' => 16, 'expression' => '7^{-3} \cdot 7^{-8} : 7^{-13}'],
+                            ['id' => 17, 'expression' => '11^{-5} \cdot 11^{-13} : 11^{-19}'],
+                            ['id' => 18, 'expression' => '5^{-3} \cdot 5^{-9} : 5^{-14}'],
+                        ]
+                    ],
+                ]
+            ],
+
+            // =====================
+            // БЛОК 3. Типовые экзаменационные варианты
+            // =====================
+            [
+                'number' => 3,
+                'title' => 'Типовые экзаменационные варианты',
+                'zadaniya' => [
+                    // I) Иррациональные числа и выражения
+                    // Задание 1 - Разные выражения
+                    [
+                        'number' => 1,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '(\sqrt{2} \cdot \sqrt{3})^2 - 1'],
+                            ['id' => 2, 'expression' => '(\sqrt{3} \cdot \sqrt{5})^2 - 9'],
+                            ['id' => 3, 'expression' => '(\sqrt{7} \cdot \sqrt{2})^2 - 10'],
+                            ['id' => 4, 'expression' => '(\sqrt{3} \cdot \sqrt{6})^2 - 8'],
+                            ['id' => 5, 'expression' => '(\sqrt{5} \cdot \sqrt{2})^2 - 7'],
+                            ['id' => 6, 'expression' => '(\sqrt{6} \cdot \sqrt{5})^2 - 18'],
+                            ['id' => 7, 'expression' => '\sqrt{64} + (\sqrt{6{,}4})^2'],
+                            ['id' => 8, 'expression' => '\sqrt{25} + (\sqrt{2{,}5})^2'],
+                            ['id' => 9, 'expression' => '\sqrt{16} + (\sqrt{1{,}6})^2'],
+                            ['id' => 10, 'expression' => '\sqrt{49} + (\sqrt{4{,}9})^2'],
+                            ['id' => 11, 'expression' => '\sqrt{36} + (\sqrt{3{,}6})^2'],
+                            ['id' => 12, 'expression' => '\sqrt{81} + (\sqrt{8{,}1})^2'],
+                            ['id' => 13, 'expression' => '\sqrt{0{,}9 \cdot 40}'],
+                            ['id' => 14, 'expression' => '\sqrt{0{,}7 \cdot 70}'],
+                            ['id' => 15, 'expression' => '\sqrt{4{,}5 \cdot 50}'],
+                            ['id' => 16, 'expression' => '\sqrt{3{,}2 \cdot 20}'],
+                            ['id' => 17, 'expression' => '\sqrt{1{,}8 \cdot 80}'],
+                            ['id' => 18, 'expression' => '\sqrt{2{,}7 \cdot 30}'],
+                            ['id' => 19, 'expression' => '\frac{5}{6}\sqrt{48} \cdot \sqrt{3}'],
+                            ['id' => 20, 'expression' => '\frac{4}{7}\sqrt{28} \cdot \sqrt{7}'],
+                            ['id' => 21, 'expression' => '\frac{5}{8}\sqrt{32} \cdot \sqrt{2}'],
+                            ['id' => 22, 'expression' => '\frac{7}{9}\sqrt{27} \cdot \sqrt{3}'],
+                            ['id' => 23, 'expression' => '\frac{3}{4}\sqrt{32} \cdot \sqrt{8}'],
+                            ['id' => 24, 'expression' => '\frac{2}{5}\sqrt{45} \cdot \sqrt{5}'],
+                        ]
+                    ],
+                    // Задание 2 - Корни с параметрами
+                    [
+                        'number' => 2,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\sqrt{0{,}04a^4b^6} \text{ при } a = 10, b = 3'],
+                            ['id' => 2, 'expression' => '\sqrt{0{,}25p^4q^4} \text{ при } p = 8, q = 3'],
+                            ['id' => 3, 'expression' => '\sqrt{0{,}01c^8d^4} \text{ при } c = 3, d = 2'],
+                            ['id' => 4, 'expression' => '\sqrt{0{,}09a^6b^2} \text{ при } a = 2, b = 12'],
+                            ['id' => 5, 'expression' => '\sqrt{0{,}16x^2y^6} \text{ при } x = 4, y = 5'],
+                            ['id' => 6, 'expression' => '\sqrt{0{,}36p^8q^2} \text{ при } p = 2, q = 15'],
+                            ['id' => 7, 'expression' => '\sqrt{a^6 \cdot (-a)^2} \text{ при } a = 10'],
+                            ['id' => 8, 'expression' => '\sqrt{(-a)^3 \cdot (-a)} \text{ при } a = 7'],
+                            ['id' => 9, 'expression' => '\sqrt{(-a)^2 \cdot a^4} \text{ при } a = 5'],
+                            ['id' => 10, 'expression' => '\sqrt{(-a)^7 \cdot (-a)^5} \text{ при } a = 2'],
+                            ['id' => 11, 'expression' => '\sqrt{a^2 \cdot (-a)^2} \text{ при } a = 12'],
+                            ['id' => 12, 'expression' => '\sqrt{(-a)^5 \cdot (-a)^3} \text{ при } a = 3'],
+                        ]
+                    ],
+                    // Задание 3 - Корни дробей с параметрами
+                    [
+                        'number' => 3,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{9\sqrt{a^8b}}{12\sqrt{ab}} \text{ при } a = 11, b = 8'],
+                            ['id' => 2, 'expression' => '\frac{15\sqrt{x^{16}y}}{10\sqrt{xy}} \text{ при } x = 13, y = 3'],
+                            ['id' => 3, 'expression' => '\frac{25\sqrt{a^{12}b}}{15\sqrt{ab}} \text{ при } a = 6, b = 7'],
+                            ['id' => 4, 'expression' => '\frac{6\sqrt{x \cdot 21y}}{14\sqrt{xy}} \text{ при } x = 3, y = 10'],
+                            ['id' => 5, 'expression' => '\frac{49\sqrt{a \cdot 9b}}{21\sqrt{ab}} \text{ при } a = 4, b = 15'],
+                            ['id' => 6, 'expression' => '\frac{12\sqrt{x \cdot 25y}}{20\sqrt{xy}} \text{ при } x = 6, y = 12'],
+                        ]
+                    ],
+                    // Задание 4 - Корни с дробями степеней
+                    [
+                        'number' => 4,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\sqrt{\frac{16a^{18}}{a^{14}}} \text{ при } a = 3'],
+                            ['id' => 2, 'expression' => '\sqrt{\frac{b^{21}}{100b^{15}}} \text{ при } b = 4'],
+                            ['id' => 3, 'expression' => '\sqrt{\frac{81x^{18}}{x^{20}}} \text{ при } x = 18'],
+                            ['id' => 4, 'expression' => '\sqrt{\frac{y^{22}}{25y^{14}}} \text{ при } y = 2'],
+                            ['id' => 5, 'expression' => '\sqrt{\frac{144p^{20}}{p^{16}}} \text{ при } p = 2'],
+                            ['id' => 6, 'expression' => '\sqrt{\frac{q^{19}}{64q^{15}}} \text{ при } q = 6'],
+                        ]
+                    ],
+                    // II) Степенные выражения
+                    // Задание 5 - Отрицательные степени
+                    [
+                        'number' => 5,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{8^{-6} \cdot 8^{-7}}{8^{-15}}'],
+                            ['id' => 2, 'expression' => '\frac{5^{-3} \cdot 5^{-9}}{5^{-11}}'],
+                            ['id' => 3, 'expression' => '\frac{9^{-5} \cdot 9^{-4}}{9^{-10}}'],
+                            ['id' => 4, 'expression' => '\frac{4^{-2} \cdot 4^{-7}}{4^{-9}}'],
+                            ['id' => 5, 'expression' => '\frac{2^{-7} \cdot 2^{-6}}{2^{-12}}'],
+                            ['id' => 6, 'expression' => '\frac{3^{-7} \cdot 3^{-6}}{3^{-16}}'],
+                        ]
+                    ],
+                    // Задание 6 - Степени с параметрами
+                    [
+                        'number' => 6,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => 'a^{-11} \cdot (a^5)^2 \text{ при } a = 5'],
+                            ['id' => 2, 'expression' => 'b^{16} \cdot (b^3)^{-5} \text{ при } b = 7'],
+                            ['id' => 3, 'expression' => 'c^{-4} \cdot (c^3)^2 \text{ при } c = 9'],
+                            ['id' => 4, 'expression' => 'd^4 \cdot (d^2)^{-3} \text{ при } d = 2'],
+                            ['id' => 5, 'expression' => 'm^{-10} \cdot (m^4)^2 \text{ при } m = 10'],
+                            ['id' => 6, 'expression' => 'n^{10} \cdot (n^{-4})^2 \text{ при } n = 6'],
+                            ['id' => 7, 'expression' => '\frac{(x^4)^{-6}}{x^{-28}} \text{ при } x = 3'],
+                            ['id' => 8, 'expression' => '\frac{(y^4)^{-5}}{y^{-19}} \text{ при } y = 10'],
+                            ['id' => 9, 'expression' => '\frac{(a^{-2})^{-3}}{a^{-1}} \text{ при } a = 2'],
+                            ['id' => 10, 'expression' => '\frac{(b^3)^{-4}}{b^{-11}} \text{ при } b = 5'],
+                            ['id' => 11, 'expression' => '\frac{(p^{-2})^{-1}}{p^{-3}} \text{ при } p = 2'],
+                            ['id' => 12, 'expression' => '\frac{(q^{-4})^5}{q^{-22}} \text{ при } q = 8'],
+                        ]
+                    ],
+                    // Задание 7 - Степени с умножением
+                    [
+                        'number' => 7,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{a^{12} \cdot a^{13}}{a^{20}} \text{ при } a = 2'],
+                            ['id' => 2, 'expression' => '\frac{x^9 \cdot x^{18}}{x^{28}} \text{ при } x = 20'],
+                            ['id' => 3, 'expression' => '\frac{y^{17} \cdot y^4}{y^{19}} \text{ при } y = 13'],
+                            ['id' => 4, 'expression' => '\frac{b^{14} \cdot b^8}{b^{21}} \text{ при } b = 17'],
+                            ['id' => 5, 'expression' => '\frac{d^{16} \cdot d^{10}}{d^{28}} \text{ при } d = 10'],
+                            ['id' => 6, 'expression' => '\frac{c^8 \cdot c^{12}}{c^{16}} \text{ при } c = 3'],
+                        ]
+                    ],
+                    // Задание 8 - Сложные степенные выражения
+                    [
+                        'number' => 8,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{(x^2)^4 \cdot x^5}{x^7} \text{ при } x = 2'],
+                            ['id' => 2, 'expression' => '\frac{(y^5)^7 \cdot y^2}{y^{36}} \text{ при } y = 7'],
+                            ['id' => 3, 'expression' => '\frac{(a^4)^5 \cdot a^7}{a^{29}} \text{ при } a = 5'],
+                            ['id' => 4, 'expression' => '\frac{(b^2)^7 \cdot b^3}{b^{18}} \text{ при } b = 4'],
+                            ['id' => 5, 'expression' => '\frac{(c^6)^3 \cdot c^4}{c^{20}} \text{ при } c = 9'],
+                            ['id' => 6, 'expression' => '\frac{(z^2)^6 \cdot z^4}{z^{19}} \text{ при } z = 10'],
+                            ['id' => 7, 'expression' => '\frac{m^{15} \cdot (n^6)^3}{(mn)^{17}} \text{ при } m = 5, n = 15'],
+                            ['id' => 8, 'expression' => '\frac{x^{14} \cdot (y^3)^5}{(xy)^{13}} \text{ при } x = 10, y = 7'],
+                            ['id' => 9, 'expression' => '\frac{a^{16} \cdot (b^7)^3}{(ab)^{18}} \text{ при } a = 2, b = 6'],
+                            ['id' => 10, 'expression' => '\frac{(p^3)^9 \cdot q^{24}}{(pq)^{23}} \text{ при } p = 2, q = 4'],
+                            ['id' => 11, 'expression' => '\frac{(c^5)^4 \cdot d^{16}}{(cd)^{19}} \text{ при } c = 20, d = 10'],
+                            ['id' => 12, 'expression' => '\frac{(z^4)^7 \cdot t^{29}}{(zt)^{26}} \text{ при } z = 10, t = 3'],
+                        ]
+                    ],
+                ]
+            ],
+        ];
     }
 }
