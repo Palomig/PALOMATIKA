@@ -33,7 +33,7 @@ class TestPdfController extends Controller
     {
         $availableTopics = $this->taskGenerator->getAvailableTopics();
 
-        // Add manual topics (06-13) which have structured data in controller
+        // Add manual topics (06-13, 18-19) which have structured data in controller
         $manualTopics = [
             ['topic_id' => '06', 'title' => 'Вычисления', 'tasks_count' => 174],
             ['topic_id' => '07', 'title' => 'Числа, координатная прямая', 'tasks_count' => 85],
@@ -43,6 +43,8 @@ class TestPdfController extends Controller
             ['topic_id' => '11', 'title' => 'Графики функций', 'tasks_count' => 120],
             ['topic_id' => '12', 'title' => 'Расчеты по формулам', 'tasks_count' => 100],
             ['topic_id' => '13', 'title' => 'Неравенства', 'tasks_count' => 150],
+            ['topic_id' => '18', 'title' => 'Фигуры на квадратной решётке', 'tasks_count' => 161],
+            ['topic_id' => '19', 'title' => 'Анализ геометрических высказываний', 'tasks_count' => 136],
         ];
 
         // Merge, avoiding duplicates
@@ -101,6 +103,10 @@ class TestPdfController extends Controller
                 $tasks = $this->getRandomTasksFromManualData12($tasksPerTopic);
             } elseif ($topicId === '13') {
                 $tasks = $this->getRandomTasksFromManualData13($tasksPerTopic);
+            } elseif ($topicId === '18') {
+                $tasks = $this->getRandomTasksFromManualData18($tasksPerTopic);
+            } elseif ($topicId === '19') {
+                $tasks = $this->getRandomTasksFromManualData19($tasksPerTopic);
             } else {
                 $tasks = $this->taskGenerator->getRandomTasksFromTopic($topicId, $tasksPerTopic);
             }
@@ -3150,6 +3156,679 @@ class TestPdfController extends Controller
                             ['id' => 4, 'expression' => 'x^2 - 5x - 6 \\leq 0'],
                             ['id' => 5, 'expression' => 'x^2 - 17x + 72 \\leq 0'],
                             ['id' => 6, 'expression' => 'x^2 - 6x - 27 \\leq 0'],
+                        ]
+                    ],
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * Display Topic 18 - Фигуры на квадратной решётке
+     */
+    public function topic18()
+    {
+        $blocks = $this->getAllBlocksData18();
+        $source = 'Manual (все блоки из PDF)';
+
+        return view('test.topic18', compact('blocks', 'source'));
+    }
+
+    /**
+     * Display Topic 19 - Анализ геометрических высказываний
+     */
+    public function topic19()
+    {
+        $blocks = $this->getAllBlocksData19();
+        $source = 'Manual (все блоки из PDF)';
+
+        return view('test.topic19', compact('blocks', 'source'));
+    }
+
+    /**
+     * Get random tasks from manual topic 18 data
+     */
+    protected function getRandomTasksFromManualData18(int $count): array
+    {
+        $blocks = $this->getAllBlocksData18();
+        return $this->extractRandomTasks($blocks, '18', 'Фигуры на квадратной решётке', $count);
+    }
+
+    /**
+     * Get random tasks from manual topic 19 data
+     */
+    protected function getRandomTasksFromManualData19(int $count): array
+    {
+        $blocks = $this->getAllBlocksData19();
+        return $this->extractRandomTasks($blocks, '19', 'Анализ геометрических высказываний', $count);
+    }
+
+    /**
+     * Get all blocks data for Topic 18 - Фигуры на квадратной решётке
+     */
+    protected function getAllBlocksData18(): array
+    {
+        return [
+            // =====================
+            // БЛОК 1. ФИПИ
+            // =====================
+            [
+                'number' => 1,
+                'title' => 'ФИПИ',
+                'zadaniya' => [
+                    // I) Длина
+                    [
+                        'number' => 1,
+                        'instruction' => 'На клетчатой бумаге с размером клетки 1×1 изображен прямоугольный треугольник. Найдите длину его большего катета.',
+                        'type' => 'grid_image',
+                        'tasks' => [
+                            ['id' => 1, 'image' => 'oge18_p1_img1.png'],
+                            ['id' => 2, 'image' => 'oge18_p1_img2.png'],
+                            ['id' => 3, 'image' => 'oge18_p1_img3.png'],
+                            ['id' => 4, 'image' => 'oge18_p1_img4.png'],
+                            ['id' => 5, 'image' => 'oge18_p1_img5.png'],
+                            ['id' => 6, 'image' => 'oge18_p1_img6.png'],
+                        ]
+                    ],
+                    [
+                        'number' => 2,
+                        'instruction' => 'На клетчатой бумаге с размером клетки 1×1 изображён ромб. Найдите длину его большей диагонали.',
+                        'type' => 'grid_image',
+                        'tasks' => [
+                            ['id' => 1, 'image' => 'oge18_p1_img7.png'],
+                            ['id' => 2, 'image' => 'oge18_p1_img8.png'],
+                            ['id' => 3, 'image' => 'oge18_p1_img9.png'],
+                            ['id' => 4, 'image' => 'oge18_p1_img10.png'],
+                            ['id' => 5, 'image' => 'oge18_p1_img11.png'],
+                            ['id' => 6, 'image' => 'oge18_p1_img12.png'],
+                        ]
+                    ],
+                    // II) Теорема Фалеса
+                    [
+                        'number' => 3,
+                        'instruction' => 'На клетчатой бумаге изображён треугольник ABC.',
+                        'type' => 'grid_image_with_question',
+                        'tasks' => [
+                            ['id' => 1, 'question' => 'Во сколько раз отрезок AM короче отрезка CM?', 'image' => 'oge18_p2_img1.png'],
+                            ['id' => 2, 'question' => 'Во сколько раз отрезок AM длиннее отрезка CM?', 'image' => 'oge18_p2_img2.png'],
+                            ['id' => 3, 'question' => 'Во сколько раз отрезок BM короче отрезка CM?', 'image' => 'oge18_p2_img3.png'],
+                            ['id' => 4, 'question' => 'Во сколько раз отрезок BM длиннее отрезка CM?', 'image' => 'oge18_p2_img4.png'],
+                            ['id' => 5, 'question' => 'Во сколько раз отрезок AM короче отрезка BM?', 'image' => 'oge18_p2_img5.png'],
+                            ['id' => 6, 'question' => 'Во сколько раз отрезок AM длиннее отрезка BM?', 'image' => 'oge18_p2_img6.png'],
+                        ]
+                    ],
+                    // III) Площадь
+                    [
+                        'number' => 4,
+                        'instruction' => 'На клетчатой бумаге с размером клетки 1 см × 1 см изображена фигура. Найдите её площадь. Ответ дайте в квадратных сантиметрах.',
+                        'type' => 'grid_image',
+                        'tasks' => [
+                            ['id' => 1, 'image' => 'oge18_p2_img7.png'],
+                            ['id' => 2, 'image' => 'oge18_p2_img8.png'],
+                            ['id' => 3, 'image' => 'oge18_p2_img9.png'],
+                            ['id' => 4, 'image' => 'oge18_p2_img10.png'],
+                            ['id' => 5, 'image' => 'oge18_p2_img11.png'],
+                            ['id' => 6, 'image' => 'oge18_p2_img12.png'],
+                            ['id' => 7, 'image' => 'oge18_p3_img1.png'],
+                            ['id' => 8, 'image' => 'oge18_p3_img2.png'],
+                            ['id' => 9, 'image' => 'oge18_p3_img3.png'],
+                        ]
+                    ],
+                    [
+                        'number' => 5,
+                        'instruction' => 'На клетчатой бумаге с размером клетки 1 см × 1 см изображена фигура. Найдите её площадь. Ответ дайте в квадратных сантиметрах.',
+                        'type' => 'grid_image',
+                        'tasks' => [
+                            ['id' => 1, 'image' => 'oge18_p3_img4.png'],
+                            ['id' => 2, 'image' => 'oge18_p3_img5.png'],
+                            ['id' => 3, 'image' => 'oge18_p3_img6.png'],
+                            ['id' => 4, 'image' => 'oge18_p3_img7.png'],
+                            ['id' => 5, 'image' => 'oge18_p3_img8.png'],
+                            ['id' => 6, 'image' => 'oge18_p3_img9.png'],
+                            ['id' => 7, 'image' => 'oge18_p3_img10.png'],
+                            ['id' => 8, 'image' => 'oge18_p3_img11.png'],
+                            ['id' => 9, 'image' => 'oge18_p3_img12.png'],
+                        ]
+                    ],
+                    [
+                        'number' => 6,
+                        'instruction' => 'На клетчатой бумаге с размером клетки 1 см × 1 см изображена фигура. Найдите её площадь. Ответ дайте в квадратных сантиметрах.',
+                        'type' => 'grid_image',
+                        'tasks' => [
+                            ['id' => 1, 'image' => 'oge18_p3_img13.png'],
+                            ['id' => 2, 'image' => 'oge18_p3_img14.png'],
+                            ['id' => 3, 'image' => 'oge18_p3_img15.png'],
+                            ['id' => 4, 'image' => 'oge18_p4_img1.png'],
+                            ['id' => 5, 'image' => 'oge18_p4_img2.png'],
+                            ['id' => 6, 'image' => 'oge18_p4_img3.png'],
+                            ['id' => 7, 'image' => 'oge18_p4_img4.png'],
+                            ['id' => 8, 'image' => 'oge18_p4_img5.png'],
+                            ['id' => 9, 'image' => 'oge18_p4_img6.png'],
+                        ]
+                    ],
+                    [
+                        'number' => 7,
+                        'instruction' => 'На клетчатой бумаге с размером клетки 1 см × 1 см изображена фигура. Найдите её площадь. Ответ дайте в квадратных сантиметрах.',
+                        'type' => 'grid_image',
+                        'tasks' => [
+                            ['id' => 1, 'image' => 'oge18_p4_img7.png'],
+                            ['id' => 2, 'image' => 'oge18_p4_img8.png'],
+                            ['id' => 3, 'image' => 'oge18_p4_img9.png'],
+                            ['id' => 4, 'image' => 'oge18_p4_img10.png'],
+                            ['id' => 5, 'image' => 'oge18_p4_img11.png'],
+                            ['id' => 6, 'image' => 'oge18_p4_img12.png'],
+                            ['id' => 7, 'image' => 'oge18_p4_img13.png'],
+                            ['id' => 8, 'image' => 'oge18_p4_img14.png'],
+                            ['id' => 9, 'image' => 'oge18_p4_img15.png'],
+                        ]
+                    ],
+                    // IV) Теорема Пифагора
+                    [
+                        'number' => 8,
+                        'instruction' => 'На клетчатой бумаге с размером клетки 1×1 изображены две точки. Найдите расстояние между ними.',
+                        'type' => 'grid_image',
+                        'tasks' => [
+                            ['id' => 1, 'image' => 'oge18_p5_img1.png'],
+                            ['id' => 2, 'image' => 'oge18_p5_img2.png'],
+                            ['id' => 3, 'image' => 'oge18_p5_img3.png'],
+                            ['id' => 4, 'image' => 'oge18_p5_img4.png'],
+                            ['id' => 5, 'image' => 'oge18_p5_img5.png'],
+                            ['id' => 6, 'image' => 'oge18_p5_img6.png'],
+                        ]
+                    ],
+                    // V) Подобные треугольники. Средняя линия
+                    [
+                        'number' => 9,
+                        'instruction' => 'На клетчатой бумаге с размером клетки 1×1 изображён △ABC. Найдите длину его средней линии, параллельной стороне AC.',
+                        'type' => 'grid_image',
+                        'tasks' => [
+                            ['id' => 1, 'image' => 'oge18_p5_img7.png'],
+                            ['id' => 2, 'image' => 'oge18_p5_img8.png'],
+                            ['id' => 3, 'image' => 'oge18_p5_img9.png'],
+                            ['id' => 4, 'image' => 'oge18_p5_img10.png'],
+                            ['id' => 5, 'image' => 'oge18_p6_img1.png'],
+                            ['id' => 6, 'image' => 'oge18_p6_img2.png'],
+                        ]
+                    ],
+                    [
+                        'number' => 10,
+                        'instruction' => 'На клетчатой бумаге с размером клетки 1×1 изображена фигура. Найдите длину отрезка AB по данным чертежа.',
+                        'type' => 'grid_image',
+                        'tasks' => [
+                            ['id' => 1, 'image' => 'oge18_p6_img3.png'],
+                            ['id' => 2, 'image' => 'oge18_p6_img4.png'],
+                            ['id' => 3, 'image' => 'oge18_p6_img5.png'],
+                            ['id' => 4, 'image' => 'oge18_p6_img6.png'],
+                            ['id' => 5, 'image' => 'oge18_p6_img7.png'],
+                            ['id' => 6, 'image' => 'oge18_p6_img8.png'],
+                            ['id' => 7, 'image' => 'oge18_p6_img9.png'],
+                            ['id' => 8, 'image' => 'oge18_p6_img10.png'],
+                            ['id' => 9, 'image' => 'oge18_p6_img11.png'],
+                        ]
+                    ],
+                    [
+                        'number' => 11,
+                        'instruction' => 'На клетчатой бумаге с размером клетки 1×1 изображена трапеция. Найдите длину её средней линии.',
+                        'type' => 'grid_image',
+                        'tasks' => [
+                            ['id' => 1, 'image' => 'oge18_p6_img12.png'],
+                            ['id' => 2, 'image' => 'oge18_p6_img13.png'],
+                            ['id' => 3, 'image' => 'oge18_p7_img1.png'],
+                            ['id' => 4, 'image' => 'oge18_p7_img2.png'],
+                            ['id' => 5, 'image' => 'oge18_p7_img3.png'],
+                            ['id' => 6, 'image' => 'oge18_p7_img4.png'],
+                            ['id' => 7, 'image' => 'oge18_p7_img5.png'],
+                            ['id' => 8, 'image' => 'oge18_p7_img6.png'],
+                            ['id' => 9, 'image' => 'oge18_p7_img7.png'],
+                        ]
+                    ],
+                    // VI) Площадь круга
+                    [
+                        'number' => 12,
+                        'instruction' => 'На клетчатой бумаге изображены два круга. Во сколько раз площадь большего круга больше площади меньшего?',
+                        'type' => 'grid_image',
+                        'tasks' => [
+                            ['id' => 1, 'image' => 'oge18_p7_img8.png'],
+                            ['id' => 2, 'image' => 'oge18_p7_img9.png'],
+                            ['id' => 3, 'image' => 'oge18_p7_img10.png'],
+                            ['id' => 4, 'image' => 'oge18_p7_img11.png'],
+                            ['id' => 5, 'image' => 'oge18_p7_img12.png'],
+                            ['id' => 6, 'image' => 'oge18_p8_img1.png'],
+                            ['id' => 7, 'image' => 'oge18_p8_img2.png'],
+                            ['id' => 8, 'image' => 'oge18_p8_img3.png'],
+                            ['id' => 9, 'image' => 'oge18_p8_img4.png'],
+                        ]
+                    ],
+                ]
+            ],
+            // =====================
+            // БЛОК 2. ФИПИ. Расширенная версия
+            // =====================
+            [
+                'number' => 2,
+                'title' => 'ФИПИ. Расширенная версия',
+                'zadaniya' => [
+                    // I) Расстояние
+                    [
+                        'number' => 1,
+                        'instruction' => 'На клетчатой бумаге с размером клетки 1 см × 1 см отмечены точки А, В и С. Найдите расстояние от точки А до середины отрезка ВС. Ответ выразите в сантиметрах.',
+                        'type' => 'grid_image',
+                        'tasks' => [
+                            ['id' => 1, 'image' => 'oge18_p8_img5.png'],
+                            ['id' => 2, 'image' => 'oge18_p8_img6.png'],
+                            ['id' => 3, 'image' => 'oge18_p9_img1.png'],
+                            ['id' => 4, 'image' => 'oge18_p9_img2.png'],
+                            ['id' => 5, 'image' => 'oge18_p9_img3.png'],
+                            ['id' => 6, 'image' => 'oge18_p9_img4.png'],
+                        ]
+                    ],
+                    [
+                        'number' => 2,
+                        'instruction' => 'На клетчатой бумаге с размером клетки 1 см × 1 см отмечены точки А, В и С. Найдите расстояние от точки А до прямой ВС. Ответ выразите в сантиметрах.',
+                        'type' => 'grid_image',
+                        'tasks' => [
+                            ['id' => 1, 'image' => 'oge18_p9_img5.png'],
+                            ['id' => 2, 'image' => 'oge18_p9_img6.png'],
+                            ['id' => 3, 'image' => 'oge18_p9_img7.png'],
+                            ['id' => 4, 'image' => 'oge18_p9_img8.png'],
+                            ['id' => 5, 'image' => 'oge18_p9_img9.png'],
+                            ['id' => 6, 'image' => 'oge18_p9_img10.png'],
+                        ]
+                    ],
+                    [
+                        'number' => 3,
+                        'instruction' => 'На клетчатой бумаге с размером клетки 1 см × 1 см отмечены точки А, В и С. Найдите расстояние от точки А до середины отрезка ВС. Ответ выразите в сантиметрах.',
+                        'type' => 'grid_image',
+                        'tasks' => [
+                            ['id' => 1, 'image' => 'oge18_p9_img11.png'],
+                            ['id' => 2, 'image' => 'oge18_p9_img12.png'],
+                            ['id' => 3, 'image' => 'oge18_p10_img1.png'],
+                            ['id' => 4, 'image' => 'oge18_p10_img2.png'],
+                            ['id' => 5, 'image' => 'oge18_p10_img3.png'],
+                            ['id' => 6, 'image' => 'oge18_p10_img4.png'],
+                        ]
+                    ],
+                    // II) Площадь
+                    [
+                        'number' => 4,
+                        'instruction' => 'На клетчатой бумаге с размером клетки 1 см × 1 см изображена фигура. Найдите её площадь.',
+                        'type' => 'grid_image',
+                        'tasks' => [
+                            ['id' => 1, 'image' => 'oge18_p10_img5.png'],
+                            ['id' => 2, 'image' => 'oge18_p10_img6.png'],
+                            ['id' => 3, 'image' => 'oge18_p10_img7.png'],
+                            ['id' => 4, 'image' => 'oge18_p10_img8.png'],
+                            ['id' => 5, 'image' => 'oge18_p10_img9.png'],
+                            ['id' => 6, 'image' => 'oge18_p10_img10.png'],
+                        ]
+                    ],
+                    [
+                        'number' => 5,
+                        'instruction' => 'На клетчатой бумаге с размером клетки 1 см × 1 см изображена фигура. Найдите её площадь.',
+                        'type' => 'grid_image',
+                        'tasks' => [
+                            ['id' => 1, 'image' => 'oge18_p10_img11.png'],
+                            ['id' => 2, 'image' => 'oge18_p10_img12.png'],
+                            ['id' => 3, 'image' => 'oge18_p11_img1.png'],
+                            ['id' => 4, 'image' => 'oge18_p11_img2.png'],
+                            ['id' => 5, 'image' => 'oge18_p11_img3.png'],
+                            ['id' => 6, 'image' => 'oge18_p11_img4.png'],
+                            ['id' => 7, 'image' => 'oge18_p11_img5.png'],
+                            ['id' => 8, 'image' => 'oge18_p11_img6.png'],
+                            ['id' => 9, 'image' => 'oge18_p11_img7.png'],
+                        ]
+                    ],
+                    // III) Углы
+                    [
+                        'number' => 6,
+                        'instruction' => 'Найдите угол ABC. Ответ дайте в градусах.',
+                        'type' => 'grid_image',
+                        'tasks' => [
+                            ['id' => 1, 'image' => 'oge18_p11_img8.png'],
+                            ['id' => 2, 'image' => 'oge18_p11_img9.png'],
+                            ['id' => 3, 'image' => 'oge18_p11_img10.png'],
+                            ['id' => 4, 'image' => 'oge18_p11_img11.png'],
+                            ['id' => 5, 'image' => 'oge18_p11_img12.png'],
+                            ['id' => 6, 'image' => 'oge18_p12_img1.png'],
+                        ]
+                    ],
+                    [
+                        'number' => 7,
+                        'instruction' => 'Найдите тангенс угла А треугольника ABC, изображённого на рисунке.',
+                        'type' => 'grid_image',
+                        'tasks' => [
+                            ['id' => 1, 'image' => 'oge18_p12_img2.png'],
+                            ['id' => 2, 'image' => 'oge18_p12_img3.png'],
+                        ]
+                    ],
+                    [
+                        'number' => 8,
+                        'instruction' => 'Найдите тангенс угла B треугольника ABC, изображённого на рисунке.',
+                        'type' => 'grid_image',
+                        'tasks' => [
+                            ['id' => 1, 'image' => 'oge18_p12_img4.png'],
+                            ['id' => 2, 'image' => 'oge18_p12_img5.png'],
+                        ]
+                    ],
+                    [
+                        'number' => 9,
+                        'instruction' => 'Найдите тангенс угла С треугольника ABC, изображённого на рисунке.',
+                        'type' => 'grid_image',
+                        'tasks' => [
+                            ['id' => 1, 'image' => 'oge18_p12_img6.png'],
+                            ['id' => 2, 'image' => 'oge18_p12_img7.png'],
+                        ]
+                    ],
+                    [
+                        'number' => 10,
+                        'instruction' => 'Найдите тангенс угла AOB, изображенного на рисунке.',
+                        'type' => 'grid_image',
+                        'tasks' => [
+                            ['id' => 1, 'image' => 'oge18_p12_img8.png'],
+                            ['id' => 2, 'image' => 'oge18_p12_img9.png'],
+                            ['id' => 3, 'image' => 'oge18_p12_img10.png'],
+                            ['id' => 4, 'image' => 'oge18_p12_img11.png'],
+                            ['id' => 5, 'image' => 'oge18_p12_img12.png'],
+                            ['id' => 6, 'image' => 'oge18_p13_img1.png'],
+                            ['id' => 7, 'image' => 'oge18_p13_img2.png'],
+                            ['id' => 8, 'image' => 'oge18_p13_img3.png'],
+                            ['id' => 9, 'image' => 'oge18_p13_img4.png'],
+                            ['id' => 10, 'image' => 'oge18_p13_img5.png'],
+                            ['id' => 11, 'image' => 'oge18_p13_img6.png'],
+                            ['id' => 12, 'image' => 'oge18_p13_img7.png'],
+                        ]
+                    ],
+                    [
+                        'number' => 11,
+                        'instruction' => 'Найдите тангенс угла AOB, изображенного на рисунке.',
+                        'type' => 'grid_image',
+                        'tasks' => [
+                            ['id' => 1, 'image' => 'oge18_p13_img8.png'],
+                            ['id' => 2, 'image' => 'oge18_p13_img9.png'],
+                            ['id' => 3, 'image' => 'oge18_p13_img10.png'],
+                            ['id' => 4, 'image' => 'oge18_p13_img11.png'],
+                            ['id' => 5, 'image' => 'oge18_p13_img12.png'],
+                            ['id' => 6, 'image' => 'oge18_p14_img1.png'],
+                        ]
+                    ],
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * Get all blocks data for Topic 19 - Анализ геометрических высказываний
+     */
+    protected function getAllBlocksData19(): array
+    {
+        return [
+            // =====================
+            // БЛОК 1. ФИПИ
+            // =====================
+            [
+                'number' => 1,
+                'title' => 'ФИПИ',
+                'zadaniya' => [
+                    // I) Начальные геометрические сведения
+                    [
+                        'number' => 1,
+                        'instruction' => 'Укажите номера верных утверждений.',
+                        'section' => 'Начальные геометрические сведения (отрезки, прямые и углы)',
+                        'type' => 'statements',
+                        'statements' => [
+                            ['id' => 1, 'text' => 'Точка, лежащая на серединном перпендикуляре к отрезку, равноудалена от концов этого отрезка.', 'is_true' => true],
+                            ['id' => 2, 'text' => 'Существуют три прямые, которые проходят через одну точку.', 'is_true' => true],
+                            ['id' => 3, 'text' => 'Смежные углы всегда равны.', 'is_true' => false],
+                            ['id' => 4, 'text' => 'Вертикальные углы равны.', 'is_true' => true],
+                            ['id' => 5, 'text' => 'Всегда один из двух смежных углов острый, а другой тупой.', 'is_true' => false],
+                            ['id' => 6, 'text' => 'Через заданную точку плоскости можно провести только одну прямую.', 'is_true' => false],
+                            ['id' => 7, 'text' => 'Если точка лежит на биссектрисе угла, то она равноудалена от сторон этого угла.', 'is_true' => true],
+                            ['id' => 8, 'text' => 'Если угол острый, то смежный с ним угол также является острым.', 'is_true' => false],
+                        ]
+                    ],
+                    // II) Параллельные и перпендикулярные прямые
+                    [
+                        'number' => 2,
+                        'instruction' => 'Укажите номера верных утверждений.',
+                        'section' => 'Параллельные и перпендикулярные прямые',
+                        'type' => 'statements',
+                        'statements' => [
+                            ['id' => 9, 'text' => 'Две прямые, параллельные третьей прямой, перпендикулярны.', 'is_true' => false],
+                            ['id' => 10, 'text' => 'Две прямые, перпендикулярные третьей прямой, перпендикулярны.', 'is_true' => false],
+                            ['id' => 11, 'text' => 'Две различные прямые, перпендикулярные третьей прямой, параллельны.', 'is_true' => true],
+                            ['id' => 12, 'text' => 'Через точку, не лежащую на данной прямой, можно провести прямую, перпендикулярную этой прямой.', 'is_true' => true],
+                            ['id' => 13, 'text' => 'Через точку, не лежащую на данной прямой, можно провести прямую, параллельную этой прямой.', 'is_true' => true],
+                        ]
+                    ],
+                    // III) Треугольник
+                    [
+                        'number' => 3,
+                        'instruction' => 'Укажите номера верных утверждений.',
+                        'section' => 'Треугольник',
+                        'type' => 'statements',
+                        'statements' => [
+                            ['id' => 14, 'text' => 'Если в треугольнике есть один острый угол, то этот треугольник остроугольный.', 'is_true' => false],
+                            ['id' => 15, 'text' => 'В любом тупоугольном треугольнике есть острый угол.', 'is_true' => true],
+                            ['id' => 16, 'text' => 'В тупоугольном треугольнике все углы тупые.', 'is_true' => false],
+                            ['id' => 17, 'text' => 'В остроугольном треугольнике все углы острые.', 'is_true' => true],
+                            ['id' => 18, 'text' => 'В треугольнике против большего угла лежит большая сторона.', 'is_true' => true],
+                            ['id' => 19, 'text' => 'Внешний угол треугольника больше не смежного с ним внутреннего угла.', 'is_true' => true],
+                            ['id' => 20, 'text' => 'Внешний угол треугольника равен сумме его внутренних углов.', 'is_true' => false],
+                            ['id' => 21, 'text' => 'Один из углов треугольника всегда не превышает 60 градусов.', 'is_true' => true],
+                            ['id' => 22, 'text' => 'Медиана треугольника делит пополам угол, из вершины которого проведена.', 'is_true' => false],
+                            ['id' => 23, 'text' => 'Отношение площадей подобных треугольников равно коэффициенту подобия.', 'is_true' => false],
+                            ['id' => 24, 'text' => 'Площадь треугольника меньше произведения двух его сторон.', 'is_true' => true],
+                            ['id' => 25, 'text' => 'Сумма углов любого треугольника равна 360 градусам.', 'is_true' => false],
+                            ['id' => 26, 'text' => 'Треугольник со сторонами 1, 2, 4 существует.', 'is_true' => false],
+                            ['id' => 27, 'text' => 'Треугольника со сторонами 1, 2, 5 не существует.', 'is_true' => true],
+                            ['id' => 28, 'text' => 'Биссектриса треугольника делит пополам сторону, к которой проведена.', 'is_true' => false],
+                            ['id' => 29, 'text' => 'Если два угла одного треугольника равны двум углам другого треугольника, то такие треугольники подобны.', 'is_true' => true],
+                            ['id' => 30, 'text' => 'Если две стороны и угол одного треугольника равны соответственно двум сторонам и углу другого треугольника, то такие треугольники равны.', 'is_true' => false],
+                            ['id' => 31, 'text' => 'Если две стороны одного треугольника соответственно равны двум сторонам другого треугольника, то такие треугольники равны.', 'is_true' => false],
+                            ['id' => 32, 'text' => 'Если три угла одного треугольника равны соответственно трём углам другого треугольника, то такие треугольники равны.', 'is_true' => false],
+                            ['id' => 33, 'text' => 'Биссектрисы треугольника пересекаются в точке, которая является центром окружности, вписанной в треугольник.', 'is_true' => true],
+                            ['id' => 34, 'text' => 'Серединные перпендикуляры к сторонам треугольника пересекаются в точке, являющейся центром окружности, описанной около треугольника.', 'is_true' => true],
+                            ['id' => 35, 'text' => 'Все равнобедренные треугольники подобны.', 'is_true' => false],
+                            ['id' => 36, 'text' => 'Всякий равнобедренный треугольник является остроугольным.', 'is_true' => false],
+                            ['id' => 37, 'text' => 'Каждая из биссектрис равнобедренного треугольника является его высотой.', 'is_true' => false],
+                            ['id' => 38, 'text' => 'Каждая из биссектрис равнобедренного треугольника является его медианой.', 'is_true' => false],
+                            ['id' => 39, 'text' => 'Сумма углов равнобедренного треугольника равна 180 градусам.', 'is_true' => true],
+                            ['id' => 40, 'text' => 'Все высоты равностороннего треугольника равны.', 'is_true' => true],
+                            ['id' => 41, 'text' => 'Всякий равносторонний треугольник является равнобедренным.', 'is_true' => true],
+                            ['id' => 42, 'text' => 'Всякий равносторонний треугольник является остроугольным.', 'is_true' => true],
+                            ['id' => 43, 'text' => 'Любые два равносторонних треугольника подобны.', 'is_true' => true],
+                            ['id' => 44, 'text' => 'Все равносторонние треугольники подобны.', 'is_true' => true],
+                            ['id' => 45, 'text' => 'В прямоугольном треугольнике гипотенуза равна сумме катетов.', 'is_true' => false],
+                            ['id' => 46, 'text' => 'Все прямоугольные треугольники подобны.', 'is_true' => false],
+                            ['id' => 47, 'text' => 'В прямоугольном треугольнике квадрат гипотенузы равен разности квадратов катетов.', 'is_true' => false],
+                            ['id' => 48, 'text' => 'Длина гипотенузы прямоугольного треугольника меньше суммы длин его катетов.', 'is_true' => true],
+                            ['id' => 49, 'text' => 'Площадь прямоугольного треугольника равна произведению длин его катетов.', 'is_true' => false],
+                            ['id' => 50, 'text' => 'Косинус острого угла прямоугольного треугольника равен отношению гипотенузы к прилежащему к этому углу катету.', 'is_true' => false],
+                            ['id' => 51, 'text' => 'Сумма углов прямоугольного треугольника равна 90 градусам.', 'is_true' => false],
+                            ['id' => 52, 'text' => 'Тангенс любого острого угла меньше единицы.', 'is_true' => false],
+                            ['id' => 53, 'text' => 'Сумма острых углов прямоугольного треугольника равна 90 градусам.', 'is_true' => true],
+                        ]
+                    ],
+                    // IV) Четырехугольник
+                    [
+                        'number' => 4,
+                        'instruction' => 'Укажите номера верных утверждений.',
+                        'section' => 'Четырехугольник',
+                        'type' => 'statements',
+                        'statements' => [
+                            ['id' => 54, 'text' => 'В любой четырёхугольник можно вписать окружность.', 'is_true' => false],
+                            ['id' => 55, 'text' => 'Если стороны одного четырёхугольника соответственно равны сторонам другого четырёхугольника, то такие четырёхугольники равны.', 'is_true' => false],
+                            ['id' => 56, 'text' => 'Сумма углов выпуклого четырёхугольника равна 360 градусам.', 'is_true' => true],
+                        ]
+                    ],
+                    // V) Параллелограмм
+                    [
+                        'number' => 5,
+                        'instruction' => 'Укажите номера верных утверждений.',
+                        'section' => 'Параллелограмм',
+                        'type' => 'statements',
+                        'statements' => [
+                            ['id' => 57, 'text' => 'Диагонали параллелограмма равны.', 'is_true' => false],
+                            ['id' => 58, 'text' => 'В параллелограмме есть два равных угла.', 'is_true' => true],
+                            ['id' => 59, 'text' => 'Площадь любого параллелограмма равна произведению длин его сторон.', 'is_true' => false],
+                            ['id' => 60, 'text' => 'Площадь параллелограмма равна половине произведения его диагоналей.', 'is_true' => false],
+                            ['id' => 61, 'text' => 'Диагональ параллелограмма делит его на два равных треугольника.', 'is_true' => true],
+                        ]
+                    ],
+                    // VI) Квадрат, прямоугольник
+                    [
+                        'number' => 6,
+                        'instruction' => 'Укажите номера верных утверждений.',
+                        'section' => 'Квадрат, прямоугольник',
+                        'type' => 'statements',
+                        'statements' => [
+                            ['id' => 62, 'text' => 'В любой прямоугольник можно вписать окружность.', 'is_true' => false],
+                            ['id' => 63, 'text' => 'Диагонали любого прямоугольника делят его на четыре равных треугольника.', 'is_true' => false],
+                            ['id' => 64, 'text' => 'Диагонали прямоугольника точкой пересечения делятся пополам.', 'is_true' => true],
+                            ['id' => 65, 'text' => 'Существует прямоугольник, диагонали которого взаимно перпендикулярны.', 'is_true' => true],
+                            ['id' => 66, 'text' => 'Если диагонали параллелограмма равны, то это прямоугольник.', 'is_true' => true],
+                            ['id' => 67, 'text' => 'Любой прямоугольник можно вписать в окружность.', 'is_true' => true],
+                            ['id' => 68, 'text' => 'Все углы прямоугольника равны.', 'is_true' => true],
+                            ['id' => 69, 'text' => 'В любом прямоугольнике диагонали взаимно перпендикулярны.', 'is_true' => false],
+                            ['id' => 70, 'text' => 'Площадь прямоугольника равна произведению длин всех его сторон.', 'is_true' => false],
+                            ['id' => 71, 'text' => 'Площадь прямоугольника равна произведению длин его смежных сторон.', 'is_true' => true],
+                            ['id' => 72, 'text' => 'Если в параллелограмме диагонали равны и перпендикулярны, то этот параллелограмм является квадратом.', 'is_true' => true],
+                            ['id' => 73, 'text' => 'Если диагонали параллелограмма равны, то этот параллелограмм является квадратом.', 'is_true' => false],
+                            ['id' => 74, 'text' => 'Если диагонали выпуклого четырёхугольника равны и перпендикулярны, то этот четырёхугольник является квадратом.', 'is_true' => false],
+                            ['id' => 75, 'text' => 'Любой квадрат является прямоугольником.', 'is_true' => true],
+                            ['id' => 76, 'text' => 'Площадь квадрата равна произведению двух его смежных сторон.', 'is_true' => true],
+                            ['id' => 77, 'text' => 'Площадь квадрата равна произведению его диагоналей.', 'is_true' => false],
+                            ['id' => 78, 'text' => 'Существует квадрат, который не является прямоугольником.', 'is_true' => false],
+                            ['id' => 79, 'text' => 'Все квадраты имеют равные площади.', 'is_true' => false],
+                        ]
+                    ],
+                    // VII) Трапеция
+                    [
+                        'number' => 7,
+                        'instruction' => 'Укажите номера верных утверждений.',
+                        'section' => 'Трапеция',
+                        'type' => 'statements',
+                        'statements' => [
+                            ['id' => 80, 'text' => 'Основания любой трапеции параллельны.', 'is_true' => true],
+                            ['id' => 81, 'text' => 'Основания равнобедренной трапеции равны.', 'is_true' => false],
+                            ['id' => 82, 'text' => 'Площадь трапеции равна произведению основания трапеции на высоту.', 'is_true' => false],
+                            ['id' => 83, 'text' => 'Средняя линия трапеции параллельна её основаниям.', 'is_true' => true],
+                            ['id' => 84, 'text' => 'Средняя линия трапеции равна сумме её оснований.', 'is_true' => false],
+                            ['id' => 85, 'text' => 'Средняя линия трапеции равна полусумме её оснований.', 'is_true' => true],
+                            ['id' => 86, 'text' => 'Боковые стороны любой трапеции равны.', 'is_true' => false],
+                            ['id' => 87, 'text' => 'В любой прямоугольной трапеции есть два равных угла.', 'is_true' => true],
+                            ['id' => 88, 'text' => 'Диагонали трапеции пересекаются и делятся точкой пересечения пополам.', 'is_true' => false],
+                            ['id' => 89, 'text' => 'Диагонали прямоугольной трапеции равны.', 'is_true' => false],
+                        ]
+                    ],
+                ]
+            ],
+            // =====================
+            // БЛОК 2. Открытый банк
+            // =====================
+            [
+                'number' => 2,
+                'title' => 'Открытый банк',
+                'zadaniya' => [
+                    // I) Начальные геометрические сведения
+                    [
+                        'number' => 1,
+                        'instruction' => 'Укажите номера верных утверждений.',
+                        'section' => 'Начальные геометрические сведения',
+                        'type' => 'statements',
+                        'statements' => [
+                            ['id' => 1, 'text' => 'Если угол равен 45°, то вертикальный с ним угол равен 45°.', 'is_true' => true],
+                            ['id' => 2, 'text' => 'Если угол равен 60°, то смежный с ним угол равен 120°.', 'is_true' => true],
+                            ['id' => 3, 'text' => 'Существует прямоугольник, диагонали которого взаимно перпендикулярны.', 'is_true' => true],
+                            ['id' => 4, 'text' => 'Точка пересечения двух окружностей равноудалена от центров этих окружностей.', 'is_true' => false],
+                        ]
+                    ],
+                    // II) Треугольники
+                    [
+                        'number' => 2,
+                        'instruction' => 'Укажите номера верных утверждений.',
+                        'section' => 'Треугольники',
+                        'type' => 'statements',
+                        'statements' => [
+                            ['id' => 5, 'text' => 'Если один из углов треугольника прямой, то треугольник прямоугольный.', 'is_true' => true],
+                            ['id' => 6, 'text' => 'Если гипотенуза и острый угол одного прямоугольного треугольника соответственно равны гипотенузе и углу другого прямоугольного треугольника, то такие треугольники равны.', 'is_true' => true],
+                            ['id' => 7, 'text' => 'Площадь треугольника не превышает произведения двух его сторон.', 'is_true' => true],
+                            ['id' => 8, 'text' => 'Против большей стороны треугольника лежит больший угол.', 'is_true' => true],
+                            ['id' => 9, 'text' => 'Против равных сторон треугольника лежат равные углы.', 'is_true' => true],
+                            ['id' => 10, 'text' => 'Сумма углов любого треугольника равна 180°.', 'is_true' => true],
+                            ['id' => 11, 'text' => 'Если две стороны одного треугольника пропорциональны двум сторонам другого треугольника и углы, образованные этими сторонами, равны, то треугольники подобны.', 'is_true' => true],
+                            ['id' => 12, 'text' => 'Если три стороны одного треугольника пропорциональны трём сторонам другого треугольника, то треугольники подобны.', 'is_true' => true],
+                            ['id' => 13, 'text' => 'Если три угла одного треугольника соответственно равны трём углам другого треугольника, то такие треугольники подобны.', 'is_true' => true],
+                            ['id' => 14, 'text' => 'В любой треугольник можно вписать окружность.', 'is_true' => true],
+                        ]
+                    ],
+                    // III) Параллелограмм, прямоугольник, квадрат
+                    [
+                        'number' => 3,
+                        'instruction' => 'Укажите номера верных утверждений.',
+                        'section' => 'Параллелограмм, прямоугольник, квадрат',
+                        'type' => 'statements',
+                        'statements' => [
+                            ['id' => 15, 'text' => 'В любом параллелограмме диагонали точкой пересечения делятся пополам.', 'is_true' => true],
+                            ['id' => 16, 'text' => 'Существует параллелограмм, который не является прямоугольником.', 'is_true' => true],
+                            ['id' => 17, 'text' => 'Диагонали любого прямоугольника равны.', 'is_true' => true],
+                            ['id' => 18, 'text' => 'Существует прямоугольник, который не является параллелограммом.', 'is_true' => false],
+                            ['id' => 19, 'text' => 'Не существует прямоугольника, диагонали которого взаимно перпендикулярны.', 'is_true' => false],
+                            ['id' => 20, 'text' => 'Диагонали квадрата взаимно перпендикулярны.', 'is_true' => true],
+                            ['id' => 21, 'text' => 'Диагонали квадрата точкой пересечения делятся пополам.', 'is_true' => true],
+                            ['id' => 22, 'text' => 'Квадрат диагонали прямоугольника равен сумме квадратов двух его смежных сторон.', 'is_true' => true],
+                            ['id' => 23, 'text' => 'Квадрат является прямоугольником.', 'is_true' => true],
+                            ['id' => 24, 'text' => 'Любой квадрат можно вписать в окружность.', 'is_true' => true],
+                            ['id' => 25, 'text' => 'Сумма квадратов диагоналей прямоугольника равна сумме квадратов всех его сторон.', 'is_true' => true],
+                        ]
+                    ],
+                    // IV) Трапеция
+                    [
+                        'number' => 4,
+                        'instruction' => 'Укажите номера верных утверждений.',
+                        'section' => 'Трапеция',
+                        'type' => 'statements',
+                        'statements' => [
+                            ['id' => 26, 'text' => 'Площадь трапеции равна произведению средней линии на высоту.', 'is_true' => true],
+                            ['id' => 27, 'text' => 'У любой трапеции боковые стороны равны.', 'is_true' => false],
+                            ['id' => 28, 'text' => 'У любой трапеции основания параллельны.', 'is_true' => true],
+                        ]
+                    ],
+                    // V) Ромб
+                    [
+                        'number' => 5,
+                        'instruction' => 'Укажите номера верных утверждений.',
+                        'section' => 'Ромб',
+                        'type' => 'statements',
+                        'statements' => [
+                            ['id' => 29, 'text' => 'Если в четырёхугольнике диагонали перпендикулярны, то этот четырёхугольник – ромб.', 'is_true' => false],
+                            ['id' => 30, 'text' => 'Если в параллелограмме две смежные стороны равны, то такой параллелограмм является ромбом.', 'is_true' => true],
+                            ['id' => 31, 'text' => 'Существует квадрат, который не является ромбом.', 'is_true' => false],
+                            ['id' => 32, 'text' => 'Ромб не является параллелограммом.', 'is_true' => false],
+                            ['id' => 33, 'text' => 'Любой квадрат является ромбом.', 'is_true' => true],
+                            ['id' => 34, 'text' => 'Существует ромб, который не является квадратом.', 'is_true' => true],
+                        ]
+                    ],
+                    // VI) Окружность
+                    [
+                        'number' => 6,
+                        'instruction' => 'Укажите номера верных утверждений.',
+                        'section' => 'Окружность',
+                        'type' => 'statements',
+                        'statements' => [
+                            ['id' => 35, 'text' => 'В плоскости все точки, равноудалённые от заданной точки, лежат на одной окружности.', 'is_true' => true],
+                            ['id' => 36, 'text' => 'В плоскости для точки, лежащей вне круга, расстояние до центра круга больше его радиуса.', 'is_true' => true],
+                            ['id' => 37, 'text' => 'Вокруг любого треугольника можно описать окружность.', 'is_true' => true],
+                            ['id' => 38, 'text' => 'Вокруг любого параллелограмма можно описать окружность.', 'is_true' => false],
+                            ['id' => 39, 'text' => 'Для точки, лежащей внутри круга, расстояние до центра круга меньше его радиуса.', 'is_true' => true],
+                            ['id' => 40, 'text' => 'Если из точки M проведены две касательные к окружности и А и В – точки касания, то отрезки MA и MB равны.', 'is_true' => true],
+                            ['id' => 41, 'text' => 'Из двух хорд окружности больше та, середина которой находится дальше от центра окружности.', 'is_true' => false],
+                            ['id' => 42, 'text' => 'Площадь круга меньше квадрата длины его диаметра.', 'is_true' => true],
+                            ['id' => 43, 'text' => 'Центр вписанной окружности равнобедренного треугольника лежит на высоте, проведённой к основанию треугольника.', 'is_true' => true],
+                            ['id' => 44, 'text' => 'Центр описанной окружности равнобедренного треугольника лежит на высоте, проведённой к основанию треугольника.', 'is_true' => true],
+                            ['id' => 45, 'text' => 'Центром вписанной в треугольник окружности является точка пересечения его биссектрис.', 'is_true' => true],
+                            ['id' => 46, 'text' => 'Центром описанной окружности треугольника является точка пересечения серединных перпендикуляров к его сторонам.', 'is_true' => true],
+                            ['id' => 47, 'text' => 'Центры вписанной и описанной окружностей равнобедренного треугольника совпадают.', 'is_true' => false],
                         ]
                     ],
                 ]
