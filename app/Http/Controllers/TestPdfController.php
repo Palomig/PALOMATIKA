@@ -27,6 +27,14 @@ class TestPdfController extends Controller
     }
 
     /**
+     * Show index page with all topics 6-19
+     */
+    public function index()
+    {
+        return view('test.index');
+    }
+
+    /**
      * Show test generator interface
      */
     public function testGenerator()
