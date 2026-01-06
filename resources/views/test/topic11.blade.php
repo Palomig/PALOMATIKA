@@ -29,11 +29,8 @@
         <div class="flex gap-2 flex-wrap justify-center">
             <a href="{{ route('test.topic06') }}" class="px-2 py-1 rounded bg-slate-700 text-slate-300 hover:bg-slate-600 transition">06</a>
             <a href="{{ route('test.topic07') }}" class="px-2 py-1 rounded bg-slate-700 text-slate-300 hover:bg-slate-600 transition">07</a>
-            <a href="{{ route('test.topic08') }}" class="px-2 py-1 rounded bg-slate-700 text-slate-300 hover:bg-slate-600 transition">08</a>
-            <a href="{{ route('test.topic09') }}" class="px-2 py-1 rounded bg-slate-700 text-slate-300 hover:bg-slate-600 transition">09</a>
             <a href="{{ route('test.topic10') }}" class="px-2 py-1 rounded bg-slate-700 text-slate-300 hover:bg-slate-600 transition">10</a>
             <span class="px-2 py-1 rounded bg-cyan-500 text-white font-bold">11</span>
-            <a href="{{ route('test.topic12') }}" class="px-2 py-1 rounded bg-slate-700 text-slate-300 hover:bg-slate-600 transition">12</a>
             <a href="{{ route('test.topic15') }}" class="px-2 py-1 rounded bg-slate-700 text-slate-300 hover:bg-slate-600 transition">15</a>
             <a href="{{ route('test.topic16') }}" class="px-2 py-1 rounded bg-slate-700 text-slate-300 hover:bg-slate-600 transition">16</a>
             <a href="{{ route('test.topic17') }}" class="px-2 py-1 rounded bg-slate-700 text-slate-300 hover:bg-slate-600 transition">17</a>
@@ -70,7 +67,7 @@
         </div>
     </div>
 
-    @foreach($blocks as $block)
+    @foreach($blocks as $blockIndex => $block)
     <div class="mb-12">
         {{-- Block Header --}}
         <div class="flex justify-between items-center mb-6 text-sm text-slate-500 italic border-b border-slate-700 pb-4">
@@ -83,7 +80,7 @@
             <p class="text-cyan-400 text-lg mt-1">Блок {{ $block['number'] }}. {{ $block['title'] }}</p>
         </div>
 
-        @foreach($block['zadaniya'] as $zadanie)
+        @foreach($block['zadaniya'] as $zadanieIndex => $zadanie)
             <div class="mb-10">
                 {{-- Zadanie Header --}}
                 <div class="bg-slate-800 rounded-xl p-4 mb-6 border-l-4 border-cyan-500">
@@ -94,55 +91,16 @@
 
                 {{-- Tasks Grid --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    @foreach($zadanie['tasks'] ?? [] as $index => $task)
+                    @foreach($zadanie['tasks'] ?? [] as $taskIndex => $task)
+                        @php
+                            $uniqueId = $blockIndex . '-' . $zadanieIndex . '-' . $taskIndex;
+                        @endphp
                         <div class="bg-slate-800/70 rounded-xl p-4 border border-slate-700 hover:border-cyan-500/50 transition-colors">
                             <div class="text-cyan-400 font-semibold mb-3">{{ $task['id'] }}.</div>
 
-                            {{-- SVG Graph --}}
-                            <div class="bg-slate-900/50 rounded-lg p-2 mb-4" x-data="graphData({{ json_encode($task) }}, {{ $index }})">
-                                <svg :viewBox="viewBox" class="w-full h-48 rounded">
-                                    {{-- Grid pattern --}}
-                                    <defs>
-                                        <pattern :id="'grid-' + index" width="20" height="20" patternUnits="userSpaceOnUse">
-                                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#334155" stroke-width="0.5"/>
-                                        </pattern>
-                                    </defs>
-                                    <rect x="0" y="0" width="100%" height="100%" :fill="'url(#grid-' + index + ')'"/>
-
-                                    {{-- Axes --}}
-                                    <line :x1="padding" :y1="centerY" :x2="width - padding" :y2="centerY" stroke="#64748b" stroke-width="1.5"/>
-                                    <line :x1="centerX" :y1="padding" :x2="centerX" :y2="height - padding" stroke="#64748b" stroke-width="1.5"/>
-
-                                    {{-- Axis arrows --}}
-                                    <polygon :points="arrowX" fill="#64748b"/>
-                                    <polygon :points="arrowY" fill="#64748b"/>
-
-                                    {{-- Axis labels --}}
-                                    <text :x="width - padding + 5" :y="centerY + 4" fill="#94a3b8" font-size="12">x</text>
-                                    <text :x="centerX + 5" :y="padding - 5" fill="#94a3b8" font-size="12">y</text>
-
-                                    {{-- Origin --}}
-                                    <text :x="centerX - 12" :y="centerY + 14" fill="#94a3b8" font-size="11">0</text>
-
-                                    {{-- Tick marks --}}
-                                    <template x-for="i in ticks">
-                                        <g>
-                                            <line :x1="centerX + i * scale" :y1="centerY - 3" :x2="centerX + i * scale" :y2="centerY + 3" stroke="#64748b" stroke-width="1"/>
-                                            <line :x1="centerX - 3" :y1="centerY - i * scale" :x2="centerX + 3" :y2="centerY - i * scale" stroke="#64748b" stroke-width="1"/>
-                                        </g>
-                                    </template>
-
-                                    {{-- Function graphs (3-4 per task) --}}
-                                    <template x-for="(graph, gi) in graphs">
-                                        <g>
-                                            {{-- Graph label (А, Б, В, Г) --}}
-                                            <text :x="graph.labelX" :y="graph.labelY" :fill="graph.color" font-size="14" font-weight="bold" x-text="graph.label"></text>
-
-                                            {{-- The graph path --}}
-                                            <path :d="graph.path" :stroke="graph.color" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                                        </g>
-                                    </template>
-                                </svg>
+                            {{-- SVG Graph Container --}}
+                            <div class="bg-slate-900/50 rounded-lg p-2 mb-4">
+                                <div id="graph-{{ $uniqueId }}" class="w-full h-48"></div>
                             </div>
 
                             {{-- Options --}}
@@ -162,6 +120,12 @@
                                 @endif
                             </div>
                         </div>
+
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                renderGraph('graph-{{ $uniqueId }}', @json($task['options'] ?? []), {{ $taskIndex }});
+                            });
+                        </script>
                     @endforeach
                 </div>
             </div>
@@ -185,148 +149,291 @@
         </div>
     </div>
 
-    <p class="text-center text-slate-500 text-sm mt-8">Все графики генерируются программно через SVG + Alpine.js</p>
+    <p class="text-center text-slate-500 text-sm mt-8">Все графики генерируются программно через SVG</p>
 </div>
 
 <script>
-    // Graph generation for function matching tasks
-    function graphData(task, index) {
-        const width = 240;
-        const height = 180;
-        const padding = 25;
-        const centerX = width / 2;
-        const centerY = height / 2;
-        const scale = 20; // pixels per unit
+    const WIDTH = 280;
+    const HEIGHT = 200;
+    const PADDING = 30;
+    const CENTER_X = WIDTH / 2;
+    const CENTER_Y = HEIGHT / 2;
+    const SCALE = 20;
+    const COLORS = ['#f59e0b', '#10b981', '#60a5fa', '#f472b6'];
+    const LABELS = ['А)', 'Б)', 'В)', 'Г)'];
 
-        const colors = ['#f59e0b', '#10b981', '#60a5fa', '#f472b6'];
-        const labels = ['А)', 'Б)', 'В)', 'Г)'];
+    function renderGraph(containerId, options, taskIndex) {
+        const container = document.getElementById(containerId);
+        if (!container || !options.length) return;
 
-        // Parse options to determine function types and generate graphs
-        const graphs = [];
-        const options = task.options || [];
+        // Create SVG
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('viewBox', `0 0 ${WIDTH} ${HEIGHT}`);
+        svg.setAttribute('class', 'w-full h-full rounded');
 
-        options.forEach((opt, i) => {
-            const graph = parseAndDrawFunction(opt, i, {
-                centerX, centerY, scale, padding, width, height,
-                color: colors[i % colors.length],
-                label: labels[i]
-            });
-            if (graph) graphs.push(graph);
-        });
+        // Grid pattern
+        const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+        const pattern = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
+        pattern.setAttribute('id', `grid-${containerId}`);
+        pattern.setAttribute('width', '20');
+        pattern.setAttribute('height', '20');
+        pattern.setAttribute('patternUnits', 'userSpaceOnUse');
+        const patternPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        patternPath.setAttribute('d', 'M 20 0 L 0 0 0 20');
+        patternPath.setAttribute('fill', 'none');
+        patternPath.setAttribute('stroke', '#334155');
+        patternPath.setAttribute('stroke-width', '0.5');
+        pattern.appendChild(patternPath);
+        defs.appendChild(pattern);
+        svg.appendChild(defs);
 
-        return {
-            width,
-            height,
-            padding,
-            centerX,
-            centerY,
-            scale,
-            index,
-            viewBox: `0 0 ${width} ${height}`,
-            arrowX: `${width - padding},${centerY - 4} ${width - padding},${centerY + 4} ${width - padding + 8},${centerY}`,
-            arrowY: `${centerX - 4},${padding} ${centerX + 4},${padding} ${centerX},${padding - 8}`,
-            ticks: [-4, -3, -2, -1, 1, 2, 3, 4],
-            graphs
-        };
-    }
+        // Background with grid
+        const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        bg.setAttribute('x', '0');
+        bg.setAttribute('y', '0');
+        bg.setAttribute('width', WIDTH);
+        bg.setAttribute('height', HEIGHT);
+        bg.setAttribute('fill', `url(#grid-${containerId})`);
+        svg.appendChild(bg);
 
-    function parseAndDrawFunction(formula, index, params) {
-        const { centerX, centerY, scale, padding, width, height, color, label } = params;
+        // X axis
+        const xAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        xAxis.setAttribute('x1', PADDING);
+        xAxis.setAttribute('y1', CENTER_Y);
+        xAxis.setAttribute('x2', WIDTH - PADDING);
+        xAxis.setAttribute('y2', CENTER_Y);
+        xAxis.setAttribute('stroke', '#64748b');
+        xAxis.setAttribute('stroke-width', '1.5');
+        svg.appendChild(xAxis);
 
-        // Clean formula
-        let f = formula.replace(/\s+/g, '').replace('y=', '');
+        // Y axis
+        const yAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        yAxis.setAttribute('x1', CENTER_X);
+        yAxis.setAttribute('y1', PADDING);
+        yAxis.setAttribute('x2', CENTER_X);
+        yAxis.setAttribute('y2', HEIGHT - PADDING);
+        yAxis.setAttribute('stroke', '#64748b');
+        yAxis.setAttribute('stroke-width', '1.5');
+        svg.appendChild(yAxis);
 
-        let path = '';
-        let labelX = padding + 10 + index * 50;
-        let labelY = padding + 15;
+        // X arrow
+        const xArrow = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+        xArrow.setAttribute('points', `${WIDTH-PADDING},${CENTER_Y-4} ${WIDTH-PADDING},${CENTER_Y+4} ${WIDTH-PADDING+8},${CENTER_Y}`);
+        xArrow.setAttribute('fill', '#64748b');
+        svg.appendChild(xArrow);
 
-        // Detect function type and draw
-        if (f.includes('x²') || f.includes('x^2')) {
-            // Quadratic function
-            path = drawQuadratic(f, params);
-            labelY = padding + 20 + index * 12;
-        } else if (f.includes('/x') || f.includes('\\frac')) {
-            // Hyperbola
-            path = drawHyperbola(f, params);
-            labelX = index < 2 ? width - padding - 30 : padding + 10;
-            labelY = index < 2 ? padding + 30 : height - padding - 10;
-        } else {
-            // Linear function
-            path = drawLinear(f, params);
-            labelX = width - padding - 25;
-            labelY = padding + 15 + index * 15;
+        // Y arrow
+        const yArrow = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+        yArrow.setAttribute('points', `${CENTER_X-4},${PADDING} ${CENTER_X+4},${PADDING} ${CENTER_X},${PADDING-8}`);
+        yArrow.setAttribute('fill', '#64748b');
+        svg.appendChild(yArrow);
+
+        // Labels
+        const xLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        xLabel.setAttribute('x', WIDTH - PADDING + 5);
+        xLabel.setAttribute('y', CENTER_Y + 4);
+        xLabel.setAttribute('fill', '#94a3b8');
+        xLabel.setAttribute('font-size', '12');
+        xLabel.textContent = 'x';
+        svg.appendChild(xLabel);
+
+        const yLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        yLabel.setAttribute('x', CENTER_X + 5);
+        yLabel.setAttribute('y', PADDING - 5);
+        yLabel.setAttribute('fill', '#94a3b8');
+        yLabel.setAttribute('font-size', '12');
+        yLabel.textContent = 'y';
+        svg.appendChild(yLabel);
+
+        // Origin
+        const origin = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        origin.setAttribute('x', CENTER_X - 12);
+        origin.setAttribute('y', CENTER_Y + 14);
+        origin.setAttribute('fill', '#94a3b8');
+        origin.setAttribute('font-size', '11');
+        origin.textContent = '0';
+        svg.appendChild(origin);
+
+        // Tick marks
+        for (let i = -5; i <= 5; i++) {
+            if (i === 0) continue;
+            // X ticks
+            const xTick = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            xTick.setAttribute('x1', CENTER_X + i * SCALE);
+            xTick.setAttribute('y1', CENTER_Y - 3);
+            xTick.setAttribute('x2', CENTER_X + i * SCALE);
+            xTick.setAttribute('y2', CENTER_Y + 3);
+            xTick.setAttribute('stroke', '#64748b');
+            xTick.setAttribute('stroke-width', '1');
+            svg.appendChild(xTick);
+
+            // Y ticks
+            const yTick = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            yTick.setAttribute('x1', CENTER_X - 3);
+            yTick.setAttribute('y1', CENTER_Y - i * SCALE);
+            yTick.setAttribute('x2', CENTER_X + 3);
+            yTick.setAttribute('y2', CENTER_Y - i * SCALE);
+            yTick.setAttribute('stroke', '#64748b');
+            yTick.setAttribute('stroke-width', '1');
+            svg.appendChild(yTick);
         }
 
+        // Draw each function
+        options.forEach((formula, i) => {
+            const color = COLORS[i % COLORS.length];
+            const label = LABELS[i];
+            const pathData = parseAndDrawFunction(formula);
+
+            if (pathData.path) {
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', pathData.path);
+                path.setAttribute('stroke', color);
+                path.setAttribute('stroke-width', '2.5');
+                path.setAttribute('fill', 'none');
+                path.setAttribute('stroke-linecap', 'round');
+                svg.appendChild(path);
+
+                // Label
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', pathData.labelX);
+                text.setAttribute('y', pathData.labelY);
+                text.setAttribute('fill', color);
+                text.setAttribute('font-size', '13');
+                text.setAttribute('font-weight', 'bold');
+                text.textContent = label;
+                svg.appendChild(text);
+            }
+        });
+
+        container.appendChild(svg);
+    }
+
+    function parseAndDrawFunction(formula) {
+        // Clean formula
+        let f = formula.replace(/\s+/g, '').replace('y=', '');
+        f = f.replace(/−/g, '-');
+
+        let path = '';
+        let labelX = PADDING + 5;
+        let labelY = PADDING + 15;
+
+        // Detect function type
+        if (f.includes('x²') || f.includes('x^2') || f.match(/\d*x\^?2/)) {
+            // Quadratic
+            const result = drawQuadratic(f);
+            path = result.path;
+            labelX = result.labelX;
+            labelY = result.labelY;
+        } else if (f.includes('/x') || f.match(/\\frac\{[^}]+\}\{x\}/)) {
+            // Hyperbola
+            const result = drawHyperbola(f);
+            path = result.path;
+            labelX = result.labelX;
+            labelY = result.labelY;
+        } else {
+            // Linear
+            const result = drawLinear(f);
+            path = result.path;
+            labelX = result.labelX;
+            labelY = result.labelY;
+        }
+
+        return { path, labelX, labelY };
+    }
+
+    function drawLinear(f) {
+        let k = 0, b = 0;
+
+        // Handle fractions like \frac{2}{5}
+        f = f.replace(/\\frac\{(-?\d+)\}\{(\d+)\}/g, (m, n, d) => (parseFloat(n) / parseFloat(d)));
+
+        // Parse different formats
+        // y = kx + b, y = kx, y = b, y = -x, etc.
+
+        // Check for constant: y = 3
+        if (f.match(/^-?\d+\.?\d*$/) && !f.includes('x')) {
+            k = 0;
+            b = parseFloat(f);
+        }
+        // Check for y = kx + b or y = kx - b
+        else if (f.match(/^(-?\d*\.?\d*)x([+-]\d+\.?\d*)?$/)) {
+            const match = f.match(/^(-?\d*\.?\d*)x([+-]\d+\.?\d*)?$/);
+            let kStr = match[1];
+            if (kStr === '' || kStr === '+') k = 1;
+            else if (kStr === '-') k = -1;
+            else k = parseFloat(kStr);
+            b = match[2] ? parseFloat(match[2]) : 0;
+        }
+        // Check for y = b + kx
+        else if (f.match(/^(-?\d+\.?\d*)([+-]\d*\.?\d*)x$/)) {
+            const match = f.match(/^(-?\d+\.?\d*)([+-]\d*\.?\d*)x$/);
+            b = parseFloat(match[1]);
+            let kStr = match[2];
+            if (kStr === '+' || kStr === '') k = 1;
+            else if (kStr === '-') k = -1;
+            else k = parseFloat(kStr);
+        }
+        // Just y = x or y = -x
+        else if (f === 'x') {
+            k = 1; b = 0;
+        } else if (f === '-x') {
+            k = -1; b = 0;
+        }
+
+        // Generate path
+        const points = [];
+        for (let x = -7; x <= 7; x += 0.5) {
+            const y = k * x + b;
+            const px = CENTER_X + x * SCALE;
+            const py = CENTER_Y - y * SCALE;
+
+            if (px >= PADDING - 5 && px <= WIDTH - PADDING + 5 && py >= PADDING - 5 && py <= HEIGHT - PADDING + 5) {
+                points.push(`${px.toFixed(1)},${py.toFixed(1)}`);
+            }
+        }
+
+        // Find good label position
+        let labelX = WIDTH - PADDING - 25;
+        let labelY = CENTER_Y - (k * 4 + b) * SCALE - 5;
+        if (labelY < PADDING + 15) labelY = PADDING + 15;
+        if (labelY > HEIGHT - PADDING - 5) labelY = HEIGHT - PADDING - 15;
+
         return {
-            path,
-            color,
-            label,
+            path: points.length > 1 ? `M ${points.join(' L ')}` : '',
             labelX,
             labelY
         };
     }
 
-    function drawLinear(f, params) {
-        const { centerX, centerY, scale, padding, width, height } = params;
-
-        // Parse y = kx + b
-        let k = 1, b = 0;
-
-        // Handle various formats
-        f = f.replace(/\\frac\{(\d+)\}\{(\d+)\}/g, (m, n, d) => n/d);
-        f = f.replace(/−/g, '-');
-
-        if (f.match(/^(-?\d*\.?\d*)x([+-]\d+\.?\d*)?$/)) {
-            const match = f.match(/^(-?\d*\.?\d*)x([+-]\d+\.?\d*)?$/);
-            k = match[1] === '' || match[1] === '+' ? 1 : (match[1] === '-' ? -1 : parseFloat(match[1]));
-            b = match[2] ? parseFloat(match[2]) : 0;
-        } else if (f.match(/^(-?\d+\.?\d*)$/)) {
-            k = 0;
-            b = parseFloat(f);
-        } else if (f.match(/^(-?\d*\.?\d*)x$/)) {
-            const match = f.match(/^(-?\d*\.?\d*)x$/);
-            k = match[1] === '' || match[1] === '+' ? 1 : (match[1] === '-' ? -1 : parseFloat(match[1]));
-        }
-
-        // Generate path
-        const xMin = -5, xMax = 5;
-        const points = [];
-
-        for (let x = xMin; x <= xMax; x += 0.5) {
-            const y = k * x + b;
-            const px = centerX + x * scale;
-            const py = centerY - y * scale;
-
-            if (px >= padding && px <= width - padding && py >= padding && py <= height - padding) {
-                points.push(`${px},${py}`);
-            }
-        }
-
-        return points.length > 1 ? `M ${points.join(' L ')}` : '';
-    }
-
-    function drawQuadratic(f, params) {
-        const { centerX, centerY, scale, padding, width, height } = params;
-
-        // Parse y = ax² + bx + c
+    function drawQuadratic(f) {
         let a = 1, b = 0, c = 0;
 
-        f = f.replace(/\\frac\{(\d+)\}\{(\d+)\}/g, (m, n, d) => n/d);
-        f = f.replace(/−/g, '-');
+        // Handle fractions
+        f = f.replace(/\\frac\{(-?\d+)\}\{(\d+)\}/g, (m, n, d) => (parseFloat(n) / parseFloat(d)));
         f = f.replace(/x²/g, 'x^2');
 
-        // Simple parsing for common formats
-        const aMatch = f.match(/^(-?\d*\.?\d*)x\^2/);
+        // Parse ax^2 + bx + c formats
+        // Simple cases first
+
+        // Check for coefficient of x^2
+        const aMatch = f.match(/^(-?\d*\.?\d*)x\^?2/);
         if (aMatch) {
-            a = aMatch[1] === '' || aMatch[1] === '+' ? 1 : (aMatch[1] === '-' ? -1 : parseFloat(aMatch[1]));
+            let aStr = aMatch[1];
+            if (aStr === '' || aStr === '+') a = 1;
+            else if (aStr === '-') a = -1;
+            else a = parseFloat(aStr);
         }
 
+        // Check for x coefficient (not x^2)
         const bMatch = f.match(/([+-]\d*\.?\d*)x(?!\^)/);
         if (bMatch) {
-            const bStr = bMatch[1];
-            b = bStr === '+' || bStr === '' ? 1 : (bStr === '-' ? -1 : parseFloat(bStr));
+            let bStr = bMatch[1];
+            if (bStr === '+' || bStr === '') b = 1;
+            else if (bStr === '-') b = -1;
+            else b = parseFloat(bStr);
         }
 
+        // Check for constant
         const cMatch = f.match(/([+-]\d+\.?\d*)$/);
         if (cMatch && !cMatch[0].includes('x')) {
             c = parseFloat(cMatch[1]);
@@ -334,55 +441,72 @@
 
         // Generate parabola path
         const points = [];
-        for (let x = -6; x <= 6; x += 0.2) {
+        for (let x = -7; x <= 7; x += 0.15) {
             const y = a * x * x + b * x + c;
-            const px = centerX + x * scale;
-            const py = centerY - y * scale;
+            const px = CENTER_X + x * SCALE;
+            const py = CENTER_Y - y * SCALE;
 
-            if (px >= padding - 5 && px <= width - padding + 5 && py >= padding - 5 && py <= height - padding + 5) {
-                points.push(`${px},${py}`);
+            if (px >= PADDING - 10 && px <= WIDTH - PADDING + 10 && py >= PADDING - 10 && py <= HEIGHT - PADDING + 10) {
+                points.push(`${px.toFixed(1)},${py.toFixed(1)}`);
             }
         }
 
-        return points.length > 1 ? `M ${points.join(' L ')}` : '';
+        // Label at vertex
+        const vertexX = -b / (2 * a);
+        const vertexY = a * vertexX * vertexX + b * vertexX + c;
+        let labelX = CENTER_X + vertexX * SCALE + 10;
+        let labelY = CENTER_Y - vertexY * SCALE - 10;
+        if (a < 0) labelY = CENTER_Y - vertexY * SCALE + 20;
+        if (labelX > WIDTH - PADDING - 20) labelX = WIDTH - PADDING - 25;
+        if (labelX < PADDING) labelX = PADDING + 5;
+        if (labelY < PADDING + 10) labelY = PADDING + 15;
+        if (labelY > HEIGHT - PADDING) labelY = HEIGHT - PADDING - 5;
+
+        return {
+            path: points.length > 1 ? `M ${points.join(' L ')}` : '',
+            labelX,
+            labelY
+        };
     }
 
-    function drawHyperbola(f, params) {
-        const { centerX, centerY, scale, padding, width, height } = params;
-
-        // Parse y = k/x
+    function drawHyperbola(f) {
         let k = 1;
 
+        // Handle \frac{k}{x}
         f = f.replace(/\\frac\{(-?\d+)\}\{x\}/g, (m, n) => n + '/x');
-        f = f.replace(/−/g, '-');
+        f = f.replace(/\\frac\{(-?\d+)\}\{(\d+)x\}/g, (m, n, d) => (parseFloat(n) / parseFloat(d)) + '/x');
 
-        const match = f.match(/(-?\d+\.?\d*)\/x/);
+        const match = f.match(/(-?\d*\.?\d*)\/x/);
         if (match) {
-            k = parseFloat(match[1]);
+            let kStr = match[1];
+            if (kStr === '' || kStr === '+') k = 1;
+            else if (kStr === '-') k = -1;
+            else k = parseFloat(kStr);
         }
 
-        // Generate hyperbola path (two branches)
-        const points1 = [], points2 = [];
+        // Generate hyperbola paths (two branches)
+        const points1 = [];
+        const points2 = [];
 
         // Positive x branch
-        for (let x = 0.3; x <= 6; x += 0.1) {
+        for (let x = 0.25; x <= 7; x += 0.1) {
             const y = k / x;
-            const px = centerX + x * scale;
-            const py = centerY - y * scale;
+            const px = CENTER_X + x * SCALE;
+            const py = CENTER_Y - y * SCALE;
 
-            if (px >= padding && px <= width - padding && py >= padding && py <= height - padding) {
-                points1.push(`${px},${py}`);
+            if (px >= PADDING && px <= WIDTH - PADDING && py >= PADDING && py <= HEIGHT - PADDING) {
+                points1.push(`${px.toFixed(1)},${py.toFixed(1)}`);
             }
         }
 
         // Negative x branch
-        for (let x = -6; x <= -0.3; x += 0.1) {
+        for (let x = -7; x <= -0.25; x += 0.1) {
             const y = k / x;
-            const px = centerX + x * scale;
-            const py = centerY - y * scale;
+            const px = CENTER_X + x * SCALE;
+            const py = CENTER_Y - y * SCALE;
 
-            if (px >= padding && px <= width - padding && py >= padding && py <= height - padding) {
-                points2.push(`${px},${py}`);
+            if (px >= PADDING && px <= WIDTH - PADDING && py >= PADDING && py <= HEIGHT - PADDING) {
+                points2.push(`${px.toFixed(1)},${py.toFixed(1)}`);
             }
         }
 
@@ -390,7 +514,11 @@
         if (points1.length > 1) path += `M ${points1.join(' L ')}`;
         if (points2.length > 1) path += ` M ${points2.join(' L ')}`;
 
-        return path;
+        // Label position based on k sign
+        let labelX = k > 0 ? WIDTH - PADDING - 30 : PADDING + 5;
+        let labelY = k > 0 ? PADDING + 25 : HEIGHT - PADDING - 10;
+
+        return { path, labelX, labelY };
     }
 </script>
 
