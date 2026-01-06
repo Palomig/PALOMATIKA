@@ -58,26 +58,28 @@
             color: #34495e;
         }
 
-        .section-title {
-            font-weight: 600;
-            font-size: 16px;
-            color: #8e44ad;
-            margin: 30px 0 15px;
-            padding: 10px 15px;
-            background: #f5f0fa;
-            border-radius: 6px;
-            border-left: 4px solid #8e44ad;
-        }
-
         .zadanie {
-            margin-bottom: 25px;
+            margin-bottom: 35px;
         }
 
         .zadanie-header {
             font-weight: 700;
-            font-size: 14px;
+            font-size: 16px;
             margin-bottom: 10px;
-            color: #6c757d;
+            color: #2c3e50;
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 6px;
+            border-left: 4px solid #3498db;
+        }
+
+        .section-title {
+            font-weight: 600;
+            font-size: 15px;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+            padding-left: 15px;
+            border-left: 3px solid #95a5a6;
         }
 
         /* Statements list */
@@ -101,135 +103,69 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
 
-        .statement-item.correct {
+        .statement-item.is-true {
             border-left: 4px solid #27ae60;
-            background: #f8fff8;
+            background: #f0fff4;
         }
 
-        .statement-item.incorrect {
+        .statement-item.is-false {
             border-left: 4px solid #e74c3c;
-            background: #fff8f8;
+            background: #fff5f5;
         }
 
         .statement-number {
-            min-width: 40px;
+            min-width: 35px;
             flex-shrink: 0;
-            font-weight: 700;
+            font-weight: 600;
             color: #3498db;
-            font-size: 15px;
         }
 
         .statement-text {
             flex: 1;
-            line-height: 1.6;
         }
 
         .statement-badge {
             margin-left: 10px;
             padding: 2px 8px;
             border-radius: 4px;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 600;
-            text-transform: uppercase;
+            flex-shrink: 0;
         }
 
         .statement-badge.true {
-            background: #d4edda;
-            color: #155724;
+            background: #27ae60;
+            color: white;
         }
 
         .statement-badge.false {
-            background: #f8d7da;
-            color: #721c24;
+            background: #e74c3c;
+            color: white;
         }
 
-        /* Toggle answers button */
-        .toggle-answers {
+        /* Source info */
+        .source-info {
+            background: #e8f4fc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .source-info strong {
+            color: #2c3e50;
+        }
+
+        /* Back link */
+        .back-link {
             display: inline-block;
             margin-bottom: 20px;
-            padding: 10px 20px;
-            background: #3498db;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            transition: background 0.2s;
-        }
-
-        .toggle-answers:hover {
-            background: #2980b9;
-        }
-
-        .hide-answers .statement-badge,
-        .hide-answers .statement-item.correct,
-        .hide-answers .statement-item.incorrect {
-            display: none;
-        }
-
-        .hide-answers .statement-item {
-            border-left: 4px solid #e9ecef;
-            background: #fff;
-        }
-
-        /* Info box */
-        .info-box {
-            margin-top: 40px;
-            padding: 20px;
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            font-size: 14px;
-        }
-
-        .info-box h4 {
-            color: #495057;
-            margin-bottom: 12px;
-            font-size: 16px;
-        }
-
-        .info-box p {
-            margin-bottom: 8px;
-            color: #6c757d;
-        }
-
-        .info-box code {
-            background: #e9ecef;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 13px;
-            color: #495057;
-        }
-
-        .info-box ul {
-            margin-left: 20px;
-            margin-top: 8px;
-            color: #6c757d;
-        }
-
-        /* Navigation */
-        .nav-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding: 15px 20px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            font-family: 'Inter', sans-serif;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .nav-bar a {
-            color: #60a5fa;
+            color: #3498db;
             text-decoration: none;
             font-size: 14px;
         }
 
-        .nav-bar a:hover {
+        .back-link:hover {
             text-decoration: underline;
         }
 
@@ -237,168 +173,195 @@
         .stats {
             display: flex;
             gap: 20px;
-            margin-bottom: 20px;
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
         }
 
         .stat-item {
-            padding: 8px 15px;
             background: #f8f9fa;
+            padding: 10px 20px;
             border-radius: 6px;
+            font-size: 14px;
         }
 
-        .stat-item.true {
-            background: #d4edda;
-            color: #155724;
+        .stat-item strong {
+            color: #3498db;
         }
 
-        .stat-item.false {
-            background: #f8d7da;
-            color: #721c24;
+        /* Toggle buttons */
+        .toggle-buttons {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
-        /* Responsive */
-        @media (max-width: 900px) {
+        .toggle-btn {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: #fff;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .toggle-btn:hover {
+            background: #f8f9fa;
+        }
+
+        .toggle-btn.active {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        /* Hidden statements */
+        .statement-item.hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
             body {
                 padding: 20px;
-                font-size: 15px;
-            }
-            .title {
-                font-size: 20px;
-            }
-            .statement-item {
-                flex-direction: column;
-            }
-            .statement-number {
-                margin-bottom: 5px;
-            }
-            .statement-badge {
-                margin-left: 0;
-                margin-top: 8px;
-            }
-        }
-
-        /* Print */
-        @media print {
-            .nav-bar, .info-box, .toggle-answers {
-                display: none;
-            }
-            body {
-                padding: 20px;
-            }
-            .statement-item {
-                page-break-inside: avoid;
             }
         }
     </style>
 </head>
 <body>
+    <a href="/test/generator" class="back-link">&larr; Назад к генератору</a>
 
-<div class="nav-bar">
-    <a href="{{ route('test.pdf.index') }}">← Назад к парсеру</a>
-    <div>
-        <a href="{{ route('test.topic06') }}">06</a> |
-        <a href="{{ route('test.topic07') }}">07</a> |
-        <a href="{{ route('test.topic08') }}">08</a> |
-        <a href="{{ route('test.topic09') }}">09</a> |
-        <a href="{{ route('test.topic10') }}">10</a> |
-        <a href="{{ route('test.topic18') }}">18</a> |
-        <strong>19</strong>
+    <h1 class="title">19. Анализ геометрических высказываний</h1>
+    <p class="subtitle">Укажите номера верных утверждений</p>
+
+    <div class="source-info">
+        <strong>Источник данных:</strong> {{ $source ?? 'Manual' }}
     </div>
-</div>
-
-<button class="toggle-answers" onclick="toggleAnswers()">Показать/скрыть ответы</button>
-
-@php
-    $currentSection = '';
-@endphp
-
-@foreach($blocks as $block)
-<div class="page" id="statements-container">
-    <!-- Page Header -->
-    <div class="header">
-        <span>Е. А. Ширяева</span>
-        <span>Задачник ОГЭ 2026 (тренажер)</span>
-    </div>
-
-    <!-- Title -->
-    <div class="title">19. Анализ геометрических высказываний</div>
-    <div class="subtitle">Блок {{ $block['number'] }}. {{ $block['title'] }}</div>
 
     @php
-        $trueCount = 0;
-        $falseCount = 0;
-        foreach ($block['zadaniya'] as $zadanie) {
-            foreach ($zadanie['tasks'] ?? [] as $task) {
-                if (isset($task['correct'])) {
-                    if ($task['correct']) $trueCount++;
-                    else $falseCount++;
+        $totalStatements = 0;
+        $trueStatements = 0;
+        foreach ($blocks as $block) {
+            foreach ($block['zadaniya'] as $zadanie) {
+                foreach ($zadanie['statements'] ?? [] as $statement) {
+                    $totalStatements++;
+                    if ($statement['is_true'] ?? false) {
+                        $trueStatements++;
+                    }
                 }
             }
         }
     @endphp
 
     <div class="stats">
-        <div class="stat-item">Всего утверждений: {{ $trueCount + $falseCount }}</div>
-        <div class="stat-item true">Верных: {{ $trueCount }}</div>
-        <div class="stat-item false">Неверных: {{ $falseCount }}</div>
+        <div class="stat-item">
+            <strong>{{ count($blocks) }}</strong> блоков
+        </div>
+        <div class="stat-item">
+            <strong>{{ $totalStatements }}</strong> утверждений
+        </div>
+        <div class="stat-item">
+            <strong style="color: #27ae60;">{{ $trueStatements }}</strong> верных
+        </div>
+        <div class="stat-item">
+            <strong style="color: #e74c3c;">{{ $totalStatements - $trueStatements }}</strong> неверных
+        </div>
     </div>
 
-    @foreach($block['zadaniya'] as $zadanie)
-        @if(isset($zadanie['section']) && $zadanie['section'] !== $currentSection)
-            @php $currentSection = $zadanie['section']; @endphp
-            <div class="section-title">{{ $currentSection }}</div>
-        @endif
+    <div class="toggle-buttons">
+        <button class="toggle-btn active" onclick="filterStatements('all')">Все</button>
+        <button class="toggle-btn" onclick="filterStatements('true')">Только верные</button>
+        <button class="toggle-btn" onclick="filterStatements('false')">Только неверные</button>
+        <button class="toggle-btn" onclick="toggleAnswers()">Показать/скрыть ответы</button>
+    </div>
 
-        <div class="zadanie">
-            <ul class="statements-list">
-                @foreach($zadanie['tasks'] ?? [] as $task)
-                    @php
-                        $isCorrect = isset($task['correct']) ? $task['correct'] : null;
-                        $itemClass = '';
-                        if ($isCorrect === true) $itemClass = 'correct';
-                        elseif ($isCorrect === false) $itemClass = 'incorrect';
-                    @endphp
-                    <li class="statement-item {{ $itemClass }}">
-                        <span class="statement-number">{{ $task['id'] }}.</span>
-                        <span class="statement-text">{{ $task['text'] }}</span>
-                        @if($isCorrect !== null)
-                            <span class="statement-badge {{ $isCorrect ? 'true' : 'false' }}">
-                                {{ $isCorrect ? 'Верно' : 'Неверно' }}
-                            </span>
-                        @endif
-                    </li>
-                @endforeach
-            </ul>
+    @foreach ($blocks as $block)
+        <div class="page">
+            <div class="header">
+                <span>Е. А. Ширяева</span>
+                <span>Задачник ОГЭ 2026 (тренажер)</span>
+            </div>
+
+            <h2 class="subtitle">Блок {{ $block['number'] }}. {{ $block['title'] }}</h2>
+
+            @foreach ($block['zadaniya'] as $zadanie)
+                <div class="zadanie">
+                    <div class="zadanie-header">
+                        {{ $zadanie['instruction'] }}
+                    </div>
+
+                    @if (!empty($zadanie['section']))
+                        <div class="section-title">{{ $zadanie['section'] }}</div>
+                    @endif
+
+                    @if (($zadanie['type'] ?? '') === 'statements')
+                        <ul class="statements-list">
+                            @foreach ($zadanie['statements'] ?? [] as $statement)
+                                <li class="statement-item {{ $statement['is_true'] ? 'is-true' : 'is-false' }}"
+                                    data-is-true="{{ $statement['is_true'] ? 'true' : 'false' }}">
+                                    <span class="statement-number">{{ $statement['id'] }}.</span>
+                                    <span class="statement-text">{{ $statement['text'] }}</span>
+                                    <span class="statement-badge answer-badge {{ $statement['is_true'] ? 'true' : 'false' }}">
+                                        {{ $statement['is_true'] ? 'ВЕРНО' : 'НЕВЕРНО' }}
+                                    </span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </div>
+            @endforeach
         </div>
     @endforeach
-</div>
-@php $currentSection = ''; @endphp
-@endforeach
 
-<!-- Info box about parsing -->
-<div class="info-box">
-    <h4>Информация о парсинге</h4>
-    <p><strong>Тема:</strong> 19. Анализ геометрических высказываний</p>
-    <p><strong>Источник данных:</strong> {{ $source ?? 'Manual' }}</p>
-    <p><strong>PDF файл:</strong> <code>storage/app/pdf/task_19.pdf</code></p>
-    <p><strong>Контроллер:</strong> <code>TestPdfController::getAllBlocksData19()</code></p>
-    <p><strong>Структура данных:</strong></p>
-    <ul>
-        <li>Блок 1: ФИПИ (117 утверждений по 9 разделам геометрии)</li>
-        <li>Блок 2: ФИПИ. Расширенная версия - старый ОБЗ (71 утверждение по 7 разделам)</li>
-        <li>Всего: 188 утверждений с ответами (верно/неверно)</li>
-    </ul>
-    <p><strong>Разделы:</strong> Начальные сведения, Параллельные прямые, Треугольники, Четырёхугольники, Параллелограмм, Прямоугольник/Квадрат, Трапеция, Ромб, Окружность</p>
-</div>
+    <div style="text-align: center; padding: 20px; color: #666; font-size: 14px;">
+        Всего утверждений: {{ $totalStatements }} (верных: {{ $trueStatements }}, неверных: {{ $totalStatements - $trueStatements }})
+    </div>
 
-<script>
-    function toggleAnswers() {
-        const container = document.body;
-        container.classList.toggle('hide-answers');
-    }
-</script>
+    <script>
+        let answersVisible = true;
 
+        function filterStatements(filter) {
+            const items = document.querySelectorAll('.statement-item');
+            const buttons = document.querySelectorAll('.toggle-btn');
+
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            items.forEach(item => {
+                const isTrue = item.dataset.isTrue === 'true';
+
+                if (filter === 'all') {
+                    item.classList.remove('hidden');
+                } else if (filter === 'true') {
+                    item.classList.toggle('hidden', !isTrue);
+                } else if (filter === 'false') {
+                    item.classList.toggle('hidden', isTrue);
+                }
+            });
+        }
+
+        function toggleAnswers() {
+            answersVisible = !answersVisible;
+            const badges = document.querySelectorAll('.answer-badge');
+            const items = document.querySelectorAll('.statement-item');
+
+            badges.forEach(badge => {
+                badge.style.display = answersVisible ? '' : 'none';
+            });
+
+            items.forEach(item => {
+                if (!answersVisible) {
+                    item.classList.remove('is-true', 'is-false');
+                    item.style.borderLeftColor = '#ddd';
+                    item.style.background = '#fff';
+                } else {
+                    const isTrue = item.dataset.isTrue === 'true';
+                    item.classList.add(isTrue ? 'is-true' : 'is-false');
+                    item.style.borderLeftColor = '';
+                    item.style.background = '';
+                }
+            });
+        }
+    </script>
 </body>
 </html>
