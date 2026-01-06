@@ -195,6 +195,32 @@
             font-size: 1.1em !important;
         }
 
+        /* Task images */
+        .task-image {
+            margin: 8px 0;
+        }
+
+        .task-image img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            background: #fff;
+        }
+
+        .zadanie-image {
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .zadanie-image img {
+            max-width: 500px;
+            height: auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            background: #fff;
+        }
+
         /* Info box */
         .info-box {
             margin-top: 40px;
@@ -270,6 +296,11 @@
             @if($zadanie['type'] === 'simple_choice')
                 {{-- Simple choice with options --}}
                 <div class="simple-choice">
+                    @if(isset($zadanie['image']))
+                        <div class="zadanie-image">
+                            <img src="/images/tasks/07/{{ $zadanie['image'] }}" alt="Координатная прямая">
+                        </div>
+                    @endif
                     <div class="options">
                         @foreach($zadanie['options'] as $i => $option)
                             <span class="option">
@@ -285,13 +316,20 @@
                 @foreach($zadanie['tasks'] as $task)
                     <div class="task-row">
                         <span class="task-number">{{ $task['id'] }}</span>
-                        <div class="task-options">
-                            @foreach($task['options'] as $i => $option)
-                                <span class="option">
-                                    <span class="option-num">{{ $i + 1 }})</span>
-                                    <span>{{ $option }}</span>
-                                </span>
-                            @endforeach
+                        <div class="task-content">
+                            @if(isset($task['image']))
+                                <div class="task-image">
+                                    <img src="/images/tasks/07/{{ $task['image'] }}" alt="Координатная прямая">
+                                </div>
+                            @endif
+                            <div class="task-options">
+                                @foreach($task['options'] as $i => $option)
+                                    <span class="option">
+                                        <span class="option-num">{{ $i + 1 }})</span>
+                                        <span>{{ $option }}</span>
+                                    </span>
+                                @endforeach
+                            </div>
                         </div>
                     </div>
                 @endforeach
@@ -302,6 +340,11 @@
                     <div class="task-row">
                         <span class="task-number">{{ $task['id'] }}</span>
                         <div class="task-content">
+                            @if(isset($task['image']))
+                                <div class="task-image">
+                                    <img src="/images/tasks/07/{{ $task['image'] }}" alt="Координатная прямая">
+                                </div>
+                            @endif
                             <span class="task-expression">${{ $task['expression'] }}$</span>
                             <div class="task-options">
                                 @foreach($task['options'] as $i => $option)

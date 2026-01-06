@@ -444,12 +444,12 @@ class TestPdfController extends Controller
                         'instruction' => 'На координатной прямой отмечено число a. Какое из утверждений для этого числа является верным?',
                         'type' => 'choice',
                         'tasks' => [
-                            ['id' => 1, 'options' => ['$a - 6 < 0$', '$6 - a > 0$', '$a - 7 > 0$', '$8 - a < 0$']],
-                            ['id' => 2, 'options' => ['$5 - a < 0$', '$a - 6 > 0$', '$a - 5 < 0$', '$4 - a > 0$']],
-                            ['id' => 3, 'options' => ['$a - 4 < 0$', '$a - 6 > 0$', '$6 - a > 0$', '$7 - a < 0$']],
-                            ['id' => 4, 'options' => ['$8 - a > 0$', '$8 - a < 0$', '$a - 7 < 0$', '$a - 9 > 0$']],
-                            ['id' => 5, 'options' => ['$4 - a > 0$', '$a - 7 < 0$', '$a - 8 > 0$', '$8 - a < 0$']],
-                            ['id' => 6, 'options' => ['$4 - a > 0$', '$a - 4 < 0$', '$a - 3 < 0$', '$6 - a > 0$']],
+                            ['id' => 1, 'image' => 'img-000.png', 'options' => ['$a - 6 < 0$', '$6 - a > 0$', '$a - 7 > 0$', '$8 - a < 0$']],
+                            ['id' => 2, 'image' => 'img-001.png', 'options' => ['$5 - a < 0$', '$a - 6 > 0$', '$a - 5 < 0$', '$4 - a > 0$']],
+                            ['id' => 3, 'image' => 'img-002.png', 'options' => ['$a - 4 < 0$', '$a - 6 > 0$', '$6 - a > 0$', '$7 - a < 0$']],
+                            ['id' => 4, 'image' => 'img-003.png', 'options' => ['$8 - a > 0$', '$8 - a < 0$', '$a - 7 < 0$', '$a - 9 > 0$']],
+                            ['id' => 5, 'image' => 'img-004.png', 'options' => ['$4 - a > 0$', '$a - 7 < 0$', '$a - 8 > 0$', '$8 - a < 0$']],
+                            ['id' => 6, 'image' => 'img-005.png', 'options' => ['$4 - a > 0$', '$a - 4 < 0$', '$a - 3 < 0$', '$6 - a > 0$']],
                         ]
                     ],
                     // Задание 2 - Два числа x и y на прямой
@@ -458,12 +458,12 @@ class TestPdfController extends Controller
                         'instruction' => 'На координатной прямой отмечены числа. Какое из приведённых утверждений для этих чисел верно?',
                         'type' => 'choice',
                         'tasks' => [
-                            ['id' => 1, 'options' => ['$x + y < 0$', '$xy < 0$', '$y - x > 0$', '$x^2 y > 0$']],
-                            ['id' => 2, 'options' => ['$a + b > 0$', '$a^2 b < 0$', '$ab > 0$', '$a - b < 0$']],
-                            ['id' => 3, 'options' => ['$xy > 0$', '$x^2 y < 0$', '$x + y > 0$', '$x - y < 0$']],
-                            ['id' => 4, 'options' => ['$a + b < 0$', '$a - b > 0$', '$ab^2 > 0$', '$ab < 0$']],
-                            ['id' => 5, 'options' => ['$xy^2 > 0$', '$x - y < 0$', '$x + y > 0$', '$xy > 0$']],
-                            ['id' => 6, 'options' => ['$ab^2 > 0$', '$a - b < 0$', '$ab > 0$', '$a + b > 0$']],
+                            ['id' => 1, 'image' => 'img-006.png', 'options' => ['$x + y < 0$', '$xy < 0$', '$y - x > 0$', '$x^2 y > 0$']],
+                            ['id' => 2, 'image' => 'img-007.png', 'options' => ['$a + b > 0$', '$a^2 b < 0$', '$ab > 0$', '$a - b < 0$']],
+                            ['id' => 3, 'image' => 'img-008.png', 'options' => ['$xy > 0$', '$x^2 y < 0$', '$x + y > 0$', '$x - y < 0$']],
+                            ['id' => 4, 'image' => 'img-009.png', 'options' => ['$a + b < 0$', '$a - b > 0$', '$ab^2 > 0$', '$ab < 0$']],
+                            ['id' => 5, 'image' => 'img-010.png', 'options' => ['$xy^2 > 0$', '$x - y < 0$', '$x + y > 0$', '$xy > 0$']],
+                            ['id' => 6, 'image' => 'img-011.png', 'options' => ['$ab^2 > 0$', '$a - b < 0$', '$ab > 0$', '$a + b > 0$']],
                         ]
                     ],
                     // Задание 3 - Разности q-p, q-r, r-p положительна
@@ -471,6 +471,7 @@ class TestPdfController extends Controller
                         'number' => 3,
                         'instruction' => 'На координатной прямой отмечены числа p, q и r. Какая из разностей q − p, q − r, r − p положительна?',
                         'type' => 'simple_choice',
+                        'image' => 'img-012.png',
                         'options' => ['$q - p$', '$q - r$', '$r - p$', 'невозможно определить'],
                     ],
                     // Задание 4 - Разности z-x, y-z, x-y отрицательна
@@ -478,6 +479,7 @@ class TestPdfController extends Controller
                         'number' => 4,
                         'instruction' => 'На координатной прямой отмечены числа x, y и z. Какая из разностей z − x, y − z, x − y отрицательна?',
                         'type' => 'simple_choice',
+                        'image' => 'img-013.png',
                         'options' => ['$z - x$', '$y - z$', '$x - y$', 'невозможно определить'],
                     ],
                     // Задание 5 - Разности a-b, a-c, c-b положительна
@@ -485,6 +487,7 @@ class TestPdfController extends Controller
                         'number' => 5,
                         'instruction' => 'На координатной прямой отмечены числа a, b и c. Какая из разностей a − b, a − c, c − b положительна?',
                         'type' => 'simple_choice',
+                        'image' => 'img-014.png',
                         'options' => ['$a - b$', '$a - c$', '$c - b$', 'невозможно определить'],
                     ],
                     // Задание 6 - Разности q-p, q-r, r-p отрицательна
@@ -492,6 +495,7 @@ class TestPdfController extends Controller
                         'number' => 6,
                         'instruction' => 'На координатной прямой отмечены числа p, q и r. Какая из разностей q − p, q − r, r − p отрицательна?',
                         'type' => 'simple_choice',
+                        'image' => 'img-015.png',
                         'options' => ['$q - p$', '$q - r$', '$r - p$', 'невозможно определить'],
                     ],
                     // Задание 7 - Разности z-x, y-z, x-y положительна
@@ -499,6 +503,7 @@ class TestPdfController extends Controller
                         'number' => 7,
                         'instruction' => 'На координатной прямой отмечены числа x, y и z. Какая из разностей z − x, y − z, x − y положительна?',
                         'type' => 'simple_choice',
+                        'image' => 'img-016.png',
                         'options' => ['$z - x$', '$y - z$', '$x - y$', 'невозможно определить'],
                     ],
                     // Задание 8 - Разности a-b, a-c, c-b отрицательна
@@ -506,6 +511,7 @@ class TestPdfController extends Controller
                         'number' => 8,
                         'instruction' => 'На координатной прямой отмечены числа a, b и c. Какая из разностей a − b, a − c, c − b отрицательна?',
                         'type' => 'simple_choice',
+                        'image' => 'img-017.png',
                         'options' => ['$a - b$', '$a - c$', '$c - b$', 'невозможно определить'],
                     ],
                     // Задание 9 - Точка соответствует числу
@@ -514,12 +520,12 @@ class TestPdfController extends Controller
                         'instruction' => 'На координатной прямой отмечены точки A, B, C и D. Одна из них соответствует данному числу. Какая это точка?',
                         'type' => 'fraction_choice',
                         'tasks' => [
-                            ['id' => 1, 'expression' => '\frac{63}{11}', 'options' => ['A', 'B', 'C', 'D']],
-                            ['id' => 2, 'expression' => '\frac{116}{15}', 'options' => ['A', 'B', 'C', 'D']],
-                            ['id' => 3, 'expression' => '\frac{107}{13}', 'options' => ['A', 'B', 'C', 'D']],
-                            ['id' => 4, 'expression' => '\frac{100}{19}', 'options' => ['A', 'B', 'C', 'D']],
-                            ['id' => 5, 'expression' => '\frac{132}{17}', 'options' => ['A', 'B', 'C', 'D']],
-                            ['id' => 6, 'expression' => '\frac{92}{9}', 'options' => ['A', 'B', 'C', 'D']],
+                            ['id' => 1, 'image' => 'img-018.png', 'expression' => '\frac{63}{11}', 'options' => ['A', 'B', 'C', 'D']],
+                            ['id' => 2, 'image' => 'img-019.png', 'expression' => '\frac{116}{15}', 'options' => ['A', 'B', 'C', 'D']],
+                            ['id' => 3, 'image' => 'img-020.png', 'expression' => '\frac{107}{13}', 'options' => ['A', 'B', 'C', 'D']],
+                            ['id' => 4, 'image' => 'img-021.png', 'expression' => '\frac{100}{19}', 'options' => ['A', 'B', 'C', 'D']],
+                            ['id' => 5, 'image' => 'img-022.png', 'expression' => '\frac{132}{17}', 'options' => ['A', 'B', 'C', 'D']],
+                            ['id' => 6, 'image' => 'img-023.png', 'expression' => '\frac{92}{9}', 'options' => ['A', 'B', 'C', 'D']],
                         ]
                     ],
                     // Задание 10 - Между какими целыми числами
