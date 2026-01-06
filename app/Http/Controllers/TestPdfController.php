@@ -33,10 +33,13 @@ class TestPdfController extends Controller
     {
         $availableTopics = $this->taskGenerator->getAvailableTopics();
 
-        // Add manual topics (06, 07) which have structured data in controller
+        // Add manual topics (06, 07, 08, 09, 10) which have structured data in controller
         $manualTopics = [
             ['topic_id' => '06', 'title' => 'Вычисления', 'tasks_count' => 174],
             ['topic_id' => '07', 'title' => 'Числа, координатная прямая', 'tasks_count' => 85],
+            ['topic_id' => '08', 'title' => 'Квадратные корни и степени', 'tasks_count' => 278],
+            ['topic_id' => '09', 'title' => 'Уравнения', 'tasks_count' => 177],
+            ['topic_id' => '10', 'title' => 'Теория вероятностей', 'tasks_count' => 148],
         ];
 
         // Merge, avoiding duplicates
@@ -78,11 +81,17 @@ class TestPdfController extends Controller
         foreach ($topicIds as $topicId) {
             $topicId = str_pad($topicId, 2, '0', STR_PAD_LEFT);
 
-            // Check if it's a manual topic (06, 07)
+            // Check if it's a manual topic (06, 07, 08, 09, 10)
             if ($topicId === '06') {
                 $tasks = $this->getRandomTasksFromManualData06($tasksPerTopic);
             } elseif ($topicId === '07') {
                 $tasks = $this->getRandomTasksFromManualData07($tasksPerTopic);
+            } elseif ($topicId === '08') {
+                $tasks = $this->getRandomTasksFromManualData08($tasksPerTopic);
+            } elseif ($topicId === '09') {
+                $tasks = $this->getRandomTasksFromManualData09($tasksPerTopic);
+            } elseif ($topicId === '10') {
+                $tasks = $this->getRandomTasksFromManualData10($tasksPerTopic);
             } else {
                 $tasks = $this->taskGenerator->getRandomTasksFromTopic($topicId, $tasksPerTopic);
             }
@@ -116,6 +125,33 @@ class TestPdfController extends Controller
     {
         $blocks = $this->getAllBlocksData07();
         return $this->extractRandomTasks($blocks, '07', 'Числа, координатная прямая', $count);
+    }
+
+    /**
+     * Get random tasks from manual topic 08 data
+     */
+    protected function getRandomTasksFromManualData08(int $count): array
+    {
+        $blocks = $this->getAllBlocksData08();
+        return $this->extractRandomTasks($blocks, '08', 'Квадратные корни и степени', $count);
+    }
+
+    /**
+     * Get random tasks from manual topic 09 data
+     */
+    protected function getRandomTasksFromManualData09(int $count): array
+    {
+        $blocks = $this->getAllBlocksData09();
+        return $this->extractRandomTasks($blocks, '09', 'Уравнения', $count);
+    }
+
+    /**
+     * Get random tasks from manual topic 10 data
+     */
+    protected function getRandomTasksFromManualData10(int $count): array
+    {
+        $blocks = $this->getAllBlocksData10();
+        return $this->extractRandomTasks($blocks, '10', 'Теория вероятностей', $count);
     }
 
     /**
@@ -1197,5 +1233,1318 @@ class TestPdfController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * Display parsed tasks from PDF for topic 08
+     */
+    public function topic08()
+    {
+        $blocks = $this->getAllBlocksData08();
+        $source = 'Manual (все блоки из PDF)';
+
+        return view('test.topic08', compact('blocks', 'source'));
+    }
+
+    /**
+     * Get all blocks data for Topic 08 - Квадратные корни и степени
+     */
+    protected function getAllBlocksData08(): array
+    {
+        return [
+            // =====================
+            // БЛОК 1. ФИПИ
+            // =====================
+            [
+                'number' => 1,
+                'title' => 'ФИПИ',
+                'zadaniya' => [
+                    // I) Иррациональные числа и выражения
+                    // Задание 1 - Корни с параметрами
+                    [
+                        'number' => 1,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\sqrt{\frac{16a^{14}}{a^8}} \text{ при } a = 3'],
+                            ['id' => 2, 'expression' => '\sqrt{\frac{36a^{21}}{a^{15}}} \text{ при } a = 2'],
+                            ['id' => 3, 'expression' => '\sqrt{\frac{25a^{19}}{a^{11}}} \text{ при } a = 2'],
+                            ['id' => 4, 'expression' => '\sqrt{\frac{64a^{17}}{a^{15}}} \text{ при } a = 7'],
+                            ['id' => 5, 'expression' => '\sqrt{\frac{9a^{14}}{a^8}} \text{ при } a = 2'],
+                            ['id' => 6, 'expression' => '\sqrt{\frac{16a^{12}}{a^{10}}} \text{ при } a = 5'],
+                            ['id' => 7, 'expression' => '\sqrt{\frac{9a^{19}}{a^9}} \text{ при } a = 2'],
+                            ['id' => 8, 'expression' => '\sqrt{\frac{4a^{16}}{a^{12}}} \text{ при } a = 5'],
+                            ['id' => 9, 'expression' => '\sqrt{\frac{36x^4}{y^2}} \text{ при } x = 6, y = 9'],
+                            ['id' => 10, 'expression' => '\sqrt{\frac{25x^2}{y^4}} \text{ при } x = 10, y = 5'],
+                            ['id' => 11, 'expression' => '\sqrt{\frac{4x^2}{y^6}} \text{ при } x = 8, y = 2'],
+                            ['id' => 12, 'expression' => '\sqrt{\frac{16x^4}{y^6}} \text{ при } x = 4, y = 2'],
+                            ['id' => 13, 'expression' => '\sqrt{\frac{25x^4}{y^6}} \text{ при } x = 10, y = 5'],
+                            ['id' => 14, 'expression' => '\sqrt{\frac{36x^2}{y^4}} \text{ при } x = 6, y = 2'],
+                            ['id' => 15, 'expression' => '\sqrt{\frac{16x^8}{y^6}} \text{ при } x = 2, y = 4'],
+                            ['id' => 16, 'expression' => '\sqrt{\frac{9x^4}{y^6}} \text{ при } x = 9, y = 3'],
+                        ]
+                    ],
+                    // Задание 2 - Корни со степенями xy
+                    [
+                        'number' => 2,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\sqrt{\frac{1}{16}x^6y^4} \text{ при } x = 2, y = 5'],
+                            ['id' => 2, 'expression' => '\sqrt{\frac{1}{25}x^8y^2} \text{ при } x = 3, y = 5'],
+                            ['id' => 3, 'expression' => '\sqrt{\frac{1}{4}x^2y^8} \text{ при } x = 5, y = 2'],
+                            ['id' => 4, 'expression' => '\sqrt{\frac{1}{9}x^4y^{10}} \text{ при } x = 3, y = 2'],
+                            ['id' => 5, 'expression' => '\sqrt{\frac{1}{4}x^8y^4} \text{ при } x = 2, y = 3'],
+                            ['id' => 6, 'expression' => '\sqrt{\frac{1}{25}x^4y^8} \text{ при } x = 5, y = 2'],
+                            ['id' => 7, 'expression' => '\sqrt{\frac{1}{9}x^2y^6} \text{ при } x = 7, y = 3'],
+                            ['id' => 8, 'expression' => '\sqrt{\frac{1}{16}x^{10}y^2} \text{ при } x = 2, y = 3'],
+                        ]
+                    ],
+                    // Задание 3 - Корни с отрицательными числами
+                    [
+                        'number' => 3,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\sqrt{a^2 \cdot (-a)^2} \text{ при } a = 4'],
+                            ['id' => 2, 'expression' => '\sqrt{a^6 \cdot (-a)^4} \text{ при } a = 2'],
+                            ['id' => 3, 'expression' => '\sqrt{a^6 \cdot (-a)^2} \text{ при } a = 3'],
+                            ['id' => 4, 'expression' => '\sqrt{a^2 \cdot (-a)^4} \text{ при } a = 4'],
+                            ['id' => 5, 'expression' => '\sqrt{(-a)^4 \cdot a^2} \text{ при } a = 5'],
+                            ['id' => 6, 'expression' => '\sqrt{(-a)^8 \cdot a^2} \text{ при } a = 2'],
+                            ['id' => 7, 'expression' => '\sqrt{(-a)^2 \cdot a^4} \text{ при } a = 3'],
+                            ['id' => 8, 'expression' => '\sqrt{(-a)^2 \cdot a^2} \text{ при } a = 5'],
+                        ]
+                    ],
+                    // Задание 4 - Полные квадраты
+                    [
+                        'number' => 4,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\sqrt{a^2 + 8ab + 16b^2} \text{ при } a = 3\frac{3}{7}, b = \frac{1}{7}'],
+                            ['id' => 2, 'expression' => '\sqrt{a^2 + 12ab + 36b^2} \text{ при } a = 7\frac{2}{5}, b = \frac{3}{5}'],
+                            ['id' => 3, 'expression' => '\sqrt{a^2 + 10ab + 25b^2} \text{ при } a = 1\frac{6}{13}, b = \frac{4}{13}'],
+                            ['id' => 4, 'expression' => '\sqrt{a^2 + 8ab + 16b^2} \text{ при } a = 3\frac{2}{3}, b = \frac{1}{3}'],
+                            ['id' => 5, 'expression' => '\sqrt{9a^2 + 6ab + b^2} \text{ при } a = \frac{5}{13}, b = 6\frac{11}{13}'],
+                            ['id' => 6, 'expression' => '\sqrt{16a^2 + 8ab + b^2} \text{ при } a = \frac{3}{11}, b = 5\frac{10}{11}'],
+                            ['id' => 7, 'expression' => '\sqrt{25a^2 + 10ab + b^2} \text{ при } a = \frac{4}{9}, b = 3\frac{7}{9}'],
+                            ['id' => 8, 'expression' => '\sqrt{36a^2 + 12ab + b^2} \text{ при } a = \frac{4}{5}, b = 8\frac{1}{5}'],
+                            ['id' => 9, 'expression' => '\sqrt{a^2 - 6ab + 9b^2} \text{ при } a = 3, b = 6'],
+                            ['id' => 10, 'expression' => '\sqrt{a^2 - 12ab + 36b^2} \text{ при } a = 8, b = 3'],
+                            ['id' => 11, 'expression' => '\sqrt{a^2 - 8ab + 16b^2} \text{ при } a = 4, b = 3'],
+                            ['id' => 12, 'expression' => '\sqrt{a^2 - 10ab + 25b^2} \text{ при } a = 7, b = 2'],
+                            ['id' => 13, 'expression' => '\sqrt{a^2 + 10ab + 25b^2} \text{ при } a = 8, b = -2'],
+                            ['id' => 14, 'expression' => '\sqrt{a^2 + 6ab + 9b^2} \text{ при } a = 5, b = -4'],
+                            ['id' => 15, 'expression' => '\sqrt{a^2 + 12ab + 36b^2} \text{ при } a = 7, b = -3'],
+                            ['id' => 16, 'expression' => '\sqrt{a^2 + 4ab + 4b^2} \text{ при } a = 2, b = -4'],
+                        ]
+                    ],
+                    // Задание 5 - Упрощение радикалов
+                    [
+                        'number' => 5,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '(\sqrt{20} - \sqrt{5}) \cdot \sqrt{5}'],
+                            ['id' => 2, 'expression' => '(\sqrt{18} - \sqrt{2}) \cdot \sqrt{2}'],
+                            ['id' => 3, 'expression' => '(\sqrt{48} - \sqrt{3}) \cdot \sqrt{3}'],
+                            ['id' => 4, 'expression' => '(\sqrt{50} + \sqrt{2}) \cdot \sqrt{2}'],
+                            ['id' => 5, 'expression' => '(\sqrt{45} + \sqrt{5}) \cdot \sqrt{5}'],
+                            ['id' => 6, 'expression' => '(\sqrt{27} + \sqrt{3}) \cdot \sqrt{3}'],
+                            ['id' => 7, 'expression' => '\sqrt{5} \cdot \sqrt{18} \cdot \sqrt{10}'],
+                            ['id' => 8, 'expression' => '\sqrt{7} \cdot \sqrt{12} \cdot \sqrt{21}'],
+                            ['id' => 9, 'expression' => '\sqrt{2} \cdot \sqrt{45} \cdot \sqrt{10}'],
+                            ['id' => 10, 'expression' => '\sqrt{7} \cdot \sqrt{45} \cdot \sqrt{35}'],
+                            ['id' => 11, 'expression' => '\sqrt{11} \cdot \sqrt{32} \cdot \sqrt{22}'],
+                            ['id' => 12, 'expression' => '\sqrt{13} \cdot \sqrt{18} \cdot \sqrt{26}'],
+                        ]
+                    ],
+                    // Задание 6 - Дроби с радикалами
+                    [
+                        'number' => 6,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{\sqrt{21} \cdot \sqrt{14}}{\sqrt{6}}'],
+                            ['id' => 2, 'expression' => '\frac{\sqrt{35} \cdot \sqrt{21}}{\sqrt{15}}'],
+                            ['id' => 3, 'expression' => '\frac{\sqrt{22} \cdot \sqrt{33}}{\sqrt{6}}'],
+                            ['id' => 4, 'expression' => '\frac{\sqrt{65} \cdot \sqrt{13}}{\sqrt{5}}'],
+                            ['id' => 5, 'expression' => '\frac{\sqrt{8} \cdot \sqrt{192}}{\sqrt{24}}'],
+                            ['id' => 6, 'expression' => '\frac{\sqrt{75} \cdot \sqrt{10}}{\sqrt{30}}'],
+                        ]
+                    ],
+                    // Задание 7 - Сложные радикальные выражения
+                    [
+                        'number' => 7,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '5\sqrt{11} \cdot 2\sqrt{2} \cdot \sqrt{22}'],
+                            ['id' => 2, 'expression' => '7\sqrt{15} \cdot 2\sqrt{2} \cdot \sqrt{30}'],
+                            ['id' => 3, 'expression' => '4\sqrt{17} \cdot 5\sqrt{2} \cdot \sqrt{34}'],
+                            ['id' => 4, 'expression' => '4\sqrt{5} \cdot 3\sqrt{3} \cdot \sqrt{15}'],
+                            ['id' => 5, 'expression' => '10\sqrt{7} \cdot 2\sqrt{6} \cdot \sqrt{42}'],
+                            ['id' => 6, 'expression' => '5\sqrt{13} \cdot 2\sqrt{3} \cdot \sqrt{39}'],
+                        ]
+                    ],
+                    // Задание 8 - Степени и корни
+                    [
+                        'number' => 8,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\sqrt{6^4}'],
+                            ['id' => 2, 'expression' => '\sqrt{5^6}'],
+                            ['id' => 3, 'expression' => '\sqrt{4^5}'],
+                            ['id' => 4, 'expression' => '\sqrt{9^3}'],
+                            ['id' => 5, 'expression' => '\sqrt{8^4}'],
+                            ['id' => 6, 'expression' => '\sqrt{3^6}'],
+                            ['id' => 7, 'expression' => '\frac{(2\sqrt{10})^2}{160}'],
+                            ['id' => 8, 'expression' => '\frac{(3\sqrt{5})^2}{30}'],
+                            ['id' => 9, 'expression' => '\frac{(4\sqrt{2})^2}{64}'],
+                            ['id' => 10, 'expression' => '\frac{72}{(2\sqrt{3})^2}'],
+                            ['id' => 11, 'expression' => '\frac{160}{(2\sqrt{5})^2}'],
+                            ['id' => 12, 'expression' => '\frac{200}{(5\sqrt{2})^2}'],
+                        ]
+                    ],
+                    // Задание 9 - Сопряжённые выражения
+                    [
+                        'number' => 9,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '(\sqrt{17} - 3)(\sqrt{17} + 3)'],
+                            ['id' => 2, 'expression' => '(\sqrt{23} - 2)(\sqrt{23} + 2)'],
+                            ['id' => 3, 'expression' => '(\sqrt{47} - 5)(\sqrt{47} + 5)'],
+                            ['id' => 4, 'expression' => '(\sqrt{29} - 4)(\sqrt{29} + 4)'],
+                            ['id' => 5, 'expression' => '(\sqrt{41} - 3)(\sqrt{41} + 3)'],
+                            ['id' => 6, 'expression' => '(\sqrt{13} - 2)(\sqrt{13} + 2)'],
+                            ['id' => 7, 'expression' => '(\sqrt{7} - 3)(\sqrt{7} + 3)'],
+                            ['id' => 8, 'expression' => '(\sqrt{13} - 2)(\sqrt{13} + 2)'],
+                            ['id' => 9, 'expression' => '(\sqrt{17} - 5)(\sqrt{17} + 5)'],
+                            ['id' => 10, 'expression' => '(\sqrt{19} - 2)(\sqrt{19} + 2)'],
+                            ['id' => 11, 'expression' => '(\sqrt{5} - 3)(\sqrt{5} + 3)'],
+                            ['id' => 12, 'expression' => '(\sqrt{7} - 5)(\sqrt{7} + 5)'],
+                            ['id' => 13, 'expression' => '(\sqrt{19} - 7)^2 + 14\sqrt{19}'],
+                            ['id' => 14, 'expression' => '(\sqrt{13} - 3)^2 + 6\sqrt{13}'],
+                            ['id' => 15, 'expression' => '(\sqrt{11} - 7)^2 + 14\sqrt{11}'],
+                            ['id' => 16, 'expression' => '(\sqrt{5} + 9)^2 - 18\sqrt{5}'],
+                            ['id' => 17, 'expression' => '(\sqrt{17} + 2)^2 - 4\sqrt{17}'],
+                            ['id' => 18, 'expression' => '(\sqrt{3} + 8)^2 - 16\sqrt{3}'],
+                        ]
+                    ],
+                    // Задание 10 - Суммы дробей с радикалами
+                    [
+                        'number' => 10,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{1}{2 + \sqrt{3}} + \frac{1}{2 - \sqrt{3}}'],
+                            ['id' => 2, 'expression' => '\frac{1}{5 + \sqrt{23}} + \frac{1}{5 - \sqrt{23}}'],
+                            ['id' => 3, 'expression' => '\frac{1}{6 + \sqrt{35}} + \frac{1}{6 - \sqrt{35}}'],
+                            ['id' => 4, 'expression' => '\frac{1}{4 + \sqrt{15}} + \frac{1}{4 - \sqrt{15}}'],
+                            ['id' => 5, 'expression' => '\frac{1}{7 + \sqrt{47}} + \frac{1}{7 - \sqrt{47}}'],
+                            ['id' => 6, 'expression' => '\frac{1}{3 + \sqrt{7}} + \frac{1}{3 - \sqrt{7}}'],
+                        ]
+                    ],
+                    // Задание 11 - Разности дробей с радикалами
+                    [
+                        'number' => 11,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{1}{\sqrt{5} - 2} - \frac{1}{\sqrt{5} + 2}'],
+                            ['id' => 2, 'expression' => '\frac{1}{\sqrt{10} - 3} - \frac{1}{\sqrt{10} + 3}'],
+                            ['id' => 3, 'expression' => '\frac{1}{\sqrt{37} - 6} - \frac{1}{\sqrt{37} + 6}'],
+                            ['id' => 4, 'expression' => '\frac{1}{\sqrt{17} - 4} - \frac{1}{\sqrt{17} + 4}'],
+                            ['id' => 5, 'expression' => '\frac{1}{\sqrt{13} - 3} - \frac{1}{\sqrt{13} + 3}'],
+                            ['id' => 6, 'expression' => '\frac{1}{\sqrt{27} - 5} - \frac{1}{\sqrt{27} + 5}'],
+                        ]
+                    ],
+                    // II) Степенные выражения
+                    // Задание 12 - Степени с параметрами
+                    [
+                        'number' => 12,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{a^9 \cdot a^{12}}{a^{18}} \text{ при } a = 4'],
+                            ['id' => 2, 'expression' => '\frac{a^{12} \cdot a^6}{a^{14}} \text{ при } a = 3'],
+                            ['id' => 3, 'expression' => '\frac{a^{11} \cdot a^9}{a^{18}} \text{ при } a = 7'],
+                            ['id' => 4, 'expression' => '\frac{a^9 \cdot a^8}{a^{12}} \text{ при } a = 2'],
+                            ['id' => 5, 'expression' => '\frac{a^{16} \cdot a^{-7}}{a^8} \text{ при } a = 3'],
+                            ['id' => 6, 'expression' => '\frac{a^{18} \cdot a^{-6}}{a^{10}} \text{ при } a = 5'],
+                            ['id' => 7, 'expression' => '\frac{a^{17} \cdot a^{-6}}{a^9} \text{ при } a = 4'],
+                            ['id' => 8, 'expression' => '\frac{a^{19} \cdot a^{-11}}{a^5} \text{ при } a = 5'],
+                            ['id' => 9, 'expression' => '\frac{(a^4)^5}{a^{18}} \text{ при } a = 6'],
+                            ['id' => 10, 'expression' => '\frac{(a^8)^2}{a^{11}} \text{ при } a = 2'],
+                            ['id' => 11, 'expression' => '\frac{(a^8)^2}{a^{13}} \text{ при } a = 5'],
+                            ['id' => 12, 'expression' => '\frac{(a^3)^5}{a^{11}} \text{ при } a = 3'],
+                        ]
+                    ],
+                    // Задание 13 - Степени с делением
+                    [
+                        'number' => 13,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => 'a^6 \cdot a^{18} : a^{20} \text{ при } a = 2'],
+                            ['id' => 2, 'expression' => 'a^{14} \cdot a^{-5} : a^7 \text{ при } a = 3'],
+                            ['id' => 3, 'expression' => 'a^{15} \cdot a^{-8} : a^4 \text{ при } a = 4'],
+                            ['id' => 4, 'expression' => 'a^{20} \cdot a^{-9} : a^8 \text{ при } a = 2'],
+                            ['id' => 5, 'expression' => 'a^{21} \cdot a^{-8} : a^{11} \text{ при } a = 5'],
+                            ['id' => 6, 'expression' => 'a^{17} \cdot a^{-4} : a^{10} \text{ при } a = 6'],
+                        ]
+                    ],
+                    // Задание 14 - Степени со скобками
+                    [
+                        'number' => 14,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '(a^5)^3 \cdot a^{-8} \text{ при } a = 2'],
+                            ['id' => 2, 'expression' => '(a^4)^5 \cdot a^{-12} \text{ при } a = 3'],
+                            ['id' => 3, 'expression' => '(a^3)^7 \cdot a^{-15} \text{ при } a = 2'],
+                            ['id' => 4, 'expression' => '(a^6)^3 \cdot a^{-11} \text{ при } a = 4'],
+                            ['id' => 5, 'expression' => '(a^2)^9 \cdot a^{-14} \text{ при } a = 5'],
+                            ['id' => 6, 'expression' => '(a^4)^4 \cdot a^{-9} \text{ при } a = 3'],
+                        ]
+                    ],
+                    // Задание 15 - Сложные степени
+                    [
+                        'number' => 15,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{(a^3)^4}{a^5 \cdot a^4} \text{ при } a = 7'],
+                            ['id' => 2, 'expression' => '\frac{(a^5)^3}{a^8 \cdot a^4} \text{ при } a = 5'],
+                            ['id' => 3, 'expression' => '\frac{(a^4)^4}{a^9 \cdot a^5} \text{ при } a = 3'],
+                            ['id' => 4, 'expression' => '\frac{(a^2)^7}{a^6 \cdot a^5} \text{ при } a = 6'],
+                            ['id' => 5, 'expression' => '\frac{(a^6)^2}{a^3 \cdot a^6} \text{ при } a = 8'],
+                            ['id' => 6, 'expression' => '\frac{(a^3)^5}{a^7 \cdot a^4} \text{ при } a = 4'],
+                        ]
+                    ],
+                    // Задание 16 - Степени с xy
+                    [
+                        'number' => 16,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{x^5 \cdot y^4}{(xy)^3} \text{ при } x = 3, y = 4'],
+                            ['id' => 2, 'expression' => '\frac{x^6 \cdot y^5}{(xy)^4} \text{ при } x = 2, y = 5'],
+                            ['id' => 3, 'expression' => '\frac{x^7 \cdot y^3}{(xy)^4} \text{ при } x = 4, y = 3'],
+                            ['id' => 4, 'expression' => '\frac{x^4 \cdot y^6}{(xy)^3} \text{ при } x = 5, y = 2'],
+                            ['id' => 5, 'expression' => '\frac{x^8 \cdot y^4}{(xy)^5} \text{ при } x = 3, y = 6'],
+                            ['id' => 6, 'expression' => '\frac{x^5 \cdot y^7}{(xy)^4} \text{ при } x = 6, y = 3'],
+                        ]
+                    ],
+                    // Задание 17 - Степенные дроби
+                    [
+                        'number' => 17,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{6^4 \cdot 9^5}{54^4}'],
+                            ['id' => 2, 'expression' => '\frac{4^5 \cdot 16^3}{64^3}'],
+                            ['id' => 3, 'expression' => '\frac{8^3 \cdot 27^2}{72^2}'],
+                            ['id' => 4, 'expression' => '\frac{9^4 \cdot 4^6}{6^8}'],
+                            ['id' => 5, 'expression' => '\frac{25^3 \cdot 8^4}{20^4}'],
+                            ['id' => 6, 'expression' => '\frac{16^3 \cdot 27^2}{36^3}'],
+                        ]
+                    ],
+                    // Задание 18 - Степени с произведениями
+                    [
+                        'number' => 18,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{4^8 \cdot 11^{10}}{44^8}'],
+                            ['id' => 2, 'expression' => '\frac{7^8 \cdot 10^6}{70^6}'],
+                            ['id' => 3, 'expression' => '\frac{3^8 \cdot 10^5}{30^5}'],
+                            ['id' => 4, 'expression' => '\frac{5^4 \cdot 7^5}{35^4}'],
+                            ['id' => 5, 'expression' => '\frac{4^4 \cdot 7^5}{28^4}'],
+                            ['id' => 6, 'expression' => '\frac{2^6 \cdot 3^5}{6^5}'],
+                            ['id' => 7, 'expression' => '\frac{2^9 \cdot 12^{11}}{24^9}'],
+                            ['id' => 8, 'expression' => '\frac{3^{13} \cdot 7^{10}}{21^{10}}'],
+                            ['id' => 9, 'expression' => '\frac{5^9 \cdot 8^{11}}{40^9}'],
+                            ['id' => 10, 'expression' => '\frac{6^9 \cdot 11^7}{66^7}'],
+                            ['id' => 11, 'expression' => '\frac{8^7 \cdot 9^5}{72^5}'],
+                            ['id' => 12, 'expression' => '\frac{7^6 \cdot 8^4}{56^4}'],
+                            ['id' => 13, 'expression' => '\frac{(4 \cdot 5)^8}{4^6 \cdot 5^8}'],
+                            ['id' => 14, 'expression' => '\frac{(2 \cdot 6)^7}{2^5 \cdot 6^6}'],
+                            ['id' => 15, 'expression' => '\frac{(3 \cdot 10)^8}{3^6 \cdot 10^7}'],
+                            ['id' => 16, 'expression' => '\frac{(5 \cdot 7)^6}{5^4 \cdot 7^6}'],
+                            ['id' => 17, 'expression' => '\frac{(6 \cdot 7)^5}{6^5 \cdot 7^3}'],
+                            ['id' => 18, 'expression' => '\frac{(4 \cdot 9)^6}{4^4 \cdot 9^6}'],
+                            ['id' => 19, 'expression' => '\frac{(3 \cdot 8)^7}{3^7 \cdot 8^5}'],
+                            ['id' => 20, 'expression' => '\frac{(2 \cdot 10)^5}{2^2 \cdot 10^4}'],
+                        ]
+                    ],
+                    // Задание 19 - Отрицательные степени
+                    [
+                        'number' => 19,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '5^{-7} \cdot (5^5)^2'],
+                            ['id' => 2, 'expression' => '2^{-7} \cdot (2^4)^3'],
+                            ['id' => 3, 'expression' => '9^{-6} \cdot (9^2)^4'],
+                            ['id' => 4, 'expression' => '3^{-8} \cdot (3^6)^2'],
+                            ['id' => 5, 'expression' => '2^{-9} \cdot (2^7)^2'],
+                            ['id' => 6, 'expression' => '11^{-5} \cdot (11^3)^2'],
+                            ['id' => 7, 'expression' => '\frac{(8^3)^{-7}}{8^{-23}}'],
+                            ['id' => 8, 'expression' => '\frac{(3^7)^{-2}}{3^{-16}}'],
+                            ['id' => 9, 'expression' => '\frac{(2^9)^{-3}}{2^{-29}}'],
+                            ['id' => 10, 'expression' => '\frac{(5^2)^{-8}}{5^{-18}}'],
+                            ['id' => 11, 'expression' => '\frac{(7^7)^{-3}}{7^{-23}}'],
+                            ['id' => 12, 'expression' => '\frac{(6^2)^{-9}}{6^{-20}}'],
+                            ['id' => 13, 'expression' => '\frac{1}{5^{-8} \cdot 5^6}'],
+                            ['id' => 14, 'expression' => '\frac{1}{7^{-14}} \cdot \frac{1}{7^{13}}'],
+                            ['id' => 15, 'expression' => '\frac{1}{2^{-19}} \cdot \frac{1}{2^{16}}'],
+                            ['id' => 16, 'expression' => '\frac{1}{8^{-7} \cdot 8^6}'],
+                            ['id' => 17, 'expression' => '\frac{1}{3^{-10}} \cdot \frac{1}{3^8}'],
+                            ['id' => 18, 'expression' => '\frac{1}{4^{-10}} \cdot \frac{1}{4^9}'],
+                        ]
+                    ],
+                    // Задание 20 - Степенные выражения
+                    [
+                        'number' => 20,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{7^{-3} \cdot 7^{13}}{7^8}'],
+                            ['id' => 2, 'expression' => '\frac{9^{-6} \cdot 9^{15}}{9^7}'],
+                            ['id' => 3, 'expression' => '\frac{3^{-5} \cdot 3^{15}}{3^7}'],
+                            ['id' => 4, 'expression' => '\frac{2^{-3} \cdot 2^{19}}{2^{13}}'],
+                            ['id' => 5, 'expression' => '\frac{11^{-3} \cdot 11^{12}}{11^8}'],
+                            ['id' => 6, 'expression' => '\frac{13^{-4} \cdot 13^{16}}{13^{11}}'],
+                        ]
+                    ],
+                ]
+            ],
+
+            // =====================
+            // БЛОК 2. ФИПИ. Расширенная версия
+            // =====================
+            [
+                'number' => 2,
+                'title' => 'ФИПИ. Расширенная версия',
+                'zadaniya' => [
+                    // Задание 1 - Упрощение радикалов
+                    [
+                        'number' => 1,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{\sqrt{54}}{\sqrt{6}}'],
+                            ['id' => 2, 'expression' => '\frac{\sqrt{28}}{\sqrt{7}}'],
+                            ['id' => 3, 'expression' => '\frac{\sqrt{48}}{\sqrt{3}}'],
+                            ['id' => 4, 'expression' => '\frac{\sqrt{75}}{\sqrt{3}}'],
+                            ['id' => 5, 'expression' => '\frac{\sqrt{72}}{\sqrt{2}}'],
+                            ['id' => 6, 'expression' => '\frac{\sqrt{60}}{\sqrt{15}}'],
+                            ['id' => 7, 'expression' => '\sqrt{45} \cdot \sqrt{60} \cdot \sqrt{12}'],
+                            ['id' => 8, 'expression' => '\sqrt{24} \cdot \sqrt{75} \cdot \sqrt{8}'],
+                            ['id' => 9, 'expression' => '\sqrt{66} \cdot \sqrt{110} \cdot \sqrt{15}'],
+                            ['id' => 10, 'expression' => '\sqrt{42} \cdot \sqrt{75} \cdot \sqrt{14}'],
+                            ['id' => 11, 'expression' => '\sqrt{63} \cdot \sqrt{80} \cdot \sqrt{35}'],
+                            ['id' => 12, 'expression' => '\sqrt{54} \cdot \sqrt{90} \cdot \sqrt{15}'],
+                        ]
+                    ],
+                    // Задание 2 - Радикалы с числами
+                    [
+                        'number' => 2,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\sqrt{9} \cdot \sqrt{54}'],
+                            ['id' => 2, 'expression' => '\sqrt{25} \cdot \sqrt{72}'],
+                            ['id' => 3, 'expression' => '\sqrt{9} \cdot \sqrt{82}'],
+                            ['id' => 4, 'expression' => '\sqrt{4} \cdot \sqrt{36}'],
+                            ['id' => 5, 'expression' => '\sqrt{16} \cdot \sqrt{34}'],
+                            ['id' => 6, 'expression' => '\sqrt{25} \cdot \sqrt{26}'],
+                            ['id' => 7, 'expression' => '\sqrt{3} \cdot \sqrt{72} - \sqrt{3} \cdot \sqrt{24}'],
+                            ['id' => 8, 'expression' => '\sqrt{7} \cdot \sqrt{34} - \sqrt{7} \cdot \sqrt{22}'],
+                            ['id' => 9, 'expression' => '\sqrt{11} \cdot \sqrt{36} - \sqrt{11} \cdot \sqrt{22}'],
+                            ['id' => 10, 'expression' => '\sqrt{2} \cdot \sqrt{492} - \sqrt{2} \cdot \sqrt{54}'],
+                            ['id' => 11, 'expression' => '\sqrt{17} \cdot \sqrt{54} - \sqrt{17} \cdot \sqrt{22}'],
+                            ['id' => 12, 'expression' => '\sqrt{13} \cdot \sqrt{54} - \sqrt{13} \cdot \sqrt{62}'],
+                            ['id' => 13, 'expression' => '\sqrt{26} \cdot \sqrt{72} - \sqrt{102}'],
+                            ['id' => 14, 'expression' => '\sqrt{54} \cdot \sqrt{62} - \sqrt{132}'],
+                            ['id' => 15, 'expression' => '\sqrt{22} \cdot \sqrt{54} - \sqrt{492}'],
+                            ['id' => 16, 'expression' => '\sqrt{26} \cdot \sqrt{32} - \sqrt{52}'],
+                            ['id' => 17, 'expression' => '\sqrt{34} \cdot \sqrt{42} - \sqrt{22}'],
+                            ['id' => 18, 'expression' => '\sqrt{54} \cdot \sqrt{82} - \sqrt{212}'],
+                        ]
+                    ],
+                    // Задание 3 - Корни с параметрами xy
+                    [
+                        'number' => 3,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\sqrt{36x^4y^{10}} \text{ при } x = 3, y = 2'],
+                            ['id' => 2, 'expression' => '\sqrt{4x^6y^4} \text{ при } x = 3, y = 5'],
+                            ['id' => 3, 'expression' => '\sqrt{25x^6y^4} \text{ при } x = 2, y = 6'],
+                            ['id' => 4, 'expression' => '\sqrt{16x^4y^6} \text{ при } x = 6, y = 2'],
+                            ['id' => 5, 'expression' => '\sqrt{9x^8y^6} \text{ при } x = 2, y = 3'],
+                            ['id' => 6, 'expression' => '\sqrt{25x^4y^4} \text{ при } x = 3, y = 7'],
+                            ['id' => 7, 'expression' => '\sqrt{9x^4y^6} \text{ при } x = 5, y = 3'],
+                            ['id' => 8, 'expression' => '\sqrt{49x^8y^4} \text{ при } x = 2, y = 3'],
+                        ]
+                    ],
+                    // Задание 4 - Сложные корни с дробями
+                    [
+                        'number' => 4,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\sqrt{\frac{25a^9 \cdot 16b^8}{a^5b^8}} \text{ при } a = 4, b = 7'],
+                            ['id' => 2, 'expression' => '\sqrt{\frac{16a^9 \cdot 4b^3}{a^5b^3}} \text{ при } a = 9, b = 11'],
+                            ['id' => 3, 'expression' => '\sqrt{\frac{4a^{11} \cdot 9b^4}{a^7b^4}} \text{ при } a = 7, b = 9'],
+                            ['id' => 4, 'expression' => '\sqrt{\frac{25a^5 \cdot 36b^6}{a^5b^4}} \text{ при } a = 4, b = 9'],
+                            ['id' => 5, 'expression' => '\sqrt{\frac{16a^5 \cdot 36b}{ab}} \text{ при } a = 7, b = 5'],
+                            ['id' => 6, 'expression' => '\sqrt{\frac{4a^6 \cdot 25b^7}{a^2b^7}} \text{ при } a = 9, b = 7'],
+                            ['id' => 7, 'expression' => '\sqrt{\frac{36a \cdot 9b^5}{ab}} \text{ при } a = 9, b = 4'],
+                            ['id' => 8, 'expression' => '\sqrt{\frac{25a^8 \cdot 9b^5}{a^4b^5}} \text{ при } a = 7, b = 10'],
+                        ]
+                    ],
+                    // Задание 5 - Квадраты сумм и разностей
+                    [
+                        'number' => 5,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '(5 + \sqrt{2})^2 + (5 - \sqrt{2})^2'],
+                            ['id' => 2, 'expression' => '(4 + \sqrt{7})^2 + (4 - \sqrt{7})^2'],
+                            ['id' => 3, 'expression' => '(3 + \sqrt{2})^2 + (3 - \sqrt{2})^2'],
+                            ['id' => 4, 'expression' => '(4 + \sqrt{5})^2 + (4 - \sqrt{5})^2'],
+                            ['id' => 5, 'expression' => '(5 + \sqrt{7})^2 + (5 - \sqrt{7})^2'],
+                            ['id' => 6, 'expression' => '(3 + \sqrt{5})^2 + (3 - \sqrt{5})^2'],
+                            ['id' => 7, 'expression' => '\sqrt{(-17)^2}'],
+                            ['id' => 8, 'expression' => '\sqrt{(-11)^2}'],
+                            ['id' => 9, 'expression' => '\sqrt{(-19)^2}'],
+                            ['id' => 10, 'expression' => '\sqrt{(-23)^2}'],
+                            ['id' => 11, 'expression' => '\sqrt{(-5)^2}'],
+                            ['id' => 12, 'expression' => '\sqrt{(-29)^2}'],
+                            ['id' => 13, 'expression' => '(3\sqrt{2} - 5)^2 + 3\sqrt{2}'],
+                            ['id' => 14, 'expression' => '(5\sqrt{2} - 8)^2 + 5\sqrt{2}'],
+                            ['id' => 15, 'expression' => '(4\sqrt{2} - 7)^2 + 4\sqrt{2}'],
+                            ['id' => 16, 'expression' => '(6\sqrt{3} - 11)^2 + 6\sqrt{3}'],
+                            ['id' => 17, 'expression' => '(2\sqrt{3} - 5)^2 + 2\sqrt{3}'],
+                            ['id' => 18, 'expression' => '(5\sqrt{3} - 9)^2 + 5\sqrt{3}'],
+                        ]
+                    ],
+                    // Задание 6 - Степенные выражения
+                    [
+                        'number' => 6,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{(2^2 \cdot 2^4)^7}{(2 \cdot 2^6)^6}'],
+                            ['id' => 2, 'expression' => '\frac{(3^3 \cdot 3^5)^6}{(3 \cdot 3^8)^5}'],
+                            ['id' => 3, 'expression' => '\frac{(5^2 \cdot 5^3)^4}{(5 \cdot 5^5)^3}'],
+                            ['id' => 4, 'expression' => '\frac{(7^2 \cdot 7^4)^5}{(7 \cdot 7^6)^4}'],
+                            ['id' => 5, 'expression' => '\frac{(2^2 \cdot 2^6)^5}{(2 \cdot 2^8)^4}'],
+                            ['id' => 6, 'expression' => '\frac{(3^2 \cdot 3^7)^9}{(3 \cdot 3^9)^8}'],
+                            ['id' => 7, 'expression' => '\frac{16^4}{8^6}'],
+                            ['id' => 8, 'expression' => '\frac{8^{15}}{27^6}'],
+                            ['id' => 9, 'expression' => '\frac{125^3}{25^5}'],
+                            ['id' => 10, 'expression' => '\frac{64^2}{16^3}'],
+                            ['id' => 11, 'expression' => '\frac{27^3}{9^4}'],
+                            ['id' => 12, 'expression' => '\frac{8^3}{4^5}'],
+                            ['id' => 13, 'expression' => '2^{-7} \cdot 2^{-8} : 2^{-16}'],
+                            ['id' => 14, 'expression' => '9^{-5} \cdot 9^{-8} : 9^{-15}'],
+                            ['id' => 15, 'expression' => '3^{-4} \cdot 3^{-8} : 3^{-14}'],
+                            ['id' => 16, 'expression' => '7^{-3} \cdot 7^{-8} : 7^{-13}'],
+                            ['id' => 17, 'expression' => '11^{-5} \cdot 11^{-13} : 11^{-19}'],
+                            ['id' => 18, 'expression' => '5^{-3} \cdot 5^{-9} : 5^{-14}'],
+                        ]
+                    ],
+                ]
+            ],
+
+            // =====================
+            // БЛОК 3. Типовые экзаменационные варианты
+            // =====================
+            [
+                'number' => 3,
+                'title' => 'Типовые экзаменационные варианты',
+                'zadaniya' => [
+                    // I) Иррациональные числа и выражения
+                    // Задание 1 - Разные выражения
+                    [
+                        'number' => 1,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '(\sqrt{2} \cdot \sqrt{3})^2 - 1'],
+                            ['id' => 2, 'expression' => '(\sqrt{3} \cdot \sqrt{5})^2 - 9'],
+                            ['id' => 3, 'expression' => '(\sqrt{7} \cdot \sqrt{2})^2 - 10'],
+                            ['id' => 4, 'expression' => '(\sqrt{3} \cdot \sqrt{6})^2 - 8'],
+                            ['id' => 5, 'expression' => '(\sqrt{5} \cdot \sqrt{2})^2 - 7'],
+                            ['id' => 6, 'expression' => '(\sqrt{6} \cdot \sqrt{5})^2 - 18'],
+                            ['id' => 7, 'expression' => '\sqrt{64} + (\sqrt{6{,}4})^2'],
+                            ['id' => 8, 'expression' => '\sqrt{25} + (\sqrt{2{,}5})^2'],
+                            ['id' => 9, 'expression' => '\sqrt{16} + (\sqrt{1{,}6})^2'],
+                            ['id' => 10, 'expression' => '\sqrt{49} + (\sqrt{4{,}9})^2'],
+                            ['id' => 11, 'expression' => '\sqrt{36} + (\sqrt{3{,}6})^2'],
+                            ['id' => 12, 'expression' => '\sqrt{81} + (\sqrt{8{,}1})^2'],
+                            ['id' => 13, 'expression' => '\sqrt{0{,}9 \cdot 40}'],
+                            ['id' => 14, 'expression' => '\sqrt{0{,}7 \cdot 70}'],
+                            ['id' => 15, 'expression' => '\sqrt{4{,}5 \cdot 50}'],
+                            ['id' => 16, 'expression' => '\sqrt{3{,}2 \cdot 20}'],
+                            ['id' => 17, 'expression' => '\sqrt{1{,}8 \cdot 80}'],
+                            ['id' => 18, 'expression' => '\sqrt{2{,}7 \cdot 30}'],
+                            ['id' => 19, 'expression' => '\frac{5}{6}\sqrt{48} \cdot \sqrt{3}'],
+                            ['id' => 20, 'expression' => '\frac{4}{7}\sqrt{28} \cdot \sqrt{7}'],
+                            ['id' => 21, 'expression' => '\frac{5}{8}\sqrt{32} \cdot \sqrt{2}'],
+                            ['id' => 22, 'expression' => '\frac{7}{9}\sqrt{27} \cdot \sqrt{3}'],
+                            ['id' => 23, 'expression' => '\frac{3}{4}\sqrt{32} \cdot \sqrt{8}'],
+                            ['id' => 24, 'expression' => '\frac{2}{5}\sqrt{45} \cdot \sqrt{5}'],
+                        ]
+                    ],
+                    // Задание 2 - Корни с параметрами
+                    [
+                        'number' => 2,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\sqrt{0{,}04a^4b^6} \text{ при } a = 10, b = 3'],
+                            ['id' => 2, 'expression' => '\sqrt{0{,}25p^4q^4} \text{ при } p = 8, q = 3'],
+                            ['id' => 3, 'expression' => '\sqrt{0{,}01c^8d^4} \text{ при } c = 3, d = 2'],
+                            ['id' => 4, 'expression' => '\sqrt{0{,}09a^6b^2} \text{ при } a = 2, b = 12'],
+                            ['id' => 5, 'expression' => '\sqrt{0{,}16x^2y^6} \text{ при } x = 4, y = 5'],
+                            ['id' => 6, 'expression' => '\sqrt{0{,}36p^8q^2} \text{ при } p = 2, q = 15'],
+                            ['id' => 7, 'expression' => '\sqrt{a^6 \cdot (-a)^2} \text{ при } a = 10'],
+                            ['id' => 8, 'expression' => '\sqrt{(-a)^3 \cdot (-a)} \text{ при } a = 7'],
+                            ['id' => 9, 'expression' => '\sqrt{(-a)^2 \cdot a^4} \text{ при } a = 5'],
+                            ['id' => 10, 'expression' => '\sqrt{(-a)^7 \cdot (-a)^5} \text{ при } a = 2'],
+                            ['id' => 11, 'expression' => '\sqrt{a^2 \cdot (-a)^2} \text{ при } a = 12'],
+                            ['id' => 12, 'expression' => '\sqrt{(-a)^5 \cdot (-a)^3} \text{ при } a = 3'],
+                        ]
+                    ],
+                    // Задание 3 - Корни дробей с параметрами
+                    [
+                        'number' => 3,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{9\sqrt{a^8b}}{12\sqrt{ab}} \text{ при } a = 11, b = 8'],
+                            ['id' => 2, 'expression' => '\frac{15\sqrt{x^{16}y}}{10\sqrt{xy}} \text{ при } x = 13, y = 3'],
+                            ['id' => 3, 'expression' => '\frac{25\sqrt{a^{12}b}}{15\sqrt{ab}} \text{ при } a = 6, b = 7'],
+                            ['id' => 4, 'expression' => '\frac{6\sqrt{x \cdot 21y}}{14\sqrt{xy}} \text{ при } x = 3, y = 10'],
+                            ['id' => 5, 'expression' => '\frac{49\sqrt{a \cdot 9b}}{21\sqrt{ab}} \text{ при } a = 4, b = 15'],
+                            ['id' => 6, 'expression' => '\frac{12\sqrt{x \cdot 25y}}{20\sqrt{xy}} \text{ при } x = 6, y = 12'],
+                        ]
+                    ],
+                    // Задание 4 - Корни с дробями степеней
+                    [
+                        'number' => 4,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\sqrt{\frac{16a^{18}}{a^{14}}} \text{ при } a = 3'],
+                            ['id' => 2, 'expression' => '\sqrt{\frac{b^{21}}{100b^{15}}} \text{ при } b = 4'],
+                            ['id' => 3, 'expression' => '\sqrt{\frac{81x^{18}}{x^{20}}} \text{ при } x = 18'],
+                            ['id' => 4, 'expression' => '\sqrt{\frac{y^{22}}{25y^{14}}} \text{ при } y = 2'],
+                            ['id' => 5, 'expression' => '\sqrt{\frac{144p^{20}}{p^{16}}} \text{ при } p = 2'],
+                            ['id' => 6, 'expression' => '\sqrt{\frac{q^{19}}{64q^{15}}} \text{ при } q = 6'],
+                        ]
+                    ],
+                    // II) Степенные выражения
+                    // Задание 5 - Отрицательные степени
+                    [
+                        'number' => 5,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{8^{-6} \cdot 8^{-7}}{8^{-15}}'],
+                            ['id' => 2, 'expression' => '\frac{5^{-3} \cdot 5^{-9}}{5^{-11}}'],
+                            ['id' => 3, 'expression' => '\frac{9^{-5} \cdot 9^{-4}}{9^{-10}}'],
+                            ['id' => 4, 'expression' => '\frac{4^{-2} \cdot 4^{-7}}{4^{-9}}'],
+                            ['id' => 5, 'expression' => '\frac{2^{-7} \cdot 2^{-6}}{2^{-12}}'],
+                            ['id' => 6, 'expression' => '\frac{3^{-7} \cdot 3^{-6}}{3^{-16}}'],
+                        ]
+                    ],
+                    // Задание 6 - Степени с параметрами
+                    [
+                        'number' => 6,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => 'a^{-11} \cdot (a^5)^2 \text{ при } a = 5'],
+                            ['id' => 2, 'expression' => 'b^{16} \cdot (b^3)^{-5} \text{ при } b = 7'],
+                            ['id' => 3, 'expression' => 'c^{-4} \cdot (c^3)^2 \text{ при } c = 9'],
+                            ['id' => 4, 'expression' => 'd^4 \cdot (d^2)^{-3} \text{ при } d = 2'],
+                            ['id' => 5, 'expression' => 'm^{-10} \cdot (m^4)^2 \text{ при } m = 10'],
+                            ['id' => 6, 'expression' => 'n^{10} \cdot (n^{-4})^2 \text{ при } n = 6'],
+                            ['id' => 7, 'expression' => '\frac{(x^4)^{-6}}{x^{-28}} \text{ при } x = 3'],
+                            ['id' => 8, 'expression' => '\frac{(y^4)^{-5}}{y^{-19}} \text{ при } y = 10'],
+                            ['id' => 9, 'expression' => '\frac{(a^{-2})^{-3}}{a^{-1}} \text{ при } a = 2'],
+                            ['id' => 10, 'expression' => '\frac{(b^3)^{-4}}{b^{-11}} \text{ при } b = 5'],
+                            ['id' => 11, 'expression' => '\frac{(p^{-2})^{-1}}{p^{-3}} \text{ при } p = 2'],
+                            ['id' => 12, 'expression' => '\frac{(q^{-4})^5}{q^{-22}} \text{ при } q = 8'],
+                        ]
+                    ],
+                    // Задание 7 - Степени с умножением
+                    [
+                        'number' => 7,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{a^{12} \cdot a^{13}}{a^{20}} \text{ при } a = 2'],
+                            ['id' => 2, 'expression' => '\frac{x^9 \cdot x^{18}}{x^{28}} \text{ при } x = 20'],
+                            ['id' => 3, 'expression' => '\frac{y^{17} \cdot y^4}{y^{19}} \text{ при } y = 13'],
+                            ['id' => 4, 'expression' => '\frac{b^{14} \cdot b^8}{b^{21}} \text{ при } b = 17'],
+                            ['id' => 5, 'expression' => '\frac{d^{16} \cdot d^{10}}{d^{28}} \text{ при } d = 10'],
+                            ['id' => 6, 'expression' => '\frac{c^8 \cdot c^{12}}{c^{16}} \text{ при } c = 3'],
+                        ]
+                    ],
+                    // Задание 8 - Сложные степенные выражения
+                    [
+                        'number' => 8,
+                        'instruction' => 'Найдите значение выражения',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\frac{(x^2)^4 \cdot x^5}{x^7} \text{ при } x = 2'],
+                            ['id' => 2, 'expression' => '\frac{(y^5)^7 \cdot y^2}{y^{36}} \text{ при } y = 7'],
+                            ['id' => 3, 'expression' => '\frac{(a^4)^5 \cdot a^7}{a^{29}} \text{ при } a = 5'],
+                            ['id' => 4, 'expression' => '\frac{(b^2)^7 \cdot b^3}{b^{18}} \text{ при } b = 4'],
+                            ['id' => 5, 'expression' => '\frac{(c^6)^3 \cdot c^4}{c^{20}} \text{ при } c = 9'],
+                            ['id' => 6, 'expression' => '\frac{(z^2)^6 \cdot z^4}{z^{19}} \text{ при } z = 10'],
+                            ['id' => 7, 'expression' => '\frac{m^{15} \cdot (n^6)^3}{(mn)^{17}} \text{ при } m = 5, n = 15'],
+                            ['id' => 8, 'expression' => '\frac{x^{14} \cdot (y^3)^5}{(xy)^{13}} \text{ при } x = 10, y = 7'],
+                            ['id' => 9, 'expression' => '\frac{a^{16} \cdot (b^7)^3}{(ab)^{18}} \text{ при } a = 2, b = 6'],
+                            ['id' => 10, 'expression' => '\frac{(p^3)^9 \cdot q^{24}}{(pq)^{23}} \text{ при } p = 2, q = 4'],
+                            ['id' => 11, 'expression' => '\frac{(c^5)^4 \cdot d^{16}}{(cd)^{19}} \text{ при } c = 20, d = 10'],
+                            ['id' => 12, 'expression' => '\frac{(z^4)^7 \cdot t^{29}}{(zt)^{26}} \text{ при } z = 10, t = 3'],
+                        ]
+                    ],
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * Display parsed tasks from PDF for topic 09
+     */
+    public function topic09()
+    {
+        $blocks = $this->getAllBlocksData09();
+        $source = 'Manual (все блоки из PDF)';
+
+        return view('test.topic09', compact('blocks', 'source'));
+    }
+
+    /**
+     * Get all blocks data for Topic 09 - Уравнения
+     */
+    protected function getAllBlocksData09(): array
+    {
+        return [
+            // =====================
+            // БЛОК 1. ФИПИ
+            // =====================
+            [
+                'number' => 1,
+                'title' => 'ФИПИ',
+                'zadaniya' => [
+                    // I) Линейные уравнения
+                    [
+                        'number' => 1,
+                        'instruction' => 'Найдите корень уравнения',
+                        'type' => 'expression',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => 'x + 3 = -9x'],
+                            ['id' => 2, 'expression' => '-3x - 9 = 2x'],
+                            ['id' => 3, 'expression' => '6x + 1 = -4x'],
+                            ['id' => 4, 'expression' => '-2x - 4 = 3x'],
+                            ['id' => 5, 'expression' => '3x + 3 = 5x'],
+                            ['id' => 6, 'expression' => '-8x - 3 = -6x'],
+                            ['id' => 7, 'expression' => '7 + 8x = -2x - 5'],
+                            ['id' => 8, 'expression' => '-5 + 9x = 10x + 4'],
+                            ['id' => 9, 'expression' => '1 - 10x = -5x + 10'],
+                            ['id' => 10, 'expression' => '-4 - 6x = 4x - 3'],
+                            ['id' => 11, 'expression' => '2 + 3x = -7x - 5'],
+                            ['id' => 12, 'expression' => '-1 - 3x = 2x + 1'],
+                            ['id' => 13, 'expression' => '4(x - 8) = -5'],
+                            ['id' => 14, 'expression' => '10(x - 9) = 7'],
+                            ['id' => 15, 'expression' => '5(x + 9) = -8'],
+                            ['id' => 16, 'expression' => '4(x + 1) = 9'],
+                            ['id' => 17, 'expression' => '10(x + 2) = -7'],
+                            ['id' => 18, 'expression' => '5(x - 6) = 2'],
+                        ]
+                    ],
+                    // II) Квадратные уравнения
+                    [
+                        'number' => 2,
+                        'instruction' => 'Решите уравнение. Если уравнение имеет более одного корня, в ответ запишите меньший из корней',
+                        'type' => 'expression',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => 'x^2 - 9 = 0'],
+                            ['id' => 2, 'expression' => 'x^2 - 64 = 0'],
+                            ['id' => 3, 'expression' => 'x^2 - 144 = 0'],
+                            ['id' => 4, 'expression' => 'x^2 - 81 = 0'],
+                            ['id' => 5, 'expression' => 'x^2 - 169 = 0'],
+                            ['id' => 6, 'expression' => 'x^2 - 16 = 0'],
+                            ['id' => 7, 'expression' => '4x^2 = 8x'],
+                            ['id' => 8, 'expression' => '7x^2 = 42x'],
+                            ['id' => 9, 'expression' => '10x^2 = 80x'],
+                            ['id' => 10, 'expression' => '5x^2 = 35x'],
+                        ]
+                    ],
+                    [
+                        'number' => 3,
+                        'instruction' => 'Решите уравнение. Если уравнение имеет более одного корня, в ответ запишите больший из корней',
+                        'type' => 'expression',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => 'x^2 - 36 = 0'],
+                            ['id' => 2, 'expression' => 'x^2 - 25 = 0'],
+                            ['id' => 3, 'expression' => 'x^2 - 49 = 0'],
+                            ['id' => 4, 'expression' => 'x^2 - 121 = 0'],
+                            ['id' => 5, 'expression' => 'x^2 - 4 = 0'],
+                            ['id' => 6, 'expression' => 'x^2 - 100 = 0'],
+                        ]
+                    ],
+                    [
+                        'number' => 4,
+                        'instruction' => 'Решите уравнение. Если уравнение имеет более одного корня, в ответ запишите меньший из корней',
+                        'type' => 'expression',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => 'x^2 - 6x + 5 = 0'],
+                            ['id' => 2, 'expression' => 'x^2 - 9x + 18 = 0'],
+                            ['id' => 3, 'expression' => 'x^2 - 10x + 24 = 0'],
+                            ['id' => 4, 'expression' => 'x^2 + x - 12 = 0'],
+                            ['id' => 5, 'expression' => 'x^2 - 11x + 30 = 0'],
+                            ['id' => 6, 'expression' => 'x^2 - 7x + 10 = 0'],
+                        ]
+                    ],
+                    [
+                        'number' => 5,
+                        'instruction' => 'Решите уравнение. Если уравнение имеет более одного корня, в ответ запишите больший из корней',
+                        'type' => 'expression',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => 'x^2 - 8x + 12 = 0'],
+                            ['id' => 2, 'expression' => 'x^2 - 10x + 21 = 0'],
+                            ['id' => 3, 'expression' => 'x^2 - 11x + 18 = 0'],
+                            ['id' => 4, 'expression' => 'x^2 - 12x + 20 = 0'],
+                            ['id' => 5, 'expression' => 'x^2 - 9x + 8 = 0'],
+                            ['id' => 6, 'expression' => 'x^2 - 13x + 22 = 0'],
+                        ]
+                    ],
+                    [
+                        'number' => 6,
+                        'instruction' => 'Решите уравнение. Если уравнение имеет более одного корня, в ответ запишите меньший из корней',
+                        'type' => 'expression',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '2x^2 - 3x + 1 = 0'],
+                            ['id' => 2, 'expression' => '5x^2 - 9x + 4 = 0'],
+                            ['id' => 3, 'expression' => '8x^2 - 10x + 2 = 0'],
+                            ['id' => 4, 'expression' => '6x^2 - 9x + 3 = 0'],
+                            ['id' => 5, 'expression' => '8x^2 - 12x + 4 = 0'],
+                            ['id' => 6, 'expression' => '2x^2 + 5x - 7 = 0'],
+                        ]
+                    ],
+                    [
+                        'number' => 7,
+                        'instruction' => 'Решите уравнение. Если уравнение имеет более одного корня, в ответ запишите больший из корней',
+                        'type' => 'expression',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '5x^2 + 9x + 4 = 0'],
+                            ['id' => 2, 'expression' => '5x^2 + 4x - 1 = 0'],
+                            ['id' => 3, 'expression' => '5x^2 - 12x + 7 = 0'],
+                            ['id' => 4, 'expression' => '5x^2 + 8x + 3 = 0'],
+                            ['id' => 5, 'expression' => '5x^2 - 11x + 6 = 0'],
+                            ['id' => 6, 'expression' => '5x^2 + 7x - 12 = 0'],
+                        ]
+                    ],
+                ]
+            ],
+            // =====================
+            // БЛОК 2. ФИПИ. Расширенная версия
+            // =====================
+            [
+                'number' => 2,
+                'title' => 'ФИПИ. Расширенная версия',
+                'zadaniya' => [
+                    // I) Линейные уравнения
+                    [
+                        'number' => 1,
+                        'instruction' => 'Найдите корень уравнения',
+                        'type' => 'expression',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '2 + 3x = -7x - 5'],
+                            ['id' => 2, 'expression' => '7 + 8x = -2x - 5'],
+                            ['id' => 3, 'expression' => '-7 - 2x = -6x + 10'],
+                            ['id' => 4, 'expression' => '-1 - 3x = 2x + 1'],
+                            ['id' => 5, 'expression' => '8 - 5(2x - 3) = 13 - 6x'],
+                            ['id' => 6, 'expression' => '1 - 7(4 + 2x) = -9 - 4x'],
+                        ]
+                    ],
+                    [
+                        'number' => 2,
+                        'instruction' => 'Найдите корень уравнения',
+                        'type' => 'expression',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '3x + 5 + (x + 5) = (1 - x) + 4'],
+                            ['id' => 2, 'expression' => 'x - 3 - 4(x + 1) = 5(4 - x) - 1'],
+                            ['id' => 3, 'expression' => '4x + 4 - 3(x + 1) = 5(-2 - x) + 5'],
+                            ['id' => 4, 'expression' => '2x + 2 + 3(x + 4) = -4(1 - x) + 3'],
+                            ['id' => 5, 'expression' => '-3x + 1 + (x - 5) = 5(3 - x) + 5'],
+                            ['id' => 6, 'expression' => '-x - 4 + 5(x + 3) = 5(-1 - x) - 2'],
+                            ['id' => 7, 'expression' => '-3x + 1 - 3(x + 3) = -2(1 - x) + 2'],
+                            ['id' => 8, 'expression' => '-5x - 2 + 4(x + 1) = 4(-3 - x) - 1'],
+                        ]
+                    ],
+                    [
+                        'number' => 3,
+                        'instruction' => 'Найдите корень уравнения',
+                        'type' => 'expression',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '(x - 5)^2 = (x - 8)^2'],
+                            ['id' => 2, 'expression' => '(x + 9)^2 = (x + 6)^2'],
+                            ['id' => 3, 'expression' => '(x + 10)^2 = (5 - x)^2'],
+                            ['id' => 4, 'expression' => '(x - 3)^2 = (x + 10)^2'],
+                            ['id' => 5, 'expression' => '(x + 6)^2 = (15 - x)^2'],
+                            ['id' => 6, 'expression' => '(x - 2)^2 = (x - 9)^2'],
+                        ]
+                    ],
+                    [
+                        'number' => 4,
+                        'instruction' => 'Найдите корень уравнения',
+                        'type' => 'expression',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '(x + 1)^2 + (x - 6)^2 = 2x^2'],
+                            ['id' => 2, 'expression' => '(x - 2)^2 + (x - 8)^2 = 2x^2'],
+                            ['id' => 3, 'expression' => '(x - 6)^2 + (x + 8)^2 = 2x^2'],
+                            ['id' => 4, 'expression' => '(x - 2)^2 + (x - 3)^2 = 2x^2'],
+                        ]
+                    ],
+                    [
+                        'number' => 5,
+                        'instruction' => 'Найдите корень уравнения',
+                        'type' => 'expression',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => 'x^2 + x + 6 = -x^2 - 3x + (-2 + 2x^2)'],
+                            ['id' => 2, 'expression' => '-3x^2 + 5x - 3 = -x^2 + 3x + (2 - 2x^2)'],
+                            ['id' => 3, 'expression' => '3x^2 - 4x + 7 = x^2 - 5x + (-1 + 2x^2)'],
+                            ['id' => 4, 'expression' => '-4x^2 + 2x + 6 = -2x^2 + 3x - (-3 + 2x^2)'],
+                        ]
+                    ],
+                    [
+                        'number' => 6,
+                        'instruction' => 'Найдите корень уравнения',
+                        'type' => 'expression',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => 'x + \\frac{x}{9} = -\\frac{10}{3}'],
+                            ['id' => 2, 'expression' => 'x - \\frac{x}{7} = 6'],
+                            ['id' => 3, 'expression' => 'x + \\frac{x}{5} = -\\frac{12}{5}'],
+                            ['id' => 4, 'expression' => 'x - \\frac{x}{12} = \\frac{11}{3}'],
+                            ['id' => 5, 'expression' => 'x + \\frac{x}{2} = -9'],
+                            ['id' => 6, 'expression' => 'x - \\frac{x}{11} = \\frac{50}{11}'],
+                            ['id' => 7, 'expression' => '6 + \\frac{x}{2} = \\frac{x + 3}{5}'],
+                            ['id' => 8, 'expression' => '-4 + \\frac{x}{5} = \\frac{x + 4}{2}'],
+                            ['id' => 9, 'expression' => '1 + \\frac{x}{5} = \\frac{x + 9}{7}'],
+                        ]
+                    ],
+                    [
+                        'number' => 7,
+                        'instruction' => 'Найдите корень уравнения',
+                        'type' => 'expression',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\\frac{4x + 7}{3} + 2 = \\frac{7x}{2}'],
+                            ['id' => 2, 'expression' => '\\frac{6x + 8}{2} + 5 = \\frac{5x}{3}'],
+                            ['id' => 3, 'expression' => '\\frac{9x + 6}{7} + 3 = \\frac{7x}{6}'],
+                        ]
+                    ],
+                    [
+                        'number' => 8,
+                        'instruction' => 'Найдите корень уравнения',
+                        'type' => 'expression',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\\frac{12}{x + 5} = -\\frac{12}{5}'],
+                            ['id' => 2, 'expression' => '\\frac{6}{x + 8} = -\\frac{3}{4}'],
+                            ['id' => 3, 'expression' => '\\frac{1}{x + 2} = -\\frac{1}{2}'],
+                            ['id' => 4, 'expression' => '\\frac{10}{x + 7} = -\\frac{5}{8}'],
+                            ['id' => 5, 'expression' => '\\frac{11}{x + 4} = -\\frac{11}{7}'],
+                            ['id' => 6, 'expression' => '\\frac{8}{x + 9} = -\\frac{2}{9}'],
+                            ['id' => 7, 'expression' => '\\frac{7}{x - 5} = 2'],
+                            ['id' => 8, 'expression' => '\\frac{4}{x - 4} = -5'],
+                            ['id' => 9, 'expression' => '\\frac{11}{x - 9} = -10'],
+                            ['id' => 10, 'expression' => '\\frac{7}{x + 8} = -1'],
+                            ['id' => 11, 'expression' => '\\frac{6}{x + 5} = -5'],
+                            ['id' => 12, 'expression' => '\\frac{11}{x + 3} = 10'],
+                            ['id' => 13, 'expression' => '\\frac{3}{x - 19} = \\frac{19}{x - 3}'],
+                            ['id' => 14, 'expression' => '\\frac{13}{x - 5} = \\frac{5}{x - 13}'],
+                            ['id' => 15, 'expression' => '\\frac{6}{x - 8} = \\frac{8}{x - 6}'],
+                        ]
+                    ],
+                    // II) Квадратные уравнения
+                    [
+                        'number' => 9,
+                        'instruction' => 'Решите уравнение. Если уравнение имеет более одного корня, в ответ запишите меньший из корней',
+                        'type' => 'expression',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '(5x - 2)(-x + 3) = 0'],
+                            ['id' => 2, 'expression' => '(x - 6)(4x - 6) = 0'],
+                            ['id' => 3, 'expression' => '(-2x + 1)(-2x - 7) = 0'],
+                            ['id' => 4, 'expression' => '(x - 7)(-5x - 9) = 0'],
+                            ['id' => 5, 'expression' => '(-5x + 3)(-x + 6) = 0'],
+                            ['id' => 6, 'expression' => '(x - 2)(-2x - 3) = 0'],
+                        ]
+                    ],
+                    [
+                        'number' => 10,
+                        'instruction' => 'Решите уравнение. Если уравнение имеет более одного корня, в ответ запишите меньший из корней',
+                        'type' => 'expression',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '3x^2 + 12x = 0'],
+                            ['id' => 2, 'expression' => '7x^2 + 21x = 0'],
+                            ['id' => 3, 'expression' => '3x^2 + 18x = 0'],
+                            ['id' => 4, 'expression' => '5x^2 + 25x = 0'],
+                            ['id' => 5, 'expression' => '6x^2 + 24x = 0'],
+                            ['id' => 6, 'expression' => '5x^2 + 10x = 0'],
+                        ]
+                    ],
+                    [
+                        'number' => 11,
+                        'instruction' => 'Решите уравнение. Если уравнение имеет более одного корня, в ответ запишите больший из корней',
+                        'type' => 'expression',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '(-x - 5)(2x + 4) = 0'],
+                            ['id' => 2, 'expression' => '(6x - 3)(-x + 3) = 0'],
+                            ['id' => 3, 'expression' => '(-x - 4)(3x + 3) = 0'],
+                            ['id' => 4, 'expression' => '(5x + 2)(-x - 6) = 0'],
+                            ['id' => 5, 'expression' => '(-x + 7)(x - 2) = 0'],
+                            ['id' => 6, 'expression' => '(x + 10)(-x - 8) = 0'],
+                            ['id' => 7, 'expression' => '3x^2 - 9x = 0'],
+                            ['id' => 8, 'expression' => '5x^2 - 10x = 0'],
+                            ['id' => 9, 'expression' => '4x^2 - 16x = 0'],
+                            ['id' => 10, 'expression' => '7x^2 - 14x = 0'],
+                            ['id' => 11, 'expression' => '4x^2 - 20x = 0'],
+                            ['id' => 12, 'expression' => '2x^2 - 12x = 0'],
+                            ['id' => 13, 'expression' => '9x^2 = 54x'],
+                            ['id' => 14, 'expression' => '2x^2 = 8x'],
+                            ['id' => 15, 'expression' => '3x^2 = 27x'],
+                            ['id' => 16, 'expression' => '4x^2 = 20x'],
+                        ]
+                    ],
+                    [
+                        'number' => 12,
+                        'instruction' => 'Решите уравнение. Если уравнение имеет более одного корня, в ответ запишите меньший из корней',
+                        'type' => 'expression',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => 'x^2 - 15 = 2x'],
+                            ['id' => 2, 'expression' => 'x^2 + 7 = 8x'],
+                            ['id' => 3, 'expression' => 'x^2 - 16 = 6x'],
+                            ['id' => 4, 'expression' => 'x^2 + 18 = 9x'],
+                            ['id' => 5, 'expression' => 'x^2 - 35 = 2x'],
+                            ['id' => 6, 'expression' => 'x^2 + 6 = 5x'],
+                            ['id' => 7, 'expression' => 'x^2 + 4x = 5'],
+                            ['id' => 8, 'expression' => 'x^2 - 6x = 16'],
+                            ['id' => 9, 'expression' => 'x^2 + 2x = 15'],
+                            ['id' => 10, 'expression' => 'x^2 - 7x = 8'],
+                            ['id' => 11, 'expression' => 'x^2 + 4x = 21'],
+                            ['id' => 12, 'expression' => 'x^2 - 5x = 14'],
+                        ]
+                    ],
+                    [
+                        'number' => 13,
+                        'instruction' => 'Решите уравнение. Если уравнение имеет более одного корня, в ответ запишите больший из корней',
+                        'type' => 'expression',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => 'x^2 - 18 = 7x'],
+                            ['id' => 2, 'expression' => 'x^2 + 6 = 5x'],
+                            ['id' => 3, 'expression' => 'x^2 - 21 = 4x'],
+                            ['id' => 4, 'expression' => 'x^2 + 10 = 7x'],
+                            ['id' => 5, 'expression' => 'x^2 - 20 = x'],
+                            ['id' => 6, 'expression' => 'x^2 + 4 = 5x'],
+                            ['id' => 7, 'expression' => 'x^2 + 7x = 18'],
+                            ['id' => 8, 'expression' => 'x^2 - x = 12'],
+                            ['id' => 9, 'expression' => 'x^2 + 3x = 10'],
+                            ['id' => 10, 'expression' => 'x^2 - 5x = 14'],
+                            ['id' => 11, 'expression' => 'x^2 + 7x = 8'],
+                            ['id' => 12, 'expression' => 'x^2 - 3x = 18'],
+                        ]
+                    ],
+                ]
+            ],
+            // =====================
+            // БЛОК 3. Типовые экзаменационные варианты
+            // =====================
+            [
+                'number' => 3,
+                'title' => 'Типовые экзаменационные варианты',
+                'zadaniya' => [
+                    [
+                        'number' => 1,
+                        'instruction' => 'Найдите корень уравнения',
+                        'type' => 'expression',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '(x - 9)^2 - x^2 = 0'],
+                            ['id' => 2, 'expression' => '(x - 7)^2 - x^2 = 0'],
+                            ['id' => 3, 'expression' => '(2x - 3)^2 - 4x^2 = 0'],
+                            ['id' => 4, 'expression' => '(2x - 5)^2 - 4x^2 = 0'],
+                        ]
+                    ],
+                    [
+                        'number' => 2,
+                        'instruction' => 'Решите уравнение. Если уравнение имеет более одного корня, в ответ запишите меньший из корней',
+                        'type' => 'expression',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '\\frac{1}{5}x^2 - 5 = 0'],
+                            ['id' => 2, 'expression' => '\\frac{1}{8}x^2 - 8 = 0'],
+                            ['id' => 3, 'expression' => '\\frac{1}{6}x^2 - 24 = 0'],
+                            ['id' => 4, 'expression' => '\\frac{1}{7}x^2 - 28 = 0'],
+                        ]
+                    ],
+                    [
+                        'number' => 3,
+                        'instruction' => 'Решите уравнение. Если уравнение имеет более одного корня, в ответ запишите больший из корней',
+                        'type' => 'expression',
+                        'tasks' => [
+                            ['id' => 1, 'expression' => '-\\frac{2}{3}x^2 + 6 = 0'],
+                            ['id' => 2, 'expression' => '-\\frac{3}{4}x^2 + 12 = 0'],
+                            ['id' => 3, 'expression' => '-\\frac{5}{7}x^2 + 35 = 0'],
+                            ['id' => 4, 'expression' => '-\\frac{4}{9}x^2 + 36 = 0'],
+                        ]
+                    ],
+                ]
+            ],
+        ];
+    }
+
+    /**
+     * Display parsed tasks from PDF for topic 10
+     */
+    public function topic10()
+    {
+        $blocks = $this->getAllBlocksData10();
+        $source = 'Manual (все блоки из PDF)';
+
+        return view('test.topic10', compact('blocks', 'source'));
+    }
+
+    /**
+     * Get all blocks data for Topic 10 - Теория вероятностей
+     */
+    protected function getAllBlocksData10(): array
+    {
+        return [
+            // =====================
+            // БЛОК 1. ФИПИ
+            // =====================
+            [
+                'number' => 1,
+                'title' => 'ФИПИ',
+                'zadaniya' => [
+                    // I) Классическое определение вероятности
+                    [
+                        'number' => 1,
+                        'instruction' => 'Классическое определение вероятности',
+                        'type' => 'word_problem',
+                        'tasks' => [
+                            ['id' => 1, 'text' => 'В фирме такси в данный момент свободно 20 машин: 3 чёрные, 3 жёлтые и 14 зелёных. По вызову выехала одна из машин, случайно оказавшаяся ближе всего к заказчику. Найдите вероятность того, что к нему приедет жёлтое такси.'],
+                            ['id' => 2, 'text' => 'В фирме такси в данный момент свободно 15 машин: 3 чёрные, 6 жёлтых и 6 зелёных. По вызову выехала одна из машин, случайно оказавшаяся ближе всего к заказчику. Найдите вероятность того, что к нему приедет жёлтое такси.'],
+                            ['id' => 3, 'text' => 'В фирме такси в данный момент свободно 30 машин: 6 чёрных, 3 жёлтых и 21 зелёная. По вызову выехала одна из машин, случайно оказавшаяся ближе всего к заказчику. Найдите вероятность того, что к нему приедет жёлтое такси.'],
+                            ['id' => 4, 'text' => 'В фирме такси в данный момент свободно 12 машин: 3 чёрных, 3 жёлтых и 6 зелёных. По вызову выехала одна из машин, случайно оказавшаяся ближе всего к заказчику. Найдите вероятность того, что к нему приедет жёлтое такси.'],
+                            ['id' => 5, 'text' => 'В фирме такси в данный момент свободно 10 машин: 5 чёрных, 2 жёлтых и 3 зелёных. По вызову выехала одна из машин, случайно оказавшаяся ближе всего к заказчику. Найдите вероятность того, что к нему приедет жёлтое такси.'],
+                            ['id' => 6, 'text' => 'В фирме такси в данный момент свободно 30 машин: 1 чёрная, 9 жёлтых и 20 зелёных. По вызову выехала одна из машин, случайно оказавшаяся ближе всего к заказчику. Найдите вероятность того, что к нему приедет жёлтое такси.'],
+                            ['id' => 7, 'text' => 'Родительский комитет закупил 10 пазлов для подарков детям в связи с окончанием учебного года, из них 2 с машинами и 8 с видами городов. Подарки распределяются случайным образом между 10 детьми, среди которых есть Андрюша. Найдите вероятность того, что Андрюше достанется пазл с машиной.'],
+                            ['id' => 8, 'text' => 'Родительский комитет закупил 25 пазлов для подарков детям в связи с окончанием учебного года, из них 18 с машинами и 7 с видами городов. Подарки распределяются случайным образом между 25 детьми, среди которых есть Володя. Найдите вероятность того, что Володе достанется пазл с машиной.'],
+                            ['id' => 9, 'text' => 'Родительский комитет закупил 20 пазлов для подарков детям в связи с окончанием учебного года, из них 6 с машинами и 14 с видами городов. Подарки распределяются случайным образом между 20 детьми, среди которых есть Володя. Найдите вероятность того, что Володе достанется пазл с машиной.'],
+                            ['id' => 10, 'text' => 'Родительский комитет закупил 25 пазлов для подарков детям в связи с окончанием учебного года, из них 21 с машинами и 4 с видами городов. Подарки распределяются случайным образом между 25 детьми, среди которых есть Саша. Найдите вероятность того, что Саше достанется пазл с машиной.'],
+                            ['id' => 11, 'text' => 'Родительский комитет закупил 15 пазлов для подарков детям в связи с окончанием учебного года, из них 12 с машинами и 3 с видами городов. Подарки распределяются случайным образом между 15 детьми, среди которых есть Миша. Найдите вероятность того, что Мише достанется пазл с машиной.'],
+                            ['id' => 12, 'text' => 'Родительский комитет закупил 25 пазлов для подарков детям в связи с окончанием учебного года, из них 24 с машинами и 1 с видом города. Подарки распределяются случайным образом между 25 детьми, среди которых есть Андрюша. Найдите вероятность того, что Андрюше достанется пазл с машиной.'],
+                            ['id' => 13, 'text' => 'В лыжных гонках участвуют 7 спортсменов из России, 1 спортсмен из Норвегии и 2 спортсмена из Швеции. Порядок, в котором спортсмены стартуют, определяется жребием. Найдите вероятность того, что первым будет стартовать спортсмен из Швеции.'],
+                            ['id' => 14, 'text' => 'В лыжных гонках участвуют 13 спортсменов из России, 2 спортсмена из Норвегии и 5 спортсменов из Швеции. Порядок, в котором спортсмены стартуют, определяется жребием. Найдите вероятность того, что первым будет стартовать спортсмен из Норвегии или Швеции.'],
+                            ['id' => 15, 'text' => 'В лыжных гонках участвуют 11 спортсменов из России, 6 спортсменов из Норвегии и 3 спортсмена из Швеции. Порядок, в котором спортсмены стартуют, определяется жребием. Найдите вероятность того, что первым будет стартовать спортсмен не из Норвегии.'],
+                            ['id' => 16, 'text' => 'В лыжных гонках участвуют 13 спортсменов из России, 2 спортсмена из Норвегии и 5 спортсменов из Швеции. Порядок, в котором спортсмены стартуют, определяется жребием. Найдите вероятность того, что первым будет стартовать спортсмен из России.'],
+                            ['id' => 17, 'text' => 'В лыжных гонках участвуют 7 спортсменов из России, 1 спортсмен из Норвегии и 2 спортсмена из Швеции. Порядок, в котором спортсмены стартуют, определяется жребием. Найдите вероятность того, что первым будет стартовать спортсмен из Норвегии.'],
+                            ['id' => 18, 'text' => 'В лыжных гонках участвуют 13 спортсменов из России, 2 спортсмена из Норвегии и 5 спортсменов из Швеции. Порядок, в котором спортсмены стартуют, определяется жребием. Найдите вероятность того, что первым будет стартовать спортсмен не из России.'],
+                            ['id' => 19, 'text' => 'У бабушки 20 чашек: 15 с красными цветами, остальные с синими. Бабушка наливает чай в случайно выбранную чашку. Найдите вероятность того, что это будет чашка с синими цветами.'],
+                            ['id' => 20, 'text' => 'У бабушки 25 чашек: 7 с красными цветами, остальные с синими. Бабушка наливает чай в случайно выбранную чашку. Найдите вероятность того, что это будет чашка с синими цветами.'],
+                            ['id' => 21, 'text' => 'У бабушки 10 чашек: 3 с красными цветами, остальные с синими. Бабушка наливает чай в случайно выбранную чашку. Найдите вероятность того, что это будет чашка с синими цветами.'],
+                            ['id' => 22, 'text' => 'У бабушки 20 чашек: 9 с красными цветами, остальные с синими. Бабушка наливает чай в случайно выбранную чашку. Найдите вероятность того, что это будет чашка с синими цветами.'],
+                            ['id' => 23, 'text' => 'У бабушки 15 чашек: 9 с красными цветами, остальные с синими. Бабушка наливает чай в случайно выбранную чашку. Найдите вероятность того, что это будет чашка с синими цветами.'],
+                            ['id' => 24, 'text' => 'У бабушки 25 чашек: 5 с красными цветами, остальные с синими. Бабушка наливает чай в случайно выбранную чашку. Найдите вероятность того, что это будет чашка с синими цветами.'],
+                            ['id' => 25, 'text' => 'На экзамене 30 билетов, Серёжа не выучил 9 из них. Найдите вероятность того, что ему попадётся выученный билет.'],
+                            ['id' => 26, 'text' => 'На экзамене 50 билетов, Сеня не выучил 5 из них. Найдите вероятность того, что ему попадётся выученный билет.'],
+                            ['id' => 27, 'text' => 'На экзамене 20 билетов, Андрей не выучил 1 из них. Найдите вероятность того, что ему попадётся выученный билет.'],
+                            ['id' => 28, 'text' => 'На экзамене 25 билетов, Костя не выучил 4 из них. Найдите вероятность того, что ему попадётся выученный билет.'],
+                            ['id' => 29, 'text' => 'На экзамене 35 билетов, Стас не выучил 7 из них. Найдите вероятность того, что ему попадётся выученный билет.'],
+                            ['id' => 30, 'text' => 'На экзамене 40 билетов, Яша не выучил 3 из них. Найдите вероятность того, что ему попадётся выученный билет.'],
+                            ['id' => 31, 'text' => 'В магазине канцтоваров продаётся 120 ручек: 32 красных, 32 зелёных, 46 фиолетовых, остальные синие и чёрные, их поровну. Найдите вероятность того, что случайно выбранная в этом магазине ручка будет красной или фиолетовой.'],
+                            ['id' => 32, 'text' => 'В магазине канцтоваров продаётся 84 ручки, из них 22 красных, 9 зелёных, 41 фиолетовая, остальные синие и чёрные, их поровну. Найдите вероятность того, что случайно выбранная в этом магазине ручка будет красной или фиолетовой.'],
+                            ['id' => 33, 'text' => 'В магазине канцтоваров продаётся 144 ручки: 30 красных, 24 зелёных, 18 фиолетовых, остальные синие и чёрные, их поровну. Найдите вероятность того, что случайно выбранная в этом магазине ручка будет синей или чёрной.'],
+                            ['id' => 34, 'text' => 'В магазине канцтоваров продаётся 165 ручек: 37 красных, 16 зелёных, 46 фиолетовых, остальные синие и чёрные, их поровну. Найдите вероятность того, что случайно выбранная в этом магазине ручка будет синей или чёрной.'],
+                            ['id' => 35, 'text' => 'В магазине канцтоваров продаётся 255 ручек: 46 красных, 31 зелёная, 36 фиолетовых, остальные синие и чёрные, их поровну. Найдите вероятность того, что случайно выбранная в этом магазине ручка будет черной или зеленой.'],
+                            ['id' => 36, 'text' => 'В магазине канцтоваров продаётся 112 ручек: 17 красных, 44 зелёных, 29 фиолетовых, остальные синие и чёрные, их поровну. Найдите вероятность того, что случайно выбранная в этом магазине ручка будет красной или чёрной.'],
+                            ['id' => 37, 'text' => 'В магазине канцтоваров продаётся 206 ручек: 20 красных, 8 зелёных, 12 фиолетовых, остальные синие и чёрные, их поровну. Найдите вероятность того, что случайно выбранная в этом магазине ручка будет красной или синей.'],
+                            ['id' => 38, 'text' => 'В магазине канцтоваров продаётся 272 ручки: 11 красных, 37 зелёных, 26 фиолетовых, остальные синие и чёрные, их поровну. Найдите вероятность того, что случайно выбранная в этом магазине ручка будет зелёной или синей.'],
+                            ['id' => 39, 'text' => 'Игральную кость бросают дважды. Найдите вероятность того, что сумма двух выпавших чисел равна 7 или 10.'],
+                            ['id' => 40, 'text' => 'Игральную кость бросают дважды. Найдите вероятность того, что сумма двух выпавших чисел равна 6 или 9.'],
+                            ['id' => 41, 'text' => 'Игральную кость бросают дважды. Найдите вероятность того, что сумма двух выпавших чисел равна 5 или 8.'],
+                            ['id' => 42, 'text' => 'Игральную кость бросают дважды. Найдите вероятность того, что сумма двух выпавших чисел чётна.'],
+                            ['id' => 43, 'text' => '(Демо) Симметричный игральный кубик бросают два раза. Найдите вероятность события «сумма выпавших очков равна 9, 10 или 11».'],
+                            ['id' => 44, 'text' => '(Демо) Симметричный игральный кубик бросают два раза. Найдите вероятность события «сумма выпавших очков равна 4, 5, 6 или 7».'],
+                        ]
+                    ],
+                    // II) Статистическое определение вероятности
+                    [
+                        'number' => 2,
+                        'instruction' => 'Статистическое определение вероятности',
+                        'type' => 'word_problem',
+                        'tasks' => [
+                            ['id' => 45, 'text' => 'В среднем из 150 карманных фонариков, поступивших в продажу, три неисправных. Найдите вероятность того, что выбранный наудачу в магазине фонарик окажется исправен.'],
+                            ['id' => 46, 'text' => 'В среднем из 80 карманных фонариков, поступивших в продажу, шесть неисправных. Найдите вероятность того, что выбранный наудачу в магазине фонарик окажется исправен.'],
+                            ['id' => 47, 'text' => 'В среднем из 75 карманных фонариков, поступивших в продажу, девять неисправных. Найдите вероятность того, что выбранный наудачу в магазине фонарик окажется исправен.'],
+                            ['id' => 48, 'text' => 'В среднем из 100 карманных фонариков, поступивших в продажу, четыре неисправных. Найдите вероятность того, что выбранный наудачу в магазине фонарик окажется исправен.'],
+                            ['id' => 49, 'text' => 'В среднем из 50 карманных фонариков, поступивших в продажу, шесть неисправных. Найдите вероятность того, что выбранный наудачу в магазине фонарик окажется исправен.'],
+                            ['id' => 50, 'text' => 'В среднем из 200 карманных фонариков, поступивших в продажу, четыре неисправных. Найдите вероятность того, что выбранный наудачу в магазине фонарик окажется исправен.'],
+                        ]
+                    ],
+                    // III) Формулы для вычисления вероятностей
+                    [
+                        'number' => 3,
+                        'instruction' => 'Формулы для вычисления вероятностей',
+                        'type' => 'word_problem',
+                        'tasks' => [
+                            ['id' => 51, 'text' => 'Вероятность того, что новая шариковая ручка пишет плохо (или не пишет), равна 0,14. Покупатель в магазине выбирает одну такую ручку. Найдите вероятность того, что эта ручка пишет хорошо.'],
+                            ['id' => 52, 'text' => 'Вероятность того, что новая шариковая ручка пишет плохо (или не пишет), равна 0,2. Покупатель в магазине выбирает одну такую ручку. Найдите вероятность того, что эта ручка пишет хорошо.'],
+                            ['id' => 53, 'text' => 'Вероятность того, что новая шариковая ручка пишет плохо (или не пишет), равна 0,08. Покупатель в магазине выбирает одну такую ручку. Найдите вероятность того, что эта ручка пишет хорошо.'],
+                            ['id' => 54, 'text' => 'Вероятность того, что новая шариковая ручка пишет плохо (или не пишет), равна 0,22. Покупатель в магазине выбирает одну такую ручку. Найдите вероятность того, что эта ручка пишет хорошо.'],
+                            ['id' => 55, 'text' => 'Вероятность того, что новая шариковая ручка пишет плохо (или не пишет), равна 0,07. Покупатель в магазине выбирает одну такую ручку. Найдите вероятность того, что эта ручка пишет хорошо.'],
+                            ['id' => 56, 'text' => 'Вероятность того, что новая шариковая ручка пишет плохо (или не пишет), равна 0,19. Покупатель в магазине выбирает одну такую ручку. Найдите вероятность того, что эта ручка пишет хорошо.'],
+                        ]
+                    ],
+                ]
+            ],
+            // =====================
+            // БЛОК 2. ФИПИ. Расширенная версия
+            // =====================
+            [
+                'number' => 2,
+                'title' => 'ФИПИ. Расширенная версия',
+                'zadaniya' => [
+                    // I) Классическое определение вероятности
+                    [
+                        'number' => 1,
+                        'instruction' => 'Классическое определение вероятности',
+                        'type' => 'word_problem',
+                        'tasks' => [
+                            ['id' => 1, 'text' => 'На тарелке лежат одинаковые на вид пирожки: 4 с мясом, 5 с рисом и 21 с повидлом. Андрей наугад берёт один пирожок. Найдите вероятность того, что пирожок окажется с повидлом.'],
+                            ['id' => 2, 'text' => 'На тарелке лежат одинаковые на вид пирожки: 13 с мясом, 11 с капустой и 6 с вишней. Антон наугад берёт один пирожок. Найдите вероятность того, что пирожок окажется с вишней.'],
+                            ['id' => 3, 'text' => 'На тарелке лежат одинаковые на вид пирожки: 14 с рисом, 8 с мясом и 3 с капустой. Петя наугад берёт один пирожок. Найдите вероятность того, что пирожок окажется с капустой.'],
+                            ['id' => 4, 'text' => 'На тарелке лежат одинаковые на вид пирожки: 1 с творогом, 12 с мясом и 3 с яблоками. Ваня наугад берёт один пирожок. Найдите вероятность того, что пирожок окажется с мясом.'],
+                            ['id' => 5, 'text' => 'На тарелке лежат одинаковые на вид пирожки: 3 с мясом, 3 с капустой и 4 с вишней. Саша наугад берёт один пирожок. Найдите вероятность того, что пирожок окажется с вишней.'],
+                            ['id' => 6, 'text' => 'На тарелке лежат одинаковые на вид пирожки: 2 с творогом, 13 с рисом и 5 с яблоками. Лёша наугад берёт один пирожок. Найдите вероятность того, что пирожок окажется с яблоками.'],
+                            ['id' => 7, 'text' => 'Петя, Вика, Катя, Игорь, Антон, Полина бросили жребий – кому начинать игру. Найдите вероятность того, что начинать игру должен будет мальчик.'],
+                            ['id' => 8, 'text' => 'Саша, Семён, Зоя и Лера бросили жребий – кому начинать игру. Найдите вероятность того, что начинать игру должен будет не Семён.'],
+                            ['id' => 9, 'text' => 'Девятиклассники Петя, Катя, Ваня, Даша и Наташа бросили жребий, кому начинать игру. Найдите вероятность того, что начинать игру должна будет девочка.'],
+                            ['id' => 10, 'text' => 'Девятиклассники Петя, Катя, Ваня, Даша и Наташа бросили жребий, кому начинать игру. Найдите вероятность того, что жребий начинать игру Кате не выпадет.'],
+                            ['id' => 11, 'text' => 'Саша выбирает случайное трёхзначное число. Найдите вероятность того, что оно делится на 4.'],
+                            ['id' => 12, 'text' => 'Андрей выбирает случайное трёхзначное число. Найдите вероятность того, что оно делится на 10.'],
+                            ['id' => 13, 'text' => 'Валя выбирает случайное трёхзначное число. Найдите вероятность того, что оно делится на 51.'],
+                            ['id' => 14, 'text' => 'Коля выбирает случайное трёхзначное число. Найдите вероятность того, что оно делится на 93.'],
+                            ['id' => 15, 'text' => 'Женя выбирает случайное трёхзначное число. Найдите вероятность того, что оно делится на 100.'],
+                            ['id' => 16, 'text' => 'В случайном эксперименте симметричную монету бросают дважды. Найдите вероятность того, что орел выпадет ровно 1 раз.'],
+                            ['id' => 17, 'text' => 'В случайном эксперименте симметричную монету бросают дважды. Найдите вероятность того, что орел выпадет ровно 2 раза.'],
+                            ['id' => 18, 'text' => 'В случайном эксперименте симметричную монету бросают трижды. Найдите вероятность того, что орел выпадет ровно 1 раз.'],
+                            ['id' => 19, 'text' => 'В случайном эксперименте симметричную монету бросают трижды. Найдите вероятность того, что орел выпадет ровно 2 раза.'],
+                            ['id' => 20, 'text' => 'В случайном эксперименте симметричную монету бросают трижды. Найдите вероятность того, что орел выпадет ровно 3 раза.'],
+                            ['id' => 21, 'text' => 'В случайном эксперименте симметричную монету бросают четыре раза. Найдите вероятность того, что орел выпадет ровно 1 раз.'],
+                            ['id' => 22, 'text' => 'В случайном эксперименте симметричную монету бросают четыре раза. Найдите вероятность того, что орел выпадет ровно 3 раза.'],
+                            ['id' => 23, 'text' => 'Определите вероятность того, что при бросании кубика выпало число очков, не большее 3.'],
+                            ['id' => 24, 'text' => 'Определите вероятность того, что при бросании кубика выпало число очков, не меньшее 1.'],
+                            ['id' => 25, 'text' => 'Определите вероятность того, что при бросании игрального кубика выпадет более 3 очков.'],
+                            ['id' => 26, 'text' => 'Определите вероятность того, что при бросании игрального кубика выпадет менее 4 очков.'],
+                            ['id' => 27, 'text' => 'Определите вероятность того, что при бросании кубика выпало четное число очков.'],
+                            ['id' => 28, 'text' => 'Определите вероятность того, что при бросании кубика выпало нечетное число очков.'],
+                            ['id' => 29, 'text' => 'Игральную кость бросают дважды. Найдите вероятность того, что наибольшее из двух выпавших чисел равно 5.'],
+                            ['id' => 30, 'text' => 'Игральную кость бросают дважды. Найдите вероятность того, что оба раза выпало число, большее 3.'],
+                            ['id' => 31, 'text' => 'Игральную кость бросают дважды. Найдите вероятность того, что оба раза выпало число, меньшее 4.'],
+                            ['id' => 32, 'text' => 'Игральную кость бросают 2 раза. Найдите вероятность того, что сумма двух выпавших чисел нечётна.'],
+                            ['id' => 33, 'text' => 'Игральную кость бросают 2 раза. Найдите вероятность того, что хотя бы раз выпало число, большее 3.'],
+                            ['id' => 34, 'text' => 'Игральную кость бросают 2 раза. Найдите вероятность того, что хотя бы раз выпало число, меньшее 4.'],
+                        ]
+                    ],
+                    // II) Статистическое определение вероятности
+                    [
+                        'number' => 2,
+                        'instruction' => 'Статистическое определение вероятности',
+                        'type' => 'word_problem',
+                        'tasks' => [
+                            ['id' => 35, 'text' => 'Из 1600 пакетов молока в среднем 80 протекают. Какова вероятность того, что случайно выбранный пакет молока не течёт?'],
+                            ['id' => 36, 'text' => 'Из 600 клавиатур для компьютера в среднем 12 не исправны. Какова вероятность того, что случайно выбранная клавиатура исправна?'],
+                            ['id' => 37, 'text' => 'Из 1200 чистых компакт-дисков в среднем 72 не пригодны для записи. Какова вероятность, что случайно выбранный диск пригоден для записи?'],
+                            ['id' => 38, 'text' => 'Из каждых 1000 электрических лампочек 5 бракованных. Какова вероятность купить исправную лампочку?'],
+                            ['id' => 39, 'text' => 'В среднем из каждых 80 поступивших в продажу аккумуляторов 76 аккумуляторов заряжены. Найдите вероятность того, что купленный аккумулятор не заряжен.'],
+                            ['id' => 40, 'text' => 'В среднем из каждых 50 поступивших в продажу аккумуляторов 48 аккумуляторов заряжены. Найдите вероятность того, что купленный аккумулятор не заряжен.'],
+                            ['id' => 41, 'text' => 'В среднем из каждых 75 поступивших в продажу аккумуляторов 63 аккумулятора заряжены. Найдите вероятность того, что купленный аккумулятор не заряжен.'],
+                            ['id' => 42, 'text' => 'В каждой десятой банке кофе согласно условиям акции есть приз. Призы распределены по банкам случайно. Варя покупает банку кофе в надежде выиграть приз. Найдите вероятность того, что Варя не найдет приз в своей банке.'],
+                            ['id' => 43, 'text' => 'В каждой двадцать пятой банке кофе согласно условиям акции есть приз. Призы распределены по банкам случайно. Коля покупает банку кофе в надежде выиграть приз. Найдите вероятность того, что Коля не найдёт приз в своей банке.'],
+                            ['id' => 44, 'text' => 'В каждой четвертой банке кофе согласно условиям акции есть приз. Призы распределены по банкам случайно. Аля покупает банку кофе в надежде выиграть приз. Найдите вероятность того, что Аля не найдет приз в своей банке.'],
+                            ['id' => 45, 'text' => 'Известно, что в некотором регионе вероятность того, что родившийся младенец окажется мальчиком, равна 0,512. В 2010 г. в этом регионе на 1000 родившихся младенцев в среднем пришлось 477 девочек. Насколько частота рождения девочек в 2010 г. в этом регионе отличается от вероятности этого события?'],
+                            ['id' => 46, 'text' => 'Известно, что в некотором регионе вероятность того, что родившийся младенец окажется мальчиком, равна 0,486. В 2011 г. в этом регионе на 1000 родившихся младенцев в среднем пришлось 522 девочки. Насколько частота рождения девочки в 2011 г. в этом регионе отличается от вероятности этого события?'],
+                            ['id' => 47, 'text' => 'Известно, что в некотором регионе вероятность того, что родившийся младенец окажется мальчиком, равна 0,52. В 2013 г. в этом регионе на 1000 родившихся младенцев в среднем пришлось 486 девочек. Насколько частота рождения девочки в 2013 г. в этом регионе отличается от вероятности этого события?'],
+                            ['id' => 48, 'text' => 'Во время вероятностного эксперимента монету бросили 1000 раз, 532 раза выпал орел. На сколько частота выпадения решки в этом эксперименте отличается от вероятности этого события?'],
+                            ['id' => 49, 'text' => 'Во время вероятностного эксперимента монету бросили 1000 раз, 449 раз выпала решка. На сколько частота выпадения орла в этом эксперименте отличается от вероятности этого события?'],
+                        ]
+                    ],
+                    // III) Формулы для вычисления вероятностей
+                    [
+                        'number' => 3,
+                        'instruction' => 'Формулы для вычисления вероятностей',
+                        'type' => 'word_problem',
+                        'tasks' => [
+                            ['id' => 50, 'text' => 'На экзамене по геометрии школьнику достаётся одна задача из сборника. Вероятность того, что эта задача по теме «Площадь», равна 0,15. Вероятность того, что это окажется задача по теме «Окружность», равна 0,3. В сборнике нет задач, которые одновременно относятся к этим двум темам. Найдите вероятность того, что на экзамене школьнику достанется задача по одной из этих двух тем.'],
+                            ['id' => 51, 'text' => 'На экзамене по геометрии школьнику достаётся одна задача из сборника. Вероятность того, что эта задача по теме «Параллелограмм», равна 0,45. Вероятность того, что это окажется задача по теме «Треугольники», равна 0,15. В сборнике нет задач, которые одновременно относятся к этим двум темам. Найдите вероятность того, что на экзамене школьнику достанется задача по одной из этих двух тем.'],
+                            ['id' => 52, 'text' => 'На экзамене по геометрии школьнику достаётся одна задача из сборника. Вероятность того, что эта задача по теме «Трапеция», равна 0,1. Вероятность того, что это окажется задача по теме «Площадь», равна 0,3. В сборнике нет задач, которые одновременно относятся к этим двум темам. Найдите вероятность того, что на экзамене школьнику достанется задача по одной из этих двух тем.'],
+                            ['id' => 53, 'text' => 'Стрелок 3 раза стреляет по мишеням. Вероятность попадания в мишень при одном выстреле равна 0,8. Найдите вероятность того, что стрелок первые 2 раза попал в мишени, а последний раз промахнулся.'],
+                            ['id' => 54, 'text' => 'Стрелок 3 раза стреляет по мишеням. Вероятность попадания в мишень при одном выстреле равна 0,6. Найдите вероятность того, что стрелок первый раз попал в мишени, а последние два раза промахнулся.'],
+                            ['id' => 55, 'text' => 'Стрелок 4 раза стреляет по мишеням. Вероятность попадания в мишень при одном выстреле равна 0,5. Найдите вероятность того, что стрелок первые 3 раза попал в мишени, а последний раз промахнулся.'],
+                            ['id' => 56, 'text' => 'Стрелок 4 раза стреляет по мишеням. Вероятность попадания в мишень при одном выстреле равна 0,5. Найдите вероятность того, что стрелок первые 2 раза попал в мишени, а последние 2 раза промахнулся.'],
+                            ['id' => 57, 'text' => 'Стрелок 4 раза стреляет по мишеням. Вероятность попадания в мишень при одном выстреле равна 0,7. Найдите вероятность того, что стрелок первый раз попал в мишени, а последние 3 раза промахнулся.'],
+                            ['id' => 58, 'text' => 'Стрелок 5 раз стреляет по мишеням. Вероятность попадания в мишень при одном выстреле равна 0,9. Найдите вероятность того, что стрелок первые 3 раза попал в мишени, а последние два раза промахнулся.'],
+                            ['id' => 59, 'text' => 'Стрелок 5 раз стреляет по мишеням. Вероятность попадания в мишень при одном выстреле равна 0,9. Найдите вероятность того, что стрелок первые 2 раза попал в мишени, а последние 3 раза промахнулся.'],
+                            ['id' => 60, 'text' => 'Стрелок 5 раз стреляет по мишеням. Вероятность попадания в мишень при одном выстреле равна 0,8. Найдите вероятность того, что стрелок первый раз попал в мишени, а последние 4 раза промахнулся.'],
+                        ]
+                    ],
+                ]
+            ],
+            // =====================
+            // БЛОК 3. Типовые экзаменационные варианты
+            // =====================
+            [
+                'number' => 3,
+                'title' => 'Типовые экзаменационные варианты',
+                'zadaniya' => [
+                    // I) Классическое определение вероятности
+                    [
+                        'number' => 1,
+                        'instruction' => 'Классическое определение вероятности',
+                        'type' => 'word_problem',
+                        'tasks' => [
+                            ['id' => 1, 'text' => 'В одиннадцатом физико-математическом классе учатся 10 мальчиков и 6 девочек. По жребию они выбирают одного дежурного по классу. Какова вероятность, что это будет мальчик?'],
+                            ['id' => 2, 'text' => 'В одиннадцатом физико-математическом классе учатся 15 мальчиков и 5 девочек. По жребию они выбирают одного дежурного по классу. Какова вероятность, что это будет мальчик?'],
+                            ['id' => 3, 'text' => 'В десятом физико-математическом классе учатся 19 мальчиков и 6 девочек. По жребию они выбирают одного дежурного по классу. Какова вероятность, что это будет мальчик?'],
+                            ['id' => 4, 'text' => 'В девятом физико-математическом классе учатся 17 мальчиков и 3 девочки. По жребию они выбирают одного дежурного по классу. Какова вероятность, что это будет мальчик?'],
+                            ['id' => 5, 'text' => 'В группе туристов 20 человек. С помощью жребия они выбирают трёх человек, которые должны идти в село в магазин за продуктами. Какова вероятность того, что турист К., входящий в состав группы, пойдёт в магазин?'],
+                            ['id' => 6, 'text' => 'В группе туристов 8 человек. С помощью жребия они выбирают трёх человек, которые должны идти в село в магазин за продуктами. Какова вероятность того, что турист Д., входящий в состав группы, пойдёт в магазин?'],
+                            ['id' => 7, 'text' => 'В сборнике билетов по физике всего 40 билетов, в 6 из них встречается вопрос по теме «Термодинамика». Найдите вероятность того, что в случайно выбранном на экзамене билете школьнику достанется вопрос по теме «Термодинамика».'],
+                            ['id' => 8, 'text' => 'В сборнике билетов по физике всего 50 билетов, в 8 из них встречается вопрос по теме «Механика». Найдите вероятность того, что в случайно выбранном на экзамене билете школьнику достанется вопрос по теме «Механика».'],
+                            ['id' => 9, 'text' => 'Научная конференция проводится в 3 дня. Всего запланировано 50 докладов: в первый день – 16 докладов, остальные распределены поровну между вторым и третьим днями. На конференции планируется доклад профессора Н. Порядок докладов определяется случайным образом. Какова вероятность того, что доклад профессора Н. окажется запланированным на последний день конференции?'],
+                            ['id' => 10, 'text' => 'Научная конференция проводится в 4 дня. Всего запланировано 50 докладов: первые два дня – по 13 докладов, остальные распределены поровну между 3-им и 4-ым днями. На конференции планируется доклад профессора К. Порядок докладов определяется случайным образом. Какова вероятность, что доклад профессора К. окажется запланированным на последний день конференции?'],
+                            ['id' => 11, 'text' => 'На олимпиаде по химии участников рассаживают по трём аудиториям. В первых двух по 110 человек, оставшихся проводят в запасную аудиторию в другом корпусе. При подсчёте выяснилось, что всего было 400 участников. Найдите вероятность того, что случайно выбранный участник писал олимпиаду в запасной аудитории.'],
+                            ['id' => 12, 'text' => 'На олимпиаде по биологии участников рассаживают по трём аудиториям. В первых двух по 130 человек, оставшихся проводят в запасную аудиторию в другом корпусе. При подсчёте выяснилось, что всего было 400 участников. Найдите вероятность того, что случайно выбранный участник писал олимпиаду в запасной аудитории.'],
+                            ['id' => 13, 'text' => 'В коробке вперемешку лежат чайные пакетики с чёрным и зелёным чаем, одинаковые на вид, причём пакетиков с чёрным чаем в 4 раза больше, чем пакетиков с зелёным. Найдите вероятность того, что случайно выбранный из этой коробки пакетик окажется пакетиком с черным чаем.'],
+                            ['id' => 14, 'text' => 'В коробке вперемешку лежат чайные пакетики с чёрным и зелёным чаем, одинаковые на вид, причём пакетиков с зеленым чаем в 7 раза меньше, чем пакетиков с черным. Найдите вероятность того, что случайно выбранный из этой коробки пакетик окажется пакетиком с черным чаем.'],
+                            ['id' => 15, 'text' => 'На птицеферме есть только куры и гуси, причём кур в 19 раз больше, чем гусей. Найдите вероятность того, что случайно выбранная на этой ферме птица окажется гусем.'],
+                            ['id' => 16, 'text' => 'На птицеферме есть только куры и гуси, причём кур в 4 раза больше, чем гусей. Найдите вероятность того, что случайно выбранная на этой ферме птица окажется гусем.'],
+                            ['id' => 17, 'text' => 'Перед началом первого тура чемпионата по шашкам участников разбивают на игровые пары случайным образом с помощью жребия. Всего в чемпионате участвует 71 спортсмен, среди которых 22 спортсменов из России, в том числе Т. Найдите вероятность того, что в первом туре Т. будет играть с каким-либо спортсменом из России.'],
+                            ['id' => 18, 'text' => 'Перед началом первого тура чемпионата по теннису участников разбивают на игровые пары случайным образом с помощью жребия. Всего в чемпионате участвует 51 спортсмен, среди которых 14 спортсменов из России, в том числе Д. Найдите вероятность того, что в первом туре Д. будет играть с каким-либо спортсменом не из России.'],
+                            ['id' => 19, 'text' => 'За круглый стол на 11 стульев в случайном порядке рассаживаются 9 мальчиков и 2 девочки. Найдите вероятность того, что девочки окажутся на соседних местах.'],
+                            ['id' => 20, 'text' => 'За круглый стол на 9 стульев в случайном порядке рассаживаются 7 мальчиков и 2 девочки. Найдите вероятность того, что девочки окажутся на соседних местах.'],
+                            ['id' => 21, 'text' => 'За круглый стол на 11 стул в случайном порядке рассаживаются 9 мальчиков и 2 девочки. Найдите вероятность того, что девочки не окажутся на соседних местах.'],
+                            ['id' => 22, 'text' => 'За круглый стол на 21 стул в случайном порядке рассаживаются 19 мальчиков и 2 девочки. Найдите вероятность того, что девочки не окажутся на соседних местах.'],
+                            ['id' => 23, 'text' => 'Правильную игральную кость бросают дважды. Известно, что сумма выпавших очков больше 8. Найдите вероятность события «при втором броске выпало 3 очка».'],
+                            ['id' => 24, 'text' => 'Правильную игральную кость бросают дважды. Известно, что сумма выпавших очков больше 8. Найдите вероятность события «при втором броске выпало 4 очка».'],
+                            ['id' => 25, 'text' => 'На фестивале выступают группы – по одной от каждой из заявленных стран, среди этих стран Россия, Великобритания и Франция. Порядок выступления определяется жребием. Какова вероятность того, что группа из Франции будет выступать после группы из Великобритании и после группы из России? Результат округлите до сотых.'],
+                            ['id' => 26, 'text' => 'На фестивале выступают группы - по одной от каждой из заявленных стран, среди этих стран Испания, Португалия и Италия. Порядок выступления определяется жребием. Какова вероятность того, что группа из Испании будет выступать до группы из Португалии и до группы из Италии? Результат округлите до сотых.'],
+                        ]
+                    ],
+                    // II) Статистическое определение вероятности
+                    [
+                        'number' => 2,
+                        'instruction' => 'Статистическое определение вероятности',
+                        'type' => 'word_problem',
+                        'tasks' => [
+                            ['id' => 27, 'text' => 'Фабрика выпускает сумки. В среднем из 120 сумок 6 сумок имеют скрытый дефект. Найдите вероятность того, что случайно выбранная сумка окажется без дефектов.'],
+                            ['id' => 28, 'text' => 'Фабрика выпускает сумки. В среднем из 150 сумок 3 сумки имеют скрытый дефект. Найдите вероятность того, что случайно выбранная сумка окажется без дефектов.'],
+                        ]
+                    ],
+                    // III) Формулы для вычисления вероятностей
+                    [
+                        'number' => 3,
+                        'instruction' => 'Формулы для вычисления вероятностей',
+                        'type' => 'word_problem',
+                        'tasks' => [
+                            ['id' => 29, 'text' => 'Вероятность того, что новый принтер прослужит больше года, равна 0,95. Вероятность того, что он прослужит два года или больше 0,88. Найдите вероятность того, что он прослужит меньше двух лет, но не менее года.'],
+                            ['id' => 30, 'text' => 'Вероятность того, что новый принтер прослужит больше года, равна 0,96. Вероятность того, что он прослужит два года или больше 0,74. Найдите вероятность того, что он прослужит меньше двух лет, но не менее года.'],
+                            ['id' => 31, 'text' => 'Вероятность того, что новый сканер прослужит больше года, равна 0,96. Вероятность того, что он прослужит два года или больше 0,87. Найдите вероятность того, что он прослужит меньше двух лет, но не менее года.'],
+                            ['id' => 32, 'text' => 'Вероятность того, что новый сканер прослужит больше года, равна 0,95. Вероятность того, что он прослужит два года или больше 0,77. Найдите вероятность того, что он прослужит меньше двух лет, но не менее года.'],
+                        ]
+                    ],
+                ]
+            ],
+        ];
     }
 }
