@@ -207,9 +207,16 @@
 <div class="nav-bar">
     <a href="{{ route('test.pdf.index') }}">← Назад к парсеру</a>
     <div>
-        <a href="{{ route('test.topic06') }}">Topic 06</a> |
-        <a href="{{ route('test.topic07') }}">Topic 07</a> |
-        <strong>Topic 08</strong>
+        <a href="{{ route('test.topic06') }}">06</a> |
+        <a href="{{ route('test.topic07') }}">07</a> |
+        <strong>08</strong> |
+        <a href="{{ route('test.topic09') }}">09</a> |
+        <a href="{{ route('test.topic10') }}">10</a> |
+        <a href="{{ route('test.topic11') }}">11</a> |
+        <a href="{{ route('test.topic12') }}">12</a> |
+        <a href="{{ route('test.topic13') }}">13</a> |
+        <a href="{{ route('test.topic18') }}">18</a> |
+        <a href="{{ route('test.topic19') }}">19</a>
     </div>
 </div>
 
