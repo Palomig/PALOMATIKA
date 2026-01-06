@@ -5,743 +5,658 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>15. Треугольники - Интерактивные изображения</title>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-            onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
-
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'PT Serif', Georgia, serif;
-            font-size: 17px;
-            line-height: 1.6;
-            padding: 40px 60px;
-            max-width: 1400px;
-            margin: 0 auto;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #e0e0e0;
-            min-height: 100vh;
-        }
-
-        .nav-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding: 15px 20px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 12px;
-            font-family: 'Inter', sans-serif;
-            backdrop-filter: blur(10px);
-        }
-        .nav-bar a { color: #60a5fa; text-decoration: none; font-size: 14px; transition: color 0.2s; }
-        .nav-bar a:hover { color: #93c5fd; }
-
-        .title {
-            text-align: center;
-            font-weight: 700;
-            font-size: 28px;
-            margin-bottom: 8px;
-            color: #fff;
-        }
-        .subtitle {
-            text-align: center;
-            font-weight: 500;
-            font-size: 16px;
-            margin-bottom: 30px;
-            color: #9ca3af;
-        }
-
-        .demos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-            gap: 24px;
-        }
-
-        .demo-card {
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 16px;
-            padding: 24px;
-            transition: all 0.3s ease;
-        }
-        .demo-card:hover {
-            background: rgba(255,255,255,0.06);
-            border-color: rgba(255,255,255,0.2);
-            transform: translateY(-2px);
-        }
-
-        .demo-title {
-            font-family: 'Inter', sans-serif;
-            font-weight: 600;
-            font-size: 18px;
-            color: #fff;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .demo-title .number {
-            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
-            color: white;
-            width: 28px;
-            height: 28px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        .svg-container {
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 16px;
-        }
-        .svg-container svg {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .hint-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .hint-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
-        }
-        .hint-btn.active {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        }
-
-        .hint-text {
-            margin-top: 12px;
-            padding: 12px 16px;
-            background: rgba(16, 185, 129, 0.1);
-            border-left: 3px solid #10b981;
-            border-radius: 0 8px 8px 0;
-            font-size: 14px;
-            color: #a7f3d0;
-            font-family: 'Inter', sans-serif;
-        }
-
-        /* SVG Styles - matching original */
-        .geo-line {
-            stroke: #8B1A1A;
-            stroke-width: 2.5;
-            fill: none;
-            transition: all 0.3s ease;
-        }
-        .geo-line.highlight {
-            stroke: #f59e0b;
-            stroke-width: 4;
-        }
-        .geo-line.secondary {
-            stroke: #8B1A1A;
-            stroke-width: 2;
-            stroke-dasharray: 6,4;
-        }
-        .geo-line.secondary.highlight {
-            stroke: #f59e0b;
-            stroke-dasharray: none;
-            stroke-width: 3;
-        }
-        .geo-point {
-            fill: #8B1A1A;
-            transition: all 0.3s ease;
-        }
-        .geo-point.highlight {
-            fill: #f59e0b;
-        }
+        [x-cloak] { display: none !important; }
+        .geo-line { transition: stroke 0.2s ease, stroke-width 0.2s ease; }
+        .geo-point { transition: r 0.2s ease, fill 0.2s ease; }
         .geo-label {
             font-family: 'Times New Roman', serif;
             font-style: italic;
             font-weight: 500;
-            font-size: 20px;
-            fill: #1e40af;
-            transition: all 0.3s ease;
-        }
-        .geo-label.highlight {
-            fill: #f59e0b;
-            font-size: 22px;
-        }
-        .geo-arc {
-            stroke: #27ae60;
-            stroke-width: 2;
-            fill: none;
-            transition: all 0.3s ease;
-        }
-        .geo-arc.highlight {
-            stroke: #f59e0b;
-            stroke-width: 3;
-        }
-        .geo-square {
-            stroke: #27ae60;
-            stroke-width: 2;
-            fill: none;
-        }
-        .geo-square.highlight {
-            stroke: #f59e0b;
-            stroke-width: 3;
-        }
-        .geo-fill {
-            transition: all 0.3s ease;
-        }
-        .geo-fill.highlight {
-            fill: rgba(245, 158, 11, 0.15);
-        }
-
-        .formula-box {
-            margin-top: 12px;
-            padding: 12px 16px;
-            background: rgba(59, 130, 246, 0.1);
-            border-radius: 8px;
-            text-align: center;
-            font-size: 18px;
-            color: #93c5fd;
-        }
-
-        @media (max-width: 900px) {
-            body { padding: 20px; font-size: 15px; }
-            .title { font-size: 22px; }
-            .demos-grid { grid-template-columns: 1fr; }
+            user-select: none;
+            pointer-events: none;
         }
     </style>
 </head>
-<body>
+<body class="min-h-screen bg-gradient-to-br from-slate-800 to-slate-900 p-6">
 
-<div class="nav-bar">
-    <a href="{{ route('test.topic15') }}">← Назад к статичной версии</a>
-    <div>
-        <a href="{{ route('test.pdf.index') }}">Парсер PDF</a>
+<div class="max-w-6xl mx-auto">
+    <div class="flex justify-between items-center mb-6 text-sm">
+        <a href="{{ route('test.topic15') }}" class="text-blue-400 hover:text-blue-300 transition-colors">← Статичная версия</a>
+        <a href="{{ route('test.pdf.index') }}" class="text-blue-400 hover:text-blue-300 transition-colors">Парсер PDF</a>
     </div>
+
+    <h1 class="text-3xl font-bold text-center text-white mb-2">15. Треугольники</h1>
+    <p class="text-center text-slate-400 mb-8">Наведите на кнопки для подсветки элементов</p>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        {{-- 1. Биссектриса треугольника --}}
+        <div x-data="bisectorDemo()" class="bg-slate-800 rounded-xl shadow-lg p-6 border border-slate-700">
+            <h3 class="text-xl font-semibold text-white mb-4">1. Биссектриса треугольника</h3>
+
+            <svg viewBox="0 0 300 220" class="w-full h-52 mb-4">
+                {{-- Треугольник --}}
+                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                    fill="none"
+                    :stroke="isHighlighted('sides') ? '#f59e0b' : '#dc2626'"
+                    :stroke-width="isHighlighted('sides') ? 5 : 3.5"
+                    stroke-linejoin="round" class="geo-line"/>
+
+                {{-- Биссектриса BD --}}
+                <g x-show="isHighlighted('bisector')">
+                    <line :x1="B.x" :y1="B.y" :x2="D.x" :y2="D.y"
+                        stroke="#10b981" stroke-width="2.5" stroke-dasharray="8,5"/>
+                    <circle :cx="D.x" :cy="D.y" r="4" fill="#10b981"/>
+                </g>
+
+                {{-- Дуги равных углов --}}
+                <g x-show="isHighlighted('bisector')">
+                    <path :d="makeAngleArc(B, A, D, 28)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                    <path :d="makeAngleArc(B, D, C, 32)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                </g>
+
+                {{-- Угол при A --}}
+                <g x-show="isHighlighted('angleA')">
+                    <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                </g>
+
+                {{-- Вершины --}}
+                <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                {{-- Подписи --}}
+                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                <text x-show="isHighlighted('bisector')" :x="D.x" :y="D.y + 20" fill="#10b981" font-size="18" class="geo-label" text-anchor="middle">D</text>
+            </svg>
+
+            <div class="flex flex-wrap gap-2 mb-3">
+                <template x-for="h in hints" :key="h.id">
+                    <button @mouseenter="hint = h.id" @mouseleave="hint = null"
+                        :class="hint === h.id ? 'bg-amber-500 text-white shadow-md' : 'bg-slate-700 text-slate-200 hover:bg-slate-600'"
+                        class="px-3 py-1.5 rounded-full text-sm font-medium transition-all" x-text="h.label"></button>
+                </template>
+            </div>
+            <div x-show="hint" x-cloak class="bg-amber-500/20 border-l-4 border-amber-500 p-3 rounded">
+                <p class="text-slate-200" x-text="hints.find(h => h.id === hint)?.desc"></p>
+            </div>
+        </div>
+
+        {{-- 2. Медиана треугольника --}}
+        <div x-data="medianDemo()" class="bg-slate-800 rounded-xl shadow-lg p-6 border border-slate-700">
+            <h3 class="text-xl font-semibold text-white mb-4">2. Медиана треугольника</h3>
+
+            <svg viewBox="0 0 300 220" class="w-full h-52 mb-4">
+                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                    fill="none"
+                    :stroke="isHighlighted('sides') ? '#f59e0b' : '#dc2626'"
+                    :stroke-width="isHighlighted('sides') ? 5 : 3.5"
+                    stroke-linejoin="round" class="geo-line"/>
+
+                {{-- Медиана BM --}}
+                <g x-show="isHighlighted('median')">
+                    <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
+                        stroke="#10b981" stroke-width="2.5" stroke-dasharray="8,5"/>
+                    <circle :cx="M.x" :cy="M.y" r="5" fill="#10b981"/>
+                    {{-- Маркеры равных отрезков --}}
+                    <line :x1="(A.x + M.x)/2 - 5" :y1="A.y - 5" :x2="(A.x + M.x)/2 + 5" :y2="A.y + 5" stroke="#3b82f6" stroke-width="3"/>
+                    <line :x1="(M.x + C.x)/2 - 5" :y1="A.y - 5" :x2="(M.x + C.x)/2 + 5" :y2="A.y + 5" stroke="#3b82f6" stroke-width="3"/>
+                </g>
+
+                <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                <text x-show="isHighlighted('median')" :x="M.x" :y="M.y + 20" fill="#10b981" font-size="18" class="geo-label" text-anchor="middle">M</text>
+            </svg>
+
+            <div class="flex flex-wrap gap-2 mb-3">
+                <template x-for="h in hints" :key="h.id">
+                    <button @mouseenter="hint = h.id" @mouseleave="hint = null"
+                        :class="hint === h.id ? 'bg-amber-500 text-white shadow-md' : 'bg-slate-700 text-slate-200 hover:bg-slate-600'"
+                        class="px-3 py-1.5 rounded-full text-sm font-medium transition-all" x-text="h.label"></button>
+                </template>
+            </div>
+            <div x-show="hint" x-cloak class="bg-amber-500/20 border-l-4 border-amber-500 p-3 rounded">
+                <p class="text-slate-200" x-text="hints.find(h => h.id === hint)?.desc"></p>
+            </div>
+        </div>
+
+        {{-- 3. Сумма углов треугольника --}}
+        <div x-data="anglesSum()" class="bg-slate-800 rounded-xl shadow-lg p-6 border border-slate-700">
+            <h3 class="text-xl font-semibold text-white mb-4">3. Сумма углов треугольника</h3>
+
+            <svg viewBox="0 0 300 220" class="w-full h-52 mb-4">
+                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                    fill="none" stroke="#dc2626" stroke-width="3.5" stroke-linejoin="round" class="geo-line"/>
+
+                {{-- Все три угла --}}
+                <g x-show="isHighlighted('allAngles')">
+                    <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                    <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2.5"/>
+                    <path :d="makeAngleArc(C, B, A, 30)" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+                </g>
+
+                <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+            </svg>
+
+            <div class="flex flex-wrap gap-2 mb-3">
+                <button @mouseenter="hint = 'allAngles'" @mouseleave="hint = null"
+                    :class="hint === 'allAngles' ? 'bg-amber-500 text-white shadow-md' : 'bg-slate-700 text-slate-200 hover:bg-slate-600'"
+                    class="px-3 py-1.5 rounded-full text-sm font-medium transition-all">Подсказка</button>
+            </div>
+            <div x-show="hint" x-cloak class="bg-amber-500/20 border-l-4 border-amber-500 p-3 rounded">
+                <p class="text-slate-200"><strong>∠A + ∠B + ∠C = 180°</strong><br>Третий угол = 180° − (первый + второй)</p>
+            </div>
+        </div>
+
+        {{-- 4. Внешний угол треугольника --}}
+        <div x-data="externalAngle()" class="bg-slate-800 rounded-xl shadow-lg p-6 border border-slate-700">
+            <h3 class="text-xl font-semibold text-white mb-4">4. Внешний угол</h3>
+
+            <svg viewBox="0 0 300 200" class="w-full h-48 mb-4">
+                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                    fill="none" stroke="#dc2626" stroke-width="3.5" stroke-linejoin="round"/>
+
+                {{-- Продолжение стороны --}}
+                <line :x1="C.x" :y1="C.y" :x2="D.x" :y2="D.y" stroke="#dc2626" stroke-width="2" stroke-dasharray="8,5"/>
+
+                {{-- Внешний угол --}}
+                <g x-show="isHighlighted('external')">
+                    <path :d="makeAngleArc(C, B, D, 25)" fill="none" stroke="#f59e0b" stroke-width="3"/>
+                </g>
+
+                {{-- Внутренний угол --}}
+                <g x-show="isHighlighted('internal')">
+                    <path :d="makeAngleArc(C, A, B, 30)" fill="none" stroke="#10b981" stroke-width="2.5"/>
+                </g>
+
+                {{-- Несмежные углы --}}
+                <g x-show="isHighlighted('nonadjacent')">
+                    <path :d="makeAngleArc(A, C, B, 28)" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+                    <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+                </g>
+
+                <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                <text :x="C.x" :y="C.y + 22" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle">C</text>
+            </svg>
+
+            <div class="flex flex-wrap gap-2 mb-3">
+                <template x-for="h in hints" :key="h.id">
+                    <button @mouseenter="hint = h.id" @mouseleave="hint = null"
+                        :class="hint === h.id ? 'bg-amber-500 text-white shadow-md' : 'bg-slate-700 text-slate-200 hover:bg-slate-600'"
+                        class="px-3 py-1.5 rounded-full text-sm font-medium transition-all" x-text="h.label"></button>
+                </template>
+            </div>
+            <div x-show="hint" x-cloak class="bg-amber-500/20 border-l-4 border-amber-500 p-3 rounded">
+                <p class="text-slate-200" x-text="hints.find(h => h.id === hint)?.desc"></p>
+            </div>
+        </div>
+
+        {{-- 5. Равнобедренный треугольник --}}
+        <div x-data="isoscelesDemo()" class="bg-slate-800 rounded-xl shadow-lg p-6 border border-slate-700">
+            <h3 class="text-xl font-semibold text-white mb-4">5. Равнобедренный треугольник</h3>
+
+            <svg viewBox="0 0 300 220" class="w-full h-52 mb-4">
+                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                    fill="none" stroke="#dc2626" stroke-width="3.5" stroke-linejoin="round"/>
+
+                {{-- Маркеры равных сторон --}}
+                <g x-show="isHighlighted('equalSides')">
+                    <line :x1="markAB.x - 6" :y1="markAB.y - 6" :x2="markAB.x + 6" :y2="markAB.y + 6" stroke="#3b82f6" stroke-width="3"/>
+                    <line :x1="markAB.x - 6 + 5" :y1="markAB.y - 6 + 5" :x2="markAB.x + 6 + 5" :y2="markAB.y + 6 + 5" stroke="#3b82f6" stroke-width="3"/>
+                    <line :x1="markBC.x - 6" :y1="markBC.y + 6" :x2="markBC.x + 6" :y2="markBC.y - 6" stroke="#3b82f6" stroke-width="3"/>
+                    <line :x1="markBC.x - 6 - 5" :y1="markBC.y + 6 + 5" :x2="markBC.x + 6 - 5" :y2="markBC.y - 6 + 5" stroke="#3b82f6" stroke-width="3"/>
+                </g>
+
+                {{-- Углы при основании --}}
+                <g x-show="isHighlighted('baseAngles')">
+                    <path :d="makeAngleArc(A, C, B, 35)" fill="none" stroke="#10b981" stroke-width="2.5"/>
+                    <path :d="makeAngleArc(C, B, A, 35)" fill="none" stroke="#10b981" stroke-width="2.5"/>
+                </g>
+
+                {{-- Угол при вершине --}}
+                <g x-show="isHighlighted('vertexAngle')">
+                    <path :d="makeAngleArc(B, A, C, 30)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                </g>
+
+                <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+            </svg>
+
+            <div class="flex flex-wrap gap-2 mb-3">
+                <template x-for="h in hints" :key="h.id">
+                    <button @mouseenter="hint = h.id" @mouseleave="hint = null"
+                        :class="hint === h.id ? 'bg-amber-500 text-white shadow-md' : 'bg-slate-700 text-slate-200 hover:bg-slate-600'"
+                        class="px-3 py-1.5 rounded-full text-sm font-medium transition-all" x-text="h.label"></button>
+                </template>
+            </div>
+            <div x-show="hint" x-cloak class="bg-amber-500/20 border-l-4 border-amber-500 p-3 rounded">
+                <p class="text-slate-200" x-text="hints.find(h => h.id === hint)?.desc"></p>
+            </div>
+        </div>
+
+        {{-- 6. Внешний угол равнобедренного --}}
+        <div x-data="isoscelesExternal()" class="bg-slate-800 rounded-xl shadow-lg p-6 border border-slate-700">
+            <h3 class="text-xl font-semibold text-white mb-4">6. Внешний угол равнобедр.</h3>
+
+            <svg viewBox="0 0 300 200" class="w-full h-48 mb-4">
+                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                    fill="none" stroke="#dc2626" stroke-width="3.5" stroke-linejoin="round"/>
+
+                <line :x1="C.x" :y1="C.y" :x2="D.x" :y2="D.y" stroke="#dc2626" stroke-width="2" stroke-dasharray="8,5"/>
+
+                {{-- Внешний угол --}}
+                <g x-show="isHighlighted('external')">
+                    <path :d="makeAngleArc(C, B, D, 25)" fill="none" stroke="#f59e0b" stroke-width="3"/>
+                </g>
+
+                {{-- Углы при основании --}}
+                <g x-show="isHighlighted('baseAngles')">
+                    <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#10b981" stroke-width="2.5"/>
+                    <path :d="makeAngleArc(C, B, A, 30)" fill="none" stroke="#10b981" stroke-width="2.5"/>
+                </g>
+
+                {{-- Равные стороны --}}
+                <g x-show="isHighlighted('equalSides')">
+                    <line :x1="markAB.x - 5" :y1="markAB.y - 5" :x2="markAB.x + 5" :y2="markAB.y + 5" stroke="#3b82f6" stroke-width="3"/>
+                    <line :x1="markBC.x - 5" :y1="markBC.y + 5" :x2="markBC.x + 5" :y2="markBC.y - 5" stroke="#3b82f6" stroke-width="3"/>
+                </g>
+
+                <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                <text :x="C.x" :y="C.y + 22" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle">C</text>
+            </svg>
+
+            <div class="flex flex-wrap gap-2 mb-3">
+                <template x-for="h in hints" :key="h.id">
+                    <button @mouseenter="hint = h.id" @mouseleave="hint = null"
+                        :class="hint === h.id ? 'bg-amber-500 text-white shadow-md' : 'bg-slate-700 text-slate-200 hover:bg-slate-600'"
+                        class="px-3 py-1.5 rounded-full text-sm font-medium transition-all" x-text="h.label"></button>
+                </template>
+            </div>
+            <div x-show="hint" x-cloak class="bg-amber-500/20 border-l-4 border-amber-500 p-3 rounded">
+                <p class="text-slate-200" x-text="hints.find(h => h.id === hint)?.desc"></p>
+            </div>
+        </div>
+
+        {{-- 7. Прямоугольный треугольник --}}
+        <div x-data="rightTriangle()" class="bg-slate-800 rounded-xl shadow-lg p-6 border border-slate-700">
+            <h3 class="text-xl font-semibold text-white mb-4">7. Прямоугольный треугольник</h3>
+
+            <svg viewBox="0 0 300 220" class="w-full h-52 mb-4">
+                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                    fill="none" stroke="#dc2626" stroke-width="3.5" stroke-linejoin="round"/>
+
+                {{-- Прямой угол (квадратик) --}}
+                <path :d="rightAnglePath(C, A, B, 15)" fill="none"
+                    :stroke="isHighlighted('rightAngle') ? '#f59e0b' : '#666'"
+                    :stroke-width="isHighlighted('rightAngle') ? 3 : 2"/>
+
+                {{-- Острые углы --}}
+                <g x-show="isHighlighted('acuteAngles')">
+                    <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#10b981" stroke-width="2.5"/>
+                    <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+                </g>
+
+                <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+            </svg>
+
+            <div class="flex flex-wrap gap-2 mb-3">
+                <template x-for="h in hints" :key="h.id">
+                    <button @mouseenter="hint = h.id" @mouseleave="hint = null"
+                        :class="hint === h.id ? 'bg-amber-500 text-white shadow-md' : 'bg-slate-700 text-slate-200 hover:bg-slate-600'"
+                        class="px-3 py-1.5 rounded-full text-sm font-medium transition-all" x-text="h.label"></button>
+                </template>
+            </div>
+            <div x-show="hint" x-cloak class="bg-amber-500/20 border-l-4 border-amber-500 p-3 rounded">
+                <p class="text-slate-200" x-text="hints.find(h => h.id === hint)?.desc"></p>
+            </div>
+        </div>
+
+        {{-- 8. Высота треугольника --}}
+        <div x-data="heightDemo()" class="bg-slate-800 rounded-xl shadow-lg p-6 border border-slate-700">
+            <h3 class="text-xl font-semibold text-white mb-4">8. Высота треугольника</h3>
+
+            <svg viewBox="0 0 300 220" class="w-full h-52 mb-4">
+                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                    fill="none" stroke="#dc2626" stroke-width="3.5" stroke-linejoin="round"/>
+
+                {{-- Высота BH --}}
+                <g x-show="isHighlighted('height')">
+                    <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y"
+                        stroke="#3b82f6" stroke-width="2.5" stroke-dasharray="8,5"/>
+                    <path :d="rightAnglePath(H, A, B, 12)" fill="none" stroke="#3b82f6" stroke-width="2"/>
+                    <circle :cx="H.x" :cy="H.y" r="4" fill="#3b82f6"/>
+                </g>
+
+                {{-- Угол BAC --}}
+                <g x-show="isHighlighted('angleA')">
+                    <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                </g>
+
+                {{-- Угол ABH --}}
+                <g x-show="isHighlighted('angleABH')">
+                    <path :d="makeAngleArc(B, A, H, 25)" fill="none" stroke="#10b981" stroke-width="2.5"/>
+                </g>
+
+                <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                <text x-show="isHighlighted('height')" :x="H.x + 15" :y="H.y - 5" fill="#3b82f6" font-size="18" class="geo-label">H</text>
+            </svg>
+
+            <div class="flex flex-wrap gap-2 mb-3">
+                <template x-for="h in hints" :key="h.id">
+                    <button @mouseenter="hint = h.id" @mouseleave="hint = null"
+                        :class="hint === h.id ? 'bg-amber-500 text-white shadow-md' : 'bg-slate-700 text-slate-200 hover:bg-slate-600'"
+                        class="px-3 py-1.5 rounded-full text-sm font-medium transition-all" x-text="h.label"></button>
+                </template>
+            </div>
+            <div x-show="hint" x-cloak class="bg-amber-500/20 border-l-4 border-amber-500 p-3 rounded">
+                <p class="text-slate-200" x-text="hints.find(h => h.id === hint)?.desc"></p>
+            </div>
+        </div>
+
+        {{-- 9. Площадь прямоугольного треугольника --}}
+        <div x-data="areaDemo()" class="bg-slate-800 rounded-xl shadow-lg p-6 border border-slate-700">
+            <h3 class="text-xl font-semibold text-white mb-4">9. Площадь прямоуг. треуг.</h3>
+
+            <svg viewBox="0 0 300 220" class="w-full h-52 mb-4">
+                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                    :fill="isHighlighted('area') ? 'rgba(245, 158, 11, 0.2)' : 'none'"
+                    stroke="#dc2626" stroke-width="3.5" stroke-linejoin="round"/>
+
+                {{-- Прямой угол --}}
+                <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666" stroke-width="2"/>
+
+                {{-- Катеты --}}
+                <g x-show="isHighlighted('catheti')">
+                    <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#f59e0b" stroke-width="5"/>
+                    <line :x1="C.x" :y1="C.y" :x2="B.x" :y2="B.y" stroke="#3b82f6" stroke-width="5"/>
+                    <text :x="(A.x + C.x)/2 - 15" :y="(A.y + C.y)/2" fill="#f59e0b" font-size="18" class="geo-label">a</text>
+                    <text :x="(C.x + B.x)/2 + 10" :y="(C.y + B.y)/2" fill="#3b82f6" font-size="18" class="geo-label">b</text>
+                </g>
+
+                <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#60a5fa" font-size="20" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+            </svg>
+
+            <div class="flex flex-wrap gap-2 mb-3">
+                <template x-for="h in hints" :key="h.id">
+                    <button @mouseenter="hint = h.id" @mouseleave="hint = null"
+                        :class="hint === h.id ? 'bg-amber-500 text-white shadow-md' : 'bg-slate-700 text-slate-200 hover:bg-slate-600'"
+                        class="px-3 py-1.5 rounded-full text-sm font-medium transition-all" x-text="h.label"></button>
+                </template>
+            </div>
+            <div x-show="hint" x-cloak class="bg-amber-500/20 border-l-4 border-amber-500 p-3 rounded">
+                <p class="text-slate-200" x-text="hints.find(h => h.id === hint)?.desc"></p>
+            </div>
+            <div x-show="isHighlighted('area')" class="mt-3 p-3 bg-indigo-500/20 rounded text-center">
+                <p class="text-white text-lg font-mono">S = <span class="text-amber-400">a</span> × <span class="text-blue-400">b</span> / 2</p>
+            </div>
+        </div>
+
+    </div>
+
+    <p class="text-center text-slate-500 text-sm mt-8">Все изображения генерируются программно</p>
 </div>
 
-<h1 class="title">15. Треугольники</h1>
-<p class="subtitle">Интерактивные геометрические изображения с подсказками</p>
+<script>
+    // Глобальные функции из спецификации
+    function labelPos(point, center, distance = 20) {
+        const dx = point.x - center.x;
+        const dy = point.y - center.y;
+        const len = Math.sqrt(dx * dx + dy * dy);
+        if (len === 0) return { x: point.x, y: point.y - distance };
+        return {
+            x: point.x + (dx / len) * distance,
+            y: point.y + (dy / len) * distance
+        };
+    }
 
-<div class="demos-grid">
+    function makeAngleArc(vertex, point1, point2, radius) {
+        const angle1 = Math.atan2(point1.y - vertex.y, point1.x - vertex.x);
+        const angle2 = Math.atan2(point2.y - vertex.y, point2.x - vertex.x);
+        const x1 = vertex.x + radius * Math.cos(angle1);
+        const y1 = vertex.y + radius * Math.sin(angle1);
+        const x2 = vertex.x + radius * Math.cos(angle2);
+        const y2 = vertex.y + radius * Math.sin(angle2);
+        let angleDiff = angle2 - angle1;
+        while (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
+        while (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
+        const sweep = angleDiff > 0 ? 1 : 0;
+        return `M ${x1} ${y1} A ${radius} ${radius} 0 0 ${sweep} ${x2} ${y2}`;
+    }
 
-    {{-- 1. Биссектриса треугольника - BD из B к AC --}}
-    <div class="demo-card" x-data="{ showHint: false }">
-        <div class="demo-title">
-            <span class="number">1</span>
-            Биссектриса треугольника
-        </div>
-        <div class="svg-container">
-            <svg viewBox="0 0 300 200">
-                {{-- Triangle ABC --}}
-                <polygon points="30,170 270,170 200,30"
-                         class="geo-line" stroke-linejoin="round"/>
+    function rightAnglePath(vertex, p1, p2, size = 12) {
+        const angle1 = Math.atan2(p1.y - vertex.y, p1.x - vertex.x);
+        const angle2 = Math.atan2(p2.y - vertex.y, p2.x - vertex.x);
+        const c1 = { x: vertex.x + size * Math.cos(angle1), y: vertex.y + size * Math.sin(angle1) };
+        const c2 = { x: vertex.x + size * Math.cos(angle2), y: vertex.y + size * Math.sin(angle2) };
+        const diag = { x: c1.x + size * Math.cos(angle2), y: c1.y + size * Math.sin(angle2) };
+        return `M ${c1.x} ${c1.y} L ${diag.x} ${diag.y} L ${c2.x} ${c2.y}`;
+    }
 
-                {{-- Bisector BD from B to AC --}}
-                <line x1="200" y1="30" x2="150" y2="170"
-                      class="geo-line secondary"
-                      :class="{ 'highlight': showHint }"/>
+    window.labelPos = labelPos;
+    window.makeAngleArc = makeAngleArc;
+    window.rightAnglePath = rightAnglePath;
 
-                {{-- Angle arc at A (the angle we're bisecting is at A in the problem) --}}
-                <path d="M 50 170 A 20 20 0 0 0 42 155"
-                      class="geo-arc"
-                      :class="{ 'highlight': showHint }"/>
+    // 1. Биссектриса
+    function bisectorDemo() {
+        const A = { x: 30, y: 190 };
+        const B = { x: 180, y: 30 };
+        const C = { x: 270, y: 190 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        const D = { x: 150, y: 190 }; // Точка на AC
+        return {
+            hint: null, A, B, C, D, center,
+            hints: [
+                { id: 'bisector', label: 'Подсказка', desc: 'BD — биссектриса. ∠ABD = ∠DBC = ∠ABC / 2' },
+                { id: 'angleA', label: 'Угол A', desc: '∠BAC — угол при вершине A' },
+            ],
+            isHighlighted(name) { return this.hint === name; },
+            labelPos: (p, c) => window.labelPos(p, c),
+            makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
+        };
+    }
 
-                {{-- Two equal angle arcs at B when hint shown --}}
-                <template x-if="showHint">
-                    <g>
-                        {{-- First half of angle ABD --}}
-                        <path d="M 185 50 A 22 22 0 0 0 175 62" class="geo-arc highlight"/>
-                        {{-- Second half of angle DBC --}}
-                        <path d="M 175 62 A 22 22 0 0 0 210 55" class="geo-arc highlight"/>
-                        {{-- Equal marks --}}
-                        <line x1="178" y1="54" x2="182" y2="58" stroke="#f59e0b" stroke-width="2"/>
-                        <line x1="192" y1="54" x2="196" y2="58" stroke="#f59e0b" stroke-width="2"/>
-                    </g>
-                </template>
+    // 2. Медиана
+    function medianDemo() {
+        const A = { x: 30, y: 190 };
+        const B = { x: 180, y: 30 };
+        const C = { x: 270, y: 190 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        const M = { x: (A.x + C.x) / 2, y: A.y };
+        return {
+            hint: null, A, B, C, M, center,
+            hints: [
+                { id: 'median', label: 'Подсказка', desc: 'BM — медиана. AM = MC = AC / 2' },
+            ],
+            isHighlighted(name) { return this.hint === name; },
+            labelPos: (p, c) => window.labelPos(p, c),
+        };
+    }
 
-                {{-- Points --}}
-                <circle cx="30" cy="170" r="4" class="geo-point"/>
-                <circle cx="270" cy="170" r="4" class="geo-point"/>
-                <circle cx="200" cy="30" r="4" class="geo-point"/>
-                <circle cx="150" cy="170" r="4" class="geo-point" :class="{ 'highlight': showHint }"/>
+    // 3. Сумма углов
+    function anglesSum() {
+        const A = { x: 30, y: 190 };
+        const B = { x: 180, y: 30 };
+        const C = { x: 270, y: 190 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            hint: null, A, B, C, center,
+            isHighlighted(name) { return this.hint === name; },
+            labelPos: (p, c) => window.labelPos(p, c),
+            makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
+        };
+    }
 
-                {{-- Labels --}}
-                <text x="15" y="175" class="geo-label">A</text>
-                <text x="275" y="175" class="geo-label">C</text>
-                <text x="205" y="22" class="geo-label">B</text>
-                <text x="145" y="190" class="geo-label" :class="{ 'highlight': showHint }">D</text>
-            </svg>
-        </div>
-        <button class="hint-btn" :class="{ 'active': showHint }" @click="showHint = !showHint">
-            <span x-text="showHint ? 'Скрыть' : 'Подсказка'"></span>
-        </button>
-        <div class="hint-text" x-show="showHint" x-transition>
-            <strong>Биссектриса</strong> делит угол пополам.<br>
-            ∠ABD = ∠DBC = <strong>∠ABC / 2</strong>
-        </div>
-    </div>
+    // 4. Внешний угол
+    function externalAngle() {
+        const A = { x: 30, y: 160 };
+        const B = { x: 130, y: 30 };
+        const C = { x: 200, y: 160 };
+        const D = { x: 280, y: 160 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            hint: null, A, B, C, D, center,
+            hints: [
+                { id: 'external', label: 'Внешний', desc: 'Внешний угол = 180° − внутренний угол при C' },
+                { id: 'internal', label: 'Внутренний', desc: 'Внутренний угол при C' },
+                { id: 'nonadjacent', label: 'Несмежные', desc: 'Внешний угол = ∠A + ∠B (сумма несмежных)' },
+            ],
+            isHighlighted(name) { return this.hint === name; },
+            labelPos: (p, c) => window.labelPos(p, c),
+            makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
+        };
+    }
 
-    {{-- 2. Медиана треугольника - BM из B к середине AC --}}
-    <div class="demo-card" x-data="{ showHint: false }">
-        <div class="demo-title">
-            <span class="number">2</span>
-            Медиана треугольника
-        </div>
-        <div class="svg-container">
-            <svg viewBox="0 0 300 200">
-                {{-- Triangle ABC --}}
-                <polygon points="30,170 270,170 200,30"
-                         class="geo-line" stroke-linejoin="round"/>
+    // 5. Равнобедренный
+    function isoscelesDemo() {
+        const A = { x: 50, y: 190 };
+        const B = { x: 150, y: 30 };
+        const C = { x: 250, y: 190 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            hint: null, A, B, C, center,
+            get markAB() { return { x: (this.A.x + this.B.x) / 2, y: (this.A.y + this.B.y) / 2 }; },
+            get markBC() { return { x: (this.B.x + this.C.x) / 2, y: (this.B.y + this.C.y) / 2 }; },
+            hints: [
+                { id: 'equalSides', label: 'Равные стороны', desc: 'AB = BC — боковые стороны равны' },
+                { id: 'baseAngles', label: 'Углы при основании', desc: '∠A = ∠C — углы при основании равны' },
+                { id: 'vertexAngle', label: 'Угол при вершине', desc: '∠B — угол при вершине' },
+            ],
+            isHighlighted(name) { return this.hint === name; },
+            labelPos: (p, c) => window.labelPos(p, c),
+            makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
+        };
+    }
 
-                {{-- Median BM from B to midpoint of AC --}}
-                <line x1="200" y1="30" x2="150" y2="170"
-                      class="geo-line secondary"
-                      :class="{ 'highlight': showHint }"/>
+    // 6. Внешний угол равнобедренного
+    function isoscelesExternal() {
+        const A = { x: 30, y: 160 };
+        const B = { x: 115, y: 30 };
+        const C = { x: 200, y: 160 };
+        const D = { x: 280, y: 160 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            hint: null, A, B, C, D, center,
+            get markAB() { return { x: (this.A.x + this.B.x) / 2, y: (this.A.y + this.B.y) / 2 }; },
+            get markBC() { return { x: (this.B.x + this.C.x) / 2, y: (this.B.y + this.C.y) / 2 }; },
+            hints: [
+                { id: 'external', label: 'Внешний угол', desc: 'Внешний угол при C' },
+                { id: 'baseAngles', label: 'Углы при основании', desc: '∠A = внутр. ∠C. Угол при основании = 180° − внешний' },
+                { id: 'equalSides', label: 'Равные стороны', desc: 'AB = BC' },
+            ],
+            isHighlighted(name) { return this.hint === name; },
+            labelPos: (p, c) => window.labelPos(p, c),
+            makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
+        };
+    }
 
-                {{-- Equal segments marks when hint is shown --}}
-                <template x-if="showHint">
-                    <g>
-                        {{-- AM segment highlighted --}}
-                        <line x1="30" y1="170" x2="150" y2="170" stroke="#f59e0b" stroke-width="4"/>
-                        {{-- MC segment highlighted --}}
-                        <line x1="150" y1="170" x2="270" y2="170" stroke="#f59e0b" stroke-width="4"/>
-                        {{-- Equal marks --}}
-                        <line x1="85" y1="165" x2="95" y2="175" stroke="#27ae60" stroke-width="3"/>
-                        <line x1="205" y1="165" x2="215" y2="175" stroke="#27ae60" stroke-width="3"/>
-                    </g>
-                </template>
+    // 7. Прямоугольный
+    function rightTriangle() {
+        const A = { x: 30, y: 190 };
+        const B = { x: 250, y: 40 };
+        const C = { x: 250, y: 190 }; // Прямой угол
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            hint: null, A, B, C, center,
+            hints: [
+                { id: 'rightAngle', label: 'Прямой угол', desc: '∠C = 90° — прямой угол' },
+                { id: 'acuteAngles', label: 'Острые углы', desc: '∠A + ∠B = 90° — сумма острых углов' },
+            ],
+            isHighlighted(name) { return this.hint === name; },
+            labelPos: (p, c) => window.labelPos(p, c),
+            makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+        };
+    }
 
-                {{-- Points --}}
-                <circle cx="30" cy="170" r="4" class="geo-point"/>
-                <circle cx="270" cy="170" r="4" class="geo-point"/>
-                <circle cx="200" cy="30" r="4" class="geo-point"/>
-                <circle cx="150" cy="170" r="5" class="geo-point" :class="{ 'highlight': showHint }"/>
+    // 8. Высота
+    function heightDemo() {
+        const A = { x: 30, y: 190 };
+        const B = { x: 180, y: 30 };
+        const C = { x: 270, y: 190 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        const H = { x: B.x, y: A.y }; // Основание высоты
+        return {
+            hint: null, A, B, C, H, center,
+            hints: [
+                { id: 'height', label: 'Высота', desc: 'BH ⊥ AC — высота из B' },
+                { id: 'angleA', label: 'Угол A', desc: '∠BAC = α' },
+                { id: 'angleABH', label: 'Угол ABH', desc: '∠ABH = 90° − α' },
+            ],
+            isHighlighted(name) { return this.hint === name; },
+            labelPos: (p, c) => window.labelPos(p, c),
+            makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+        };
+    }
 
-                {{-- Labels --}}
-                <text x="15" y="175" class="geo-label">A</text>
-                <text x="275" y="175" class="geo-label">C</text>
-                <text x="205" y="22" class="geo-label">B</text>
-                <text x="145" y="190" class="geo-label" :class="{ 'highlight': showHint }">M</text>
-            </svg>
-        </div>
-        <button class="hint-btn" :class="{ 'active': showHint }" @click="showHint = !showHint">
-            <span x-text="showHint ? 'Скрыть' : 'Подсказка'"></span>
-        </button>
-        <div class="hint-text" x-show="showHint" x-transition>
-            <strong>Медиана</strong> делит противоположную сторону пополам.<br>
-            <strong>AM = MC = AC / 2</strong>
-        </div>
-    </div>
-
-    {{-- 3. Сумма углов треугольника --}}
-    <div class="demo-card" x-data="{ showHint: false }">
-        <div class="demo-title">
-            <span class="number">3</span>
-            Сумма углов треугольника
-        </div>
-        <div class="svg-container">
-            <svg viewBox="0 0 300 200">
-                {{-- Triangle ABC --}}
-                <polygon points="30,170 270,170 180,30"
-                         class="geo-line" stroke-linejoin="round"
-                         :class="{ 'geo-fill highlight': showHint }"/>
-
-                {{-- Angle arcs --}}
-                <path d="M 55 170 A 25 25 0 0 0 45 152"
-                      class="geo-arc" :class="{ 'highlight': showHint }"/>
-                <path d="M 245 170 A 25 25 0 0 1 255 155"
-                      class="geo-arc" :class="{ 'highlight': showHint }"/>
-                <path d="M 165 50 A 20 20 0 0 0 195 50"
-                      class="geo-arc" :class="{ 'highlight': showHint }"/>
-
-                {{-- Angle labels when hint is shown --}}
-                <template x-if="showHint">
-                    <g>
-                        <text x="65" y="155" fill="#f59e0b" font-size="16" font-style="italic">α</text>
-                        <text x="230" y="155" fill="#f59e0b" font-size="16" font-style="italic">β</text>
-                        <text x="175" y="70" fill="#f59e0b" font-size="16" font-style="italic">γ</text>
-                    </g>
-                </template>
-
-                {{-- Points --}}
-                <circle cx="30" cy="170" r="4" class="geo-point"/>
-                <circle cx="270" cy="170" r="4" class="geo-point"/>
-                <circle cx="180" cy="30" r="4" class="geo-point"/>
-
-                {{-- Labels --}}
-                <text x="15" y="178" class="geo-label">A</text>
-                <text x="275" y="178" class="geo-label">C</text>
-                <text x="183" y="22" class="geo-label">B</text>
-            </svg>
-        </div>
-        <button class="hint-btn" :class="{ 'active': showHint }" @click="showHint = !showHint">
-            <span x-text="showHint ? 'Скрыть' : 'Подсказка'"></span>
-        </button>
-        <div class="hint-text" x-show="showHint" x-transition>
-            <strong>Сумма углов треугольника = 180°</strong><br>
-            α + β + γ = 180° → <strong>γ = 180° − α − β</strong>
-        </div>
-    </div>
-
-    {{-- 4. Внешний угол треугольника --}}
-    <div class="demo-card" x-data="{ showHint: false }">
-        <div class="demo-title">
-            <span class="number">4</span>
-            Внешний угол треугольника
-        </div>
-        <div class="svg-container">
-            <svg viewBox="0 0 300 200">
-                {{-- Triangle ABC --}}
-                <polygon points="30,160 200,160 130,40"
-                         class="geo-line" stroke-linejoin="round"/>
-
-                {{-- Extended side CD --}}
-                <line x1="200" y1="160" x2="280" y2="160"
-                      stroke="#8B1A1A" stroke-width="2" stroke-dasharray="6,4"/>
-
-                {{-- External angle arc at C --}}
-                <path d="M 220 160 A 20 20 0 0 0 212 143"
-                      class="geo-arc" :class="{ 'highlight': showHint }"/>
-
-                {{-- Internal angle at C --}}
-                <path d="M 180 160 A 20 20 0 0 1 190 147"
-                      stroke="#888" stroke-width="1.5" fill="none"/>
-
-                {{-- Non-adjacent angles when hint is shown --}}
-                <template x-if="showHint">
-                    <g>
-                        {{-- Angle at A --}}
-                        <path d="M 55 160 A 25 25 0 0 0 43 145" class="geo-arc highlight"/>
-                        {{-- Angle at B --}}
-                        <path d="M 118 58 A 18 18 0 0 0 142 58" class="geo-arc highlight"/>
-                        <text x="60" y="145" fill="#f59e0b" font-size="14" font-style="italic">α</text>
-                        <text x="125" y="75" fill="#f59e0b" font-size="14" font-style="italic">β</text>
-                    </g>
-                </template>
-
-                {{-- Points --}}
-                <circle cx="30" cy="160" r="4" class="geo-point"/>
-                <circle cx="200" cy="160" r="4" class="geo-point"/>
-                <circle cx="130" cy="40" r="4" class="geo-point"/>
-
-                {{-- Labels --}}
-                <text x="15" y="168" class="geo-label">A</text>
-                <text x="200" y="182" class="geo-label">C</text>
-                <text x="130" y="28" class="geo-label">B</text>
-            </svg>
-        </div>
-        <button class="hint-btn" :class="{ 'active': showHint }" @click="showHint = !showHint">
-            <span x-text="showHint ? 'Скрыть' : 'Подсказка'"></span>
-        </button>
-        <div class="hint-text" x-show="showHint" x-transition>
-            <strong>Внешний угол = 180° − внутренний угол</strong><br>
-            Или: внешний угол = α + β (сумма двух несмежных внутренних)
-        </div>
-    </div>
-
-    {{-- 5. Равнобедренный треугольник (AB = BC) --}}
-    <div class="demo-card" x-data="{ showHint: false }">
-        <div class="demo-title">
-            <span class="number">5</span>
-            Равнобедренный треугольник
-        </div>
-        <div class="svg-container">
-            <svg viewBox="0 0 300 200">
-                {{-- Triangle ABC (isosceles: AB = BC, vertex at B) --}}
-                <polygon points="50,170 250,170 150,30"
-                         class="geo-line" stroke-linejoin="round"/>
-
-                {{-- Equal sides highlighting when hint shown --}}
-                <template x-if="showHint">
-                    <g>
-                        {{-- Side AB highlighted --}}
-                        <line x1="50" y1="170" x2="150" y2="30" stroke="#f59e0b" stroke-width="4"/>
-                        {{-- Side BC highlighted --}}
-                        <line x1="150" y1="30" x2="250" y2="170" stroke="#f59e0b" stroke-width="4"/>
-                        {{-- Equal marks on AB --}}
-                        <line x1="95" y1="105" x2="105" y2="95" stroke="#27ae60" stroke-width="3"/>
-                        <line x1="100" y1="110" x2="110" y2="100" stroke="#27ae60" stroke-width="3"/>
-                        {{-- Equal marks on BC --}}
-                        <line x1="195" y1="95" x2="205" y2="105" stroke="#27ae60" stroke-width="3"/>
-                        <line x1="190" y1="100" x2="200" y2="110" stroke="#27ae60" stroke-width="3"/>
-                    </g>
-                </template>
-
-                {{-- Vertex angle at B --}}
-                <path d="M 135 48 A 22 22 0 0 0 165 48"
-                      class="geo-arc" :class="{ 'highlight': showHint }"/>
-
-                {{-- Equal base angles --}}
-                <path d="M 75 170 A 25 25 0 0 0 62 152"
-                      class="geo-arc" :class="{ 'highlight': showHint }"/>
-                <path d="M 225 170 A 25 25 0 0 1 238 152"
-                      class="geo-arc" :class="{ 'highlight': showHint }"/>
-
-                {{-- Points --}}
-                <circle cx="50" cy="170" r="4" class="geo-point"/>
-                <circle cx="250" cy="170" r="4" class="geo-point"/>
-                <circle cx="150" cy="30" r="4" class="geo-point"/>
-
-                {{-- Labels --}}
-                <text x="35" y="178" class="geo-label">A</text>
-                <text x="255" y="178" class="geo-label">C</text>
-                <text x="150" y="18" class="geo-label">B</text>
-            </svg>
-        </div>
-        <button class="hint-btn" :class="{ 'active': showHint }" @click="showHint = !showHint">
-            <span x-text="showHint ? 'Скрыть' : 'Подсказка'"></span>
-        </button>
-        <div class="hint-text" x-show="showHint" x-transition>
-            В равнобедренном треугольнике <strong>AB = BC</strong>.<br>
-            <strong>Углы при основании равны</strong>: ∠A = ∠C = (180° − ∠B) / 2
-        </div>
-    </div>
-
-    {{-- 6. Внешний угол равнобедренного треугольника --}}
-    <div class="demo-card" x-data="{ showHint: false }">
-        <div class="demo-title">
-            <span class="number">6</span>
-            Внешний угол равнобедренного
-        </div>
-        <div class="svg-container">
-            <svg viewBox="0 0 300 200">
-                {{-- Triangle ABC (isosceles: AB = BC) --}}
-                <polygon points="30,160 200,160 115,40"
-                         class="geo-line" stroke-linejoin="round"/>
-
-                {{-- Extended side --}}
-                <line x1="200" y1="160" x2="280" y2="160"
-                      stroke="#8B1A1A" stroke-width="2" stroke-dasharray="6,4"/>
-
-                {{-- Equal sides highlighting when hint shown --}}
-                <template x-if="showHint">
-                    <g>
-                        {{-- Equal marks on AB --}}
-                        <line x1="68" y1="105" x2="78" y2="95" stroke="#27ae60" stroke-width="3"/>
-                        <line x1="73" y1="110" x2="83" y2="100" stroke="#27ae60" stroke-width="3"/>
-                        {{-- Equal marks on BC --}}
-                        <line x1="152" y1="95" x2="162" y2="105" stroke="#27ae60" stroke-width="3"/>
-                        <line x1="147" y1="100" x2="157" y2="110" stroke="#27ae60" stroke-width="3"/>
-                    </g>
-                </template>
-
-                {{-- External angle at C --}}
-                <path d="M 220 160 A 20 20 0 0 0 212 143"
-                      class="geo-arc" :class="{ 'highlight': showHint }"/>
-
-                {{-- Equal base angles --}}
-                <path d="M 55 160 A 25 25 0 0 0 42 145"
-                      class="geo-arc" :class="{ 'highlight': showHint }"/>
-                <path d="M 180 160 A 20 20 0 0 1 190 148"
-                      class="geo-arc" :class="{ 'highlight': showHint }"/>
-
-                {{-- Points --}}
-                <circle cx="30" cy="160" r="4" class="geo-point"/>
-                <circle cx="200" cy="160" r="4" class="geo-point"/>
-                <circle cx="115" cy="40" r="4" class="geo-point"/>
-
-                {{-- Labels --}}
-                <text x="15" y="168" class="geo-label">A</text>
-                <text x="200" y="182" class="geo-label">C</text>
-                <text x="115" y="28" class="geo-label">B</text>
-            </svg>
-        </div>
-        <button class="hint-btn" :class="{ 'active': showHint }" @click="showHint = !showHint">
-            <span x-text="showHint ? 'Скрыть' : 'Подсказка'"></span>
-        </button>
-        <div class="hint-text" x-show="showHint" x-transition>
-            Внешний угол = 180° − угол при основании.<br>
-            Угол при основании = 180° − внешний угол.<br>
-            <strong>∠ABC = 180° − 2 × (180° − внешний угол)</strong>
-        </div>
-    </div>
-
-    {{-- 7. Прямоугольный треугольник (прямой угол при C) --}}
-    <div class="demo-card" x-data="{ showHint: false }">
-        <div class="demo-title">
-            <span class="number">7</span>
-            Прямоугольный треугольник
-        </div>
-        <div class="svg-container">
-            <svg viewBox="0 0 300 200">
-                {{-- Triangle ABC (right angle at C) --}}
-                <polygon points="30,170 250,170 250,40"
-                         class="geo-line" stroke-linejoin="round"/>
-
-                {{-- Right angle marker at C (square) --}}
-                <path d="M 235 170 L 235 155 L 250 155"
-                      class="geo-square" :class="{ 'highlight': showHint }"/>
-
-                {{-- Acute angle at A --}}
-                <path d="M 60 170 A 30 30 0 0 0 48 152"
-                      class="geo-arc" :class="{ 'highlight': showHint }"/>
-
-                {{-- Acute angle at B --}}
-                <path d="M 250 60 A 20 20 0 0 0 230 48"
-                      class="geo-arc" :class="{ 'highlight': showHint }"/>
-
-                {{-- Angle labels when hint is shown --}}
-                <template x-if="showHint">
-                    <g>
-                        <text x="70" y="155" fill="#f59e0b" font-size="16" font-style="italic">α</text>
-                        <text x="218" y="65" fill="#f59e0b" font-size="16" font-style="italic">β</text>
-                        <text x="220" y="160" fill="#f59e0b" font-size="14">90°</text>
-                    </g>
-                </template>
-
-                {{-- Points --}}
-                <circle cx="30" cy="170" r="4" class="geo-point"/>
-                <circle cx="250" cy="170" r="4" class="geo-point"/>
-                <circle cx="250" cy="40" r="4" class="geo-point"/>
-
-                {{-- Labels --}}
-                <text x="15" y="178" class="geo-label">A</text>
-                <text x="258" y="178" class="geo-label">C</text>
-                <text x="258" y="40" class="geo-label">B</text>
-            </svg>
-        </div>
-        <button class="hint-btn" :class="{ 'active': showHint }" @click="showHint = !showHint">
-            <span x-text="showHint ? 'Скрыть' : 'Подсказка'"></span>
-        </button>
-        <div class="hint-text" x-show="showHint" x-transition>
-            В прямоугольном треугольнике <strong>один угол = 90°</strong>.<br>
-            Сумма острых углов: <strong>α + β = 90°</strong>
-        </div>
-    </div>
-
-    {{-- 8. Высота треугольника (BH перпендикулярна AC) --}}
-    <div class="demo-card" x-data="{ showHint: false }">
-        <div class="demo-title">
-            <span class="number">8</span>
-            Высота треугольника
-        </div>
-        <div class="svg-container">
-            <svg viewBox="0 0 300 200">
-                {{-- Triangle ABC --}}
-                <polygon points="30,170 270,170 180,30"
-                         class="geo-line" stroke-linejoin="round"/>
-
-                {{-- Height BH --}}
-                <line x1="180" y1="30" x2="180" y2="170"
-                      class="geo-line secondary"
-                      :class="{ 'highlight': showHint }"/>
-
-                {{-- Right angle marker at H (square) --}}
-                <path d="M 165 170 L 165 155 L 180 155"
-                      class="geo-square" :class="{ 'highlight': showHint }"/>
-
-                {{-- Angle at A --}}
-                <path d="M 58 170 A 28 28 0 0 0 47 152"
-                      class="geo-arc" :class="{ 'highlight': showHint }"/>
-
-                {{-- Angle ABH when hint shown --}}
-                <template x-if="showHint">
-                    <g>
-                        <path d="M 175 48 A 18 18 0 0 1 180 65" stroke="#f59e0b" stroke-width="2.5" fill="none"/>
-                        <text x="155" y="70" fill="#f59e0b" font-size="12" font-style="italic">90°-α</text>
-                        <text x="62" y="152" fill="#f59e0b" font-size="14" font-style="italic">α</text>
-                    </g>
-                </template>
-
-                {{-- Points --}}
-                <circle cx="30" cy="170" r="4" class="geo-point"/>
-                <circle cx="270" cy="170" r="4" class="geo-point"/>
-                <circle cx="180" cy="30" r="4" class="geo-point"/>
-                <circle cx="180" cy="170" r="5" class="geo-point" :class="{ 'highlight': showHint }"/>
-
-                {{-- Labels --}}
-                <text x="15" y="178" class="geo-label">A</text>
-                <text x="275" y="178" class="geo-label">C</text>
-                <text x="183" y="20" class="geo-label">B</text>
-                <text x="175" y="190" class="geo-label" :class="{ 'highlight': showHint }">H</text>
-            </svg>
-        </div>
-        <button class="hint-btn" :class="{ 'active': showHint }" @click="showHint = !showHint">
-            <span x-text="showHint ? 'Скрыть' : 'Подсказка'"></span>
-        </button>
-        <div class="hint-text" x-show="showHint" x-transition>
-            <strong>Высота</strong> перпендикулярна стороне (∠BHA = 90°).<br>
-            В треугольнике ABH: <strong>∠ABH = 90° − ∠BAC</strong>
-        </div>
-    </div>
-
-    {{-- 9. Площадь прямоугольного треугольника --}}
-    <div class="demo-card" x-data="{ showHint: false }">
-        <div class="demo-title">
-            <span class="number">9</span>
-            Площадь прямоугольного треугольника
-        </div>
-        <div class="svg-container">
-            <svg viewBox="0 0 300 200">
-                {{-- Triangle fill (shown when hint active) --}}
-                <polygon points="30,170 250,170 250,50"
-                         class="geo-line" stroke-linejoin="round"
-                         :class="{ 'geo-fill highlight': showHint }"/>
-
-                {{-- Catheti highlighting when hint shown --}}
-                <template x-if="showHint">
-                    <g>
-                        {{-- Horizontal cathetus (a) --}}
-                        <line x1="30" y1="170" x2="250" y2="170" stroke="#f59e0b" stroke-width="5"/>
-                        {{-- Vertical cathetus (b) --}}
-                        <line x1="250" y1="170" x2="250" y2="50" stroke="#3b82f6" stroke-width="5"/>
-                        {{-- Labels for catheti --}}
-                        <text x="140" y="192" fill="#f59e0b" font-size="18" font-style="italic" text-anchor="middle">a</text>
-                        <text x="270" y="115" fill="#3b82f6" font-size="18" font-style="italic">b</text>
-                    </g>
-                </template>
-
-                {{-- Right angle marker at C (square) --}}
-                <path d="M 235 170 L 235 155 L 250 155"
-                      class="geo-square"/>
-
-                {{-- Points --}}
-                <circle cx="30" cy="170" r="4" class="geo-point"/>
-                <circle cx="250" cy="170" r="4" class="geo-point"/>
-                <circle cx="250" cy="50" r="4" class="geo-point"/>
-
-                {{-- Labels --}}
-                <text x="15" y="178" class="geo-label">A</text>
-                <text x="258" y="178" class="geo-label">C</text>
-                <text x="258" y="45" class="geo-label">B</text>
-            </svg>
-        </div>
-        <button class="hint-btn" :class="{ 'active': showHint }" @click="showHint = !showHint">
-            <span x-text="showHint ? 'Скрыть' : 'Подсказка'"></span>
-        </button>
-        <div class="hint-text" x-show="showHint" x-transition>
-            Площадь = половина произведения катетов.<br>
-            <strong>S = (a × b) / 2</strong>
-        </div>
-        <div class="formula-box" x-show="showHint" x-transition>
-            S = <span style="color: #f59e0b">a</span> × <span style="color: #3b82f6">b</span> / 2
-        </div>
-    </div>
-
-</div>
-
-<div style="text-align: center; margin-top: 40px; color: #6b7280; font-size: 14px;">
-    Все изображения генерируются программно — никаких проблем с авторскими правами
-</div>
+    // 9. Площадь
+    function areaDemo() {
+        const A = { x: 30, y: 50 };
+        const B = { x: 250, y: 190 };
+        const C = { x: 30, y: 190 }; // Прямой угол
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            hint: null, A, B, C, center,
+            hints: [
+                { id: 'catheti', label: 'Катеты', desc: 'a и b — катеты прямоугольного треугольника' },
+                { id: 'area', label: 'Площадь', desc: 'S = (a × b) / 2' },
+            ],
+            isHighlighted(name) { return this.hint === name; },
+            labelPos: (p, c) => window.labelPos(p, c),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+        };
+    }
+</script>
 
 </body>
 </html>
