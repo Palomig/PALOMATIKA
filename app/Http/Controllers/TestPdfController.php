@@ -2,11 +2,166 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\PdfParserService;
 use App\Services\PdfTaskParser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class TestPdfController extends Controller
 {
+    protected PdfParserService $pdfParser;
+
+    public function __construct(PdfParserService $pdfParser)
+    {
+        $this->pdfParser = $pdfParser;
+    }
+
+    /**
+     * Show PDF parser web interface
+     */
+    public function pdfParserIndex()
+    {
+        $parsedPages = $this->getParsedPagesList();
+        return view('test.pdf-parser', compact('parsedPages'));
+    }
+
+    /**
+     * Handle PDF upload and parse
+     */
+    public function uploadPdf(Request $request)
+    {
+        $request->validate([
+            'pdf_file' => 'required|file|mimes:pdf|max:20480',
+            'topic_id' => 'required|string|max:10',
+            'title' => 'nullable|string|max:255',
+        ]);
+
+        $topicId = str_pad($request->input('topic_id'), 2, '0', STR_PAD_LEFT);
+        $title = $request->input('title') ?: "Задание {$topicId}";
+
+        try {
+            // Save uploaded PDF
+            $pdfFile = $request->file('pdf_file');
+            $pdfFilename = "task_{$topicId}.pdf";
+            $pdfPath = storage_path('app/pdf');
+
+            if (!File::isDirectory($pdfPath)) {
+                File::makeDirectory($pdfPath, 0755, true);
+            }
+
+            $pdfFile->move($pdfPath, $pdfFilename);
+
+            // Check dependencies
+            $deps = $this->pdfParser->checkDependencies();
+            if (!$deps['ok']) {
+                return back()->with('error', 'Не установлены зависимости: ' . implode(', ', $deps['missing']) . '. Установите: ' . $deps['install_hint']);
+            }
+
+            // Extract text
+            $text = $this->pdfParser->extractText($pdfFilename);
+            $blocks = $this->pdfParser->findBlocks($text);
+            $zadaniya = $this->pdfParser->findZadaniya($text);
+
+            // Extract images
+            $images = $this->pdfParser->extractImages($pdfFilename, $topicId);
+
+            // Create parsed data structure
+            $parsedData = [
+                'topic_id' => $topicId,
+                'title' => $title,
+                'created_at' => now()->format('Y-m-d H:i:s'),
+                'pdf_filename' => $pdfFilename,
+                'text' => $text,
+                'blocks' => $blocks,
+                'zadaniya' => $zadaniya,
+                'images' => array_map(fn($img) => $img['filename'], $images),
+                'images_count' => count($images),
+            ];
+
+            // Save parsed data as JSON
+            $jsonPath = storage_path("app/parsed/topic_{$topicId}.json");
+            $jsonDir = dirname($jsonPath);
+
+            if (!File::isDirectory($jsonDir)) {
+                File::makeDirectory($jsonDir, 0755, true);
+            }
+
+            File::put($jsonPath, json_encode($parsedData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+            return redirect()->route('test.parsed', $topicId)
+                ->with('success', "PDF успешно распарсен! Извлечено {$parsedData['images_count']} изображений.");
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'Ошибка парсинга: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Show dynamically parsed page
+     */
+    public function showParsedPage(string $topicId)
+    {
+        $topicId = str_pad($topicId, 2, '0', STR_PAD_LEFT);
+        $jsonPath = storage_path("app/parsed/topic_{$topicId}.json");
+
+        if (!File::exists($jsonPath)) {
+            abort(404, 'Страница не найдена. Сначала загрузите PDF.');
+        }
+
+        $data = json_decode(File::get($jsonPath), true);
+
+        return view('test.parsed-page', compact('data', 'topicId'));
+    }
+
+    /**
+     * Download parsed JSON data
+     */
+    public function downloadJson(string $topicId)
+    {
+        $topicId = str_pad($topicId, 2, '0', STR_PAD_LEFT);
+        $jsonPath = storage_path("app/parsed/topic_{$topicId}.json");
+
+        if (!File::exists($jsonPath)) {
+            abort(404, 'JSON не найден');
+        }
+
+        return response()->download($jsonPath, "topic_{$topicId}.json");
+    }
+
+    /**
+     * Get list of all parsed pages
+     */
+    protected function getParsedPagesList(): array
+    {
+        $parsedDir = storage_path('app/parsed');
+        $pages = [];
+
+        if (!File::isDirectory($parsedDir)) {
+            return $pages;
+        }
+
+        $files = glob($parsedDir . '/topic_*.json');
+
+        foreach ($files as $file) {
+            $data = json_decode(File::get($file), true);
+            if ($data) {
+                $pages[] = [
+                    'topic_id' => $data['topic_id'] ?? '',
+                    'title' => $data['title'] ?? 'Без названия',
+                    'images_count' => $data['images_count'] ?? 0,
+                    'blocks_count' => count($data['blocks'] ?? []),
+                    'created_at' => $data['created_at'] ?? '',
+                ];
+            }
+        }
+
+        // Sort by topic_id
+        usort($pages, fn($a, $b) => $a['topic_id'] <=> $b['topic_id']);
+
+        return $pages;
+    }
+
     /**
      * Display parsed tasks from PDF for topic 06
      */
