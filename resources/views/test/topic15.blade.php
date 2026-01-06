@@ -301,19 +301,26 @@
                                         @break
 
                                     @case(10)
-                                        {{-- Площадь с высотой --}}
+                                        {{-- Площадь с высотой: S = 1/2 * a * h --}}
                                         <div x-data="areaHeightSVG()">
                                             <svg viewBox="0 0 200 160" class="w-full h-36">
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                                                     fill="rgba(245, 158, 11, 0.15)" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
                                                 <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y" stroke="#10b981" stroke-width="2" stroke-dasharray="5,3"/>
                                                 <path :d="rightAnglePath(H, A, B, 10)" fill="none" stroke="#10b981" stroke-width="2"/>
-                                                <circle :cx="H.x" :cy="H.y" r="3" fill="#10b981"/>
+                                                {{-- Метки сторон --}}
                                                 <text :x="(A.x + C.x)/2" :y="A.y + 18" fill="#f59e0b" font-size="14" class="geo-label" text-anchor="middle">a</text>
                                                 <text :x="(B.x + H.x)/2 + 12" :y="(B.y + H.y)/2" fill="#10b981" font-size="14" class="geo-label">h</text>
+                                                {{-- Вершины --}}
                                                 <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
                                                 <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
                                                 <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="H.x" :cy="H.y" r="3" fill="#10b981"/>
+                                                {{-- Метки вершин --}}
+                                                <text :x="A.x - 15" :y="A.y + 5" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="end" dominant-baseline="middle">A</text>
+                                                <text :x="B.x" :y="B.y - 12" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                                                <text :x="C.x + 15" :y="C.y + 5" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="start" dominant-baseline="middle">C</text>
+                                                <text :x="H.x + 5" :y="H.y + 15" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="start">H</text>
                                             </svg>
                                         </div>
                                         @break
@@ -343,21 +350,28 @@
 
                                     @case(12)
                                     @case(13)
-                                        {{-- Теорема Пифагора --}}
+                                        {{-- Теорема Пифагора: a² + b² = c² --}}
                                         <div x-data="pythagorasSVG()">
                                             <svg viewBox="0 0 200 160" class="w-full h-36">
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                                                     fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
                                                 <path :d="rightAnglePath(C, A, B, 12)" fill="none" stroke="#10b981" stroke-width="2"/>
+                                                {{-- Катеты и гипотенуза --}}
                                                 <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#f59e0b" stroke-width="3"/>
                                                 <line :x1="C.x" :y1="C.y" :x2="B.x" :y2="B.y" stroke="#3b82f6" stroke-width="3"/>
                                                 <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#ec4899" stroke-width="3"/>
-                                                <text :x="(A.x + C.x)/2 - 10" :y="(A.y + C.y)/2 + 15" fill="#f59e0b" font-size="14" class="geo-label">a</text>
-                                                <text :x="(C.x + B.x)/2 + 10" :y="(C.y + B.y)/2" fill="#3b82f6" font-size="14" class="geo-label">b</text>
-                                                <text :x="(A.x + B.x)/2 - 8" :y="(A.y + B.y)/2 - 8" fill="#ec4899" font-size="14" class="geo-label">c</text>
+                                                {{-- Метки сторон --}}
+                                                <text :x="(A.x + C.x)/2" :y="A.y + 18" fill="#f59e0b" font-size="14" class="geo-label" text-anchor="middle">a</text>
+                                                <text :x="C.x + 15" :y="(C.y + B.y)/2" fill="#3b82f6" font-size="14" class="geo-label">b</text>
+                                                <text :x="(A.x + B.x)/2 - 12" :y="(A.y + B.y)/2 - 5" fill="#ec4899" font-size="14" class="geo-label">c</text>
+                                                {{-- Вершины --}}
                                                 <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
                                                 <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
                                                 <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
+                                                {{-- Метки вершин --}}
+                                                <text :x="A.x - 15" :y="A.y + 5" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="end" dominant-baseline="middle">A</text>
+                                                <text :x="B.x + 5" :y="B.y - 12" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="start" dominant-baseline="middle">B</text>
+                                                <text :x="C.x + 15" :y="C.y + 5" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="start" dominant-baseline="middle">C</text>
                                             </svg>
                                         </div>
                                         @break
@@ -367,17 +381,24 @@
                                     @case(16)
                                     @case(17)
                                     @case(18)
-                                        {{-- Равносторонний треугольник --}}
+                                        {{-- Равносторонний треугольник с высотой --}}
                                         <div x-data="equilateralSVG()">
                                             <svg viewBox="0 0 200 160" class="w-full h-36">
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                                                     fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
+                                                {{-- Высота BH --}}
                                                 <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y" stroke="#10b981" stroke-width="2" stroke-dasharray="5,3"/>
                                                 <path :d="rightAnglePath(H, A, B, 10)" fill="none" stroke="#10b981" stroke-width="2"/>
+                                                {{-- Вершины --}}
                                                 <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
                                                 <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
                                                 <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
                                                 <circle :cx="H.x" :cy="H.y" r="3" fill="#10b981"/>
+                                                {{-- Метки вершин --}}
+                                                <text :x="A.x - 15" :y="A.y + 5" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="end" dominant-baseline="middle">A</text>
+                                                <text :x="B.x" :y="B.y - 12" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                                                <text :x="C.x + 15" :y="C.y + 5" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="start" dominant-baseline="middle">C</text>
+                                                <text :x="H.x + 5" :y="H.y + 15" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="start">H</text>
                                             </svg>
                                         </div>
                                         @break
@@ -410,43 +431,65 @@
                                     @case(24)
                                     @case(25)
                                         {{-- Тригонометрия в прямоугольном треугольнике --}}
+                                        {{-- ПРАВИЛА ПОЗИЦИОНИРОВАНИЯ:
+                                             1. Метки вершин (A,B,C) - через labelPos() от центра, distance=18
+                                             2. Метки сторон - на середине стороны, смещение перпендикулярно стороне
+                                             3. Метки углов - внутри угловой дуги или рядом с radius+10
+                                             4. Не показывать одновременно метку вершины и угла в одной точке --}}
                                         <div x-data="trigSVG()">
                                             <svg viewBox="0 0 200 160" class="w-full h-36">
+                                                {{-- Основной треугольник --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                                                     fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
+                                                {{-- Прямой угол при C --}}
                                                 <path :d="rightAnglePath(C, A, B, 12)" fill="none" stroke="#10b981" stroke-width="2"/>
-                                                <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                                                {{-- Выделенные стороны --}}
                                                 <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#3b82f6" stroke-width="2"/>
                                                 <line :x1="C.x" :y1="C.y" :x2="B.x" :y2="B.y" stroke="#ec4899" stroke-width="2"/>
-                                                <text :x="(A.x + C.x)/2" :y="A.y + 15" fill="#3b82f6" font-size="12" class="geo-label" text-anchor="middle">AC</text>
-                                                <text :x="C.x + 20" :y="(C.y + B.y)/2" fill="#ec4899" font-size="12" class="geo-label">BC</text>
-                                                <text :x="B.x - 25" :y="B.y + 30" fill="#f59e0b" font-size="14" class="geo-label">B</text>
+                                                {{-- Метки сторон: AC внизу, BC справа --}}
+                                                <text :x="(A.x + C.x)/2" :y="A.y + 18" fill="#3b82f6" font-size="12" class="geo-label" text-anchor="middle">AC</text>
+                                                <text :x="C.x + 18" :y="(C.y + B.y)/2 + 10" fill="#ec4899" font-size="12" class="geo-label">BC</text>
+                                                {{-- Гипотенуза AB --}}
+                                                <text :x="(A.x + B.x)/2 - 18" :y="(A.y + B.y)/2 - 5" fill="#dc2626" font-size="12" class="geo-label">AB</text>
+                                                {{-- Вершины --}}
                                                 <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
                                                 <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
                                                 <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
-                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
-                                                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                                                {{-- Метки вершин --}}
+                                                <text :x="A.x - 15" :y="A.y + 5" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="end" dominant-baseline="middle">A</text>
+                                                <text :x="B.x + 5" :y="B.y - 12" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="start" dominant-baseline="middle">B</text>
+                                                <text :x="C.x + 15" :y="C.y + 5" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="start" dominant-baseline="middle">C</text>
                                             </svg>
                                         </div>
                                         @break
 
                                     @case(26)
-                                        {{-- Теорема о площади --}}
+                                        {{-- Теорема о площади: S = 1/2 * AB * BC * sin(B) --}}
+                                        {{-- ПРАВИЛА ПОЗИЦИОНИРОВАНИЯ:
+                                             1. Все три вершины должны иметь метки
+                                             2. Угол показываем дугой, метку угла внутри дуги
+                                             3. Стороны подписываем снаружи треугольника --}}
                                         <div x-data="areaTheoremSVG()">
                                             <svg viewBox="0 0 200 160" class="w-full h-36">
+                                                {{-- Заливка треугольника (показывает площадь) --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                                                     fill="rgba(245, 158, 11, 0.15)" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
+                                                {{-- Угол B с дугой --}}
                                                 <path :d="makeAngleArc(B, A, C, 22)" fill="none" stroke="#10b981" stroke-width="2.5"/>
+                                                {{-- Стороны AB и BC выделены --}}
                                                 <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#3b82f6" stroke-width="3"/>
                                                 <line :x1="B.x" :y1="B.y" :x2="C.x" :y2="C.y" stroke="#f59e0b" stroke-width="3"/>
-                                                <text :x="(A.x + B.x)/2 - 12" :y="(A.y + B.y)/2 - 8" fill="#3b82f6" font-size="12" class="geo-label">AB</text>
-                                                <text :x="(B.x + C.x)/2 + 8" :y="(B.y + C.y)/2 - 5" fill="#f59e0b" font-size="12" class="geo-label">BC</text>
-                                                <text :x="B.x + 5" :y="B.y + 35" fill="#10b981" font-size="14" class="geo-label">∠B</text>
+                                                {{-- Метки сторон --}}
+                                                <text :x="(A.x + B.x)/2 - 15" :y="(A.y + B.y)/2 - 5" fill="#3b82f6" font-size="12" class="geo-label">AB</text>
+                                                <text :x="(B.x + C.x)/2 + 12" :y="(B.y + C.y)/2" fill="#f59e0b" font-size="12" class="geo-label">BC</text>
+                                                {{-- Вершины --}}
                                                 <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
                                                 <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
                                                 <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
-                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
-                                                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                                                {{-- Метки вершин --}}
+                                                <text :x="A.x - 15" :y="A.y + 8" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="end" dominant-baseline="middle">A</text>
+                                                <text :x="B.x" :y="B.y - 15" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                                                <text :x="C.x + 15" :y="C.y + 5" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="start" dominant-baseline="middle">C</text>
                                             </svg>
                                         </div>
                                         @break
@@ -482,6 +525,46 @@
 </div>
 
 <script>
+    /**
+     * ========================================================================
+     * ПРАВИЛА ПОЗИЦИОНИРОВАНИЯ МЕТОК В SVG (GEOMETRY_SPEC)
+     * ========================================================================
+     *
+     * 1. МЕТКИ ВЕРШИН (A, B, C, H, M, N, O):
+     *    - ВСЕГДА добавлять метки для ВСЕХ вершин треугольника
+     *    - Использовать фиксированные смещения относительно позиции вершины:
+     *      * Левый нижний угол: x - 15, text-anchor="end"
+     *      * Верхний угол: y - 12, text-anchor="middle"
+     *      * Правый нижний угол: x + 15, text-anchor="start"
+     *    - НЕ использовать labelPos() для вершин в углах viewBox - может выйти за границы
+     *    - Размер шрифта: 16px для вершин треугольника, 14px для вспомогательных точек
+     *
+     * 2. МЕТКИ СТОРОН (a, b, c, AB, BC, AC, h):
+     *    - Располагать НА СЕРЕДИНЕ стороны со смещением НАРУЖУ от треугольника
+     *    - Нижняя сторона: y + 18, text-anchor="middle"
+     *    - Правая вертикальная сторона: x + 15-18
+     *    - Гипотенуза: смещение - 12-15 от центра стороны
+     *    - Размер шрифта: 12-14px
+     *
+     * 3. МЕТКИ УГЛОВ (∠A, ∠B, ∠C):
+     *    - НЕ показывать одновременно метку вершины и метку угла у одной точки
+     *    - Угловая дуга достаточно указывает на угол
+     *    - Если нужна метка угла - располагать внутри дуги или рядом с radius + 10
+     *
+     * 4. ИЗБЕЖАНИЕ НАЛОЖЕНИЙ:
+     *    - Проверять, что метки вершин не накладываются на угловые дуги
+     *    - Метки сторон не должны накладываться на метки вершин
+     *    - Минимальное расстояние между метками: 15px
+     *
+     * 5. СТАНДАРТНЫЙ ПРЯМОУГОЛЬНЫЙ ТРЕУГОЛЬНИК:
+     *    - A = левый нижний (30, 130) → метка слева: A.x - 15
+     *    - B = правый верхний (160, 30) → метка сверху: B.y - 12
+     *    - C = правый нижний (160, 130) → метка справа: C.x + 15
+     *    - Прямой угол при C (правый нижний)
+     *
+     * ========================================================================
+     */
+
     // Глобальные функции из спецификации GEOMETRY_SPEC
     function labelPos(point, center, distance = 15) {
         const dx = point.x - center.x;
