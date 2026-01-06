@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\PdfParserService;
 use App\Services\PdfTaskParser;
 use App\Services\TaskGeneratorService;
+use App\Services\AdvancedPdfParser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -13,11 +14,16 @@ class TestPdfController extends Controller
 {
     protected PdfParserService $pdfParser;
     protected TaskGeneratorService $taskGenerator;
+    protected AdvancedPdfParser $advancedParser;
 
-    public function __construct(PdfParserService $pdfParser, TaskGeneratorService $taskGenerator)
-    {
+    public function __construct(
+        PdfParserService $pdfParser,
+        TaskGeneratorService $taskGenerator,
+        AdvancedPdfParser $advancedParser
+    ) {
         $this->pdfParser = $pdfParser;
         $this->taskGenerator = $taskGenerator;
+        $this->advancedParser = $advancedParser;
     }
 
     /**
@@ -178,7 +184,7 @@ class TestPdfController extends Controller
         ]);
 
         $topicId = str_pad($request->input('topic_id'), 2, '0', STR_PAD_LEFT);
-        $title = $request->input('title') ?: "Задание {$topicId}";
+        $title = $request->input('title') ?: null; // Let parser detect title if not provided
 
         try {
             // Save uploaded PDF
@@ -198,26 +204,8 @@ class TestPdfController extends Controller
                 return back()->with('error', 'Не установлены зависимости: ' . implode(', ', $deps['missing']) . '. Установите: ' . $deps['install_hint']);
             }
 
-            // Extract text
-            $text = $this->pdfParser->extractText($pdfFilename);
-            $blocks = $this->pdfParser->findBlocks($text);
-            $zadaniya = $this->pdfParser->findZadaniya($text);
-
-            // Extract images
-            $images = $this->pdfParser->extractImages($pdfFilename, $topicId);
-
-            // Create parsed data structure
-            $parsedData = [
-                'topic_id' => $topicId,
-                'title' => $title,
-                'created_at' => now()->format('Y-m-d H:i:s'),
-                'pdf_filename' => $pdfFilename,
-                'text' => $text,
-                'blocks' => $blocks,
-                'zadaniya' => $zadaniya,
-                'images' => array_map(fn($img) => $img['filename'], $images),
-                'images_count' => count($images),
-            ];
+            // Use advanced parser to create fully structured data
+            $parsedData = $this->advancedParser->parseToStructured($pdfFilename, $topicId, $title);
 
             // Save parsed data as JSON
             $jsonPath = storage_path("app/parsed/topic_{$topicId}.json");
@@ -229,12 +217,33 @@ class TestPdfController extends Controller
 
             File::put($jsonPath, json_encode($parsedData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
+            $blocksCount = count($parsedData['structured_blocks'] ?? []);
+            $tasksCount = $this->countTasksInBlocks($parsedData['structured_blocks'] ?? []);
+
             return redirect()->route('test.parsed', $topicId)
-                ->with('success', "PDF успешно распарсен! Извлечено {$parsedData['images_count']} изображений.");
+                ->with('success', "PDF успешно распарсен! Блоков: {$blocksCount}, заданий: {$tasksCount}, изображений: {$parsedData['images_count']}.");
 
         } catch (\Exception $e) {
             return back()->with('error', 'Ошибка парсинга: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Count total tasks in structured blocks
+     */
+    protected function countTasksInBlocks(array $blocks): int
+    {
+        $count = 0;
+        foreach ($blocks as $block) {
+            foreach ($block['zadaniya'] ?? [] as $zadanie) {
+                if (!empty($zadanie['tasks'])) {
+                    $count += count($zadanie['tasks']);
+                } else {
+                    $count++; // Simple zadanie counts as 1
+                }
+            }
+        }
+        return $count;
     }
 
     /**
