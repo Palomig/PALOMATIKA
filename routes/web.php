@@ -123,6 +123,9 @@ Route::middleware(['auth'])->group(function () {
 
 // Test pages for PDF parsing (public for development)
 Route::prefix('test')->group(function () {
+    // Index page with all topics
+    Route::get('/', [TestPdfController::class, 'index'])->name('test.index');
+
     // Static parsed pages
     Route::get('/6', [TestPdfController::class, 'topic06'])->name('test.topic06');
     Route::get('/7', [TestPdfController::class, 'topic07'])->name('test.topic07');
