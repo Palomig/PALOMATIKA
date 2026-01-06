@@ -229,7 +229,21 @@
     </style>
 </head>
 <body>
-    <a href="/test/generator" class="back-link">&larr; Назад к генератору</a>
+    <div class="nav-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding: 15px 20px; background: #f8f9fa; border-radius: 8px; font-family: 'Inter', sans-serif;">
+        <a href="{{ route('test.pdf.index') }}" style="color: #60a5fa; text-decoration: none; font-size: 14px;">← Назад к парсеру</a>
+        <div>
+            <a href="{{ route('test.topic06') }}" style="color: #60a5fa; text-decoration: none; font-size: 14px;">06</a> |
+            <a href="{{ route('test.topic07') }}" style="color: #60a5fa; text-decoration: none; font-size: 14px;">07</a> |
+            <a href="{{ route('test.topic08') }}" style="color: #60a5fa; text-decoration: none; font-size: 14px;">08</a> |
+            <a href="{{ route('test.topic09') }}" style="color: #60a5fa; text-decoration: none; font-size: 14px;">09</a> |
+            <a href="{{ route('test.topic10') }}" style="color: #60a5fa; text-decoration: none; font-size: 14px;">10</a> |
+            <a href="{{ route('test.topic11') }}" style="color: #60a5fa; text-decoration: none; font-size: 14px;">11</a> |
+            <a href="{{ route('test.topic12') }}" style="color: #60a5fa; text-decoration: none; font-size: 14px;">12</a> |
+            <a href="{{ route('test.topic13') }}" style="color: #60a5fa; text-decoration: none; font-size: 14px;">13</a> |
+            <a href="{{ route('test.topic18') }}" style="color: #60a5fa; text-decoration: none; font-size: 14px;">18</a> |
+            <strong>19</strong>
+        </div>
+    </div>
 
     <h1 class="title">19. Анализ геометрических высказываний</h1>
     <p class="subtitle">Укажите номера верных утверждений</p>

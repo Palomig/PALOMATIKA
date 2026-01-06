@@ -46,7 +46,9 @@
         <a href="{{ route('test.topic10') }}">10</a> |
         <a href="{{ route('test.topic11') }}">11</a> |
         <strong>12</strong> |
-        <a href="{{ route('test.topic13') }}">13</a>
+        <a href="{{ route('test.topic13') }}">13</a> |
+        <a href="{{ route('test.topic18') }}">18</a> |
+        <a href="{{ route('test.topic19') }}">19</a>
     </div>
 </div>
 
