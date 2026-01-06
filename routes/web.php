@@ -129,6 +129,9 @@ Route::prefix('test')->group(function () {
     Route::get('/8', [TestPdfController::class, 'topic08'])->name('test.topic08');
     Route::get('/9', [TestPdfController::class, 'topic09'])->name('test.topic09');
     Route::get('/10', [TestPdfController::class, 'topic10'])->name('test.topic10');
+    Route::get('/11', [TestPdfController::class, 'topic11'])->name('test.topic11');
+    Route::get('/12', [TestPdfController::class, 'topic12'])->name('test.topic12');
+    Route::get('/13', [TestPdfController::class, 'topic13'])->name('test.topic13');
 
     // PDF Parser Web Interface
     Route::get('/pdf', [TestPdfController::class, 'pdfParserIndex'])->name('test.pdf.index');
