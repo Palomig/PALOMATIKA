@@ -300,6 +300,160 @@
                                         </div>
                                         @break
 
+                                    @case(10)
+                                        {{-- Площадь с высотой --}}
+                                        <div x-data="areaHeightSVG()">
+                                            <svg viewBox="0 0 200 160" class="w-full h-36">
+                                                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                                    fill="rgba(245, 158, 11, 0.15)" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
+                                                <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y" stroke="#10b981" stroke-width="2" stroke-dasharray="5,3"/>
+                                                <path :d="rightAnglePath(H, A, B, 10)" fill="none" stroke="#10b981" stroke-width="2"/>
+                                                <circle :cx="H.x" :cy="H.y" r="3" fill="#10b981"/>
+                                                <text :x="(A.x + C.x)/2" :y="A.y + 18" fill="#f59e0b" font-size="14" class="geo-label" text-anchor="middle">a</text>
+                                                <text :x="(B.x + H.x)/2 + 12" :y="(B.y + H.y)/2" fill="#10b981" font-size="14" class="geo-label">h</text>
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
+                                            </svg>
+                                        </div>
+                                        @break
+
+                                    @case(11)
+                                        {{-- Средняя линия --}}
+                                        <div x-data="midlineSVG()">
+                                            <svg viewBox="0 0 200 160" class="w-full h-36">
+                                                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                                    fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
+                                                <line :x1="M.x" :y1="M.y" :x2="N.x" :y2="N.y" stroke="#10b981" stroke-width="2.5"/>
+                                                <line :x1="M.x - 4" :y1="M.y - 6" :x2="M.x + 4" :y2="M.y + 6" stroke="#3b82f6" stroke-width="2"/>
+                                                <line :x1="N.x - 4" :y1="N.y + 6" :x2="N.x + 4" :y2="N.y - 6" stroke="#3b82f6" stroke-width="2"/>
+                                                <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                                                <circle :cx="N.x" :cy="N.y" r="4" fill="#10b981"/>
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
+                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                                                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                                                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                                                <text :x="M.x - 12" :y="M.y" fill="#60a5fa" font-size="14" class="geo-label">M</text>
+                                                <text :x="N.x + 10" :y="N.y" fill="#60a5fa" font-size="14" class="geo-label">N</text>
+                                            </svg>
+                                        </div>
+                                        @break
+
+                                    @case(12)
+                                    @case(13)
+                                        {{-- Теорема Пифагора --}}
+                                        <div x-data="pythagorasSVG()">
+                                            <svg viewBox="0 0 200 160" class="w-full h-36">
+                                                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                                    fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
+                                                <path :d="rightAnglePath(C, A, B, 12)" fill="none" stroke="#10b981" stroke-width="2"/>
+                                                <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#f59e0b" stroke-width="3"/>
+                                                <line :x1="C.x" :y1="C.y" :x2="B.x" :y2="B.y" stroke="#3b82f6" stroke-width="3"/>
+                                                <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#ec4899" stroke-width="3"/>
+                                                <text :x="(A.x + C.x)/2 - 10" :y="(A.y + C.y)/2 + 15" fill="#f59e0b" font-size="14" class="geo-label">a</text>
+                                                <text :x="(C.x + B.x)/2 + 10" :y="(C.y + B.y)/2" fill="#3b82f6" font-size="14" class="geo-label">b</text>
+                                                <text :x="(A.x + B.x)/2 - 8" :y="(A.y + B.y)/2 - 8" fill="#ec4899" font-size="14" class="geo-label">c</text>
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
+                                            </svg>
+                                        </div>
+                                        @break
+
+                                    @case(14)
+                                    @case(15)
+                                    @case(16)
+                                    @case(17)
+                                    @case(18)
+                                        {{-- Равносторонний треугольник --}}
+                                        <div x-data="equilateralSVG()">
+                                            <svg viewBox="0 0 200 160" class="w-full h-36">
+                                                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                                    fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
+                                                <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y" stroke="#10b981" stroke-width="2" stroke-dasharray="5,3"/>
+                                                <path :d="rightAnglePath(H, A, B, 10)" fill="none" stroke="#10b981" stroke-width="2"/>
+                                                <line :x1="markAB.x - 5" :y1="markAB.y - 5" :x2="markAB.x + 5" :y2="markAB.y + 5" stroke="#3b82f6" stroke-width="2"/>
+                                                <line :x1="markBC.x - 5" :y1="markBC.y + 5" :x2="markBC.x + 5" :y2="markBC.y - 5" stroke="#3b82f6" stroke-width="2"/>
+                                                <line :x1="markAC.x - 5" :y1="markAC.y" :x2="markAC.x + 5" :y2="markAC.y" stroke="#3b82f6" stroke-width="2"/>
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="H.x" :cy="H.y" r="3" fill="#10b981"/>
+                                            </svg>
+                                        </div>
+                                        @break
+
+                                    @case(19)
+                                        {{-- Радиус описанной окружности --}}
+                                        <div x-data="circumcircleSVG()">
+                                            <svg viewBox="0 0 200 160" class="w-full h-36">
+                                                <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#6366f1" stroke-width="1.5" stroke-dasharray="4,3"/>
+                                                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                                    fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
+                                                <path :d="rightAnglePath(C, A, B, 10)" fill="none" stroke="#10b981" stroke-width="2"/>
+                                                <line :x1="O.x" :y1="O.y" :x2="A.x" :y2="A.y" stroke="#f59e0b" stroke-width="2"/>
+                                                <circle :cx="O.x" :cy="O.y" r="3" fill="#f59e0b"/>
+                                                <text :x="(O.x + A.x)/2 - 8" :y="(O.y + A.y)/2 - 5" fill="#f59e0b" font-size="12" class="geo-label">R</text>
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
+                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                                                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                                                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                                            </svg>
+                                        </div>
+                                        @break
+
+                                    @case(20)
+                                    @case(21)
+                                    @case(22)
+                                    @case(23)
+                                    @case(24)
+                                    @case(25)
+                                        {{-- Тригонометрия в прямоугольном треугольнике --}}
+                                        <div x-data="trigSVG()">
+                                            <svg viewBox="0 0 200 160" class="w-full h-36">
+                                                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                                    fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
+                                                <path :d="rightAnglePath(C, A, B, 12)" fill="none" stroke="#10b981" stroke-width="2"/>
+                                                <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                                                <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#3b82f6" stroke-width="2"/>
+                                                <line :x1="C.x" :y1="C.y" :x2="B.x" :y2="B.y" stroke="#ec4899" stroke-width="2"/>
+                                                <text :x="(A.x + C.x)/2" :y="A.y + 15" fill="#3b82f6" font-size="12" class="geo-label" text-anchor="middle">AC</text>
+                                                <text :x="C.x + 20" :y="(C.y + B.y)/2" fill="#ec4899" font-size="12" class="geo-label">BC</text>
+                                                <text :x="B.x - 25" :y="B.y + 30" fill="#f59e0b" font-size="14" class="geo-label">B</text>
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
+                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                                                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                                            </svg>
+                                        </div>
+                                        @break
+
+                                    @case(26)
+                                        {{-- Теорема о площади --}}
+                                        <div x-data="areaTheoremSVG()">
+                                            <svg viewBox="0 0 200 160" class="w-full h-36">
+                                                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                                    fill="rgba(245, 158, 11, 0.15)" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
+                                                <path :d="makeAngleArc(B, A, C, 22)" fill="none" stroke="#10b981" stroke-width="2.5"/>
+                                                <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#3b82f6" stroke-width="3"/>
+                                                <line :x1="B.x" :y1="B.y" :x2="C.x" :y2="C.y" stroke="#f59e0b" stroke-width="3"/>
+                                                <text :x="(A.x + B.x)/2 - 12" :y="(A.y + B.y)/2 - 8" fill="#3b82f6" font-size="12" class="geo-label">AB</text>
+                                                <text :x="(B.x + C.x)/2 + 8" :y="(B.y + C.y)/2 - 5" fill="#f59e0b" font-size="12" class="geo-label">BC</text>
+                                                <text :x="B.x + 5" :y="B.y + 35" fill="#10b981" font-size="14" class="geo-label">∠B</text>
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
+                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                                                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                                            </svg>
+                                        </div>
+                                        @break
+
                                     @default
                                         <div class="text-slate-500 text-center py-8">Изображение</div>
                                 @endswitch
@@ -494,6 +648,103 @@
             A, B, C, center,
             labelPos: (p, c) => window.labelPos(p, c),
             rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+        };
+    }
+
+    // 10. Площадь с высотой
+    function areaHeightSVG() {
+        const A = { x: 20, y: 130 };
+        const B = { x: 100, y: 25 };
+        const C = { x: 180, y: 130 };
+        const H = { x: B.x, y: A.y };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, H, center,
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+        };
+    }
+
+    // 11. Средняя линия
+    function midlineSVG() {
+        const A = { x: 20, y: 130 };
+        const B = { x: 100, y: 25 };
+        const C = { x: 180, y: 130 };
+        const M = { x: (A.x + B.x) / 2, y: (A.y + B.y) / 2 };
+        const N = { x: (B.x + C.x) / 2, y: (B.y + C.y) / 2 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, M, N, center,
+            labelPos: (p, c) => window.labelPos(p, c),
+        };
+    }
+
+    // 12-13. Теорема Пифагора
+    function pythagorasSVG() {
+        const A = { x: 20, y: 130 };
+        const B = { x: 170, y: 30 };
+        const C = { x: 170, y: 130 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+        };
+    }
+
+    // 14-18. Равносторонний треугольник
+    function equilateralSVG() {
+        const A = { x: 30, y: 140 };
+        const B = { x: 100, y: 20 };
+        const C = { x: 170, y: 140 };
+        const H = { x: B.x, y: A.y };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, H, center,
+            get markAB() { return { x: (this.A.x + this.B.x) / 2, y: (this.A.y + this.B.y) / 2 }; },
+            get markBC() { return { x: (this.B.x + this.C.x) / 2, y: (this.B.y + this.C.y) / 2 }; },
+            get markAC() { return { x: (this.A.x + this.C.x) / 2, y: this.A.y }; },
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+        };
+    }
+
+    // 19. Радиус описанной окружности
+    function circumcircleSVG() {
+        const A = { x: 30, y: 120 };
+        const B = { x: 150, y: 30 };
+        const C = { x: 150, y: 120 };
+        const O = { x: (A.x + B.x) / 2, y: (A.y + B.y) / 2 }; // Центр на гипотенузе
+        const R = Math.sqrt(Math.pow(O.x - A.x, 2) + Math.pow(O.y - A.y, 2));
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, O, R, center,
+            labelPos: (p, c) => window.labelPos(p, c),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+        };
+    }
+
+    // 20-25. Тригонометрия
+    function trigSVG() {
+        const A = { x: 30, y: 130 };
+        const B = { x: 160, y: 30 };
+        const C = { x: 160, y: 130 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c) => window.labelPos(p, c),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
+        };
+    }
+
+    // 26. Теорема о площади треугольника
+    function areaTheoremSVG() {
+        const A = { x: 30, y: 130 };
+        const B = { x: 100, y: 25 };
+        const C = { x: 180, y: 110 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c) => window.labelPos(p, c),
+            makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
         };
     }
 </script>
