@@ -374,9 +374,6 @@
                                                     fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
                                                 <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y" stroke="#10b981" stroke-width="2" stroke-dasharray="5,3"/>
                                                 <path :d="rightAnglePath(H, A, B, 10)" fill="none" stroke="#10b981" stroke-width="2"/>
-                                                <line :x1="markAB.x - 5" :y1="markAB.y - 5" :x2="markAB.x + 5" :y2="markAB.y + 5" stroke="#3b82f6" stroke-width="2"/>
-                                                <line :x1="markBC.x - 5" :y1="markBC.y + 5" :x2="markBC.x + 5" :y2="markBC.y - 5" stroke="#3b82f6" stroke-width="2"/>
-                                                <line :x1="markAC.x - 5" :y1="markAC.y" :x2="markAC.x + 5" :y2="markAC.y" stroke="#3b82f6" stroke-width="2"/>
                                                 <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
                                                 <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
                                                 <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
