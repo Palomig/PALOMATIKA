@@ -101,7 +101,7 @@
         }
 
         .svg-container {
-            background: rgba(0,0,0,0.2);
+            background: #ffffff;
             border-radius: 12px;
             padding: 16px;
             margin-bottom: 16px;
@@ -146,22 +146,71 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* SVG Styles */
-        .geo-line { transition: all 0.3s ease; }
-        .geo-line.highlight { stroke-width: 4; }
-        .geo-point { transition: all 0.3s ease; }
-        .geo-point.highlight { r: 7; }
+        /* SVG Styles - matching original */
+        .geo-line {
+            stroke: #8B1A1A;
+            stroke-width: 2.5;
+            fill: none;
+            transition: all 0.3s ease;
+        }
+        .geo-line.highlight {
+            stroke: #f59e0b;
+            stroke-width: 4;
+        }
+        .geo-line.secondary {
+            stroke: #8B1A1A;
+            stroke-width: 2;
+            stroke-dasharray: 6,4;
+        }
+        .geo-line.secondary.highlight {
+            stroke: #f59e0b;
+            stroke-dasharray: none;
+            stroke-width: 3;
+        }
+        .geo-point {
+            fill: #8B1A1A;
+            transition: all 0.3s ease;
+        }
+        .geo-point.highlight {
+            fill: #f59e0b;
+        }
         .geo-label {
             font-family: 'Times New Roman', serif;
             font-style: italic;
             font-weight: 500;
+            font-size: 20px;
+            fill: #1e40af;
             transition: all 0.3s ease;
         }
-        .geo-label.highlight { font-size: 20px; }
-        .geo-arc { transition: all 0.3s ease; }
-        .geo-arc.highlight { stroke-width: 3; }
-        .geo-fill { transition: all 0.3s ease; }
-        .geo-fill.highlight { fill-opacity: 0.3; }
+        .geo-label.highlight {
+            fill: #f59e0b;
+            font-size: 22px;
+        }
+        .geo-arc {
+            stroke: #27ae60;
+            stroke-width: 2;
+            fill: none;
+            transition: all 0.3s ease;
+        }
+        .geo-arc.highlight {
+            stroke: #f59e0b;
+            stroke-width: 3;
+        }
+        .geo-square {
+            stroke: #27ae60;
+            stroke-width: 2;
+            fill: none;
+        }
+        .geo-square.highlight {
+            stroke: #f59e0b;
+            stroke-width: 3;
+        }
+        .geo-fill {
+            transition: all 0.3s ease;
+        }
+        .geo-fill.highlight {
+            fill: rgba(245, 158, 11, 0.15);
+        }
 
         .formula-box {
             margin-top: 12px;
@@ -194,50 +243,52 @@
 
 <div class="demos-grid">
 
-    {{-- 1. Биссектриса треугольника --}}
+    {{-- 1. Биссектриса треугольника - BD из B к AC --}}
     <div class="demo-card" x-data="{ showHint: false }">
         <div class="demo-title">
             <span class="number">1</span>
             Биссектриса треугольника
         </div>
         <div class="svg-container">
-            <svg viewBox="0 0 300 220">
+            <svg viewBox="0 0 300 200">
                 {{-- Triangle ABC --}}
-                <polygon points="40,180 260,180 180,40" fill="none" stroke="#8B1A1A" stroke-width="3" stroke-linejoin="round"/>
+                <polygon points="30,170 270,170 200,30"
+                         class="geo-line" stroke-linejoin="round"/>
 
-                {{-- Bisector AD --}}
-                <line x1="180" y1="40" x2="150" y2="180"
-                      stroke="#2563eb" stroke-width="2" stroke-dasharray="6,4"
-                      :class="{ 'highlight': showHint }"
-                      :style="showHint ? 'stroke: #f59e0b; stroke-dasharray: none; stroke-width: 4' : ''"/>
+                {{-- Bisector BD from B to AC --}}
+                <line x1="200" y1="30" x2="150" y2="170"
+                      class="geo-line secondary"
+                      :class="{ 'highlight': showHint }"/>
 
-                {{-- Angle arc at A (full angle BAC) --}}
-                <path d="M 165 60 A 25 25 0 0 0 195 60" fill="none" stroke="#8B1A1A" stroke-width="2"/>
+                {{-- Angle arc at A (the angle we're bisecting is at A in the problem) --}}
+                <path d="M 50 170 A 20 20 0 0 0 42 155"
+                      class="geo-arc"
+                      :class="{ 'highlight': showHint }"/>
 
-                {{-- Two equal angle arcs when hint is shown --}}
+                {{-- Two equal angle arcs at B when hint shown --}}
                 <template x-if="showHint">
                     <g>
-                        {{-- First half angle BAD --}}
-                        <path d="M 168 55 A 20 20 0 0 0 180 70" fill="none" stroke="#10b981" stroke-width="3"/>
-                        {{-- Second half angle DAC --}}
-                        <path d="M 180 70 A 20 20 0 0 0 192 55" fill="none" stroke="#10b981" stroke-width="3"/>
+                        {{-- First half of angle ABD --}}
+                        <path d="M 185 50 A 22 22 0 0 0 175 62" class="geo-arc highlight"/>
+                        {{-- Second half of angle DBC --}}
+                        <path d="M 175 62 A 22 22 0 0 0 210 55" class="geo-arc highlight"/>
                         {{-- Equal marks --}}
-                        <line x1="172" y1="62" x2="174" y2="58" stroke="#10b981" stroke-width="2"/>
-                        <line x1="186" y1="62" x2="188" y2="58" stroke="#10b981" stroke-width="2"/>
+                        <line x1="178" y1="54" x2="182" y2="58" stroke="#f59e0b" stroke-width="2"/>
+                        <line x1="192" y1="54" x2="196" y2="58" stroke="#f59e0b" stroke-width="2"/>
                     </g>
                 </template>
 
                 {{-- Points --}}
-                <circle cx="40" cy="180" r="4" fill="#8B1A1A"/>
-                <circle cx="260" cy="180" r="4" fill="#8B1A1A"/>
-                <circle cx="180" cy="40" r="4" fill="#8B1A1A"/>
-                <circle cx="150" cy="180" r="4" fill="#2563eb" :class="{ 'highlight': showHint }" :style="showHint ? 'fill: #f59e0b' : ''"/>
+                <circle cx="30" cy="170" r="4" class="geo-point"/>
+                <circle cx="270" cy="170" r="4" class="geo-point"/>
+                <circle cx="200" cy="30" r="4" class="geo-point"/>
+                <circle cx="150" cy="170" r="4" class="geo-point" :class="{ 'highlight': showHint }"/>
 
                 {{-- Labels --}}
-                <text x="25" y="185" fill="#fff" font-size="18" class="geo-label">A</text>
-                <text x="268" y="185" fill="#fff" font-size="18" class="geo-label">C</text>
-                <text x="180" y="28" fill="#fff" font-size="18" class="geo-label">B</text>
-                <text x="148" y="200" fill="#60a5fa" font-size="16" class="geo-label" :style="showHint ? 'fill: #f59e0b' : ''">D</text>
+                <text x="15" y="175" class="geo-label">A</text>
+                <text x="275" y="175" class="geo-label">C</text>
+                <text x="205" y="22" class="geo-label">B</text>
+                <text x="145" y="190" class="geo-label" :class="{ 'highlight': showHint }">D</text>
             </svg>
         </div>
         <button class="hint-btn" :class="{ 'active': showHint }" @click="showHint = !showHint">
@@ -245,50 +296,51 @@
         </button>
         <div class="hint-text" x-show="showHint" x-transition>
             <strong>Биссектриса</strong> делит угол пополам.<br>
-            Угол BAD = Угол DAC = <strong>Угол BAC / 2</strong>
+            ∠ABD = ∠DBC = <strong>∠ABC / 2</strong>
         </div>
     </div>
 
-    {{-- 2. Медиана треугольника --}}
+    {{-- 2. Медиана треугольника - BM из B к середине AC --}}
     <div class="demo-card" x-data="{ showHint: false }">
         <div class="demo-title">
             <span class="number">2</span>
             Медиана треугольника
         </div>
         <div class="svg-container">
-            <svg viewBox="0 0 300 220">
+            <svg viewBox="0 0 300 200">
                 {{-- Triangle ABC --}}
-                <polygon points="40,180 260,180 150,40" fill="none" stroke="#8B1A1A" stroke-width="3" stroke-linejoin="round"/>
+                <polygon points="30,170 270,170 200,30"
+                         class="geo-line" stroke-linejoin="round"/>
 
-                {{-- Median BM --}}
-                <line x1="150" y1="40" x2="150" y2="180"
-                      stroke="#2563eb" stroke-width="2" stroke-dasharray="6,4"
-                      :style="showHint ? 'stroke: #f59e0b; stroke-dasharray: none; stroke-width: 4' : ''"/>
+                {{-- Median BM from B to midpoint of AC --}}
+                <line x1="200" y1="30" x2="150" y2="170"
+                      class="geo-line secondary"
+                      :class="{ 'highlight': showHint }"/>
 
                 {{-- Equal segments marks when hint is shown --}}
                 <template x-if="showHint">
                     <g>
-                        {{-- AM segment mark --}}
-                        <line x1="90" y1="175" x2="100" y2="185" stroke="#10b981" stroke-width="3"/>
-                        {{-- MC segment mark --}}
-                        <line x1="200" y1="175" x2="210" y2="185" stroke="#10b981" stroke-width="3"/>
-                        {{-- Highlight AM and MC --}}
-                        <line x1="40" y1="180" x2="150" y2="180" stroke="#10b981" stroke-width="4"/>
-                        <line x1="150" y1="180" x2="260" y2="180" stroke="#10b981" stroke-width="4"/>
+                        {{-- AM segment highlighted --}}
+                        <line x1="30" y1="170" x2="150" y2="170" stroke="#f59e0b" stroke-width="4"/>
+                        {{-- MC segment highlighted --}}
+                        <line x1="150" y1="170" x2="270" y2="170" stroke="#f59e0b" stroke-width="4"/>
+                        {{-- Equal marks --}}
+                        <line x1="85" y1="165" x2="95" y2="175" stroke="#27ae60" stroke-width="3"/>
+                        <line x1="205" y1="165" x2="215" y2="175" stroke="#27ae60" stroke-width="3"/>
                     </g>
                 </template>
 
                 {{-- Points --}}
-                <circle cx="40" cy="180" r="4" fill="#8B1A1A"/>
-                <circle cx="260" cy="180" r="4" fill="#8B1A1A"/>
-                <circle cx="150" cy="40" r="4" fill="#8B1A1A"/>
-                <circle cx="150" cy="180" r="5" fill="#2563eb" :style="showHint ? 'fill: #f59e0b; r: 7' : ''"/>
+                <circle cx="30" cy="170" r="4" class="geo-point"/>
+                <circle cx="270" cy="170" r="4" class="geo-point"/>
+                <circle cx="200" cy="30" r="4" class="geo-point"/>
+                <circle cx="150" cy="170" r="5" class="geo-point" :class="{ 'highlight': showHint }"/>
 
                 {{-- Labels --}}
-                <text x="25" y="185" fill="#fff" font-size="18" class="geo-label">A</text>
-                <text x="268" y="185" fill="#fff" font-size="18" class="geo-label">C</text>
-                <text x="150" y="28" fill="#fff" font-size="18" class="geo-label">B</text>
-                <text x="148" y="200" fill="#60a5fa" font-size="16" class="geo-label" :style="showHint ? 'fill: #f59e0b' : ''">M</text>
+                <text x="15" y="175" class="geo-label">A</text>
+                <text x="275" y="175" class="geo-label">C</text>
+                <text x="205" y="22" class="geo-label">B</text>
+                <text x="145" y="190" class="geo-label" :class="{ 'highlight': showHint }">M</text>
             </svg>
         </div>
         <button class="hint-btn" :class="{ 'active': showHint }" @click="showHint = !showHint">
@@ -307,39 +359,38 @@
             Сумма углов треугольника
         </div>
         <div class="svg-container">
-            <svg viewBox="0 0 300 220">
+            <svg viewBox="0 0 300 200">
                 {{-- Triangle ABC --}}
-                <polygon points="40,180 260,180 180,40" fill="none" stroke="#8B1A1A" stroke-width="3" stroke-linejoin="round"/>
+                <polygon points="30,170 270,170 180,30"
+                         class="geo-line" stroke-linejoin="round"
+                         :class="{ 'geo-fill highlight': showHint }"/>
 
                 {{-- Angle arcs --}}
-                <path d="M 60 180 A 20 20 0 0 0 52 163" fill="none"
-                      :stroke="showHint ? '#f59e0b' : '#666'" stroke-width="2"
-                      :style="showHint ? 'stroke-width: 3' : ''"/>
-                <path d="M 240 180 A 20 20 0 0 1 235 162" fill="none"
-                      :stroke="showHint ? '#10b981' : '#666'" stroke-width="2"
-                      :style="showHint ? 'stroke-width: 3' : ''"/>
-                <path d="M 168 55 A 18 18 0 0 0 192 55" fill="none"
-                      :stroke="showHint ? '#3b82f6' : '#666'" stroke-width="2"
-                      :style="showHint ? 'stroke-width: 3' : ''"/>
+                <path d="M 55 170 A 25 25 0 0 0 45 152"
+                      class="geo-arc" :class="{ 'highlight': showHint }"/>
+                <path d="M 245 170 A 25 25 0 0 1 255 155"
+                      class="geo-arc" :class="{ 'highlight': showHint }"/>
+                <path d="M 165 50 A 20 20 0 0 0 195 50"
+                      class="geo-arc" :class="{ 'highlight': showHint }"/>
 
                 {{-- Angle labels when hint is shown --}}
                 <template x-if="showHint">
                     <g>
-                        <text x="70" y="165" fill="#f59e0b" font-size="14" class="geo-label">α</text>
-                        <text x="225" y="165" fill="#10b981" font-size="14" class="geo-label">β</text>
-                        <text x="175" y="70" fill="#3b82f6" font-size="14" class="geo-label">γ</text>
+                        <text x="65" y="155" fill="#f59e0b" font-size="16" font-style="italic">α</text>
+                        <text x="230" y="155" fill="#f59e0b" font-size="16" font-style="italic">β</text>
+                        <text x="175" y="70" fill="#f59e0b" font-size="16" font-style="italic">γ</text>
                     </g>
                 </template>
 
                 {{-- Points --}}
-                <circle cx="40" cy="180" r="4" fill="#8B1A1A"/>
-                <circle cx="260" cy="180" r="4" fill="#8B1A1A"/>
-                <circle cx="180" cy="40" r="4" fill="#8B1A1A"/>
+                <circle cx="30" cy="170" r="4" class="geo-point"/>
+                <circle cx="270" cy="170" r="4" class="geo-point"/>
+                <circle cx="180" cy="30" r="4" class="geo-point"/>
 
                 {{-- Labels --}}
-                <text x="25" y="185" fill="#fff" font-size="18" class="geo-label">A</text>
-                <text x="268" y="185" fill="#fff" font-size="18" class="geo-label">C</text>
-                <text x="180" y="28" fill="#fff" font-size="18" class="geo-label">B</text>
+                <text x="15" y="178" class="geo-label">A</text>
+                <text x="275" y="178" class="geo-label">C</text>
+                <text x="183" y="22" class="geo-label">B</text>
             </svg>
         </div>
         <button class="hint-btn" :class="{ 'active': showHint }" @click="showHint = !showHint">
@@ -358,51 +409,44 @@
             Внешний угол треугольника
         </div>
         <div class="svg-container">
-            <svg viewBox="0 0 300 220">
+            <svg viewBox="0 0 300 200">
                 {{-- Triangle ABC --}}
-                <polygon points="40,180 200,180 120,50" fill="none" stroke="#8B1A1A" stroke-width="3" stroke-linejoin="round"/>
+                <polygon points="30,160 200,160 130,40"
+                         class="geo-line" stroke-linejoin="round"/>
 
                 {{-- Extended side CD --}}
-                <line x1="200" y1="180" x2="280" y2="180" stroke="#8B1A1A" stroke-width="2" stroke-dasharray="6,4"/>
+                <line x1="200" y1="160" x2="280" y2="160"
+                      stroke="#8B1A1A" stroke-width="2" stroke-dasharray="6,4"/>
 
-                {{-- External angle arc --}}
-                <path d="M 220 180 A 20 20 0 0 0 210 162" fill="none"
-                      :stroke="showHint ? '#f59e0b' : '#666'" stroke-width="2"
-                      :style="showHint ? 'stroke-width: 4' : ''"/>
+                {{-- External angle arc at C --}}
+                <path d="M 220 160 A 20 20 0 0 0 212 143"
+                      class="geo-arc" :class="{ 'highlight': showHint }"/>
 
                 {{-- Internal angle at C --}}
-                <path d="M 180 180 A 20 20 0 0 1 188 165" fill="none"
-                      :stroke="showHint ? '#10b981' : '#666'" stroke-width="2"
-                      :style="showHint ? 'stroke-width: 3' : ''"/>
+                <path d="M 180 160 A 20 20 0 0 1 190 147"
+                      stroke="#888" stroke-width="1.5" fill="none"/>
 
                 {{-- Non-adjacent angles when hint is shown --}}
                 <template x-if="showHint">
                     <g>
                         {{-- Angle at A --}}
-                        <path d="M 60 180 A 20 20 0 0 0 50 165" fill="none" stroke="#3b82f6" stroke-width="3"/>
+                        <path d="M 55 160 A 25 25 0 0 0 43 145" class="geo-arc highlight"/>
                         {{-- Angle at B --}}
-                        <path d="M 110 65 A 18 18 0 0 0 130 65" fill="none" stroke="#3b82f6" stroke-width="3"/>
+                        <path d="M 118 58 A 18 18 0 0 0 142 58" class="geo-arc highlight"/>
+                        <text x="60" y="145" fill="#f59e0b" font-size="14" font-style="italic">α</text>
+                        <text x="125" y="75" fill="#f59e0b" font-size="14" font-style="italic">β</text>
                     </g>
                 </template>
 
                 {{-- Points --}}
-                <circle cx="40" cy="180" r="4" fill="#8B1A1A"/>
-                <circle cx="200" cy="180" r="4" fill="#8B1A1A"/>
-                <circle cx="120" cy="50" r="4" fill="#8B1A1A"/>
-                <circle cx="280" cy="180" r="3" fill="#666"/>
+                <circle cx="30" cy="160" r="4" class="geo-point"/>
+                <circle cx="200" cy="160" r="4" class="geo-point"/>
+                <circle cx="130" cy="40" r="4" class="geo-point"/>
 
                 {{-- Labels --}}
-                <text x="25" y="185" fill="#fff" font-size="18" class="geo-label">A</text>
-                <text x="200" y="200" fill="#fff" font-size="18" class="geo-label">C</text>
-                <text x="120" y="38" fill="#fff" font-size="18" class="geo-label">B</text>
-                <text x="280" y="200" fill="#888" font-size="14" class="geo-label">D</text>
-
-                {{-- Angle labels --}}
-                <template x-if="showHint">
-                    <g>
-                        <text x="230" y="168" fill="#f59e0b" font-size="12">внеш.</text>
-                    </g>
-                </template>
+                <text x="15" y="168" class="geo-label">A</text>
+                <text x="200" y="182" class="geo-label">C</text>
+                <text x="130" y="28" class="geo-label">B</text>
             </svg>
         </div>
         <button class="hint-btn" :class="{ 'active': showHint }" @click="showHint = !showHint">
@@ -410,56 +454,57 @@
         </button>
         <div class="hint-text" x-show="showHint" x-transition>
             <strong>Внешний угол = 180° − внутренний угол</strong><br>
-            Или: внешний угол = сумма двух несмежных внутренних
+            Или: внешний угол = α + β (сумма двух несмежных внутренних)
         </div>
     </div>
 
-    {{-- 5. Равнобедренный треугольник --}}
+    {{-- 5. Равнобедренный треугольник (AB = BC) --}}
     <div class="demo-card" x-data="{ showHint: false }">
         <div class="demo-title">
             <span class="number">5</span>
             Равнобедренный треугольник
         </div>
         <div class="svg-container">
-            <svg viewBox="0 0 300 220">
-                {{-- Triangle ABC (isosceles: AB = BC) --}}
-                <polygon points="50,180 250,180 150,40" fill="none" stroke="#8B1A1A" stroke-width="3" stroke-linejoin="round"/>
+            <svg viewBox="0 0 300 200">
+                {{-- Triangle ABC (isosceles: AB = BC, vertex at B) --}}
+                <polygon points="50,170 250,170 150,30"
+                         class="geo-line" stroke-linejoin="round"/>
 
-                {{-- Equal sides marks --}}
+                {{-- Equal sides highlighting when hint shown --}}
                 <template x-if="showHint">
                     <g>
-                        {{-- Mark on AB --}}
-                        <line x1="95" y1="115" x2="105" y2="105" stroke="#f59e0b" stroke-width="3"/>
-                        <line x1="98" y1="118" x2="108" y2="108" stroke="#f59e0b" stroke-width="3"/>
-                        {{-- Mark on BC --}}
-                        <line x1="195" y1="105" x2="205" y2="115" stroke="#f59e0b" stroke-width="3"/>
-                        <line x1="192" y1="108" x2="202" y2="118" stroke="#f59e0b" stroke-width="3"/>
-                        {{-- Highlight equal sides --}}
-                        <line x1="50" y1="180" x2="150" y2="40" stroke="#f59e0b" stroke-width="4"/>
-                        <line x1="150" y1="40" x2="250" y2="180" stroke="#f59e0b" stroke-width="4"/>
+                        {{-- Side AB highlighted --}}
+                        <line x1="50" y1="170" x2="150" y2="30" stroke="#f59e0b" stroke-width="4"/>
+                        {{-- Side BC highlighted --}}
+                        <line x1="150" y1="30" x2="250" y2="170" stroke="#f59e0b" stroke-width="4"/>
+                        {{-- Equal marks on AB --}}
+                        <line x1="95" y1="105" x2="105" y2="95" stroke="#27ae60" stroke-width="3"/>
+                        <line x1="100" y1="110" x2="110" y2="100" stroke="#27ae60" stroke-width="3"/>
+                        {{-- Equal marks on BC --}}
+                        <line x1="195" y1="95" x2="205" y2="105" stroke="#27ae60" stroke-width="3"/>
+                        <line x1="190" y1="100" x2="200" y2="110" stroke="#27ae60" stroke-width="3"/>
                     </g>
                 </template>
 
-                {{-- Equal angle arcs at base --}}
-                <path d="M 70 180 A 20 20 0 0 0 60 163" fill="none"
-                      :stroke="showHint ? '#10b981' : '#666'" stroke-width="2"
-                      :style="showHint ? 'stroke-width: 3' : ''"/>
-                <path d="M 230 180 A 20 20 0 0 1 240 163" fill="none"
-                      :stroke="showHint ? '#10b981' : '#666'" stroke-width="2"
-                      :style="showHint ? 'stroke-width: 3' : ''"/>
+                {{-- Vertex angle at B --}}
+                <path d="M 135 48 A 22 22 0 0 0 165 48"
+                      class="geo-arc" :class="{ 'highlight': showHint }"/>
 
-                {{-- Vertex angle --}}
-                <path d="M 135 55 A 20 20 0 0 0 165 55" fill="none" stroke="#3b82f6" stroke-width="2"/>
+                {{-- Equal base angles --}}
+                <path d="M 75 170 A 25 25 0 0 0 62 152"
+                      class="geo-arc" :class="{ 'highlight': showHint }"/>
+                <path d="M 225 170 A 25 25 0 0 1 238 152"
+                      class="geo-arc" :class="{ 'highlight': showHint }"/>
 
                 {{-- Points --}}
-                <circle cx="50" cy="180" r="4" fill="#8B1A1A"/>
-                <circle cx="250" cy="180" r="4" fill="#8B1A1A"/>
-                <circle cx="150" cy="40" r="4" fill="#8B1A1A"/>
+                <circle cx="50" cy="170" r="4" class="geo-point"/>
+                <circle cx="250" cy="170" r="4" class="geo-point"/>
+                <circle cx="150" cy="30" r="4" class="geo-point"/>
 
                 {{-- Labels --}}
-                <text x="35" y="185" fill="#fff" font-size="18" class="geo-label">A</text>
-                <text x="258" y="185" fill="#fff" font-size="18" class="geo-label">C</text>
-                <text x="150" y="28" fill="#fff" font-size="18" class="geo-label">B</text>
+                <text x="35" y="178" class="geo-label">A</text>
+                <text x="255" y="178" class="geo-label">C</text>
+                <text x="150" y="18" class="geo-label">B</text>
             </svg>
         </div>
         <button class="hint-btn" :class="{ 'active': showHint }" @click="showHint = !showHint">
@@ -478,47 +523,46 @@
             Внешний угол равнобедренного
         </div>
         <div class="svg-container">
-            <svg viewBox="0 0 300 220">
+            <svg viewBox="0 0 300 200">
                 {{-- Triangle ABC (isosceles: AB = BC) --}}
-                <polygon points="40,180 200,180 120,50" fill="none" stroke="#8B1A1A" stroke-width="3" stroke-linejoin="round"/>
+                <polygon points="30,160 200,160 115,40"
+                         class="geo-line" stroke-linejoin="round"/>
 
                 {{-- Extended side --}}
-                <line x1="200" y1="180" x2="280" y2="180" stroke="#8B1A1A" stroke-width="2" stroke-dasharray="6,4"/>
+                <line x1="200" y1="160" x2="280" y2="160"
+                      stroke="#8B1A1A" stroke-width="2" stroke-dasharray="6,4"/>
 
-                {{-- Equal sides marks --}}
+                {{-- Equal sides highlighting when hint shown --}}
                 <template x-if="showHint">
                     <g>
-                        {{-- Mark on AB --}}
-                        <line x1="75" y1="120" x2="85" y2="110" stroke="#f59e0b" stroke-width="3"/>
-                        <line x1="78" y1="123" x2="88" y2="113" stroke="#f59e0b" stroke-width="3"/>
-                        {{-- Mark on BC --}}
-                        <line x1="155" y1="110" x2="165" y2="120" stroke="#f59e0b" stroke-width="3"/>
-                        <line x1="152" y1="113" x2="162" y2="123" stroke="#f59e0b" stroke-width="3"/>
+                        {{-- Equal marks on AB --}}
+                        <line x1="68" y1="105" x2="78" y2="95" stroke="#27ae60" stroke-width="3"/>
+                        <line x1="73" y1="110" x2="83" y2="100" stroke="#27ae60" stroke-width="3"/>
+                        {{-- Equal marks on BC --}}
+                        <line x1="152" y1="95" x2="162" y2="105" stroke="#27ae60" stroke-width="3"/>
+                        <line x1="147" y1="100" x2="157" y2="110" stroke="#27ae60" stroke-width="3"/>
                     </g>
                 </template>
 
-                {{-- External angle --}}
-                <path d="M 220 180 A 20 20 0 0 0 210 163" fill="none"
-                      :stroke="showHint ? '#f59e0b' : '#666'" stroke-width="2"
-                      :style="showHint ? 'stroke-width: 4' : ''"/>
+                {{-- External angle at C --}}
+                <path d="M 220 160 A 20 20 0 0 0 212 143"
+                      class="geo-arc" :class="{ 'highlight': showHint }"/>
 
                 {{-- Equal base angles --}}
-                <path d="M 60 180 A 20 20 0 0 0 50 165" fill="none"
-                      :stroke="showHint ? '#10b981' : '#666'" stroke-width="2"
-                      :style="showHint ? 'stroke-width: 3' : ''"/>
-                <path d="M 180 180 A 20 20 0 0 1 188 167" fill="none"
-                      :stroke="showHint ? '#10b981' : '#666'" stroke-width="2"
-                      :style="showHint ? 'stroke-width: 3' : ''"/>
+                <path d="M 55 160 A 25 25 0 0 0 42 145"
+                      class="geo-arc" :class="{ 'highlight': showHint }"/>
+                <path d="M 180 160 A 20 20 0 0 1 190 148"
+                      class="geo-arc" :class="{ 'highlight': showHint }"/>
 
                 {{-- Points --}}
-                <circle cx="40" cy="180" r="4" fill="#8B1A1A"/>
-                <circle cx="200" cy="180" r="4" fill="#8B1A1A"/>
-                <circle cx="120" cy="50" r="4" fill="#8B1A1A"/>
+                <circle cx="30" cy="160" r="4" class="geo-point"/>
+                <circle cx="200" cy="160" r="4" class="geo-point"/>
+                <circle cx="115" cy="40" r="4" class="geo-point"/>
 
                 {{-- Labels --}}
-                <text x="25" y="185" fill="#fff" font-size="18" class="geo-label">A</text>
-                <text x="200" y="200" fill="#fff" font-size="18" class="geo-label">C</text>
-                <text x="120" y="38" fill="#fff" font-size="18" class="geo-label">B</text>
+                <text x="15" y="168" class="geo-label">A</text>
+                <text x="200" y="182" class="geo-label">C</text>
+                <text x="115" y="28" class="geo-label">B</text>
             </svg>
         </div>
         <button class="hint-btn" :class="{ 'active': showHint }" @click="showHint = !showHint">
@@ -526,52 +570,53 @@
         </button>
         <div class="hint-text" x-show="showHint" x-transition>
             Внешний угол = 180° − угол при основании.<br>
+            Угол при основании = 180° − внешний угол.<br>
             <strong>∠ABC = 180° − 2 × (180° − внешний угол)</strong>
         </div>
     </div>
 
-    {{-- 7. Прямоугольный треугольник --}}
+    {{-- 7. Прямоугольный треугольник (прямой угол при C) --}}
     <div class="demo-card" x-data="{ showHint: false }">
         <div class="demo-title">
             <span class="number">7</span>
             Прямоугольный треугольник
         </div>
         <div class="svg-container">
-            <svg viewBox="0 0 300 220">
+            <svg viewBox="0 0 300 200">
                 {{-- Triangle ABC (right angle at C) --}}
-                <polygon points="50,180 250,180 250,50" fill="none" stroke="#8B1A1A" stroke-width="3" stroke-linejoin="round"/>
+                <polygon points="30,170 250,170 250,40"
+                         class="geo-line" stroke-linejoin="round"/>
 
-                {{-- Right angle marker --}}
-                <path d="M 235 180 L 235 165 L 250 165" fill="none"
-                      :stroke="showHint ? '#f59e0b' : '#666'" stroke-width="2"
-                      :style="showHint ? 'stroke-width: 3' : ''"/>
+                {{-- Right angle marker at C (square) --}}
+                <path d="M 235 170 L 235 155 L 250 155"
+                      class="geo-square" :class="{ 'highlight': showHint }"/>
 
-                {{-- Acute angles --}}
-                <path d="M 75 180 A 25 25 0 0 0 62 163" fill="none"
-                      :stroke="showHint ? '#10b981' : '#666'" stroke-width="2"
-                      :style="showHint ? 'stroke-width: 3' : ''"/>
-                <path d="M 250 70 A 20 20 0 0 0 232 58" fill="none"
-                      :stroke="showHint ? '#3b82f6' : '#666'" stroke-width="2"
-                      :style="showHint ? 'stroke-width: 3' : ''"/>
+                {{-- Acute angle at A --}}
+                <path d="M 60 170 A 30 30 0 0 0 48 152"
+                      class="geo-arc" :class="{ 'highlight': showHint }"/>
+
+                {{-- Acute angle at B --}}
+                <path d="M 250 60 A 20 20 0 0 0 230 48"
+                      class="geo-arc" :class="{ 'highlight': showHint }"/>
 
                 {{-- Angle labels when hint is shown --}}
                 <template x-if="showHint">
                     <g>
-                        <text x="85" y="165" fill="#10b981" font-size="14" class="geo-label">α</text>
-                        <text x="225" y="75" fill="#3b82f6" font-size="14" class="geo-label">β</text>
-                        <text x="220" y="170" fill="#f59e0b" font-size="14" class="geo-label">90°</text>
+                        <text x="70" y="155" fill="#f59e0b" font-size="16" font-style="italic">α</text>
+                        <text x="218" y="65" fill="#f59e0b" font-size="16" font-style="italic">β</text>
+                        <text x="220" y="160" fill="#f59e0b" font-size="14">90°</text>
                     </g>
                 </template>
 
                 {{-- Points --}}
-                <circle cx="50" cy="180" r="4" fill="#8B1A1A"/>
-                <circle cx="250" cy="180" r="4" fill="#8B1A1A"/>
-                <circle cx="250" cy="50" r="4" fill="#8B1A1A"/>
+                <circle cx="30" cy="170" r="4" class="geo-point"/>
+                <circle cx="250" cy="170" r="4" class="geo-point"/>
+                <circle cx="250" cy="40" r="4" class="geo-point"/>
 
                 {{-- Labels --}}
-                <text x="35" y="185" fill="#fff" font-size="18" class="geo-label">A</text>
-                <text x="258" y="190" fill="#fff" font-size="18" class="geo-label">C</text>
-                <text x="258" y="50" fill="#fff" font-size="18" class="geo-label">B</text>
+                <text x="15" y="178" class="geo-label">A</text>
+                <text x="258" y="178" class="geo-label">C</text>
+                <text x="258" y="40" class="geo-label">B</text>
             </svg>
         </div>
         <button class="hint-btn" :class="{ 'active': showHint }" @click="showHint = !showHint">
@@ -583,62 +628,58 @@
         </div>
     </div>
 
-    {{-- 8. Высота треугольника --}}
+    {{-- 8. Высота треугольника (BH перпендикулярна AC) --}}
     <div class="demo-card" x-data="{ showHint: false }">
         <div class="demo-title">
             <span class="number">8</span>
             Высота треугольника
         </div>
         <div class="svg-container">
-            <svg viewBox="0 0 300 220">
+            <svg viewBox="0 0 300 200">
                 {{-- Triangle ABC --}}
-                <polygon points="40,180 260,180 180,40" fill="none" stroke="#8B1A1A" stroke-width="3" stroke-linejoin="round"/>
+                <polygon points="30,170 270,170 180,30"
+                         class="geo-line" stroke-linejoin="round"/>
 
                 {{-- Height BH --}}
-                <line x1="180" y1="40" x2="180" y2="180"
-                      stroke="#2563eb" stroke-width="2" stroke-dasharray="6,4"
-                      :style="showHint ? 'stroke: #f59e0b; stroke-dasharray: none; stroke-width: 4' : ''"/>
+                <line x1="180" y1="30" x2="180" y2="170"
+                      class="geo-line secondary"
+                      :class="{ 'highlight': showHint }"/>
 
-                {{-- Right angle marker --}}
-                <path d="M 165 180 L 165 165 L 180 165" fill="none"
-                      :stroke="showHint ? '#f59e0b' : '#666'" stroke-width="2"
-                      :style="showHint ? 'stroke-width: 3' : ''"/>
+                {{-- Right angle marker at H (square) --}}
+                <path d="M 165 170 L 165 155 L 180 155"
+                      class="geo-square" :class="{ 'highlight': showHint }"/>
 
                 {{-- Angle at A --}}
-                <path d="M 60 180 A 20 20 0 0 0 52 165" fill="none"
-                      :stroke="showHint ? '#10b981' : '#666'" stroke-width="2"
-                      :style="showHint ? 'stroke-width: 3' : ''"/>
+                <path d="M 58 170 A 28 28 0 0 0 47 152"
+                      class="geo-arc" :class="{ 'highlight': showHint }"/>
 
-                {{-- Angle ABH (complement) --}}
+                {{-- Angle ABH when hint shown --}}
                 <template x-if="showHint">
                     <g>
-                        <path d="M 175 55 A 15 15 0 0 1 180 70" fill="none" stroke="#3b82f6" stroke-width="3"/>
-                        <text x="160" y="75" fill="#3b82f6" font-size="12" class="geo-label">90°-α</text>
+                        <path d="M 175 48 A 18 18 0 0 1 180 65" stroke="#f59e0b" stroke-width="2.5" fill="none"/>
+                        <text x="155" y="70" fill="#f59e0b" font-size="12" font-style="italic">90°-α</text>
+                        <text x="62" y="152" fill="#f59e0b" font-size="14" font-style="italic">α</text>
                     </g>
                 </template>
 
                 {{-- Points --}}
-                <circle cx="40" cy="180" r="4" fill="#8B1A1A"/>
-                <circle cx="260" cy="180" r="4" fill="#8B1A1A"/>
-                <circle cx="180" cy="40" r="4" fill="#8B1A1A"/>
-                <circle cx="180" cy="180" r="5" fill="#2563eb" :style="showHint ? 'fill: #f59e0b' : ''"/>
+                <circle cx="30" cy="170" r="4" class="geo-point"/>
+                <circle cx="270" cy="170" r="4" class="geo-point"/>
+                <circle cx="180" cy="30" r="4" class="geo-point"/>
+                <circle cx="180" cy="170" r="5" class="geo-point" :class="{ 'highlight': showHint }"/>
 
                 {{-- Labels --}}
-                <text x="25" y="185" fill="#fff" font-size="18" class="geo-label">A</text>
-                <text x="268" y="185" fill="#fff" font-size="18" class="geo-label">C</text>
-                <text x="180" y="28" fill="#fff" font-size="18" class="geo-label">B</text>
-                <text x="178" y="200" fill="#60a5fa" font-size="16" class="geo-label" :style="showHint ? 'fill: #f59e0b' : ''">H</text>
-
-                <template x-if="showHint">
-                    <text x="70" y="165" fill="#10b981" font-size="12" class="geo-label">α</text>
-                </template>
+                <text x="15" y="178" class="geo-label">A</text>
+                <text x="275" y="178" class="geo-label">C</text>
+                <text x="183" y="20" class="geo-label">B</text>
+                <text x="175" y="190" class="geo-label" :class="{ 'highlight': showHint }">H</text>
             </svg>
         </div>
         <button class="hint-btn" :class="{ 'active': showHint }" @click="showHint = !showHint">
             <span x-text="showHint ? 'Скрыть' : 'Подсказка'"></span>
         </button>
         <div class="hint-text" x-show="showHint" x-transition>
-            <strong>Высота</strong> перпендикулярна стороне (∠BHC = 90°).<br>
+            <strong>Высота</strong> перпендикулярна стороне (∠BHA = 90°).<br>
             В треугольнике ABH: <strong>∠ABH = 90° − ∠BAC</strong>
         </div>
     </div>
@@ -650,37 +691,38 @@
             Площадь прямоугольного треугольника
         </div>
         <div class="svg-container">
-            <svg viewBox="0 0 300 220">
+            <svg viewBox="0 0 300 200">
                 {{-- Triangle fill (shown when hint active) --}}
-                <polygon points="50,180 250,180 250,60"
-                         :fill="showHint ? 'rgba(16, 185, 129, 0.2)' : 'none'"
-                         stroke="#8B1A1A" stroke-width="3" stroke-linejoin="round"/>
+                <polygon points="30,170 250,170 250,50"
+                         class="geo-line" stroke-linejoin="round"
+                         :class="{ 'geo-fill highlight': showHint }"/>
 
-                {{-- Catheti highlighting --}}
+                {{-- Catheti highlighting when hint shown --}}
                 <template x-if="showHint">
                     <g>
                         {{-- Horizontal cathetus (a) --}}
-                        <line x1="50" y1="180" x2="250" y2="180" stroke="#f59e0b" stroke-width="5"/>
+                        <line x1="30" y1="170" x2="250" y2="170" stroke="#f59e0b" stroke-width="5"/>
                         {{-- Vertical cathetus (b) --}}
-                        <line x1="250" y1="180" x2="250" y2="60" stroke="#3b82f6" stroke-width="5"/>
+                        <line x1="250" y1="170" x2="250" y2="50" stroke="#3b82f6" stroke-width="5"/>
                         {{-- Labels for catheti --}}
-                        <text x="150" y="200" fill="#f59e0b" font-size="16" text-anchor="middle" class="geo-label">a</text>
-                        <text x="270" y="125" fill="#3b82f6" font-size="16" class="geo-label">b</text>
+                        <text x="140" y="192" fill="#f59e0b" font-size="18" font-style="italic" text-anchor="middle">a</text>
+                        <text x="270" y="115" fill="#3b82f6" font-size="18" font-style="italic">b</text>
                     </g>
                 </template>
 
-                {{-- Right angle marker --}}
-                <path d="M 235 180 L 235 165 L 250 165" fill="none" stroke="#666" stroke-width="2"/>
+                {{-- Right angle marker at C (square) --}}
+                <path d="M 235 170 L 235 155 L 250 155"
+                      class="geo-square"/>
 
                 {{-- Points --}}
-                <circle cx="50" cy="180" r="4" fill="#8B1A1A"/>
-                <circle cx="250" cy="180" r="4" fill="#8B1A1A"/>
-                <circle cx="250" cy="60" r="4" fill="#8B1A1A"/>
+                <circle cx="30" cy="170" r="4" class="geo-point"/>
+                <circle cx="250" cy="170" r="4" class="geo-point"/>
+                <circle cx="250" cy="50" r="4" class="geo-point"/>
 
                 {{-- Labels --}}
-                <text x="35" y="185" fill="#fff" font-size="18" class="geo-label">A</text>
-                <text x="258" y="190" fill="#fff" font-size="18" class="geo-label">C</text>
-                <text x="258" y="55" fill="#fff" font-size="18" class="geo-label">B</text>
+                <text x="15" y="178" class="geo-label">A</text>
+                <text x="258" y="178" class="geo-label">C</text>
+                <text x="258" y="45" class="geo-label">B</text>
             </svg>
         </div>
         <button class="hint-btn" :class="{ 'active': showHint }" @click="showHint = !showHint">
