@@ -2616,12 +2616,12 @@ class TestPdfController extends Controller
                         'instruction' => 'Установите соответствие между графиками функций и формулами, которые их задают',
                         'type' => 'matching',
                         'tasks' => [
-                            ['id' => 1, 'options' => ['y = x + 3', 'y = 3', 'y = 3x']],
-                            ['id' => 2, 'options' => ['y = -2x - 1', 'y = 2x + 1', 'y = -2x + 1']],
-                            ['id' => 3, 'options' => ['y = -x', 'y = -1', 'y = x - 1']],
-                            ['id' => 4, 'options' => ['y = 2x + 4', 'y = -2x + 4', 'y = -2x - 4']],
-                            ['id' => 5, 'options' => ['y = \\frac{2}{5}x + 2', 'y = \\frac{2}{5}x - 2', 'y = -\\frac{2}{5}x + 2']],
-                            ['id' => 6, 'options' => ['y = -\\frac{2}{3}x - 5', 'y = \\frac{2}{3}x + 5', 'y = \\frac{2}{3}x - 5']],
+                            ['id' => 1, 'image' => 'img-000.png', 'options' => ['y = x + 3', 'y = 3', 'y = 3x']],
+                            ['id' => 2, 'image' => 'img-001.png', 'options' => ['y = -2x - 1', 'y = 2x + 1', 'y = -2x + 1']],
+                            ['id' => 3, 'image' => 'img-002.png', 'options' => ['y = -x', 'y = -1', 'y = x - 1']],
+                            ['id' => 4, 'image' => 'img-003.png', 'options' => ['y = 2x + 4', 'y = -2x + 4', 'y = -2x - 4']],
+                            ['id' => 5, 'image' => 'img-004.png', 'options' => ['y = \\frac{2}{5}x + 2', 'y = \\frac{2}{5}x - 2', 'y = -\\frac{2}{5}x + 2']],
+                            ['id' => 6, 'image' => 'img-005.png', 'options' => ['y = -\\frac{2}{3}x - 5', 'y = \\frac{2}{3}x + 5', 'y = \\frac{2}{3}x - 5']],
                         ]
                     ],
                     [
@@ -2629,12 +2629,12 @@ class TestPdfController extends Controller
                         'instruction' => 'Установите соответствие между графиками функций и формулами',
                         'type' => 'matching',
                         'tasks' => [
-                            ['id' => 1, 'options' => ['y = 2x + 6', 'y = -2x + 6', 'y = -2x - 6']],
-                            ['id' => 2, 'options' => ['y = -3x', 'y = -\\frac{1}{3}x', 'y = \\frac{1}{3}x']],
-                            ['id' => 3, 'options' => ['y = -2x - 4', 'y = 2x - 4', 'y = -2x + 4']],
-                            ['id' => 4, 'options' => ['y = 3x', 'y = -3x', 'y = \\frac{1}{3}x']],
-                            ['id' => 5, 'options' => ['y = \\frac{1}{2}x - 2', 'y = -\\frac{1}{2}x + 2', 'y = -\\frac{1}{2}x - 2']],
-                            ['id' => 6, 'options' => ['y = -\\frac{1}{2}x + 3', 'y = \\frac{1}{2}x + 3', 'y = \\frac{1}{2}x - 3']],
+                            ['id' => 1, 'image' => 'img-006.jpeg', 'options' => ['y = 2x + 6', 'y = -2x + 6', 'y = -2x - 6']],
+                            ['id' => 2, 'image' => 'img-007.png', 'options' => ['y = -3x', 'y = -\\frac{1}{3}x', 'y = \\frac{1}{3}x']],
+                            ['id' => 3, 'image' => 'img-008.jpeg', 'options' => ['y = -2x - 4', 'y = 2x - 4', 'y = -2x + 4']],
+                            ['id' => 4, 'image' => 'img-009.jpeg', 'options' => ['y = 3x', 'y = -3x', 'y = \\frac{1}{3}x']],
+                            ['id' => 5, 'image' => 'img-010.jpeg', 'options' => ['y = \\frac{1}{2}x - 2', 'y = -\\frac{1}{2}x + 2', 'y = -\\frac{1}{2}x - 2']],
+                            ['id' => 6, 'image' => 'img-011.jpeg', 'options' => ['y = -\\frac{1}{2}x + 3', 'y = \\frac{1}{2}x + 3', 'y = \\frac{1}{2}x - 3']],
                         ]
                     ],
                     [
@@ -2642,18 +2642,18 @@ class TestPdfController extends Controller
                         'instruction' => 'Установите соответствие между графиками y = kx + b и знаками коэффициентов',
                         'type' => 'matching_signs',
                         'tasks' => [
-                            ['id' => 1, 'options' => ['k > 0, b < 0', 'k < 0, b < 0', 'k > 0, b > 0']],
-                            ['id' => 2, 'options' => ['k < 0, b < 0', 'k < 0, b > 0', 'k > 0, b > 0']],
-                            ['id' => 3, 'options' => ['k < 0, b > 0', 'k < 0, b < 0', 'k > 0, b > 0']],
-                            ['id' => 4, 'options' => ['k < 0, b > 0', 'k < 0, b < 0', 'k > 0, b < 0']],
-                            ['id' => 5, 'options' => ['k > 0, b > 0', 'k < 0, b > 0', 'k > 0, b < 0']],
-                            ['id' => 6, 'options' => ['k < 0, b < 0', 'k > 0, b > 0', 'k > 0, b < 0']],
-                            ['id' => 7, 'options' => ['k < 0, b < 0', 'k < 0, b > 0', 'k > 0, b < 0']],
-                            ['id' => 8, 'options' => ['k < 0, b < 0', 'k < 0, b > 0', 'k > 0, b < 0']],
-                            ['id' => 9, 'options' => ['k < 0, b < 0', 'k > 0, b > 0', 'k < 0, b > 0']],
-                            ['id' => 10, 'options' => ['k < 0, b < 0', 'k > 0, b < 0', 'k > 0, b > 0']],
-                            ['id' => 11, 'options' => ['k < 0, b > 0', 'k > 0, b > 0', 'k > 0, b < 0']],
-                            ['id' => 12, 'options' => ['k < 0, b > 0', 'k > 0, b > 0', 'k > 0, b < 0']],
+                            ['id' => 1, 'image' => 'img-012.png', 'options' => ['k > 0, b < 0', 'k < 0, b < 0', 'k > 0, b > 0']],
+                            ['id' => 2, 'image' => 'img-013.png', 'options' => ['k < 0, b < 0', 'k < 0, b > 0', 'k > 0, b > 0']],
+                            ['id' => 3, 'image' => 'img-014.png', 'options' => ['k < 0, b > 0', 'k < 0, b < 0', 'k > 0, b > 0']],
+                            ['id' => 4, 'image' => 'img-015.png', 'options' => ['k < 0, b > 0', 'k < 0, b < 0', 'k > 0, b < 0']],
+                            ['id' => 5, 'image' => 'img-016.png', 'options' => ['k > 0, b > 0', 'k < 0, b > 0', 'k > 0, b < 0']],
+                            ['id' => 6, 'image' => 'img-017.png', 'options' => ['k < 0, b < 0', 'k > 0, b > 0', 'k > 0, b < 0']],
+                            ['id' => 7, 'image' => 'img-018.png', 'options' => ['k < 0, b < 0', 'k < 0, b > 0', 'k > 0, b < 0']],
+                            ['id' => 8, 'image' => 'img-019.png', 'options' => ['k < 0, b < 0', 'k < 0, b > 0', 'k > 0, b < 0']],
+                            ['id' => 9, 'image' => 'img-020.png', 'options' => ['k < 0, b < 0', 'k > 0, b > 0', 'k < 0, b > 0']],
+                            ['id' => 10, 'image' => 'img-021.png', 'options' => ['k < 0, b < 0', 'k > 0, b < 0', 'k > 0, b > 0']],
+                            ['id' => 11, 'image' => 'img-022.png', 'options' => ['k < 0, b > 0', 'k > 0, b > 0', 'k > 0, b < 0']],
+                            ['id' => 12, 'image' => 'img-023.png', 'options' => ['k < 0, b > 0', 'k > 0, b > 0', 'k > 0, b < 0']],
                         ]
                     ],
                     [
@@ -2661,18 +2661,18 @@ class TestPdfController extends Controller
                         'instruction' => 'Установите соответствие между графиками y = ax² + bx + c и знаками коэффициентов',
                         'type' => 'matching_signs',
                         'tasks' => [
-                            ['id' => 1, 'options' => ['a < 0, c > 0', 'a > 0, c < 0', 'a > 0, c > 0']],
-                            ['id' => 2, 'options' => ['a > 0, c < 0', 'a > 0, c > 0', 'a < 0, c > 0']],
-                            ['id' => 3, 'options' => ['a < 0, c > 0', 'a > 0, c < 0', 'a < 0, c < 0']],
-                            ['id' => 4, 'options' => ['a < 0, c > 0', 'a > 0, c > 0', 'a > 0, c < 0']],
-                            ['id' => 5, 'options' => ['a < 0, c > 0', 'a > 0, c > 0', 'a > 0, c < 0']],
-                            ['id' => 6, 'options' => ['a < 0, c < 0', 'a > 0, c > 0', 'a < 0, c > 0']],
-                            ['id' => 7, 'options' => ['a < 0, c > 0', 'a > 0, c > 0', 'a > 0, c < 0']],
-                            ['id' => 8, 'options' => ['a > 0, c > 0', 'a < 0, c > 0', 'a > 0, c < 0']],
-                            ['id' => 9, 'options' => ['a < 0, c > 0', 'a > 0, c < 0', 'a > 0, c > 0']],
-                            ['id' => 10, 'options' => ['a < 0, c > 0', 'a > 0, c > 0', 'a > 0, c < 0']],
-                            ['id' => 11, 'options' => ['a < 0, c > 0', 'a > 0, c > 0', 'a > 0, c < 0']],
-                            ['id' => 12, 'options' => ['a < 0, c < 0', 'a > 0, c > 0', 'a < 0, c > 0']],
+                            ['id' => 1, 'image' => 'img-024.png', 'options' => ['a < 0, c > 0', 'a > 0, c < 0', 'a > 0, c > 0']],
+                            ['id' => 2, 'image' => 'img-025.png', 'options' => ['a > 0, c < 0', 'a > 0, c > 0', 'a < 0, c > 0']],
+                            ['id' => 3, 'image' => 'img-026.png', 'options' => ['a < 0, c > 0', 'a > 0, c < 0', 'a < 0, c < 0']],
+                            ['id' => 4, 'image' => 'img-027.png', 'options' => ['a < 0, c > 0', 'a > 0, c > 0', 'a > 0, c < 0']],
+                            ['id' => 5, 'image' => 'img-028.png', 'options' => ['a < 0, c > 0', 'a > 0, c > 0', 'a > 0, c < 0']],
+                            ['id' => 6, 'image' => 'img-029.png', 'options' => ['a < 0, c < 0', 'a > 0, c > 0', 'a < 0, c > 0']],
+                            ['id' => 7, 'image' => 'img-030.png', 'options' => ['a < 0, c > 0', 'a > 0, c > 0', 'a > 0, c < 0']],
+                            ['id' => 8, 'image' => 'img-031.png', 'options' => ['a > 0, c > 0', 'a < 0, c > 0', 'a > 0, c < 0']],
+                            ['id' => 9, 'image' => 'img-032.png', 'options' => ['a < 0, c > 0', 'a > 0, c < 0', 'a > 0, c > 0']],
+                            ['id' => 10, 'image' => 'img-033.png', 'options' => ['a < 0, c > 0', 'a > 0, c > 0', 'a > 0, c < 0']],
+                            ['id' => 11, 'image' => 'img-034.png', 'options' => ['a < 0, c > 0', 'a > 0, c > 0', 'a > 0, c < 0']],
+                            ['id' => 12, 'image' => 'img-035.png', 'options' => ['a < 0, c < 0', 'a > 0, c > 0', 'a < 0, c > 0']],
                         ]
                     ],
                     [
@@ -2680,12 +2680,12 @@ class TestPdfController extends Controller
                         'instruction' => 'Установите соответствие между графиками и формулами (разные типы функций)',
                         'type' => 'matching',
                         'tasks' => [
-                            ['id' => 1, 'options' => ['y = -\\frac{1}{2}x', 'y = x', 'y = -x² - 2']],
-                            ['id' => 2, 'options' => ['y = -\\frac{2}{x}', 'y = 2x', 'y = x² - 2']],
-                            ['id' => 3, 'options' => ['y = \\frac{6}{x}', 'y = -2x + 4', 'y = -2x²']],
-                            ['id' => 4, 'options' => ['y = \\frac{1}{2}x', 'y = 2 - x²', 'y = x']],
-                            ['id' => 5, 'options' => ['y = -x² - 4', 'y = x', 'y = -2x - 4']],
-                            ['id' => 6, 'options' => ['y = -\\frac{1}{x}', 'y = 4 - x²', 'y = 2x + 4']],
+                            ['id' => 1, 'image' => 'img-036.png', 'options' => ['y = -\\frac{1}{2}x', 'y = x', 'y = -x² - 2']],
+                            ['id' => 2, 'image' => 'img-037.png', 'options' => ['y = -\\frac{2}{x}', 'y = 2x', 'y = x² - 2']],
+                            ['id' => 3, 'image' => 'img-038.png', 'options' => ['y = \\frac{6}{x}', 'y = -2x + 4', 'y = -2x²']],
+                            ['id' => 4, 'image' => 'img-039.png', 'options' => ['y = \\frac{1}{2}x', 'y = 2 - x²', 'y = x']],
+                            ['id' => 5, 'image' => 'img-040.png', 'options' => ['y = -x² - 4', 'y = x', 'y = -2x - 4']],
+                            ['id' => 6, 'image' => 'img-041.png', 'options' => ['y = -\\frac{1}{x}', 'y = 4 - x²', 'y = 2x + 4']],
                         ]
                     ],
                 ]
@@ -2699,9 +2699,9 @@ class TestPdfController extends Controller
                         'instruction' => 'Какие утверждения о квадратичной функции y = f(x) верны?',
                         'type' => 'statements',
                         'tasks' => [
-                            ['id' => 1, 'statements' => ['f(-1) = f(5)', 'функция убывает на [2; +∞)', 'f(x) > 0 при x < -1 и x > 5']],
-                            ['id' => 2, 'statements' => ['наибольшее значение функции равно 3', 'функция возрастает на (-∞; 1]', 'f(x) ≤ 0 при x = -1']],
-                            ['id' => 3, 'statements' => ['наименьшее значение функции равно -9', 'f(-4) > f(1)', 'f(x) < 0 при x = -4']],
+                            ['id' => 1, 'image' => 'img-042.png', 'statements' => ['f(-1) = f(5)', 'функция убывает на [2; +∞)', 'f(x) > 0 при x < -1 и x > 5']],
+                            ['id' => 2, 'image' => 'img-043.png', 'statements' => ['наибольшее значение функции равно 3', 'функция возрастает на (-∞; 1]', 'f(x) ≤ 0 при x = -1']],
+                            ['id' => 3, 'image' => 'img-044.png', 'statements' => ['наименьшее значение функции равно -9', 'f(-4) > f(1)', 'f(x) < 0 при x = -4']],
                         ]
                     ],
                     [
@@ -2709,9 +2709,9 @@ class TestPdfController extends Controller
                         'instruction' => 'Какие утверждения о квадратичной функции y = f(x) неверны?',
                         'type' => 'statements',
                         'tasks' => [
-                            ['id' => 1, 'statements' => ['Функция возрастает на (-∞; -1]', 'Наибольшее значение равно 8', 'f(-4) ≤ f(2)']],
-                            ['id' => 2, 'statements' => ['Функция убывает на [1; +∞)', 'Наименьшее значение равно -4', 'f(-2) ≤ f(3)']],
-                            ['id' => 3, 'statements' => ['функция возрастает на [2; +∞)', 'f(x) > 0 при -1 < x < 5', 'f(0) < f(4)']],
+                            ['id' => 1, 'image' => 'img-045.png', 'statements' => ['Функция возрастает на (-∞; -1]', 'Наибольшее значение равно 8', 'f(-4) ≤ f(2)']],
+                            ['id' => 2, 'image' => 'img-046.png', 'statements' => ['Функция убывает на [1; +∞)', 'Наименьшее значение равно -4', 'f(-2) ≤ f(3)']],
+                            ['id' => 3, 'image' => 'img-047.png', 'statements' => ['функция возрастает на [2; +∞)', 'f(x) > 0 при -1 < x < 5', 'f(0) < f(4)']],
                         ]
                     ],
                     [
@@ -2719,8 +2719,8 @@ class TestPdfController extends Controller
                         'instruction' => 'Установите соответствие между графиками y = ax² + c и знаками коэффициентов',
                         'type' => 'matching_4',
                         'tasks' => [
-                            ['id' => 1, 'options' => ['a > 0, c < 0', 'a < 0, c > 0', 'a > 0, c > 0', 'a < 0, c < 0']],
-                            ['id' => 2, 'options' => ['a > 0, c > 0', 'a > 0, c < 0', 'a < 0, c < 0', 'a < 0, c > 0']],
+                            ['id' => 1, 'image' => 'img-048.png', 'options' => ['a > 0, c < 0', 'a < 0, c > 0', 'a > 0, c > 0', 'a < 0, c < 0']],
+                            ['id' => 2, 'image' => 'img-049.png', 'options' => ['a > 0, c > 0', 'a > 0, c < 0', 'a < 0, c < 0', 'a < 0, c > 0']],
                         ]
                     ],
                     [
@@ -2728,12 +2728,12 @@ class TestPdfController extends Controller
                         'instruction' => 'Установите соответствие между графиками квадратичных функций и формулами',
                         'type' => 'matching',
                         'tasks' => [
-                            ['id' => 1, 'options' => ['y = 2x² - 10x + 8', 'y = -2x² + 10x - 8', 'y = -2x² - 10x - 8']],
-                            ['id' => 2, 'options' => ['y = x² - 7x + 14', 'y = x² + 7x + 14', 'y = -x² - 7x - 14']],
-                            ['id' => 3, 'options' => ['y = -3x² + 3x + 1', 'y = 3x² - 3x - 1', 'y = -3x² - 3x + 1']],
-                            ['id' => 4, 'options' => ['y = x² + 8x + 12', 'y = x² - 8x + 12', 'y = -x² + 8x - 12']],
-                            ['id' => 5, 'options' => ['y = x² - 7x + 9', 'y = -x² - 7x - 9', 'y = -x² + 7x - 9']],
-                            ['id' => 6, 'options' => ['y = -3x² + 24x - 42', 'y = 3x² - 24x + 42', 'y = -3x² - 24x - 42']],
+                            ['id' => 1, 'image' => 'img-050.png', 'options' => ['y = 2x² - 10x + 8', 'y = -2x² + 10x - 8', 'y = -2x² - 10x - 8']],
+                            ['id' => 2, 'image' => 'img-051.png', 'options' => ['y = x² - 7x + 14', 'y = x² + 7x + 14', 'y = -x² - 7x - 14']],
+                            ['id' => 3, 'image' => 'img-052.png', 'options' => ['y = -3x² + 3x + 1', 'y = 3x² - 3x - 1', 'y = -3x² - 3x + 1']],
+                            ['id' => 4, 'image' => 'img-053.png', 'options' => ['y = x² + 8x + 12', 'y = x² - 8x + 12', 'y = -x² + 8x - 12']],
+                            ['id' => 5, 'image' => 'img-054.png', 'options' => ['y = x² - 7x + 9', 'y = -x² - 7x - 9', 'y = -x² + 7x - 9']],
+                            ['id' => 6, 'image' => 'img-055.png', 'options' => ['y = -3x² + 24x - 42', 'y = 3x² - 24x + 42', 'y = -3x² - 24x - 42']],
                         ]
                     ],
                     [
@@ -2741,12 +2741,12 @@ class TestPdfController extends Controller
                         'instruction' => 'Установите соответствие между графиками гипербол и формулами',
                         'type' => 'matching',
                         'tasks' => [
-                            ['id' => 1, 'options' => ['y = -\\frac{1}{2x}', 'y = -\\frac{2}{x}', 'y = \\frac{2}{x}']],
-                            ['id' => 2, 'options' => ['y = -\\frac{1}{3x}', 'y = \\frac{3}{x}', 'y = -\\frac{3}{x}']],
-                            ['id' => 3, 'options' => ['y = \\frac{6}{x}', 'y = \\frac{1}{6x}', 'y = -\\frac{6}{x}']],
-                            ['id' => 4, 'options' => ['y = \\frac{8}{x}', 'y = -\\frac{1}{8x}', 'y = -\\frac{8}{x}']],
-                            ['id' => 5, 'options' => ['y = \\frac{1}{9x}', 'y = \\frac{9}{x}', 'y = -\\frac{9}{x}']],
-                            ['id' => 6, 'options' => ['y = \\frac{12}{x}', 'y = -\\frac{12}{x}', 'y = -\\frac{1}{12x}']],
+                            ['id' => 1, 'image' => 'img-056.png', 'options' => ['y = -\\frac{1}{2x}', 'y = -\\frac{2}{x}', 'y = \\frac{2}{x}']],
+                            ['id' => 2, 'image' => 'img-057.png', 'options' => ['y = -\\frac{1}{3x}', 'y = \\frac{3}{x}', 'y = -\\frac{3}{x}']],
+                            ['id' => 3, 'image' => 'img-058.png', 'options' => ['y = \\frac{6}{x}', 'y = \\frac{1}{6x}', 'y = -\\frac{6}{x}']],
+                            ['id' => 4, 'image' => 'img-059.png', 'options' => ['y = \\frac{8}{x}', 'y = -\\frac{1}{8x}', 'y = -\\frac{8}{x}']],
+                            ['id' => 5, 'image' => 'img-060.png', 'options' => ['y = \\frac{1}{9x}', 'y = \\frac{9}{x}', 'y = -\\frac{9}{x}']],
+                            ['id' => 6, 'image' => 'img-061.png', 'options' => ['y = \\frac{12}{x}', 'y = -\\frac{12}{x}', 'y = -\\frac{1}{12x}']],
                         ]
                     ],
                 ]
@@ -3106,15 +3106,15 @@ class TestPdfController extends Controller
                         'instruction' => 'Линейные неравенства (графическое решение)',
                         'type' => 'graphic',
                         'tasks' => [
-                            ['id' => 1, 'expression' => '4x + 5 \\geq 6x - 2'],
-                            ['id' => 2, 'expression' => '-2x + 5 \\geq -3x - 3'],
-                            ['id' => 3, 'expression' => '3 - x \\geq 3x + 5'],
-                            ['id' => 4, 'expression' => 'x + 4 \\geq 4x - 5'],
-                            ['id' => 5, 'expression' => '2 + x \\geq 5x - 8'],
-                            ['id' => 6, 'expression' => '4x - 5 \\geq 2x - 4'],
-                            ['id' => 7, 'expression' => 'x - 1 \\geq 3x + 2'],
-                            ['id' => 8, 'expression' => '2x + 4 \\geq -4x + 1'],
-                            ['id' => 9, 'expression' => 'x - 2 \\geq 4x + 4'],
+                            ['id' => 1, 'expression' => '4x + 5 \\geq 6x - 2', 'image' => 'img-000.png'],
+                            ['id' => 2, 'expression' => '-2x + 5 \\geq -3x - 3', 'image' => 'img-001.png'],
+                            ['id' => 3, 'expression' => '3 - x \\geq 3x + 5', 'image' => 'img-002.png'],
+                            ['id' => 4, 'expression' => 'x + 4 \\geq 4x - 5', 'image' => 'img-003.png'],
+                            ['id' => 5, 'expression' => '2 + x \\geq 5x - 8', 'image' => 'img-004.png'],
+                            ['id' => 6, 'expression' => '4x - 5 \\geq 2x - 4', 'image' => 'img-005.png'],
+                            ['id' => 7, 'expression' => 'x - 1 \\geq 3x + 2', 'image' => 'img-006.png'],
+                            ['id' => 8, 'expression' => '2x + 4 \\geq -4x + 1', 'image' => 'img-007.png'],
+                            ['id' => 9, 'expression' => 'x - 2 \\geq 4x + 4', 'image' => 'img-008.png'],
                         ]
                     ],
                     [
@@ -3150,12 +3150,12 @@ class TestPdfController extends Controller
                         'instruction' => 'Квадратные неравенства (графическое решение)',
                         'type' => 'graphic',
                         'tasks' => [
-                            ['id' => 1, 'expression' => 'x^2 - 4x + 3 \\leq 0'],
-                            ['id' => 2, 'expression' => 'x^2 - 7x + 12 \\leq 0'],
-                            ['id' => 3, 'expression' => 'x^2 + 9x + 20 \\leq 0'],
-                            ['id' => 4, 'expression' => 'x^2 - 5x - 6 \\leq 0'],
-                            ['id' => 5, 'expression' => 'x^2 - 17x + 72 \\leq 0'],
-                            ['id' => 6, 'expression' => 'x^2 - 6x - 27 \\leq 0'],
+                            ['id' => 1, 'expression' => 'x^2 - 4x + 3 \\leq 0', 'image' => 'img-009.png'],
+                            ['id' => 2, 'expression' => 'x^2 - 7x + 12 \\leq 0', 'image' => 'img-010.png'],
+                            ['id' => 3, 'expression' => 'x^2 + 9x + 20 \\leq 0', 'image' => 'img-011.png'],
+                            ['id' => 4, 'expression' => 'x^2 - 5x - 6 \\leq 0', 'image' => 'img-012.png'],
+                            ['id' => 5, 'expression' => 'x^2 - 17x + 72 \\leq 0', 'image' => 'img-013.png'],
+                            ['id' => 6, 'expression' => 'x^2 - 6x - 27 \\leq 0', 'image' => 'img-014.png'],
                         ]
                     ],
                 ]
