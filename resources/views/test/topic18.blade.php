@@ -112,17 +112,17 @@
                                     @case(1)
                                         {{-- Прямоугольный треугольник - найти больший катет --}}
                                         <div x-data="rightTriangleOnGrid({{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 bg-slate-100 rounded">
+                                                {{-- Сетка как клетчатая бумага --}}
                                                 <template x-for="line in gridLines">
                                                     <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#374151" stroke-width="1"/>
+                                                        stroke="#94a3b8" stroke-width="1"/>
                                                 </template>
+                                                {{-- Треугольник --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                                    fill="rgba(6, 182, 212, 0.2)" stroke="#06b6d4" stroke-width="2" stroke-linejoin="round"/>
-                                                <path :d="rightAngleMark" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#06b6d4"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#06b6d4"/>
-                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#06b6d4"/>
+                                                    fill="none" stroke="#991b1b" stroke-width="2.5" stroke-linejoin="round"/>
+                                                {{-- Прямой угол --}}
+                                                <path :d="rightAngleMark" fill="none" stroke="#991b1b" stroke-width="2"/>
                                             </svg>
                                         </div>
                                         @break
@@ -130,19 +130,15 @@
                                     @case(2)
                                         {{-- Ромб - найти большую диагональ --}}
                                         <div x-data="rhombusOnGrid({{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 bg-slate-100 rounded">
                                                 <template x-for="line in gridLines">
                                                     <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#374151" stroke-width="1"/>
+                                                        stroke="#94a3b8" stroke-width="1"/>
                                                 </template>
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
-                                                    fill="rgba(6, 182, 212, 0.2)" stroke="#06b6d4" stroke-width="2" stroke-linejoin="round"/>
-                                                <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4,3"/>
-                                                <line :x1="B.x" :y1="B.y" :x2="D.x" :y2="D.y" stroke="#ec4899" stroke-width="2" stroke-dasharray="4,3"/>
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#06b6d4"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#06b6d4"/>
-                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#06b6d4"/>
-                                                <circle :cx="D.x" :cy="D.y" r="4" fill="#06b6d4"/>
+                                                    fill="none" stroke="#991b1b" stroke-width="2.5" stroke-linejoin="round"/>
+                                                <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#991b1b" stroke-width="2" stroke-dasharray="4,3"/>
+                                                <line :x1="B.x" :y1="B.y" :x2="D.x" :y2="D.y" stroke="#991b1b" stroke-width="2" stroke-dasharray="4,3"/>
                                             </svg>
                                         </div>
                                         @break
@@ -150,21 +146,18 @@
                                     @case(3)
                                         {{-- Треугольник ABC с точкой M (теорема Фалеса) --}}
                                         <div x-data="triangleWithPointM({{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 bg-slate-100 rounded">
                                                 <template x-for="line in gridLines">
                                                     <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#374151" stroke-width="1"/>
+                                                        stroke="#94a3b8" stroke-width="1"/>
                                                 </template>
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                                    fill="rgba(6, 182, 212, 0.15)" stroke="#06b6d4" stroke-width="2" stroke-linejoin="round"/>
-                                                <circle :cx="M.x" :cy="M.y" r="4" fill="#f59e0b"/>
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#06b6d4"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#06b6d4"/>
-                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#06b6d4"/>
-                                                <text :x="A.x - 10" :y="A.y + 5" fill="#60a5fa" font-size="12" class="geo-label">A</text>
-                                                <text :x="B.x + 5" :y="B.y - 5" fill="#60a5fa" font-size="12" class="geo-label">B</text>
-                                                <text :x="C.x + 5" :y="C.y + 12" fill="#60a5fa" font-size="12" class="geo-label">C</text>
-                                                <text :x="M.x + 5" :y="M.y - 5" fill="#f59e0b" font-size="12" class="geo-label">M</text>
+                                                    fill="none" stroke="#991b1b" stroke-width="2.5" stroke-linejoin="round"/>
+                                                <circle :cx="M.x" :cy="M.y" r="4" fill="#991b1b"/>
+                                                <text :x="A.x - 12" :y="A.y + 4" fill="#1e3a5f" font-size="13" font-weight="bold" font-style="italic">A</text>
+                                                <text :x="B.x + 4" :y="B.y - 6" fill="#1e3a5f" font-size="13" font-weight="bold" font-style="italic">B</text>
+                                                <text :x="C.x + 4" :y="C.y + 14" fill="#1e3a5f" font-size="13" font-weight="bold" font-style="italic">C</text>
+                                                <text :x="M.x + 4" :y="M.y - 6" fill="#1e3a5f" font-size="13" font-weight="bold" font-style="italic">M</text>
                                             </svg>
                                         </div>
                                         @break
@@ -175,16 +168,13 @@
                                     @case(7)
                                         {{-- Многоугольник для нахождения площади --}}
                                         <div x-data="polygonOnGrid({{ $zadanie['number'] }}, {{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 bg-slate-100 rounded">
                                                 <template x-for="line in gridLines">
                                                     <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#374151" stroke-width="1"/>
+                                                        stroke="#94a3b8" stroke-width="1"/>
                                                 </template>
                                                 <polygon :points="pointsString"
-                                                    fill="rgba(6, 182, 212, 0.25)" stroke="#06b6d4" stroke-width="2" stroke-linejoin="round"/>
-                                                <template x-for="point in points">
-                                                    <circle :cx="point.x" :cy="point.y" r="3" fill="#06b6d4"/>
-                                                </template>
+                                                    fill="none" stroke="#991b1b" stroke-width="2.5" stroke-linejoin="round"/>
                                             </svg>
                                         </div>
                                         @break
@@ -192,16 +182,14 @@
                                     @case(8)
                                         {{-- Две точки на сетке - найти расстояние --}}
                                         <div x-data="twoPointsOnGrid({{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 bg-slate-100 rounded">
                                                 <template x-for="line in gridLines">
                                                     <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#374151" stroke-width="1"/>
+                                                        stroke="#94a3b8" stroke-width="1"/>
                                                 </template>
-                                                <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#f59e0b" stroke-width="2.5"/>
-                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#06b6d4"/>
-                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#ec4899"/>
-                                                <text :x="A.x - 10" :y="A.y - 8" fill="#06b6d4" font-size="12" class="geo-label">A</text>
-                                                <text :x="B.x + 5" :y="B.y - 8" fill="#ec4899" font-size="12" class="geo-label">B</text>
+                                                <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#991b1b" stroke-width="2.5"/>
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#991b1b"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#991b1b"/>
                                             </svg>
                                         </div>
                                         @break
@@ -209,22 +197,17 @@
                                     @case(9)
                                         {{-- Треугольник ABC - найти среднюю линию --}}
                                         <div x-data="triangleWithMidline({{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 bg-slate-100 rounded">
                                                 <template x-for="line in gridLines">
                                                     <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#374151" stroke-width="1"/>
+                                                        stroke="#94a3b8" stroke-width="1"/>
                                                 </template>
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                                    fill="rgba(6, 182, 212, 0.15)" stroke="#06b6d4" stroke-width="2" stroke-linejoin="round"/>
-                                                <line :x1="M1.x" :y1="M1.y" :x2="M2.x" :y2="M2.y" stroke="#f59e0b" stroke-width="2.5"/>
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#06b6d4"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#06b6d4"/>
-                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#06b6d4"/>
-                                                <circle :cx="M1.x" :cy="M1.y" r="3" fill="#f59e0b"/>
-                                                <circle :cx="M2.x" :cy="M2.y" r="3" fill="#f59e0b"/>
-                                                <text :x="A.x - 10" :y="A.y + 12" fill="#60a5fa" font-size="12" class="geo-label">A</text>
-                                                <text :x="B.x" :y="B.y - 8" fill="#60a5fa" font-size="12" class="geo-label">B</text>
-                                                <text :x="C.x + 5" :y="C.y + 12" fill="#60a5fa" font-size="12" class="geo-label">C</text>
+                                                    fill="none" stroke="#991b1b" stroke-width="2.5" stroke-linejoin="round"/>
+                                                <line :x1="M1.x" :y1="M1.y" :x2="M2.x" :y2="M2.y" stroke="#991b1b" stroke-width="2" stroke-dasharray="5,3"/>
+                                                <text :x="A.x - 12" :y="A.y + 14" fill="#1e3a5f" font-size="13" font-weight="bold" font-style="italic">A</text>
+                                                <text :x="B.x - 2" :y="B.y - 8" fill="#1e3a5f" font-size="13" font-weight="bold" font-style="italic">B</text>
+                                                <text :x="C.x + 4" :y="C.y + 14" fill="#1e3a5f" font-size="13" font-weight="bold" font-style="italic">C</text>
                                             </svg>
                                         </div>
                                         @break
@@ -232,18 +215,16 @@
                                     @case(10)
                                         {{-- Фигура с отрезком AB --}}
                                         <div x-data="figureWithSegmentAB({{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 bg-slate-100 rounded">
                                                 <template x-for="line in gridLines">
                                                     <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#374151" stroke-width="1"/>
+                                                        stroke="#94a3b8" stroke-width="1"/>
                                                 </template>
                                                 <polygon :points="shapePoints"
-                                                    fill="rgba(6, 182, 212, 0.15)" stroke="#06b6d4" stroke-width="2" stroke-linejoin="round"/>
-                                                <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#f59e0b" stroke-width="2.5"/>
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#ec4899"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#ec4899"/>
-                                                <text :x="A.x - 10" :y="A.y + 5" fill="#ec4899" font-size="12" class="geo-label">A</text>
-                                                <text :x="B.x + 5" :y="B.y + 5" fill="#ec4899" font-size="12" class="geo-label">B</text>
+                                                    fill="none" stroke="#991b1b" stroke-width="2.5" stroke-linejoin="round"/>
+                                                <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#991b1b" stroke-width="2.5"/>
+                                                <text :x="labelA.x" :y="labelA.y" fill="#1e3a5f" font-size="13" font-weight="bold" font-style="italic">A</text>
+                                                <text :x="labelB.x" :y="labelB.y" fill="#1e3a5f" font-size="13" font-weight="bold" font-style="italic">B</text>
                                             </svg>
                                         </div>
                                         @break
@@ -251,20 +232,14 @@
                                     @case(11)
                                         {{-- Трапеция - найти среднюю линию --}}
                                         <div x-data="trapezoidWithMidline({{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 bg-slate-100 rounded">
                                                 <template x-for="line in gridLines">
                                                     <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#374151" stroke-width="1"/>
+                                                        stroke="#94a3b8" stroke-width="1"/>
                                                 </template>
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
-                                                    fill="rgba(6, 182, 212, 0.2)" stroke="#06b6d4" stroke-width="2" stroke-linejoin="round"/>
-                                                <line :x1="M1.x" :y1="M1.y" :x2="M2.x" :y2="M2.y" stroke="#f59e0b" stroke-width="2.5"/>
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#06b6d4"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#06b6d4"/>
-                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#06b6d4"/>
-                                                <circle :cx="D.x" :cy="D.y" r="4" fill="#06b6d4"/>
-                                                <circle :cx="M1.x" :cy="M1.y" r="3" fill="#f59e0b"/>
-                                                <circle :cx="M2.x" :cy="M2.y" r="3" fill="#f59e0b"/>
+                                                    fill="none" stroke="#991b1b" stroke-width="2.5" stroke-linejoin="round"/>
+                                                <line :x1="M1.x" :y1="M1.y" :x2="M2.x" :y2="M2.y" stroke="#991b1b" stroke-width="2" stroke-dasharray="5,3"/>
                                             </svg>
                                         </div>
                                         @break
@@ -272,15 +247,15 @@
                                     @case(12)
                                         {{-- Два круга - сравнить площади --}}
                                         <div x-data="twoCirclesOnGrid({{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 bg-slate-100 rounded">
                                                 <template x-for="line in gridLines">
                                                     <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
-                                                        stroke="#374151" stroke-width="1"/>
+                                                        stroke="#94a3b8" stroke-width="1"/>
                                                 </template>
-                                                <circle :cx="c1.x" :cy="c1.y" :r="r1" fill="rgba(6, 182, 212, 0.2)" stroke="#06b6d4" stroke-width="2"/>
-                                                <circle :cx="c2.x" :cy="c2.y" :r="r2" fill="rgba(236, 72, 153, 0.2)" stroke="#ec4899" stroke-width="2"/>
-                                                <circle :cx="c1.x" :cy="c1.y" r="3" fill="#06b6d4"/>
-                                                <circle :cx="c2.x" :cy="c2.y" r="3" fill="#ec4899"/>
+                                                <circle :cx="c1.x" :cy="c1.y" :r="r1" fill="none" stroke="#991b1b" stroke-width="2.5"/>
+                                                <circle :cx="c2.x" :cy="c2.y" :r="r2" fill="none" stroke="#991b1b" stroke-width="2.5"/>
+                                                <circle :cx="c1.x" :cy="c1.y" r="3" fill="#991b1b"/>
+                                                <circle :cx="c2.x" :cy="c2.y" r="3" fill="#991b1b"/>
                                             </svg>
                                         </div>
                                         @break
@@ -320,29 +295,28 @@
 </div>
 
 <script>
-    const GRID_SIZE = 20;
-    const PADDING = 10;
+    const GRID_SIZE = 18;
+    const PADDING = 5;
 
     // Генерация линий сетки
     function generateGridLines(cols, rows) {
         const lines = [];
-        const width = PADDING * 2 + cols * GRID_SIZE;
-        const height = PADDING * 2 + rows * GRID_SIZE;
-
         for (let i = 0; i <= cols; i++) {
             lines.push({
                 x1: PADDING + i * GRID_SIZE,
                 y1: PADDING,
                 x2: PADDING + i * GRID_SIZE,
-                y2: height - PADDING
+                y2: PADDING + rows * GRID_SIZE,
+                isMain: false
             });
         }
         for (let i = 0; i <= rows; i++) {
             lines.push({
                 x1: PADDING,
                 y1: PADDING + i * GRID_SIZE,
-                x2: width - PADDING,
-                y2: PADDING + i * GRID_SIZE
+                x2: PADDING + cols * GRID_SIZE,
+                y2: PADDING + i * GRID_SIZE,
+                isMain: false
             });
         }
         return lines;
@@ -356,15 +330,18 @@
         };
     }
 
-    // 1. Прямоугольный треугольник на сетке
+    // 1. Прямоугольный треугольник на сетке - больший катет
+    // Треугольники как на картинке: прямой угол внизу слева, вертикальный катет и горизонтальный катет
     function rightTriangleOnGrid(index) {
+        // Варианты: вертикальный катет (высота), горизонтальный катет (основание)
+        // Нужно найти БОЛЬШИЙ катет
         const variants = [
-            { A: {gx: 1, gy: 5}, B: {gx: 1, gy: 1}, C: {gx: 6, gy: 5}, cols: 8, rows: 6, rightAt: 'A' },
-            { A: {gx: 0, gy: 4}, B: {gx: 0, gy: 0}, C: {gx: 5, gy: 4}, cols: 7, rows: 5, rightAt: 'A' },
-            { A: {gx: 1, gy: 4}, B: {gx: 1, gy: 1}, C: {gx: 7, gy: 4}, cols: 9, rows: 5, rightAt: 'A' },
-            { A: {gx: 0, gy: 5}, B: {gx: 0, gy: 2}, C: {gx: 4, gy: 5}, cols: 6, rows: 6, rightAt: 'A' },
-            { A: {gx: 1, gy: 5}, B: {gx: 1, gy: 0}, C: {gx: 5, gy: 5}, cols: 7, rows: 6, rightAt: 'A' },
-            { A: {gx: 0, gy: 4}, B: {gx: 0, gy: 1}, C: {gx: 6, gy: 4}, cols: 8, rows: 5, rightAt: 'A' },
+            { A: {gx: 0, gy: 0}, B: {gx: 0, gy: 6}, C: {gx: 8, gy: 6}, cols: 9, rows: 7 }, // верт=6, гор=8, больший=8
+            { A: {gx: 0, gy: 0}, B: {gx: 0, gy: 4}, C: {gx: 5, gy: 4}, cols: 6, rows: 5 }, // верт=4, гор=5, больший=5
+            { A: {gx: 0, gy: 0}, B: {gx: 0, gy: 3}, C: {gx: 7, gy: 3}, cols: 8, rows: 4 }, // верт=3, гор=7, больший=7
+            { A: {gx: 0, gy: 0}, B: {gx: 0, gy: 7}, C: {gx: 5, gy: 7}, cols: 6, rows: 8 }, // верт=7, гор=5, больший=7
+            { A: {gx: 0, gy: 0}, B: {gx: 0, gy: 5}, C: {gx: 4, gy: 5}, cols: 5, rows: 6 }, // верт=5, гор=4, больший=5
+            { A: {gx: 0, gy: 0}, B: {gx: 0, gy: 2}, C: {gx: 6, gy: 2}, cols: 7, rows: 3 }, // верт=2, гор=6, больший=6
         ];
         const v = variants[index % variants.length];
         const A = gridToSVG(v.A.gx, v.A.gy);
@@ -373,9 +350,9 @@
         const width = PADDING * 2 + v.cols * GRID_SIZE;
         const height = PADDING * 2 + v.rows * GRID_SIZE;
 
-        // Прямой угол в точке A
-        const size = 8;
-        const rightAngleMark = `M ${A.x} ${A.y - size} L ${A.x + size} ${A.y - size} L ${A.x + size} ${A.y}`;
+        // Прямой угол в точке B (нижний левый)
+        const size = 6;
+        const rightAngleMark = `M ${B.x + size} ${B.y} L ${B.x + size} ${B.y - size} L ${B.x} ${B.y - size}`;
 
         return {
             A, B, C, width, height,
@@ -408,15 +385,16 @@
         };
     }
 
-    // 3. Треугольник с точкой M (теорема Фалеса)
+    // 3. Треугольник с точкой M (теорема Фалеса) - все координаты целые
     function triangleWithPointM(index) {
+        // M - точка на стороне треугольника (на пересечении линий сетки)
         const variants = [
-            { A: {gx: 0, gy: 5}, B: {gx: 3, gy: 0}, C: {gx: 7, gy: 5}, M: {gx: 1.5, gy: 2.5}, cols: 8, rows: 6 },
+            { A: {gx: 0, gy: 6}, B: {gx: 4, gy: 0}, C: {gx: 8, gy: 6}, M: {gx: 2, gy: 3}, cols: 9, rows: 7 },
             { A: {gx: 1, gy: 4}, B: {gx: 4, gy: 0}, C: {gx: 8, gy: 4}, M: {gx: 6, gy: 2}, cols: 9, rows: 5 },
-            { A: {gx: 0, gy: 5}, B: {gx: 2, gy: 1}, C: {gx: 6, gy: 5}, M: {gx: 1, gy: 3}, cols: 7, rows: 6 },
-            { A: {gx: 1, gy: 5}, B: {gx: 5, gy: 0}, C: {gx: 7, gy: 5}, M: {gx: 3, gy: 2.5}, cols: 8, rows: 6 },
-            { A: {gx: 0, gy: 4}, B: {gx: 3, gy: 1}, C: {gx: 6, gy: 4}, M: {gx: 4.5, gy: 2.5}, cols: 7, rows: 5 },
-            { A: {gx: 1, gy: 5}, B: {gx: 4, gy: 0}, C: {gx: 8, gy: 5}, M: {gx: 2.5, gy: 2.5}, cols: 9, rows: 6 },
+            { A: {gx: 0, gy: 6}, B: {gx: 2, gy: 2}, C: {gx: 6, gy: 6}, M: {gx: 1, gy: 4}, cols: 7, rows: 7 },
+            { A: {gx: 1, gy: 6}, B: {gx: 5, gy: 0}, C: {gx: 7, gy: 6}, M: {gx: 3, gy: 3}, cols: 8, rows: 7 },
+            { A: {gx: 0, gy: 4}, B: {gx: 4, gy: 0}, C: {gx: 6, gy: 4}, M: {gx: 5, gy: 2}, cols: 7, rows: 5 },
+            { A: {gx: 1, gy: 6}, B: {gx: 4, gy: 0}, C: {gx: 9, gy: 6}, M: {gx: 2, gy: 4}, cols: 10, rows: 7 },
         ];
         const v = variants[index % variants.length];
         const A = gridToSVG(v.A.gx, v.A.gy);
@@ -552,17 +530,17 @@
         };
     }
 
-    // 10. Фигура с отрезком AB
+    // 10. Фигура с отрезком AB (все координаты целые для подсчёта клеток)
     function figureWithSegmentAB(index) {
         const variants = [
             { shape: [{gx: 0, gy: 4}, {gx: 2, gy: 0}, {gx: 6, gy: 0}, {gx: 8, gy: 4}], A: {gx: 1, gy: 2}, B: {gx: 7, gy: 2}, cols: 9, rows: 5 },
             { shape: [{gx: 1, gy: 5}, {gx: 1, gy: 1}, {gx: 5, gy: 1}, {gx: 7, gy: 5}], A: {gx: 1, gy: 3}, B: {gx: 6, gy: 3}, cols: 8, rows: 6 },
-            { shape: [{gx: 0, gy: 4}, {gx: 3, gy: 0}, {gx: 6, gy: 4}], A: {gx: 1.5, gy: 2}, B: {gx: 4.5, gy: 2}, cols: 7, rows: 5 },
+            { shape: [{gx: 0, gy: 4}, {gx: 3, gy: 0}, {gx: 6, gy: 4}], A: {gx: 1, gy: 2}, B: {gx: 5, gy: 2}, cols: 7, rows: 5 },
             { shape: [{gx: 1, gy: 5}, {gx: 0, gy: 2}, {gx: 4, gy: 0}, {gx: 7, gy: 2}, {gx: 6, gy: 5}], A: {gx: 2, gy: 1}, B: {gx: 5, gy: 1}, cols: 8, rows: 6 },
-            { shape: [{gx: 0, gy: 4}, {gx: 2, gy: 1}, {gx: 5, gy: 1}, {gx: 7, gy: 4}], A: {gx: 1, gy: 2.5}, B: {gx: 6, gy: 2.5}, cols: 8, rows: 5 },
+            { shape: [{gx: 0, gy: 4}, {gx: 2, gy: 1}, {gx: 5, gy: 1}, {gx: 7, gy: 4}], A: {gx: 1, gy: 2}, B: {gx: 6, gy: 2}, cols: 8, rows: 5 },
             { shape: [{gx: 1, gy: 5}, {gx: 1, gy: 1}, {gx: 6, gy: 1}, {gx: 6, gy: 5}], A: {gx: 1, gy: 3}, B: {gx: 6, gy: 3}, cols: 7, rows: 6 },
-            { shape: [{gx: 0, gy: 4}, {gx: 3, gy: 0}, {gx: 7, gy: 4}], A: {gx: 1.5, gy: 2}, B: {gx: 5, gy: 2}, cols: 8, rows: 5 },
-            { shape: [{gx: 1, gy: 5}, {gx: 2, gy: 1}, {gx: 6, gy: 1}, {gx: 7, gy: 5}], A: {gx: 1.5, gy: 3}, B: {gx: 6.5, gy: 3}, cols: 8, rows: 6 },
+            { shape: [{gx: 0, gy: 4}, {gx: 3, gy: 0}, {gx: 7, gy: 4}], A: {gx: 2, gy: 2}, B: {gx: 5, gy: 2}, cols: 8, rows: 5 },
+            { shape: [{gx: 1, gy: 5}, {gx: 2, gy: 1}, {gx: 6, gy: 1}, {gx: 7, gy: 5}], A: {gx: 2, gy: 3}, B: {gx: 6, gy: 3}, cols: 8, rows: 6 },
             { shape: [{gx: 0, gy: 5}, {gx: 0, gy: 1}, {gx: 5, gy: 1}, {gx: 5, gy: 5}], A: {gx: 0, gy: 3}, B: {gx: 5, gy: 3}, cols: 6, rows: 6 },
         ];
         const v = variants[index % variants.length];
@@ -575,8 +553,12 @@
         const width = PADDING * 2 + v.cols * GRID_SIZE;
         const height = PADDING * 2 + v.rows * GRID_SIZE;
 
+        // Позиции меток A и B рядом с точками
+        const labelA = { x: A.x - 14, y: A.y + 4 };
+        const labelB = { x: B.x + 6, y: B.y + 4 };
+
         return {
-            shapePoints, A, B, width, height,
+            shapePoints, A, B, labelA, labelB, width, height,
             gridLines: generateGridLines(v.cols, v.rows)
         };
     }
@@ -611,18 +593,18 @@
         };
     }
 
-    // 12. Два круга на сетке
+    // 12. Два круга на сетке - центры на пересечениях сетки, радиусы целые
     function twoCirclesOnGrid(index) {
         const variants = [
-            { c1: {gx: 2, gy: 3}, r1: 2, c2: {gx: 6, gy: 3}, r2: 1, cols: 9, rows: 6 },
-            { c1: {gx: 2, gy: 2.5}, r1: 1.5, c2: {gx: 6, gy: 2.5}, r2: 2.5, cols: 10, rows: 6 },
+            { c1: {gx: 2, gy: 3}, r1: 2, c2: {gx: 7, gy: 3}, r2: 1, cols: 9, rows: 6 },
+            { c1: {gx: 2, gy: 3}, r1: 2, c2: {gx: 7, gy: 3}, r2: 3, cols: 11, rows: 7 },
             { c1: {gx: 3, gy: 3}, r1: 3, c2: {gx: 3, gy: 3}, r2: 1, cols: 7, rows: 7 },
-            { c1: {gx: 2, gy: 2}, r1: 1, c2: {gx: 5, gy: 2}, r2: 2, cols: 8, rows: 5 },
-            { c1: {gx: 3, gy: 3}, r1: 2, c2: {gx: 7, gy: 3}, r2: 3, cols: 11, rows: 7 },
-            { c1: {gx: 2.5, gy: 2.5}, r1: 2.5, c2: {gx: 7, gy: 2.5}, r2: 1.5, cols: 10, rows: 6 },
+            { c1: {gx: 2, gy: 2}, r1: 1, c2: {gx: 6, gy: 2}, r2: 2, cols: 9, rows: 5 },
+            { c1: {gx: 3, gy: 3}, r1: 2, c2: {gx: 8, gy: 3}, r2: 3, cols: 12, rows: 7 },
+            { c1: {gx: 3, gy: 3}, r1: 3, c2: {gx: 8, gy: 3}, r2: 2, cols: 11, rows: 7 },
             { c1: {gx: 2, gy: 2}, r1: 2, c2: {gx: 6, gy: 2}, r2: 1, cols: 8, rows: 5 },
             { c1: {gx: 3, gy: 3}, r1: 1, c2: {gx: 3, gy: 3}, r2: 2, cols: 6, rows: 6 },
-            { c1: {gx: 2, gy: 3}, r1: 1.5, c2: {gx: 6, gy: 3}, r2: 3, cols: 10, rows: 7 },
+            { c1: {gx: 2, gy: 3}, r1: 2, c2: {gx: 8, gy: 3}, r2: 3, cols: 12, rows: 7 },
         ];
         const v = variants[index % variants.length];
         const c1 = gridToSVG(v.c1.gx, v.c1.gy);
