@@ -135,6 +135,10 @@ Route::prefix('test')->group(function () {
     // Dynamic parsed pages
     Route::get('/parsed/{topicId}', [TestPdfController::class, 'showParsedPage'])->name('test.parsed');
 
+    // Test Generator
+    Route::get('/generator', [TestPdfController::class, 'testGenerator'])->name('test.generator');
+    Route::post('/generator/generate', [TestPdfController::class, 'generateRandomTest'])->name('test.generator.generate');
+
     // Legacy
     Route::post('/parse-pdf', [TestPdfController::class, 'parsePdf'])->name('test.parsePdf');
 });
