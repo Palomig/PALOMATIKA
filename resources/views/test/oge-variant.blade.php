@@ -11,573 +11,332 @@
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
             onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
 
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'PT Serif', Georgia, 'Times New Roman', serif;
-            font-size: 17px;
-            line-height: 1.6;
-            padding: 40px 60px;
-            max-width: 900px;
-            margin: 0 auto;
-            background: #fefefe;
-            color: #1a1a1a;
-        }
-
-        /* Header like OGE paper */
-        .oge-header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #333;
-        }
-
-        .oge-header-line {
-            display: flex;
-            justify-content: space-between;
-            font-size: 13px;
-            color: #555;
-            margin-bottom: 15px;
-        }
-
-        .oge-title {
-            font-size: 26px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .oge-subtitle {
-            font-size: 16px;
-            color: #444;
-        }
-
-        /* Actions bar (hidden on print) */
-        .actions-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding: 15px 20px;
-            background: #f5f5f5;
-            border-radius: 8px;
-        }
-
-        .actions-bar a,
-        .actions-bar button {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 10px 18px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.2s;
-            font-family: 'Inter', sans-serif;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-primary {
-            background: #ff6b6b;
-            color: #fff;
-        }
-
-        .btn-primary:hover {
-            background: #ff5252;
-        }
-
-        .btn-secondary {
-            background: #e0e0e0;
-            color: #333;
-        }
-
-        .btn-secondary:hover {
-            background: #d0d0d0;
-        }
-
-        /* Instructions block */
-        .instructions {
-            background: #f9f9f9;
-            border: 1px solid #ddd;
-            padding: 20px;
-            margin-bottom: 30px;
-            font-size: 15px;
+        [x-cloak] { display: none !important; }
+        .number-line { font-family: 'Times New Roman', serif; }
+        .geo-label {
+            font-family: 'Times New Roman', serif;
             font-style: italic;
-            line-height: 1.7;
-            border-radius: 4px;
-        }
-
-        /* Part header */
-        .part-header {
-            font-size: 18px;
-            font-weight: 700;
-            text-align: center;
-            margin: 30px 0 25px;
-            padding: 10px;
-            background: #f0f0f0;
-            border-radius: 4px;
-        }
-
-        /* Task block */
-        .task-block {
-            margin-bottom: 30px;
-            padding-bottom: 25px;
-            border-bottom: 1px solid #e0e0e0;
-            page-break-inside: avoid;
-        }
-
-        .task-block:last-child {
-            border-bottom: none;
-        }
-
-        .task-number-box {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px;
-            height: 36px;
-            border: 2px solid #333;
-            font-weight: 700;
-            font-size: 16px;
-            margin-right: 12px;
-            flex-shrink: 0;
-        }
-
-        .task-header-row {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 12px;
-        }
-
-        .task-text {
-            flex: 1;
-        }
-
-        /* Task content */
-        .task-content {
-            padding-left: 48px;
-        }
-
-        .task-expression {
-            font-size: 20px;
-            margin: 15px 0;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 6px;
-            text-align: center;
-        }
-
-        .task-image {
-            margin: 15px 0;
-            text-align: center;
-        }
-
-        .task-image img,
-        .task-image svg {
-            max-width: 100%;
-            max-height: 280px;
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            background: #fff;
-        }
-
-        /* Options */
-        .options-list {
-            list-style: none;
-            margin-top: 15px;
-        }
-
-        .options-list.horizontal {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .options-list.vertical li {
-            margin-bottom: 10px;
-        }
-
-        .option-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            cursor: pointer;
-            padding: 8px 12px;
-            border-radius: 6px;
-            transition: background 0.2s;
-        }
-
-        .option-item:hover {
-            background: #f0f0f0;
-        }
-
-        .option-item.selected {
-            background: rgba(255, 107, 107, 0.15);
-        }
-
-        .option-item input {
-            display: none;
-        }
-
-        .option-num {
-            font-weight: 600;
-            min-width: 20px;
-        }
-
-        /* Answer line */
-        .answer-line {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 20px;
-            padding-left: 48px;
-        }
-
-        .answer-label {
-            font-weight: 600;
-        }
-
-        .answer-input {
-            width: 200px;
-            padding: 10px 15px;
-            font-size: 18px;
-            border: 2px solid #333;
-            border-radius: 4px;
-            font-family: inherit;
-        }
-
-        .answer-input:focus {
-            outline: none;
-            border-color: #ff6b6b;
-        }
-
-        .answer-boxes {
-            display: flex;
-            gap: 2px;
-        }
-
-        .answer-box {
-            width: 30px;
-            height: 36px;
-            border: 1px solid #333;
-            text-align: center;
-            font-size: 18px;
-            font-weight: 600;
-            font-family: inherit;
-        }
-
-        /* Topic badge */
-        .topic-badge {
-            display: inline-block;
-            font-family: 'Inter', sans-serif;
-            font-size: 11px;
-            padding: 2px 8px;
-            background: #e8e8e8;
-            border-radius: 4px;
-            color: #666;
-            margin-left: 10px;
-        }
-
-        /* SVG containers */
-        .svg-container {
-            display: flex;
-            justify-content: center;
-            margin: 15px 0;
-        }
-
-        .svg-container svg {
-            max-width: 100%;
-            height: auto;
-        }
-
-        /* Matching table */
-        .matching-table {
-            margin: 15px 0;
-            border-collapse: collapse;
-        }
-
-        .matching-table th,
-        .matching-table td {
-            border: 1px solid #333;
-            padding: 8px 15px;
-            text-align: center;
-        }
-
-        .matching-table th {
-            background: #f0f0f0;
-            font-weight: 600;
-        }
-
-        .matching-table input {
-            width: 40px;
-            padding: 5px;
-            text-align: center;
-            border: 1px solid #ccc;
-            font-size: 16px;
-        }
-
-        /* Graphs row */
-        .graphs-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        .graph-item {
-            text-align: center;
-        }
-
-        .graph-item img,
-        .graph-item svg {
-            max-width: 180px;
-            max-height: 150px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        .graph-label {
-            font-weight: 600;
-            margin-top: 5px;
-        }
-
-        /* Page number */
-        .page-number {
-            text-align: center;
-            margin-top: 40px;
-            color: #888;
-            font-size: 14px;
-        }
-
-        /* KaTeX */
-        .katex {
-            font-size: 1.1em !important;
+            font-weight: 500;
+            user-select: none;
         }
 
         /* Print styles */
         @media print {
             body {
-                padding: 15px;
-                font-size: 15px;
+                background: white !important;
+                color: black !important;
             }
-
-            .actions-bar {
+            .no-print {
                 display: none !important;
             }
-
-            .task-block {
+            .task-card {
                 break-inside: avoid;
+                border: 1px solid #ccc !important;
+                background: white !important;
             }
-
-            .oge-header {
-                margin-bottom: 20px;
+            .bg-slate-900, .bg-slate-800, .bg-slate-900\/50 {
+                background: #f5f5f5 !important;
             }
-
-            .answer-input,
-            .answer-box {
-                border: 1px solid #000;
+            .text-white, .text-slate-200, .text-slate-300 {
+                color: black !important;
             }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            body {
-                padding: 20px;
-                font-size: 15px;
-            }
-
-            .oge-header-line {
-                flex-direction: column;
-                gap: 5px;
-            }
-
-            .task-content {
-                padding-left: 0;
-            }
-
-            .answer-line {
-                padding-left: 0;
-                flex-wrap: wrap;
-            }
-
-            .options-list.horizontal {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .actions-bar {
-                flex-direction: column;
-                gap: 10px;
+            .text-blue-400, .text-cyan-400, .text-emerald-400, .text-amber-400 {
+                color: #1e40af !important;
             }
         }
     </style>
 </head>
-<body>
+<body class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
 
-<div class="actions-bar">
-    <div>
-        <a href="{{ route('test.oge.generator') }}" class="btn-secondary">← Новый вариант</a>
-        <a href="{{ route('test.generator') }}" class="btn-secondary">🎲 Генератор</a>
+<div class="max-w-5xl mx-auto px-4 py-8">
+    {{-- Navigation --}}
+    <div class="no-print flex justify-between items-center mb-8 text-sm bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+        <a href="{{ route('test.oge.generator') }}" class="text-blue-400 hover:text-blue-300 transition-colors">← Новый вариант</a>
+        <div class="flex gap-3">
+            <a href="{{ route('test.generator') }}" class="px-3 py-1.5 rounded-lg bg-slate-700 text-slate-300 hover:bg-slate-600 transition">Генератор</a>
+            <button onclick="window.print()" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white hover:bg-emerald-500 transition">🖨️ Печать</button>
+        </div>
     </div>
-    <div>
-        <button onclick="window.print()" class="btn-secondary">🖨️ Печать</button>
+
+    {{-- Header --}}
+    <div class="text-center mb-8">
+        <div class="flex justify-between items-center text-sm text-slate-500 mb-4">
+            <span>ОГЭ–2025</span>
+            <span>palomatika.ru</span>
+        </div>
+        <h1 class="text-4xl font-bold text-white mb-2">Тренировочная работа № {{ $variantNumber ?? rand(1, 99) }}</h1>
+        <p class="text-slate-400 text-lg">Задания 6–19 (Часть 1)</p>
     </div>
-</div>
 
-<div class="oge-header">
-    <div class="oge-header-line">
-        <span>ОГЭ–2025</span>
-        <span>Тренировочная работа</span>
-        <span>palomatika.ru</span>
+    {{-- Instructions --}}
+    <div class="bg-slate-800/70 rounded-xl p-5 mb-8 border border-slate-700">
+        <p class="text-slate-300 text-sm italic leading-relaxed">
+            <strong class="text-white">Инструкция:</strong> Ответами к заданиям 6–19 являются число или последовательность цифр.
+            Запишите ответ в поле ответа. Если ответом является последовательность цифр, то запишите её без пробелов, запятых и других дополнительных символов.
+        </p>
     </div>
-    <h1 class="oge-title">Тренировочная работа № {{ $variantNumber ?? rand(1, 99) }}</h1>
-    <p class="oge-subtitle">Задания 6–19 (Часть 1)</p>
-</div>
 
-<div class="instructions">
-    <strong>Инструкция:</strong> Ответами к заданиям 6–19 являются число или последовательность цифр.
-    Запишите ответ в поле ответа. Если ответом является последовательность цифр, то запишите её без пробелов, запятых и других дополнительных символов.
-</div>
+    {{-- Stats --}}
+    <div class="no-print flex justify-center gap-6 mb-10">
+        <div class="bg-slate-800 px-6 py-3 rounded-xl border border-slate-700">
+            <span class="text-emerald-400 font-bold text-xl">{{ count($tasks) }}</span>
+            <span class="text-slate-400 ml-2">заданий</span>
+        </div>
+        <div class="bg-slate-800 px-6 py-3 rounded-xl border border-slate-700">
+            <span class="text-emerald-400 font-bold text-xl">{{ now()->format('d.m.Y') }}</span>
+            <span class="text-slate-400 ml-2">дата</span>
+        </div>
+    </div>
 
-@foreach($tasks as $index => $taskData)
-    @php
-        $taskNumber = 6 + $index;
-        $task = $taskData['task'] ?? [];
-        $topicTitle = $taskData['topic_title'] ?? '';
-    @endphp
+    {{-- Tasks --}}
+    @foreach($tasks as $index => $taskData)
+        @php
+            $taskNumber = 6 + $index;
+            $task = $taskData['task'] ?? [];
+            $topicTitle = $taskData['topic_title'] ?? '';
+            $type = $taskData['type'] ?? 'expression';
+            $instruction = $taskData['instruction'] ?? 'Найдите значение выражения.';
 
-    <div class="task-block">
-        <div class="task-header-row">
-            <div class="task-number-box">{{ $taskNumber }}</div>
-            <div class="task-text">
-                {{ $taskData['instruction'] ?? 'Найдите значение выражения.' }}
-                @if($topicTitle)
-                    <span class="topic-badge">{{ $topicTitle }}</span>
+            // Определяем цвет акцента для разных тем
+            $accentColors = [
+                '06' => 'blue',
+                '07' => 'cyan',
+                '08' => 'violet',
+                '09' => 'pink',
+                '10' => 'orange',
+                '11' => 'rose',
+                '12' => 'lime',
+                '13' => 'teal',
+                '14' => 'indigo',
+                '15' => 'emerald',
+                '16' => 'amber',
+                '17' => 'fuchsia',
+                '18' => 'sky',
+                '19' => 'red',
+            ];
+            $accent = $accentColors[$taskData['topic_id'] ?? '06'] ?? 'blue';
+        @endphp
+
+        <div class="task-card mb-8 bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
+            {{-- Task Header --}}
+            <div class="bg-slate-800 p-4 border-b border-slate-700 flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-{{ $accent }}-500 to-{{ $accent }}-600 flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                    {{ $taskNumber }}
+                </div>
+                <div class="flex-1">
+                    <div class="text-white font-medium">{{ $instruction }}</div>
+                    <div class="text-slate-500 text-sm mt-1">{{ $topicTitle }}</div>
+                </div>
+            </div>
+
+            {{-- Task Content --}}
+            <div class="p-5">
+                {{-- Expression (LaTeX) --}}
+                @if(!empty($task['expression']))
+                    <div class="bg-slate-900/50 rounded-xl p-5 mb-4 text-center">
+                        <span class="text-slate-200 text-xl">${{ $task['expression'] }}$</span>
+                    </div>
                 @endif
+
+                {{-- Text description --}}
+                @if(!empty($task['text']))
+                    <div class="text-slate-300 mb-4 leading-relaxed">{{ $task['text'] }}</div>
+                @endif
+
+                {{-- SVG for number line (topic 07) --}}
+                @if(($taskData['topic_id'] ?? '') === '07' && isset($task['point_value']))
+                    @php
+                        $pointVal = $task['point_value'];
+                        $pointLabel = $task['point_label'] ?? 'a';
+                        $maxTick = ceil($pointVal) + 2;
+                        $tickWidth = 280 / $maxTick;
+                        $pointX = 15 + ($pointVal / $maxTick) * 280;
+                    @endphp
+                    <div class="bg-slate-900/50 rounded-xl p-4 mb-4">
+                        <svg viewBox="0 0 320 55" class="w-full h-16 number-line">
+                            <defs>
+                                <marker id="arrowR-{{ $taskNumber }}" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto">
+                                    <path d="M0,0 L0,6 L8,3 z" fill="#8B0000"/>
+                                </marker>
+                            </defs>
+                            <line x1="15" y1="25" x2="305" y2="25" stroke="#8B0000" stroke-width="2" marker-end="url(#arrowR-{{ $taskNumber }})"/>
+                            @for($i = 0; $i <= $maxTick; $i++)
+                                <line x1="{{ 15 + $i * $tickWidth }}" y1="18" x2="{{ 15 + $i * $tickWidth }}" y2="32" stroke="#8B0000" stroke-width="1.5"/>
+                            @endfor
+                            <text x="15" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">0</text>
+                            <text x="{{ 15 + $tickWidth }}" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">1</text>
+                            <circle cx="{{ $pointX }}" cy="25" r="6" fill="#22c55e"/>
+                            <text x="{{ $pointX }}" y="12" text-anchor="middle" fill="#1e40af" font-size="14" font-weight="bold">{{ $pointLabel }}</text>
+                        </svg>
+                    </div>
+                @endif
+
+                {{-- SVG for two points (topic 07) --}}
+                @if(($taskData['topic_id'] ?? '') === '07' && isset($task['points']) && is_array($task['points']))
+                    @php
+                        $pts = $task['points'];
+                        $values = array_column($pts, 'value');
+                        $minVal = min(min($values), 0);
+                        $maxVal = max($values);
+                        $minTick = floor($minVal) - 1;
+                        $maxTick = ceil($maxVal) + 1;
+                        $range = $maxTick - $minTick;
+                        $tickWidth = 280 / $range;
+                    @endphp
+                    <div class="bg-slate-900/50 rounded-xl p-4 mb-4">
+                        <svg viewBox="0 0 320 55" class="w-full h-16 number-line">
+                            <defs>
+                                <marker id="arrowR2-{{ $taskNumber }}" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto">
+                                    <path d="M0,0 L0,6 L8,3 z" fill="#8B0000"/>
+                                </marker>
+                            </defs>
+                            <line x1="15" y1="25" x2="305" y2="25" stroke="#8B0000" stroke-width="2" marker-end="url(#arrowR2-{{ $taskNumber }})"/>
+                            @for($i = $minTick; $i <= $maxTick; $i++)
+                                <line x1="{{ 15 + ($i - $minTick) * $tickWidth }}" y1="18" x2="{{ 15 + ($i - $minTick) * $tickWidth }}" y2="32" stroke="#8B0000" stroke-width="1.5"/>
+                            @endfor
+                            <text x="{{ 15 + (0 - $minTick) * $tickWidth }}" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">0</text>
+                            @foreach($pts as $pt)
+                                @php $px = 15 + ($pt['value'] - $minTick) * $tickWidth; @endphp
+                                <circle cx="{{ $px }}" cy="25" r="6" fill="#22c55e"/>
+                                <text x="{{ $px }}" y="12" text-anchor="middle" fill="#1e40af" font-size="14" font-weight="bold">{{ $pt['label'] }}</text>
+                            @endforeach
+                        </svg>
+                    </div>
+                @endif
+
+                {{-- SVG from task data --}}
+                @if(!empty($task['svg']))
+                    <div class="bg-slate-900/50 rounded-xl p-4 mb-4 flex justify-center">
+                        {!! $task['svg'] !!}
+                    </div>
+                @endif
+
+                {{-- Image --}}
+                @if(!empty($task['image']))
+                    <div class="bg-slate-900/50 rounded-xl p-4 mb-4 flex justify-center">
+                        <img src="/images/tasks/{{ $taskData['topic_id'] ?? '' }}/{{ $task['image'] }}" alt="Задание {{ $taskNumber }}" class="max-h-48 rounded">
+                    </div>
+                @endif
+
+                {{-- Options for choice questions --}}
+                @if(!empty($task['options']))
+                    <div class="grid {{ count($task['options']) <= 4 ? 'grid-cols-2 md:grid-cols-4' : 'grid-cols-1 md:grid-cols-2' }} gap-3 mt-4">
+                        @foreach($task['options'] as $optIndex => $option)
+                            <div class="bg-slate-700/50 hover:bg-slate-700 rounded-lg px-4 py-3 cursor-pointer transition-colors border border-slate-600 hover:border-slate-500"
+                                 onclick="selectOption(this, {{ $taskNumber }}, {{ $optIndex + 1 }})">
+                                <span class="text-{{ $accent }}-400 font-semibold">{{ $optIndex + 1 }})</span>
+                                <span class="text-slate-300 ml-2">{{ $option }}</span>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+
+                {{-- Matching table (for topic 11 - graphs) --}}
+                @if($type === 'matching' && !empty($task['headers']))
+                    <div class="overflow-x-auto mt-4">
+                        <table class="w-full border-collapse">
+                            <thead>
+                                <tr>
+                                    @foreach($task['headers'] as $header)
+                                        <th class="border border-slate-600 bg-slate-700 px-4 py-2 text-slate-200">{{ $header }}</th>
+                                    @endforeach
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    @foreach($task['headers'] as $i => $header)
+                                        <td class="border border-slate-600 px-4 py-2 text-center">
+                                            <input type="text" maxlength="1" class="w-10 h-10 text-center bg-slate-800 border border-slate-500 rounded text-white text-lg focus:border-{{ $accent }}-400 focus:outline-none">
+                                        </td>
+                                    @endforeach
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                @endif
+
+                {{-- Graphs for function matching (topic 11) --}}
+                @if(!empty($task['graphs']))
+                    <div class="grid grid-cols-3 gap-4 mt-4">
+                        @foreach($task['graphs'] as $gIndex => $graph)
+                            <div class="bg-slate-900/50 rounded-lg p-3 text-center">
+                                @if(is_string($graph) && str_starts_with($graph, '<svg'))
+                                    {!! $graph !!}
+                                @elseif(is_string($graph))
+                                    <img src="{{ $graph }}" alt="График {{ $gIndex + 1 }}" class="max-h-32 mx-auto">
+                                @endif
+                                <div class="text-slate-400 mt-2 font-semibold">{{ $gIndex + 1 }})</div>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+
+                {{-- Statements for topic 19 --}}
+                @if(($taskData['topic_id'] ?? '') === '19' && !empty($task['statements']))
+                    <div class="space-y-3 mt-4">
+                        @foreach($task['statements'] as $stIndex => $statement)
+                            <div class="bg-slate-700/50 rounded-lg px-4 py-3 border border-slate-600">
+                                <span class="text-red-400 font-semibold">{{ $stIndex + 1 }})</span>
+                                <span class="text-slate-300 ml-2">{{ is_array($statement) ? ($statement['text'] ?? '') : $statement }}</span>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+
+                {{-- Answer field --}}
+                <div class="mt-6 flex items-center gap-4">
+                    <span class="text-slate-400 font-medium">Ответ:</span>
+                    <input type="text"
+                           id="answer-{{ $taskNumber }}"
+                           class="w-40 px-4 py-2 bg-slate-900 border-2 border-slate-600 rounded-lg text-white text-lg focus:border-{{ $accent }}-400 focus:outline-none transition-colors"
+                           placeholder="">
+                </div>
             </div>
         </div>
+    @endforeach
 
-        <div class="task-content">
-            {{-- Expression --}}
-            @if(!empty($task['expression']))
-                <div class="task-expression">
-                    ${{ $task['expression'] }}$
-                </div>
-            @endif
-
-            {{-- SVG Image --}}
-            @if(!empty($task['svg']))
-                <div class="svg-container">
-                    {!! $task['svg'] !!}
-                </div>
-            @endif
-
-            {{-- Regular Image --}}
-            @if(!empty($task['image']))
-                <div class="task-image">
-                    <img src="/images/tasks/{{ $taskData['topic_id'] ?? '' }}/{{ $task['image'] }}" alt="Задание {{ $taskNumber }}">
-                </div>
-            @endif
-
-            {{-- Options for choice questions --}}
-            @if(!empty($task['options']))
-                <ul class="options-list {{ count($task['options']) <= 4 && strlen(implode('', $task['options'])) < 100 ? 'horizontal' : 'vertical' }}">
-                    @foreach($task['options'] as $optIndex => $option)
-                        <li class="option-item" onclick="selectOption(this, {{ $taskNumber }})">
-                            <input type="radio" name="answer_{{ $taskNumber }}" value="{{ $optIndex + 1 }}">
-                            <span class="option-num">{{ $optIndex + 1 }})</span>
-                            <span class="option-text">{{ $option }}</span>
-                        </li>
-                    @endforeach
-                </ul>
-            @endif
-
-            {{-- Matching table for correspondence tasks --}}
-            @if(!empty($task['matching']))
-                <table class="matching-table">
-                    <tr>
-                        @foreach($task['matching']['headers'] ?? ['А', 'Б', 'В'] as $header)
-                            <th>{{ $header }}</th>
-                        @endforeach
-                    </tr>
-                    <tr>
-                        @foreach($task['matching']['headers'] ?? ['А', 'Б', 'В'] as $i => $header)
-                            <td><input type="text" maxlength="1" name="match_{{ $taskNumber }}_{{ $i }}"></td>
-                        @endforeach
-                    </tr>
-                </table>
-            @endif
-
-            {{-- Graphs for function matching --}}
-            @if(!empty($task['graphs']))
-                <div class="graphs-row">
-                    @foreach($task['graphs'] as $graphIndex => $graph)
-                        <div class="graph-item">
-                            @if(is_string($graph) && str_starts_with($graph, '<svg'))
-                                {!! $graph !!}
-                            @elseif(is_string($graph))
-                                <img src="{{ $graph }}" alt="График {{ $graphIndex + 1 }}">
-                            @endif
-                            <div class="graph-label">{{ $graphIndex + 1 }})</div>
-                        </div>
-                    @endforeach
-                </div>
-            @endif
-        </div>
-
-        {{-- Answer line --}}
-        <div class="answer-line">
-            <span class="answer-label">Ответ:</span>
-            @if(!empty($task['options']))
-                {{-- For multiple choice, just show selected number --}}
-                <input type="text" class="answer-input" style="width: 80px;" name="final_answer_{{ $taskNumber }}" placeholder="">
-            @elseif(!empty($task['matching']))
-                {{-- For matching, show boxes for sequence --}}
-                <div class="answer-boxes">
-                    @for($i = 0; $i < count($task['matching']['headers'] ?? ['А', 'Б', 'В']); $i++)
-                        <input type="text" class="answer-box" maxlength="1">
-                    @endfor
-                </div>
-            @else
-                {{-- Default text input --}}
-                <input type="text" class="answer-input" name="final_answer_{{ $taskNumber }}" placeholder="">
-            @endif
+    {{-- Footer --}}
+    <div class="no-print text-center mt-10">
+        <div class="bg-slate-800 rounded-xl p-6 border border-slate-700">
+            <p class="text-slate-400 mb-4">Вариант сгенерирован {{ now()->format('d.m.Y H:i') }}</p>
+            <div class="flex justify-center gap-4">
+                <button onclick="window.print()" class="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors">
+                    🖨️ Распечатать
+                </button>
+                <a href="{{ route('test.oge.generator') }}" class="px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white rounded-lg transition-colors">
+                    🎲 Новый вариант
+                </a>
+            </div>
         </div>
     </div>
-@endforeach
-
-<div class="page-number">
-    Сгенерировано: {{ now()->format('d.m.Y H:i') }}
 </div>
 
 <script>
-    function selectOption(element, taskNumber) {
+    function selectOption(element, taskNumber, value) {
         // Deselect all options in this task
-        const taskBlock = element.closest('.task-block');
-        taskBlock.querySelectorAll('.option-item').forEach(item => {
-            item.classList.remove('selected');
+        const taskCard = element.closest('.task-card');
+        taskCard.querySelectorAll('.bg-slate-700\\/50').forEach(opt => {
+            opt.classList.remove('ring-2', 'ring-emerald-400');
         });
 
         // Select this option
-        element.classList.add('selected');
-        const radio = element.querySelector('input[type="radio"]');
-        radio.checked = true;
+        element.classList.add('ring-2', 'ring-emerald-400');
 
         // Update answer field
-        const answerInput = taskBlock.querySelector('input[name="final_answer_' + taskNumber + '"]');
+        const answerInput = document.getElementById('answer-' + taskNumber);
         if (answerInput) {
-            answerInput.value = radio.value;
+            answerInput.value = value;
         }
     }
 </script>
