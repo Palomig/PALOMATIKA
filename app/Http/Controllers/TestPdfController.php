@@ -833,13 +833,14 @@ class TestPdfController extends Controller
                         'number' => 1,
                         'instruction' => 'На координатной прямой отмечено число a. Какое из утверждений для этого числа является верным?',
                         'type' => 'choice',
+                        'svg_type' => 'single_point',
                         'tasks' => [
-                            ['id' => 1, 'image' => 'img-000.png', 'options' => ['$a - 6 < 0$', '$6 - a > 0$', '$a - 7 > 0$', '$8 - a < 0$']],
-                            ['id' => 2, 'image' => 'img-001.png', 'options' => ['$5 - a < 0$', '$a - 6 > 0$', '$a - 5 < 0$', '$4 - a > 0$']],
-                            ['id' => 3, 'image' => 'img-002.png', 'options' => ['$a - 4 < 0$', '$a - 6 > 0$', '$6 - a > 0$', '$7 - a < 0$']],
-                            ['id' => 4, 'image' => 'img-003.png', 'options' => ['$8 - a > 0$', '$8 - a < 0$', '$a - 7 < 0$', '$a - 9 > 0$']],
-                            ['id' => 5, 'image' => 'img-004.png', 'options' => ['$4 - a > 0$', '$a - 7 < 0$', '$a - 8 > 0$', '$8 - a < 0$']],
-                            ['id' => 6, 'image' => 'img-005.png', 'options' => ['$4 - a > 0$', '$a - 4 < 0$', '$a - 3 < 0$', '$6 - a > 0$']],
+                            ['id' => 1, 'point_value' => 6.5, 'point_label' => 'a', 'options' => ['$a - 6 < 0$', '$6 - a > 0$', '$a - 7 > 0$', '$8 - a < 0$']],
+                            ['id' => 2, 'point_value' => 5, 'point_label' => 'a', 'options' => ['$5 - a < 0$', '$a - 6 > 0$', '$a - 5 < 0$', '$4 - a > 0$']],
+                            ['id' => 3, 'point_value' => 5.5, 'point_label' => 'a', 'options' => ['$a - 4 < 0$', '$a - 6 > 0$', '$6 - a > 0$', '$7 - a < 0$']],
+                            ['id' => 4, 'point_value' => 8.5, 'point_label' => 'a', 'options' => ['$8 - a > 0$', '$8 - a < 0$', '$a - 7 < 0$', '$a - 9 > 0$']],
+                            ['id' => 5, 'point_value' => 8.5, 'point_label' => 'a', 'options' => ['$4 - a > 0$', '$a - 7 < 0$', '$a - 8 > 0$', '$8 - a < 0$']],
+                            ['id' => 6, 'point_value' => 3.5, 'point_label' => 'a', 'options' => ['$4 - a > 0$', '$a - 4 < 0$', '$a - 3 < 0$', '$6 - a > 0$']],
                         ]
                     ],
                     // Задание 2 - Два числа x и y на прямой
@@ -847,13 +848,14 @@ class TestPdfController extends Controller
                         'number' => 2,
                         'instruction' => 'На координатной прямой отмечены числа. Какое из приведённых утверждений для этих чисел верно?',
                         'type' => 'choice',
+                        'svg_type' => 'two_points',
                         'tasks' => [
-                            ['id' => 1, 'image' => 'img-006.png', 'options' => ['$x + y < 0$', '$xy < 0$', '$y - x > 0$', '$x^2 y > 0$']],
-                            ['id' => 2, 'image' => 'img-007.png', 'options' => ['$a + b > 0$', '$a^2 b < 0$', '$ab > 0$', '$a - b < 0$']],
-                            ['id' => 3, 'image' => 'img-008.png', 'options' => ['$xy > 0$', '$x^2 y < 0$', '$x + y > 0$', '$x - y < 0$']],
-                            ['id' => 4, 'image' => 'img-009.png', 'options' => ['$a + b < 0$', '$a - b > 0$', '$ab^2 > 0$', '$ab < 0$']],
-                            ['id' => 5, 'image' => 'img-010.png', 'options' => ['$xy^2 > 0$', '$x - y < 0$', '$x + y > 0$', '$xy > 0$']],
-                            ['id' => 6, 'image' => 'img-011.png', 'options' => ['$ab^2 > 0$', '$a - b < 0$', '$ab > 0$', '$a + b > 0$']],
+                            ['id' => 1, 'points' => [['value' => -3, 'label' => 'x'], ['value' => 2, 'label' => 'y']], 'options' => ['$x + y < 0$', '$xy < 0$', '$y - x > 0$', '$x^2 y > 0$']],
+                            ['id' => 2, 'points' => [['value' => -2, 'label' => 'a'], ['value' => 3, 'label' => 'b']], 'options' => ['$a + b > 0$', '$a^2 b < 0$', '$ab > 0$', '$a - b < 0$']],
+                            ['id' => 3, 'points' => [['value' => -1, 'label' => 'x'], ['value' => 4, 'label' => 'y']], 'options' => ['$xy > 0$', '$x^2 y < 0$', '$x + y > 0$', '$x - y < 0$']],
+                            ['id' => 4, 'points' => [['value' => -4, 'label' => 'a'], ['value' => -1, 'label' => 'b']], 'options' => ['$a + b < 0$', '$a - b > 0$', '$ab^2 > 0$', '$ab < 0$']],
+                            ['id' => 5, 'points' => [['value' => 2, 'label' => 'x'], ['value' => 4, 'label' => 'y']], 'options' => ['$xy^2 > 0$', '$x - y < 0$', '$x + y > 0$', '$xy > 0$']],
+                            ['id' => 6, 'points' => [['value' => 1, 'label' => 'a'], ['value' => 3, 'label' => 'b']], 'options' => ['$ab^2 > 0$', '$a - b < 0$', '$ab > 0$', '$a + b > 0$']],
                         ]
                     ],
                     // Задание 3 - Разности q-p, q-r, r-p положительна
@@ -861,7 +863,8 @@ class TestPdfController extends Controller
                         'number' => 3,
                         'instruction' => 'На координатной прямой отмечены числа p, q и r. Какая из разностей q − p, q − r, r − p положительна?',
                         'type' => 'simple_choice',
-                        'image' => 'img-012.png',
+                        'svg_type' => 'three_points',
+                        'points' => [['value' => -2, 'label' => 'p'], ['value' => 1, 'label' => 'q'], ['value' => 4, 'label' => 'r']],
                         'options' => ['$q - p$', '$q - r$', '$r - p$', 'невозможно определить'],
                     ],
                     // Задание 4 - Разности z-x, y-z, x-y отрицательна
@@ -869,7 +872,8 @@ class TestPdfController extends Controller
                         'number' => 4,
                         'instruction' => 'На координатной прямой отмечены числа x, y и z. Какая из разностей z − x, y − z, x − y отрицательна?',
                         'type' => 'simple_choice',
-                        'image' => 'img-013.png',
+                        'svg_type' => 'three_points',
+                        'points' => [['value' => -3, 'label' => 'x'], ['value' => 0, 'label' => 'y'], ['value' => 3, 'label' => 'z']],
                         'options' => ['$z - x$', '$y - z$', '$x - y$', 'невозможно определить'],
                     ],
                     // Задание 5 - Разности a-b, a-c, c-b положительна
@@ -877,7 +881,8 @@ class TestPdfController extends Controller
                         'number' => 5,
                         'instruction' => 'На координатной прямой отмечены числа a, b и c. Какая из разностей a − b, a − c, c − b положительна?',
                         'type' => 'simple_choice',
-                        'image' => 'img-014.png',
+                        'svg_type' => 'three_points',
+                        'points' => [['value' => -1, 'label' => 'a'], ['value' => 2, 'label' => 'b'], ['value' => 5, 'label' => 'c']],
                         'options' => ['$a - b$', '$a - c$', '$c - b$', 'невозможно определить'],
                     ],
                     // Задание 6 - Разности q-p, q-r, r-p отрицательна
@@ -885,7 +890,8 @@ class TestPdfController extends Controller
                         'number' => 6,
                         'instruction' => 'На координатной прямой отмечены числа p, q и r. Какая из разностей q − p, q − r, r − p отрицательна?',
                         'type' => 'simple_choice',
-                        'image' => 'img-015.png',
+                        'svg_type' => 'three_points',
+                        'points' => [['value' => -4, 'label' => 'p'], ['value' => -1, 'label' => 'q'], ['value' => 2, 'label' => 'r']],
                         'options' => ['$q - p$', '$q - r$', '$r - p$', 'невозможно определить'],
                     ],
                     // Задание 7 - Разности z-x, y-z, x-y положительна
@@ -893,7 +899,8 @@ class TestPdfController extends Controller
                         'number' => 7,
                         'instruction' => 'На координатной прямой отмечены числа x, y и z. Какая из разностей z − x, y − z, x − y положительна?',
                         'type' => 'simple_choice',
-                        'image' => 'img-016.png',
+                        'svg_type' => 'three_points',
+                        'points' => [['value' => 0, 'label' => 'x'], ['value' => 2, 'label' => 'y'], ['value' => 5, 'label' => 'z']],
                         'options' => ['$z - x$', '$y - z$', '$x - y$', 'невозможно определить'],
                     ],
                     // Задание 8 - Разности a-b, a-c, c-b отрицательна
@@ -901,7 +908,8 @@ class TestPdfController extends Controller
                         'number' => 8,
                         'instruction' => 'На координатной прямой отмечены числа a, b и c. Какая из разностей a − b, a − c, c − b отрицательна?',
                         'type' => 'simple_choice',
-                        'image' => 'img-017.png',
+                        'svg_type' => 'three_points',
+                        'points' => [['value' => -3, 'label' => 'a'], ['value' => 1, 'label' => 'b'], ['value' => 4, 'label' => 'c']],
                         'options' => ['$a - b$', '$a - c$', '$c - b$', 'невозможно определить'],
                     ],
                     // Задание 9 - Точка соответствует числу
@@ -909,13 +917,20 @@ class TestPdfController extends Controller
                         'number' => 9,
                         'instruction' => 'На координатной прямой отмечены точки A, B, C и D. Одна из них соответствует данному числу. Какая это точка?',
                         'type' => 'fraction_choice',
+                        'svg_type' => 'four_points_abcd',
                         'tasks' => [
-                            ['id' => 1, 'image' => 'img-018.png', 'expression' => '\frac{63}{11}', 'options' => ['A', 'B', 'C', 'D']],
-                            ['id' => 2, 'image' => 'img-019.png', 'expression' => '\frac{116}{15}', 'options' => ['A', 'B', 'C', 'D']],
-                            ['id' => 3, 'image' => 'img-020.png', 'expression' => '\frac{107}{13}', 'options' => ['A', 'B', 'C', 'D']],
-                            ['id' => 4, 'image' => 'img-021.png', 'expression' => '\frac{100}{19}', 'options' => ['A', 'B', 'C', 'D']],
-                            ['id' => 5, 'image' => 'img-022.png', 'expression' => '\frac{132}{17}', 'options' => ['A', 'B', 'C', 'D']],
-                            ['id' => 6, 'image' => 'img-023.png', 'expression' => '\frac{92}{9}', 'options' => ['A', 'B', 'C', 'D']],
+                            // 63/11 ≈ 5.73, range 5-7
+                            ['id' => 1, 'four_points' => [5.3, 5.7, 6.2, 6.7], 'range' => [5, 7], 'expression' => '\frac{63}{11}', 'options' => ['A', 'B', 'C', 'D']],
+                            // 116/15 ≈ 7.73, range 7-9
+                            ['id' => 2, 'four_points' => [7.3, 7.7, 8.2, 8.7], 'range' => [7, 9], 'expression' => '\frac{116}{15}', 'options' => ['A', 'B', 'C', 'D']],
+                            // 107/13 ≈ 8.23, range 7-9
+                            ['id' => 3, 'four_points' => [7.5, 8.0, 8.3, 8.8], 'range' => [7, 9], 'expression' => '\frac{107}{13}', 'options' => ['A', 'B', 'C', 'D']],
+                            // 100/19 ≈ 5.26, range 5-7
+                            ['id' => 4, 'four_points' => [5.1, 5.3, 5.8, 6.3], 'range' => [5, 7], 'expression' => '\frac{100}{19}', 'options' => ['A', 'B', 'C', 'D']],
+                            // 132/17 ≈ 7.76, range 7-9
+                            ['id' => 5, 'four_points' => [7.4, 7.8, 8.3, 8.6], 'range' => [7, 9], 'expression' => '\frac{132}{17}', 'options' => ['A', 'B', 'C', 'D']],
+                            // 92/9 ≈ 10.22, range 9-11
+                            ['id' => 6, 'four_points' => [9.5, 10.0, 10.2, 10.8], 'range' => [9, 11], 'expression' => '\frac{92}{9}', 'options' => ['A', 'B', 'C', 'D']],
                         ]
                     ],
                     // Задание 10 - Между какими целыми числами
@@ -1072,9 +1087,10 @@ class TestPdfController extends Controller
                         'number' => 1,
                         'instruction' => 'На координатной прямой отмечены числа. Какое из следующих утверждений верно?',
                         'type' => 'comparison',
+                        'svg_type' => 'two_points',
                         'tasks' => [
-                            ['id' => 1, 'options' => ['$x < y$ и $|x| < |y|$', '$x < y$ и $|x| > |y|$', '$x > y$ и $|x| > |y|$', '$x > y$ и $|x| < |y|$']],
-                            ['id' => 2, 'options' => ['$a < b$ и $|a| < |b|$', '$a < b$ и $|a| > |b|$', '$a > b$ и $|a| > |b|$', '$a > b$ и $|a| < |b|$']],
+                            ['id' => 1, 'points' => [['value' => -4, 'label' => 'x'], ['value' => 2, 'label' => 'y']], 'options' => ['$x < y$ и $|x| < |y|$', '$x < y$ и $|x| > |y|$', '$x > y$ и $|x| > |y|$', '$x > y$ и $|x| < |y|$']],
+                            ['id' => 2, 'points' => [['value' => -2, 'label' => 'a'], ['value' => 4, 'label' => 'b']], 'options' => ['$a < b$ и $|a| < |b|$', '$a < b$ и $|a| > |b|$', '$a > b$ и $|a| > |b|$', '$a > b$ и $|a| < |b|$']],
                         ]
                     ],
                     // Задание 2 - Наименьшее среди степеней
@@ -1082,11 +1098,12 @@ class TestPdfController extends Controller
                         'number' => 2,
                         'instruction' => 'На координатной прямой отмечены числа. Какое из перечисленных чисел наименьшее?',
                         'type' => 'power_choice',
+                        'svg_type' => 'single_point',
                         'tasks' => [
-                            ['id' => 1, 'options' => ['$a$', '$a^2$', '$a^3$', 'нет данных']],
-                            ['id' => 2, 'options' => ['$a^2$', '$a^3$', '$a^4$', 'нет данных']],
-                            ['id' => 3, 'options' => ['$a^2$', '$a^3$', '$a^4$', 'нет данных']],
-                            ['id' => 4, 'options' => ['$a$', '$a^2$', '$a^3$', 'нет данных']],
+                            ['id' => 1, 'point_value' => -0.5, 'point_label' => 'a', 'options' => ['$a$', '$a^2$', '$a^3$', 'нет данных']],
+                            ['id' => 2, 'point_value' => 0.5, 'point_label' => 'a', 'options' => ['$a^2$', '$a^3$', '$a^4$', 'нет данных']],
+                            ['id' => 3, 'point_value' => -0.7, 'point_label' => 'a', 'options' => ['$a^2$', '$a^3$', '$a^4$', 'нет данных']],
+                            ['id' => 4, 'point_value' => 1.5, 'point_label' => 'a', 'options' => ['$a$', '$a^2$', '$a^3$', 'нет данных']],
                         ]
                     ],
                     // Задание 3 - Сравнение дробей
@@ -1114,11 +1131,12 @@ class TestPdfController extends Controller
                         'number' => 5,
                         'instruction' => 'Расположите в порядке возрастания числа.',
                         'type' => 'ordering',
+                        'svg_type' => 'two_points',
                         'tasks' => [
-                            ['id' => 1, 'options' => ['$\frac{1}{a}, 1, \frac{1}{b}$', '$1, \frac{1}{b}, \frac{1}{a}$', '$\frac{1}{a}, \frac{1}{b}, 1$', '$\frac{1}{b}, \frac{1}{a}, 1$']],
-                            ['id' => 2, 'options' => ['$\frac{1}{b}, 1, \frac{1}{a}$', '$\frac{1}{a}, 1, \frac{1}{b}$', '$\frac{1}{a}, \frac{1}{b}, 1$', '$\frac{1}{b}, \frac{1}{a}, 1$']],
-                            ['id' => 3, 'options' => ['$1, \frac{1}{a}, \frac{1}{c}$', '$\frac{1}{c}, \frac{1}{a}, 1$', '$\frac{1}{a}, \frac{1}{c}, 1$', '$1, \frac{1}{c}, \frac{1}{a}$']],
-                            ['id' => 4, 'options' => ['$\frac{1}{x}, 1, \frac{1}{y}$', '$\frac{1}{y}, 1, \frac{1}{x}$', '$\frac{1}{x}, \frac{1}{y}, 1$', '$1, \frac{1}{x}, \frac{1}{y}$']],
+                            ['id' => 1, 'points' => [['value' => 0.3, 'label' => 'a'], ['value' => 0.7, 'label' => 'b']], 'options' => ['$\frac{1}{a}, 1, \frac{1}{b}$', '$1, \frac{1}{b}, \frac{1}{a}$', '$\frac{1}{a}, \frac{1}{b}, 1$', '$\frac{1}{b}, \frac{1}{a}, 1$']],
+                            ['id' => 2, 'points' => [['value' => 1.5, 'label' => 'a'], ['value' => 2.5, 'label' => 'b']], 'options' => ['$\frac{1}{b}, 1, \frac{1}{a}$', '$\frac{1}{a}, 1, \frac{1}{b}$', '$\frac{1}{a}, \frac{1}{b}, 1$', '$\frac{1}{b}, \frac{1}{a}, 1$']],
+                            ['id' => 3, 'points' => [['value' => 0.5, 'label' => 'a'], ['value' => 1.5, 'label' => 'c']], 'options' => ['$1, \frac{1}{a}, \frac{1}{c}$', '$\frac{1}{c}, \frac{1}{a}, 1$', '$\frac{1}{a}, \frac{1}{c}, 1$', '$1, \frac{1}{c}, \frac{1}{a}$']],
+                            ['id' => 4, 'points' => [['value' => 0.4, 'label' => 'x'], ['value' => 0.8, 'label' => 'y']], 'options' => ['$\frac{1}{x}, 1, \frac{1}{y}$', '$\frac{1}{y}, 1, \frac{1}{x}$', '$\frac{1}{x}, \frac{1}{y}, 1$', '$1, \frac{1}{x}, \frac{1}{y}$']],
                         ]
                     ],
                     // Задание 6 - Какому числу соответствует точка
@@ -1126,11 +1144,12 @@ class TestPdfController extends Controller
                         'number' => 6,
                         'instruction' => 'На координатной прямой точками отмечены числа. Какому числу соответствует точка?',
                         'type' => 'point_value',
+                        'svg_type' => 'four_points_abcd',
                         'tasks' => [
-                            ['id' => 1, 'point' => 'C', 'options' => ['\frac{4}{7}', '\frac{11}{5}', '2,6', '0,3']],
-                            ['id' => 2, 'point' => 'D', 'options' => ['\frac{11}{7}', '\frac{3}{2}', '1,55', '1,7']],
-                            ['id' => 3, 'point' => 'C', 'options' => ['\frac{8}{3}', '\frac{9}{4}', '2,55', '2,4']],
-                            ['id' => 4, 'point' => 'D', 'options' => ['\frac{4}{13}', '\frac{5}{14}', '0,29', '0,3']],
+                            ['id' => 1, 'point' => 'C', 'four_points' => [0.3, 0.57, 2.2, 2.6], 'range' => [0, 3], 'options' => ['\frac{4}{7}', '\frac{11}{5}', '2,6', '0,3']],
+                            ['id' => 2, 'point' => 'D', 'four_points' => [1.5, 1.55, 1.57, 1.7], 'range' => [1, 2], 'options' => ['\frac{11}{7}', '\frac{3}{2}', '1,55', '1,7']],
+                            ['id' => 3, 'point' => 'C', 'four_points' => [2.25, 2.4, 2.55, 2.67], 'range' => [2, 3], 'options' => ['\frac{8}{3}', '\frac{9}{4}', '2,55', '2,4']],
+                            ['id' => 4, 'point' => 'D', 'four_points' => [0.29, 0.3, 0.31, 0.36], 'range' => [0, 0.5], 'options' => ['\frac{4}{13}', '\frac{5}{14}', '0,29', '0,3']],
                         ]
                     ],
                     // Задание 7 - Какая точка соответствует числу (простые дроби)
@@ -1138,11 +1157,16 @@ class TestPdfController extends Controller
                         'number' => 7,
                         'instruction' => 'Одна из точек, отмеченных на координатной прямой, соответствует данному числу. Какая это точка?',
                         'type' => 'fraction_point',
+                        'svg_type' => 'four_points_abcd',
                         'tasks' => [
-                            ['id' => 1, 'expression' => '\frac{1}{7}', 'options' => ['A', 'B', 'C', 'D']],
-                            ['id' => 2, 'expression' => '\frac{8}{11}', 'options' => ['A', 'B', 'C', 'D']],
-                            ['id' => 3, 'expression' => '\frac{2}{9}', 'options' => ['A', 'B', 'C', 'D']],
-                            ['id' => 4, 'expression' => '\frac{10}{13}', 'options' => ['A', 'B', 'C', 'D']],
+                            // 1/7 ≈ 0.143
+                            ['id' => 1, 'expression' => '\frac{1}{7}', 'four_points' => [0.1, 0.14, 0.22, 0.35], 'range' => [0, 0.5], 'options' => ['A', 'B', 'C', 'D']],
+                            // 8/11 ≈ 0.727
+                            ['id' => 2, 'expression' => '\frac{8}{11}', 'four_points' => [0.6, 0.68, 0.73, 0.82], 'range' => [0.5, 1], 'options' => ['A', 'B', 'C', 'D']],
+                            // 2/9 ≈ 0.222
+                            ['id' => 3, 'expression' => '\frac{2}{9}', 'four_points' => [0.15, 0.22, 0.3, 0.4], 'range' => [0, 0.5], 'options' => ['A', 'B', 'C', 'D']],
+                            // 10/13 ≈ 0.769
+                            ['id' => 4, 'expression' => '\frac{10}{13}', 'four_points' => [0.65, 0.72, 0.77, 0.85], 'range' => [0.5, 1], 'options' => ['A', 'B', 'C', 'D']],
                         ]
                     ],
                     // Задание 8 - Промежуток для корня
@@ -1164,13 +1188,20 @@ class TestPdfController extends Controller
                         'number' => 9,
                         'instruction' => 'Одно из чисел отмечено на прямой точкой A. Какое это число?',
                         'type' => 'sqrt_options',
+                        'svg_type' => 'point_a_on_range',
                         'tasks' => [
-                            ['id' => 1, 'options' => ['\sqrt{41}', '\sqrt{48}', '\sqrt{53}', '\sqrt{63}']],
-                            ['id' => 2, 'options' => ['\sqrt{28}', '\sqrt{33}', '\sqrt{38}', '\sqrt{47}']],
-                            ['id' => 3, 'options' => ['\sqrt{17}', '\sqrt{22}', '\sqrt{28}', '\sqrt{32}']],
-                            ['id' => 4, 'options' => ['\sqrt{29}', '\sqrt{33}', '\sqrt{39}', '\sqrt{44}']],
-                            ['id' => 5, 'options' => ['\sqrt{18}', '\sqrt{24}', '\sqrt{26}', '\sqrt{32}']],
-                            ['id' => 6, 'options' => ['\sqrt{40}', '\sqrt{46}', '\sqrt{53}', '\sqrt{58}']],
+                            // sqrt(48) ≈ 6.93, range 6-8
+                            ['id' => 1, 'point_a' => 6.93, 'range' => [6, 8], 'options' => ['\sqrt{41}', '\sqrt{48}', '\sqrt{53}', '\sqrt{63}']],
+                            // sqrt(33) ≈ 5.74, range 5-7
+                            ['id' => 2, 'point_a' => 5.74, 'range' => [5, 7], 'options' => ['\sqrt{28}', '\sqrt{33}', '\sqrt{38}', '\sqrt{47}']],
+                            // sqrt(22) ≈ 4.69, range 4-6
+                            ['id' => 3, 'point_a' => 4.69, 'range' => [4, 6], 'options' => ['\sqrt{17}', '\sqrt{22}', '\sqrt{28}', '\sqrt{32}']],
+                            // sqrt(33) ≈ 5.74, range 5-7
+                            ['id' => 4, 'point_a' => 5.74, 'range' => [5, 7], 'options' => ['\sqrt{29}', '\sqrt{33}', '\sqrt{39}', '\sqrt{44}']],
+                            // sqrt(24) ≈ 4.90, range 4-6
+                            ['id' => 5, 'point_a' => 4.90, 'range' => [4, 6], 'options' => ['\sqrt{18}', '\sqrt{24}', '\sqrt{26}', '\sqrt{32}']],
+                            // sqrt(46) ≈ 6.78, range 6-8
+                            ['id' => 6, 'point_a' => 6.78, 'range' => [6, 8], 'options' => ['\sqrt{40}', '\sqrt{46}', '\sqrt{53}', '\sqrt{58}']],
                         ]
                     ],
                     // Задание 10 - Сколько целых чисел между
