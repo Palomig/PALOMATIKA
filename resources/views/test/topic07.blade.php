@@ -10,15 +10,15 @@
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
             onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
 
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
     <style>
-        .task-image img {
-            filter: invert(0.85) hue-rotate(180deg);
-        }
+        [x-cloak] { display: none !important; }
+        .number-line { font-family: 'Times New Roman', serif; }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
@@ -43,7 +43,7 @@
             <a href="{{ route('test.topic18') }}" class="px-2 py-1 rounded bg-slate-700 text-slate-300 hover:bg-slate-600 transition">18</a>
             <a href="{{ route('test.topic19') }}" class="px-2 py-1 rounded bg-slate-700 text-slate-300 hover:bg-slate-600 transition">19</a>
         </div>
-        <span class="text-slate-500">PNG</span>
+        <span class="text-slate-500">SVG</span>
     </div>
 
     @php
@@ -95,14 +95,34 @@
                     </h3>
                 </div>
 
-                @if($zadanie['type'] === 'simple_choice')
-                    {{-- Simple choice with options --}}
+                @php $svgType = $zadanie['svg_type'] ?? null; @endphp
+
+                @if($zadanie['type'] === 'simple_choice' && $svgType === 'three_points')
+                    {{-- Simple choice with three points SVG --}}
                     <div class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
-                        @if(isset($zadanie['image']))
-                            <div class="task-image mb-4 text-center">
-                                <img src="/images/tasks/07/{{ $zadanie['image'] }}" alt="Координатная прямая" class="max-w-lg mx-auto rounded border border-slate-600">
-                            </div>
-                        @endif
+                        @php $points = $zadanie['points'] ?? []; @endphp
+                        <div class="bg-slate-900/50 rounded-lg p-3 mb-4"
+                             x-data="threePointsLine({{ json_encode($points) }})">
+                            <svg viewBox="0 0 320 70" class="w-full h-16 number-line">
+                                <defs>
+                                    <marker id="arrowR" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
+                                        <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
+                                    </marker>
+                                </defs>
+                                {{-- Number line --}}
+                                <line x1="20" y1="40" x2="295" y2="40" stroke="#64748b" stroke-width="2" marker-end="url(#arrowR)"/>
+                                {{-- Origin tick --}}
+                                <line x1="160" y1="35" x2="160" y2="45" stroke="#64748b" stroke-width="2"/>
+                                <text x="160" y="58" text-anchor="middle" fill="#94a3b8" font-size="11">0</text>
+                                {{-- Points --}}
+                                <template x-for="(pt, i) in points" :key="i">
+                                    <g>
+                                        <circle :cx="getX(pt.value)" cy="40" r="4" fill="#22d3ee"/>
+                                        <text :x="getX(pt.value)" y="28" text-anchor="middle" fill="#22d3ee" font-size="13" font-style="italic" x-text="pt.label"></text>
+                                    </g>
+                                </template>
+                            </svg>
+                        </div>
                         <div class="flex flex-wrap gap-4">
                             @foreach($zadanie['options'] as $i => $option)
                                 <span class="bg-slate-700/70 text-slate-300 px-4 py-2 rounded-lg">
@@ -112,26 +132,182 @@
                         </div>
                     </div>
 
-                @elseif(in_array($zadanie['type'], ['choice', 'comparison', 'power_choice', 'fraction_choice', 'sqrt_choice', 'fraction_point']))
-                    {{-- Multiple tasks with options --}}
+                @elseif($zadanie['type'] === 'simple_choice')
+                    {{-- Simple choice with options (no image) --}}
+                    <div class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                        <div class="flex flex-wrap gap-4">
+                            @foreach($zadanie['options'] as $i => $option)
+                                <span class="bg-slate-700/70 text-slate-300 px-4 py-2 rounded-lg">
+                                    {{ $i + 1 }}) {{ $option }}
+                                </span>
+                            @endforeach
+                        </div>
+                    </div>
+
+                @elseif(in_array($zadanie['type'], ['choice', 'comparison', 'power_choice', 'ordering']) && in_array($svgType, ['single_point', 'two_points']))
+                    {{-- Tasks with SVG number lines --}}
                     <div class="space-y-4">
                         @foreach($zadanie['tasks'] as $task)
                             <div class="bg-slate-800/70 rounded-xl p-4 border border-slate-700 hover:border-slate-600 transition-colors">
                                 <div class="flex items-start gap-3">
                                     <span class="text-cyan-400 font-bold flex-shrink-0">{{ $task['id'] }}</span>
                                     <div class="flex-1">
-                                        @if(isset($task['image']))
-                                            <div class="task-image mb-3">
-                                                <img src="/images/tasks/07/{{ $task['image'] }}" alt="Координатная прямая" class="max-w-md rounded border border-slate-600">
-                                            </div>
-                                        @endif
-                                        @if(isset($task['expression']))
-                                            <div class="text-slate-200 mb-2">${{ $task['expression'] }}$</div>
-                                        @endif
+                                        {{-- SVG Number Line --}}
+                                        <div class="bg-slate-900/50 rounded-lg p-3 mb-3">
+                                            @if($svgType === 'single_point' && isset($task['point_value']))
+                                                <div x-data="singlePointLine({{ $task['point_value'] }}, '{{ $task['point_label'] ?? 'a' }}')">
+                                                    <svg viewBox="0 0 280 60" class="w-full h-14 number-line">
+                                                        <defs>
+                                                            <marker id="arrowR-{{ $task['id'] }}" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
+                                                                <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
+                                                            </marker>
+                                                        </defs>
+                                                        <line x1="20" y1="35" x2="255" y2="35" stroke="#64748b" stroke-width="2" marker-end="url(#arrowR-{{ $task['id'] }})"/>
+                                                        <template x-for="tick in ticks" :key="tick">
+                                                            <g>
+                                                                <line :x1="getX(tick)" y1="30" :x2="getX(tick)" y2="40" stroke="#64748b" stroke-width="1.5"/>
+                                                                <text :x="getX(tick)" y="52" text-anchor="middle" fill="#94a3b8" font-size="11" x-text="tick"></text>
+                                                            </g>
+                                                        </template>
+                                                        <circle :cx="pointX" cy="35" r="4" fill="#22d3ee"/>
+                                                        <text :x="pointX" y="22" text-anchor="middle" fill="#22d3ee" font-size="13" font-style="italic" x-text="label"></text>
+                                                    </svg>
+                                                </div>
+                                            @elseif($svgType === 'two_points' && isset($task['points']))
+                                                @php $pts = json_encode($task['points']); @endphp
+                                                <div x-data="twoPointsLine({{ $pts }})">
+                                                    <svg viewBox="0 0 280 60" class="w-full h-14 number-line">
+                                                        <defs>
+                                                            <marker id="arrowR2-{{ $task['id'] }}" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
+                                                                <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
+                                                            </marker>
+                                                        </defs>
+                                                        <line x1="20" y1="35" x2="255" y2="35" stroke="#64748b" stroke-width="2" marker-end="url(#arrowR2-{{ $task['id'] }})"/>
+                                                        <template x-for="tick in ticks" :key="tick">
+                                                            <g>
+                                                                <line :x1="getX(tick)" y1="30" :x2="getX(tick)" y2="40" stroke="#64748b" stroke-width="1.5"/>
+                                                                <text :x="getX(tick)" y="52" text-anchor="middle" fill="#94a3b8" font-size="11" x-text="tick"></text>
+                                                            </g>
+                                                        </template>
+                                                        <template x-for="(pt, i) in points" :key="i">
+                                                            <g>
+                                                                <circle :cx="getX(pt.value)" cy="35" r="4" fill="#22d3ee"/>
+                                                                <text :x="getX(pt.value)" y="22" text-anchor="middle" fill="#22d3ee" font-size="13" font-style="italic" x-text="pt.label"></text>
+                                                            </g>
+                                                        </template>
+                                                    </svg>
+                                                </div>
+                                            @endif
+                                        </div>
                                         <div class="flex flex-wrap gap-3">
                                             @foreach($task['options'] as $i => $option)
                                                 <span class="bg-slate-700/70 text-slate-300 px-3 py-1 rounded text-sm">
                                                     {{ $i + 1 }}) {{ $option }}
+                                                </span>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                @elseif(in_array($zadanie['type'], ['fraction_choice', 'fraction_point', 'point_value', 'sqrt_options']) && $svgType === 'four_points_abcd')
+                    {{-- Four points A,B,C,D tasks --}}
+                    <div class="space-y-4">
+                        @foreach($zadanie['tasks'] as $task)
+                            <div class="bg-slate-800/70 rounded-xl p-4 border border-slate-700 hover:border-slate-600 transition-colors">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-cyan-400 font-bold flex-shrink-0">{{ $task['id'] }}</span>
+                                    <div class="flex-1">
+                                        {{-- SVG with four points --}}
+                                        <div class="bg-slate-900/50 rounded-lg p-3 mb-3">
+                                            @php
+                                                $fourPts = json_encode($task['four_points'] ?? [5, 6, 7, 8]);
+                                                $range = json_encode($task['range'] ?? [4, 9]);
+                                            @endphp
+                                            <div x-data="fourPointsLine({{ $fourPts }}, {{ $range }})">
+                                                <svg viewBox="0 0 300 70" class="w-full h-16 number-line">
+                                                    <defs>
+                                                        <marker id="arrowR4-{{ $task['id'] }}" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
+                                                            <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
+                                                        </marker>
+                                                    </defs>
+                                                    <line x1="20" y1="40" x2="275" y2="40" stroke="#64748b" stroke-width="2" marker-end="url(#arrowR4-{{ $task['id'] }})"/>
+                                                    {{-- Range ticks --}}
+                                                    <template x-for="tick in rangeTicks" :key="tick">
+                                                        <g>
+                                                            <line :x1="getX(tick)" y1="35" :x2="getX(tick)" y2="45" stroke="#64748b" stroke-width="1.5"/>
+                                                            <text :x="getX(tick)" y="58" text-anchor="middle" fill="#94a3b8" font-size="11" x-text="tick"></text>
+                                                        </g>
+                                                    </template>
+                                                    {{-- Four labeled points --}}
+                                                    <template x-for="(pt, i) in labeledPoints" :key="i">
+                                                        <g>
+                                                            <circle :cx="pt.x" cy="40" r="4" fill="#22d3ee"/>
+                                                            <text :x="pt.x" y="28" text-anchor="middle" fill="#22d3ee" font-size="12" font-weight="bold" x-text="pt.label"></text>
+                                                        </g>
+                                                    </template>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        @if(isset($task['expression']))
+                                            <div class="text-slate-200 mb-2">${{ $task['expression'] }}$</div>
+                                        @endif
+                                        @if(isset($task['point']))
+                                            <div class="text-slate-200 mb-2">Точка {{ $task['point'] }}:</div>
+                                        @endif
+                                        <div class="flex flex-wrap gap-3">
+                                            @foreach($task['options'] as $i => $option)
+                                                <span class="bg-slate-700/70 text-slate-300 px-3 py-1 rounded text-sm">
+                                                    {{ $i + 1 }})
+                                                    @if(str_contains($option, '\frac') || str_contains($option, '\sqrt'))
+                                                        ${{ $option }}$
+                                                    @else
+                                                        {{ $option }}
+                                                    @endif
+                                                </span>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                @elseif($zadanie['type'] === 'sqrt_options' && $svgType === 'point_a_on_range')
+                    {{-- Sqrt with point A on range --}}
+                    <div class="space-y-4">
+                        @foreach($zadanie['tasks'] as $task)
+                            <div class="bg-slate-800/70 rounded-xl p-4 border border-slate-700 hover:border-slate-600 transition-colors">
+                                <div class="flex items-start gap-3">
+                                    <span class="text-cyan-400 font-bold flex-shrink-0">{{ $task['id'] }}</span>
+                                    <div class="flex-1">
+                                        <div class="bg-slate-900/50 rounded-lg p-3 mb-3">
+                                            @php $range = json_encode($task['range'] ?? [5, 7]); @endphp
+                                            <div x-data="pointALine({{ $task['point_a'] ?? 6 }}, {{ $range }})">
+                                                <svg viewBox="0 0 280 60" class="w-full h-14 number-line">
+                                                    <defs>
+                                                        <marker id="arrowRA-{{ $task['id'] }}" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
+                                                            <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
+                                                        </marker>
+                                                    </defs>
+                                                    <line x1="20" y1="35" x2="255" y2="35" stroke="#64748b" stroke-width="2" marker-end="url(#arrowRA-{{ $task['id'] }})"/>
+                                                    <template x-for="tick in ticks" :key="tick">
+                                                        <g>
+                                                            <line :x1="getX(tick)" y1="30" :x2="getX(tick)" y2="40" stroke="#64748b" stroke-width="1.5"/>
+                                                            <text :x="getX(tick)" y="52" text-anchor="middle" fill="#94a3b8" font-size="11" x-text="tick"></text>
+                                                        </g>
+                                                    </template>
+                                                    <circle :cx="pointX" cy="35" r="4" fill="#22d3ee"/>
+                                                    <text :x="pointX" y="22" text-anchor="middle" fill="#22d3ee" font-size="12" font-weight="bold">A</text>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-wrap gap-3">
+                                            @foreach($task['options'] as $i => $option)
+                                                <span class="bg-slate-700/70 text-slate-300 px-3 py-1 rounded text-sm">
+                                                    {{ $i + 1 }}) ${{ $option }}$
                                                 </span>
                                             @endforeach
                                         </div>
@@ -193,8 +369,8 @@
                         @endforeach
                     </div>
 
-                @elseif(in_array($zadanie['type'], ['fraction_options', 'sqrt_options']))
-                    {{-- Fraction/sqrt options --}}
+                @elseif(in_array($zadanie['type'], ['fraction_options', 'sqrt_options']) && !$svgType)
+                    {{-- Fraction/sqrt options without SVG --}}
                     <div class="space-y-3">
                         @foreach($zadanie['tasks'] as $task)
                             <div class="bg-slate-800/70 rounded-xl p-4 border border-slate-700 flex flex-wrap items-center gap-3">
@@ -245,8 +421,8 @@
                         @endforeach
                     </div>
 
-                @elseif(in_array($zadanie['type'], ['false_statements', 'ordering']))
-                    {{-- False statements or ordering --}}
+                @elseif(in_array($zadanie['type'], ['false_statements']))
+                    {{-- False statements --}}
                     <div class="space-y-3">
                         @foreach($zadanie['tasks'] as $task)
                             <div class="bg-slate-800/70 rounded-xl p-4 border border-slate-700 flex flex-wrap items-center gap-3">
@@ -254,27 +430,6 @@
                                 @foreach($task['options'] as $i => $option)
                                     <span class="bg-slate-700/70 text-slate-300 px-3 py-1 rounded text-sm">
                                         {{ $i + 1 }}) {{ $option }}
-                                    </span>
-                                @endforeach
-                            </div>
-                        @endforeach
-                    </div>
-
-                @elseif($zadanie['type'] === 'point_value')
-                    {{-- Point value --}}
-                    <div class="space-y-3">
-                        @foreach($zadanie['tasks'] as $task)
-                            <div class="bg-slate-800/70 rounded-xl p-4 border border-slate-700 flex flex-wrap items-center gap-3">
-                                <span class="text-cyan-400 font-bold">{{ $task['id'] }}.</span>
-                                <span class="text-slate-200">Точка {{ $task['point'] }}:</span>
-                                @foreach($task['options'] as $i => $option)
-                                    <span class="bg-slate-700/70 text-slate-300 px-3 py-1 rounded text-sm">
-                                        {{ $i + 1 }})
-                                        @if(str_contains($option, '\frac'))
-                                            ${{ $option }}$
-                                        @else
-                                            {{ $option }}
-                                        @endif
                                     </span>
                                 @endforeach
                             </div>
@@ -312,14 +467,129 @@
             <p><strong class="text-slate-300">Контроллер:</strong> <code class="bg-slate-700 px-2 py-1 rounded text-xs">TestPdfController::getAllBlocksData07()</code></p>
             <ul class="list-disc list-inside mt-3 space-y-1">
                 <li>Типы заданий: choice, fraction_choice, interval_choice, sqrt_choice и др.</li>
-                <li>Изображения координатных прямых инвертированы для тёмной темы</li>
+                <li>Графика: SVG числовые прямые с динамической генерацией</li>
                 <li>Всего: {{ $totalTasks }} задач</li>
             </ul>
         </div>
     </div>
 
-    <p class="text-center text-slate-500 text-sm mt-8">Изображения координатных прямых из PDF с инверсией цветов</p>
+    <p class="text-center text-slate-500 text-sm mt-8">SVG числовые прямые генерируются с помощью Alpine.js</p>
 </div>
+
+<script>
+    // Single point on number line
+    function singlePointLine(value, label) {
+        const minV = Math.floor(value) - 2;
+        const maxV = Math.ceil(value) + 2;
+        const ticks = [];
+        for (let i = minV; i <= maxV; i++) ticks.push(i);
+
+        return {
+            value: value,
+            label: label,
+            ticks: ticks,
+            minV: minV,
+            maxV: maxV,
+            getX(v) {
+                return 30 + ((v - this.minV) / (this.maxV - this.minV)) * 210;
+            },
+            get pointX() {
+                return this.getX(this.value);
+            }
+        };
+    }
+
+    // Two points on number line
+    function twoPointsLine(points) {
+        const values = points.map(p => p.value);
+        const minP = Math.min(...values);
+        const maxP = Math.max(...values);
+        const padding = Math.max(1, Math.ceil((maxP - minP) * 0.3));
+        const minV = Math.floor(minP - padding);
+        const maxV = Math.ceil(maxP + padding);
+        const ticks = [];
+        for (let i = minV; i <= maxV; i++) ticks.push(i);
+
+        return {
+            points: points,
+            ticks: ticks,
+            minV: minV,
+            maxV: maxV,
+            getX(v) {
+                return 30 + ((v - this.minV) / (this.maxV - this.minV)) * 210;
+            }
+        };
+    }
+
+    // Three points on number line
+    function threePointsLine(points) {
+        const values = points.map(p => p.value);
+        const minP = Math.min(...values);
+        const maxP = Math.max(...values);
+        const range = maxP - minP;
+        const minV = Math.floor(minP - range * 0.2);
+        const maxV = Math.ceil(maxP + range * 0.2);
+
+        return {
+            points: points,
+            minV: minV,
+            maxV: maxV,
+            getX(v) {
+                return 30 + ((v - this.minV) / (this.maxV - this.minV)) * 260;
+            }
+        };
+    }
+
+    // Four points A,B,C,D on number line
+    function fourPointsLine(fourPoints, range) {
+        const [minV, maxV] = range;
+        const labels = ['A', 'B', 'C', 'D'];
+        const rangeTicks = [];
+        for (let i = Math.ceil(minV); i <= Math.floor(maxV); i++) {
+            rangeTicks.push(i);
+        }
+
+        const labeledPoints = fourPoints.map((val, i) => ({
+            value: val,
+            label: labels[i],
+            x: 30 + ((val - minV) / (maxV - minV)) * 230
+        }));
+
+        return {
+            fourPoints: fourPoints,
+            range: range,
+            minV: minV,
+            maxV: maxV,
+            rangeTicks: rangeTicks,
+            labeledPoints: labeledPoints,
+            getX(v) {
+                return 30 + ((v - this.minV) / (this.maxV - this.minV)) * 230;
+            }
+        };
+    }
+
+    // Point A on range
+    function pointALine(pointValue, range) {
+        const [minV, maxV] = range;
+        const ticks = [];
+        for (let i = Math.ceil(minV); i <= Math.floor(maxV); i++) {
+            ticks.push(i);
+        }
+
+        return {
+            pointValue: pointValue,
+            minV: minV,
+            maxV: maxV,
+            ticks: ticks,
+            getX(v) {
+                return 30 + ((v - this.minV) / (this.maxV - this.minV)) * 210;
+            },
+            get pointX() {
+                return this.getX(this.pointValue);
+            }
+        };
+    }
+</script>
 
 </body>
 </html>
