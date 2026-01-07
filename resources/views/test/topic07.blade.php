@@ -100,30 +100,37 @@
                 @if($zadanie['type'] === 'simple_choice' && $svgType === 'three_points')
                     {{-- Simple choice with three points SVG --}}
                     <div class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
-                        @php $points = $zadanie['points'] ?? []; @endphp
-                        <div class="bg-slate-900/50 rounded-lg p-3 mb-4"
-                             x-data="threePointsLine({{ json_encode($points) }})">
-                            <svg viewBox="0 0 320 55" class="w-full h-12 number-line">
+                        @php
+                            $pts = $zadanie['points'] ?? [];
+                            $values = array_column($pts, 'value');
+                            $minVal = min(min($values), 0);
+                            $maxVal = max($values);
+                            $minTick = floor($minVal) - 1;
+                            $maxTick = ceil($maxVal) + 1;
+                            $range = $maxTick - $minTick;
+                            $tickWidth = 280 / $range;
+                        @endphp
+                        <div class="bg-slate-900/50 rounded-lg p-3 mb-4">
+                            <svg viewBox="0 0 320 50" class="w-full h-11 number-line">
                                 <defs>
                                     <marker id="arrowR3" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto">
                                         <path d="M0,0 L0,6 L8,3 z" fill="#8B0000"/>
                                     </marker>
                                 </defs>
                                 {{-- Number line --}}
-                                <line x1="15" y1="25" x2="300" y2="25" stroke="#8B0000" stroke-width="2" marker-end="url(#arrowR3)"/>
-                                {{-- All tick marks --}}
-                                <template x-for="tick in ticks" :key="tick">
-                                    <line :x1="getX(tick)" y1="20" :x2="getX(tick)" y2="30" stroke="#8B0000" stroke-width="1.5"/>
-                                </template>
+                                <line x1="15" y1="22" x2="305" y2="22" stroke="#8B0000" stroke-width="2" marker-end="url(#arrowR3)"/>
+                                {{-- Tick marks --}}
+                                @for($i = $minTick; $i <= $maxTick; $i++)
+                                    <line x1="{{ 15 + ($i - $minTick) * $tickWidth }}" y1="17" x2="{{ 15 + ($i - $minTick) * $tickWidth }}" y2="27" stroke="#8B0000" stroke-width="1.5"/>
+                                @endfor
                                 {{-- Label 0 --}}
-                                <text :x="getX(0)" y="45" text-anchor="middle" fill="#1e40af" font-size="12" font-weight="bold">0</text>
+                                <text x="{{ 15 + (0 - $minTick) * $tickWidth }}" y="42" text-anchor="middle" fill="#1e40af" font-size="12" font-weight="bold">0</text>
                                 {{-- Points --}}
-                                <template x-for="(pt, i) in points" :key="i">
-                                    <g>
-                                        <circle :cx="getX(pt.value)" cy="25" r="5" fill="#22c55e"/>
-                                        <text :x="getX(pt.value)" y="45" text-anchor="middle" fill="#1e40af" font-size="13" font-style="italic" x-text="pt.label"></text>
-                                    </g>
-                                </template>
+                                @foreach($pts as $pt)
+                                    @php $px = 15 + ($pt['value'] - $minTick) * $tickWidth; @endphp
+                                    <circle cx="{{ $px }}" cy="22" r="5" fill="#22c55e"/>
+                                    <text x="{{ $px }}" y="42" text-anchor="middle" fill="#1e40af" font-size="13" font-style="italic">{{ $pt['label'] }}</text>
+                                @endforeach
                             </svg>
                         </div>
                         <div class="flex flex-wrap gap-4">
@@ -158,53 +165,64 @@
                                         {{-- SVG Number Line --}}
                                         <div class="bg-slate-900/50 rounded-lg p-3 mb-3">
                                             @if($svgType === 'single_point' && isset($task['point_value']))
-                                                <div x-data="singlePointLine({{ $task['point_value'] }}, '{{ $task['point_label'] ?? 'a' }}')">
-                                                    <svg viewBox="0 0 320 55" class="w-full h-12 number-line">
-                                                        <defs>
-                                                            <marker id="arrowR-{{ $task['id'] }}" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto">
-                                                                <path d="M0,0 L0,6 L8,3 z" fill="#8B0000"/>
-                                                            </marker>
-                                                        </defs>
-                                                        {{-- Main line --}}
-                                                        <line x1="15" y1="25" x2="300" y2="25" stroke="#8B0000" stroke-width="2" marker-end="url(#arrowR-{{ $task['id'] }})"/>
-                                                        {{-- All tick marks --}}
-                                                        <template x-for="tick in ticks" :key="tick">
-                                                            <line :x1="getX(tick)" y1="20" :x2="getX(tick)" y2="30" stroke="#8B0000" stroke-width="1.5"/>
-                                                        </template>
-                                                        {{-- Labels only for 0 and 1 --}}
-                                                        <text :x="getX(0)" y="45" text-anchor="middle" fill="#1e40af" font-size="12" font-weight="bold">0</text>
-                                                        <text :x="getX(1)" y="45" text-anchor="middle" fill="#1e40af" font-size="12" font-weight="bold">1</text>
-                                                        {{-- Point --}}
-                                                        <circle :cx="pointX" cy="25" r="5" fill="#22c55e"/>
-                                                        <text :x="pointX" y="45" text-anchor="middle" fill="#1e40af" font-size="13" font-style="italic" x-text="label"></text>
-                                                    </svg>
-                                                </div>
+                                                @php
+                                                    $pointVal = $task['point_value'];
+                                                    $pointLabel = $task['point_label'] ?? 'a';
+                                                    $maxTick = ceil($pointVal) + 2;
+                                                    $tickWidth = 280 / $maxTick; // ширина единичного отрезка
+                                                    $pointX = 15 + ($pointVal / $maxTick) * 280;
+                                                @endphp
+                                                <svg viewBox="0 0 320 50" class="w-full h-11 number-line">
+                                                    <defs>
+                                                        <marker id="arrowR-{{ $task['id'] }}" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto">
+                                                            <path d="M0,0 L0,6 L8,3 z" fill="#8B0000"/>
+                                                        </marker>
+                                                    </defs>
+                                                    {{-- Main line --}}
+                                                    <line x1="15" y1="22" x2="305" y2="22" stroke="#8B0000" stroke-width="2" marker-end="url(#arrowR-{{ $task['id'] }})"/>
+                                                    {{-- Tick marks --}}
+                                                    @for($i = 0; $i <= $maxTick; $i++)
+                                                        <line x1="{{ 15 + $i * $tickWidth }}" y1="17" x2="{{ 15 + $i * $tickWidth }}" y2="27" stroke="#8B0000" stroke-width="1.5"/>
+                                                    @endfor
+                                                    {{-- Labels 0 and 1 --}}
+                                                    <text x="{{ 15 }}" y="42" text-anchor="middle" fill="#1e40af" font-size="12" font-weight="bold">0</text>
+                                                    <text x="{{ 15 + $tickWidth }}" y="42" text-anchor="middle" fill="#1e40af" font-size="12" font-weight="bold">1</text>
+                                                    {{-- Point --}}
+                                                    <circle cx="{{ $pointX }}" cy="22" r="5" fill="#22c55e"/>
+                                                    <text x="{{ $pointX }}" y="42" text-anchor="middle" fill="#1e40af" font-size="13" font-style="italic">{{ $pointLabel }}</text>
+                                                </svg>
                                             @elseif($svgType === 'two_points' && isset($task['points']))
-                                                @php $pts = json_encode($task['points']); @endphp
-                                                <div x-data="twoPointsLine({{ $pts }})">
-                                                    <svg viewBox="0 0 320 55" class="w-full h-12 number-line">
-                                                        <defs>
-                                                            <marker id="arrowR2-{{ $task['id'] }}" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto">
-                                                                <path d="M0,0 L0,6 L8,3 z" fill="#8B0000"/>
-                                                            </marker>
-                                                        </defs>
-                                                        {{-- Main line --}}
-                                                        <line x1="15" y1="25" x2="300" y2="25" stroke="#8B0000" stroke-width="2" marker-end="url(#arrowR2-{{ $task['id'] }})"/>
-                                                        {{-- All tick marks --}}
-                                                        <template x-for="tick in ticks" :key="tick">
-                                                            <line :x1="getX(tick)" y1="20" :x2="getX(tick)" y2="30" stroke="#8B0000" stroke-width="1.5"/>
-                                                        </template>
-                                                        {{-- Labels only for 0 --}}
-                                                        <text :x="getX(0)" y="45" text-anchor="middle" fill="#1e40af" font-size="12" font-weight="bold">0</text>
-                                                        {{-- Points with labels --}}
-                                                        <template x-for="(pt, i) in points" :key="i">
-                                                            <g>
-                                                                <circle :cx="getX(pt.value)" cy="25" r="5" fill="#22c55e"/>
-                                                                <text :x="getX(pt.value)" y="45" text-anchor="middle" fill="#1e40af" font-size="13" font-style="italic" x-text="pt.label"></text>
-                                                            </g>
-                                                        </template>
-                                                    </svg>
-                                                </div>
+                                                @php
+                                                    $pts = $task['points'];
+                                                    $values = array_column($pts, 'value');
+                                                    $minVal = min(min($values), 0);
+                                                    $maxVal = max($values);
+                                                    $minTick = floor($minVal) - 1;
+                                                    $maxTick = ceil($maxVal) + 1;
+                                                    $range = $maxTick - $minTick;
+                                                    $tickWidth = 280 / $range;
+                                                @endphp
+                                                <svg viewBox="0 0 320 50" class="w-full h-11 number-line">
+                                                    <defs>
+                                                        <marker id="arrowR2-{{ $task['id'] }}" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto">
+                                                            <path d="M0,0 L0,6 L8,3 z" fill="#8B0000"/>
+                                                        </marker>
+                                                    </defs>
+                                                    {{-- Main line --}}
+                                                    <line x1="15" y1="22" x2="305" y2="22" stroke="#8B0000" stroke-width="2" marker-end="url(#arrowR2-{{ $task['id'] }})"/>
+                                                    {{-- Tick marks --}}
+                                                    @for($i = $minTick; $i <= $maxTick; $i++)
+                                                        <line x1="{{ 15 + ($i - $minTick) * $tickWidth }}" y1="17" x2="{{ 15 + ($i - $minTick) * $tickWidth }}" y2="27" stroke="#8B0000" stroke-width="1.5"/>
+                                                    @endfor
+                                                    {{-- Label 0 --}}
+                                                    <text x="{{ 15 + (0 - $minTick) * $tickWidth }}" y="42" text-anchor="middle" fill="#1e40af" font-size="12" font-weight="bold">0</text>
+                                                    {{-- Points --}}
+                                                    @foreach($pts as $pt)
+                                                        @php $px = 15 + ($pt['value'] - $minTick) * $tickWidth; @endphp
+                                                        <circle cx="{{ $px }}" cy="22" r="5" fill="#22c55e"/>
+                                                        <text x="{{ $px }}" y="42" text-anchor="middle" fill="#1e40af" font-size="13" font-style="italic">{{ $pt['label'] }}</text>
+                                                    @endforeach
+                                                </svg>
                                             @endif
                                         </div>
                                         <div class="flex flex-wrap gap-3">
@@ -231,33 +249,36 @@
                                         {{-- SVG with four points --}}
                                         <div class="bg-slate-900/50 rounded-lg p-3 mb-3">
                                             @php
-                                                $fourPts = json_encode($task['four_points'] ?? [5, 6, 7, 8]);
-                                                $range = json_encode($task['range'] ?? [4, 9]);
+                                                $fourPts = $task['four_points'] ?? [5, 6, 7, 8];
+                                                $rangeArr = $task['range'] ?? [4, 9];
+                                                $minV = $rangeArr[0];
+                                                $maxV = $rangeArr[1];
+                                                $labels = ['A', 'B', 'C', 'D'];
+                                                $getX = function($v) use ($minV, $maxV) {
+                                                    return 15 + (($v - $minV) / ($maxV - $minV)) * 280;
+                                                };
                                             @endphp
-                                            <div x-data="fourPointsLine({{ $fourPts }}, {{ $range }})">
-                                                <svg viewBox="0 0 320 55" class="w-full h-12 number-line">
-                                                    <defs>
-                                                        <marker id="arrowR4-{{ $task['id'] }}" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto">
-                                                            <path d="M0,0 L0,6 L8,3 z" fill="#8B0000"/>
-                                                        </marker>
-                                                    </defs>
-                                                    <line x1="15" y1="25" x2="300" y2="25" stroke="#8B0000" stroke-width="2" marker-end="url(#arrowR4-{{ $task['id'] }})"/>
-                                                    {{-- Range ticks --}}
-                                                    <template x-for="tick in rangeTicks" :key="tick">
-                                                        <line :x1="getX(tick)" y1="20" :x2="getX(tick)" y2="30" stroke="#8B0000" stroke-width="1.5"/>
-                                                    </template>
-                                                    {{-- Labels for range boundaries --}}
-                                                    <text :x="getX(rangeTicks[0])" y="45" text-anchor="middle" fill="#1e40af" font-size="11" x-text="rangeTicks[0]"></text>
-                                                    <text :x="getX(rangeTicks[rangeTicks.length-1])" y="45" text-anchor="middle" fill="#1e40af" font-size="11" x-text="rangeTicks[rangeTicks.length-1]"></text>
-                                                    {{-- Four labeled points --}}
-                                                    <template x-for="(pt, i) in labeledPoints" :key="i">
-                                                        <g>
-                                                            <circle :cx="pt.x" cy="25" r="5" fill="#22c55e"/>
-                                                            <text :x="pt.x" y="45" text-anchor="middle" fill="#1e40af" font-size="12" font-weight="bold" x-text="pt.label"></text>
-                                                        </g>
-                                                    </template>
-                                                </svg>
-                                            </div>
+                                            <svg viewBox="0 0 320 55" class="w-full h-12 number-line">
+                                                <defs>
+                                                    <marker id="arrowR4-{{ $task['id'] }}" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto">
+                                                        <path d="M0,0 L0,6 L8,3 z" fill="#8B0000"/>
+                                                    </marker>
+                                                </defs>
+                                                {{-- Main line --}}
+                                                <line x1="15" y1="25" x2="305" y2="25" stroke="#8B0000" stroke-width="2" marker-end="url(#arrowR4-{{ $task['id'] }})"/>
+                                                {{-- Tick marks --}}
+                                                @for($i = ceil($minV); $i <= floor($maxV); $i++)
+                                                    <line x1="{{ $getX($i) }}" y1="20" x2="{{ $getX($i) }}" y2="30" stroke="#8B0000" stroke-width="1.5"/>
+                                                @endfor
+                                                {{-- Labels for range boundaries --}}
+                                                <text x="{{ $getX(ceil($minV)) }}" y="45" text-anchor="middle" fill="#1e40af" font-size="11" font-weight="bold">{{ ceil($minV) }}</text>
+                                                <text x="{{ $getX(floor($maxV)) }}" y="45" text-anchor="middle" fill="#1e40af" font-size="11" font-weight="bold">{{ floor($maxV) }}</text>
+                                                {{-- Four labeled points --}}
+                                                @foreach($fourPts as $idx => $ptVal)
+                                                    <circle cx="{{ $getX($ptVal) }}" cy="25" r="5" fill="#22c55e"/>
+                                                    <text x="{{ $getX($ptVal) }}" y="12" text-anchor="middle" fill="#1e40af" font-size="12" font-weight="bold">{{ $labels[$idx] }}</text>
+                                                @endforeach
+                                            </svg>
                                         </div>
                                         @if(isset($task['expression']))
                                             <div class="text-slate-200 mb-2">${{ $task['expression'] }}$</div>
@@ -292,27 +313,35 @@
                                     <span class="text-cyan-400 font-bold flex-shrink-0">{{ $task['id'] }}</span>
                                     <div class="flex-1">
                                         <div class="bg-slate-900/50 rounded-lg p-3 mb-3">
-                                            @php $range = json_encode($task['range'] ?? [5, 7]); @endphp
-                                            <div x-data="pointALine({{ $task['point_a'] ?? 6 }}, {{ $range }})">
-                                                <svg viewBox="0 0 320 55" class="w-full h-12 number-line">
-                                                    <defs>
-                                                        <marker id="arrowRA-{{ $task['id'] }}" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto">
-                                                            <path d="M0,0 L0,6 L8,3 z" fill="#8B0000"/>
-                                                        </marker>
-                                                    </defs>
-                                                    <line x1="15" y1="25" x2="300" y2="25" stroke="#8B0000" stroke-width="2" marker-end="url(#arrowRA-{{ $task['id'] }})"/>
-                                                    {{-- All tick marks --}}
-                                                    <template x-for="tick in ticks" :key="tick">
-                                                        <line :x1="getX(tick)" y1="20" :x2="getX(tick)" y2="30" stroke="#8B0000" stroke-width="1.5"/>
-                                                    </template>
-                                                    {{-- Labels for range boundaries --}}
-                                                    <text :x="getX(ticks[0])" y="45" text-anchor="middle" fill="#1e40af" font-size="11" x-text="ticks[0]"></text>
-                                                    <text :x="getX(ticks[ticks.length-1])" y="45" text-anchor="middle" fill="#1e40af" font-size="11" x-text="ticks[ticks.length-1]"></text>
-                                                    {{-- Point A --}}
-                                                    <circle :cx="pointX" cy="25" r="5" fill="#22c55e"/>
-                                                    <text :x="pointX" y="45" text-anchor="middle" fill="#1e40af" font-size="12" font-weight="bold">A</text>
-                                                </svg>
-                                            </div>
+                                            @php
+                                                $rangeArr = $task['range'] ?? [5, 7];
+                                                $minV = $rangeArr[0];
+                                                $maxV = $rangeArr[1];
+                                                $pointA = $task['point_a'] ?? 6;
+                                                $getX = function($v) use ($minV, $maxV) {
+                                                    return 15 + (($v - $minV) / ($maxV - $minV)) * 280;
+                                                };
+                                                $pointX = $getX($pointA);
+                                            @endphp
+                                            <svg viewBox="0 0 320 55" class="w-full h-12 number-line">
+                                                <defs>
+                                                    <marker id="arrowRA-{{ $task['id'] }}" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto">
+                                                        <path d="M0,0 L0,6 L8,3 z" fill="#8B0000"/>
+                                                    </marker>
+                                                </defs>
+                                                {{-- Main line --}}
+                                                <line x1="15" y1="25" x2="305" y2="25" stroke="#8B0000" stroke-width="2" marker-end="url(#arrowRA-{{ $task['id'] }})"/>
+                                                {{-- Tick marks --}}
+                                                @for($i = ceil($minV); $i <= floor($maxV); $i++)
+                                                    <line x1="{{ $getX($i) }}" y1="20" x2="{{ $getX($i) }}" y2="30" stroke="#8B0000" stroke-width="1.5"/>
+                                                @endfor
+                                                {{-- Labels for range boundaries --}}
+                                                <text x="{{ $getX(ceil($minV)) }}" y="45" text-anchor="middle" fill="#1e40af" font-size="11" font-weight="bold">{{ ceil($minV) }}</text>
+                                                <text x="{{ $getX(floor($maxV)) }}" y="45" text-anchor="middle" fill="#1e40af" font-size="11" font-weight="bold">{{ floor($maxV) }}</text>
+                                                {{-- Point A --}}
+                                                <circle cx="{{ $pointX }}" cy="25" r="5" fill="#22c55e"/>
+                                                <text x="{{ $pointX }}" y="12" text-anchor="middle" fill="#1e40af" font-size="12" font-weight="bold">A</text>
+                                            </svg>
                                         </div>
                                         <div class="flex flex-wrap gap-3">
                                             @foreach($task['options'] as $i => $option)
@@ -483,124 +512,8 @@
         </div>
     </div>
 
-    <p class="text-center text-slate-500 text-sm mt-8">SVG числовые прямые генерируются с помощью Alpine.js</p>
+    <p class="text-center text-slate-500 text-sm mt-8">SVG числовые прямые генерируются на сервере (PHP)</p>
 </div>
-
-<script>
-    // Single point on number line (like PDF: 0, 1, 2, ... with labeled 0 and 1)
-    function singlePointLine(value, label) {
-        const minV = 0;
-        const maxV = Math.ceil(value) + 2;
-        const ticks = [];
-        for (let i = minV; i <= maxV; i++) ticks.push(i);
-
-        return {
-            value: value,
-            label: label,
-            ticks: ticks,
-            minV: minV,
-            maxV: maxV,
-            getX(v) {
-                return 25 + ((v - this.minV) / (this.maxV - this.minV)) * 260;
-            },
-            get pointX() {
-                return this.getX(this.value);
-            }
-        };
-    }
-
-    // Two points on number line (like PDF style with 0 marked)
-    function twoPointsLine(points) {
-        const values = points.map(p => p.value);
-        const minP = Math.min(...values, 0);
-        const maxP = Math.max(...values);
-        const minV = Math.floor(minP) - 1;
-        const maxV = Math.ceil(maxP) + 1;
-        const ticks = [];
-        for (let i = minV; i <= maxV; i++) ticks.push(i);
-
-        return {
-            points: points,
-            ticks: ticks,
-            minV: minV,
-            maxV: maxV,
-            getX(v) {
-                return 25 + ((v - this.minV) / (this.maxV - this.minV)) * 260;
-            }
-        };
-    }
-
-    // Three points on number line (like PDF style with ticks and 0 labeled)
-    function threePointsLine(points) {
-        const values = points.map(p => p.value);
-        const minP = Math.min(...values, 0);
-        const maxP = Math.max(...values);
-        const minV = Math.floor(minP) - 1;
-        const maxV = Math.ceil(maxP) + 1;
-        const ticks = [];
-        for (let i = minV; i <= maxV; i++) ticks.push(i);
-
-        return {
-            points: points,
-            ticks: ticks,
-            minV: minV,
-            maxV: maxV,
-            getX(v) {
-                return 25 + ((v - this.minV) / (this.maxV - this.minV)) * 260;
-            }
-        };
-    }
-
-    // Four points A,B,C,D on number line (PDF style)
-    function fourPointsLine(fourPoints, range) {
-        const [minV, maxV] = range;
-        const labels = ['A', 'B', 'C', 'D'];
-        const rangeTicks = [];
-        for (let i = Math.ceil(minV); i <= Math.floor(maxV); i++) {
-            rangeTicks.push(i);
-        }
-
-        const getX = (v) => 25 + ((v - minV) / (maxV - minV)) * 260;
-
-        const labeledPoints = fourPoints.map((val, i) => ({
-            value: val,
-            label: labels[i],
-            x: getX(val)
-        }));
-
-        return {
-            fourPoints: fourPoints,
-            range: range,
-            minV: minV,
-            maxV: maxV,
-            rangeTicks: rangeTicks,
-            labeledPoints: labeledPoints,
-            getX: getX
-        };
-    }
-
-    // Point A on range (PDF style)
-    function pointALine(pointValue, range) {
-        const [minV, maxV] = range;
-        const ticks = [];
-        for (let i = Math.ceil(minV); i <= Math.floor(maxV); i++) {
-            ticks.push(i);
-        }
-
-        return {
-            pointValue: pointValue,
-            minV: minV,
-            maxV: maxV,
-            ticks: ticks,
-            getX(v) {
-                return 25 + ((v - this.minV) / (this.maxV - this.minV)) * 260;
-            },
-            get pointX() {
-                return this.getX(this.pointValue);
-            }
-        };
-    }
-</script>
 
 </body>
 </html>
