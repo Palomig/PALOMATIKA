@@ -10,15 +10,10 @@
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
             onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
 
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
-    <style>
-        [x-cloak] { display: none !important; }
-    </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
 
@@ -89,41 +84,57 @@
                     </h3>
                 </div>
 
-                {{-- Tasks Grid --}}
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {{-- Tasks --}}
+                <div class="space-y-8">
                     @foreach($zadanie['tasks'] ?? [] as $taskIndex => $task)
                         @php
                             $uniqueId = $blockIndex . '-' . $zadanieIndex . '-' . $taskIndex;
+                            $options = $task['options'] ?? [];
+                            $graphLabels = ['А', 'Б', 'В', 'Г'];
                         @endphp
-                        <div class="bg-slate-800/70 rounded-xl p-4 border border-slate-700 hover:border-cyan-500/50 transition-colors">
-                            <div class="text-cyan-400 font-semibold mb-3">{{ $task['id'] }}.</div>
 
-                            {{-- SVG Graph Container --}}
-                            <div class="bg-slate-900/50 rounded-lg p-2 mb-4">
-                                <div id="graph-{{ $uniqueId }}" class="w-full h-48"></div>
+                        <div class="bg-slate-800/70 rounded-xl p-6 border border-slate-700">
+                            {{-- Task number --}}
+                            <div class="text-cyan-400 font-bold text-lg mb-4">{{ $task['id'] }}</div>
+
+                            {{-- Three separate graphs in a row --}}
+                            <div class="grid grid-cols-3 gap-4 mb-6">
+                                @foreach($options as $optIndex => $formula)
+                                    <div class="bg-slate-900/50 rounded-lg p-3">
+                                        {{-- Graph label --}}
+                                        <div class="text-center text-white font-bold mb-2">{{ $graphLabels[$optIndex] }})</div>
+                                        {{-- SVG container --}}
+                                        <div id="graph-{{ $uniqueId }}-{{ $optIndex }}" class="w-full aspect-square"></div>
+                                    </div>
+                                @endforeach
                             </div>
 
-                            {{-- Options --}}
-                            <div class="flex flex-wrap gap-2">
-                                @if(isset($task['options']))
-                                    @foreach($task['options'] as $i => $opt)
-                                        <span class="bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg text-sm">
-                                            {{ chr(1040 + $i) }}) ${{ $opt }}$
-                                        </span>
-                                    @endforeach
-                                @elseif(isset($task['statements']))
-                                    @foreach($task['statements'] as $i => $stmt)
-                                        <span class="bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg text-sm">
-                                            {{ $i + 1 }}) {{ $stmt }}
-                                        </span>
-                                    @endforeach
-                                @endif
+                            {{-- Formulas to match --}}
+                            <div class="flex flex-wrap gap-4 mb-4 justify-center">
+                                @foreach($options as $i => $opt)
+                                    <span class="bg-slate-700 text-slate-200 px-4 py-2 rounded-lg text-sm">
+                                        {{ $i + 1 }}) ${{ $opt }}$
+                                    </span>
+                                @endforeach
+                            </div>
+
+                            {{-- Answer table --}}
+                            <div class="flex justify-center gap-1 mt-4">
+                                @foreach($options as $i => $opt)
+                                    <div class="flex flex-col items-center">
+                                        <span class="text-slate-400 text-sm font-bold mb-1">{{ $graphLabels[$i] }}</span>
+                                        <div class="w-10 h-8 border-2 border-slate-600 rounded bg-slate-800"></div>
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
 
                         <script>
                             document.addEventListener('DOMContentLoaded', function() {
-                                renderGraph('graph-{{ $uniqueId }}', @json($task['options'] ?? []), {{ $taskIndex }});
+                                const options = @json($options);
+                                options.forEach((formula, i) => {
+                                    renderSingleGraph('graph-{{ $uniqueId }}-' + i, formula);
+                                });
                             });
                         </script>
                     @endforeach
@@ -153,54 +164,59 @@
 </div>
 
 <script>
-    const WIDTH = 280;
-    const HEIGHT = 200;
-    const PADDING = 30;
+    const WIDTH = 180;
+    const HEIGHT = 180;
+    const PADDING = 25;
     const CENTER_X = WIDTH / 2;
     const CENTER_Y = HEIGHT / 2;
-    const SCALE = 20;
-    const COLORS = ['#f59e0b', '#10b981', '#60a5fa', '#f472b6'];
-    const LABELS = ['А)', 'Б)', 'В)', 'Г)'];
+    const SCALE = 18;
 
-    function renderGraph(containerId, options, taskIndex) {
+    function renderSingleGraph(containerId, formula) {
         const container = document.getElementById(containerId);
-        if (!container || !options.length) return;
+        if (!container) return;
 
         // Create SVG
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         svg.setAttribute('viewBox', `0 0 ${WIDTH} ${HEIGHT}`);
-        svg.setAttribute('class', 'w-full h-full rounded');
+        svg.setAttribute('class', 'w-full h-full');
 
-        // Grid pattern
-        const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-        const pattern = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
-        pattern.setAttribute('id', `grid-${containerId}`);
-        pattern.setAttribute('width', '20');
-        pattern.setAttribute('height', '20');
-        pattern.setAttribute('patternUnits', 'userSpaceOnUse');
-        const patternPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        patternPath.setAttribute('d', 'M 20 0 L 0 0 0 20');
-        patternPath.setAttribute('fill', 'none');
-        patternPath.setAttribute('stroke', '#334155');
-        patternPath.setAttribute('stroke-width', '0.5');
-        pattern.appendChild(patternPath);
-        defs.appendChild(pattern);
-        svg.appendChild(defs);
-
-        // Background with grid
+        // Background
         const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        bg.setAttribute('x', '0');
-        bg.setAttribute('y', '0');
         bg.setAttribute('width', WIDTH);
         bg.setAttribute('height', HEIGHT);
-        bg.setAttribute('fill', `url(#grid-${containerId})`);
+        bg.setAttribute('fill', '#0f172a');
         svg.appendChild(bg);
+
+        // Grid
+        const gridGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        for (let i = -5; i <= 5; i++) {
+            // Vertical lines
+            const vLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            vLine.setAttribute('x1', CENTER_X + i * SCALE);
+            vLine.setAttribute('y1', PADDING - 5);
+            vLine.setAttribute('x2', CENTER_X + i * SCALE);
+            vLine.setAttribute('y2', HEIGHT - PADDING + 5);
+            vLine.setAttribute('stroke', '#334155');
+            vLine.setAttribute('stroke-width', '0.5');
+            gridGroup.appendChild(vLine);
+
+            // Horizontal lines
+            const hLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            hLine.setAttribute('x1', PADDING - 5);
+            hLine.setAttribute('y1', CENTER_Y + i * SCALE);
+            hLine.setAttribute('x2', WIDTH - PADDING + 5);
+            hLine.setAttribute('y2', CENTER_Y + i * SCALE);
+            hLine.setAttribute('stroke', '#334155');
+            hLine.setAttribute('stroke-width', '0.5');
+            gridGroup.appendChild(hLine);
+        }
+        svg.appendChild(gridGroup);
 
         // X axis
         const xAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        xAxis.setAttribute('x1', PADDING);
+        xAxis.setAttribute('x1', PADDING - 5);
         xAxis.setAttribute('y1', CENTER_Y);
-        xAxis.setAttribute('x2', WIDTH - PADDING);
+        xAxis.setAttribute('x2', WIDTH - PADDING + 5);
         xAxis.setAttribute('y2', CENTER_Y);
         xAxis.setAttribute('stroke', '#64748b');
         xAxis.setAttribute('stroke-width', '1.5');
@@ -209,101 +225,106 @@
         // Y axis
         const yAxis = document.createElementNS('http://www.w3.org/2000/svg', 'line');
         yAxis.setAttribute('x1', CENTER_X);
-        yAxis.setAttribute('y1', PADDING);
+        yAxis.setAttribute('y1', PADDING - 5);
         yAxis.setAttribute('x2', CENTER_X);
-        yAxis.setAttribute('y2', HEIGHT - PADDING);
+        yAxis.setAttribute('y2', HEIGHT - PADDING + 5);
         yAxis.setAttribute('stroke', '#64748b');
         yAxis.setAttribute('stroke-width', '1.5');
         svg.appendChild(yAxis);
 
         // X arrow
         const xArrow = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-        xArrow.setAttribute('points', `${WIDTH-PADDING},${CENTER_Y-4} ${WIDTH-PADDING},${CENTER_Y+4} ${WIDTH-PADDING+8},${CENTER_Y}`);
+        xArrow.setAttribute('points', `${WIDTH-PADDING+2},${CENTER_Y-3} ${WIDTH-PADDING+2},${CENTER_Y+3} ${WIDTH-PADDING+8},${CENTER_Y}`);
         xArrow.setAttribute('fill', '#64748b');
         svg.appendChild(xArrow);
 
         // Y arrow
         const yArrow = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-        yArrow.setAttribute('points', `${CENTER_X-4},${PADDING} ${CENTER_X+4},${PADDING} ${CENTER_X},${PADDING-8}`);
+        yArrow.setAttribute('points', `${CENTER_X-3},${PADDING-2} ${CENTER_X+3},${PADDING-2} ${CENTER_X},${PADDING-8}`);
         yArrow.setAttribute('fill', '#64748b');
         svg.appendChild(yArrow);
 
-        // Labels
+        // Axis labels
         const xLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        xLabel.setAttribute('x', WIDTH - PADDING + 5);
+        xLabel.setAttribute('x', WIDTH - PADDING + 10);
         xLabel.setAttribute('y', CENTER_Y + 4);
         xLabel.setAttribute('fill', '#94a3b8');
-        xLabel.setAttribute('font-size', '12');
+        xLabel.setAttribute('font-size', '11');
+        xLabel.setAttribute('font-style', 'italic');
         xLabel.textContent = 'x';
         svg.appendChild(xLabel);
 
         const yLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         yLabel.setAttribute('x', CENTER_X + 5);
-        yLabel.setAttribute('y', PADDING - 5);
+        yLabel.setAttribute('y', PADDING - 10);
         yLabel.setAttribute('fill', '#94a3b8');
-        yLabel.setAttribute('font-size', '12');
+        yLabel.setAttribute('font-size', '11');
+        yLabel.setAttribute('font-style', 'italic');
         yLabel.textContent = 'y';
         svg.appendChild(yLabel);
 
-        // Origin
+        // Origin label and unit marks
         const origin = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        origin.setAttribute('x', CENTER_X - 12);
-        origin.setAttribute('y', CENTER_Y + 14);
+        origin.setAttribute('x', CENTER_X - 10);
+        origin.setAttribute('y', CENTER_Y + 12);
         origin.setAttribute('fill', '#94a3b8');
-        origin.setAttribute('font-size', '11');
+        origin.setAttribute('font-size', '10');
         origin.textContent = '0';
         svg.appendChild(origin);
 
+        // Mark "1" on x axis
+        const oneX = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        oneX.setAttribute('x', CENTER_X + SCALE - 2);
+        oneX.setAttribute('y', CENTER_Y + 12);
+        oneX.setAttribute('fill', '#94a3b8');
+        oneX.setAttribute('font-size', '10');
+        oneX.textContent = '1';
+        svg.appendChild(oneX);
+
+        // Mark "1" on y axis
+        const oneY = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        oneY.setAttribute('x', CENTER_X + 5);
+        oneY.setAttribute('y', CENTER_Y - SCALE + 4);
+        oneY.setAttribute('fill', '#94a3b8');
+        oneY.setAttribute('font-size', '10');
+        oneY.textContent = '1';
+        svg.appendChild(oneY);
+
         // Tick marks
-        for (let i = -5; i <= 5; i++) {
+        for (let i = -4; i <= 4; i++) {
             if (i === 0) continue;
             // X ticks
             const xTick = document.createElementNS('http://www.w3.org/2000/svg', 'line');
             xTick.setAttribute('x1', CENTER_X + i * SCALE);
-            xTick.setAttribute('y1', CENTER_Y - 3);
+            xTick.setAttribute('y1', CENTER_Y - 2);
             xTick.setAttribute('x2', CENTER_X + i * SCALE);
-            xTick.setAttribute('y2', CENTER_Y + 3);
+            xTick.setAttribute('y2', CENTER_Y + 2);
             xTick.setAttribute('stroke', '#64748b');
             xTick.setAttribute('stroke-width', '1');
             svg.appendChild(xTick);
 
             // Y ticks
             const yTick = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-            yTick.setAttribute('x1', CENTER_X - 3);
+            yTick.setAttribute('x1', CENTER_X - 2);
             yTick.setAttribute('y1', CENTER_Y - i * SCALE);
-            yTick.setAttribute('x2', CENTER_X + 3);
+            yTick.setAttribute('x2', CENTER_X + 2);
             yTick.setAttribute('y2', CENTER_Y - i * SCALE);
             yTick.setAttribute('stroke', '#64748b');
             yTick.setAttribute('stroke-width', '1');
             svg.appendChild(yTick);
         }
 
-        // Draw each function
-        options.forEach((formula, i) => {
-            const color = COLORS[i % COLORS.length];
-            const label = LABELS[i];
-            const pathData = parseAndDrawFunction(formula);
-
-            if (pathData.path) {
-                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                path.setAttribute('d', pathData.path);
-                path.setAttribute('stroke', color);
-                path.setAttribute('stroke-width', '2.5');
-                path.setAttribute('fill', 'none');
-                path.setAttribute('stroke-linecap', 'round');
-                svg.appendChild(path);
-
-                // Label
-                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                text.setAttribute('x', pathData.labelX);
-                text.setAttribute('y', pathData.labelY);
-                text.setAttribute('fill', color);
-                text.setAttribute('font-size', '13');
-                text.setAttribute('font-weight', 'bold');
-                text.textContent = label;
-                svg.appendChild(text);
-            }
-        });
+        // Draw the function
+        const pathData = parseAndDrawFunction(formula);
+        if (pathData) {
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', pathData);
+            path.setAttribute('stroke', '#10b981');
+            path.setAttribute('stroke-width', '2');
+            path.setAttribute('fill', 'none');
+            path.setAttribute('stroke-linecap', 'round');
+            svg.appendChild(path);
+        }
 
         container.appendChild(svg);
     }
@@ -313,32 +334,14 @@
         let f = formula.replace(/\s+/g, '').replace('y=', '');
         f = f.replace(/−/g, '-');
 
-        let path = '';
-        let labelX = PADDING + 5;
-        let labelY = PADDING + 15;
-
         // Detect function type
         if (f.includes('x²') || f.includes('x^2') || f.match(/\d*x\^?2/)) {
-            // Quadratic
-            const result = drawQuadratic(f);
-            path = result.path;
-            labelX = result.labelX;
-            labelY = result.labelY;
-        } else if (f.includes('/x') || f.match(/\\frac\{[^}]+\}\{x\}/)) {
-            // Hyperbola
-            const result = drawHyperbola(f);
-            path = result.path;
-            labelX = result.labelX;
-            labelY = result.labelY;
+            return drawQuadratic(f);
+        } else if (f.includes('/x') || f.match(/\\frac\{[^}]+\}\{x\}/) || f.match(/\\frac\{[^}]+\}\{\d*x\}/)) {
+            return drawHyperbola(f);
         } else {
-            // Linear
-            const result = drawLinear(f);
-            path = result.path;
-            labelX = result.labelX;
-            labelY = result.labelY;
+            return drawLinear(f);
         }
-
-        return { path, labelX, labelY };
     }
 
     function drawLinear(f) {
@@ -347,10 +350,7 @@
         // Handle fractions like \frac{2}{5}
         f = f.replace(/\\frac\{(-?\d+)\}\{(\d+)\}/g, (m, n, d) => (parseFloat(n) / parseFloat(d)));
 
-        // Parse different formats
-        // y = kx + b, y = kx, y = b, y = -x, etc.
-
-        // Check for constant: y = 3
+        // Check for constant: y = 3 or y = -1
         if (f.match(/^-?\d+\.?\d*$/) && !f.includes('x')) {
             k = 0;
             b = parseFloat(f);
@@ -382,27 +382,17 @@
 
         // Generate path
         const points = [];
-        for (let x = -7; x <= 7; x += 0.5) {
+        for (let x = -6; x <= 6; x += 0.25) {
             const y = k * x + b;
             const px = CENTER_X + x * SCALE;
             const py = CENTER_Y - y * SCALE;
 
-            if (px >= PADDING - 5 && px <= WIDTH - PADDING + 5 && py >= PADDING - 5 && py <= HEIGHT - PADDING + 5) {
+            if (px >= 0 && px <= WIDTH && py >= 0 && py <= HEIGHT) {
                 points.push(`${px.toFixed(1)},${py.toFixed(1)}`);
             }
         }
 
-        // Find good label position
-        let labelX = WIDTH - PADDING - 25;
-        let labelY = CENTER_Y - (k * 4 + b) * SCALE - 5;
-        if (labelY < PADDING + 15) labelY = PADDING + 15;
-        if (labelY > HEIGHT - PADDING - 5) labelY = HEIGHT - PADDING - 15;
-
-        return {
-            path: points.length > 1 ? `M ${points.join(' L ')}` : '',
-            labelX,
-            labelY
-        };
+        return points.length > 1 ? `M ${points.join(' L ')}` : '';
     }
 
     function drawQuadratic(f) {
@@ -411,9 +401,6 @@
         // Handle fractions
         f = f.replace(/\\frac\{(-?\d+)\}\{(\d+)\}/g, (m, n, d) => (parseFloat(n) / parseFloat(d)));
         f = f.replace(/x²/g, 'x^2');
-
-        // Parse ax^2 + bx + c formats
-        // Simple cases first
 
         // Check for coefficient of x^2
         const aMatch = f.match(/^(-?\d*\.?\d*)x\^?2/);
@@ -441,32 +428,17 @@
 
         // Generate parabola path
         const points = [];
-        for (let x = -7; x <= 7; x += 0.15) {
+        for (let x = -6; x <= 6; x += 0.1) {
             const y = a * x * x + b * x + c;
             const px = CENTER_X + x * SCALE;
             const py = CENTER_Y - y * SCALE;
 
-            if (px >= PADDING - 10 && px <= WIDTH - PADDING + 10 && py >= PADDING - 10 && py <= HEIGHT - PADDING + 10) {
+            if (px >= -10 && px <= WIDTH + 10 && py >= -10 && py <= HEIGHT + 10) {
                 points.push(`${px.toFixed(1)},${py.toFixed(1)}`);
             }
         }
 
-        // Label at vertex
-        const vertexX = -b / (2 * a);
-        const vertexY = a * vertexX * vertexX + b * vertexX + c;
-        let labelX = CENTER_X + vertexX * SCALE + 10;
-        let labelY = CENTER_Y - vertexY * SCALE - 10;
-        if (a < 0) labelY = CENTER_Y - vertexY * SCALE + 20;
-        if (labelX > WIDTH - PADDING - 20) labelX = WIDTH - PADDING - 25;
-        if (labelX < PADDING) labelX = PADDING + 5;
-        if (labelY < PADDING + 10) labelY = PADDING + 15;
-        if (labelY > HEIGHT - PADDING) labelY = HEIGHT - PADDING - 5;
-
-        return {
-            path: points.length > 1 ? `M ${points.join(' L ')}` : '',
-            labelX,
-            labelY
-        };
+        return points.length > 1 ? `M ${points.join(' L ')}` : '';
     }
 
     function drawHyperbola(f) {
@@ -489,23 +461,23 @@
         const points2 = [];
 
         // Positive x branch
-        for (let x = 0.25; x <= 7; x += 0.1) {
+        for (let x = 0.2; x <= 6; x += 0.05) {
             const y = k / x;
             const px = CENTER_X + x * SCALE;
             const py = CENTER_Y - y * SCALE;
 
-            if (px >= PADDING && px <= WIDTH - PADDING && py >= PADDING && py <= HEIGHT - PADDING) {
+            if (px >= 0 && px <= WIDTH && py >= 0 && py <= HEIGHT) {
                 points1.push(`${px.toFixed(1)},${py.toFixed(1)}`);
             }
         }
 
         // Negative x branch
-        for (let x = -7; x <= -0.25; x += 0.1) {
+        for (let x = -6; x <= -0.2; x += 0.05) {
             const y = k / x;
             const px = CENTER_X + x * SCALE;
             const py = CENTER_Y - y * SCALE;
 
-            if (px >= PADDING && px <= WIDTH - PADDING && py >= PADDING && py <= HEIGHT - PADDING) {
+            if (px >= 0 && px <= WIDTH && py >= 0 && py <= HEIGHT) {
                 points2.push(`${px.toFixed(1)},${py.toFixed(1)}`);
             }
         }
@@ -514,11 +486,7 @@
         if (points1.length > 1) path += `M ${points1.join(' L ')}`;
         if (points2.length > 1) path += ` M ${points2.join(' L ')}`;
 
-        // Label position based on k sign
-        let labelX = k > 0 ? WIDTH - PADDING - 30 : PADDING + 5;
-        let labelY = k > 0 ? PADDING + 25 : HEIGHT - PADDING - 10;
-
-        return { path, labelX, labelY };
+        return path;
     }
 </script>
 
