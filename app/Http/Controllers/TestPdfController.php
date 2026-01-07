@@ -205,6 +205,42 @@ class TestPdfController extends Controller
     }
 
     /**
+     * Get random tasks from manual topic 14 data
+     */
+    protected function getRandomTasksFromManualData14(int $count): array
+    {
+        $blocks = $this->getAllBlocksData14();
+        return $this->extractRandomTasks($blocks, '14', 'Прогрессии', $count);
+    }
+
+    /**
+     * Get random tasks from manual topic 15 data
+     */
+    protected function getRandomTasksFromManualData15(int $count): array
+    {
+        $blocks = $this->getAllBlocksData15();
+        return $this->extractRandomTasks($blocks, '15', 'Треугольники', $count);
+    }
+
+    /**
+     * Get random tasks from manual topic 16 data
+     */
+    protected function getRandomTasksFromManualData16(int $count): array
+    {
+        $blocks = $this->getAllBlocksData16();
+        return $this->extractRandomTasks($blocks, '16', 'Окружность', $count);
+    }
+
+    /**
+     * Get random tasks from manual topic 17 data
+     */
+    protected function getRandomTasksFromManualData17(int $count): array
+    {
+        $blocks = $this->getAllBlocksData17();
+        return $this->extractRandomTasks($blocks, '17', 'Четырёхугольники', $count);
+    }
+
+    /**
      * Extract random tasks from block structure
      */
     protected function extractRandomTasks(array $blocks, string $topicId, string $topicTitle, int $count): array
@@ -223,6 +259,7 @@ class TestPdfController extends Controller
                             'zadanie_number' => $zadanie['number'],
                             'instruction' => $zadanie['instruction'] ?? '',
                             'type' => $zadanie['type'] ?? 'expression',
+                            'svg_type' => $zadanie['svg_type'] ?? null,
                             'task' => $task,
                         ];
                     }
@@ -236,9 +273,12 @@ class TestPdfController extends Controller
                         'zadanie_number' => $zadanie['number'],
                         'instruction' => $zadanie['instruction'] ?? '',
                         'type' => $zadanie['type'] ?? 'simple_choice',
+                        'svg_type' => $zadanie['svg_type'] ?? null,
                         'task' => [
                             'options' => $zadanie['options'] ?? [],
                             'image' => $zadanie['image'] ?? null,
+                            'points' => $zadanie['points'] ?? null,
+                            'statements' => $zadanie['statements'] ?? null,
                         ],
                     ];
                 }
