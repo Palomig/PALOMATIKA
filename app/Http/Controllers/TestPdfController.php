@@ -4947,11 +4947,21 @@ class TestPdfController extends Controller
     }
 
     /**
-     * Generate a full OGE variant with tasks 6-19
+     * Show OGE variant by hash (deterministic based on hash)
      */
-    public function generateOgeVariant(Request $request)
+    public function showOgeVariant(string $hash)
     {
-        $variantNumber = $request->input('variant_number', rand(1, 999));
+        // Validate hash format (alphanumeric, 8-16 chars)
+        if (!preg_match('/^[a-zA-Z0-9]{8,16}$/', $hash)) {
+            abort(404);
+        }
+
+        // Use hash as seed for deterministic random generation
+        $seed = crc32($hash);
+        mt_srand($seed);
+
+        // Extract variant number from hash
+        $variantNumber = (abs($seed) % 999) + 1;
 
         $topicIds = ['06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19'];
 
@@ -4983,10 +4993,22 @@ class TestPdfController extends Controller
             }
         }
 
+        // Reset random seed
+        mt_srand();
+
         return view('test.oge-variant', [
             'tasks' => $tasks,
             'variantNumber' => $variantNumber,
+            'variantHash' => $hash,
         ]);
+    }
+
+    /**
+     * Generate a unique hash for OGE variant
+     */
+    protected function generateVariantHash(): string
+    {
+        return substr(md5(uniqid(mt_rand(), true)), 0, 10);
     }
 
     /**
