@@ -62,8 +62,10 @@
 <div class="max-w-5xl mx-auto px-4 py-8">
     {{-- Navigation --}}
     <div class="no-print flex justify-between items-center mb-8 text-sm bg-slate-800/50 rounded-xl p-4 border border-slate-700">
-        <a href="{{ route('test.oge.generator') }}" class="text-blue-400 hover:text-blue-300 transition-colors">← Новый вариант</a>
+        <a href="{{ route('test.oge.generator') }}" class="text-blue-400 hover:text-blue-300 transition-colors">← К генератору</a>
         <div class="flex gap-3">
+            @php $newHash = substr(md5(uniqid(mt_rand(), true)), 0, 10); @endphp
+            <a href="{{ route('test.oge.show', ['hash' => $newHash]) }}" class="px-3 py-1.5 rounded-lg bg-slate-700 text-slate-300 hover:bg-slate-600 transition">🎲 Новый вариант</a>
             <a href="{{ route('test.generator') }}" class="px-3 py-1.5 rounded-lg bg-slate-700 text-slate-300 hover:bg-slate-600 transition">Генератор</a>
             <button onclick="window.print()" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white hover:bg-emerald-500 transition">🖨️ Печать</button>
         </div>
@@ -309,12 +311,14 @@
     {{-- Footer --}}
     <div class="no-print text-center mt-10">
         <div class="bg-slate-800 rounded-xl p-6 border border-slate-700">
-            <p class="text-slate-400 mb-4">Вариант сгенерирован {{ now()->format('d.m.Y H:i') }}</p>
+            <p class="text-slate-400 mb-2">Вариант: <code class="bg-slate-700 px-2 py-1 rounded text-emerald-400">{{ $variantHash ?? 'unknown' }}</code></p>
+            <p class="text-slate-500 text-sm mb-4">Ссылка на этот вариант сохраняется — можно поделиться</p>
             <div class="flex justify-center gap-4">
                 <button onclick="window.print()" class="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors">
                     🖨️ Распечатать
                 </button>
-                <a href="{{ route('test.oge.generator') }}" class="px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white rounded-lg transition-colors">
+                @php $footerHash = substr(md5(uniqid(mt_rand(), true)), 0, 10); @endphp
+                <a href="{{ route('test.oge.show', ['hash' => $footerHash]) }}" class="px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white rounded-lg transition-colors">
                     🎲 Новый вариант
                 </a>
             </div>

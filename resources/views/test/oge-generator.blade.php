@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Генератор вариантов ОГЭ - PALOMATIKA</title>
 
     <!-- Tailwind CSS -->
@@ -40,7 +39,7 @@
         <p class="text-slate-300 leading-relaxed">
             Генератор создаёт полноценный тренировочный вариант ОГЭ по математике,
             включающий по одному случайному заданию из каждой темы 6–19.
-            Каждый вариант уникален — можно тренироваться бесконечно!
+            Каждый вариант получает уникальную ссылку — можно делиться с друзьями!
         </p>
     </div>
 
@@ -69,7 +68,7 @@
             @endphp
 
             @foreach($topics as $topic)
-                <div class="bg-slate-700/50 rounded-xl p-3 text-center border border-slate-600 hover:border-{{ $topic['color'] }}-500/50 transition-colors">
+                <div class="bg-slate-700/50 rounded-xl p-3 text-center border border-slate-600">
                     <div class="text-2xl font-bold text-{{ $topic['color'] }}-400 mb-1">{{ $topic['num'] }}</div>
                     <div class="text-slate-500 text-xs leading-tight">{{ $topic['title'] }}</div>
                 </div>
@@ -77,37 +76,28 @@
         </div>
     </div>
 
-    {{-- Generate Form --}}
-    <form action="{{ route('test.oge.generate') }}" method="POST">
-        @csrf
-
-        <div class="bg-slate-800 rounded-2xl p-6 mb-8 border border-slate-700">
-            <h2 class="text-white font-semibold text-lg mb-5">Настройки</h2>
-
-            <div class="grid md:grid-cols-2 gap-6">
-                <div>
-                    <label for="variant_number" class="block text-slate-400 text-sm mb-2">Номер варианта (необязательно)</label>
-                    <input type="number"
-                           id="variant_number"
-                           name="variant_number"
-                           min="1"
-                           max="999"
-                           placeholder="Случайный номер"
-                           class="w-full px-4 py-3 bg-slate-900 border border-slate-600 rounded-xl text-white placeholder-slate-500 focus:border-emerald-400 focus:outline-none transition-colors">
-                </div>
-                <div class="flex items-end">
-                    <div class="bg-slate-700/50 rounded-xl px-5 py-3 border border-slate-600 w-full text-center">
-                        <span class="text-slate-400 text-sm">Будет сгенерировано</span>
-                        <div class="text-emerald-400 font-bold text-2xl">14 заданий</div>
-                    </div>
-                </div>
+    {{-- Generate Button --}}
+    <div class="bg-slate-800 rounded-2xl p-6 mb-8 border border-slate-700">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h2 class="text-white font-semibold text-lg">Готовы начать?</h2>
+                <p class="text-slate-400 text-sm mt-1">Каждый клик создаёт новый уникальный вариант</p>
+            </div>
+            <div class="bg-slate-700/50 rounded-xl px-5 py-3 border border-slate-600 text-center">
+                <span class="text-slate-400 text-sm">В варианте</span>
+                <div class="text-emerald-400 font-bold text-2xl">14 заданий</div>
             </div>
         </div>
 
-        <button type="submit" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white font-bold text-lg rounded-xl transition-all shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40">
+        @php
+            $newHash = substr(md5(uniqid(mt_rand(), true)), 0, 10);
+        @endphp
+
+        <a href="{{ route('test.oge.show', ['hash' => $newHash]) }}"
+           class="block w-full py-4 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white font-bold text-lg rounded-xl transition-all shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 text-center">
             🎯 Сгенерировать вариант
-        </button>
-    </form>
+        </a>
+    </div>
 
     {{-- Features --}}
     <div class="grid grid-cols-3 gap-4 mt-10">
@@ -116,12 +106,12 @@
             <div class="text-slate-400 text-sm">Случайные задания</div>
         </div>
         <div class="bg-slate-800/50 rounded-xl p-5 text-center border border-slate-700">
-            <div class="text-3xl mb-2">🖨️</div>
-            <div class="text-slate-400 text-sm">Готов к печати</div>
+            <div class="text-3xl mb-2">🔗</div>
+            <div class="text-slate-400 text-sm">Уникальная ссылка</div>
         </div>
         <div class="bg-slate-800/50 rounded-xl p-5 text-center border border-slate-700">
-            <div class="text-3xl mb-2">📱</div>
-            <div class="text-slate-400 text-sm">На любом устройстве</div>
+            <div class="text-3xl mb-2">🖨️</div>
+            <div class="text-slate-400 text-sm">Готов к печати</div>
         </div>
     </div>
 
