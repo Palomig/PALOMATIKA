@@ -4937,4 +4937,73 @@ class TestPdfController extends Controller
             ],
         ];
     }
+
+    /**
+     * Show OGE variant generator page
+     */
+    public function ogeGenerator()
+    {
+        return view('test.oge-generator');
+    }
+
+    /**
+     * Generate a full OGE variant with tasks 6-19
+     */
+    public function generateOgeVariant(Request $request)
+    {
+        $variantNumber = $request->input('variant_number', rand(1, 999));
+
+        $topicIds = ['06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19'];
+
+        $topicTitles = [
+            '06' => 'Вычисления',
+            '07' => 'Числа, координатная прямая',
+            '08' => 'Квадратные корни и степени',
+            '09' => 'Уравнения',
+            '10' => 'Теория вероятностей',
+            '11' => 'Графики функций',
+            '12' => 'Расчёты по формулам',
+            '13' => 'Неравенства',
+            '14' => 'Прогрессии',
+            '15' => 'Треугольники',
+            '16' => 'Окружность',
+            '17' => 'Четырёхугольники',
+            '18' => 'Фигуры на клетчатой бумаге',
+            '19' => 'Анализ геометрических высказываний',
+        ];
+
+        $tasks = [];
+
+        foreach ($topicIds as $topicId) {
+            $task = $this->getOneRandomTaskForOge($topicId);
+            if ($task) {
+                $task['topic_id'] = $topicId;
+                $task['topic_title'] = $topicTitles[$topicId] ?? '';
+                $tasks[] = $task;
+            }
+        }
+
+        return view('test.oge-variant', [
+            'tasks' => $tasks,
+            'variantNumber' => $variantNumber,
+        ]);
+    }
+
+    /**
+     * Get one random task for OGE variant
+     */
+    protected function getOneRandomTaskForOge(string $topicId): ?array
+    {
+        // Use existing methods to get random tasks
+        $methodName = 'getRandomTasksFromManualData' . $topicId;
+
+        if (method_exists($this, $methodName)) {
+            $tasks = $this->$methodName(1);
+            return $tasks[0] ?? null;
+        }
+
+        // Fallback to task generator service
+        $tasks = $this->taskGenerator->getRandomTasksFromTopic($topicId, 1);
+        return $tasks[0] ?? null;
+    }
 }
