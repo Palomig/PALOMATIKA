@@ -293,16 +293,18 @@
                         </div>
                     @endif
 
-                {{-- ===== TOPIC 11: Graphs with SVG rendering ===== --}}
+                {{-- ===== TOPIC 11: Graphs ===== --}}
                 @elseif($topicId === '11')
                     @php
                         $options = $task['options'] ?? [];
                         $graphLabels = ['А', 'Б', 'В', 'Г'];
                         $uniqueId = $taskNumber;
+                        // Check if options contain formulas (y = ...) or coefficient signs (a < 0, c > 0)
+                        $isFormulaMatching = !empty($options) && str_contains($options[0] ?? '', 'y =');
                     @endphp
 
-                    {{-- Three separate graphs in a row --}}
-                    @if(count($options) >= 3)
+                    @if($isFormulaMatching && count($options) >= 3)
+                        {{-- Type: matching formulas - render graphs from formulas --}}
                         <div class="grid grid-cols-3 gap-4 mb-6">
                             @foreach(array_slice($options, 0, 3) as $optIndex => $formula)
                                 <div class="bg-slate-900/50 rounded-lg p-3">
@@ -341,6 +343,20 @@
                                 });
                             });
                         </script>
+                    @elseif(!empty($task['image']))
+                        {{-- Type: matching_signs - load image from file --}}
+                        <div class="bg-slate-900/50 rounded-xl p-4 mb-4 flex justify-center">
+                            <img src="/images/tasks/11/{{ $task['image'] }}" alt="График" class="max-h-64 rounded">
+                        </div>
+
+                        {{-- Options to match --}}
+                        <div class="flex flex-wrap gap-4 mb-4 justify-center">
+                            @foreach($options as $i => $opt)
+                                <span class="bg-slate-700 text-slate-200 px-4 py-2 rounded-lg text-sm">
+                                    {{ $i + 1 }}) {{ $opt }}
+                                </span>
+                            @endforeach
+                        </div>
                     @endif
 
                 {{-- ===== TOPIC 14: Word Problems (Progressions) ===== --}}
