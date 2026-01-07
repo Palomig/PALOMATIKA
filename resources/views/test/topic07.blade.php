@@ -361,8 +361,8 @@
                         @endforeach
                     </div>
 
-                @elseif(in_array($zadanie['type'], ['interval_choice', 'sqrt_interval', 'negative_interval']))
-                    {{-- Interval choices - grid --}}
+                @elseif(in_array($zadanie['type'], ['interval_choice', 'sqrt_interval', 'negative_interval', 'sqrt_choice']))
+                    {{-- Interval/sqrt choices - grid --}}
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         @foreach($zadanie['tasks'] as $task)
                             <div class="bg-slate-800/70 rounded-xl p-4 border border-slate-700">
