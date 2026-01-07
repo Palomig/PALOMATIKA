@@ -994,13 +994,14 @@ class TestPdfController extends Controller
                         'number' => 14,
                         'instruction' => 'Одно из чисел отмечено на прямой точкой А. Какое это число?',
                         'type' => 'fraction_options',
+                        'svg_type' => 'single_point',
                         'tasks' => [
-                            ['id' => 1, 'options' => ['\frac{3}{11}', '\frac{7}{11}', '\frac{8}{11}', '\frac{13}{11}']],
-                            ['id' => 2, 'options' => ['\frac{10}{17}', '\frac{11}{17}', '\frac{13}{17}', '\frac{14}{17}']],
-                            ['id' => 3, 'options' => ['\frac{3}{13}', '\frac{9}{13}', '\frac{10}{13}', '\frac{12}{13}']],
-                            ['id' => 4, 'options' => ['\frac{10}{23}', '\frac{11}{23}', '\frac{13}{23}', '\frac{14}{23}']],
-                            ['id' => 5, 'options' => ['\frac{2}{7}', '\frac{4}{7}', '\frac{10}{7}', '\frac{11}{7}']],
-                            ['id' => 6, 'options' => ['\frac{6}{23}', '\frac{7}{23}', '\frac{11}{23}', '\frac{12}{23}']],
+                            ['id' => 1, 'point_value' => 8/11, 'point_label' => 'A', 'options' => ['\frac{3}{11}', '\frac{7}{11}', '\frac{8}{11}', '\frac{13}{11}']],
+                            ['id' => 2, 'point_value' => 11/17, 'point_label' => 'A', 'options' => ['\frac{10}{17}', '\frac{11}{17}', '\frac{13}{17}', '\frac{14}{17}']],
+                            ['id' => 3, 'point_value' => 10/13, 'point_label' => 'A', 'options' => ['\frac{3}{13}', '\frac{9}{13}', '\frac{10}{13}', '\frac{12}{13}']],
+                            ['id' => 4, 'point_value' => 11/23, 'point_label' => 'A', 'options' => ['\frac{10}{23}', '\frac{11}{23}', '\frac{13}{23}', '\frac{14}{23}']],
+                            ['id' => 5, 'point_value' => 10/7, 'point_label' => 'A', 'options' => ['\frac{2}{7}', '\frac{4}{7}', '\frac{10}{7}', '\frac{11}{7}']],
+                            ['id' => 6, 'point_value' => 11/23, 'point_label' => 'A', 'options' => ['\frac{6}{23}', '\frac{7}{23}', '\frac{11}{23}', '\frac{12}{23}']],
                         ]
                     ],
                     // Задание 15 - Точка A соответствует числу (большие дроби)
@@ -1008,13 +1009,14 @@ class TestPdfController extends Controller
                         'number' => 15,
                         'instruction' => 'Одно из чисел отмечено на прямой точкой A. Какое это число?',
                         'type' => 'fraction_options',
+                        'svg_type' => 'single_point',
                         'tasks' => [
-                            ['id' => 1, 'options' => ['\frac{55}{19}', '\frac{64}{19}', '\frac{72}{19}', '\frac{79}{19}']],
-                            ['id' => 2, 'options' => ['\frac{71}{15}', '\frac{79}{15}', '\frac{86}{15}', '\frac{92}{15}']],
-                            ['id' => 3, 'options' => ['\frac{73}{22}', '\frac{83}{22}', '\frac{93}{22}', '\frac{113}{22}']],
-                            ['id' => 4, 'options' => ['\frac{58}{13}', '\frac{69}{13}', '\frac{76}{13}', '\frac{83}{13}']],
-                            ['id' => 5, 'options' => ['\frac{75}{23}', '\frac{85}{23}', '\frac{97}{23}', '\frac{110}{23}']],
-                            ['id' => 6, 'options' => ['\frac{31}{11}', '\frac{37}{11}', '\frac{41}{11}', '\frac{47}{11}']],
+                            ['id' => 1, 'point_value' => 64/19, 'point_label' => 'A', 'options' => ['\frac{55}{19}', '\frac{64}{19}', '\frac{72}{19}', '\frac{79}{19}']],
+                            ['id' => 2, 'point_value' => 79/15, 'point_label' => 'A', 'options' => ['\frac{71}{15}', '\frac{79}{15}', '\frac{86}{15}', '\frac{92}{15}']],
+                            ['id' => 3, 'point_value' => 83/22, 'point_label' => 'A', 'options' => ['\frac{73}{22}', '\frac{83}{22}', '\frac{93}{22}', '\frac{113}{22}']],
+                            ['id' => 4, 'point_value' => 69/13, 'point_label' => 'A', 'options' => ['\frac{58}{13}', '\frac{69}{13}', '\frac{76}{13}', '\frac{83}{13}']],
+                            ['id' => 5, 'point_value' => 85/23, 'point_label' => 'A', 'options' => ['\frac{75}{23}', '\frac{85}{23}', '\frac{97}{23}', '\frac{110}{23}']],
+                            ['id' => 6, 'point_value' => 37/11, 'point_label' => 'A', 'options' => ['\frac{31}{11}', '\frac{37}{11}', '\frac{41}{11}', '\frac{47}{11}']],
                         ]
                     ],
                     // Задание 16 - Десятичные числа на прямой
