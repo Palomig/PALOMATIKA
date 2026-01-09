@@ -123,5 +123,8 @@
     <p class="text-center text-slate-500 text-sm mt-8">Текстовые задачи на прогрессии</p>
 </div>
 
+{{-- Инструмент для пометки заданий --}}
+@include('components.task-review-tool', ['topicId' => '14'])
+
 </body>
 </html>

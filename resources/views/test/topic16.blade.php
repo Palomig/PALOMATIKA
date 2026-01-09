@@ -913,5 +913,8 @@
     }
 </script>
 
+{{-- Инструмент для пометки заданий --}}
+@include('components.task-review-tool', ['topicId' => '16'])
+
 </body>
 </html>

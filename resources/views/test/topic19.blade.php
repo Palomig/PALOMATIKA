@@ -380,5 +380,9 @@
             });
         }
     </script>
+
+{{-- Инструмент для пометки заданий --}}
+@include('components.task-review-tool', ['topicId' => '19'])
+
 </body>
 </html>

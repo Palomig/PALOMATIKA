@@ -261,5 +261,8 @@
     </ul>
 </div>
 
+{{-- Инструмент для пометки заданий --}}
+@include('components.task-review-tool', ['topicId' => '10'])
+
 </body>
 </html>
