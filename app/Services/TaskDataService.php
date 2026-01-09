@@ -108,6 +108,11 @@ class TaskDataService
     public function __construct()
     {
         $this->basePath = storage_path('app/tasks');
+
+        // Автоматически создаём директорию если её нет
+        if (!File::isDirectory($this->basePath)) {
+            File::makeDirectory($this->basePath, 0755, true);
+        }
     }
 
     /**
