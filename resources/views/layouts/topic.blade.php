@@ -40,9 +40,10 @@
         .number-line { font-family: 'Times New Roman', serif; }
         .geo-label { font-family: 'PT Serif', serif; font-style: italic; }
         /* Увеличиваем размер KaTeX формул */
-        .katex { font-size: 1.3em; }
-        /* Для дробей делаем ещё крупнее */
-        .katex .mfrac { font-size: 1.1em; }
+        .katex { font-size: 1.5em; }
+        /* Для вложенных дробей (трёхэтажных) предотвращаем чрезмерное уменьшение */
+        .katex .mfrac .mfrac { font-size: 1.15em; }
+        .katex .mfrac .mfrac .mfrac { font-size: 1.1em; }
     </style>
 
     @stack('styles')
