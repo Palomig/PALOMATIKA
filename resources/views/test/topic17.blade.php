@@ -27,6 +27,10 @@
             user-select: none;
             pointer-events: none;
         }
+        /* Увеличиваем размер KaTeX формул */
+        .katex { font-size: 1.3em; }
+        /* Для дробей делаем ещё крупнее */
+        .katex .mfrac { font-size: 1.1em; }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">

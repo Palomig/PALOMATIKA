@@ -30,6 +30,10 @@
             font-weight: 500;
             user-select: none;
         }
+        /* Увеличиваем размер KaTeX формул */
+        .katex { font-size: 1.3em; }
+        /* Для дробей делаем ещё крупнее */
+        .katex .mfrac { font-size: 1.1em; }
 
         /* Print styles */
         @media print {

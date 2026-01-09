@@ -14,6 +14,13 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* Увеличиваем размер KaTeX формул */
+        .katex { font-size: 1.3em; }
+        /* Для дробей делаем ещё крупнее */
+        .katex .mfrac { font-size: 1.1em; }
+    </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
 
