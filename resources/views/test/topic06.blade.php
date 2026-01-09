@@ -93,7 +93,11 @@
                     {{-- Задание с знаменателем - формат параграфа --}}
                     <div class="space-y-3">
                         @foreach($zadanie['tasks'] as $task)
-                            <div class="bg-slate-800/70 rounded-xl p-4 border border-slate-700">
+                            @php
+                                $taskKey = "topic_06_block_{$block['number']}_zadanie_{$zadanie['number']}_task_{$task['id']}";
+                                $taskInfo = "Блок {$block['number']} ({$block['title']}), Задание {$zadanie['number']}, Задача {$task['id']}<br>Выражение: <code>{$task['expression']}</code>";
+                            @endphp
+                            <div class="bg-slate-800/70 rounded-xl p-4 border border-slate-700 task-review-item" data-task-key="{{ $taskKey }}" data-task-info="{{ $taskInfo }}">
                                 <span class="text-blue-400 font-bold">{{ $task['id'] }})</span>
                                 <span class="text-slate-200 ml-2">Представьте выражение ${{ $task['expression'] }}$ в виде дроби со знаменателем {{ $task['denominator'] }}. В ответ запишите числитель полученной дроби.</span>
                             </div>
@@ -103,7 +107,11 @@
                     {{-- Сетка задач --}}
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                         @foreach($zadanie['tasks'] as $task)
-                            <div class="bg-slate-800/70 rounded-lg p-3 border border-slate-700 hover:border-slate-600 transition-colors">
+                            @php
+                                $taskKey = "topic_06_block_{$block['number']}_zadanie_{$zadanie['number']}_task_{$task['id']}";
+                                $taskInfo = "Блок {$block['number']} ({$block['title']}), Задание {$zadanie['number']}, Задача {$task['id']}<br>Выражение: <code>{$task['expression']}</code>";
+                            @endphp
+                            <div class="bg-slate-800/70 rounded-lg p-3 border border-slate-700 hover:border-slate-600 transition-colors task-review-item" data-task-key="{{ $taskKey }}" data-task-info="{{ $taskInfo }}">
                                 <span class="text-blue-400 font-bold">{{ $task['id'] }})</span>
                                 <span class="text-slate-200 ml-2">${{ $task['expression'] }}$</span>
                             </div>
@@ -131,6 +139,26 @@
 
     <p class="text-center text-slate-500 text-sm mt-8">Формулы отображаются с помощью KaTeX</p>
 </div>
+
+{{-- Инструмент для пометки заданий --}}
+@include('components.task-review-tool', ['topicId' => '06'])
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Добавляем кнопки флагов ко всем заданиям
+    document.querySelectorAll('.task-review-item').forEach(function(item) {
+        const taskKey = item.dataset.taskKey;
+        const taskInfo = item.dataset.taskInfo;
+        if (taskKey && window.TaskReview) {
+            window.TaskReview.addFlagButton(item, taskKey, taskInfo);
+        }
+    });
+    // Обновляем UI после добавления кнопок
+    if (window.TaskReview) {
+        window.TaskReview.loadReviews();
+    }
+});
+</script>
 
 </body>
 </html>

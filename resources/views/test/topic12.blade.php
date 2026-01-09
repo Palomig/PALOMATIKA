@@ -124,5 +124,8 @@
     <p class="text-center text-slate-500 text-sm mt-8">Формулы отображаются с помощью KaTeX</p>
 </div>
 
+{{-- Инструмент для пометки заданий --}}
+@include('components.task-review-tool', ['topicId' => '12'])
+
 </body>
 </html>

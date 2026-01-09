@@ -520,5 +520,8 @@
     <p class="text-center text-slate-500 text-sm mt-8">SVG числовые прямые генерируются на сервере (PHP)</p>
 </div>
 
+{{-- Инструмент для пометки заданий --}}
+@include('components.task-review-tool', ['topicId' => '07'])
+
 </body>
 </html>
