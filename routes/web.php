@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\Auth\TelegramBotAuthController;
 use App\Http\Controllers\TestPdfController;
+use App\Http\Controllers\TopicController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -56,14 +57,10 @@ Route::middleware(['auth'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    // Student pages
-    Route::get('/topics', function () {
-        return view('student.topics');
-    })->name('topics');
-
-    Route::get('/topics/{id}', function ($id) {
-        return view('student.topics', ['topicId' => $id]);
-    })->name('topics.show');
+    // Student pages (redirects to new topics system)
+    Route::get('/student/topics', function () {
+        return redirect()->route('topics.index');
+    })->name('student.topics');
 
     Route::get('/practice', function () {
         return view('student.practice');
@@ -121,7 +118,23 @@ Route::middleware(['auth'])->group(function () {
     })->name('logout');
 });
 
-// Test pages for PDF parsing (public for development)
+// New unified topic pages (JSON-based)
+Route::prefix('topics')->name('topics.')->group(function () {
+    Route::get('/', [TopicController::class, 'index'])->name('index');
+    Route::get('/{id}', [TopicController::class, 'show'])->name('show')->where('id', '[0-9]+');
+});
+
+// OGE Generator (new)
+Route::get('/oge', [TopicController::class, 'ogeGenerator'])->name('oge.generator');
+Route::get('/oge/{hash}', [TopicController::class, 'showOgeVariant'])->name('oge.show');
+
+// API for tasks
+Route::prefix('api/topics')->group(function () {
+    Route::get('/{topicId}/random', [TopicController::class, 'apiGetRandomTasks']);
+    Route::get('/{topicId}', [TopicController::class, 'apiGetTopicData']);
+});
+
+// Test pages for PDF parsing (legacy, public for development)
 Route::prefix('test')->group(function () {
     // Index page with all topics
     Route::get('/', [TestPdfController::class, 'index'])->name('test.index');
