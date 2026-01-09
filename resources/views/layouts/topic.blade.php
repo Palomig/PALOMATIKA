@@ -39,6 +39,10 @@
         .math-serif { font-family: 'PT Serif', Georgia, serif; }
         .number-line { font-family: 'Times New Roman', serif; }
         .geo-label { font-family: 'PT Serif', serif; font-style: italic; }
+        /* Увеличиваем размер KaTeX формул */
+        .katex { font-size: 1.3em; }
+        /* Для дробей делаем ещё крупнее */
+        .katex .mfrac { font-size: 1.1em; }
     </style>
 
     @stack('styles')
