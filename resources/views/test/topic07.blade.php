@@ -16,7 +16,8 @@
                 if (el.childNodes.length === 1 && el.childNodes[0].nodeType === 3) {
                     let text = el.childNodes[0].textContent;
                     if (text.includes('$') && text.includes('\\frac')) {
-                        text = text.replace(/\$([^$]*\\frac)/g, '$\\displaystyle $1');
+                        // Заменяем ВСЕ \frac на \displaystyle\frac
+                        text = text.replace(/\\frac\{/g, '\\displaystyle\\frac{');
                         el.childNodes[0].textContent = text;
                     }
                 }
