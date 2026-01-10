@@ -16,10 +16,8 @@
     <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
     <style>
-        /* Размеры KaTeX формул по типам */
-        .katex { font-size: 1.3em; }                                /* Десятичные дроби */
-        .katex .mfrac .sizing { font-size: 1em !important; }        /* Двухэтажные дроби */
-        .katex .mfrac .mfrac .sizing { font-size: 0.9em !important; } /* Трёхэтажные дроби */
+        /* Увеличенный размер KaTeX формул */
+        .katex { font-size: 1.4em; }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">

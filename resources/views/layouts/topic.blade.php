@@ -39,10 +39,8 @@
         .math-serif { font-family: 'PT Serif', Georgia, serif; }
         .number-line { font-family: 'Times New Roman', serif; }
         .geo-label { font-family: 'PT Serif', serif; font-style: italic; }
-        /* Размеры KaTeX формул по типам */
-        .katex { font-size: 1.3em; }                                /* Десятичные дроби */
-        .katex .mfrac .sizing { font-size: 1em !important; }        /* Двухэтажные дроби */
-        .katex .mfrac .mfrac .sizing { font-size: 0.9em !important; } /* Трёхэтажные дроби */
+        /* Увеличенный размер KaTeX формул */
+        .katex { font-size: 1.4em; }
     </style>
 
     @stack('styles')
