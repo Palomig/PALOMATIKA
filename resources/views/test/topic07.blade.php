@@ -20,9 +20,9 @@
         [x-cloak] { display: none !important; }
         .number-line { font-family: 'Times New Roman', serif; }
         /* Размеры KaTeX формул по типам */
-        .katex { font-size: 1.3em; }                    /* Десятичные дроби */
-        .katex .mfrac { font-size: 1em; }               /* Двухэтажные дроби */
-        .katex .mfrac .mfrac { font-size: 0.9em; }      /* Трёхэтажные дроби */
+        .katex { font-size: 1.3em; }                                /* Десятичные дроби */
+        .katex .mfrac .sizing { font-size: 1em !important; }        /* Двухэтажные дроби */
+        .katex .mfrac .mfrac .sizing { font-size: 0.9em !important; } /* Трёхэтажные дроби */
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
