@@ -30,11 +30,10 @@
             font-weight: 500;
             user-select: none;
         }
-        /* Увеличиваем размер KaTeX формул */
-        .katex { font-size: 1.5em; }
-        /* Для вложенных дробей (трёхэтажных) предотвращаем чрезмерное уменьшение */
-        .katex .mfrac .mfrac { font-size: 1.15em; }
-        .katex .mfrac .mfrac .mfrac { font-size: 1.1em; }
+        /* Размеры KaTeX формул по типам */
+        .katex { font-size: 1.3em; }                    /* Десятичные дроби */
+        .katex .mfrac { font-size: 1em; }               /* Двухэтажные дроби */
+        .katex .mfrac .mfrac { font-size: 0.9em; }      /* Трёхэтажные дроби */
 
         /* Print styles */
         @media print {
