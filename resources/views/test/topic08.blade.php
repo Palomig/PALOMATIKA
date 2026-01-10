@@ -8,7 +8,27 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-            onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+            onload="renderMathWithDisplayStyle()"></script>
+    <script>
+        function renderMathWithDisplayStyle() {
+            // Добавляем \displaystyle к формулам с дробями для увеличения размера
+            document.querySelectorAll('body *').forEach(el => {
+                if (el.childNodes.length === 1 && el.childNodes[0].nodeType === 3) {
+                    let text = el.childNodes[0].textContent;
+                    if (text.includes('$') && text.includes('\\frac')) {
+                        text = text.replace(/\$([^$]*\\frac)/g, '$\\displaystyle $1');
+                        el.childNodes[0].textContent = text;
+                    }
+                }
+            });
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ]
+            });
+        }
+    </script>
 
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -16,8 +36,7 @@
     <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
     <style>
-        /* Увеличенный размер KaTeX формул */
-        .katex { font-size: 1.4em; }
+        .katex { font-size: 1.1em; }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">

@@ -9,7 +9,26 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-            onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+            onload="renderMathWithDisplayStyle()"></script>
+    <script>
+        function renderMathWithDisplayStyle() {
+            document.querySelectorAll('body *').forEach(el => {
+                if (el.childNodes.length === 1 && el.childNodes[0].nodeType === 3) {
+                    let text = el.childNodes[0].textContent;
+                    if (text.includes('$') && text.includes('\\frac')) {
+                        text = text.replace(/\$([^$]*\\frac)/g, '$\\displaystyle $1');
+                        el.childNodes[0].textContent = text;
+                    }
+                }
+            });
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ]
+            });
+        }
+    </script>
 
     {{-- Alpine.js для интерактивности --}}
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -39,8 +58,7 @@
         .math-serif { font-family: 'PT Serif', Georgia, serif; }
         .number-line { font-family: 'Times New Roman', serif; }
         .geo-label { font-family: 'PT Serif', serif; font-style: italic; }
-        /* Увеличенный размер KaTeX формул */
-        .katex { font-size: 1.4em; }
+        .katex { font-size: 1.1em; }
     </style>
 
     @stack('styles')
