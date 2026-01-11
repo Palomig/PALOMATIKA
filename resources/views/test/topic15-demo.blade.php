@@ -94,7 +94,8 @@
     }
 
     // 6. Позиция метки угла — ровно посередине между двумя сторонами
-    function angleLabelPos(vertex, p1, p2, labelRadius) {
+    //    bias: 0.5 = точная середина, <0.5 = ближе к p1, >0.5 = ближе к p2
+    function angleLabelPos(vertex, p1, p2, labelRadius, bias = 0.5) {
         const angle1 = Math.atan2(p1.y - vertex.y, p1.x - vertex.x);
         const angle2 = Math.atan2(p2.y - vertex.y, p2.x - vertex.x);
 
@@ -103,8 +104,8 @@
         while (diff > Math.PI) diff -= 2 * Math.PI;
         while (diff < -Math.PI) diff += 2 * Math.PI;
 
-        // Середина угла = angle1 + половина нормализованной разницы
-        const midAngle = angle1 + diff / 2;
+        // Позиция = angle1 + bias * diff
+        const midAngle = angle1 + diff * bias;
 
         return {
             x: vertex.x + labelRadius * Math.cos(midAngle),
@@ -203,8 +204,8 @@
                             <text :x="D.x + 14" :y="D.y - 8"
                                 fill="#10b981" font-size="16" class="geo-label" text-anchor="start" dominant-baseline="middle">D</text>
 
-                            {{-- Метка угла 68° — в верхней половине угла (BAD), дальше от вершины --}}
-                            <text :x="angleLabelPos(A, B, D, 62).x" :y="angleLabelPos(A, B, D, 62).y"
+                            {{-- Метка угла 68° — bias=0.35 смещает к стороне AB --}}
+                            <text :x="angleLabelPos(A, B, D, 62, 0.35).x" :y="angleLabelPos(A, B, D, 62, 0.35).y"
                                 fill="#f59e0b" font-size="13" class="geo-label" text-anchor="middle" dominant-baseline="middle">68°</text>
                         </svg>
                     </div>
@@ -248,8 +249,8 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="D.x + 14" :y="D.y - 8" fill="#10b981" font-size="16" class="geo-label">D</text>
 
-                            {{-- Метка угла 82° — дальше от вершины --}}
-                            <text :x="angleLabelPos(A, B, D, 62).x" :y="angleLabelPos(A, B, D, 62).y"
+                            {{-- Метка угла 82° — bias=0.35 смещает к стороне AB --}}
+                            <text :x="angleLabelPos(A, B, D, 62, 0.35).x" :y="angleLabelPos(A, B, D, 62, 0.35).y"
                                 fill="#f59e0b" font-size="13" class="geo-label" text-anchor="middle">82°</text>
                         </svg>
                     </div>
