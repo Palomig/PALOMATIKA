@@ -304,12 +304,12 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="M.x" :y="M.y + 18" fill="#10b981" font-size="16" class="geo-label" text-anchor="middle">M</text>
 
-                            {{-- Метка длины AC: между M и C, ниже основания --}}
-                            <text :x="(M.x + C.x) / 2" :y="A.y + 16"
+                            {{-- Метка длины AC: по центру всего основания --}}
+                            <text :x="(A.x + C.x) / 2" :y="A.y + 16"
                                 fill="#f59e0b" font-size="13" class="geo-label" text-anchor="middle">14</text>
 
-                            {{-- Метка длины BM: слева от медианы, на 1/3 высоты от B --}}
-                            <text :x="B.x - 22" :y="B.y + (M.y - B.y) * 0.35"
+                            {{-- Метка длины BM: сбоку от медианы, по центру высоты --}}
+                            <text :x="B.x - 20" :y="(B.y + M.y) / 2"
                                 fill="#10b981" font-size="13" class="geo-label" text-anchor="middle">10</text>
                         </svg>
                     </div>
@@ -352,12 +352,12 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="M.x" :y="M.y + 18" fill="#10b981" font-size="16" class="geo-label" text-anchor="middle">M</text>
 
-                            {{-- Метка длины AC: между M и C, ниже основания --}}
-                            <text :x="(M.x + C.x) / 2" :y="A.y + 16"
+                            {{-- Метка длины AC: по центру всего основания --}}
+                            <text :x="(A.x + C.x) / 2" :y="A.y + 16"
                                 fill="#f59e0b" font-size="13" class="geo-label" text-anchor="middle">16</text>
 
-                            {{-- Метка длины BM: слева от медианы, на 1/3 высоты от B --}}
-                            <text :x="B.x - 22" :y="B.y + (M.y - B.y) * 0.35"
+                            {{-- Метка длины BM: сбоку от медианы, по центру высоты --}}
+                            <text :x="B.x - 20" :y="(B.y + M.y) / 2"
                                 fill="#10b981" font-size="13" class="geo-label" text-anchor="middle">12</text>
                         </svg>
                     </div>
