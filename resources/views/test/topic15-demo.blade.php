@@ -306,11 +306,11 @@
 
                             {{-- Метка длины AC (перпендикулярно, снизу) --}}
                             <text :x="labelOnSegment(A, C, 18, true).x" :y="labelOnSegment(A, C, 18, true).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">AC = 14</text>
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">14</text>
 
-                            {{-- Метка длины BM (слева от медианы, flipSide=true чтобы не накладывалась) --}}
-                            <text :x="labelOnSegment(B, M, 18, true).x" :y="labelOnSegment(B, M, 18, true).y"
-                                fill="#10b981" font-size="11" class="geo-label" text-anchor="middle">BM = 10</text>
+                            {{-- Метка длины BM (слева от медианы, смещение 25px чтобы не накладывалась) --}}
+                            <text :x="labelOnSegment(B, M, 25, false).x" :y="labelOnSegment(B, M, 25, false).y"
+                                fill="#10b981" font-size="11" class="geo-label" text-anchor="middle">10</text>
                         </svg>
                     </div>
 
@@ -353,11 +353,11 @@
                             <text :x="M.x" :y="M.y + 18" fill="#10b981" font-size="16" class="geo-label" text-anchor="middle">M</text>
 
                             <text :x="labelOnSegment(A, C, 18, true).x" :y="labelOnSegment(A, C, 18, true).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">AC = 16</text>
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">16</text>
 
-                            {{-- Метка длины BM (слева от медианы) --}}
-                            <text :x="labelOnSegment(B, M, 18, true).x" :y="labelOnSegment(B, M, 18, true).y"
-                                fill="#10b981" font-size="11" class="geo-label" text-anchor="middle">BM = 12</text>
+                            {{-- Метка длины BM (слева от медианы, смещение 25px) --}}
+                            <text :x="labelOnSegment(B, M, 25, false).x" :y="labelOnSegment(B, M, 25, false).y"
+                                fill="#10b981" font-size="11" class="geo-label" text-anchor="middle">12</text>
                         </svg>
                     </div>
 
