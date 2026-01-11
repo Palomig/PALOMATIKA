@@ -178,11 +178,11 @@
                             <line :x1="A.x" :y1="A.y" :x2="D.x" :y2="D.y"
                                 stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            {{-- Дуга полного угла BAC --}}
-                            <path :d="makeAngleArc(A, B, C, 35)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            {{-- Дуга полного угла BAC — увеличенный радиус для места под текст --}}
+                            <path :d="makeAngleArc(A, B, C, 45)" fill="none" stroke="#f59e0b" stroke-width="2"/>
 
                             {{-- Дуга искомого угла BAD --}}
-                            <path :d="makeAngleArc(A, B, D, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, B, D, 30)" fill="none" stroke="#10b981" stroke-width="2"/>
 
                             {{-- Точки вершин --}}
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
@@ -202,8 +202,8 @@
                             <text :x="D.x + 14" :y="D.y - 8"
                                 fill="#10b981" font-size="16" class="geo-label" text-anchor="start" dominant-baseline="middle">D</text>
 
-                            {{-- Метка угла 68° — в верхней половине угла (BAD), НЕ на биссектрисе --}}
-                            <text :x="angleLabelPos(A, B, D, 50).x" :y="angleLabelPos(A, B, D, 50).y"
+                            {{-- Метка угла 68° — в верхней половине угла (BAD), дальше от вершины --}}
+                            <text :x="angleLabelPos(A, B, D, 62).x" :y="angleLabelPos(A, B, D, 62).y"
                                 fill="#f59e0b" font-size="13" class="geo-label" text-anchor="middle" dominant-baseline="middle">68°</text>
                         </svg>
                     </div>
@@ -230,8 +230,9 @@
                             <line :x1="A.x" :y1="A.y" :x2="D.x" :y2="D.y"
                                 stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <path :d="makeAngleArc(A, B, C, 35)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(A, B, D, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            {{-- Увеличенные радиусы дуг --}}
+                            <path :d="makeAngleArc(A, B, C, 45)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, B, D, 30)" fill="none" stroke="#10b981" stroke-width="2"/>
 
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
                             <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
@@ -246,8 +247,8 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="D.x + 14" :y="D.y - 8" fill="#10b981" font-size="16" class="geo-label">D</text>
 
-                            {{-- Метка угла 82° — в верхней половине угла (BAD), НЕ на биссектрисе --}}
-                            <text :x="angleLabelPos(A, B, D, 50).x" :y="angleLabelPos(A, B, D, 50).y"
+                            {{-- Метка угла 82° — дальше от вершины --}}
+                            <text :x="angleLabelPos(A, B, D, 62).x" :y="angleLabelPos(A, B, D, 62).y"
                                 fill="#f59e0b" font-size="13" class="geo-label" text-anchor="middle">82°</text>
                         </svg>
                     </div>
