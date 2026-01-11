@@ -179,10 +179,10 @@
                                 stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
 
                             {{-- Дуга полного угла BAC --}}
-                            <path :d="makeAngleArc(A, B, C, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, B, C, 35)" fill="none" stroke="#f59e0b" stroke-width="2"/>
 
                             {{-- Дуга искомого угла BAD --}}
-                            <path :d="makeAngleArc(A, B, D, 22)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, B, D, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
 
                             {{-- Точки вершин --}}
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
@@ -191,25 +191,20 @@
                             <circle :cx="D.x" :cy="D.y" r="4" fill="#10b981"/>
 
                             {{-- Подписи вершин (от центра) --}}
-                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                            <text :x="labelPos(A, center, 24).x" :y="labelPos(A, center, 24).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
-                            {{-- Подпись D (на стороне BC, чуть ниже) --}}
-                            <text :x="labelOnSegment(B, C, 18, true).x" :y="labelOnSegment(B, C, 18, true).y"
-                                fill="#10b981" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle"
-                                :transform="`translate(${D.x - labelOnSegment(B, C, 18, true).x}, ${D.y - labelOnSegment(B, C, 18, true).y + 18})`">D</text>
+                            {{-- Подпись D (справа от точки D) --}}
+                            <text :x="D.x + 14" :y="D.y - 8"
+                                fill="#10b981" font-size="16" class="geo-label" text-anchor="start" dominant-baseline="middle">D</text>
 
-                            {{-- Метка угла 68° --}}
-                            <text :x="angleLabelPos(A, B, C, 48).x" :y="angleLabelPos(A, B, C, 48).y"
+                            {{-- Метка угла 68° — внутри угла, дальше от вершины --}}
+                            <text :x="angleLabelPos(A, B, C, 55).x" :y="angleLabelPos(A, B, C, 55).y"
                                 fill="#f59e0b" font-size="13" class="geo-label" text-anchor="middle" dominant-baseline="middle">68°</text>
-
-                            {{-- Метка искомого угла --}}
-                            <text :x="angleLabelPos(A, B, D, 38).x" :y="angleLabelPos(A, B, D, 38).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle" dominant-baseline="middle">?</text>
                         </svg>
                     </div>
 
@@ -235,23 +230,23 @@
                             <line :x1="A.x" :y1="A.y" :x2="D.x" :y2="D.y"
                                 stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <path :d="makeAngleArc(A, B, C, 28)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(A, B, D, 20)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, B, C, 35)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, B, D, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
 
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
                             <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
                             <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
                             <circle :cx="D.x" :cy="D.y" r="4" fill="#10b981"/>
 
-                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                            <text :x="labelPos(A, center, 24).x" :y="labelPos(A, center, 24).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
-                            <text :x="D.x + 12" :y="D.y + 5" fill="#10b981" font-size="16" class="geo-label">D</text>
+                            <text :x="D.x + 14" :y="D.y - 8" fill="#10b981" font-size="16" class="geo-label">D</text>
 
-                            <text :x="angleLabelPos(A, B, C, 45).x" :y="angleLabelPos(A, B, C, 45).y"
+                            <text :x="angleLabelPos(A, B, C, 55).x" :y="angleLabelPos(A, B, C, 55).y"
                                 fill="#f59e0b" font-size="13" class="geo-label" text-anchor="middle">82°</text>
                         </svg>
                     </div>
@@ -309,8 +304,8 @@
                             <text :x="labelOnSegment(A, C, 18, true).x" :y="labelOnSegment(A, C, 18, true).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">AC = 14</text>
 
-                            {{-- Метка длины BM (перпендикулярно медиане) --}}
-                            <text :x="labelOnSegment(B, M, 16).x" :y="labelOnSegment(B, M, 16).y"
+                            {{-- Метка длины BM (слева от медианы, flipSide=true чтобы не накладывалась) --}}
+                            <text :x="labelOnSegment(B, M, 18, true).x" :y="labelOnSegment(B, M, 18, true).y"
                                 fill="#10b981" font-size="11" class="geo-label" text-anchor="middle">BM = 10</text>
                         </svg>
                     </div>
@@ -355,6 +350,10 @@
 
                             <text :x="labelOnSegment(A, C, 18, true).x" :y="labelOnSegment(A, C, 18, true).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">AC = 16</text>
+
+                            {{-- Метка длины BM (слева от медианы) --}}
+                            <text :x="labelOnSegment(B, M, 18, true).x" :y="labelOnSegment(B, M, 18, true).y"
+                                fill="#10b981" font-size="11" class="geo-label" text-anchor="middle">BM = 12</text>
                         </svg>
                     </div>
 
@@ -387,9 +386,9 @@
                                 fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
                             {{-- Дуги углов --}}
-                            <path :d="makeAngleArc(A, C, B, 25)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, A, C, 22)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(C, B, A, 22)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, C, 28)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, B, A, 28)" fill="none" stroke="#10b981" stroke-width="2"/>
 
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
                             <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
@@ -402,12 +401,12 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
-                            {{-- Метки углов --}}
-                            <text :x="angleLabelPos(A, C, B, 42).x" :y="angleLabelPos(A, C, B, 42).y"
+                            {{-- Метки углов — внутри треугольника, рядом с дугой --}}
+                            <text :x="A.x + 50" :y="A.y - 18"
                                 fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">72°</text>
-                            <text :x="angleLabelPos(B, A, C, 38).x" :y="angleLabelPos(B, A, C, 38).y"
+                            <text :x="B.x - 42" :y="B.y + 30"
                                 fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">42°</text>
-                            <text :x="angleLabelPos(C, B, A, 38).x" :y="angleLabelPos(C, B, A, 38).y"
+                            <text :x="C.x - 42" :y="C.y - 18"
                                 fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
@@ -431,9 +430,9 @@
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                                 fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
-                            <path :d="makeAngleArc(A, C, B, 28)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, A, C, 18)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(C, B, A, 22)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, C, 22)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, B, A, 28)" fill="none" stroke="#10b981" stroke-width="2"/>
 
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
                             <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
@@ -446,10 +445,13 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
-                            <text :x="angleLabelPos(A, C, B, 45).x" :y="angleLabelPos(A, C, B, 45).y"
+                            {{-- Метки углов — внутри треугольника, рядом с дугой --}}
+                            <text :x="A.x + 50" :y="A.y - 18"
                                 fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">43°</text>
-                            <text :x="angleLabelPos(B, A, C, 35).x" :y="angleLabelPos(B, A, C, 35).y"
+                            <text :x="B.x - 35" :y="B.y + 28"
                                 fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">88°</text>
+                            <text :x="C.x - 42" :y="C.y - 18"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -495,14 +497,14 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
-                            {{-- Метки длин катетов --}}
-                            <text :x="labelOnSegment(A, C, 16, true).x" :y="labelOnSegment(A, C, 16, true).y"
+                            {{-- Метки длин катетов — ближе к сторонам --}}
+                            <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">24</text>
-                            <text :x="labelOnSegment(A, B, 16).x" :y="labelOnSegment(A, B, 16).y"
+                            <text :x="labelOnSegment(A, B, 12).x" :y="labelOnSegment(A, B, 12).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">7</text>
 
                             {{-- Метка гипотенузы (искомая) --}}
-                            <text :x="labelOnSegment(B, C, 16).x" :y="labelOnSegment(B, C, 16).y"
+                            <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
                                 fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
@@ -539,10 +541,15 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
-                            <text :x="labelOnSegment(A, C, 16, true).x" :y="labelOnSegment(A, C, 16, true).y"
+                            {{-- Метки длин катетов — ближе к сторонам --}}
+                            <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">15</text>
-                            <text :x="labelOnSegment(A, B, 16).x" :y="labelOnSegment(A, B, 16).y"
+                            <text :x="labelOnSegment(A, B, 12).x" :y="labelOnSegment(A, B, 12).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">8</text>
+
+                            {{-- Метка гипотенузы (искомая) --}}
+                            <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
