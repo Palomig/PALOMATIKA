@@ -304,13 +304,13 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="M.x" :y="M.y + 18" fill="#10b981" font-size="16" class="geo-label" text-anchor="middle">M</text>
 
-                            {{-- Метка длины AC (перпендикулярно, снизу) --}}
-                            <text :x="labelOnSegment(A, C, 18, true).x" :y="labelOnSegment(A, C, 18, true).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">14</text>
+                            {{-- Метка длины AC: между M и C, ниже основания --}}
+                            <text :x="(M.x + C.x) / 2" :y="A.y + 16"
+                                fill="#f59e0b" font-size="13" class="geo-label" text-anchor="middle">14</text>
 
-                            {{-- Метка длины BM (слева от медианы, смещение 25px чтобы не накладывалась) --}}
-                            <text :x="labelOnSegment(B, M, 25, false).x" :y="labelOnSegment(B, M, 25, false).y"
-                                fill="#10b981" font-size="11" class="geo-label" text-anchor="middle">10</text>
+                            {{-- Метка длины BM: слева от медианы, на 1/3 высоты от B --}}
+                            <text :x="B.x - 22" :y="B.y + (M.y - B.y) * 0.35"
+                                fill="#10b981" font-size="13" class="geo-label" text-anchor="middle">10</text>
                         </svg>
                     </div>
 
@@ -352,12 +352,13 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="M.x" :y="M.y + 18" fill="#10b981" font-size="16" class="geo-label" text-anchor="middle">M</text>
 
-                            <text :x="labelOnSegment(A, C, 18, true).x" :y="labelOnSegment(A, C, 18, true).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">16</text>
+                            {{-- Метка длины AC: между M и C, ниже основания --}}
+                            <text :x="(M.x + C.x) / 2" :y="A.y + 16"
+                                fill="#f59e0b" font-size="13" class="geo-label" text-anchor="middle">16</text>
 
-                            {{-- Метка длины BM (слева от медианы, смещение 25px) --}}
-                            <text :x="labelOnSegment(B, M, 25, false).x" :y="labelOnSegment(B, M, 25, false).y"
-                                fill="#10b981" font-size="11" class="geo-label" text-anchor="middle">12</text>
+                            {{-- Метка длины BM: слева от медианы, на 1/3 высоты от B --}}
+                            <text :x="B.x - 22" :y="B.y + (M.y - B.y) * 0.35"
+                                fill="#10b981" font-size="13" class="geo-label" text-anchor="middle">12</text>
                         </svg>
                     </div>
 
