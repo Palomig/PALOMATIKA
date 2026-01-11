@@ -890,14 +890,21 @@ function bisectorPoint(A, B, C) {
 2. Использовать функцию для вычисления позиции метки угла:
 
 ```javascript
-function angleLabelPos(vertex, p1, p2, radius, labelRadius) {
+// bias: 0.5 = точная середина между p1 и p2
+//       <0.5 = ближе к p1
+//       >0.5 = ближе к p2
+function angleLabelPos(vertex, p1, p2, labelRadius, bias = 0.5) {
     const angle1 = Math.atan2(p1.y - vertex.y, p1.x - vertex.x);
     const angle2 = Math.atan2(p2.y - vertex.y, p2.x - vertex.x);
-    const midAngle = (angle1 + angle2) / 2;
-    // Корректировка для углов, пересекающих ±π
-    if (Math.abs(angle2 - angle1) > Math.PI) {
-        midAngle += Math.PI;
-    }
+
+    // Нормализуем разницу углов к диапазону (-π, π]
+    let diff = angle2 - angle1;
+    while (diff > Math.PI) diff -= 2 * Math.PI;
+    while (diff < -Math.PI) diff += 2 * Math.PI;
+
+    // Позиция = angle1 + bias * diff
+    const midAngle = angle1 + diff * bias;
+
     return {
         x: vertex.x + labelRadius * Math.cos(midAngle),
         y: vertex.y + labelRadius * Math.sin(midAngle)
@@ -905,7 +912,7 @@ function angleLabelPos(vertex, p1, p2, radius, labelRadius) {
 }
 ```
 
-3. `labelRadius` должен быть **больше** радиуса дуги на 10-15px
+3. `labelRadius` должен быть **больше** радиуса дуги на 15-20px
 
 4. **ВАЖНО: Углы с биссектрисой** — когда угол делится биссектрисой, метку полного угла НЕЛЬЗЯ размещать через `angleLabelPos(vertex, p1, p2)`, т.к. это поместит её на биссектрису!
 
@@ -915,11 +922,32 @@ function angleLabelPos(vertex, p1, p2, radius, labelRadius) {
    angleLabelPos(A, B, C, 50)  // ❌ Метка окажется НА биссектрисе AD!
    ```
 
-   **Правильно:**
+   **Правильно — метка в половине угла BAD:**
    ```javascript
-   // Размещаем метку в одной из половин угла (BAD или DAC)
-   angleLabelPos(A, B, D, 50)  // ✅ Метка в верхней половине угла, над биссектрисой
+   // D — точка биссектрисы на противоположной стороне BC
+   const D = bisectorPoint(A, B, C);
+
+   // Дуга полного угла BAC с радиусом 45px
+   makeAngleArc(A, B, C, 45)
+
+   // Метка градусов в половине угла BAD:
+   // - labelRadius = 62 (дуга 45 + отступ 17)
+   // - bias = 0.6 для визуального центрирования между стороной AB и биссектрисой AD
+   angleLabelPos(A, B, D, 62, 0.6)  // ✅ Метка визуально по центру между AB и AD
    ```
+
+   **Почему bias = 0.6, а не 0.5?**
+   - Математический центр (0.5) НЕ совпадает с визуальным центром
+   - Из-за кривизны дуги, текст при bias=0.5 визуально смещён к стороне треугольника
+   - bias=0.6 компенсирует это и даёт визуально центрированную метку
+
+   **Рекомендуемые параметры для биссектрисы:**
+   | Параметр | Значение | Комментарий |
+   |----------|----------|-------------|
+   | Радиус дуги полного угла | 45px | Достаточно места для метки |
+   | labelRadius | 62px | = 45 + 17 (отступ от дуги) |
+   | bias | 0.6 | Визуальное центрирование |
+   | Радиус дуг половинных углов | 30px | Меньше, чтобы не мешать метке |
 
 #### Метки длин сторон (AC = 14, BM = 10)
 1. Использовать `labelOnSegment()` для позиционирования
@@ -940,6 +968,7 @@ function angleLabelPos(vertex, p1, p2, radius, labelRadius) {
 - [ ] Все дуги углов начинаются и заканчиваются на сторонах (не выходят за пределы)
 - [ ] Биссектриса/медиана/высота доходит до противоположной стороны
 - [ ] Метки углов не накладываются на дуги
+- [ ] **Для биссектрис:** метка угла через `angleLabelPos(A, B, D, 62, 0.6)` — в половине угла с bias=0.6
 - [ ] Метки длин не накладываются на линии
 - [ ] Прямой угол обозначен квадратиком в правильной вершине
 - [ ] Все вспомогательные точки (D, M, H) расположены на сторонах треугольника
@@ -971,7 +1000,8 @@ function triangleTask() {
         rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
         pointOnLine: (p1, p2, t) => window.pointOnLine(p1, p2, t),
         labelOnSegment: (p1, p2, o) => window.labelOnSegment(p1, p2, o),
-        angleLabelPos: (v, p1, p2, r, lr) => window.angleLabelPos(v, p1, p2, r, lr),
+        // ВАЖНО: bias параметр обязателен для правильной работы с биссектрисами
+        angleLabelPos: (v, p1, p2, r, bias) => window.angleLabelPos(v, p1, p2, r, bias),
     };
 }
 ```
