@@ -202,8 +202,8 @@
                             <text :x="D.x + 14" :y="D.y - 8"
                                 fill="#10b981" font-size="16" class="geo-label" text-anchor="start" dominant-baseline="middle">D</text>
 
-                            {{-- Метка угла 68° — внутри угла, дальше от вершины --}}
-                            <text :x="angleLabelPos(A, B, C, 55).x" :y="angleLabelPos(A, B, C, 55).y"
+                            {{-- Метка угла 68° — в верхней половине угла (BAD), НЕ на биссектрисе --}}
+                            <text :x="angleLabelPos(A, B, D, 50).x" :y="angleLabelPos(A, B, D, 50).y"
                                 fill="#f59e0b" font-size="13" class="geo-label" text-anchor="middle" dominant-baseline="middle">68°</text>
                         </svg>
                     </div>
@@ -246,7 +246,8 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="D.x + 14" :y="D.y - 8" fill="#10b981" font-size="16" class="geo-label">D</text>
 
-                            <text :x="angleLabelPos(A, B, C, 55).x" :y="angleLabelPos(A, B, C, 55).y"
+                            {{-- Метка угла 82° — в верхней половине угла (BAD), НЕ на биссектрисе --}}
+                            <text :x="angleLabelPos(A, B, D, 50).x" :y="angleLabelPos(A, B, D, 50).y"
                                 fill="#f59e0b" font-size="13" class="geo-label" text-anchor="middle">82°</text>
                         </svg>
                     </div>
