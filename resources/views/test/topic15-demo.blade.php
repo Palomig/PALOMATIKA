@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>15. Треугольники (DEMO) - SVG версия</title>
+    <title>15. Треугольники (DEMO v3) - GEOMETRY_SPEC</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -28,9 +28,11 @@
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
 
-{{-- Глобальные функции из GEOMETRY_SPEC --}}
+{{-- ========================================
+    GEOMETRY_SPEC — Все функции из CLAUDE.md
+    ======================================== --}}
 <script>
-    // Позиционирует подписи в направлении от центра фигуры
+    // 1. Позиционирует подписи в направлении от центра фигуры
     function labelPos(point, center, distance = 22) {
         const dx = point.x - center.x;
         const dy = point.y - center.y;
@@ -42,7 +44,7 @@
         };
     }
 
-    // Рисует дугу угла строго между двумя сторонами
+    // 2. Рисует дугу угла строго между двумя сторонами
     function makeAngleArc(vertex, point1, point2, radius) {
         const angle1 = Math.atan2(point1.y - vertex.y, point1.x - vertex.x);
         const angle2 = Math.atan2(point2.y - vertex.y, point2.x - vertex.x);
@@ -57,7 +59,7 @@
         return `M ${x1} ${y1} A ${radius} ${radius} 0 0 ${sweep} ${x2} ${y2}`;
     }
 
-    // Рисует квадратик для прямого угла
+    // 3. Рисует квадратик для прямого угла
     function rightAnglePath(vertex, p1, p2, size = 12) {
         const angle1 = Math.atan2(p1.y - vertex.y, p1.x - vertex.x);
         const angle2 = Math.atan2(p2.y - vertex.y, p2.x - vertex.x);
@@ -67,18 +69,71 @@
         return `M ${c1.x} ${c1.y} L ${diag.x} ${diag.y} L ${c2.x} ${c2.y}`;
     }
 
+    // 4. Точка на отрезке (t=0 → p1, t=1 → p2, t=0.5 → середина)
+    function pointOnLine(p1, p2, t) {
+        return {
+            x: p1.x + (p2.x - p1.x) * t,
+            y: p1.y + (p2.y - p1.y) * t
+        };
+    }
+
+    // 5. Подпись длины стороны — перпендикулярно отрезку
+    function labelOnSegment(p1, p2, offset = 15, flipSide = false) {
+        const mid = { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 };
+        const dx = p2.x - p1.x;
+        const dy = p2.y - p1.y;
+        const len = Math.sqrt(dx * dx + dy * dy);
+        // Нормаль перпендикулярна отрезку
+        let nx = -dy / len;
+        let ny = dx / len;
+        if (flipSide) { nx = -nx; ny = -ny; }
+        return {
+            x: mid.x + nx * offset,
+            y: mid.y + ny * offset
+        };
+    }
+
+    // 6. Позиция метки угла — на биссектрисе угла, дальше чем дуга
+    function angleLabelPos(vertex, p1, p2, labelRadius) {
+        const angle1 = Math.atan2(p1.y - vertex.y, p1.x - vertex.x);
+        const angle2 = Math.atan2(p2.y - vertex.y, p2.x - vertex.x);
+        let midAngle = (angle1 + angle2) / 2;
+        // Корректировка для углов, пересекающих ±π
+        let diff = angle2 - angle1;
+        while (diff > Math.PI) diff -= 2 * Math.PI;
+        while (diff < -Math.PI) diff += 2 * Math.PI;
+        if (Math.abs(diff) > Math.PI) {
+            midAngle += Math.PI;
+        }
+        return {
+            x: vertex.x + labelRadius * Math.cos(midAngle),
+            y: vertex.y + labelRadius * Math.sin(midAngle)
+        };
+    }
+
+    // 7. Точка D на стороне BC для биссектрисы из A
+    function bisectorPoint(A, B, C) {
+        const AB = Math.sqrt((B.x - A.x)**2 + (B.y - A.y)**2);
+        const AC = Math.sqrt((C.x - A.x)**2 + (C.y - A.y)**2);
+        const t = AB / (AB + AC);
+        return pointOnLine(B, C, t);
+    }
+
     // Экспортируем в глобальную область
     window.labelPos = labelPos;
     window.makeAngleArc = makeAngleArc;
     window.rightAnglePath = rightAnglePath;
+    window.pointOnLine = pointOnLine;
+    window.labelOnSegment = labelOnSegment;
+    window.angleLabelPos = angleLabelPos;
+    window.bisectorPoint = bisectorPoint;
 </script>
 
 <div class="max-w-6xl mx-auto px-4 py-8">
     {{-- Header --}}
     <div class="text-center mb-8">
-        <h1 class="text-4xl font-bold text-white mb-2">15. Треугольники (DEMO v2)</h1>
-        <p class="text-slate-400 text-lg">С правильными SVG функциями из GEOMETRY_SPEC</p>
-        <p class="text-emerald-400 mt-2">labelPos(), makeAngleArc(), rightAnglePath()</p>
+        <h1 class="text-4xl font-bold text-white mb-2">15. Треугольники (DEMO v3)</h1>
+        <p class="text-slate-400 text-lg">Полная реализация GEOMETRY_SPEC из CLAUDE.md</p>
     </div>
 
     {{-- Navigation --}}
@@ -100,14 +155,12 @@
         {{-- I) Биссектриса --}}
         <div class="mb-10">
             <div class="bg-slate-800 rounded-xl p-4 mb-6 border-l-4 border-red-500">
-                <h3 class="text-lg font-semibold text-white">
-                    I) Биссектриса треугольника
-                </h3>
+                <h3 class="text-lg font-semibold text-white">I) Биссектриса треугольника</h3>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {{-- Задача 1: угол 68° --}}
-                <div x-data="task1()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700 hover:border-amber-500/50 transition-all">
+                {{-- Задача 1: угол BAC = 68°, найти BAD --}}
+                <div x-data="task1Bisector()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
                     <div class="flex items-start gap-3 mb-4">
                         <span class="text-red-400 font-bold text-xl">1</span>
                         <div class="text-slate-200">
@@ -119,46 +172,54 @@
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             {{-- Треугольник ABC --}}
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round" class="geo-line"/>
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
-                            {{-- Биссектриса AD --}}
+                            {{-- Биссектриса AD (доходит до стороны BC!) --}}
                             <line :x1="A.x" :y1="A.y" :x2="D.x" :y2="D.y"
-                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4" class="geo-line"/>
+                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            {{-- Дуга полного угла BAC (68°) --}}
-                            <path :d="makeAngleArc(A, B, C, 35)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            {{-- Дуга полного угла BAC --}}
+                            <path :d="makeAngleArc(A, B, C, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
 
-                            {{-- Дуга искомого угла BAD (34°) --}}
-                            <path :d="makeAngleArc(A, B, D, 28)" fill="none" stroke="#10b981" stroke-width="2.5"/>
+                            {{-- Дуга искомого угла BAD --}}
+                            <path :d="makeAngleArc(A, B, D, 22)" fill="none" stroke="#10b981" stroke-width="2"/>
 
-                            {{-- Точки --}}
+                            {{-- Точки вершин --}}
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
                             <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
                             <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
                             <circle :cx="D.x" :cy="D.y" r="4" fill="#10b981"/>
 
-                            {{-- Подписи через labelPos --}}
-                            <text :x="labelPos(A, center, 24).x" :y="labelPos(A, center, 24).y"
+                            {{-- Подписи вершин (от центра) --}}
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
-                            <text :x="labelPos(B, center, 24).x" :y="labelPos(B, center, 24).y"
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                            <text :x="labelPos(C, center, 24).x" :y="labelPos(C, center, 24).y"
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
-                            <text :x="D.x" :y="D.y + 18" fill="#10b981" font-size="16" class="geo-label" text-anchor="middle">D</text>
 
-                            {{-- Метка угла --}}
-                            <text x="75" y="175" fill="#f59e0b" font-size="14" class="geo-label">68°</text>
-                            <text x="60" y="158" fill="#10b981" font-size="12" class="geo-label">?</text>
+                            {{-- Подпись D (на стороне BC, чуть ниже) --}}
+                            <text :x="labelOnSegment(B, C, 18, true).x" :y="labelOnSegment(B, C, 18, true).y"
+                                fill="#10b981" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle"
+                                :transform="`translate(${D.x - labelOnSegment(B, C, 18, true).x}, ${D.y - labelOnSegment(B, C, 18, true).y + 18})`">D</text>
+
+                            {{-- Метка угла 68° --}}
+                            <text :x="angleLabelPos(A, B, C, 48).x" :y="angleLabelPos(A, B, C, 48).y"
+                                fill="#f59e0b" font-size="13" class="geo-label" text-anchor="middle" dominant-baseline="middle">68°</text>
+
+                            {{-- Метка искомого угла --}}
+                            <text :x="angleLabelPos(A, B, D, 38).x" :y="angleLabelPos(A, B, D, 38).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle" dominant-baseline="middle">?</text>
                         </svg>
                     </div>
 
                     <div class="mt-3 text-slate-500 text-sm">
-                        <span class="text-emerald-400">Ответ:</span> 34° (биссектриса делит угол пополам)
+                        <span class="text-emerald-400">Ответ:</span> 34°
                     </div>
                 </div>
 
-                {{-- Задача 2: угол 82° --}}
-                <div x-data="task2()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700 hover:border-amber-500/50 transition-all">
+                {{-- Задача 2: угол BAC = 82° --}}
+                <div x-data="task2Bisector()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
                     <div class="flex items-start gap-3 mb-4">
                         <span class="text-red-400 font-bold text-xl">2</span>
                         <div class="text-slate-200">
@@ -169,28 +230,29 @@
                     <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round" class="geo-line"/>
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
                             <line :x1="A.x" :y1="A.y" :x2="D.x" :y2="D.y"
-                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4" class="geo-line"/>
+                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <path :d="makeAngleArc(A, B, C, 32)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(A, B, D, 25)" fill="none" stroke="#10b981" stroke-width="2.5"/>
+                            <path :d="makeAngleArc(A, B, C, 28)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, B, D, 20)" fill="none" stroke="#10b981" stroke-width="2"/>
 
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
                             <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
                             <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
                             <circle :cx="D.x" :cy="D.y" r="4" fill="#10b981"/>
 
-                            <text :x="labelPos(A, center, 24).x" :y="labelPos(A, center, 24).y"
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
-                            <text :x="labelPos(B, center, 24).x" :y="labelPos(B, center, 24).y"
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                            <text :x="labelPos(C, center, 24).x" :y="labelPos(C, center, 24).y"
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
-                            <text :x="D.x" :y="D.y + 18" fill="#10b981" font-size="16" class="geo-label" text-anchor="middle">D</text>
+                            <text :x="D.x + 12" :y="D.y + 5" fill="#10b981" font-size="16" class="geo-label">D</text>
 
-                            <text x="70" y="172" fill="#f59e0b" font-size="14" class="geo-label">82°</text>
+                            <text :x="angleLabelPos(A, B, C, 45).x" :y="angleLabelPos(A, B, C, 45).y"
+                                fill="#f59e0b" font-size="13" class="geo-label" text-anchor="middle">82°</text>
                         </svg>
                     </div>
 
@@ -204,14 +266,12 @@
         {{-- II) Медиана --}}
         <div class="mb-10">
             <div class="bg-slate-800 rounded-xl p-4 mb-6 border-l-4 border-red-500">
-                <h3 class="text-lg font-semibold text-white">
-                    II) Медиана треугольника
-                </h3>
+                <h3 class="text-lg font-semibold text-white">II) Медиана треугольника</h3>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {{-- Задача 5 --}}
-                <div x-data="task5()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700 hover:border-amber-500/50 transition-all">
+                {{-- Задача 5: AC=14, BM медиана --}}
+                <div x-data="task5Median()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
                     <div class="flex items-start gap-3 mb-4">
                         <span class="text-red-400 font-bold text-xl">5</span>
                         <div class="text-slate-200">
@@ -222,42 +282,46 @@
                     <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round" class="geo-line"/>
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
                             {{-- Медиана BM --}}
                             <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
-                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4" class="geo-line"/>
+                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            {{-- Маркеры равных отрезков AM = MC --}}
-                            <line :x1="(A.x + M.x)/2 - 4" :y1="A.y - 6" :x2="(A.x + M.x)/2 + 4" :y2="A.y + 2" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="(M.x + C.x)/2 - 4" :y1="C.y - 6" :x2="(M.x + C.x)/2 + 4" :y2="C.y + 2" stroke="#3b82f6" stroke-width="2.5"/>
+                            {{-- Маркеры равенства AM = MC --}}
+                            <line :x1="tickAM.x - 4" :y1="tickAM.y - 5" :x2="tickAM.x + 4" :y2="tickAM.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickMC.x - 4" :y1="tickMC.y - 5" :x2="tickMC.x + 4" :y2="tickMC.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
 
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
                             <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
                             <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
                             <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
 
-                            <text :x="labelPos(A, center, 24).x" :y="labelPos(A, center, 24).y"
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
-                            <text :x="labelPos(B, center, 24).x" :y="labelPos(B, center, 24).y"
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                            <text :x="labelPos(C, center, 24).x" :y="labelPos(C, center, 24).y"
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
-                            <text :x="M.x" :y="M.y - 12" fill="#10b981" font-size="16" class="geo-label" text-anchor="middle">M</text>
+                            <text :x="M.x" :y="M.y + 18" fill="#10b981" font-size="16" class="geo-label" text-anchor="middle">M</text>
 
-                            {{-- Метки длин --}}
-                            <text :x="(A.x + C.x)/2" :y="A.y + 22" fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">AC = 14</text>
-                            <text :x="(B.x + M.x)/2 - 20" :y="(B.y + M.y)/2" fill="#10b981" font-size="11" class="geo-label">BM = 10</text>
+                            {{-- Метка длины AC (перпендикулярно, снизу) --}}
+                            <text :x="labelOnSegment(A, C, 18, true).x" :y="labelOnSegment(A, C, 18, true).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">AC = 14</text>
+
+                            {{-- Метка длины BM (перпендикулярно медиане) --}}
+                            <text :x="labelOnSegment(B, M, 16).x" :y="labelOnSegment(B, M, 16).y"
+                                fill="#10b981" font-size="11" class="geo-label" text-anchor="middle">BM = 10</text>
                         </svg>
                     </div>
 
                     <div class="mt-3 text-slate-500 text-sm">
-                        <span class="text-emerald-400">Ответ:</span> 7 (AM = AC/2 = 14/2 = 7)
+                        <span class="text-emerald-400">Ответ:</span> 7 (AM = AC/2)
                     </div>
                 </div>
 
-                {{-- Задача 6 --}}
-                <div x-data="task6()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700 hover:border-amber-500/50 transition-all">
+                {{-- Задача 6: AC=16 --}}
+                <div x-data="task6Median()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
                     <div class="flex items-start gap-3 mb-4">
                         <span class="text-red-400 font-bold text-xl">6</span>
                         <div class="text-slate-200">
@@ -268,28 +332,29 @@
                     <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round" class="geo-line"/>
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
                             <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
-                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4" class="geo-line"/>
+                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <line :x1="(A.x + M.x)/2 - 4" :y1="A.y - 6" :x2="(A.x + M.x)/2 + 4" :y2="A.y + 2" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="(M.x + C.x)/2 - 4" :y1="C.y - 6" :x2="(M.x + C.x)/2 + 4" :y2="C.y + 2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAM.x - 4" :y1="tickAM.y - 5" :x2="tickAM.x + 4" :y2="tickAM.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickMC.x - 4" :y1="tickMC.y - 5" :x2="tickMC.x + 4" :y2="tickMC.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
 
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
                             <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
                             <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
                             <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
 
-                            <text :x="labelPos(A, center, 24).x" :y="labelPos(A, center, 24).y"
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
-                            <text :x="labelPos(B, center, 24).x" :y="labelPos(B, center, 24).y"
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                            <text :x="labelPos(C, center, 24).x" :y="labelPos(C, center, 24).y"
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
-                            <text :x="M.x" :y="M.y - 12" fill="#10b981" font-size="16" class="geo-label" text-anchor="middle">M</text>
+                            <text :x="M.x" :y="M.y + 18" fill="#10b981" font-size="16" class="geo-label" text-anchor="middle">M</text>
 
-                            <text :x="(A.x + C.x)/2" :y="A.y + 22" fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">AC = 16</text>
+                            <text :x="labelOnSegment(A, C, 18, true).x" :y="labelOnSegment(A, C, 18, true).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">AC = 16</text>
                         </svg>
                     </div>
 
@@ -303,14 +368,12 @@
         {{-- III) Сумма углов --}}
         <div class="mb-10">
             <div class="bg-slate-800 rounded-xl p-4 mb-6 border-l-4 border-red-500">
-                <h3 class="text-lg font-semibold text-white">
-                    III) Сумма углов треугольника
-                </h3>
+                <h3 class="text-lg font-semibold text-white">III) Сумма углов треугольника</h3>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {{-- Задача 9 --}}
-                <div x-data="task9()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700 hover:border-amber-500/50 transition-all">
+                {{-- Задача 9: углы 72° и 42° --}}
+                <div x-data="task9Angles()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
                     <div class="flex items-start gap-3 mb-4">
                         <span class="text-red-400 font-bold text-xl">9</span>
                         <div class="text-slate-200">
@@ -321,38 +384,41 @@
                     <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round" class="geo-line"/>
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
                             {{-- Дуги углов --}}
-                            <path :d="makeAngleArc(A, C, B, 28)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, C, B, 25)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                             <path :d="makeAngleArc(B, A, C, 22)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(C, B, A, 25)" fill="none" stroke="#10b981" stroke-width="2.5"/>
+                            <path :d="makeAngleArc(C, B, A, 22)" fill="none" stroke="#10b981" stroke-width="2"/>
 
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
                             <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
                             <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
 
-                            <text :x="labelPos(A, center, 24).x" :y="labelPos(A, center, 24).y"
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
-                            <text :x="labelPos(B, center, 24).x" :y="labelPos(B, center, 24).y"
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                            <text :x="labelPos(C, center, 24).x" :y="labelPos(C, center, 24).y"
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             {{-- Метки углов --}}
-                            <text x="60" y="175" fill="#f59e0b" font-size="12" class="geo-label">72°</text>
-                            <text x="220" y="175" fill="#f59e0b" font-size="12" class="geo-label">42°</text>
-                            <text :x="C.x - 5" :y="C.y + 35" fill="#10b981" font-size="12" class="geo-label">?</text>
+                            <text :x="angleLabelPos(A, C, B, 42).x" :y="angleLabelPos(A, C, B, 42).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">72°</text>
+                            <text :x="angleLabelPos(B, A, C, 38).x" :y="angleLabelPos(B, A, C, 38).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">42°</text>
+                            <text :x="angleLabelPos(C, B, A, 38).x" :y="angleLabelPos(C, B, A, 38).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
                     <div class="mt-3 text-slate-500 text-sm">
-                        <span class="text-emerald-400">Ответ:</span> 66° (180° − 72° − 42° = 66°)
+                        <span class="text-emerald-400">Ответ:</span> 66° (180° − 72° − 42°)
                     </div>
                 </div>
 
-                {{-- Задача 10 --}}
-                <div x-data="task10()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700 hover:border-amber-500/50 transition-all">
+                {{-- Задача 10: углы 43° и 88° --}}
+                <div x-data="task10Angles()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
                     <div class="flex items-start gap-3 mb-4">
                         <span class="text-red-400 font-bold text-xl">10</span>
                         <div class="text-slate-200">
@@ -363,25 +429,27 @@
                     <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round" class="geo-line"/>
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
                             <path :d="makeAngleArc(A, C, B, 28)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                             <path :d="makeAngleArc(B, A, C, 18)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(C, B, A, 25)" fill="none" stroke="#10b981" stroke-width="2.5"/>
+                            <path :d="makeAngleArc(C, B, A, 22)" fill="none" stroke="#10b981" stroke-width="2"/>
 
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
                             <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
                             <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
 
-                            <text :x="labelPos(A, center, 24).x" :y="labelPos(A, center, 24).y"
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
-                            <text :x="labelPos(B, center, 24).x" :y="labelPos(B, center, 24).y"
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                            <text :x="labelPos(C, center, 24).x" :y="labelPos(C, center, 24).y"
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
-                            <text x="55" y="175" fill="#f59e0b" font-size="12" class="geo-label">43°</text>
-                            <text x="215" y="175" fill="#f59e0b" font-size="12" class="geo-label">88°</text>
+                            <text :x="angleLabelPos(A, C, B, 45).x" :y="angleLabelPos(A, C, B, 45).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">43°</text>
+                            <text :x="angleLabelPos(B, A, C, 35).x" :y="angleLabelPos(B, A, C, 35).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">88°</text>
                         </svg>
                     </div>
 
@@ -395,14 +463,12 @@
         {{-- IV) Теорема Пифагора --}}
         <div class="mb-10">
             <div class="bg-slate-800 rounded-xl p-4 mb-6 border-l-4 border-red-500">
-                <h3 class="text-lg font-semibold text-white">
-                    IV) Теорема Пифагора
-                </h3>
+                <h3 class="text-lg font-semibold text-white">IV) Теорема Пифагора</h3>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {{-- Задача 45 --}}
-                <div x-data="task45()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700 hover:border-amber-500/50 transition-all">
+                {{-- Задача 45: катеты 7 и 24 --}}
+                <div x-data="task45Pythagoras()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
                     <div class="flex items-start gap-3 mb-4">
                         <span class="text-red-400 font-bold text-xl">45</span>
                         <div class="text-slate-200">
@@ -413,36 +479,41 @@
                     <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round" class="geo-line"/>
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
-                            {{-- Прямой угол через rightAnglePath --}}
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666" stroke-width="2"/>
+                            {{-- Прямой угол в A --}}
+                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
 
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
                             <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
                             <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
 
-                            <text :x="labelPos(A, center, 24).x" :y="labelPos(A, center, 24).y"
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
-                            <text :x="labelPos(B, center, 24).x" :y="labelPos(B, center, 24).y"
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                            <text :x="labelPos(C, center, 24).x" :y="labelPos(C, center, 24).y"
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
-                            {{-- Метки длин --}}
-                            <text :x="(A.x + C.x)/2" :y="A.y + 22" fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">24</text>
-                            <text :x="C.x - 20" :y="(C.y + B.y)/2" fill="#94a3b8" font-size="12" class="geo-label">7</text>
-                            <text :x="(A.x + B.x)/2 + 15" :y="(A.y + B.y)/2 - 5" fill="#10b981" font-size="12" class="geo-label">?</text>
+                            {{-- Метки длин катетов --}}
+                            <text :x="labelOnSegment(A, C, 16, true).x" :y="labelOnSegment(A, C, 16, true).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">24</text>
+                            <text :x="labelOnSegment(A, B, 16).x" :y="labelOnSegment(A, B, 16).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">7</text>
+
+                            {{-- Метка гипотенузы (искомая) --}}
+                            <text :x="labelOnSegment(B, C, 16).x" :y="labelOnSegment(B, C, 16).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
                     <div class="mt-3 text-slate-500 text-sm">
-                        <span class="text-emerald-400">Ответ:</span> 25 ($\sqrt{7^2 + 24^2} = \sqrt{625} = 25$)
+                        <span class="text-emerald-400">Ответ:</span> 25
                     </div>
                 </div>
 
-                {{-- Задача 46 --}}
-                <div x-data="task46()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700 hover:border-amber-500/50 transition-all">
+                {{-- Задача 46: катеты 8 и 15 --}}
+                <div x-data="task46Pythagoras()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
                     <div class="flex items-start gap-3 mb-4">
                         <span class="text-red-400 font-bold text-xl">46</span>
                         <div class="text-slate-200">
@@ -453,23 +524,25 @@
                     <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round" class="geo-line"/>
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666" stroke-width="2"/>
+                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
 
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
                             <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
                             <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
 
-                            <text :x="labelPos(A, center, 24).x" :y="labelPos(A, center, 24).y"
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
-                            <text :x="labelPos(B, center, 24).x" :y="labelPos(B, center, 24).y"
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                            <text :x="labelPos(C, center, 24).x" :y="labelPos(C, center, 24).y"
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
-                            <text :x="(A.x + C.x)/2" :y="A.y + 22" fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">15</text>
-                            <text :x="C.x - 20" :y="(C.y + B.y)/2" fill="#94a3b8" font-size="12" class="geo-label">8</text>
+                            <text :x="labelOnSegment(A, C, 16, true).x" :y="labelOnSegment(A, C, 16, true).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">15</text>
+                            <text :x="labelOnSegment(A, B, 16).x" :y="labelOnSegment(A, B, 16).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">8</text>
                         </svg>
                     </div>
 
@@ -482,126 +555,144 @@
 
     </div>
 
-    {{-- Информация --}}
+    {{-- Чек-лист --}}
     <div class="bg-emerald-900/30 border border-emerald-500/30 rounded-xl p-6 mt-10">
-        <h4 class="text-emerald-400 font-semibold mb-4">SVG с правилами из GEOMETRY_SPEC</h4>
-        <ul class="text-slate-300 space-y-2">
-            <li>✅ <code class="bg-slate-700 px-1 rounded">labelPos()</code> — подписи вне фигуры, от центра</li>
-            <li>✅ <code class="bg-slate-700 px-1 rounded">makeAngleArc()</code> — дуги строго между сторонами</li>
-            <li>✅ <code class="bg-slate-700 px-1 rounded">rightAnglePath()</code> — квадратик для 90°</li>
-            <li>✅ Цвета: red (#dc2626), amber (#f59e0b), green (#10b981), blue (#3b82f6)</li>
-            <li>✅ Центр = центроид треугольника</li>
+        <h4 class="text-emerald-400 font-semibold mb-4">✅ Чек-лист GEOMETRY_SPEC</h4>
+        <ul class="text-slate-300 space-y-1 text-sm">
+            <li>☑ Все подписи через <code class="bg-slate-700 px-1 rounded">labelPos()</code></li>
+            <li>☑ Дуги строго между сторонами через <code class="bg-slate-700 px-1 rounded">makeAngleArc()</code></li>
+            <li>☑ Биссектриса доходит до стороны через <code class="bg-slate-700 px-1 rounded">bisectorPoint()</code></li>
+            <li>☑ Медиана до середины через <code class="bg-slate-700 px-1 rounded">pointOnLine(A, C, 0.5)</code></li>
+            <li>☑ Метки углов через <code class="bg-slate-700 px-1 rounded">angleLabelPos()</code></li>
+            <li>☑ Метки длин через <code class="bg-slate-700 px-1 rounded">labelOnSegment()</code></li>
+            <li>☑ Прямой угол через <code class="bg-slate-700 px-1 rounded">rightAnglePath()</code></li>
         </ul>
     </div>
 
 </div>
 
-{{-- Alpine.js данные для каждой задачи --}}
+{{-- Alpine.js данные --}}
 <script>
-    // Биссектриса: задача 1 (угол 68°)
-    function task1() {
-        const A = { x: 30, y: 190 };
-        const B = { x: 180, y: 35 };
-        const C = { x: 270, y: 190 };
+    // Биссектриса: задача 1
+    function task1Bisector() {
+        const A = { x: 40, y: 180 };
+        const B = { x: 160, y: 40 };
+        const C = { x: 260, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
-        // D на стороне BC, биссектриса из A
-        const D = { x: 210, y: 130 };
+        const D = window.bisectorPoint(A, B, C); // Точка на BC
         return {
             A, B, C, D, center,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
             makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
+            angleLabelPos: (v, p1, p2, r) => window.angleLabelPos(v, p1, p2, r),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
         };
     }
 
-    // Биссектриса: задача 2 (угол 82°)
-    function task2() {
-        const A = { x: 30, y: 190 };
-        const B = { x: 160, y: 35 };
-        const C = { x: 270, y: 190 };
+    // Биссектриса: задача 2
+    function task2Bisector() {
+        const A = { x: 40, y: 180 };
+        const B = { x: 140, y: 40 };
+        const C = { x: 260, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
-        const D = { x: 200, y: 125 };
+        const D = window.bisectorPoint(A, B, C);
         return {
             A, B, C, D, center,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
             makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
+            angleLabelPos: (v, p1, p2, r) => window.angleLabelPos(v, p1, p2, r),
         };
     }
 
     // Медиана: задача 5
-    function task5() {
-        const A = { x: 30, y: 190 };
-        const B = { x: 180, y: 35 };
-        const C = { x: 270, y: 190 };
+    function task5Median() {
+        const A = { x: 40, y: 180 };
+        const B = { x: 160, y: 40 };
+        const C = { x: 260, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
-        const M = { x: (A.x + C.x) / 2, y: (A.y + C.y) / 2 };
-        return { A, B, C, M, center, labelPos: (p, c, d) => window.labelPos(p, c, d) };
+        const M = window.pointOnLine(A, C, 0.5); // Середина AC
+        const tickAM = window.pointOnLine(A, M, 0.5);
+        const tickMC = window.pointOnLine(M, C, 0.5);
+        return {
+            A, B, C, M, center, tickAM, tickMC,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
     }
 
     // Медиана: задача 6
-    function task6() {
-        const A = { x: 30, y: 190 };
-        const B = { x: 200, y: 35 };
-        const C = { x: 270, y: 190 };
+    function task6Median() {
+        const A = { x: 40, y: 180 };
+        const B = { x: 180, y: 40 };
+        const C = { x: 260, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
-        const M = { x: (A.x + C.x) / 2, y: (A.y + C.y) / 2 };
-        return { A, B, C, M, center, labelPos: (p, c, d) => window.labelPos(p, c, d) };
+        const M = window.pointOnLine(A, C, 0.5);
+        const tickAM = window.pointOnLine(A, M, 0.5);
+        const tickMC = window.pointOnLine(M, C, 0.5);
+        return {
+            A, B, C, M, center, tickAM, tickMC,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
     }
 
     // Сумма углов: задача 9
-    function task9() {
-        const A = { x: 30, y: 190 };
-        const B = { x: 250, y: 190 };
-        const C = { x: 140, y: 45 };
+    function task9Angles() {
+        const A = { x: 40, y: 180 };
+        const B = { x: 260, y: 180 };
+        const C = { x: 140, y: 50 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
         return {
             A, B, C, center,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
             makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
+            angleLabelPos: (v, p1, p2, r) => window.angleLabelPos(v, p1, p2, r),
         };
     }
 
     // Сумма углов: задача 10
-    function task10() {
-        const A = { x: 30, y: 190 };
-        const B = { x: 260, y: 190 };
-        const C = { x: 150, y: 40 };
+    function task10Angles() {
+        const A = { x: 40, y: 180 };
+        const B = { x: 260, y: 180 };
+        const C = { x: 150, y: 45 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
         return {
             A, B, C, center,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
             makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
+            angleLabelPos: (v, p1, p2, r) => window.angleLabelPos(v, p1, p2, r),
         };
     }
 
-    // Теорема Пифагора: задача 45
-    function task45() {
-        const A = { x: 30, y: 190 };
-        const B = { x: 30, y: 50 };
-        const C = { x: 260, y: 190 };
+    // Пифагор: задача 45
+    function task45Pythagoras() {
+        // Прямой угол в A, катеты AB=7, AC=24
+        const A = { x: 50, y: 180 };
+        const B = { x: 50, y: 60 };  // Вертикальный катет
+        const C = { x: 250, y: 180 }; // Горизонтальный катет
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
         return {
             A, B, C, center,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
             rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
         };
     }
 
-    // Теорема Пифагора: задача 46
-    function task46() {
-        const A = { x: 30, y: 190 };
-        const B = { x: 30, y: 60 };
-        const C = { x: 240, y: 190 };
+    // Пифагор: задача 46
+    function task46Pythagoras() {
+        const A = { x: 50, y: 180 };
+        const B = { x: 50, y: 70 };
+        const C = { x: 230, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
         return {
             A, B, C, center,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
             rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
         };
     }
 </script>
-
-{{-- Инструмент для пометки заданий --}}
-@include('components.task-review-tool', ['topicId' => '15'])
 
 </body>
 </html>
