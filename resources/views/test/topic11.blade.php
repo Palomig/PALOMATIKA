@@ -31,6 +31,7 @@
     </script>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -105,6 +106,9 @@
         </div>
 
         @foreach($block['zadaniya'] as $zadanieIndex => $zadanie)
+            @php
+                $zadanieType = $zadanie['type'] ?? 'matching';
+            @endphp
             <div class="mb-10">
                 {{-- Zadanie Header --}}
                 <div class="bg-slate-800 rounded-xl p-4 mb-6 border-l-4 border-cyan-500">
@@ -119,6 +123,7 @@
                         @php
                             $uniqueId = $blockIndex . '-' . $zadanieIndex . '-' . $taskIndex;
                             $options = $task['options'] ?? [];
+                            $statements = $task['statements'] ?? [];
                             $graphLabels = ['А', 'Б', 'В', 'Г'];
                         @endphp
 
@@ -126,46 +131,225 @@
                             {{-- Task number --}}
                             <div class="text-cyan-400 font-bold text-lg mb-4">{{ $task['id'] }}</div>
 
-                            {{-- Three separate graphs in a row --}}
-                            <div class="grid grid-cols-3 gap-4 mb-6">
-                                @foreach($options as $optIndex => $formula)
-                                    <div class="bg-slate-900/50 rounded-lg p-3">
-                                        {{-- Graph label --}}
-                                        <div class="text-center text-white font-bold mb-2">{{ $graphLabels[$optIndex] }})</div>
-                                        {{-- SVG container --}}
-                                        <div id="graph-{{ $uniqueId }}-{{ $optIndex }}" class="w-full aspect-square"></div>
-                                    </div>
-                                @endforeach
-                            </div>
+                            @if($zadanieType === 'matching' || $zadanieType === 'matching_4')
+                                {{-- MATCHING: Generate SVG graphs from formula options --}}
+                                <div class="grid grid-cols-3 gap-4 mb-6">
+                                    @foreach($options as $optIndex => $formula)
+                                        <div class="bg-slate-900/50 rounded-lg p-3">
+                                            <div class="text-center text-white font-bold mb-2">{{ $graphLabels[$optIndex] }})</div>
+                                            <div id="graph-{{ $uniqueId }}-{{ $optIndex }}" class="w-full aspect-square"></div>
+                                        </div>
+                                    @endforeach
+                                </div>
 
-                            {{-- Formulas to match --}}
-                            <div class="flex flex-wrap gap-4 mb-4 justify-center">
-                                @foreach($options as $i => $opt)
-                                    <span class="bg-slate-700 text-slate-200 px-4 py-2 rounded-lg text-sm">
-                                        {{ $i + 1 }}) ${{ $opt }}$
-                                    </span>
-                                @endforeach
-                            </div>
+                                {{-- Formulas to match --}}
+                                <div class="flex flex-wrap gap-4 mb-4 justify-center">
+                                    @foreach($options as $i => $opt)
+                                        <span class="bg-slate-700 text-slate-200 px-4 py-2 rounded-lg text-sm">
+                                            {{ $i + 1 }}) ${{ $opt }}$
+                                        </span>
+                                    @endforeach
+                                </div>
 
-                            {{-- Answer table --}}
-                            <div class="flex justify-center gap-1 mt-4">
-                                @foreach($options as $i => $opt)
-                                    <div class="flex flex-col items-center">
-                                        <span class="text-slate-400 text-sm font-bold mb-1">{{ $graphLabels[$i] }}</span>
-                                        <div class="w-10 h-8 border-2 border-slate-600 rounded bg-slate-800"></div>
+                                {{-- Answer table --}}
+                                <div class="flex justify-center gap-1 mt-4">
+                                    @foreach($options as $i => $opt)
+                                        <div class="flex flex-col items-center">
+                                            <span class="text-slate-400 text-sm font-bold mb-1">{{ $graphLabels[$i] }}</span>
+                                            <div class="w-10 h-8 border-2 border-slate-600 rounded bg-slate-800"></div>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        const options = @json($options);
+                                        options.forEach((formula, i) => {
+                                            renderSingleGraph('graph-{{ $uniqueId }}-' + i, formula);
+                                        });
+                                    });
+                                </script>
+
+                            @elseif($zadanieType === 'matching_signs')
+                                @php
+                                    // Detect if this is linear (k, b) or quadratic (a, c) based on options
+                                    $isQuadratic = !empty($options) && strpos($options[0], 'a') !== false;
+                                    $funcId = str_replace('-', '_', $uniqueId);
+                                @endphp
+
+                                @if($isQuadratic)
+                                    {{-- QUADRATIC: y = ax² + c with interactive parabola --}}
+                                    <div class="grid md:grid-cols-2 gap-6 mb-6" x-data="quadraticGraph_{{ $funcId }}()">
+                                        {{-- Interactive SVG Graph --}}
+                                        <div class="bg-slate-900/50 rounded-lg p-4">
+                                            <div class="text-center text-white font-bold mb-3">y = ax² + c</div>
+                                            <svg viewBox="0 0 200 200" class="w-full max-w-xs mx-auto">
+                                                <rect width="200" height="200" fill="#0f172a"/>
+                                                <g stroke="#334155" stroke-width="0.5">
+                                                    <template x-for="i in 9"><line :x1="20*i" y1="10" :x2="20*i" y2="190"/></template>
+                                                    <template x-for="i in 9"><line x1="10" :y1="20*i" x2="190" :y2="20*i"/></template>
+                                                </g>
+                                                <line x1="10" y1="100" x2="190" y2="100" stroke="#64748b" stroke-width="1.5"/>
+                                                <line x1="100" y1="10" x2="100" y2="190" stroke="#64748b" stroke-width="1.5"/>
+                                                <polygon points="187,97 187,103 193,100" fill="#64748b"/>
+                                                <polygon points="97,13 103,13 100,7" fill="#64748b"/>
+                                                <text x="193" y="104" fill="#94a3b8" font-size="12" font-style="italic">x</text>
+                                                <text x="104" y="15" fill="#94a3b8" font-size="12" font-style="italic">y</text>
+                                                <text x="92" y="112" fill="#94a3b8" font-size="10">0</text>
+                                                <text x="118" y="112" fill="#94a3b8" font-size="10">1</text>
+                                                <text x="104" y="82" fill="#94a3b8" font-size="10">1</text>
+                                                {{-- Parabola --}}
+                                                <path :d="parabolaPath" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                                            </svg>
+                                        </div>
+
+                                        {{-- Coefficient Controls --}}
+                                        <div class="flex flex-col justify-center space-y-6">
+                                            <div>
+                                                <label class="text-white font-semibold mb-2 block">
+                                                    a = <span x-text="a.toFixed(1)" class="text-cyan-400"></span>
+                                                    <span x-show="a > 0" class="text-green-400 ml-2">(a > 0, ветви вверх)</span>
+                                                    <span x-show="a < 0" class="text-red-400 ml-2">(a < 0, ветви вниз)</span>
+                                                </label>
+                                                <input type="range" x-model="a" min="-2" max="2" step="0.1"
+                                                       class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500">
+                                            </div>
+                                            <div>
+                                                <label class="text-white font-semibold mb-2 block">
+                                                    c = <span x-text="c.toFixed(1)" class="text-cyan-400"></span>
+                                                    <span x-show="c > 0" class="text-green-400 ml-2">(c > 0, выше нуля)</span>
+                                                    <span x-show="c < 0" class="text-red-400 ml-2">(c < 0, ниже нуля)</span>
+                                                    <span x-show="c === 0" class="text-gray-400 ml-2">(c = 0)</span>
+                                                </label>
+                                                <input type="range" x-model="c" min="-4" max="4" step="0.1"
+                                                       class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500">
+                                            </div>
+                                            <button @click="a = 1; c = 0"
+                                                    class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg transition">
+                                                Сброс (a=1, c=0)
+                                            </button>
+                                        </div>
                                     </div>
-                                @endforeach
-                            </div>
+
+                                    <script>
+                                        function quadraticGraph_{{ $funcId }}() {
+                                            return {
+                                                a: 1, c: 0,
+                                                get parabolaPath() {
+                                                    const pts = [];
+                                                    for (let x = -5; x <= 5; x += 0.2) {
+                                                        const y = this.a * x * x + this.c;
+                                                        const px = 100 + x * 20;
+                                                        const py = 100 - y * 20;
+                                                        if (py >= -50 && py <= 250) pts.push(`${px.toFixed(1)},${py.toFixed(1)}`);
+                                                    }
+                                                    return pts.length > 1 ? 'M ' + pts.join(' L ') : '';
+                                                }
+                                            }
+                                        }
+                                    </script>
+                                @else
+                                    {{-- LINEAR: y = kx + b with interactive line --}}
+                                    <div class="grid md:grid-cols-2 gap-6 mb-6" x-data="linearGraph_{{ $funcId }}()">
+                                        <div class="bg-slate-900/50 rounded-lg p-4">
+                                            <div class="text-center text-white font-bold mb-3">y = kx + b</div>
+                                            <svg viewBox="0 0 200 200" class="w-full max-w-xs mx-auto">
+                                                <rect width="200" height="200" fill="#0f172a"/>
+                                                <g stroke="#334155" stroke-width="0.5">
+                                                    <template x-for="i in 9"><line :x1="20*i" y1="10" :x2="20*i" y2="190"/></template>
+                                                    <template x-for="i in 9"><line x1="10" :y1="20*i" x2="190" :y2="20*i"/></template>
+                                                </g>
+                                                <line x1="10" y1="100" x2="190" y2="100" stroke="#64748b" stroke-width="1.5"/>
+                                                <line x1="100" y1="10" x2="100" y2="190" stroke="#64748b" stroke-width="1.5"/>
+                                                <polygon points="187,97 187,103 193,100" fill="#64748b"/>
+                                                <polygon points="97,13 103,13 100,7" fill="#64748b"/>
+                                                <text x="193" y="104" fill="#94a3b8" font-size="12" font-style="italic">x</text>
+                                                <text x="104" y="15" fill="#94a3b8" font-size="12" font-style="italic">y</text>
+                                                <text x="92" y="112" fill="#94a3b8" font-size="10">0</text>
+                                                <text x="118" y="112" fill="#94a3b8" font-size="10">1</text>
+                                                <text x="104" y="82" fill="#94a3b8" font-size="10">1</text>
+                                                <line :x1="lineX1" :y1="lineY1" :x2="lineX2" :y2="lineY2"
+                                                      stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
+                                            </svg>
+                                        </div>
+
+                                        <div class="flex flex-col justify-center space-y-6">
+                                            <div>
+                                                <label class="text-white font-semibold mb-2 block">
+                                                    k = <span x-text="k.toFixed(1)" class="text-cyan-400"></span>
+                                                    <span x-show="k > 0" class="text-green-400 ml-2">(k > 0, возрастает)</span>
+                                                    <span x-show="k < 0" class="text-red-400 ml-2">(k < 0, убывает)</span>
+                                                    <span x-show="k === 0" class="text-gray-400 ml-2">(k = 0, горизонталь)</span>
+                                                </label>
+                                                <input type="range" x-model="k" min="-3" max="3" step="0.1"
+                                                       class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500">
+                                            </div>
+                                            <div>
+                                                <label class="text-white font-semibold mb-2 block">
+                                                    b = <span x-text="b.toFixed(1)" class="text-cyan-400"></span>
+                                                    <span x-show="b > 0" class="text-green-400 ml-2">(b > 0)</span>
+                                                    <span x-show="b < 0" class="text-red-400 ml-2">(b < 0)</span>
+                                                    <span x-show="b === 0" class="text-gray-400 ml-2">(b = 0)</span>
+                                                </label>
+                                                <input type="range" x-model="b" min="-4" max="4" step="0.1"
+                                                       class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-500">
+                                            </div>
+                                            <button @click="k = 1; b = 0"
+                                                    class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg transition">
+                                                Сброс (k=1, b=0)
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <script>
+                                        function linearGraph_{{ $funcId }}() {
+                                            return {
+                                                k: 1, b: 0,
+                                                get lineX1() { return 100 + (-5) * 20; },
+                                                get lineY1() { return 100 - (this.k * (-5) + this.b) * 20; },
+                                                get lineX2() { return 100 + 5 * 20; },
+                                                get lineY2() { return 100 - (this.k * 5 + this.b) * 20; }
+                                            }
+                                        }
+                                    </script>
+                                @endif
+
+                                {{-- Sign options to choose --}}
+                                <div class="flex flex-wrap gap-3 mb-4 justify-center">
+                                    @foreach($options as $i => $opt)
+                                        <span class="bg-slate-700 text-slate-200 px-4 py-2 rounded-lg text-sm hover:bg-slate-600 cursor-pointer transition">
+                                            {{ $i + 1 }}) {{ $opt }}
+                                        </span>
+                                    @endforeach
+                                </div>
+
+                            @elseif($zadanieType === 'statements')
+                                {{-- STATEMENTS: Show image and statements to evaluate --}}
+                                <div class="grid md:grid-cols-2 gap-6 mb-4">
+                                    @if(!empty($task['image']))
+                                        <div class="bg-slate-900/50 rounded-lg p-4">
+                                            <img src="{{ asset('images/tasks/11/' . $task['image']) }}"
+                                                 alt="График функции"
+                                                 class="w-full max-w-xs mx-auto rounded">
+                                        </div>
+                                    @endif
+                                    <div class="space-y-3">
+                                        @foreach($statements as $i => $statement)
+                                            <div class="flex items-start gap-3 bg-slate-700/50 p-3 rounded-lg">
+                                                <span class="text-cyan-400 font-bold">{{ $i + 1 }})</span>
+                                                <span class="text-slate-200">{{ $statement }}</span>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+
+                            @else
+                                {{-- DEFAULT: Simple display --}}
+                                <div class="text-slate-400 text-center py-4">
+                                    Неизвестный тип задания: {{ $zadanieType }}
+                                </div>
+                            @endif
                         </div>
-
-                        <script>
-                            document.addEventListener('DOMContentLoaded', function() {
-                                const options = @json($options);
-                                options.forEach((formula, i) => {
-                                    renderSingleGraph('graph-{{ $uniqueId }}-' + i, formula);
-                                });
-                            });
-                        </script>
                     @endforeach
                 </div>
             </div>
