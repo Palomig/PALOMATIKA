@@ -93,18 +93,19 @@
         };
     }
 
-    // 6. Позиция метки угла — на биссектрисе угла, дальше чем дуга
+    // 6. Позиция метки угла — ровно посередине между двумя сторонами
     function angleLabelPos(vertex, p1, p2, labelRadius) {
         const angle1 = Math.atan2(p1.y - vertex.y, p1.x - vertex.x);
         const angle2 = Math.atan2(p2.y - vertex.y, p2.x - vertex.x);
-        let midAngle = (angle1 + angle2) / 2;
-        // Корректировка для углов, пересекающих ±π
+
+        // Нормализуем разницу углов к диапазону (-π, π]
         let diff = angle2 - angle1;
         while (diff > Math.PI) diff -= 2 * Math.PI;
         while (diff < -Math.PI) diff += 2 * Math.PI;
-        if (Math.abs(diff) > Math.PI) {
-            midAngle += Math.PI;
-        }
+
+        // Середина угла = angle1 + половина нормализованной разницы
+        const midAngle = angle1 + diff / 2;
+
         return {
             x: vertex.x + labelRadius * Math.cos(midAngle),
             y: vertex.y + labelRadius * Math.sin(midAngle)
