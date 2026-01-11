@@ -595,7 +595,7 @@
             A, B, C, D, center,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
             makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
-            angleLabelPos: (v, p1, p2, r) => window.angleLabelPos(v, p1, p2, r),
+            angleLabelPos: (v, p1, p2, r, bias) => window.angleLabelPos(v, p1, p2, r, bias),
             labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
         };
     }
@@ -611,7 +611,7 @@
             A, B, C, D, center,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
             makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
-            angleLabelPos: (v, p1, p2, r) => window.angleLabelPos(v, p1, p2, r),
+            angleLabelPos: (v, p1, p2, r, bias) => window.angleLabelPos(v, p1, p2, r, bias),
         };
     }
 
