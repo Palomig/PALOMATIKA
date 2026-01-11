@@ -406,12 +406,12 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
-                            {{-- Метки углов — внутри треугольника, рядом с дугой --}}
-                            <text :x="A.x + 50" :y="A.y - 18"
+                            {{-- Метки углов — используем angleLabelPos для правильного позиционирования --}}
+                            <text :x="angleLabelPos(A, C, B, 45).x" :y="angleLabelPos(A, C, B, 45).y"
                                 fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">72°</text>
-                            <text :x="B.x - 42" :y="B.y + 30"
+                            <text :x="angleLabelPos(B, A, C, 45).x" :y="angleLabelPos(B, A, C, 45).y"
                                 fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">42°</text>
-                            <text :x="C.x - 42" :y="C.y - 18"
+                            <text :x="angleLabelPos(C, B, A, 45).x" :y="angleLabelPos(C, B, A, 45).y"
                                 fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
@@ -450,12 +450,12 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
-                            {{-- Метки углов — внутри треугольника, рядом с дугой --}}
-                            <text :x="A.x + 50" :y="A.y - 18"
+                            {{-- Метки углов — используем angleLabelPos для правильного позиционирования --}}
+                            <text :x="angleLabelPos(A, C, B, 45).x" :y="angleLabelPos(A, C, B, 45).y"
                                 fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">43°</text>
-                            <text :x="B.x - 35" :y="B.y + 28"
+                            <text :x="angleLabelPos(B, A, C, 38).x" :y="angleLabelPos(B, A, C, 38).y"
                                 fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">88°</text>
-                            <text :x="C.x - 42" :y="C.y - 18"
+                            <text :x="angleLabelPos(C, B, A, 45).x" :y="angleLabelPos(C, B, A, 45).y"
                                 fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
