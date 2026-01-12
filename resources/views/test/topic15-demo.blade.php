@@ -5375,9 +5375,10 @@
     // Радиус = гипотенуза / 2
     function taskCircumradius(ac, bc) {
         // Прямоугольный треугольник с прямым углом в C
-        const C = { x: 50, y: 180 };
-        const A = { x: 250, y: 180 };
-        const B = { x: 50, y: 60 };
+        // Уменьшенный размер чтобы описанная окружность помещалась в viewBox
+        const C = { x: 70, y: 155 };
+        const A = { x: 230, y: 155 };
+        const B = { x: 70, y: 55 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
         // Центр описанной окружности — середина гипотенузы AB
         const O = window.pointOnLine(A, B, 0.5);
