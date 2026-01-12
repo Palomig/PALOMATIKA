@@ -158,6 +158,41 @@
         };
     }
 
+    // Двойная черточка (для второй пары равных отрезков)
+    function doubleEqualityTick(p1, p2, t = 0.5, length = 8, gap = 4) {
+        const dx = p2.x - p1.x;
+        const dy = p2.y - p1.y;
+        const len = Math.sqrt(dx * dx + dy * dy);
+        // Единичный вектор вдоль отрезка
+        const ux = dx / len;
+        const uy = dy / len;
+        // Нормаль (перпендикуляр) к отрезку
+        const nx = -dy / len;
+        const ny = dx / len;
+        // Центральная точка
+        const mid = {
+            x: p1.x + dx * t,
+            y: p1.y + dy * t
+        };
+        const half = length / 2;
+        const halfGap = gap / 2;
+        // Первая черточка (смещена назад вдоль отрезка)
+        const tick1 = {
+            x1: mid.x - ux * halfGap - nx * half,
+            y1: mid.y - uy * halfGap - ny * half,
+            x2: mid.x - ux * halfGap + nx * half,
+            y2: mid.y - uy * halfGap + ny * half
+        };
+        // Вторая черточка (смещена вперёд вдоль отрезка)
+        const tick2 = {
+            x1: mid.x + ux * halfGap - nx * half,
+            y1: mid.y + uy * halfGap - ny * half,
+            x2: mid.x + ux * halfGap + nx * half,
+            y2: mid.y + uy * halfGap + ny * half
+        };
+        return { tick1, tick2 };
+    }
+
     // Экспортируем в глобальную область
     window.labelPos = labelPos;
     window.makeAngleArc = makeAngleArc;
@@ -168,6 +203,7 @@
     window.bisectorPoint = bisectorPoint;
     window.isRightAngle = isRightAngle;
     window.equalityTick = equalityTick;
+    window.doubleEqualityTick = doubleEqualityTick;
 </script>
 
 <div class="max-w-6xl mx-auto px-4 py-8">
@@ -2123,10 +2159,14 @@
                             <line :x1="tickMB.x1" :y1="tickMB.y1" :x2="tickMB.x2" :y2="tickMB.y2"
                                 stroke="#3b82f6" stroke-width="2"/>
 
-                            {{-- Маркеры равенства BN = NC --}}
-                            <line :x1="tickBN.x1" :y1="tickBN.y1" :x2="tickBN.x2" :y2="tickBN.y2"
+                            {{-- Маркеры равенства BN = NC (двойные черточки) --}}
+                            <line :x1="dblTickBN.tick1.x1" :y1="dblTickBN.tick1.y1" :x2="dblTickBN.tick1.x2" :y2="dblTickBN.tick1.y2"
                                 stroke="#f59e0b" stroke-width="2"/>
-                            <line :x1="tickNC.x1" :y1="tickNC.y1" :x2="tickNC.x2" :y2="tickNC.y2"
+                            <line :x1="dblTickBN.tick2.x1" :y1="dblTickBN.tick2.y1" :x2="dblTickBN.tick2.x2" :y2="dblTickBN.tick2.y2"
+                                stroke="#f59e0b" stroke-width="2"/>
+                            <line :x1="dblTickNC.tick1.x1" :y1="dblTickNC.tick1.y1" :x2="dblTickNC.tick1.x2" :y2="dblTickNC.tick1.y2"
+                                stroke="#f59e0b" stroke-width="2"/>
+                            <line :x1="dblTickNC.tick2.x1" :y1="dblTickNC.tick2.y1" :x2="dblTickNC.tick2.x2" :y2="dblTickNC.tick2.y2"
                                 stroke="#f59e0b" stroke-width="2"/>
 
                             {{-- Вершины --}}
@@ -2181,9 +2221,14 @@
                             <line :x1="tickMB.x1" :y1="tickMB.y1" :x2="tickMB.x2" :y2="tickMB.y2"
                                 stroke="#3b82f6" stroke-width="2"/>
 
-                            <line :x1="tickBN.x1" :y1="tickBN.y1" :x2="tickBN.x2" :y2="tickBN.y2"
+                            {{-- Двойные черточки для BN = NC --}}
+                            <line :x1="dblTickBN.tick1.x1" :y1="dblTickBN.tick1.y1" :x2="dblTickBN.tick1.x2" :y2="dblTickBN.tick1.y2"
                                 stroke="#f59e0b" stroke-width="2"/>
-                            <line :x1="tickNC.x1" :y1="tickNC.y1" :x2="tickNC.x2" :y2="tickNC.y2"
+                            <line :x1="dblTickBN.tick2.x1" :y1="dblTickBN.tick2.y1" :x2="dblTickBN.tick2.x2" :y2="dblTickBN.tick2.y2"
+                                stroke="#f59e0b" stroke-width="2"/>
+                            <line :x1="dblTickNC.tick1.x1" :y1="dblTickNC.tick1.y1" :x2="dblTickNC.tick1.x2" :y2="dblTickNC.tick1.y2"
+                                stroke="#f59e0b" stroke-width="2"/>
+                            <line :x1="dblTickNC.tick2.x1" :y1="dblTickNC.tick2.y1" :x2="dblTickNC.tick2.x2" :y2="dblTickNC.tick2.y2"
                                 stroke="#f59e0b" stroke-width="2"/>
 
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
@@ -2235,9 +2280,14 @@
                             <line :x1="tickMB.x1" :y1="tickMB.y1" :x2="tickMB.x2" :y2="tickMB.y2"
                                 stroke="#3b82f6" stroke-width="2"/>
 
-                            <line :x1="tickBN.x1" :y1="tickBN.y1" :x2="tickBN.x2" :y2="tickBN.y2"
+                            {{-- Двойные черточки для BN = NC --}}
+                            <line :x1="dblTickBN.tick1.x1" :y1="dblTickBN.tick1.y1" :x2="dblTickBN.tick1.x2" :y2="dblTickBN.tick1.y2"
                                 stroke="#f59e0b" stroke-width="2"/>
-                            <line :x1="tickNC.x1" :y1="tickNC.y1" :x2="tickNC.x2" :y2="tickNC.y2"
+                            <line :x1="dblTickBN.tick2.x1" :y1="dblTickBN.tick2.y1" :x2="dblTickBN.tick2.x2" :y2="dblTickBN.tick2.y2"
+                                stroke="#f59e0b" stroke-width="2"/>
+                            <line :x1="dblTickNC.tick1.x1" :y1="dblTickNC.tick1.y1" :x2="dblTickNC.tick1.x2" :y2="dblTickNC.tick1.y2"
+                                stroke="#f59e0b" stroke-width="2"/>
+                            <line :x1="dblTickNC.tick2.x1" :y1="dblTickNC.tick2.y1" :x2="dblTickNC.tick2.x2" :y2="dblTickNC.tick2.y2"
                                 stroke="#f59e0b" stroke-width="2"/>
 
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
@@ -2289,9 +2339,14 @@
                             <line :x1="tickMB.x1" :y1="tickMB.y1" :x2="tickMB.x2" :y2="tickMB.y2"
                                 stroke="#3b82f6" stroke-width="2"/>
 
-                            <line :x1="tickBN.x1" :y1="tickBN.y1" :x2="tickBN.x2" :y2="tickBN.y2"
+                            {{-- Двойные черточки для BN = NC --}}
+                            <line :x1="dblTickBN.tick1.x1" :y1="dblTickBN.tick1.y1" :x2="dblTickBN.tick1.x2" :y2="dblTickBN.tick1.y2"
                                 stroke="#f59e0b" stroke-width="2"/>
-                            <line :x1="tickNC.x1" :y1="tickNC.y1" :x2="tickNC.x2" :y2="tickNC.y2"
+                            <line :x1="dblTickBN.tick2.x1" :y1="dblTickBN.tick2.y1" :x2="dblTickBN.tick2.x2" :y2="dblTickBN.tick2.y2"
+                                stroke="#f59e0b" stroke-width="2"/>
+                            <line :x1="dblTickNC.tick1.x1" :y1="dblTickNC.tick1.y1" :x2="dblTickNC.tick1.x2" :y2="dblTickNC.tick1.y2"
+                                stroke="#f59e0b" stroke-width="2"/>
+                            <line :x1="dblTickNC.tick2.x1" :y1="dblTickNC.tick2.y1" :x2="dblTickNC.tick2.x2" :y2="dblTickNC.tick2.y2"
                                 stroke="#f59e0b" stroke-width="2"/>
 
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
@@ -3385,12 +3440,14 @@
         // M — середина AB, N — середина BC
         const M = window.pointOnLine(A, B, 0.5);
         const N = window.pointOnLine(B, C, 0.5);
+        // Одинарные черточки для AM = MB
         const tickAM = window.equalityTick(A, M, 0.5, 8);
         const tickMB = window.equalityTick(M, B, 0.5, 8);
-        const tickBN = window.equalityTick(B, N, 0.5, 8);
-        const tickNC = window.equalityTick(N, C, 0.5, 8);
+        // Двойные черточки для BN = NC (другая пара равных отрезков)
+        const dblTickBN = window.doubleEqualityTick(B, N, 0.5, 8, 4);
+        const dblTickNC = window.doubleEqualityTick(N, C, 0.5, 8, 4);
         return {
-            A, B, C, M, N, center, tickAM, tickMB, tickBN, tickNC,
+            A, B, C, M, N, center, tickAM, tickMB, dblTickBN, dblTickNC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
             labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
         };
@@ -3404,12 +3461,14 @@
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
         const M = window.pointOnLine(A, B, 0.5);
         const N = window.pointOnLine(B, C, 0.5);
+        // Одинарные черточки для AM = MB
         const tickAM = window.equalityTick(A, M, 0.5, 8);
         const tickMB = window.equalityTick(M, B, 0.5, 8);
-        const tickBN = window.equalityTick(B, N, 0.5, 8);
-        const tickNC = window.equalityTick(N, C, 0.5, 8);
+        // Двойные черточки для BN = NC
+        const dblTickBN = window.doubleEqualityTick(B, N, 0.5, 8, 4);
+        const dblTickNC = window.doubleEqualityTick(N, C, 0.5, 8, 4);
         return {
-            A, B, C, M, N, center, tickAM, tickMB, tickBN, tickNC,
+            A, B, C, M, N, center, tickAM, tickMB, dblTickBN, dblTickNC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
             labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
         };
@@ -3423,12 +3482,14 @@
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
         const M = window.pointOnLine(A, B, 0.5);
         const N = window.pointOnLine(B, C, 0.5);
+        // Одинарные черточки для AM = MB
         const tickAM = window.equalityTick(A, M, 0.5, 8);
         const tickMB = window.equalityTick(M, B, 0.5, 8);
-        const tickBN = window.equalityTick(B, N, 0.5, 8);
-        const tickNC = window.equalityTick(N, C, 0.5, 8);
+        // Двойные черточки для BN = NC
+        const dblTickBN = window.doubleEqualityTick(B, N, 0.5, 8, 4);
+        const dblTickNC = window.doubleEqualityTick(N, C, 0.5, 8, 4);
         return {
-            A, B, C, M, N, center, tickAM, tickMB, tickBN, tickNC,
+            A, B, C, M, N, center, tickAM, tickMB, dblTickBN, dblTickNC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
             labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
         };
@@ -3442,12 +3503,14 @@
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
         const M = window.pointOnLine(A, B, 0.5);
         const N = window.pointOnLine(B, C, 0.5);
+        // Одинарные черточки для AM = MB
         const tickAM = window.equalityTick(A, M, 0.5, 8);
         const tickMB = window.equalityTick(M, B, 0.5, 8);
-        const tickBN = window.equalityTick(B, N, 0.5, 8);
-        const tickNC = window.equalityTick(N, C, 0.5, 8);
+        // Двойные черточки для BN = NC
+        const dblTickBN = window.doubleEqualityTick(B, N, 0.5, 8, 4);
+        const dblTickNC = window.doubleEqualityTick(N, C, 0.5, 8, 4);
         return {
-            A, B, C, M, N, center, tickAM, tickMB, tickBN, tickNC,
+            A, B, C, M, N, center, tickAM, tickMB, dblTickBN, dblTickNC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
             labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
         };
