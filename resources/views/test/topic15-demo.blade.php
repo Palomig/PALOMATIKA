@@ -1330,7 +1330,7 @@
                                 fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
                             {{-- Прямой угол в C --}}
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="rightAnglePath(C, B, A, 15)" fill="none" stroke="#666666" stroke-width="2"/>
 
                             {{-- Дуга угла A (данный) --}}
                             <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
@@ -1375,7 +1375,7 @@
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                                 fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="rightAnglePath(C, B, A, 15)" fill="none" stroke="#666666" stroke-width="2"/>
                             <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                             <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
 
@@ -1416,7 +1416,7 @@
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                                 fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="rightAnglePath(C, B, A, 15)" fill="none" stroke="#666666" stroke-width="2"/>
                             <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                             <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
 
@@ -1457,7 +1457,7 @@
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                                 fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="rightAnglePath(C, B, A, 15)" fill="none" stroke="#666666" stroke-width="2"/>
                             <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                             <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
 
