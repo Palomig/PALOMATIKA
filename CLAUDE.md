@@ -983,6 +983,89 @@ const tickBC = window.equalityTick(B, C, 0.5, 10);
 
 **ВАЖНО:** Черточка маркера равенства **ДОЛЖНА быть перпендикулярна** стороне треугольника. НИКОГДА не используйте фиксированные смещения типа `x - 4, y - 5` — это создаёт черточку под произвольным углом вместо перпендикуляра.
 
+### Функция 3.3: doubleEqualityTick() — двойной маркер равенства
+
+```javascript
+function doubleEqualityTick(p1, p2, t = 0.5, length = 8, gap = 4) {
+    const dx = p2.x - p1.x;
+    const dy = p2.y - p1.y;
+    const len = Math.sqrt(dx * dx + dy * dy);
+    // Единичный вектор вдоль отрезка
+    const ux = dx / len;
+    const uy = dy / len;
+    // Нормаль (перпендикуляр) к отрезку
+    const nx = -dy / len;
+    const ny = dx / len;
+    // Центральная точка
+    const mid = { x: p1.x + dx * t, y: p1.y + dy * t };
+    const half = length / 2;
+    const halfGap = gap / 2;
+    // Первая черточка (смещена назад вдоль отрезка)
+    const tick1 = {
+        x1: mid.x - ux * halfGap - nx * half,
+        y1: mid.y - uy * halfGap - ny * half,
+        x2: mid.x - ux * halfGap + nx * half,
+        y2: mid.y - uy * halfGap + ny * half
+    };
+    // Вторая черточка (смещена вперёд вдоль отрезка)
+    const tick2 = {
+        x1: mid.x + ux * halfGap - nx * half,
+        y1: mid.y + uy * halfGap - ny * half,
+        x2: mid.x + ux * halfGap + nx * half,
+        y2: mid.y + uy * halfGap + ny * half
+    };
+    return { tick1, tick2 };
+}
+```
+
+**Назначение:** Рисует две параллельные черточки для обозначения второй пары равных отрезков.
+
+**Параметры:**
+- `p1`, `p2` — концы отрезка
+- `t` — позиция на отрезке (0.5 = середина)
+- `length` — длина каждой черточки (по умолчанию 8)
+- `gap` — расстояние между черточками (по умолчанию 4)
+
+**Возвращает:** Объект `{ tick1, tick2 }`, где каждый tick содержит `{x1, y1, x2, y2}`.
+
+**Использование в SVG:**
+```html
+{{-- Двойные черточки для BN = NC --}}
+<line :x1="dblTickBN.tick1.x1" :y1="dblTickBN.tick1.y1" :x2="dblTickBN.tick1.x2" :y2="dblTickBN.tick1.y2"
+    stroke="#f59e0b" stroke-width="2"/>
+<line :x1="dblTickBN.tick2.x1" :y1="dblTickBN.tick2.y1" :x2="dblTickBN.tick2.x2" :y2="dblTickBN.tick2.y2"
+    stroke="#f59e0b" stroke-width="2"/>
+```
+
+### Правило: Разные пары равных отрезков — разное количество черточек
+
+**КРИТИЧЕСКИ ВАЖНО:** В геометрии равные отрезки обозначаются одинаковым количеством черточек. Если на рисунке есть **несколько пар** равных отрезков, каждая пара должна иметь **своё количество** черточек.
+
+| Пара равных отрезков | Количество черточек | Функция |
+|---------------------|---------------------|---------|
+| Первая пара (напр. AM = MB) | 1 черточка | `equalityTick()` |
+| Вторая пара (напр. BN = NC) | 2 черточки | `doubleEqualityTick()` |
+| Третья пара | 3 черточки | (создать по аналогии) |
+
+**Пример (средняя линия треугольника):**
+```javascript
+// M — середина AB, N — середина BC
+const M = window.pointOnLine(A, B, 0.5);
+const N = window.pointOnLine(B, C, 0.5);
+
+// Первая пара: AM = MB (одна черточка, синяя)
+const tickAM = window.equalityTick(A, M, 0.5, 8);
+const tickMB = window.equalityTick(M, B, 0.5, 8);
+
+// Вторая пара: BN = NC (две черточки, янтарная)
+const dblTickBN = window.doubleEqualityTick(B, N, 0.5, 8, 4);
+const dblTickNC = window.doubleEqualityTick(N, C, 0.5, 8, 4);
+```
+
+**НЕПРАВИЛЬНО:** Все 4 отрезка помечены одной черточкой (AM, MB, BN, NC) — это означает, что все они равны между собой, что неверно!
+
+**ПРАВИЛЬНО:** AM = MB помечены одной черточкой, BN = NC помечены двумя черточками — это показывает две разные пары равных отрезков.
+
 ### Функция 4: pointOnLine() — точка на отрезке
 
 ```javascript
