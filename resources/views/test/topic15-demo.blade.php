@@ -3177,6 +3177,202 @@
             </div>
         </div>
 
+        {{-- XV) Радиус описанной окружности --}}
+        <div class="mb-10">
+            <div class="bg-slate-800 rounded-xl p-4 mb-6 border-l-4 border-purple-500">
+                <h3 class="text-lg font-semibold text-white">XV) Радиус описанной окружности</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {{-- Задача 63: AC=6, BC=8 --}}
+                <div x-data="task63Circumradius()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">63</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC известно, что AC=6, BC=8, угол C равен 90°. Найдите радиус описанной окружности этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            {{-- Описанная окружность --}}
+                            <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#a855f7" stroke-width="2" stroke-dasharray="6,4"/>
+
+                            {{-- Треугольник --}}
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            {{-- Прямой угол в C --}}
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+
+                            {{-- Центр окружности (середина гипотенузы) --}}
+                            <circle :cx="O.x" :cy="O.y" r="4" fill="#a855f7"/>
+
+                            {{-- Радиус --}}
+                            <line :x1="O.x" :y1="O.y" :x2="C.x" :y2="C.y"
+                                stroke="#10b981" stroke-width="2" stroke-dasharray="4,3"/>
+
+                            {{-- Вершины --}}
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                            {{-- Подписи вершин --}}
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="O.x + 15" :y="O.y - 10"
+                                fill="#a855f7" font-size="14" class="geo-label" text-anchor="start">O</text>
+
+                            {{-- Метки длин --}}
+                            <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">6</text>
+                            <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">8</text>
+                            <text :x="(O.x + C.x) / 2 + 12" :y="(O.y + C.y) / 2"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="start">R=?</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 5 (R = AB/2 = 10/2)
+                    </div>
+                </div>
+
+                {{-- Задача 64: AC=40, BC=30 --}}
+                <div x-data="task64Circumradius()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">64</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC известно, что AC=40, BC=30, угол C равен 90°. Найдите радиус описанной окружности этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#a855f7" stroke-width="2" stroke-dasharray="6,4"/>
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <circle :cx="O.x" :cy="O.y" r="4" fill="#a855f7"/>
+                            <line :x1="O.x" :y1="O.y" :x2="C.x" :y2="C.y"
+                                stroke="#10b981" stroke-width="2" stroke-dasharray="4,3"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="O.x + 15" :y="O.y - 10"
+                                fill="#a855f7" font-size="14" class="geo-label" text-anchor="start">O</text>
+                            <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">40</text>
+                            <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">30</text>
+                            <text :x="(O.x + C.x) / 2 + 12" :y="(O.y + C.y) / 2"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="start">R=?</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 25 (R = AB/2 = 50/2)
+                    </div>
+                </div>
+
+                {{-- Задача 65: AC=12, BC=5 --}}
+                <div x-data="task65Circumradius()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">65</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC известно, что AC=12, BC=5, угол C равен 90°. Найдите радиус описанной окружности этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#a855f7" stroke-width="2" stroke-dasharray="6,4"/>
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <circle :cx="O.x" :cy="O.y" r="4" fill="#a855f7"/>
+                            <line :x1="O.x" :y1="O.y" :x2="C.x" :y2="C.y"
+                                stroke="#10b981" stroke-width="2" stroke-dasharray="4,3"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="O.x + 15" :y="O.y - 10"
+                                fill="#a855f7" font-size="14" class="geo-label" text-anchor="start">O</text>
+                            <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">12</text>
+                            <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">5</text>
+                            <text :x="(O.x + C.x) / 2 + 12" :y="(O.y + C.y) / 2"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="start">R=?</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 6,5 (R = AB/2 = 13/2)
+                    </div>
+                </div>
+
+                {{-- Задача 66: AC=7, BC=24 --}}
+                <div x-data="task66Circumradius()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">66</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC известно, что AC=7, BC=24, угол C равен 90°. Найдите радиус описанной окружности этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#a855f7" stroke-width="2" stroke-dasharray="6,4"/>
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <circle :cx="O.x" :cy="O.y" r="4" fill="#a855f7"/>
+                            <line :x1="O.x" :y1="O.y" :x2="C.x" :y2="C.y"
+                                stroke="#10b981" stroke-width="2" stroke-dasharray="4,3"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="O.x + 15" :y="O.y - 10"
+                                fill="#a855f7" font-size="14" class="geo-label" text-anchor="start">O</text>
+                            <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">7</text>
+                            <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">24</text>
+                            <text :x="(O.x + C.x) / 2 + 12" :y="(O.y + C.y) / 2"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="start">R=?</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 12,5 (R = AB/2 = 25/2)
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     {{-- Чек-лист --}}
@@ -4074,6 +4270,32 @@
     function task60Equilateral() { return taskEquilateral(); }
     function task61Equilateral() { return taskEquilateral(); }
     function task62Equilateral() { return taskEquilateral(); }
+
+    // Радиус описанной окружности: задачи 63-66
+    // Для прямоугольного треугольника: центр описанной окружности — середина гипотенузы
+    // Радиус = гипотенуза / 2
+    function taskCircumradius(ac, bc) {
+        // Прямоугольный треугольник с прямым углом в C
+        const C = { x: 50, y: 180 };
+        const A = { x: 250, y: 180 };
+        const B = { x: 50, y: 60 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        // Центр описанной окружности — середина гипотенузы AB
+        const O = window.pointOnLine(A, B, 0.5);
+        // Радиус — расстояние от O до любой вершины
+        const R = Math.sqrt((A.x - O.x) ** 2 + (A.y - O.y) ** 2);
+        return {
+            A, B, C, O, R, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    function task63Circumradius() { return taskCircumradius(6, 8); }
+    function task64Circumradius() { return taskCircumradius(40, 30); }
+    function task65Circumradius() { return taskCircumradius(12, 5); }
+    function task66Circumradius() { return taskCircumradius(7, 24); }
 </script>
 
 </body>
