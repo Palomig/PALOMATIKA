@@ -467,41 +467,129 @@
         </h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {{-- Tasks 29-34: Inscribed circle in trapezoid --}}
+            {{-- Tasks 29-30: Inscribed circle in regular trapezoid (не равнобедренная) --}}
             @php
-                $trapezoidTasks = [
-                    ['id' => 29, 'r' => 18, 'type' => 'трапецию', 'answer' => '36'],
-                    ['id' => 30, 'r' => 26, 'type' => 'трапецию', 'answer' => '52'],
-                    ['id' => 31, 'r' => 28, 'type' => 'прямоугольную трапецию', 'answer' => '56'],
-                    ['id' => 32, 'r' => 32, 'type' => 'прямоугольную трапецию', 'answer' => '64'],
-                    ['id' => 33, 'r' => 30, 'type' => 'равнобедренную трапецию', 'answer' => '60'],
-                    ['id' => 34, 'r' => 44, 'type' => 'равнобедренную трапецию', 'answer' => '88'],
+                $regularTrapezoidTasks = [
+                    ['id' => 29, 'r' => 18, 'answer' => '36'],
+                    ['id' => 30, 'r' => 26, 'answer' => '52'],
                 ];
             @endphp
 
-            @foreach($trapezoidTasks as $task)
+            @foreach($regularTrapezoidTasks as $task)
             <div class="bg-slate-800/70 rounded-xl p-4 border border-slate-700">
                 <div class="flex items-start gap-2 mb-3">
                     <span class="text-red-400 font-bold">{{ $task['id'] }}</span>
                     <div class="text-slate-200 text-sm">
-                        Радиус окружности, вписанной в {{ $task['type'] }}, равен {{ $task['r'] }}. Найдите высоту этой трапеции.
+                        Радиус окружности, вписанной в трапецию, равен {{ $task['r'] }}. Найдите высоту этой трапеции.
                     </div>
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 200 140" class="w-full max-w-[180px] h-auto">
-                        {{-- Trapezoid --}}
-                        <polygon points="30,100 60,40 140,40 170,100"
+                    <svg viewBox="0 0 220 160" class="w-full max-w-[200px] h-auto">
+                        {{-- Трапеция (не равнобедренная) - левая сторона более пологая --}}
+                        <polygon points="20,120 50,40 160,40 200,120"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
 
-                        {{-- Inscribed circle --}}
-                        <circle cx="100" cy="70" r="30" fill="none" stroke="#3b82f6" stroke-width="2"/>
+                        {{-- Inscribed circle (касается всех 4 сторон) --}}
+                        <circle cx="110" cy="80" r="40" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+
+                        {{-- Radius indicator --}}
+                        <line x1="110" y1="80" x2="110" y2="120" stroke="#f59e0b" stroke-width="2"/>
+                        <circle cx="110" cy="80" r="3" fill="#f59e0b"/>
 
                         {{-- Height indicator --}}
-                        <line x1="100" y1="40" x2="100" y2="100" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4,3"/>
+                        <line x1="70" y1="40" x2="70" y2="120" stroke="#10b981" stroke-width="2" stroke-dasharray="5,4"/>
 
                         {{-- Labels --}}
-                        <text x="108" y="75" fill="#f59e0b" font-size="12" class="geo-label">r={{ $task['r'] }}</text>
+                        <text x="118" y="105" fill="#f59e0b" font-size="14" class="geo-label">r={{ $task['r'] }}</text>
+                    </svg>
+                </div>
+
+                <div class="mt-2 text-slate-500 text-xs">
+                    <span class="text-emerald-400">Ответ:</span> {{ $task['answer'] }}
+                </div>
+            </div>
+            @endforeach
+
+            {{-- Tasks 31-32: Inscribed circle in right trapezoid (прямоугольная) --}}
+            @php
+                $rightTrapezoidTasks = [
+                    ['id' => 31, 'r' => 28, 'answer' => '56'],
+                    ['id' => 32, 'r' => 32, 'answer' => '64'],
+                ];
+            @endphp
+
+            @foreach($rightTrapezoidTasks as $task)
+            <div class="bg-slate-800/70 rounded-xl p-4 border border-slate-700">
+                <div class="flex items-start gap-2 mb-3">
+                    <span class="text-red-400 font-bold">{{ $task['id'] }}</span>
+                    <div class="text-slate-200 text-sm">
+                        Радиус окружности, вписанной в прямоугольную трапецию, равен {{ $task['r'] }}. Найдите высоту этой трапеции.
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
+                    <svg viewBox="0 0 220 160" class="w-full max-w-[200px] h-auto">
+                        {{-- Прямоугольная трапеция - левая сторона вертикальная --}}
+                        <polygon points="30,120 30,40 150,40 200,120"
+                            fill="none" stroke="#dc2626" stroke-width="2.5"/>
+
+                        {{-- Inscribed circle (касается всех 4 сторон) --}}
+                        <circle cx="100" cy="80" r="40" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+
+                        {{-- Right angle marker --}}
+                        <path d="M 30,52 L 42,52 L 42,40" fill="none" stroke="#666" stroke-width="2"/>
+
+                        {{-- Radius indicator --}}
+                        <line x1="100" y1="80" x2="100" y2="120" stroke="#f59e0b" stroke-width="2"/>
+                        <circle cx="100" cy="80" r="3" fill="#f59e0b"/>
+
+                        {{-- Labels --}}
+                        <text x="108" y="105" fill="#f59e0b" font-size="14" class="geo-label">r={{ $task['r'] }}</text>
+                    </svg>
+                </div>
+
+                <div class="mt-2 text-slate-500 text-xs">
+                    <span class="text-emerald-400">Ответ:</span> {{ $task['answer'] }}
+                </div>
+            </div>
+            @endforeach
+
+            {{-- Tasks 33-34: Inscribed circle in isosceles trapezoid (равнобедренная) --}}
+            @php
+                $isoscelesTrapezoidTasks = [
+                    ['id' => 33, 'r' => 30, 'answer' => '60'],
+                    ['id' => 34, 'r' => 44, 'answer' => '88'],
+                ];
+            @endphp
+
+            @foreach($isoscelesTrapezoidTasks as $task)
+            <div class="bg-slate-800/70 rounded-xl p-4 border border-slate-700">
+                <div class="flex items-start gap-2 mb-3">
+                    <span class="text-red-400 font-bold">{{ $task['id'] }}</span>
+                    <div class="text-slate-200 text-sm">
+                        Радиус окружности, вписанной в равнобедренную трапецию, равен {{ $task['r'] }}. Найдите высоту этой трапеции.
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
+                    <svg viewBox="0 0 220 160" class="w-full max-w-[200px] h-auto">
+                        {{-- Равнобедренная трапеция - симметричная --}}
+                        <polygon points="25,120 65,40 155,40 195,120"
+                            fill="none" stroke="#dc2626" stroke-width="2.5"/>
+
+                        {{-- Inscribed circle (касается всех 4 сторон) --}}
+                        <circle cx="110" cy="80" r="40" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+
+                        {{-- Radius indicator --}}
+                        <line x1="110" y1="80" x2="110" y2="120" stroke="#f59e0b" stroke-width="2"/>
+                        <circle cx="110" cy="80" r="3" fill="#f59e0b"/>
+
+                        {{-- Axis of symmetry --}}
+                        <line x1="110" y1="35" x2="110" y2="125" stroke="#10b981" stroke-width="1.5" stroke-dasharray="5,4"/>
+
+                        {{-- Labels --}}
+                        <text x="118" y="105" fill="#f59e0b" font-size="14" class="geo-label">r={{ $task['r'] }}</text>
                     </svg>
                 </div>
 
