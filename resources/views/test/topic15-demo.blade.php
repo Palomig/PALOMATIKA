@@ -1725,17 +1725,184 @@
             </div>
         </div>
 
-        {{-- IX) Теорема Пифагора --}}
+        {{-- IX) Площадь по катетам --}}
         <div class="mb-10">
             <div class="bg-slate-800 rounded-xl p-4 mb-6 border-l-4 border-red-500">
-                <h3 class="text-lg font-semibold text-white">IX) Теорема Пифагора</h3>
+                <h3 class="text-lg font-semibold text-white">IX) Площадь по катетам</h3>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {{-- Задача 33: катеты 7 и 24 --}}
-                <div x-data="task33Pythagoras()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                {{-- Задача 33: катеты 4 и 10 --}}
+                <div x-data="task33Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
                     <div class="flex items-start gap-3 mb-4">
                         <span class="text-red-400 font-bold text-xl">33</span>
+                        <div class="text-slate-200">
+                            Два катета прямоугольного треугольника равны 4 и 10. Найдите площадь этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            {{-- Прямой угол в A --}}
+                            <path :d="rightAnglePath(A, B, C, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+
+                            {{-- Метки длин катетов --}}
+                            <text :x="labelOnSegment(A, B, 10, true).x" :y="labelOnSegment(A, B, 10, true).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">4</text>
+                            <text :x="labelOnSegment(A, C, 14).x" :y="labelOnSegment(A, C, 14).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">10</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 20 (½ · 4 · 10)
+                    </div>
+                </div>
+
+                {{-- Задача 34: катеты 14 и 5 --}}
+                <div x-data="task34Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">34</span>
+                        <div class="text-slate-200">
+                            Два катета прямоугольного треугольника равны 14 и 5. Найдите площадь этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            <path :d="rightAnglePath(A, B, C, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+
+                            <text :x="labelOnSegment(A, B, 10, true).x" :y="labelOnSegment(A, B, 10, true).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">5</text>
+                            <text :x="labelOnSegment(A, C, 14).x" :y="labelOnSegment(A, C, 14).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">14</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 35 (½ · 14 · 5)
+                    </div>
+                </div>
+
+                {{-- Задача 35: катеты 7 и 12 --}}
+                <div x-data="task35Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">35</span>
+                        <div class="text-slate-200">
+                            Два катета прямоугольного треугольника равны 7 и 12. Найдите площадь этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            <path :d="rightAnglePath(A, B, C, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+
+                            <text :x="labelOnSegment(A, B, 10, true).x" :y="labelOnSegment(A, B, 10, true).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">7</text>
+                            <text :x="labelOnSegment(A, C, 14).x" :y="labelOnSegment(A, C, 14).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">12</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 42 (½ · 7 · 12)
+                    </div>
+                </div>
+
+                {{-- Задача 36: катеты 18 и 7 --}}
+                <div x-data="task36Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">36</span>
+                        <div class="text-slate-200">
+                            Два катета прямоугольного треугольника равны 18 и 7. Найдите площадь этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            <path :d="rightAnglePath(A, B, C, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+
+                            <text :x="labelOnSegment(A, B, 10, true).x" :y="labelOnSegment(A, B, 10, true).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">7</text>
+                            <text :x="labelOnSegment(A, C, 14).x" :y="labelOnSegment(A, C, 14).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">18</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 63 (½ · 18 · 7)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- X) Теорема Пифагора --}}
+        <div class="mb-10">
+            <div class="bg-slate-800 rounded-xl p-4 mb-6 border-l-4 border-red-500">
+                <h3 class="text-lg font-semibold text-white">X) Теорема Пифагора</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {{-- Задача 45: катеты 7 и 24 --}}
+                <div x-data="task45Pythagoras()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">45</span>
                         <div class="text-slate-200">
                             Катеты прямоугольного треугольника равны 7 и 24. Найдите гипотенузу.
                         </div>
@@ -1777,10 +1944,10 @@
                     </div>
                 </div>
 
-                {{-- Задача 34: катеты 8 и 15 --}}
-                <div x-data="task34Pythagoras()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                {{-- Задача 46: катеты 8 и 15 --}}
+                <div x-data="task46Pythagoras()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
                     <div class="flex items-start gap-3 mb-4">
-                        <span class="text-red-400 font-bold text-xl">34</span>
+                        <span class="text-red-400 font-bold text-xl">46</span>
                         <div class="text-slate-200">
                             Катеты прямоугольного треугольника равны 8 и 15. Найдите гипотенузу.
                         </div>
@@ -1818,173 +1985,6 @@
 
                     <div class="mt-3 text-slate-500 text-sm">
                         <span class="text-emerald-400">Ответ:</span> 17
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {{-- X) Площадь по катетам --}}
-        <div class="mb-10">
-            <div class="bg-slate-800 rounded-xl p-4 mb-6 border-l-4 border-red-500">
-                <h3 class="text-lg font-semibold text-white">X) Площадь по катетам</h3>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {{-- Задача 35: катеты 4 и 10 --}}
-                <div x-data="task35Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
-                    <div class="flex items-start gap-3 mb-4">
-                        <span class="text-red-400 font-bold text-xl">35</span>
-                        <div class="text-slate-200">
-                            Два катета прямоугольного треугольника равны 4 и 10. Найдите площадь этого треугольника.
-                        </div>
-                    </div>
-
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
-                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
-                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-
-                            {{-- Прямой угол в A --}}
-                            <path :d="rightAnglePath(A, B, C, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-
-                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
-                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
-                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
-                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
-                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
-
-                            {{-- Метки длин катетов --}}
-                            <text :x="labelOnSegment(A, B, 10, true).x" :y="labelOnSegment(A, B, 10, true).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">4</text>
-                            <text :x="labelOnSegment(A, C, 14).x" :y="labelOnSegment(A, C, 14).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">10</text>
-                        </svg>
-                    </div>
-
-                    <div class="mt-3 text-slate-500 text-sm">
-                        <span class="text-emerald-400">Ответ:</span> 20 (½ · 4 · 10)
-                    </div>
-                </div>
-
-                {{-- Задача 36: катеты 14 и 5 --}}
-                <div x-data="task36Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
-                    <div class="flex items-start gap-3 mb-4">
-                        <span class="text-red-400 font-bold text-xl">36</span>
-                        <div class="text-slate-200">
-                            Два катета прямоугольного треугольника равны 14 и 5. Найдите площадь этого треугольника.
-                        </div>
-                    </div>
-
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
-                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
-                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-
-                            <path :d="rightAnglePath(A, B, C, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-
-                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
-                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
-                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
-                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
-                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
-
-                            <text :x="labelOnSegment(A, B, 10, true).x" :y="labelOnSegment(A, B, 10, true).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">5</text>
-                            <text :x="labelOnSegment(A, C, 14).x" :y="labelOnSegment(A, C, 14).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">14</text>
-                        </svg>
-                    </div>
-
-                    <div class="mt-3 text-slate-500 text-sm">
-                        <span class="text-emerald-400">Ответ:</span> 35 (½ · 14 · 5)
-                    </div>
-                </div>
-
-                {{-- Задача 37: катеты 7 и 12 --}}
-                <div x-data="task37Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
-                    <div class="flex items-start gap-3 mb-4">
-                        <span class="text-red-400 font-bold text-xl">37</span>
-                        <div class="text-slate-200">
-                            Два катета прямоугольного треугольника равны 7 и 12. Найдите площадь этого треугольника.
-                        </div>
-                    </div>
-
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
-                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
-                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-
-                            <path :d="rightAnglePath(A, B, C, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-
-                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
-                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
-                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
-                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
-                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
-
-                            <text :x="labelOnSegment(A, B, 10, true).x" :y="labelOnSegment(A, B, 10, true).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">7</text>
-                            <text :x="labelOnSegment(A, C, 14).x" :y="labelOnSegment(A, C, 14).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">12</text>
-                        </svg>
-                    </div>
-
-                    <div class="mt-3 text-slate-500 text-sm">
-                        <span class="text-emerald-400">Ответ:</span> 42 (½ · 7 · 12)
-                    </div>
-                </div>
-
-                {{-- Задача 38: катеты 18 и 7 --}}
-                <div x-data="task38Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
-                    <div class="flex items-start gap-3 mb-4">
-                        <span class="text-red-400 font-bold text-xl">38</span>
-                        <div class="text-slate-200">
-                            Два катета прямоугольного треугольника равны 18 и 7. Найдите площадь этого треугольника.
-                        </div>
-                    </div>
-
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
-                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
-                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-
-                            <path :d="rightAnglePath(A, B, C, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-
-                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
-                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
-                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
-                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
-                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
-
-                            <text :x="labelOnSegment(A, B, 10, true).x" :y="labelOnSegment(A, B, 10, true).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">7</text>
-                            <text :x="labelOnSegment(A, C, 14).x" :y="labelOnSegment(A, C, 14).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">18</text>
-                        </svg>
-                    </div>
-
-                    <div class="mt-3 text-slate-500 text-sm">
-                        <span class="text-emerald-400">Ответ:</span> 63 (½ · 18 · 7)
                     </div>
                 </div>
             </div>
@@ -2539,8 +2539,8 @@
         };
     }
 
-    // Пифагор: задача 33
-    function task33Pythagoras() {
+    // Пифагор: задача 45 (катеты 7 и 24)
+    function task45Pythagoras() {
         // Прямой угол в A, катеты AB=7, AC=24
         const A = { x: 50, y: 180 };
         const B = { x: 50, y: 60 };  // Вертикальный катет
@@ -2554,8 +2554,8 @@
         };
     }
 
-    // Пифагор: задача 34
-    function task34Pythagoras() {
+    // Пифагор: задача 46 (катеты 8 и 15)
+    function task46Pythagoras() {
         const A = { x: 50, y: 180 };
         const B = { x: 50, y: 70 };
         const C = { x: 230, y: 180 };
@@ -2568,8 +2568,8 @@
         };
     }
 
-    // Площадь по катетам: задача 35 (катеты 4 и 10)
-    function task35Area() {
+    // Площадь по катетам: задача 33 (катеты 4 и 10)
+    function task33Area() {
         const A = { x: 50, y: 180 };
         const B = { x: 50, y: 70 };
         const C = { x: 240, y: 180 };
@@ -2582,8 +2582,8 @@
         };
     }
 
-    // Площадь по катетам: задача 36 (катеты 14 и 5)
-    function task36Area() {
+    // Площадь по катетам: задача 34 (катеты 14 и 5)
+    function task34Area() {
         const A = { x: 50, y: 180 };
         const B = { x: 50, y: 85 };
         const C = { x: 230, y: 180 };
@@ -2596,8 +2596,8 @@
         };
     }
 
-    // Площадь по катетам: задача 37 (катеты 7 и 12)
-    function task37Area() {
+    // Площадь по катетам: задача 35 (катеты 7 и 12)
+    function task35Area() {
         const A = { x: 50, y: 180 };
         const B = { x: 50, y: 75 };
         const C = { x: 245, y: 180 };
@@ -2610,8 +2610,8 @@
         };
     }
 
-    // Площадь по катетам: задача 38 (катеты 18 и 7)
-    function task38Area() {
+    // Площадь по катетам: задача 36 (катеты 18 и 7)
+    function task36Area() {
         const A = { x: 50, y: 180 };
         const B = { x: 50, y: 80 };
         const C = { x: 250, y: 180 };
