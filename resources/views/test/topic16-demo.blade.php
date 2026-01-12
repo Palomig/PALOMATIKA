@@ -125,14 +125,14 @@
 
             @foreach($squareCircleTasks as $task)
             <div x-data="{
-                // Концептуальная диаграмма: квадрат 60x60, сдвинут вверх чтобы окружность поместилась
-                A: { x: 50, y: 25 },
-                B: { x: 110, y: 25 },
-                C: { x: 110, y: 85 },
-                D: { x: 50, y: 85 },
-                O: { x: 80, y: 85 },
+                // Концептуальная диаграмма: квадрат 75x75, масштабировано
+                A: { x: 55, y: 25 },
+                B: { x: 130, y: 25 },
+                C: { x: 130, y: 100 },
+                D: { x: 55, y: 100 },
+                O: { x: 92, y: 100 },
                 // Радиус подобран визуально: окружность проходит через A и помещается в viewBox
-                R: 67
+                R: 83
             }" class="bg-slate-800/70 rounded-xl p-4 border border-slate-700">
                 <div class="flex items-start gap-2 mb-3">
                     <span class="text-red-400 font-bold">{{ $task['id'] }}</span>
@@ -142,30 +142,30 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 160 160" class="w-full max-w-[150px] h-auto">
+                    <svg viewBox="0 0 195 195" class="w-full max-w-[210px] h-auto">
                         {{-- Circle (проходит через A визуально) --}}
-                        <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#3b82f6" stroke-width="2"/>
+                        <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
                         {{-- Square --}}
                         <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
 
                         {{-- Center O --}}
-                        <circle :cx="O.x" :cy="O.y" r="4" fill="#3b82f6"/>
+                        <circle :cx="O.x" :cy="O.y" r="5" fill="#3b82f6"/>
 
                         {{-- Radius line to A --}}
                         <line :x1="O.x" :y1="O.y" :x2="A.x" :y2="A.y"
-                            stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,3"/>
+                            stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,4"/>
 
                         {{-- Vertex A highlighted --}}
-                        <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
+                        <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
 
                         {{-- Labels --}}
-                        <text :x="A.x - 10" :y="A.y - 6" fill="#60a5fa" font-size="13" class="geo-label">A</text>
-                        <text :x="B.x + 5" :y="B.y - 6" fill="#60a5fa" font-size="13" class="geo-label">B</text>
-                        <text :x="C.x + 5" :y="C.y + 12" fill="#60a5fa" font-size="13" class="geo-label">C</text>
-                        <text :x="D.x - 10" :y="D.y + 12" fill="#60a5fa" font-size="13" class="geo-label">D</text>
-                        <text :x="O.x" :y="O.y + 14" fill="#3b82f6" font-size="12" class="geo-label" text-anchor="middle">O</text>
+                        <text :x="A.x - 12" :y="A.y - 8" fill="#60a5fa" font-size="16" class="geo-label">A</text>
+                        <text :x="B.x + 6" :y="B.y - 8" fill="#60a5fa" font-size="16" class="geo-label">B</text>
+                        <text :x="C.x + 6" :y="C.y + 14" fill="#60a5fa" font-size="16" class="geo-label">C</text>
+                        <text :x="D.x - 12" :y="D.y + 14" fill="#60a5fa" font-size="16" class="geo-label">D</text>
+                        <text :x="O.x" :y="O.y + 18" fill="#3b82f6" font-size="15" class="geo-label" text-anchor="middle">O</text>
                     </svg>
                 </div>
 
@@ -277,11 +277,11 @@
 
             @foreach($inscribedAngleTasks as $task)
             <div x-data="{
-                O: { x: 100, y: 110 },
-                R: 70,
-                A: { x: 45, y: 145 },
-                B: { x: 155, y: 145 },
-                C: { x: 70, y: 55 }
+                O: { x: 115, y: 120 },
+                R: 85,
+                A: { x: 48, y: 160 },
+                B: { x: 182, y: 160 },
+                C: { x: 78, y: 52 }
             }" class="bg-slate-800/70 rounded-xl p-4 border border-slate-700">
                 <div class="flex items-start gap-2 mb-3">
                     <span class="text-red-400 font-bold">{{ $task['id'] }}</span>
@@ -291,32 +291,32 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 200 200" class="w-full max-w-[180px] h-auto">
+                    <svg viewBox="0 0 230 220" class="w-full max-w-[220px] h-auto">
                         {{-- Circle --}}
-                        <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#3b82f6" stroke-width="2"/>
+                        <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
                         {{-- Triangle --}}
                         <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
 
                         {{-- Central angle --}}
-                        <line :x1="O.x" :y1="O.y" :x2="A.x" :y2="A.y" stroke="#f59e0b" stroke-width="1.5"/>
-                        <line :x1="O.x" :y1="O.y" :x2="B.x" :y2="B.y" stroke="#f59e0b" stroke-width="1.5"/>
+                        <line :x1="O.x" :y1="O.y" :x2="A.x" :y2="A.y" stroke="#f59e0b" stroke-width="2"/>
+                        <line :x1="O.x" :y1="O.y" :x2="B.x" :y2="B.y" stroke="#f59e0b" stroke-width="2"/>
 
                         {{-- Points --}}
-                        <circle :cx="O.x" :cy="O.y" r="4" fill="#3b82f6"/>
-                        <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
-                        <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
-                        <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
+                        <circle :cx="O.x" :cy="O.y" r="5" fill="#3b82f6"/>
+                        <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                        <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                        <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
 
                         {{-- Labels --}}
-                        <text :x="O.x + 8" :y="O.y + 5" fill="#3b82f6" font-size="14" class="geo-label">O</text>
-                        <text :x="A.x - 12" :y="A.y + 12" fill="#60a5fa" font-size="14" class="geo-label">A</text>
-                        <text :x="B.x + 6" :y="B.y + 12" fill="#60a5fa" font-size="14" class="geo-label">B</text>
-                        <text :x="C.x - 5" :y="C.y - 10" fill="#60a5fa" font-size="14" class="geo-label">C</text>
+                        <text :x="O.x + 10" :y="O.y + 6" fill="#3b82f6" font-size="16" class="geo-label">O</text>
+                        <text :x="A.x - 14" :y="A.y + 14" fill="#60a5fa" font-size="16" class="geo-label">A</text>
+                        <text :x="B.x + 8" :y="B.y + 14" fill="#60a5fa" font-size="16" class="geo-label">B</text>
+                        <text :x="C.x - 6" :y="C.y - 12" fill="#60a5fa" font-size="16" class="geo-label">C</text>
 
                         {{-- Angle label --}}
-                        <text x="100" y="135" fill="#f59e0b" font-size="11" class="geo-label" text-anchor="middle">{{ $task['aob'] }}°</text>
+                        <text x="115" y="150" fill="#f59e0b" font-size="14" class="geo-label" text-anchor="middle">{{ $task['aob'] }}°</text>
                     </svg>
                 </div>
 
@@ -342,12 +342,12 @@
 
             @foreach($diameterTasks as $task)
             <div x-data="{
-                O: { x: 100, y: 100 },
-                R: 60,
-                A: { x: 40, y: 100 },
-                C: { x: 160, y: 100 },
-                B: { x: 70, y: 48 },
-                D: { x: 130, y: 152 }
+                O: { x: 115, y: 110 },
+                R: 75,
+                A: { x: 40, y: 110 },
+                C: { x: 190, y: 110 },
+                B: { x: 78, y: 45 },
+                D: { x: 152, y: 175 }
             }" class="bg-slate-800/70 rounded-xl p-4 border border-slate-700">
                 <div class="flex items-start gap-2 mb-3">
                     <span class="text-red-400 font-bold">{{ $task['id'] }}</span>
@@ -361,32 +361,32 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 200 200" class="w-full max-w-[180px] h-auto">
+                    <svg viewBox="0 0 230 220" class="w-full max-w-[220px] h-auto">
                         {{-- Circle --}}
-                        <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#3b82f6" stroke-width="2"/>
+                        <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
                         {{-- Diameters --}}
-                        <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#dc2626" stroke-width="2"/>
-                        <line :x1="B.x" :y1="B.y" :x2="D.x" :y2="D.y" stroke="#dc2626" stroke-width="2"/>
+                        <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#dc2626" stroke-width="2.5"/>
+                        <line :x1="B.x" :y1="B.y" :x2="D.x" :y2="D.y" stroke="#dc2626" stroke-width="2.5"/>
 
                         {{-- Chord BC --}}
-                        <line :x1="B.x" :y1="B.y" :x2="C.x" :y2="C.y" stroke="#f59e0b" stroke-width="1.5"/>
+                        <line :x1="B.x" :y1="B.y" :x2="C.x" :y2="C.y" stroke="#f59e0b" stroke-width="2"/>
 
                         {{-- Center --}}
-                        <circle :cx="O.x" :cy="O.y" r="4" fill="#3b82f6"/>
+                        <circle :cx="O.x" :cy="O.y" r="5" fill="#3b82f6"/>
 
                         {{-- Vertices --}}
-                        <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
-                        <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
-                        <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
-                        <circle :cx="D.x" :cy="D.y" r="4" fill="#dc2626"/>
+                        <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                        <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                        <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                        <circle :cx="D.x" :cy="D.y" r="5" fill="#dc2626"/>
 
                         {{-- Labels --}}
-                        <text :x="A.x - 15" :y="A.y + 5" fill="#60a5fa" font-size="14" class="geo-label">A</text>
-                        <text :x="B.x - 5" :y="B.y - 10" fill="#60a5fa" font-size="14" class="geo-label">B</text>
-                        <text :x="C.x + 8" :y="C.y + 5" fill="#60a5fa" font-size="14" class="geo-label">C</text>
-                        <text :x="D.x - 5" :y="D.y + 15" fill="#60a5fa" font-size="14" class="geo-label">D</text>
-                        <text :x="O.x + 8" :y="O.y - 8" fill="#3b82f6" font-size="13" class="geo-label">O</text>
+                        <text :x="A.x - 16" :y="A.y + 6" fill="#60a5fa" font-size="16" class="geo-label">A</text>
+                        <text :x="B.x - 6" :y="B.y - 12" fill="#60a5fa" font-size="16" class="geo-label">B</text>
+                        <text :x="C.x + 10" :y="C.y + 6" fill="#60a5fa" font-size="16" class="geo-label">C</text>
+                        <text :x="D.x - 6" :y="D.y + 18" fill="#60a5fa" font-size="16" class="geo-label">D</text>
+                        <text :x="O.x + 10" :y="O.y - 10" fill="#3b82f6" font-size="16" class="geo-label">O</text>
                     </svg>
                 </div>
 
@@ -408,12 +408,12 @@
 
             @foreach($oppositeTasks as $task)
             <div x-data="{
-                O: { x: 100, y: 100 },
-                R: 60,
-                A: { x: 40, y: 100 },
-                B: { x: 160, y: 100 },
-                N: { x: 80, y: 45 },
-                M: { x: 120, y: 155 }
+                O: { x: 115, y: 110 },
+                R: 75,
+                A: { x: 40, y: 110 },
+                B: { x: 190, y: 110 },
+                N: { x: 90, y: 42 },
+                M: { x: 140, y: 178 }
             }" class="bg-slate-800/70 rounded-xl p-4 border border-slate-700">
                 <div class="flex items-start gap-2 mb-3">
                     <span class="text-red-400 font-bold">{{ $task['id'] }}</span>
@@ -423,32 +423,32 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 200 200" class="w-full max-w-[180px] h-auto">
+                    <svg viewBox="0 0 230 220" class="w-full max-w-[220px] h-auto">
                         {{-- Circle --}}
-                        <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#3b82f6" stroke-width="2"/>
+                        <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
                         {{-- Diameter AB --}}
-                        <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#dc2626" stroke-width="2"/>
+                        <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#dc2626" stroke-width="2.5"/>
 
                         {{-- Lines to N --}}
-                        <line :x1="N.x" :y1="N.y" :x2="A.x" :y2="A.y" stroke="#f59e0b" stroke-width="1.5"/>
-                        <line :x1="N.x" :y1="N.y" :x2="B.x" :y2="B.y" stroke="#f59e0b" stroke-width="1.5"/>
+                        <line :x1="N.x" :y1="N.y" :x2="A.x" :y2="A.y" stroke="#f59e0b" stroke-width="2"/>
+                        <line :x1="N.x" :y1="N.y" :x2="B.x" :y2="B.y" stroke="#f59e0b" stroke-width="2"/>
 
                         {{-- Lines to M --}}
-                        <line :x1="M.x" :y1="M.y" :x2="N.x" :y2="N.y" stroke="#10b981" stroke-width="1.5"/>
-                        <line :x1="M.x" :y1="M.y" :x2="B.x" :y2="B.y" stroke="#10b981" stroke-width="1.5"/>
+                        <line :x1="M.x" :y1="M.y" :x2="N.x" :y2="N.y" stroke="#10b981" stroke-width="2"/>
+                        <line :x1="M.x" :y1="M.y" :x2="B.x" :y2="B.y" stroke="#10b981" stroke-width="2"/>
 
                         {{-- Points --}}
-                        <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
-                        <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
-                        <circle :cx="N.x" :cy="N.y" r="4" fill="#f59e0b"/>
-                        <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                        <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                        <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                        <circle :cx="N.x" :cy="N.y" r="5" fill="#f59e0b"/>
+                        <circle :cx="M.x" :cy="M.y" r="5" fill="#10b981"/>
 
                         {{-- Labels --}}
-                        <text :x="A.x - 12" :y="A.y + 5" fill="#60a5fa" font-size="14" class="geo-label">A</text>
-                        <text :x="B.x + 8" :y="B.y + 5" fill="#60a5fa" font-size="14" class="geo-label">B</text>
-                        <text :x="N.x - 5" :y="N.y - 10" fill="#60a5fa" font-size="14" class="geo-label">N</text>
-                        <text :x="M.x - 5" :y="M.y + 15" fill="#60a5fa" font-size="14" class="geo-label">M</text>
+                        <text :x="A.x - 14" :y="A.y + 6" fill="#60a5fa" font-size="16" class="geo-label">A</text>
+                        <text :x="B.x + 10" :y="B.y + 6" fill="#60a5fa" font-size="16" class="geo-label">B</text>
+                        <text :x="N.x - 6" :y="N.y - 12" fill="#60a5fa" font-size="16" class="geo-label">N</text>
+                        <text :x="M.x - 6" :y="M.y + 18" fill="#60a5fa" font-size="16" class="geo-label">M</text>
                     </svg>
                 </div>
 
