@@ -130,6 +130,34 @@
         return Math.abs(dot) < 1; // допуск для погрешности округления
     }
 
+    // 9. Маркер равенства сторон (черточка перпендикулярна отрезку)
+    //    p1, p2 — концы отрезка
+    //    t — позиция на отрезке (0.5 = середина)
+    //    length — длина черточки (по умолчанию 8px)
+    //    Возвращает объект с координатами начала и конца черточки
+    function equalityTick(p1, p2, t = 0.5, length = 8) {
+        // Точка на середине отрезка
+        const mid = {
+            x: p1.x + (p2.x - p1.x) * t,
+            y: p1.y + (p2.y - p1.y) * t
+        };
+        // Вектор вдоль отрезка
+        const dx = p2.x - p1.x;
+        const dy = p2.y - p1.y;
+        const len = Math.sqrt(dx * dx + dy * dy);
+        // Нормаль (перпендикуляр) к отрезку
+        const nx = -dy / len;
+        const ny = dx / len;
+        // Черточка по обе стороны от середины
+        const half = length / 2;
+        return {
+            x1: mid.x - nx * half,
+            y1: mid.y - ny * half,
+            x2: mid.x + nx * half,
+            y2: mid.y + ny * half
+        };
+    }
+
     // Экспортируем в глобальную область
     window.labelPos = labelPos;
     window.makeAngleArc = makeAngleArc;
@@ -139,6 +167,7 @@
     window.angleLabelPos = angleLabelPos;
     window.bisectorPoint = bisectorPoint;
     window.isRightAngle = isRightAngle;
+    window.equalityTick = equalityTick;
 </script>
 
 <div class="max-w-6xl mx-auto px-4 py-8">
@@ -384,8 +413,8 @@
                                 stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
 
                             {{-- Маркеры равенства AM = MC --}}
-                            <line :x1="tickAM.x - 4" :y1="tickAM.y - 5" :x2="tickAM.x + 4" :y2="tickAM.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickMC.x - 4" :y1="tickMC.y - 5" :x2="tickMC.x + 4" :y2="tickMC.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAM.x1" :y1="tickAM.y1" :x2="tickAM.x2" :y2="tickAM.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickMC.x1" :y1="tickMC.y1" :x2="tickMC.x2" :y2="tickMC.y2" stroke="#3b82f6" stroke-width="2.5"/>
 
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
                             <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
@@ -432,8 +461,8 @@
                             <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
                                 stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <line :x1="tickAM.x - 4" :y1="tickAM.y - 5" :x2="tickAM.x + 4" :y2="tickAM.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickMC.x - 4" :y1="tickMC.y - 5" :x2="tickMC.x + 4" :y2="tickMC.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAM.x1" :y1="tickAM.y1" :x2="tickAM.x2" :y2="tickAM.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickMC.x1" :y1="tickMC.y1" :x2="tickMC.x2" :y2="tickMC.y2" stroke="#3b82f6" stroke-width="2.5"/>
 
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
                             <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
@@ -480,8 +509,8 @@
                             <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
                                 stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <line :x1="tickAM.x - 4" :y1="tickAM.y - 5" :x2="tickAM.x + 4" :y2="tickAM.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickMC.x - 4" :y1="tickMC.y - 5" :x2="tickMC.x + 4" :y2="tickMC.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAM.x1" :y1="tickAM.y1" :x2="tickAM.x2" :y2="tickAM.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickMC.x1" :y1="tickMC.y1" :x2="tickMC.x2" :y2="tickMC.y2" stroke="#3b82f6" stroke-width="2.5"/>
 
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
                             <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
@@ -525,8 +554,8 @@
                             <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
                                 stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <line :x1="tickAM.x - 4" :y1="tickAM.y - 5" :x2="tickAM.x + 4" :y2="tickAM.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickMC.x - 4" :y1="tickMC.y - 5" :x2="tickMC.x + 4" :y2="tickMC.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAM.x1" :y1="tickAM.y1" :x2="tickAM.x2" :y2="tickAM.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickMC.x1" :y1="tickMC.y1" :x2="tickMC.x2" :y2="tickMC.y2" stroke="#3b82f6" stroke-width="2.5"/>
 
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
                             <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
@@ -954,8 +983,8 @@
                                 fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
                             {{-- Маркеры равенства AB = BC --}}
-                            <line :x1="tickAB.x - 4" :y1="tickAB.y - 5" :x2="tickAB.x + 4" :y2="tickAB.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickBC.x - 4" :y1="tickBC.y - 5" :x2="tickBC.x + 4" :y2="tickBC.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#3b82f6" stroke-width="2.5"/>
 
                             {{-- Дуга угла B (известный) --}}
                             <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#f59e0b" stroke-width="2"/>
@@ -1000,8 +1029,8 @@
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                                 fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
-                            <line :x1="tickAB.x - 4" :y1="tickAB.y - 5" :x2="tickAB.x + 4" :y2="tickAB.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickBC.x - 4" :y1="tickBC.y - 5" :x2="tickBC.x + 4" :y2="tickBC.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#3b82f6" stroke-width="2.5"/>
 
                             <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                             <path :d="makeAngleArc(C, B, A, 28)" fill="none" stroke="#10b981" stroke-width="2"/>
@@ -1043,8 +1072,8 @@
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                                 fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
-                            <line :x1="tickAB.x - 4" :y1="tickAB.y - 5" :x2="tickAB.x + 4" :y2="tickAB.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickBC.x - 4" :y1="tickBC.y - 5" :x2="tickBC.x + 4" :y2="tickBC.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#3b82f6" stroke-width="2.5"/>
 
                             <path :d="makeAngleArc(B, A, C, 22)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                             <path :d="makeAngleArc(C, B, A, 32)" fill="none" stroke="#10b981" stroke-width="2"/>
@@ -1086,8 +1115,8 @@
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                                 fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
-                            <line :x1="tickAB.x - 4" :y1="tickAB.y - 5" :x2="tickAB.x + 4" :y2="tickAB.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickBC.x - 4" :y1="tickBC.y - 5" :x2="tickBC.x + 4" :y2="tickBC.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#3b82f6" stroke-width="2.5"/>
 
                             <path :d="makeAngleArc(B, A, C, 20)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                             <path :d="makeAngleArc(C, B, A, 35)" fill="none" stroke="#10b981" stroke-width="2"/>
@@ -1144,8 +1173,8 @@
                                 stroke="#dc2626" stroke-width="2" stroke-dasharray="6,4"/>
 
                             {{-- Маркеры равных сторон AB = BC --}}
-                            <line :x1="tickAB.x - 4" :y1="tickAB.y - 6" :x2="tickAB.x + 4" :y2="tickAB.y + 2" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickBC.x - 4" :y1="tickBC.y - 6" :x2="tickBC.x + 4" :y2="tickBC.y + 2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#3b82f6" stroke-width="2.5"/>
 
                             {{-- Дуга внешнего угла при C --}}
                             <path :d="makeAngleArc(C, B, ext, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
@@ -1195,8 +1224,8 @@
                             <line :x1="C.x" :y1="C.y" :x2="ext.x" :y2="ext.y"
                                 stroke="#dc2626" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <line :x1="tickAB.x - 4" :y1="tickAB.y - 6" :x2="tickAB.x + 4" :y2="tickAB.y + 2" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickBC.x - 4" :y1="tickBC.y - 6" :x2="tickBC.x + 4" :y2="tickBC.y + 2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#3b82f6" stroke-width="2.5"/>
 
                             <path :d="makeAngleArc(C, B, ext, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                             <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
@@ -1241,8 +1270,8 @@
                             <line :x1="C.x" :y1="C.y" :x2="ext.x" :y2="ext.y"
                                 stroke="#dc2626" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <line :x1="tickAB.x - 4" :y1="tickAB.y - 6" :x2="tickAB.x + 4" :y2="tickAB.y + 2" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickBC.x - 4" :y1="tickBC.y - 6" :x2="tickBC.x + 4" :y2="tickBC.y + 2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#3b82f6" stroke-width="2.5"/>
 
                             <path :d="makeAngleArc(C, B, ext, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                             <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
@@ -1287,8 +1316,8 @@
                             <line :x1="C.x" :y1="C.y" :x2="ext.x" :y2="ext.y"
                                 stroke="#dc2626" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <line :x1="tickAB.x - 4" :y1="tickAB.y - 6" :x2="tickAB.x + 4" :y2="tickAB.y + 2" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickBC.x - 4" :y1="tickBC.y - 6" :x2="tickBC.x + 4" :y2="tickBC.y + 2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#3b82f6" stroke-width="2.5"/>
 
                             <path :d="makeAngleArc(C, B, ext, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                             <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
@@ -2049,8 +2078,8 @@
         const C = { x: 260, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
         const M = window.pointOnLine(A, C, 0.5); // Середина AC
-        const tickAM = window.pointOnLine(A, M, 0.5);
-        const tickMC = window.pointOnLine(M, C, 0.5);
+        const tickAM = window.equalityTick(A, M, 0.5, 10);
+        const tickMC = window.equalityTick(M, C, 0.5, 10);
         return {
             A, B, C, M, center, tickAM, tickMC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
@@ -2065,8 +2094,8 @@
         const C = { x: 260, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
         const M = window.pointOnLine(A, C, 0.5);
-        const tickAM = window.pointOnLine(A, M, 0.5);
-        const tickMC = window.pointOnLine(M, C, 0.5);
+        const tickAM = window.equalityTick(A, M, 0.5, 10);
+        const tickMC = window.equalityTick(M, C, 0.5, 10);
         return {
             A, B, C, M, center, tickAM, tickMC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
@@ -2081,8 +2110,8 @@
         const C = { x: 260, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
         const M = window.pointOnLine(A, C, 0.5);
-        const tickAM = window.pointOnLine(A, M, 0.5);
-        const tickMC = window.pointOnLine(M, C, 0.5);
+        const tickAM = window.equalityTick(A, M, 0.5, 10);
+        const tickMC = window.equalityTick(M, C, 0.5, 10);
         return {
             A, B, C, M, center, tickAM, tickMC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
@@ -2097,8 +2126,8 @@
         const C = { x: 260, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
         const M = window.pointOnLine(A, C, 0.5);
-        const tickAM = window.pointOnLine(A, M, 0.5);
-        const tickMC = window.pointOnLine(M, C, 0.5);
+        const tickAM = window.equalityTick(A, M, 0.5, 10);
+        const tickMC = window.equalityTick(M, C, 0.5, 10);
         return {
             A, B, C, M, center, tickAM, tickMC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
@@ -2242,8 +2271,8 @@
         const B = { x: 150, y: 40 };
         const C = { x: 260, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
-        const tickAB = window.pointOnLine(A, B, 0.5);
-        const tickBC = window.pointOnLine(B, C, 0.5);
+        const tickAB = window.equalityTick(A, B, 0.5, 10);
+        const tickBC = window.equalityTick(B, C, 0.5, 10);
         return {
             A, B, C, center, tickAB, tickBC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
@@ -2258,8 +2287,8 @@
         const B = { x: 150, y: 45 };
         const C = { x: 260, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
-        const tickAB = window.pointOnLine(A, B, 0.5);
-        const tickBC = window.pointOnLine(B, C, 0.5);
+        const tickAB = window.equalityTick(A, B, 0.5, 10);
+        const tickBC = window.equalityTick(B, C, 0.5, 10);
         return {
             A, B, C, center, tickAB, tickBC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
@@ -2274,8 +2303,8 @@
         const B = { x: 150, y: 60 };
         const C = { x: 270, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
-        const tickAB = window.pointOnLine(A, B, 0.5);
-        const tickBC = window.pointOnLine(B, C, 0.5);
+        const tickAB = window.equalityTick(A, B, 0.5, 10);
+        const tickBC = window.equalityTick(B, C, 0.5, 10);
         return {
             A, B, C, center, tickAB, tickBC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
@@ -2290,8 +2319,8 @@
         const B = { x: 150, y: 75 };
         const C = { x: 275, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
-        const tickAB = window.pointOnLine(A, B, 0.5);
-        const tickBC = window.pointOnLine(B, C, 0.5);
+        const tickAB = window.equalityTick(A, B, 0.5, 10);
+        const tickBC = window.equalityTick(B, C, 0.5, 10);
         return {
             A, B, C, center, tickAB, tickBC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
@@ -2312,8 +2341,8 @@
         const len = Math.sqrt(dx * dx + dy * dy);
         const ext = { x: C.x + (dx / len) * 55, y: C.y + (dy / len) * 55 };
         // Маркеры равенства AB = BC
-        const tickAB = window.pointOnLine(A, B, 0.5);
-        const tickBC = window.pointOnLine(B, C, 0.5);
+        const tickAB = window.equalityTick(A, B, 0.5, 10);
+        const tickBC = window.equalityTick(B, C, 0.5, 10);
         return {
             A, B, C, center, ext, tickAB, tickBC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
@@ -2332,8 +2361,8 @@
         const dy = C.y - A.y;
         const len = Math.sqrt(dx * dx + dy * dy);
         const ext = { x: C.x + (dx / len) * 55, y: C.y + (dy / len) * 55 };
-        const tickAB = window.pointOnLine(A, B, 0.5);
-        const tickBC = window.pointOnLine(B, C, 0.5);
+        const tickAB = window.equalityTick(A, B, 0.5, 10);
+        const tickBC = window.equalityTick(B, C, 0.5, 10);
         return {
             A, B, C, center, ext, tickAB, tickBC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
@@ -2352,8 +2381,8 @@
         const dy = C.y - A.y;
         const len = Math.sqrt(dx * dx + dy * dy);
         const ext = { x: C.x + (dx / len) * 55, y: C.y + (dy / len) * 55 };
-        const tickAB = window.pointOnLine(A, B, 0.5);
-        const tickBC = window.pointOnLine(B, C, 0.5);
+        const tickAB = window.equalityTick(A, B, 0.5, 10);
+        const tickBC = window.equalityTick(B, C, 0.5, 10);
         return {
             A, B, C, center, ext, tickAB, tickBC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
@@ -2372,8 +2401,8 @@
         const dy = C.y - A.y;
         const len = Math.sqrt(dx * dx + dy * dy);
         const ext = { x: C.x + (dx / len) * 55, y: C.y + (dy / len) * 55 };
-        const tickAB = window.pointOnLine(A, B, 0.5);
-        const tickBC = window.pointOnLine(B, C, 0.5);
+        const tickAB = window.equalityTick(A, B, 0.5, 10);
+        const tickBC = window.equalityTick(B, C, 0.5, 10);
         return {
             A, B, C, center, ext, tickAB, tickBC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
