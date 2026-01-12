@@ -485,23 +485,22 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 220 160" class="w-full max-w-[200px] h-auto">
-                        {{-- Трапеция (не равнобедренная) - левая сторона более пологая --}}
-                        <polygon points="20,120 50,40 160,40 200,120"
+                    <svg viewBox="0 0 220 150" class="w-full max-w-[210px] h-auto">
+                        {{-- Трапеция (не равнобедренная) - окружность касается всех 4 сторон
+                             Высота = 2r, центр окружности посередине высоты
+                             Верх: y=25, Низ: y=125, Высота=100, r=50, центр y=75 --}}
+                        <polygon points="10,125 40,25 170,25 210,125"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
 
-                        {{-- Inscribed circle (касается всех 4 сторон) --}}
-                        <circle cx="110" cy="80" r="40" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+                        {{-- Inscribed circle: r=50, center=(110, 75), касается верха y=25, низа y=125 --}}
+                        <circle cx="110" cy="75" r="50" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
                         {{-- Radius indicator --}}
-                        <line x1="110" y1="80" x2="110" y2="120" stroke="#f59e0b" stroke-width="2"/>
-                        <circle cx="110" cy="80" r="3" fill="#f59e0b"/>
-
-                        {{-- Height indicator --}}
-                        <line x1="70" y1="40" x2="70" y2="120" stroke="#10b981" stroke-width="2" stroke-dasharray="5,4"/>
+                        <line x1="110" y1="75" x2="110" y2="125" stroke="#f59e0b" stroke-width="2"/>
+                        <circle cx="110" cy="75" r="3" fill="#f59e0b"/>
 
                         {{-- Labels --}}
-                        <text x="118" y="105" fill="#f59e0b" font-size="14" class="geo-label">r={{ $task['r'] }}</text>
+                        <text x="118" y="108" fill="#f59e0b" font-size="14" class="geo-label">r={{ $task['r'] }}</text>
                     </svg>
                 </div>
 
@@ -529,23 +528,25 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 220 160" class="w-full max-w-[200px] h-auto">
-                        {{-- Прямоугольная трапеция - левая сторона вертикальная --}}
-                        <polygon points="30,120 30,40 150,40 200,120"
+                    <svg viewBox="0 0 220 150" class="w-full max-w-[210px] h-auto">
+                        {{-- Прямоугольная трапеция - левая сторона вертикальная
+                             Окружность касается: левой вертикальной стороны, верхней, нижней и правой наклонной
+                             Высота = 2r = 100, r = 50 --}}
+                        <polygon points="25,125 25,25 145,25 210,125"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
 
-                        {{-- Inscribed circle (касается всех 4 сторон) --}}
-                        <circle cx="100" cy="80" r="40" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+                        {{-- Inscribed circle: касается левой стороны x=25, верха y=25, низа y=125 --}}
+                        <circle cx="75" cy="75" r="50" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
-                        {{-- Right angle marker --}}
-                        <path d="M 30,52 L 42,52 L 42,40" fill="none" stroke="#666" stroke-width="2"/>
+                        {{-- Right angle marker (левый верхний угол) --}}
+                        <path d="M 25,40 L 40,40 L 40,25" fill="none" stroke="#666" stroke-width="2"/>
 
                         {{-- Radius indicator --}}
-                        <line x1="100" y1="80" x2="100" y2="120" stroke="#f59e0b" stroke-width="2"/>
-                        <circle cx="100" cy="80" r="3" fill="#f59e0b"/>
+                        <line x1="75" y1="75" x2="75" y2="125" stroke="#f59e0b" stroke-width="2"/>
+                        <circle cx="75" cy="75" r="3" fill="#f59e0b"/>
 
                         {{-- Labels --}}
-                        <text x="108" y="105" fill="#f59e0b" font-size="14" class="geo-label">r={{ $task['r'] }}</text>
+                        <text x="83" y="108" fill="#f59e0b" font-size="14" class="geo-label">r={{ $task['r'] }}</text>
                     </svg>
                 </div>
 
@@ -573,23 +574,21 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 220 160" class="w-full max-w-[200px] h-auto">
-                        {{-- Равнобедренная трапеция - симметричная --}}
-                        <polygon points="25,120 65,40 155,40 195,120"
+                    <svg viewBox="0 0 220 150" class="w-full max-w-[210px] h-auto">
+                        {{-- Равнобедренная трапеция - симметричная
+                             Высота = 2r = 100, центр окружности в центре --}}
+                        <polygon points="15,125 55,25 165,25 205,125"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
 
-                        {{-- Inscribed circle (касается всех 4 сторон) --}}
-                        <circle cx="110" cy="80" r="40" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+                        {{-- Inscribed circle: касается всех 4 сторон --}}
+                        <circle cx="110" cy="75" r="50" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
                         {{-- Radius indicator --}}
-                        <line x1="110" y1="80" x2="110" y2="120" stroke="#f59e0b" stroke-width="2"/>
-                        <circle cx="110" cy="80" r="3" fill="#f59e0b"/>
-
-                        {{-- Axis of symmetry --}}
-                        <line x1="110" y1="35" x2="110" y2="125" stroke="#10b981" stroke-width="1.5" stroke-dasharray="5,4"/>
+                        <line x1="110" y1="75" x2="110" y2="125" stroke="#f59e0b" stroke-width="2"/>
+                        <circle cx="110" cy="75" r="3" fill="#f59e0b"/>
 
                         {{-- Labels --}}
-                        <text x="118" y="105" fill="#f59e0b" font-size="14" class="geo-label">r={{ $task['r'] }}</text>
+                        <text x="118" y="108" fill="#f59e0b" font-size="14" class="geo-label">r={{ $task['r'] }}</text>
                     </svg>
                 </div>
 
