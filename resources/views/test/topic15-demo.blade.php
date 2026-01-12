@@ -1892,10 +1892,441 @@
             </div>
         </div>
 
-        {{-- X) Теорема Пифагора --}}
+        {{-- X) Площадь по высоте --}}
+        <div class="mb-10">
+            <div class="bg-slate-800 rounded-xl p-4 mb-6 border-l-4 border-amber-500">
+                <h3 class="text-lg font-semibold text-white">X) Площадь по высоте</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {{-- Задача 37: сторона 16, высота 19 --}}
+                <div x-data="task37AreaHeight()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">37</span>
+                        <div class="text-slate-200">
+                            Сторона треугольника равна 16, а высота, проведённая к этой стороне, равна 19. Найдите площадь треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            {{-- Треугольник --}}
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            {{-- Высота BH --}}
+                            <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y"
+                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+
+                            {{-- Прямой угол в H --}}
+                            <path :d="rightAnglePath(H, B, C, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+
+                            {{-- Вершины --}}
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="H.x" :cy="H.y" r="4" fill="#10b981"/>
+
+                            {{-- Подписи вершин --}}
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="H.x + 12" :y="H.y + 15"
+                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">H</text>
+
+                            {{-- Метка стороны AC --}}
+                            <text :x="(A.x + C.x) / 2" :y="A.y + 22"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">16</text>
+
+                            {{-- Метка высоты BH --}}
+                            <text :x="(B.x + H.x) / 2 + 16" :y="(B.y + H.y) / 2"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">19</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 152 (½ · 16 · 19)
+                    </div>
+                </div>
+
+                {{-- Задача 38: сторона 14, высота 31 --}}
+                <div x-data="task38AreaHeight()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">38</span>
+                        <div class="text-slate-200">
+                            Сторона треугольника равна 14, а высота, проведённая к этой стороне, равна 31. Найдите площадь треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y"
+                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+
+                            <path :d="rightAnglePath(H, B, C, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="H.x" :cy="H.y" r="4" fill="#10b981"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="H.x + 12" :y="H.y + 15"
+                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">H</text>
+
+                            <text :x="(A.x + C.x) / 2" :y="A.y + 22"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">14</text>
+
+                            <text :x="(B.x + H.x) / 2 + 16" :y="(B.y + H.y) / 2"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">31</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 217 (½ · 14 · 31)
+                    </div>
+                </div>
+
+                {{-- Задача 39: сторона 29, высота 12 --}}
+                <div x-data="task39AreaHeight()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">39</span>
+                        <div class="text-slate-200">
+                            Сторона треугольника равна 29, а высота, проведённая к этой стороне, равна 12. Найдите площадь треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y"
+                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+
+                            <path :d="rightAnglePath(H, B, C, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="H.x" :cy="H.y" r="4" fill="#10b981"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="H.x + 12" :y="H.y + 15"
+                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">H</text>
+
+                            <text :x="(A.x + C.x) / 2" :y="A.y + 22"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">29</text>
+
+                            <text :x="(B.x + H.x) / 2 + 16" :y="(B.y + H.y) / 2"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">12</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 174 (½ · 29 · 12)
+                    </div>
+                </div>
+
+                {{-- Задача 40: сторона 18, высота 17 --}}
+                <div x-data="task40AreaHeight()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">40</span>
+                        <div class="text-slate-200">
+                            Сторона треугольника равна 18, а высота, проведённая к этой стороне, равна 17. Найдите площадь треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y"
+                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+
+                            <path :d="rightAnglePath(H, B, C, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="H.x" :cy="H.y" r="4" fill="#10b981"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="H.x + 12" :y="H.y + 15"
+                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">H</text>
+
+                            <text :x="(A.x + C.x) / 2" :y="A.y + 22"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">18</text>
+
+                            <text :x="(B.x + H.x) / 2 + 16" :y="(B.y + H.y) / 2"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">17</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 153 (½ · 18 · 17)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- XI) Подобные треугольники (средняя линия) --}}
+        <div class="mb-10">
+            <div class="bg-slate-800 rounded-xl p-4 mb-6 border-l-4 border-purple-500">
+                <h3 class="text-lg font-semibold text-white">XI) Подобные треугольники (средняя линия)</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {{-- Задача 41: AB=21, BC=22, AC=28 --}}
+                <div x-data="task41Midline()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">41</span>
+                        <div class="text-slate-200">
+                            Точки M и N являются серединами сторон AB и BC треугольника ABC, сторона AB равна 21, сторона BC равна 22, сторона AC равна 28. Найдите MN.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            {{-- Средняя линия MN --}}
+                            <line :x1="M.x" :y1="M.y" :x2="N.x" :y2="N.y"
+                                stroke="#10b981" stroke-width="2.5"/>
+
+                            {{-- Маркеры равенства AM = MB --}}
+                            <line :x1="tickAM.x1" :y1="tickAM.y1" :x2="tickAM.x2" :y2="tickAM.y2"
+                                stroke="#3b82f6" stroke-width="2"/>
+                            <line :x1="tickMB.x1" :y1="tickMB.y1" :x2="tickMB.x2" :y2="tickMB.y2"
+                                stroke="#3b82f6" stroke-width="2"/>
+
+                            {{-- Маркеры равенства BN = NC --}}
+                            <line :x1="tickBN.x1" :y1="tickBN.y1" :x2="tickBN.x2" :y2="tickBN.y2"
+                                stroke="#f59e0b" stroke-width="2"/>
+                            <line :x1="tickNC.x1" :y1="tickNC.y1" :x2="tickNC.x2" :y2="tickNC.y2"
+                                stroke="#f59e0b" stroke-width="2"/>
+
+                            {{-- Вершины --}}
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                            <circle :cx="N.x" :cy="N.y" r="4" fill="#10b981"/>
+
+                            {{-- Подписи --}}
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="M.x - 16" :y="M.y"
+                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">M</text>
+                            <text :x="N.x + 16" :y="N.y"
+                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">N</text>
+
+                            {{-- Метка AC --}}
+                            <text :x="(A.x + C.x) / 2" :y="A.y + 20"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">28</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 14 (MN = AC/2)
+                    </div>
+                </div>
+
+                {{-- Задача 42: AB=66, BC=37, AC=74 --}}
+                <div x-data="task42Midline()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">42</span>
+                        <div class="text-slate-200">
+                            Точки M и N являются серединами сторон AB и BC треугольника ABC, сторона AB равна 66, сторона BC равна 37, сторона AC равна 74. Найдите MN.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            <line :x1="M.x" :y1="M.y" :x2="N.x" :y2="N.y"
+                                stroke="#10b981" stroke-width="2.5"/>
+
+                            <line :x1="tickAM.x1" :y1="tickAM.y1" :x2="tickAM.x2" :y2="tickAM.y2"
+                                stroke="#3b82f6" stroke-width="2"/>
+                            <line :x1="tickMB.x1" :y1="tickMB.y1" :x2="tickMB.x2" :y2="tickMB.y2"
+                                stroke="#3b82f6" stroke-width="2"/>
+
+                            <line :x1="tickBN.x1" :y1="tickBN.y1" :x2="tickBN.x2" :y2="tickBN.y2"
+                                stroke="#f59e0b" stroke-width="2"/>
+                            <line :x1="tickNC.x1" :y1="tickNC.y1" :x2="tickNC.x2" :y2="tickNC.y2"
+                                stroke="#f59e0b" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                            <circle :cx="N.x" :cy="N.y" r="4" fill="#10b981"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="M.x - 16" :y="M.y"
+                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">M</text>
+                            <text :x="N.x + 16" :y="N.y"
+                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">N</text>
+
+                            <text :x="(A.x + C.x) / 2" :y="A.y + 20"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">74</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 37 (MN = AC/2)
+                    </div>
+                </div>
+
+                {{-- Задача 43: AB=26, BC=39, AC=48 --}}
+                <div x-data="task43Midline()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">43</span>
+                        <div class="text-slate-200">
+                            Точки M и N являются серединами сторон AB и BC треугольника ABC, сторона AB равна 26, сторона BC равна 39, сторона AC равна 48. Найдите MN.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            <line :x1="M.x" :y1="M.y" :x2="N.x" :y2="N.y"
+                                stroke="#10b981" stroke-width="2.5"/>
+
+                            <line :x1="tickAM.x1" :y1="tickAM.y1" :x2="tickAM.x2" :y2="tickAM.y2"
+                                stroke="#3b82f6" stroke-width="2"/>
+                            <line :x1="tickMB.x1" :y1="tickMB.y1" :x2="tickMB.x2" :y2="tickMB.y2"
+                                stroke="#3b82f6" stroke-width="2"/>
+
+                            <line :x1="tickBN.x1" :y1="tickBN.y1" :x2="tickBN.x2" :y2="tickBN.y2"
+                                stroke="#f59e0b" stroke-width="2"/>
+                            <line :x1="tickNC.x1" :y1="tickNC.y1" :x2="tickNC.x2" :y2="tickNC.y2"
+                                stroke="#f59e0b" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                            <circle :cx="N.x" :cy="N.y" r="4" fill="#10b981"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="M.x - 16" :y="M.y"
+                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">M</text>
+                            <text :x="N.x + 16" :y="N.y"
+                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">N</text>
+
+                            <text :x="(A.x + C.x) / 2" :y="A.y + 20"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">48</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 24 (MN = AC/2)
+                    </div>
+                </div>
+
+                {{-- Задача 44: AB=42, BC=44, AC=62 --}}
+                <div x-data="task44Midline()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">44</span>
+                        <div class="text-slate-200">
+                            Точки M и N являются серединами сторон AB и BC треугольника ABC, сторона AB равна 42, сторона BC равна 44, сторона AC равна 62. Найдите MN.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            <line :x1="M.x" :y1="M.y" :x2="N.x" :y2="N.y"
+                                stroke="#10b981" stroke-width="2.5"/>
+
+                            <line :x1="tickAM.x1" :y1="tickAM.y1" :x2="tickAM.x2" :y2="tickAM.y2"
+                                stroke="#3b82f6" stroke-width="2"/>
+                            <line :x1="tickMB.x1" :y1="tickMB.y1" :x2="tickMB.x2" :y2="tickMB.y2"
+                                stroke="#3b82f6" stroke-width="2"/>
+
+                            <line :x1="tickBN.x1" :y1="tickBN.y1" :x2="tickBN.x2" :y2="tickBN.y2"
+                                stroke="#f59e0b" stroke-width="2"/>
+                            <line :x1="tickNC.x1" :y1="tickNC.y1" :x2="tickNC.x2" :y2="tickNC.y2"
+                                stroke="#f59e0b" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                            <circle :cx="N.x" :cy="N.y" r="4" fill="#10b981"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="M.x - 16" :y="M.y"
+                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">M</text>
+                            <text :x="N.x + 16" :y="N.y"
+                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">N</text>
+
+                            <text :x="(A.x + C.x) / 2" :y="A.y + 20"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">62</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 31 (MN = AC/2)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- XII) Теорема Пифагора --}}
         <div class="mb-10">
             <div class="bg-slate-800 rounded-xl p-4 mb-6 border-l-4 border-red-500">
-                <h3 class="text-lg font-semibold text-white">X) Теорема Пифагора</h3>
+                <h3 class="text-lg font-semibold text-white">XII) Теорема Пифагора</h3>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1985,6 +2416,266 @@
 
                     <div class="mt-3 text-slate-500 text-sm">
                         <span class="text-emerald-400">Ответ:</span> 17
+                    </div>
+                </div>
+
+                {{-- Задача 47: катеты 20 и 21 --}}
+                <div x-data="task47Pythagoras()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">47</span>
+                        <div class="text-slate-200">
+                            Катеты прямоугольного треугольника равны 20 и 21. Найдите гипотенузу этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+
+                            <text :x="labelOnSegment(A, C, 8, true).x" :y="labelOnSegment(A, C, 8, true).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">21</text>
+                            <text :x="labelOnSegment(A, B, 8).x" :y="labelOnSegment(A, B, 8).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">20</text>
+
+                            <text :x="labelOnSegment(B, C, 16).x" :y="labelOnSegment(B, C, 16).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 29
+                    </div>
+                </div>
+
+                {{-- Задача 48: катеты 9 и 12 --}}
+                <div x-data="task48Pythagoras()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">48</span>
+                        <div class="text-slate-200">
+                            Катеты прямоугольного треугольника равны 9 и 12. Найдите гипотенузу этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+
+                            <text :x="labelOnSegment(A, C, 8, true).x" :y="labelOnSegment(A, C, 8, true).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">12</text>
+                            <text :x="labelOnSegment(A, B, 8).x" :y="labelOnSegment(A, B, 8).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">9</text>
+
+                            <text :x="labelOnSegment(B, C, 16).x" :y="labelOnSegment(B, C, 16).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 15
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- XIII) Теорема Пифагора: найти катет --}}
+        <div class="mb-10">
+            <div class="bg-slate-800 rounded-xl p-4 mb-6 border-l-4 border-cyan-500">
+                <h3 class="text-lg font-semibold text-white">XIII) Теорема Пифагора: найти катет</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {{-- Задача 49: катет 7, гипотенуза 25 --}}
+                <div x-data="task49PythagorasLeg()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">49</span>
+                        <div class="text-slate-200">
+                            В прямоугольном треугольнике катет и гипотенуза равны 7 и 25 соответственно. Найдите другой катет этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+
+                            {{-- Известный катет AB = 7 --}}
+                            <text :x="labelOnSegment(A, B, 8).x" :y="labelOnSegment(A, B, 8).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">7</text>
+                            {{-- Гипотенуза BC = 25 --}}
+                            <text :x="labelOnSegment(B, C, 14).x" :y="labelOnSegment(B, C, 14).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">25</text>
+                            {{-- Искомый катет AC --}}
+                            <text :x="labelOnSegment(A, C, 10, true).x" :y="labelOnSegment(A, C, 10, true).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 24
+                    </div>
+                </div>
+
+                {{-- Задача 50: катет 40, гипотенуза 41 --}}
+                <div x-data="task50PythagorasLeg()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">50</span>
+                        <div class="text-slate-200">
+                            В прямоугольном треугольнике катет и гипотенуза равны 40 и 41 соответственно. Найдите другой катет этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+
+                            <text :x="labelOnSegment(A, B, 8).x" :y="labelOnSegment(A, B, 8).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">40</text>
+                            <text :x="labelOnSegment(B, C, 14).x" :y="labelOnSegment(B, C, 14).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">41</text>
+                            <text :x="labelOnSegment(A, C, 10, true).x" :y="labelOnSegment(A, C, 10, true).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 9
+                    </div>
+                </div>
+
+                {{-- Задача 51: катет 8, гипотенуза 17 --}}
+                <div x-data="task51PythagorasLeg()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">51</span>
+                        <div class="text-slate-200">
+                            В прямоугольном треугольнике катет и гипотенуза равны 8 и 17 соответственно. Найдите другой катет этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+
+                            <text :x="labelOnSegment(A, B, 8).x" :y="labelOnSegment(A, B, 8).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">8</text>
+                            <text :x="labelOnSegment(B, C, 14).x" :y="labelOnSegment(B, C, 14).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">17</text>
+                            <text :x="labelOnSegment(A, C, 10, true).x" :y="labelOnSegment(A, C, 10, true).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 15
+                    </div>
+                </div>
+
+                {{-- Задача 52: катет 16, гипотенуза 34 --}}
+                <div x-data="task52PythagorasLeg()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">52</span>
+                        <div class="text-slate-200">
+                            В прямоугольном треугольнике катет и гипотенуза равны 16 и 34 соответственно. Найдите другой катет этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+
+                            <text :x="labelOnSegment(A, B, 8).x" :y="labelOnSegment(A, B, 8).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">16</text>
+                            <text :x="labelOnSegment(B, C, 14).x" :y="labelOnSegment(B, C, 14).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">34</text>
+                            <text :x="labelOnSegment(A, C, 10, true).x" :y="labelOnSegment(A, C, 10, true).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 30
                     </div>
                 </div>
             </div>
@@ -2615,6 +3306,228 @@
         const A = { x: 50, y: 180 };
         const B = { x: 50, y: 80 };
         const C = { x: 250, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // Площадь по высоте: задача 37 (сторона 16, высота 19)
+    function task37AreaHeight() {
+        const A = { x: 40, y: 180 };
+        const C = { x: 240, y: 180 };
+        const B = { x: 150, y: 45 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        // H — основание высоты из B на AC
+        const H = { x: B.x, y: 180 };
+        return {
+            A, B, C, H, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // Площадь по высоте: задача 38 (сторона 14, высота 31)
+    function task38AreaHeight() {
+        const A = { x: 35, y: 180 };
+        const C = { x: 245, y: 180 };
+        const B = { x: 140, y: 40 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        const H = { x: B.x, y: 180 };
+        return {
+            A, B, C, H, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // Площадь по высоте: задача 39 (сторона 29, высота 12)
+    function task39AreaHeight() {
+        const A = { x: 30, y: 180 };
+        const C = { x: 250, y: 180 };
+        const B = { x: 160, y: 55 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        const H = { x: B.x, y: 180 };
+        return {
+            A, B, C, H, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // Площадь по высоте: задача 40 (сторона 18, высота 17)
+    function task40AreaHeight() {
+        const A = { x: 35, y: 180 };
+        const C = { x: 245, y: 180 };
+        const B = { x: 145, y: 50 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        const H = { x: B.x, y: 180 };
+        return {
+            A, B, C, H, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // Средняя линия: задача 41 (AB=21, BC=22, AC=28, MN=14)
+    function task41Midline() {
+        const A = { x: 40, y: 180 };
+        const B = { x: 140, y: 40 };
+        const C = { x: 260, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        // M — середина AB, N — середина BC
+        const M = window.pointOnLine(A, B, 0.5);
+        const N = window.pointOnLine(B, C, 0.5);
+        const tickAM = window.equalityTick(A, M, 0.5, 8);
+        const tickMB = window.equalityTick(M, B, 0.5, 8);
+        const tickBN = window.equalityTick(B, N, 0.5, 8);
+        const tickNC = window.equalityTick(N, C, 0.5, 8);
+        return {
+            A, B, C, M, N, center, tickAM, tickMB, tickBN, tickNC,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // Средняя линия: задача 42 (AB=66, BC=37, AC=74, MN=37)
+    function task42Midline() {
+        const A = { x: 35, y: 180 };
+        const B = { x: 130, y: 45 };
+        const C = { x: 265, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        const M = window.pointOnLine(A, B, 0.5);
+        const N = window.pointOnLine(B, C, 0.5);
+        const tickAM = window.equalityTick(A, M, 0.5, 8);
+        const tickMB = window.equalityTick(M, B, 0.5, 8);
+        const tickBN = window.equalityTick(B, N, 0.5, 8);
+        const tickNC = window.equalityTick(N, C, 0.5, 8);
+        return {
+            A, B, C, M, N, center, tickAM, tickMB, tickBN, tickNC,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // Средняя линия: задача 43 (AB=26, BC=39, AC=48, MN=24)
+    function task43Midline() {
+        const A = { x: 30, y: 180 };
+        const B = { x: 150, y: 40 };
+        const C = { x: 270, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        const M = window.pointOnLine(A, B, 0.5);
+        const N = window.pointOnLine(B, C, 0.5);
+        const tickAM = window.equalityTick(A, M, 0.5, 8);
+        const tickMB = window.equalityTick(M, B, 0.5, 8);
+        const tickBN = window.equalityTick(B, N, 0.5, 8);
+        const tickNC = window.equalityTick(N, C, 0.5, 8);
+        return {
+            A, B, C, M, N, center, tickAM, tickMB, tickBN, tickNC,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // Средняя линия: задача 44 (AB=42, BC=44, AC=62, MN=31)
+    function task44Midline() {
+        const A = { x: 35, y: 180 };
+        const B = { x: 145, y: 45 };
+        const C = { x: 265, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        const M = window.pointOnLine(A, B, 0.5);
+        const N = window.pointOnLine(B, C, 0.5);
+        const tickAM = window.equalityTick(A, M, 0.5, 8);
+        const tickMB = window.equalityTick(M, B, 0.5, 8);
+        const tickBN = window.equalityTick(B, N, 0.5, 8);
+        const tickNC = window.equalityTick(N, C, 0.5, 8);
+        return {
+            A, B, C, M, N, center, tickAM, tickMB, tickBN, tickNC,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // Пифагор: задача 47 (катеты 20 и 21)
+    function task47Pythagoras() {
+        const A = { x: 50, y: 180 };
+        const B = { x: 50, y: 55 };
+        const C = { x: 245, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // Пифагор: задача 48 (катеты 9 и 12)
+    function task48Pythagoras() {
+        const A = { x: 50, y: 180 };
+        const B = { x: 50, y: 75 };
+        const C = { x: 230, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // Пифагор (найти катет): задача 49 (катет 7, гипотенуза 25)
+    function task49PythagorasLeg() {
+        const A = { x: 50, y: 180 };
+        const B = { x: 50, y: 60 };
+        const C = { x: 240, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // Пифагор (найти катет): задача 50 (катет 40, гипотенуза 41)
+    function task50PythagorasLeg() {
+        const A = { x: 50, y: 180 };
+        const B = { x: 50, y: 70 };
+        const C = { x: 250, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // Пифагор (найти катет): задача 51 (катет 8, гипотенуза 17)
+    function task51PythagorasLeg() {
+        const A = { x: 50, y: 180 };
+        const B = { x: 50, y: 65 };
+        const C = { x: 235, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // Пифагор (найти катет): задача 52 (катет 16, гипотенуза 34)
+    function task52PythagorasLeg() {
+        const A = { x: 50, y: 180 };
+        const B = { x: 50, y: 55 };
+        const C = { x: 255, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
         return {
             A, B, C, center,
