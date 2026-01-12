@@ -503,13 +503,13 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             {{-- Метки длин катетов — ближе к сторонам --}}
-                            <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
+                            <text :x="labelOnSegment(A, C, 8, true).x" :y="labelOnSegment(A, C, 8, true).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">24</text>
-                            <text :x="labelOnSegment(A, B, 12).x" :y="labelOnSegment(A, B, 12).y"
+                            <text :x="labelOnSegment(A, B, 8).x" :y="labelOnSegment(A, B, 8).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">7</text>
 
-                            {{-- Метка гипотенузы (искомая) --}}
-                            <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                            {{-- Метка гипотенузы (искомая) — чуть дальше от стороны --}}
+                            <text :x="labelOnSegment(B, C, 16).x" :y="labelOnSegment(B, C, 16).y"
                                 fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
@@ -547,13 +547,13 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             {{-- Метки длин катетов — ближе к сторонам --}}
-                            <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
+                            <text :x="labelOnSegment(A, C, 8, true).x" :y="labelOnSegment(A, C, 8, true).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">15</text>
-                            <text :x="labelOnSegment(A, B, 12).x" :y="labelOnSegment(A, B, 12).y"
+                            <text :x="labelOnSegment(A, B, 8).x" :y="labelOnSegment(A, B, 8).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">8</text>
 
-                            {{-- Метка гипотенузы (искомая) --}}
-                            <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                            {{-- Метка гипотенузы (искомая) — чуть дальше от стороны --}}
+                            <text :x="labelOnSegment(B, C, 16).x" :y="labelOnSegment(B, C, 16).y"
                                 fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
