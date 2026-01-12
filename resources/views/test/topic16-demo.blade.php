@@ -125,12 +125,14 @@
 
             @foreach($squareCircleTasks as $task)
             <div x-data="{
-                A: { x: 50, y: 50 },
-                B: { x: 150, y: 50 },
-                C: { x: 150, y: 150 },
-                D: { x: 50, y: 150 },
-                O: { x: 100, y: 150 },
-                R: 112
+                // Концептуальная диаграмма: квадрат 70x70, помещается в viewBox
+                A: { x: 55, y: 65 },
+                B: { x: 125, y: 65 },
+                C: { x: 125, y: 135 },
+                D: { x: 55, y: 135 },
+                O: { x: 90, y: 135 },
+                // Радиус подобран визуально, чтобы окружность проходила через A
+                R: 78
             }" class="bg-slate-800/70 rounded-xl p-4 border border-slate-700">
                 <div class="flex items-start gap-2 mb-3">
                     <span class="text-red-400 font-bold">{{ $task['id'] }}</span>
@@ -140,8 +142,8 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 200 200" class="w-full max-w-[180px] h-auto">
-                        {{-- Circle --}}
+                    <svg viewBox="0 0 180 180" class="w-full max-w-[160px] h-auto">
+                        {{-- Circle (проходит через A визуально) --}}
                         <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#3b82f6" stroke-width="2"/>
 
                         {{-- Square --}}
@@ -155,15 +157,15 @@
                         <line :x1="O.x" :y1="O.y" :x2="A.x" :y2="A.y"
                             stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,3"/>
 
-                        {{-- Vertices --}}
+                        {{-- Vertex A highlighted --}}
                         <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
 
                         {{-- Labels --}}
                         <text :x="A.x - 12" :y="A.y - 8" fill="#60a5fa" font-size="14" class="geo-label">A</text>
-                        <text :x="B.x + 8" :y="B.y - 8" fill="#60a5fa" font-size="14" class="geo-label">B</text>
-                        <text :x="C.x + 8" :y="C.y + 14" fill="#60a5fa" font-size="14" class="geo-label">C</text>
+                        <text :x="B.x + 6" :y="B.y - 8" fill="#60a5fa" font-size="14" class="geo-label">B</text>
+                        <text :x="C.x + 6" :y="C.y + 14" fill="#60a5fa" font-size="14" class="geo-label">C</text>
                         <text :x="D.x - 12" :y="D.y + 14" fill="#60a5fa" font-size="14" class="geo-label">D</text>
-                        <text :x="O.x" :y="O.y + 18" fill="#3b82f6" font-size="13" class="geo-label" text-anchor="middle">O</text>
+                        <text :x="O.x" :y="O.y + 16" fill="#3b82f6" font-size="13" class="geo-label" text-anchor="middle">O</text>
                     </svg>
                 </div>
 
@@ -184,12 +186,19 @@
             @endphp
 
             @foreach($tangentTasks as $task)
+            {{-- Геометрически корректные касательные:
+                 - O = центр окружности
+                 - P = внешняя точка (пересечение касательных)
+                 - A, B = точки касания (OA ⊥ PA, OB ⊥ PB)
+                 - |PA| = |PB| (равные касательные из одной точки)
+            --}}
             <div x-data="{
-                O: { x: 100, y: 100 },
-                R: 50,
-                A: { x: 100, y: 50 },
-                B: { x: 140, y: 130 },
-                P: { x: 160, y: 20 }
+                O: { x: 80, y: 95 },
+                R: 40,
+                // Точки касания вычислены так, чтобы OA⊥PA и OB⊥PB
+                A: { x: 112, y: 119 },
+                B: { x: 80, y: 55 },
+                P: { x: 160, y: 55 }
             }" class="bg-slate-800/70 rounded-xl p-4 border border-slate-700">
                 <div class="flex items-start gap-2 mb-3">
                     <span class="text-red-400 font-bold">{{ $task['id'] }}</span>
@@ -199,34 +208,41 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 200 180" class="w-full max-w-[180px] h-auto">
+                    <svg viewBox="0 0 190 170" class="w-full max-w-[170px] h-auto">
                         {{-- Circle --}}
                         <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#3b82f6" stroke-width="2"/>
 
-                        {{-- Tangent lines --}}
+                        {{-- Tangent lines (касаются окружности в одной точке) --}}
                         <line :x1="A.x" :y1="A.y" :x2="P.x" :y2="P.y"
                             stroke="#10b981" stroke-width="2"/>
                         <line :x1="B.x" :y1="B.y" :x2="P.x" :y2="P.y"
                             stroke="#10b981" stroke-width="2"/>
 
-                        {{-- Radii --}}
+                        {{-- Radii to tangent points --}}
                         <line :x1="O.x" :y1="O.y" :x2="A.x" :y2="A.y"
                             stroke="#f59e0b" stroke-width="1.5"/>
                         <line :x1="O.x" :y1="O.y" :x2="B.x" :y2="B.y"
                             stroke="#f59e0b" stroke-width="1.5"/>
 
+                        {{-- Right angle markers at tangent points --}}
+                        <path d="M 104,115 L 108,111 L 112,115" fill="none" stroke="#666" stroke-width="1.5"/>
+                        <path d="M 84,55 L 84,63 L 80,63" fill="none" stroke="#666" stroke-width="1.5"/>
+
                         {{-- Points --}}
                         <circle :cx="O.x" :cy="O.y" r="4" fill="#3b82f6"/>
                         <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
                         <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
+                        <circle :cx="P.x" :cy="P.y" r="4" fill="#10b981"/>
 
                         {{-- Labels --}}
-                        <text :x="O.x - 15" :y="O.y + 5" fill="#3b82f6" font-size="14" class="geo-label">O</text>
-                        <text :x="A.x - 5" :y="A.y - 10" fill="#60a5fa" font-size="14" class="geo-label">A</text>
-                        <text :x="B.x + 8" :y="B.y + 5" fill="#60a5fa" font-size="14" class="geo-label">B</text>
+                        <text :x="O.x - 16" :y="O.y + 5" fill="#3b82f6" font-size="14" class="geo-label">O</text>
+                        <text :x="A.x + 6" :y="A.y + 12" fill="#60a5fa" font-size="14" class="geo-label">A</text>
+                        <text :x="B.x - 5" :y="B.y - 10" fill="#60a5fa" font-size="14" class="geo-label">B</text>
+                        <text :x="P.x + 6" :y="P.y + 4" fill="#10b981" font-size="14" class="geo-label">P</text>
 
-                        {{-- Angle label --}}
-                        <text x="155" y="45" fill="#f59e0b" font-size="12" class="geo-label">{{ $task['angle'] }}°</text>
+                        {{-- Angle arc at P --}}
+                        <path d="M 145,55 A 15 15 0 0 1 152,68" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+                        <text x="138" y="75" fill="#f59e0b" font-size="11" class="geo-label">{{ $task['angle'] }}°</text>
                     </svg>
                 </div>
 
