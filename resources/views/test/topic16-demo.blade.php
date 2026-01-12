@@ -212,6 +212,10 @@
                         {{-- Circle --}}
                         <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#3b82f6" stroke-width="2"/>
 
+                        {{-- Line AB (соединяет точки касания) --}}
+                        <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y"
+                            stroke="#dc2626" stroke-width="2"/>
+
                         {{-- Tangent lines (касаются окружности в одной точке) --}}
                         <line :x1="A.x" :y1="A.y" :x2="P.x" :y2="P.y"
                             stroke="#10b981" stroke-width="2"/>
@@ -223,11 +227,6 @@
                             stroke="#f59e0b" stroke-width="1.5"/>
                         <line :x1="O.x" :y1="O.y" :x2="B.x" :y2="B.y"
                             stroke="#f59e0b" stroke-width="1.5"/>
-
-                        {{-- Right angle marker at A --}}
-                        <path d="M 126,146 L 132,140 L 138,146" fill="none" stroke="#666" stroke-width="1.5"/>
-                        {{-- Right angle marker at B --}}
-                        <path d="M 103,70 L 103,78 L 95,78" fill="none" stroke="#666" stroke-width="1.5"/>
 
                         {{-- Points --}}
                         <circle :cx="O.x" :cy="O.y" r="4" fill="#3b82f6"/>
@@ -241,9 +240,13 @@
                         <text :x="B.x - 5" :y="B.y - 12" fill="#60a5fa" font-size="15" class="geo-label">B</text>
                         <text :x="P.x + 8" :y="P.y + 5" fill="#10b981" font-size="15" class="geo-label">P</text>
 
-                        {{-- Angle arc at P (from direction PA to PB) --}}
-                        <path d="M 187,86 A 20 20 0 0 0 180,70" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                        {{-- Angle arc at P (внутри угла между касательными) --}}
+                        <path d="M 180,70 A 20 20 0 0 1 187,86" fill="none" stroke="#f59e0b" stroke-width="2"/>
                         <text x="168" y="88" fill="#f59e0b" font-size="13" class="geo-label">{{ $task['angle'] }}°</text>
+
+                        {{-- Angle arc at B (искомый угол ABO) с зелёным ? --}}
+                        <path d="M 95,85 A 15 15 0 0 0 101,84" fill="none" stroke="#10b981" stroke-width="2"/>
+                        <text x="105" y="92" fill="#10b981" font-size="14" font-weight="bold">?</text>
                     </svg>
                 </div>
 
