@@ -242,7 +242,7 @@
 
                         {{-- Angle arc at P (внутри угла между касательными) --}}
                         <path d="M 185,50 A 25 25 0 0 0 194,69" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                        <text x="172" y="72" fill="#f59e0b" font-size="14" class="geo-label">{{ $task['angle'] }}°</text>
+                        <text x="155" y="80" fill="#f59e0b" font-size="14" class="geo-label">{{ $task['angle'] }}°</text>
 
                         {{-- Angle arc at B (искомый угол ABO) с зелёным ? --}}
                         <path d="M 78,65 A 18 18 0 0 1 70,68" fill="none" stroke="#10b981" stroke-width="2"/>
