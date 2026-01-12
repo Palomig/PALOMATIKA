@@ -2736,6 +2736,447 @@
             </div>
         </div>
 
+        {{-- XIV) Равносторонний треугольник --}}
+        <div class="mb-10">
+            <div class="bg-slate-800 rounded-xl p-4 mb-6 border-l-4 border-emerald-500">
+                <h3 class="text-lg font-semibold text-white">XIV) Равносторонний треугольник</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {{-- Задача 53: биссектриса = 12√3 --}}
+                <div x-data="task53Equilateral()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">53</span>
+                        <div class="text-slate-200">
+                            Биссектриса равностороннего треугольника равна $12\sqrt{3}$. Найдите сторону этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            {{-- Высота/медиана/биссектриса BM --}}
+                            <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
+                                stroke="#10b981" stroke-width="2.5" stroke-dasharray="6,4"/>
+
+                            {{-- Прямой угол в M --}}
+                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+
+                            {{-- Маркеры равенства сторон --}}
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2"
+                                stroke="#3b82f6" stroke-width="2"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2"
+                                stroke="#3b82f6" stroke-width="2"/>
+
+                            {{-- Вершины --}}
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+
+                            {{-- Подписи --}}
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="M.x" :y="M.y + 20"
+                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">M</text>
+
+                            {{-- Метка биссектрисы --}}
+                            <text :x="B.x + 22" :y="(B.y + M.y) / 2"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="start">$12\sqrt{3}$</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 24 (a = 2h/√3)
+                    </div>
+                </div>
+
+                {{-- Задача 54: биссектриса = 13√3 --}}
+                <div x-data="task54Equilateral()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">54</span>
+                        <div class="text-slate-200">
+                            Биссектриса равностороннего треугольника равна $13\sqrt{3}$. Найдите сторону этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
+                                stroke="#10b981" stroke-width="2.5" stroke-dasharray="6,4"/>
+                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2"
+                                stroke="#3b82f6" stroke-width="2"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2"
+                                stroke="#3b82f6" stroke-width="2"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="M.x" :y="M.y + 20"
+                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">M</text>
+                            <text :x="B.x + 22" :y="(B.y + M.y) / 2"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="start">$13\sqrt{3}$</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 26
+                    </div>
+                </div>
+
+                {{-- Задача 55: медиана = 11√3 --}}
+                <div x-data="task55Equilateral()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">55</span>
+                        <div class="text-slate-200">
+                            Медиана равностороннего треугольника равна $11\sqrt{3}$. Найдите сторону этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
+                                stroke="#10b981" stroke-width="2.5" stroke-dasharray="6,4"/>
+                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <line :x1="tickAC1.x1" :y1="tickAC1.y1" :x2="tickAC1.x2" :y2="tickAC1.y2"
+                                stroke="#f59e0b" stroke-width="2"/>
+                            <line :x1="tickAC2.x1" :y1="tickAC2.y1" :x2="tickAC2.x2" :y2="tickAC2.y2"
+                                stroke="#f59e0b" stroke-width="2"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="M.x" :y="M.y + 20"
+                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">M</text>
+                            <text :x="B.x + 22" :y="(B.y + M.y) / 2"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="start">$11\sqrt{3}$</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 22
+                    </div>
+                </div>
+
+                {{-- Задача 56: медиана = 14√3 --}}
+                <div x-data="task56Equilateral()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">56</span>
+                        <div class="text-slate-200">
+                            Медиана равностороннего треугольника равна $14\sqrt{3}$. Найдите сторону этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
+                                stroke="#10b981" stroke-width="2.5" stroke-dasharray="6,4"/>
+                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <line :x1="tickAC1.x1" :y1="tickAC1.y1" :x2="tickAC1.x2" :y2="tickAC1.y2"
+                                stroke="#f59e0b" stroke-width="2"/>
+                            <line :x1="tickAC2.x1" :y1="tickAC2.y1" :x2="tickAC2.x2" :y2="tickAC2.y2"
+                                stroke="#f59e0b" stroke-width="2"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="M.x" :y="M.y + 20"
+                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">M</text>
+                            <text :x="B.x + 22" :y="(B.y + M.y) / 2"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="start">$14\sqrt{3}$</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 28
+                    </div>
+                </div>
+
+                {{-- Задача 57: сторона = 16√3, найти биссектрису --}}
+                <div x-data="task57Equilateral()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">57</span>
+                        <div class="text-slate-200">
+                            Сторона равностороннего треугольника равна $16\sqrt{3}$. Найдите биссектрису этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
+                                stroke="#10b981" stroke-width="2.5" stroke-dasharray="6,4"/>
+                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2"
+                                stroke="#3b82f6" stroke-width="2"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2"
+                                stroke="#3b82f6" stroke-width="2"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="(A.x + C.x) / 2" :y="A.y + 20"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">$16\sqrt{3}$</text>
+                            <text :x="B.x + 22" :y="(B.y + M.y) / 2"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="start">?</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 24 (h = a·√3/2)
+                    </div>
+                </div>
+
+                {{-- Задача 58: сторона = 14√3, найти биссектрису --}}
+                <div x-data="task58Equilateral()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">58</span>
+                        <div class="text-slate-200">
+                            Сторона равностороннего треугольника равна $14\sqrt{3}$. Найдите биссектрису этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
+                                stroke="#10b981" stroke-width="2.5" stroke-dasharray="6,4"/>
+                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2"
+                                stroke="#3b82f6" stroke-width="2"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2"
+                                stroke="#3b82f6" stroke-width="2"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="(A.x + C.x) / 2" :y="A.y + 20"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">$14\sqrt{3}$</text>
+                            <text :x="B.x + 22" :y="(B.y + M.y) / 2"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="start">?</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 21
+                    </div>
+                </div>
+
+                {{-- Задача 59: сторона = 10√3, найти медиану --}}
+                <div x-data="task59Equilateral()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">59</span>
+                        <div class="text-slate-200">
+                            Сторона равностороннего треугольника равна $10\sqrt{3}$. Найдите медиану этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
+                                stroke="#10b981" stroke-width="2.5" stroke-dasharray="6,4"/>
+                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <line :x1="tickAC1.x1" :y1="tickAC1.y1" :x2="tickAC1.x2" :y2="tickAC1.y2"
+                                stroke="#f59e0b" stroke-width="2"/>
+                            <line :x1="tickAC2.x1" :y1="tickAC2.y1" :x2="tickAC2.x2" :y2="tickAC2.y2"
+                                stroke="#f59e0b" stroke-width="2"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="M.x" :y="M.y + 20"
+                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">M</text>
+                            <text :x="(A.x + C.x) / 2" :y="A.y + 20"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">$10\sqrt{3}$</text>
+                            <text :x="B.x + 22" :y="(B.y + M.y) / 2"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="start">?</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 15
+                    </div>
+                </div>
+
+                {{-- Задача 60: сторона = 8√3, найти медиану --}}
+                <div x-data="task60Equilateral()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">60</span>
+                        <div class="text-slate-200">
+                            Сторона равностороннего треугольника равна $8\sqrt{3}$. Найдите медиану этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
+                                stroke="#10b981" stroke-width="2.5" stroke-dasharray="6,4"/>
+                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <line :x1="tickAC1.x1" :y1="tickAC1.y1" :x2="tickAC1.x2" :y2="tickAC1.y2"
+                                stroke="#f59e0b" stroke-width="2"/>
+                            <line :x1="tickAC2.x1" :y1="tickAC2.y1" :x2="tickAC2.x2" :y2="tickAC2.y2"
+                                stroke="#f59e0b" stroke-width="2"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="M.x" :y="M.y + 20"
+                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">M</text>
+                            <text :x="(A.x + C.x) / 2" :y="A.y + 20"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">$8\sqrt{3}$</text>
+                            <text :x="B.x + 22" :y="(B.y + M.y) / 2"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="start">?</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 12
+                    </div>
+                </div>
+
+                {{-- Задача 61: сторона = 18√3, найти высоту --}}
+                <div x-data="task61Equilateral()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">61</span>
+                        <div class="text-slate-200">
+                            Сторона равностороннего треугольника равна $18\sqrt{3}$. Найдите высоту этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
+                                stroke="#10b981" stroke-width="2.5"/>
+                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="M.x" :y="M.y + 20"
+                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">H</text>
+                            <text :x="(A.x + C.x) / 2" :y="A.y + 20"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">$18\sqrt{3}$</text>
+                            <text :x="B.x + 22" :y="(B.y + M.y) / 2"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="start">?</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 27
+                    </div>
+                </div>
+
+                {{-- Задача 62: сторона = 12√3, найти высоту --}}
+                <div x-data="task62Equilateral()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">62</span>
+                        <div class="text-slate-200">
+                            Сторона равностороннего треугольника равна $12\sqrt{3}$. Найдите высоту этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
+                                stroke="#10b981" stroke-width="2.5"/>
+                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="M.x" :y="M.y + 20"
+                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">H</text>
+                            <text :x="(A.x + C.x) / 2" :y="A.y + 20"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">$12\sqrt{3}$</text>
+                            <text :x="B.x + 22" :y="(B.y + M.y) / 2"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="start">?</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 18
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     {{-- Чек-лист --}}
@@ -3599,6 +4040,40 @@
             labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
         };
     }
+
+    // Равносторонний треугольник: задачи 53-62
+    // В равностороннем треугольнике высота = медиана = биссектриса = a√3/2
+    function taskEquilateral() {
+        // Равносторонний треугольник
+        const A = { x: 50, y: 180 };
+        const C = { x: 250, y: 180 };
+        const B = { x: 150, y: 180 - 173 }; // Высота ≈ 173 для стороны 200
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        // M — середина AC (основание высоты/медианы)
+        const M = window.pointOnLine(A, C, 0.5);
+        // Маркеры равенства сторон
+        const tickAB = window.equalityTick(A, B, 0.5, 8);
+        const tickBC = window.equalityTick(B, C, 0.5, 8);
+        const tickAC1 = window.equalityTick(A, M, 0.5, 8);
+        const tickAC2 = window.equalityTick(M, C, 0.5, 8);
+        return {
+            A, B, C, M, center, tickAB, tickBC, tickAC1, tickAC2,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    function task53Equilateral() { return taskEquilateral(); }
+    function task54Equilateral() { return taskEquilateral(); }
+    function task55Equilateral() { return taskEquilateral(); }
+    function task56Equilateral() { return taskEquilateral(); }
+    function task57Equilateral() { return taskEquilateral(); }
+    function task58Equilateral() { return taskEquilateral(); }
+    function task59Equilateral() { return taskEquilateral(); }
+    function task60Equilateral() { return taskEquilateral(); }
+    function task61Equilateral() { return taskEquilateral(); }
+    function task62Equilateral() { return taskEquilateral(); }
 </script>
 
 </body>
