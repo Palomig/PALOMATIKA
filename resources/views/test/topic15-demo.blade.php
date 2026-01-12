@@ -1226,7 +1226,8 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                            {{-- C размещаем ниже точки, чтобы не налезать на линию внешнего угла --}}
+                            <text :x="C.x" :y="C.y + 25"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             {{-- Метка внешнего угла 129° --}}
@@ -1274,7 +1275,8 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                            {{-- C размещаем ниже точки, чтобы не налезать на линию внешнего угла --}}
+                            <text :x="C.x" :y="C.y + 25"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(C, B, ext, 48).x" :y="angleLabelPos(C, B, ext, 48).y"
@@ -1320,7 +1322,8 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                            {{-- C размещаем ниже точки, чтобы не налезать на линию внешнего угла --}}
+                            <text :x="C.x" :y="C.y + 25"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(C, B, ext, 48).x" :y="angleLabelPos(C, B, ext, 48).y"
@@ -1366,7 +1369,8 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                            {{-- C размещаем ниже точки, чтобы не налезать на линию внешнего угла --}}
+                            <text :x="C.x" :y="C.y + 25"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(C, B, ext, 48).x" :y="angleLabelPos(C, B, ext, 48).y"
