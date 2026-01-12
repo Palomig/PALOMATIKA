@@ -1732,10 +1732,10 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {{-- Задача 45: катеты 7 и 24 --}}
-                <div x-data="task45Pythagoras()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                {{-- Задача 33: катеты 7 и 24 --}}
+                <div x-data="task33Pythagoras()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
                     <div class="flex items-start gap-3 mb-4">
-                        <span class="text-red-400 font-bold text-xl">45</span>
+                        <span class="text-red-400 font-bold text-xl">33</span>
                         <div class="text-slate-200">
                             Катеты прямоугольного треугольника равны 7 и 24. Найдите гипотенузу.
                         </div>
@@ -1777,10 +1777,10 @@
                     </div>
                 </div>
 
-                {{-- Задача 46: катеты 8 и 15 --}}
-                <div x-data="task46Pythagoras()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                {{-- Задача 34: катеты 8 и 15 --}}
+                <div x-data="task34Pythagoras()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
                     <div class="flex items-start gap-3 mb-4">
-                        <span class="text-red-400 font-bold text-xl">46</span>
+                        <span class="text-red-400 font-bold text-xl">34</span>
                         <div class="text-slate-200">
                             Катеты прямоугольного треугольника равны 8 и 15. Найдите гипотенузу.
                         </div>
@@ -1830,10 +1830,10 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {{-- Задача 33: катеты 4 и 10 --}}
-                <div x-data="task33Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                {{-- Задача 35: катеты 4 и 10 --}}
+                <div x-data="task35Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
                     <div class="flex items-start gap-3 mb-4">
-                        <span class="text-red-400 font-bold text-xl">33</span>
+                        <span class="text-red-400 font-bold text-xl">35</span>
                         <div class="text-slate-200">
                             Два катета прямоугольного треугольника равны 4 и 10. Найдите площадь этого треугольника.
                         </div>
@@ -1871,10 +1871,10 @@
                     </div>
                 </div>
 
-                {{-- Задача 34: катеты 14 и 5 --}}
-                <div x-data="task34Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                {{-- Задача 36: катеты 14 и 5 --}}
+                <div x-data="task36Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
                     <div class="flex items-start gap-3 mb-4">
-                        <span class="text-red-400 font-bold text-xl">34</span>
+                        <span class="text-red-400 font-bold text-xl">36</span>
                         <div class="text-slate-200">
                             Два катета прямоугольного треугольника равны 14 и 5. Найдите площадь этого треугольника.
                         </div>
@@ -1910,10 +1910,10 @@
                     </div>
                 </div>
 
-                {{-- Задача 35: катеты 7 и 12 --}}
-                <div x-data="task35Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                {{-- Задача 37: катеты 7 и 12 --}}
+                <div x-data="task37Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
                     <div class="flex items-start gap-3 mb-4">
-                        <span class="text-red-400 font-bold text-xl">35</span>
+                        <span class="text-red-400 font-bold text-xl">37</span>
                         <div class="text-slate-200">
                             Два катета прямоугольного треугольника равны 7 и 12. Найдите площадь этого треугольника.
                         </div>
@@ -1949,10 +1949,10 @@
                     </div>
                 </div>
 
-                {{-- Задача 36: катеты 18 и 7 --}}
-                <div x-data="task36Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                {{-- Задача 38: катеты 18 и 7 --}}
+                <div x-data="task38Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
                     <div class="flex items-start gap-3 mb-4">
-                        <span class="text-red-400 font-bold text-xl">36</span>
+                        <span class="text-red-400 font-bold text-xl">38</span>
                         <div class="text-slate-200">
                             Два катета прямоугольного треугольника равны 18 и 7. Найдите площадь этого треугольника.
                         </div>
@@ -2537,64 +2537,8 @@
         };
     }
 
-    // Площадь по катетам: задача 33 (катеты 4 и 10)
-    function task33Area() {
-        const A = { x: 50, y: 180 };
-        const B = { x: 50, y: 70 };
-        const C = { x: 240, y: 180 };
-        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
-        return {
-            A, B, C, center,
-            labelPos: (p, c, d) => window.labelPos(p, c, d),
-            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
-            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
-        };
-    }
-
-    // Площадь по катетам: задача 34 (катеты 14 и 5)
-    function task34Area() {
-        const A = { x: 50, y: 180 };
-        const B = { x: 50, y: 85 };
-        const C = { x: 230, y: 180 };
-        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
-        return {
-            A, B, C, center,
-            labelPos: (p, c, d) => window.labelPos(p, c, d),
-            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
-            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
-        };
-    }
-
-    // Площадь по катетам: задача 35 (катеты 7 и 12)
-    function task35Area() {
-        const A = { x: 50, y: 180 };
-        const B = { x: 50, y: 75 };
-        const C = { x: 245, y: 180 };
-        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
-        return {
-            A, B, C, center,
-            labelPos: (p, c, d) => window.labelPos(p, c, d),
-            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
-            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
-        };
-    }
-
-    // Площадь по катетам: задача 36 (катеты 18 и 7)
-    function task36Area() {
-        const A = { x: 50, y: 180 };
-        const B = { x: 50, y: 80 };
-        const C = { x: 250, y: 180 };
-        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
-        return {
-            A, B, C, center,
-            labelPos: (p, c, d) => window.labelPos(p, c, d),
-            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
-            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
-        };
-    }
-
-    // Пифагор: задача 45
-    function task45Pythagoras() {
+    // Пифагор: задача 33
+    function task33Pythagoras() {
         // Прямой угол в A, катеты AB=7, AC=24
         const A = { x: 50, y: 180 };
         const B = { x: 50, y: 60 };  // Вертикальный катет
@@ -2608,11 +2552,67 @@
         };
     }
 
-    // Пифагор: задача 46
-    function task46Pythagoras() {
+    // Пифагор: задача 34
+    function task34Pythagoras() {
         const A = { x: 50, y: 180 };
         const B = { x: 50, y: 70 };
         const C = { x: 230, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // Площадь по катетам: задача 35 (катеты 4 и 10)
+    function task35Area() {
+        const A = { x: 50, y: 180 };
+        const B = { x: 50, y: 70 };
+        const C = { x: 240, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // Площадь по катетам: задача 36 (катеты 14 и 5)
+    function task36Area() {
+        const A = { x: 50, y: 180 };
+        const B = { x: 50, y: 85 };
+        const C = { x: 230, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // Площадь по катетам: задача 37 (катеты 7 и 12)
+    function task37Area() {
+        const A = { x: 50, y: 180 };
+        const B = { x: 50, y: 75 };
+        const C = { x: 245, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // Площадь по катетам: задача 38 (катеты 18 и 7)
+    function task38Area() {
+        const A = { x: 50, y: 180 };
+        const B = { x: 50, y: 80 };
+        const C = { x: 250, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
         return {
             A, B, C, center,
