@@ -3373,6 +3373,919 @@
             </div>
         </div>
 
+        {{-- XVI) Синус, косинус, тангенс острого угла --}}
+        <div class="mb-10">
+            <div class="bg-slate-800 rounded-xl p-4 mb-6 border-l-4 border-orange-500">
+                <h3 class="text-lg font-semibold text-white">XVI) Синус, косинус, тангенс острого угла</h3>
+            </div>
+
+            {{-- Подраздел: Найти sinB --}}
+            <div class="bg-slate-700/30 rounded-lg p-3 mb-4">
+                <span class="text-orange-400 font-medium">Найти sinB (sinB = противолежащий / гипотенуза = AC / AB)</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                {{-- Задача 67: AC=11, AB=20, найти sinB --}}
+                <div x-data="task67Trig()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">67</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC угол C равен 90°, AC=11, AB=20. Найдите sinB.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">11</text>
+                            <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">20</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 0,55 (sinB = AC/AB = 11/20)
+                    </div>
+                </div>
+
+                {{-- Задача 68 --}}
+                <div x-data="task68Trig()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">68</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC угол C равен 90°, AC=7, AB=25. Найдите sinB.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">7</text>
+                            <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">25</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 0,28 (sinB = 7/25)
+                    </div>
+                </div>
+
+                {{-- Задача 69 --}}
+                <div x-data="task69Trig()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">69</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC угол C равен 90°, AC=4, AB=5. Найдите sinB.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">4</text>
+                            <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">5</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 0,8 (sinB = 4/5)
+                    </div>
+                </div>
+
+                {{-- Задача 70 --}}
+                <div x-data="task70Trig()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">70</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC угол C равен 90°, AC=24, AB=25. Найдите sinB.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">24</text>
+                            <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">25</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 0,96 (sinB = 24/25)
+                    </div>
+                </div>
+            </div>
+
+            {{-- Подраздел: Найти cosB --}}
+            <div class="bg-slate-700/30 rounded-lg p-3 mb-4">
+                <span class="text-orange-400 font-medium">Найти cosB (cosB = прилежащий / гипотенуза = BC / AB)</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                {{-- Задача 71 --}}
+                <div x-data="task71Trig()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">71</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC угол C равен 90°, BC=13, AB=20. Найдите cosB.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">13</text>
+                            <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">20</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 0,65 (cosB = 13/20)
+                    </div>
+                </div>
+
+                {{-- Задача 72 --}}
+                <div x-data="task72Trig()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">72</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC угол C равен 90°, BC=72, AB=75. Найдите cosB.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">72</text>
+                            <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">75</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 0,96 (cosB = 72/75 = 24/25)
+                    </div>
+                </div>
+
+                {{-- Задача 73 --}}
+                <div x-data="task73Trig()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">73</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC угол C равен 90°, BC=30, AB=50. Найдите cosB.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">30</text>
+                            <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">50</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 0,6 (cosB = 30/50 = 3/5)
+                    </div>
+                </div>
+
+                {{-- Задача 74 --}}
+                <div x-data="task74Trig()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">74</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC угол C равен 90°, BC=14, AB=50. Найдите cosB.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">14</text>
+                            <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">50</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 0,28 (cosB = 14/50 = 7/25)
+                    </div>
+                </div>
+            </div>
+
+            {{-- Подраздел: Найти tgB --}}
+            <div class="bg-slate-700/30 rounded-lg p-3 mb-4">
+                <span class="text-orange-400 font-medium">Найти tgB (tgB = противолежащий / прилежащий = AC / BC)</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                {{-- Задача 75 --}}
+                <div x-data="task75Trig()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">75</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC угол C равен 90°, BC=10, AC=7. Найдите tgB.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">7</text>
+                            <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">10</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 0,7 (tgB = AC/BC = 7/10)
+                    </div>
+                </div>
+
+                {{-- Задача 76 --}}
+                <div x-data="task76Trig()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">76</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC угол C равен 90°, BC=15, AC=3. Найдите tgB.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">3</text>
+                            <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">15</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 0,2 (tgB = 3/15 = 1/5)
+                    </div>
+                </div>
+
+                {{-- Задача 77 --}}
+                <div x-data="task77Trig()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">77</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC угол C равен 90°, BC=9, AC=27. Найдите tgB.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">27</text>
+                            <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">9</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 3 (tgB = 27/9)
+                    </div>
+                </div>
+
+                {{-- Задача 78 --}}
+                <div x-data="task78Trig()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">78</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC угол C равен 90°, BC=4, AC=28. Найдите tgB.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">28</text>
+                            <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">4</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 7 (tgB = 28/4)
+                    </div>
+                </div>
+            </div>
+
+            {{-- Подраздел: Найти AC по sinB --}}
+            <div class="bg-slate-700/30 rounded-lg p-3 mb-4">
+                <span class="text-orange-400 font-medium">Найти AC по sinB (AC = AB · sinB)</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                {{-- Задача 79 --}}
+                <div x-data="task79Trig()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">79</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC угол C равен 90°, $\sin B = \frac{4}{9}$, AB=18. Найдите AC.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                            <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">18</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 8 (AC = 18 · 4/9)
+                    </div>
+                </div>
+
+                {{-- Задача 80 --}}
+                <div x-data="task80Trig()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">80</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC угол C равен 90°, $\sin B = \frac{5}{17}$, AB=51. Найдите AC.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                            <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">51</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 15 (AC = 51 · 5/17)
+                    </div>
+                </div>
+
+                {{-- Задача 81 --}}
+                <div x-data="task81Trig()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">81</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC угол C равен 90°, $\sin B = \frac{4}{11}$, AB=55. Найдите AC.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                            <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">55</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 20 (AC = 55 · 4/11)
+                    </div>
+                </div>
+
+                {{-- Задача 82 --}}
+                <div x-data="task82Trig()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">82</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC угол C равен 90°, $\sin B = \frac{7}{12}$, AB=48. Найдите AC.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                            <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">48</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 28 (AC = 48 · 7/12)
+                    </div>
+                </div>
+            </div>
+
+            {{-- Подраздел: Найти BC по cosB --}}
+            <div class="bg-slate-700/30 rounded-lg p-3 mb-4">
+                <span class="text-orange-400 font-medium">Найти BC по cosB (BC = AB · cosB)</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                {{-- Задача 83 --}}
+                <div x-data="task83Trig()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">83</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC угол C равен 90°, $\cos B = \frac{2}{5}$, AB=10. Найдите BC.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                            <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">10</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 4 (BC = 10 · 2/5)
+                    </div>
+                </div>
+
+                {{-- Задача 84 --}}
+                <div x-data="task84Trig()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">84</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC угол C равен 90°, $\cos B = \frac{7}{9}$, AB=54. Найдите BC.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                            <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">54</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 42 (BC = 54 · 7/9)
+                    </div>
+                </div>
+
+                {{-- Задача 85 --}}
+                <div x-data="task85Trig()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">85</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC угол C равен 90°, $\cos B = \frac{11}{15}$, AB=75. Найдите BC.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                            <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">75</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 55 (BC = 75 · 11/15)
+                    </div>
+                </div>
+
+                {{-- Задача 86 --}}
+                <div x-data="task86Trig()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">86</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC угол C равен 90°, $\cos B = \frac{13}{16}$, AB=96. Найдите BC.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                            <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">96</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 78 (BC = 96 · 13/16)
+                    </div>
+                </div>
+            </div>
+
+            {{-- Подраздел: Найти AC по tgB --}}
+            <div class="bg-slate-700/30 rounded-lg p-3 mb-4">
+                <span class="text-orange-400 font-medium">Найти AC по tgB (AC = BC · tgB)</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {{-- Задача 87 --}}
+                <div x-data="task87Trig()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">87</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC угол C равен 90°, $\mathrm{tg}\, B = \frac{7}{12}$, BC=48. Найдите AC.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                            <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">48</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 28 (AC = 48 · 7/12)
+                    </div>
+                </div>
+
+                {{-- Задача 88 --}}
+                <div x-data="task88Trig()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">88</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC угол C равен 90°, $\mathrm{tg}\, B = \frac{4}{7}$, BC=35. Найдите AC.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                            <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">35</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 20 (AC = 35 · 4/7)
+                    </div>
+                </div>
+
+                {{-- Задача 89 --}}
+                <div x-data="task89Trig()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">89</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC угол C равен 90°, $\mathrm{tg}\, B = \frac{8}{5}$, BC=20. Найдите AC.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                            <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">20</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 32 (AC = 20 · 8/5)
+                    </div>
+                </div>
+
+                {{-- Задача 90 --}}
+                <div x-data="task90Trig()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">90</span>
+                        <div class="text-slate-200">
+                            В треугольнике ABC угол C равен 90°, $\mathrm{tg}\, B = \frac{9}{7}$, BC=42. Найдите AC.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                            <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">42</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 54 (AC = 42 · 9/7)
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     {{-- Чек-лист --}}
@@ -4296,6 +5209,60 @@
     function task64Circumradius() { return taskCircumradius(40, 30); }
     function task65Circumradius() { return taskCircumradius(12, 5); }
     function task66Circumradius() { return taskCircumradius(7, 24); }
+
+    // Тригонометрия: задачи 67-90
+    // Прямоугольный треугольник, угол C = 90°, угол B выделен
+    // sinB = AC/AB, cosB = BC/AB, tgB = AC/BC
+    function taskTrig() {
+        // Прямоугольный треугольник: прямой угол в C
+        const C = { x: 50, y: 180 };
+        const A = { x: 250, y: 180 };
+        const B = { x: 50, y: 55 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // sinB: задачи 67-70
+    function task67Trig() { return taskTrig(); }
+    function task68Trig() { return taskTrig(); }
+    function task69Trig() { return taskTrig(); }
+    function task70Trig() { return taskTrig(); }
+
+    // cosB: задачи 71-74
+    function task71Trig() { return taskTrig(); }
+    function task72Trig() { return taskTrig(); }
+    function task73Trig() { return taskTrig(); }
+    function task74Trig() { return taskTrig(); }
+
+    // tgB: задачи 75-78
+    function task75Trig() { return taskTrig(); }
+    function task76Trig() { return taskTrig(); }
+    function task77Trig() { return taskTrig(); }
+    function task78Trig() { return taskTrig(); }
+
+    // Найти AC по sinB и AB: задачи 79-82
+    function task79Trig() { return taskTrig(); }
+    function task80Trig() { return taskTrig(); }
+    function task81Trig() { return taskTrig(); }
+    function task82Trig() { return taskTrig(); }
+
+    // Найти BC по cosB и AB: задачи 83-86
+    function task83Trig() { return taskTrig(); }
+    function task84Trig() { return taskTrig(); }
+    function task85Trig() { return taskTrig(); }
+    function task86Trig() { return taskTrig(); }
+
+    // Найти AC по tgB и BC: задачи 87-90
+    function task87Trig() { return taskTrig(); }
+    function task88Trig() { return taskTrig(); }
+    function task89Trig() { return taskTrig(); }
+    function task90Trig() { return taskTrig(); }
 </script>
 
 </body>
