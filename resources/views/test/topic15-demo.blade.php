@@ -1626,16 +1626,17 @@
         };
     }
 
-    // Внешний угол: задача 14 (угол C = 177° — почти развёрнутый)
+    // Внешний угол: задача 14 (угол C = 177°)
+    // Рисунок показывает концепцию внешнего угла, не буквальное значение
     function task14External() {
-        const A = { x: 30, y: 180 };
-        const B = { x: 160, y: 175 }; // B почти на уровне основания
-        const C = { x: 250, y: 180 };
+        const A = { x: 40, y: 180 };
+        const B = { x: 180, y: 50 };
+        const C = { x: 240, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
         const dx = C.x - A.x;
         const dy = C.y - A.y;
         const len = Math.sqrt(dx * dx + dy * dy);
-        const ext = { x: C.x + (dx / len) * 50, y: C.y + (dy / len) * 50 };
+        const ext = { x: C.x + (dx / len) * 60, y: C.y + (dy / len) * 60 };
         return {
             A, B, C, center, ext,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
