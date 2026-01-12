@@ -125,14 +125,14 @@
 
             @foreach($squareCircleTasks as $task)
             <div x-data="{
-                // Концептуальная диаграмма: квадрат 70x70, помещается в viewBox
-                A: { x: 55, y: 65 },
-                B: { x: 125, y: 65 },
-                C: { x: 125, y: 135 },
-                D: { x: 55, y: 135 },
-                O: { x: 90, y: 135 },
-                // Радиус подобран визуально, чтобы окружность проходила через A
-                R: 78
+                // Концептуальная диаграмма: квадрат 60x60, сдвинут вверх чтобы окружность поместилась
+                A: { x: 50, y: 25 },
+                B: { x: 110, y: 25 },
+                C: { x: 110, y: 85 },
+                D: { x: 50, y: 85 },
+                O: { x: 80, y: 85 },
+                // Радиус подобран визуально: окружность проходит через A и помещается в viewBox
+                R: 67
             }" class="bg-slate-800/70 rounded-xl p-4 border border-slate-700">
                 <div class="flex items-start gap-2 mb-3">
                     <span class="text-red-400 font-bold">{{ $task['id'] }}</span>
@@ -142,7 +142,7 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 180 180" class="w-full max-w-[160px] h-auto">
+                    <svg viewBox="0 0 160 160" class="w-full max-w-[150px] h-auto">
                         {{-- Circle (проходит через A визуально) --}}
                         <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#3b82f6" stroke-width="2"/>
 
@@ -161,11 +161,11 @@
                         <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
 
                         {{-- Labels --}}
-                        <text :x="A.x - 12" :y="A.y - 8" fill="#60a5fa" font-size="14" class="geo-label">A</text>
-                        <text :x="B.x + 6" :y="B.y - 8" fill="#60a5fa" font-size="14" class="geo-label">B</text>
-                        <text :x="C.x + 6" :y="C.y + 14" fill="#60a5fa" font-size="14" class="geo-label">C</text>
-                        <text :x="D.x - 12" :y="D.y + 14" fill="#60a5fa" font-size="14" class="geo-label">D</text>
-                        <text :x="O.x" :y="O.y + 16" fill="#3b82f6" font-size="13" class="geo-label" text-anchor="middle">O</text>
+                        <text :x="A.x - 10" :y="A.y - 6" fill="#60a5fa" font-size="13" class="geo-label">A</text>
+                        <text :x="B.x + 5" :y="B.y - 6" fill="#60a5fa" font-size="13" class="geo-label">B</text>
+                        <text :x="C.x + 5" :y="C.y + 12" fill="#60a5fa" font-size="13" class="geo-label">C</text>
+                        <text :x="D.x - 10" :y="D.y + 12" fill="#60a5fa" font-size="13" class="geo-label">D</text>
+                        <text :x="O.x" :y="O.y + 14" fill="#3b82f6" font-size="12" class="geo-label" text-anchor="middle">O</text>
                     </svg>
                 </div>
 
