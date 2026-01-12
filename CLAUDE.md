@@ -897,6 +897,38 @@ function rightAnglePath(vertex, p1, p2, size = 12) {
 
 **Проверка:** визуально квадратик должен находиться внутри угла треугольника.
 
+### Функция 3.1: isRightAngle() — определение прямого угла
+
+```javascript
+function isRightAngle(vertex, p1, p2) {
+    const v1 = { x: p1.x - vertex.x, y: p1.y - vertex.y };
+    const v2 = { x: p2.x - vertex.x, y: p2.y - vertex.y };
+    const dot = v1.x * v2.x + v1.y * v2.y;
+    return Math.abs(dot) < 1; // допуск для погрешности округления
+}
+```
+
+**Назначение:** Определяет, является ли угол в вершине прямым (90°).
+
+**Принцип работы:**
+- Вычисляет скалярное произведение векторов от vertex к p1 и от vertex к p2
+- Если скалярное произведение ≈ 0, угол = 90° (векторы перпендикулярны)
+
+**Использование перед rightAnglePath():**
+```javascript
+// Проверяем каждую вершину
+if (isRightAngle(A, B, C)) {
+    // Прямой угол в A, рисуем квадратик
+    rightAnglePath(A, B, C, 15);
+} else if (isRightAngle(B, A, C)) {
+    rightAnglePath(B, A, C, 15);
+} else if (isRightAngle(C, A, B)) {
+    rightAnglePath(C, A, B, 15);
+}
+```
+
+**ВАЖНО:** Всегда используйте `isRightAngle()` для определения вершины прямого угла, а не визуальную оценку координат. Это предотвращает ошибки при неочевидной ориентации треугольника.
+
 ### Функция 4: pointOnLine() — точка на отрезке
 
 ```javascript

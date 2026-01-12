@@ -121,6 +121,15 @@
         return pointOnLine(B, C, t);
     }
 
+    // 8. Проверка: является ли угол в вершине прямым (90°)
+    //    Использует скалярное произведение: если dot ≈ 0, угол = 90°
+    function isRightAngle(vertex, p1, p2) {
+        const v1 = { x: p1.x - vertex.x, y: p1.y - vertex.y };
+        const v2 = { x: p2.x - vertex.x, y: p2.y - vertex.y };
+        const dot = v1.x * v2.x + v1.y * v2.y;
+        return Math.abs(dot) < 1; // допуск для погрешности округления
+    }
+
     // Экспортируем в глобальную область
     window.labelPos = labelPos;
     window.makeAngleArc = makeAngleArc;
@@ -129,6 +138,7 @@
     window.labelOnSegment = labelOnSegment;
     window.angleLabelPos = angleLabelPos;
     window.bisectorPoint = bisectorPoint;
+    window.isRightAngle = isRightAngle;
 </script>
 
 <div class="max-w-6xl mx-auto px-4 py-8">
@@ -1329,11 +1339,11 @@
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                                 fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
-                            {{-- Прямой угол в C --}}
-                            <path :d="rightAnglePath(C, B, A, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            {{-- Прямой угол в A --}}
+                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
 
-                            {{-- Дуга угла A (данный) --}}
-                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            {{-- Дуга угла C (данный) --}}
+                            <path :d="makeAngleArc(C, A, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
 
                             {{-- Дуга угла B (искомый) --}}
                             <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
@@ -1349,7 +1359,7 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
-                            <text :x="angleLabelPos(A, C, B, 48).x" :y="angleLabelPos(A, C, B, 48).y"
+                            <text :x="angleLabelPos(C, A, B, 48).x" :y="angleLabelPos(C, A, B, 48).y"
                                 fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">21°</text>
                             <text :x="angleLabelPos(B, A, C, 42).x" :y="angleLabelPos(B, A, C, 42).y"
                                 fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
@@ -1375,8 +1385,8 @@
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                                 fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
-                            <path :d="rightAnglePath(C, B, A, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, A, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                             <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
 
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
@@ -1390,7 +1400,7 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
-                            <text :x="angleLabelPos(A, C, B, 48).x" :y="angleLabelPos(A, C, B, 48).y"
+                            <text :x="angleLabelPos(C, A, B, 48).x" :y="angleLabelPos(C, A, B, 48).y"
                                 fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">33°</text>
                             <text :x="angleLabelPos(B, A, C, 42).x" :y="angleLabelPos(B, A, C, 42).y"
                                 fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
@@ -1416,8 +1426,8 @@
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                                 fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
-                            <path :d="rightAnglePath(C, B, A, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, A, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                             <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
 
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
@@ -1431,7 +1441,7 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
-                            <text :x="angleLabelPos(A, C, B, 48).x" :y="angleLabelPos(A, C, B, 48).y"
+                            <text :x="angleLabelPos(C, A, B, 48).x" :y="angleLabelPos(C, A, B, 48).y"
                                 fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">47°</text>
                             <text :x="angleLabelPos(B, A, C, 42).x" :y="angleLabelPos(B, A, C, 42).y"
                                 fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
@@ -1457,8 +1467,8 @@
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                                 fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
-                            <path :d="rightAnglePath(C, B, A, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, A, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                             <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
 
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
@@ -1472,7 +1482,7 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
-                            <text :x="angleLabelPos(A, C, B, 48).x" :y="angleLabelPos(A, C, B, 48).y"
+                            <text :x="angleLabelPos(C, A, B, 48).x" :y="angleLabelPos(C, A, B, 48).y"
                                 fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">63°</text>
                             <text :x="angleLabelPos(B, A, C, 42).x" :y="angleLabelPos(B, A, C, 42).y"
                                 fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
