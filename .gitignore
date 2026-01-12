@@ -21,3 +21,6 @@ yarn-error.log
 # Docs data (большие файлы)
 /docs/oge_project_package.zip
 /docs/РиР_ ОГЭ (тренажер)/
+
+# PDF sources (локальные файлы для разработки)
+/pdf-sources/
