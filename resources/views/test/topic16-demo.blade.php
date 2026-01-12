@@ -186,19 +186,19 @@
             @endphp
 
             @foreach($tangentTasks as $task)
-            {{-- Геометрически корректные касательные:
+            {{-- Геометрически корректные касательные (масштабировано на весь viewBox):
                  - O = центр окружности
                  - P = внешняя точка (пересечение касательных)
                  - A, B = точки касания (OA ⊥ PA, OB ⊥ PB)
                  - |PA| = |PB| (равные касательные из одной точки)
             --}}
             <div x-data="{
-                O: { x: 95, y: 120 },
-                R: 50,
+                O: { x: 70, y: 115 },
+                R: 65,
                 // Точки касания вычислены геометрически корректно
-                A: { x: 134, y: 152 },
-                B: { x: 95, y: 70 },
-                P: { x: 200, y: 70 }
+                A: { x: 120, y: 157 },
+                B: { x: 70, y: 50 },
+                P: { x: 210, y: 50 }
             }" class="bg-slate-800/70 rounded-xl p-4 border border-slate-700">
                 <div class="flex items-start gap-2 mb-3">
                     <span class="text-red-400 font-bold">{{ $task['id'] }}</span>
@@ -208,45 +208,45 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 235 200" class="w-full max-w-[210px] h-auto">
+                    <svg viewBox="0 0 230 185" class="w-full max-w-[240px] h-auto">
                         {{-- Circle --}}
-                        <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#3b82f6" stroke-width="2"/>
+                        <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
                         {{-- Line AB (соединяет точки касания) --}}
                         <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y"
-                            stroke="#dc2626" stroke-width="2"/>
+                            stroke="#dc2626" stroke-width="2.5"/>
 
                         {{-- Tangent lines (касаются окружности в одной точке) --}}
                         <line :x1="A.x" :y1="A.y" :x2="P.x" :y2="P.y"
-                            stroke="#10b981" stroke-width="2"/>
+                            stroke="#10b981" stroke-width="2.5"/>
                         <line :x1="B.x" :y1="B.y" :x2="P.x" :y2="P.y"
-                            stroke="#10b981" stroke-width="2"/>
+                            stroke="#10b981" stroke-width="2.5"/>
 
                         {{-- Radii to tangent points --}}
                         <line :x1="O.x" :y1="O.y" :x2="A.x" :y2="A.y"
-                            stroke="#f59e0b" stroke-width="1.5"/>
+                            stroke="#f59e0b" stroke-width="2"/>
                         <line :x1="O.x" :y1="O.y" :x2="B.x" :y2="B.y"
-                            stroke="#f59e0b" stroke-width="1.5"/>
+                            stroke="#f59e0b" stroke-width="2"/>
 
                         {{-- Points --}}
-                        <circle :cx="O.x" :cy="O.y" r="4" fill="#3b82f6"/>
-                        <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
-                        <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
-                        <circle :cx="P.x" :cy="P.y" r="4" fill="#10b981"/>
+                        <circle :cx="O.x" :cy="O.y" r="5" fill="#3b82f6"/>
+                        <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                        <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                        <circle :cx="P.x" :cy="P.y" r="5" fill="#10b981"/>
 
                         {{-- Labels --}}
-                        <text :x="O.x - 18" :y="O.y + 5" fill="#3b82f6" font-size="15" class="geo-label">O</text>
-                        <text :x="A.x + 6" :y="A.y + 14" fill="#60a5fa" font-size="15" class="geo-label">A</text>
-                        <text :x="B.x - 5" :y="B.y - 12" fill="#60a5fa" font-size="15" class="geo-label">B</text>
-                        <text :x="P.x + 8" :y="P.y + 5" fill="#10b981" font-size="15" class="geo-label">P</text>
+                        <text :x="O.x - 20" :y="O.y + 6" fill="#3b82f6" font-size="16" class="geo-label">O</text>
+                        <text :x="A.x + 8" :y="A.y + 16" fill="#60a5fa" font-size="16" class="geo-label">A</text>
+                        <text :x="B.x - 6" :y="B.y - 14" fill="#60a5fa" font-size="16" class="geo-label">B</text>
+                        <text :x="P.x + 8" :y="P.y + 6" fill="#10b981" font-size="16" class="geo-label">P</text>
 
                         {{-- Angle arc at P (внутри угла между касательными) --}}
-                        <path d="M 180,70 A 20 20 0 0 1 187,86" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                        <text x="168" y="88" fill="#f59e0b" font-size="13" class="geo-label">{{ $task['angle'] }}°</text>
+                        <path d="M 185,50 A 25 25 0 0 1 194,69" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                        <text x="172" y="72" fill="#f59e0b" font-size="14" class="geo-label">{{ $task['angle'] }}°</text>
 
                         {{-- Angle arc at B (искомый угол ABO) с зелёным ? --}}
-                        <path d="M 95,85 A 15 15 0 0 0 101,84" fill="none" stroke="#10b981" stroke-width="2"/>
-                        <text x="105" y="92" fill="#10b981" font-size="14" font-weight="bold">?</text>
+                        <path d="M 78,65 A 18 18 0 0 1 70,68" fill="none" stroke="#10b981" stroke-width="2"/>
+                        <text x="82" y="78" fill="#10b981" font-size="16" font-weight="bold">?</text>
                     </svg>
                 </div>
 
