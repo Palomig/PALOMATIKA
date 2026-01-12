@@ -130,6 +130,34 @@
         return Math.abs(dot) < 1; // допуск для погрешности округления
     }
 
+    // 9. Маркер равенства сторон (черточка перпендикулярна отрезку)
+    //    p1, p2 — концы отрезка
+    //    t — позиция на отрезке (0.5 = середина)
+    //    length — длина черточки (по умолчанию 8px)
+    //    Возвращает объект с координатами начала и конца черточки
+    function equalityTick(p1, p2, t = 0.5, length = 8) {
+        // Точка на середине отрезка
+        const mid = {
+            x: p1.x + (p2.x - p1.x) * t,
+            y: p1.y + (p2.y - p1.y) * t
+        };
+        // Вектор вдоль отрезка
+        const dx = p2.x - p1.x;
+        const dy = p2.y - p1.y;
+        const len = Math.sqrt(dx * dx + dy * dy);
+        // Нормаль (перпендикуляр) к отрезку
+        const nx = -dy / len;
+        const ny = dx / len;
+        // Черточка по обе стороны от середины
+        const half = length / 2;
+        return {
+            x1: mid.x - nx * half,
+            y1: mid.y - ny * half,
+            x2: mid.x + nx * half,
+            y2: mid.y + ny * half
+        };
+    }
+
     // Экспортируем в глобальную область
     window.labelPos = labelPos;
     window.makeAngleArc = makeAngleArc;
@@ -139,6 +167,7 @@
     window.angleLabelPos = angleLabelPos;
     window.bisectorPoint = bisectorPoint;
     window.isRightAngle = isRightAngle;
+    window.equalityTick = equalityTick;
 </script>
 
 <div class="max-w-6xl mx-auto px-4 py-8">
@@ -384,8 +413,8 @@
                                 stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
 
                             {{-- Маркеры равенства AM = MC --}}
-                            <line :x1="tickAM.x - 4" :y1="tickAM.y - 5" :x2="tickAM.x + 4" :y2="tickAM.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickMC.x - 4" :y1="tickMC.y - 5" :x2="tickMC.x + 4" :y2="tickMC.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAM.x1" :y1="tickAM.y1" :x2="tickAM.x2" :y2="tickAM.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickMC.x1" :y1="tickMC.y1" :x2="tickMC.x2" :y2="tickMC.y2" stroke="#3b82f6" stroke-width="2.5"/>
 
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
                             <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
@@ -432,8 +461,8 @@
                             <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
                                 stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <line :x1="tickAM.x - 4" :y1="tickAM.y - 5" :x2="tickAM.x + 4" :y2="tickAM.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickMC.x - 4" :y1="tickMC.y - 5" :x2="tickMC.x + 4" :y2="tickMC.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAM.x1" :y1="tickAM.y1" :x2="tickAM.x2" :y2="tickAM.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickMC.x1" :y1="tickMC.y1" :x2="tickMC.x2" :y2="tickMC.y2" stroke="#3b82f6" stroke-width="2.5"/>
 
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
                             <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
@@ -480,8 +509,8 @@
                             <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
                                 stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <line :x1="tickAM.x - 4" :y1="tickAM.y - 5" :x2="tickAM.x + 4" :y2="tickAM.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickMC.x - 4" :y1="tickMC.y - 5" :x2="tickMC.x + 4" :y2="tickMC.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAM.x1" :y1="tickAM.y1" :x2="tickAM.x2" :y2="tickAM.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickMC.x1" :y1="tickMC.y1" :x2="tickMC.x2" :y2="tickMC.y2" stroke="#3b82f6" stroke-width="2.5"/>
 
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
                             <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
@@ -525,8 +554,8 @@
                             <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
                                 stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <line :x1="tickAM.x - 4" :y1="tickAM.y - 5" :x2="tickAM.x + 4" :y2="tickAM.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickMC.x - 4" :y1="tickMC.y - 5" :x2="tickMC.x + 4" :y2="tickMC.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAM.x1" :y1="tickAM.y1" :x2="tickAM.x2" :y2="tickAM.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickMC.x1" :y1="tickMC.y1" :x2="tickMC.x2" :y2="tickMC.y2" stroke="#3b82f6" stroke-width="2.5"/>
 
                             <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
                             <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
@@ -954,8 +983,8 @@
                                 fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
                             {{-- Маркеры равенства AB = BC --}}
-                            <line :x1="tickAB.x - 4" :y1="tickAB.y - 5" :x2="tickAB.x + 4" :y2="tickAB.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickBC.x - 4" :y1="tickBC.y - 5" :x2="tickBC.x + 4" :y2="tickBC.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#3b82f6" stroke-width="2.5"/>
 
                             {{-- Дуга угла B (известный) --}}
                             <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#f59e0b" stroke-width="2"/>
@@ -1000,8 +1029,8 @@
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                                 fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
-                            <line :x1="tickAB.x - 4" :y1="tickAB.y - 5" :x2="tickAB.x + 4" :y2="tickAB.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickBC.x - 4" :y1="tickBC.y - 5" :x2="tickBC.x + 4" :y2="tickBC.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#3b82f6" stroke-width="2.5"/>
 
                             <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                             <path :d="makeAngleArc(C, B, A, 28)" fill="none" stroke="#10b981" stroke-width="2"/>
@@ -1043,8 +1072,8 @@
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                                 fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
-                            <line :x1="tickAB.x - 4" :y1="tickAB.y - 5" :x2="tickAB.x + 4" :y2="tickAB.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickBC.x - 4" :y1="tickBC.y - 5" :x2="tickBC.x + 4" :y2="tickBC.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#3b82f6" stroke-width="2.5"/>
 
                             <path :d="makeAngleArc(B, A, C, 22)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                             <path :d="makeAngleArc(C, B, A, 32)" fill="none" stroke="#10b981" stroke-width="2"/>
@@ -1086,8 +1115,8 @@
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                                 fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
 
-                            <line :x1="tickAB.x - 4" :y1="tickAB.y - 5" :x2="tickAB.x + 4" :y2="tickAB.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickBC.x - 4" :y1="tickBC.y - 5" :x2="tickBC.x + 4" :y2="tickBC.y + 3" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#3b82f6" stroke-width="2.5"/>
 
                             <path :d="makeAngleArc(B, A, C, 20)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                             <path :d="makeAngleArc(C, B, A, 35)" fill="none" stroke="#10b981" stroke-width="2"/>
@@ -1144,8 +1173,8 @@
                                 stroke="#dc2626" stroke-width="2" stroke-dasharray="6,4"/>
 
                             {{-- Маркеры равных сторон AB = BC --}}
-                            <line :x1="tickAB.x - 4" :y1="tickAB.y - 6" :x2="tickAB.x + 4" :y2="tickAB.y + 2" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickBC.x - 4" :y1="tickBC.y - 6" :x2="tickBC.x + 4" :y2="tickBC.y + 2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#3b82f6" stroke-width="2.5"/>
 
                             {{-- Дуга внешнего угла при C --}}
                             <path :d="makeAngleArc(C, B, ext, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
@@ -1195,8 +1224,8 @@
                             <line :x1="C.x" :y1="C.y" :x2="ext.x" :y2="ext.y"
                                 stroke="#dc2626" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <line :x1="tickAB.x - 4" :y1="tickAB.y - 6" :x2="tickAB.x + 4" :y2="tickAB.y + 2" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickBC.x - 4" :y1="tickBC.y - 6" :x2="tickBC.x + 4" :y2="tickBC.y + 2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#3b82f6" stroke-width="2.5"/>
 
                             <path :d="makeAngleArc(C, B, ext, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                             <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
@@ -1241,8 +1270,8 @@
                             <line :x1="C.x" :y1="C.y" :x2="ext.x" :y2="ext.y"
                                 stroke="#dc2626" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <line :x1="tickAB.x - 4" :y1="tickAB.y - 6" :x2="tickAB.x + 4" :y2="tickAB.y + 2" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickBC.x - 4" :y1="tickBC.y - 6" :x2="tickBC.x + 4" :y2="tickBC.y + 2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#3b82f6" stroke-width="2.5"/>
 
                             <path :d="makeAngleArc(C, B, ext, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                             <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
@@ -1287,8 +1316,8 @@
                             <line :x1="C.x" :y1="C.y" :x2="ext.x" :y2="ext.y"
                                 stroke="#dc2626" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <line :x1="tickAB.x - 4" :y1="tickAB.y - 6" :x2="tickAB.x + 4" :y2="tickAB.y + 2" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickBC.x - 4" :y1="tickBC.y - 6" :x2="tickBC.x + 4" :y2="tickBC.y + 2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#3b82f6" stroke-width="2.5"/>
 
                             <path :d="makeAngleArc(C, B, ext, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                             <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
@@ -1703,10 +1732,10 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {{-- Задача 45: катеты 7 и 24 --}}
-                <div x-data="task45Pythagoras()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                {{-- Задача 33: катеты 7 и 24 --}}
+                <div x-data="task33Pythagoras()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
                     <div class="flex items-start gap-3 mb-4">
-                        <span class="text-red-400 font-bold text-xl">45</span>
+                        <span class="text-red-400 font-bold text-xl">33</span>
                         <div class="text-slate-200">
                             Катеты прямоугольного треугольника равны 7 и 24. Найдите гипотенузу.
                         </div>
@@ -1748,10 +1777,10 @@
                     </div>
                 </div>
 
-                {{-- Задача 46: катеты 8 и 15 --}}
-                <div x-data="task46Pythagoras()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                {{-- Задача 34: катеты 8 и 15 --}}
+                <div x-data="task34Pythagoras()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
                     <div class="flex items-start gap-3 mb-4">
-                        <span class="text-red-400 font-bold text-xl">46</span>
+                        <span class="text-red-400 font-bold text-xl">34</span>
                         <div class="text-slate-200">
                             Катеты прямоугольного треугольника равны 8 и 15. Найдите гипотенузу.
                         </div>
@@ -1801,10 +1830,10 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {{-- Задача 33: катеты 4 и 10 --}}
-                <div x-data="task33Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                {{-- Задача 35: катеты 4 и 10 --}}
+                <div x-data="task35Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
                     <div class="flex items-start gap-3 mb-4">
-                        <span class="text-red-400 font-bold text-xl">33</span>
+                        <span class="text-red-400 font-bold text-xl">35</span>
                         <div class="text-slate-200">
                             Два катета прямоугольного треугольника равны 4 и 10. Найдите площадь этого треугольника.
                         </div>
@@ -1842,10 +1871,10 @@
                     </div>
                 </div>
 
-                {{-- Задача 34: катеты 14 и 5 --}}
-                <div x-data="task34Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                {{-- Задача 36: катеты 14 и 5 --}}
+                <div x-data="task36Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
                     <div class="flex items-start gap-3 mb-4">
-                        <span class="text-red-400 font-bold text-xl">34</span>
+                        <span class="text-red-400 font-bold text-xl">36</span>
                         <div class="text-slate-200">
                             Два катета прямоугольного треугольника равны 14 и 5. Найдите площадь этого треугольника.
                         </div>
@@ -1881,10 +1910,10 @@
                     </div>
                 </div>
 
-                {{-- Задача 35: катеты 7 и 12 --}}
-                <div x-data="task35Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                {{-- Задача 37: катеты 7 и 12 --}}
+                <div x-data="task37Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
                     <div class="flex items-start gap-3 mb-4">
-                        <span class="text-red-400 font-bold text-xl">35</span>
+                        <span class="text-red-400 font-bold text-xl">37</span>
                         <div class="text-slate-200">
                             Два катета прямоугольного треугольника равны 7 и 12. Найдите площадь этого треугольника.
                         </div>
@@ -1920,10 +1949,10 @@
                     </div>
                 </div>
 
-                {{-- Задача 36: катеты 18 и 7 --}}
-                <div x-data="task36Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                {{-- Задача 38: катеты 18 и 7 --}}
+                <div x-data="task38Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
                     <div class="flex items-start gap-3 mb-4">
-                        <span class="text-red-400 font-bold text-xl">36</span>
+                        <span class="text-red-400 font-bold text-xl">38</span>
                         <div class="text-slate-200">
                             Два катета прямоугольного треугольника равны 18 и 7. Найдите площадь этого треугольника.
                         </div>
@@ -2049,8 +2078,8 @@
         const C = { x: 260, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
         const M = window.pointOnLine(A, C, 0.5); // Середина AC
-        const tickAM = window.pointOnLine(A, M, 0.5);
-        const tickMC = window.pointOnLine(M, C, 0.5);
+        const tickAM = window.equalityTick(A, M, 0.5, 10);
+        const tickMC = window.equalityTick(M, C, 0.5, 10);
         return {
             A, B, C, M, center, tickAM, tickMC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
@@ -2065,8 +2094,8 @@
         const C = { x: 260, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
         const M = window.pointOnLine(A, C, 0.5);
-        const tickAM = window.pointOnLine(A, M, 0.5);
-        const tickMC = window.pointOnLine(M, C, 0.5);
+        const tickAM = window.equalityTick(A, M, 0.5, 10);
+        const tickMC = window.equalityTick(M, C, 0.5, 10);
         return {
             A, B, C, M, center, tickAM, tickMC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
@@ -2081,8 +2110,8 @@
         const C = { x: 260, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
         const M = window.pointOnLine(A, C, 0.5);
-        const tickAM = window.pointOnLine(A, M, 0.5);
-        const tickMC = window.pointOnLine(M, C, 0.5);
+        const tickAM = window.equalityTick(A, M, 0.5, 10);
+        const tickMC = window.equalityTick(M, C, 0.5, 10);
         return {
             A, B, C, M, center, tickAM, tickMC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
@@ -2097,8 +2126,8 @@
         const C = { x: 260, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
         const M = window.pointOnLine(A, C, 0.5);
-        const tickAM = window.pointOnLine(A, M, 0.5);
-        const tickMC = window.pointOnLine(M, C, 0.5);
+        const tickAM = window.equalityTick(A, M, 0.5, 10);
+        const tickMC = window.equalityTick(M, C, 0.5, 10);
         return {
             A, B, C, M, center, tickAM, tickMC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
@@ -2242,8 +2271,8 @@
         const B = { x: 150, y: 40 };
         const C = { x: 260, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
-        const tickAB = window.pointOnLine(A, B, 0.5);
-        const tickBC = window.pointOnLine(B, C, 0.5);
+        const tickAB = window.equalityTick(A, B, 0.5, 10);
+        const tickBC = window.equalityTick(B, C, 0.5, 10);
         return {
             A, B, C, center, tickAB, tickBC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
@@ -2258,8 +2287,8 @@
         const B = { x: 150, y: 45 };
         const C = { x: 260, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
-        const tickAB = window.pointOnLine(A, B, 0.5);
-        const tickBC = window.pointOnLine(B, C, 0.5);
+        const tickAB = window.equalityTick(A, B, 0.5, 10);
+        const tickBC = window.equalityTick(B, C, 0.5, 10);
         return {
             A, B, C, center, tickAB, tickBC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
@@ -2274,8 +2303,8 @@
         const B = { x: 150, y: 60 };
         const C = { x: 270, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
-        const tickAB = window.pointOnLine(A, B, 0.5);
-        const tickBC = window.pointOnLine(B, C, 0.5);
+        const tickAB = window.equalityTick(A, B, 0.5, 10);
+        const tickBC = window.equalityTick(B, C, 0.5, 10);
         return {
             A, B, C, center, tickAB, tickBC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
@@ -2290,8 +2319,8 @@
         const B = { x: 150, y: 75 };
         const C = { x: 275, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
-        const tickAB = window.pointOnLine(A, B, 0.5);
-        const tickBC = window.pointOnLine(B, C, 0.5);
+        const tickAB = window.equalityTick(A, B, 0.5, 10);
+        const tickBC = window.equalityTick(B, C, 0.5, 10);
         return {
             A, B, C, center, tickAB, tickBC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
@@ -2312,8 +2341,8 @@
         const len = Math.sqrt(dx * dx + dy * dy);
         const ext = { x: C.x + (dx / len) * 55, y: C.y + (dy / len) * 55 };
         // Маркеры равенства AB = BC
-        const tickAB = window.pointOnLine(A, B, 0.5);
-        const tickBC = window.pointOnLine(B, C, 0.5);
+        const tickAB = window.equalityTick(A, B, 0.5, 10);
+        const tickBC = window.equalityTick(B, C, 0.5, 10);
         return {
             A, B, C, center, ext, tickAB, tickBC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
@@ -2332,8 +2361,8 @@
         const dy = C.y - A.y;
         const len = Math.sqrt(dx * dx + dy * dy);
         const ext = { x: C.x + (dx / len) * 55, y: C.y + (dy / len) * 55 };
-        const tickAB = window.pointOnLine(A, B, 0.5);
-        const tickBC = window.pointOnLine(B, C, 0.5);
+        const tickAB = window.equalityTick(A, B, 0.5, 10);
+        const tickBC = window.equalityTick(B, C, 0.5, 10);
         return {
             A, B, C, center, ext, tickAB, tickBC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
@@ -2352,8 +2381,8 @@
         const dy = C.y - A.y;
         const len = Math.sqrt(dx * dx + dy * dy);
         const ext = { x: C.x + (dx / len) * 55, y: C.y + (dy / len) * 55 };
-        const tickAB = window.pointOnLine(A, B, 0.5);
-        const tickBC = window.pointOnLine(B, C, 0.5);
+        const tickAB = window.equalityTick(A, B, 0.5, 10);
+        const tickBC = window.equalityTick(B, C, 0.5, 10);
         return {
             A, B, C, center, ext, tickAB, tickBC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
@@ -2372,8 +2401,8 @@
         const dy = C.y - A.y;
         const len = Math.sqrt(dx * dx + dy * dy);
         const ext = { x: C.x + (dx / len) * 55, y: C.y + (dy / len) * 55 };
-        const tickAB = window.pointOnLine(A, B, 0.5);
-        const tickBC = window.pointOnLine(B, C, 0.5);
+        const tickAB = window.equalityTick(A, B, 0.5, 10);
+        const tickBC = window.equalityTick(B, C, 0.5, 10);
         return {
             A, B, C, center, ext, tickAB, tickBC,
             labelPos: (p, c, d) => window.labelPos(p, c, d),
@@ -2508,64 +2537,8 @@
         };
     }
 
-    // Площадь по катетам: задача 33 (катеты 4 и 10)
-    function task33Area() {
-        const A = { x: 50, y: 180 };
-        const B = { x: 50, y: 70 };
-        const C = { x: 240, y: 180 };
-        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
-        return {
-            A, B, C, center,
-            labelPos: (p, c, d) => window.labelPos(p, c, d),
-            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
-            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
-        };
-    }
-
-    // Площадь по катетам: задача 34 (катеты 14 и 5)
-    function task34Area() {
-        const A = { x: 50, y: 180 };
-        const B = { x: 50, y: 85 };
-        const C = { x: 230, y: 180 };
-        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
-        return {
-            A, B, C, center,
-            labelPos: (p, c, d) => window.labelPos(p, c, d),
-            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
-            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
-        };
-    }
-
-    // Площадь по катетам: задача 35 (катеты 7 и 12)
-    function task35Area() {
-        const A = { x: 50, y: 180 };
-        const B = { x: 50, y: 75 };
-        const C = { x: 245, y: 180 };
-        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
-        return {
-            A, B, C, center,
-            labelPos: (p, c, d) => window.labelPos(p, c, d),
-            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
-            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
-        };
-    }
-
-    // Площадь по катетам: задача 36 (катеты 18 и 7)
-    function task36Area() {
-        const A = { x: 50, y: 180 };
-        const B = { x: 50, y: 80 };
-        const C = { x: 250, y: 180 };
-        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
-        return {
-            A, B, C, center,
-            labelPos: (p, c, d) => window.labelPos(p, c, d),
-            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
-            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
-        };
-    }
-
-    // Пифагор: задача 45
-    function task45Pythagoras() {
+    // Пифагор: задача 33
+    function task33Pythagoras() {
         // Прямой угол в A, катеты AB=7, AC=24
         const A = { x: 50, y: 180 };
         const B = { x: 50, y: 60 };  // Вертикальный катет
@@ -2579,11 +2552,67 @@
         };
     }
 
-    // Пифагор: задача 46
-    function task46Pythagoras() {
+    // Пифагор: задача 34
+    function task34Pythagoras() {
         const A = { x: 50, y: 180 };
         const B = { x: 50, y: 70 };
         const C = { x: 230, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // Площадь по катетам: задача 35 (катеты 4 и 10)
+    function task35Area() {
+        const A = { x: 50, y: 180 };
+        const B = { x: 50, y: 70 };
+        const C = { x: 240, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // Площадь по катетам: задача 36 (катеты 14 и 5)
+    function task36Area() {
+        const A = { x: 50, y: 180 };
+        const B = { x: 50, y: 85 };
+        const C = { x: 230, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // Площадь по катетам: задача 37 (катеты 7 и 12)
+    function task37Area() {
+        const A = { x: 50, y: 180 };
+        const B = { x: 50, y: 75 };
+        const C = { x: 245, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // Площадь по катетам: задача 38 (катеты 18 и 7)
+    function task38Area() {
+        const A = { x: 50, y: 180 };
+        const B = { x: 50, y: 80 };
+        const C = { x: 250, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
         return {
             A, B, C, center,
