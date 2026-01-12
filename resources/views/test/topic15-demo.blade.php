@@ -1308,10 +1308,388 @@
             </div>
         </div>
 
-        {{-- VII) Теорема Пифагора --}}
+        {{-- VII) Острые углы прямоугольного треугольника --}}
         <div class="mb-10">
             <div class="bg-slate-800 rounded-xl p-4 mb-6 border-l-4 border-red-500">
-                <h3 class="text-lg font-semibold text-white">VII) Теорема Пифагора</h3>
+                <h3 class="text-lg font-semibold text-white">VII) Острые углы прямоугольного треугольника</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {{-- Задача 25: острый угол 21° --}}
+                <div x-data="task25RightAngles()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">25</span>
+                        <div class="text-slate-200">
+                            Один из острых углов прямоугольного треугольника равен 21°. Найдите его другой острый угол.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            {{-- Прямой угол в C --}}
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+
+                            {{-- Дуга угла A (данный) --}}
+                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+
+                            {{-- Дуга угла B (искомый) --}}
+                            <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+
+                            <text :x="angleLabelPos(A, C, B, 48).x" :y="angleLabelPos(A, C, B, 48).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">21°</text>
+                            <text :x="angleLabelPos(B, A, C, 42).x" :y="angleLabelPos(B, A, C, 42).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 69° (90° − 21°)
+                    </div>
+                </div>
+
+                {{-- Задача 26: острый угол 33° --}}
+                <div x-data="task26RightAngles()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">26</span>
+                        <div class="text-slate-200">
+                            Один из острых углов прямоугольного треугольника равен 33°. Найдите его другой острый угол.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+
+                            <text :x="angleLabelPos(A, C, B, 48).x" :y="angleLabelPos(A, C, B, 48).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">33°</text>
+                            <text :x="angleLabelPos(B, A, C, 42).x" :y="angleLabelPos(B, A, C, 42).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 57° (90° − 33°)
+                    </div>
+                </div>
+
+                {{-- Задача 27: острый угол 47° --}}
+                <div x-data="task27RightAngles()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">27</span>
+                        <div class="text-slate-200">
+                            Один из острых углов прямоугольного треугольника равен 47°. Найдите его другой острый угол.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+
+                            <text :x="angleLabelPos(A, C, B, 48).x" :y="angleLabelPos(A, C, B, 48).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">47°</text>
+                            <text :x="angleLabelPos(B, A, C, 42).x" :y="angleLabelPos(B, A, C, 42).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 43° (90° − 47°)
+                    </div>
+                </div>
+
+                {{-- Задача 28: острый угол 63° --}}
+                <div x-data="task28RightAngles()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">28</span>
+                        <div class="text-slate-200">
+                            Один из острых углов прямоугольного треугольника равен 63°. Найдите его другой острый угол.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+
+                            <text :x="angleLabelPos(A, C, B, 48).x" :y="angleLabelPos(A, C, B, 48).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">63°</text>
+                            <text :x="angleLabelPos(B, A, C, 42).x" :y="angleLabelPos(B, A, C, 42).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 27° (90° − 63°)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- VIII) Высота, угол ABH --}}
+        <div class="mb-10">
+            <div class="bg-slate-800 rounded-xl p-4 mb-6 border-l-4 border-red-500">
+                <h3 class="text-lg font-semibold text-white">VIII) Высота, угол ABH</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {{-- Задача 29: угол BAC = 37° --}}
+                <div x-data="task29Height()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">29</span>
+                        <div class="text-slate-200">
+                            В остроугольном треугольнике ABC проведена высота BH, ∠BAC = 37°. Найдите угол ABH.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            {{-- Высота BH --}}
+                            <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y"
+                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+
+                            {{-- Прямой угол в H --}}
+                            <path :d="rightAnglePath(H, B, C, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+
+                            {{-- Дуга угла A (данный) --}}
+                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+
+                            {{-- Дуга угла ABH (искомый) --}}
+                            <path :d="makeAngleArc(B, A, H, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="H.x" :cy="H.y" r="4" fill="#10b981"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="H.x" :y="H.y + 20"
+                                fill="#10b981" font-size="16" class="geo-label" text-anchor="middle">H</text>
+
+                            <text :x="angleLabelPos(A, C, B, 48).x" :y="angleLabelPos(A, C, B, 48).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">37°</text>
+                            <text :x="angleLabelPos(B, A, H, 42).x" :y="angleLabelPos(B, A, H, 42).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 53° (90° − 37°)
+                    </div>
+                </div>
+
+                {{-- Задача 30: угол BAC = 29° --}}
+                <div x-data="task30Height()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">30</span>
+                        <div class="text-slate-200">
+                            В остроугольном треугольнике ABC проведена высота BH, ∠BAC = 29°. Найдите угол ABH.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y"
+                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+                            <path :d="rightAnglePath(H, B, C, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, H, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="H.x" :cy="H.y" r="4" fill="#10b981"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="H.x" :y="H.y + 20"
+                                fill="#10b981" font-size="16" class="geo-label" text-anchor="middle">H</text>
+
+                            <text :x="angleLabelPos(A, C, B, 48).x" :y="angleLabelPos(A, C, B, 48).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">29°</text>
+                            <text :x="angleLabelPos(B, A, H, 42).x" :y="angleLabelPos(B, A, H, 42).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 61° (90° − 29°)
+                    </div>
+                </div>
+
+                {{-- Задача 31: угол BAC = 46° --}}
+                <div x-data="task31Height()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">31</span>
+                        <div class="text-slate-200">
+                            В остроугольном треугольнике ABC проведена высота BH, ∠BAC = 46°. Найдите угол ABH.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y"
+                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+                            <path :d="rightAnglePath(H, B, C, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, H, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="H.x" :cy="H.y" r="4" fill="#10b981"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="H.x" :y="H.y + 20"
+                                fill="#10b981" font-size="16" class="geo-label" text-anchor="middle">H</text>
+
+                            <text :x="angleLabelPos(A, C, B, 48).x" :y="angleLabelPos(A, C, B, 48).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">46°</text>
+                            <text :x="angleLabelPos(B, A, H, 42).x" :y="angleLabelPos(B, A, H, 42).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 44° (90° − 46°)
+                    </div>
+                </div>
+
+                {{-- Задача 32: угол BAC = 82° --}}
+                <div x-data="task32Height()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">32</span>
+                        <div class="text-slate-200">
+                            В остроугольном треугольнике ABC проведена высота BH, ∠BAC = 82°. Найдите угол ABH.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y"
+                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+                            <path :d="rightAnglePath(H, B, C, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, H, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="H.x" :cy="H.y" r="4" fill="#10b981"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                            <text :x="H.x" :y="H.y + 20"
+                                fill="#10b981" font-size="16" class="geo-label" text-anchor="middle">H</text>
+
+                            <text :x="angleLabelPos(A, C, B, 48).x" :y="angleLabelPos(A, C, B, 48).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">82°</text>
+                            <text :x="angleLabelPos(B, A, H, 42).x" :y="angleLabelPos(B, A, H, 42).y"
+                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 8° (90° − 82°)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- IX) Теорема Пифагора --}}
+        <div class="mb-10">
+            <div class="bg-slate-800 rounded-xl p-4 mb-6 border-l-4 border-red-500">
+                <h3 class="text-lg font-semibold text-white">IX) Теорема Пифагора</h3>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1401,6 +1779,173 @@
 
                     <div class="mt-3 text-slate-500 text-sm">
                         <span class="text-emerald-400">Ответ:</span> 17
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- X) Площадь по катетам --}}
+        <div class="mb-10">
+            <div class="bg-slate-800 rounded-xl p-4 mb-6 border-l-4 border-red-500">
+                <h3 class="text-lg font-semibold text-white">X) Площадь по катетам</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {{-- Задача 33: катеты 4 и 10 --}}
+                <div x-data="task33Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">33</span>
+                        <div class="text-slate-200">
+                            Два катета прямоугольного треугольника равны 4 и 10. Найдите площадь этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            {{-- Прямой угол в A --}}
+                            <path :d="rightAnglePath(A, B, C, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+
+                            {{-- Метки длин катетов --}}
+                            <text :x="labelOnSegment(A, B, 10, true).x" :y="labelOnSegment(A, B, 10, true).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">4</text>
+                            <text :x="labelOnSegment(A, C, 14).x" :y="labelOnSegment(A, C, 14).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">10</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 20 (½ · 4 · 10)
+                    </div>
+                </div>
+
+                {{-- Задача 34: катеты 14 и 5 --}}
+                <div x-data="task34Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">34</span>
+                        <div class="text-slate-200">
+                            Два катета прямоугольного треугольника равны 14 и 5. Найдите площадь этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            <path :d="rightAnglePath(A, B, C, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+
+                            <text :x="labelOnSegment(A, B, 10, true).x" :y="labelOnSegment(A, B, 10, true).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">5</text>
+                            <text :x="labelOnSegment(A, C, 14).x" :y="labelOnSegment(A, C, 14).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">14</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 35 (½ · 14 · 5)
+                    </div>
+                </div>
+
+                {{-- Задача 35: катеты 7 и 12 --}}
+                <div x-data="task35Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">35</span>
+                        <div class="text-slate-200">
+                            Два катета прямоугольного треугольника равны 7 и 12. Найдите площадь этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            <path :d="rightAnglePath(A, B, C, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+
+                            <text :x="labelOnSegment(A, B, 10, true).x" :y="labelOnSegment(A, B, 10, true).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">7</text>
+                            <text :x="labelOnSegment(A, C, 14).x" :y="labelOnSegment(A, C, 14).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">12</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 42 (½ · 7 · 12)
+                    </div>
+                </div>
+
+                {{-- Задача 36: катеты 18 и 7 --}}
+                <div x-data="task36Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                    <div class="flex items-start gap-3 mb-4">
+                        <span class="text-red-400 font-bold text-xl">36</span>
+                        <div class="text-slate-200">
+                            Два катета прямоугольного треугольника равны 18 и 7. Найдите площадь этого треугольника.
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                        <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                            <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                            <path :d="rightAnglePath(A, B, C, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                            <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                            <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                            <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                                fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+
+                            <text :x="labelOnSegment(A, B, 10, true).x" :y="labelOnSegment(A, B, 10, true).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">7</text>
+                            <text :x="labelOnSegment(A, C, 14).x" :y="labelOnSegment(A, C, 14).y"
+                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">18</text>
+                        </svg>
+                    </div>
+
+                    <div class="mt-3 text-slate-500 text-sm">
+                        <span class="text-emerald-400">Ответ:</span> 63 (½ · 18 · 7)
                     </div>
                 </div>
             </div>
@@ -1824,6 +2369,188 @@
             labelPos: (p, c, d) => window.labelPos(p, c, d),
             makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
             angleLabelPos: (v, p1, p2, r) => window.angleLabelPos(v, p1, p2, r),
+        };
+    }
+
+    // Острые углы прямоугольного треугольника: задача 25 (угол 21°)
+    function task25RightAngles() {
+        // Прямой угол в C
+        const A = { x: 40, y: 180 };
+        const B = { x: 240, y: 180 };
+        const C = { x: 40, y: 50 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            angleLabelPos: (v, p1, p2, r) => window.angleLabelPos(v, p1, p2, r),
+        };
+    }
+
+    // Острые углы прямоугольного треугольника: задача 26 (угол 33°)
+    function task26RightAngles() {
+        const A = { x: 40, y: 180 };
+        const B = { x: 240, y: 180 };
+        const C = { x: 40, y: 55 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            angleLabelPos: (v, p1, p2, r) => window.angleLabelPos(v, p1, p2, r),
+        };
+    }
+
+    // Острые углы прямоугольного треугольника: задача 27 (угол 47°)
+    function task27RightAngles() {
+        const A = { x: 40, y: 180 };
+        const B = { x: 250, y: 180 };
+        const C = { x: 40, y: 60 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            angleLabelPos: (v, p1, p2, r) => window.angleLabelPos(v, p1, p2, r),
+        };
+    }
+
+    // Острые углы прямоугольного треугольника: задача 28 (угол 63°)
+    function task28RightAngles() {
+        const A = { x: 40, y: 180 };
+        const B = { x: 260, y: 180 };
+        const C = { x: 40, y: 65 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            angleLabelPos: (v, p1, p2, r) => window.angleLabelPos(v, p1, p2, r),
+        };
+    }
+
+    // Высота, угол ABH: задача 29 (угол BAC = 37°)
+    function task29Height() {
+        const A = { x: 30, y: 180 };
+        const B = { x: 140, y: 40 };
+        const C = { x: 260, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        // H — основание высоты из B на AC (AC горизонтальна)
+        const H = { x: B.x, y: 180 };
+        return {
+            A, B, C, center, H,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            angleLabelPos: (v, p1, p2, r) => window.angleLabelPos(v, p1, p2, r),
+        };
+    }
+
+    // Высота, угол ABH: задача 30 (угол BAC = 29°)
+    function task30Height() {
+        const A = { x: 30, y: 180 };
+        const B = { x: 150, y: 45 };
+        const C = { x: 260, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        const H = { x: B.x, y: 180 };
+        return {
+            A, B, C, center, H,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            angleLabelPos: (v, p1, p2, r) => window.angleLabelPos(v, p1, p2, r),
+        };
+    }
+
+    // Высота, угол ABH: задача 31 (угол BAC = 46°)
+    function task31Height() {
+        const A = { x: 30, y: 180 };
+        const B = { x: 130, y: 50 };
+        const C = { x: 260, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        const H = { x: B.x, y: 180 };
+        return {
+            A, B, C, center, H,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            angleLabelPos: (v, p1, p2, r) => window.angleLabelPos(v, p1, p2, r),
+        };
+    }
+
+    // Высота, угол ABH: задача 32 (угол BAC = 82°)
+    function task32Height() {
+        const A = { x: 30, y: 180 };
+        const B = { x: 110, y: 55 };
+        const C = { x: 260, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        const H = { x: B.x, y: 180 };
+        return {
+            A, B, C, center, H,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            angleLabelPos: (v, p1, p2, r) => window.angleLabelPos(v, p1, p2, r),
+        };
+    }
+
+    // Площадь по катетам: задача 33 (катеты 4 и 10)
+    function task33Area() {
+        const A = { x: 50, y: 180 };
+        const B = { x: 50, y: 70 };
+        const C = { x: 240, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // Площадь по катетам: задача 34 (катеты 14 и 5)
+    function task34Area() {
+        const A = { x: 50, y: 180 };
+        const B = { x: 50, y: 85 };
+        const C = { x: 230, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // Площадь по катетам: задача 35 (катеты 7 и 12)
+    function task35Area() {
+        const A = { x: 50, y: 180 };
+        const B = { x: 50, y: 75 };
+        const C = { x: 245, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    // Площадь по катетам: задача 36 (катеты 18 и 7)
+    function task36Area() {
+        const A = { x: 50, y: 180 };
+        const B = { x: 50, y: 80 };
+        const C = { x: 250, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            rightAnglePath: (v, p1, p2, s) => window.rightAnglePath(v, p1, p2, s),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
         };
     }
 
