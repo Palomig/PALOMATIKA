@@ -2042,10 +2042,11 @@
     }
 
     // Биссектриса: задача 3 (угол 26°)
+    // Визуально угол шире для удобства отображения метки
     function task3Bisector() {
-        const A = { x: 30, y: 180 };
-        const B = { x: 200, y: 50 };
-        const C = { x: 270, y: 180 };
+        const A = { x: 40, y: 180 };
+        const B = { x: 160, y: 45 };
+        const C = { x: 260, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
         const D = window.bisectorPoint(A, B, C);
         return {
@@ -2057,10 +2058,11 @@
     }
 
     // Биссектриса: задача 4 (угол 24°)
+    // Визуально угол шире для удобства отображения метки
     function task4Bisector() {
-        const A = { x: 30, y: 180 };
-        const B = { x: 210, y: 60 };
-        const C = { x: 270, y: 180 };
+        const A = { x: 40, y: 180 };
+        const B = { x: 155, y: 45 };
+        const C = { x: 260, y: 180 };
         const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
         const D = window.bisectorPoint(A, B, C);
         return {
