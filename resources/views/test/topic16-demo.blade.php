@@ -193,12 +193,12 @@
                  - |PA| = |PB| (равные касательные из одной точки)
             --}}
             <div x-data="{
-                O: { x: 80, y: 95 },
-                R: 40,
-                // Точки касания вычислены так, чтобы OA⊥PA и OB⊥PB
-                A: { x: 112, y: 119 },
-                B: { x: 80, y: 55 },
-                P: { x: 160, y: 55 }
+                O: { x: 95, y: 120 },
+                R: 50,
+                // Точки касания вычислены геометрически корректно
+                A: { x: 134, y: 152 },
+                B: { x: 95, y: 70 },
+                P: { x: 200, y: 70 }
             }" class="bg-slate-800/70 rounded-xl p-4 border border-slate-700">
                 <div class="flex items-start gap-2 mb-3">
                     <span class="text-red-400 font-bold">{{ $task['id'] }}</span>
@@ -208,7 +208,7 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 190 170" class="w-full max-w-[170px] h-auto">
+                    <svg viewBox="0 0 235 200" class="w-full max-w-[210px] h-auto">
                         {{-- Circle --}}
                         <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#3b82f6" stroke-width="2"/>
 
@@ -224,9 +224,10 @@
                         <line :x1="O.x" :y1="O.y" :x2="B.x" :y2="B.y"
                             stroke="#f59e0b" stroke-width="1.5"/>
 
-                        {{-- Right angle markers at tangent points --}}
-                        <path d="M 104,115 L 108,111 L 112,115" fill="none" stroke="#666" stroke-width="1.5"/>
-                        <path d="M 84,55 L 84,63 L 80,63" fill="none" stroke="#666" stroke-width="1.5"/>
+                        {{-- Right angle marker at A --}}
+                        <path d="M 126,146 L 132,140 L 138,146" fill="none" stroke="#666" stroke-width="1.5"/>
+                        {{-- Right angle marker at B --}}
+                        <path d="M 103,70 L 103,78 L 95,78" fill="none" stroke="#666" stroke-width="1.5"/>
 
                         {{-- Points --}}
                         <circle :cx="O.x" :cy="O.y" r="4" fill="#3b82f6"/>
@@ -235,14 +236,14 @@
                         <circle :cx="P.x" :cy="P.y" r="4" fill="#10b981"/>
 
                         {{-- Labels --}}
-                        <text :x="O.x - 16" :y="O.y + 5" fill="#3b82f6" font-size="14" class="geo-label">O</text>
-                        <text :x="A.x + 6" :y="A.y + 12" fill="#60a5fa" font-size="14" class="geo-label">A</text>
-                        <text :x="B.x - 5" :y="B.y - 10" fill="#60a5fa" font-size="14" class="geo-label">B</text>
-                        <text :x="P.x + 6" :y="P.y + 4" fill="#10b981" font-size="14" class="geo-label">P</text>
+                        <text :x="O.x - 18" :y="O.y + 5" fill="#3b82f6" font-size="15" class="geo-label">O</text>
+                        <text :x="A.x + 6" :y="A.y + 14" fill="#60a5fa" font-size="15" class="geo-label">A</text>
+                        <text :x="B.x - 5" :y="B.y - 12" fill="#60a5fa" font-size="15" class="geo-label">B</text>
+                        <text :x="P.x + 8" :y="P.y + 5" fill="#10b981" font-size="15" class="geo-label">P</text>
 
-                        {{-- Angle arc at P --}}
-                        <path d="M 145,55 A 15 15 0 0 1 152,68" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
-                        <text x="138" y="75" fill="#f59e0b" font-size="11" class="geo-label">{{ $task['angle'] }}°</text>
+                        {{-- Angle arc at P (from direction PA to PB) --}}
+                        <path d="M 187,86 A 20 20 0 0 0 180,70" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                        <text x="168" y="88" fill="#f59e0b" font-size="13" class="geo-label">{{ $task['angle'] }}°</text>
                     </svg>
                 </div>
 
