@@ -487,12 +487,13 @@
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
                     <svg viewBox="0 0 220 150" class="w-full max-w-[210px] h-auto">
                         {{-- Трапеция (не равнобедренная) - окружность касается всех 4 сторон
-                             Высота = 2r, центр окружности посередине высоты
-                             Верх: y=25, Низ: y=125, Высота=100, r=50, центр y=75 --}}
-                        <polygon points="10,125 40,25 170,25 210,125"
+                             Условие вписанной окружности: a × b = r² = 2500
+                             Левая сторона: a_L=35, b_L=71.4 → (75,25)→(39,125)
+                             Правая сторона: a_R=45, b_R=55.6 → (155,25)→(166,125) --}}
+                        <polygon points="39,125 75,25 155,25 166,125"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
 
-                        {{-- Inscribed circle: r=50, center=(110, 75), касается верха y=25, низа y=125 --}}
+                        {{-- Inscribed circle: r=50, center=(110, 75), касается всех 4 сторон --}}
                         <circle cx="110" cy="75" r="50" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
                         {{-- Radius indicator --}}
@@ -528,14 +529,14 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 220 150" class="w-full max-w-[210px] h-auto">
+                    <svg viewBox="0 0 180 150" class="w-full max-w-[190px] h-auto">
                         {{-- Прямоугольная трапеция - левая сторона вертикальная
-                             Окружность касается: левой вертикальной стороны, верхней, нижней и правой наклонной
-                             Высота = 2r = 100, r = 50 --}}
-                        <polygon points="25,125 25,25 145,25 210,125"
+                             Центр окружности (75, 75), r=50
+                             Левая сторона x=25 (касается), правая: a=40, b=62.5 → (115,25)→(138,125) --}}
+                        <polygon points="25,125 25,25 115,25 138,125"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
 
-                        {{-- Inscribed circle: касается левой стороны x=25, верха y=25, низа y=125 --}}
+                        {{-- Inscribed circle: касается всех 4 сторон --}}
                         <circle cx="75" cy="75" r="50" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
                         {{-- Right angle marker (левый верхний угол) --}}
@@ -576,8 +577,9 @@
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
                     <svg viewBox="0 0 220 150" class="w-full max-w-[210px] h-auto">
                         {{-- Равнобедренная трапеция - симметричная
-                             Высота = 2r = 100, центр окружности в центре --}}
-                        <polygon points="15,125 55,25 165,25 205,125"
+                             Условие: a × b = r² = 2500, где a=40, b=62.5
+                             Верх: 70→150 (ширина 80), Низ: 47.5→172.5 (ширина 125) --}}
+                        <polygon points="48,125 70,25 150,25 172,125"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
 
                         {{-- Inscribed circle: касается всех 4 сторон --}}
