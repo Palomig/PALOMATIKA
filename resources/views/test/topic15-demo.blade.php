@@ -4288,6 +4288,192 @@
 
     </div>
 
+    {{-- XVII) Теорема о площади треугольника (задачи 91-94) --}}
+    <div class="mt-10">
+        <h3 class="text-xl font-semibold text-amber-400 mb-2">XVII) Теорема о площади треугольника</h3>
+        <p class="text-slate-400 text-sm mb-6">$S = \frac{1}{2} \cdot AB \cdot BC \cdot \sin \angle ABC$</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            {{-- Задача 91 --}}
+            <div x-data="task91Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                <div class="flex items-start gap-3 mb-4">
+                    <span class="text-red-400 font-bold text-xl">91</span>
+                    <div class="text-slate-200">
+                        В треугольнике ABC известно, что AB=15, BC=8, $\sin \angle ABC = \frac{5}{6}$. Найдите площадь треугольника ABC.
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                        {{-- Треугольник --}}
+                        <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                            fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                        {{-- Дуга угла B --}}
+                        <path :d="makeAngleArc(B, A, C, 30)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+
+                        {{-- Вершины --}}
+                        <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                        <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                        <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                        {{-- Подписи вершин --}}
+                        <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                            fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                        <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                            fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                        <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                            fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+
+                        {{-- Длины сторон --}}
+                        <text :x="labelOnSegment(A, B, 12).x" :y="labelOnSegment(A, B, 12).y"
+                            fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">15</text>
+                        <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                            fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">8</text>
+                    </svg>
+                </div>
+
+                <div class="mt-3 text-slate-500 text-sm">
+                    <span class="text-emerald-400">Ответ:</span> 50 ($S = \frac{1}{2} \cdot 15 \cdot 8 \cdot \frac{5}{6}$)
+                </div>
+            </div>
+
+            {{-- Задача 92 --}}
+            <div x-data="task92Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                <div class="flex items-start gap-3 mb-4">
+                    <span class="text-red-400 font-bold text-xl">92</span>
+                    <div class="text-slate-200">
+                        В треугольнике ABC известно, что AB=10, BC=12, $\sin \angle ABC = \frac{8}{15}$. Найдите площадь треугольника ABC.
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                        {{-- Треугольник --}}
+                        <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                            fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                        {{-- Дуга угла B --}}
+                        <path :d="makeAngleArc(B, A, C, 30)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+
+                        {{-- Вершины --}}
+                        <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                        <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                        <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                        {{-- Подписи вершин --}}
+                        <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                            fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                        <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                            fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                        <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                            fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+
+                        {{-- Длины сторон --}}
+                        <text :x="labelOnSegment(A, B, 12).x" :y="labelOnSegment(A, B, 12).y"
+                            fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">10</text>
+                        <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                            fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">12</text>
+                    </svg>
+                </div>
+
+                <div class="mt-3 text-slate-500 text-sm">
+                    <span class="text-emerald-400">Ответ:</span> 32 ($S = \frac{1}{2} \cdot 10 \cdot 12 \cdot \frac{8}{15}$)
+                </div>
+            </div>
+
+            {{-- Задача 93 --}}
+            <div x-data="task93Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                <div class="flex items-start gap-3 mb-4">
+                    <span class="text-red-400 font-bold text-xl">93</span>
+                    <div class="text-slate-200">
+                        В треугольнике ABC известно, что AB=12, BC=15, $\sin \angle ABC = \frac{4}{9}$. Найдите площадь треугольника ABC.
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                        {{-- Треугольник --}}
+                        <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                            fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                        {{-- Дуга угла B --}}
+                        <path :d="makeAngleArc(B, A, C, 30)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+
+                        {{-- Вершины --}}
+                        <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                        <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                        <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                        {{-- Подписи вершин --}}
+                        <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                            fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                        <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                            fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                        <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                            fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+
+                        {{-- Длины сторон --}}
+                        <text :x="labelOnSegment(A, B, 12).x" :y="labelOnSegment(A, B, 12).y"
+                            fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">12</text>
+                        <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                            fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">15</text>
+                    </svg>
+                </div>
+
+                <div class="mt-3 text-slate-500 text-sm">
+                    <span class="text-emerald-400">Ответ:</span> 40 ($S = \frac{1}{2} \cdot 12 \cdot 15 \cdot \frac{4}{9}$)
+                </div>
+            </div>
+
+            {{-- Задача 94 --}}
+            <div x-data="task94Area()" class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
+                <div class="flex items-start gap-3 mb-4">
+                    <span class="text-red-400 font-bold text-xl">94</span>
+                    <div class="text-slate-200">
+                        В треугольнике ABC известно, что AB=9, BC=16, $\sin \angle ABC = \frac{7}{12}$. Найдите площадь треугольника ABC.
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                        {{-- Треугольник --}}
+                        <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
+                            fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+
+                        {{-- Дуга угла B --}}
+                        <path :d="makeAngleArc(B, A, C, 30)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+
+                        {{-- Вершины --}}
+                        <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                        <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                        <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+
+                        {{-- Подписи вершин --}}
+                        <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
+                            fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                        <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
+                            fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                        <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
+                            fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+
+                        {{-- Длины сторон --}}
+                        <text :x="labelOnSegment(A, B, 12).x" :y="labelOnSegment(A, B, 12).y"
+                            fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">9</text>
+                        <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
+                            fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">16</text>
+                    </svg>
+                </div>
+
+                <div class="mt-3 text-slate-500 text-sm">
+                    <span class="text-emerald-400">Ответ:</span> 42 ($S = \frac{1}{2} \cdot 9 \cdot 16 \cdot \frac{7}{12}$)
+                </div>
+            </div>
+
+        </div>
+    </div>
+
     {{-- Чек-лист --}}
     <div class="bg-emerald-900/30 border border-emerald-500/30 rounded-xl p-6 mt-10">
         <h4 class="text-emerald-400 font-semibold mb-4">✅ Чек-лист GEOMETRY_SPEC</h4>
@@ -5263,6 +5449,27 @@
     function task88Trig() { return taskTrig(); }
     function task89Trig() { return taskTrig(); }
     function task90Trig() { return taskTrig(); }
+
+    // Теорема о площади треугольника: задачи 91-94
+    // S = (1/2) * AB * BC * sin(∠ABC)
+    function taskArea() {
+        // Общий треугольник с выделенным углом B
+        const A = { x: 30, y: 180 };
+        const B = { x: 150, y: 35 };
+        const C = { x: 270, y: 180 };
+        const center = { x: (A.x + B.x + C.x) / 3, y: (A.y + B.y + C.y) / 3 };
+        return {
+            A, B, C, center,
+            labelPos: (p, c, d) => window.labelPos(p, c, d),
+            makeAngleArc: (v, p1, p2, r) => window.makeAngleArc(v, p1, p2, r),
+            labelOnSegment: (p1, p2, o, f) => window.labelOnSegment(p1, p2, o, f),
+        };
+    }
+
+    function task91Area() { return taskArea(); }
+    function task92Area() { return taskArea(); }
+    function task93Area() { return taskArea(); }
+    function task94Area() { return taskArea(); }
 </script>
 
 </body>
