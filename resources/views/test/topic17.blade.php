@@ -545,6 +545,19 @@
                                         <div class="text-slate-500 text-center py-8">Изображение</div>
                                 @endswitch
                             </div>
+
+                            {{-- Answer --}}
+                            @if(isset($task['answer']) && $task['answer'] !== '—')
+                                <div x-data="{ showAnswer: false }" class="mt-3">
+                                    <button @click="showAnswer = !showAnswer" class="w-full py-2 px-3 rounded-lg text-sm font-medium transition-colors"
+                                        :class="showAnswer ? 'bg-emerald-500/20 text-emerald-400' : 'bg-slate-700/50 text-slate-400 hover:bg-slate-700'">
+                                        <span x-text="showAnswer ? 'Скрыть ответ' : 'Показать ответ'"></span>
+                                    </button>
+                                    <div x-show="showAnswer" x-transition class="mt-2 p-3 bg-emerald-500/10 rounded-lg border border-emerald-500/30">
+                                        <div class="text-emerald-400 font-bold text-lg text-center">{{ $task['answer'] }}</div>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     @endforeach
                 </div>
