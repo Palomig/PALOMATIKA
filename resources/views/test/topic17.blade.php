@@ -128,33 +128,106 @@
                             <div class="bg-slate-900/50 rounded-lg p-3">
                                 @switch($zadanie['number'])
                                     @case(1)
-                                    @case(2)
-                                    @case(3)
-                                    @case(4)
-                                        {{-- Параллелограмм --}}
+                                        {{-- Задания 1-8: Параллелограмм БЕЗ диагоналей, только угол --}}
                                         <div x-data="parallelogramSVG()">
                                             <svg viewBox="0 0 220 200" class="w-full max-w-[250px] h-auto">
                                                 {{-- Параллелограмм ABCD --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
-                                                    fill="none" stroke="#10b981" stroke-width="2" stroke-linejoin="round"/>
-                                                {{-- Диагонали --}}
-                                                <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,3"/>
-                                                <line :x1="B.x" :y1="B.y" :x2="D.x" :y2="D.y" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,3"/>
-                                                {{-- Точка пересечения O --}}
-                                                <circle :cx="O.x" :cy="O.y" r="3" fill="#f59e0b"/>
+                                                    fill="none" stroke="#dc2626" stroke-width="2" stroke-linejoin="round"/>
                                                 {{-- Угол при A --}}
-                                                <path :d="makeAngleArc(A, D, B, 18)" fill="none" stroke="#ec4899" stroke-width="2"/>
+                                                <path :d="makeAngleArc(A, D, B, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
                                                 {{-- Точки вершин --}}
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#10b981"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#10b981"/>
-                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#10b981"/>
-                                                <circle :cx="D.x" :cy="D.y" r="4" fill="#10b981"/>
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="D.x" :cy="D.y" r="4" fill="#dc2626"/>
+                                                {{-- Метки вершин --}}
+                                                <text :x="A.x - 15" :y="A.y + 5" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="end">A</text>
+                                                <text :x="B.x - 8" :y="B.y - 10" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="end">B</text>
+                                                <text :x="C.x + 15" :y="C.y - 10" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="start">C</text>
+                                                <text :x="D.x + 15" :y="D.y + 5" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="start">D</text>
+                                            </svg>
+                                        </div>
+                                        @break
+
+                                    @case(2)
+                                        {{-- Задания 9-16: Диагональ BD или AC с двумя углами --}}
+                                        <div x-data="parallelogramDiagonalSVG()">
+                                            <svg viewBox="0 0 220 200" class="w-full max-w-[250px] h-auto">
+                                                {{-- Параллелограмм ABCD --}}
+                                                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
+                                                    fill="none" stroke="#dc2626" stroke-width="2" stroke-linejoin="round"/>
+                                                {{-- Диагональ BD --}}
+                                                <line :x1="B.x" :y1="B.y" :x2="D.x" :y2="D.y" stroke="#dc2626" stroke-width="2"/>
+                                                {{-- Угол ABD (между AB и BD) --}}
+                                                <path :d="makeAngleArc(B, A, D, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
+                                                {{-- Угол DBC (между BD и BC) --}}
+                                                <path :d="makeAngleArc(B, D, C, 35)" fill="none" stroke="#10b981" stroke-width="2"/>
+                                                {{-- Точки вершин --}}
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="D.x" :cy="D.y" r="4" fill="#dc2626"/>
+                                                {{-- Метки вершин --}}
+                                                <text :x="A.x - 15" :y="A.y + 5" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="end">A</text>
+                                                <text :x="B.x - 8" :y="B.y - 10" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="end">B</text>
+                                                <text :x="C.x + 15" :y="C.y - 10" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="start">C</text>
+                                                <text :x="D.x + 15" :y="D.y + 5" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="start">D</text>
+                                                {{-- Метки углов --}}
+                                                <text :x="B.x + 18" :y="B.y + 25" fill="#10b981" font-size="13" class="geo-label">65°</text>
+                                                <text :x="B.x + 40" :y="B.y + 8" fill="#10b981" font-size="13" class="geo-label">50°</text>
+                                            </svg>
+                                        </div>
+                                        @break
+
+                                    @case(3)
+                                        {{-- Задания 17-20: Биссектриса угла параллелограмма --}}
+                                        <div x-data="parallelogramSVG()">
+                                            <svg viewBox="0 0 220 200" class="w-full max-w-[250px] h-auto">
+                                                {{-- Параллелограмм ABCD --}}
+                                                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
+                                                    fill="none" stroke="#dc2626" stroke-width="2" stroke-linejoin="round"/>
+                                                {{-- Биссектриса из A --}}
+                                                <line :x1="A.x" :y1="A.y" :x2="B.x + 60" :y2="B.y" stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+                                                {{-- Угол при A --}}
+                                                <path :d="makeAngleArc(A, D, B, 25)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                                                {{-- Точки вершин --}}
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="D.x" :cy="D.y" r="4" fill="#dc2626"/>
                                                 {{-- Метки --}}
-                                                <text :x="A.x - 12" :y="A.y + 5" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="end">A</text>
-                                                <text :x="B.x - 8" :y="B.y - 8" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="end">B</text>
-                                                <text :x="C.x + 12" :y="C.y - 8" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="start">C</text>
-                                                <text :x="D.x + 12" :y="D.y + 5" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="start">D</text>
-                                                <text :x="O.x + 8" :y="O.y - 5" fill="#f59e0b" font-size="12" class="geo-label" text-anchor="start">O</text>
+                                                <text :x="A.x - 15" :y="A.y + 5" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="end">A</text>
+                                                <text :x="B.x - 8" :y="B.y - 10" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="end">B</text>
+                                                <text :x="C.x + 15" :y="C.y - 10" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="start">C</text>
+                                                <text :x="D.x + 15" :y="D.y + 5" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="start">D</text>
+                                            </svg>
+                                        </div>
+                                        @break
+
+                                    @case(4)
+                                        {{-- Задания 21-24: Диагонали параллелограмма (DO) --}}
+                                        <div x-data="parallelogramSVG()">
+                                            <svg viewBox="0 0 220 200" class="w-full max-w-[250px] h-auto">
+                                                {{-- Параллелограмм ABCD --}}
+                                                <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
+                                                    fill="none" stroke="#dc2626" stroke-width="2" stroke-linejoin="round"/>
+                                                {{-- Диагонали --}}
+                                                <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#f59e0b" stroke-width="2"/>
+                                                <line :x1="B.x" :y1="B.y" :x2="D.x" :y2="D.y" stroke="#f59e0b" stroke-width="2"/>
+                                                {{-- Точка пересечения O --}}
+                                                <circle :cx="O.x" :cy="O.y" r="4" fill="#f59e0b"/>
+                                                {{-- Точки вершин --}}
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="D.x" :cy="D.y" r="4" fill="#dc2626"/>
+                                                {{-- Метки --}}
+                                                <text :x="A.x - 15" :y="A.y + 5" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="end">A</text>
+                                                <text :x="B.x - 8" :y="B.y - 10" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="end">B</text>
+                                                <text :x="C.x + 15" :y="C.y - 10" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="start">C</text>
+                                                <text :x="D.x + 15" :y="D.y + 5" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="start">D</text>
+                                                <text :x="O.x + 10" :y="O.y - 8" fill="#f59e0b" font-size="14" font-style="italic" class="geo-label" text-anchor="start">O</text>
                                             </svg>
                                         </div>
                                         @break
@@ -652,6 +725,19 @@
 
         return {
             A, B, C, D, O,
+            makeAngleArc: (v, p1, p2, r) => makeAngleArc(v, p1, p2, r)
+        };
+    }
+
+    // 1b. Параллелограмм с диагональю BD для заданий 9-16
+    function parallelogramDiagonalSVG() {
+        const A = { x: 20, y: 160 };
+        const B = { x: 60, y: 40 };
+        const C = { x: 200, y: 40 };
+        const D = { x: 160, y: 160 };
+
+        return {
+            A, B, C, D,
             makeAngleArc: (v, p1, p2, r) => makeAngleArc(v, p1, p2, r)
         };
     }
