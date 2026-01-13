@@ -711,14 +711,14 @@
             {{-- Tasks 47-54: Circumscribed trapezoid/quadrilateral --}}
             @php
                 $circumscribedTasks = [
-                    ['id' => 47, 'ab' => 7, 'bc' => 5, 'cd' => 17, 'type' => 'Трапеция', 'answer' => '19'],
-                    ['id' => 48, 'ab' => 14, 'bc' => 13, 'cd' => 22, 'type' => 'Трапеция', 'answer' => '23'],
-                    ['id' => 49, 'ab' => 10, 'bc' => 16, 'cd' => 12, 'type' => 'Трапеция', 'answer' => '6'],
-                    ['id' => 50, 'ab' => 13, 'bc' => 14, 'cd' => 11, 'type' => 'Трапеция', 'answer' => '10'],
-                    ['id' => 51, 'ab' => 5, 'bc' => 12, 'cd' => 16, 'type' => 'Четырёхугольник', 'answer' => '9'],
-                    ['id' => 52, 'ab' => 8, 'bc' => 20, 'cd' => 17, 'type' => 'Четырёхугольник', 'answer' => '5'],
-                    ['id' => 53, 'ab' => 11, 'bc' => 15, 'cd' => 12, 'type' => 'Четырёхугольник', 'answer' => '8'],
-                    ['id' => 54, 'ab' => 14, 'bc' => 21, 'cd' => 23, 'type' => 'Четырёхугольник', 'answer' => '16'],
+                    ['id' => 47, 'ab' => 7, 'bc' => 5, 'cd' => 17, 'type' => 'Трапеция', 'answer' => '19', 'shape' => 1],
+                    ['id' => 48, 'ab' => 14, 'bc' => 13, 'cd' => 22, 'type' => 'Трапеция', 'answer' => '23', 'shape' => 1],
+                    ['id' => 49, 'ab' => 10, 'bc' => 16, 'cd' => 12, 'type' => 'Трапеция', 'answer' => '6', 'shape' => 2],
+                    ['id' => 50, 'ab' => 13, 'bc' => 14, 'cd' => 11, 'type' => 'Трапеция', 'answer' => '10', 'shape' => 2],
+                    ['id' => 51, 'ab' => 5, 'bc' => 12, 'cd' => 16, 'type' => 'Четырёхугольник', 'answer' => '9', 'shape' => 3],
+                    ['id' => 52, 'ab' => 8, 'bc' => 20, 'cd' => 17, 'type' => 'Четырёхугольник', 'answer' => '5', 'shape' => 3],
+                    ['id' => 53, 'ab' => 11, 'bc' => 15, 'cd' => 12, 'type' => 'Четырёхугольник', 'answer' => '8', 'shape' => 4],
+                    ['id' => 54, 'ab' => 14, 'bc' => 21, 'cd' => 23, 'type' => 'Четырёхугольник', 'answer' => '16', 'shape' => 4],
                 ];
             @endphp
 
@@ -732,19 +732,44 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 225 175" class="w-full max-w-[200px] h-auto">
-                        {{-- Quadrilateral - масштабировано ×1.25 --}}
-                        <polygon points="38,138 63,44 163,44 188,138"
+                    <svg viewBox="0 0 225 200" class="w-full max-w-[200px] h-auto">
+                        @if($task['shape'] == 1)
+                        {{-- Форма 1: Трапеция, широкое основание внизу (AD > BC) --}}
+                        <polygon points="25,160 70,45 155,45 200,160"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
-
-                        {{-- Circle --}}
-                        <circle cx="113" cy="90" r="44" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
-
-                        {{-- Labels --}}
-                        <text x="30" y="150" fill="#60a5fa" font-size="15" class="geo-label">A</text>
-                        <text x="56" y="35" fill="#60a5fa" font-size="15" class="geo-label">B</text>
-                        <text x="165" y="35" fill="#60a5fa" font-size="15" class="geo-label">C</text>
-                        <text x="190" y="150" fill="#60a5fa" font-size="15" class="geo-label">D</text>
+                        <circle cx="113" cy="102" r="55" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+                        <text x="12" y="172" fill="#60a5fa" font-size="15" class="geo-label">A</text>
+                        <text x="62" y="35" fill="#60a5fa" font-size="15" class="geo-label">B</text>
+                        <text x="157" y="35" fill="#60a5fa" font-size="15" class="geo-label">C</text>
+                        <text x="202" y="172" fill="#60a5fa" font-size="15" class="geo-label">D</text>
+                        @elseif($task['shape'] == 2)
+                        {{-- Форма 2: Трапеция, широкое основание вверху (BC > AD) --}}
+                        <polygon points="70,160 25,45 200,45 155,160"
+                            fill="none" stroke="#dc2626" stroke-width="2.5"/>
+                        <circle cx="113" cy="102" r="55" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+                        <text x="57" y="175" fill="#60a5fa" font-size="15" class="geo-label">A</text>
+                        <text x="12" y="38" fill="#60a5fa" font-size="15" class="geo-label">B</text>
+                        <text x="202" y="38" fill="#60a5fa" font-size="15" class="geo-label">C</text>
+                        <text x="157" y="175" fill="#60a5fa" font-size="15" class="geo-label">D</text>
+                        @elseif($task['shape'] == 3)
+                        {{-- Форма 3: Прямоугольный четырёхугольник (левая сторона вертикальная) --}}
+                        <polygon points="35,160 35,45 155,45 200,160"
+                            fill="none" stroke="#dc2626" stroke-width="2.5"/>
+                        <circle cx="105" cy="102" r="55" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+                        <text x="22" y="175" fill="#60a5fa" font-size="15" class="geo-label">A</text>
+                        <text x="22" y="38" fill="#60a5fa" font-size="15" class="geo-label">B</text>
+                        <text x="157" y="38" fill="#60a5fa" font-size="15" class="geo-label">C</text>
+                        <text x="202" y="175" fill="#60a5fa" font-size="15" class="geo-label">D</text>
+                        @else
+                        {{-- Форма 4: Симметричная трапеция --}}
+                        <polygon points="30,160 55,45 170,45 195,160"
+                            fill="none" stroke="#dc2626" stroke-width="2.5"/>
+                        <circle cx="113" cy="102" r="55" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+                        <text x="17" y="175" fill="#60a5fa" font-size="15" class="geo-label">A</text>
+                        <text x="47" y="35" fill="#60a5fa" font-size="15" class="geo-label">B</text>
+                        <text x="172" y="35" fill="#60a5fa" font-size="15" class="geo-label">C</text>
+                        <text x="197" y="175" fill="#60a5fa" font-size="15" class="geo-label">D</text>
+                        @endif
                     </svg>
                 </div>
 
