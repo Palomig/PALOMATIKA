@@ -194,11 +194,14 @@
             --}}
             <div x-data="{
                 // 85% заполнение viewBox 220×200
-                O: { x: 75, y: 120 },
+                // O - центр, R=70, A и B - точки касания НА окружности
+                O: { x: 75, y: 110 },
                 R: 70,
-                A: { x: 130, y: 170 },
-                B: { x: 75, y: 50 },
-                P: { x: 200, y: 50 }
+                // A на окружности: угол 50° вниз от горизонтали (cos50°≈0.64, sin50°≈0.77)
+                A: { x: 120, y: 164 },
+                // B на окружности: вверх (угол -90°)
+                B: { x: 75, y: 40 },
+                P: { x: 195, y: 40 }
             }" class="bg-slate-800/70 rounded-xl p-4 border border-slate-700">
                 <div class="flex items-start gap-2 mb-3">
                     <span class="text-red-400 font-bold">{{ $task['id'] }}</span>
@@ -278,11 +281,15 @@
             @foreach($inscribedAngleTasks as $task)
             <div x-data="{
                 // 85% заполнение viewBox 220×200
-                O: { x: 110, y: 105 },
+                // Все точки A, B, C лежат НА окружности
+                O: { x: 110, y: 100 },
                 R: 80,
-                A: { x: 40, y: 155 },
-                B: { x: 180, y: 155 },
-                C: { x: 70, y: 40 }
+                // A: угол 150° (внизу слева)
+                A: { x: 41, y: 140 },
+                // B: угол 30° (внизу справа)
+                B: { x: 179, y: 140 },
+                // C: угол -120° (вверху слева)
+                C: { x: 70, y: 31 }
             }" class="bg-slate-800/70 rounded-xl p-4 border border-slate-700">
                 <div class="flex items-start gap-2 mb-3">
                     <span class="text-red-400 font-bold">{{ $task['id'] }}</span>
@@ -314,7 +321,7 @@
                         <text :x="O.x + 10" :y="O.y + 6" fill="#3b82f6" font-size="16" class="geo-label">O</text>
                         <text :x="A.x - 14" :y="A.y + 14" fill="#60a5fa" font-size="16" class="geo-label">A</text>
                         <text :x="B.x + 8" :y="B.y + 14" fill="#60a5fa" font-size="16" class="geo-label">B</text>
-                        <text :x="C.x - 6" :y="C.y - 12" fill="#60a5fa" font-size="16" class="geo-label">C</text>
+                        <text :x="C.x - 16" :y="C.y - 8" fill="#60a5fa" font-size="16" class="geo-label">C</text>
 
                         {{-- Angle label --}}
                         <text x="115" y="150" fill="#f59e0b" font-size="14" class="geo-label" text-anchor="middle">{{ $task['aob'] }}°</text>
@@ -344,12 +351,16 @@
             @foreach($diameterTasks as $task)
             <div x-data="{
                 // 85% заполнение viewBox 220×200
+                // A, C - горизонтальный диаметр; B, D - диаметр под углом
+                // Все точки НА окружности с R=85
                 O: { x: 110, y: 100 },
                 R: 85,
                 A: { x: 25, y: 100 },
                 C: { x: 195, y: 100 },
-                B: { x: 68, y: 28 },
-                D: { x: 152, y: 172 }
+                // B: угол ~-60° (вверху слева)
+                B: { x: 67, y: 26 },
+                // D: противоположная точка диаметра
+                D: { x: 153, y: 174 }
             }" class="bg-slate-800/70 rounded-xl p-4 border border-slate-700">
                 <div class="flex items-start gap-2 mb-3">
                     <span class="text-red-400 font-bold">{{ $task['id'] }}</span>
@@ -383,11 +394,11 @@
                         <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
                         <circle :cx="D.x" :cy="D.y" r="5" fill="#dc2626"/>
 
-                        {{-- Labels --}}
-                        <text :x="A.x - 16" :y="A.y + 6" fill="#60a5fa" font-size="16" class="geo-label">A</text>
-                        <text :x="B.x - 6" :y="B.y - 12" fill="#60a5fa" font-size="16" class="geo-label">B</text>
+                        {{-- Labels - увеличены отступы --}}
+                        <text :x="A.x - 18" :y="A.y + 5" fill="#60a5fa" font-size="16" class="geo-label">A</text>
+                        <text :x="B.x - 16" :y="B.y - 6" fill="#60a5fa" font-size="16" class="geo-label">B</text>
                         <text :x="C.x + 10" :y="C.y + 6" fill="#60a5fa" font-size="16" class="geo-label">C</text>
-                        <text :x="D.x - 6" :y="D.y + 18" fill="#60a5fa" font-size="16" class="geo-label">D</text>
+                        <text :x="D.x + 8" :y="D.y + 16" fill="#60a5fa" font-size="16" class="geo-label">D</text>
                         <text :x="O.x + 10" :y="O.y - 10" fill="#3b82f6" font-size="16" class="geo-label">O</text>
                     </svg>
                 </div>
@@ -411,12 +422,15 @@
             @foreach($oppositeTasks as $task)
             <div x-data="{
                 // 85% заполнение viewBox 220×200
+                // Все точки A, B, N, M НА окружности с R=85
                 O: { x: 110, y: 100 },
                 R: 85,
                 A: { x: 25, y: 100 },
                 B: { x: 195, y: 100 },
-                N: { x: 80, y: 28 },
-                M: { x: 140, y: 175 }
+                // N: вверху слева (угол ~-110°)
+                N: { x: 81, y: 20 },
+                // M: внизу справа (угол ~70°)
+                M: { x: 139, y: 180 }
             }" class="bg-slate-800/70 rounded-xl p-4 border border-slate-700">
                 <div class="flex items-start gap-2 mb-3">
                     <span class="text-red-400 font-bold">{{ $task['id'] }}</span>
@@ -448,7 +462,7 @@
                         <circle :cx="M.x" :cy="M.y" r="5" fill="#10b981"/>
 
                         {{-- Labels --}}
-                        <text :x="A.x - 14" :y="A.y + 6" fill="#60a5fa" font-size="16" class="geo-label">A</text>
+                        <text :x="A.x - 18" :y="A.y + 5" fill="#60a5fa" font-size="16" class="geo-label">A</text>
                         <text :x="B.x + 10" :y="B.y + 6" fill="#60a5fa" font-size="16" class="geo-label">B</text>
                         <text :x="N.x - 6" :y="N.y - 12" fill="#60a5fa" font-size="16" class="geo-label">N</text>
                         <text :x="M.x - 6" :y="M.y + 18" fill="#60a5fa" font-size="16" class="geo-label">M</text>
@@ -771,13 +785,14 @@
                         <text x="210" y="185" fill="#60a5fa" font-size="15" class="geo-label">D</text>
                         @else
                         {{-- Форма 4: Симметричная трапеция
-                             85% заполнение: r=70, a=55, b=85 --}}
-                        <polygon points="25,170 55,30 165,30 195,170"
+                             85% заполнение: r=70, center=(110,100)
+                             Для касания боковых сторон: a×b=4900, a=85, b=58 --}}
+                        <polygon points="25,170 52,30 168,30 195,170"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
                         <circle cx="110" cy="100" r="70" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
                         <text x="12" y="185" fill="#60a5fa" font-size="15" class="geo-label">A</text>
-                        <text x="47" y="18" fill="#60a5fa" font-size="15" class="geo-label">B</text>
-                        <text x="167" y="18" fill="#60a5fa" font-size="15" class="geo-label">C</text>
+                        <text x="40" y="18" fill="#60a5fa" font-size="15" class="geo-label">B</text>
+                        <text x="170" y="18" fill="#60a5fa" font-size="15" class="geo-label">C</text>
                         <text x="197" y="185" fill="#60a5fa" font-size="15" class="geo-label">D</text>
                         @endif
                     </svg>
@@ -810,12 +825,14 @@
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
                     <svg viewBox="0 0 220 200" class="w-full max-w-[250px] h-auto">
-                        {{-- Triangle - 85% заполнение --}}
+                        {{-- Triangle - 85% заполнение
+                             A=(110,15), B=(15,185), C=(205,185)
+                             Инцентр (110,130), r=55 касается всех сторон --}}
                         <polygon points="110,15 15,185 205,185"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
 
-                        {{-- Inscribed circle --}}
-                        <circle cx="110" cy="128" r="52" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+                        {{-- Inscribed circle - касается всех 3 сторон --}}
+                        <circle cx="110" cy="130" r="55" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
                     </svg>
                 </div>
 
@@ -854,12 +871,13 @@
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
                     <svg viewBox="0 0 220 200" class="w-full max-w-[250px] h-auto">
-                        {{-- Equilateral triangle - 85% заполнение --}}
+                        {{-- Equilateral triangle - 85% заполнение
+                             Инцентр (110,130), r=55 касается всех сторон --}}
                         <polygon points="110,15 15,185 205,185"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
 
-                        {{-- Inscribed circle --}}
-                        <circle cx="110" cy="128" r="52" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+                        {{-- Inscribed circle - касается всех 3 сторон --}}
+                        <circle cx="110" cy="130" r="55" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
                     </svg>
                 </div>
 
@@ -907,21 +925,22 @@
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
                     <svg viewBox="0 0 220 200" class="w-full max-w-[250px] h-auto">
-                        {{-- Circle - 85% заполнение: R=85 --}}
+                        {{-- Circle - 85% заполнение: O=(110,100), R=85 --}}
                         <circle cx="110" cy="100" r="85" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
-                        {{-- Quadrilateral --}}
-                        <polygon points="35,55 55,175 175,175 195,55"
+                        {{-- Quadrilateral - все вершины НА окружности R=85
+                             A: угол 205°, B: угол 125°, C: угол 55°, D: угол 335° --}}
+                        <polygon points="33,64 62,170 158,170 187,64"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
 
                         {{-- Diagonal --}}
-                        <line x1="35" y1="55" x2="175" y2="175" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,4"/>
+                        <line x1="33" y1="64" x2="158" y2="170" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,4"/>
 
                         {{-- Labels --}}
-                        <text x="22" y="48" fill="#60a5fa" font-size="15" class="geo-label">A</text>
-                        <text x="42" y="192" fill="#60a5fa" font-size="15" class="geo-label">B</text>
-                        <text x="178" y="192" fill="#60a5fa" font-size="15" class="geo-label">C</text>
-                        <text x="198" y="48" fill="#60a5fa" font-size="15" class="geo-label">D</text>
+                        <text x="18" y="58" fill="#60a5fa" font-size="15" class="geo-label">A</text>
+                        <text x="50" y="188" fill="#60a5fa" font-size="15" class="geo-label">B</text>
+                        <text x="160" y="188" fill="#60a5fa" font-size="15" class="geo-label">C</text>
+                        <text x="192" y="58" fill="#60a5fa" font-size="15" class="geo-label">D</text>
                     </svg>
                 </div>
 
@@ -966,17 +985,37 @@
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
                     <svg viewBox="0 0 220 200" class="w-full max-w-[250px] h-auto">
-                        {{-- Circle - 85% заполнение: R=85 --}}
+                        {{-- Circle - O=(110,110), R=85; A,B на диаметре (y=110), C на окружности --}}
                         <circle cx="110" cy="110" r="85" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
-                        {{-- Triangle with right angle at C --}}
-                        <polygon points="25,110 195,110 110,38"
+                        {{-- Triangle: A и B на диаметре, C на окружности (разные формы)
+                             Центр на AB означает прямой угол в C
+                             Разные формы для разных заданий --}}
+                        @if(($task['id'] - 75) % 4 == 0)
+                        {{-- Форма 1: C левее центра, x=70, y=35 --}}
+                        <polygon points="25,110 195,110 70,35"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
+                        <text x="58" y="26" fill="#60a5fa" font-size="15" class="geo-label">C</text>
+                        @elseif(($task['id'] - 75) % 4 == 1)
+                        {{-- Форма 2: C правее центра, x=150, y=35 --}}
+                        <polygon points="25,110 195,110 150,35"
+                            fill="none" stroke="#dc2626" stroke-width="2.5"/>
+                        <text x="152" y="22" fill="#60a5fa" font-size="15" class="geo-label">C</text>
+                        @elseif(($task['id'] - 75) % 4 == 2)
+                        {{-- Форма 3: C ещё левее, x=55, y=45 --}}
+                        <polygon points="25,110 195,110 55,45"
+                            fill="none" stroke="#dc2626" stroke-width="2.5"/>
+                        <text x="40" y="38" fill="#60a5fa" font-size="15" class="geo-label">C</text>
+                        @else
+                        {{-- Форма 4: C ещё правее, x=165, y=45 --}}
+                        <polygon points="25,110 195,110 165,45"
+                            fill="none" stroke="#dc2626" stroke-width="2.5"/>
+                        <text x="168" y="38" fill="#60a5fa" font-size="15" class="geo-label">C</text>
+                        @endif
 
-                        {{-- Labels --}}
+                        {{-- Labels A и B --}}
                         <text x="10" y="116" fill="#60a5fa" font-size="15" class="geo-label">A</text>
                         <text x="198" y="116" fill="#60a5fa" font-size="15" class="geo-label">B</text>
-                        <text x="110" y="25" fill="#60a5fa" font-size="15" class="geo-label" text-anchor="middle">C</text>
                     </svg>
                 </div>
 
@@ -1015,29 +1054,26 @@
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
                     <svg viewBox="0 0 220 200" class="w-full max-w-[250px] h-auto">
-                        {{-- Circle - 85% заполнение: R=85 --}}
+                        {{-- Circle - O=(110,100), R=85 --}}
                         <circle cx="110" cy="100" r="85" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
-                        {{-- Quadrilateral --}}
+                        {{-- Quadrilateral/Trapezoid - все вершины НА окружности R=85 --}}
                         @if($task['shape'] == 'трапеции')
-                        <polygon points="30,160 65,40 155,40 190,160"
+                        {{-- Трапеция: A(150°), B(240°), C(300°), D(30°) на окружности --}}
+                        <polygon points="36,142 68,26 152,26 184,142"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
+                        <text x="20" y="152" fill="#60a5fa" font-size="15" class="geo-label">A</text>
+                        <text x="55" y="16" fill="#60a5fa" font-size="15" class="geo-label">B</text>
+                        <text x="155" y="16" fill="#60a5fa" font-size="15" class="geo-label">C</text>
+                        <text x="187" y="152" fill="#60a5fa" font-size="15" class="geo-label">D</text>
                         @else
-                        <polygon points="35,55 55,175 175,175 195,55"
+                        {{-- Четырёхугольник: A(205°), B(125°), C(55°), D(335°) --}}
+                        <polygon points="33,64 62,170 158,170 187,64"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
-                        @endif
-
-                        {{-- Labels --}}
-                        @if($task['shape'] == 'трапеции')
-                        <text x="17" y="172" fill="#60a5fa" font-size="15" class="geo-label">A</text>
-                        <text x="57" y="28" fill="#60a5fa" font-size="15" class="geo-label">B</text>
-                        <text x="157" y="28" fill="#60a5fa" font-size="15" class="geo-label">C</text>
-                        <text x="193" y="172" fill="#60a5fa" font-size="15" class="geo-label">D</text>
-                        @else
-                        <text x="22" y="48" fill="#60a5fa" font-size="15" class="geo-label">A</text>
-                        <text x="42" y="192" fill="#60a5fa" font-size="15" class="geo-label">B</text>
-                        <text x="178" y="192" fill="#60a5fa" font-size="15" class="geo-label">C</text>
-                        <text x="198" y="48" fill="#60a5fa" font-size="15" class="geo-label">D</text>
+                        <text x="18" y="58" fill="#60a5fa" font-size="15" class="geo-label">A</text>
+                        <text x="50" y="188" fill="#60a5fa" font-size="15" class="geo-label">B</text>
+                        <text x="160" y="188" fill="#60a5fa" font-size="15" class="geo-label">C</text>
+                        <text x="192" y="58" fill="#60a5fa" font-size="15" class="geo-label">D</text>
                         @endif
                     </svg>
                 </div>
@@ -1120,11 +1156,12 @@
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
                     <svg viewBox="0 0 220 200" class="w-full max-w-[250px] h-auto">
-                        {{-- Circle - 85% заполнение: R=85 --}}
+                        {{-- Circle - O=(110,100), R=85 --}}
                         <circle cx="110" cy="100" r="85" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
-                        {{-- Equilateral triangle --}}
-                        <polygon points="110,15 25,175 195,175"
+                        {{-- Equilateral triangle - все вершины НА окружности
+                             A(270°)=(110,15), B(30°)=(184,143), C(150°)=(36,143) --}}
+                        <polygon points="110,15 184,143 36,143"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
                     </svg>
                 </div>
@@ -1172,22 +1209,24 @@
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
                     <svg viewBox="0 0 220 200" class="w-full max-w-[250px] h-auto">
-                        {{-- Circle - 85% заполнение: R=85 --}}
+                        {{-- Circle - O=(110,100), R=85 --}}
                         <circle cx="110" cy="100" r="85" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
-                        {{-- Triangle --}}
+                        {{-- Triangle - все вершины НА окружности R=85 --}}
                         @if($task['c'] < 90)
-                        <polygon points="35,170 185,170 110,25"
+                        {{-- Острый угол C: A(150°), B(30°), C(270°) на окружности --}}
+                        <polygon points="36,143 184,143 110,15"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
-                        <text x="22" y="183" fill="#60a5fa" font-size="15" class="geo-label">A</text>
-                        <text x="188" y="183" fill="#60a5fa" font-size="15" class="geo-label">B</text>
-                        <text x="110" y="15" fill="#60a5fa" font-size="15" class="geo-label" text-anchor="middle">C</text>
+                        <text x="20" y="153" fill="#60a5fa" font-size="15" class="geo-label">A</text>
+                        <text x="188" y="153" fill="#60a5fa" font-size="15" class="geo-label">B</text>
+                        <text x="110" y="8" fill="#60a5fa" font-size="15" class="geo-label" text-anchor="middle">C</text>
                         @else
-                        <polygon points="55,45 165,45 110,180"
+                        {{-- Тупой угол C: A(210°), B(330°), C(90°) на окружности --}}
+                        <polygon points="36,58 184,58 110,185"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
-                        <text x="42" y="38" fill="#60a5fa" font-size="15" class="geo-label">A</text>
-                        <text x="168" y="38" fill="#60a5fa" font-size="15" class="geo-label">B</text>
-                        <text x="110" y="197" fill="#60a5fa" font-size="15" class="geo-label" text-anchor="middle">C</text>
+                        <text x="20" y="50" fill="#60a5fa" font-size="15" class="geo-label">A</text>
+                        <text x="188" y="50" fill="#60a5fa" font-size="15" class="geo-label">B</text>
+                        <text x="110" y="198" fill="#60a5fa" font-size="15" class="geo-label" text-anchor="middle">C</text>
                         @endif
 
                         {{-- Angle label --}}
