@@ -155,9 +155,9 @@ Route::prefix('test')->group(function () {
     })->name('test.topic15');
     Route::get('/old/15', [TestPdfController::class, 'topic15'])->name('test.topic15.old');
     Route::get('/new/15', [TestPdfController::class, 'topic15Interactive'])->name('test.topic15.interactive');
-    // Topic 16: Main page uses demo with all 126 tasks
+    // Topic 16: Main page with all 126 tasks (moved to topics/)
     Route::get('/16', function () {
-        return view('test.topic16-demo');
+        return view('topics.topic16');
     })->name('test.topic16');
     Route::get('/old/16', [TestPdfController::class, 'topic16'])->name('test.topic16.old');
     Route::get('/17', [TestPdfController::class, 'topic17'])->name('test.topic17');
