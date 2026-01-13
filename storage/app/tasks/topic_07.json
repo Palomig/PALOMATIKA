@@ -1,0 +1,1952 @@
+{
+    "topic_id": "07",
+    "meta": {
+        "title": "Числа, координатная прямая",
+        "description": "Сравнение чисел и работа с координатной прямой",
+        "color": "cyan",
+        "icon": "ruler"
+    },
+    "exported_at": "2026-01-13T07:51:15+00:00",
+    "blocks": [
+        {
+            "number": 1,
+            "title": "ФИПИ",
+            "zadaniya": [
+                {
+                    "number": 1,
+                    "instruction": "На координатной прямой отмечено число a. Какое из утверждений для этого числа является верным?",
+                    "type": "choice",
+                    "svg_type": "single_point",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "point_value": 6.5,
+                            "point_label": "a",
+                            "options": [
+                                "$a - 6 < 0$",
+                                "$6 - a > 0$",
+                                "$a - 7 > 0$",
+                                "$8 - a < 0$"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "point_value": 5,
+                            "point_label": "a",
+                            "options": [
+                                "$5 - a < 0$",
+                                "$a - 6 > 0$",
+                                "$a - 5 < 0$",
+                                "$4 - a > 0$"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "point_value": 5.5,
+                            "point_label": "a",
+                            "options": [
+                                "$a - 4 < 0$",
+                                "$a - 6 > 0$",
+                                "$6 - a > 0$",
+                                "$7 - a < 0$"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "point_value": 8.5,
+                            "point_label": "a",
+                            "options": [
+                                "$8 - a > 0$",
+                                "$8 - a < 0$",
+                                "$a - 7 < 0$",
+                                "$a - 9 > 0$"
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "point_value": 8.5,
+                            "point_label": "a",
+                            "options": [
+                                "$4 - a > 0$",
+                                "$a - 7 < 0$",
+                                "$a - 8 > 0$",
+                                "$8 - a < 0$"
+                            ]
+                        },
+                        {
+                            "id": 6,
+                            "point_value": 3.5,
+                            "point_label": "a",
+                            "options": [
+                                "$4 - a > 0$",
+                                "$a - 4 < 0$",
+                                "$a - 3 < 0$",
+                                "$6 - a > 0$"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 2,
+                    "instruction": "На координатной прямой отмечены числа. Какое из приведённых утверждений для этих чисел верно?",
+                    "type": "choice",
+                    "svg_type": "two_points",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "points": [
+                                {
+                                    "value": -3,
+                                    "label": "x"
+                                },
+                                {
+                                    "value": 2,
+                                    "label": "y"
+                                }
+                            ],
+                            "options": [
+                                "$x + y < 0$",
+                                "$xy < 0$",
+                                "$y - x > 0$",
+                                "$x^2 y > 0$"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "points": [
+                                {
+                                    "value": -2,
+                                    "label": "a"
+                                },
+                                {
+                                    "value": 3,
+                                    "label": "b"
+                                }
+                            ],
+                            "options": [
+                                "$a + b > 0$",
+                                "$a^2 b < 0$",
+                                "$ab > 0$",
+                                "$a - b < 0$"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "points": [
+                                {
+                                    "value": -1,
+                                    "label": "x"
+                                },
+                                {
+                                    "value": 4,
+                                    "label": "y"
+                                }
+                            ],
+                            "options": [
+                                "$xy > 0$",
+                                "$x^2 y < 0$",
+                                "$x + y > 0$",
+                                "$x - y < 0$"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "points": [
+                                {
+                                    "value": -4,
+                                    "label": "a"
+                                },
+                                {
+                                    "value": -1,
+                                    "label": "b"
+                                }
+                            ],
+                            "options": [
+                                "$a + b < 0$",
+                                "$a - b > 0$",
+                                "$ab^2 > 0$",
+                                "$ab < 0$"
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "points": [
+                                {
+                                    "value": 2,
+                                    "label": "x"
+                                },
+                                {
+                                    "value": 4,
+                                    "label": "y"
+                                }
+                            ],
+                            "options": [
+                                "$xy^2 > 0$",
+                                "$x - y < 0$",
+                                "$x + y > 0$",
+                                "$xy > 0$"
+                            ]
+                        },
+                        {
+                            "id": 6,
+                            "points": [
+                                {
+                                    "value": 1,
+                                    "label": "a"
+                                },
+                                {
+                                    "value": 3,
+                                    "label": "b"
+                                }
+                            ],
+                            "options": [
+                                "$ab^2 > 0$",
+                                "$a - b < 0$",
+                                "$ab > 0$",
+                                "$a + b > 0$"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 3,
+                    "instruction": "На координатной прямой отмечены числа p, q и r. Какая из разностей q − p, q − r, r − p положительна?",
+                    "type": "simple_choice",
+                    "svg_type": "three_points",
+                    "points": [
+                        {
+                            "value": -2,
+                            "label": "p"
+                        },
+                        {
+                            "value": 1,
+                            "label": "q"
+                        },
+                        {
+                            "value": 4,
+                            "label": "r"
+                        }
+                    ],
+                    "options": [
+                        "$q - p$",
+                        "$q - r$",
+                        "$r - p$",
+                        "невозможно определить"
+                    ]
+                },
+                {
+                    "number": 4,
+                    "instruction": "На координатной прямой отмечены числа x, y и z. Какая из разностей z − x, y − z, x − y отрицательна?",
+                    "type": "simple_choice",
+                    "svg_type": "three_points",
+                    "points": [
+                        {
+                            "value": -3,
+                            "label": "x"
+                        },
+                        {
+                            "value": 0,
+                            "label": "y"
+                        },
+                        {
+                            "value": 3,
+                            "label": "z"
+                        }
+                    ],
+                    "options": [
+                        "$z - x$",
+                        "$y - z$",
+                        "$x - y$",
+                        "невозможно определить"
+                    ]
+                },
+                {
+                    "number": 5,
+                    "instruction": "На координатной прямой отмечены числа a, b и c. Какая из разностей a − b, a − c, c − b положительна?",
+                    "type": "simple_choice",
+                    "svg_type": "three_points",
+                    "points": [
+                        {
+                            "value": -1,
+                            "label": "a"
+                        },
+                        {
+                            "value": 2,
+                            "label": "b"
+                        },
+                        {
+                            "value": 5,
+                            "label": "c"
+                        }
+                    ],
+                    "options": [
+                        "$a - b$",
+                        "$a - c$",
+                        "$c - b$",
+                        "невозможно определить"
+                    ]
+                },
+                {
+                    "number": 6,
+                    "instruction": "На координатной прямой отмечены числа p, q и r. Какая из разностей q − p, q − r, r − p отрицательна?",
+                    "type": "simple_choice",
+                    "svg_type": "three_points",
+                    "points": [
+                        {
+                            "value": -4,
+                            "label": "p"
+                        },
+                        {
+                            "value": -1,
+                            "label": "q"
+                        },
+                        {
+                            "value": 2,
+                            "label": "r"
+                        }
+                    ],
+                    "options": [
+                        "$q - p$",
+                        "$q - r$",
+                        "$r - p$",
+                        "невозможно определить"
+                    ]
+                },
+                {
+                    "number": 7,
+                    "instruction": "На координатной прямой отмечены числа x, y и z. Какая из разностей z − x, y − z, x − y положительна?",
+                    "type": "simple_choice",
+                    "svg_type": "three_points",
+                    "points": [
+                        {
+                            "value": 0,
+                            "label": "x"
+                        },
+                        {
+                            "value": 2,
+                            "label": "y"
+                        },
+                        {
+                            "value": 5,
+                            "label": "z"
+                        }
+                    ],
+                    "options": [
+                        "$z - x$",
+                        "$y - z$",
+                        "$x - y$",
+                        "невозможно определить"
+                    ]
+                },
+                {
+                    "number": 8,
+                    "instruction": "На координатной прямой отмечены числа a, b и c. Какая из разностей a − b, a − c, c − b отрицательна?",
+                    "type": "simple_choice",
+                    "svg_type": "three_points",
+                    "points": [
+                        {
+                            "value": -3,
+                            "label": "a"
+                        },
+                        {
+                            "value": 1,
+                            "label": "b"
+                        },
+                        {
+                            "value": 4,
+                            "label": "c"
+                        }
+                    ],
+                    "options": [
+                        "$a - b$",
+                        "$a - c$",
+                        "$c - b$",
+                        "невозможно определить"
+                    ]
+                },
+                {
+                    "number": 9,
+                    "instruction": "На координатной прямой отмечены точки A, B, C и D. Одна из них соответствует данному числу. Какая это точка?",
+                    "type": "fraction_choice",
+                    "svg_type": "four_points_abcd",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "four_points": [
+                                5.3,
+                                5.7,
+                                6.2,
+                                6.7
+                            ],
+                            "range": [
+                                5,
+                                7
+                            ],
+                            "expression": "\\frac{63}{11}",
+                            "options": [
+                                "A",
+                                "B",
+                                "C",
+                                "D"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "four_points": [
+                                7.3,
+                                7.7,
+                                8.2,
+                                8.7
+                            ],
+                            "range": [
+                                7,
+                                9
+                            ],
+                            "expression": "\\frac{116}{15}",
+                            "options": [
+                                "A",
+                                "B",
+                                "C",
+                                "D"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "four_points": [
+                                7.5,
+                                8,
+                                8.3,
+                                8.8
+                            ],
+                            "range": [
+                                7,
+                                9
+                            ],
+                            "expression": "\\frac{107}{13}",
+                            "options": [
+                                "A",
+                                "B",
+                                "C",
+                                "D"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "four_points": [
+                                5.1,
+                                5.3,
+                                5.8,
+                                6.3
+                            ],
+                            "range": [
+                                5,
+                                7
+                            ],
+                            "expression": "\\frac{100}{19}",
+                            "options": [
+                                "A",
+                                "B",
+                                "C",
+                                "D"
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "four_points": [
+                                7.4,
+                                7.8,
+                                8.3,
+                                8.6
+                            ],
+                            "range": [
+                                7,
+                                9
+                            ],
+                            "expression": "\\frac{132}{17}",
+                            "options": [
+                                "A",
+                                "B",
+                                "C",
+                                "D"
+                            ]
+                        },
+                        {
+                            "id": 6,
+                            "four_points": [
+                                9.5,
+                                10,
+                                10.2,
+                                10.8
+                            ],
+                            "range": [
+                                9,
+                                11
+                            ],
+                            "expression": "\\frac{92}{9}",
+                            "options": [
+                                "A",
+                                "B",
+                                "C",
+                                "D"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 10,
+                    "instruction": "Между какими целыми числами заключено число...",
+                    "type": "interval_choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "\\frac{130}{11}",
+                            "options": [
+                                "10 и 11",
+                                "11 и 12",
+                                "12 и 13",
+                                "13 и 14"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\frac{124}{15}",
+                            "options": [
+                                "8 и 9",
+                                "9 и 10",
+                                "10 и 11",
+                                "11 и 12"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "expression": "\\frac{230}{19}",
+                            "options": [
+                                "11 и 12",
+                                "12 и 13",
+                                "13 и 14",
+                                "14 и 15"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "expression": "\\frac{140}{17}",
+                            "options": [
+                                "5 и 6",
+                                "6 и 7",
+                                "7 и 8",
+                                "8 и 9"
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "expression": "\\frac{110}{13}",
+                            "options": [
+                                "8 и 9",
+                                "9 и 10",
+                                "10 и 11",
+                                "11 и 12"
+                            ]
+                        },
+                        {
+                            "id": 6,
+                            "expression": "\\frac{131}{12}",
+                            "options": [
+                                "10 и 11",
+                                "11 и 12",
+                                "12 и 13",
+                                "13 и 14"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 11,
+                    "instruction": "Какому из данных промежутков принадлежит число...",
+                    "type": "interval_choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "\\frac{2}{9}",
+                            "options": [
+                                "[0,1; 0,2]",
+                                "[0,2; 0,3]",
+                                "[0,3; 0,4]",
+                                "[0,4; 0,5]"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\frac{7}{11}",
+                            "options": [
+                                "[0,4; 0,5]",
+                                "[0,5; 0,6]",
+                                "[0,6; 0,7]",
+                                "[0,7; 0,8]"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "expression": "\\frac{5}{13}",
+                            "options": [
+                                "[0,2; 0,3]",
+                                "[0,3; 0,4]",
+                                "[0,4; 0,5]",
+                                "[0,5; 0,6]"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "expression": "\\frac{3}{7}",
+                            "options": [
+                                "[0,1; 0,2]",
+                                "[0,2; 0,3]",
+                                "[0,3; 0,4]",
+                                "[0,4; 0,5]"
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "expression": "\\frac{5}{11}",
+                            "options": [
+                                "[0,2; 0,3]",
+                                "[0,3; 0,4]",
+                                "[0,4; 0,5]",
+                                "[0,5; 0,6]"
+                            ]
+                        },
+                        {
+                            "id": 6,
+                            "expression": "\\frac{9}{13}",
+                            "options": [
+                                "[0,5; 0,6]",
+                                "[0,6; 0,7]",
+                                "[0,7; 0,8]",
+                                "[0,8; 0,9]"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 12,
+                    "instruction": "Какое из следующих чисел заключено между числами...",
+                    "type": "between_fractions",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "left": "\\frac{8}{3}",
+                            "right": "\\frac{11}{4}",
+                            "options": [
+                                "2,7",
+                                "2,8",
+                                "2,9",
+                                "3"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "left": "\\frac{8}{13}",
+                            "right": "\\frac{12}{17}",
+                            "options": [
+                                "0,6",
+                                "0,7",
+                                "0,8",
+                                "0,9"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "left": "\\frac{15}{11}",
+                            "right": "\\frac{13}{9}",
+                            "options": [
+                                "1,4",
+                                "1,5",
+                                "1,6",
+                                "1,7"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "left": "\\frac{17}{15}",
+                            "right": "\\frac{16}{13}",
+                            "options": [
+                                "1,2",
+                                "1,3",
+                                "1,4",
+                                "1,5"
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "left": "\\frac{19}{8}",
+                            "right": "\\frac{17}{7}",
+                            "options": [
+                                "2,3",
+                                "2,4",
+                                "2,5",
+                                "2,6"
+                            ]
+                        },
+                        {
+                            "id": 6,
+                            "left": "\\frac{18}{17}",
+                            "right": "\\frac{17}{15}",
+                            "options": [
+                                "1,0",
+                                "1,1",
+                                "1,2",
+                                "1,3"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 13,
+                    "instruction": "Какое из данных чисел принадлежит отрезку...",
+                    "type": "segment_choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "segment": "[3; 4]",
+                            "options": [
+                                "\\frac{47}{14}",
+                                "\\frac{57}{14}",
+                                "\\frac{61}{14}",
+                                "\\frac{65}{14}"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "segment": "[4; 5]",
+                            "options": [
+                                "\\frac{58}{17}",
+                                "\\frac{72}{17}",
+                                "\\frac{87}{17}",
+                                "\\frac{91}{17}"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "segment": "[7; 8]",
+                            "options": [
+                                "\\frac{57}{9}",
+                                "\\frac{62}{9}",
+                                "\\frac{70}{9}",
+                                "\\frac{79}{9}"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "segment": "[6; 7]",
+                            "options": [
+                                "\\frac{67}{12}",
+                                "\\frac{71}{12}",
+                                "\\frac{83}{12}",
+                                "\\frac{91}{12}"
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "segment": "[5; 6]",
+                            "options": [
+                                "\\frac{68}{13}",
+                                "\\frac{79}{13}",
+                                "\\frac{82}{13}",
+                                "\\frac{89}{13}"
+                            ]
+                        },
+                        {
+                            "id": 6,
+                            "segment": "[4; 5]",
+                            "options": [
+                                "\\frac{49}{15}",
+                                "\\frac{52}{15}",
+                                "\\frac{58}{15}",
+                                "\\frac{71}{15}"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 14,
+                    "instruction": "Одно из чисел отмечено на прямой точкой А. Какое это число?",
+                    "type": "fraction_options",
+                    "svg_type": "single_point",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "point_value": 0.7272727272727273,
+                            "point_label": "A",
+                            "options": [
+                                "\\frac{3}{11}",
+                                "\\frac{7}{11}",
+                                "\\frac{8}{11}",
+                                "\\frac{13}{11}"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "point_value": 0.6470588235294118,
+                            "point_label": "A",
+                            "options": [
+                                "\\frac{10}{17}",
+                                "\\frac{11}{17}",
+                                "\\frac{13}{17}",
+                                "\\frac{14}{17}"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "point_value": 0.7692307692307693,
+                            "point_label": "A",
+                            "options": [
+                                "\\frac{3}{13}",
+                                "\\frac{9}{13}",
+                                "\\frac{10}{13}",
+                                "\\frac{12}{13}"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "point_value": 0.4782608695652174,
+                            "point_label": "A",
+                            "options": [
+                                "\\frac{10}{23}",
+                                "\\frac{11}{23}",
+                                "\\frac{13}{23}",
+                                "\\frac{14}{23}"
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "point_value": 1.4285714285714286,
+                            "point_label": "A",
+                            "options": [
+                                "\\frac{2}{7}",
+                                "\\frac{4}{7}",
+                                "\\frac{10}{7}",
+                                "\\frac{11}{7}"
+                            ]
+                        },
+                        {
+                            "id": 6,
+                            "point_value": 0.4782608695652174,
+                            "point_label": "A",
+                            "options": [
+                                "\\frac{6}{23}",
+                                "\\frac{7}{23}",
+                                "\\frac{11}{23}",
+                                "\\frac{12}{23}"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 15,
+                    "instruction": "Одно из чисел отмечено на прямой точкой A. Какое это число?",
+                    "type": "fraction_options",
+                    "svg_type": "single_point",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "point_value": 3.3684210526315788,
+                            "point_label": "A",
+                            "options": [
+                                "\\frac{55}{19}",
+                                "\\frac{64}{19}",
+                                "\\frac{72}{19}",
+                                "\\frac{79}{19}"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "point_value": 5.266666666666667,
+                            "point_label": "A",
+                            "options": [
+                                "\\frac{71}{15}",
+                                "\\frac{79}{15}",
+                                "\\frac{86}{15}",
+                                "\\frac{92}{15}"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "point_value": 3.772727272727273,
+                            "point_label": "A",
+                            "options": [
+                                "\\frac{73}{22}",
+                                "\\frac{83}{22}",
+                                "\\frac{93}{22}",
+                                "\\frac{113}{22}"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "point_value": 5.3076923076923075,
+                            "point_label": "A",
+                            "options": [
+                                "\\frac{58}{13}",
+                                "\\frac{69}{13}",
+                                "\\frac{76}{13}",
+                                "\\frac{83}{13}"
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "point_value": 3.6956521739130435,
+                            "point_label": "A",
+                            "options": [
+                                "\\frac{75}{23}",
+                                "\\frac{85}{23}",
+                                "\\frac{97}{23}",
+                                "\\frac{110}{23}"
+                            ]
+                        },
+                        {
+                            "id": 6,
+                            "point_value": 3.3636363636363638,
+                            "point_label": "A",
+                            "options": [
+                                "\\frac{31}{11}",
+                                "\\frac{37}{11}",
+                                "\\frac{41}{11}",
+                                "\\frac{47}{11}"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 16,
+                    "instruction": "На координатной прямой точки A, B, C и D соответствуют числам. Какой точке соответствует указанное число?",
+                    "type": "decimal_choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "numbers": "0,0137; 0,103; 0,03; 0,021",
+                            "target": "0,03",
+                            "options": [
+                                "A",
+                                "B",
+                                "C",
+                                "D"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "numbers": "−0,502; 0,25; 0,205; 0,52",
+                            "target": "0,205",
+                            "options": [
+                                "A",
+                                "B",
+                                "C",
+                                "D"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "numbers": "0,508; 0,85; −0,05; 0,058",
+                            "target": "0,058",
+                            "options": [
+                                "A",
+                                "B",
+                                "C",
+                                "D"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "numbers": "−0,39; −0,09; −0,93; 0,03",
+                            "target": "−0,09",
+                            "options": [
+                                "A",
+                                "B",
+                                "C",
+                                "D"
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "numbers": "0,271; −0,112; 0,041; −0,267",
+                            "target": "0,271",
+                            "options": [
+                                "A",
+                                "B",
+                                "C",
+                                "D"
+                            ]
+                        },
+                        {
+                            "id": 6,
+                            "numbers": "−0,201; −0,012; −0,304; 0,021",
+                            "target": "−0,304",
+                            "options": [
+                                "A",
+                                "B",
+                                "C",
+                                "D"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 17,
+                    "instruction": "На координатной прямой отмечены точки A, B, C, D. Одна из них соответствует данному числу. Какая это точка?",
+                    "type": "sqrt_choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "\\sqrt{86}",
+                            "options": [
+                                "A",
+                                "B",
+                                "C",
+                                "D"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\sqrt{46}",
+                            "options": [
+                                "A",
+                                "B",
+                                "C",
+                                "D"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "expression": "\\sqrt{68}",
+                            "options": [
+                                "A",
+                                "B",
+                                "C",
+                                "D"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "expression": "\\sqrt{85}",
+                            "options": [
+                                "A",
+                                "B",
+                                "C",
+                                "D"
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "expression": "\\sqrt{39}",
+                            "options": [
+                                "A",
+                                "B",
+                                "C",
+                                "D"
+                            ]
+                        },
+                        {
+                            "id": 6,
+                            "expression": "\\sqrt{76}",
+                            "options": [
+                                "A",
+                                "B",
+                                "C",
+                                "D"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 18,
+                    "instruction": "Между какими целыми числами заключено число...",
+                    "type": "sqrt_interval",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "\\sqrt{89}",
+                            "options": [
+                                "4 и 5",
+                                "29 и 31",
+                                "9 и 10",
+                                "88 и 90"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\sqrt{27}",
+                            "options": [
+                                "2 и 3",
+                                "5 и 6",
+                                "12 и 14",
+                                "26 и 28"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "expression": "\\sqrt{58}",
+                            "options": [
+                                "19 и 21",
+                                "57 и 59",
+                                "3 и 4",
+                                "7 и 8"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "expression": "\\sqrt{73}",
+                            "options": [
+                                "8 и 9",
+                                "72 и 74",
+                                "24 и 26",
+                                "4 и 5"
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "expression": "\\sqrt{30}",
+                            "options": [
+                                "11 и 13",
+                                "5 и 6",
+                                "2 и 3",
+                                "29 и 31"
+                            ]
+                        },
+                        {
+                            "id": 6,
+                            "expression": "\\sqrt{56}",
+                            "options": [
+                                "55 и 57",
+                                "3 и 4",
+                                "19 и 21",
+                                "7 и 8"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 19,
+                    "instruction": "Какое из данных чисел принадлежит промежутку...",
+                    "type": "sqrt_segment",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "segment": "[5; 6]",
+                            "options": [
+                                "\\sqrt{5}",
+                                "\\sqrt{6}",
+                                "\\sqrt{24}",
+                                "\\sqrt{32}"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "segment": "[6; 7]",
+                            "options": [
+                                "\\sqrt{6}",
+                                "\\sqrt{7}",
+                                "\\sqrt{38}",
+                                "\\sqrt{50}"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "segment": "[7; 8]",
+                            "options": [
+                                "\\sqrt{7}",
+                                "\\sqrt{8}",
+                                "\\sqrt{62}",
+                                "\\sqrt{72}"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "segment": "[6; 7]",
+                            "options": [
+                                "\\sqrt{6}",
+                                "\\sqrt{7}",
+                                "\\sqrt{40}",
+                                "\\sqrt{51}"
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "segment": "[5; 6]",
+                            "options": [
+                                "\\sqrt{5}",
+                                "\\sqrt{6}",
+                                "\\sqrt{28}",
+                                "\\sqrt{41}"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "number": 2,
+            "title": "ФИПИ. Расширенная версия",
+            "zadaniya": [
+                {
+                    "number": 1,
+                    "instruction": "На координатной прямой отмечены числа. Какое из следующих утверждений верно?",
+                    "type": "comparison",
+                    "svg_type": "two_points",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "points": [
+                                {
+                                    "value": -4,
+                                    "label": "x"
+                                },
+                                {
+                                    "value": 2,
+                                    "label": "y"
+                                }
+                            ],
+                            "options": [
+                                "$x < y$ и $|x| < |y|$",
+                                "$x < y$ и $|x| > |y|$",
+                                "$x > y$ и $|x| > |y|$",
+                                "$x > y$ и $|x| < |y|$"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "points": [
+                                {
+                                    "value": -2,
+                                    "label": "a"
+                                },
+                                {
+                                    "value": 4,
+                                    "label": "b"
+                                }
+                            ],
+                            "options": [
+                                "$a < b$ и $|a| < |b|$",
+                                "$a < b$ и $|a| > |b|$",
+                                "$a > b$ и $|a| > |b|$",
+                                "$a > b$ и $|a| < |b|$"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 2,
+                    "instruction": "На координатной прямой отмечены числа. Какое из перечисленных чисел наименьшее?",
+                    "type": "power_choice",
+                    "svg_type": "single_point",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "point_value": -0.5,
+                            "point_label": "a",
+                            "options": [
+                                "$a$",
+                                "$a^2$",
+                                "$a^3$",
+                                "нет данных"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "point_value": 0.5,
+                            "point_label": "a",
+                            "options": [
+                                "$a^2$",
+                                "$a^3$",
+                                "$a^4$",
+                                "нет данных"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "point_value": -0.7,
+                            "point_label": "a",
+                            "options": [
+                                "$a^2$",
+                                "$a^3$",
+                                "$a^4$",
+                                "нет данных"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "point_value": 1.5,
+                            "point_label": "a",
+                            "options": [
+                                "$a$",
+                                "$a^2$",
+                                "$a^3$",
+                                "нет данных"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 3,
+                    "instruction": "Сравните числа, если a, b — положительные числа и...",
+                    "type": "compare_fractions",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "condition": "$a < b$",
+                            "question": "\\frac{2}{a} \\text{ и } \\frac{2}{b}",
+                            "options": [
+                                "$\\frac{2}{a} > \\frac{2}{b}$",
+                                "$\\frac{2}{a} < \\frac{2}{b}$",
+                                "$\\frac{2}{a} = \\frac{2}{b}$",
+                                "невозможно"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "condition": "$a > b$",
+                            "question": "\\frac{1}{a} \\text{ и } \\frac{1}{b}",
+                            "options": [
+                                "$\\frac{1}{a} > \\frac{1}{b}$",
+                                "$\\frac{1}{a} < \\frac{1}{b}$",
+                                "$\\frac{1}{a} = \\frac{1}{b}$",
+                                "невозможно"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 4,
+                    "instruction": "Какие из данных утверждений неверны, если a < c?",
+                    "type": "false_statements",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "options": [
+                                "$a - 49 < c - 49$",
+                                "$a + 23 < c + 23$",
+                                "$-\\frac{a}{26} < -\\frac{c}{26}$",
+                                "$\\frac{a}{5} < \\frac{c}{5}$"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "options": [
+                                "$a - 24 < c - 24$",
+                                "$a + 33 < c + 33$",
+                                "$-\\frac{a}{5} < -\\frac{c}{5}$",
+                                "$\\frac{a}{17} < \\frac{c}{17}$"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 5,
+                    "instruction": "Расположите в порядке возрастания числа.",
+                    "type": "ordering",
+                    "svg_type": "two_points",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "points": [
+                                {
+                                    "value": 0.3,
+                                    "label": "a"
+                                },
+                                {
+                                    "value": 0.7,
+                                    "label": "b"
+                                }
+                            ],
+                            "options": [
+                                "$\\frac{1}{a}, 1, \\frac{1}{b}$",
+                                "$1, \\frac{1}{b}, \\frac{1}{a}$",
+                                "$\\frac{1}{a}, \\frac{1}{b}, 1$",
+                                "$\\frac{1}{b}, \\frac{1}{a}, 1$"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "points": [
+                                {
+                                    "value": 1.5,
+                                    "label": "a"
+                                },
+                                {
+                                    "value": 2.5,
+                                    "label": "b"
+                                }
+                            ],
+                            "options": [
+                                "$\\frac{1}{b}, 1, \\frac{1}{a}$",
+                                "$\\frac{1}{a}, 1, \\frac{1}{b}$",
+                                "$\\frac{1}{a}, \\frac{1}{b}, 1$",
+                                "$\\frac{1}{b}, \\frac{1}{a}, 1$"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "points": [
+                                {
+                                    "value": 0.5,
+                                    "label": "a"
+                                },
+                                {
+                                    "value": 1.5,
+                                    "label": "c"
+                                }
+                            ],
+                            "options": [
+                                "$1, \\frac{1}{a}, \\frac{1}{c}$",
+                                "$\\frac{1}{c}, \\frac{1}{a}, 1$",
+                                "$\\frac{1}{a}, \\frac{1}{c}, 1$",
+                                "$1, \\frac{1}{c}, \\frac{1}{a}$"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "points": [
+                                {
+                                    "value": 0.4,
+                                    "label": "x"
+                                },
+                                {
+                                    "value": 0.8,
+                                    "label": "y"
+                                }
+                            ],
+                            "options": [
+                                "$\\frac{1}{x}, 1, \\frac{1}{y}$",
+                                "$\\frac{1}{y}, 1, \\frac{1}{x}$",
+                                "$\\frac{1}{x}, \\frac{1}{y}, 1$",
+                                "$1, \\frac{1}{x}, \\frac{1}{y}$"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 6,
+                    "instruction": "На координатной прямой точками отмечены числа. Какому числу соответствует точка?",
+                    "type": "point_value",
+                    "svg_type": "four_points_abcd",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "point": "C",
+                            "four_points": [
+                                0.3,
+                                0.57,
+                                2.2,
+                                2.6
+                            ],
+                            "range": [
+                                0,
+                                3
+                            ],
+                            "options": [
+                                "\\frac{4}{7}",
+                                "\\frac{11}{5}",
+                                "2,6",
+                                "0,3"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "point": "D",
+                            "four_points": [
+                                1.5,
+                                1.55,
+                                1.57,
+                                1.7
+                            ],
+                            "range": [
+                                1,
+                                2
+                            ],
+                            "options": [
+                                "\\frac{11}{7}",
+                                "\\frac{3}{2}",
+                                "1,55",
+                                "1,7"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "point": "C",
+                            "four_points": [
+                                2.25,
+                                2.4,
+                                2.55,
+                                2.67
+                            ],
+                            "range": [
+                                2,
+                                3
+                            ],
+                            "options": [
+                                "\\frac{8}{3}",
+                                "\\frac{9}{4}",
+                                "2,55",
+                                "2,4"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "point": "D",
+                            "four_points": [
+                                0.29,
+                                0.3,
+                                0.31,
+                                0.36
+                            ],
+                            "range": [
+                                0,
+                                0.5
+                            ],
+                            "options": [
+                                "\\frac{4}{13}",
+                                "\\frac{5}{14}",
+                                "0,29",
+                                "0,3"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 7,
+                    "instruction": "Одна из точек, отмеченных на координатной прямой, соответствует данному числу. Какая это точка?",
+                    "type": "fraction_point",
+                    "svg_type": "four_points_abcd",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "\\frac{1}{7}",
+                            "four_points": [
+                                0.1,
+                                0.14,
+                                0.22,
+                                0.35
+                            ],
+                            "range": [
+                                0,
+                                0.5
+                            ],
+                            "options": [
+                                "A",
+                                "B",
+                                "C",
+                                "D"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\frac{8}{11}",
+                            "four_points": [
+                                0.6,
+                                0.68,
+                                0.73,
+                                0.82
+                            ],
+                            "range": [
+                                0.5,
+                                1
+                            ],
+                            "options": [
+                                "A",
+                                "B",
+                                "C",
+                                "D"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "expression": "\\frac{2}{9}",
+                            "four_points": [
+                                0.15,
+                                0.22,
+                                0.3,
+                                0.4
+                            ],
+                            "range": [
+                                0,
+                                0.5
+                            ],
+                            "options": [
+                                "A",
+                                "B",
+                                "C",
+                                "D"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "expression": "\\frac{10}{13}",
+                            "four_points": [
+                                0.65,
+                                0.72,
+                                0.77,
+                                0.85
+                            ],
+                            "range": [
+                                0.5,
+                                1
+                            ],
+                            "options": [
+                                "A",
+                                "B",
+                                "C",
+                                "D"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 8,
+                    "instruction": "Какому из данных промежутков принадлежит число...",
+                    "type": "sqrt_interval",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "\\sqrt{58}",
+                            "options": [
+                                "[4; 5]",
+                                "[5; 6]",
+                                "[6; 7]",
+                                "[7; 8]"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\sqrt{27}",
+                            "options": [
+                                "[4; 5]",
+                                "[5; 6]",
+                                "[6; 7]",
+                                "[7; 8]"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "expression": "\\sqrt{19}",
+                            "options": [
+                                "[4; 5]",
+                                "[5; 6]",
+                                "[6; 7]",
+                                "[7; 8]"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "expression": "\\sqrt{63}",
+                            "options": [
+                                "[4; 5]",
+                                "[5; 6]",
+                                "[6; 7]",
+                                "[7; 8]"
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "expression": "\\sqrt{42}",
+                            "options": [
+                                "[4; 5]",
+                                "[5; 6]",
+                                "[6; 7]",
+                                "[7; 8]"
+                            ]
+                        },
+                        {
+                            "id": 6,
+                            "expression": "\\sqrt{31}",
+                            "options": [
+                                "[4; 5]",
+                                "[5; 6]",
+                                "[6; 7]",
+                                "[7; 8]"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 9,
+                    "instruction": "Одно из чисел отмечено на прямой точкой A. Какое это число?",
+                    "type": "sqrt_options",
+                    "svg_type": "point_a_on_range",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "point_a": 6.93,
+                            "range": [
+                                6,
+                                8
+                            ],
+                            "options": [
+                                "\\sqrt{41}",
+                                "\\sqrt{48}",
+                                "\\sqrt{53}",
+                                "\\sqrt{63}"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "point_a": 5.74,
+                            "range": [
+                                5,
+                                7
+                            ],
+                            "options": [
+                                "\\sqrt{28}",
+                                "\\sqrt{33}",
+                                "\\sqrt{38}",
+                                "\\sqrt{47}"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "point_a": 4.69,
+                            "range": [
+                                4,
+                                6
+                            ],
+                            "options": [
+                                "\\sqrt{17}",
+                                "\\sqrt{22}",
+                                "\\sqrt{28}",
+                                "\\sqrt{32}"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "point_a": 5.74,
+                            "range": [
+                                5,
+                                7
+                            ],
+                            "options": [
+                                "\\sqrt{29}",
+                                "\\sqrt{33}",
+                                "\\sqrt{39}",
+                                "\\sqrt{44}"
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "point_a": 4.9,
+                            "range": [
+                                4,
+                                6
+                            ],
+                            "options": [
+                                "\\sqrt{18}",
+                                "\\sqrt{24}",
+                                "\\sqrt{26}",
+                                "\\sqrt{32}"
+                            ]
+                        },
+                        {
+                            "id": 6,
+                            "point_a": 6.78,
+                            "range": [
+                                6,
+                                8
+                            ],
+                            "options": [
+                                "\\sqrt{40}",
+                                "\\sqrt{46}",
+                                "\\sqrt{53}",
+                                "\\sqrt{58}"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 10,
+                    "instruction": "Сколько целых чисел расположено между...",
+                    "type": "count_integers",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "left": "\\sqrt{5}",
+                            "right": "\\sqrt{95}"
+                        },
+                        {
+                            "id": 2,
+                            "left": "\\sqrt{19}",
+                            "right": "\\sqrt{133}"
+                        },
+                        {
+                            "id": 3,
+                            "left": "\\sqrt{18}",
+                            "right": "\\sqrt{78}"
+                        },
+                        {
+                            "id": 4,
+                            "left": "\\sqrt{17}",
+                            "right": "\\sqrt{114}"
+                        },
+                        {
+                            "id": 5,
+                            "left": "6^7",
+                            "right": "7^6"
+                        },
+                        {
+                            "id": 6,
+                            "left": "3^{14}",
+                            "right": "7^3"
+                        },
+                        {
+                            "id": 7,
+                            "left": "2^{10}",
+                            "right": "10^2"
+                        },
+                        {
+                            "id": 8,
+                            "left": "4^{11}",
+                            "right": "11^2"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "number": 3,
+            "title": "Типовые экзаменационные варианты",
+            "zadaniya": [
+                {
+                    "number": 1,
+                    "instruction": "Какое из данных чисел принадлежит отрезку...",
+                    "type": "negative_segment",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "segment": "[−4; −3]",
+                            "options": [
+                                "-\\frac{45}{19}",
+                                "-\\frac{52}{19}",
+                                "-\\frac{68}{19}",
+                                "-\\frac{77}{19}"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "segment": "[−7; −6]",
+                            "options": [
+                                "-\\frac{68}{13}",
+                                "-\\frac{82}{13}",
+                                "-\\frac{92}{13}",
+                                "-\\frac{101}{13}"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "segment": "[−8; −7]",
+                            "options": [
+                                "-\\frac{69}{11}",
+                                "-\\frac{80}{11}",
+                                "-\\frac{90}{11}",
+                                "-\\frac{92}{11}"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "segment": "[−9; −8]",
+                            "options": [
+                                "-\\frac{46}{7}",
+                                "-\\frac{53}{7}",
+                                "-\\frac{55}{7}",
+                                "-\\frac{61}{7}"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 2,
+                    "instruction": "На координатной прямой точки A, B, C и D соответствуют числам $-\\frac{3}{8}$; $\\frac{3}{10}$; $-\\frac{3}{7}$; $\\frac{3}{14}$. Какой точке соответствует число $\\frac{3}{10}$?",
+                    "type": "simple_choice",
+                    "options": [
+                        "A",
+                        "B",
+                        "C",
+                        "D"
+                    ]
+                },
+                {
+                    "number": 3,
+                    "instruction": "На координатной прямой точки A, B, C и D соответствуют числам $-\\frac{5}{6}$; $\\frac{5}{12}$; $\\frac{5}{6}$; $\\frac{5}{10}$. Какой точке соответствует число $\\frac{5}{12}$?",
+                    "type": "simple_choice",
+                    "options": [
+                        "A",
+                        "B",
+                        "C",
+                        "D"
+                    ]
+                },
+                {
+                    "number": 4,
+                    "instruction": "На координатной прямой точки A, B, C и D соответствуют числам $-\\frac{4}{5}$; $-\\frac{4}{9}$; $\\frac{4}{7}$; $-\\frac{4}{7}$. Какой точке соответствует число $-\\frac{4}{7}$?",
+                    "type": "simple_choice",
+                    "options": [
+                        "A",
+                        "B",
+                        "C",
+                        "D"
+                    ]
+                },
+                {
+                    "number": 5,
+                    "instruction": "На координатной прямой точки A, B, C и D соответствуют числам $\\frac{2}{7}$; $\\frac{2}{11}$; $-\\frac{2}{11}$; $-\\frac{2}{9}$. Какой точке соответствует число $-\\frac{2}{9}$?",
+                    "type": "simple_choice",
+                    "options": [
+                        "A",
+                        "B",
+                        "C",
+                        "D"
+                    ]
+                },
+                {
+                    "number": 6,
+                    "instruction": "Между какими целыми числами заключено число...",
+                    "type": "negative_interval",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "-\\frac{134}{11}",
+                            "options": [
+                                "–11 и –10",
+                                "–12 и –11",
+                                "–13 и –12",
+                                "–14 и –13"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "expression": "-\\frac{104}{9}",
+                            "options": [
+                                "–12 и –11",
+                                "–13 и –12",
+                                "–14 и –13",
+                                "–15 и –14"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "expression": "-\\frac{111}{17}",
+                            "options": [
+                                "–6 и –5",
+                                "–7 и –6",
+                                "–8 и –7",
+                                "–9 и –8"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "expression": "-\\frac{152}{15}",
+                            "options": [
+                                "–8 и –7",
+                                "–9 и –8",
+                                "–10 и –9",
+                                "–11 и –10"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
