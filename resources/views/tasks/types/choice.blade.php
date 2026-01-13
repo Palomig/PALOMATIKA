@@ -17,6 +17,7 @@
         @include('tasks.partials.number-line', [
             'points' => $points,
             'svgType' => $svgType,
+            'task' => $zadanie,
         ])
 
         @if(!empty($options))
@@ -58,10 +59,11 @@
                 </div>
 
                 {{-- SVG для отдельной задачи --}}
-                @if(!empty($taskPoints))
+                @if(!empty($taskPoints) || !empty($task['svg_type']))
                     @include('tasks.partials.number-line', [
                         'points' => $taskPoints,
                         'svgType' => $task['svg_type'] ?? 'single_point',
+                        'task' => $task,
                     ])
                 @endif
 
