@@ -1,0 +1,1002 @@
+{
+    "topic_id": "06",
+    "meta": {
+        "title": "Дроби и степени",
+        "description": "Вычисления с дробями и степенями",
+        "color": "blue",
+        "icon": "calculator"
+    },
+    "exported_at": "2026-01-13T07:51:15+00:00",
+    "blocks": [
+        {
+            "number": 1,
+            "title": "ФИПИ",
+            "zadaniya": [
+                {
+                    "number": 1,
+                    "instruction": "Найдите значение выражения",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "\\frac{3}{4} \\cdot \\frac{6}{5}"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "\\frac{12}{5} : \\frac{15}{2}"
+                        },
+                        {
+                            "id": 13,
+                            "expression": "\\frac{1}{4} \\cdot \\frac{3}{25}"
+                        },
+                        {
+                            "id": 19,
+                            "expression": "\\frac{14}{25} + \\frac{3}{2}"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\frac{21}{5} \\cdot \\frac{3}{7}"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "\\frac{6}{5} : \\frac{4}{11}"
+                        },
+                        {
+                            "id": 14,
+                            "expression": "\\frac{1}{5} \\cdot \\frac{27}{50}"
+                        },
+                        {
+                            "id": 20,
+                            "expression": "\\frac{9}{4} + \\frac{8}{5}"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "\\frac{3}{5} \\cdot \\frac{25}{4}"
+                        },
+                        {
+                            "id": 9,
+                            "expression": "\\frac{3}{5} : \\frac{4}{35}"
+                        },
+                        {
+                            "id": 15,
+                            "expression": "\\frac{1}{2} \\cdot \\frac{9}{25}"
+                        },
+                        {
+                            "id": 21,
+                            "expression": "\\frac{11}{5} + \\frac{13}{4}"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "\\frac{9}{5} \\cdot \\frac{2}{3}"
+                        },
+                        {
+                            "id": 10,
+                            "expression": "\\frac{15}{4} : \\frac{3}{7}"
+                        },
+                        {
+                            "id": 16,
+                            "expression": "\\frac{1}{5} \\cdot \\frac{3}{4}"
+                        },
+                        {
+                            "id": 22,
+                            "expression": "\\frac{1}{10} + \\frac{21}{50}"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "\\frac{5}{3} \\cdot \\frac{9}{2}"
+                        },
+                        {
+                            "id": 11,
+                            "expression": "\\frac{21}{2} : \\frac{3}{5}"
+                        },
+                        {
+                            "id": 17,
+                            "expression": "\\frac{1}{2} \\cdot \\frac{13}{50}"
+                        },
+                        {
+                            "id": 23,
+                            "expression": "\\frac{3}{4} + \\frac{7}{25}"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "\\frac{7}{5} \\cdot \\frac{12}{35}"
+                        },
+                        {
+                            "id": 12,
+                            "expression": "\\frac{14}{5} : \\frac{7}{2}"
+                        },
+                        {
+                            "id": 18,
+                            "expression": "\\frac{1}{10} \\cdot \\frac{23}{20}"
+                        },
+                        {
+                            "id": 24,
+                            "expression": "\\frac{4}{25} + \\frac{15}{4}"
+                        }
+                    ]
+                },
+                {
+                    "number": 2,
+                    "instruction": "Найдите значение выражения",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "9{,}3 + 7{,}8"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "5{,}7 - 7{,}6"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "5{,}2 \\cdot 3{,}1"
+                        },
+                        {
+                            "id": 10,
+                            "expression": "\\frac{8{,}2}{4{,}1}"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "8{,}7 + 4{,}6"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "4{,}9 - 9{,}4"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "2{,}1 \\cdot 9{,}6"
+                        },
+                        {
+                            "id": 11,
+                            "expression": "\\frac{13{,}2}{1{,}2}"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "6{,}9 + 7{,}4"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "6{,}1 - 2{,}5"
+                        },
+                        {
+                            "id": 9,
+                            "expression": "8{,}9 \\cdot 4{,}3"
+                        },
+                        {
+                            "id": 12,
+                            "expression": "\\frac{6{,}5}{1{,}3}"
+                        }
+                    ]
+                },
+                {
+                    "number": 3,
+                    "instruction": "Представьте выражение в виде дроби с указанным знаменателем",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "\\frac{7}{9} - \\frac{2}{5}",
+                            "denominator": 90
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\frac{6}{7} - \\frac{3}{5}",
+                            "denominator": 70
+                        },
+                        {
+                            "id": 3,
+                            "expression": "\\frac{1}{7} + \\frac{3}{4}",
+                            "denominator": 56
+                        },
+                        {
+                            "id": 4,
+                            "expression": "\\frac{5}{8} + \\frac{1}{3}",
+                            "denominator": 48
+                        },
+                        {
+                            "id": 5,
+                            "expression": "\\frac{3}{4} - \\frac{8}{11}",
+                            "denominator": 88
+                        },
+                        {
+                            "id": 6,
+                            "expression": "\\frac{2}{3} - \\frac{7}{13}",
+                            "denominator": 78
+                        }
+                    ]
+                },
+                {
+                    "number": 4,
+                    "instruction": "Найдите значение выражения",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "\\frac{1}{\\frac{1}{30} + \\frac{1}{42}}"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "\\frac{1}{\\frac{1}{36} + \\frac{1}{45}}"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "\\frac{1}{\\frac{1}{21} + \\frac{1}{28}}"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\frac{1}{\\frac{1}{36} - \\frac{1}{44}}"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "\\frac{1}{\\frac{1}{35} - \\frac{1}{60}}"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "\\frac{1}{\\frac{1}{72} - \\frac{1}{99}}"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "number": 2,
+            "title": "ФИПИ. Расширенная версия",
+            "zadaniya": [
+                {
+                    "number": 1,
+                    "instruction": "Найдите значение выражения",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "\\left(\\frac{17}{10} - \\frac{1}{20}\\right) \\cdot \\frac{2}{15}"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "\\left(\\frac{10}{13} + \\frac{15}{4}\\right) \\cdot \\frac{26}{5}"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "\\left(\\frac{3}{4} - \\frac{1}{6}\\right) \\cdot 3"
+                        },
+                        {
+                            "id": 10,
+                            "expression": "\\left(\\frac{2}{20} + \\frac{7}{30}\\right) \\cdot 15"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\left(\\frac{5}{22} - \\frac{8}{11}\\right) \\cdot \\frac{11}{5}"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "\\left(\\frac{17}{26} + \\frac{11}{13}\\right) \\cdot \\frac{17}{6}"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "\\left(\\frac{2}{5} + \\frac{13}{15}\\right) \\cdot 6"
+                        },
+                        {
+                            "id": 11,
+                            "expression": "\\left(\\frac{9}{10} - \\frac{7}{15}\\right) \\cdot 3"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "\\left(\\frac{5}{26} - \\frac{3}{25}\\right) \\cdot \\frac{13}{2}"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "\\left(\\frac{11}{12} + \\frac{11}{20}\\right) \\cdot \\frac{15}{8}"
+                        },
+                        {
+                            "id": 9,
+                            "expression": "\\left(\\frac{3}{8} - \\frac{1}{20}\\right) \\cdot 10"
+                        },
+                        {
+                            "id": 12,
+                            "expression": "\\left(\\frac{1}{6} + \\frac{1}{4}\\right) \\cdot 9"
+                        }
+                    ]
+                },
+                {
+                    "number": 2,
+                    "instruction": "Найдите значение выражения",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "\\left(\\frac{9}{16} + 2\\frac{3}{8}\\right) \\cdot 4"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "\\left(1\\frac{3}{4} + 2\\frac{4}{5}\\right) \\cdot 30"
+                        },
+                        {
+                            "id": 9,
+                            "expression": "4\\frac{7}{8} : \\left(2\\frac{3}{4} + 1\\frac{10}{19}\\right)"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\left(\\frac{4}{9} - 3\\frac{1}{15}\\right) \\cdot 9"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "\\left(\\frac{1}{13} - 2\\frac{3}{4}\\right) \\cdot 26"
+                        },
+                        {
+                            "id": 10,
+                            "expression": "1\\frac{1}{12} : \\left(1\\frac{13}{18} - 2\\frac{5}{9}\\right)"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "\\left(2\\frac{3}{4} + 2\\frac{1}{5}\\right) \\cdot 16"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "1\\frac{8}{17} : \\left(\\frac{12}{17} + 2\\frac{7}{11}\\right)"
+                        },
+                        {
+                            "id": 11,
+                            "expression": "3\\frac{1}{2} : \\left(1\\frac{4}{15} + 2\\frac{9}{10}\\right)"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "\\left(1\\frac{11}{16} - 3\\frac{7}{8}\\right) \\cdot 4"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "3\\frac{4}{9} : \\left(1\\frac{5}{9} - \\frac{4}{7}\\right)"
+                        },
+                        {
+                            "id": 12,
+                            "expression": "4\\frac{1}{4} : \\left(2\\frac{7}{10} - 3\\frac{1}{8}\\right)"
+                        }
+                    ]
+                },
+                {
+                    "number": 3,
+                    "instruction": "Найдите значение выражения",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "10 \\cdot \\left(\\frac{1}{5}\\right)^2 - 12 \\cdot \\frac{1}{5}"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "21 \\cdot \\left(\\frac{1}{7}\\right)^2 - 10 \\cdot \\frac{1}{7}"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "18 \\cdot \\left(\\frac{1}{9}\\right)^2 - 20 \\cdot \\frac{1}{9}"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "8 \\cdot \\left(\\frac{1}{4}\\right)^2 - 14 \\cdot \\frac{1}{4}"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "6 \\cdot \\left(\\frac{1}{3}\\right)^2 - 17 \\cdot \\frac{1}{3}"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "15 \\cdot \\left(\\frac{1}{5}\\right)^2 - 8 \\cdot \\frac{1}{5}"
+                        }
+                    ]
+                },
+                {
+                    "number": 4,
+                    "instruction": "Найдите значение выражения",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "\\frac{2{,}1}{6{,}6 - 2{,}4}"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "\\frac{9{,}5 + 8{,}9}{2{,}3}"
+                        },
+                        {
+                            "id": 13,
+                            "expression": "\\frac{27}{3 \\cdot 4{,}5}"
+                        },
+                        {
+                            "id": 19,
+                            "expression": "\\frac{8{,}4 \\cdot 1{,}3}{0{,}7}"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\frac{7{,}2}{8{,}3 - 8{,}6}"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "\\frac{6{,}8 - 4{,}7}{1{,}4}"
+                        },
+                        {
+                            "id": 14,
+                            "expression": "\\frac{16}{3{,}2 \\cdot 2}"
+                        },
+                        {
+                            "id": 20,
+                            "expression": "\\frac{4{,}4 \\cdot 0{,}3}{6{,}6}"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "\\frac{9{,}2}{0{,}5 - 2{,}8}"
+                        },
+                        {
+                            "id": 9,
+                            "expression": "\\frac{7{,}5 + 3{,}5}{2{,}5}"
+                        },
+                        {
+                            "id": 15,
+                            "expression": "\\frac{36}{4 \\cdot 4{,}5}"
+                        },
+                        {
+                            "id": 21,
+                            "expression": "\\frac{4{,}8 \\cdot 0{,}4}{0{,}6}"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "\\frac{1{,}6}{2{,}5 + 0{,}7}"
+                        },
+                        {
+                            "id": 10,
+                            "expression": "\\frac{6{,}9 - 4{,}1}{0{,}2}"
+                        },
+                        {
+                            "id": 16,
+                            "expression": "\\frac{21}{17{,}5 \\cdot 0{,}8}"
+                        },
+                        {
+                            "id": 22,
+                            "expression": "\\frac{8{,}8 \\cdot 0{,}8}{4{,}4}"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "\\frac{5{,}6}{1{,}9 + 2{,}1}"
+                        },
+                        {
+                            "id": 11,
+                            "expression": "\\frac{1{,}7 + 3{,}8}{2{,}2}"
+                        },
+                        {
+                            "id": 17,
+                            "expression": "\\frac{22}{4{,}4 \\cdot 2{,}5}"
+                        },
+                        {
+                            "id": 23,
+                            "expression": "\\frac{0{,}3 \\cdot 7{,}5}{0{,}5}"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "\\frac{9{,}4}{4{,}1 + 5{,}3}"
+                        },
+                        {
+                            "id": 12,
+                            "expression": "\\frac{7{,}2 - 6{,}1}{2{,}2}"
+                        },
+                        {
+                            "id": 18,
+                            "expression": "\\frac{7}{12{,}5 \\cdot 1{,}4}"
+                        },
+                        {
+                            "id": 24,
+                            "expression": "\\frac{5{,}6 \\cdot 0{,}3}{0{,}8}"
+                        }
+                    ]
+                },
+                {
+                    "number": 5,
+                    "instruction": "Найдите значение выражения",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "\\frac{0{,}9}{1 + \\frac{1}{5}}"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\frac{2{,}6}{1 - \\frac{1}{14}}"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "\\frac{1{,}3}{1 + \\frac{1}{12}}"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "\\frac{1{,}2}{1 - \\frac{1}{3}}"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "\\frac{0{,}6}{1 + \\frac{1}{2}}"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "\\frac{0{,}8}{1 - \\frac{1}{9}}"
+                        }
+                    ]
+                },
+                {
+                    "number": 6,
+                    "instruction": "Найдите значение выражения",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "-7 \\cdot (-4{,}7) - 6{,}8"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "-0{,}8 \\cdot (-10)^2 - 95"
+                        },
+                        {
+                            "id": 13,
+                            "expression": "30 - 0{,}8 \\cdot (-10)^2"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "-13 \\cdot (-9{,}3) - 7{,}8"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "0{,}7 \\cdot (-10)^3 - 20"
+                        },
+                        {
+                            "id": 14,
+                            "expression": "80 + 0{,}4 \\cdot (-10)^3"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "-12 \\cdot (-8{,}6) - 9{,}4"
+                        },
+                        {
+                            "id": 9,
+                            "expression": "-0{,}2 \\cdot (-10)^2 + 55"
+                        },
+                        {
+                            "id": 15,
+                            "expression": "55 + 0{,}2 \\cdot (-10)^2"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "7{,}6 - 8 \\cdot (-5{,}2)"
+                        },
+                        {
+                            "id": 10,
+                            "expression": "0{,}9 \\cdot (-10)^3 + 50"
+                        },
+                        {
+                            "id": 16,
+                            "expression": "-60 + 0{,}4 \\cdot (-10)^2"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "6{,}8 - 11 \\cdot (-6{,}1)"
+                        },
+                        {
+                            "id": 11,
+                            "expression": "-0{,}7 \\cdot (-10)^2 - 120"
+                        },
+                        {
+                            "id": 17,
+                            "expression": "-80 + 0{,}3 \\cdot (-10)^3"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "5{,}3 - 9 \\cdot (-4{,}4)"
+                        },
+                        {
+                            "id": 12,
+                            "expression": "0{,}6 \\cdot (-10)^3 + 50"
+                        },
+                        {
+                            "id": 18,
+                            "expression": "-45 + 0{,}5 \\cdot (-10)^2"
+                        }
+                    ]
+                },
+                {
+                    "number": 7,
+                    "instruction": "Найдите значение выражения",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "(2{,}6 \\cdot 10^{-2}) \\cdot (9 \\cdot 10^{-3})"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "(7 \\cdot 10^3)^2 \\cdot (16 \\cdot 10^{-4})"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "(1{,}6 \\cdot 10^{-5}) \\cdot (6 \\cdot 10^{-2})"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "(2 \\cdot 10^2)^4 \\cdot (19 \\cdot 10^{-6})"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "(1{,}7 \\cdot 10^{-3}) \\cdot (5 \\cdot 10^{-4})"
+                        },
+                        {
+                            "id": 9,
+                            "expression": "(8 \\cdot 10^2)^2 \\cdot (3 \\cdot 10^{-2})"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "(2{,}1 \\cdot 10^{-2}) \\cdot (2 \\cdot 10^{-2})"
+                        },
+                        {
+                            "id": 10,
+                            "expression": "(9 \\cdot 10^{-2})^2 \\cdot (11 \\cdot 10^5)"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "(2{,}2 \\cdot 10^{-2}) \\cdot (3 \\cdot 10^{-4})"
+                        },
+                        {
+                            "id": 11,
+                            "expression": "(16 \\cdot 10^{-2})^2 \\cdot (13 \\cdot 10^4)"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "(1{,}2 \\cdot 10^{-3}) \\cdot (7 \\cdot 10^{-2})"
+                        },
+                        {
+                            "id": 12,
+                            "expression": "(14 \\cdot 10^{-2})^2 \\cdot (12 \\cdot 10^3)"
+                        }
+                    ]
+                },
+                {
+                    "number": 8,
+                    "instruction": "Найдите значение выражения",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "0{,}7 \\cdot (-10)^3 - 4 \\cdot (-10)^2 - 63"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "-0{,}7 \\cdot (-10)^4 - 8 \\cdot (-10)^2 - 26"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "-0{,}4 \\cdot (-10)^4 + 3 \\cdot (-10)^2 - 98"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "0{,}4 \\cdot (-10)^3 + 7 \\cdot (-10)^2 + 64"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "0{,}8 \\cdot (-10)^4 + 3 \\cdot (-10)^3 + 78"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "-0{,}3 \\cdot (-10)^4 + 4 \\cdot (-10)^2 - 59"
+                        }
+                    ]
+                },
+                {
+                    "number": 9,
+                    "instruction": "Найдите значение выражения",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "0{,}0006 \\cdot 6 \\cdot 600000"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "0{,}005 \\cdot 0{,}5 \\cdot 50"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "0{,}007 \\cdot 0{,}7 \\cdot 70"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "0{,}003 \\cdot 0{,}0003 \\cdot 300"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "0{,}0008 \\cdot 0{,}008 \\cdot 80000"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "0{,}004 \\cdot 0{,}04 \\cdot 40000"
+                        }
+                    ]
+                },
+                {
+                    "number": 10,
+                    "instruction": "Найдите значение выражения",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "-0{,}2 \\cdot (-7)^4 - 1 \\cdot (-7)^3 - 13"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "0{,}5 \\cdot (-6)^4 + 2 \\cdot (-6)^2 - 30"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "-0{,}9 \\cdot (-2)^3 + 2{,}9 \\cdot (-2)^2 - 22"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "-1{,}1 \\cdot (-3)^4 - 0{,}9 \\cdot (-3)^3 - 15"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "0{,}1 \\cdot (-8)^3 + 0{,}2 \\cdot (-8)^2 - 25"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "0{,}2 \\cdot (-4)^3 + 3 \\cdot (-4)^2 - 17"
+                        }
+                    ]
+                },
+                {
+                    "number": 11,
+                    "instruction": "Запишите десятичную дробь, равную сумме",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "1 \\cdot 10^{-1} + 7 \\cdot 10^{-3} + 2 \\cdot 10^{-4}"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "8 \\cdot 10^0 + 9 \\cdot 10^{-2} + 3 \\cdot 10^{-4}"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "9 \\cdot 10^1 + 3 \\cdot 10^{-3} + 8 \\cdot 10^{-4}"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "6 \\cdot 10^1 + 7 \\cdot 10^{-2} + 5 \\cdot 10^{-3}"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "2 \\cdot 10^0 + 6 \\cdot 10^{-1} + 4 \\cdot 10^{-3}"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "5 \\cdot 10^{-1} + 6 \\cdot 10^{-2} + 4 \\cdot 10^{-4}"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "number": 3,
+            "title": "Типовые экзаменационные варианты",
+            "zadaniya": [
+                {
+                    "number": 1,
+                    "instruction": "Найдите значение выражения",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "\\left(\\frac{1}{17} + 1\\frac{1}{4}\\right) : \\frac{1}{34}"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "\\left(\\frac{7}{9} + 1\\frac{4}{5}\\right) : \\frac{1}{18}"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "\\left(\\frac{13}{24} + 1\\frac{1}{15}\\right) : \\frac{1}{24}"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\left(\\frac{3}{4} - 2\\frac{9}{10}\\right) : \\frac{1}{12}"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "\\left(\\frac{4}{11} - 2\\frac{1}{4}\\right) : \\frac{1}{22}"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "\\left(\\frac{15}{26} - 2\\frac{3}{4}\\right) : \\frac{1}{26}"
+                        }
+                    ]
+                },
+                {
+                    "number": 2,
+                    "instruction": "Найдите значение выражения",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "\\frac{\\frac{1}{20} + \\frac{1}{12}}{\\frac{1}{27}}"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "\\frac{\\frac{1}{18} + \\frac{1}{45}}{\\frac{5}{27}}"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "\\frac{\\frac{1}{28} + \\frac{1}{42}}{\\frac{1}{21}}"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\frac{\\frac{1}{12} - \\frac{1}{21}}{\\frac{1}{70}}"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "\\frac{\\frac{1}{72} - \\frac{1}{88}}{\\frac{5}{99}}"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "\\frac{\\frac{1}{40} - \\frac{1}{65}}{\\frac{1}{78}}"
+                        }
+                    ]
+                },
+                {
+                    "number": 3,
+                    "instruction": "Найдите значение выражения",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "1{,}9 - 3{,}5 \\cdot 7{,}2"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "5{,}1 + 2{,}8 \\cdot 2{,}5"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "-9{,}2 - 0{,}4 \\cdot 6{,}5"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "-3{,}6 + 7{,}2 \\cdot 1{,}5"
+                        }
+                    ]
+                },
+                {
+                    "number": 4,
+                    "instruction": "Найдите значение выражения",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "\\frac{3}{16} : \\left(-\\frac{5}{56}\\right) + 3{,}8"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "-\\frac{14}{23} : \\frac{35}{46} + 2{,}9"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\frac{7}{18} : \\left(-\\frac{10}{27}\\right) - 2{,}4"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "-\\frac{15}{58} : \\frac{3}{29} - 5{,}63"
+                        }
+                    ]
+                },
+                {
+                    "number": 5,
+                    "instruction": "Найдите значение выражения. Представьте результат в виде несократимой обыкновенной дроби. В ответ запишите числитель этой дроби.",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "\\frac{2}{5} + \\frac{3}{11}"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "\\frac{1}{45} + \\frac{5}{9}"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "3\\frac{1}{12} - 2\\frac{1}{4}"
+                        },
+                        {
+                            "id": 10,
+                            "expression": "9\\frac{2}{15} - 8\\frac{32}{33}"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\frac{7}{13} + \\frac{1}{3}"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "\\frac{3}{20} + \\frac{7}{36}"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "5\\frac{1}{15} - 4\\frac{2}{5}"
+                        },
+                        {
+                            "id": 11,
+                            "expression": "2\\frac{3}{28} - 1\\frac{17}{36}"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "\\frac{5}{7} + \\frac{4}{21}"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "\\frac{2}{45} + \\frac{9}{35}"
+                        },
+                        {
+                            "id": 9,
+                            "expression": "7\\frac{1}{18} - 6\\frac{13}{14}"
+                        },
+                        {
+                            "id": 12,
+                            "expression": "6\\frac{2}{21} - 5\\frac{31}{33}"
+                        }
+                    ]
+                },
+                {
+                    "number": 6,
+                    "instruction": "Найдите значение выражения. Представьте результат в виде несократимой обыкновенной дроби. В ответ запишите числитель этой дроби.",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "1\\frac{19}{29} \\cdot \\frac{7}{48}"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "\\frac{7}{12} : 2\\frac{1}{4}"
+                        },
+                        {
+                            "id": 9,
+                            "expression": "\\frac{1}{15} + 4\\frac{4}{5} \\cdot \\frac{2}{21}"
+                        },
+                        {
+                            "id": 13,
+                            "expression": "4\\frac{25}{27} - \\frac{3}{38} \\cdot \\frac{5}{22}"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "1\\frac{13}{58} \\cdot \\frac{9}{71}"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "\\frac{9}{14} : 1\\frac{4}{7}"
+                        },
+                        {
+                            "id": 10,
+                            "expression": "\\frac{3}{20} + 3\\frac{3}{4} \\cdot \\frac{1}{27}"
+                        },
+                        {
+                            "id": 14,
+                            "expression": "6\\frac{24}{35} - \\frac{1}{9} \\cdot \\frac{4}{15}"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "1\\frac{15}{34} \\cdot \\frac{17}{49}"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "\\frac{8}{11} : 2\\frac{2}{5}"
+                        },
+                        {
+                            "id": 11,
+                            "expression": "\\frac{1}{14} + 2\\frac{1}{12} \\cdot \\frac{2}{15}"
+                        },
+                        {
+                            "id": 15,
+                            "expression": "2\\frac{39}{40} - \\frac{2}{7} \\cdot \\frac{3}{28}"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "1\\frac{11}{45} \\cdot \\frac{25}{56}"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "\\frac{6}{13} : 1\\frac{1}{8}"
+                        },
+                        {
+                            "id": 12,
+                            "expression": "\\frac{10}{21} + 2\\frac{2}{15} \\cdot \\frac{3}{14}"
+                        },
+                        {
+                            "id": 16,
+                            "expression": "5\\frac{25}{28} - \\frac{4}{45} \\cdot \\frac{5}{39}"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
