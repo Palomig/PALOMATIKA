@@ -734,41 +734,45 @@
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
                     <svg viewBox="0 0 225 200" class="w-full max-w-[200px] h-auto">
                         @if($task['shape'] == 1)
-                        {{-- Форма 1: Трапеция, широкое основание внизу (AD > BC) --}}
-                        <polygon points="25,160 70,45 155,45 200,160"
+                        {{-- Форма 1: Трапеция, широкое основание внизу (AD > BC)
+                             r=55, center=(113,102), a×b=3025, a=40, b=76 --}}
+                        <polygon points="37,157 73,47 153,47 189,157"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
                         <circle cx="113" cy="102" r="55" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
-                        <text x="12" y="172" fill="#60a5fa" font-size="15" class="geo-label">A</text>
-                        <text x="62" y="35" fill="#60a5fa" font-size="15" class="geo-label">B</text>
-                        <text x="157" y="35" fill="#60a5fa" font-size="15" class="geo-label">C</text>
-                        <text x="202" y="172" fill="#60a5fa" font-size="15" class="geo-label">D</text>
+                        <text x="24" y="170" fill="#60a5fa" font-size="15" class="geo-label">A</text>
+                        <text x="65" y="37" fill="#60a5fa" font-size="15" class="geo-label">B</text>
+                        <text x="155" y="37" fill="#60a5fa" font-size="15" class="geo-label">C</text>
+                        <text x="191" y="170" fill="#60a5fa" font-size="15" class="geo-label">D</text>
                         @elseif($task['shape'] == 2)
-                        {{-- Форма 2: Трапеция, широкое основание вверху (BC > AD) --}}
-                        <polygon points="70,160 25,45 200,45 155,160"
+                        {{-- Форма 2: Трапеция, широкое основание вверху (BC > AD)
+                             r=55, a=76, b=40 --}}
+                        <polygon points="73,157 37,47 189,47 153,157"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
                         <circle cx="113" cy="102" r="55" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
-                        <text x="57" y="175" fill="#60a5fa" font-size="15" class="geo-label">A</text>
-                        <text x="12" y="38" fill="#60a5fa" font-size="15" class="geo-label">B</text>
-                        <text x="202" y="38" fill="#60a5fa" font-size="15" class="geo-label">C</text>
-                        <text x="157" y="175" fill="#60a5fa" font-size="15" class="geo-label">D</text>
+                        <text x="60" y="172" fill="#60a5fa" font-size="15" class="geo-label">A</text>
+                        <text x="24" y="40" fill="#60a5fa" font-size="15" class="geo-label">B</text>
+                        <text x="191" y="40" fill="#60a5fa" font-size="15" class="geo-label">C</text>
+                        <text x="155" y="172" fill="#60a5fa" font-size="15" class="geo-label">D</text>
                         @elseif($task['shape'] == 3)
-                        {{-- Форма 3: Прямоугольный четырёхугольник (левая сторона вертикальная) --}}
-                        <polygon points="35,160 35,45 155,45 200,160"
-                            fill="none" stroke="#dc2626" stroke-width="2.5"/>
-                        <circle cx="105" cy="102" r="55" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
-                        <text x="22" y="175" fill="#60a5fa" font-size="15" class="geo-label">A</text>
-                        <text x="22" y="38" fill="#60a5fa" font-size="15" class="geo-label">B</text>
-                        <text x="157" y="38" fill="#60a5fa" font-size="15" class="geo-label">C</text>
-                        <text x="202" y="175" fill="#60a5fa" font-size="15" class="geo-label">D</text>
-                        @else
-                        {{-- Форма 4: Симметричная трапеция --}}
-                        <polygon points="30,160 55,45 170,45 195,160"
+                        {{-- Форма 3: Прямоугольный четырёхугольник
+                             Левая сторона вертикальная x=58, a_right=45, b_right=67 --}}
+                        <polygon points="58,157 58,47 158,47 180,157"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
                         <circle cx="113" cy="102" r="55" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
-                        <text x="17" y="175" fill="#60a5fa" font-size="15" class="geo-label">A</text>
-                        <text x="47" y="35" fill="#60a5fa" font-size="15" class="geo-label">B</text>
-                        <text x="172" y="35" fill="#60a5fa" font-size="15" class="geo-label">C</text>
-                        <text x="197" y="175" fill="#60a5fa" font-size="15" class="geo-label">D</text>
+                        <text x="45" y="172" fill="#60a5fa" font-size="15" class="geo-label">A</text>
+                        <text x="45" y="40" fill="#60a5fa" font-size="15" class="geo-label">B</text>
+                        <text x="160" y="40" fill="#60a5fa" font-size="15" class="geo-label">C</text>
+                        <text x="182" y="172" fill="#60a5fa" font-size="15" class="geo-label">D</text>
+                        @else
+                        {{-- Форма 4: Симметричная трапеция
+                             r=55, a=50, b=61 --}}
+                        <polygon points="52,157 63,47 163,47 174,157"
+                            fill="none" stroke="#dc2626" stroke-width="2.5"/>
+                        <circle cx="113" cy="102" r="55" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
+                        <text x="39" y="172" fill="#60a5fa" font-size="15" class="geo-label">A</text>
+                        <text x="55" y="37" fill="#60a5fa" font-size="15" class="geo-label">B</text>
+                        <text x="165" y="37" fill="#60a5fa" font-size="15" class="geo-label">C</text>
+                        <text x="176" y="172" fill="#60a5fa" font-size="15" class="geo-label">D</text>
                         @endif
                     </svg>
                 </div>
