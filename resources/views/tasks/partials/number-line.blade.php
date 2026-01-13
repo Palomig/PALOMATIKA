@@ -137,7 +137,7 @@
             @foreach($pts as $pt)
                 @php $px = $getX($pt['value']); @endphp
                 <circle cx="{{ $px }}" cy="22" r="5" fill="#22c55e"/>
-                <text x="{{ $px }}" y="48" text-anchor="middle" fill="#1e40af" font-size="14" font-weight="bold" font-style="italic">{{ $pt['label'] }}</text>
+                <text x="{{ $px }}" y="10" text-anchor="middle" fill="#1e40af" font-size="14" font-weight="bold" font-style="italic">{{ $pt['label'] }}</text>
             @endforeach
         </svg>
     </div>
