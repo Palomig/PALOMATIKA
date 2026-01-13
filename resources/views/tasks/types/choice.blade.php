@@ -59,10 +59,14 @@
                 </div>
 
                 {{-- SVG для отдельной задачи --}}
-                @if(!empty($taskPoints) || !empty($task['svg_type']) || isset($task['point_value']))
+                @php
+                    // svg_type может быть на уровне task или zadanie
+                    $taskSvgType = $task['svg_type'] ?? $svgType ?? 'single_point';
+                @endphp
+                @if(!empty($taskPoints) || !empty($taskSvgType) || isset($task['point_value']))
                     @include('tasks.partials.number-line', [
                         'points' => $taskPoints,
-                        'svgType' => $task['svg_type'] ?? 'single_point',
+                        'svgType' => $taskSvgType,
                         'task' => $task,
                     ])
                 @endif
