@@ -142,7 +142,7 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 195 195" class="w-full max-w-[210px] h-auto">
+                    <svg viewBox="0 0 195 195" class="w-full max-w-[250px] h-auto">
                         {{-- Circle (проходит через A визуально) --}}
                         <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
@@ -208,7 +208,7 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 230 185" class="w-full max-w-[240px] h-auto">
+                    <svg viewBox="0 0 230 185" class="w-full max-w-[250px] h-auto">
                         {{-- Circle --}}
                         <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
@@ -291,7 +291,7 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 230 220" class="w-full max-w-[220px] h-auto">
+                    <svg viewBox="0 0 230 220" class="w-full max-w-[250px] h-auto">
                         {{-- Circle --}}
                         <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
@@ -361,7 +361,7 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 230 220" class="w-full max-w-[220px] h-auto">
+                    <svg viewBox="0 0 230 220" class="w-full max-w-[250px] h-auto">
                         {{-- Circle --}}
                         <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
@@ -423,7 +423,7 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 230 220" class="w-full max-w-[220px] h-auto">
+                    <svg viewBox="0 0 230 220" class="w-full max-w-[250px] h-auto">
                         {{-- Circle --}}
                         <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
@@ -485,7 +485,7 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 275 188" class="w-full max-w-[260px] h-auto">
+                    <svg viewBox="0 0 275 188" class="w-full max-w-[250px] h-auto">
                         {{-- Трапеция (не равнобедренная) - масштабировано ×1.25 --}}
                         <polygon points="49,156 94,31 194,31 207,156"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
@@ -526,7 +526,7 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 225 188" class="w-full max-w-[235px] h-auto">
+                    <svg viewBox="0 0 225 188" class="w-full max-w-[250px] h-auto">
                         {{-- Прямоугольная трапеция - масштабировано ×1.25 --}}
                         <polygon points="31,156 31,31 144,31 172,156"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
@@ -570,7 +570,7 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 275 188" class="w-full max-w-[260px] h-auto">
+                    <svg viewBox="0 0 275 188" class="w-full max-w-[250px] h-auto">
                         {{-- Равнобедренная трапеция - масштабировано ×1.25 --}}
                         <polygon points="60,156 88,31 188,31 215,156"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
@@ -613,7 +613,7 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 200 200" class="w-full max-w-[180px] h-auto">
+                    <svg viewBox="0 0 200 200" class="w-full max-w-[250px] h-auto">
                         {{-- Square - масштабировано ×1.25 --}}
                         <rect x="38" y="38" width="125" height="125" fill="none" stroke="#dc2626" stroke-width="2.5"/>
 
@@ -651,7 +651,7 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 200 200" class="w-full max-w-[180px] h-auto">
+                    <svg viewBox="0 0 200 200" class="w-full max-w-[250px] h-auto">
                         {{-- Square - масштабировано ×1.25 --}}
                         <rect x="38" y="38" width="125" height="125" fill="none" stroke="#dc2626" stroke-width="2.5"/>
 
@@ -690,7 +690,7 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 200 200" class="w-full max-w-[180px] h-auto">
+                    <svg viewBox="0 0 200 200" class="w-full max-w-[250px] h-auto">
                         {{-- Square - масштабировано ×1.25 --}}
                         <rect x="38" y="38" width="125" height="125" fill="none" stroke="#dc2626" stroke-width="2.5"/>
 
@@ -732,7 +732,7 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 225 200" class="w-full max-w-[200px] h-auto">
+                    <svg viewBox="0 0 225 200" class="w-full max-w-[250px] h-auto">
                         @if($task['shape'] == 1)
                         {{-- Форма 1: Трапеция, широкое основание внизу (AD > BC)
                              r=55, center=(113,102), a×b=3025, a=40, b=76 --}}
@@ -803,7 +803,7 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 200 175" class="w-full max-w-[175px] h-auto">
+                    <svg viewBox="0 0 200 175" class="w-full max-w-[250px] h-auto">
                         {{-- Triangle - масштабировано ×1.25 --}}
                         <polygon points="100,25 25,150 175,150"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
@@ -847,7 +847,7 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 200 175" class="w-full max-w-[175px] h-auto">
+                    <svg viewBox="0 0 200 175" class="w-full max-w-[250px] h-auto">
                         {{-- Equilateral triangle - масштабировано ×1.25 --}}
                         <polygon points="100,19 25,150 175,150"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
@@ -900,7 +900,7 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 225 225" class="w-full max-w-[200px] h-auto">
+                    <svg viewBox="0 0 225 225" class="w-full max-w-[250px] h-auto">
                         {{-- Circle - масштабировано ×1.25 --}}
                         <circle cx="113" cy="113" r="81" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
@@ -959,7 +959,7 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 225 188" class="w-full max-w-[200px] h-auto">
+                    <svg viewBox="0 0 225 188" class="w-full max-w-[250px] h-auto">
                         {{-- Circle - масштабировано ×1.25 --}}
                         <circle cx="113" cy="113" r="75" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
@@ -1008,7 +1008,7 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 225 225" class="w-full max-w-[200px] h-auto">
+                    <svg viewBox="0 0 225 225" class="w-full max-w-[250px] h-auto">
                         {{-- Circle - масштабировано ×1.25 --}}
                         <circle cx="113" cy="113" r="81" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
@@ -1070,7 +1070,7 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 200 200" class="w-full max-w-[175px] h-auto">
+                    <svg viewBox="0 0 200 200" class="w-full max-w-[250px] h-auto">
                         {{-- Circle - масштабировано ×1.25 --}}
                         <circle cx="100" cy="100" r="70" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
@@ -1113,7 +1113,7 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 200 188" class="w-full max-w-[175px] h-auto">
+                    <svg viewBox="0 0 200 188" class="w-full max-w-[250px] h-auto">
                         {{-- Circle - масштабировано ×1.25 --}}
                         <circle cx="100" cy="100" r="69" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
@@ -1165,7 +1165,7 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 225 200" class="w-full max-w-[200px] h-auto">
+                    <svg viewBox="0 0 225 200" class="w-full max-w-[250px] h-auto">
                         {{-- Circle - масштабировано ×1.25 --}}
                         <circle cx="113" cy="106" r="75" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
