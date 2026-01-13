@@ -207,13 +207,36 @@
 </script>
 
 <div class="max-w-6xl mx-auto px-4 py-8">
-    {{-- Header --}}
-    <div class="text-center mb-8">
-        <h1 class="text-4xl font-bold text-white mb-2">15. Треугольники (DEMO v3)</h1>
-        <p class="text-slate-400 text-lg">Полная реализация GEOMETRY_SPEC из CLAUDE.md</p>
+    {{-- Topic Navigation --}}
+    <div class="flex justify-between items-center mb-8 text-sm bg-slate-800/50 rounded-xl p-4 border border-slate-700">
+        <a href="{{ route('topics.index') }}" class="text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            Назад к темам
+        </a>
+
+        <div class="flex gap-1.5 flex-wrap justify-center">
+            @foreach(['06','07','08','09','10','11','12','13','14','15','16','17','18','19'] as $tid)
+                @if($tid === '15')
+                    <span class="px-2.5 py-1 rounded-lg bg-red-500 text-white font-bold text-xs">{{ $tid }}</span>
+                @else
+                    <a href="{{ route('topics.show', ['id' => ltrim($tid, '0')]) }}"
+                       class="px-2.5 py-1 rounded-lg bg-slate-700 text-slate-300 hover:bg-slate-600 transition text-xs">{{ $tid }}</a>
+                @endif
+            @endforeach
+        </div>
+
+        <span class="text-slate-500 text-xs">170 заданий</span>
     </div>
 
-    {{-- Navigation --}}
+    {{-- Header --}}
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-white mb-2">15. Треугольники</h1>
+        <p class="text-slate-400 text-lg">Геометрия: треугольники, биссектрисы, медианы, высоты</p>
+    </div>
+
+    {{-- Version Navigation --}}
     <div class="flex justify-center gap-4 mb-8">
         <a href="{{ route('test.topic15') }}" class="px-4 py-2 bg-slate-700 text-slate-300 rounded-lg hover:bg-slate-600">
             ← Старая версия (PNG)
