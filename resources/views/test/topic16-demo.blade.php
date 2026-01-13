@@ -421,16 +421,15 @@
 
             @foreach($oppositeTasks as $task)
             <div x-data="{
-                // 85% заполнение viewBox 220×200
                 // Все точки A, B, N, M НА окружности с R=85
-                O: { x: 110, y: 100 },
+                O: { x: 110, y: 105 },
                 R: 85,
-                A: { x: 25, y: 100 },
-                B: { x: 195, y: 100 },
+                A: { x: 25, y: 105 },
+                B: { x: 195, y: 105 },
                 // N: вверху слева (угол ~-110°)
-                N: { x: 81, y: 20 },
+                N: { x: 81, y: 25 },
                 // M: внизу справа (угол ~70°)
-                M: { x: 139, y: 180 }
+                M: { x: 139, y: 185 }
             }" class="bg-slate-800/70 rounded-xl p-4 border border-slate-700">
                 <div class="flex items-start gap-2 mb-3">
                     <span class="text-red-400 font-bold">{{ $task['id'] }}</span>
@@ -440,7 +439,7 @@
                 </div>
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
-                    <svg viewBox="0 0 220 200" class="w-full max-w-[250px] h-auto">
+                    <svg viewBox="0 0 220 210" class="w-full max-w-[250px] h-auto">
                         {{-- Circle --}}
                         <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
@@ -925,7 +924,7 @@
 
                 <div class="bg-slate-900/50 rounded-lg p-3 flex justify-center">
                     <svg viewBox="0 0 220 200" class="w-full max-w-[250px] h-auto">
-                        {{-- Circle - 85% заполнение: O=(110,100), R=85 --}}
+                        {{-- Circle - O=(110,100), R=85 --}}
                         <circle cx="110" cy="100" r="85" fill="none" stroke="#3b82f6" stroke-width="2.5"/>
 
                         {{-- Quadrilateral - все вершины НА окружности R=85
@@ -933,8 +932,9 @@
                         <polygon points="33,64 62,170 158,170 187,64"
                             fill="none" stroke="#dc2626" stroke-width="2.5"/>
 
-                        {{-- Diagonal --}}
-                        <line x1="33" y1="64" x2="158" y2="170" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,4"/>
+                        {{-- Diagonals AC and BD --}}
+                        <line x1="33" y1="64" x2="158" y2="170" stroke="#f59e0b" stroke-width="2"/>
+                        <line x1="62" y1="170" x2="187" y2="64" stroke="#f59e0b" stroke-width="2"/>
 
                         {{-- Labels --}}
                         <text x="18" y="58" fill="#60a5fa" font-size="15" class="geo-label">A</text>
