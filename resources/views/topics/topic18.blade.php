@@ -137,8 +137,8 @@
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-auto rounded">
                                                 {{-- Сетка через pattern --}}
                                                 <defs>
-                                                    <pattern id="grid1-{{ $index }}" width="20" height="20" patternUnits="userSpaceOnUse">
-                                                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    <pattern id="grid1-{{ $index }}" width="25" height="25" patternUnits="userSpaceOnUse">
+                                                        <path d="M 25 0 L 0 0 0 25" fill="none" stroke="#475569" stroke-width="1"/>
                                                     </pattern>
                                                 </defs>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid1-{{ $index }})"/>
@@ -156,8 +156,8 @@
                                         <div x-data="rhombusOnGrid({{ $index }})">
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-auto rounded">
                                                 <defs>
-                                                    <pattern id="grid2-{{ $index }}" width="20" height="20" patternUnits="userSpaceOnUse">
-                                                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    <pattern id="grid2-{{ $index }}" width="25" height="25" patternUnits="userSpaceOnUse">
+                                                        <path d="M 25 0 L 0 0 0 25" fill="none" stroke="#475569" stroke-width="1"/>
                                                     </pattern>
                                                 </defs>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid2-{{ $index }})"/>
@@ -174,8 +174,8 @@
                                         <div x-data="triangleWithPointM({{ $index }})">
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-auto rounded">
                                                 <defs>
-                                                    <pattern id="grid3-{{ $index }}" width="20" height="20" patternUnits="userSpaceOnUse">
-                                                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    <pattern id="grid3-{{ $index }}" width="25" height="25" patternUnits="userSpaceOnUse">
+                                                        <path d="M 25 0 L 0 0 0 25" fill="none" stroke="#475569" stroke-width="1"/>
                                                     </pattern>
                                                 </defs>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid3-{{ $index }})"/>
@@ -198,8 +198,8 @@
                                         <div x-data="polygonOnGrid({{ $zadanie['number'] }}, {{ $index }})">
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-auto rounded">
                                                 <defs>
-                                                    <pattern id="grid4-{{ $zadanie['number'] }}-{{ $index }}" width="20" height="20" patternUnits="userSpaceOnUse">
-                                                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    <pattern id="grid4-{{ $zadanie['number'] }}-{{ $index }}" width="25" height="25" patternUnits="userSpaceOnUse">
+                                                        <path d="M 25 0 L 0 0 0 25" fill="none" stroke="#475569" stroke-width="1"/>
                                                     </pattern>
                                                 </defs>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid4-{{ $zadanie['number'] }}-{{ $index }})"/>
@@ -214,8 +214,8 @@
                                         <div x-data="twoPointsOnGrid({{ $index }})">
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-auto rounded">
                                                 <defs>
-                                                    <pattern id="grid8-{{ $index }}" width="20" height="20" patternUnits="userSpaceOnUse">
-                                                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    <pattern id="grid8-{{ $index }}" width="25" height="25" patternUnits="userSpaceOnUse">
+                                                        <path d="M 25 0 L 0 0 0 25" fill="none" stroke="#475569" stroke-width="1"/>
                                                     </pattern>
                                                 </defs>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid8-{{ $index }})"/>
@@ -231,8 +231,8 @@
                                         <div x-data="triangleWithMidline({{ $index }})">
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-auto rounded">
                                                 <defs>
-                                                    <pattern id="grid9-{{ $index }}" width="20" height="20" patternUnits="userSpaceOnUse">
-                                                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    <pattern id="grid9-{{ $index }}" width="25" height="25" patternUnits="userSpaceOnUse">
+                                                        <path d="M 25 0 L 0 0 0 25" fill="none" stroke="#475569" stroke-width="1"/>
                                                     </pattern>
                                                 </defs>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid9-{{ $index }})"/>
@@ -251,8 +251,8 @@
                                         <div x-data="figureWithSegmentAB({{ $index }})">
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-auto rounded">
                                                 <defs>
-                                                    <pattern id="grid10-{{ $index }}" width="20" height="20" patternUnits="userSpaceOnUse">
-                                                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    <pattern id="grid10-{{ $index }}" width="25" height="25" patternUnits="userSpaceOnUse">
+                                                        <path d="M 25 0 L 0 0 0 25" fill="none" stroke="#475569" stroke-width="1"/>
                                                     </pattern>
                                                 </defs>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid10-{{ $index }})"/>
@@ -270,8 +270,8 @@
                                         <div x-data="trapezoidWithMidline({{ $index }})">
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-auto rounded">
                                                 <defs>
-                                                    <pattern id="grid11-{{ $index }}" width="20" height="20" patternUnits="userSpaceOnUse">
-                                                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    <pattern id="grid11-{{ $index }}" width="25" height="25" patternUnits="userSpaceOnUse">
+                                                        <path d="M 25 0 L 0 0 0 25" fill="none" stroke="#475569" stroke-width="1"/>
                                                     </pattern>
                                                 </defs>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid11-{{ $index }})"/>
@@ -287,8 +287,8 @@
                                         <div x-data="twoCirclesOnGrid({{ $index }})">
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-auto rounded">
                                                 <defs>
-                                                    <pattern id="grid12-{{ $index }}" width="20" height="20" patternUnits="userSpaceOnUse">
-                                                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    <pattern id="grid12-{{ $index }}" width="25" height="25" patternUnits="userSpaceOnUse">
+                                                        <path d="M 25 0 L 0 0 0 25" fill="none" stroke="#475569" stroke-width="1"/>
                                                     </pattern>
                                                 </defs>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid12-{{ $index }})"/>
@@ -335,32 +335,8 @@
 </div>
 
 <script>
-    const GRID_SIZE = 20;
-    const PADDING = 5;
-
-    // Генерация линий сетки
-    function generateGridLines(cols, rows) {
-        const lines = [];
-        for (let i = 0; i <= cols; i++) {
-            lines.push({
-                x1: PADDING + i * GRID_SIZE,
-                y1: PADDING,
-                x2: PADDING + i * GRID_SIZE,
-                y2: PADDING + rows * GRID_SIZE,
-                isMain: false
-            });
-        }
-        for (let i = 0; i <= rows; i++) {
-            lines.push({
-                x1: PADDING,
-                y1: PADDING + i * GRID_SIZE,
-                x2: PADDING + cols * GRID_SIZE,
-                y2: PADDING + i * GRID_SIZE,
-                isMain: false
-            });
-        }
-        return lines;
-    }
+    const GRID_SIZE = 25;
+    const PADDING = 10;
 
     // Преобразование координат сетки в SVG
     function gridToSVG(gx, gy) {
@@ -370,294 +346,257 @@
         };
     }
 
-    // 1. Прямоугольный треугольник на сетке - больший катет
-    // Треугольники как на картинке: прямой угол внизу слева, вертикальный катет и горизонтальный катет
+    // 1. Прямоугольный треугольник - унифицированные размеры 7x5 клеток
     function rightTriangleOnGrid(index) {
-        // Варианты: вертикальный катет (высота), горизонтальный катет (основание)
-        // Нужно найти БОЛЬШИЙ катет
         const variants = [
-            { A: {gx: 0, gy: 0}, B: {gx: 0, gy: 6}, C: {gx: 8, gy: 6}, cols: 9, rows: 7 }, // верт=6, гор=8, больший=8
-            { A: {gx: 0, gy: 0}, B: {gx: 0, gy: 4}, C: {gx: 5, gy: 4}, cols: 6, rows: 5 }, // верт=4, гор=5, больший=5
-            { A: {gx: 0, gy: 0}, B: {gx: 0, gy: 3}, C: {gx: 7, gy: 3}, cols: 8, rows: 4 }, // верт=3, гор=7, больший=7
-            { A: {gx: 0, gy: 0}, B: {gx: 0, gy: 7}, C: {gx: 5, gy: 7}, cols: 6, rows: 8 }, // верт=7, гор=5, больший=7
-            { A: {gx: 0, gy: 0}, B: {gx: 0, gy: 5}, C: {gx: 4, gy: 5}, cols: 5, rows: 6 }, // верт=5, гор=4, больший=5
-            { A: {gx: 0, gy: 0}, B: {gx: 0, gy: 2}, C: {gx: 6, gy: 2}, cols: 7, rows: 3 }, // верт=2, гор=6, больший=6
+            { A: {gx: 0, gy: 0}, B: {gx: 0, gy: 4}, C: {gx: 6, gy: 4} }, // гор=6, верт=4
+            { A: {gx: 0, gy: 0}, B: {gx: 0, gy: 3}, C: {gx: 5, gy: 3} }, // гор=5, верт=3
+            { A: {gx: 0, gy: 0}, B: {gx: 0, gy: 2}, C: {gx: 6, gy: 2} }, // гор=6, верт=2
+            { A: {gx: 0, gy: 0}, B: {gx: 0, gy: 5}, C: {gx: 4, gy: 5} }, // гор=4, верт=5
+            { A: {gx: 0, gy: 0}, B: {gx: 0, gy: 4}, C: {gx: 3, gy: 4} }, // гор=3, верт=4
+            { A: {gx: 0, gy: 0}, B: {gx: 0, gy: 3}, C: {gx: 4, gy: 3} }, // гор=4, верт=3
         ];
         const v = variants[index % variants.length];
+        const cols = Math.max(v.C.gx, v.A.gx, v.B.gx) + 1;
+        const rows = Math.max(v.C.gy, v.A.gy, v.B.gy) + 1;
         const A = gridToSVG(v.A.gx, v.A.gy);
         const B = gridToSVG(v.B.gx, v.B.gy);
         const C = gridToSVG(v.C.gx, v.C.gy);
-        const width = PADDING * 2 + v.cols * GRID_SIZE;
-        const height = PADDING * 2 + v.rows * GRID_SIZE;
-
-        // Прямой угол в точке B (нижний левый)
-        const size = 6;
+        const width = PADDING * 2 + cols * GRID_SIZE;
+        const height = PADDING * 2 + rows * GRID_SIZE;
+        const size = 8;
         const rightAngleMark = `M ${B.x + size} ${B.y} L ${B.x + size} ${B.y - size} L ${B.x} ${B.y - size}`;
-
-        return {
-            A, B, C, width, height,
-            gridLines: generateGridLines(v.cols, v.rows),
-            rightAngleMark
-        };
+        return { A, B, C, width, height, rightAngleMark };
     }
 
-    // 2. Ромб на сетке
+    // 2. Ромб - унифицированные размеры 7x6 клеток
     function rhombusOnGrid(index) {
         const variants = [
-            { A: {gx: 0, gy: 3}, B: {gx: 3, gy: 0}, C: {gx: 6, gy: 3}, D: {gx: 3, gy: 6}, cols: 7, rows: 7 },
-            { A: {gx: 0, gy: 2}, B: {gx: 4, gy: 0}, C: {gx: 8, gy: 2}, D: {gx: 4, gy: 4}, cols: 9, rows: 5 },
-            { A: {gx: 1, gy: 3}, B: {gx: 4, gy: 0}, C: {gx: 7, gy: 3}, D: {gx: 4, gy: 6}, cols: 9, rows: 7 },
-            { A: {gx: 0, gy: 2}, B: {gx: 3, gy: 0}, C: {gx: 6, gy: 2}, D: {gx: 3, gy: 4}, cols: 7, rows: 5 },
-            { A: {gx: 0, gy: 3}, B: {gx: 2, gy: 0}, C: {gx: 4, gy: 3}, D: {gx: 2, gy: 6}, cols: 5, rows: 7 },
-            { A: {gx: 1, gy: 2}, B: {gx: 5, gy: 0}, C: {gx: 9, gy: 2}, D: {gx: 5, gy: 4}, cols: 11, rows: 5 },
+            { A: {gx: 0, gy: 3}, B: {gx: 3, gy: 0}, C: {gx: 6, gy: 3}, D: {gx: 3, gy: 6} },
+            { A: {gx: 0, gy: 2}, B: {gx: 3, gy: 0}, C: {gx: 6, gy: 2}, D: {gx: 3, gy: 4} },
+            { A: {gx: 0, gy: 3}, B: {gx: 2, gy: 0}, C: {gx: 4, gy: 3}, D: {gx: 2, gy: 6} },
+            { A: {gx: 0, gy: 2}, B: {gx: 4, gy: 0}, C: {gx: 8, gy: 2}, D: {gx: 4, gy: 4} },
+            { A: {gx: 0, gy: 2}, B: {gx: 2, gy: 0}, C: {gx: 4, gy: 2}, D: {gx: 2, gy: 4} },
+            { A: {gx: 0, gy: 3}, B: {gx: 4, gy: 0}, C: {gx: 8, gy: 3}, D: {gx: 4, gy: 6} },
         ];
         const v = variants[index % variants.length];
+        const cols = Math.max(v.A.gx, v.B.gx, v.C.gx, v.D.gx) + 1;
+        const rows = Math.max(v.A.gy, v.B.gy, v.C.gy, v.D.gy) + 1;
         const A = gridToSVG(v.A.gx, v.A.gy);
         const B = gridToSVG(v.B.gx, v.B.gy);
         const C = gridToSVG(v.C.gx, v.C.gy);
         const D = gridToSVG(v.D.gx, v.D.gy);
-        const width = PADDING * 2 + v.cols * GRID_SIZE;
-        const height = PADDING * 2 + v.rows * GRID_SIZE;
-
-        return {
-            A, B, C, D, width, height,
-            gridLines: generateGridLines(v.cols, v.rows)
-        };
+        const width = PADDING * 2 + cols * GRID_SIZE;
+        const height = PADDING * 2 + rows * GRID_SIZE;
+        return { A, B, C, D, width, height };
     }
 
-    // 3. Треугольник с точкой M (теорема Фалеса) - все координаты целые
+    // 3. Треугольник с точкой M - унифицированные размеры 8x6 клеток
     function triangleWithPointM(index) {
-        // M - точка на стороне треугольника (на пересечении линий сетки)
         const variants = [
-            { A: {gx: 0, gy: 6}, B: {gx: 4, gy: 0}, C: {gx: 8, gy: 6}, M: {gx: 2, gy: 3}, cols: 9, rows: 7 },
-            { A: {gx: 1, gy: 4}, B: {gx: 4, gy: 0}, C: {gx: 8, gy: 4}, M: {gx: 6, gy: 2}, cols: 9, rows: 5 },
-            { A: {gx: 0, gy: 6}, B: {gx: 2, gy: 2}, C: {gx: 6, gy: 6}, M: {gx: 1, gy: 4}, cols: 7, rows: 7 },
-            { A: {gx: 1, gy: 6}, B: {gx: 5, gy: 0}, C: {gx: 7, gy: 6}, M: {gx: 3, gy: 3}, cols: 8, rows: 7 },
-            { A: {gx: 0, gy: 4}, B: {gx: 4, gy: 0}, C: {gx: 6, gy: 4}, M: {gx: 5, gy: 2}, cols: 7, rows: 5 },
-            { A: {gx: 1, gy: 6}, B: {gx: 4, gy: 0}, C: {gx: 9, gy: 6}, M: {gx: 2, gy: 4}, cols: 10, rows: 7 },
+            { A: {gx: 0, gy: 5}, B: {gx: 3, gy: 0}, C: {gx: 7, gy: 5}, M: {gx: 1, gy: 3} },
+            { A: {gx: 0, gy: 4}, B: {gx: 3, gy: 0}, C: {gx: 6, gy: 4}, M: {gx: 5, gy: 2} },
+            { A: {gx: 0, gy: 5}, B: {gx: 2, gy: 1}, C: {gx: 5, gy: 5}, M: {gx: 1, gy: 3} },
+            { A: {gx: 0, gy: 5}, B: {gx: 4, gy: 0}, C: {gx: 6, gy: 5}, M: {gx: 2, gy: 3} },
+            { A: {gx: 0, gy: 4}, B: {gx: 3, gy: 0}, C: {gx: 5, gy: 4}, M: {gx: 4, gy: 2} },
+            { A: {gx: 0, gy: 5}, B: {gx: 3, gy: 0}, C: {gx: 7, gy: 5}, M: {gx: 2, gy: 3} },
         ];
         const v = variants[index % variants.length];
+        const cols = Math.max(v.A.gx, v.B.gx, v.C.gx, v.M.gx) + 1;
+        const rows = Math.max(v.A.gy, v.B.gy, v.C.gy, v.M.gy) + 1;
         const A = gridToSVG(v.A.gx, v.A.gy);
         const B = gridToSVG(v.B.gx, v.B.gy);
         const C = gridToSVG(v.C.gx, v.C.gy);
         const M = gridToSVG(v.M.gx, v.M.gy);
-        const width = PADDING * 2 + v.cols * GRID_SIZE;
-        const height = PADDING * 2 + v.rows * GRID_SIZE;
-
-        return {
-            A, B, C, M, width, height,
-            gridLines: generateGridLines(v.cols, v.rows)
-        };
+        const width = PADDING * 2 + cols * GRID_SIZE;
+        const height = PADDING * 2 + rows * GRID_SIZE;
+        return { A, B, C, M, width, height };
     }
 
-    // 4-7. Многоугольники для площади
+    // 4-7. Многоугольники - унифицированные размеры max 7x5 клеток
     function polygonOnGrid(zadanieNum, index) {
-        // Разные наборы многоугольников для заданий 4-7
         const allVariants = {
-            4: [ // Простые треугольники и четырехугольники
-                [{gx: 1, gy: 5}, {gx: 1, gy: 1}, {gx: 6, gy: 5}],
-                [{gx: 0, gy: 4}, {gx: 3, gy: 0}, {gx: 6, gy: 4}],
-                [{gx: 1, gy: 4}, {gx: 1, gy: 1}, {gx: 5, gy: 1}, {gx: 5, gy: 4}],
+            4: [ // Простые фигуры
+                [{gx: 0, gy: 4}, {gx: 0, gy: 0}, {gx: 5, gy: 4}],
+                [{gx: 0, gy: 4}, {gx: 2, gy: 0}, {gx: 5, gy: 4}],
+                [{gx: 0, gy: 4}, {gx: 0, gy: 0}, {gx: 4, gy: 0}, {gx: 4, gy: 4}],
                 [{gx: 0, gy: 3}, {gx: 2, gy: 0}, {gx: 5, gy: 3}],
-                [{gx: 1, gy: 5}, {gx: 3, gy: 1}, {gx: 7, gy: 5}],
-                [{gx: 0, gy: 4}, {gx: 0, gy: 1}, {gx: 4, gy: 1}, {gx: 4, gy: 4}],
-                [{gx: 1, gy: 4}, {gx: 2, gy: 1}, {gx: 6, gy: 4}],
-                [{gx: 0, gy: 5}, {gx: 2, gy: 0}, {gx: 6, gy: 5}],
-                [{gx: 1, gy: 3}, {gx: 1, gy: 0}, {gx: 5, gy: 0}, {gx: 5, gy: 3}],
+                [{gx: 0, gy: 4}, {gx: 2, gy: 0}, {gx: 6, gy: 4}],
+                [{gx: 0, gy: 4}, {gx: 0, gy: 0}, {gx: 3, gy: 0}, {gx: 3, gy: 4}],
+                [{gx: 0, gy: 4}, {gx: 1, gy: 0}, {gx: 5, gy: 4}],
+                [{gx: 0, gy: 5}, {gx: 2, gy: 0}, {gx: 5, gy: 5}],
+                [{gx: 0, gy: 3}, {gx: 0, gy: 0}, {gx: 4, gy: 0}, {gx: 4, gy: 3}],
             ],
-            5: [ // Пятиугольники и сложные фигуры
-                [{gx: 1, gy: 4}, {gx: 1, gy: 1}, {gx: 4, gy: 1}, {gx: 6, gy: 3}, {gx: 4, gy: 4}],
+            5: [ // Трапеции и четырёхугольники
+                [{gx: 0, gy: 4}, {gx: 1, gy: 0}, {gx: 4, gy: 0}, {gx: 5, gy: 4}],
                 [{gx: 0, gy: 3}, {gx: 2, gy: 0}, {gx: 5, gy: 0}, {gx: 5, gy: 3}],
-                [{gx: 1, gy: 5}, {gx: 1, gy: 2}, {gx: 3, gy: 0}, {gx: 6, gy: 2}, {gx: 6, gy: 5}],
-                [{gx: 0, gy: 4}, {gx: 2, gy: 1}, {gx: 5, gy: 1}, {gx: 7, gy: 4}],
-                [{gx: 1, gy: 4}, {gx: 1, gy: 1}, {gx: 3, gy: 1}, {gx: 5, gy: 3}, {gx: 3, gy: 4}],
-                [{gx: 0, gy: 5}, {gx: 0, gy: 2}, {gx: 3, gy: 0}, {gx: 6, gy: 2}, {gx: 6, gy: 5}],
-                [{gx: 1, gy: 3}, {gx: 3, gy: 0}, {gx: 6, gy: 3}, {gx: 4, gy: 5}],
-                [{gx: 0, gy: 4}, {gx: 1, gy: 1}, {gx: 4, gy: 1}, {gx: 5, gy: 4}],
-                [{gx: 1, gy: 5}, {gx: 2, gy: 1}, {gx: 5, gy: 1}, {gx: 6, gy: 5}],
+                [{gx: 0, gy: 5}, {gx: 1, gy: 1}, {gx: 4, gy: 1}, {gx: 5, gy: 5}],
+                [{gx: 0, gy: 4}, {gx: 1, gy: 0}, {gx: 4, gy: 0}, {gx: 6, gy: 4}],
+                [{gx: 0, gy: 4}, {gx: 0, gy: 0}, {gx: 3, gy: 0}, {gx: 4, gy: 3}, {gx: 2, gy: 4}],
+                [{gx: 0, gy: 4}, {gx: 0, gy: 1}, {gx: 2, gy: 0}, {gx: 5, gy: 1}, {gx: 5, gy: 4}],
+                [{gx: 0, gy: 3}, {gx: 2, gy: 0}, {gx: 5, gy: 3}, {gx: 3, gy: 4}],
+                [{gx: 0, gy: 4}, {gx: 1, gy: 0}, {gx: 4, gy: 0}, {gx: 5, gy: 4}],
+                [{gx: 0, gy: 5}, {gx: 1, gy: 0}, {gx: 4, gy: 0}, {gx: 5, gy: 5}],
             ],
             6: [ // Шестиугольники
-                [{gx: 2, gy: 5}, {gx: 0, gy: 3}, {gx: 2, gy: 0}, {gx: 5, gy: 0}, {gx: 7, gy: 3}, {gx: 5, gy: 5}],
-                [{gx: 1, gy: 4}, {gx: 0, gy: 2}, {gx: 2, gy: 0}, {gx: 5, gy: 0}, {gx: 6, gy: 2}, {gx: 4, gy: 4}],
+                [{gx: 1, gy: 4}, {gx: 0, gy: 2}, {gx: 1, gy: 0}, {gx: 4, gy: 0}, {gx: 5, gy: 2}, {gx: 4, gy: 4}],
+                [{gx: 1, gy: 4}, {gx: 0, gy: 2}, {gx: 2, gy: 0}, {gx: 4, gy: 0}, {gx: 5, gy: 2}, {gx: 4, gy: 4}],
                 [{gx: 2, gy: 4}, {gx: 0, gy: 2}, {gx: 2, gy: 0}, {gx: 4, gy: 0}, {gx: 6, gy: 2}, {gx: 4, gy: 4}],
-                [{gx: 1, gy: 5}, {gx: 0, gy: 3}, {gx: 1, gy: 1}, {gx: 4, gy: 1}, {gx: 5, gy: 3}, {gx: 4, gy: 5}],
-                [{gx: 2, gy: 4}, {gx: 1, gy: 2}, {gx: 2, gy: 0}, {gx: 5, gy: 0}, {gx: 6, gy: 2}, {gx: 5, gy: 4}],
-                [{gx: 1, gy: 5}, {gx: 0, gy: 2}, {gx: 2, gy: 0}, {gx: 5, gy: 0}, {gx: 7, gy: 2}, {gx: 6, gy: 5}],
-                [{gx: 2, gy: 5}, {gx: 0, gy: 2}, {gx: 2, gy: 0}, {gx: 6, gy: 0}, {gx: 8, gy: 2}, {gx: 6, gy: 5}],
-                [{gx: 1, gy: 4}, {gx: 0, gy: 2}, {gx: 1, gy: 0}, {gx: 5, gy: 0}, {gx: 6, gy: 2}, {gx: 5, gy: 4}],
-                [{gx: 2, gy: 5}, {gx: 1, gy: 3}, {gx: 2, gy: 1}, {gx: 5, gy: 1}, {gx: 6, gy: 3}, {gx: 5, gy: 5}],
+                [{gx: 1, gy: 4}, {gx: 0, gy: 2}, {gx: 1, gy: 0}, {gx: 3, gy: 0}, {gx: 4, gy: 2}, {gx: 3, gy: 4}],
+                [{gx: 1, gy: 4}, {gx: 0, gy: 2}, {gx: 1, gy: 0}, {gx: 4, gy: 0}, {gx: 5, gy: 2}, {gx: 4, gy: 4}],
+                [{gx: 1, gy: 4}, {gx: 0, gy: 1}, {gx: 2, gy: 0}, {gx: 4, gy: 0}, {gx: 6, gy: 1}, {gx: 5, gy: 4}],
+                [{gx: 2, gy: 4}, {gx: 0, gy: 2}, {gx: 2, gy: 0}, {gx: 5, gy: 0}, {gx: 7, gy: 2}, {gx: 5, gy: 4}],
+                [{gx: 1, gy: 4}, {gx: 0, gy: 2}, {gx: 1, gy: 0}, {gx: 4, gy: 0}, {gx: 5, gy: 2}, {gx: 4, gy: 4}],
+                [{gx: 1, gy: 4}, {gx: 0, gy: 2}, {gx: 1, gy: 0}, {gx: 4, gy: 0}, {gx: 5, gy: 2}, {gx: 4, gy: 4}],
             ],
-            7: [ // Сложные многоугольники
-                [{gx: 0, gy: 5}, {gx: 0, gy: 2}, {gx: 2, gy: 0}, {gx: 5, gy: 0}, {gx: 7, gy: 3}, {gx: 5, gy: 5}],
-                [{gx: 1, gy: 4}, {gx: 1, gy: 1}, {gx: 3, gy: 0}, {gx: 6, gy: 1}, {gx: 6, gy: 4}],
-                [{gx: 0, gy: 5}, {gx: 0, gy: 1}, {gx: 3, gy: 1}, {gx: 5, gy: 3}, {gx: 5, gy: 5}],
-                [{gx: 1, gy: 5}, {gx: 0, gy: 2}, {gx: 3, gy: 0}, {gx: 6, gy: 2}, {gx: 5, gy: 5}],
-                [{gx: 0, gy: 4}, {gx: 2, gy: 1}, {gx: 5, gy: 1}, {gx: 7, gy: 4}, {gx: 4, gy: 4}],
-                [{gx: 1, gy: 5}, {gx: 1, gy: 2}, {gx: 4, gy: 0}, {gx: 7, gy: 2}, {gx: 7, gy: 5}],
-                [{gx: 0, gy: 4}, {gx: 0, gy: 1}, {gx: 2, gy: 0}, {gx: 5, gy: 1}, {gx: 5, gy: 4}],
-                [{gx: 1, gy: 5}, {gx: 0, gy: 3}, {gx: 2, gy: 0}, {gx: 6, gy: 0}, {gx: 7, gy: 3}, {gx: 5, gy: 5}],
-                [{gx: 2, gy: 4}, {gx: 0, gy: 2}, {gx: 2, gy: 0}, {gx: 5, gy: 2}, {gx: 4, gy: 4}],
+            7: [ // Сложные фигуры
+                [{gx: 0, gy: 4}, {gx: 0, gy: 1}, {gx: 2, gy: 0}, {gx: 4, gy: 0}, {gx: 6, gy: 2}, {gx: 4, gy: 4}],
+                [{gx: 0, gy: 4}, {gx: 0, gy: 0}, {gx: 2, gy: 0}, {gx: 5, gy: 1}, {gx: 5, gy: 4}],
+                [{gx: 0, gy: 4}, {gx: 0, gy: 0}, {gx: 3, gy: 0}, {gx: 4, gy: 2}, {gx: 4, gy: 4}],
+                [{gx: 0, gy: 4}, {gx: 0, gy: 1}, {gx: 2, gy: 0}, {gx: 5, gy: 1}, {gx: 4, gy: 4}],
+                [{gx: 0, gy: 4}, {gx: 1, gy: 0}, {gx: 4, gy: 0}, {gx: 6, gy: 4}, {gx: 3, gy: 4}],
+                [{gx: 0, gy: 4}, {gx: 0, gy: 1}, {gx: 3, gy: 0}, {gx: 6, gy: 1}, {gx: 6, gy: 4}],
+                [{gx: 0, gy: 4}, {gx: 0, gy: 0}, {gx: 2, gy: 0}, {gx: 4, gy: 1}, {gx: 4, gy: 4}],
+                [{gx: 0, gy: 4}, {gx: 0, gy: 2}, {gx: 1, gy: 0}, {gx: 5, gy: 0}, {gx: 6, gy: 2}, {gx: 4, gy: 4}],
+                [{gx: 1, gy: 4}, {gx: 0, gy: 2}, {gx: 1, gy: 0}, {gx: 4, gy: 2}, {gx: 3, gy: 4}],
             ]
         };
-
         const variants = allVariants[zadanieNum] || allVariants[4];
         const coords = variants[index % variants.length];
-
         let maxX = 0, maxY = 0;
-        coords.forEach(c => {
-            if (c.gx > maxX) maxX = c.gx;
-            if (c.gy > maxY) maxY = c.gy;
-        });
-
-        const cols = maxX + 2;
+        coords.forEach(c => { maxX = Math.max(maxX, c.gx); maxY = Math.max(maxY, c.gy); });
+        const cols = maxX + 1;
         const rows = maxY + 1;
         const points = coords.map(c => gridToSVG(c.gx, c.gy));
         const pointsString = points.map(p => `${p.x},${p.y}`).join(' ');
         const width = PADDING * 2 + cols * GRID_SIZE;
         const height = PADDING * 2 + rows * GRID_SIZE;
-
-        return {
-            points, pointsString, width, height,
-            gridLines: generateGridLines(cols, rows)
-        };
+        return { points, pointsString, width, height };
     }
 
-    // 8. Две точки на сетке
+    // 8. Две точки на сетке - 6x5 клеток
     function twoPointsOnGrid(index) {
         const variants = [
-            { A: {gx: 1, gy: 4}, B: {gx: 4, gy: 1}, cols: 6, rows: 5 },
-            { A: {gx: 0, gy: 3}, B: {gx: 5, gy: 1}, cols: 7, rows: 4 },
-            { A: {gx: 1, gy: 5}, B: {gx: 6, gy: 2}, cols: 8, rows: 6 },
-            { A: {gx: 2, gy: 4}, B: {gx: 5, gy: 0}, cols: 7, rows: 5 },
-            { A: {gx: 0, gy: 4}, B: {gx: 3, gy: 0}, cols: 5, rows: 5 },
-            { A: {gx: 1, gy: 5}, B: {gx: 5, gy: 1}, cols: 7, rows: 6 },
+            { A: {gx: 1, gy: 4}, B: {gx: 4, gy: 1} },
+            { A: {gx: 0, gy: 3}, B: {gx: 5, gy: 1} },
+            { A: {gx: 1, gy: 4}, B: {gx: 5, gy: 1} },
+            { A: {gx: 1, gy: 4}, B: {gx: 4, gy: 0} },
+            { A: {gx: 0, gy: 4}, B: {gx: 3, gy: 0} },
+            { A: {gx: 1, gy: 4}, B: {gx: 5, gy: 0} },
         ];
         const v = variants[index % variants.length];
+        const cols = Math.max(v.A.gx, v.B.gx) + 1;
+        const rows = Math.max(v.A.gy, v.B.gy) + 1;
         const A = gridToSVG(v.A.gx, v.A.gy);
         const B = gridToSVG(v.B.gx, v.B.gy);
-        const width = PADDING * 2 + v.cols * GRID_SIZE;
-        const height = PADDING * 2 + v.rows * GRID_SIZE;
-
-        return {
-            A, B, width, height,
-            gridLines: generateGridLines(v.cols, v.rows)
-        };
+        const width = PADDING * 2 + cols * GRID_SIZE;
+        const height = PADDING * 2 + rows * GRID_SIZE;
+        return { A, B, width, height };
     }
 
-    // 9. Треугольник со средней линией
+    // 9. Треугольник со средней линией - 8x6 клеток
     function triangleWithMidline(index) {
         const variants = [
-            { A: {gx: 0, gy: 5}, B: {gx: 3, gy: 0}, C: {gx: 7, gy: 5}, cols: 8, rows: 6 },
-            { A: {gx: 1, gy: 4}, B: {gx: 4, gy: 0}, C: {gx: 8, gy: 4}, cols: 9, rows: 5 },
-            { A: {gx: 0, gy: 5}, B: {gx: 2, gy: 1}, C: {gx: 6, gy: 5}, cols: 7, rows: 6 },
-            { A: {gx: 1, gy: 5}, B: {gx: 5, gy: 0}, C: {gx: 8, gy: 5}, cols: 9, rows: 6 },
-            { A: {gx: 0, gy: 4}, B: {gx: 4, gy: 0}, C: {gx: 6, gy: 4}, cols: 7, rows: 5 },
-            { A: {gx: 1, gy: 5}, B: {gx: 4, gy: 0}, C: {gx: 9, gy: 5}, cols: 10, rows: 6 },
+            { A: {gx: 0, gy: 5}, B: {gx: 3, gy: 0}, C: {gx: 7, gy: 5} },
+            { A: {gx: 0, gy: 4}, B: {gx: 3, gy: 0}, C: {gx: 7, gy: 4} },
+            { A: {gx: 0, gy: 5}, B: {gx: 2, gy: 0}, C: {gx: 5, gy: 5} },
+            { A: {gx: 0, gy: 5}, B: {gx: 4, gy: 0}, C: {gx: 7, gy: 5} },
+            { A: {gx: 0, gy: 4}, B: {gx: 3, gy: 0}, C: {gx: 5, gy: 4} },
+            { A: {gx: 0, gy: 5}, B: {gx: 3, gy: 0}, C: {gx: 8, gy: 5} },
         ];
         const v = variants[index % variants.length];
+        const cols = Math.max(v.A.gx, v.B.gx, v.C.gx) + 1;
+        const rows = Math.max(v.A.gy, v.B.gy, v.C.gy) + 1;
         const A = gridToSVG(v.A.gx, v.A.gy);
         const B = gridToSVG(v.B.gx, v.B.gy);
         const C = gridToSVG(v.C.gx, v.C.gy);
-        // Середины AB и BC (средняя линия параллельна AC)
         const M1 = { x: (A.x + B.x) / 2, y: (A.y + B.y) / 2 };
         const M2 = { x: (B.x + C.x) / 2, y: (B.y + C.y) / 2 };
-        const width = PADDING * 2 + v.cols * GRID_SIZE;
-        const height = PADDING * 2 + v.rows * GRID_SIZE;
-
-        return {
-            A, B, C, M1, M2, width, height,
-            gridLines: generateGridLines(v.cols, v.rows)
-        };
+        const width = PADDING * 2 + cols * GRID_SIZE;
+        const height = PADDING * 2 + rows * GRID_SIZE;
+        return { A, B, C, M1, M2, width, height };
     }
 
-    // 10. Фигура с отрезком AB (все координаты целые для подсчёта клеток)
+    // 10. Фигура с отрезком AB - 7x5 клеток
     function figureWithSegmentAB(index) {
         const variants = [
-            { shape: [{gx: 0, gy: 4}, {gx: 2, gy: 0}, {gx: 6, gy: 0}, {gx: 8, gy: 4}], A: {gx: 1, gy: 2}, B: {gx: 7, gy: 2}, cols: 9, rows: 5 },
-            { shape: [{gx: 1, gy: 5}, {gx: 1, gy: 1}, {gx: 5, gy: 1}, {gx: 7, gy: 5}], A: {gx: 1, gy: 3}, B: {gx: 6, gy: 3}, cols: 8, rows: 6 },
-            { shape: [{gx: 0, gy: 4}, {gx: 3, gy: 0}, {gx: 6, gy: 4}], A: {gx: 1, gy: 2}, B: {gx: 5, gy: 2}, cols: 7, rows: 5 },
-            { shape: [{gx: 1, gy: 5}, {gx: 0, gy: 2}, {gx: 4, gy: 0}, {gx: 7, gy: 2}, {gx: 6, gy: 5}], A: {gx: 2, gy: 1}, B: {gx: 5, gy: 1}, cols: 8, rows: 6 },
-            { shape: [{gx: 0, gy: 4}, {gx: 2, gy: 1}, {gx: 5, gy: 1}, {gx: 7, gy: 4}], A: {gx: 1, gy: 2}, B: {gx: 6, gy: 2}, cols: 8, rows: 5 },
-            { shape: [{gx: 1, gy: 5}, {gx: 1, gy: 1}, {gx: 6, gy: 1}, {gx: 6, gy: 5}], A: {gx: 1, gy: 3}, B: {gx: 6, gy: 3}, cols: 7, rows: 6 },
-            { shape: [{gx: 0, gy: 4}, {gx: 3, gy: 0}, {gx: 7, gy: 4}], A: {gx: 2, gy: 2}, B: {gx: 5, gy: 2}, cols: 8, rows: 5 },
-            { shape: [{gx: 1, gy: 5}, {gx: 2, gy: 1}, {gx: 6, gy: 1}, {gx: 7, gy: 5}], A: {gx: 2, gy: 3}, B: {gx: 6, gy: 3}, cols: 8, rows: 6 },
-            { shape: [{gx: 0, gy: 5}, {gx: 0, gy: 1}, {gx: 5, gy: 1}, {gx: 5, gy: 5}], A: {gx: 0, gy: 3}, B: {gx: 5, gy: 3}, cols: 6, rows: 6 },
+            { shape: [{gx: 0, gy: 4}, {gx: 2, gy: 0}, {gx: 5, gy: 0}, {gx: 7, gy: 4}], A: {gx: 1, gy: 2}, B: {gx: 6, gy: 2} },
+            { shape: [{gx: 0, gy: 4}, {gx: 0, gy: 0}, {gx: 4, gy: 0}, {gx: 6, gy: 4}], A: {gx: 0, gy: 2}, B: {gx: 5, gy: 2} },
+            { shape: [{gx: 0, gy: 4}, {gx: 2, gy: 0}, {gx: 5, gy: 4}], A: {gx: 1, gy: 2}, B: {gx: 4, gy: 2} },
+            { shape: [{gx: 0, gy: 4}, {gx: 0, gy: 1}, {gx: 3, gy: 0}, {gx: 6, gy: 1}, {gx: 5, gy: 4}], A: {gx: 2, gy: 1}, B: {gx: 4, gy: 1} },
+            { shape: [{gx: 0, gy: 4}, {gx: 1, gy: 0}, {gx: 4, gy: 0}, {gx: 6, gy: 4}], A: {gx: 1, gy: 2}, B: {gx: 5, gy: 2} },
+            { shape: [{gx: 0, gy: 4}, {gx: 0, gy: 0}, {gx: 5, gy: 0}, {gx: 5, gy: 4}], A: {gx: 0, gy: 2}, B: {gx: 5, gy: 2} },
+            { shape: [{gx: 0, gy: 4}, {gx: 2, gy: 0}, {gx: 6, gy: 4}], A: {gx: 1, gy: 2}, B: {gx: 4, gy: 2} },
+            { shape: [{gx: 0, gy: 4}, {gx: 1, gy: 0}, {gx: 5, gy: 0}, {gx: 6, gy: 4}], A: {gx: 1, gy: 2}, B: {gx: 5, gy: 2} },
+            { shape: [{gx: 0, gy: 4}, {gx: 0, gy: 0}, {gx: 4, gy: 0}, {gx: 4, gy: 4}], A: {gx: 0, gy: 2}, B: {gx: 4, gy: 2} },
         ];
         const v = variants[index % variants.length];
-        const shapePoints = v.shape.map(c => {
-            const p = gridToSVG(c.gx, c.gy);
-            return `${p.x},${p.y}`;
-        }).join(' ');
+        let maxX = 0, maxY = 0;
+        v.shape.forEach(c => { maxX = Math.max(maxX, c.gx); maxY = Math.max(maxY, c.gy); });
+        maxX = Math.max(maxX, v.A.gx, v.B.gx);
+        maxY = Math.max(maxY, v.A.gy, v.B.gy);
+        const cols = maxX + 1;
+        const rows = maxY + 1;
+        const shapePoints = v.shape.map(c => `${gridToSVG(c.gx, c.gy).x},${gridToSVG(c.gx, c.gy).y}`).join(' ');
         const A = gridToSVG(v.A.gx, v.A.gy);
         const B = gridToSVG(v.B.gx, v.B.gy);
-        const width = PADDING * 2 + v.cols * GRID_SIZE;
-        const height = PADDING * 2 + v.rows * GRID_SIZE;
-
-        // Позиции меток A и B рядом с точками
+        const width = PADDING * 2 + cols * GRID_SIZE;
+        const height = PADDING * 2 + rows * GRID_SIZE;
         const labelA = { x: A.x - 14, y: A.y + 4 };
         const labelB = { x: B.x + 6, y: B.y + 4 };
-
-        return {
-            shapePoints, A, B, labelA, labelB, width, height,
-            gridLines: generateGridLines(v.cols, v.rows)
-        };
+        return { shapePoints, A, B, labelA, labelB, width, height };
     }
 
-    // 11. Трапеция со средней линией
+    // 11. Трапеция со средней линией - 8x6 клеток
     function trapezoidWithMidline(index) {
         const variants = [
-            { A: {gx: 0, gy: 5}, B: {gx: 2, gy: 1}, C: {gx: 6, gy: 1}, D: {gx: 8, gy: 5}, cols: 9, rows: 6 },
-            { A: {gx: 1, gy: 4}, B: {gx: 3, gy: 0}, C: {gx: 5, gy: 0}, D: {gx: 7, gy: 4}, cols: 8, rows: 5 },
-            { A: {gx: 0, gy: 5}, B: {gx: 1, gy: 2}, C: {gx: 5, gy: 2}, D: {gx: 7, gy: 5}, cols: 8, rows: 6 },
-            { A: {gx: 1, gy: 4}, B: {gx: 2, gy: 1}, C: {gx: 6, gy: 1}, D: {gx: 8, gy: 4}, cols: 9, rows: 5 },
-            { A: {gx: 0, gy: 5}, B: {gx: 2, gy: 0}, C: {gx: 4, gy: 0}, D: {gx: 6, gy: 5}, cols: 7, rows: 6 },
-            { A: {gx: 1, gy: 5}, B: {gx: 3, gy: 1}, C: {gx: 7, gy: 1}, D: {gx: 9, gy: 5}, cols: 10, rows: 6 },
-            { A: {gx: 0, gy: 4}, B: {gx: 1, gy: 1}, C: {gx: 5, gy: 1}, D: {gx: 6, gy: 4}, cols: 7, rows: 5 },
-            { A: {gx: 1, gy: 5}, B: {gx: 2, gy: 2}, C: {gx: 6, gy: 2}, D: {gx: 8, gy: 5}, cols: 9, rows: 6 },
-            { A: {gx: 0, gy: 4}, B: {gx: 2, gy: 0}, C: {gx: 6, gy: 0}, D: {gx: 8, gy: 4}, cols: 9, rows: 5 },
+            { A: {gx: 0, gy: 4}, B: {gx: 2, gy: 0}, C: {gx: 5, gy: 0}, D: {gx: 7, gy: 4} },
+            { A: {gx: 0, gy: 4}, B: {gx: 2, gy: 0}, C: {gx: 4, gy: 0}, D: {gx: 6, gy: 4} },
+            { A: {gx: 0, gy: 4}, B: {gx: 1, gy: 1}, C: {gx: 4, gy: 1}, D: {gx: 6, gy: 4} },
+            { A: {gx: 0, gy: 4}, B: {gx: 1, gy: 0}, C: {gx: 5, gy: 0}, D: {gx: 7, gy: 4} },
+            { A: {gx: 0, gy: 4}, B: {gx: 2, gy: 0}, C: {gx: 4, gy: 0}, D: {gx: 5, gy: 4} },
+            { A: {gx: 0, gy: 4}, B: {gx: 2, gy: 0}, C: {gx: 6, gy: 0}, D: {gx: 8, gy: 4} },
+            { A: {gx: 0, gy: 4}, B: {gx: 1, gy: 0}, C: {gx: 4, gy: 0}, D: {gx: 5, gy: 4} },
+            { A: {gx: 0, gy: 4}, B: {gx: 1, gy: 1}, C: {gx: 5, gy: 1}, D: {gx: 7, gy: 4} },
+            { A: {gx: 0, gy: 4}, B: {gx: 1, gy: 0}, C: {gx: 5, gy: 0}, D: {gx: 7, gy: 4} },
         ];
         const v = variants[index % variants.length];
+        const cols = Math.max(v.A.gx, v.B.gx, v.C.gx, v.D.gx) + 1;
+        const rows = Math.max(v.A.gy, v.B.gy, v.C.gy, v.D.gy) + 1;
         const A = gridToSVG(v.A.gx, v.A.gy);
         const B = gridToSVG(v.B.gx, v.B.gy);
         const C = gridToSVG(v.C.gx, v.C.gy);
         const D = gridToSVG(v.D.gx, v.D.gy);
-        // Середины боковых сторон
         const M1 = { x: (A.x + B.x) / 2, y: (A.y + B.y) / 2 };
         const M2 = { x: (C.x + D.x) / 2, y: (C.y + D.y) / 2 };
-        const width = PADDING * 2 + v.cols * GRID_SIZE;
-        const height = PADDING * 2 + v.rows * GRID_SIZE;
-
-        return {
-            A, B, C, D, M1, M2, width, height,
-            gridLines: generateGridLines(v.cols, v.rows)
-        };
+        const width = PADDING * 2 + cols * GRID_SIZE;
+        const height = PADDING * 2 + rows * GRID_SIZE;
+        return { A, B, C, D, M1, M2, width, height };
     }
 
-    // 12. Два круга на сетке - центры на пересечениях сетки, радиусы целые
+    // 12. Два круга - 10x6 клеток
     function twoCirclesOnGrid(index) {
         const variants = [
-            { c1: {gx: 2, gy: 3}, r1: 2, c2: {gx: 7, gy: 3}, r2: 1, cols: 9, rows: 6 },
-            { c1: {gx: 2, gy: 3}, r1: 2, c2: {gx: 7, gy: 3}, r2: 3, cols: 11, rows: 7 },
-            { c1: {gx: 3, gy: 3}, r1: 3, c2: {gx: 3, gy: 3}, r2: 1, cols: 7, rows: 7 },
-            { c1: {gx: 2, gy: 2}, r1: 1, c2: {gx: 6, gy: 2}, r2: 2, cols: 9, rows: 5 },
-            { c1: {gx: 3, gy: 3}, r1: 2, c2: {gx: 8, gy: 3}, r2: 3, cols: 12, rows: 7 },
-            { c1: {gx: 3, gy: 3}, r1: 3, c2: {gx: 8, gy: 3}, r2: 2, cols: 11, rows: 7 },
-            { c1: {gx: 2, gy: 2}, r1: 2, c2: {gx: 6, gy: 2}, r2: 1, cols: 8, rows: 5 },
-            { c1: {gx: 3, gy: 3}, r1: 1, c2: {gx: 3, gy: 3}, r2: 2, cols: 6, rows: 6 },
-            { c1: {gx: 2, gy: 3}, r1: 2, c2: {gx: 8, gy: 3}, r2: 3, cols: 12, rows: 7 },
+            { c1: {gx: 2, gy: 3}, r1: 2, c2: {gx: 6, gy: 3}, r2: 1 },
+            { c1: {gx: 2, gy: 3}, r1: 2, c2: {gx: 7, gy: 3}, r2: 2 },
+            { c1: {gx: 3, gy: 3}, r1: 2, c2: {gx: 3, gy: 3}, r2: 1 },
+            { c1: {gx: 2, gy: 2}, r1: 1, c2: {gx: 5, gy: 2}, r2: 2 },
+            { c1: {gx: 2, gy: 3}, r1: 2, c2: {gx: 7, gy: 3}, r2: 2 },
+            { c1: {gx: 3, gy: 3}, r1: 2, c2: {gx: 7, gy: 3}, r2: 2 },
+            { c1: {gx: 2, gy: 2}, r1: 2, c2: {gx: 6, gy: 2}, r2: 1 },
+            { c1: {gx: 2, gy: 2}, r1: 1, c2: {gx: 2, gy: 2}, r2: 2 },
+            { c1: {gx: 2, gy: 3}, r1: 2, c2: {gx: 7, gy: 3}, r2: 2 },
         ];
         const v = variants[index % variants.length];
+        const cols = Math.max(v.c1.gx + v.r1, v.c2.gx + v.r2) + 1;
+        const rows = Math.max(v.c1.gy + v.r1, v.c2.gy + v.r2) + 1;
         const c1 = gridToSVG(v.c1.gx, v.c1.gy);
         const c2 = gridToSVG(v.c2.gx, v.c2.gy);
         const r1 = v.r1 * GRID_SIZE;
         const r2 = v.r2 * GRID_SIZE;
-        const width = PADDING * 2 + v.cols * GRID_SIZE;
-        const height = PADDING * 2 + v.rows * GRID_SIZE;
-
-        return {
-            c1, c2, r1, r2, width, height,
-            gridLines: generateGridLines(v.cols, v.rows)
-        };
+        const width = PADDING * 2 + cols * GRID_SIZE;
+        const height = PADDING * 2 + rows * GRID_SIZE;
+        return { c1, c2, r1, r2, width, height };
     }
 </script>
 
