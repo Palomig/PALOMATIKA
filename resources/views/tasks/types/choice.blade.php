@@ -91,9 +91,10 @@
                 {{-- SVG для отдельной задачи --}}
                 @php
                     // svg_type может быть на уровне task или zadanie
-                    $taskSvgType = $task['svg_type'] ?? $svgType ?? 'single_point';
+                    // НЕ ставим дефолт, чтобы не показывать number-line когда он не нужен
+                    $taskSvgType = $task['svg_type'] ?? $svgType ?? null;
                 @endphp
-                @if(!empty($taskPoints) || !empty($taskSvgType) || isset($task['point_value']))
+                @if(!empty($taskPoints) || ($taskSvgType !== null) || isset($task['point_value']))
                     @include('tasks.partials.number-line', [
                         'points' => $taskPoints,
                         'svgType' => $taskSvgType,
