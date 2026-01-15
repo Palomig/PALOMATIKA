@@ -172,44 +172,100 @@
                                 </script>
 
                             @elseif($zadanieType === 'matching_signs')
-                                {{-- MATCHING SIGNS: Статический график + выбор знаков коэффициентов --}}
+                                {{-- MATCHING SIGNS: 3 SVG графика + выбор знаков коэффициентов --}}
                                 @php
                                     $isQuadratic = !empty($options) && strpos($options[0], 'a') !== false;
                                     $funcType = $isQuadratic ? 'y = ax² + c' : 'y = kx + b';
+                                    $graphLabels = ['А', 'Б', 'В'];
+
+                                    // Парсим options чтобы получить параметры графиков
+                                    $graphParams = [];
+                                    foreach ($options as $opt) {
+                                        if ($isQuadratic) {
+                                            // Парсим "a > 0, c < 0" и т.д.
+                                            $a = strpos($opt, 'a > 0') !== false ? 0.8 : -0.8;
+                                            $c = strpos($opt, 'c > 0') !== false ? 1.5 : -1.5;
+                                            $graphParams[] = ['a' => $a, 'c' => $c];
+                                        } else {
+                                            // Парсим "k > 0, b < 0" и т.д.
+                                            $k = strpos($opt, 'k > 0') !== false ? 1.5 : -1.5;
+                                            $b = strpos($opt, 'b > 0') !== false ? 1.5 : -1.5;
+                                            $graphParams[] = ['k' => $k, 'b' => $b];
+                                        }
+                                    }
                                 @endphp
 
-                                <div class="grid md:grid-cols-2 gap-6 mb-6">
-                                    {{-- Статический график --}}
-                                    <div class="bg-slate-900/50 rounded-lg p-4">
-                                        <div class="text-center text-white font-bold mb-3">{{ $funcType }}</div>
-                                        @if(!empty($task['image']))
-                                            <img src="{{ asset('images/tasks/11/' . $task['image']) }}"
-                                                 alt="График функции"
-                                                 class="w-full max-w-xs mx-auto rounded bg-white p-2">
-                                        @else
-                                            {{-- Fallback: пустая координатная плоскость --}}
-                                            <svg viewBox="0 0 200 200" class="w-full max-w-xs mx-auto">
-                                                <rect width="200" height="200" fill="#0f172a"/>
-                                                <line x1="10" y1="100" x2="190" y2="100" stroke="#64748b" stroke-width="1.5"/>
-                                                <line x1="100" y1="10" x2="100" y2="190" stroke="#64748b" stroke-width="1.5"/>
-                                                <polygon points="187,97 187,103 193,100" fill="#64748b"/>
-                                                <polygon points="97,13 103,13 100,7" fill="#64748b"/>
-                                                <text x="193" y="104" fill="#94a3b8" font-size="12" font-style="italic">x</text>
-                                                <text x="104" y="15" fill="#94a3b8" font-size="12" font-style="italic">y</text>
-                                                <text x="92" y="112" fill="#94a3b8" font-size="10">0</text>
-                                            </svg>
-                                        @endif
-                                    </div>
+                                {{-- 3 SVG графика в ряд --}}
+                                <div class="grid grid-cols-3 gap-3 mb-4">
+                                    @foreach($graphParams as $gi => $gp)
+                                        <div class="bg-slate-900/50 rounded-lg p-2">
+                                            <div class="text-center text-cyan-400 font-bold text-lg mb-1">{{ $graphLabels[$gi] }})</div>
+                                            <svg viewBox="0 0 120 120" class="w-full">
+                                                {{-- Фон --}}
+                                                <rect width="120" height="120" fill="#0f172a"/>
+                                                {{-- Сетка --}}
+                                                @for($gi2 = 1; $gi2 < 6; $gi2++)
+                                                    <line x1="{{ $gi2 * 20 }}" y1="10" x2="{{ $gi2 * 20 }}" y2="110" stroke="#334155" stroke-width="0.5"/>
+                                                    <line x1="10" y1="{{ $gi2 * 20 }}" x2="110" y2="{{ $gi2 * 20 }}" stroke="#334155" stroke-width="0.5"/>
+                                                @endfor
+                                                {{-- Оси --}}
+                                                <line x1="10" y1="60" x2="110" y2="60" stroke="#64748b" stroke-width="1.5"/>
+                                                <line x1="60" y1="10" x2="60" y2="110" stroke="#64748b" stroke-width="1.5"/>
+                                                {{-- Стрелки --}}
+                                                <polygon points="107,57 107,63 113,60" fill="#64748b"/>
+                                                <polygon points="57,13 63,13 60,7" fill="#64748b"/>
+                                                {{-- Метки осей --}}
+                                                <text x="113" y="64" fill="#94a3b8" font-size="10" font-style="italic">x</text>
+                                                <text x="64" y="14" fill="#94a3b8" font-size="10" font-style="italic">y</text>
+                                                <text x="52" y="72" fill="#94a3b8" font-size="8">0</text>
 
-                                    {{-- Варианты ответа --}}
-                                    <div class="flex flex-col justify-center space-y-3">
-                                        @foreach($options as $i => $opt)
-                                            <div class="bg-slate-700/50 hover:bg-slate-700 px-4 py-3 rounded-lg cursor-pointer transition flex items-center gap-3">
-                                                <span class="text-amber-400 font-bold">{{ $i + 1 }})</span>
-                                                <span class="text-slate-200">{{ $opt }}</span>
-                                            </div>
-                                        @endforeach
-                                    </div>
+                                                @if($isQuadratic)
+                                                    {{-- Парабола y = ax² + c --}}
+                                                    @php
+                                                        $a = $gp['a'];
+                                                        $c = $gp['c'];
+                                                        $pts = [];
+                                                        for ($x = -3; $x <= 3; $x += 0.2) {
+                                                            $y = $a * $x * $x + $c;
+                                                            $px = 60 + $x * 15;
+                                                            $py = 60 - $y * 15;
+                                                            if ($py >= 5 && $py <= 115) {
+                                                                $pts[] = round($px, 1) . ',' . round($py, 1);
+                                                            }
+                                                        }
+                                                        $pathD = count($pts) > 1 ? 'M ' . implode(' L ', $pts) : '';
+                                                    @endphp
+                                                    <path d="{{ $pathD }}" stroke="#10b981" stroke-width="2" fill="none"/>
+                                                @else
+                                                    {{-- Линия y = kx + b --}}
+                                                    @php
+                                                        $k = $gp['k'];
+                                                        $b = $gp['b'];
+                                                        // Точки линии от x=-3 до x=3
+                                                        $x1 = -3; $y1 = $k * $x1 + $b;
+                                                        $x2 = 3; $y2 = $k * $x2 + $b;
+                                                        // Конвертируем в пиксели (центр 60,60, масштаб 15)
+                                                        $px1 = 60 + $x1 * 15;
+                                                        $py1 = 60 - $y1 * 15;
+                                                        $px2 = 60 + $x2 * 15;
+                                                        $py2 = 60 - $y2 * 15;
+                                                    @endphp
+                                                    <line x1="{{ $px1 }}" y1="{{ $py1 }}" x2="{{ $px2 }}" y2="{{ $py2 }}"
+                                                          stroke="#10b981" stroke-width="2" stroke-linecap="round"/>
+                                                @endif
+                                            </svg>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                {{-- Варианты ответа --}}
+                                <div class="flex flex-wrap gap-3 justify-center">
+                                    @foreach($options as $i => $opt)
+                                        <div class="bg-slate-700/50 hover:bg-slate-700 px-4 py-2 rounded-lg cursor-pointer transition flex items-center gap-2">
+                                            <span class="text-amber-400 font-bold">{{ $i + 1 }})</span>
+                                            <span class="text-slate-200">{{ $opt }}</span>
+                                        </div>
+                                    @endforeach
                                 </div>
 
                             @elseif($zadanieType === 'statements')
