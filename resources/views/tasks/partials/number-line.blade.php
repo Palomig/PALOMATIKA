@@ -26,12 +26,12 @@
         <svg viewBox="0 0 400 50" class="w-full max-w-md h-16 number-line">
             <defs>
                 <marker id="arrow_{{ $uniqueId }}" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
-                    <path d="M0,0 L0,6 L9,3 z" fill="#8B0000"/>
+                    <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
                 </marker>
             </defs>
 
             {{-- Линия --}}
-            <line x1="20" y1="20" x2="380" y2="20" stroke="#8B0000" stroke-width="2.5" marker-end="url(#arrow_{{ $uniqueId }})"/>
+            <line x1="20" y1="20" x2="380" y2="20" stroke="#64748b" stroke-width="2.5" marker-end="url(#arrow_{{ $uniqueId }})"/>
 
             {{-- Три точки равномерно распределены --}}
             @php
@@ -41,8 +41,8 @@
             @endphp
 
             @foreach($positions as $i => $px)
-                <circle cx="{{ $px }}" cy="20" r="4" fill="#22c55e"/>
-                <text x="{{ $px }}" y="42" text-anchor="middle" fill="#1e40af" font-size="15" font-weight="bold" font-style="italic">{{ $labels[$i] ?? '' }}</text>
+                <circle cx="{{ $px }}" cy="20" r="4" fill="#10b981"/>
+                <text x="{{ $px }}" y="42" text-anchor="middle" fill="#94a3b8" font-size="15" font-weight="bold" font-style="italic">{{ $labels[$i] ?? '' }}</text>
             @endforeach
         </svg>
     </div>
@@ -71,25 +71,25 @@
         <svg viewBox="0 0 400 55" class="w-full max-w-md h-16 number-line">
             <defs>
                 <marker id="arrow_{{ $uniqueId }}" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
-                    <path d="M0,0 L0,6 L9,3 z" fill="#8B0000"/>
+                    <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
                 </marker>
             </defs>
 
             {{-- Линия --}}
-            <line x1="{{ $lineStart }}" y1="22" x2="{{ $lineEnd }}" y2="22" stroke="#8B0000" stroke-width="2.5" marker-end="url(#arrow_{{ $uniqueId }})"/>
+            <line x1="{{ $lineStart }}" y1="22" x2="{{ $lineEnd }}" y2="22" stroke="#64748b" stroke-width="2.5" marker-end="url(#arrow_{{ $uniqueId }})"/>
 
             {{-- Деления и подписи чисел --}}
             @for($i = $minV; $i <= $maxV; $i++)
                 @php $tx = $getX($i); @endphp
-                <line x1="{{ $tx }}" y1="15" x2="{{ $tx }}" y2="29" stroke="#8B0000" stroke-width="2"/>
-                <text x="{{ $tx }}" y="48" text-anchor="middle" fill="#8B0000" font-size="14" font-weight="bold">{{ $i }}</text>
+                <line x1="{{ $tx }}" y1="15" x2="{{ $tx }}" y2="29" stroke="#64748b" stroke-width="2"/>
+                <text x="{{ $tx }}" y="48" text-anchor="middle" fill="#64748b" font-size="14" font-weight="bold">{{ $i }}</text>
             @endfor
 
             {{-- Четыре точки A, B, C, D --}}
             @foreach($fourPts as $i => $ptVal)
                 @php $px = $getX($ptVal); @endphp
-                <circle cx="{{ $px }}" cy="22" r="4" fill="#22c55e"/>
-                <text x="{{ $px }}" y="10" text-anchor="middle" fill="#1e40af" font-size="14" font-weight="bold" font-style="italic">{{ $labels[$i] ?? '' }}</text>
+                <circle cx="{{ $px }}" cy="22" r="4" fill="#10b981"/>
+                <text x="{{ $px }}" y="10" text-anchor="middle" fill="#94a3b8" font-size="14" font-weight="bold" font-style="italic">{{ $labels[$i] ?? '' }}</text>
             @endforeach
         </svg>
     </div>
@@ -121,23 +121,23 @@
         <svg viewBox="0 0 370 55" class="w-full max-w-md h-16 number-line">
             <defs>
                 <marker id="arrow_{{ $uniqueId }}" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
-                    <path d="M0,0 L0,6 L9,3 z" fill="#8B0000"/>
+                    <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
                 </marker>
             </defs>
 
             {{-- Линия --}}
-            <line x1="{{ $lineStart }}" y1="22" x2="{{ $lineEnd }}" y2="22" stroke="#8B0000" stroke-width="2.5" marker-end="url(#arrow_{{ $uniqueId }})"/>
+            <line x1="{{ $lineStart }}" y1="22" x2="{{ $lineEnd }}" y2="22" stroke="#64748b" stroke-width="2.5" marker-end="url(#arrow_{{ $uniqueId }})"/>
 
             {{-- Деление только для 0 --}}
             @php $zeroX = $getX(0); @endphp
-            <line x1="{{ $zeroX }}" y1="15" x2="{{ $zeroX }}" y2="29" stroke="#8B0000" stroke-width="2"/>
-            <text x="{{ $zeroX }}" y="48" text-anchor="middle" fill="#1e40af" font-size="14" font-weight="bold">0</text>
+            <line x1="{{ $zeroX }}" y1="15" x2="{{ $zeroX }}" y2="29" stroke="#64748b" stroke-width="2"/>
+            <text x="{{ $zeroX }}" y="48" text-anchor="middle" fill="#94a3b8" font-size="14" font-weight="bold">0</text>
 
             {{-- Две точки --}}
             @foreach($pts as $pt)
                 @php $px = $getX($pt['value']); @endphp
-                <circle cx="{{ $px }}" cy="22" r="4" fill="#22c55e"/>
-                <text x="{{ $px }}" y="10" text-anchor="middle" fill="#1e40af" font-size="14" font-weight="bold" font-style="italic">{{ $pt['label'] }}</text>
+                <circle cx="{{ $px }}" cy="22" r="4" fill="#10b981"/>
+                <text x="{{ $px }}" y="10" text-anchor="middle" fill="#94a3b8" font-size="14" font-weight="bold" font-style="italic">{{ $pt['label'] }}</text>
             @endforeach
         </svg>
     </div>
@@ -163,12 +163,12 @@
         <svg viewBox="0 0 400 55" class="w-full max-w-md h-16 number-line">
             <defs>
                 <marker id="arrow_{{ $uniqueId }}" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
-                    <path d="M0,0 L0,6 L9,3 z" fill="#8B0000"/>
+                    <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
                 </marker>
             </defs>
 
             {{-- Линия --}}
-            <line x1="{{ $lineStart }}" y1="20" x2="{{ $lineEnd }}" y2="20" stroke="#8B0000" stroke-width="2.5" marker-end="url(#arrow_{{ $uniqueId }})"/>
+            <line x1="{{ $lineStart }}" y1="20" x2="{{ $lineEnd }}" y2="20" stroke="#64748b" stroke-width="2.5" marker-end="url(#arrow_{{ $uniqueId }})"/>
 
             {{-- Деления 0, 0.1, 0.2, ..., 1 --}}
             @for($i = 0; $i <= $divisions; $i++)
@@ -178,14 +178,14 @@
                     // Формат: 0, 0,1, 0,2, ..., 1 (запятая как десятичный разделитель)
                     $label = $i == 0 ? '0' : ($i == $divisions ? '1' : '0,' . $i);
                 @endphp
-                <line x1="{{ $tx }}" y1="13" x2="{{ $tx }}" y2="27" stroke="#8B0000" stroke-width="1.5"/>
-                <text x="{{ $tx }}" y="45" text-anchor="middle" fill="#1e40af" font-size="11">{{ $label }}</text>
+                <line x1="{{ $tx }}" y1="13" x2="{{ $tx }}" y2="27" stroke="#64748b" stroke-width="1.5"/>
+                <text x="{{ $tx }}" y="45" text-anchor="middle" fill="#94a3b8" font-size="11">{{ $label }}</text>
             @endfor
 
             {{-- Точка A --}}
             @php $px = $getX($pointVal); @endphp
-            <circle cx="{{ $px }}" cy="20" r="4" fill="#22c55e"/>
-            <text x="{{ $px }}" y="8" text-anchor="middle" fill="#1e40af" font-size="14" font-weight="bold" font-style="italic">{{ $pointLabel }}</text>
+            <circle cx="{{ $px }}" cy="20" r="4" fill="#10b981"/>
+            <text x="{{ $px }}" y="8" text-anchor="middle" fill="#94a3b8" font-size="14" font-weight="bold" font-style="italic">{{ $pointLabel }}</text>
         </svg>
     </div>
 
@@ -215,27 +215,27 @@
         <svg viewBox="0 0 320 55" class="w-full max-w-md h-16 number-line">
             <defs>
                 <marker id="arrow_{{ $uniqueId }}" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
-                    <path d="M0,0 L0,6 L9,3 z" fill="#8B0000"/>
+                    <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
                 </marker>
             </defs>
 
             {{-- Линия --}}
-            <line x1="{{ $lineStart }}" y1="22" x2="{{ $lineEnd }}" y2="22" stroke="#8B0000" stroke-width="2.5" marker-end="url(#arrow_{{ $uniqueId }})"/>
+            <line x1="{{ $lineStart }}" y1="22" x2="{{ $lineEnd }}" y2="22" stroke="#64748b" stroke-width="2.5" marker-end="url(#arrow_{{ $uniqueId }})"/>
 
             {{-- Деления на каждом целом числе --}}
             @for($i = $minTick; $i <= $maxTick; $i++)
                 @php $tx = $getX($i); @endphp
-                <line x1="{{ $tx }}" y1="15" x2="{{ $tx }}" y2="29" stroke="#8B0000" stroke-width="1.5"/>
+                <line x1="{{ $tx }}" y1="15" x2="{{ $tx }}" y2="29" stroke="#64748b" stroke-width="1.5"/>
             @endfor
 
             {{-- Подписи только 0 и 1 --}}
-            <text x="{{ $getX(0) }}" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">0</text>
-            <text x="{{ $getX(1) }}" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">1</text>
+            <text x="{{ $getX(0) }}" y="48" text-anchor="middle" fill="#94a3b8" font-size="13" font-weight="bold">0</text>
+            <text x="{{ $getX(1) }}" y="48" text-anchor="middle" fill="#94a3b8" font-size="13" font-weight="bold">1</text>
 
             {{-- Точка --}}
             @php $px = $getX($pointVal); @endphp
-            <circle cx="{{ $px }}" cy="22" r="4" fill="#22c55e"/>
-            <text x="{{ $px }}" y="10" text-anchor="middle" fill="#1e40af" font-size="14" font-weight="bold" font-style="italic">{{ $pointLabel }}</text>
+            <circle cx="{{ $px }}" cy="22" r="4" fill="#10b981"/>
+            <text x="{{ $px }}" y="10" text-anchor="middle" fill="#94a3b8" font-size="14" font-weight="bold" font-style="italic">{{ $pointLabel }}</text>
         </svg>
     </div>
 @endif
