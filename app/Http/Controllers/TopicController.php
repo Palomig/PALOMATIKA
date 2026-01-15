@@ -51,17 +51,18 @@ class TopicController extends Controller
             return $this->fallbackToLegacy($topicId);
         }
 
-        // Проверяем наличие кастомного шаблона для темы (с custom SVG)
-        $customView = "topics.topic{$topicId}";
-        if (view()->exists($customView)) {
-            return view($customView);
-        }
-
-        // Используем generic шаблон с JSON данными
+        // Получаем данные из JSON
         $blocks = $this->taskService->getBlocks($topicId);
         $topicMeta = $this->taskService->getTopicMeta($topicId);
         $stats = $this->taskService->getTopicStats($topicId);
 
+        // Проверяем наличие кастомного шаблона для темы (с custom SVG)
+        $customView = "topics.topic{$topicId}";
+        if (view()->exists($customView)) {
+            return view($customView, compact('blocks', 'topicId', 'topicMeta', 'stats'));
+        }
+
+        // Используем generic шаблон с JSON данными
         return view('topics.show', compact('blocks', 'topicId', 'topicMeta', 'stats'));
     }
 
