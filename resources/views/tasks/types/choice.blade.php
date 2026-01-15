@@ -9,6 +9,36 @@
     $points = $zadanie['points'] ?? [];
     $options = $zadanie['options'] ?? [];
     $tasks = $zadanie['tasks'] ?? [];
+
+    // Функция для определения, является ли опция интервалом
+    if (!function_exists('isIntervalOption')) {
+        function isIntervalOption($option) {
+            // Паттерны интервалов: (-∞; a], [a; b], (a; +∞), etc.
+            $option = trim($option);
+            // Проверяем наличие точки с запятой и скобок
+            if (preg_match('/^[\(\[].*?;.*?[\)\]]$/', $option)) {
+                return true;
+            }
+            // Объединение интервалов: (-∞; a] ∪ [b; +∞)
+            if (str_contains($option, '∪')) {
+                return true;
+            }
+            return false;
+        }
+    }
+
+    // Проверяем, все ли опции являются интервалами (для темы 13)
+    if (!function_exists('allOptionsAreIntervals')) {
+        function allOptionsAreIntervals($options) {
+            if (empty($options)) return false;
+            foreach ($options as $opt) {
+                if (!isIntervalOption($opt) && $opt !== 'нет решений' && $opt !== '(-∞; +∞)') {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
 @endphp
 
 {{-- Если есть общие points на уровне задания --}}
@@ -73,17 +103,55 @@
 
                 {{-- Варианты ответа --}}
                 @if(!empty($taskOptions))
-                    <div class="flex flex-wrap gap-3 mt-3">
-                        @foreach($taskOptions as $i => $option)
-                            <span class="bg-slate-700/70 text-slate-300 px-4 py-2 rounded-lg hover:bg-slate-600 cursor-pointer transition">
-                                @if(str_contains($option, '\\'))
-                                    {{ $i + 1 }}) ${{ $option }}$
-                                @else
-                                    {{ $i + 1 }}) {{ $option }}
-                                @endif
-                            </span>
-                        @endforeach
-                    </div>
+                    @php
+                        $useIntervalSvg = allOptionsAreIntervals($taskOptions);
+                    @endphp
+
+                    @if($useIntervalSvg)
+                        {{-- SVG интервалы для темы 13 --}}
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                            @foreach($taskOptions as $i => $option)
+                                <div class="bg-slate-700/50 rounded-lg p-3 hover:bg-slate-700 cursor-pointer transition border border-slate-600">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="text-cyan-400 font-bold">{{ $i + 1 }})</span>
+                                        @if($option === 'нет решений')
+                                            <span class="text-slate-400 italic">нет решений</span>
+                                        @elseif($option === '(-∞; +∞)')
+                                            <span class="text-slate-300">все числа</span>
+                                        @endif
+                                    </div>
+                                    @if($option !== 'нет решений' && $option !== '(-∞; +∞)')
+                                        @if(str_contains($option, '∪'))
+                                            {{-- Объединение интервалов --}}
+                                            @php
+                                                $parts = explode('∪', $option);
+                                            @endphp
+                                            <div class="space-y-2">
+                                                @foreach($parts as $part)
+                                                    @include('tasks.partials.interval-line', ['interval' => trim($part), 'index' => $i + 1])
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            @include('tasks.partials.interval-line', ['interval' => $option, 'index' => $i + 1])
+                                        @endif
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        {{-- Обычные текстовые варианты --}}
+                        <div class="flex flex-wrap gap-3 mt-3">
+                            @foreach($taskOptions as $i => $option)
+                                <span class="bg-slate-700/70 text-slate-300 px-4 py-2 rounded-lg hover:bg-slate-600 cursor-pointer transition">
+                                    @if(str_contains($option, '\\'))
+                                        {{ $i + 1 }}) ${{ $option }}$
+                                    @else
+                                        {{ $i + 1 }}) {{ $option }}
+                                    @endif
+                                </span>
+                            @endforeach
+                        </div>
+                    @endif
                 @endif
             </div>
         @endforeach

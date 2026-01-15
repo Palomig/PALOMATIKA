@@ -76,6 +76,10 @@
             @include('tasks.types.statements', compact('zadanie', 'block', 'topicId'))
             @break
 
+        @case('graphic')
+            @include('tasks.types.graphic', compact('zadanie', 'block', 'topicId'))
+            @break
+
         @default
             @include('tasks.types.expression', compact('zadanie', 'block', 'topicId'))
     @endswitch
