@@ -134,11 +134,11 @@
                                     @case(1)
                                         {{-- Прямоугольный треугольник - найти больший катет --}}
                                         <div x-data="rightTriangleOnGrid({{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-auto rounded">
                                                 {{-- Сетка через pattern --}}
                                                 <defs>
-                                                    <pattern id="grid1-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
-                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    <pattern id="grid1-{{ $index }}" width="28" height="28" patternUnits="userSpaceOnUse">
+                                                        <path d="M 28 0 L 0 0 0 28" fill="none" stroke="#475569" stroke-width="1"/>
                                                     </pattern>
                                                 </defs>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid1-{{ $index }})"/>
@@ -154,10 +154,10 @@
                                     @case(2)
                                         {{-- Ромб - найти большую диагональ --}}
                                         <div x-data="rhombusOnGrid({{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-auto rounded">
                                                 <defs>
-                                                    <pattern id="grid2-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
-                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    <pattern id="grid2-{{ $index }}" width="28" height="28" patternUnits="userSpaceOnUse">
+                                                        <path d="M 28 0 L 0 0 0 28" fill="none" stroke="#475569" stroke-width="1"/>
                                                     </pattern>
                                                 </defs>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid2-{{ $index }})"/>
@@ -172,10 +172,10 @@
                                     @case(3)
                                         {{-- Треугольник ABC с точкой M (теорема Фалеса) --}}
                                         <div x-data="triangleWithPointM({{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-auto rounded">
                                                 <defs>
-                                                    <pattern id="grid3-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
-                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    <pattern id="grid3-{{ $index }}" width="28" height="28" patternUnits="userSpaceOnUse">
+                                                        <path d="M 28 0 L 0 0 0 28" fill="none" stroke="#475569" stroke-width="1"/>
                                                     </pattern>
                                                 </defs>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid3-{{ $index }})"/>
@@ -196,10 +196,10 @@
                                     @case(7)
                                         {{-- Многоугольник для нахождения площади --}}
                                         <div x-data="polygonOnGrid({{ $zadanie['number'] }}, {{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-auto rounded">
                                                 <defs>
-                                                    <pattern id="grid4-{{ $zadanie['number'] }}-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
-                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    <pattern id="grid4-{{ $zadanie['number'] }}-{{ $index }}" width="28" height="28" patternUnits="userSpaceOnUse">
+                                                        <path d="M 28 0 L 0 0 0 28" fill="none" stroke="#475569" stroke-width="1"/>
                                                     </pattern>
                                                 </defs>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid4-{{ $zadanie['number'] }}-{{ $index }})"/>
@@ -212,10 +212,10 @@
                                     @case(8)
                                         {{-- Две точки на сетке - найти расстояние --}}
                                         <div x-data="twoPointsOnGrid({{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-auto rounded">
                                                 <defs>
-                                                    <pattern id="grid8-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
-                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    <pattern id="grid8-{{ $index }}" width="28" height="28" patternUnits="userSpaceOnUse">
+                                                        <path d="M 28 0 L 0 0 0 28" fill="none" stroke="#475569" stroke-width="1"/>
                                                     </pattern>
                                                 </defs>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid8-{{ $index }})"/>
@@ -229,10 +229,10 @@
                                     @case(9)
                                         {{-- Треугольник ABC - найти среднюю линию --}}
                                         <div x-data="triangleWithMidline({{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-auto rounded">
                                                 <defs>
-                                                    <pattern id="grid9-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
-                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    <pattern id="grid9-{{ $index }}" width="28" height="28" patternUnits="userSpaceOnUse">
+                                                        <path d="M 28 0 L 0 0 0 28" fill="none" stroke="#475569" stroke-width="1"/>
                                                     </pattern>
                                                 </defs>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid9-{{ $index }})"/>
@@ -249,10 +249,10 @@
                                     @case(10)
                                         {{-- Фигура с отрезком AB --}}
                                         <div x-data="figureWithSegmentAB({{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-auto rounded">
                                                 <defs>
-                                                    <pattern id="grid10-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
-                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    <pattern id="grid10-{{ $index }}" width="28" height="28" patternUnits="userSpaceOnUse">
+                                                        <path d="M 28 0 L 0 0 0 28" fill="none" stroke="#475569" stroke-width="1"/>
                                                     </pattern>
                                                 </defs>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid10-{{ $index }})"/>
@@ -268,10 +268,10 @@
                                     @case(11)
                                         {{-- Трапеция - найти среднюю линию --}}
                                         <div x-data="trapezoidWithMidline({{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-auto rounded">
                                                 <defs>
-                                                    <pattern id="grid11-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
-                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    <pattern id="grid11-{{ $index }}" width="28" height="28" patternUnits="userSpaceOnUse">
+                                                        <path d="M 28 0 L 0 0 0 28" fill="none" stroke="#475569" stroke-width="1"/>
                                                     </pattern>
                                                 </defs>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid11-{{ $index }})"/>
@@ -285,10 +285,10 @@
                                     @case(12)
                                         {{-- Два круга - сравнить площади --}}
                                         <div x-data="twoCirclesOnGrid({{ $index }})">
-                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
+                                            <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-auto rounded">
                                                 <defs>
-                                                    <pattern id="grid12-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
-                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                    <pattern id="grid12-{{ $index }}" width="28" height="28" patternUnits="userSpaceOnUse">
+                                                        <path d="M 28 0 L 0 0 0 28" fill="none" stroke="#475569" stroke-width="1"/>
                                                     </pattern>
                                                 </defs>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid12-{{ $index }})"/>
@@ -335,8 +335,8 @@
 </div>
 
 <script>
-    const GRID_SIZE = 18;
-    const PADDING = 5;
+    const GRID_SIZE = 28;
+    const PADDING = 8;
 
     // Генерация линий сетки
     function generateGridLines(cols, rows) {
