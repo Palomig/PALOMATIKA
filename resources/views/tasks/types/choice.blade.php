@@ -76,7 +76,11 @@
                     <div class="flex flex-wrap gap-3 mt-3">
                         @foreach($taskOptions as $i => $option)
                             <span class="bg-slate-700/70 text-slate-300 px-4 py-2 rounded-lg hover:bg-slate-600 cursor-pointer transition">
-                                {{ $i + 1 }}) {{ $option }}
+                                @if(str_contains($option, '\\'))
+                                    {{ $i + 1 }}) ${{ $option }}$
+                                @else
+                                    {{ $i + 1 }}) {{ $option }}
+                                @endif
                             </span>
                         @endforeach
                     </div>
