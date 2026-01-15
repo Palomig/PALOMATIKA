@@ -23,7 +23,7 @@
 @if($svgType === 'three_points')
     {{-- ТИП: три точки БЕЗ шкалы (референс: oge07_p2_img*.png) --}}
     <div class="bg-slate-900/50 rounded-lg p-4">
-        <svg viewBox="0 0 400 50" class="w-full h-12 number-line">
+        <svg viewBox="0 0 400 50" class="w-full max-w-md h-16 number-line">
             <defs>
                 <marker id="arrow_{{ $uniqueId }}" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
                     <path d="M0,0 L0,6 L9,3 z" fill="#8B0000"/>
@@ -41,7 +41,7 @@
             @endphp
 
             @foreach($positions as $i => $px)
-                <circle cx="{{ $px }}" cy="20" r="5" fill="#22c55e"/>
+                <circle cx="{{ $px }}" cy="20" r="4" fill="#22c55e"/>
                 <text x="{{ $px }}" y="42" text-anchor="middle" fill="#1e40af" font-size="15" font-weight="bold" font-style="italic">{{ $labels[$i] ?? '' }}</text>
             @endforeach
         </svg>
@@ -68,7 +68,7 @@
     @endphp
 
     <div class="bg-slate-900/50 rounded-lg p-4">
-        <svg viewBox="0 0 400 55" class="w-full h-14 number-line">
+        <svg viewBox="0 0 400 55" class="w-full max-w-md h-16 number-line">
             <defs>
                 <marker id="arrow_{{ $uniqueId }}" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
                     <path d="M0,0 L0,6 L9,3 z" fill="#8B0000"/>
@@ -88,7 +88,7 @@
             {{-- Четыре точки A, B, C, D --}}
             @foreach($fourPts as $i => $ptVal)
                 @php $px = $getX($ptVal); @endphp
-                <circle cx="{{ $px }}" cy="22" r="5" fill="#22c55e"/>
+                <circle cx="{{ $px }}" cy="22" r="4" fill="#22c55e"/>
                 <text x="{{ $px }}" y="10" text-anchor="middle" fill="#1e40af" font-size="14" font-weight="bold" font-style="italic">{{ $labels[$i] ?? '' }}</text>
             @endforeach
         </svg>
@@ -118,7 +118,7 @@
     @endphp
 
     <div class="bg-slate-900/50 rounded-lg p-4">
-        <svg viewBox="0 0 370 55" class="w-full h-14 number-line">
+        <svg viewBox="0 0 370 55" class="w-full max-w-md h-16 number-line">
             <defs>
                 <marker id="arrow_{{ $uniqueId }}" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
                     <path d="M0,0 L0,6 L9,3 z" fill="#8B0000"/>
@@ -136,7 +136,7 @@
             {{-- Две точки --}}
             @foreach($pts as $pt)
                 @php $px = $getX($pt['value']); @endphp
-                <circle cx="{{ $px }}" cy="22" r="5" fill="#22c55e"/>
+                <circle cx="{{ $px }}" cy="22" r="4" fill="#22c55e"/>
                 <text x="{{ $px }}" y="10" text-anchor="middle" fill="#1e40af" font-size="14" font-weight="bold" font-style="italic">{{ $pt['label'] }}</text>
             @endforeach
         </svg>
@@ -160,7 +160,7 @@
     @endphp
 
     <div class="bg-slate-900/50 rounded-lg p-4">
-        <svg viewBox="0 0 400 55" class="w-full h-14 number-line">
+        <svg viewBox="0 0 400 55" class="w-full max-w-md h-16 number-line">
             <defs>
                 <marker id="arrow_{{ $uniqueId }}" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
                     <path d="M0,0 L0,6 L9,3 z" fill="#8B0000"/>
@@ -184,7 +184,7 @@
 
             {{-- Точка A --}}
             @php $px = $getX($pointVal); @endphp
-            <circle cx="{{ $px }}" cy="20" r="5" fill="#22c55e"/>
+            <circle cx="{{ $px }}" cy="20" r="4" fill="#22c55e"/>
             <text x="{{ $px }}" y="8" text-anchor="middle" fill="#1e40af" font-size="14" font-weight="bold" font-style="italic">{{ $pointLabel }}</text>
         </svg>
     </div>
@@ -212,7 +212,7 @@
     @endphp
 
     <div class="bg-slate-900/50 rounded-lg p-4">
-        <svg viewBox="0 0 320 55" class="w-full h-14 number-line">
+        <svg viewBox="0 0 320 55" class="w-full max-w-md h-16 number-line">
             <defs>
                 <marker id="arrow_{{ $uniqueId }}" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
                     <path d="M0,0 L0,6 L9,3 z" fill="#8B0000"/>
@@ -234,7 +234,7 @@
 
             {{-- Точка --}}
             @php $px = $getX($pointVal); @endphp
-            <circle cx="{{ $px }}" cy="22" r="5" fill="#22c55e"/>
+            <circle cx="{{ $px }}" cy="22" r="4" fill="#22c55e"/>
             <text x="{{ $px }}" y="10" text-anchor="middle" fill="#1e40af" font-size="14" font-weight="bold" font-style="italic">{{ $pointLabel }}</text>
         </svg>
     </div>
