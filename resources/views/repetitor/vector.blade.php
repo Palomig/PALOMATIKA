@@ -195,6 +195,18 @@
         .vector-name {
             font-weight: 600;
             width: 20px;
+            font-style: italic;
+            position: relative;
+        }
+
+        .vector-name::after {
+            content: '→';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7em;
+            font-style: normal;
         }
 
         .vector-coords {
@@ -346,6 +358,24 @@
             font-size: 0.9rem;
             color: var(--text-secondary);
         }
+
+        /* Vector notation with arrow on top */
+        .vec {
+            font-style: italic;
+            position: relative;
+            display: inline-block;
+            margin: 0 2px;
+        }
+
+        .vec::after {
+            content: '→';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.6em;
+            font-style: normal;
+        }
     </style>
 </head>
 <body>
@@ -378,15 +408,15 @@
                     <div class="vector-info">
                         <div class="vector-row">
                             <div class="vector-dot a"></div>
-                            <span class="vector-name highlight-a">a⃗</span>
+                            <span class="vector-name highlight-a">a</span>
                             <span class="vector-coords" id="vectorA">(3, 2)</span>
-                            <span class="vector-length" id="lengthA">|a⃗| = 3.61</span>
+                            <span class="vector-length" id="lengthA">|<span class="vec">a</span>| = 3.61</span>
                         </div>
                         <div class="vector-row">
                             <div class="vector-dot b"></div>
-                            <span class="vector-name highlight-b">b⃗</span>
+                            <span class="vector-name highlight-b">b</span>
                             <span class="vector-coords" id="vectorB">(1, 3)</span>
-                            <span class="vector-length" id="lengthB">|b⃗| = 3.16</span>
+                            <span class="vector-length" id="lengthB">|<span class="vec">b</span>| = 3.16</span>
                         </div>
                     </div>
                 </div>
@@ -396,7 +426,7 @@
                     <div class="formula-section">
                         <div class="formula-line">
                             <div class="formula-label">Скалярное произведение:</div>
-                            <div class="formula-value" id="dotProduct">a⃗ · b⃗ = 9</div>
+                            <div class="formula-value" id="dotProduct"><span class="vec">a</span> · <span class="vec">b</span> = 9</div>
                         </div>
                         <div class="formula-line">
                             <div class="formula-label">Косинус угла:</div>
@@ -428,24 +458,24 @@
             </p>
 
             <div class="theory-formula">
-                cos(θ) = (a⃗ · b⃗) / (|a⃗| · |b⃗|) = (a₁·b₁ + a₂·b₂) / (√(a₁² + a₂²) · √(b₁² + b₂²))
+                cos(θ) = (<span class="vec">a</span> · <span class="vec">b</span>) / (|<span class="vec">a</span>| · |<span class="vec">b</span>|) = (a₁·b₁ + a₂·b₂) / (√(a₁² + a₂²) · √(b₁² + b₂²))
             </div>
 
             <div class="steps">
                 <div class="step">
                     <div class="step-number">1</div>
                     <div class="step-title">Скалярное произведение</div>
-                    <div class="step-desc">a⃗ · b⃗ = a₁·b₁ + a₂·b₂</div>
+                    <div class="step-desc"><span class="vec">a</span> · <span class="vec">b</span> = a₁·b₁ + a₂·b₂</div>
                 </div>
                 <div class="step">
                     <div class="step-number">2</div>
                     <div class="step-title">Длины векторов</div>
-                    <div class="step-desc">|a⃗| = √(a₁² + a₂²)</div>
+                    <div class="step-desc">|<span class="vec">a</span>| = √(a₁² + a₂²)</div>
                 </div>
                 <div class="step">
                     <div class="step-number">3</div>
                     <div class="step-title">Косинус угла</div>
-                    <div class="step-desc">cos(θ) = (a⃗·b⃗)/(|a⃗|·|b⃗|)</div>
+                    <div class="step-desc">cos(θ) = (<span class="vec">a</span>·<span class="vec">b</span>)/(|<span class="vec">a</span>|·|<span class="vec">b</span>|)</div>
                 </div>
                 <div class="step">
                     <div class="step-number">4</div>
@@ -669,8 +699,8 @@
 
             drawGrid();
             drawAngleArc();
-            drawVector(vectorA, '#ff6b6b', 'a⃗');
-            drawVector(vectorB, '#4ecdc4', 'b⃗');
+            drawVector(vectorA, '#ff6b6b', 'a');
+            drawVector(vectorB, '#4ecdc4', 'b');
 
             updateInfo();
         }
@@ -691,11 +721,11 @@
 
             document.getElementById('vectorA').textContent = `(${vectorA.x.toFixed(1)}, ${vectorA.y.toFixed(1)})`;
             document.getElementById('vectorB').textContent = `(${vectorB.x.toFixed(1)}, ${vectorB.y.toFixed(1)})`;
-            document.getElementById('lengthA').textContent = `|a⃗| = ${magA.toFixed(2)}`;
-            document.getElementById('lengthB').textContent = `|b⃗| = ${magB.toFixed(2)}`;
+            document.getElementById('lengthA').innerHTML = `|<span class="vec">a</span>| = ${magA.toFixed(2)}`;
+            document.getElementById('lengthB').innerHTML = `|<span class="vec">b</span>| = ${magB.toFixed(2)}`;
 
-            document.getElementById('dotProduct').textContent =
-                `a⃗ · b⃗ = ${vectorA.x.toFixed(1)}·${vectorB.x.toFixed(1)} + ${vectorA.y.toFixed(1)}·${vectorB.y.toFixed(1)} = ${dot.toFixed(2)}`;
+            document.getElementById('dotProduct').innerHTML =
+                `<span class="vec">a</span> · <span class="vec">b</span> = ${vectorA.x.toFixed(1)}·${vectorB.x.toFixed(1)} + ${vectorA.y.toFixed(1)}·${vectorB.y.toFixed(1)} = ${dot.toFixed(2)}`;
             document.getElementById('cosValue').textContent =
                 `cos(θ) = ${dot.toFixed(2)} / (${magA.toFixed(2)}·${magB.toFixed(2)}) = ${clampedCos.toFixed(3)}`;
             document.getElementById('angleResult').textContent =
