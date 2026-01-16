@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\Auth\TelegramBotAuthController;
+use App\Http\Controllers\RepetitorController;
 use App\Http\Controllers\TestPdfController;
 use App\Http\Controllers\TopicController;
 use Illuminate\Support\Facades\Route;
@@ -50,6 +51,11 @@ Route::get('/ref/{code}', function ($code) {
     session(['referral_code' => $code]);
     return redirect()->route('landing');
 })->name('referral.track');
+
+// Repetitor - Interactive visualizations
+Route::prefix('repetitor')->name('repetitor.')->group(function () {
+    Route::get('/vector', [RepetitorController::class, 'vectorAngle'])->name('vector');
+});
 
 // Authenticated routes
 Route::middleware(['auth'])->group(function () {
