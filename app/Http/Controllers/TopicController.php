@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\TestPdfController;
 use App\Services\TaskDataService;
 use Illuminate\Http\Request;
 
@@ -45,6 +46,17 @@ class TopicController extends Controller
         // Нормализуем ID (6 -> 06)
         $topicId = str_pad($id, 2, '0', STR_PAD_LEFT);
 
+        // Специальные view для тем с кастомными SVG
+        $customViews = [
+            '15' => 'topics.topic15',
+            '16' => 'topics.topic16',
+            '17' => 'topics.topic17',
+        ];
+
+        if (isset($customViews[$topicId])) {
+            return $this->showCustomTopic($topicId, $customViews[$topicId]);
+        }
+
         // Проверяем существование данных
         if (!$this->taskService->topicDataExists($topicId)) {
             // Fallback на старый контроллер если JSON не существует
@@ -64,6 +76,30 @@ class TopicController extends Controller
 
         // Используем generic шаблон с JSON данными
         return view('topics.show', compact('blocks', 'topicId', 'topicMeta', 'stats'));
+    }
+
+    /**
+     * Показать тему с кастомным view (для геометрии с SVG)
+     */
+    protected function showCustomTopic(string $topicId, string $viewName)
+    {
+        $testController = app(TestPdfController::class);
+
+        $methodMap = [
+            '15' => 'getAllBlocksData15',
+            '16' => 'getAllBlocksData16',
+            '17' => 'getAllBlocksData17',
+        ];
+
+        $method = $methodMap[$topicId] ?? null;
+        if (!$method || !method_exists($testController, $method)) {
+            abort(404, "Данные для темы $topicId не найдены");
+        }
+
+        $blocks = $testController->$method();
+        $source = 'Manual (все блоки из PDF)';
+
+        return view($viewName, compact('blocks', 'source'));
     }
 
     /**
