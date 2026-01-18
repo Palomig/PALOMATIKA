@@ -52,30 +52,38 @@
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
 
-<div class="max-w-7xl mx-auto px-4 py-8">
-    {{-- Navigation --}}
-    <div class="flex justify-between items-center mb-8 text-sm bg-slate-800/50 rounded-xl p-4 border border-slate-700">
-        <a href="{{ route('test.pdf.index') }}" class="text-blue-400 hover:text-blue-300 transition-colors">← Назад к парсеру</a>
-        <div class="flex gap-2 flex-wrap justify-center">
-            <a href="{{ route('test.topic06') }}" class="px-2 py-1 rounded bg-slate-700 text-slate-300 hover:bg-slate-600 transition">06</a>
-            <a href="{{ route('test.topic07') }}" class="px-2 py-1 rounded bg-slate-700 text-slate-300 hover:bg-slate-600 transition">07</a>
-            <a href="{{ route('test.topic15') }}" class="px-2 py-1 rounded bg-slate-700 text-slate-300 hover:bg-slate-600 transition">15</a>
-            <a href="{{ route('test.topic16') }}" class="px-2 py-1 rounded bg-slate-700 text-slate-300 hover:bg-slate-600 transition">16</a>
-            <span class="px-2 py-1 rounded bg-emerald-500 text-white font-bold">17</span>
-            <a href="{{ route('test.topic18') }}" class="px-2 py-1 rounded bg-slate-700 text-slate-300 hover:bg-slate-600 transition">18</a>
-            <a href="{{ route('test.topic19') }}" class="px-2 py-1 rounded bg-slate-700 text-slate-300 hover:bg-slate-600 transition">19</a>
-        </div>
-        <span class="text-slate-500">SVG версия</span>
-    </div>
-
-    @php
-        $totalTasks = 0;
-        foreach ($blocks as $block) {
-            foreach ($block['zadaniya'] as $zadanie) {
-                $totalTasks += count($zadanie['tasks'] ?? []);
-            }
+@php
+    $totalTasks = 0;
+    foreach ($blocks as $block) {
+        foreach ($block['zadaniya'] as $zadanie) {
+            $totalTasks += count($zadanie['tasks'] ?? []);
         }
-    @endphp
+    }
+@endphp
+
+<div class="max-w-7xl mx-auto px-4 py-8">
+    {{-- Navigation like topic 15 --}}
+    <div class="flex justify-between items-center mb-8 text-sm">
+        <a href="{{ route('topics.index') }}" class="flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            Назад к темам
+        </a>
+
+        <div class="flex gap-1.5 flex-wrap justify-center">
+            @foreach(['06','07','08','09','10','11','12','13','14','15','16','17','18','19'] as $tid)
+                @if($tid === '17')
+                    <span class="px-2.5 py-1 rounded-lg bg-emerald-500 text-white font-bold text-xs">{{ $tid }}</span>
+                @else
+                    <a href="{{ route('topics.show', ['id' => ltrim($tid, '0')]) }}"
+                       class="px-2.5 py-1 rounded-lg bg-slate-700 text-slate-300 hover:bg-slate-600 transition text-xs">{{ $tid }}</a>
+                @endif
+            @endforeach
+        </div>
+
+        <span class="text-slate-500 text-xs">{{ $totalTasks }} заданий</span>
+    </div>
 
     {{-- Header --}}
     <div class="text-center mb-8">
@@ -130,22 +138,22 @@
                                     @case(1)
                                         {{-- Задания 1-8: Параллелограмм БЕЗ диагоналей, только угол --}}
                                         <div x-data="parallelogramSVG({{ $task['angle'] ?? 60 }}, {{ $task['id'] }})">
-                                            <svg viewBox="0 0 300 200" class="w-full max-w-[300px] h-auto">
+                                            <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                                                 {{-- Параллелограмм ABCD --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
-                                                    fill="none" stroke="#dc2626" stroke-width="2" stroke-linejoin="round"/>
+                                                    fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
                                                 {{-- Угол при A --}}
-                                                <path :d="makeAngleArc(A, D, B, 22)" fill="none" stroke="#10b981" stroke-width="2"/>
+                                                <path :d="makeAngleArc(A, D, B, 28)" fill="none" stroke="#10b981" stroke-width="2"/>
                                                 {{-- Точки вершин --}}
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="D.x" :cy="D.y" r="4" fill="#dc2626"/>
+                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#dc2626"/>
                                                 {{-- Метки вершин --}}
-                                                <text :x="labelA.x" :y="labelA.y" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="middle">A</text>
-                                                <text :x="labelB.x" :y="labelB.y" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="middle">B</text>
-                                                <text :x="labelC.x" :y="labelC.y" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="middle">C</text>
-                                                <text :x="labelD.x" :y="labelD.y" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="middle">D</text>
+                                                <text :x="labelA.x" :y="labelA.y" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                                                <text :x="labelB.x" :y="labelB.y" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                                                <text :x="labelC.x" :y="labelC.y" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                                                <text :x="labelD.x" :y="labelD.y" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">D</text>
                                             </svg>
                                         </div>
                                         @break
@@ -719,32 +727,33 @@
     }
 
     // 1. Параллелограмм с углом соответствующего типа (острый/прямой/тупой)
-    // viewBox: 300x200, angle - угол из условия, taskId - для рандомизации
+    // viewBox: 300x220, angle - угол из условия, taskId - для рандомизации
     function parallelogramSVG(angle = 60, taskId = 1) {
-        // Базовые параметры для viewBox 300x200
-        const baseY = 165;  // Нижняя линия
-        const topY = 35;    // Верхняя линия
+        // Базовые параметры для viewBox 300x220 (как на странице 15)
+        const baseY = 185;  // Нижняя линия (отступ 35 снизу)
+        const topY = 35;    // Верхняя линия (отступ 35 сверху)
+        const height = baseY - topY; // 150px
 
         // Небольшая рандомизация для разнообразия
         const rand = seededRandom(taskId);
 
-        // Определяем skew на основе типа угла
+        // Определяем skew на основе типа угла (увеличенные значения)
         let skew;
         if (angle < 90) {
             // Острый угол: skew положительный
-            skew = 30 + rand * 20;
+            skew = 50 + rand * 30;
         } else if (angle === 90) {
             // Прямой угол: прямоугольник
             skew = 0;
         } else {
             // Тупой угол: skew отрицательный
-            skew = -(30 + rand * 20);
+            skew = -(50 + rand * 30);
         }
 
-        // Ширина основания (уменьшена)
-        const baseWidth = 120 + rand * 20;
+        // Ширина основания (увеличена для большей фигуры)
+        const baseWidth = 160 + rand * 30;
 
-        // Вычисляем общую ширину фигуры и центрируем
+        // Вычисляем общую ширину фигуры и центрируем в viewBox 300
         const minX = Math.min(0, skew);
         const maxX = Math.max(skew + baseWidth, baseWidth);
         const totalWidth = maxX - minX;
@@ -760,11 +769,11 @@
         const center = { x: (A.x + B.x + C.x + D.x) / 4, y: (A.y + B.y + C.y + D.y) / 4 };
 
         // Функция для позиционирования меток
-        const labelPos = (p, dist = 20) => {
+        const labelPos = (p, dist = 24) => {
             const dx = p.x - center.x;
             const dy = p.y - center.y;
             const len = Math.sqrt(dx*dx + dy*dy);
-            return { x: p.x + (dx/len) * dist, y: p.y + (dy/len) * dist + 5 };
+            return { x: p.x + (dx/len) * dist, y: p.y + (dy/len) * dist };
         };
 
         return {
