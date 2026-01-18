@@ -3428,7 +3428,7 @@ class TestPdfController extends Controller
     /**
      * Get all blocks data for Topic 15 - Треугольники
      */
-    protected function getAllBlocksData15(): array
+    public function getAllBlocksData15(): array
     {
         return [
             [
@@ -3747,7 +3747,7 @@ class TestPdfController extends Controller
     /**
      * Get all blocks data for Topic 16 - Окружность, круг и их элементы
      */
-    protected function getAllBlocksData16(): array
+    public function getAllBlocksData16(): array
     {
         return [
             [
@@ -4000,7 +4000,7 @@ class TestPdfController extends Controller
     /**
      * Get all blocks data for Topic 17 - Четырехугольники
      */
-    protected function getAllBlocksData17(): array
+    public function getAllBlocksData17(): array
     {
         return [
             [
