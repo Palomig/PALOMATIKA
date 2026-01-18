@@ -244,16 +244,16 @@
                                             <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                                                 {{-- Трапеция ABCD --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
-                                                    fill="none" stroke="#10b981" stroke-width="3" stroke-linejoin="round"/>
+                                                    fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
                                                 {{-- Угол при A --}}
-                                                <path :d="makeAngleArc(A, D, B, 18)" fill="none" stroke="#ec4899" stroke-width="2"/>
+                                                <path :d="makeAngleArc(A, D, B, 18)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                                                 {{-- Угол при D --}}
-                                                <path :d="makeAngleArc(D, A, C, 18)" fill="none" stroke="#ec4899" stroke-width="2"/>
+                                                <path :d="makeAngleArc(D, A, C, 18)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                                                 {{-- Точки --}}
-                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#10b981"/>
-                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#10b981"/>
-                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#10b981"/>
-                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#10b981"/>
+                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#dc2626"/>
                                                 {{-- Метки --}}
                                                 <text :x="A.x - 12" :y="A.y + 15" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="end">A</text>
                                                 <text :x="B.x - 8" :y="B.y - 8" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="end">B</text>
@@ -269,16 +269,16 @@
                                             <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                                                 {{-- Трапеция --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
-                                                    fill="none" stroke="#10b981" stroke-width="3" stroke-linejoin="round"/>
+                                                    fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
                                                 {{-- Прямой угол при A --}}
-                                                <path :d="rightAnglePath(A, D, B, 12)" fill="none" stroke="#ec4899" stroke-width="2"/>
+                                                <path :d="rightAnglePath(A, D, B, 12)" fill="none" stroke="#666666" stroke-width="2"/>
                                                 {{-- Прямой угол при B --}}
-                                                <path :d="rightAnglePath(B, A, C, 12)" fill="none" stroke="#ec4899" stroke-width="2"/>
+                                                <path :d="rightAnglePath(B, A, C, 12)" fill="none" stroke="#666666" stroke-width="2"/>
                                                 {{-- Точки --}}
-                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#10b981"/>
-                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#10b981"/>
-                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#10b981"/>
-                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#10b981"/>
+                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#dc2626"/>
                                                 {{-- Метки --}}
                                                 <text :x="A.x - 12" :y="A.y + 15" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="end">A</text>
                                                 <text :x="B.x - 12" :y="B.y - 5" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="end">B</text>
@@ -295,18 +295,18 @@
                                             <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                                                 {{-- Трапеция --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
-                                                    fill="none" stroke="#10b981" stroke-width="3" stroke-linejoin="round"/>
+                                                    fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
                                                 {{-- Высота CH --}}
                                                 <line :x1="C.x" :y1="C.y" :x2="H.x" :y2="H.y" stroke="#f59e0b" stroke-width="3"/>
                                                 {{-- Прямой угол при H --}}
-                                                <path :d="rightAnglePath(H, C, D, 10)" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+                                                <path :d="rightAnglePath(H, C, D, 10)" fill="none" stroke="#666666" stroke-width="2"/>
                                                 {{-- Диагональ (для задания 9) --}}
                                                 <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#ec4899" stroke-width="1.5" stroke-dasharray="4,3"/>
                                                 {{-- Точки --}}
-                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#10b981"/>
-                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#10b981"/>
-                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#10b981"/>
-                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#10b981"/>
+                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#dc2626"/>
                                                 <circle :cx="H.x" :cy="H.y" r="3" fill="#f59e0b"/>
                                                 {{-- Метки --}}
                                                 <text :x="A.x - 12" :y="A.y + 15" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="end">A</text>
@@ -329,14 +329,14 @@
                                                 <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#f59e0b" stroke-width="3"/>
                                                 <line :x1="B.x" :y1="B.y" :x2="D.x" :y2="D.y" stroke="#f59e0b" stroke-width="3"/>
                                                 {{-- Угол между диагональю и стороной --}}
-                                                <path :d="makeAngleArc(A, D, C, 20)" fill="none" stroke="#ec4899" stroke-width="2"/>
+                                                <path :d="makeAngleArc(A, D, C, 20)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                                                 {{-- Точка O --}}
                                                 <circle :cx="O.x" :cy="O.y" r="3" fill="#f59e0b"/>
                                                 {{-- Точки вершин --}}
-                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#10b981"/>
-                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#10b981"/>
-                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#10b981"/>
-                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#10b981"/>
+                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#dc2626"/>
                                                 {{-- Метки --}}
                                                 <text :x="A.x - 12" :y="A.y + 15" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="end">A</text>
                                                 <text :x="B.x - 12" :y="B.y - 5" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="end">B</text>
@@ -355,19 +355,19 @@
                                             <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                                                 {{-- Ромб ABCD --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
-                                                    fill="none" stroke="#10b981" stroke-width="3" stroke-linejoin="round"/>
+                                                    fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
                                                 {{-- Диагонали --}}
                                                 <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,3"/>
                                                 <line :x1="B.x" :y1="B.y" :x2="D.x" :y2="D.y" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4,3"/>
                                                 {{-- Угол при B --}}
-                                                <path :d="makeAngleArc(B, A, C, 18)" fill="none" stroke="#ec4899" stroke-width="2"/>
+                                                <path :d="makeAngleArc(B, A, C, 18)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                                                 {{-- Высота (для задания 13) --}}
                                                 <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y" stroke="#3b82f6" stroke-width="2"/>
                                                 {{-- Точки --}}
-                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#10b981"/>
-                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#10b981"/>
-                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#10b981"/>
-                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#10b981"/>
+                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#dc2626"/>
                                                 {{-- Метки --}}
                                                 <text :x="A.x - 12" :y="A.y + 5" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="end">A</text>
                                                 <text :x="B.x" :y="B.y - 12" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle">B</text>
@@ -383,16 +383,16 @@
                                             <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                                                 {{-- Параллелограмм --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
-                                                    fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" stroke-width="3" stroke-linejoin="round"/>
+                                                    fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
                                                 {{-- Высота --}}
                                                 <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y" stroke="#f59e0b" stroke-width="3"/>
                                                 {{-- Прямой угол --}}
-                                                <path :d="rightAnglePath(H, B, D, 10)" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+                                                <path :d="rightAnglePath(H, B, D, 10)" fill="none" stroke="#666666" stroke-width="2"/>
                                                 {{-- Точки --}}
-                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#10b981"/>
-                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#10b981"/>
-                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#10b981"/>
-                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#10b981"/>
+                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#dc2626"/>
                                                 <circle :cx="H.x" :cy="H.y" r="3" fill="#f59e0b"/>
                                                 {{-- Метки --}}
                                                 <text :x="A.x - 12" :y="A.y + 15" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="end">A</text>
@@ -412,16 +412,16 @@
                                             <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                                                 {{-- Трапеция --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
-                                                    fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" stroke-width="3" stroke-linejoin="round"/>
+                                                    fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
                                                 {{-- Высота --}}
                                                 <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y" stroke="#f59e0b" stroke-width="3"/>
                                                 {{-- Прямой угол --}}
-                                                <path :d="rightAnglePath(H, B, D, 10)" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+                                                <path :d="rightAnglePath(H, B, D, 10)" fill="none" stroke="#666666" stroke-width="2"/>
                                                 {{-- Точки --}}
-                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#10b981"/>
-                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#10b981"/>
-                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#10b981"/>
-                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#10b981"/>
+                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#dc2626"/>
                                                 {{-- Метки оснований --}}
                                                 <text :x="(B.x + C.x)/2" :y="B.y - 10" fill="#ec4899" font-size="11" class="geo-label" text-anchor="middle">a</text>
                                                 <text :x="(A.x + D.x)/2" :y="A.y + 18" fill="#ec4899" font-size="11" class="geo-label" text-anchor="middle">b</text>
@@ -436,17 +436,17 @@
                                             <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                                                 {{-- Ромб --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
-                                                    fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" stroke-width="3" stroke-linejoin="round"/>
+                                                    fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
                                                 {{-- Диагонали --}}
                                                 <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#f59e0b" stroke-width="3"/>
-                                                <line :x1="B.x" :y1="B.y" :x2="D.x" :y2="D.y" stroke="#ec4899" stroke-width="2"/>
+                                                <line :x1="B.x" :y1="B.y" :x2="D.x" :y2="D.y" stroke="#f59e0b" stroke-width="2"/>
                                                 {{-- Угол 30° --}}
                                                 <path :d="makeAngleArc(A, D, B, 18)" fill="none" stroke="#3b82f6" stroke-width="2"/>
                                                 {{-- Точки --}}
-                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#10b981"/>
-                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#10b981"/>
-                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#10b981"/>
-                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#10b981"/>
+                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#dc2626"/>
                                                 {{-- Метки --}}
                                                 <text :x="A.x - 12" :y="A.y + 5" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="end">A</text>
                                                 <text :x="B.x" :y="B.y - 12" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle">B</text>
@@ -462,7 +462,7 @@
                                             <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                                                 {{-- Квадрат --}}
                                                 <rect :x="A.x" :y="B.y" :width="side" :height="side"
-                                                    fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" stroke-width="3"/>
+                                                    fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
                                                 {{-- Диагональ --}}
                                                 <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#f59e0b" stroke-width="2.5"/>
                                                 {{-- Сторона a --}}
@@ -470,10 +470,10 @@
                                                 {{-- Диагональ d --}}
                                                 <text :x="(A.x + C.x)/2 + 10" :y="(A.y + C.y)/2 - 5" fill="#f59e0b" font-size="12" class="geo-label" text-anchor="start">d</text>
                                                 {{-- Точки --}}
-                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#10b981"/>
-                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#10b981"/>
-                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#10b981"/>
-                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#10b981"/>
+                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#dc2626"/>
                                             </svg>
                                         </div>
                                         @break
@@ -484,7 +484,7 @@
                                             <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                                                 {{-- Трапеция --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
-                                                    fill="none" stroke="#10b981" stroke-width="3" stroke-linejoin="round"/>
+                                                    fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
                                                 {{-- Средняя линия MN --}}
                                                 <line :x1="M.x" :y1="M.y" :x2="N.x" :y2="N.y" stroke="#f59e0b" stroke-width="2.5"/>
                                                 {{-- Диагональ AC --}}
@@ -492,10 +492,10 @@
                                                 {{-- Точка пересечения P --}}
                                                 <circle :cx="P.x" :cy="P.y" r="3" fill="#ec4899"/>
                                                 {{-- Точки --}}
-                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#10b981"/>
-                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#10b981"/>
-                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#10b981"/>
-                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#10b981"/>
+                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#dc2626"/>
                                                 <circle :cx="M.x" :cy="M.y" r="3" fill="#f59e0b"/>
                                                 <circle :cx="N.x" :cy="N.y" r="3" fill="#f59e0b"/>
                                                 {{-- Метки --}}
@@ -515,19 +515,19 @@
                                             <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                                                 {{-- Трапеция ABCD --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
-                                                    fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" stroke-width="3" stroke-linejoin="round"/>
+                                                    fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
                                                 {{-- Высота BH --}}
                                                 <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y" stroke="#f59e0b" stroke-width="3" stroke-dasharray="4,3"/>
                                                 {{-- Прямой угол при H --}}
-                                                <path :d="rightAnglePath(H, B, A, 10)" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
+                                                <path :d="rightAnglePath(H, B, A, 10)" fill="none" stroke="#666666" stroke-width="2"/>
                                                 {{-- Угол 30° при A --}}
-                                                <path :d="makeAngleArc(A, D, B, 25)" fill="none" stroke="#ec4899" stroke-width="2"/>
+                                                <path :d="makeAngleArc(A, D, B, 25)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                                                 <text :x="A.x + 30" :y="A.y - 8" fill="#ec4899" font-size="11" class="geo-label">30°</text>
                                                 {{-- Точки вершин --}}
-                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#10b981"/>
-                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#10b981"/>
-                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#10b981"/>
-                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#10b981"/>
+                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#dc2626"/>
                                                 {{-- Метки --}}
                                                 <text :x="A.x - 12" :y="A.y + 15" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="end">A</text>
                                                 <text :x="B.x - 8" :y="B.y - 8" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="end">B</text>
@@ -545,7 +545,7 @@
                                             <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                                                 {{-- Прямоугольник ABCD --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
-                                                    fill="none" stroke="#10b981" stroke-width="3" stroke-linejoin="round"/>
+                                                    fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
                                                 {{-- Отрезок AE --}}
                                                 <line :x1="A.x" :y1="A.y" :x2="E.x" :y2="E.y" stroke="#f59e0b" stroke-width="3"/>
                                                 {{-- Отрезок ED --}}
@@ -554,13 +554,13 @@
                                                 <path :d="makeAngleArc(A, B, E, 20)" fill="none" stroke="#3b82f6" stroke-width="2"/>
                                                 <text :x="A.x + 22" :y="A.y - 25" fill="#3b82f6" font-size="11" class="geo-label">45°</text>
                                                 {{-- Прямые углы --}}
-                                                <path :d="rightAnglePath(A, D, B, 10)" fill="none" stroke="#10b981" stroke-width="1.5"/>
-                                                <path :d="rightAnglePath(B, A, C, 10)" fill="none" stroke="#10b981" stroke-width="1.5"/>
+                                                <path :d="rightAnglePath(A, D, B, 10)" fill="none" stroke="#666666" stroke-width="2"/>
+                                                <path :d="rightAnglePath(B, A, C, 10)" fill="none" stroke="#666666" stroke-width="2"/>
                                                 {{-- Точки вершин --}}
-                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#10b981"/>
-                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#10b981"/>
-                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#10b981"/>
-                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#10b981"/>
+                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#dc2626"/>
                                                 <circle :cx="E.x" :cy="E.y" r="4" fill="#f59e0b"/>
                                                 {{-- Метки --}}
                                                 <text :x="A.x - 12" :y="A.y + 15" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="end">A</text>
@@ -585,12 +585,12 @@
                                                 </template>
                                                 {{-- Трапеция --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
-                                                    fill="rgba(16, 185, 129, 0.2)" stroke="#10b981" stroke-width="3" stroke-linejoin="round"/>
+                                                    fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
                                                 {{-- Точки вершин --}}
-                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#10b981"/>
-                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#10b981"/>
-                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#10b981"/>
-                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#10b981"/>
+                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#dc2626"/>
                                             </svg>
                                         </div>
                                         @break
@@ -601,17 +601,17 @@
                                             <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                                                 {{-- Квадрат --}}
                                                 <rect :x="A.x" :y="B.y" :width="side" :height="side"
-                                                    fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" stroke-width="3"/>
+                                                    fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
                                                 {{-- Обе диагонали --}}
                                                 <line :x1="d1.x1" :y1="d1.y1" :x2="d1.x2" :y2="d1.y2" stroke="#f59e0b" stroke-width="3"/>
                                                 <line :x1="d2.x1" :y1="d2.y1" :x2="d2.x2" :y2="d2.y2" stroke="#f59e0b" stroke-width="3"/>
                                                 {{-- Центр O --}}
                                                 <circle :cx="O.x" :cy="O.y" r="3" fill="#ec4899"/>
                                                 {{-- Точки вершин --}}
-                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#10b981"/>
-                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#10b981"/>
-                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#10b981"/>
-                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#10b981"/>
+                                                <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                                <circle :cx="D.x" :cy="D.y" r="5" fill="#dc2626"/>
                                                 {{-- Метка диагонали --}}
                                                 <text :x="(d1.x1 + d1.x2)/2 + 10" :y="(d1.y1 + d1.y2)/2 - 5" fill="#f59e0b" font-size="12" class="geo-label">d</text>
                                                 <text :x="O.x + 8" :y="O.y + 12" fill="#ec4899" font-size="11" class="geo-label">O</text>
