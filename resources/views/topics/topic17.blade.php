@@ -722,9 +722,8 @@
     // viewBox: 300x200, angle - угол из условия, taskId - для рандомизации
     function parallelogramSVG(angle = 60, taskId = 1) {
         // Базовые параметры для viewBox 300x200
-        const baseY = 170;  // Нижняя линия (отступ 30 снизу)
-        const topY = 30;    // Верхняя линия (отступ 30 сверху)
-        const height = baseY - topY; // 140px
+        const baseY = 165;  // Нижняя линия
+        const topY = 35;    // Верхняя линия
 
         // Небольшая рандомизация для разнообразия
         const rand = seededRandom(taskId);
@@ -732,26 +731,29 @@
         // Определяем skew на основе типа угла
         let skew;
         if (angle < 90) {
-            // Острый угол: skew положительный (верхняя сторона смещена вправо)
-            skew = 50 + rand * 30;
+            // Острый угол: skew положительный
+            skew = 30 + rand * 20;
         } else if (angle === 90) {
             // Прямой угол: прямоугольник
             skew = 0;
         } else {
-            // Тупой угол: skew отрицательный (верхняя сторона смещена влево)
-            skew = -(50 + rand * 30);
+            // Тупой угол: skew отрицательный
+            skew = -(30 + rand * 20);
         }
 
-        // Ширина основания
-        const baseWidth = 160 + rand * 30;
+        // Ширина основания (уменьшена)
+        const baseWidth = 120 + rand * 20;
 
-        // Начальная точка A (с учётом отрицательного skew для тупого угла)
-        const startX = skew < 0 ? 40 - skew : 40;
+        // Вычисляем общую ширину фигуры и центрируем
+        const minX = Math.min(0, skew);
+        const maxX = Math.max(skew + baseWidth, baseWidth);
+        const totalWidth = maxX - minX;
+        const offsetX = (300 - totalWidth) / 2 - minX;
 
-        const A = { x: startX, y: baseY };
-        const B = { x: startX + skew, y: topY };
-        const C = { x: startX + skew + baseWidth, y: topY };
-        const D = { x: startX + baseWidth, y: baseY };
+        const A = { x: offsetX, y: baseY };
+        const B = { x: offsetX + skew, y: topY };
+        const C = { x: offsetX + skew + baseWidth, y: topY };
+        const D = { x: offsetX + baseWidth, y: baseY };
         const O = { x: (A.x + C.x) / 2, y: (A.y + C.y) / 2 };
 
         // Центр для расчёта позиций меток
