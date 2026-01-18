@@ -383,7 +383,7 @@
                                             <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                                                 {{-- Параллелограмм --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
-                                                    fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" stroke-width="2" stroke-linejoin="round"/>
+                                                    fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" stroke-width="3" stroke-linejoin="round"/>
                                                 {{-- Высота --}}
                                                 <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y" stroke="#f59e0b" stroke-width="3"/>
                                                 {{-- Прямой угол --}}
@@ -412,7 +412,7 @@
                                             <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                                                 {{-- Трапеция --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
-                                                    fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" stroke-width="2" stroke-linejoin="round"/>
+                                                    fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" stroke-width="3" stroke-linejoin="round"/>
                                                 {{-- Высота --}}
                                                 <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y" stroke="#f59e0b" stroke-width="3"/>
                                                 {{-- Прямой угол --}}
@@ -436,7 +436,7 @@
                                             <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                                                 {{-- Ромб --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
-                                                    fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" stroke-width="2" stroke-linejoin="round"/>
+                                                    fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" stroke-width="3" stroke-linejoin="round"/>
                                                 {{-- Диагонали --}}
                                                 <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#f59e0b" stroke-width="3"/>
                                                 <line :x1="B.x" :y1="B.y" :x2="D.x" :y2="D.y" stroke="#ec4899" stroke-width="2"/>
@@ -462,7 +462,7 @@
                                             <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                                                 {{-- Квадрат --}}
                                                 <rect :x="A.x" :y="B.y" :width="side" :height="side"
-                                                    fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" stroke-width="2"/>
+                                                    fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" stroke-width="3"/>
                                                 {{-- Диагональ --}}
                                                 <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#f59e0b" stroke-width="2.5"/>
                                                 {{-- Сторона a --}}
@@ -515,7 +515,7 @@
                                             <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                                                 {{-- Трапеция ABCD --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
-                                                    fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" stroke-width="2" stroke-linejoin="round"/>
+                                                    fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" stroke-width="3" stroke-linejoin="round"/>
                                                 {{-- Высота BH --}}
                                                 <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y" stroke="#f59e0b" stroke-width="3" stroke-dasharray="4,3"/>
                                                 {{-- Прямой угол при H --}}
@@ -585,7 +585,7 @@
                                                 </template>
                                                 {{-- Трапеция --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
-                                                    fill="rgba(16, 185, 129, 0.2)" stroke="#10b981" stroke-width="2" stroke-linejoin="round"/>
+                                                    fill="rgba(16, 185, 129, 0.2)" stroke="#10b981" stroke-width="3" stroke-linejoin="round"/>
                                                 {{-- Точки вершин --}}
                                                 <circle :cx="A.x" :cy="A.y" r="5" fill="#10b981"/>
                                                 <circle :cx="B.x" :cy="B.y" r="5" fill="#10b981"/>
@@ -601,7 +601,7 @@
                                             <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                                                 {{-- Квадрат --}}
                                                 <rect :x="A.x" :y="B.y" :width="side" :height="side"
-                                                    fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" stroke-width="2"/>
+                                                    fill="rgba(16, 185, 129, 0.1)" stroke="#10b981" stroke-width="3"/>
                                                 {{-- Обе диагонали --}}
                                                 <line :x1="d1.x1" :y1="d1.y1" :x2="d1.x2" :y2="d1.y2" stroke="#f59e0b" stroke-width="3"/>
                                                 <line :x1="d2.x1" :y1="d2.y1" :x2="d2.x2" :y2="d2.y2" stroke="#f59e0b" stroke-width="3"/>
