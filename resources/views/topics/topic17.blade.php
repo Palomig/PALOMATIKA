@@ -130,7 +130,7 @@
                                     @case(1)
                                         {{-- Задания 1-8: Параллелограмм БЕЗ диагоналей, только угол --}}
                                         <div x-data="parallelogramSVG({{ $task['angle'] ?? 60 }}, {{ $task['id'] }})">
-                                            <svg viewBox="0 0 240 180" class="w-full max-w-[250px] h-auto">
+                                            <svg viewBox="0 0 300 200" class="w-full max-w-[300px] h-auto">
                                                 {{-- Параллелограмм ABCD --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
                                                     fill="none" stroke="#dc2626" stroke-width="2" stroke-linejoin="round"/>
@@ -719,12 +719,12 @@
     }
 
     // 1. Параллелограмм с углом соответствующего типа (острый/прямой/тупой)
-    // angle - угол из условия задачи, taskId - для небольшой рандомизации
+    // viewBox: 300x200, angle - угол из условия, taskId - для рандомизации
     function parallelogramSVG(angle = 60, taskId = 1) {
-        // Базовые параметры
-        const baseY = 145;  // Нижняя линия
-        const topY = 35;    // Верхняя линия
-        const height = baseY - topY; // 110px
+        // Базовые параметры для viewBox 300x200
+        const baseY = 170;  // Нижняя линия (отступ 30 снизу)
+        const topY = 30;    // Верхняя линия (отступ 30 сверху)
+        const height = baseY - topY; // 140px
 
         // Небольшая рандомизация для разнообразия
         const rand = seededRandom(taskId);
@@ -733,20 +733,20 @@
         let skew;
         if (angle < 90) {
             // Острый угол: skew положительный (верхняя сторона смещена вправо)
-            skew = 40 + rand * 30;
+            skew = 50 + rand * 30;
         } else if (angle === 90) {
             // Прямой угол: прямоугольник
             skew = 0;
         } else {
             // Тупой угол: skew отрицательный (верхняя сторона смещена влево)
-            skew = -(40 + rand * 30);
+            skew = -(50 + rand * 30);
         }
 
         // Ширина основания
-        const baseWidth = 150 + rand * 30;
+        const baseWidth = 160 + rand * 30;
 
         // Начальная точка A (с учётом отрицательного skew для тупого угла)
-        const startX = skew < 0 ? 30 - skew : 30;
+        const startX = skew < 0 ? 40 - skew : 40;
 
         const A = { x: startX, y: baseY };
         const B = { x: startX + skew, y: topY };
@@ -758,7 +758,7 @@
         const center = { x: (A.x + B.x + C.x + D.x) / 4, y: (A.y + B.y + C.y + D.y) / 4 };
 
         // Функция для позиционирования меток
-        const labelPos = (p, dist = 18) => {
+        const labelPos = (p, dist = 20) => {
             const dx = p.x - center.x;
             const dy = p.y - center.y;
             const len = Math.sqrt(dx*dx + dy*dy);
