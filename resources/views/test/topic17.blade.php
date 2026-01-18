@@ -129,31 +129,31 @@
                                 @switch($zadanie['number'])
                                     @case(1)
                                         {{-- Задания 1-8: Параллелограмм БЕЗ диагоналей, только угол --}}
-                                        <div x-data="parallelogramSVG()">
-                                            <svg viewBox="0 0 220 200" class="w-full max-w-[250px] h-auto">
+                                        <div x-data="parallelogramSVG({{ $task['id'] }})">
+                                            <svg viewBox="0 0 240 180" class="w-full max-w-[250px] h-auto">
                                                 {{-- Параллелограмм ABCD --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
                                                     fill="none" stroke="#dc2626" stroke-width="2" stroke-linejoin="round"/>
                                                 {{-- Угол при A --}}
-                                                <path :d="makeAngleArc(A, D, B, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
+                                                <path :d="makeAngleArc(A, D, B, 22)" fill="none" stroke="#10b981" stroke-width="2"/>
                                                 {{-- Точки вершин --}}
                                                 <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
                                                 <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
                                                 <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
                                                 <circle :cx="D.x" :cy="D.y" r="4" fill="#dc2626"/>
                                                 {{-- Метки вершин --}}
-                                                <text :x="A.x - 15" :y="A.y + 5" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="end">A</text>
-                                                <text :x="B.x - 8" :y="B.y - 10" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="end">B</text>
-                                                <text :x="C.x + 15" :y="C.y - 10" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="start">C</text>
-                                                <text :x="D.x + 15" :y="D.y + 5" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="start">D</text>
+                                                <text :x="labelA.x" :y="labelA.y" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="middle">A</text>
+                                                <text :x="labelB.x" :y="labelB.y" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="middle">B</text>
+                                                <text :x="labelC.x" :y="labelC.y" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="middle">C</text>
+                                                <text :x="labelD.x" :y="labelD.y" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="middle">D</text>
                                             </svg>
                                         </div>
                                         @break
 
                                     @case(2)
                                         {{-- Задания 9-16: Диагональ BD или AC с двумя углами --}}
-                                        <div x-data="parallelogramDiagonalSVG()">
-                                            <svg viewBox="0 0 220 200" class="w-full max-w-[250px] h-auto">
+                                        <div x-data="parallelogramDiagonalSVG({{ $task['id'] }})">
+                                            <svg viewBox="0 0 240 180" class="w-full max-w-[250px] h-auto">
                                                 {{-- Параллелограмм ABCD --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
                                                     fill="none" stroke="#dc2626" stroke-width="2" stroke-linejoin="round"/>
@@ -169,13 +169,10 @@
                                                 <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
                                                 <circle :cx="D.x" :cy="D.y" r="4" fill="#dc2626"/>
                                                 {{-- Метки вершин --}}
-                                                <text :x="A.x - 15" :y="A.y + 5" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="end">A</text>
-                                                <text :x="B.x - 8" :y="B.y - 10" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="end">B</text>
-                                                <text :x="C.x + 15" :y="C.y - 10" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="start">C</text>
-                                                <text :x="D.x + 15" :y="D.y + 5" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="start">D</text>
-                                                {{-- Метки углов --}}
-                                                <text :x="B.x + 18" :y="B.y + 25" fill="#10b981" font-size="13" class="geo-label">65°</text>
-                                                <text :x="B.x + 40" :y="B.y + 8" fill="#10b981" font-size="13" class="geo-label">50°</text>
+                                                <text :x="labelA.x" :y="labelA.y" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="middle">A</text>
+                                                <text :x="labelB.x" :y="labelB.y" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="middle">B</text>
+                                                <text :x="labelC.x" :y="labelC.y" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="middle">C</text>
+                                                <text :x="labelD.x" :y="labelD.y" fill="#60a5fa" font-size="16" font-style="italic" class="geo-label" text-anchor="middle">D</text>
                                             </svg>
                                         </div>
                                         @break
@@ -715,29 +712,92 @@
         return `M ${p1.x} ${p1.y} L ${p2.x} ${p2.y} L ${p3.x} ${p3.y}`;
     }
 
-    // 1. Параллелограмм (viewBox 220x200, заполнение ~85%)
-    function parallelogramSVG() {
-        const A = { x: 20, y: 160 };
-        const B = { x: 60, y: 40 };
-        const C = { x: 200, y: 40 };
-        const D = { x: 160, y: 160 };
+    // Простой генератор псевдослучайных чисел на основе seed
+    function seededRandom(seed) {
+        const x = Math.sin(seed * 9999) * 10000;
+        return x - Math.floor(x);
+    }
+
+    // 1. Параллелограмм с рандомизацией (viewBox 240x180)
+    function parallelogramSVG(taskId = 1) {
+        // Базовые параметры
+        const baseY = 145;  // Нижняя линия
+        const topY = 35;    // Верхняя линия
+
+        // Рандомизация на основе taskId
+        const rand1 = seededRandom(taskId);
+        const rand2 = seededRandom(taskId + 100);
+
+        // Смещение верхней стороны (наклон параллелограмма) - от 30 до 70
+        const skew = 30 + rand1 * 40;
+
+        // Ширина основания - от 140 до 180
+        const baseWidth = 140 + rand2 * 40;
+
+        // Начальная точка A
+        const startX = 25 + (20 - rand1 * 10);
+
+        const A = { x: startX, y: baseY };
+        const B = { x: startX + skew, y: topY };
+        const C = { x: startX + skew + baseWidth - skew, y: topY };
+        const D = { x: startX + baseWidth - skew, y: baseY };
         const O = { x: (A.x + C.x) / 2, y: (A.y + C.y) / 2 };
+
+        // Центр для расчёта позиций меток
+        const center = { x: (A.x + B.x + C.x + D.x) / 4, y: (A.y + B.y + C.y + D.y) / 4 };
+
+        // Функция для позиционирования меток
+        const labelPos = (p, dist = 18) => {
+            const dx = p.x - center.x;
+            const dy = p.y - center.y;
+            const len = Math.sqrt(dx*dx + dy*dy);
+            return { x: p.x + (dx/len) * dist, y: p.y + (dy/len) * dist + 5 };
+        };
 
         return {
             A, B, C, D, O,
+            labelA: labelPos(A),
+            labelB: labelPos(B),
+            labelC: labelPos(C),
+            labelD: labelPos(D),
             makeAngleArc: (v, p1, p2, r) => makeAngleArc(v, p1, p2, r)
         };
     }
 
     // 1b. Параллелограмм с диагональю BD для заданий 9-16
-    function parallelogramDiagonalSVG() {
-        const A = { x: 20, y: 160 };
-        const B = { x: 60, y: 40 };
-        const C = { x: 200, y: 40 };
-        const D = { x: 160, y: 160 };
+    function parallelogramDiagonalSVG(taskId = 9) {
+        // Базовые параметры
+        const baseY = 145;
+        const topY = 35;
+
+        // Рандомизация
+        const rand1 = seededRandom(taskId);
+        const rand2 = seededRandom(taskId + 100);
+
+        const skew = 30 + rand1 * 40;
+        const baseWidth = 140 + rand2 * 40;
+        const startX = 25 + (20 - rand1 * 10);
+
+        const A = { x: startX, y: baseY };
+        const B = { x: startX + skew, y: topY };
+        const C = { x: startX + skew + baseWidth - skew, y: topY };
+        const D = { x: startX + baseWidth - skew, y: baseY };
+
+        const center = { x: (A.x + B.x + C.x + D.x) / 4, y: (A.y + B.y + C.y + D.y) / 4 };
+
+        const labelPos = (p, dist = 18) => {
+            const dx = p.x - center.x;
+            const dy = p.y - center.y;
+            const len = Math.sqrt(dx*dx + dy*dy);
+            return { x: p.x + (dx/len) * dist, y: p.y + (dy/len) * dist + 5 };
+        };
 
         return {
             A, B, C, D,
+            labelA: labelPos(A),
+            labelB: labelPos(B),
+            labelC: labelPos(C),
+            labelD: labelPos(D),
             makeAngleArc: (v, p1, p2, r) => makeAngleArc(v, p1, p2, r)
         };
     }
