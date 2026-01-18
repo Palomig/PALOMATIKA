@@ -143,7 +143,7 @@
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
                                                     fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
                                                 {{-- Угол при A --}}
-                                                <path :d="makeAngleArc(A, D, B, 28)" fill="none" stroke="#10b981" stroke-width="2"/>
+                                                <path :d="makeAngleArc(A, D, B, 28)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                                                 {{-- Точки вершин --}}
                                                 <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
                                                 <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
@@ -168,9 +168,9 @@
                                                 {{-- Диагональ BD --}}
                                                 <line :x1="B.x" :y1="B.y" :x2="D.x" :y2="D.y" stroke="#dc2626" stroke-width="3"/>
                                                 {{-- Угол ABD (между AB и BD) --}}
-                                                <path :d="makeAngleArc(B, A, D, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
+                                                <path :d="makeAngleArc(B, A, D, 25)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                                                 {{-- Угол DBC (между BD и BC) --}}
-                                                <path :d="makeAngleArc(B, D, C, 35)" fill="none" stroke="#10b981" stroke-width="2"/>
+                                                <path :d="makeAngleArc(B, D, C, 35)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                                                 {{-- Точки вершин --}}
                                                 <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
                                                 <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
@@ -324,7 +324,7 @@
                                             <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                                                 {{-- Прямоугольник --}}
                                                 <rect :x="A.x" :y="B.y" :width="D.x - A.x" :height="A.y - B.y"
-                                                    fill="none" stroke="#10b981" stroke-width="3"/>
+                                                    fill="none" stroke="#dc2626" stroke-width="3"/>
                                                 {{-- Диагонали --}}
                                                 <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#f59e0b" stroke-width="3"/>
                                                 <line :x1="B.x" :y1="B.y" :x2="D.x" :y2="D.y" stroke="#f59e0b" stroke-width="3"/>
