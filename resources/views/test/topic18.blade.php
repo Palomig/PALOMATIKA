@@ -41,16 +41,56 @@
         .geo-line { transition: stroke 0.2s ease, stroke-width 0.2s ease; }
         .geo-point { transition: r 0.2s ease, fill 0.2s ease; }
         .geo-label {
-            font-family: 'Times New Roman', serif;
+            font-family: 'Courier New', monospace;
             font-style: italic;
             font-weight: 500;
             user-select: none;
             pointer-events: none;
         }
         .katex { font-size: 1.1em; }
+
+        /* Blueprint color scheme */
+        :root {
+            --bp-bg: #0a1628;
+            --bp-grid-small: #1a3a5c;
+            --bp-grid-large: #1e4a6e;
+            --bp-line: #c8dce8;
+            --bp-circle: #5a9fcf;
+            --bp-aux: #5a9fcf;
+            --bp-accent: #d4a855;
+            --bp-axis: #3a5a7c;
+            --bp-service: #7eb8da;
+            --bp-text: #c8dce8;
+            --bp-text-aux: #5a9fcf;
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+
+{{-- Blueprint SVG Definitions (shared across all SVGs) --}}
+<svg style="position: absolute; width: 0; height: 0; overflow: hidden;" aria-hidden="true">
+    <defs>
+        <pattern id="bp-smallGrid" width="10" height="10" patternUnits="userSpaceOnUse">
+            <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#1a3a5c" stroke-width="0.5"/>
+        </pattern>
+        <pattern id="bp-grid" width="50" height="50" patternUnits="userSpaceOnUse">
+            <rect width="50" height="50" fill="url(#bp-smallGrid)"/>
+            <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#1e4a6e" stroke-width="1"/>
+        </pattern>
+        <symbol id="bp-crosshair" viewBox="-6 -6 12 12">
+            <line x1="-5" y1="0" x2="5" y2="0" stroke="#7eb8da" stroke-width="1"/>
+            <line x1="0" y1="-5" x2="0" y2="5" stroke="#7eb8da" stroke-width="1"/>
+            <circle cx="0" cy="0" r="2" fill="none" stroke="#7eb8da" stroke-width="0.8"/>
+        </symbol>
+        <symbol id="bp-centerMark" viewBox="-8 -8 16 16">
+            <line x1="-6" y1="0" x2="-2" y2="0" stroke="#7eb8da" stroke-width="0.8"/>
+            <line x1="2" y1="0" x2="6" y2="0" stroke="#7eb8da" stroke-width="0.8"/>
+            <line x1="0" y1="-6" x2="0" y2="-2" stroke="#7eb8da" stroke-width="0.8"/>
+            <line x1="0" y1="2" x2="0" y2="6" stroke="#7eb8da" stroke-width="0.8"/>
+            <circle cx="0" cy="0" r="1.5" fill="#7eb8da"/>
+        </symbol>
+    </defs>
+</svg>
 
 <div class="max-w-7xl mx-auto px-4 py-8">
     {{-- Navigation --}}
@@ -137,15 +177,16 @@
                                                 {{-- Сетка через pattern --}}
                                                 <defs>
                                                     <pattern id="grid1-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
-                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#1e4a6e" stroke-width="0.8"/>
                                                     </pattern>
                                                 </defs>
+                                                <rect x="0" y="0" :width="width" :height="height" fill="#0a1628"/>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid1-{{ $index }})"/>
                                                 {{-- Треугольник --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                                    fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
+                                                    fill="none" stroke="#c8dce8" stroke-width="1.5" stroke-linejoin="round"/>
                                                 {{-- Прямой угол --}}
-                                                <path :d="rightAngleMark" fill="none" stroke="#10b981" stroke-width="2"/>
+                                                <path :d="rightAngleMark" fill="none" stroke="#c8dce8" stroke-width="1.5"/>
                                             </svg>
                                         </div>
                                         @break
@@ -156,14 +197,15 @@
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
                                                 <defs>
                                                     <pattern id="grid2-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
-                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#1e4a6e" stroke-width="0.8"/>
                                                     </pattern>
                                                 </defs>
+                                                <rect x="0" y="0" :width="width" :height="height" fill="#0a1628"/>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid2-{{ $index }})"/>
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
-                                                    fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
-                                                <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#10b981" stroke-width="2" stroke-dasharray="4,3"/>
-                                                <line :x1="B.x" :y1="B.y" :x2="D.x" :y2="D.y" stroke="#10b981" stroke-width="2" stroke-dasharray="4,3"/>
+                                                    fill="none" stroke="#c8dce8" stroke-width="1.5" stroke-linejoin="round"/>
+                                                <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#c8dce8" stroke-width="1.5" stroke-dasharray="4,3"/>
+                                                <line :x1="B.x" :y1="B.y" :x2="D.x" :y2="D.y" stroke="#c8dce8" stroke-width="1.5" stroke-dasharray="4,3"/>
                                             </svg>
                                         </div>
                                         @break
@@ -174,17 +216,18 @@
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
                                                 <defs>
                                                     <pattern id="grid3-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
-                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#1e4a6e" stroke-width="0.8"/>
                                                     </pattern>
                                                 </defs>
+                                                <rect x="0" y="0" :width="width" :height="height" fill="#0a1628"/>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid3-{{ $index }})"/>
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                                    fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
-                                                <circle :cx="M.x" :cy="M.y" r="4" fill="#f59e0b"/>
-                                                <text :x="A.x - 12" :y="A.y + 4" fill="#60a5fa" font-size="13" font-weight="bold" font-style="italic">A</text>
-                                                <text :x="B.x + 4" :y="B.y - 6" fill="#60a5fa" font-size="13" font-weight="bold" font-style="italic">B</text>
-                                                <text :x="C.x + 4" :y="C.y + 14" fill="#60a5fa" font-size="13" font-weight="bold" font-style="italic">C</text>
-                                                <text :x="M.x + 4" :y="M.y - 6" fill="#f59e0b" font-size="13" font-weight="bold" font-style="italic">M</text>
+                                                    fill="none" stroke="#c8dce8" stroke-width="1.5" stroke-linejoin="round"/>
+                                                <circle :cx="M.x" :cy="M.y" r="4" fill="#d4a855"/>
+                                                <text :x="A.x - 12" :y="A.y + 4" fill="#c8dce8" font-size="13" font-weight="bold" font-style="italic">A</text>
+                                                <text :x="B.x + 4" :y="B.y - 6" fill="#c8dce8" font-size="13" font-weight="bold" font-style="italic">B</text>
+                                                <text :x="C.x + 4" :y="C.y + 14" fill="#c8dce8" font-size="13" font-weight="bold" font-style="italic">C</text>
+                                                <text :x="M.x + 4" :y="M.y - 6" fill="#d4a855" font-size="13" font-weight="bold" font-style="italic">M</text>
                                             </svg>
                                         </div>
                                         @break
@@ -198,12 +241,13 @@
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
                                                 <defs>
                                                     <pattern id="grid4-{{ $zadanie['number'] }}-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
-                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#1e4a6e" stroke-width="0.8"/>
                                                     </pattern>
                                                 </defs>
+                                                <rect x="0" y="0" :width="width" :height="height" fill="#0a1628"/>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid4-{{ $zadanie['number'] }}-{{ $index }})"/>
                                                 <polygon :points="pointsString"
-                                                    fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
+                                                    fill="none" stroke="#c8dce8" stroke-width="1.5" stroke-linejoin="round"/>
                                             </svg>
                                         </div>
                                         @break
@@ -214,13 +258,14 @@
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
                                                 <defs>
                                                     <pattern id="grid8-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
-                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#1e4a6e" stroke-width="0.8"/>
                                                     </pattern>
                                                 </defs>
+                                                <rect x="0" y="0" :width="width" :height="height" fill="#0a1628"/>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid8-{{ $index }})"/>
-                                                <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#10b981" stroke-width="2.5"/>
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#10b981"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#10b981"/>
+                                                <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#c8dce8" stroke-width="1.5"/>
+                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#7eb8da"/>
+                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#7eb8da"/>
                                             </svg>
                                         </div>
                                         @break
@@ -231,16 +276,17 @@
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
                                                 <defs>
                                                     <pattern id="grid9-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
-                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#1e4a6e" stroke-width="0.8"/>
                                                     </pattern>
                                                 </defs>
+                                                <rect x="0" y="0" :width="width" :height="height" fill="#0a1628"/>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid9-{{ $index }})"/>
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                                    fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
-                                                <line :x1="M1.x" :y1="M1.y" :x2="M2.x" :y2="M2.y" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,3"/>
-                                                <text :x="A.x - 12" :y="A.y + 14" fill="#60a5fa" font-size="13" font-weight="bold" font-style="italic">A</text>
-                                                <text :x="B.x - 2" :y="B.y - 8" fill="#60a5fa" font-size="13" font-weight="bold" font-style="italic">B</text>
-                                                <text :x="C.x + 4" :y="C.y + 14" fill="#60a5fa" font-size="13" font-weight="bold" font-style="italic">C</text>
+                                                    fill="none" stroke="#c8dce8" stroke-width="1.5" stroke-linejoin="round"/>
+                                                <line :x1="M1.x" :y1="M1.y" :x2="M2.x" :y2="M2.y" stroke="#d4a855" stroke-width="2" stroke-dasharray="5,3"/>
+                                                <text :x="A.x - 12" :y="A.y + 14" fill="#c8dce8" font-size="13" font-weight="bold" font-style="italic">A</text>
+                                                <text :x="B.x - 2" :y="B.y - 8" fill="#c8dce8" font-size="13" font-weight="bold" font-style="italic">B</text>
+                                                <text :x="C.x + 4" :y="C.y + 14" fill="#c8dce8" font-size="13" font-weight="bold" font-style="italic">C</text>
                                             </svg>
                                         </div>
                                         @break
@@ -251,15 +297,16 @@
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
                                                 <defs>
                                                     <pattern id="grid10-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
-                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#1e4a6e" stroke-width="0.8"/>
                                                     </pattern>
                                                 </defs>
+                                                <rect x="0" y="0" :width="width" :height="height" fill="#0a1628"/>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid10-{{ $index }})"/>
                                                 <polygon :points="shapePoints"
-                                                    fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
-                                                <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#f59e0b" stroke-width="2.5"/>
-                                                <text :x="labelA.x" :y="labelA.y" fill="#60a5fa" font-size="13" font-weight="bold" font-style="italic">A</text>
-                                                <text :x="labelB.x" :y="labelB.y" fill="#60a5fa" font-size="13" font-weight="bold" font-style="italic">B</text>
+                                                    fill="none" stroke="#c8dce8" stroke-width="1.5" stroke-linejoin="round"/>
+                                                <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#d4a855" stroke-width="2.5"/>
+                                                <text :x="labelA.x" :y="labelA.y" fill="#c8dce8" font-size="13" font-weight="bold" font-style="italic">A</text>
+                                                <text :x="labelB.x" :y="labelB.y" fill="#c8dce8" font-size="13" font-weight="bold" font-style="italic">B</text>
                                             </svg>
                                         </div>
                                         @break
@@ -270,13 +317,14 @@
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
                                                 <defs>
                                                     <pattern id="grid11-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
-                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#1e4a6e" stroke-width="0.8"/>
                                                     </pattern>
                                                 </defs>
+                                                <rect x="0" y="0" :width="width" :height="height" fill="#0a1628"/>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid11-{{ $index }})"/>
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
-                                                    fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
-                                                <line :x1="M1.x" :y1="M1.y" :x2="M2.x" :y2="M2.y" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,3"/>
+                                                    fill="none" stroke="#c8dce8" stroke-width="1.5" stroke-linejoin="round"/>
+                                                <line :x1="M1.x" :y1="M1.y" :x2="M2.x" :y2="M2.y" stroke="#d4a855" stroke-width="2" stroke-dasharray="5,3"/>
                                             </svg>
                                         </div>
                                         @break
@@ -287,14 +335,15 @@
                                             <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-36 rounded">
                                                 <defs>
                                                     <pattern id="grid12-{{ $index }}" width="18" height="18" patternUnits="userSpaceOnUse">
-                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#475569" stroke-width="1"/>
+                                                        <path d="M 18 0 L 0 0 0 18" fill="none" stroke="#1e4a6e" stroke-width="0.8"/>
                                                     </pattern>
                                                 </defs>
+                                                <rect x="0" y="0" :width="width" :height="height" fill="#0a1628"/>
                                                 <rect x="0" y="0" :width="width" :height="height" fill="url(#grid12-{{ $index }})"/>
-                                                <circle :cx="c1.x" :cy="c1.y" :r="r1" fill="none" stroke="#10b981" stroke-width="2.5"/>
-                                                <circle :cx="c2.x" :cy="c2.y" :r="r2" fill="none" stroke="#10b981" stroke-width="2.5"/>
-                                                <circle :cx="c1.x" :cy="c1.y" r="3" fill="#10b981"/>
-                                                <circle :cx="c2.x" :cy="c2.y" r="3" fill="#10b981"/>
+                                                <circle :cx="c1.x" :cy="c1.y" :r="r1" fill="none" stroke="#c8dce8" stroke-width="1.5"/>
+                                                <circle :cx="c2.x" :cy="c2.y" :r="r2" fill="none" stroke="#c8dce8" stroke-width="1.5"/>
+                                                <circle :cx="c1.x" :cy="c1.y" r="3" fill="#7eb8da"/>
+                                                <circle :cx="c2.x" :cy="c2.y" r="3" fill="#7eb8da"/>
                                             </svg>
                                         </div>
                                         @break
