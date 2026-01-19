@@ -41,16 +41,56 @@
         .geo-line { transition: stroke 0.2s ease, stroke-width 0.2s ease; }
         .geo-point { transition: r 0.2s ease, fill 0.2s ease; }
         .geo-label {
-            font-family: 'Times New Roman', serif;
+            font-family: 'Courier New', monospace;
             font-style: italic;
             font-weight: 500;
             user-select: none;
             pointer-events: none;
         }
         .katex { font-size: 1.1em; }
+
+        /* Blueprint color scheme */
+        :root {
+            --bp-bg: #0a1628;
+            --bp-grid-small: #1a3a5c;
+            --bp-grid-large: #1e4a6e;
+            --bp-line: #c8dce8;
+            --bp-circle: #5a9fcf;
+            --bp-aux: #5a9fcf;
+            --bp-accent: #d4a855;
+            --bp-axis: #3a5a7c;
+            --bp-service: #7eb8da;
+            --bp-text: #c8dce8;
+            --bp-text-aux: #5a9fcf;
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+
+{{-- Blueprint SVG Definitions (shared across all SVGs) --}}
+<svg style="position: absolute; width: 0; height: 0; overflow: hidden;" aria-hidden="true">
+    <defs>
+        <pattern id="bp-smallGrid" width="10" height="10" patternUnits="userSpaceOnUse">
+            <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#1a3a5c" stroke-width="0.5"/>
+        </pattern>
+        <pattern id="bp-grid" width="50" height="50" patternUnits="userSpaceOnUse">
+            <rect width="50" height="50" fill="url(#bp-smallGrid)"/>
+            <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#1e4a6e" stroke-width="1"/>
+        </pattern>
+        <symbol id="bp-crosshair" viewBox="-6 -6 12 12">
+            <line x1="-5" y1="0" x2="5" y2="0" stroke="#7eb8da" stroke-width="1"/>
+            <line x1="0" y1="-5" x2="0" y2="5" stroke="#7eb8da" stroke-width="1"/>
+            <circle cx="0" cy="0" r="2" fill="none" stroke="#7eb8da" stroke-width="0.8"/>
+        </symbol>
+        <symbol id="bp-centerMark" viewBox="-8 -8 16 16">
+            <line x1="-6" y1="0" x2="-2" y2="0" stroke="#7eb8da" stroke-width="0.8"/>
+            <line x1="2" y1="0" x2="6" y2="0" stroke="#7eb8da" stroke-width="0.8"/>
+            <line x1="0" y1="-6" x2="0" y2="-2" stroke="#7eb8da" stroke-width="0.8"/>
+            <line x1="0" y1="2" x2="0" y2="6" stroke="#7eb8da" stroke-width="0.8"/>
+            <circle cx="0" cy="0" r="1.5" fill="#7eb8da"/>
+        </symbol>
+    </defs>
+</svg>
 
 <div class="max-w-7xl mx-auto px-4 py-8">
     {{-- Navigation --}}
@@ -137,20 +177,28 @@
                                         {{-- Биссектриса --}}
                                         <div x-data="bisectorSVG()">
                                             <svg viewBox="0 0 200 160" class="w-full h-36">
+                                                {{-- Blueprint background --}}
+                                                <rect width="100%" height="100%" fill="#0a1628"/>
+                                                <rect width="100%" height="100%" fill="url(#bp-grid)"/>
+                                                {{-- Main triangle --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                                    fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
+                                                    fill="none" stroke="#c8dce8" stroke-width="1.5" stroke-linejoin="round"/>
+                                                {{-- Bisector line --}}
                                                 <line :x1="A.x" :y1="A.y" :x2="D.x" :y2="D.y"
-                                                    stroke="#dc2626" stroke-width="1.5"/>
-                                                <circle :cx="D.x" :cy="D.y" r="3" fill="#dc2626"/>
-                                                <path :d="makeAngleArc(A, C, D, 20)" fill="none" stroke="#10b981" stroke-width="2"/>
-                                                <path :d="makeAngleArc(A, D, B, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
-                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
-                                                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                                                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
-                                                <text :x="D.x" :y="D.y + 15" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="middle">D</text>
+                                                    stroke="#5a9fcf" stroke-width="1" stroke-dasharray="8,4"/>
+                                                {{-- Angle arcs --}}
+                                                <path :d="makeAngleArc(A, C, D, 20)" fill="none" stroke="#d4a855" stroke-width="1.2"/>
+                                                <path :d="makeAngleArc(A, D, B, 25)" fill="none" stroke="#d4a855" stroke-width="1.2"/>
+                                                {{-- Vertices (crosshairs) --}}
+                                                <use href="#bp-crosshair" :x="A.x - 6" :y="A.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="B.x - 6" :y="B.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="C.x - 6" :y="C.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="D.x - 6" :y="D.y - 6" width="12" height="12"/>
+                                                {{-- Labels --}}
+                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                                                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                                                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                                                <text :x="D.x" :y="D.y + 15" fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">D</text>
                                             </svg>
                                         </div>
                                         @break
@@ -159,20 +207,28 @@
                                         {{-- Медиана --}}
                                         <div x-data="medianSVG()">
                                             <svg viewBox="0 0 200 160" class="w-full h-36">
+                                                {{-- Blueprint background --}}
+                                                <rect width="100%" height="100%" fill="#0a1628"/>
+                                                <rect width="100%" height="100%" fill="url(#bp-grid)"/>
+                                                {{-- Main triangle --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                                    fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
+                                                    fill="none" stroke="#c8dce8" stroke-width="1.5" stroke-linejoin="round"/>
+                                                {{-- Median line --}}
                                                 <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
-                                                    stroke="#dc2626" stroke-width="1.5"/>
-                                                <circle :cx="M.x" :cy="M.y" r="3" fill="#dc2626"/>
-                                                <line :x1="(A.x + M.x)/2 - 4" :y1="A.y - 4" :x2="(A.x + M.x)/2 + 4" :y2="A.y + 4" stroke="#3b82f6" stroke-width="2"/>
-                                                <line :x1="(M.x + C.x)/2 - 4" :y1="A.y - 4" :x2="(M.x + C.x)/2 + 4" :y2="A.y + 4" stroke="#3b82f6" stroke-width="2"/>
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
-                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
-                                                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                                                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
-                                                <text :x="M.x" :y="M.y + 15" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="middle">M</text>
+                                                    stroke="#5a9fcf" stroke-width="1" stroke-dasharray="8,4"/>
+                                                {{-- Equality marks --}}
+                                                <line :x1="(A.x + M.x)/2 - 4" :y1="A.y - 4" :x2="(A.x + M.x)/2 + 4" :y2="A.y + 4" stroke="#7eb8da" stroke-width="1.5"/>
+                                                <line :x1="(M.x + C.x)/2 - 4" :y1="A.y - 4" :x2="(M.x + C.x)/2 + 4" :y2="A.y + 4" stroke="#7eb8da" stroke-width="1.5"/>
+                                                {{-- Vertices (crosshairs) --}}
+                                                <use href="#bp-crosshair" :x="A.x - 6" :y="A.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="B.x - 6" :y="B.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="C.x - 6" :y="C.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="M.x - 6" :y="M.y - 6" width="12" height="12"/>
+                                                {{-- Labels --}}
+                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                                                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                                                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                                                <text :x="M.x" :y="M.y + 15" fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">M</text>
                                             </svg>
                                         </div>
                                         @break
@@ -181,17 +237,24 @@
                                         {{-- Сумма углов --}}
                                         <div x-data="anglesSumSVG()">
                                             <svg viewBox="0 0 200 160" class="w-full h-36">
+                                                {{-- Blueprint background --}}
+                                                <rect width="100%" height="100%" fill="#0a1628"/>
+                                                <rect width="100%" height="100%" fill="url(#bp-grid)"/>
+                                                {{-- Main triangle --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                                    fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
-                                                <path :d="makeAngleArc(A, C, B, 22)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                                                <path :d="makeAngleArc(B, A, C, 18)" fill="none" stroke="#10b981" stroke-width="2"/>
-                                                <path :d="makeAngleArc(C, B, A, 22)" fill="none" stroke="#3b82f6" stroke-width="2"/>
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
-                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
-                                                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                                                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                                                    fill="none" stroke="#c8dce8" stroke-width="1.5" stroke-linejoin="round"/>
+                                                {{-- Angle arcs --}}
+                                                <path :d="makeAngleArc(A, C, B, 22)" fill="none" stroke="#d4a855" stroke-width="1.2"/>
+                                                <path :d="makeAngleArc(B, A, C, 18)" fill="none" stroke="#d4a855" stroke-width="1.2"/>
+                                                <path :d="makeAngleArc(C, B, A, 22)" fill="none" stroke="#d4a855" stroke-width="1.2"/>
+                                                {{-- Vertices (crosshairs) --}}
+                                                <use href="#bp-crosshair" :x="A.x - 6" :y="A.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="B.x - 6" :y="B.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="C.x - 6" :y="C.y - 6" width="12" height="12"/>
+                                                {{-- Labels --}}
+                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                                                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                                                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                                             </svg>
                                         </div>
                                         @break
@@ -200,17 +263,25 @@
                                         {{-- Внешний угол --}}
                                         <div x-data="externalAngleSVG()">
                                             <svg viewBox="0 0 200 140" class="w-full h-32">
+                                                {{-- Blueprint background --}}
+                                                <rect width="100%" height="100%" fill="#0a1628"/>
+                                                <rect width="100%" height="100%" fill="url(#bp-grid)"/>
+                                                {{-- Main triangle --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                                    fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
-                                                <line :x1="C.x" :y1="C.y" :x2="D.x" :y2="D.y" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="6,4"/>
-                                                <path :d="makeAngleArc(C, A, B, 20)" fill="none" stroke="#10b981" stroke-width="2"/>
-                                                <path :d="makeAngleArc(C, B, D, 18)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
-                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
-                                                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                                                <text :x="C.x" :y="C.y + 18" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle">C</text>
+                                                    fill="none" stroke="#c8dce8" stroke-width="1.5" stroke-linejoin="round"/>
+                                                {{-- Extension line --}}
+                                                <line :x1="C.x" :y1="C.y" :x2="D.x" :y2="D.y" stroke="#5a9fcf" stroke-width="1" stroke-dasharray="8,4"/>
+                                                {{-- Angle arcs --}}
+                                                <path :d="makeAngleArc(C, A, B, 20)" fill="none" stroke="#5a9fcf" stroke-width="1"/>
+                                                <path :d="makeAngleArc(C, B, D, 18)" fill="none" stroke="#d4a855" stroke-width="1.5"/>
+                                                {{-- Vertices (crosshairs) --}}
+                                                <use href="#bp-crosshair" :x="A.x - 6" :y="A.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="B.x - 6" :y="B.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="C.x - 6" :y="C.y - 6" width="12" height="12"/>
+                                                {{-- Labels --}}
+                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                                                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                                                <text :x="C.x" :y="C.y + 18" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle">C</text>
                                             </svg>
                                         </div>
                                         @break
@@ -219,21 +290,29 @@
                                         {{-- Равнобедренный --}}
                                         <div x-data="isoscelesSVG()">
                                             <svg viewBox="0 0 200 160" class="w-full h-36">
+                                                {{-- Blueprint background --}}
+                                                <rect width="100%" height="100%" fill="#0a1628"/>
+                                                <rect width="100%" height="100%" fill="url(#bp-grid)"/>
+                                                {{-- Main triangle --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                                    fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
-                                                <line :x1="markAB.x - 5" :y1="markAB.y - 5" :x2="markAB.x + 5" :y2="markAB.y + 5" stroke="#3b82f6" stroke-width="2.5"/>
-                                                <line :x1="markAB.x - 5 + 4" :y1="markAB.y - 5 + 4" :x2="markAB.x + 5 + 4" :y2="markAB.y + 5 + 4" stroke="#3b82f6" stroke-width="2.5"/>
-                                                <line :x1="markBC.x - 5" :y1="markBC.y + 5" :x2="markBC.x + 5" :y2="markBC.y - 5" stroke="#3b82f6" stroke-width="2.5"/>
-                                                <line :x1="markBC.x - 5 - 4" :y1="markBC.y + 5 + 4" :x2="markBC.x + 5 - 4" :y2="markBC.y - 5 + 4" stroke="#3b82f6" stroke-width="2.5"/>
-                                                <path :d="makeAngleArc(A, C, B, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
-                                                <path :d="makeAngleArc(C, B, A, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
-                                                <path :d="makeAngleArc(B, A, C, 20)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
-                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
-                                                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                                                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                                                    fill="none" stroke="#c8dce8" stroke-width="1.5" stroke-linejoin="round"/>
+                                                {{-- Equality marks --}}
+                                                <line :x1="markAB.x - 5" :y1="markAB.y - 5" :x2="markAB.x + 5" :y2="markAB.y + 5" stroke="#7eb8da" stroke-width="1.5"/>
+                                                <line :x1="markAB.x - 5 + 4" :y1="markAB.y - 5 + 4" :x2="markAB.x + 5 + 4" :y2="markAB.y + 5 + 4" stroke="#7eb8da" stroke-width="1.5"/>
+                                                <line :x1="markBC.x - 5" :y1="markBC.y + 5" :x2="markBC.x + 5" :y2="markBC.y - 5" stroke="#7eb8da" stroke-width="1.5"/>
+                                                <line :x1="markBC.x - 5 - 4" :y1="markBC.y + 5 + 4" :x2="markBC.x + 5 - 4" :y2="markBC.y - 5 + 4" stroke="#7eb8da" stroke-width="1.5"/>
+                                                {{-- Angle arcs --}}
+                                                <path :d="makeAngleArc(A, C, B, 25)" fill="none" stroke="#5a9fcf" stroke-width="1"/>
+                                                <path :d="makeAngleArc(C, B, A, 25)" fill="none" stroke="#5a9fcf" stroke-width="1"/>
+                                                <path :d="makeAngleArc(B, A, C, 20)" fill="none" stroke="#d4a855" stroke-width="1.2"/>
+                                                {{-- Vertices (crosshairs) --}}
+                                                <use href="#bp-crosshair" :x="A.x - 6" :y="A.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="B.x - 6" :y="B.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="C.x - 6" :y="C.y - 6" width="12" height="12"/>
+                                                {{-- Labels --}}
+                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                                                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                                                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                                             </svg>
                                         </div>
                                         @break
@@ -242,18 +321,27 @@
                                         {{-- Внешний угол равнобедренного --}}
                                         <div x-data="isoscelesExternalSVG()">
                                             <svg viewBox="0 0 200 140" class="w-full h-32">
+                                                {{-- Blueprint background --}}
+                                                <rect width="100%" height="100%" fill="#0a1628"/>
+                                                <rect width="100%" height="100%" fill="url(#bp-grid)"/>
+                                                {{-- Main triangle --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                                    fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
-                                                <line :x1="C.x" :y1="C.y" :x2="D.x" :y2="D.y" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="6,4"/>
-                                                <line :x1="markAB.x - 4" :y1="markAB.y - 4" :x2="markAB.x + 4" :y2="markAB.y + 4" stroke="#3b82f6" stroke-width="2"/>
-                                                <line :x1="markBC.x - 4" :y1="markBC.y + 4" :x2="markBC.x + 4" :y2="markBC.y - 4" stroke="#3b82f6" stroke-width="2"/>
-                                                <path :d="makeAngleArc(C, B, D, 18)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
-                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
-                                                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                                                <text :x="C.x" :y="C.y + 18" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle">C</text>
+                                                    fill="none" stroke="#c8dce8" stroke-width="1.5" stroke-linejoin="round"/>
+                                                {{-- Extension line --}}
+                                                <line :x1="C.x" :y1="C.y" :x2="D.x" :y2="D.y" stroke="#5a9fcf" stroke-width="1" stroke-dasharray="8,4"/>
+                                                {{-- Equality marks --}}
+                                                <line :x1="markAB.x - 4" :y1="markAB.y - 4" :x2="markAB.x + 4" :y2="markAB.y + 4" stroke="#7eb8da" stroke-width="1.5"/>
+                                                <line :x1="markBC.x - 4" :y1="markBC.y + 4" :x2="markBC.x + 4" :y2="markBC.y - 4" stroke="#7eb8da" stroke-width="1.5"/>
+                                                {{-- Angle arc --}}
+                                                <path :d="makeAngleArc(C, B, D, 18)" fill="none" stroke="#d4a855" stroke-width="1.5"/>
+                                                {{-- Vertices (crosshairs) --}}
+                                                <use href="#bp-crosshair" :x="A.x - 6" :y="A.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="B.x - 6" :y="B.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="C.x - 6" :y="C.y - 6" width="12" height="12"/>
+                                                {{-- Labels --}}
+                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                                                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                                                <text :x="C.x" :y="C.y + 18" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle">C</text>
                                             </svg>
                                         </div>
                                         @break
@@ -262,17 +350,25 @@
                                         {{-- Прямоугольный --}}
                                         <div x-data="rightTriangleSVG()">
                                             <svg viewBox="0 0 200 160" class="w-full h-36">
+                                                {{-- Blueprint background --}}
+                                                <rect width="100%" height="100%" fill="#0a1628"/>
+                                                <rect width="100%" height="100%" fill="url(#bp-grid)"/>
+                                                {{-- Main triangle --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                                    fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
-                                                <path :d="rightAnglePath(C, A, B, 12)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                                                <path :d="makeAngleArc(A, C, B, 22)" fill="none" stroke="#10b981" stroke-width="2"/>
-                                                <path :d="makeAngleArc(B, A, C, 18)" fill="none" stroke="#3b82f6" stroke-width="2"/>
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
-                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
-                                                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                                                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                                                    fill="none" stroke="#c8dce8" stroke-width="1.5" stroke-linejoin="round"/>
+                                                {{-- Right angle mark --}}
+                                                <path :d="rightAnglePath(C, A, B, 12)" fill="none" stroke="#d4a855" stroke-width="1.2"/>
+                                                {{-- Angle arcs --}}
+                                                <path :d="makeAngleArc(A, C, B, 22)" fill="none" stroke="#5a9fcf" stroke-width="1"/>
+                                                <path :d="makeAngleArc(B, A, C, 18)" fill="none" stroke="#5a9fcf" stroke-width="1"/>
+                                                {{-- Vertices (crosshairs) --}}
+                                                <use href="#bp-crosshair" :x="A.x - 6" :y="A.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="B.x - 6" :y="B.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="C.x - 6" :y="C.y - 6" width="12" height="12"/>
+                                                {{-- Labels --}}
+                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                                                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                                                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                                             </svg>
                                         </div>
                                         @break
@@ -281,21 +377,30 @@
                                         {{-- Высота --}}
                                         <div x-data="heightSVG()">
                                             <svg viewBox="0 0 200 160" class="w-full h-36">
+                                                {{-- Blueprint background --}}
+                                                <rect width="100%" height="100%" fill="#0a1628"/>
+                                                <rect width="100%" height="100%" fill="url(#bp-grid)"/>
+                                                {{-- Main triangle --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                                    fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
+                                                    fill="none" stroke="#c8dce8" stroke-width="1.5" stroke-linejoin="round"/>
+                                                {{-- Height line --}}
                                                 <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y"
-                                                    stroke="#dc2626" stroke-width="1.5"/>
-                                                <path :d="rightAnglePath(H, A, B, 10)" fill="none" stroke="#3b82f6" stroke-width="2"/>
-                                                <circle :cx="H.x" :cy="H.y" r="3" fill="#dc2626"/>
-                                                <path :d="makeAngleArc(A, C, B, 22)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                                                <path :d="makeAngleArc(B, A, H, 18)" fill="none" stroke="#10b981" stroke-width="2"/>
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
-                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
-                                                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                                                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
-                                                <text :x="H.x + 12" :y="H.y - 5" fill="#60a5fa" font-size="14" class="geo-label">H</text>
+                                                    stroke="#5a9fcf" stroke-width="1" stroke-dasharray="8,4"/>
+                                                {{-- Right angle mark --}}
+                                                <path :d="rightAnglePath(H, A, B, 10)" fill="none" stroke="#7eb8da" stroke-width="1"/>
+                                                {{-- Angle arcs --}}
+                                                <path :d="makeAngleArc(A, C, B, 22)" fill="none" stroke="#d4a855" stroke-width="1.2"/>
+                                                <path :d="makeAngleArc(B, A, H, 18)" fill="none" stroke="#5a9fcf" stroke-width="1"/>
+                                                {{-- Vertices (crosshairs) --}}
+                                                <use href="#bp-crosshair" :x="A.x - 6" :y="A.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="B.x - 6" :y="B.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="C.x - 6" :y="C.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="H.x - 6" :y="H.y - 6" width="12" height="12"/>
+                                                {{-- Labels --}}
+                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                                                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                                                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                                                <text :x="H.x + 12" :y="H.y - 5" fill="#5a9fcf" font-size="12" class="geo-label">H</text>
                                             </svg>
                                         </div>
                                         @break
@@ -304,19 +409,28 @@
                                         {{-- Площадь прямоугольного --}}
                                         <div x-data="areaSVG()">
                                             <svg viewBox="0 0 200 160" class="w-full h-36">
+                                                {{-- Blueprint background --}}
+                                                <rect width="100%" height="100%" fill="#0a1628"/>
+                                                <rect width="100%" height="100%" fill="url(#bp-grid)"/>
+                                                {{-- Main triangle with fill --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                                    fill="rgba(245, 158, 11, 0.15)" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
-                                                <path :d="rightAnglePath(C, A, B, 12)" fill="none" stroke="#666" stroke-width="2"/>
-                                                <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#f59e0b" stroke-width="3"/>
-                                                <line :x1="C.x" :y1="C.y" :x2="B.x" :y2="B.y" stroke="#3b82f6" stroke-width="3"/>
-                                                <text :x="(A.x + C.x)/2 - 12" :y="(A.y + C.y)/2" fill="#f59e0b" font-size="14" class="geo-label">a</text>
-                                                <text :x="(C.x + B.x)/2 + 8" :y="(C.y + B.y)/2" fill="#3b82f6" font-size="14" class="geo-label">b</text>
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
-                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
-                                                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                                                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                                                    fill="rgba(90, 159, 207, 0.1)" stroke="#c8dce8" stroke-width="1.5" stroke-linejoin="round"/>
+                                                {{-- Right angle mark --}}
+                                                <path :d="rightAnglePath(C, A, B, 12)" fill="none" stroke="#3a5a7c" stroke-width="1"/>
+                                                {{-- Highlighted sides --}}
+                                                <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#d4a855" stroke-width="2"/>
+                                                <line :x1="C.x" :y1="C.y" :x2="B.x" :y2="B.y" stroke="#5a9fcf" stroke-width="2"/>
+                                                {{-- Side labels --}}
+                                                <text :x="(A.x + C.x)/2 - 12" :y="(A.y + C.y)/2" fill="#d4a855" font-size="12" class="geo-label">a</text>
+                                                <text :x="(C.x + B.x)/2 + 8" :y="(C.y + B.y)/2" fill="#5a9fcf" font-size="12" class="geo-label">b</text>
+                                                {{-- Vertices (crosshairs) --}}
+                                                <use href="#bp-crosshair" :x="A.x - 6" :y="A.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="B.x - 6" :y="B.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="C.x - 6" :y="C.y - 6" width="12" height="12"/>
+                                                {{-- Labels --}}
+                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                                                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                                                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                                             </svg>
                                         </div>
                                         @break
@@ -325,23 +439,29 @@
                                         {{-- Площадь с высотой: S = 1/2 * a * h --}}
                                         <div x-data="areaHeightSVG()">
                                             <svg viewBox="0 0 200 160" class="w-full h-36">
+                                                {{-- Blueprint background --}}
+                                                <rect width="100%" height="100%" fill="#0a1628"/>
+                                                <rect width="100%" height="100%" fill="url(#bp-grid)"/>
+                                                {{-- Main triangle with fill --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                                    fill="rgba(245, 158, 11, 0.15)" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
-                                                <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y" stroke="#10b981" stroke-width="2" stroke-dasharray="5,3"/>
-                                                <path :d="rightAnglePath(H, A, B, 10)" fill="none" stroke="#10b981" stroke-width="2"/>
-                                                {{-- Метки сторон --}}
-                                                <text :x="(A.x + C.x)/2" :y="A.y + 18" fill="#f59e0b" font-size="14" class="geo-label" text-anchor="middle">a</text>
-                                                <text :x="(B.x + H.x)/2 + 12" :y="(B.y + H.y)/2" fill="#10b981" font-size="14" class="geo-label">h</text>
-                                                {{-- Вершины --}}
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="H.x" :cy="H.y" r="3" fill="#10b981"/>
-                                                {{-- Метки вершин --}}
-                                                <text :x="A.x - 15" :y="A.y + 5" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="end" dominant-baseline="middle">A</text>
-                                                <text :x="B.x" :y="B.y - 12" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                                                <text :x="C.x + 15" :y="C.y + 5" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="start" dominant-baseline="middle">C</text>
-                                                <text :x="H.x + 5" :y="H.y + 15" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="start">H</text>
+                                                    fill="rgba(90, 159, 207, 0.1)" stroke="#c8dce8" stroke-width="1.5" stroke-linejoin="round"/>
+                                                {{-- Height line --}}
+                                                <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y" stroke="#5a9fcf" stroke-width="1" stroke-dasharray="8,4"/>
+                                                {{-- Right angle mark --}}
+                                                <path :d="rightAnglePath(H, A, B, 10)" fill="none" stroke="#5a9fcf" stroke-width="1"/>
+                                                {{-- Side labels --}}
+                                                <text :x="(A.x + C.x)/2" :y="A.y + 18" fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">a</text>
+                                                <text :x="(B.x + H.x)/2 + 12" :y="(B.y + H.y)/2" fill="#5a9fcf" font-size="12" class="geo-label">h</text>
+                                                {{-- Vertices (crosshairs) --}}
+                                                <use href="#bp-crosshair" :x="A.x - 6" :y="A.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="B.x - 6" :y="B.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="C.x - 6" :y="C.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="H.x - 6" :y="H.y - 6" width="12" height="12"/>
+                                                {{-- Labels --}}
+                                                <text :x="A.x - 15" :y="A.y + 5" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="end" dominant-baseline="middle">A</text>
+                                                <text :x="B.x" :y="B.y - 12" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                                                <text :x="C.x + 15" :y="C.y + 5" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="start" dominant-baseline="middle">C</text>
+                                                <text :x="H.x + 5" :y="H.y + 15" fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="start">H</text>
                                             </svg>
                                         </div>
                                         @break
@@ -350,21 +470,29 @@
                                         {{-- Средняя линия --}}
                                         <div x-data="midlineSVG()">
                                             <svg viewBox="0 0 200 160" class="w-full h-36">
+                                                {{-- Blueprint background --}}
+                                                <rect width="100%" height="100%" fill="#0a1628"/>
+                                                <rect width="100%" height="100%" fill="url(#bp-grid)"/>
+                                                {{-- Main triangle --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                                    fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
-                                                <line :x1="M.x" :y1="M.y" :x2="N.x" :y2="N.y" stroke="#10b981" stroke-width="2.5"/>
-                                                <line :x1="M.x - 4" :y1="M.y - 6" :x2="M.x + 4" :y2="M.y + 6" stroke="#3b82f6" stroke-width="2"/>
-                                                <line :x1="N.x - 4" :y1="N.y + 6" :x2="N.x + 4" :y2="N.y - 6" stroke="#3b82f6" stroke-width="2"/>
-                                                <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
-                                                <circle :cx="N.x" :cy="N.y" r="4" fill="#10b981"/>
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
-                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
-                                                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                                                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
-                                                <text :x="M.x - 12" :y="M.y" fill="#60a5fa" font-size="14" class="geo-label">M</text>
-                                                <text :x="N.x + 10" :y="N.y" fill="#60a5fa" font-size="14" class="geo-label">N</text>
+                                                    fill="none" stroke="#c8dce8" stroke-width="1.5" stroke-linejoin="round"/>
+                                                {{-- Midline --}}
+                                                <line :x1="M.x" :y1="M.y" :x2="N.x" :y2="N.y" stroke="#d4a855" stroke-width="1.5"/>
+                                                {{-- Equality marks --}}
+                                                <line :x1="M.x - 4" :y1="M.y - 6" :x2="M.x + 4" :y2="M.y + 6" stroke="#7eb8da" stroke-width="1.5"/>
+                                                <line :x1="N.x - 4" :y1="N.y + 6" :x2="N.x + 4" :y2="N.y - 6" stroke="#7eb8da" stroke-width="1.5"/>
+                                                {{-- Vertices (crosshairs) --}}
+                                                <use href="#bp-crosshair" :x="A.x - 6" :y="A.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="B.x - 6" :y="B.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="C.x - 6" :y="C.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="M.x - 6" :y="M.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="N.x - 6" :y="N.y - 6" width="12" height="12"/>
+                                                {{-- Labels --}}
+                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                                                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                                                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                                                <text :x="M.x - 12" :y="M.y" fill="#5a9fcf" font-size="12" class="geo-label">M</text>
+                                                <text :x="N.x + 10" :y="N.y" fill="#5a9fcf" font-size="12" class="geo-label">N</text>
                                             </svg>
                                         </div>
                                         @break
@@ -374,25 +502,30 @@
                                         {{-- Теорема Пифагора: a² + b² = c² --}}
                                         <div x-data="pythagorasSVG()">
                                             <svg viewBox="0 0 200 160" class="w-full h-36">
+                                                {{-- Blueprint background --}}
+                                                <rect width="100%" height="100%" fill="#0a1628"/>
+                                                <rect width="100%" height="100%" fill="url(#bp-grid)"/>
+                                                {{-- Main triangle --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                                    fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
-                                                <path :d="rightAnglePath(C, A, B, 12)" fill="none" stroke="#10b981" stroke-width="2"/>
-                                                {{-- Катеты и гипотенуза --}}
-                                                <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#f59e0b" stroke-width="3"/>
-                                                <line :x1="C.x" :y1="C.y" :x2="B.x" :y2="B.y" stroke="#3b82f6" stroke-width="3"/>
-                                                <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#ec4899" stroke-width="3"/>
-                                                {{-- Метки сторон --}}
-                                                <text :x="(A.x + C.x)/2" :y="A.y + 18" fill="#f59e0b" font-size="14" class="geo-label" text-anchor="middle">a</text>
-                                                <text :x="C.x + 15" :y="(C.y + B.y)/2" fill="#3b82f6" font-size="14" class="geo-label">b</text>
-                                                <text :x="(A.x + B.x)/2 - 12" :y="(A.y + B.y)/2 - 5" fill="#ec4899" font-size="14" class="geo-label">c</text>
-                                                {{-- Вершины --}}
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
-                                                {{-- Метки вершин --}}
-                                                <text :x="A.x - 15" :y="A.y + 5" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="end" dominant-baseline="middle">A</text>
-                                                <text :x="B.x + 5" :y="B.y - 12" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="start" dominant-baseline="middle">B</text>
-                                                <text :x="C.x + 15" :y="C.y + 5" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="start" dominant-baseline="middle">C</text>
+                                                    fill="none" stroke="#c8dce8" stroke-width="1.5" stroke-linejoin="round"/>
+                                                {{-- Right angle mark --}}
+                                                <path :d="rightAnglePath(C, A, B, 12)" fill="none" stroke="#5a9fcf" stroke-width="1"/>
+                                                {{-- Highlighted sides (catheti and hypotenuse) --}}
+                                                <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#d4a855" stroke-width="2"/>
+                                                <line :x1="C.x" :y1="C.y" :x2="B.x" :y2="B.y" stroke="#5a9fcf" stroke-width="2"/>
+                                                <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#7eb8da" stroke-width="2"/>
+                                                {{-- Side labels --}}
+                                                <text :x="(A.x + C.x)/2" :y="A.y + 18" fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">a</text>
+                                                <text :x="C.x + 15" :y="(C.y + B.y)/2" fill="#5a9fcf" font-size="12" class="geo-label">b</text>
+                                                <text :x="(A.x + B.x)/2 - 12" :y="(A.y + B.y)/2 - 5" fill="#7eb8da" font-size="12" class="geo-label">c</text>
+                                                {{-- Vertices (crosshairs) --}}
+                                                <use href="#bp-crosshair" :x="A.x - 6" :y="A.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="B.x - 6" :y="B.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="C.x - 6" :y="C.y - 6" width="12" height="12"/>
+                                                {{-- Labels --}}
+                                                <text :x="A.x - 15" :y="A.y + 5" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="end" dominant-baseline="middle">A</text>
+                                                <text :x="B.x + 5" :y="B.y - 12" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="start" dominant-baseline="middle">B</text>
+                                                <text :x="C.x + 15" :y="C.y + 5" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="start" dominant-baseline="middle">C</text>
                                             </svg>
                                         </div>
                                         @break
@@ -405,21 +538,25 @@
                                         {{-- Равносторонний треугольник с высотой --}}
                                         <div x-data="equilateralSVG()">
                                             <svg viewBox="0 0 200 160" class="w-full h-36">
+                                                {{-- Blueprint background --}}
+                                                <rect width="100%" height="100%" fill="#0a1628"/>
+                                                <rect width="100%" height="100%" fill="url(#bp-grid)"/>
+                                                {{-- Main triangle --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                                    fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
-                                                {{-- Высота BH --}}
-                                                <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y" stroke="#10b981" stroke-width="2" stroke-dasharray="5,3"/>
-                                                <path :d="rightAnglePath(H, A, B, 10)" fill="none" stroke="#10b981" stroke-width="2"/>
-                                                {{-- Вершины --}}
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="H.x" :cy="H.y" r="3" fill="#10b981"/>
-                                                {{-- Метки вершин --}}
-                                                <text :x="A.x - 15" :y="A.y + 5" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="end" dominant-baseline="middle">A</text>
-                                                <text :x="B.x" :y="B.y - 12" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                                                <text :x="C.x + 15" :y="C.y + 5" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="start" dominant-baseline="middle">C</text>
-                                                <text :x="H.x + 5" :y="H.y + 15" fill="#60a5fa" font-size="14" class="geo-label" text-anchor="start">H</text>
+                                                    fill="none" stroke="#c8dce8" stroke-width="1.5" stroke-linejoin="round"/>
+                                                {{-- Height BH --}}
+                                                <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y" stroke="#5a9fcf" stroke-width="1" stroke-dasharray="8,4"/>
+                                                <path :d="rightAnglePath(H, A, B, 10)" fill="none" stroke="#5a9fcf" stroke-width="1"/>
+                                                {{-- Vertices (crosshairs) --}}
+                                                <use href="#bp-crosshair" :x="A.x - 6" :y="A.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="B.x - 6" :y="B.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="C.x - 6" :y="C.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="H.x - 6" :y="H.y - 6" width="12" height="12"/>
+                                                {{-- Labels --}}
+                                                <text :x="A.x - 15" :y="A.y + 5" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="end" dominant-baseline="middle">A</text>
+                                                <text :x="B.x" :y="B.y - 12" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                                                <text :x="C.x + 15" :y="C.y + 5" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="start" dominant-baseline="middle">C</text>
+                                                <text :x="H.x + 5" :y="H.y + 15" fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="start">H</text>
                                             </svg>
                                         </div>
                                         @break
@@ -428,19 +565,30 @@
                                         {{-- Радиус описанной окружности --}}
                                         <div x-data="circumcircleSVG()">
                                             <svg viewBox="0 0 200 160" class="w-full h-36">
-                                                <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#6366f1" stroke-width="1.5" stroke-dasharray="4,3"/>
+                                                {{-- Blueprint background --}}
+                                                <rect width="100%" height="100%" fill="#0a1628"/>
+                                                <rect width="100%" height="100%" fill="url(#bp-grid)"/>
+                                                {{-- Circumcircle --}}
+                                                <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#5a9fcf" stroke-width="1.2"/>
+                                                {{-- Main triangle --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                                    fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
-                                                <path :d="rightAnglePath(C, A, B, 10)" fill="none" stroke="#10b981" stroke-width="2"/>
-                                                <line :x1="O.x" :y1="O.y" :x2="A.x" :y2="A.y" stroke="#f59e0b" stroke-width="2"/>
-                                                <circle :cx="O.x" :cy="O.y" r="3" fill="#f59e0b"/>
-                                                <text :x="(O.x + A.x)/2 - 8" :y="(O.y + A.y)/2 - 5" fill="#f59e0b" font-size="12" class="geo-label">R</text>
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
-                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
-                                                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                                                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                                                    fill="none" stroke="#c8dce8" stroke-width="1.5" stroke-linejoin="round"/>
+                                                {{-- Right angle mark --}}
+                                                <path :d="rightAnglePath(C, A, B, 10)" fill="none" stroke="#5a9fcf" stroke-width="1"/>
+                                                {{-- Radius line --}}
+                                                <line :x1="O.x" :y1="O.y" :x2="A.x" :y2="A.y" stroke="#d4a855" stroke-width="1" stroke-dasharray="6,3"/>
+                                                {{-- Center mark --}}
+                                                <use href="#bp-centerMark" :x="O.x - 8" :y="O.y - 8" width="16" height="16"/>
+                                                {{-- Radius label --}}
+                                                <text :x="(O.x + A.x)/2 - 8" :y="(O.y + A.y)/2 - 5" fill="#d4a855" font-size="12" class="geo-label">R</text>
+                                                {{-- Vertices (crosshairs) --}}
+                                                <use href="#bp-crosshair" :x="A.x - 6" :y="A.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="B.x - 6" :y="B.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="C.x - 6" :y="C.y - 6" width="12" height="12"/>
+                                                {{-- Labels --}}
+                                                <text :x="labelPos(A, center).x" :y="labelPos(A, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                                                <text :x="labelPos(B, center).x" :y="labelPos(B, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                                                <text :x="labelPos(C, center).x" :y="labelPos(C, center).y" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                                             </svg>
                                         </div>
                                         @break
@@ -452,65 +600,62 @@
                                     @case(24)
                                     @case(25)
                                         {{-- Тригонометрия в прямоугольном треугольнике --}}
-                                        {{-- ПРАВИЛА ПОЗИЦИОНИРОВАНИЯ:
-                                             1. Метки вершин (A,B,C) - через labelPos() от центра, distance=18
-                                             2. Метки сторон - на середине стороны, смещение перпендикулярно стороне
-                                             3. Метки углов - внутри угловой дуги или рядом с radius+10
-                                             4. Не показывать одновременно метку вершины и угла в одной точке --}}
                                         <div x-data="trigSVG()">
                                             <svg viewBox="0 0 200 160" class="w-full h-36">
-                                                {{-- Основной треугольник --}}
+                                                {{-- Blueprint background --}}
+                                                <rect width="100%" height="100%" fill="#0a1628"/>
+                                                <rect width="100%" height="100%" fill="url(#bp-grid)"/>
+                                                {{-- Main triangle --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                                    fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
-                                                {{-- Прямой угол при C --}}
-                                                <path :d="rightAnglePath(C, A, B, 12)" fill="none" stroke="#10b981" stroke-width="2"/>
-                                                {{-- Выделенные стороны --}}
-                                                <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#3b82f6" stroke-width="2"/>
-                                                <line :x1="C.x" :y1="C.y" :x2="B.x" :y2="B.y" stroke="#ec4899" stroke-width="2"/>
-                                                {{-- Метки сторон: AC внизу, BC справа --}}
-                                                <text :x="(A.x + C.x)/2" :y="A.y + 18" fill="#3b82f6" font-size="12" class="geo-label" text-anchor="middle">AC</text>
-                                                <text :x="C.x + 18" :y="(C.y + B.y)/2 + 10" fill="#ec4899" font-size="12" class="geo-label">BC</text>
-                                                {{-- Гипотенуза AB --}}
-                                                <text :x="(A.x + B.x)/2 - 18" :y="(A.y + B.y)/2 - 5" fill="#dc2626" font-size="12" class="geo-label">AB</text>
-                                                {{-- Вершины --}}
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
-                                                {{-- Метки вершин --}}
-                                                <text :x="A.x - 15" :y="A.y + 5" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="end" dominant-baseline="middle">A</text>
-                                                <text :x="B.x + 5" :y="B.y - 12" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="start" dominant-baseline="middle">B</text>
-                                                <text :x="C.x + 15" :y="C.y + 5" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="start" dominant-baseline="middle">C</text>
+                                                    fill="none" stroke="#c8dce8" stroke-width="1.5" stroke-linejoin="round"/>
+                                                {{-- Right angle at C --}}
+                                                <path :d="rightAnglePath(C, A, B, 12)" fill="none" stroke="#5a9fcf" stroke-width="1"/>
+                                                {{-- Highlighted sides --}}
+                                                <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#5a9fcf" stroke-width="1.5"/>
+                                                <line :x1="C.x" :y1="C.y" :x2="B.x" :y2="B.y" stroke="#d4a855" stroke-width="1.5"/>
+                                                {{-- Side labels --}}
+                                                <text :x="(A.x + C.x)/2" :y="A.y + 18" fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">AC</text>
+                                                <text :x="C.x + 18" :y="(C.y + B.y)/2 + 10" fill="#d4a855" font-size="12" class="geo-label">BC</text>
+                                                {{-- Hypotenuse AB --}}
+                                                <text :x="(A.x + B.x)/2 - 18" :y="(A.y + B.y)/2 - 5" fill="#c8dce8" font-size="12" class="geo-label">AB</text>
+                                                {{-- Vertices (crosshairs) --}}
+                                                <use href="#bp-crosshair" :x="A.x - 6" :y="A.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="B.x - 6" :y="B.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="C.x - 6" :y="C.y - 6" width="12" height="12"/>
+                                                {{-- Labels --}}
+                                                <text :x="A.x - 15" :y="A.y + 5" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="end" dominant-baseline="middle">A</text>
+                                                <text :x="B.x + 5" :y="B.y - 12" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="start" dominant-baseline="middle">B</text>
+                                                <text :x="C.x + 15" :y="C.y + 5" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="start" dominant-baseline="middle">C</text>
                                             </svg>
                                         </div>
                                         @break
 
                                     @case(26)
                                         {{-- Теорема о площади: S = 1/2 * AB * BC * sin(B) --}}
-                                        {{-- ПРАВИЛА ПОЗИЦИОНИРОВАНИЯ:
-                                             1. Все три вершины должны иметь метки
-                                             2. Угол показываем дугой, метку угла внутри дуги
-                                             3. Стороны подписываем снаружи треугольника --}}
                                         <div x-data="areaTheoremSVG()">
                                             <svg viewBox="0 0 200 160" class="w-full h-36">
-                                                {{-- Заливка треугольника (показывает площадь) --}}
+                                                {{-- Blueprint background --}}
+                                                <rect width="100%" height="100%" fill="#0a1628"/>
+                                                <rect width="100%" height="100%" fill="url(#bp-grid)"/>
+                                                {{-- Main triangle with fill --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                                    fill="rgba(245, 158, 11, 0.15)" stroke="#dc2626" stroke-width="2.5" stroke-linejoin="round"/>
-                                                {{-- Угол B с дугой --}}
-                                                <path :d="makeAngleArc(B, A, C, 22)" fill="none" stroke="#10b981" stroke-width="2.5"/>
-                                                {{-- Стороны AB и BC выделены --}}
-                                                <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#3b82f6" stroke-width="3"/>
-                                                <line :x1="B.x" :y1="B.y" :x2="C.x" :y2="C.y" stroke="#f59e0b" stroke-width="3"/>
-                                                {{-- Метки сторон --}}
-                                                <text :x="(A.x + B.x)/2 - 15" :y="(A.y + B.y)/2 - 5" fill="#3b82f6" font-size="12" class="geo-label">AB</text>
-                                                <text :x="(B.x + C.x)/2 + 12" :y="(B.y + C.y)/2" fill="#f59e0b" font-size="12" class="geo-label">BC</text>
-                                                {{-- Вершины --}}
-                                                <circle :cx="A.x" :cy="A.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="B.x" :cy="B.y" r="4" fill="#dc2626"/>
-                                                <circle :cx="C.x" :cy="C.y" r="4" fill="#dc2626"/>
-                                                {{-- Метки вершин --}}
-                                                <text :x="A.x - 15" :y="A.y + 8" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="end" dominant-baseline="middle">A</text>
-                                                <text :x="B.x" :y="B.y - 15" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
-                                                <text :x="C.x + 15" :y="C.y + 5" fill="#60a5fa" font-size="16" class="geo-label" text-anchor="start" dominant-baseline="middle">C</text>
+                                                    fill="rgba(90, 159, 207, 0.1)" stroke="#c8dce8" stroke-width="1.5" stroke-linejoin="round"/>
+                                                {{-- Angle B arc --}}
+                                                <path :d="makeAngleArc(B, A, C, 22)" fill="none" stroke="#d4a855" stroke-width="1.5"/>
+                                                {{-- Highlighted sides AB and BC --}}
+                                                <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#5a9fcf" stroke-width="2"/>
+                                                <line :x1="B.x" :y1="B.y" :x2="C.x" :y2="C.y" stroke="#d4a855" stroke-width="2"/>
+                                                {{-- Side labels --}}
+                                                <text :x="(A.x + B.x)/2 - 15" :y="(A.y + B.y)/2 - 5" fill="#5a9fcf" font-size="12" class="geo-label">AB</text>
+                                                <text :x="(B.x + C.x)/2 + 12" :y="(B.y + C.y)/2" fill="#d4a855" font-size="12" class="geo-label">BC</text>
+                                                {{-- Vertices (crosshairs) --}}
+                                                <use href="#bp-crosshair" :x="A.x - 6" :y="A.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="B.x - 6" :y="B.y - 6" width="12" height="12"/>
+                                                <use href="#bp-crosshair" :x="C.x - 6" :y="C.y - 6" width="12" height="12"/>
+                                                {{-- Labels --}}
+                                                <text :x="A.x - 15" :y="A.y + 8" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="end" dominant-baseline="middle">A</text>
+                                                <text :x="B.x" :y="B.y - 15" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                                                <text :x="C.x + 15" :y="C.y + 5" fill="#c8dce8" font-size="14" class="geo-label" text-anchor="start" dominant-baseline="middle">C</text>
                                             </svg>
                                         </div>
                                         @break
