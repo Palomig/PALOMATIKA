@@ -265,13 +265,13 @@
                         <text :x="B.x - 6" :y="B.y - 14" fill="#60a5fa" font-size="16" class="geo-label">B</text>
                         <text :x="P.x + 8" :y="P.y + 6" fill="#10b981" font-size="16" class="geo-label">P</text>
 
-                        {{-- Angle arc at P --}}
-                        <path d="M 175,50 A 25 25 0 0 0 184,69" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                        <text x="145" y="80" fill="#f59e0b" font-size="14" class="geo-label">{{ $task['angle'] }}°</text>
+                        {{-- Angle arc at P (динамический) --}}
+                        <path :d="makeAngleArc(P, A, B, 25)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                        <text :x="angleLabelPos(P, A, B, 40).x" :y="angleLabelPos(P, A, B, 40).y" fill="#f59e0b" font-size="14" class="geo-label" text-anchor="middle">{{ $task['angle'] }}°</text>
 
-                        {{-- Angle arc at B (искомый угол ABO) --}}
-                        <path d="M 83,65 A 18 18 0 0 1 75,68" fill="none" stroke="#10b981" stroke-width="2"/>
-                        <text x="87" y="78" fill="#10b981" font-size="16" font-weight="bold">?</text>
+                        {{-- Angle arc at B (искомый угол ABO, динамический) --}}
+                        <path :d="makeAngleArc(B, A, O, 18)" fill="none" stroke="#10b981" stroke-width="2"/>
+                        <text :x="angleLabelPos(B, A, O, 28).x" :y="angleLabelPos(B, A, O, 28).y" fill="#10b981" font-size="16" font-weight="bold" text-anchor="middle">?</text>
                     </svg>
                 </div>
 
