@@ -304,7 +304,7 @@
 
                             {{-- Метка угла 68° — bias=0.6 смещает ниже (к биссектрисе но не на неё) --}}
                             <text :x="angleLabelPos(A, B, D, 62, 0.6).x" :y="angleLabelPos(A, B, D, 62, 0.6).y"
-                                fill="#d4a855" font-size="13" class="geo-label" text-anchor="middle" dominant-baseline="middle">68°</text>
+                                fill="#d4a855" font-size="16" font-weight="600" class="geo-label" text-anchor="middle" dominant-baseline="middle">68°</text>
                         </svg>
                     </div>
 
@@ -349,7 +349,7 @@
 
                             {{-- Метка угла 82° — bias=0.6 смещает ниже --}}
                             <text :x="angleLabelPos(A, B, D, 62, 0.6).x" :y="angleLabelPos(A, B, D, 62, 0.6).y"
-                                fill="#d4a855" font-size="13" class="geo-label" text-anchor="middle">82°</text>
+                                fill="#d4a855" font-size="16" font-weight="600" class="geo-label" text-anchor="middle">82°</text>
                         </svg>
                     </div>
 
@@ -392,7 +392,7 @@
                             <text :x="D.x + 14" :y="D.y - 8" fill="#5a9fcf" font-size="16" class="geo-label">D</text>
 
                             <text :x="angleLabelPos(A, B, D, 68, 0.6).x" :y="angleLabelPos(A, B, D, 68, 0.6).y"
-                                fill="#d4a855" font-size="13" class="geo-label" text-anchor="middle">26°</text>
+                                fill="#d4a855" font-size="16" font-weight="600" class="geo-label" text-anchor="middle">26°</text>
                         </svg>
                     </div>
 
@@ -435,7 +435,7 @@
                             <text :x="D.x + 14" :y="D.y - 8" fill="#5a9fcf" font-size="16" class="geo-label">D</text>
 
                             <text :x="angleLabelPos(A, B, D, 68, 0.6).x" :y="angleLabelPos(A, B, D, 68, 0.6).y"
-                                fill="#d4a855" font-size="13" class="geo-label" text-anchor="middle">24°</text>
+                                fill="#d4a855" font-size="16" font-weight="600" class="geo-label" text-anchor="middle">24°</text>
                         </svg>
                     </div>
 
@@ -490,11 +490,11 @@
 
                             {{-- Метка длины AC: по центру основания, ниже --}}
                             <text :x="(A.x + C.x) / 2" :y="A.y + 38"
-                                fill="#d4a855" font-size="13" class="geo-label" text-anchor="middle">14</text>
+                                fill="#d4a855" font-size="16" font-weight="600" class="geo-label" text-anchor="middle">14</text>
 
                             {{-- Метка длины BM: справа от середины медианы --}}
                             <text :x="(B.x + M.x) / 2 + 18" :y="(B.y + M.y) / 2"
-                                fill="#5a9fcf" font-size="13" class="geo-label" text-anchor="middle">10</text>
+                                fill="#5a9fcf" font-size="16" font-weight="600" class="geo-label" text-anchor="middle">10</text>
                         </svg>
                     </div>
 
@@ -538,11 +538,11 @@
 
                             {{-- Метка длины AC: по центру основания, ниже --}}
                             <text :x="(A.x + C.x) / 2" :y="A.y + 38"
-                                fill="#d4a855" font-size="13" class="geo-label" text-anchor="middle">16</text>
+                                fill="#d4a855" font-size="16" font-weight="600" class="geo-label" text-anchor="middle">16</text>
 
                             {{-- Метка длины BM: справа от середины медианы --}}
                             <text :x="(B.x + M.x) / 2 + 18" :y="(B.y + M.y) / 2"
-                                fill="#5a9fcf" font-size="13" class="geo-label" text-anchor="middle">12</text>
+                                fill="#5a9fcf" font-size="16" font-weight="600" class="geo-label" text-anchor="middle">12</text>
                         </svg>
                     </div>
 
@@ -585,9 +585,9 @@
                             <text :x="M.x" :y="M.y + 18" fill="#5a9fcf" font-size="16" class="geo-label" text-anchor="middle">M</text>
 
                             <text :x="(A.x + C.x) / 2" :y="A.y + 38"
-                                fill="#d4a855" font-size="13" class="geo-label" text-anchor="middle">38</text>
+                                fill="#d4a855" font-size="16" font-weight="600" class="geo-label" text-anchor="middle">38</text>
                             <text :x="(B.x + M.x) / 2 + 18" :y="(B.y + M.y) / 2"
-                                fill="#5a9fcf" font-size="13" class="geo-label" text-anchor="middle">17</text>
+                                fill="#5a9fcf" font-size="16" font-weight="600" class="geo-label" text-anchor="middle">17</text>
                         </svg>
                     </div>
 
@@ -630,9 +630,9 @@
                             <text :x="M.x" :y="M.y + 18" fill="#5a9fcf" font-size="16" class="geo-label" text-anchor="middle">M</text>
 
                             <text :x="(A.x + C.x) / 2" :y="A.y + 38"
-                                fill="#d4a855" font-size="13" class="geo-label" text-anchor="middle">54</text>
+                                fill="#d4a855" font-size="16" font-weight="600" class="geo-label" text-anchor="middle">54</text>
                             <text :x="(B.x + M.x) / 2 + 18" :y="(B.y + M.y) / 2"
-                                fill="#5a9fcf" font-size="13" class="geo-label" text-anchor="middle">43</text>
+                                fill="#5a9fcf" font-size="16" font-weight="600" class="geo-label" text-anchor="middle">43</text>
                         </svg>
                     </div>
 
@@ -682,11 +682,11 @@
 
                             {{-- Метки углов — используем angleLabelPos для правильного позиционирования --}}
                             <text :x="angleLabelPos(A, C, B, 45).x" :y="angleLabelPos(A, C, B, 45).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">72°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">72°</text>
                             <text :x="angleLabelPos(B, A, C, 45).x" :y="angleLabelPos(B, A, C, 45).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">42°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">42°</text>
                             <text :x="angleLabelPos(C, B, A, 45).x" :y="angleLabelPos(C, B, A, 45).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -726,11 +726,11 @@
 
                             {{-- Метки углов — используем angleLabelPos для правильного позиционирования --}}
                             <text :x="angleLabelPos(A, C, B, 45).x" :y="angleLabelPos(A, C, B, 45).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">43°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">43°</text>
                             <text :x="angleLabelPos(B, A, C, 38).x" :y="angleLabelPos(B, A, C, 38).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">88°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">88°</text>
                             <text :x="angleLabelPos(C, B, A, 45).x" :y="angleLabelPos(C, B, A, 45).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -771,11 +771,11 @@
 
                             {{-- Метки углов --}}
                             <text :x="angleLabelPos(A, C, B, 45).x" :y="angleLabelPos(A, C, B, 45).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">38°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">38°</text>
                             <text :x="angleLabelPos(B, A, C, 36).x" :y="angleLabelPos(B, A, C, 36).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">89°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">89°</text>
                             <text :x="angleLabelPos(C, B, A, 45).x" :y="angleLabelPos(C, B, A, 45).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -816,11 +816,11 @@
 
                             {{-- Метки углов --}}
                             <text :x="angleLabelPos(A, C, B, 45).x" :y="angleLabelPos(A, C, B, 45).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">54°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">54°</text>
                             <text :x="angleLabelPos(B, A, C, 45).x" :y="angleLabelPos(B, A, C, 45).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">58°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">58°</text>
                             <text :x="angleLabelPos(C, B, A, 45).x" :y="angleLabelPos(C, B, A, 45).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -876,11 +876,11 @@
 
                             {{-- Метка внутреннего угла 115° --}}
                             <text :x="angleLabelPos(C, A, B, 40).x" :y="angleLabelPos(C, A, B, 40).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">115°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">115°</text>
 
                             {{-- Метка внешнего угла (?) --}}
                             <text :x="angleLabelPos(C, B, ext, 50).x" :y="angleLabelPos(C, B, ext, 50).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -921,9 +921,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(C, A, B, 50).x" :y="angleLabelPos(C, A, B, 50).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">177°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">177°</text>
                             <text :x="angleLabelPos(C, B, ext, 60).x" :y="angleLabelPos(C, B, ext, 60).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -964,9 +964,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(C, A, B, 40).x" :y="angleLabelPos(C, A, B, 40).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">106°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">106°</text>
                             <text :x="angleLabelPos(C, B, ext, 50).x" :y="angleLabelPos(C, B, ext, 50).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1007,9 +1007,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(C, A, B, 40).x" :y="angleLabelPos(C, A, B, 40).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">142°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">142°</text>
                             <text :x="angleLabelPos(C, B, ext, 55).x" :y="angleLabelPos(C, B, ext, 55).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1063,9 +1063,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(B, A, C, 40).x" :y="angleLabelPos(B, A, C, 40).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">106°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">106°</text>
                             <text :x="angleLabelPos(C, B, A, 45).x" :y="angleLabelPos(C, B, A, 45).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1106,9 +1106,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(B, A, C, 40).x" :y="angleLabelPos(B, A, C, 40).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">108°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">108°</text>
                             <text :x="angleLabelPos(C, B, A, 45).x" :y="angleLabelPos(C, B, A, 45).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1149,9 +1149,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(B, A, C, 38).x" :y="angleLabelPos(B, A, C, 38).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">132°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">132°</text>
                             <text :x="angleLabelPos(C, B, A, 48).x" :y="angleLabelPos(C, B, A, 48).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1192,9 +1192,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(B, A, C, 36).x" :y="angleLabelPos(B, A, C, 36).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">144°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">144°</text>
                             <text :x="angleLabelPos(C, B, A, 50).x" :y="angleLabelPos(C, B, A, 50).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1255,10 +1255,10 @@
 
                             {{-- Метка внешнего угла 129° --}}
                             <text :x="angleLabelPos(C, B, ext, 48).x" :y="angleLabelPos(C, B, ext, 48).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">129°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">129°</text>
                             {{-- Метка искомого угла --}}
                             <text :x="angleLabelPos(B, A, C, 42).x" :y="angleLabelPos(B, A, C, 42).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1303,9 +1303,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(C, B, ext, 48).x" :y="angleLabelPos(C, B, ext, 48).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">124°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">124°</text>
                             <text :x="angleLabelPos(B, A, C, 42).x" :y="angleLabelPos(B, A, C, 42).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1350,9 +1350,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(C, B, ext, 48).x" :y="angleLabelPos(C, B, ext, 48).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">107°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">107°</text>
                             <text :x="angleLabelPos(B, A, C, 42).x" :y="angleLabelPos(B, A, C, 42).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1397,9 +1397,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(C, B, ext, 48).x" :y="angleLabelPos(C, B, ext, 48).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">111°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">111°</text>
                             <text :x="angleLabelPos(B, A, C, 42).x" :y="angleLabelPos(B, A, C, 42).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1452,9 +1452,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(C, A, B, 48).x" :y="angleLabelPos(C, A, B, 48).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">21°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">21°</text>
                             <text :x="angleLabelPos(B, A, C, 42).x" :y="angleLabelPos(B, A, C, 42).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1493,9 +1493,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(C, A, B, 48).x" :y="angleLabelPos(C, A, B, 48).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">33°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">33°</text>
                             <text :x="angleLabelPos(B, A, C, 42).x" :y="angleLabelPos(B, A, C, 42).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1534,9 +1534,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(C, A, B, 48).x" :y="angleLabelPos(C, A, B, 48).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">47°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">47°</text>
                             <text :x="angleLabelPos(B, A, C, 42).x" :y="angleLabelPos(B, A, C, 42).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1575,9 +1575,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(C, A, B, 48).x" :y="angleLabelPos(C, A, B, 48).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">63°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">63°</text>
                             <text :x="angleLabelPos(B, A, C, 42).x" :y="angleLabelPos(B, A, C, 42).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1637,9 +1637,9 @@
                                 fill="#5a9fcf" font-size="16" class="geo-label" text-anchor="middle">H</text>
 
                             <text :x="angleLabelPos(A, C, B, 48).x" :y="angleLabelPos(A, C, B, 48).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">37°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">37°</text>
                             <text :x="angleLabelPos(B, A, H, 42).x" :y="angleLabelPos(B, A, H, 42).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1683,9 +1683,9 @@
                                 fill="#5a9fcf" font-size="16" class="geo-label" text-anchor="middle">H</text>
 
                             <text :x="angleLabelPos(A, C, B, 48).x" :y="angleLabelPos(A, C, B, 48).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">29°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">29°</text>
                             <text :x="angleLabelPos(B, A, H, 42).x" :y="angleLabelPos(B, A, H, 42).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1729,9 +1729,9 @@
                                 fill="#5a9fcf" font-size="16" class="geo-label" text-anchor="middle">H</text>
 
                             <text :x="angleLabelPos(A, C, B, 48).x" :y="angleLabelPos(A, C, B, 48).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">46°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">46°</text>
                             <text :x="angleLabelPos(B, A, H, 42).x" :y="angleLabelPos(B, A, H, 42).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1775,9 +1775,9 @@
                                 fill="#5a9fcf" font-size="16" class="geo-label" text-anchor="middle">H</text>
 
                             <text :x="angleLabelPos(A, C, B, 48).x" :y="angleLabelPos(A, C, B, 48).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">82°</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">82°</text>
                             <text :x="angleLabelPos(B, A, H, 42).x" :y="angleLabelPos(B, A, H, 42).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1825,9 +1825,9 @@
 
                             {{-- Метки длин катетов --}}
                             <text :x="labelOnSegment(A, B, 10, true).x" :y="labelOnSegment(A, B, 10, true).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">4</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">4</text>
                             <text :x="labelOnSegment(A, C, 14).x" :y="labelOnSegment(A, C, 14).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">10</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">10</text>
                         </svg>
                     </div>
 
@@ -1864,9 +1864,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="labelOnSegment(A, B, 10, true).x" :y="labelOnSegment(A, B, 10, true).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">5</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">5</text>
                             <text :x="labelOnSegment(A, C, 14).x" :y="labelOnSegment(A, C, 14).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">14</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">14</text>
                         </svg>
                     </div>
 
@@ -1903,9 +1903,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="labelOnSegment(A, B, 10, true).x" :y="labelOnSegment(A, B, 10, true).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">7</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">7</text>
                             <text :x="labelOnSegment(A, C, 14).x" :y="labelOnSegment(A, C, 14).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">12</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">12</text>
                         </svg>
                     </div>
 
@@ -1942,9 +1942,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="labelOnSegment(A, B, 10, true).x" :y="labelOnSegment(A, B, 10, true).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">7</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">7</text>
                             <text :x="labelOnSegment(A, C, 14).x" :y="labelOnSegment(A, C, 14).y"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">18</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">18</text>
                         </svg>
                     </div>
 
@@ -2002,11 +2002,11 @@
 
                             {{-- Метка стороны AC --}}
                             <text :x="(A.x + C.x) / 2" :y="A.y + 22"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">16</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">16</text>
 
                             {{-- Метка высоты BH --}}
                             <text :x="(B.x + H.x) / 2 + 16" :y="(B.y + H.y) / 2"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">19</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">19</text>
                         </svg>
                     </div>
 
@@ -2049,10 +2049,10 @@
                                 fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">H</text>
 
                             <text :x="(A.x + C.x) / 2" :y="A.y + 22"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">14</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">14</text>
 
                             <text :x="(B.x + H.x) / 2 + 16" :y="(B.y + H.y) / 2"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">31</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">31</text>
                         </svg>
                     </div>
 
@@ -2095,10 +2095,10 @@
                                 fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">H</text>
 
                             <text :x="(A.x + C.x) / 2" :y="A.y + 22"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">29</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">29</text>
 
                             <text :x="(B.x + H.x) / 2 + 16" :y="(B.y + H.y) / 2"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">12</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">12</text>
                         </svg>
                     </div>
 
@@ -2141,10 +2141,10 @@
                                 fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">H</text>
 
                             <text :x="(A.x + C.x) / 2" :y="A.y + 22"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">18</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">18</text>
 
                             <text :x="(B.x + H.x) / 2 + 16" :y="(B.y + H.y) / 2"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">17</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">17</text>
                         </svg>
                     </div>
 
@@ -2217,7 +2217,7 @@
 
                             {{-- Метка AC --}}
                             <text :x="(A.x + C.x) / 2" :y="A.y + 20"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">28</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">28</text>
                         </svg>
                     </div>
 
@@ -2276,7 +2276,7 @@
                                 fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">N</text>
 
                             <text :x="(A.x + C.x) / 2" :y="A.y + 20"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">74</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">74</text>
                         </svg>
                     </div>
 
@@ -2335,7 +2335,7 @@
                                 fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">N</text>
 
                             <text :x="(A.x + C.x) / 2" :y="A.y + 20"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">48</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">48</text>
                         </svg>
                     </div>
 
@@ -2394,7 +2394,7 @@
                                 fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">N</text>
 
                             <text :x="(A.x + C.x) / 2" :y="A.y + 20"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">62</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">62</text>
                         </svg>
                     </div>
 
@@ -2442,13 +2442,13 @@
 
                             {{-- Метки длин катетов — ближе к сторонам --}}
                             <text :x="labelOnSegment(A, C, 8, true).x" :y="labelOnSegment(A, C, 8, true).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">24</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">24</text>
                             <text :x="labelOnSegment(A, B, 8).x" :y="labelOnSegment(A, B, 8).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">7</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">7</text>
 
                             {{-- Метка гипотенузы (искомая) — чуть дальше от стороны --}}
                             <text :x="labelOnSegment(B, C, 16).x" :y="labelOnSegment(B, C, 16).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -2486,13 +2486,13 @@
 
                             {{-- Метки длин катетов — ближе к сторонам --}}
                             <text :x="labelOnSegment(A, C, 8, true).x" :y="labelOnSegment(A, C, 8, true).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">15</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">15</text>
                             <text :x="labelOnSegment(A, B, 8).x" :y="labelOnSegment(A, B, 8).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">8</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">8</text>
 
                             {{-- Метка гипотенузы (искомая) — чуть дальше от стороны --}}
                             <text :x="labelOnSegment(B, C, 16).x" :y="labelOnSegment(B, C, 16).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -2529,12 +2529,12 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="labelOnSegment(A, C, 8, true).x" :y="labelOnSegment(A, C, 8, true).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">21</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">21</text>
                             <text :x="labelOnSegment(A, B, 8).x" :y="labelOnSegment(A, B, 8).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">20</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">20</text>
 
                             <text :x="labelOnSegment(B, C, 16).x" :y="labelOnSegment(B, C, 16).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -2571,12 +2571,12 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="labelOnSegment(A, C, 8, true).x" :y="labelOnSegment(A, C, 8, true).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">12</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">12</text>
                             <text :x="labelOnSegment(A, B, 8).x" :y="labelOnSegment(A, B, 8).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">9</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">9</text>
 
                             <text :x="labelOnSegment(B, C, 16).x" :y="labelOnSegment(B, C, 16).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -2623,13 +2623,13 @@
 
                             {{-- Известный катет AB = 7 --}}
                             <text :x="labelOnSegment(A, B, 8).x" :y="labelOnSegment(A, B, 8).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">7</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">7</text>
                             {{-- Гипотенуза BC = 25 --}}
                             <text :x="labelOnSegment(B, C, 14).x" :y="labelOnSegment(B, C, 14).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">25</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">25</text>
                             {{-- Искомый катет AC --}}
                             <text :x="labelOnSegment(A, C, 10, true).x" :y="labelOnSegment(A, C, 10, true).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -2666,11 +2666,11 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="labelOnSegment(A, B, 8).x" :y="labelOnSegment(A, B, 8).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">40</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">40</text>
                             <text :x="labelOnSegment(B, C, 14).x" :y="labelOnSegment(B, C, 14).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">41</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">41</text>
                             <text :x="labelOnSegment(A, C, 10, true).x" :y="labelOnSegment(A, C, 10, true).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -2707,11 +2707,11 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="labelOnSegment(A, B, 8).x" :y="labelOnSegment(A, B, 8).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">8</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">8</text>
                             <text :x="labelOnSegment(B, C, 14).x" :y="labelOnSegment(B, C, 14).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">17</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">17</text>
                             <text :x="labelOnSegment(A, C, 10, true).x" :y="labelOnSegment(A, C, 10, true).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -2748,11 +2748,11 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="labelOnSegment(A, B, 8).x" :y="labelOnSegment(A, B, 8).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">16</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">16</text>
                             <text :x="labelOnSegment(B, C, 14).x" :y="labelOnSegment(B, C, 14).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">34</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">34</text>
                             <text :x="labelOnSegment(A, C, 10, true).x" :y="labelOnSegment(A, C, 10, true).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -2815,7 +2815,7 @@
 
                             {{-- Метка биссектрисы --}}
                             <text :x="B.x + 22" :y="(B.y + M.y) / 2"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="start">$12\sqrt{3}$</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="start">$12\sqrt{3}$</text>
                         </svg>
                     </div>
 
@@ -2857,7 +2857,7 @@
                             <text :x="M.x" :y="M.y + 20"
                                 fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">M</text>
                             <text :x="B.x + 22" :y="(B.y + M.y) / 2"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="start">$13\sqrt{3}$</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="start">$13\sqrt{3}$</text>
                         </svg>
                     </div>
 
@@ -2899,7 +2899,7 @@
                             <text :x="M.x" :y="M.y + 20"
                                 fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">M</text>
                             <text :x="B.x + 22" :y="(B.y + M.y) / 2"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="start">$11\sqrt{3}$</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="start">$11\sqrt{3}$</text>
                         </svg>
                     </div>
 
@@ -2941,7 +2941,7 @@
                             <text :x="M.x" :y="M.y + 20"
                                 fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">M</text>
                             <text :x="B.x + 22" :y="(B.y + M.y) / 2"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="start">$14\sqrt{3}$</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="start">$14\sqrt{3}$</text>
                         </svg>
                     </div>
 
@@ -2981,9 +2981,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="(A.x + C.x) / 2" :y="A.y + 20"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">$16\sqrt{3}$</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">$16\sqrt{3}$</text>
                             <text :x="B.x + 22" :y="(B.y + M.y) / 2"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="start">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="start">?</text>
                         </svg>
                     </div>
 
@@ -3023,9 +3023,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="(A.x + C.x) / 2" :y="A.y + 20"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">$14\sqrt{3}$</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">$14\sqrt{3}$</text>
                             <text :x="B.x + 22" :y="(B.y + M.y) / 2"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="start">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="start">?</text>
                         </svg>
                     </div>
 
@@ -3067,9 +3067,9 @@
                             <text :x="M.x" :y="M.y + 20"
                                 fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">M</text>
                             <text :x="(A.x + C.x) / 2" :y="A.y + 20"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">$10\sqrt{3}$</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">$10\sqrt{3}$</text>
                             <text :x="B.x + 22" :y="(B.y + M.y) / 2"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="start">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="start">?</text>
                         </svg>
                     </div>
 
@@ -3111,9 +3111,9 @@
                             <text :x="M.x" :y="M.y + 20"
                                 fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">M</text>
                             <text :x="(A.x + C.x) / 2" :y="A.y + 20"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">$8\sqrt{3}$</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">$8\sqrt{3}$</text>
                             <text :x="B.x + 22" :y="(B.y + M.y) / 2"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="start">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="start">?</text>
                         </svg>
                     </div>
 
@@ -3151,9 +3151,9 @@
                             <text :x="M.x" :y="M.y + 20"
                                 fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">H</text>
                             <text :x="(A.x + C.x) / 2" :y="A.y + 20"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">$18\sqrt{3}$</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">$18\sqrt{3}$</text>
                             <text :x="B.x + 22" :y="(B.y + M.y) / 2"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="start">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="start">?</text>
                         </svg>
                     </div>
 
@@ -3191,9 +3191,9 @@
                             <text :x="M.x" :y="M.y + 20"
                                 fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">H</text>
                             <text :x="(A.x + C.x) / 2" :y="A.y + 20"
-                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">$12\sqrt{3}$</text>
+                                fill="#d4a855" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">$12\sqrt{3}$</text>
                             <text :x="B.x + 22" :y="(B.y + M.y) / 2"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="start">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="start">?</text>
                         </svg>
                     </div>
 
@@ -3256,11 +3256,11 @@
 
                             {{-- Метки длин --}}
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">6</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">6</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">8</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">8</text>
                             <text :x="(O.x + C.x) / 2 + 12" :y="(O.y + C.y) / 2"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="start">R=?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="start">R=?</text>
                         </svg>
                     </div>
 
@@ -3299,11 +3299,11 @@
                             <text :x="O.x + 15" :y="O.y - 10"
                                 fill="#a855f7" font-size="14" class="geo-label" text-anchor="start">O</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">40</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">40</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">30</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">30</text>
                             <text :x="(O.x + C.x) / 2 + 12" :y="(O.y + C.y) / 2"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="start">R=?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="start">R=?</text>
                         </svg>
                     </div>
 
@@ -3342,11 +3342,11 @@
                             <text :x="O.x + 15" :y="O.y - 10"
                                 fill="#a855f7" font-size="14" class="geo-label" text-anchor="start">O</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">12</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">12</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">5</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">5</text>
                             <text :x="(O.x + C.x) / 2 + 12" :y="(O.y + C.y) / 2"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="start">R=?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="start">R=?</text>
                         </svg>
                     </div>
 
@@ -3385,11 +3385,11 @@
                             <text :x="O.x + 15" :y="O.y - 10"
                                 fill="#a855f7" font-size="14" class="geo-label" text-anchor="start">O</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">7</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">7</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">24</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">24</text>
                             <text :x="(O.x + C.x) / 2 + 12" :y="(O.y + C.y) / 2"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="start">R=?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="start">R=?</text>
                         </svg>
                     </div>
 
@@ -3437,9 +3437,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">11</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">11</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">20</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">20</text>
                         </svg>
                     </div>
 
@@ -3473,9 +3473,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">7</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">7</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">25</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">25</text>
                         </svg>
                     </div>
 
@@ -3509,9 +3509,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">4</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">4</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">5</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">5</text>
                         </svg>
                     </div>
 
@@ -3545,9 +3545,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">24</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">24</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">25</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">25</text>
                         </svg>
                     </div>
 
@@ -3588,9 +3588,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">13</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">13</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">20</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">20</text>
                         </svg>
                     </div>
 
@@ -3624,9 +3624,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">72</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">72</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">75</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">75</text>
                         </svg>
                     </div>
 
@@ -3660,9 +3660,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">30</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">30</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">50</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">50</text>
                         </svg>
                     </div>
 
@@ -3696,9 +3696,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">14</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">14</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">50</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">50</text>
                         </svg>
                     </div>
 
@@ -3739,9 +3739,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">7</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">7</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">10</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">10</text>
                         </svg>
                     </div>
 
@@ -3775,9 +3775,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">3</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">3</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">15</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">15</text>
                         </svg>
                     </div>
 
@@ -3811,9 +3811,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">27</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">27</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">9</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">9</text>
                         </svg>
                     </div>
 
@@ -3847,9 +3847,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">28</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">28</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">4</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">4</text>
                         </svg>
                     </div>
 
@@ -3890,9 +3890,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">18</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">18</text>
                         </svg>
                     </div>
 
@@ -3926,9 +3926,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">51</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">51</text>
                         </svg>
                     </div>
 
@@ -3962,9 +3962,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">55</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">55</text>
                         </svg>
                     </div>
 
@@ -3998,9 +3998,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">48</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">48</text>
                         </svg>
                     </div>
 
@@ -4041,9 +4041,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">10</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">10</text>
                         </svg>
                     </div>
 
@@ -4077,9 +4077,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">54</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">54</text>
                         </svg>
                     </div>
 
@@ -4113,9 +4113,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">75</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">75</text>
                         </svg>
                     </div>
 
@@ -4149,9 +4149,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">96</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">96</text>
                         </svg>
                     </div>
 
@@ -4192,9 +4192,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">48</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">48</text>
                         </svg>
                     </div>
 
@@ -4228,9 +4228,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">35</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">35</text>
                         </svg>
                     </div>
 
@@ -4264,9 +4264,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">20</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">20</text>
                         </svg>
                     </div>
 
@@ -4300,9 +4300,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">?</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">42</text>
+                                fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">42</text>
                         </svg>
                     </div>
 
@@ -4355,9 +4355,9 @@
 
                         {{-- Длины сторон --}}
                         <text :x="labelOnSegment(A, B, 12).x" :y="labelOnSegment(A, B, 12).y"
-                            fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">15</text>
+                            fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">15</text>
                         <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                            fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">8</text>
+                            fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">8</text>
                     </svg>
                 </div>
 
@@ -4399,9 +4399,9 @@
 
                         {{-- Длины сторон --}}
                         <text :x="labelOnSegment(A, B, 12).x" :y="labelOnSegment(A, B, 12).y"
-                            fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">10</text>
+                            fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">10</text>
                         <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                            fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">12</text>
+                            fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">12</text>
                     </svg>
                 </div>
 
@@ -4443,9 +4443,9 @@
 
                         {{-- Длины сторон --}}
                         <text :x="labelOnSegment(A, B, 12).x" :y="labelOnSegment(A, B, 12).y"
-                            fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">12</text>
+                            fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">12</text>
                         <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                            fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">15</text>
+                            fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">15</text>
                     </svg>
                 </div>
 
@@ -4487,9 +4487,9 @@
 
                         {{-- Длины сторон --}}
                         <text :x="labelOnSegment(A, B, 12).x" :y="labelOnSegment(A, B, 12).y"
-                            fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">9</text>
+                            fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">9</text>
                         <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                            fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">16</text>
+                            fill="#94a3b8" font-size="15" font-weight="600" class="geo-label" text-anchor="middle">16</text>
                     </svg>
                 </div>
 
