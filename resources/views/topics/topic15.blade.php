@@ -268,27 +268,27 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             {{-- Треугольник ABC --}}
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             {{-- Биссектриса AD (доходит до стороны BC!) --}}
                             <line :x1="A.x" :y1="A.y" :x2="D.x" :y2="D.y"
-                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+                                stroke="#5a9fcf" stroke-width="2" stroke-dasharray="6,4"/>
 
                             {{-- Дуга полного угла BAC — увеличенный радиус для места под текст --}}
-                            <path :d="makeAngleArc(A, B, C, 45)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, B, C, 45)" fill="none" stroke="#d4a855" stroke-width="2"/>
 
                             {{-- Дуга искомого угла BAD --}}
-                            <path :d="makeAngleArc(A, B, D, 30)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, B, D, 30)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
                             {{-- Точки вершин --}}
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="D.x" :cy="D.y" r="4" fill="#10b981"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="D.x" :cy="D.y" r="4" fill="#5a9fcf"/>
 
                             {{-- Подписи вершин (от центра) --}}
                             <text :x="labelPos(A, center, 24).x" :y="labelPos(A, center, 24).y"
@@ -300,11 +300,11 @@
 
                             {{-- Подпись D (справа от точки D) --}}
                             <text :x="D.x + 14" :y="D.y - 8"
-                                fill="#10b981" font-size="16" class="geo-label" text-anchor="start" dominant-baseline="middle">D</text>
+                                fill="#5a9fcf" font-size="16" class="geo-label" text-anchor="start" dominant-baseline="middle">D</text>
 
                             {{-- Метка угла 68° — bias=0.6 смещает ниже (к биссектрисе но не на неё) --}}
                             <text :x="angleLabelPos(A, B, D, 62, 0.6).x" :y="angleLabelPos(A, B, D, 62, 0.6).y"
-                                fill="#f59e0b" font-size="13" class="geo-label" text-anchor="middle" dominant-baseline="middle">68°</text>
+                                fill="#d4a855" font-size="13" class="geo-label" text-anchor="middle" dominant-baseline="middle">68°</text>
                         </svg>
                     </div>
 
@@ -322,22 +322,22 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             <line :x1="A.x" :y1="A.y" :x2="D.x" :y2="D.y"
-                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+                                stroke="#5a9fcf" stroke-width="2" stroke-dasharray="6,4"/>
 
                             {{-- Увеличенные радиусы дуг --}}
-                            <path :d="makeAngleArc(A, B, C, 45)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(A, B, D, 30)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, B, C, 45)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, B, D, 30)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="D.x" :cy="D.y" r="4" fill="#10b981"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="D.x" :cy="D.y" r="4" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 24).x" :y="labelPos(A, center, 24).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -345,11 +345,11 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
-                            <text :x="D.x + 14" :y="D.y - 8" fill="#10b981" font-size="16" class="geo-label">D</text>
+                            <text :x="D.x + 14" :y="D.y - 8" fill="#5a9fcf" font-size="16" class="geo-label">D</text>
 
                             {{-- Метка угла 82° — bias=0.6 смещает ниже --}}
                             <text :x="angleLabelPos(A, B, D, 62, 0.6).x" :y="angleLabelPos(A, B, D, 62, 0.6).y"
-                                fill="#f59e0b" font-size="13" class="geo-label" text-anchor="middle">82°</text>
+                                fill="#d4a855" font-size="13" class="geo-label" text-anchor="middle">82°</text>
                         </svg>
                     </div>
 
@@ -367,21 +367,21 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             <line :x1="A.x" :y1="A.y" :x2="D.x" :y2="D.y"
-                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+                                stroke="#5a9fcf" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <path :d="makeAngleArc(A, B, C, 50)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(A, B, D, 35)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, B, C, 50)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, B, D, 35)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="D.x" :cy="D.y" r="4" fill="#10b981"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="D.x" :cy="D.y" r="4" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 24).x" :y="labelPos(A, center, 24).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -389,10 +389,10 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
-                            <text :x="D.x + 14" :y="D.y - 8" fill="#10b981" font-size="16" class="geo-label">D</text>
+                            <text :x="D.x + 14" :y="D.y - 8" fill="#5a9fcf" font-size="16" class="geo-label">D</text>
 
                             <text :x="angleLabelPos(A, B, D, 68, 0.6).x" :y="angleLabelPos(A, B, D, 68, 0.6).y"
-                                fill="#f59e0b" font-size="13" class="geo-label" text-anchor="middle">26°</text>
+                                fill="#d4a855" font-size="13" class="geo-label" text-anchor="middle">26°</text>
                         </svg>
                     </div>
 
@@ -410,21 +410,21 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             <line :x1="A.x" :y1="A.y" :x2="D.x" :y2="D.y"
-                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+                                stroke="#5a9fcf" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <path :d="makeAngleArc(A, B, C, 50)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(A, B, D, 35)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, B, C, 50)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, B, D, 35)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="D.x" :cy="D.y" r="4" fill="#10b981"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="D.x" :cy="D.y" r="4" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 24).x" :y="labelPos(A, center, 24).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -432,10 +432,10 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
-                            <text :x="D.x + 14" :y="D.y - 8" fill="#10b981" font-size="16" class="geo-label">D</text>
+                            <text :x="D.x + 14" :y="D.y - 8" fill="#5a9fcf" font-size="16" class="geo-label">D</text>
 
                             <text :x="angleLabelPos(A, B, D, 68, 0.6).x" :y="angleLabelPos(A, B, D, 68, 0.6).y"
-                                fill="#f59e0b" font-size="13" class="geo-label" text-anchor="middle">24°</text>
+                                fill="#d4a855" font-size="13" class="geo-label" text-anchor="middle">24°</text>
                         </svg>
                     </div>
 
@@ -462,23 +462,23 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             {{-- Медиана BM --}}
                             <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
-                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+                                stroke="#5a9fcf" stroke-width="2" stroke-dasharray="6,4"/>
 
                             {{-- Маркеры равенства AM = MC --}}
-                            <line :x1="tickAM.x1" :y1="tickAM.y1" :x2="tickAM.x2" :y2="tickAM.y2" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickMC.x1" :y1="tickMC.y1" :x2="tickMC.x2" :y2="tickMC.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAM.x1" :y1="tickAM.y1" :x2="tickAM.x2" :y2="tickAM.y2" stroke="#7eb8da" stroke-width="2.5"/>
+                            <line :x1="tickMC.x1" :y1="tickMC.y1" :x2="tickMC.x2" :y2="tickMC.y2" stroke="#7eb8da" stroke-width="2.5"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -486,15 +486,15 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
-                            <text :x="M.x" :y="M.y + 18" fill="#10b981" font-size="16" class="geo-label" text-anchor="middle">M</text>
+                            <text :x="M.x" :y="M.y + 18" fill="#5a9fcf" font-size="16" class="geo-label" text-anchor="middle">M</text>
 
                             {{-- Метка длины AC: по центру основания, ниже --}}
                             <text :x="(A.x + C.x) / 2" :y="A.y + 38"
-                                fill="#f59e0b" font-size="13" class="geo-label" text-anchor="middle">14</text>
+                                fill="#d4a855" font-size="13" class="geo-label" text-anchor="middle">14</text>
 
                             {{-- Метка длины BM: справа от середины медианы --}}
                             <text :x="(B.x + M.x) / 2 + 18" :y="(B.y + M.y) / 2"
-                                fill="#10b981" font-size="13" class="geo-label" text-anchor="middle">10</text>
+                                fill="#5a9fcf" font-size="13" class="geo-label" text-anchor="middle">10</text>
                         </svg>
                     </div>
 
@@ -512,21 +512,21 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
-                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+                                stroke="#5a9fcf" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <line :x1="tickAM.x1" :y1="tickAM.y1" :x2="tickAM.x2" :y2="tickAM.y2" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickMC.x1" :y1="tickMC.y1" :x2="tickMC.x2" :y2="tickMC.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAM.x1" :y1="tickAM.y1" :x2="tickAM.x2" :y2="tickAM.y2" stroke="#7eb8da" stroke-width="2.5"/>
+                            <line :x1="tickMC.x1" :y1="tickMC.y1" :x2="tickMC.x2" :y2="tickMC.y2" stroke="#7eb8da" stroke-width="2.5"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -534,15 +534,15 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
-                            <text :x="M.x" :y="M.y + 18" fill="#10b981" font-size="16" class="geo-label" text-anchor="middle">M</text>
+                            <text :x="M.x" :y="M.y + 18" fill="#5a9fcf" font-size="16" class="geo-label" text-anchor="middle">M</text>
 
                             {{-- Метка длины AC: по центру основания, ниже --}}
                             <text :x="(A.x + C.x) / 2" :y="A.y + 38"
-                                fill="#f59e0b" font-size="13" class="geo-label" text-anchor="middle">16</text>
+                                fill="#d4a855" font-size="13" class="geo-label" text-anchor="middle">16</text>
 
                             {{-- Метка длины BM: справа от середины медианы --}}
                             <text :x="(B.x + M.x) / 2 + 18" :y="(B.y + M.y) / 2"
-                                fill="#10b981" font-size="13" class="geo-label" text-anchor="middle">12</text>
+                                fill="#5a9fcf" font-size="13" class="geo-label" text-anchor="middle">12</text>
                         </svg>
                     </div>
 
@@ -560,21 +560,21 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
-                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+                                stroke="#5a9fcf" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <line :x1="tickAM.x1" :y1="tickAM.y1" :x2="tickAM.x2" :y2="tickAM.y2" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickMC.x1" :y1="tickMC.y1" :x2="tickMC.x2" :y2="tickMC.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAM.x1" :y1="tickAM.y1" :x2="tickAM.x2" :y2="tickAM.y2" stroke="#7eb8da" stroke-width="2.5"/>
+                            <line :x1="tickMC.x1" :y1="tickMC.y1" :x2="tickMC.x2" :y2="tickMC.y2" stroke="#7eb8da" stroke-width="2.5"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -582,12 +582,12 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
-                            <text :x="M.x" :y="M.y + 18" fill="#10b981" font-size="16" class="geo-label" text-anchor="middle">M</text>
+                            <text :x="M.x" :y="M.y + 18" fill="#5a9fcf" font-size="16" class="geo-label" text-anchor="middle">M</text>
 
                             <text :x="(A.x + C.x) / 2" :y="A.y + 38"
-                                fill="#f59e0b" font-size="13" class="geo-label" text-anchor="middle">38</text>
+                                fill="#d4a855" font-size="13" class="geo-label" text-anchor="middle">38</text>
                             <text :x="(B.x + M.x) / 2 + 18" :y="(B.y + M.y) / 2"
-                                fill="#10b981" font-size="13" class="geo-label" text-anchor="middle">17</text>
+                                fill="#5a9fcf" font-size="13" class="geo-label" text-anchor="middle">17</text>
                         </svg>
                     </div>
 
@@ -605,21 +605,21 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
-                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+                                stroke="#5a9fcf" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <line :x1="tickAM.x1" :y1="tickAM.y1" :x2="tickAM.x2" :y2="tickAM.y2" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickMC.x1" :y1="tickMC.y1" :x2="tickMC.x2" :y2="tickMC.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAM.x1" :y1="tickAM.y1" :x2="tickAM.x2" :y2="tickAM.y2" stroke="#7eb8da" stroke-width="2.5"/>
+                            <line :x1="tickMC.x1" :y1="tickMC.y1" :x2="tickMC.x2" :y2="tickMC.y2" stroke="#7eb8da" stroke-width="2.5"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -627,12 +627,12 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
-                            <text :x="M.x" :y="M.y + 18" fill="#10b981" font-size="16" class="geo-label" text-anchor="middle">M</text>
+                            <text :x="M.x" :y="M.y + 18" fill="#5a9fcf" font-size="16" class="geo-label" text-anchor="middle">M</text>
 
                             <text :x="(A.x + C.x) / 2" :y="A.y + 38"
-                                fill="#f59e0b" font-size="13" class="geo-label" text-anchor="middle">54</text>
+                                fill="#d4a855" font-size="13" class="geo-label" text-anchor="middle">54</text>
                             <text :x="(B.x + M.x) / 2 + 18" :y="(B.y + M.y) / 2"
-                                fill="#10b981" font-size="13" class="geo-label" text-anchor="middle">43</text>
+                                fill="#5a9fcf" font-size="13" class="geo-label" text-anchor="middle">43</text>
                         </svg>
                     </div>
 
@@ -659,19 +659,19 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             {{-- Дуги углов --}}
-                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, A, C, 28)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(C, B, A, 28)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, C, 28)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, B, A, 28)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -682,11 +682,11 @@
 
                             {{-- Метки углов — используем angleLabelPos для правильного позиционирования --}}
                             <text :x="angleLabelPos(A, C, B, 45).x" :y="angleLabelPos(A, C, B, 45).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">72°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">72°</text>
                             <text :x="angleLabelPos(B, A, C, 45).x" :y="angleLabelPos(B, A, C, 45).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">42°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">42°</text>
                             <text :x="angleLabelPos(C, B, A, 45).x" :y="angleLabelPos(C, B, A, 45).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -704,18 +704,18 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
-                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, A, C, 22)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(C, B, A, 28)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, C, 22)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, B, A, 28)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -726,11 +726,11 @@
 
                             {{-- Метки углов — используем angleLabelPos для правильного позиционирования --}}
                             <text :x="angleLabelPos(A, C, B, 45).x" :y="angleLabelPos(A, C, B, 45).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">43°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">43°</text>
                             <text :x="angleLabelPos(B, A, C, 38).x" :y="angleLabelPos(B, A, C, 38).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">88°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">88°</text>
                             <text :x="angleLabelPos(C, B, A, 45).x" :y="angleLabelPos(C, B, A, 45).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -748,19 +748,19 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             {{-- Дуги углов --}}
-                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, A, C, 20)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(C, B, A, 28)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, C, 20)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, B, A, 28)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -771,11 +771,11 @@
 
                             {{-- Метки углов --}}
                             <text :x="angleLabelPos(A, C, B, 45).x" :y="angleLabelPos(A, C, B, 45).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">38°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">38°</text>
                             <text :x="angleLabelPos(B, A, C, 36).x" :y="angleLabelPos(B, A, C, 36).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">89°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">89°</text>
                             <text :x="angleLabelPos(C, B, A, 45).x" :y="angleLabelPos(C, B, A, 45).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -793,19 +793,19 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             {{-- Дуги углов --}}
-                            <path :d="makeAngleArc(A, C, B, 28)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, A, C, 28)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(C, B, A, 28)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, C, B, 28)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, C, 28)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, B, A, 28)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -816,11 +816,11 @@
 
                             {{-- Метки углов --}}
                             <text :x="angleLabelPos(A, C, B, 45).x" :y="angleLabelPos(A, C, B, 45).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">54°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">54°</text>
                             <text :x="angleLabelPos(B, A, C, 45).x" :y="angleLabelPos(B, A, C, 45).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">58°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">58°</text>
                             <text :x="angleLabelPos(C, B, A, 45).x" :y="angleLabelPos(C, B, A, 45).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -847,25 +847,25 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 320 220" class="w-full max-w-[320px] h-auto">
                             {{-- Треугольник ABC --}}
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             {{-- Продолжение стороны AC за точку C --}}
                             <line :x1="C.x" :y1="C.y" :x2="ext.x" :y2="ext.y"
                                 stroke="#94a3b8" stroke-width="2" stroke-dasharray="6,4"/>
 
                             {{-- Дуга внутреннего угла C --}}
-                            <path :d="makeAngleArc(C, A, B, 25)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, A, B, 25)" fill="none" stroke="#d4a855" stroke-width="2"/>
 
                             {{-- Дуга внешнего угла C (искомый) --}}
-                            <path :d="makeAngleArc(C, B, ext, 35)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, B, ext, 35)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -876,11 +876,11 @@
 
                             {{-- Метка внутреннего угла 115° --}}
                             <text :x="angleLabelPos(C, A, B, 40).x" :y="angleLabelPos(C, A, B, 40).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">115°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">115°</text>
 
                             {{-- Метка внешнего угла (?) --}}
                             <text :x="angleLabelPos(C, B, ext, 50).x" :y="angleLabelPos(C, B, ext, 50).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -898,20 +898,20 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 320 220" class="w-full max-w-[320px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             <line :x1="C.x" :y1="C.y" :x2="ext.x" :y2="ext.y"
                                 stroke="#94a3b8" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <path :d="makeAngleArc(C, A, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(C, B, ext, 45)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, A, B, 30)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, B, ext, 45)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -921,9 +921,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(C, A, B, 50).x" :y="angleLabelPos(C, A, B, 50).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">177°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">177°</text>
                             <text :x="angleLabelPos(C, B, ext, 60).x" :y="angleLabelPos(C, B, ext, 60).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -941,20 +941,20 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 320 220" class="w-full max-w-[320px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             <line :x1="C.x" :y1="C.y" :x2="ext.x" :y2="ext.y"
                                 stroke="#94a3b8" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <path :d="makeAngleArc(C, A, B, 25)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(C, B, ext, 35)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, A, B, 25)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, B, ext, 35)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -964,9 +964,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(C, A, B, 40).x" :y="angleLabelPos(C, A, B, 40).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">106°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">106°</text>
                             <text :x="angleLabelPos(C, B, ext, 50).x" :y="angleLabelPos(C, B, ext, 50).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -984,20 +984,20 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 320 220" class="w-full max-w-[320px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             <line :x1="C.x" :y1="C.y" :x2="ext.x" :y2="ext.y"
                                 stroke="#94a3b8" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <path :d="makeAngleArc(C, A, B, 25)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(C, B, ext, 40)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, A, B, 25)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, B, ext, 40)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -1007,9 +1007,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(C, A, B, 40).x" :y="angleLabelPos(C, A, B, 40).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">142°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">142°</text>
                             <text :x="angleLabelPos(C, B, ext, 55).x" :y="angleLabelPos(C, B, ext, 55).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1036,24 +1036,24 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             {{-- Маркеры равенства AB = BC --}}
-                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#7eb8da" stroke-width="2.5"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#7eb8da" stroke-width="2.5"/>
 
                             {{-- Дуга угла B (известный) --}}
-                            <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#d4a855" stroke-width="2"/>
 
                             {{-- Дуга угла C (искомый) --}}
-                            <path :d="makeAngleArc(C, B, A, 28)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, B, A, 28)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -1063,9 +1063,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(B, A, C, 40).x" :y="angleLabelPos(B, A, C, 40).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">106°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">106°</text>
                             <text :x="angleLabelPos(C, B, A, 45).x" :y="angleLabelPos(C, B, A, 45).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1083,20 +1083,20 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
-                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#7eb8da" stroke-width="2.5"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#7eb8da" stroke-width="2.5"/>
 
-                            <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(C, B, A, 28)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, B, A, 28)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -1106,9 +1106,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(B, A, C, 40).x" :y="angleLabelPos(B, A, C, 40).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">108°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">108°</text>
                             <text :x="angleLabelPos(C, B, A, 45).x" :y="angleLabelPos(C, B, A, 45).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1126,20 +1126,20 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
-                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#7eb8da" stroke-width="2.5"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#7eb8da" stroke-width="2.5"/>
 
-                            <path :d="makeAngleArc(B, A, C, 22)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(C, B, A, 32)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, C, 22)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, B, A, 32)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -1149,9 +1149,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(B, A, C, 38).x" :y="angleLabelPos(B, A, C, 38).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">132°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">132°</text>
                             <text :x="angleLabelPos(C, B, A, 48).x" :y="angleLabelPos(C, B, A, 48).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1169,20 +1169,20 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
-                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#7eb8da" stroke-width="2.5"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#7eb8da" stroke-width="2.5"/>
 
-                            <path :d="makeAngleArc(B, A, C, 20)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(C, B, A, 35)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, C, 20)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, B, A, 35)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -1192,9 +1192,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(B, A, C, 36).x" :y="angleLabelPos(B, A, C, 36).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">144°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">144°</text>
                             <text :x="angleLabelPos(C, B, A, 50).x" :y="angleLabelPos(C, B, A, 50).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1221,29 +1221,29 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 320 220" class="w-full max-w-[320px] h-auto">
                             {{-- Треугольник ABC --}}
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             {{-- Продолжение стороны AC за точку C --}}
                             <line :x1="C.x" :y1="C.y" :x2="ext.x" :y2="ext.y"
-                                stroke="#dc2626" stroke-width="2" stroke-dasharray="6,4"/>
+                                stroke="#c8dce8" stroke-width="2" stroke-dasharray="6,4"/>
 
                             {{-- Маркеры равных сторон AB = BC --}}
-                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#7eb8da" stroke-width="2.5"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#7eb8da" stroke-width="2.5"/>
 
                             {{-- Дуга внешнего угла при C --}}
-                            <path :d="makeAngleArc(C, B, ext, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, B, ext, 30)" fill="none" stroke="#d4a855" stroke-width="2"/>
 
                             {{-- Дуга искомого угла ABC --}}
-                            <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -1255,10 +1255,10 @@
 
                             {{-- Метка внешнего угла 129° --}}
                             <text :x="angleLabelPos(C, B, ext, 48).x" :y="angleLabelPos(C, B, ext, 48).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">129°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">129°</text>
                             {{-- Метка искомого угла --}}
                             <text :x="angleLabelPos(B, A, C, 42).x" :y="angleLabelPos(B, A, C, 42).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1276,23 +1276,23 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 320 220" class="w-full max-w-[320px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             <line :x1="C.x" :y1="C.y" :x2="ext.x" :y2="ext.y"
-                                stroke="#dc2626" stroke-width="2" stroke-dasharray="6,4"/>
+                                stroke="#c8dce8" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#7eb8da" stroke-width="2.5"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#7eb8da" stroke-width="2.5"/>
 
-                            <path :d="makeAngleArc(C, B, ext, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, B, ext, 30)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -1303,9 +1303,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(C, B, ext, 48).x" :y="angleLabelPos(C, B, ext, 48).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">124°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">124°</text>
                             <text :x="angleLabelPos(B, A, C, 42).x" :y="angleLabelPos(B, A, C, 42).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1323,23 +1323,23 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 320 220" class="w-full max-w-[320px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             <line :x1="C.x" :y1="C.y" :x2="ext.x" :y2="ext.y"
-                                stroke="#dc2626" stroke-width="2" stroke-dasharray="6,4"/>
+                                stroke="#c8dce8" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#7eb8da" stroke-width="2.5"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#7eb8da" stroke-width="2.5"/>
 
-                            <path :d="makeAngleArc(C, B, ext, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, B, ext, 30)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -1350,9 +1350,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(C, B, ext, 48).x" :y="angleLabelPos(C, B, ext, 48).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">107°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">107°</text>
                             <text :x="angleLabelPos(B, A, C, 42).x" :y="angleLabelPos(B, A, C, 42).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1370,23 +1370,23 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 320 220" class="w-full max-w-[320px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             <line :x1="C.x" :y1="C.y" :x2="ext.x" :y2="ext.y"
-                                stroke="#dc2626" stroke-width="2" stroke-dasharray="6,4"/>
+                                stroke="#c8dce8" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#3b82f6" stroke-width="2.5"/>
-                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#3b82f6" stroke-width="2.5"/>
+                            <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2" stroke="#7eb8da" stroke-width="2.5"/>
+                            <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2" stroke="#7eb8da" stroke-width="2.5"/>
 
-                            <path :d="makeAngleArc(C, B, ext, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, B, ext, 30)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -1397,9 +1397,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(C, B, ext, 48).x" :y="angleLabelPos(C, B, ext, 48).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">111°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">111°</text>
                             <text :x="angleLabelPos(B, A, C, 42).x" :y="angleLabelPos(B, A, C, 42).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1426,23 +1426,23 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             {{-- Прямой угол в A --}}
-                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
 
                             {{-- Дуга угла C (данный) --}}
-                            <path :d="makeAngleArc(C, A, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, A, B, 30)" fill="none" stroke="#d4a855" stroke-width="2"/>
 
                             {{-- Дуга угла B (искомый) --}}
-                            <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -1452,9 +1452,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(C, A, B, 48).x" :y="angleLabelPos(C, A, B, 48).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">21°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">21°</text>
                             <text :x="angleLabelPos(B, A, C, 42).x" :y="angleLabelPos(B, A, C, 42).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1472,18 +1472,18 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
-                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(C, A, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, A, B, 30)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -1493,9 +1493,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(C, A, B, 48).x" :y="angleLabelPos(C, A, B, 48).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">33°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">33°</text>
                             <text :x="angleLabelPos(B, A, C, 42).x" :y="angleLabelPos(B, A, C, 42).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1513,18 +1513,18 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
-                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(C, A, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, A, B, 30)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -1534,9 +1534,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(C, A, B, 48).x" :y="angleLabelPos(C, A, B, 48).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">47°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">47°</text>
                             <text :x="angleLabelPos(B, A, C, 42).x" :y="angleLabelPos(B, A, C, 42).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1554,18 +1554,18 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
-                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(C, A, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(C, A, B, 30)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, C, 25)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -1575,9 +1575,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="angleLabelPos(C, A, B, 48).x" :y="angleLabelPos(C, A, B, 48).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">63°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">63°</text>
                             <text :x="angleLabelPos(B, A, C, 42).x" :y="angleLabelPos(B, A, C, 42).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1604,28 +1604,28 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             {{-- Высота BH --}}
                             <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y"
-                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+                                stroke="#5a9fcf" stroke-width="2" stroke-dasharray="6,4"/>
 
                             {{-- Прямой угол в H --}}
-                            <path :d="rightAnglePath(H, B, C, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="rightAnglePath(H, B, C, 12)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
 
                             {{-- Дуга угла A (данный) --}}
-                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#d4a855" stroke-width="2"/>
 
                             {{-- Дуга угла ABH (искомый) --}}
-                            <path :d="makeAngleArc(B, A, H, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, H, 25)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="H.x" :cy="H.y" r="4" fill="#10b981"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="H.x" :cy="H.y" r="4" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -1634,12 +1634,12 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="H.x" :y="H.y + 20"
-                                fill="#10b981" font-size="16" class="geo-label" text-anchor="middle">H</text>
+                                fill="#5a9fcf" font-size="16" class="geo-label" text-anchor="middle">H</text>
 
                             <text :x="angleLabelPos(A, C, B, 48).x" :y="angleLabelPos(A, C, B, 48).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">37°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">37°</text>
                             <text :x="angleLabelPos(B, A, H, 42).x" :y="angleLabelPos(B, A, H, 42).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1657,21 +1657,21 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y"
-                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
-                            <path :d="rightAnglePath(H, B, C, 12)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, A, H, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
+                                stroke="#5a9fcf" stroke-width="2" stroke-dasharray="6,4"/>
+                            <path :d="rightAnglePath(H, B, C, 12)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, H, 25)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="H.x" :cy="H.y" r="4" fill="#10b981"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="H.x" :cy="H.y" r="4" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -1680,12 +1680,12 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="H.x" :y="H.y + 20"
-                                fill="#10b981" font-size="16" class="geo-label" text-anchor="middle">H</text>
+                                fill="#5a9fcf" font-size="16" class="geo-label" text-anchor="middle">H</text>
 
                             <text :x="angleLabelPos(A, C, B, 48).x" :y="angleLabelPos(A, C, B, 48).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">29°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">29°</text>
                             <text :x="angleLabelPos(B, A, H, 42).x" :y="angleLabelPos(B, A, H, 42).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1703,21 +1703,21 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y"
-                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
-                            <path :d="rightAnglePath(H, B, C, 12)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, A, H, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
+                                stroke="#5a9fcf" stroke-width="2" stroke-dasharray="6,4"/>
+                            <path :d="rightAnglePath(H, B, C, 12)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, H, 25)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="H.x" :cy="H.y" r="4" fill="#10b981"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="H.x" :cy="H.y" r="4" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -1726,12 +1726,12 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="H.x" :y="H.y + 20"
-                                fill="#10b981" font-size="16" class="geo-label" text-anchor="middle">H</text>
+                                fill="#5a9fcf" font-size="16" class="geo-label" text-anchor="middle">H</text>
 
                             <text :x="angleLabelPos(A, C, B, 48).x" :y="angleLabelPos(A, C, B, 48).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">46°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">46°</text>
                             <text :x="angleLabelPos(B, A, H, 42).x" :y="angleLabelPos(B, A, H, 42).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1749,21 +1749,21 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y"
-                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
-                            <path :d="rightAnglePath(H, B, C, 12)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, A, H, 25)" fill="none" stroke="#10b981" stroke-width="2"/>
+                                stroke="#5a9fcf" stroke-width="2" stroke-dasharray="6,4"/>
+                            <path :d="rightAnglePath(H, B, C, 12)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(A, C, B, 30)" fill="none" stroke="#d4a855" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, A, H, 25)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="H.x" :cy="H.y" r="4" fill="#10b981"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="H.x" :cy="H.y" r="4" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -1772,12 +1772,12 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="H.x" :y="H.y + 20"
-                                fill="#10b981" font-size="16" class="geo-label" text-anchor="middle">H</text>
+                                fill="#5a9fcf" font-size="16" class="geo-label" text-anchor="middle">H</text>
 
                             <text :x="angleLabelPos(A, C, B, 48).x" :y="angleLabelPos(A, C, B, 48).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">82°</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">82°</text>
                             <text :x="angleLabelPos(B, A, H, 42).x" :y="angleLabelPos(B, A, H, 42).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -1804,17 +1804,17 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             {{-- Прямой угол в A --}}
-                            <path :d="rightAnglePath(A, B, C, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="rightAnglePath(A, B, C, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -1825,9 +1825,9 @@
 
                             {{-- Метки длин катетов --}}
                             <text :x="labelOnSegment(A, B, 10, true).x" :y="labelOnSegment(A, B, 10, true).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">4</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">4</text>
                             <text :x="labelOnSegment(A, C, 14).x" :y="labelOnSegment(A, C, 14).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">10</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">10</text>
                         </svg>
                     </div>
 
@@ -1845,16 +1845,16 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
-                            <path :d="rightAnglePath(A, B, C, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="rightAnglePath(A, B, C, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -1864,9 +1864,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="labelOnSegment(A, B, 10, true).x" :y="labelOnSegment(A, B, 10, true).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">5</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">5</text>
                             <text :x="labelOnSegment(A, C, 14).x" :y="labelOnSegment(A, C, 14).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">14</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">14</text>
                         </svg>
                     </div>
 
@@ -1884,16 +1884,16 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
-                            <path :d="rightAnglePath(A, B, C, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="rightAnglePath(A, B, C, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -1903,9 +1903,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="labelOnSegment(A, B, 10, true).x" :y="labelOnSegment(A, B, 10, true).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">7</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">7</text>
                             <text :x="labelOnSegment(A, C, 14).x" :y="labelOnSegment(A, C, 14).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">12</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">12</text>
                         </svg>
                     </div>
 
@@ -1923,16 +1923,16 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
-                            <path :d="rightAnglePath(A, B, C, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="rightAnglePath(A, B, C, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -1942,9 +1942,9 @@
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
 
                             <text :x="labelOnSegment(A, B, 10, true).x" :y="labelOnSegment(A, B, 10, true).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">7</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">7</text>
                             <text :x="labelOnSegment(A, C, 14).x" :y="labelOnSegment(A, C, 14).y"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">18</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">18</text>
                         </svg>
                     </div>
 
@@ -1971,24 +1971,24 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             {{-- Треугольник --}}
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             {{-- Высота BH --}}
                             <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y"
-                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+                                stroke="#5a9fcf" stroke-width="2" stroke-dasharray="6,4"/>
 
                             {{-- Прямой угол в H --}}
-                            <path :d="rightAnglePath(H, B, C, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="rightAnglePath(H, B, C, 12)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
 
                             {{-- Вершины --}}
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="H.x" :cy="H.y" r="4" fill="#10b981"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="H.x" :cy="H.y" r="4" fill="#5a9fcf"/>
 
                             {{-- Подписи вершин --}}
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
@@ -1998,15 +1998,15 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="H.x + 12" :y="H.y + 15"
-                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">H</text>
+                                fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">H</text>
 
                             {{-- Метка стороны AC --}}
                             <text :x="(A.x + C.x) / 2" :y="A.y + 22"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">16</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">16</text>
 
                             {{-- Метка высоты BH --}}
                             <text :x="(B.x + H.x) / 2 + 16" :y="(B.y + H.y) / 2"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">19</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">19</text>
                         </svg>
                     </div>
 
@@ -2024,20 +2024,20 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y"
-                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+                                stroke="#5a9fcf" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <path :d="rightAnglePath(H, B, C, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="rightAnglePath(H, B, C, 12)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="H.x" :cy="H.y" r="4" fill="#10b981"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="H.x" :cy="H.y" r="4" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -2046,13 +2046,13 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="H.x + 12" :y="H.y + 15"
-                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">H</text>
+                                fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">H</text>
 
                             <text :x="(A.x + C.x) / 2" :y="A.y + 22"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">14</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">14</text>
 
                             <text :x="(B.x + H.x) / 2 + 16" :y="(B.y + H.y) / 2"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">31</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">31</text>
                         </svg>
                     </div>
 
@@ -2070,20 +2070,20 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y"
-                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+                                stroke="#5a9fcf" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <path :d="rightAnglePath(H, B, C, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="rightAnglePath(H, B, C, 12)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="H.x" :cy="H.y" r="4" fill="#10b981"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="H.x" :cy="H.y" r="4" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -2092,13 +2092,13 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="H.x + 12" :y="H.y + 15"
-                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">H</text>
+                                fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">H</text>
 
                             <text :x="(A.x + C.x) / 2" :y="A.y + 22"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">29</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">29</text>
 
                             <text :x="(B.x + H.x) / 2 + 16" :y="(B.y + H.y) / 2"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">12</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">12</text>
                         </svg>
                     </div>
 
@@ -2116,20 +2116,20 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             <line :x1="B.x" :y1="B.y" :x2="H.x" :y2="H.y"
-                                stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+                                stroke="#5a9fcf" stroke-width="2" stroke-dasharray="6,4"/>
 
-                            <path :d="rightAnglePath(H, B, C, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="rightAnglePath(H, B, C, 12)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="H.x" :cy="H.y" r="4" fill="#10b981"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="H.x" :cy="H.y" r="4" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -2138,13 +2138,13 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="H.x + 12" :y="H.y + 15"
-                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">H</text>
+                                fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">H</text>
 
                             <text :x="(A.x + C.x) / 2" :y="A.y + 22"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">18</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">18</text>
 
                             <text :x="(B.x + H.x) / 2 + 16" :y="(B.y + H.y) / 2"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">17</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">17</text>
                         </svg>
                     </div>
 
@@ -2171,37 +2171,37 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             {{-- Средняя линия MN --}}
                             <line :x1="M.x" :y1="M.y" :x2="N.x" :y2="N.y"
-                                stroke="#10b981" stroke-width="2.5"/>
+                                stroke="#5a9fcf" stroke-width="2.5"/>
 
                             {{-- Маркеры равенства AM = MB --}}
                             <line :x1="tickAM.x1" :y1="tickAM.y1" :x2="tickAM.x2" :y2="tickAM.y2"
-                                stroke="#3b82f6" stroke-width="2"/>
+                                stroke="#7eb8da" stroke-width="2"/>
                             <line :x1="tickMB.x1" :y1="tickMB.y1" :x2="tickMB.x2" :y2="tickMB.y2"
-                                stroke="#3b82f6" stroke-width="2"/>
+                                stroke="#7eb8da" stroke-width="2"/>
 
                             {{-- Маркеры равенства BN = NC (двойные черточки) --}}
                             <line :x1="dblTickBN.tick1.x1" :y1="dblTickBN.tick1.y1" :x2="dblTickBN.tick1.x2" :y2="dblTickBN.tick1.y2"
-                                stroke="#f59e0b" stroke-width="2"/>
+                                stroke="#d4a855" stroke-width="2"/>
                             <line :x1="dblTickBN.tick2.x1" :y1="dblTickBN.tick2.y1" :x2="dblTickBN.tick2.x2" :y2="dblTickBN.tick2.y2"
-                                stroke="#f59e0b" stroke-width="2"/>
+                                stroke="#d4a855" stroke-width="2"/>
                             <line :x1="dblTickNC.tick1.x1" :y1="dblTickNC.tick1.y1" :x2="dblTickNC.tick1.x2" :y2="dblTickNC.tick1.y2"
-                                stroke="#f59e0b" stroke-width="2"/>
+                                stroke="#d4a855" stroke-width="2"/>
                             <line :x1="dblTickNC.tick2.x1" :y1="dblTickNC.tick2.y1" :x2="dblTickNC.tick2.x2" :y2="dblTickNC.tick2.y2"
-                                stroke="#f59e0b" stroke-width="2"/>
+                                stroke="#d4a855" stroke-width="2"/>
 
                             {{-- Вершины --}}
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
-                            <circle :cx="N.x" :cy="N.y" r="4" fill="#10b981"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#5a9fcf"/>
+                            <circle :cx="N.x" :cy="N.y" r="4" fill="#5a9fcf"/>
 
                             {{-- Подписи --}}
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
@@ -2211,13 +2211,13 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="M.x - 16" :y="M.y"
-                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">M</text>
+                                fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">M</text>
                             <text :x="N.x + 16" :y="N.y"
-                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">N</text>
+                                fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">N</text>
 
                             {{-- Метка AC --}}
                             <text :x="(A.x + C.x) / 2" :y="A.y + 20"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">28</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">28</text>
                         </svg>
                     </div>
 
@@ -2235,34 +2235,34 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             <line :x1="M.x" :y1="M.y" :x2="N.x" :y2="N.y"
-                                stroke="#10b981" stroke-width="2.5"/>
+                                stroke="#5a9fcf" stroke-width="2.5"/>
 
                             <line :x1="tickAM.x1" :y1="tickAM.y1" :x2="tickAM.x2" :y2="tickAM.y2"
-                                stroke="#3b82f6" stroke-width="2"/>
+                                stroke="#7eb8da" stroke-width="2"/>
                             <line :x1="tickMB.x1" :y1="tickMB.y1" :x2="tickMB.x2" :y2="tickMB.y2"
-                                stroke="#3b82f6" stroke-width="2"/>
+                                stroke="#7eb8da" stroke-width="2"/>
 
                             {{-- Двойные черточки для BN = NC --}}
                             <line :x1="dblTickBN.tick1.x1" :y1="dblTickBN.tick1.y1" :x2="dblTickBN.tick1.x2" :y2="dblTickBN.tick1.y2"
-                                stroke="#f59e0b" stroke-width="2"/>
+                                stroke="#d4a855" stroke-width="2"/>
                             <line :x1="dblTickBN.tick2.x1" :y1="dblTickBN.tick2.y1" :x2="dblTickBN.tick2.x2" :y2="dblTickBN.tick2.y2"
-                                stroke="#f59e0b" stroke-width="2"/>
+                                stroke="#d4a855" stroke-width="2"/>
                             <line :x1="dblTickNC.tick1.x1" :y1="dblTickNC.tick1.y1" :x2="dblTickNC.tick1.x2" :y2="dblTickNC.tick1.y2"
-                                stroke="#f59e0b" stroke-width="2"/>
+                                stroke="#d4a855" stroke-width="2"/>
                             <line :x1="dblTickNC.tick2.x1" :y1="dblTickNC.tick2.y1" :x2="dblTickNC.tick2.x2" :y2="dblTickNC.tick2.y2"
-                                stroke="#f59e0b" stroke-width="2"/>
+                                stroke="#d4a855" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
-                            <circle :cx="N.x" :cy="N.y" r="4" fill="#10b981"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#5a9fcf"/>
+                            <circle :cx="N.x" :cy="N.y" r="4" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -2271,12 +2271,12 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="M.x - 16" :y="M.y"
-                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">M</text>
+                                fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">M</text>
                             <text :x="N.x + 16" :y="N.y"
-                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">N</text>
+                                fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">N</text>
 
                             <text :x="(A.x + C.x) / 2" :y="A.y + 20"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">74</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">74</text>
                         </svg>
                     </div>
 
@@ -2294,34 +2294,34 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             <line :x1="M.x" :y1="M.y" :x2="N.x" :y2="N.y"
-                                stroke="#10b981" stroke-width="2.5"/>
+                                stroke="#5a9fcf" stroke-width="2.5"/>
 
                             <line :x1="tickAM.x1" :y1="tickAM.y1" :x2="tickAM.x2" :y2="tickAM.y2"
-                                stroke="#3b82f6" stroke-width="2"/>
+                                stroke="#7eb8da" stroke-width="2"/>
                             <line :x1="tickMB.x1" :y1="tickMB.y1" :x2="tickMB.x2" :y2="tickMB.y2"
-                                stroke="#3b82f6" stroke-width="2"/>
+                                stroke="#7eb8da" stroke-width="2"/>
 
                             {{-- Двойные черточки для BN = NC --}}
                             <line :x1="dblTickBN.tick1.x1" :y1="dblTickBN.tick1.y1" :x2="dblTickBN.tick1.x2" :y2="dblTickBN.tick1.y2"
-                                stroke="#f59e0b" stroke-width="2"/>
+                                stroke="#d4a855" stroke-width="2"/>
                             <line :x1="dblTickBN.tick2.x1" :y1="dblTickBN.tick2.y1" :x2="dblTickBN.tick2.x2" :y2="dblTickBN.tick2.y2"
-                                stroke="#f59e0b" stroke-width="2"/>
+                                stroke="#d4a855" stroke-width="2"/>
                             <line :x1="dblTickNC.tick1.x1" :y1="dblTickNC.tick1.y1" :x2="dblTickNC.tick1.x2" :y2="dblTickNC.tick1.y2"
-                                stroke="#f59e0b" stroke-width="2"/>
+                                stroke="#d4a855" stroke-width="2"/>
                             <line :x1="dblTickNC.tick2.x1" :y1="dblTickNC.tick2.y1" :x2="dblTickNC.tick2.x2" :y2="dblTickNC.tick2.y2"
-                                stroke="#f59e0b" stroke-width="2"/>
+                                stroke="#d4a855" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
-                            <circle :cx="N.x" :cy="N.y" r="4" fill="#10b981"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#5a9fcf"/>
+                            <circle :cx="N.x" :cy="N.y" r="4" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -2330,12 +2330,12 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="M.x - 16" :y="M.y"
-                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">M</text>
+                                fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">M</text>
                             <text :x="N.x + 16" :y="N.y"
-                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">N</text>
+                                fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">N</text>
 
                             <text :x="(A.x + C.x) / 2" :y="A.y + 20"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">48</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">48</text>
                         </svg>
                     </div>
 
@@ -2353,34 +2353,34 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             <line :x1="M.x" :y1="M.y" :x2="N.x" :y2="N.y"
-                                stroke="#10b981" stroke-width="2.5"/>
+                                stroke="#5a9fcf" stroke-width="2.5"/>
 
                             <line :x1="tickAM.x1" :y1="tickAM.y1" :x2="tickAM.x2" :y2="tickAM.y2"
-                                stroke="#3b82f6" stroke-width="2"/>
+                                stroke="#7eb8da" stroke-width="2"/>
                             <line :x1="tickMB.x1" :y1="tickMB.y1" :x2="tickMB.x2" :y2="tickMB.y2"
-                                stroke="#3b82f6" stroke-width="2"/>
+                                stroke="#7eb8da" stroke-width="2"/>
 
                             {{-- Двойные черточки для BN = NC --}}
                             <line :x1="dblTickBN.tick1.x1" :y1="dblTickBN.tick1.y1" :x2="dblTickBN.tick1.x2" :y2="dblTickBN.tick1.y2"
-                                stroke="#f59e0b" stroke-width="2"/>
+                                stroke="#d4a855" stroke-width="2"/>
                             <line :x1="dblTickBN.tick2.x1" :y1="dblTickBN.tick2.y1" :x2="dblTickBN.tick2.x2" :y2="dblTickBN.tick2.y2"
-                                stroke="#f59e0b" stroke-width="2"/>
+                                stroke="#d4a855" stroke-width="2"/>
                             <line :x1="dblTickNC.tick1.x1" :y1="dblTickNC.tick1.y1" :x2="dblTickNC.tick1.x2" :y2="dblTickNC.tick1.y2"
-                                stroke="#f59e0b" stroke-width="2"/>
+                                stroke="#d4a855" stroke-width="2"/>
                             <line :x1="dblTickNC.tick2.x1" :y1="dblTickNC.tick2.y1" :x2="dblTickNC.tick2.x2" :y2="dblTickNC.tick2.y2"
-                                stroke="#f59e0b" stroke-width="2"/>
+                                stroke="#d4a855" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
-                            <circle :cx="N.x" :cy="N.y" r="4" fill="#10b981"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#5a9fcf"/>
+                            <circle :cx="N.x" :cy="N.y" r="4" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -2389,12 +2389,12 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="M.x - 16" :y="M.y"
-                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">M</text>
+                                fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">M</text>
                             <text :x="N.x + 16" :y="N.y"
-                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">N</text>
+                                fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">N</text>
 
                             <text :x="(A.x + C.x) / 2" :y="A.y + 20"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">62</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">62</text>
                         </svg>
                     </div>
 
@@ -2421,17 +2421,17 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             {{-- Прямой угол в A --}}
-                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -2448,7 +2448,7 @@
 
                             {{-- Метка гипотенузы (искомая) — чуть дальше от стороны --}}
                             <text :x="labelOnSegment(B, C, 16).x" :y="labelOnSegment(B, C, 16).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -2466,16 +2466,16 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
-                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -2492,7 +2492,7 @@
 
                             {{-- Метка гипотенузы (искомая) — чуть дальше от стороны --}}
                             <text :x="labelOnSegment(B, C, 16).x" :y="labelOnSegment(B, C, 16).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -2510,16 +2510,16 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
-                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -2534,7 +2534,7 @@
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">20</text>
 
                             <text :x="labelOnSegment(B, C, 16).x" :y="labelOnSegment(B, C, 16).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -2552,16 +2552,16 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
-                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -2576,7 +2576,7 @@
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">9</text>
 
                             <text :x="labelOnSegment(B, C, 16).x" :y="labelOnSegment(B, C, 16).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -2603,16 +2603,16 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
-                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -2629,7 +2629,7 @@
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">25</text>
                             {{-- Искомый катет AC --}}
                             <text :x="labelOnSegment(A, C, 10, true).x" :y="labelOnSegment(A, C, 10, true).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -2647,16 +2647,16 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
-                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -2670,7 +2670,7 @@
                             <text :x="labelOnSegment(B, C, 14).x" :y="labelOnSegment(B, C, 14).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">41</text>
                             <text :x="labelOnSegment(A, C, 10, true).x" :y="labelOnSegment(A, C, 10, true).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -2688,16 +2688,16 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
-                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -2711,7 +2711,7 @@
                             <text :x="labelOnSegment(B, C, 14).x" :y="labelOnSegment(B, C, 14).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">17</text>
                             <text :x="labelOnSegment(A, C, 10, true).x" :y="labelOnSegment(A, C, 10, true).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -2729,16 +2729,16 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
-                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="rightAnglePath(A, C, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
 
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
@@ -2752,7 +2752,7 @@
                             <text :x="labelOnSegment(B, C, 14).x" :y="labelOnSegment(B, C, 14).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">34</text>
                             <text :x="labelOnSegment(A, C, 10, true).x" :y="labelOnSegment(A, C, 10, true).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                         </svg>
                     </div>
 
@@ -2779,29 +2779,29 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             {{-- Высота/медиана/биссектриса BM --}}
                             <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
-                                stroke="#10b981" stroke-width="2.5" stroke-dasharray="6,4"/>
+                                stroke="#5a9fcf" stroke-width="2.5" stroke-dasharray="6,4"/>
 
                             {{-- Прямой угол в M --}}
-                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
 
                             {{-- Маркеры равенства сторон --}}
                             <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2"
-                                stroke="#3b82f6" stroke-width="2"/>
+                                stroke="#7eb8da" stroke-width="2"/>
                             <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2"
-                                stroke="#3b82f6" stroke-width="2"/>
+                                stroke="#7eb8da" stroke-width="2"/>
 
                             {{-- Вершины --}}
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#5a9fcf"/>
 
                             {{-- Подписи --}}
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
@@ -2811,11 +2811,11 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="M.x" :y="M.y + 20"
-                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">M</text>
+                                fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">M</text>
 
                             {{-- Метка биссектрисы --}}
                             <text :x="B.x + 22" :y="(B.y + M.y) / 2"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="start">$12\sqrt{3}$</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="start">$12\sqrt{3}$</text>
                         </svg>
                     </div>
 
@@ -2833,21 +2833,21 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
                             <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
-                                stroke="#10b981" stroke-width="2.5" stroke-dasharray="6,4"/>
-                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+                                stroke="#5a9fcf" stroke-width="2.5" stroke-dasharray="6,4"/>
+                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
                             <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2"
-                                stroke="#3b82f6" stroke-width="2"/>
+                                stroke="#7eb8da" stroke-width="2"/>
                             <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2"
-                                stroke="#3b82f6" stroke-width="2"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                                stroke="#7eb8da" stroke-width="2"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -2855,9 +2855,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="M.x" :y="M.y + 20"
-                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">M</text>
+                                fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">M</text>
                             <text :x="B.x + 22" :y="(B.y + M.y) / 2"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="start">$13\sqrt{3}$</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="start">$13\sqrt{3}$</text>
                         </svg>
                     </div>
 
@@ -2875,21 +2875,21 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
                             <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
-                                stroke="#10b981" stroke-width="2.5" stroke-dasharray="6,4"/>
-                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+                                stroke="#5a9fcf" stroke-width="2.5" stroke-dasharray="6,4"/>
+                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
                             <line :x1="tickAC1.x1" :y1="tickAC1.y1" :x2="tickAC1.x2" :y2="tickAC1.y2"
-                                stroke="#f59e0b" stroke-width="2"/>
+                                stroke="#d4a855" stroke-width="2"/>
                             <line :x1="tickAC2.x1" :y1="tickAC2.y1" :x2="tickAC2.x2" :y2="tickAC2.y2"
-                                stroke="#f59e0b" stroke-width="2"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                                stroke="#d4a855" stroke-width="2"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -2897,9 +2897,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="M.x" :y="M.y + 20"
-                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">M</text>
+                                fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">M</text>
                             <text :x="B.x + 22" :y="(B.y + M.y) / 2"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="start">$11\sqrt{3}$</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="start">$11\sqrt{3}$</text>
                         </svg>
                     </div>
 
@@ -2917,21 +2917,21 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
                             <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
-                                stroke="#10b981" stroke-width="2.5" stroke-dasharray="6,4"/>
-                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+                                stroke="#5a9fcf" stroke-width="2.5" stroke-dasharray="6,4"/>
+                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
                             <line :x1="tickAC1.x1" :y1="tickAC1.y1" :x2="tickAC1.x2" :y2="tickAC1.y2"
-                                stroke="#f59e0b" stroke-width="2"/>
+                                stroke="#d4a855" stroke-width="2"/>
                             <line :x1="tickAC2.x1" :y1="tickAC2.y1" :x2="tickAC2.x2" :y2="tickAC2.y2"
-                                stroke="#f59e0b" stroke-width="2"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                                stroke="#d4a855" stroke-width="2"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -2939,9 +2939,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="M.x" :y="M.y + 20"
-                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">M</text>
+                                fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">M</text>
                             <text :x="B.x + 22" :y="(B.y + M.y) / 2"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="start">$14\sqrt{3}$</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="start">$14\sqrt{3}$</text>
                         </svg>
                     </div>
 
@@ -2959,21 +2959,21 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
                             <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
-                                stroke="#10b981" stroke-width="2.5" stroke-dasharray="6,4"/>
-                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+                                stroke="#5a9fcf" stroke-width="2.5" stroke-dasharray="6,4"/>
+                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
                             <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2"
-                                stroke="#3b82f6" stroke-width="2"/>
+                                stroke="#7eb8da" stroke-width="2"/>
                             <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2"
-                                stroke="#3b82f6" stroke-width="2"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                                stroke="#7eb8da" stroke-width="2"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -2981,9 +2981,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="(A.x + C.x) / 2" :y="A.y + 20"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">$16\sqrt{3}$</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">$16\sqrt{3}$</text>
                             <text :x="B.x + 22" :y="(B.y + M.y) / 2"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="start">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="start">?</text>
                         </svg>
                     </div>
 
@@ -3001,21 +3001,21 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
                             <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
-                                stroke="#10b981" stroke-width="2.5" stroke-dasharray="6,4"/>
-                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+                                stroke="#5a9fcf" stroke-width="2.5" stroke-dasharray="6,4"/>
+                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
                             <line :x1="tickAB.x1" :y1="tickAB.y1" :x2="tickAB.x2" :y2="tickAB.y2"
-                                stroke="#3b82f6" stroke-width="2"/>
+                                stroke="#7eb8da" stroke-width="2"/>
                             <line :x1="tickBC.x1" :y1="tickBC.y1" :x2="tickBC.x2" :y2="tickBC.y2"
-                                stroke="#3b82f6" stroke-width="2"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                                stroke="#7eb8da" stroke-width="2"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -3023,9 +3023,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="(A.x + C.x) / 2" :y="A.y + 20"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">$14\sqrt{3}$</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">$14\sqrt{3}$</text>
                             <text :x="B.x + 22" :y="(B.y + M.y) / 2"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="start">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="start">?</text>
                         </svg>
                     </div>
 
@@ -3043,21 +3043,21 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
                             <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
-                                stroke="#10b981" stroke-width="2.5" stroke-dasharray="6,4"/>
-                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+                                stroke="#5a9fcf" stroke-width="2.5" stroke-dasharray="6,4"/>
+                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
                             <line :x1="tickAC1.x1" :y1="tickAC1.y1" :x2="tickAC1.x2" :y2="tickAC1.y2"
-                                stroke="#f59e0b" stroke-width="2"/>
+                                stroke="#d4a855" stroke-width="2"/>
                             <line :x1="tickAC2.x1" :y1="tickAC2.y1" :x2="tickAC2.x2" :y2="tickAC2.y2"
-                                stroke="#f59e0b" stroke-width="2"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                                stroke="#d4a855" stroke-width="2"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -3065,11 +3065,11 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="M.x" :y="M.y + 20"
-                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">M</text>
+                                fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">M</text>
                             <text :x="(A.x + C.x) / 2" :y="A.y + 20"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">$10\sqrt{3}$</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">$10\sqrt{3}$</text>
                             <text :x="B.x + 22" :y="(B.y + M.y) / 2"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="start">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="start">?</text>
                         </svg>
                     </div>
 
@@ -3087,21 +3087,21 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
                             <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
-                                stroke="#10b981" stroke-width="2.5" stroke-dasharray="6,4"/>
-                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#666666" stroke-width="2"/>
+                                stroke="#5a9fcf" stroke-width="2.5" stroke-dasharray="6,4"/>
+                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
                             <line :x1="tickAC1.x1" :y1="tickAC1.y1" :x2="tickAC1.x2" :y2="tickAC1.y2"
-                                stroke="#f59e0b" stroke-width="2"/>
+                                stroke="#d4a855" stroke-width="2"/>
                             <line :x1="tickAC2.x1" :y1="tickAC2.y1" :x2="tickAC2.x2" :y2="tickAC2.y2"
-                                stroke="#f59e0b" stroke-width="2"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                                stroke="#d4a855" stroke-width="2"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -3109,11 +3109,11 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="M.x" :y="M.y + 20"
-                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">M</text>
+                                fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">M</text>
                             <text :x="(A.x + C.x) / 2" :y="A.y + 20"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">$8\sqrt{3}$</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">$8\sqrt{3}$</text>
                             <text :x="B.x + 22" :y="(B.y + M.y) / 2"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="start">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="start">?</text>
                         </svg>
                     </div>
 
@@ -3131,17 +3131,17 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
                             <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
-                                stroke="#10b981" stroke-width="2.5"/>
-                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                                stroke="#5a9fcf" stroke-width="2.5"/>
+                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -3149,11 +3149,11 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="M.x" :y="M.y + 20"
-                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">H</text>
+                                fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">H</text>
                             <text :x="(A.x + C.x) / 2" :y="A.y + 20"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">$18\sqrt{3}$</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">$18\sqrt{3}$</text>
                             <text :x="B.x + 22" :y="(B.y + M.y) / 2"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="start">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="start">?</text>
                         </svg>
                     </div>
 
@@ -3171,17 +3171,17 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
                             <line :x1="B.x" :y1="B.y" :x2="M.x" :y2="M.y"
-                                stroke="#10b981" stroke-width="2.5"/>
-                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
-                            <circle :cx="M.x" :cy="M.y" r="4" fill="#10b981"/>
+                                stroke="#5a9fcf" stroke-width="2.5"/>
+                            <path :d="rightAnglePath(M, A, B, 12)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="M.x" :cy="M.y" r="4" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -3189,11 +3189,11 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="M.x" :y="M.y + 20"
-                                fill="#10b981" font-size="14" class="geo-label" text-anchor="middle">H</text>
+                                fill="#5a9fcf" font-size="14" class="geo-label" text-anchor="middle">H</text>
                             <text :x="(A.x + C.x) / 2" :y="A.y + 20"
-                                fill="#f59e0b" font-size="12" class="geo-label" text-anchor="middle">$12\sqrt{3}$</text>
+                                fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">$12\sqrt{3}$</text>
                             <text :x="B.x + 22" :y="(B.y + M.y) / 2"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="start">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="start">?</text>
                         </svg>
                     </div>
 
@@ -3220,29 +3220,29 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             {{-- Описанная окружность --}}
                             <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#a855f7" stroke-width="2" stroke-dasharray="6,4"/>
 
                             {{-- Треугольник --}}
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                             {{-- Прямой угол в C --}}
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
 
                             {{-- Центр окружности (середина гипотенузы) --}}
                             <circle :cx="O.x" :cy="O.y" r="4" fill="#a855f7"/>
 
                             {{-- Радиус --}}
                             <line :x1="O.x" :y1="O.y" :x2="C.x" :y2="C.y"
-                                stroke="#10b981" stroke-width="2" stroke-dasharray="4,3"/>
+                                stroke="#5a9fcf" stroke-width="2" stroke-dasharray="4,3"/>
 
                             {{-- Вершины --}}
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                             {{-- Подписи вершин --}}
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
@@ -3260,7 +3260,7 @@
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">8</text>
                             <text :x="(O.x + C.x) / 2 + 12" :y="(O.y + C.y) / 2"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="start">R=?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="start">R=?</text>
                         </svg>
                     </div>
 
@@ -3278,18 +3278,18 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#a855f7" stroke-width="2" stroke-dasharray="6,4"/>
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
                             <circle :cx="O.x" :cy="O.y" r="4" fill="#a855f7"/>
                             <line :x1="O.x" :y1="O.y" :x2="C.x" :y2="C.y"
-                                stroke="#10b981" stroke-width="2" stroke-dasharray="4,3"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                stroke="#5a9fcf" stroke-width="2" stroke-dasharray="4,3"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -3303,7 +3303,7 @@
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">30</text>
                             <text :x="(O.x + C.x) / 2 + 12" :y="(O.y + C.y) / 2"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="start">R=?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="start">R=?</text>
                         </svg>
                     </div>
 
@@ -3321,18 +3321,18 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#a855f7" stroke-width="2" stroke-dasharray="6,4"/>
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
                             <circle :cx="O.x" :cy="O.y" r="4" fill="#a855f7"/>
                             <line :x1="O.x" :y1="O.y" :x2="C.x" :y2="C.y"
-                                stroke="#10b981" stroke-width="2" stroke-dasharray="4,3"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                stroke="#5a9fcf" stroke-width="2" stroke-dasharray="4,3"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -3346,7 +3346,7 @@
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">5</text>
                             <text :x="(O.x + C.x) / 2 + 12" :y="(O.y + C.y) / 2"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="start">R=?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="start">R=?</text>
                         </svg>
                     </div>
 
@@ -3364,18 +3364,18 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <circle :cx="O.x" :cy="O.y" :r="R" fill="none" stroke="#a855f7" stroke-width="2" stroke-dasharray="6,4"/>
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
                             <circle :cx="O.x" :cy="O.y" r="4" fill="#a855f7"/>
                             <line :x1="O.x" :y1="O.y" :x2="C.x" :y2="C.y"
-                                stroke="#10b981" stroke-width="2" stroke-dasharray="4,3"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                stroke="#5a9fcf" stroke-width="2" stroke-dasharray="4,3"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -3389,7 +3389,7 @@
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">24</text>
                             <text :x="(O.x + C.x) / 2 + 12" :y="(O.y + C.y) / 2"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="start">R=?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="start">R=?</text>
                         </svg>
                     </div>
 
@@ -3421,15 +3421,15 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -3437,7 +3437,7 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">11</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">11</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">20</text>
                         </svg>
@@ -3457,15 +3457,15 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -3473,7 +3473,7 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">7</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">7</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">25</text>
                         </svg>
@@ -3493,15 +3493,15 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -3509,7 +3509,7 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">4</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">4</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">5</text>
                         </svg>
@@ -3529,15 +3529,15 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -3545,7 +3545,7 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">24</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">24</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">25</text>
                         </svg>
@@ -3572,15 +3572,15 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -3588,7 +3588,7 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">13</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">13</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">20</text>
                         </svg>
@@ -3608,15 +3608,15 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -3624,7 +3624,7 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">72</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">72</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">75</text>
                         </svg>
@@ -3644,15 +3644,15 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -3660,7 +3660,7 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">30</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">30</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">50</text>
                         </svg>
@@ -3680,15 +3680,15 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -3696,7 +3696,7 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">14</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">14</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">50</text>
                         </svg>
@@ -3723,15 +3723,15 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -3739,9 +3739,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">7</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">7</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">10</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">10</text>
                         </svg>
                     </div>
 
@@ -3759,15 +3759,15 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -3775,9 +3775,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">3</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">3</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">15</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">15</text>
                         </svg>
                     </div>
 
@@ -3795,15 +3795,15 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -3811,9 +3811,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">27</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">27</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">9</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">9</text>
                         </svg>
                     </div>
 
@@ -3831,15 +3831,15 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -3847,9 +3847,9 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">28</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">28</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">4</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">4</text>
                         </svg>
                     </div>
 
@@ -3874,15 +3874,15 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -3890,7 +3890,7 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">18</text>
                         </svg>
@@ -3910,15 +3910,15 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -3926,7 +3926,7 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">51</text>
                         </svg>
@@ -3946,15 +3946,15 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -3962,7 +3962,7 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">55</text>
                         </svg>
@@ -3982,15 +3982,15 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -3998,7 +3998,7 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">48</text>
                         </svg>
@@ -4025,15 +4025,15 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -4041,7 +4041,7 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">10</text>
                         </svg>
@@ -4061,15 +4061,15 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -4077,7 +4077,7 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">54</text>
                         </svg>
@@ -4097,15 +4097,15 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -4113,7 +4113,7 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">75</text>
                         </svg>
@@ -4133,15 +4133,15 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -4149,7 +4149,7 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                             <text :x="labelOnSegment(A, B, 14).x" :y="labelOnSegment(A, B, 14).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">96</text>
                         </svg>
@@ -4176,15 +4176,15 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -4192,7 +4192,7 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">48</text>
                         </svg>
@@ -4212,15 +4212,15 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -4228,7 +4228,7 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">35</text>
                         </svg>
@@ -4248,15 +4248,15 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -4264,7 +4264,7 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">20</text>
                         </svg>
@@ -4284,15 +4284,15 @@
                         </div>
                     </div>
 
-                    <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                    <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                         <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                             <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                                fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#666666" stroke-width="2"/>
-                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
-                            <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                            <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                            <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                                fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
+                            <path :d="rightAnglePath(C, A, B, 15)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
+                            <path :d="makeAngleArc(B, C, A, 25)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
+                            <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                            <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                             <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
                             <text :x="labelPos(B, center, 22).x" :y="labelPos(B, center, 22).y"
@@ -4300,7 +4300,7 @@
                             <text :x="labelPos(C, center, 22).x" :y="labelPos(C, center, 22).y"
                                 fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
                             <text :x="labelOnSegment(A, C, 12, true).x" :y="labelOnSegment(A, C, 12, true).y"
-                                fill="#10b981" font-size="12" class="geo-label" text-anchor="middle">?</text>
+                                fill="#5a9fcf" font-size="12" class="geo-label" text-anchor="middle">?</text>
                             <text :x="labelOnSegment(B, C, 12).x" :y="labelOnSegment(B, C, 12).y"
                                 fill="#94a3b8" font-size="12" class="geo-label" text-anchor="middle">42</text>
                         </svg>
@@ -4331,19 +4331,19 @@
                     </div>
                 </div>
 
-                <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                     <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                         {{-- Треугольник --}}
                         <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                            fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                         {{-- Дуга угла B --}}
-                        <path :d="makeAngleArc(B, A, C, 30)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                        <path :d="makeAngleArc(B, A, C, 30)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
 
                         {{-- Вершины --}}
-                        <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                        <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                        <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                        <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                        <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                        <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                         {{-- Подписи вершин --}}
                         <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
@@ -4375,19 +4375,19 @@
                     </div>
                 </div>
 
-                <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                     <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                         {{-- Треугольник --}}
                         <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                            fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                         {{-- Дуга угла B --}}
-                        <path :d="makeAngleArc(B, A, C, 30)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                        <path :d="makeAngleArc(B, A, C, 30)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
 
                         {{-- Вершины --}}
-                        <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                        <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                        <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                        <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                        <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                        <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                         {{-- Подписи вершин --}}
                         <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
@@ -4419,19 +4419,19 @@
                     </div>
                 </div>
 
-                <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                     <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                         {{-- Треугольник --}}
                         <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                            fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                         {{-- Дуга угла B --}}
-                        <path :d="makeAngleArc(B, A, C, 30)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                        <path :d="makeAngleArc(B, A, C, 30)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
 
                         {{-- Вершины --}}
-                        <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                        <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                        <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                        <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                        <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                        <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                         {{-- Подписи вершин --}}
                         <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
@@ -4463,19 +4463,19 @@
                     </div>
                 </div>
 
-                <div class="bg-slate-900/50 rounded-lg p-4 flex justify-center">
+                <div class="rounded-lg p-4 flex justify-center" style="background-color: #0a1628;">
                     <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
                         {{-- Треугольник --}}
                         <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
-                            fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
+                            fill="none" stroke="#c8dce8" stroke-width="3" stroke-linejoin="round"/>
 
                         {{-- Дуга угла B --}}
-                        <path :d="makeAngleArc(B, A, C, 30)" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+                        <path :d="makeAngleArc(B, A, C, 30)" fill="none" stroke="#d4a855" stroke-width="2.5"/>
 
                         {{-- Вершины --}}
-                        <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
-                        <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
-                        <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
+                        <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
+                        <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
+                        <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
 
                         {{-- Подписи вершин --}}
                         <text :x="labelPos(A, center, 22).x" :y="labelPos(A, center, 22).y"
