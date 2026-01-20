@@ -6,6 +6,7 @@ use App\Services\PdfParserService;
 use App\Services\PdfTaskParser;
 use App\Services\TaskGeneratorService;
 use App\Services\AdvancedPdfParser;
+use App\Services\TaskDataService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -15,15 +16,18 @@ class TestPdfController extends Controller
     protected PdfParserService $pdfParser;
     protected TaskGeneratorService $taskGenerator;
     protected AdvancedPdfParser $advancedParser;
+    protected TaskDataService $taskDataService;
 
     public function __construct(
         PdfParserService $pdfParser,
         TaskGeneratorService $taskGenerator,
-        AdvancedPdfParser $advancedParser
+        AdvancedPdfParser $advancedParser,
+        TaskDataService $taskDataService
     ) {
         $this->pdfParser = $pdfParser;
         $this->taskGenerator = $taskGenerator;
         $this->advancedParser = $advancedParser;
+        $this->taskDataService = $taskDataService;
     }
 
     /**
@@ -4983,7 +4987,70 @@ class TestPdfController extends Controller
      */
     public function ogeGenerator()
     {
-        return view('test.oge-generator');
+        $topicIds = ['06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19'];
+
+        // Собираем все блоки со всех тем с примерами
+        $topicsWithBlocks = [];
+
+        foreach ($topicIds as $topicId) {
+            $topicMeta = $this->taskDataService->getTopicMeta($topicId);
+            $blocks = $this->taskDataService->getBlocks($topicId);
+
+            $blocksData = [];
+            foreach ($blocks as $block) {
+                // Получаем первое задание из блока как пример
+                $firstZadanie = $block['zadaniya'][0] ?? null;
+                $example = null;
+
+                if ($firstZadanie) {
+                    // Формируем пример в зависимости от типа задания
+                    $type = $firstZadanie['type'] ?? 'expression';
+
+                    if ($type === 'statements' && isset($firstZadanie['statements'])) {
+                        // Для statements берём первое утверждение
+                        $firstStatement = $firstZadanie['statements'][0] ?? null;
+                        if ($firstStatement) {
+                            $example = [
+                                'type' => 'statements',
+                                'text' => $firstStatement['text'] ?? ''
+                            ];
+                        }
+                    } elseif (isset($firstZadanie['tasks'][0])) {
+                        // Для обычных заданий берём первую задачу
+                        $firstTask = $firstZadanie['tasks'][0];
+                        $example = [
+                            'type' => $type,
+                            'instruction' => $firstZadanie['instruction'] ?? '',
+                            'expression' => $firstTask['expression'] ?? '',
+                            'text' => $firstTask['text'] ?? '',
+                            'image' => $firstTask['image'] ?? null,
+                        ];
+                    }
+                }
+
+                $blocksData[] = [
+                    'block_id' => "{$topicId}_{$block['number']}",
+                    'number' => $block['number'],
+                    'title' => $block['title'] ?? "Блок {$block['number']}",
+                    'example' => $example,
+                ];
+            }
+
+            if (!empty($blocksData)) {
+                $topicsWithBlocks[] = [
+                    'topic_id' => $topicId,
+                    'topic_number' => ltrim($topicId, '0'),
+                    'title' => $topicMeta['title'],
+                    'color' => $topicMeta['color'] ?? 'gray',
+                    'category' => in_array($topicId, ['06', '07', '08', '09', '10', '11', '12', '13', '14']) ? 'algebra' : 'geometry',
+                    'blocks' => $blocksData,
+                ];
+            }
+        }
+
+        return view('test.oge-generator', [
+            'topicsWithBlocks' => $topicsWithBlocks
+        ]);
     }
 
     /**
@@ -5003,27 +5070,31 @@ class TestPdfController extends Controller
         // Extract variant number from hash
         $variantNumber = (abs($seed) % 999) + 1;
 
-        // Get selected topics from query parameter
-        // Default: all topics except 18 and 19 (not ready yet)
-        $defaultTopics = ['06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17'];
-        $topicsParam = $request->query('topics');
+        // Get selected blocks from query parameter
+        $blocksParam = $request->query('blocks');
+        $selectedBlocks = [];
 
-        if ($topicsParam) {
-            // Parse topics from query string (format: "06,07,08,09")
-            $selectedTopics = explode(',', $topicsParam);
-            // Validate and filter topics
-            $validTopics = ['06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19'];
-            $topicIds = array_filter($selectedTopics, function($topic) use ($validTopics) {
-                return in_array($topic, $validTopics);
+        if ($blocksParam) {
+            // Parse blocks from query string (format: "06_1,06_2,07_1,15_3")
+            $selectedBlocks = explode(',', $blocksParam);
+            // Validate block format (должно быть XX_Y, где XX - topic_id, Y - block_number)
+            $selectedBlocks = array_filter($selectedBlocks, function($block) {
+                return preg_match('/^\d{2}_\d+$/', $block);
             });
-            // Ensure at least one topic is selected
-            if (empty($topicIds)) {
-                $topicIds = $defaultTopics;
-            }
-        } else {
-            $topicIds = $defaultTopics;
         }
 
+        // Если блоки не указаны, используем дефолтные (все блоки тем 06-17)
+        if (empty($selectedBlocks)) {
+            $defaultTopics = ['06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17'];
+            foreach ($defaultTopics as $topicId) {
+                $blocks = $this->taskDataService->getBlocks($topicId);
+                foreach ($blocks as $block) {
+                    $selectedBlocks[] = "{$topicId}_{$block['number']}";
+                }
+            }
+        }
+
+        $tasks = [];
         $topicTitles = [
             '06' => 'Дроби и степени',
             '07' => 'Числа, координатная прямая',
@@ -5041,11 +5112,26 @@ class TestPdfController extends Controller
             '19' => 'Анализ геометрических высказываний',
         ];
 
-        $tasks = [];
+        // Группируем блоки по темам для генерации по одному заданию на тему
+        $blocksByTopic = [];
+        foreach ($selectedBlocks as $blockId) {
+            list($topicId, $blockNumber) = explode('_', $blockId);
+            if (!isset($blocksByTopic[$topicId])) {
+                $blocksByTopic[$topicId] = [];
+            }
+            $blocksByTopic[$topicId][] = (int)$blockNumber;
+        }
 
-        foreach ($topicIds as $topicId) {
-            $task = $this->getOneRandomTaskForOge($topicId);
-            if ($task) {
+        // Генерируем задания: по одному заданию для каждой темы из случайного выбранного блока
+        foreach ($blocksByTopic as $topicId => $blockNumbers) {
+            // Выбираем случайный блок из выбранных для этой темы
+            $randomBlockNumber = $blockNumbers[array_rand($blockNumbers)];
+
+            // Получаем случайное задание из этого блока
+            $tasksFromBlock = $this->taskDataService->getRandomTasksFromBlock($topicId, $randomBlockNumber, 1);
+
+            if (!empty($tasksFromBlock)) {
+                $task = $tasksFromBlock[0];
                 $task['topic_id'] = $topicId;
                 $task['topic_title'] = $topicTitles[$topicId] ?? '';
                 $tasks[] = $task;
@@ -5059,7 +5145,7 @@ class TestPdfController extends Controller
             'tasks' => $tasks,
             'variantNumber' => $variantNumber,
             'variantHash' => $hash,
-            'selectedTopics' => $topicIds,
+            'selectedBlocks' => $selectedBlocks,
         ]);
     }
 
