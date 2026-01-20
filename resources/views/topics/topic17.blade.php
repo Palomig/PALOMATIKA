@@ -137,7 +137,7 @@
                                 @switch($zadanie['number'])
                                     @case(1)
                                         {{-- Задания 1-8: Параллелограмм БЕЗ диагоналей, только угол --}}
-                                        <div x-data="parallelogramSVG({{ $task['angle'] ?? 60 }}, {{ $task['id'] }})">
+                                        <div x-data="parallelogramSimpleSVG({{ $task['angle'] ?? 60 }}, {{ $task['id'] }})">
                                             <svg viewBox="0 0 340 250" class="w-full max-w-[300px] h-auto">
                                                 {{-- Параллелограмм ABCD --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
@@ -216,7 +216,7 @@
 
                                     @case(4)
                                         {{-- Задания 21-24: Диагонали параллелограмма (DO) --}}
-                                        <div x-data="parallelogramSVG()">
+                                        <div x-data="parallelogramSimpleSVG(60, {{ $task['id'] ?? 21 }})">
                                             <svg viewBox="0 0 340 250" class="w-full max-w-[300px] h-auto">
                                                 {{-- Параллелограмм ABCD --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
@@ -231,11 +231,11 @@
                                                 <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
                                                 <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
                                                 <circle :cx="D.x" :cy="D.y" r="5" fill="#dc2626"/>
-                                                {{-- Метки --}}
-                                                <text :x="A.x - 15" :y="A.y + 5" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="end">A</text>
-                                                <text :x="B.x - 8" :y="B.y - 10" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="end">B</text>
-                                                <text :x="C.x + 15" :y="C.y - 10" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="start">C</text>
-                                                <text :x="D.x + 15" :y="D.y + 5" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="start">D</text>
+                                                {{-- Метки вершин --}}
+                                                <text :x="labelA.x" :y="labelA.y" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                                                <text :x="labelB.x" :y="labelB.y" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                                                <text :x="labelC.x" :y="labelC.y" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                                                <text :x="labelD.x" :y="labelD.y" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">D</text>
                                                 <text :x="O.x + 10" :y="O.y - 8" fill="#f59e0b" font-size="14" font-style="italic" class="geo-label" text-anchor="start">O</text>
                                             </svg>
                                         </div>
@@ -859,6 +859,62 @@
             labelD: labelPos(D),
             makeAngleArc: (v, p1, p2, r) => makeAngleArc(v, p1, p2, r),
             bisectorDirection: (v, p1, p2) => bisectorDirection(v, p1, p2)
+        };
+    }
+
+    // 1a. Простой параллелограмм для заданий 1-8 и 21-24 (viewBox 340x250)
+    // Без биссектрисы, только углы и диагонали
+    function parallelogramSimpleSVG(angle = 60, taskId = 1) {
+        // Базовые параметры для viewBox 340x250
+        const baseY = 200;  // Нижняя линия (отступ 50 снизу)
+        const topY = 50;    // Верхняя линия (отступ 50 сверху)
+
+        // Небольшая рандомизация для разнообразия
+        const rand = seededRandom(taskId);
+
+        // Определяем skew на основе типа угла
+        let skew;
+        if (angle < 90) {
+            skew = 45 + rand * 25;
+        } else if (angle === 90) {
+            skew = 0;
+        } else {
+            skew = -(45 + rand * 25);
+        }
+
+        // Ширина основания
+        const baseWidth = 180 + rand * 30;
+
+        // Вычисляем общую ширину фигуры и центрируем в viewBox 340
+        const minX = Math.min(0, skew);
+        const maxX = Math.max(skew + baseWidth, baseWidth);
+        const totalWidth = maxX - minX;
+        const offsetX = (340 - totalWidth) / 2 - minX;
+
+        const A = { x: offsetX, y: baseY };
+        const B = { x: offsetX + skew, y: topY };
+        const C = { x: offsetX + skew + baseWidth, y: topY };
+        const D = { x: offsetX + baseWidth, y: baseY };
+        const O = { x: (A.x + C.x) / 2, y: (A.y + C.y) / 2 };
+
+        // Центр для расчёта позиций меток
+        const center = { x: (A.x + B.x + C.x + D.x) / 4, y: (A.y + B.y + C.y + D.y) / 4 };
+
+        // Функция для позиционирования меток
+        const labelPos = (p, dist = 22) => {
+            const dx = p.x - center.x;
+            const dy = p.y - center.y;
+            const len = Math.sqrt(dx*dx + dy*dy);
+            return { x: p.x + (dx/len) * dist, y: p.y + (dy/len) * dist };
+        };
+
+        return {
+            A, B, C, D, O,
+            labelA: labelPos(A),
+            labelB: labelPos(B),
+            labelC: labelPos(C),
+            labelD: labelPos(D),
+            makeAngleArc: (v, p1, p2, r) => makeAngleArc(v, p1, p2, r)
         };
     }
 
