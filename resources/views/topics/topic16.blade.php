@@ -345,8 +345,8 @@
                         <text :x="B.x + 8" :y="B.y + 14" fill="#60a5fa" font-size="16" class="geo-label">B</text>
                         <text :x="C.x - 16" :y="C.y - 8" fill="#60a5fa" font-size="16" class="geo-label">C</text>
 
-                        {{-- Angle label --}}
-                        <text x="115" y="150" fill="#f59e0b" font-size="14" class="geo-label" text-anchor="middle">{{ $task['aob'] }}°</text>
+                        {{-- Angle label (отступ минимум 20px от ближайшей линии) --}}
+                        <text x="115" y="165" fill="#f59e0b" font-size="14" class="geo-label" text-anchor="middle">{{ $task['aob'] }}°</text>
                     </svg>
                 </div>
 
