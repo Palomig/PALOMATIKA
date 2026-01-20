@@ -188,7 +188,7 @@
                                     @case(3)
                                         {{-- Задания 17-20: Биссектриса угла параллелограмма --}}
                                         <div x-data="parallelogramSVG()">
-                                            <svg viewBox="0 0 340 250" class="w-full max-w-[300px] h-auto">
+                                            <svg viewBox="0 0 380 270" class="w-full max-w-[300px] h-auto">
                                                 {{-- Параллелограмм ABCD --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
                                                     fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
@@ -796,12 +796,12 @@
     }
 
     // 1. Параллелограмм с углом соответствующего типа (острый/прямой/тупой)
-    // viewBox: 340x250, angle - угол из условия, taskId - для рандомизации
+    // viewBox: 380x270, angle - угол из условия, taskId - для рандомизации
     function parallelogramSVG(angle = 60, taskId = 1) {
-        // Базовые параметры для viewBox 340x250
-        const baseY = 200;  // Нижняя линия
-        const topY = 50;    // Верхняя линия
-        const height = baseY - topY; // 150px
+        // Базовые параметры для viewBox 380x270
+        const baseY = 220;  // Нижняя линия (отступ 50 снизу)
+        const topY = 50;    // Верхняя линия (отступ 50 сверху)
+        const height = baseY - topY; // 170px
 
         // Небольшая рандомизация для разнообразия
         const rand = seededRandom(taskId);
@@ -821,13 +821,13 @@
         }
 
         // Ширина основания — УВЕЛИЧЕНА, чтобы биссектриса явно пересекала BC между B и C
-        const baseWidth = 240 + rand * 20;
+        const baseWidth = 260 + rand * 20;
 
-        // Вычисляем общую ширину фигуры и центрируем в viewBox 340
+        // Вычисляем общую ширину фигуры и центрируем в viewBox 380
         const minX = Math.min(0, skew);
         const maxX = Math.max(skew + baseWidth, baseWidth);
         const totalWidth = maxX - minX;
-        const offsetX = (340 - totalWidth) / 2 - minX;
+        const offsetX = (380 - totalWidth) / 2 - minX;
 
         const A = { x: offsetX, y: baseY };
         const B = { x: offsetX + skew, y: topY };
