@@ -24,6 +24,13 @@
             user-select: none;
             pointer-events: none;
         }
+        .geo-label-bold {
+            font-family: 'Times New Roman', serif;
+            font-style: normal;
+            font-weight: 700;
+            user-select: none;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
@@ -267,7 +274,7 @@
 
                         {{-- Angle arc at P (динамический) --}}
                         <path :d="makeAngleArc(P, A, B, 25)" fill="none" stroke="#d4a855" stroke-width="2"/>
-                        <text :x="angleLabelPos(P, A, B, 40).x" :y="angleLabelPos(P, A, B, 40).y" fill="#d4a855" font-size="14" class="geo-label" text-anchor="middle">{{ $task['angle'] }}°</text>
+                        <text :x="angleLabelPos(P, A, B, 40).x" :y="angleLabelPos(P, A, B, 40).y" fill="#d4a855" font-size="16" class="geo-label-bold" text-anchor="middle">{{ $task['angle'] }}°</text>
 
                         {{-- Angle arc at B (искомый угол ABO, динамический) --}}
                         <path :d="makeAngleArc(B, A, O, 18)" fill="none" stroke="#5a9fcf" stroke-width="2"/>
@@ -346,7 +353,7 @@
                         <text :x="C.x - 16" :y="C.y - 8" fill="#60a5fa" font-size="16" class="geo-label">C</text>
 
                         {{-- Angle label (отступ минимум 20px от ближайшей линии) --}}
-                        <text x="115" y="165" fill="#d4a855" font-size="14" class="geo-label" text-anchor="middle">{{ $task['aob'] }}°</text>
+                        <text x="115" y="165" fill="#d4a855" font-size="16" class="geo-label-bold" text-anchor="middle">{{ $task['aob'] }}°</text>
                     </svg>
                 </div>
 
@@ -662,7 +669,7 @@
                         <circle cx="110" cy="95" r="85" fill="none" stroke="#5a9fcf" stroke-width="2.5"/>
 
                         {{-- Side label --}}
-                        <text x="110" y="195" fill="#d4a855" font-size="14" class="geo-label" text-anchor="middle">a={{ $task['side'] }}</text>
+                        <text x="110" y="195" fill="#d4a855" font-size="16" class="geo-label-bold" text-anchor="middle">a={{ $task['side'] }}</text>
                     </svg>
                 </div>
 
@@ -701,7 +708,7 @@
 
                         {{-- Radius --}}
                         <line x1="110" y1="100" x2="195" y2="100" stroke="#d4a855" stroke-width="2"/>
-                        <text x="152" y="90" fill="#d4a855" font-size="14" class="geo-label">r={{ $task['r'] }}</text>
+                        <text x="152" y="90" fill="#d4a855" font-size="16" class="geo-label-bold">r={{ $task['r'] }}</text>
                     </svg>
                 </div>
 
@@ -1252,7 +1259,7 @@
                         @endif
 
                         {{-- Angle label --}}
-                        <text x="110" y="{{ $task['c'] < 90 ? 58 : 155 }}" fill="#d4a855" font-size="14" class="geo-label" text-anchor="middle">{{ $task['c'] }}°</text>
+                        <text x="110" y="{{ $task['c'] < 90 ? 58 : 155 }}" fill="#d4a855" font-size="16" class="geo-label-bold" text-anchor="middle">{{ $task['c'] }}°</text>
                     </svg>
                 </div>
 

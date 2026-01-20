@@ -47,6 +47,13 @@
             user-select: none;
             pointer-events: none;
         }
+        .geo-label-bold {
+            font-family: 'Times New Roman', serif;
+            font-style: normal;
+            font-weight: 700;
+            user-select: none;
+            pointer-events: none;
+        }
         .katex { font-size: 1.1em; }
     </style>
 </head>
@@ -182,10 +189,10 @@
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                                                     fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
                                                 <circle :cx="M.x" :cy="M.y" r="4" fill="#f59e0b"/>
-                                                <text :x="A.x - 12" :y="A.y + 4" fill="#94a3b8" font-size="13" font-weight="bold" font-style="italic">A</text>
-                                                <text :x="B.x + 4" :y="B.y - 6" fill="#94a3b8" font-size="13" font-weight="bold" font-style="italic">B</text>
-                                                <text :x="C.x + 4" :y="C.y + 14" fill="#94a3b8" font-size="13" font-weight="bold" font-style="italic">C</text>
-                                                <text :x="M.x + 4" :y="M.y - 6" fill="#f59e0b" font-size="13" font-weight="bold" font-style="italic">M</text>
+                                                <text :x="A.x - 12" :y="A.y + 4" fill="#94a3b8" font-size="15" class="geo-label-bold">A</text>
+                                                <text :x="B.x + 4" :y="B.y - 6" fill="#94a3b8" font-size="15" class="geo-label-bold">B</text>
+                                                <text :x="C.x + 4" :y="C.y + 14" fill="#94a3b8" font-size="15" class="geo-label-bold">C</text>
+                                                <text :x="M.x + 4" :y="M.y - 6" fill="#f59e0b" font-size="15" class="geo-label-bold">M</text>
                                             </svg>
                                         </div>
                                         @break
@@ -239,9 +246,9 @@
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`"
                                                     fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
                                                 <line :x1="M1.x" :y1="M1.y" :x2="M2.x" :y2="M2.y" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,3"/>
-                                                <text :x="A.x - 12" :y="A.y + 14" fill="#94a3b8" font-size="13" font-weight="bold" font-style="italic">A</text>
-                                                <text :x="B.x - 2" :y="B.y - 8" fill="#94a3b8" font-size="13" font-weight="bold" font-style="italic">B</text>
-                                                <text :x="C.x + 4" :y="C.y + 14" fill="#94a3b8" font-size="13" font-weight="bold" font-style="italic">C</text>
+                                                <text :x="A.x - 12" :y="A.y + 14" fill="#94a3b8" font-size="15" class="geo-label-bold">A</text>
+                                                <text :x="B.x - 2" :y="B.y - 8" fill="#94a3b8" font-size="15" class="geo-label-bold">B</text>
+                                                <text :x="C.x + 4" :y="C.y + 14" fill="#94a3b8" font-size="15" class="geo-label-bold">C</text>
                                             </svg>
                                         </div>
                                         @break
@@ -259,8 +266,8 @@
                                                 <polygon :points="shapePoints"
                                                     fill="none" stroke="#10b981" stroke-width="2.5" stroke-linejoin="round"/>
                                                 <line :x1="A.x" :y1="A.y" :x2="B.x" :y2="B.y" stroke="#f59e0b" stroke-width="2.5"/>
-                                                <text :x="labelA.x" :y="labelA.y" fill="#94a3b8" font-size="13" font-weight="bold" font-style="italic">A</text>
-                                                <text :x="labelB.x" :y="labelB.y" fill="#94a3b8" font-size="13" font-weight="bold" font-style="italic">B</text>
+                                                <text :x="labelA.x" :y="labelA.y" fill="#94a3b8" font-size="15" class="geo-label-bold">A</text>
+                                                <text :x="labelB.x" :y="labelB.y" fill="#94a3b8" font-size="15" class="geo-label-bold">B</text>
                                             </svg>
                                         </div>
                                         @break
