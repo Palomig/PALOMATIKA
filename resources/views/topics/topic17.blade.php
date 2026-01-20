@@ -192,20 +192,24 @@
                                                 {{-- Параллелограмм ABCD --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
                                                     fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
-                                                {{-- Биссектриса из A --}}
-                                                <line :x1="A.x" :y1="A.y" :x2="B.x + 60" :y2="B.y" stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
-                                                {{-- Угол при A --}}
-                                                <path :d="makeAngleArc(A, D, B, 25)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                                                {{-- Биссектриса из A (делит угол DAB пополам, пересекает BC) --}}
+                                                <line :x1="A.x" :y1="A.y" :x2="bisectorEnd.x" :y2="bisectorEnd.y"
+                                                    stroke="#10b981" stroke-width="2" stroke-dasharray="6,4"/>
+                                                {{-- Точка пересечения биссектрисы с BC --}}
+                                                <circle :cx="bisectorEnd.x" :cy="bisectorEnd.y" r="3" fill="#10b981"/>
+                                                {{-- Дуги половинных углов (показывают что биссектриса делит угол пополам) --}}
+                                                <path :d="makeAngleArc(A, D, bisectorEnd, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
+                                                <path :d="makeAngleArc(A, bisectorEnd, B, 30)" fill="none" stroke="#f59e0b" stroke-width="2"/>
                                                 {{-- Точки вершин --}}
                                                 <circle :cx="A.x" :cy="A.y" r="5" fill="#dc2626"/>
                                                 <circle :cx="B.x" :cy="B.y" r="5" fill="#dc2626"/>
                                                 <circle :cx="C.x" :cy="C.y" r="5" fill="#dc2626"/>
                                                 <circle :cx="D.x" :cy="D.y" r="5" fill="#dc2626"/>
-                                                {{-- Метки --}}
-                                                <text :x="A.x - 15" :y="A.y + 5" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="end">A</text>
-                                                <text :x="B.x - 8" :y="B.y - 10" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="end">B</text>
-                                                <text :x="C.x + 15" :y="C.y - 10" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="start">C</text>
-                                                <text :x="D.x + 15" :y="D.y + 5" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="start">D</text>
+                                                {{-- Метки вершин --}}
+                                                <text :x="labelA.x" :y="labelA.y" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">A</text>
+                                                <text :x="labelB.x" :y="labelB.y" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">B</text>
+                                                <text :x="labelC.x" :y="labelC.y" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">C</text>
+                                                <text :x="labelD.x" :y="labelD.y" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="middle" dominant-baseline="middle">D</text>
                                             </svg>
                                         </div>
                                         @break
@@ -726,6 +730,71 @@
         return x - Math.floor(x);
     }
 
+    // Функция для расчёта биссектрисы угла
+    // vertex - вершина угла, p1 и p2 - точки на сторонах угла
+    // Возвращает единичный вектор направления биссектрисы
+    function bisectorDirection(vertex, p1, p2) {
+        // Единичный вектор от vertex к p1
+        const dx1 = p1.x - vertex.x;
+        const dy1 = p1.y - vertex.y;
+        const len1 = Math.sqrt(dx1 * dx1 + dy1 * dy1);
+        const u1 = { x: dx1 / len1, y: dy1 / len1 };
+
+        // Единичный вектор от vertex к p2
+        const dx2 = p2.x - vertex.x;
+        const dy2 = p2.y - vertex.y;
+        const len2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+        const u2 = { x: dx2 / len2, y: dy2 / len2 };
+
+        // Биссектриса = сумма единичных векторов (нормализованная)
+        const bx = u1.x + u2.x;
+        const by = u1.y + u2.y;
+        const blen = Math.sqrt(bx * bx + by * by);
+
+        return { x: bx / blen, y: by / blen };
+    }
+
+    // Функция для нахождения пересечения луча с отрезком
+    // ray: { origin, direction }, segment: { p1, p2 }
+    // Возвращает точку пересечения или null
+    function raySegmentIntersection(rayOrigin, rayDir, segP1, segP2) {
+        const dx = segP2.x - segP1.x;
+        const dy = segP2.y - segP1.y;
+
+        const denom = rayDir.x * dy - rayDir.y * dx;
+        if (Math.abs(denom) < 1e-10) return null; // Параллельны
+
+        const t = ((segP1.x - rayOrigin.x) * dy - (segP1.y - rayOrigin.y) * dx) / denom;
+        const s = ((segP1.x - rayOrigin.x) * rayDir.y - (segP1.y - rayOrigin.y) * rayDir.x) / denom;
+
+        if (t > 0 && s >= 0 && s <= 1) {
+            return {
+                x: rayOrigin.x + t * rayDir.x,
+                y: rayOrigin.y + t * rayDir.y
+            };
+        }
+        return null;
+    }
+
+    // Функция для нахождения точки пересечения биссектрисы с противоположной стороной
+    // Для параллелограмма ABCD: биссектриса из A пересекает BC
+    function bisectorEndpoint(vertex, p1, p2, targetP1, targetP2) {
+        const dir = bisectorDirection(vertex, p1, p2);
+        const intersection = raySegmentIntersection(vertex, dir, targetP1, targetP2);
+
+        // Если пересечение найдено, возвращаем его
+        // Иначе продлеваем луч на фиксированное расстояние
+        if (intersection) {
+            return intersection;
+        }
+
+        // Fallback: продлить на 200px
+        return {
+            x: vertex.x + dir.x * 200,
+            y: vertex.y + dir.y * 200
+        };
+    }
+
     // 1. Параллелограмм с углом соответствующего типа (острый/прямой/тупой)
     // viewBox: 300x220, angle - угол из условия, taskId - для рандомизации
     function parallelogramSVG(angle = 60, taskId = 1) {
@@ -776,13 +845,19 @@
             return { x: p.x + (dx/len) * dist, y: p.y + (dy/len) * dist };
         };
 
+        // Биссектриса угла A: угол между AD и AB
+        // Биссектриса пересекает сторону BC
+        const bisectorEnd = bisectorEndpoint(A, D, B, B, C);
+
         return {
             A, B, C, D, O,
+            bisectorEnd,
             labelA: labelPos(A),
             labelB: labelPos(B),
             labelC: labelPos(C),
             labelD: labelPos(D),
-            makeAngleArc: (v, p1, p2, r) => makeAngleArc(v, p1, p2, r)
+            makeAngleArc: (v, p1, p2, r) => makeAngleArc(v, p1, p2, r),
+            bisectorDirection: (v, p1, p2) => bisectorDirection(v, p1, p2)
         };
     }
 
