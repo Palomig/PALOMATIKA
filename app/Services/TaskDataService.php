@@ -303,6 +303,66 @@ class TaskDataService
     }
 
     /**
+     * Получить случайные задания из конкретного zadanie
+     */
+    public function getRandomTasksFromZadanie(string $topicId, int $blockNumber, int $zadanieNumber, int $count = 1): array
+    {
+        $blocks = $this->getBlocks($topicId);
+        $meta = $this->getTopicMeta($topicId);
+        $allTasks = [];
+
+        // Находим нужный блок
+        foreach ($blocks as $block) {
+            if ($block['number'] == $blockNumber) {
+                // Находим нужное zadanie
+                foreach ($block['zadaniya'] ?? [] as $zadanie) {
+                    if ($zadanie['number'] == $zadanieNumber) {
+                        // Для statements — сами statements являются "задачами"
+                        if (($zadanie['type'] ?? '') === 'statements' && isset($zadanie['statements'])) {
+                            $allTasks[] = [
+                                'topic_id' => $topicId,
+                                'topic_title' => $meta['title'],
+                                'block_number' => $block['number'],
+                                'block_title' => $block['title'],
+                                'zadanie_number' => $zadanie['number'],
+                                'instruction' => $zadanie['instruction'],
+                                'type' => 'statements',
+                                'section' => $zadanie['section'] ?? null,
+                                'statements' => $zadanie['statements'],
+                            ];
+                        } else {
+                            foreach ($zadanie['tasks'] ?? [] as $task) {
+                                $allTasks[] = [
+                                    'topic_id' => $topicId,
+                                    'topic_title' => $meta['title'],
+                                    'block_number' => $block['number'],
+                                    'block_title' => $block['title'],
+                                    'zadanie_number' => $zadanie['number'],
+                                    'instruction' => $zadanie['instruction'],
+                                    'type' => $zadanie['type'] ?? 'expression',
+                                    'svg_type' => $zadanie['svg_type'] ?? null,
+                                    'points' => $zadanie['points'] ?? null,
+                                    'options' => $zadanie['options'] ?? null,
+                                    'task' => $task,
+                                ];
+                            }
+                        }
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+
+        if (empty($allTasks)) {
+            return [];
+        }
+
+        shuffle($allTasks);
+        return array_slice($allTasks, 0, $count);
+    }
+
+    /**
      * Сохранить данные темы в JSON
      */
     public function saveTopicData(string $topicId, array $data): bool

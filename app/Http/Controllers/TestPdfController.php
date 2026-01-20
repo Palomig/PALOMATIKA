@@ -5067,26 +5067,28 @@ class TestPdfController extends Controller
         // Extract variant number from hash
         $variantNumber = (abs($seed) % 999) + 1;
 
-        // Get selected blocks from query parameter
-        $blocksParam = $request->query('blocks');
-        $selectedBlocks = [];
+        // Get selected zadaniya from query parameter
+        $zadaniyaParam = $request->query('zadaniya');
+        $selectedZadaniya = [];
 
-        if ($blocksParam) {
-            // Parse blocks from query string (format: "06_1,06_2,07_1,15_3")
-            $selectedBlocks = explode(',', $blocksParam);
-            // Validate block format (должно быть XX_Y, где XX - topic_id, Y - block_number)
-            $selectedBlocks = array_filter($selectedBlocks, function($block) {
-                return preg_match('/^\d{2}_\d+$/', $block);
+        if ($zadaniyaParam) {
+            // Parse zadaniya from query string (format: "06_1_2,06_2_3,07_1_1,15_3_2")
+            $selectedZadaniya = explode(',', $zadaniyaParam);
+            // Validate zadanie format (должно быть XX_Y_Z, где XX - topic_id, Y - block_number, Z - zadanie_number)
+            $selectedZadaniya = array_filter($selectedZadaniya, function($zadanie) {
+                return preg_match('/^\d{2}_\d+_\d+$/', $zadanie);
             });
         }
 
-        // Если блоки не указаны, используем дефолтные (все блоки тем 06-17)
-        if (empty($selectedBlocks)) {
+        // Если zadaniya не указаны, используем дефолтные (все zadaniya тем 06-17, кроме 18-19)
+        if (empty($selectedZadaniya)) {
             $defaultTopics = ['06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17'];
             foreach ($defaultTopics as $topicId) {
                 $blocks = $this->taskDataService->getBlocks($topicId);
                 foreach ($blocks as $block) {
-                    $selectedBlocks[] = "{$topicId}_{$block['number']}";
+                    foreach ($block['zadaniya'] ?? [] as $zadanie) {
+                        $selectedZadaniya[] = "{$topicId}_{$block['number']}_{$zadanie['number']}";
+                    }
                 }
             }
         }
@@ -5109,26 +5111,37 @@ class TestPdfController extends Controller
             '19' => 'Анализ геометрических высказываний',
         ];
 
-        // Группируем блоки по темам для генерации по одному заданию на тему
-        $blocksByTopic = [];
-        foreach ($selectedBlocks as $blockId) {
-            list($topicId, $blockNumber) = explode('_', $blockId);
-            if (!isset($blocksByTopic[$topicId])) {
-                $blocksByTopic[$topicId] = [];
+        // Группируем zadaniya по темам для генерации по одному заданию на тему
+        $zadaniyaByTopic = [];
+        foreach ($selectedZadaniya as $zadanieId) {
+            $parts = explode('_', $zadanieId);
+            if (count($parts) !== 3) continue;
+
+            list($topicId, $blockNumber, $zadanieNumber) = $parts;
+            if (!isset($zadaniyaByTopic[$topicId])) {
+                $zadaniyaByTopic[$topicId] = [];
             }
-            $blocksByTopic[$topicId][] = (int)$blockNumber;
+            $zadaniyaByTopic[$topicId][] = [
+                'block' => (int)$blockNumber,
+                'zadanie' => (int)$zadanieNumber
+            ];
         }
 
-        // Генерируем задания: по одному заданию для каждой темы из случайного выбранного блока
-        foreach ($blocksByTopic as $topicId => $blockNumbers) {
-            // Выбираем случайный блок из выбранных для этой темы
-            $randomBlockNumber = $blockNumbers[array_rand($blockNumbers)];
+        // Генерируем задания: по одному заданию для каждой темы из случайного выбранного zadanie
+        foreach ($zadaniyaByTopic as $topicId => $zadaniyaList) {
+            // Выбираем случайное zadanie из выбранных для этой темы
+            $randomZadanie = $zadaniyaList[array_rand($zadaniyaList)];
 
-            // Получаем случайное задание из этого блока
-            $tasksFromBlock = $this->taskDataService->getRandomTasksFromBlock($topicId, $randomBlockNumber, 1);
+            // Получаем случайное задание из этого zadanie
+            $tasksFromZadanie = $this->taskDataService->getRandomTasksFromZadanie(
+                $topicId,
+                $randomZadanie['block'],
+                $randomZadanie['zadanie'],
+                1
+            );
 
-            if (!empty($tasksFromBlock)) {
-                $task = $tasksFromBlock[0];
+            if (!empty($tasksFromZadanie)) {
+                $task = $tasksFromZadanie[0];
                 $task['topic_id'] = $topicId;
                 $task['topic_title'] = $topicTitles[$topicId] ?? '';
                 $tasks[] = $task;
@@ -5142,7 +5155,7 @@ class TestPdfController extends Controller
             'tasks' => $tasks,
             'variantNumber' => $variantNumber,
             'variantHash' => $hash,
-            'selectedBlocks' => $selectedBlocks,
+            'selectedZadaniya' => $selectedZadaniya,
         ]);
     }
 
