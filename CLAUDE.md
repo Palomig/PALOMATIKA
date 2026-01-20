@@ -1215,18 +1215,109 @@ function labelOnSegment(p1, p2, offset = 15) {
 - Отступ: **12-18px** от середины отрезка
 - Направление отступа выбирается так, чтобы текст не накладывался на фигуру
 
+### Функция 6: bisectorDirection() — направление биссектрисы угла
+
+```javascript
+// Вычисляет единичный вектор направления биссектрисы угла
+// vertex - вершина угла, p1 и p2 - точки на сторонах угла
+function bisectorDirection(vertex, p1, p2) {
+    // Единичный вектор от vertex к p1
+    const dx1 = p1.x - vertex.x;
+    const dy1 = p1.y - vertex.y;
+    const len1 = Math.sqrt(dx1 * dx1 + dy1 * dy1);
+    const u1 = { x: dx1 / len1, y: dy1 / len1 };
+
+    // Единичный вектор от vertex к p2
+    const dx2 = p2.x - vertex.x;
+    const dy2 = p2.y - vertex.y;
+    const len2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+    const u2 = { x: dx2 / len2, y: dy2 / len2 };
+
+    // Биссектриса = сумма единичных векторов (нормализованная)
+    const bx = u1.x + u2.x;
+    const by = u1.y + u2.y;
+    const blen = Math.sqrt(bx * bx + by * by);
+
+    return { x: bx / blen, y: by / blen };
+}
+```
+
+**Принцип работы:**
+- Вычисляем единичные векторы от вершины к каждой точке на сторонах угла
+- Складываем их — результат указывает точно посередине между ними
+- Нормализуем для получения единичного вектора направления
+
+**Важно:** Эта функция вычисляет **направление** биссектрисы, а не конечную точку.
+
+### Функция 7: bisectorEndpoint() — точка пересечения биссектрисы со стороной
+
+```javascript
+// Находит точку пересечения биссектрисы с целевым отрезком
+function bisectorEndpoint(vertex, p1, p2, targetP1, targetP2) {
+    const dir = bisectorDirection(vertex, p1, p2);
+    const intersection = raySegmentIntersection(vertex, dir, targetP1, targetP2);
+    if (intersection) return intersection;
+    // Fallback: продлить на 200px
+    return { x: vertex.x + dir.x * 200, y: vertex.y + dir.y * 200 };
+}
+
+// Вспомогательная функция пересечения луча с отрезком
+function raySegmentIntersection(rayOrigin, rayDir, segP1, segP2) {
+    const dx = segP2.x - segP1.x;
+    const dy = segP2.y - segP1.y;
+    const denom = rayDir.x * dy - rayDir.y * dx;
+    if (Math.abs(denom) < 1e-10) return null;
+    const t = ((segP1.x - rayOrigin.x) * dy - (segP1.y - rayOrigin.y) * dx) / denom;
+    const s = ((segP1.x - rayOrigin.x) * rayDir.y - (segP1.y - rayOrigin.y) * rayDir.x) / denom;
+    if (t > 0 && s >= 0 && s <= 1) {
+        return { x: rayOrigin.x + t * rayDir.x, y: rayOrigin.y + t * rayDir.y };
+    }
+    return null;
+}
+```
+
+**Использование для параллелограмма ABCD:**
+```javascript
+// Биссектриса угла A (между AD и AB) пересекает сторону BC
+const bisectorEnd = bisectorEndpoint(A, D, B, B, C);
+```
+
 ### Правила для вспомогательных линий
 
 #### Биссектриса
-1. Биссектриса **ДОЛЖНА** доходить до противоположной стороны
-2. Точка D вычисляется как пересечение биссектрисы со стороной BC
+
+**КРИТИЧЕСКИ ВАЖНО:** Биссектриса **ДОЛЖНА** визуально делить угол пополам. Нельзя использовать захардкоженные координаты!
+
+**Правила:**
+1. Биссектриса **ОБЯЗАТЕЛЬНО** вычисляется через `bisectorDirection()` или `bisectorEndpoint()`
+2. Биссектриса **ДОЛЖНА** доходить до противоположной стороны
 3. Линия: `stroke-dasharray="6,4"`, цвет `#10b981`
-4. Точка D: круг радиуса 4px, цвет `#10b981`
+4. Точка пересечения: круг радиуса 3-4px, цвет `#10b981`
+5. Для визуализации деления угла пополам — рисовать **две дуги** одинакового радиуса
+
+**НЕПРАВИЛЬНО:**
+```html
+{{-- Захардкоженные координаты — угол НЕ будет делиться пополам! --}}
+<line :x1="A.x" :y1="A.y" :x2="B.x + 60" :y2="B.y" stroke="#10b981"/>
+```
+
+**ПРАВИЛЬНО:**
+```html
+{{-- Вычисленная биссектриса --}}
+<line :x1="A.x" :y1="A.y" :x2="bisectorEnd.x" :y2="bisectorEnd.y" stroke="#10b981"/>
+{{-- Точка пересечения --}}
+<circle :cx="bisectorEnd.x" :cy="bisectorEnd.y" r="3" fill="#10b981"/>
+{{-- Две дуги половинных углов (показывают равенство) --}}
+<path :d="makeAngleArc(A, D, bisectorEnd, 30)" stroke="#f59e0b"/>
+<path :d="makeAngleArc(A, bisectorEnd, B, 30)" stroke="#f59e0b"/>
+```
+
+**Для треугольников (альтернативный метод через теорему):**
 
 ```javascript
 // Точка D на стороне BC для биссектрисы из A
-function bisectorPoint(A, B, C) {
-    // Биссектриса делит противоположную сторону в отношении прилежащих сторон
+// Биссектриса делит противоположную сторону в отношении прилежащих сторон
+function bisectorPointTriangle(A, B, C) {
     const AB = Math.sqrt((B.x - A.x)**2 + (B.y - A.y)**2);
     const AC = Math.sqrt((C.x - A.x)**2 + (C.y - A.y)**2);
     const t = AB / (AB + AC);
