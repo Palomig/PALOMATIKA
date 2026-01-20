@@ -138,7 +138,7 @@
                                     @case(1)
                                         {{-- Задания 1-8: Параллелограмм БЕЗ диагоналей, только угол --}}
                                         <div x-data="parallelogramSVG({{ $task['angle'] ?? 60 }}, {{ $task['id'] }})">
-                                            <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                                            <svg viewBox="0 0 310 230" class="w-full max-w-[300px] h-auto">
                                                 {{-- Параллелограмм ABCD --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
                                                     fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
@@ -161,7 +161,7 @@
                                     @case(2)
                                         {{-- Задания 9-16: Диагональ BD или AC с двумя углами --}}
                                         <div x-data="parallelogramDiagonalSVG({{ $task['id'] }})">
-                                            <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                                            <svg viewBox="0 0 310 230" class="w-full max-w-[300px] h-auto">
                                                 {{-- Параллелограмм ABCD --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
                                                     fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
@@ -188,7 +188,7 @@
                                     @case(3)
                                         {{-- Задания 17-20: Биссектриса угла параллелограмма --}}
                                         <div x-data="parallelogramSVG()">
-                                            <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                                            <svg viewBox="0 0 310 230" class="w-full max-w-[300px] h-auto">
                                                 {{-- Параллелограмм ABCD --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
                                                     fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
@@ -213,7 +213,7 @@
                                     @case(4)
                                         {{-- Задания 21-24: Диагонали параллелограмма (DO) --}}
                                         <div x-data="parallelogramSVG()">
-                                            <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                                            <svg viewBox="0 0 310 230" class="w-full max-w-[300px] h-auto">
                                                 {{-- Параллелограмм ABCD --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
                                                     fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
@@ -241,7 +241,7 @@
                                     @case(6)
                                         {{-- Равнобедренная трапеция --}}
                                         <div x-data="isoscelesTrapezoidSVG()">
-                                            <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                                            <svg viewBox="0 0 310 230" class="w-full max-w-[300px] h-auto">
                                                 {{-- Трапеция ABCD --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
                                                     fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
@@ -266,7 +266,7 @@
                                     @case(7)
                                         {{-- Прямоугольная трапеция --}}
                                         <div x-data="rightTrapezoidSVG()">
-                                            <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                                            <svg viewBox="0 0 310 230" class="w-full max-w-[300px] h-auto">
                                                 {{-- Трапеция --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
                                                     fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
@@ -292,7 +292,7 @@
                                     @case(9)
                                         {{-- Трапеция с высотой --}}
                                         <div x-data="trapezoidWithHeightSVG()">
-                                            <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                                            <svg viewBox="0 0 310 230" class="w-full max-w-[300px] h-auto">
                                                 {{-- Трапеция --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
                                                     fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
@@ -321,7 +321,7 @@
                                     @case(10)
                                         {{-- Прямоугольник с диагоналями --}}
                                         <div x-data="rectangleSVG()">
-                                            <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                                            <svg viewBox="0 0 310 230" class="w-full max-w-[300px] h-auto">
                                                 {{-- Прямоугольник --}}
                                                 <rect :x="A.x" :y="B.y" :width="D.x - A.x" :height="A.y - B.y"
                                                     fill="none" stroke="#dc2626" stroke-width="3"/>
@@ -352,7 +352,7 @@
                                     @case(13)
                                         {{-- Ромб --}}
                                         <div x-data="rhombusSVG()">
-                                            <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                                            <svg viewBox="0 0 310 230" class="w-full max-w-[300px] h-auto">
                                                 {{-- Ромб ABCD --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
                                                     fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
@@ -380,7 +380,7 @@
                                     @case(14)
                                         {{-- Параллелограмм для площади --}}
                                         <div x-data="parallelogramAreaSVG()">
-                                            <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                                            <svg viewBox="0 0 310 230" class="w-full max-w-[300px] h-auto">
                                                 {{-- Параллелограмм --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
                                                     fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
@@ -409,7 +409,7 @@
                                     @case(15)
                                         {{-- Трапеция для площади --}}
                                         <div x-data="trapezoidAreaSVG()">
-                                            <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                                            <svg viewBox="0 0 310 230" class="w-full max-w-[300px] h-auto">
                                                 {{-- Трапеция --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
                                                     fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
@@ -433,7 +433,7 @@
                                     @case(16)
                                         {{-- Ромб для площади --}}
                                         <div x-data="rhombusAreaSVG()">
-                                            <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                                            <svg viewBox="0 0 310 230" class="w-full max-w-[300px] h-auto">
                                                 {{-- Ромб --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
                                                     fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
@@ -459,7 +459,7 @@
                                     @case(17)
                                         {{-- Квадрат с диагональю --}}
                                         <div x-data="squareDiagonalSVG()">
-                                            <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                                            <svg viewBox="0 0 310 230" class="w-full max-w-[300px] h-auto">
                                                 {{-- Квадрат --}}
                                                 <rect :x="A.x" :y="B.y" :width="side" :height="side"
                                                     fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
@@ -481,7 +481,7 @@
                                     @case(18)
                                         {{-- Трапеция со средней линией --}}
                                         <div x-data="trapezoidMidlineSVG()">
-                                            <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                                            <svg viewBox="0 0 310 230" class="w-full max-w-[300px] h-auto">
                                                 {{-- Трапеция --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
                                                     fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
@@ -512,7 +512,7 @@
                                     @case(19)
                                         {{-- Трапеция с углом 30° (страница 18 PDF) --}}
                                         <div x-data="trapezoid30AngleSVG()">
-                                            <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                                            <svg viewBox="0 0 310 230" class="w-full max-w-[300px] h-auto">
                                                 {{-- Трапеция ABCD --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
                                                     fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
@@ -542,7 +542,7 @@
                                     @case(20)
                                         {{-- Прямоугольник с точкой E на BC (страница 18 PDF) --}}
                                         <div x-data="rectangleWithPointESVG()">
-                                            <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                                            <svg viewBox="0 0 310 230" class="w-full max-w-[300px] h-auto">
                                                 {{-- Прямоугольник ABCD --}}
                                                 <polygon :points="`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`"
                                                     fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
@@ -577,7 +577,7 @@
                                     @case(21)
                                         {{-- Трапеция на координатной сетке (задание 61) --}}
                                         <div x-data="gridTrapezoidSVG('a')">
-                                            <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                                            <svg viewBox="0 0 310 230" class="w-full max-w-[300px] h-auto">
                                                 {{-- Сетка --}}
                                                 <template x-for="line in gridLines">
                                                     <line :x1="line.x1" :y1="line.y1" :x2="line.x2" :y2="line.y2"
@@ -598,7 +598,7 @@
                                     @case(22)
                                         {{-- Квадрат с площадью по диагонали --}}
                                         <div x-data="squareAreaSVG()">
-                                            <svg viewBox="0 0 300 220" class="w-full max-w-[300px] h-auto">
+                                            <svg viewBox="0 0 310 230" class="w-full max-w-[300px] h-auto">
                                                 {{-- Квадрат --}}
                                                 <rect :x="A.x" :y="B.y" :width="side" :height="side"
                                                     fill="none" stroke="#dc2626" stroke-width="3" stroke-linejoin="round"/>
