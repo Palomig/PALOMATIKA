@@ -4993,55 +4993,65 @@ class TestPdfController extends Controller
         $topicsWithZadaniya = [];
 
         foreach ($topicIds as $topicId) {
-            $topicMeta = $this->taskDataService->getTopicMeta($topicId);
-            $blocks = $this->taskDataService->getBlocks($topicId);
+            try {
+                $topicMeta = $this->taskDataService->getTopicMeta($topicId);
+                $blocks = $this->taskDataService->getBlocks($topicId);
 
-            $zadaniyaData = [];
-            foreach ($blocks as $block) {
-                $blockTitle = $block['title'] ?? "Блок {$block['number']}";
+                if (empty($blocks)) {
+                    continue;
+                }
 
-                foreach ($block['zadaniya'] ?? [] as $zadanie) {
-                    // Получаем первую задачу из zadanie как пример
-                    $example = null;
+                $zadaniyaData = [];
+                foreach ($blocks as $block) {
+                    $blockTitle = $block['title'] ?? "Блок {$block['number']}";
 
-                    if (($zadanie['type'] ?? '') === 'statements' && isset($zadanie['statements'][0])) {
-                        // Для statements берём первое утверждение
-                        $example = [
-                            'type' => 'statements',
-                            'text' => $zadanie['statements'][0]['text'] ?? ''
-                        ];
-                    } elseif (isset($zadanie['tasks'][0])) {
-                        // Для обычных заданий берём первую задачу
-                        $firstTask = $zadanie['tasks'][0];
-                        $example = [
-                            'type' => $zadanie['type'] ?? 'expression',
+                    foreach ($block['zadaniya'] ?? [] as $zadanie) {
+                        // Получаем первую задачу из zadanie как пример
+                        $example = null;
+
+                        if (($zadanie['type'] ?? '') === 'statements' && isset($zadanie['statements'][0])) {
+                            // Для statements берём первое утверждение
+                            $example = [
+                                'type' => 'statements',
+                                'text' => $zadanie['statements'][0]['text'] ?? ''
+                            ];
+                        } elseif (isset($zadanie['tasks'][0])) {
+                            // Для обычных заданий берём первую задачу
+                            $firstTask = $zadanie['tasks'][0];
+                            $example = [
+                                'type' => $zadanie['type'] ?? 'expression',
+                                'instruction' => $zadanie['instruction'] ?? '',
+                                'expression' => $firstTask['expression'] ?? '',
+                                'text' => $firstTask['text'] ?? '',
+                                'image' => $firstTask['image'] ?? null,
+                            ];
+                        }
+
+                        $zadaniyaData[] = [
+                            'zadanie_id' => "{$topicId}_{$block['number']}_{$zadanie['number']}",
+                            'block_number' => $block['number'],
+                            'block_title' => $blockTitle,
+                            'zadanie_number' => $zadanie['number'],
                             'instruction' => $zadanie['instruction'] ?? '',
-                            'expression' => $firstTask['expression'] ?? '',
-                            'text' => $firstTask['text'] ?? '',
-                            'image' => $firstTask['image'] ?? null,
+                            'example' => $example,
                         ];
                     }
+                }
 
-                    $zadaniyaData[] = [
-                        'zadanie_id' => "{$topicId}_{$block['number']}_{$zadanie['number']}",
-                        'block_number' => $block['number'],
-                        'block_title' => $blockTitle,
-                        'zadanie_number' => $zadanie['number'],
-                        'instruction' => $zadanie['instruction'] ?? '',
-                        'example' => $example,
+                if (!empty($zadaniyaData)) {
+                    $topicsWithZadaniya[] = [
+                        'topic_id' => $topicId,
+                        'topic_number' => ltrim($topicId, '0'),
+                        'title' => $topicMeta['title'],
+                        'color' => $topicMeta['color'] ?? 'gray',
+                        'category' => in_array($topicId, ['06', '07', '08', '09', '10', '11', '12', '13', '14']) ? 'algebra' : 'geometry',
+                        'zadaniya' => $zadaniyaData,
                     ];
                 }
-            }
-
-            if (!empty($zadaniyaData)) {
-                $topicsWithZadaniya[] = [
-                    'topic_id' => $topicId,
-                    'topic_number' => ltrim($topicId, '0'),
-                    'title' => $topicMeta['title'],
-                    'color' => $topicMeta['color'] ?? 'gray',
-                    'category' => in_array($topicId, ['06', '07', '08', '09', '10', '11', '12', '13', '14']) ? 'algebra' : 'geometry',
-                    'zadaniya' => $zadaniyaData,
-                ];
+            } catch (\Exception $e) {
+                // Логируем ошибку, но продолжаем обработку других тем
+                \Log::warning("Failed to load topic {$topicId}: " . $e->getMessage());
+                continue;
             }
         }
 
