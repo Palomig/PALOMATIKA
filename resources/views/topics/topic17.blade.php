@@ -47,6 +47,13 @@
             user-select: none;
             pointer-events: none;
         }
+        .geo-label-bold {
+            font-family: 'Times New Roman', serif;
+            font-style: normal;
+            font-weight: 700;
+            user-select: none;
+            pointer-events: none;
+        }
         .katex { font-size: 1.1em; }
     </style>
 </head>
@@ -317,7 +324,7 @@
                                                 <text :x="B.x - 8" :y="B.y - 8" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="end">B</text>
                                                 <text :x="C.x + 8" :y="C.y - 8" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="start">C</text>
                                                 <text :x="D.x + 12" :y="D.y + 15" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="start">D</text>
-                                                <text :x="H.x" :y="H.y + 18" fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">H</text>
+                                                <text :x="H.x" :y="H.y + 18" fill="#d4a855" font-size="15" class="geo-label-bold" text-anchor="middle">H</text>
                                             </svg>
                                         </div>
                                         @break
@@ -346,7 +353,7 @@
                                                 <text :x="B.x - 12" :y="B.y - 5" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="end">B</text>
                                                 <text :x="C.x + 12" :y="C.y - 5" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="start">C</text>
                                                 <text :x="D.x + 12" :y="D.y + 15" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="start">D</text>
-                                                <text :x="O.x + 8" :y="O.y - 5" fill="#d4a855" font-size="12" class="geo-label" text-anchor="start">O</text>
+                                                <text :x="O.x + 8" :y="O.y - 5" fill="#d4a855" font-size="15" class="geo-label-bold" text-anchor="start">O</text>
                                             </svg>
                                         </div>
                                         @break
@@ -403,9 +410,9 @@
                                                 <text :x="B.x - 8" :y="B.y - 8" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="end">B</text>
                                                 <text :x="C.x + 12" :y="C.y - 8" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="start">C</text>
                                                 <text :x="D.x + 12" :y="D.y + 15" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="start">D</text>
-                                                <text :x="H.x" :y="H.y + 18" fill="#d4a855" font-size="12" class="geo-label" text-anchor="middle">H</text>
+                                                <text :x="H.x" :y="H.y + 18" fill="#d4a855" font-size="15" class="geo-label-bold" text-anchor="middle">H</text>
                                                 {{-- Метка высоты --}}
-                                                <text :x="(B.x + H.x)/2 - 10" :y="(B.y + H.y)/2" fill="#d4a855" font-size="11" class="geo-label">h</text>
+                                                <text :x="(B.x + H.x)/2 - 10" :y="(B.y + H.y)/2" fill="#d4a855" font-size="15" class="geo-label-bold">h</text>
                                             </svg>
                                         </div>
                                         @break
@@ -427,9 +434,9 @@
                                                 <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                                                 <circle :cx="D.x" :cy="D.y" r="5" fill="#5a9fcf"/>
                                                 {{-- Метки оснований --}}
-                                                <text :x="(B.x + C.x)/2" :y="B.y - 10" fill="#e0a8a8" font-size="11" class="geo-label" text-anchor="middle">a</text>
-                                                <text :x="(A.x + D.x)/2" :y="A.y + 18" fill="#e0a8a8" font-size="11" class="geo-label" text-anchor="middle">b</text>
-                                                <text :x="(B.x + H.x)/2 - 10" :y="(B.y + H.y)/2" fill="#d4a855" font-size="11" class="geo-label">h</text>
+                                                <text :x="(B.x + C.x)/2" :y="B.y - 10" fill="#e0a8a8" font-size="15" class="geo-label-bold" text-anchor="middle">a</text>
+                                                <text :x="(A.x + D.x)/2" :y="A.y + 18" fill="#e0a8a8" font-size="15" class="geo-label-bold" text-anchor="middle">b</text>
+                                                <text :x="(B.x + H.x)/2 - 10" :y="(B.y + H.y)/2" fill="#d4a855" font-size="15" class="geo-label-bold">h</text>
                                             </svg>
                                         </div>
                                         @break
@@ -470,9 +477,9 @@
                                                 {{-- Диагональ --}}
                                                 <line :x1="A.x" :y1="A.y" :x2="C.x" :y2="C.y" stroke="#d4a855" stroke-width="2.5"/>
                                                 {{-- Сторона a --}}
-                                                <text :x="A.x - 15" :y="(A.y + B.y)/2" fill="#e0a8a8" font-size="12" class="geo-label" text-anchor="end">a</text>
+                                                <text :x="A.x - 15" :y="(A.y + B.y)/2" fill="#e0a8a8" font-size="15" class="geo-label-bold" text-anchor="end">a</text>
                                                 {{-- Диагональ d --}}
-                                                <text :x="(A.x + C.x)/2 + 10" :y="(A.y + C.y)/2 - 5" fill="#d4a855" font-size="12" class="geo-label" text-anchor="start">d</text>
+                                                <text :x="(A.x + C.x)/2 + 10" :y="(A.y + C.y)/2 - 5" fill="#d4a855" font-size="15" class="geo-label-bold" text-anchor="start">d</text>
                                                 {{-- Точки --}}
                                                 <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
                                                 <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
@@ -507,8 +514,8 @@
                                                 <text :x="B.x - 8" :y="B.y - 8" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="end">B</text>
                                                 <text :x="C.x + 8" :y="C.y - 8" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="start">C</text>
                                                 <text :x="D.x + 12" :y="D.y + 15" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="start">D</text>
-                                                <text :x="M.x - 10" :y="M.y + 5" fill="#d4a855" font-size="12" class="geo-label" text-anchor="end">M</text>
-                                                <text :x="N.x + 10" :y="N.y + 5" fill="#d4a855" font-size="12" class="geo-label" text-anchor="start">N</text>
+                                                <text :x="M.x - 10" :y="M.y + 5" fill="#d4a855" font-size="15" class="geo-label-bold" text-anchor="end">M</text>
+                                                <text :x="N.x + 10" :y="N.y + 5" fill="#d4a855" font-size="15" class="geo-label-bold" text-anchor="start">N</text>
                                             </svg>
                                         </div>
                                         @break
@@ -526,7 +533,7 @@
                                                 <path :d="rightAnglePath(H, B, A, 10)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
                                                 {{-- Угол 30° при A --}}
                                                 <path :d="makeAngleArc(A, D, B, 25)" fill="none" stroke="#d4a855" stroke-width="2"/>
-                                                <text :x="A.x + 30" :y="A.y - 8" fill="#e0a8a8" font-size="11" class="geo-label">30°</text>
+                                                <text :x="A.x + 30" :y="A.y - 8" fill="#e0a8a8" font-size="15" class="geo-label-bold">30°</text>
                                                 {{-- Точки вершин --}}
                                                 <circle :cx="A.x" :cy="A.y" r="5" fill="#5a9fcf"/>
                                                 <circle :cx="B.x" :cy="B.y" r="5" fill="#5a9fcf"/>
@@ -538,7 +545,7 @@
                                                 <text :x="C.x + 8" :y="C.y - 8" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="start">C</text>
                                                 <text :x="D.x + 12" :y="D.y + 15" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="start">D</text>
                                                 {{-- Метка боковой стороны --}}
-                                                <text :x="(A.x + B.x)/2 - 12" :y="(A.y + B.y)/2" fill="#7eb8da" font-size="11" class="geo-label" text-anchor="end">a</text>
+                                                <text :x="(A.x + B.x)/2 - 12" :y="(A.y + B.y)/2" fill="#7eb8da" font-size="15" class="geo-label-bold" text-anchor="end">a</text>
                                             </svg>
                                         </div>
                                         @break
@@ -556,7 +563,7 @@
                                                 <line :x1="E.x" :y1="E.y" :x2="D.x" :y2="D.y" stroke="#e0a8a8" stroke-width="2.5"/>
                                                 {{-- Угол EAB = 45° --}}
                                                 <path :d="makeAngleArc(A, B, E, 20)" fill="none" stroke="#7eb8da" stroke-width="2"/>
-                                                <text :x="A.x + 22" :y="A.y - 25" fill="#7eb8da" font-size="11" class="geo-label">45°</text>
+                                                <text :x="A.x + 22" :y="A.y - 25" fill="#7eb8da" font-size="15" class="geo-label-bold">45°</text>
                                                 {{-- Прямые углы --}}
                                                 <path :d="rightAnglePath(A, D, B, 10)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
                                                 <path :d="rightAnglePath(B, A, C, 10)" fill="none" stroke="#4a6b8a" stroke-width="2"/>
@@ -573,7 +580,7 @@
                                                 <text :x="D.x + 12" :y="D.y + 15" fill="#60a5fa" font-size="18" class="geo-label" text-anchor="start">D</text>
                                                 <text :x="E.x" :y="E.y - 10" fill="#d4a855" font-size="14" class="geo-label" text-anchor="middle">E</text>
                                                 {{-- Метка ED --}}
-                                                <text :x="(E.x + D.x)/2 + 10" :y="(E.y + D.y)/2" fill="#e0a8a8" font-size="11" class="geo-label">?</text>
+                                                <text :x="(E.x + D.x)/2 + 10" :y="(E.y + D.y)/2" fill="#e0a8a8" font-size="15" class="geo-label-bold">?</text>
                                             </svg>
                                         </div>
                                         @break
@@ -617,8 +624,8 @@
                                                 <circle :cx="C.x" :cy="C.y" r="5" fill="#5a9fcf"/>
                                                 <circle :cx="D.x" :cy="D.y" r="5" fill="#5a9fcf"/>
                                                 {{-- Метка диагонали --}}
-                                                <text :x="(d1.x1 + d1.x2)/2 + 10" :y="(d1.y1 + d1.y2)/2 - 5" fill="#d4a855" font-size="12" class="geo-label">d</text>
-                                                <text :x="O.x + 8" :y="O.y + 12" fill="#e0a8a8" font-size="11" class="geo-label">O</text>
+                                                <text :x="(d1.x1 + d1.x2)/2 + 10" :y="(d1.y1 + d1.y2)/2 - 5" fill="#d4a855" font-size="15" class="geo-label-bold">d</text>
+                                                <text :x="O.x + 8" :y="O.y + 12" fill="#e0a8a8" font-size="15" class="geo-label-bold">O</text>
                                             </svg>
                                         </div>
                                         @break
