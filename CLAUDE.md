@@ -270,7 +270,15 @@ VK_REDIRECT_URI=https://cw95865.tmweb.ru/auth/vkontakte/callback
 **Хостинг:** Timeweb (cw95865.tmweb.ru)
 **Путь на сервере:** /home/c/cw95865/OGE/
 
-### Команды для деплоя
+### Автоматический CI/CD
+
+На GitHub настроен автоматический workflow:
+1. **Auto-merge:** Ветки `claude/*` автоматически мержатся в `main` после push
+2. **Auto-deploy:** После merge в `main` автоматически выполняется deploy на production сервер
+
+**ВАЖНО:** Любые изменения в ветках `claude/*` попадут на production автоматически! Тестируйте локально перед push.
+
+### Команды для ручного деплоя
 ```bash
 # На сервере
 cd /home/c/cw95865/OGE
