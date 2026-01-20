@@ -46,8 +46,8 @@
     <div class="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-2xl p-6 mb-8 border border-blue-500/30">
         <h3 class="text-blue-400 font-semibold text-lg mb-2">ℹ️ Как это работает?</h3>
         <p class="text-slate-300 leading-relaxed">
-            Выберите нужные темы-блоки из каждого задания. Рядом с каждым блоком показан пример задачи,
-            чтобы вы понимали, о чём эта тема. Можно выбирать отдельные блоки или целые задания.
+            Выберите нужные типы заданий из каждой темы. Рядом с каждым типом показан пример задачи,
+            чтобы вы понимали, о чём этот тип. Можно выбирать отдельные типы или целые темы.
         </p>
     </div>
 
@@ -55,9 +55,9 @@
     <div class="bg-slate-800 rounded-2xl p-6 mb-6 border border-slate-700">
         <h2 class="text-white font-semibold text-lg mb-4">Быстрый выбор</h2>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <button @click="selectAllBlocks()"
+            <button @click="selectAllZadaniya()"
                     class="px-4 py-3 bg-gradient-to-r from-emerald-500/20 to-emerald-600/20 hover:from-emerald-500/30 hover:to-emerald-600/30 text-emerald-400 font-medium rounded-lg border border-emerald-500/30 transition-all">
-                🎯 Все блоки
+                🎯 Все типы
             </button>
             <button @click="selectCategory('algebra')"
                     class="px-4 py-3 bg-gradient-to-r from-blue-500/20 to-blue-600/20 hover:from-blue-500/30 hover:to-blue-600/30 text-blue-400 font-medium rounded-lg border border-blue-500/30 transition-all">
@@ -76,7 +76,7 @@
 
     {{-- Topics with Blocks --}}
     <div class="space-y-4 mb-8">
-        @foreach($topicsWithBlocks as $topic)
+        @foreach($topicsWithZadaniya as $topic)
             <div class="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
                 {{-- Topic Header --}}
                 <div class="p-4 bg-slate-700/30 border-b border-slate-700 flex items-center justify-between">
@@ -86,14 +86,14 @@
                         </div>
                         <div>
                             <h3 class="text-white font-semibold">{{ $topic['title'] }}</h3>
-                            <p class="text-slate-400 text-sm">{{ count($topic['blocks']) }} {{ count($topic['blocks']) === 1 ? 'блок' : (count($topic['blocks']) < 5 ? 'блока' : 'блоков') }}</p>
+                            <p class="text-slate-400 text-sm">{{ count($topic['zadaniya']) }} {{ count($topic['zadaniya']) === 1 ? 'тип задания' : (count($topic['zadaniya']) < 5 ? 'типа заданий' : 'типов заданий') }}</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button @click="toggleAllBlocksInTopic('{{ $topic['topic_id'] }}')"
+                        <button @click="toggleAllZadaniyaInTopic('{{ $topic['topic_id'] }}')"
                                 class="px-3 py-1.5 text-sm bg-slate-600 hover:bg-slate-500 text-slate-300 rounded-lg transition">
-                            <span x-show="!areAllBlocksSelectedInTopic('{{ $topic['topic_id'] }}')">Выбрать все</span>
-                            <span x-show="areAllBlocksSelectedInTopic('{{ $topic['topic_id'] }}')">Снять все</span>
+                            <span x-show="!areAllZadaniyaSelectedInTopic('{{ $topic['topic_id'] }}')">Выбрать все</span>
+                            <span x-show="areAllZadaniyaSelectedInTopic('{{ $topic['topic_id'] }}')">Снять все</span>
                         </button>
                         <button @click="toggleTopic('{{ $topic['topic_id'] }}')"
                                 class="text-slate-400 hover:text-white transition">
@@ -108,35 +108,35 @@
                 <div x-show="expandedTopics.includes('{{ $topic['topic_id'] }}')"
                      x-transition
                      class="p-4 space-y-3">
-                    @foreach($topic['blocks'] as $block)
+                    @foreach($topic['zadaniya'] as $zadanie)
                         <label class="flex gap-4 p-4 bg-slate-700/20 hover:bg-slate-700/40 rounded-xl border border-slate-600/50 hover:border-slate-500 cursor-pointer transition-all group">
                             <input type="checkbox"
-                                   x-model="selectedBlocks"
-                                   value="{{ $block['block_id'] }}"
+                                   x-model="selectedZadaniya"
+                                   value="{{ $zadanie['zadanie_id'] }}"
                                    class="w-5 h-5 mt-1 rounded border-slate-500 text-{{ $topic['color'] }}-500 focus:ring-{{ $topic['color'] }}-500 focus:ring-offset-slate-800 flex-shrink-0">
 
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-start justify-between mb-2">
-                                    <h4 class="text-slate-200 font-medium">{{ $block['title'] }}</h4>
+                                    <h4 class="text-slate-200 font-medium">{{ $zadanie['title'] }}</h4>
                                     <span class="text-xs px-2 py-1 rounded-md bg-slate-600/50 text-slate-400 flex-shrink-0">
                                         {{ $topic['category'] === 'algebra' ? '📊' : '📐' }}
                                     </span>
                                 </div>
 
-                                @if($block['example'])
+                                @if($zadanie['example'])
                                     <div class="mt-2 p-3 bg-slate-800/50 rounded-lg border border-slate-600/30">
                                         <p class="text-slate-400 text-xs mb-2">Пример:</p>
-                                        @if($block['example']['type'] === 'statements')
-                                            <p class="text-slate-300 text-sm latex-content">{{ $block['example']['text'] }}</p>
+                                        @if($zadanie['example']['type'] === 'statements')
+                                            <p class="text-slate-300 text-sm latex-content">{{ $zadanie['example']['text'] }}</p>
                                         @else
-                                            @if(!empty($block['example']['instruction']))
-                                                <p class="text-slate-400 text-xs mb-1">{{ $block['example']['instruction'] }}</p>
+                                            @if(!empty($zadanie['example']['instruction']))
+                                                <p class="text-slate-400 text-xs mb-1">{{ $zadanie['example']['instruction'] }}</p>
                                             @endif
-                                            @if(!empty($block['example']['expression']))
-                                                <p class="text-slate-200 latex-content">${{ $block['example']['expression'] }}$</p>
+                                            @if(!empty($zadanie['example']['expression']))
+                                                <p class="text-slate-200 latex-content">${{ $zadanie['example']['expression'] }}$</p>
                                             @endif
-                                            @if(!empty($block['example']['text']))
-                                                <p class="text-slate-300 text-sm latex-content">{{ $block['example']['text'] }}</p>
+                                            @if(!empty($zadanie['example']['text']))
+                                                <p class="text-slate-300 text-sm latex-content">{{ $zadanie['example']['text'] }}</p>
                                             @endif
                                         @endif
                                     </div>
@@ -157,21 +157,21 @@
                 <p class="text-slate-400 text-sm mt-1">Каждый клик создаёт новый уникальный вариант</p>
             </div>
             <div class="bg-slate-700/50 rounded-xl px-5 py-3 border border-slate-600 text-center">
-                <span class="text-slate-400 text-sm">Выбрано блоков</span>
-                <div class="font-bold text-2xl" :class="selectedBlocks.length > 0 ? 'text-emerald-400' : 'text-slate-500'"
-                     x-text="selectedBlocks.length">
+                <span class="text-slate-400 text-sm">Выбрано типов</span>
+                <div class="font-bold text-2xl" :class="selectedZadaniya.length > 0 ? 'text-emerald-400' : 'text-slate-500'"
+                     x-text="selectedZadaniya.length">
                 </div>
             </div>
         </div>
 
-        {{-- Warning if no blocks selected --}}
-        <div x-show="selectedBlocks.length === 0" class="mb-4 p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl">
-            <p class="text-amber-400 text-sm">⚠️ Выберите хотя бы один блок для генерации варианта</p>
+        {{-- Warning if no types selected --}}
+        <div x-show="selectedZadaniya.length === 0" class="mb-4 p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl">
+            <p class="text-amber-400 text-sm">⚠️ Выберите хотя бы один тип задания для генерации варианта</p>
         </div>
 
         <button @click="generateVariant()"
-                :disabled="selectedBlocks.length === 0"
-                :class="selectedBlocks.length === 0 ? 'opacity-50 cursor-not-allowed bg-slate-600' : 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40'"
+                :disabled="selectedZadaniya.length === 0"
+                :class="selectedZadaniya.length === 0 ? 'opacity-50 cursor-not-allowed bg-slate-600' : 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40'"
                 class="block w-full py-4 text-white font-bold text-lg rounded-xl transition-all text-center">
             🎯 Сгенерировать вариант
         </button>
@@ -185,21 +185,21 @@
 
 <script>
 // Передаём данные из PHP в JavaScript
-const topicsData = @json($topicsWithBlocks);
+const topicsData = @json($topicsWithZadaniya);
 
 function ogeGenerator() {
-    // Получаем все block_id для дефолтного выбора (все кроме тем 18 и 19)
-    const defaultBlocks = [];
+    // Получаем все zadanie_id для дефолтного выбора (все кроме тем 18 и 19)
+    const defaultZadaniya = [];
     topicsData.forEach(topic => {
         if (!['18', '19'].includes(topic.topic_id)) {
-            topic.blocks.forEach(block => {
-                defaultBlocks.push(block.block_id);
+            topic.zadaniya.forEach(zadanie => {
+                defaultZadaniya.push(zadanie.zadanie_id);
             });
         }
     });
 
     return {
-        selectedBlocks: defaultBlocks,
+        selectedZadaniya: defaultZadaniya,
         expandedTopics: topicsData.map(t => t.topic_id), // Все темы развёрнуты по умолчанию
 
         toggleTopic(topicId) {
@@ -211,67 +211,67 @@ function ogeGenerator() {
             }
         },
 
-        toggleAllBlocksInTopic(topicId) {
+        toggleAllZadaniyaInTopic(topicId) {
             const topic = topicsData.find(t => t.topic_id === topicId);
             if (!topic) return;
 
-            const topicBlockIds = topic.blocks.map(b => b.block_id);
-            const allSelected = topicBlockIds.every(id => this.selectedBlocks.includes(id));
+            const topicZadaniyaIds = topic.zadaniya.map(z => z.zadanie_id);
+            const allSelected = topicZadaniyaIds.every(id => this.selectedZadaniya.includes(id));
 
             if (allSelected) {
-                // Снять все блоки этой темы
-                this.selectedBlocks = this.selectedBlocks.filter(id => !topicBlockIds.includes(id));
+                // Снять все zadaniya этой темы
+                this.selectedZadaniya = this.selectedZadaniya.filter(id => !topicZadaniyaIds.includes(id));
             } else {
-                // Выбрать все блоки этой темы
-                topicBlockIds.forEach(id => {
-                    if (!this.selectedBlocks.includes(id)) {
-                        this.selectedBlocks.push(id);
+                // Выбрать все zadaniya этой темы
+                topicZadaniyaIds.forEach(id => {
+                    if (!this.selectedZadaniya.includes(id)) {
+                        this.selectedZadaniya.push(id);
                     }
                 });
             }
         },
 
-        areAllBlocksSelectedInTopic(topicId) {
+        areAllZadaniyaSelectedInTopic(topicId) {
             const topic = topicsData.find(t => t.topic_id === topicId);
             if (!topic) return false;
 
-            const topicBlockIds = topic.blocks.map(b => b.block_id);
-            return topicBlockIds.every(id => this.selectedBlocks.includes(id));
+            const topicZadaniyaIds = topic.zadaniya.map(z => z.zadanie_id);
+            return topicZadaniyaIds.every(id => this.selectedZadaniya.includes(id));
         },
 
-        selectAllBlocks() {
-            this.selectedBlocks = [];
+        selectAllZadaniya() {
+            this.selectedZadaniya = [];
             topicsData.forEach(topic => {
-                topic.blocks.forEach(block => {
-                    this.selectedBlocks.push(block.block_id);
+                topic.zadaniya.forEach(zadanie => {
+                    this.selectedZadaniya.push(zadanie.zadanie_id);
                 });
             });
         },
 
         selectCategory(category) {
-            this.selectedBlocks = [];
+            this.selectedZadaniya = [];
             topicsData.forEach(topic => {
                 if (topic.category === category) {
-                    topic.blocks.forEach(block => {
-                        this.selectedBlocks.push(block.block_id);
+                    topic.zadaniya.forEach(zadanie => {
+                        this.selectedZadaniya.push(zadanie.zadanie_id);
                     });
                 }
             });
         },
 
         clearAll() {
-            this.selectedBlocks = [];
+            this.selectedZadaniya = [];
         },
 
         generateVariant() {
-            if (this.selectedBlocks.length === 0) return;
+            if (this.selectedZadaniya.length === 0) return;
 
             // Generate random hash
             const hash = Math.random().toString(36).substring(2, 12);
 
-            // Build URL with selected blocks as query parameter
-            const blocks = this.selectedBlocks.sort().join(',');
-            const url = `{{ route('test.oge.show', ['hash' => '__HASH__']) }}`.replace('__HASH__', hash) + '?blocks=' + blocks;
+            // Build URL with selected zadaniya as query parameter
+            const zadaniya = this.selectedZadaniya.sort().join(',');
+            const url = `{{ route('test.oge.show', ['hash' => '__HASH__']) }}`.replace('__HASH__', hash) + '?zadaniya=' + zadaniya;
 
             // Navigate to generated variant
             window.location.href = url;
