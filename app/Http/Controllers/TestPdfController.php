@@ -4989,67 +4989,64 @@ class TestPdfController extends Controller
     {
         $topicIds = ['06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19'];
 
-        // Собираем все блоки со всех тем с примерами
-        $topicsWithBlocks = [];
+        // Собираем все zadaniya со всех тем с примерами
+        $topicsWithZadaniya = [];
 
         foreach ($topicIds as $topicId) {
             $topicMeta = $this->taskDataService->getTopicMeta($topicId);
             $blocks = $this->taskDataService->getBlocks($topicId);
 
-            $blocksData = [];
+            $zadaniyaData = [];
             foreach ($blocks as $block) {
-                // Получаем первое задание из блока как пример
-                $firstZadanie = $block['zadaniya'][0] ?? null;
-                $example = null;
+                $blockTitle = $block['title'] ?? "Блок {$block['number']}";
 
-                if ($firstZadanie) {
-                    // Формируем пример в зависимости от типа задания
-                    $type = $firstZadanie['type'] ?? 'expression';
+                foreach ($block['zadaniya'] ?? [] as $zadanie) {
+                    // Получаем первую задачу из zadanie как пример
+                    $example = null;
 
-                    if ($type === 'statements' && isset($firstZadanie['statements'])) {
+                    if (($zadanie['type'] ?? '') === 'statements' && isset($zadanie['statements'][0])) {
                         // Для statements берём первое утверждение
-                        $firstStatement = $firstZadanie['statements'][0] ?? null;
-                        if ($firstStatement) {
-                            $example = [
-                                'type' => 'statements',
-                                'text' => $firstStatement['text'] ?? ''
-                            ];
-                        }
-                    } elseif (isset($firstZadanie['tasks'][0])) {
-                        // Для обычных заданий берём первую задачу
-                        $firstTask = $firstZadanie['tasks'][0];
                         $example = [
-                            'type' => $type,
-                            'instruction' => $firstZadanie['instruction'] ?? '',
+                            'type' => 'statements',
+                            'text' => $zadanie['statements'][0]['text'] ?? ''
+                        ];
+                    } elseif (isset($zadanie['tasks'][0])) {
+                        // Для обычных заданий берём первую задачу
+                        $firstTask = $zadanie['tasks'][0];
+                        $example = [
+                            'type' => $zadanie['type'] ?? 'expression',
+                            'instruction' => $zadanie['instruction'] ?? '',
                             'expression' => $firstTask['expression'] ?? '',
                             'text' => $firstTask['text'] ?? '',
                             'image' => $firstTask['image'] ?? null,
                         ];
                     }
-                }
 
-                $blocksData[] = [
-                    'block_id' => "{$topicId}_{$block['number']}",
-                    'number' => $block['number'],
-                    'title' => $block['title'] ?? "Блок {$block['number']}",
-                    'example' => $example,
-                ];
+                    $zadaniyaData[] = [
+                        'zadanie_id' => "{$topicId}_{$block['number']}_{$zadanie['number']}",
+                        'block_number' => $block['number'],
+                        'block_title' => $blockTitle,
+                        'zadanie_number' => $zadanie['number'],
+                        'instruction' => $zadanie['instruction'] ?? '',
+                        'example' => $example,
+                    ];
+                }
             }
 
-            if (!empty($blocksData)) {
-                $topicsWithBlocks[] = [
+            if (!empty($zadaniyaData)) {
+                $topicsWithZadaniya[] = [
                     'topic_id' => $topicId,
                     'topic_number' => ltrim($topicId, '0'),
                     'title' => $topicMeta['title'],
                     'color' => $topicMeta['color'] ?? 'gray',
                     'category' => in_array($topicId, ['06', '07', '08', '09', '10', '11', '12', '13', '14']) ? 'algebra' : 'geometry',
-                    'blocks' => $blocksData,
+                    'zadaniya' => $zadaniyaData,
                 ];
             }
         }
 
         return view('test.oge-generator', [
-            'topicsWithBlocks' => $topicsWithBlocks
+            'topicsWithZadaniya' => $topicsWithZadaniya
         ]);
     }
 
