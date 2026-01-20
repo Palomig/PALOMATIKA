@@ -4989,7 +4989,7 @@ class TestPdfController extends Controller
     /**
      * Show OGE variant by hash (deterministic based on hash)
      */
-    public function showOgeVariant(string $hash)
+    public function showOgeVariant(string $hash, Request $request)
     {
         // Validate hash format (alphanumeric, 8-16 chars)
         if (!preg_match('/^[a-zA-Z0-9]{8,16}$/', $hash)) {
@@ -5003,10 +5003,29 @@ class TestPdfController extends Controller
         // Extract variant number from hash
         $variantNumber = (abs($seed) % 999) + 1;
 
-        $topicIds = ['06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19'];
+        // Get selected topics from query parameter
+        // Default: all topics except 18 and 19 (not ready yet)
+        $defaultTopics = ['06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17'];
+        $topicsParam = $request->query('topics');
+
+        if ($topicsParam) {
+            // Parse topics from query string (format: "06,07,08,09")
+            $selectedTopics = explode(',', $topicsParam);
+            // Validate and filter topics
+            $validTopics = ['06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19'];
+            $topicIds = array_filter($selectedTopics, function($topic) use ($validTopics) {
+                return in_array($topic, $validTopics);
+            });
+            // Ensure at least one topic is selected
+            if (empty($topicIds)) {
+                $topicIds = $defaultTopics;
+            }
+        } else {
+            $topicIds = $defaultTopics;
+        }
 
         $topicTitles = [
-            '06' => 'Вычисления',
+            '06' => 'Дроби и степени',
             '07' => 'Числа, координатная прямая',
             '08' => 'Квадратные корни и степени',
             '09' => 'Уравнения',
@@ -5040,6 +5059,7 @@ class TestPdfController extends Controller
             'tasks' => $tasks,
             'variantNumber' => $variantNumber,
             'variantHash' => $hash,
+            'selectedTopics' => $topicIds,
         ]);
     }
 
