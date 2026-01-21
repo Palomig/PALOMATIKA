@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Генератор вариантов ОГЭ - PALOMATIKA</title>
 
     <!-- Tailwind CSS -->
@@ -345,18 +346,39 @@ function ogeGenerator() {
             this.selectedZadaniya = [];
         },
 
-        generateVariant() {
+        async generateVariant() {
             if (this.selectedZadaniya.length === 0) return;
 
             // Generate short beautiful hash (6 characters)
             const hash = Math.random().toString(36).substring(2, 8);
 
-            // Build URL with selected zadaniya as query parameter
-            const zadaniya = this.selectedZadaniya.sort().join(',');
-            const url = `{{ route('test.oge.show', ['hash' => '__HASH__']) }}`.replace('__HASH__', hash) + '?zadaniya=' + zadaniya;
+            // Save variant configuration to server
+            try {
+                const response = await fetch('{{ route('test.oge.save') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({
+                        hash: hash,
+                        zadaniya: this.selectedZadaniya.sort()
+                    })
+                });
 
-            // Open in new tab
-            window.open(url, '_blank');
+                if (!response.ok) {
+                    console.error('Failed to save variant configuration');
+                    return;
+                }
+
+                // Build clean URL (just hash, no query parameters)
+                const url = `{{ route('test.oge.show', ['hash' => '__HASH__']) }}`.replace('__HASH__', hash);
+
+                // Open in new tab
+                window.open(url, '_blank');
+            } catch (error) {
+                console.error('Error generating variant:', error);
+            }
         },
 
         // Template management

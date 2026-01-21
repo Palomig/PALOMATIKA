@@ -5077,17 +5077,22 @@ class TestPdfController extends Controller
         // Extract variant number from hash
         $variantNumber = (abs($seed) % 999) + 1;
 
-        // Get selected zadaniya from query parameter
-        $zadaniyaParam = $request->query('zadaniya');
-        $selectedZadaniya = [];
+        // Try to load zadaniya from cache first (stored by saveVariant)
+        $selectedZadaniya = \Cache::get("oge_variant_{$hash}");
 
-        if ($zadaniyaParam) {
-            // Parse zadaniya from query string (format: "06_1_2,06_2_3,07_1_1,15_3_2")
-            $selectedZadaniya = explode(',', $zadaniyaParam);
-            // Validate zadanie format (должно быть XX_Y_Z, где XX - topic_id, Y - block_number, Z - zadanie_number)
-            $selectedZadaniya = array_filter($selectedZadaniya, function($zadanie) {
-                return preg_match('/^\d{2}_\d+_\d+$/', $zadanie);
-            });
+        // Fallback to query parameter if not in cache (for backward compatibility)
+        if (!$selectedZadaniya) {
+            $zadaniyaParam = $request->query('zadaniya');
+            $selectedZadaniya = [];
+
+            if ($zadaniyaParam) {
+                // Parse zadaniya from query string (format: "06_1_2,06_2_3,07_1_1,15_3_2")
+                $selectedZadaniya = explode(',', $zadaniyaParam);
+                // Validate zadanie format (должно быть XX_Y_Z, где XX - topic_id, Y - block_number, Z - zadanie_number)
+                $selectedZadaniya = array_filter($selectedZadaniya, function($zadanie) {
+                    return preg_match('/^\d{2}_\d+_\d+$/', $zadanie);
+                });
+            }
         }
 
         // Если zadaniya не указаны, используем дефолтные (все zadaniya тем 06-17, кроме 18-19)
@@ -5167,6 +5172,37 @@ class TestPdfController extends Controller
             'variantHash' => $hash,
             'selectedZadaniya' => $selectedZadaniya,
         ]);
+    }
+
+    /**
+     * Save OGE variant configuration to cache
+     */
+    public function saveVariant(Request $request)
+    {
+        $hash = $request->input('hash');
+        $zadaniya = $request->input('zadaniya');
+
+        // Validate hash format
+        if (!preg_match('/^[a-zA-Z0-9]{5,8}$/', $hash)) {
+            return response()->json(['error' => 'Invalid hash format'], 400);
+        }
+
+        // Validate zadaniya array
+        if (!is_array($zadaniya) || empty($zadaniya)) {
+            return response()->json(['error' => 'Invalid zadaniya'], 400);
+        }
+
+        // Validate each zadanie format (XX_Y_Z)
+        foreach ($zadaniya as $zadanie) {
+            if (!preg_match('/^\d{2}_\d+_\d+$/', $zadanie)) {
+                return response()->json(['error' => 'Invalid zadanie format'], 400);
+            }
+        }
+
+        // Store in cache for 30 days
+        \Cache::put("oge_variant_{$hash}", $zadaniya, now()->addDays(30));
+
+        return response()->json(['success' => true, 'hash' => $hash]);
     }
 
     /**
