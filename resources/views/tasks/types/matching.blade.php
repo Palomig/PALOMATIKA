@@ -7,6 +7,15 @@
     $type = $zadanie['type'] ?? 'matching';
     $tasks = $zadanie['tasks'] ?? [];
     $graphLabels = ['А', 'Б', 'В', 'Г'];
+
+    // Функция для загрузки изображения и извлечения графиков
+    function extractGraphsFromImage($topicId, $imageName) {
+        $imagePath = public_path("images/tasks/{$topicId}/{$imageName}");
+        if (!file_exists($imagePath)) {
+            return null;
+        }
+        return "/images/tasks/{$topicId}/{$imageName}";
+    }
 @endphp
 
 <div class="space-y-8">
@@ -14,7 +23,9 @@
         @php
             $taskKey = "topic_{$topicId}_block_{$block['number']}_zadanie_{$zadanie['number']}_task_{$task['id']}";
             $options = $task['options'] ?? [];
-            $taskInfo = "Блок {$block['number']}, Задание {$zadanie['number']}, Задача {$task['id']}<br>Изображение: {$task['image']}";
+            $imageName = $task['image'] ?? '';
+            $imageUrl = extractGraphsFromImage($topicId, $imageName);
+            $taskInfo = "Блок {$block['number']}, Задание {$zadanie['number']}, Задача {$task['id']}<br>Изображение: {$imageName}";
         @endphp
 
         <div class="bg-slate-800/70 rounded-xl p-5 border border-slate-700 task-review-item relative"
@@ -25,20 +36,25 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {{-- Графики --}}
-                <div class="grid grid-cols-2 gap-3">
-                    @foreach($graphLabels as $label)
-                        <div class="bg-slate-900/50 rounded-lg p-2 text-center">
-                            <div class="text-cyan-400 font-bold mb-1">{{ $label }}</div>
-                            {{-- SVG график рендерится через Alpine.js --}}
-                            <div class="w-full aspect-square bg-slate-800 rounded flex items-center justify-center">
-                                <svg viewBox="0 0 100 100" class="w-full h-full">
-                                    <line x1="10" y1="50" x2="90" y2="50" stroke="#475569" stroke-width="1"/>
-                                    <line x1="50" y1="10" x2="50" y2="90" stroke="#475569" stroke-width="1"/>
-                                </svg>
-                            </div>
+                {{-- Изображение с графиками --}}
+                <div class="bg-slate-900/50 rounded-lg p-3">
+                    @if($imageUrl)
+                        <img src="{{ $imageUrl }}" alt="Графики функций" class="w-full h-auto rounded">
+                    @else
+                        <div class="grid grid-cols-2 gap-3">
+                            @foreach($graphLabels as $label)
+                                <div class="bg-slate-900/50 rounded-lg p-2 text-center">
+                                    <div class="text-cyan-400 font-bold mb-1">{{ $label }}</div>
+                                    <div class="w-full aspect-square bg-slate-800 rounded flex items-center justify-center">
+                                        <svg viewBox="0 0 100 100" class="w-full h-full">
+                                            <line x1="10" y1="50" x2="90" y2="50" stroke="#475569" stroke-width="1"/>
+                                            <line x1="50" y1="10" x2="50" y2="90" stroke="#475569" stroke-width="1"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
-                    @endforeach
+                    @endif
                 </div>
 
                 {{-- Формулы --}}
