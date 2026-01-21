@@ -43,11 +43,20 @@
     <style>
         body { font-family: 'Inter', sans-serif; }
         .katex { font-size: 1.1em; }
+        /* GEOMETRY_SPEC: стили для SVG меток (синхронизировано с topic16.blade.php) */
         .geo-label {
-            font-family: 'Courier New', monospace;
+            font-family: 'Times New Roman', serif;
             font-style: italic;
             font-weight: 500;
             user-select: none;
+            pointer-events: none;
+        }
+        .geo-label-bold {
+            font-family: 'Times New Roman', serif;
+            font-style: normal;
+            font-weight: 700;
+            user-select: none;
+            pointer-events: none;
         }
     </style>
 </head>

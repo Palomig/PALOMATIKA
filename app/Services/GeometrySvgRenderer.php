@@ -894,9 +894,10 @@ SVG;
     private function label(string $text, array $pos, string $color = null, int $size = 14): string
     {
         $color = $color ?? self::COLORS['text'];
+        // GEOMETRY_SPEC: Times New Roman, serif - синхронизировано с клиентской версией
         return "  <text x=\"{$pos['x']}\" y=\"{$pos['y']}\" fill=\"{$color}\" font-size=\"{$size}\" " .
-               "font-family=\"Courier New, monospace\" font-style=\"italic\" font-weight=\"500\" " .
-               "text-anchor=\"middle\" dominant-baseline=\"middle\">{$text}</text>\n";
+               "font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" " .
+               "text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">{$text}</text>\n";
     }
 
     private function renderTick(array $tick): string
@@ -1301,9 +1302,10 @@ SVG;
         $svg .= "  <path d=\"{$arcP}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"2\"/>\n";
 
         // Подпись угла в P (если передан параметр angle)
+        // GEOMETRY_SPEC: geo-label-bold = Times New Roman, font-style: normal, font-weight: 700
         if (isset($params['angle'])) {
             $angleLabelPos = $this->angleLabelPos($P, $A, $B, 40);
-            $svg .= "  <text x=\"{$angleLabelPos['x']}\" y=\"{$angleLabelPos['y']}\" fill=\"" . self::COLORS['accent'] . "\" font-size=\"16\" font-weight=\"bold\" class=\"geo-label\" text-anchor=\"middle\">{$params['angle']}°</text>\n";
+            $svg .= "  <text x=\"{$angleLabelPos['x']}\" y=\"{$angleLabelPos['y']}\" fill=\"" . self::COLORS['accent'] . "\" font-size=\"16\" font-family=\"'Times New Roman', serif\" font-weight=\"700\" class=\"geo-label-bold\" text-anchor=\"middle\">{$params['angle']}°</text>\n";
         }
 
         // Дуга угла ABO (искомый угол)
@@ -1311,7 +1313,7 @@ SVG;
         $svg .= "  <path d=\"{$arcB}\" fill=\"none\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"2\"/>\n";
         // Вопросительный знак для искомого угла
         $angleLabelB = $this->angleLabelPos($B, $A, $O, 28);
-        $svg .= "  <text x=\"{$angleLabelB['x']}\" y=\"{$angleLabelB['y']}\" fill=\"" . self::COLORS['circle'] . "\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\">?</text>\n";
+        $svg .= "  <text x=\"{$angleLabelB['x']}\" y=\"{$angleLabelB['y']}\" fill=\"" . self::COLORS['circle'] . "\" font-size=\"16\" font-family=\"'Times New Roman', serif\" font-weight=\"700\" text-anchor=\"middle\">?</text>\n";
 
         return $svg;
     }
@@ -1358,8 +1360,9 @@ SVG;
         $svg .= $this->label('C', ['x' => $C['x'] - 16, 'y' => $C['y'] - 8], '#60a5fa', 16);
 
         // Подпись угла AOB (если передан параметр aob)
+        // GEOMETRY_SPEC: geo-label-bold для числовых значений углов
         if (isset($params['aob'])) {
-            $svg .= "  <text x=\"115\" y=\"165\" fill=\"" . self::COLORS['accent'] . "\" font-size=\"16\" font-weight=\"bold\" class=\"geo-label\" text-anchor=\"middle\">{$params['aob']}°</text>\n";
+            $svg .= "  <text x=\"115\" y=\"165\" fill=\"" . self::COLORS['accent'] . "\" font-size=\"16\" font-family=\"'Times New Roman', serif\" font-weight=\"700\" class=\"geo-label-bold\" text-anchor=\"middle\">{$params['aob']}°</text>\n";
         }
 
         return $svg;
@@ -1496,9 +1499,9 @@ SVG;
         // Центр
         $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"4\" fill=\"" . self::COLORS['accent'] . "\"/>\n";
 
-        // Метка радиуса
+        // Метка радиуса (geo-label для измерений типа r=18)
         if (isset($params['r'])) {
-            $svg .= "  <text x=\"122\" y=\"145\" fill=\"" . self::COLORS['accent'] . "\" font-size=\"16\" class=\"geo-label\">r={$params['r']}</text>\n";
+            $svg .= "  <text x=\"122\" y=\"145\" fill=\"" . self::COLORS['accent'] . "\" font-size=\"16\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" class=\"geo-label\">r={$params['r']}</text>\n";
         }
 
         return $svg;
@@ -1528,10 +1531,10 @@ SVG;
         if ($find === 'area' && isset($params['radius'])) {
             // Задачи 39-42: дан радиус, найти площадь - показываем радиус
             $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"195\" y2=\"{$O['y']}\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"2\"/>\n";
-            $svg .= "  <text x=\"152\" y=\"85\" fill=\"" . self::COLORS['accent'] . "\" font-size=\"16\" font-weight=\"bold\" class=\"geo-label\">r={$params['radius']}</text>\n";
+            $svg .= "  <text x=\"152\" y=\"85\" fill=\"" . self::COLORS['accent'] . "\" font-size=\"16\" font-family=\"'Times New Roman', serif\" font-weight=\"700\" class=\"geo-label-bold\">r={$params['radius']}</text>\n";
         } else if (isset($params['side'])) {
             // Задачи 35-38: дана сторона, найти радиус - показываем сторону
-            $svg .= "  <text x=\"110\" y=\"195\" fill=\"" . self::COLORS['accent'] . "\" font-size=\"16\" font-weight=\"bold\" class=\"geo-label\" text-anchor=\"middle\">a={$params['side']}</text>\n";
+            $svg .= "  <text x=\"110\" y=\"195\" fill=\"" . self::COLORS['accent'] . "\" font-size=\"16\" font-family=\"'Times New Roman', serif\" font-weight=\"700\" class=\"geo-label-bold\" text-anchor=\"middle\">a={$params['side']}</text>\n";
         }
 
         return $svg;
