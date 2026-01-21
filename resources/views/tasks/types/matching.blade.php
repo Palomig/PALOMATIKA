@@ -28,36 +28,61 @@
                 <span class="text-cyan-400 font-bold text-lg">{{ $task['id'] }})</span>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {{-- Изображение с 4 графиками (А, Б, В, Г) --}}
-                <div class="bg-slate-900/50 rounded-lg p-3">
-                    @if($imageUrl && file_exists(public_path("images/tasks/{$topicId}/{$imageName}")))
-                        <img src="{{ $imageUrl }}" alt="Графики функций А, Б, В, Г" class="w-full h-auto rounded border border-slate-700">
-                    @else
-                        <div class="text-red-400 text-center p-4">
-                            <p class="font-bold mb-2">⚠️ Изображение не найдено</p>
-                            <p class="text-sm text-slate-400">{{ $imageName }}</p>
+            @php
+                $uniqueId = uniqid();
+            @endphp
+
+            @if(!empty($options) && count($options) >= 3)
+                {{-- SVG Графики: генерируются динамически из формул --}}
+                <div class="grid grid-cols-{{ count($options) == 3 ? '3' : '2' }} gap-3 mb-4">
+                    @foreach($options as $optIndex => $formula)
+                        <div class="bg-slate-900/50 rounded-lg p-3">
+                            <div class="text-cyan-400 font-bold text-center mb-2">{{ $graphLabels[$optIndex] ?? ($optIndex + 1) }})</div>
+                            <div id="graph-{{ $uniqueId }}-{{ $optIndex }}" class="w-full aspect-square"></div>
                         </div>
-                    @endif
+                    @endforeach
                 </div>
 
+                <script>
+                    (function() {
+                        const graphFormulas = @json($options);
+                        const uniqueId = "{{ $uniqueId }}";
+
+                        // Ждём загрузки DOM и наличия функции renderSingleGraph
+                        function initGraphs() {
+                            if (typeof renderSingleGraph === 'function') {
+                                graphFormulas.forEach((formula, i) => {
+                                    renderSingleGraph(`graph-${uniqueId}-${i}`, formula);
+                                });
+                            } else {
+                                // Функция ещё не загружена, пробуем через 100ms
+                                setTimeout(initGraphs, 100);
+                            }
+                        }
+
+                        if (document.readyState === 'loading') {
+                            document.addEventListener('DOMContentLoaded', initGraphs);
+                        } else {
+                            initGraphs();
+                        }
+                    })();
+                </script>
+
                 {{-- Формулы для соответствия --}}
-                <div class="space-y-3">
-                    @if(!empty($options))
-                        @foreach($options as $i => $option)
-                            <div class="flex items-center gap-3 bg-slate-700/50 rounded-lg px-4 py-3 hover:bg-slate-700 transition cursor-pointer">
-                                <span class="text-amber-400 font-bold">{{ $i + 1 }})</span>
-                                <span class="text-slate-200 math-serif">${{ $option }}$</span>
-                            </div>
-                        @endforeach
-                    @else
-                        <div class="text-red-400 text-center p-4">
-                            <p class="font-bold">⚠️ Формулы не найдены</p>
-                            <p class="text-sm text-slate-400">Проверьте структуру данных</p>
+                <div class="flex flex-wrap gap-3 justify-center mb-4">
+                    @foreach($options as $i => $option)
+                        <div class="bg-slate-700/50 rounded-lg px-4 py-2">
+                            <span class="text-amber-400 font-bold">{{ $i + 1 }})</span>
+                            <span class="text-slate-200 math-serif ml-2">${{ $option }}$</span>
                         </div>
-                    @endif
+                    @endforeach
                 </div>
-            </div>
+            @else
+                <div class="text-red-400 text-center p-4">
+                    <p class="font-bold mb-2">⚠️ Формулы не найдены</p>
+                    <p class="text-sm text-slate-400">Для отображения графиков требуется минимум 3 формулы</p>
+                </div>
+            @endif
 
             {{-- Таблица ответов --}}
             <div class="mt-4 flex items-center gap-4">
