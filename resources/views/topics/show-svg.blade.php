@@ -122,9 +122,6 @@
                     <h3 class="text-lg font-semibold text-white">
                         Задание {{ $zadanie['number'] }}. {{ $zadanie['instruction'] }}
                     </h3>
-                    @if(isset($zadanie['svg_type']))
-                        <span class="text-xs text-slate-500 mt-1 inline-block">svg_type: {{ $zadanie['svg_type'] }}</span>
-                    @endif
                 </div>
 
                 {{-- Tasks Grid --}}
@@ -145,14 +142,6 @@
                                 </div>
                             @endif
 
-                            {{-- Task params (for debugging) --}}
-                            @if(isset($task['params']) && !empty($task['params']))
-                                <div class="mt-3 text-xs text-slate-500">
-                                    @foreach($task['params'] as $key => $value)
-                                        <span class="inline-block mr-2 px-2 py-1 bg-slate-700/50 rounded">{{ $key }}={{ $value }}</span>
-                                    @endforeach
-                                </div>
-                            @endif
 
                             {{-- Answer --}}
                             @if(isset($task['answer']))
