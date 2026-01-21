@@ -104,44 +104,40 @@
                     </div>
                 </div>
 
-                {{-- Blocks --}}
+                {{-- Zadaniya Grid --}}
                 <div x-show="expandedTopics.includes('{{ $topic['topic_id'] }}')"
                      x-transition
-                     class="p-4 space-y-3">
+                     class="p-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
                     @foreach($topic['zadaniya'] as $zadanie)
-                        <label class="flex gap-4 p-4 bg-slate-700/20 hover:bg-slate-700/40 rounded-xl border border-slate-600/50 hover:border-slate-500 cursor-pointer transition-all group">
-                            <input type="checkbox"
-                                   x-model="selectedZadaniya"
-                                   value="{{ $zadanie['zadanie_id'] }}"
-                                   class="w-5 h-5 mt-1 rounded border-slate-500 text-{{ $topic['color'] }}-500 focus:ring-{{ $topic['color'] }}-500 focus:ring-offset-slate-800 flex-shrink-0">
+                        <label class="flex flex-col gap-3 p-3 bg-slate-700/20 hover:bg-slate-700/40 rounded-xl border border-slate-600/50 hover:border-slate-500 cursor-pointer transition-all group">
+                            <div class="flex items-start gap-3">
+                                <input type="checkbox"
+                                       x-model="selectedZadaniya"
+                                       value="{{ $zadanie['zadanie_id'] }}"
+                                       class="w-5 h-5 mt-0.5 rounded border-slate-500 text-{{ $topic['color'] }}-500 focus:ring-{{ $topic['color'] }}-500 focus:ring-offset-slate-800 flex-shrink-0">
 
-                            <div class="flex-1 min-w-0">
-                                <div class="flex items-start justify-between mb-2">
-                                    <h4 class="text-slate-200 font-medium">{{ $zadanie['instruction'] }}</h4>
-                                    <span class="text-xs px-2 py-1 rounded-md bg-slate-600/50 text-slate-400 flex-shrink-0">
-                                        {{ $topic['category'] === 'algebra' ? '📊' : '📐' }}
-                                    </span>
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="text-slate-200 font-medium text-sm leading-snug">{{ $zadanie['instruction'] }}</h4>
                                 </div>
+                            </div>
 
-                                @if($zadanie['example'])
-                                    <div class="mt-2 p-3 bg-slate-800/50 rounded-lg border border-slate-600/30">
-                                        <p class="text-slate-400 text-xs mb-2">Пример:</p>
+                            @if($zadanie['example'])
+                                <div class="pl-8 pr-2">
+                                    <div class="p-2 bg-slate-800/50 rounded-lg border border-slate-600/30">
+                                        <p class="text-slate-400 text-xs mb-1.5">Пример:</p>
                                         @if($zadanie['example']['type'] === 'statements')
-                                            <p class="text-slate-300 text-sm latex-content">{{ $zadanie['example']['text'] }}</p>
+                                            <p class="text-slate-300 text-xs latex-content">{{ $zadanie['example']['text'] }}</p>
                                         @else
-                                            @if(!empty($zadanie['example']['instruction']))
-                                                <p class="text-slate-400 text-xs mb-1">{{ $zadanie['example']['instruction'] }}</p>
-                                            @endif
                                             @if(!empty($zadanie['example']['expression']))
-                                                <p class="text-slate-200 latex-content">${{ $zadanie['example']['expression'] }}$</p>
+                                                <p class="text-slate-200 text-sm latex-content">${{ $zadanie['example']['expression'] }}$</p>
                                             @endif
                                             @if(!empty($zadanie['example']['text']))
-                                                <p class="text-slate-300 text-sm latex-content">{{ $zadanie['example']['text'] }}</p>
+                                                <p class="text-slate-300 text-xs latex-content">{{ $zadanie['example']['text'] }}</p>
                                             @endif
                                         @endif
                                     </div>
-                                @endif
-                            </div>
+                                </div>
+                            @endif
                         </label>
                     @endforeach
                 </div>
