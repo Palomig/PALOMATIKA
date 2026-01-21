@@ -209,8 +209,8 @@ class GeometrySvgRenderer
         $width = $viewBox[2] ?? 200;
         $height = $viewBox[3] ?? 160;
 
-        // Стандартный размер SVG диаграммы: max-w-[250px], высота автоматическая
-        $svg = "<svg viewBox=\"0 0 {$width} {$height}\" class=\"w-full max-w-[250px] h-auto mx-auto\">\n";
+        // Стандартный размер SVG диаграммы: max-w-[288px] (250px + 15%), высота автоматическая
+        $svg = "<svg viewBox=\"0 0 {$width} {$height}\" class=\"w-full max-w-[288px] h-auto mx-auto\">\n";
 
         // Фон с сеткой (blueprint style)
         $svg .= $this->renderBackground($width, $height);

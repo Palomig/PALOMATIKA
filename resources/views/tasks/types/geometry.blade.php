@@ -21,8 +21,8 @@
             <div class="p-5 {{ $hasImage ? 'lg:flex lg:gap-6' : '' }}">
                 {{-- Изображение --}}
                 @if($hasImage)
-                    <div class="lg:w-72 lg:shrink-0 mb-4 lg:mb-0">
-                        <div class="bg-slate-900/50 rounded-lg p-3 flex items-center justify-center min-h-[180px]">
+                    <div class="lg:w-80 lg:shrink-0 mb-4 lg:mb-0">
+                        <div class="bg-slate-900/50 rounded-lg p-3 flex items-center justify-center min-h-[200px]">
                             @if(str_starts_with($task['image'], '<svg'))
                                 {!! $task['image'] !!}
                             @else
