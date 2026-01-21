@@ -1655,41 +1655,34 @@ SVG;
 
     /**
      * Центр на стороне треугольника (задания 75-90)
+     * Синхронизировано с клиентской версией topic16.blade.php
      */
     private function renderCenterOnSide(array $points, array $center, array $geometry, array $params): string
     {
-        // Центр описанной окружности на стороне AB (угол C = 90°)
-        $A = ['x' => 40, 'y' => 140];
-        $B = ['x' => 180, 'y' => 140];
-        $C = ['x' => 100, 'y' => 50];
-        $O = ['x' => 110, 'y' => 140]; // Середина AB
+        // Координаты как в клиентской версии: circle cx=110, cy=110, r=85
+        $O = ['x' => 110, 'y' => 110];
+        $R = 85;
 
-        $R = $this->distance($O, $A);
+        // A и B на диаметре (y=110)
+        $A = ['x' => 25, 'y' => 110];
+        $B = ['x' => 195, 'y' => 110];
+
+        // C на окружности (разные формы в клиенте, но для сервера используем одну)
+        // Форма по умолчанию: C левее центра
+        $C = ['x' => 70, 'y' => 35];
 
         $svg = '';
 
         // Описанная окружность
-        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"{$R}\" fill=\"none\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"2\"/>\n";
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"{$R}\" fill=\"none\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"2.5\"/>\n";
 
         // Треугольник
-        $svg .= "  <polygon points=\"{$A['x']},{$A['y']} {$B['x']},{$B['y']} {$C['x']},{$C['y']}\" fill=\"none\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2\"/>\n";
+        $svg .= "  <polygon points=\"{$A['x']},{$A['y']} {$B['x']},{$B['y']} {$C['x']},{$C['y']}\" fill=\"none\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2.5\"/>\n";
 
-        // Прямой угол в C
-        $rightAngle = $this->rightAnglePath($C, $A, $B, 12);
-        $svg .= "  <path d=\"{$rightAngle}\" fill=\"none\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1\"/>\n";
-
-        // Радиус OC (пунктир)
-        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$C['x']}\" y2=\"{$C['y']}\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"5,4\"/>\n";
-
-        // Центр
-        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"4\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
-        $svg .= $this->crosshairs([$A, $B, $C]);
-
-        // Метки
-        $svg .= $this->label('A', ['x' => $A['x'] - 12, 'y' => $A['y'] + 5]);
-        $svg .= $this->label('B', ['x' => $B['x'] + 8, 'y' => $B['y'] + 5]);
-        $svg .= $this->label('C', ['x' => $C['x'], 'y' => $C['y'] - 15]);
-        $svg .= $this->label('O', ['x' => $O['x'], 'y' => $O['y'] + 18], self::COLORS['text_aux'], 14);
+        // Метки вершин (без O - как в клиентской версии)
+        $svg .= $this->label('A', ['x' => $A['x'] - 15, 'y' => $A['y'] + 6]);
+        $svg .= $this->label('B', ['x' => $B['x'] + 5, 'y' => $B['y'] + 6]);
+        $svg .= $this->label('C', ['x' => $C['x'] - 12, 'y' => $C['y'] - 9]);
 
         return $svg;
     }
