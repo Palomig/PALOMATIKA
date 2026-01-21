@@ -128,6 +128,8 @@ Route::middleware(['auth'])->group(function () {
 Route::prefix('topics')->name('topics.')->group(function () {
     Route::get('/', [TopicController::class, 'index'])->name('index');
     Route::get('/{id}', [TopicController::class, 'show'])->name('show')->where('id', '[0-9]+');
+    // Server-side SVG rendering (new!)
+    Route::get('/{id}/svg', [TopicController::class, 'showWithServerSvg'])->name('svg')->where('id', '[0-9]+');
 });
 
 // OGE Generator (new)
