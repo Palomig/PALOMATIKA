@@ -1255,22 +1255,26 @@ SVG;
 
     /**
      * Касательные к окружности (задания 9-12)
+     *
+     * ВАЖНО: Геометрия подобрана так, чтобы ЦЕЛОЧИСЛЕННЫЕ координаты
+     * давали ТОЧНЫЕ касательные (OA ⊥ AP, OB ⊥ BP, |OA| = |OB| = R).
+     *
+     * Математическое доказательство:
+     * - O = (60, 100), R = 60, P = (180, 40)
+     * - |OP| = sqrt(120² + 60²) = sqrt(18000) = 60√5
+     * - Треугольник 3-4-5: катеты 48, 36, гипотенуза 60
+     * - A = (60+48, 100+36) = (108, 136): |OA| = 60 ✓
+     * - OA = (48, 36), AP = (72, -96) = 24*(3, -4)
+     * - OA·AP = 48*72 + 36*(-96) = 3456 - 3456 = 0 ✓
      */
     private function renderTangentLines(array $points, array $center, array $geometry, array $params): string
     {
-        // Координаты вычислены геометрически для ИСТИННЫХ касательных
-        // O - центр, R=70, A и B - точки касания НА окружности
-        // Условие касания: OA ⊥ AP и OB ⊥ BP
-        $O = ['x' => 75, 'y' => 110];
-        $R = 70;
-        // P - внешняя точка (точка пересечения касательных)
-        $P = ['x' => 195, 'y' => 40];
-        // B на окружности: вверх (угол -90°), BP горизонтально → OB ⊥ BP ✓
-        $B = ['x' => 75, 'y' => 40];
-        // A на окружности: вычислено из условия OA ⊥ AP
-        // ty = (35600 + sqrt(406406400)) / 386 ≈ 144.45
-        // tx = (7*ty + 620) / 12 ≈ 135.93
-        $A = ['x' => 136, 'y' => 144];
+        // Геометрия с ТОЧНЫМИ целочисленными касательными
+        $O = ['x' => 60, 'y' => 100];  // Центр окружности
+        $R = 60;                         // Радиус
+        $P = ['x' => 180, 'y' => 40];   // Внешняя точка (пересечение касательных)
+        $B = ['x' => 60, 'y' => 40];    // Точка касания (OB вертикально, BP горизонтально)
+        $A = ['x' => 108, 'y' => 136];  // Точка касания (OA·AP = 0, |OA| = 60)
 
         $svg = '';
 
@@ -1280,42 +1284,41 @@ SVG;
         // Линия AB (соединяет точки касания)
         $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$B['x']}\" y2=\"{$B['y']}\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2.5\"/>\n";
 
-        // Касательные (от точек касания к P)
+        // Касательные (от точек касания к P) — теперь ИСТИННЫЕ касательные
         $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$P['x']}\" y2=\"{$P['y']}\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"2.5\"/>\n";
         $svg .= "  <line x1=\"{$B['x']}\" y1=\"{$B['y']}\" x2=\"{$P['x']}\" y2=\"{$P['y']}\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"2.5\"/>\n";
 
-        // Радиусы к точкам касания (сплошные линии)
+        // Радиусы к точкам касания
         $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$A['x']}\" y2=\"{$A['y']}\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"2\"/>\n";
         $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$B['x']}\" y2=\"{$B['y']}\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"2\"/>\n";
 
-        // Точки (центр O, точки касания A и B, точка P)
+        // Точки
         $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"5\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
         $svg .= "  <circle cx=\"{$A['x']}\" cy=\"{$A['y']}\" r=\"5\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
         $svg .= "  <circle cx=\"{$B['x']}\" cy=\"{$B['y']}\" r=\"5\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
         $svg .= "  <circle cx=\"{$P['x']}\" cy=\"{$P['y']}\" r=\"5\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
 
-        // Метки
-        $svg .= $this->label('O', ['x' => $O['x'] - 20, 'y' => $O['y'] + 6], self::COLORS['text_aux'], 16);
-        $svg .= $this->label('A', ['x' => $A['x'] + 8, 'y' => $A['y'] + 16], '#60a5fa', 16);
-        $svg .= $this->label('B', ['x' => $B['x'] - 6, 'y' => $B['y'] - 14], '#60a5fa', 16);
-        $svg .= $this->label('P', ['x' => $P['x'] + 8, 'y' => $P['y'] + 6], self::COLORS['text_aux'], 16);
+        // Метки (позиции скорректированы для новой геометрии)
+        $svg .= $this->label('O', ['x' => $O['x'] - 18, 'y' => $O['y'] + 8], self::COLORS['text_aux'], 16);
+        $svg .= $this->label('A', ['x' => $A['x'] + 12, 'y' => $A['y'] + 14], '#60a5fa', 16);
+        $svg .= $this->label('B', ['x' => $B['x'] - 8, 'y' => $B['y'] - 12], '#60a5fa', 16);
+        $svg .= $this->label('P', ['x' => $P['x'] + 10, 'y' => $P['y'] + 8], self::COLORS['text_aux'], 16);
 
         // Дуга угла в P (между касательными)
-        $arcP = $this->makeAngleArc($P, $A, $B, 25);
+        $arcP = $this->makeAngleArc($P, $A, $B, 28);
         $svg .= "  <path d=\"{$arcP}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"2\"/>\n";
 
-        // Подпись угла в P (если передан параметр angle)
-        // GEOMETRY_SPEC: geo-label-bold = Times New Roman, font-style: normal, font-weight: 700
+        // Подпись угла в P
         if (isset($params['angle'])) {
-            $angleLabelPos = $this->angleLabelPos($P, $A, $B, 40);
+            $angleLabelPos = $this->angleLabelPos($P, $A, $B, 45);
             $svg .= "  <text x=\"{$angleLabelPos['x']}\" y=\"{$angleLabelPos['y']}\" fill=\"" . self::COLORS['accent'] . "\" font-size=\"16\" font-family=\"'Times New Roman', serif\" font-weight=\"700\" class=\"geo-label-bold\" text-anchor=\"middle\">{$params['angle']}°</text>\n";
         }
 
         // Дуга угла ABO (искомый угол)
-        $arcB = $this->makeAngleArc($B, $A, $O, 18);
+        $arcB = $this->makeAngleArc($B, $A, $O, 20);
         $svg .= "  <path d=\"{$arcB}\" fill=\"none\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"2\"/>\n";
         // Вопросительный знак для искомого угла
-        $angleLabelB = $this->angleLabelPos($B, $A, $O, 28);
+        $angleLabelB = $this->angleLabelPos($B, $A, $O, 32);
         $svg .= "  <text x=\"{$angleLabelB['x']}\" y=\"{$angleLabelB['y']}\" fill=\"" . self::COLORS['circle'] . "\" font-size=\"16\" font-family=\"'Times New Roman', serif\" font-weight=\"700\" text-anchor=\"middle\">?</text>\n";
 
         return $svg;
