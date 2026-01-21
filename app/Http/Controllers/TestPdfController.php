@@ -7,6 +7,7 @@ use App\Services\PdfTaskParser;
 use App\Services\TaskGeneratorService;
 use App\Services\AdvancedPdfParser;
 use App\Services\TaskDataService;
+use App\Services\GeometrySvgRenderer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -17,17 +18,20 @@ class TestPdfController extends Controller
     protected TaskGeneratorService $taskGenerator;
     protected AdvancedPdfParser $advancedParser;
     protected TaskDataService $taskDataService;
+    protected GeometrySvgRenderer $svgRenderer;
 
     public function __construct(
         PdfParserService $pdfParser,
         TaskGeneratorService $taskGenerator,
         AdvancedPdfParser $advancedParser,
-        TaskDataService $taskDataService
+        TaskDataService $taskDataService,
+        GeometrySvgRenderer $svgRenderer
     ) {
         $this->pdfParser = $pdfParser;
         $this->taskGenerator = $taskGenerator;
         $this->advancedParser = $advancedParser;
         $this->taskDataService = $taskDataService;
+        $this->svgRenderer = $svgRenderer;
     }
 
     /**
@@ -5159,6 +5163,12 @@ class TestPdfController extends Controller
                 $task = $tasksFromZadanie[0];
                 $task['topic_id'] = $topicId;
                 $task['topic_title'] = $topicTitles[$topicId] ?? '';
+
+                // Для геометрических тем (15, 16, 17) рендерим SVG
+                if (in_array($topicId, ['15', '16', '17'])) {
+                    $task = $this->renderGeometrySvgForTask($task);
+                }
+
                 $tasks[] = $task;
             }
         }
@@ -5229,5 +5239,37 @@ class TestPdfController extends Controller
         // Fallback to task generator service
         $tasks = $this->taskGenerator->getRandomTasksFromTopic($topicId, 1);
         return $tasks[0] ?? null;
+    }
+
+    /**
+     * Render SVG for geometry task
+     *
+     * Добавляет отрендеренный SVG в task['task']['image'] для тем 15, 16, 17
+     */
+    protected function renderGeometrySvgForTask(array $task): array
+    {
+        // Проверяем наличие данных для рендеринга
+        $svgType = $task['svg_type'] ?? null;
+        $geometry = $task['geometry'] ?? null;
+
+        if (!$svgType || !$geometry) {
+            return $task;
+        }
+
+        // Проверяем, поддерживает ли рендерер этот тип
+        if (!$this->svgRenderer->supports($svgType)) {
+            return $task;
+        }
+
+        // Рендерим SVG
+        $taskParams = $task['task']['params'] ?? [];
+        $renderedSvg = $this->svgRenderer->render($svgType, $geometry, $taskParams);
+
+        // Помещаем SVG в task['task']['image'] для совместимости с шаблонами
+        if ($renderedSvg) {
+            $task['task']['image'] = $renderedSvg;
+        }
+
+        return $task;
     }
 }
