@@ -52,6 +52,14 @@
             font-style: italic;
             font-weight: 500;
             user-select: none;
+            pointer-events: none;
+        }
+        .geo-label-bold {
+            font-family: 'Times New Roman', serif;
+            font-style: normal;
+            font-weight: 700;
+            user-select: none;
+            pointer-events: none;
         }
         .katex { font-size: 1.1em; }
 
