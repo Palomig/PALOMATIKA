@@ -37,6 +37,9 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- Geometry Helpers (для тем 15, 16, 17) -->
+    <script src="/js/geometry-helpers.js"></script>
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -404,159 +407,7 @@
 
             return path;
         }
-
-        // ========================================
-        // GEOMETRY_SPEC - Функции для геометрии (темы 15, 16, 17)
-        // ========================================
-
-        // 1. Позиционирует подписи в направлении от центра фигуры
-        function labelPos(point, center, distance = 22) {
-            const dx = point.x - center.x;
-            const dy = point.y - center.y;
-            const len = Math.sqrt(dx * dx + dy * dy);
-            if (len === 0) return { x: point.x, y: point.y - distance };
-            return {
-                x: point.x + (dx / len) * distance,
-                y: point.y + (dy / len) * distance
-            };
-        }
-
-        // 2. Рисует дугу угла строго между двумя сторонами
-        function makeAngleArc(vertex, point1, point2, radius) {
-            const angle1 = Math.atan2(point1.y - vertex.y, point1.x - vertex.x);
-            const angle2 = Math.atan2(point2.y - vertex.y, point2.x - vertex.x);
-            const x1 = vertex.x + radius * Math.cos(angle1);
-            const y1 = vertex.y + radius * Math.sin(angle1);
-            const x2 = vertex.x + radius * Math.cos(angle2);
-            const y2 = vertex.y + radius * Math.sin(angle2);
-            let angleDiff = angle2 - angle1;
-            while (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
-            while (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
-            const sweep = angleDiff > 0 ? 1 : 0;
-            return `M ${x1} ${y1} A ${radius} ${radius} 0 0 ${sweep} ${x2} ${y2}`;
-        }
-
-        // 3. Рисует квадратик для прямого угла
-        function rightAnglePath(vertex, p1, p2, size = 12) {
-            const angle1 = Math.atan2(p1.y - vertex.y, p1.x - vertex.x);
-            const angle2 = Math.atan2(p2.y - vertex.y, p2.x - vertex.x);
-            const c1 = { x: vertex.x + size * Math.cos(angle1), y: vertex.y + size * Math.sin(angle1) };
-            const c2 = { x: vertex.x + size * Math.cos(angle2), y: vertex.y + size * Math.sin(angle2) };
-            const diag = { x: c1.x + size * Math.cos(angle2), y: c1.y + size * Math.sin(angle2) };
-            return `M ${c1.x} ${c1.y} L ${diag.x} ${diag.y} L ${c2.x} ${c2.y}`;
-        }
-
-        // 4. Точка на отрезке (t=0 → p1, t=1 → p2, t=0.5 → середина)
-        function pointOnLine(p1, p2, t) {
-            return {
-                x: p1.x + (p2.x - p1.x) * t,
-                y: p1.y + (p2.y - p1.y) * t
-            };
-        }
-
-        // 5. Подпись длины стороны — перпендикулярно отрезку
-        function labelOnSegment(p1, p2, offset = 15, flipSide = false) {
-            const mid = { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 };
-            const dx = p2.x - p1.x;
-            const dy = p2.y - p1.y;
-            const len = Math.sqrt(dx * dx + dy * dy);
-            let nx = -dy / len;
-            let ny = dx / len;
-            if (flipSide) { nx = -nx; ny = -ny; }
-            return {
-                x: mid.x + nx * offset,
-                y: mid.y + ny * offset
-            };
-        }
-
-        // 6. Позиция метки угла — ровно посередине между двумя сторонами
-        function angleLabelPos(vertex, p1, p2, labelRadius, bias = 0.5) {
-            const angle1 = Math.atan2(p1.y - vertex.y, p1.x - vertex.x);
-            const angle2 = Math.atan2(p2.y - vertex.y, p2.x - vertex.x);
-            let diff = angle2 - angle1;
-            while (diff > Math.PI) diff -= 2 * Math.PI;
-            while (diff < -Math.PI) diff += 2 * Math.PI;
-            const midAngle = angle1 + diff * bias;
-            return {
-                x: vertex.x + labelRadius * Math.cos(midAngle),
-                y: vertex.y + labelRadius * Math.sin(midAngle)
-            };
-        }
-
-        // 7. Точка D на стороне BC для биссектрисы из A
-        function bisectorPoint(A, B, C) {
-            const AB = Math.sqrt((B.x - A.x)**2 + (B.y - A.y)**2);
-            const AC = Math.sqrt((C.x - A.x)**2 + (C.y - A.y)**2);
-            const t = AB / (AB + AC);
-            return pointOnLine(B, C, t);
-        }
-
-        // 8. Проверка: является ли угол в вершине прямым (90°)
-        function isRightAngle(vertex, p1, p2) {
-            const v1 = { x: p1.x - vertex.x, y: p1.y - vertex.y };
-            const v2 = { x: p2.x - vertex.x, y: p2.y - vertex.y };
-            const dot = v1.x * v2.x + v1.y * v2.y;
-            return Math.abs(dot) < 1;
-        }
-
-        // 9. Маркер равенства сторон (черточка перпендикулярна отрезку)
-        function equalityTick(p1, p2, t = 0.5, length = 8) {
-            const mid = {
-                x: p1.x + (p2.x - p1.x) * t,
-                y: p1.y + (p2.y - p1.y) * t
-            };
-            const dx = p2.x - p1.x;
-            const dy = p2.y - p1.y;
-            const len = Math.sqrt(dx * dx + dy * dy);
-            const nx = -dy / len;
-            const ny = dx / len;
-            const half = length / 2;
-            return {
-                x1: mid.x - nx * half,
-                y1: mid.y - ny * half,
-                x2: mid.x + nx * half,
-                y2: mid.y + ny * half
-            };
-        }
-
-        // 10. Двойная черточка (для второй пары равных отрезков)
-        function doubleEqualityTick(p1, p2, t = 0.5, length = 8, gap = 4) {
-            const dx = p2.x - p1.x;
-            const dy = p2.y - p1.y;
-            const len = Math.sqrt(dx * dx + dy * dy);
-            const ux = dx / len;
-            const uy = dy / len;
-            const nx = -dy / len;
-            const ny = dx / len;
-            const mid = { x: p1.x + dx * t, y: p1.y + dy * t };
-            const half = length / 2;
-            const halfGap = gap / 2;
-            const tick1 = {
-                x1: mid.x - ux * halfGap - nx * half,
-                y1: mid.y - uy * halfGap - ny * half,
-                x2: mid.x - ux * halfGap + nx * half,
-                y2: mid.y - uy * halfGap + ny * half
-            };
-            const tick2 = {
-                x1: mid.x + ux * halfGap - nx * half,
-                y1: mid.y + uy * halfGap - ny * half,
-                x2: mid.x + ux * halfGap + nx * half,
-                y2: mid.y + uy * halfGap + ny * half
-            };
-            return { tick1, tick2 };
-        }
-
-        // Экспортируем в глобальную область для использования в компонентах
-        window.labelPos = labelPos;
-        window.makeAngleArc = makeAngleArc;
-        window.rightAnglePath = rightAnglePath;
-        window.pointOnLine = pointOnLine;
-        window.labelOnSegment = labelOnSegment;
-        window.angleLabelPos = angleLabelPos;
-        window.bisectorPoint = bisectorPoint;
-        window.isRightAngle = isRightAngle;
-        window.equalityTick = equalityTick;
-        window.doubleEqualityTick = doubleEqualityTick;
+        // GEOMETRY_SPEC функции загружаются из /js/geometry-helpers.js
     </script>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
