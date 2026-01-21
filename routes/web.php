@@ -184,6 +184,7 @@ Route::prefix('test')->group(function () {
 
     // OGE Variant Generator (tasks 6-19)
     Route::get('/oge', [TestPdfController::class, 'ogeGenerator'])->name('test.oge.generator');
+    Route::post('/oge/save', [TestPdfController::class, 'saveVariant'])->name('test.oge.save');
     Route::get('/oge/{hash}', [TestPdfController::class, 'showOgeVariant'])->name('test.oge.show');
 
     // Legacy
