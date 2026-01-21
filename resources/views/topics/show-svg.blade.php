@@ -140,14 +140,14 @@
                             <div class="text-emerald-400 font-semibold mb-3">{{ $task['id'] ?? $loop->iteration }}.</div>
                             <div class="text-slate-200 text-sm leading-relaxed mb-4">{{ $task['text'] ?? '' }}</div>
 
-                            {{-- Server-rendered SVG --}}
-                            @if(isset($task['rendered_svg']))
+                            {{-- Pre-baked SVG (stored in JSON via svg:bake command) --}}
+                            @if(isset($task['svg']))
                                 <div class="bg-slate-900/50 rounded-lg p-3 flex items-center justify-center">
-                                    {!! $task['rendered_svg'] !!}
+                                    {!! $task['svg'] !!}
                                 </div>
-                            @else
-                                <div class="bg-slate-900/50 rounded-lg p-3 text-center text-slate-500 py-8">
-                                    SVG не отрендерен
+                            @elseif(isset($task['image']))
+                                <div class="bg-slate-900/50 rounded-lg p-3 flex items-center justify-center">
+                                    <img src="/images/tasks/{{ $topicId }}/{{ $task['image'] }}" alt="Задание" class="max-w-[250px]">
                                 </div>
                             @endif
 
@@ -169,20 +169,20 @@
 
     {{-- Info Box --}}
     <div class="bg-slate-800 rounded-xl p-6 border border-slate-700 mt-10">
-        <h4 class="text-white font-semibold mb-4">Информация о рендеринге</h4>
+        <h4 class="text-white font-semibold mb-4">Информация о данных</h4>
         <div class="text-slate-400 text-sm space-y-2">
             <p><strong class="text-slate-300">Тема:</strong> {{ $topicId }}. {{ $topicMeta['title'] }}</p>
-            <p><strong class="text-slate-300">Источник данных:</strong> <code class="bg-slate-700 px-2 py-1 rounded text-xs">storage/app/tasks/topic_{{ $topicId }}_geometry.json</code></p>
-            <p><strong class="text-slate-300">Рендерер:</strong> <code class="bg-slate-700 px-2 py-1 rounded text-xs">App\Services\GeometrySvgRenderer</code></p>
+            <p><strong class="text-slate-300">Источник данных:</strong> <code class="bg-slate-700 px-2 py-1 rounded text-xs">storage/app/tasks/topic_{{ $topicId }}.json</code></p>
+            <p><strong class="text-slate-300">Генерация SVG:</strong> <code class="bg-slate-700 px-2 py-1 rounded text-xs">php artisan svg:bake {{ $topicId }}</code></p>
             <ul class="list-disc list-inside mt-3 space-y-1">
-                <li>SVG генерируется на сервере без JavaScript</li>
-                <li>Поддерживает 16 типов геометрии для треугольников</li>
-                <li>Координаты и производные точки вычисляются в PHP</li>
+                <li>SVG предварительно сгенерирован и сохранён в JSON (task['svg'])</li>
+                <li>Один источник данных — идентичный результат везде</li>
+                <li>Нет динамического рендеринга на сервере или клиенте</li>
             </ul>
         </div>
     </div>
 
-    <p class="text-center text-slate-500 text-sm mt-8">SVG отрисован на сервере через GeometrySvgRenderer</p>
+    <p class="text-center text-slate-500 text-sm mt-8">SVG предзаготовлен через svg:bake (static)</p>
 </div>
 
 </body>
