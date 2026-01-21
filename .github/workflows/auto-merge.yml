@@ -67,3 +67,24 @@ jobs:
             **/.DS_Store
             **/vendor/**
             **/docs/oge_project_package.zip
+
+      # Option 1: SSH post-deploy (requires SSH_* secrets)
+      # Uncomment and add secrets: SSH_HOST, SSH_USER, SSH_KEY
+      # - name: Post-deploy refresh via SSH
+      #   uses: appleboy/ssh-action@v1.0.3
+      #   with:
+      #     host: ${{ secrets.SSH_HOST }}
+      #     username: ${{ secrets.SSH_USER }}
+      #     key: ${{ secrets.SSH_KEY }}
+      #     script: |
+      #       cd /home/c/cw95865/OGE
+      #       php artisan deploy:refresh
+
+      # Option 2: Webhook trigger (requires DEPLOY_WEBHOOK_SECRET)
+      - name: Trigger deploy refresh webhook
+        if: ${{ secrets.DEPLOY_WEBHOOK_SECRET != '' }}
+        run: |
+          curl -s -X POST "https://cw95865.tmweb.ru/api/deploy/refresh" \
+            -H "X-Deploy-Secret: ${{ secrets.DEPLOY_WEBHOOK_SECRET }}" \
+            -H "Content-Type: application/json" \
+            --max-time 120 || echo "Webhook failed or not configured"

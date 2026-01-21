@@ -62,4 +62,18 @@ return [
         'test_mode' => env('ROBOKASSA_TEST_MODE', false),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Deploy Webhook
+    |--------------------------------------------------------------------------
+    |
+    | Secret for authenticating deploy refresh webhook calls from CI/CD.
+    | Set DEPLOY_WEBHOOK_SECRET in .env and as GitHub Actions secret.
+    |
+    */
+
+    'deploy' => [
+        'webhook_secret' => env('DEPLOY_WEBHOOK_SECRET'),
+    ],
+
 ];

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 
@@ -141,6 +142,11 @@ class TaskDataService
      */
     public function getTopicData(string $topicId): array
     {
+        // Auto-bake SVG in local environment if geometry file is newer
+        if (app()->environment('local')) {
+            $this->autoBakeIfNeeded($topicId);
+        }
+
         $cacheKey = "topic_data_{$topicId}";
 
         return Cache::remember($cacheKey, 3600, function () use ($topicId) {
@@ -153,6 +159,47 @@ class TaskDataService
             $content = File::get($filePath);
             return json_decode($content, true) ?? [];
         });
+    }
+
+    /**
+     * Auto-bake SVG if geometry file is newer than output (local env only)
+     */
+    protected function autoBakeIfNeeded(string $topicId): void
+    {
+        $geometryPath = "{$this->basePath}/topic_{$topicId}_geometry.json";
+        $outputPath = "{$this->basePath}/topic_{$topicId}.json";
+
+        // Skip if no geometry file exists
+        if (!File::exists($geometryPath)) {
+            return;
+        }
+
+        $needsBake = false;
+
+        if (!File::exists($outputPath)) {
+            $needsBake = true;
+        } else {
+            $geometryTime = File::lastModified($geometryPath);
+            $outputTime = File::lastModified($outputPath);
+            $needsBake = $geometryTime > $outputTime;
+        }
+
+        if ($needsBake) {
+            try {
+                // Clear cache for this topic before baking
+                Cache::forget("topic_data_{$topicId}");
+
+                // Run svg:bake command
+                Artisan::call('svg:bake', ['topic' => $topicId]);
+
+                // Log for debugging
+                if (config('app.debug')) {
+                    \Log::info("Auto-baked SVG for topic {$topicId}");
+                }
+            } catch (\Exception $e) {
+                \Log::warning("Auto-bake failed for topic {$topicId}: " . $e->getMessage());
+            }
+        }
     }
 
     /**

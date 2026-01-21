@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\DeployController;
 use App\Http\Controllers\Api\OAuthController;
 use App\Http\Controllers\Api\BadgeController;
 use App\Http\Controllers\Api\DuelController;
@@ -31,6 +32,9 @@ Route::get('/telegram/check-token/{token}', [TelegramBotAuthController::class, '
 Route::get('/oauth/{provider}/redirect', [OAuthController::class, 'redirect']);
 Route::post('/oauth/{provider}/callback', [OAuthController::class, 'callback']);
 Route::post('/referral/track', [OAuthController::class, 'trackReferral']);
+
+// Deploy webhook (called by GitHub Actions after FTP deploy)
+Route::post('/deploy/refresh', [DeployController::class, 'refresh']);
 
 Route::get('/topics', [TopicController::class, 'index']);
 Route::get('/topics/{topic}', [TopicController::class, 'show']);
