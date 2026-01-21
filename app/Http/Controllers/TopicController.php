@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\TestPdfController;
 use App\Services\TaskDataService;
 use Illuminate\Http\Request;
 
@@ -40,22 +39,13 @@ class TopicController extends Controller
 
     /**
      * Страница темы с заданиями
+     *
+     * Все темы используют единый JSON-источник данных.
+     * Для геометрии (15, 16) SVG предзаготовлен в task['svg'].
      */
     public function show(string $id)
     {
-        // Нормализуем ID (6 -> 06)
         $topicId = str_pad($id, 2, '0', STR_PAD_LEFT);
-
-        // Специальные view для тем с кастомными SVG
-        $customViews = [
-            '15' => 'topics.topic15',
-            '16' => 'topics.topic16',
-            '17' => 'topics.topic17',
-        ];
-
-        if (isset($customViews[$topicId])) {
-            return $this->showCustomTopic($topicId, $customViews[$topicId]);
-        }
 
         // Проверяем существование данных
         if (!$this->taskService->topicDataExists($topicId)) {
@@ -63,47 +53,16 @@ class TopicController extends Controller
             return $this->fallbackToLegacy($topicId);
         }
 
-        // Получаем данные из JSON
+        // Получаем данные из JSON (SVG уже встроен в task['svg'])
         $blocks = $this->taskService->getBlocks($topicId);
         $topicMeta = $this->taskService->getTopicMeta($topicId);
         $stats = $this->taskService->getTopicStats($topicId);
 
-        // Проверяем наличие кастомного шаблона для темы (с custom SVG)
-        $customView = "topics.topic{$topicId}";
-        if (view()->exists($customView)) {
-            return view($customView, compact('blocks', 'topicId', 'topicMeta', 'stats'));
-        }
-
-        // Используем generic шаблон с JSON данными
         return view('topics.show', compact('blocks', 'topicId', 'topicMeta', 'stats'));
     }
 
     /**
-     * Показать тему с кастомным view (для геометрии с SVG)
-     */
-    protected function showCustomTopic(string $topicId, string $viewName)
-    {
-        $testController = app(TestPdfController::class);
-
-        $methodMap = [
-            '15' => 'getAllBlocksData15',
-            '16' => 'getAllBlocksData16',
-            '17' => 'getAllBlocksData17',
-        ];
-
-        $method = $methodMap[$topicId] ?? null;
-        if (!$method || !method_exists($testController, $method)) {
-            abort(404, "Данные для темы $topicId не найдены");
-        }
-
-        $blocks = $testController->$method();
-        $source = 'Manual (все блоки из PDF)';
-
-        return view($viewName, compact('blocks', 'source'));
-    }
-
-    /**
-     * Fallback на старый контроллер (временно, пока не мигрируем все данные)
+     * Fallback на старый контроллер (для тем без JSON)
      */
     protected function fallbackToLegacy(string $topicId): \Illuminate\Http\RedirectResponse
     {
@@ -117,9 +76,6 @@ class TopicController extends Controller
             '12' => 'test.topic12',
             '13' => 'test.topic13',
             '14' => 'test.topic14',
-            '15' => 'test.topic15',
-            '16' => 'test.topic16',
-            '17' => 'test.topic17',
             '18' => 'test.topic18',
             '19' => 'test.topic19',
         ];
