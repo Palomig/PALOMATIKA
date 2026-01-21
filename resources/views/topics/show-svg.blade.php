@@ -133,7 +133,7 @@
 
                             {{-- Server-rendered SVG --}}
                             @if(isset($task['rendered_svg']))
-                                <div class="bg-slate-900/50 rounded-lg p-3">
+                                <div class="bg-slate-900/50 rounded-lg p-3 flex items-center justify-center">
                                     {!! $task['rendered_svg'] !!}
                                 </div>
                             @else
