@@ -414,6 +414,160 @@ class TaskDataService
     {
         foreach (array_keys($this->topicsMeta) as $topicId) {
             Cache::forget("topic_data_{$topicId}");
+            Cache::forget("topic_data_geometry_{$topicId}");
         }
+    }
+
+    // ========================================================================
+    // МЕТОДЫ ДЛЯ ГЕОМЕТРИИ С SVG-РЕНДЕРИНГОМ
+    // ========================================================================
+
+    /**
+     * Получить данные темы с геометрией (из topic_XX_geometry.json)
+     */
+    public function getGeometryTopicData(string $topicId): array
+    {
+        $cacheKey = "topic_data_geometry_{$topicId}";
+
+        return Cache::remember($cacheKey, 3600, function () use ($topicId) {
+            $filePath = "{$this->basePath}/topic_{$topicId}_geometry.json";
+
+            if (!File::exists($filePath)) {
+                return [];
+            }
+
+            $content = File::get($filePath);
+            return json_decode($content, true) ?? [];
+        });
+    }
+
+    /**
+     * Получить блоки темы с геометрией
+     */
+    public function getGeometryBlocks(string $topicId): array
+    {
+        $data = $this->getGeometryTopicData($topicId);
+        return $data['blocks'] ?? [];
+    }
+
+    /**
+     * Проверить существование файла геометрических данных
+     */
+    public function geometryDataExists(string $topicId): bool
+    {
+        return File::exists("{$this->basePath}/topic_{$topicId}_geometry.json");
+    }
+
+    /**
+     * Добавить отрендеренный SVG к задаче
+     *
+     * @param array $taskData Данные задачи (с svg_type и geometry из zadanie)
+     * @return array Задача с добавленным rendered_svg
+     */
+    public function getTaskWithRenderedSvg(array $taskData): array
+    {
+        // Если нет данных для рендеринга - возвращаем как есть
+        if (!isset($taskData['svg_type']) || !isset($taskData['geometry'])) {
+            return $taskData;
+        }
+
+        $renderer = app(GeometrySvgRenderer::class);
+
+        if (!$renderer->supports($taskData['svg_type'])) {
+            return $taskData;
+        }
+
+        $taskData['rendered_svg'] = $renderer->render(
+            $taskData['svg_type'],
+            $taskData['geometry'],
+            $taskData['task']['params'] ?? []
+        );
+
+        return $taskData;
+    }
+
+    /**
+     * Получить случайные задания с отрендеренным SVG
+     */
+    public function getRandomTasksWithSvg(string $topicId, int $count = 1): array
+    {
+        // Используем геометрические данные если есть
+        if ($this->geometryDataExists($topicId)) {
+            $blocks = $this->getGeometryBlocks($topicId);
+        } else {
+            $blocks = $this->getBlocks($topicId);
+        }
+
+        $meta = $this->getTopicMeta($topicId);
+        $allTasks = [];
+
+        foreach ($blocks as $block) {
+            foreach ($block['zadaniya'] ?? [] as $zadanie) {
+                foreach ($zadanie['tasks'] ?? [] as $task) {
+                    $taskData = [
+                        'topic_id' => $topicId,
+                        'topic_title' => $meta['title'],
+                        'block_number' => $block['number'],
+                        'block_title' => $block['title'],
+                        'zadanie_number' => $zadanie['number'],
+                        'instruction' => $zadanie['instruction'],
+                        'type' => $zadanie['type'] ?? 'expression',
+                        'svg_type' => $zadanie['svg_type'] ?? null,
+                        'geometry' => $zadanie['geometry'] ?? null,
+                        'task' => $task,
+                    ];
+
+                    // Рендерим SVG если есть данные
+                    $allTasks[] = $this->getTaskWithRenderedSvg($taskData);
+                }
+            }
+        }
+
+        if (empty($allTasks)) {
+            return [];
+        }
+
+        shuffle($allTasks);
+        return array_slice($allTasks, 0, $count);
+    }
+
+    /**
+     * Получить блоки с отрендеренным SVG для всех задач
+     */
+    public function getBlocksWithRenderedSvg(string $topicId): array
+    {
+        // Используем геометрические данные если есть
+        if ($this->geometryDataExists($topicId)) {
+            $blocks = $this->getGeometryBlocks($topicId);
+        } else {
+            $blocks = $this->getBlocks($topicId);
+        }
+
+        $renderer = app(GeometrySvgRenderer::class);
+
+        foreach ($blocks as &$block) {
+            foreach ($block['zadaniya'] as &$zadanie) {
+                // Пропускаем если нет данных для рендеринга
+                if (!isset($zadanie['svg_type']) || !isset($zadanie['geometry'])) {
+                    continue;
+                }
+
+                // Пропускаем если тип не поддерживается
+                if (!$renderer->supports($zadanie['svg_type'])) {
+                    continue;
+                }
+
+                // Рендерим SVG для каждой задачи
+                foreach ($zadanie['tasks'] as &$task) {
+                    $task['rendered_svg'] = $renderer->render(
+                        $zadanie['svg_type'],
+                        $zadanie['geometry'],
+                        $task['params'] ?? []
+                    );
+                }
+            }
+        }
+
+        return $blocks;
     }
 }

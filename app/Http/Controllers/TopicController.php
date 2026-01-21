@@ -208,4 +208,65 @@ class TopicController extends Controller
             'blocks' => $this->taskService->getBlocks($topicId),
         ]);
     }
+
+    // ========================================================================
+    // НОВЫЕ МЕТОДЫ: SVG РЕНДЕРИНГ НА СЕРВЕРЕ
+    // ========================================================================
+
+    /**
+     * Страница темы с серверным рендерингом SVG
+     *
+     * Роут: /topics/{id}/svg
+     * Использует JSON-данные из topic_XX_geometry.json и GeometrySvgRenderer
+     */
+    public function showWithServerSvg(string $id)
+    {
+        $topicId = str_pad($id, 2, '0', STR_PAD_LEFT);
+
+        // Проверяем существование геометрических данных
+        if (!$this->taskService->geometryDataExists($topicId)) {
+            // Fallback на старый метод если geometry.json не существует
+            return $this->show($id);
+        }
+
+        // Получаем блоки с отрендеренным SVG
+        $blocks = $this->taskService->getBlocksWithRenderedSvg($topicId);
+        $topicMeta = $this->taskService->getTopicMeta($topicId);
+
+        // Вычисляем статистику
+        $totalTasks = 0;
+        $totalZadaniya = 0;
+        foreach ($blocks as $block) {
+            foreach ($block['zadaniya'] ?? [] as $zadanie) {
+                $totalZadaniya++;
+                $totalTasks += count($zadanie['tasks'] ?? []);
+            }
+        }
+
+        $stats = [
+            'blocks' => count($blocks),
+            'zadaniya' => $totalZadaniya,
+            'tasks' => $totalTasks,
+        ];
+
+        return view('topics.show-svg', compact('blocks', 'topicId', 'topicMeta', 'stats'));
+    }
+
+    /**
+     * API: Получить случайные задания с отрендеренным SVG
+     */
+    public function apiGetRandomTasksWithSvg(Request $request, string $topicId)
+    {
+        $topicId = str_pad($topicId, 2, '0', STR_PAD_LEFT);
+        $count = $request->input('count', 1);
+
+        $tasks = $this->taskService->getRandomTasksWithSvg($topicId, $count);
+
+        return response()->json([
+            'success' => true,
+            'topic_id' => $topicId,
+            'count' => count($tasks),
+            'tasks' => $tasks,
+        ]);
+    }
 }
