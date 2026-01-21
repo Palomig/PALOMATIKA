@@ -8,23 +8,16 @@
     $tasks = $zadanie['tasks'] ?? [];
     $graphLabels = ['А', 'Б', 'В', 'Г'];
 
-    // Функция для загрузки изображения и извлечения графиков
-    function extractGraphsFromImage($topicId, $imageName) {
-        $imagePath = public_path("images/tasks/{$topicId}/{$imageName}");
-        if (!file_exists($imagePath)) {
-            return null;
-        }
-        return "/images/tasks/{$topicId}/{$imageName}";
-    }
+    // Получаем options из zadanie (исправлено в TaskDataService)
+    $options = $zadanie['options'] ?? [];
 @endphp
 
 <div class="space-y-8">
     @foreach($tasks as $taskIndex => $task)
         @php
             $taskKey = "topic_{$topicId}_block_{$block['number']}_zadanie_{$zadanie['number']}_task_{$task['id']}";
-            $options = $task['options'] ?? [];
             $imageName = $task['image'] ?? '';
-            $imageUrl = extractGraphsFromImage($topicId, $imageName);
+            $imageUrl = $imageName ? asset("images/tasks/{$topicId}/{$imageName}") : null;
             $taskInfo = "Блок {$block['number']}, Задание {$zadanie['number']}, Задача {$task['id']}<br>Изображение: {$imageName}";
         @endphp
 
@@ -36,35 +29,33 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {{-- Изображение с графиками --}}
+                {{-- Изображение с 4 графиками (А, Б, В, Г) --}}
                 <div class="bg-slate-900/50 rounded-lg p-3">
-                    @if($imageUrl)
-                        <img src="{{ $imageUrl }}" alt="Графики функций" class="w-full h-auto rounded">
+                    @if($imageUrl && file_exists(public_path("images/tasks/{$topicId}/{$imageName}")))
+                        <img src="{{ $imageUrl }}" alt="Графики функций А, Б, В, Г" class="w-full h-auto rounded border border-slate-700">
                     @else
-                        <div class="grid grid-cols-2 gap-3">
-                            @foreach($graphLabels as $label)
-                                <div class="bg-slate-900/50 rounded-lg p-2 text-center">
-                                    <div class="text-cyan-400 font-bold mb-1">{{ $label }}</div>
-                                    <div class="w-full aspect-square bg-slate-800 rounded flex items-center justify-center">
-                                        <svg viewBox="0 0 100 100" class="w-full h-full">
-                                            <line x1="10" y1="50" x2="90" y2="50" stroke="#475569" stroke-width="1"/>
-                                            <line x1="50" y1="10" x2="50" y2="90" stroke="#475569" stroke-width="1"/>
-                                        </svg>
-                                    </div>
-                                </div>
-                            @endforeach
+                        <div class="text-red-400 text-center p-4">
+                            <p class="font-bold mb-2">⚠️ Изображение не найдено</p>
+                            <p class="text-sm text-slate-400">{{ $imageName }}</p>
                         </div>
                     @endif
                 </div>
 
-                {{-- Формулы --}}
+                {{-- Формулы для соответствия --}}
                 <div class="space-y-3">
-                    @foreach($options as $i => $option)
-                        <div class="flex items-center gap-3 bg-slate-700/50 rounded-lg px-4 py-3 hover:bg-slate-700 transition cursor-pointer">
-                            <span class="text-amber-400 font-bold">{{ $i + 1 }})</span>
-                            <span class="text-slate-200 math-serif">${{ $option }}$</span>
+                    @if(!empty($options))
+                        @foreach($options as $i => $option)
+                            <div class="flex items-center gap-3 bg-slate-700/50 rounded-lg px-4 py-3 hover:bg-slate-700 transition cursor-pointer">
+                                <span class="text-amber-400 font-bold">{{ $i + 1 }})</span>
+                                <span class="text-slate-200 math-serif">${{ $option }}$</span>
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="text-red-400 text-center p-4">
+                            <p class="font-bold">⚠️ Формулы не найдены</p>
+                            <p class="text-sm text-slate-400">Проверьте структуру данных</p>
                         </div>
-                    @endforeach
+                    @endif
                 </div>
             </div>
 

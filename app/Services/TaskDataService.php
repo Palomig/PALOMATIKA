@@ -342,7 +342,8 @@ class TaskDataService
                                     'type' => $zadanie['type'] ?? 'expression',
                                     'svg_type' => $zadanie['svg_type'] ?? null,
                                     'points' => $zadanie['points'] ?? null,
-                                    'options' => $zadanie['options'] ?? null,
+                                    // FIXED: Сначала проверяем options в задаче (для matching), затем в задании
+                                    'options' => $task['options'] ?? $zadanie['options'] ?? null,
                                     'task' => $task,
                                 ];
                             }
