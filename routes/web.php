@@ -157,18 +157,10 @@ Route::prefix('test')->group(function () {
     Route::get('/12', [TestPdfController::class, 'topic12'])->name('test.topic12');
     Route::get('/13', [TestPdfController::class, 'topic13'])->name('test.topic13');
     Route::get('/14', [TestPdfController::class, 'topic14'])->name('test.topic14');
-    // Topic 15: Main page uses demo with all 94 tasks
-    Route::get('/15', function () {
-        return view('test.topic15-demo');
-    })->name('test.topic15');
-    Route::get('/old/15', [TestPdfController::class, 'topic15'])->name('test.topic15.old');
-    Route::get('/new/15', [TestPdfController::class, 'topic15Interactive'])->name('test.topic15.interactive');
-    // Topic 16: Blueprint test version
-    Route::get('/16', function () {
-        return view('test.topic16-blueprint');
-    })->name('test.topic16');
-    Route::get('/old/16', [TestPdfController::class, 'topic16'])->name('test.topic16.old');
-    Route::get('/17', [TestPdfController::class, 'topic17'])->name('test.topic17');
+    // Topics 15, 16, 17 — redirect to new unified system with pre-baked SVG
+    Route::get('/15', fn() => redirect()->route('topics.show', 15))->name('test.topic15');
+    Route::get('/16', fn() => redirect()->route('topics.show', 16))->name('test.topic16');
+    Route::get('/17', fn() => redirect()->route('topics.show', 17))->name('test.topic17');
     Route::get('/18', [TestPdfController::class, 'topic18'])->name('test.topic18');
     Route::get('/19', [TestPdfController::class, 'topic19'])->name('test.topic19');
 
