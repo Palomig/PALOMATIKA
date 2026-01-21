@@ -7,7 +7,6 @@ use App\Services\PdfTaskParser;
 use App\Services\TaskGeneratorService;
 use App\Services\AdvancedPdfParser;
 use App\Services\TaskDataService;
-use App\Services\GeometrySvgRenderer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -18,20 +17,17 @@ class TestPdfController extends Controller
     protected TaskGeneratorService $taskGenerator;
     protected AdvancedPdfParser $advancedParser;
     protected TaskDataService $taskDataService;
-    protected GeometrySvgRenderer $svgRenderer;
 
     public function __construct(
         PdfParserService $pdfParser,
         TaskGeneratorService $taskGenerator,
         AdvancedPdfParser $advancedParser,
-        TaskDataService $taskDataService,
-        GeometrySvgRenderer $svgRenderer
+        TaskDataService $taskDataService
     ) {
         $this->pdfParser = $pdfParser;
         $this->taskGenerator = $taskGenerator;
         $this->advancedParser = $advancedParser;
         $this->taskDataService = $taskDataService;
-        $this->svgRenderer = $svgRenderer;
     }
 
     /**
@@ -5242,32 +5238,17 @@ class TestPdfController extends Controller
     }
 
     /**
-     * Render SVG for geometry task
+     * Copy pre-baked SVG to image field for geometry tasks
      *
-     * Добавляет отрендеренный SVG в task['task']['image'] для тем 15, 16, 17
+     * SVG is pre-generated via `php artisan svg:bake` and stored in task['task']['svg']
+     * This method copies it to task['task']['image'] for compatibility with templates
      */
     protected function renderGeometrySvgForTask(array $task): array
     {
-        // Проверяем наличие данных для рендеринга
-        $svgType = $task['svg_type'] ?? null;
-        $geometry = $task['geometry'] ?? null;
-
-        if (!$svgType || !$geometry) {
-            return $task;
-        }
-
-        // Проверяем, поддерживает ли рендерер этот тип
-        if (!$this->svgRenderer->supports($svgType)) {
-            return $task;
-        }
-
-        // Рендерим SVG
-        $taskParams = $task['task']['params'] ?? [];
-        $renderedSvg = $this->svgRenderer->render($svgType, $geometry, $taskParams);
-
-        // Помещаем SVG в task['task']['image'] для совместимости с шаблонами
-        if ($renderedSvg) {
-            $task['task']['image'] = $renderedSvg;
+        // SVG уже предзаготовлен в task['task']['svg'] через svg:bake
+        // Копируем в task['task']['image'] для совместимости с шаблонами
+        if (isset($task['task']['svg'])) {
+            $task['task']['image'] = $task['task']['svg'];
         }
 
         return $task;

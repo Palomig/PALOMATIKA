@@ -210,57 +210,42 @@ class TopicController extends Controller
     }
 
     // ========================================================================
-    // НОВЫЕ МЕТОДЫ: SVG РЕНДЕРИНГ НА СЕРВЕРЕ
+    // SVG-СТРАНИЦЫ (SVG предзаготовлен в JSON через svg:bake)
     // ========================================================================
 
     /**
-     * Страница темы с серверным рендерингом SVG
+     * Страница темы с предзаготовленными SVG
      *
      * Роут: /topics/{id}/svg
-     * Использует JSON-данные из topic_XX_geometry.json и GeometrySvgRenderer
+     * SVG хранятся в task['svg'] в JSON-файлах (предгенерированы через php artisan svg:bake)
      */
     public function showWithServerSvg(string $id)
     {
         $topicId = str_pad($id, 2, '0', STR_PAD_LEFT);
 
-        // Проверяем существование геометрических данных
-        if (!$this->taskService->geometryDataExists($topicId)) {
-            // Fallback на старый метод если geometry.json не существует
+        // Проверяем существование темы
+        if (!$this->taskService->topicDataExists($topicId)) {
             return $this->show($id);
         }
 
-        // Получаем блоки с отрендеренным SVG
-        $blocks = $this->taskService->getBlocksWithRenderedSvg($topicId);
+        // SVG уже встроены в task['svg'] — просто получаем блоки
+        $blocks = $this->taskService->getBlocks($topicId);
         $topicMeta = $this->taskService->getTopicMeta($topicId);
-
-        // Вычисляем статистику
-        $totalTasks = 0;
-        $totalZadaniya = 0;
-        foreach ($blocks as $block) {
-            foreach ($block['zadaniya'] ?? [] as $zadanie) {
-                $totalZadaniya++;
-                $totalTasks += count($zadanie['tasks'] ?? []);
-            }
-        }
-
-        $stats = [
-            'blocks' => count($blocks),
-            'zadaniya' => $totalZadaniya,
-            'tasks' => $totalTasks,
-        ];
+        $stats = $this->taskService->getTopicStats($topicId);
 
         return view('topics.show-svg', compact('blocks', 'topicId', 'topicMeta', 'stats'));
     }
 
     /**
-     * API: Получить случайные задания с отрендеренным SVG
+     * API: Получить случайные задания (SVG встроен в task['svg'])
      */
     public function apiGetRandomTasksWithSvg(Request $request, string $topicId)
     {
         $topicId = str_pad($topicId, 2, '0', STR_PAD_LEFT);
         $count = $request->input('count', 1);
 
-        $tasks = $this->taskService->getRandomTasksWithSvg($topicId, $count);
+        // SVG уже встроен в task['svg'] — просто получаем задания
+        $tasks = $this->taskService->getRandomTasks($topicId, $count);
 
         return response()->json([
             'success' => true,
