@@ -45,6 +45,23 @@ class GeometrySvgRenderer
         'area_theorem',       // Теорема о площади
     ];
 
+    // Поддерживаемые типы SVG для окружностей (тема 16)
+    private const CIRCLE_TYPES = [
+        'square_circle_vertex',      // Квадрат с окружностью через вершину
+        'tangent_lines',             // Касательные к окружности
+        'inscribed_angle',           // Вписанный угол
+        'diameters',                 // Два диаметра
+        'diameter_points',           // Точки по разные стороны диаметра
+        'inscribed_trapezoid',       // Окружность, вписанная в трапецию
+        'inscribed_square',          // Окружность, вписанная в квадрат
+        'circumscribed_shapes',      // Описанные фигуры
+        'triangle_inscribed_circle', // Треугольник с вписанной окружностью
+        'quad_in_circle',            // Четырёхугольник в окружности
+        'center_on_side',            // Центр на стороне треугольника
+        'trapezoid_in_circle',       // Трапеция в окружности
+        'sine_theorem',              // Теорема синусов
+    ];
+
     /**
      * Рендерит SVG из геометрических данных
      *
@@ -76,7 +93,7 @@ class GeometrySvgRenderer
      */
     public function supports(string $svgType): bool
     {
-        return in_array($svgType, self::TRIANGLE_TYPES);
+        return in_array($svgType, self::TRIANGLE_TYPES) || in_array($svgType, self::CIRCLE_TYPES);
     }
 
     /**
@@ -84,7 +101,7 @@ class GeometrySvgRenderer
      */
     public function getSupportedTypes(): array
     {
-        return self::TRIANGLE_TYPES;
+        return array_merge(self::TRIANGLE_TYPES, self::CIRCLE_TYPES);
     }
 
     /**
@@ -217,6 +234,7 @@ class GeometrySvgRenderer
 
         // Рендерим по типу SVG
         $svg .= match($svgType) {
+            // Тема 15: Треугольники
             'bisector' => $this->renderBisector($points, $center, $geometry),
             'median' => $this->renderMedian($points, $center, $geometry),
             'angles_sum' => $this->renderAnglesSum($points, $center, $geometry),
@@ -233,6 +251,20 @@ class GeometrySvgRenderer
             'circumcircle' => $this->renderCircumcircle($points, $center, $geometry),
             'trig' => $this->renderTrig($points, $center, $geometry),
             'area_theorem' => $this->renderAreaTheorem($points, $center, $geometry),
+            // Тема 16: Окружности
+            'square_circle_vertex' => $this->renderSquareCircleVertex($points, $center, $geometry, $params),
+            'tangent_lines' => $this->renderTangentLines($points, $center, $geometry, $params),
+            'inscribed_angle' => $this->renderInscribedAngle($points, $center, $geometry, $params),
+            'diameters' => $this->renderDiameters($points, $center, $geometry, $params),
+            'diameter_points' => $this->renderDiameterPoints($points, $center, $geometry, $params),
+            'inscribed_trapezoid' => $this->renderInscribedTrapezoid($points, $center, $geometry, $params),
+            'inscribed_square' => $this->renderInscribedSquare($points, $center, $geometry, $params),
+            'circumscribed_shapes' => $this->renderCircumscribedShapes($points, $center, $geometry, $params),
+            'triangle_inscribed_circle' => $this->renderTriangleInscribedCircle($points, $center, $geometry, $params),
+            'quad_in_circle' => $this->renderQuadInCircle($points, $center, $geometry, $params),
+            'center_on_side' => $this->renderCenterOnSide($points, $center, $geometry, $params),
+            'trapezoid_in_circle' => $this->renderTrapezoidInCircle($points, $center, $geometry, $params),
+            'sine_theorem' => $this->renderSineTheorem($points, $center, $geometry, $params),
             default => $this->renderBasicTriangle($points, $center),
         };
 
@@ -1148,5 +1180,549 @@ SVG;
             'x' => $mid['x'] + $nx * $offset,
             'y' => $mid['y'] + $ny * $offset
         ];
+    }
+
+    // ========================================================================
+    // РЕНДЕРЫ ДЛЯ ОКРУЖНОСТЕЙ (ТЕМА 16)
+    // ========================================================================
+
+    /**
+     * Квадрат с окружностью через вершину (задания 1-8)
+     * O - середина CD, окружность проходит через A
+     */
+    private function renderSquareCircleVertex(array $points, array $center, array $geometry, array $params): string
+    {
+        // Фиксированные координаты для 85% заполнения viewBox 220×200
+        $A = ['x' => 72, 'y' => 34];
+        $B = ['x' => 148, 'y' => 34];
+        $C = ['x' => 148, 'y' => 110];
+        $D = ['x' => 72, 'y' => 110];
+        $O = ['x' => 110, 'y' => 110]; // Середина CD
+        $R = 85; // Визуальный радиус
+
+        $svg = '';
+
+        // Окружность
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"{$R}\" fill=\"none\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"2.5\"/>\n";
+
+        // Квадрат
+        $svg .= "  <polygon points=\"{$A['x']},{$A['y']} {$B['x']},{$B['y']} {$C['x']},{$C['y']} {$D['x']},{$D['y']}\" fill=\"none\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2.5\"/>\n";
+
+        // Центр O
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"5\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
+
+        // Радиус к A (пунктир)
+        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$A['x']}\" y2=\"{$A['y']}\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"2\" stroke-dasharray=\"5,4\"/>\n";
+
+        // Вершина A выделена
+        $svg .= "  <circle cx=\"{$A['x']}\" cy=\"{$A['y']}\" r=\"5\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
+
+        // Метки
+        $svg .= $this->label('A', ['x' => $A['x'] - 12, 'y' => $A['y'] - 8]);
+        $svg .= $this->label('B', ['x' => $B['x'] + 6, 'y' => $B['y'] - 8]);
+        $svg .= $this->label('C', ['x' => $C['x'] + 6, 'y' => $C['y'] + 14]);
+        $svg .= $this->label('D', ['x' => $D['x'] - 12, 'y' => $D['y'] + 14]);
+        $svg .= $this->label('O', ['x' => $O['x'], 'y' => $O['y'] + 18], self::COLORS['text_aux'], 15);
+
+        return $svg;
+    }
+
+    /**
+     * Касательные к окружности (задания 9-12)
+     */
+    private function renderTangentLines(array $points, array $center, array $geometry, array $params): string
+    {
+        $O = ['x' => 110, 'y' => 110];
+        $R = 50;
+        $P = ['x' => 110, 'y' => 30]; // Точка пересечения касательных
+
+        // Точки касания
+        $A = ['x' => 60, 'y' => 85];
+        $B = ['x' => 160, 'y' => 85];
+
+        $svg = '';
+
+        // Окружность
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"{$R}\" fill=\"none\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"2\"/>\n";
+
+        // Касательные
+        $svg .= "  <line x1=\"{$P['x']}\" y1=\"{$P['y']}\" x2=\"{$A['x']}\" y2=\"{$A['y']}\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2\"/>\n";
+        $svg .= "  <line x1=\"{$P['x']}\" y1=\"{$P['y']}\" x2=\"{$B['x']}\" y2=\"{$B['y']}\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2\"/>\n";
+
+        // Радиусы к точкам касания (пунктир)
+        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$A['x']}\" y2=\"{$A['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"5,4\"/>\n";
+        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$B['x']}\" y2=\"{$B['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"5,4\"/>\n";
+
+        // Прямые углы в точках касания
+        $svg .= "  <rect x=\"" . ($A['x'] + 3) . "\" y=\"" . ($A['y'] - 10) . "\" width=\"8\" height=\"8\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1\"/>\n";
+        $svg .= "  <rect x=\"" . ($B['x'] - 11) . "\" y=\"" . ($B['y'] - 10) . "\" width=\"8\" height=\"8\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1\"/>\n";
+
+        // Угол между касательными (акцент)
+        $arcP = $this->makeAngleArc($P, $A, $B, 25);
+        $svg .= "  <path d=\"{$arcP}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.5\"/>\n";
+
+        // Центр и точки
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"4\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
+        $svg .= "  <circle cx=\"{$A['x']}\" cy=\"{$A['y']}\" r=\"4\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
+        $svg .= "  <circle cx=\"{$B['x']}\" cy=\"{$B['y']}\" r=\"4\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
+
+        // Метки
+        $svg .= $this->label('O', ['x' => $O['x'], 'y' => $O['y'] + 18], self::COLORS['text_aux'], 14);
+        $svg .= $this->label('A', ['x' => $A['x'] - 15, 'y' => $A['y']]);
+        $svg .= $this->label('B', ['x' => $B['x'] + 15, 'y' => $B['y']]);
+
+        return $svg;
+    }
+
+    /**
+     * Вписанный угол (задания 13-16)
+     */
+    private function renderInscribedAngle(array $points, array $center, array $geometry, array $params): string
+    {
+        $O = ['x' => 110, 'y' => 100];
+        $R = 70;
+
+        // Точки на окружности
+        $A = ['x' => 40, 'y' => 100];
+        $B = ['x' => 180, 'y' => 100];
+        $C = ['x' => 110, 'y' => 30]; // C и O в одной полуплоскости от AB
+
+        $svg = '';
+
+        // Окружность
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"{$R}\" fill=\"none\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"2\"/>\n";
+
+        // Треугольник ABC
+        $svg .= "  <polygon points=\"{$A['x']},{$A['y']} {$B['x']},{$B['y']} {$C['x']},{$C['y']}\" fill=\"none\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2\"/>\n";
+
+        // Радиусы OA и OB (центральный угол)
+        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$A['x']}\" y2=\"{$A['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"5,4\"/>\n";
+        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$B['x']}\" y2=\"{$B['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"5,4\"/>\n";
+
+        // Центральный угол AOB (акцент)
+        $arcO = $this->makeAngleArc($O, $A, $B, 25);
+        $svg .= "  <path d=\"{$arcO}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.5\"/>\n";
+
+        // Вписанный угол ACB
+        $arcC = $this->makeAngleArc($C, $A, $B, 25);
+        $svg .= "  <path d=\"{$arcC}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1.5\"/>\n";
+
+        // Центр и вершины
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"4\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
+        $svg .= $this->crosshairs([$A, $B, $C]);
+
+        // Метки
+        $svg .= $this->label('O', ['x' => $O['x'] + 12, 'y' => $O['y'] + 5], self::COLORS['text_aux'], 14);
+        $svg .= $this->label('A', ['x' => $A['x'] - 15, 'y' => $A['y'] + 5]);
+        $svg .= $this->label('B', ['x' => $B['x'] + 10, 'y' => $B['y'] + 5]);
+        $svg .= $this->label('C', ['x' => $C['x'], 'y' => $C['y'] - 12]);
+
+        return $svg;
+    }
+
+    /**
+     * Два диаметра (задания 17-24)
+     */
+    private function renderDiameters(array $points, array $center, array $geometry, array $params): string
+    {
+        $O = ['x' => 110, 'y' => 100];
+        $R = 70;
+
+        // Диаметры AC и BD
+        $A = ['x' => 40, 'y' => 100];
+        $C = ['x' => 180, 'y' => 100];
+        $B = ['x' => 80, 'y' => 40];
+        $D = ['x' => 140, 'y' => 160];
+
+        $svg = '';
+
+        // Окружность
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"{$R}\" fill=\"none\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"2\"/>\n";
+
+        // Диаметры
+        $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$C['x']}\" y2=\"{$C['y']}\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2\"/>\n";
+        $svg .= "  <line x1=\"{$B['x']}\" y1=\"{$B['y']}\" x2=\"{$D['x']}\" y2=\"{$D['y']}\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2\"/>\n";
+
+        // Хорда CB
+        $svg .= "  <line x1=\"{$C['x']}\" y1=\"{$C['y']}\" x2=\"{$B['x']}\" y2=\"{$B['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"5,4\"/>\n";
+
+        // Угол AOD (центральный, акцент)
+        $arcAOD = $this->makeAngleArc($O, $A, $D, 25);
+        $svg .= "  <path d=\"{$arcAOD}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.5\"/>\n";
+
+        // Угол ACB (вписанный)
+        $arcACB = $this->makeAngleArc($C, $A, $B, 20);
+        $svg .= "  <path d=\"{$arcACB}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1.5\"/>\n";
+
+        // Центр
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"4\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
+        $svg .= $this->crosshairs([$A, $B, $C, $D]);
+
+        // Метки
+        $svg .= $this->label('O', ['x' => $O['x'] + 10, 'y' => $O['y'] - 10], self::COLORS['text_aux'], 14);
+        $svg .= $this->label('A', ['x' => $A['x'] - 15, 'y' => $A['y'] + 5]);
+        $svg .= $this->label('B', ['x' => $B['x'] - 5, 'y' => $B['y'] - 12]);
+        $svg .= $this->label('C', ['x' => $C['x'] + 10, 'y' => $C['y'] + 5]);
+        $svg .= $this->label('D', ['x' => $D['x'] + 5, 'y' => $D['y'] + 15]);
+
+        return $svg;
+    }
+
+    /**
+     * Точки по разные стороны от диаметра (задания 25-28)
+     */
+    private function renderDiameterPoints(array $points, array $center, array $geometry, array $params): string
+    {
+        $O = ['x' => 110, 'y' => 100];
+        $R = 70;
+
+        // Диаметр AB
+        $A = ['x' => 40, 'y' => 100];
+        $B = ['x' => 180, 'y' => 100];
+
+        // Точки M и N по разные стороны
+        $M = ['x' => 80, 'y' => 35];   // Сверху
+        $N = ['x' => 140, 'y' => 165]; // Снизу
+
+        $svg = '';
+
+        // Окружность
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"{$R}\" fill=\"none\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"2\"/>\n";
+
+        // Диаметр AB
+        $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$B['x']}\" y2=\"{$B['y']}\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2\"/>\n";
+
+        // Хорды NB и MB
+        $svg .= "  <line x1=\"{$N['x']}\" y1=\"{$N['y']}\" x2=\"{$B['x']}\" y2=\"{$B['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\"/>\n";
+        $svg .= "  <line x1=\"{$M['x']}\" y1=\"{$M['y']}\" x2=\"{$B['x']}\" y2=\"{$B['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\"/>\n";
+        $svg .= "  <line x1=\"{$N['x']}\" y1=\"{$N['y']}\" x2=\"{$M['x']}\" y2=\"{$M['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"5,4\"/>\n";
+
+        // Угол NBA (акцент)
+        $arcNBA = $this->makeAngleArc($B, $N, $A, 25);
+        $svg .= "  <path d=\"{$arcNBA}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.5\"/>\n";
+
+        // Угол NMB
+        $arcNMB = $this->makeAngleArc($M, $N, $B, 20);
+        $svg .= "  <path d=\"{$arcNMB}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1.5\"/>\n";
+
+        // Центр и точки
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"3\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
+        $svg .= $this->crosshairs([$A, $B, $M, $N]);
+
+        // Метки
+        $svg .= $this->label('A', ['x' => $A['x'] - 15, 'y' => $A['y'] + 5]);
+        $svg .= $this->label('B', ['x' => $B['x'] + 10, 'y' => $B['y'] + 5]);
+        $svg .= $this->label('M', ['x' => $M['x'] - 5, 'y' => $M['y'] - 12]);
+        $svg .= $this->label('N', ['x' => $N['x'] + 5, 'y' => $N['y'] + 15]);
+
+        return $svg;
+    }
+
+    /**
+     * Окружность, вписанная в трапецию (задания 29-34)
+     */
+    private function renderInscribedTrapezoid(array $points, array $center, array $geometry, array $params): string
+    {
+        // Равнобедренная трапеция с вписанной окружностью
+        // h = 2r
+        $O = ['x' => 110, 'y' => 100];
+        $r = 45;
+
+        $A = ['x' => 30, 'y' => 145];
+        $B = ['x' => 60, 'y' => 55];
+        $C = ['x' => 160, 'y' => 55];
+        $D = ['x' => 190, 'y' => 145];
+
+        $svg = '';
+
+        // Трапеция
+        $svg .= "  <polygon points=\"{$A['x']},{$A['y']} {$B['x']},{$B['y']} {$C['x']},{$C['y']} {$D['x']},{$D['y']}\" fill=\"none\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2\"/>\n";
+
+        // Вписанная окружность
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"{$r}\" fill=\"none\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"2\"/>\n";
+
+        // Высота h = 2r (пунктир)
+        $svg .= "  <line x1=\"110\" y1=\"55\" x2=\"110\" y2=\"145\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"5,4\"/>\n";
+
+        // Радиус к основанию
+        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"110\" y2=\"145\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"5,4\"/>\n";
+
+        // Центр
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"4\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
+
+        // Метка r
+        $svg .= $this->label('r', ['x' => $O['x'] + 15, 'y' => ($O['y'] + 145) / 2], self::COLORS['aux'], 14);
+        // Метка h
+        $svg .= $this->label('h', ['x' => 95, 'y' => 100], self::COLORS['accent'], 14);
+
+        return $svg;
+    }
+
+    /**
+     * Окружность, вписанная в квадрат (задания 35-42)
+     */
+    private function renderInscribedSquare(array $points, array $center, array $geometry, array $params): string
+    {
+        $O = ['x' => 110, 'y' => 100];
+        $side = 130;
+        $r = $side / 2;
+
+        $half = $side / 2;
+        $A = ['x' => $O['x'] - $half, 'y' => $O['y'] - $half];
+        $B = ['x' => $O['x'] + $half, 'y' => $O['y'] - $half];
+        $C = ['x' => $O['x'] + $half, 'y' => $O['y'] + $half];
+        $D = ['x' => $O['x'] - $half, 'y' => $O['y'] + $half];
+
+        $svg = '';
+
+        // Квадрат
+        $svg .= "  <polygon points=\"{$A['x']},{$A['y']} {$B['x']},{$B['y']} {$C['x']},{$C['y']} {$D['x']},{$D['y']}\" fill=\"none\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2\"/>\n";
+
+        // Вписанная окружность
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"{$r}\" fill=\"none\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"2\"/>\n";
+
+        // Радиус (пунктир)
+        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$O['x']}\" y2=\"" . ($O['y'] - $r) . "\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"5,4\"/>\n";
+
+        // Центр
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"4\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
+
+        // Метки
+        $svg .= $this->label('r', ['x' => $O['x'] + 12, 'y' => $O['y'] - $r / 2], self::COLORS['accent'], 14);
+
+        return $svg;
+    }
+
+    /**
+     * Описанные фигуры (задания 43-54)
+     */
+    private function renderCircumscribedShapes(array $points, array $center, array $geometry, array $params): string
+    {
+        $O = ['x' => 110, 'y' => 100];
+        $r = 50;
+
+        // Четырёхугольник ABCD, описанный около окружности
+        $A = ['x' => 30, 'y' => 140];
+        $B = ['x' => 50, 'y' => 40];
+        $C = ['x' => 170, 'y' => 50];
+        $D = ['x' => 190, 'y' => 150];
+
+        $svg = '';
+
+        // Вписанная окружность
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"{$r}\" fill=\"none\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"2\"/>\n";
+
+        // Четырёхугольник
+        $svg .= "  <polygon points=\"{$A['x']},{$A['y']} {$B['x']},{$B['y']} {$C['x']},{$C['y']} {$D['x']},{$D['y']}\" fill=\"none\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2\"/>\n";
+
+        // Центр
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"3\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
+
+        // Метки
+        $svg .= $this->label('A', ['x' => $A['x'] - 12, 'y' => $A['y'] + 5]);
+        $svg .= $this->label('B', ['x' => $B['x'] - 5, 'y' => $B['y'] - 12]);
+        $svg .= $this->label('C', ['x' => $C['x'] + 8, 'y' => $C['y'] - 8]);
+        $svg .= $this->label('D', ['x' => $D['x'] + 8, 'y' => $D['y'] + 8]);
+
+        return $svg;
+    }
+
+    /**
+     * Треугольник с вписанной окружностью (задания 55-66)
+     */
+    private function renderTriangleInscribedCircle(array $points, array $center, array $geometry, array $params): string
+    {
+        // Равносторонний треугольник с вписанной окружностью
+        $cx = 110;
+        $cy = 110;
+        $side = 150;
+        $h = $side * sqrt(3) / 2;
+        $r = $h / 3; // Радиус вписанной окружности
+
+        $A = ['x' => $cx, 'y' => $cy - $h * 2 / 3];
+        $B = ['x' => $cx - $side / 2, 'y' => $cy + $h / 3];
+        $C = ['x' => $cx + $side / 2, 'y' => $cy + $h / 3];
+        $O = ['x' => $cx, 'y' => $cy];
+
+        $svg = '';
+
+        // Треугольник
+        $svg .= "  <polygon points=\"{$A['x']},{$A['y']} {$B['x']},{$B['y']} {$C['x']},{$C['y']}\" fill=\"none\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2\"/>\n";
+
+        // Вписанная окружность
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"" . round($r) . "\" fill=\"none\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"2\"/>\n";
+
+        // Радиус к основанию
+        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$O['x']}\" y2=\"" . ($cy + $h / 3) . "\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"5,4\"/>\n";
+
+        // Центр
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"3\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
+
+        // Метки
+        $svg .= $this->label('A', ['x' => $A['x'], 'y' => $A['y'] - 12]);
+        $svg .= $this->label('B', ['x' => $B['x'] - 15, 'y' => $B['y'] + 8]);
+        $svg .= $this->label('C', ['x' => $C['x'] + 10, 'y' => $C['y'] + 8]);
+        $svg .= $this->label('r', ['x' => $O['x'] + 12, 'y' => $O['y'] + 15], self::COLORS['accent'], 14);
+
+        return $svg;
+    }
+
+    /**
+     * Четырёхугольник в окружности (задания 67-74)
+     */
+    private function renderQuadInCircle(array $points, array $center, array $geometry, array $params): string
+    {
+        $O = ['x' => 110, 'y' => 100];
+        $R = 70;
+
+        // Четырёхугольник ABCD вписан в окружность
+        $A = ['x' => 50, 'y' => 130];
+        $B = ['x' => 60, 'y' => 50];
+        $C = ['x' => 160, 'y' => 45];
+        $D = ['x' => 170, 'y' => 140];
+
+        $svg = '';
+
+        // Окружность
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"{$R}\" fill=\"none\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"2\"/>\n";
+
+        // Четырёхугольник
+        $svg .= "  <polygon points=\"{$A['x']},{$A['y']} {$B['x']},{$B['y']} {$C['x']},{$C['y']} {$D['x']},{$D['y']}\" fill=\"none\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2\"/>\n";
+
+        // Диагонали (пунктир)
+        $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$C['x']}\" y2=\"{$C['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1\" stroke-dasharray=\"5,4\"/>\n";
+        $svg .= "  <line x1=\"{$B['x']}\" y1=\"{$B['y']}\" x2=\"{$D['x']}\" y2=\"{$D['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1\" stroke-dasharray=\"5,4\"/>\n";
+
+        // Угол A (акцент)
+        $arcA = $this->makeAngleArc($A, $D, $B, 20);
+        $svg .= "  <path d=\"{$arcA}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.5\"/>\n";
+
+        // Метки
+        $svg .= $this->label('A', ['x' => $A['x'] - 12, 'y' => $A['y'] + 8]);
+        $svg .= $this->label('B', ['x' => $B['x'] - 8, 'y' => $B['y'] - 10]);
+        $svg .= $this->label('C', ['x' => $C['x'] + 8, 'y' => $C['y'] - 8]);
+        $svg .= $this->label('D', ['x' => $D['x'] + 10, 'y' => $D['y'] + 8]);
+
+        return $svg;
+    }
+
+    /**
+     * Центр на стороне треугольника (задания 75-90)
+     */
+    private function renderCenterOnSide(array $points, array $center, array $geometry, array $params): string
+    {
+        // Центр описанной окружности на стороне AB (угол C = 90°)
+        $A = ['x' => 40, 'y' => 140];
+        $B = ['x' => 180, 'y' => 140];
+        $C = ['x' => 100, 'y' => 50];
+        $O = ['x' => 110, 'y' => 140]; // Середина AB
+
+        $R = $this->distance($O, $A);
+
+        $svg = '';
+
+        // Описанная окружность
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"{$R}\" fill=\"none\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"2\"/>\n";
+
+        // Треугольник
+        $svg .= "  <polygon points=\"{$A['x']},{$A['y']} {$B['x']},{$B['y']} {$C['x']},{$C['y']}\" fill=\"none\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2\"/>\n";
+
+        // Прямой угол в C
+        $rightAngle = $this->rightAnglePath($C, $A, $B, 12);
+        $svg .= "  <path d=\"{$rightAngle}\" fill=\"none\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1\"/>\n";
+
+        // Радиус OC (пунктир)
+        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$C['x']}\" y2=\"{$C['y']}\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"5,4\"/>\n";
+
+        // Центр
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"4\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
+        $svg .= $this->crosshairs([$A, $B, $C]);
+
+        // Метки
+        $svg .= $this->label('A', ['x' => $A['x'] - 12, 'y' => $A['y'] + 5]);
+        $svg .= $this->label('B', ['x' => $B['x'] + 8, 'y' => $B['y'] + 5]);
+        $svg .= $this->label('C', ['x' => $C['x'], 'y' => $C['y'] - 15]);
+        $svg .= $this->label('O', ['x' => $O['x'], 'y' => $O['y'] + 18], self::COLORS['text_aux'], 14);
+
+        return $svg;
+    }
+
+    /**
+     * Трапеция в окружности (задания 91-102)
+     */
+    private function renderTrapezoidInCircle(array $points, array $center, array $geometry, array $params): string
+    {
+        $O = ['x' => 110, 'y' => 100];
+        $R = 70;
+
+        // Равнобедренная трапеция, вписанная в окружность
+        $A = ['x' => 45, 'y' => 130];
+        $B = ['x' => 60, 'y' => 50];
+        $C = ['x' => 160, 'y' => 50];
+        $D = ['x' => 175, 'y' => 130];
+
+        $svg = '';
+
+        // Окружность
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"{$R}\" fill=\"none\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"2\"/>\n";
+
+        // Трапеция
+        $svg .= "  <polygon points=\"{$A['x']},{$A['y']} {$B['x']},{$B['y']} {$C['x']},{$C['y']} {$D['x']},{$D['y']}\" fill=\"none\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2\"/>\n";
+
+        // Угол A (акцент)
+        $arcA = $this->makeAngleArc($A, $D, $B, 20);
+        $svg .= "  <path d=\"{$arcA}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.5\"/>\n";
+
+        // Метки
+        $svg .= $this->label('A', ['x' => $A['x'] - 12, 'y' => $A['y'] + 8]);
+        $svg .= $this->label('B', ['x' => $B['x'] - 10, 'y' => $B['y'] - 8]);
+        $svg .= $this->label('C', ['x' => $C['x'] + 8, 'y' => $C['y'] - 8]);
+        $svg .= $this->label('D', ['x' => $D['x'] + 10, 'y' => $D['y'] + 8]);
+
+        return $svg;
+    }
+
+    /**
+     * Теорема синусов (задания 115-126)
+     */
+    private function renderSineTheorem(array $points, array $center, array $geometry, array $params): string
+    {
+        $O = ['x' => 110, 'y' => 100];
+        $R = 70;
+
+        // Треугольник ABC в окружности
+        $A = ['x' => 55, 'y' => 145];
+        $B = ['x' => 175, 'y' => 130];
+        $C = ['x' => 90, 'y' => 35];
+
+        $svg = '';
+
+        // Окружность
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"{$R}\" fill=\"none\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"2\"/>\n";
+
+        // Треугольник
+        $svg .= "  <polygon points=\"{$A['x']},{$A['y']} {$B['x']},{$B['y']} {$C['x']},{$C['y']}\" fill=\"none\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2\"/>\n";
+
+        // Сторона AB (напротив угла C) - акцент
+        $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$B['x']}\" y2=\"{$B['y']}\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"2.5\"/>\n";
+
+        // Угол C
+        $arcC = $this->makeAngleArc($C, $A, $B, 20);
+        $svg .= "  <path d=\"{$arcC}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1.5\"/>\n";
+
+        // Радиус (пунктир)
+        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$A['x']}\" y2=\"{$A['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1\" stroke-dasharray=\"5,4\"/>\n";
+
+        // Центр
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"3\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
+        $svg .= $this->crosshairs([$A, $B, $C]);
+
+        // Метки
+        $svg .= $this->label('A', ['x' => $A['x'] - 12, 'y' => $A['y'] + 10]);
+        $svg .= $this->label('B', ['x' => $B['x'] + 10, 'y' => $B['y'] + 5]);
+        $svg .= $this->label('C', ['x' => $C['x'] - 5, 'y' => $C['y'] - 12]);
+        $svg .= $this->label('R', ['x' => ($O['x'] + $A['x']) / 2 - 10, 'y' => ($O['y'] + $A['y']) / 2 - 8], self::COLORS['aux'], 12);
+
+        return $svg;
     }
 }
