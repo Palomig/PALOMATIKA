@@ -241,24 +241,11 @@ class GeometrySvgRenderer
     }
 
     /**
-     * Рендерит фон с сеткой (blueprint style)
+     * Рендерит фон (blueprint style, без сетки)
      */
     private function renderBackground(int $width, int $height): string
     {
-        return <<<SVG
-  <defs>
-    <pattern id="bp-smallGrid-{$width}" width="10" height="10" patternUnits="userSpaceOnUse">
-      <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#1a3a5c" stroke-width="0.5"/>
-    </pattern>
-    <pattern id="bp-grid-{$width}" width="50" height="50" patternUnits="userSpaceOnUse">
-      <rect width="50" height="50" fill="url(#bp-smallGrid-{$width})"/>
-      <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#1e4a6e" stroke-width="1"/>
-    </pattern>
-  </defs>
-  <rect width="100%" height="100%" fill="#0a1628"/>
-  <rect width="100%" height="100%" fill="url(#bp-grid-{$width})"/>
-
-SVG;
+        return "  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n";
     }
 
     // ========================================================================
@@ -367,7 +354,7 @@ SVG;
         $A = $points['A'];
         $B = $points['B'];
         $C = $points['C'];
-        $D = $points['D'] ?? $this->extendLine($C, $A, 50);
+        $D = $points['D'] ?? $this->extendLine($A, $C, 50);
 
         $svg = $this->renderTriangle($A, $B, $C);
 
@@ -435,7 +422,7 @@ SVG;
         $A = $points['A'];
         $B = $points['B'];
         $C = $points['C'];
-        $D = $points['D'] ?? $this->extendLine($C, $A, 50);
+        $D = $points['D'] ?? $this->extendLine($A, $C, 50);
 
         $svg = $this->renderTriangle($A, $B, $C);
 
