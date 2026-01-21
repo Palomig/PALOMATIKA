@@ -209,7 +209,10 @@ class GeometrySvgRenderer
         $width = $viewBox[2] ?? 200;
         $height = $viewBox[3] ?? 160;
 
-        $svg = "<svg viewBox=\"0 0 {$width} {$height}\" class=\"w-full h-36\">\n";
+        // Определяем класс высоты на основе viewBox
+        $heightClass = $height <= 140 ? 'h-32' : 'h-36';
+
+        $svg = "<svg viewBox=\"0 0 {$width} {$height}\" class=\"w-full {$heightClass}\">\n";
 
         // Фон с сеткой (blueprint style)
         $svg .= $this->renderBackground($width, $height);
