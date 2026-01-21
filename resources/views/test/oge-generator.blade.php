@@ -74,6 +74,89 @@
         </div>
     </div>
 
+    {{-- Saved Templates --}}
+    <div class="bg-slate-800 rounded-2xl p-6 mb-6 border border-slate-700">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-white font-semibold text-lg">💾 Мои шаблоны</h2>
+            <button @click="showSaveTemplateModal = true"
+                    :disabled="selectedZadaniya.length === 0"
+                    :class="selectedZadaniya.length === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'"
+                    class="px-4 py-2 bg-emerald-500 text-white text-sm font-medium rounded-lg transition-all">
+                ➕ Сохранить текущий выбор
+            </button>
+        </div>
+
+        <div x-show="templates.length === 0" class="text-slate-400 text-sm text-center py-4">
+            У вас пока нет сохранённых шаблонов
+        </div>
+
+        <div x-show="templates.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <template x-for="template in templates" :key="template.id">
+                <div class="p-4 bg-slate-700/30 rounded-lg border border-slate-600/50 hover:border-slate-500 transition-all group">
+                    <div class="flex items-start justify-between mb-2">
+                        <h3 class="text-slate-200 font-medium" x-text="template.name"></h3>
+                        <button @click="deleteTemplate(template.id)"
+                                class="text-slate-400 hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <p class="text-slate-400 text-xs mb-3">
+                        <span x-text="template.zadaniya.length"></span> типов заданий
+                    </p>
+                    <button @click="loadTemplate(template.id)"
+                            class="w-full px-3 py-2 bg-slate-600 hover:bg-slate-500 text-slate-200 text-sm rounded-lg transition-all">
+                        Загрузить
+                    </button>
+                </div>
+            </template>
+        </div>
+    </div>
+
+    {{-- Save Template Modal --}}
+    <div x-show="showSaveTemplateModal"
+         x-cloak
+         @click.self="showSaveTemplateModal = false"
+         class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div @click.away="showSaveTemplateModal = false"
+             class="bg-slate-800 rounded-2xl p-6 max-w-md w-full border border-slate-700 shadow-2xl">
+            <h3 class="text-white font-semibold text-xl mb-4">Сохранить шаблон</h3>
+
+            <div class="mb-4">
+                <label class="block text-slate-300 text-sm mb-2">Название шаблона</label>
+                <input type="text"
+                       x-model="newTemplateName"
+                       @keydown.enter="saveTemplate()"
+                       placeholder="Например: Лёгкий уровень"
+                       class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500 transition-colors">
+            </div>
+
+            <div class="mb-6">
+                <p class="text-slate-400 text-sm">
+                    Будет сохранено <span class="text-emerald-400 font-semibold" x-text="selectedZadaniya.length"></span> типов заданий
+                </p>
+            </div>
+
+            <div class="flex gap-3">
+                <button @click="showSaveTemplateModal = false"
+                        class="flex-1 px-4 py-3 bg-slate-700 hover:bg-slate-600 text-slate-300 rounded-lg transition-all">
+                    Отмена
+                </button>
+                <button @click="saveTemplate()"
+                        :disabled="!newTemplateName.trim()"
+                        :class="!newTemplateName.trim() ? 'opacity-50 cursor-not-allowed' : 'hover:bg-emerald-600'"
+                        class="flex-1 px-4 py-3 bg-emerald-500 text-white font-medium rounded-lg transition-all">
+                    Сохранить
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
+
     {{-- Topics with Blocks --}}
     <div class="space-y-4 mb-8">
         @foreach($topicsWithZadaniya as $topic)
@@ -197,6 +280,9 @@ function ogeGenerator() {
     return {
         selectedZadaniya: defaultZadaniya,
         expandedTopics: topicsData.map(t => t.topic_id), // Все темы развёрнуты по умолчанию
+        templates: JSON.parse(localStorage.getItem('ogeTemplates') || '[]'),
+        showSaveTemplateModal: false,
+        newTemplateName: '',
 
         toggleTopic(topicId) {
             const index = this.expandedTopics.indexOf(topicId);
@@ -271,6 +357,47 @@ function ogeGenerator() {
 
             // Navigate to generated variant
             window.location.href = url;
+        },
+
+        // Template management
+        saveTemplate() {
+            if (!this.newTemplateName.trim()) return;
+
+            const newTemplate = {
+                id: Date.now().toString(),
+                name: this.newTemplateName.trim(),
+                zadaniya: [...this.selectedZadaniya],
+                createdAt: new Date().toISOString()
+            };
+
+            this.templates.push(newTemplate);
+            localStorage.setItem('ogeTemplates', JSON.stringify(this.templates));
+
+            // Reset modal
+            this.newTemplateName = '';
+            this.showSaveTemplateModal = false;
+
+            // Show success message (optional)
+            console.log('Шаблон сохранён:', newTemplate.name);
+        },
+
+        loadTemplate(templateId) {
+            const template = this.templates.find(t => t.id === templateId);
+            if (!template) return;
+
+            // Load zadaniya from template
+            this.selectedZadaniya = [...template.zadaniya];
+
+            console.log('Шаблон загружен:', template.name);
+        },
+
+        deleteTemplate(templateId) {
+            if (!confirm('Удалить этот шаблон?')) return;
+
+            this.templates = this.templates.filter(t => t.id !== templateId);
+            localStorage.setItem('ogeTemplates', JSON.stringify(this.templates));
+
+            console.log('Шаблон удалён');
         }
     }
 }
