@@ -117,7 +117,7 @@
 
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-start justify-between mb-2">
-                                    <h4 class="text-slate-200 font-medium">{{ $zadanie['title'] }}</h4>
+                                    <h4 class="text-slate-200 font-medium">{{ $zadanie['instruction'] }}</h4>
                                     <span class="text-xs px-2 py-1 rounded-md bg-slate-600/50 text-slate-400 flex-shrink-0">
                                         {{ $topic['category'] === 'algebra' ? '📊' : '📐' }}
                                     </span>
