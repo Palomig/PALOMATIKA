@@ -348,15 +348,15 @@ function ogeGenerator() {
         generateVariant() {
             if (this.selectedZadaniya.length === 0) return;
 
-            // Generate random hash
-            const hash = Math.random().toString(36).substring(2, 12);
+            // Generate short beautiful hash (6 characters)
+            const hash = Math.random().toString(36).substring(2, 8);
 
             // Build URL with selected zadaniya as query parameter
             const zadaniya = this.selectedZadaniya.sort().join(',');
             const url = `{{ route('test.oge.show', ['hash' => '__HASH__']) }}`.replace('__HASH__', hash) + '?zadaniya=' + zadaniya;
 
-            // Navigate to generated variant
-            window.location.href = url;
+            // Open in new tab
+            window.open(url, '_blank');
         },
 
         // Template management

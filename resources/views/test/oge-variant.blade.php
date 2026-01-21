@@ -85,7 +85,7 @@
     <div class="no-print flex justify-between items-center mb-8 text-sm bg-slate-800/50 rounded-xl p-4 border border-slate-700">
         <a href="{{ route('test.oge.generator') }}" class="text-blue-400 hover:text-blue-300 transition-colors">← К генератору</a>
         <div class="flex gap-3">
-            @php $newHash = substr(md5(uniqid(mt_rand(), true)), 0, 10); @endphp
+            @php $newHash = substr(base_convert(mt_rand(), 10, 36), 0, 6); @endphp
             <a href="{{ route('test.oge.show', ['hash' => $newHash]) }}" class="px-3 py-1.5 rounded-lg bg-slate-700 text-slate-300 hover:bg-slate-600 transition">🎲 Новый вариант</a>
             <a href="{{ route('test.generator') }}" class="px-3 py-1.5 rounded-lg bg-slate-700 text-slate-300 hover:bg-slate-600 transition">Генератор</a>
             <button onclick="window.print()" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white hover:bg-emerald-500 transition">🖨️ Печать</button>
@@ -164,7 +164,7 @@
                 <button onclick="window.print()" class="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors">
                     🖨️ Распечатать
                 </button>
-                @php $footerHash = substr(md5(uniqid(mt_rand(), true)), 0, 10); @endphp
+                @php $footerHash = substr(base_convert(mt_rand(), 10, 36), 0, 6); @endphp
                 <a href="{{ route('test.oge.show', ['hash' => $footerHash]) }}" class="px-6 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white rounded-lg transition-colors">
                     🎲 Новый вариант
                 </a>
