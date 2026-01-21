@@ -307,7 +307,13 @@ class TaskDataService
      */
     public function getRandomTasksFromZadanie(string $topicId, int $blockNumber, int $zadanieNumber, int $count = 1): array
     {
-        $blocks = $this->getBlocks($topicId);
+        // Для геометрических тем используем geometry данные если есть
+        if (in_array($topicId, ['15', '16', '17']) && $this->geometryDataExists($topicId)) {
+            $blocks = $this->getGeometryBlocks($topicId);
+        } else {
+            $blocks = $this->getBlocks($topicId);
+        }
+
         $meta = $this->getTopicMeta($topicId);
         $allTasks = [];
 
