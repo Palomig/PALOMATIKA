@@ -62,6 +62,30 @@ class GeometrySvgRenderer
         'sine_theorem',              // Теорема синусов
     ];
 
+    // Поддерживаемые типы SVG для четырёхугольников (тема 17)
+    private const QUADRILATERAL_TYPES = [
+        'parallelogram_angles',      // Углы параллелограмма
+        'parallelogram_diagonal',    // Диагональ параллелограмма
+        'parallelogram_bisector',    // Биссектриса угла параллелограмма
+        'parallelogram_diagonals',   // Диагонали параллелограмма
+        'parallelogram_area',        // Площадь параллелограмма
+        'isosceles_trapezoid',       // Равнобедренная трапеция
+        'right_trapezoid',           // Прямоугольная трапеция
+        'trapezoid_height',          // Трапеция с высотой
+        'trapezoid_diagonal_45',     // Трапеция с диагональю 45°
+        'trapezoid_area',            // Площадь трапеции
+        'trapezoid_midline',         // Средняя линия трапеции
+        'trapezoid_30',              // Трапеция с углом 30°
+        'rectangle_diagonals',       // Прямоугольник с диагоналями
+        'rectangle_point_e',         // Прямоугольник с точкой E
+        'rhombus_angles',            // Углы ромба
+        'rhombus_diagonal',          // Ромб с диагональю
+        'rhombus_height',            // Высота ромба
+        'rhombus_area',              // Площадь ромба
+        'square_diagonal',           // Диагональ квадрата
+        'square_area',               // Площадь квадрата
+    ];
+
     /**
      * Рендерит SVG из геометрических данных
      *
@@ -93,7 +117,9 @@ class GeometrySvgRenderer
      */
     public function supports(string $svgType): bool
     {
-        return in_array($svgType, self::TRIANGLE_TYPES) || in_array($svgType, self::CIRCLE_TYPES);
+        return in_array($svgType, self::TRIANGLE_TYPES)
+            || in_array($svgType, self::CIRCLE_TYPES)
+            || in_array($svgType, self::QUADRILATERAL_TYPES);
     }
 
     /**
@@ -101,7 +127,7 @@ class GeometrySvgRenderer
      */
     public function getSupportedTypes(): array
     {
-        return array_merge(self::TRIANGLE_TYPES, self::CIRCLE_TYPES);
+        return array_merge(self::TRIANGLE_TYPES, self::CIRCLE_TYPES, self::QUADRILATERAL_TYPES);
     }
 
     /**
@@ -265,6 +291,27 @@ class GeometrySvgRenderer
             'center_on_side' => $this->renderCenterOnSide($points, $center, $geometry, $params),
             'trapezoid_in_circle' => $this->renderTrapezoidInCircle($points, $center, $geometry, $params),
             'sine_theorem' => $this->renderSineTheorem($points, $center, $geometry, $params),
+            // Тема 17: Четырёхугольники
+            'parallelogram_angles' => $this->renderParallelogramAngles($points, $center, $geometry, $params),
+            'parallelogram_diagonal' => $this->renderParallelogramDiagonal($points, $center, $geometry, $params),
+            'parallelogram_bisector' => $this->renderParallelogramBisector($points, $center, $geometry, $params),
+            'parallelogram_diagonals' => $this->renderParallelogramDiagonals($points, $center, $geometry, $params),
+            'parallelogram_area' => $this->renderParallelogramArea($points, $center, $geometry, $params),
+            'isosceles_trapezoid' => $this->renderIsoscelesTrapezoid($points, $center, $geometry, $params),
+            'right_trapezoid' => $this->renderRightTrapezoid($points, $center, $geometry, $params),
+            'trapezoid_height' => $this->renderTrapezoidHeight($points, $center, $geometry, $params),
+            'trapezoid_diagonal_45' => $this->renderTrapezoidDiagonal45($points, $center, $geometry, $params),
+            'trapezoid_area' => $this->renderTrapezoidArea($points, $center, $geometry, $params),
+            'trapezoid_midline' => $this->renderTrapezoidMidline($points, $center, $geometry, $params),
+            'trapezoid_30' => $this->renderTrapezoid30($points, $center, $geometry, $params),
+            'rectangle_diagonals' => $this->renderRectangleDiagonals($points, $center, $geometry, $params),
+            'rectangle_point_e' => $this->renderRectanglePointE($points, $center, $geometry, $params),
+            'rhombus_angles' => $this->renderRhombusAngles($points, $center, $geometry, $params),
+            'rhombus_diagonal' => $this->renderRhombusDiagonal($points, $center, $geometry, $params),
+            'rhombus_height' => $this->renderRhombusHeight($points, $center, $geometry, $params),
+            'rhombus_area' => $this->renderRhombusArea($points, $center, $geometry, $params),
+            'square_diagonal' => $this->renderSquareDiagonal($points, $center, $geometry, $params),
+            'square_area' => $this->renderSquareArea($points, $center, $geometry, $params),
             default => $this->renderBasicTriangle($points, $center),
         };
 
@@ -1768,6 +1815,961 @@ SVG;
         $svg .= $this->label('B', ['x' => $B['x'] + 10, 'y' => $B['y'] + 5]);
         $svg .= $this->label('C', ['x' => $C['x'] - 5, 'y' => $C['y'] - 12]);
         $svg .= $this->label('R', ['x' => ($O['x'] + $A['x']) / 2 - 10, 'y' => ($O['y'] + $A['y']) / 2 - 8], self::COLORS['aux'], 12);
+
+        return $svg;
+    }
+
+    // ========================================================================
+    // РЕНДЕРЫ ДЛЯ ЧЕТЫРЁХУГОЛЬНИКОВ (Тема 17)
+    // ========================================================================
+
+    /**
+     * Рендерит базовый четырёхугольник
+     */
+    private function renderQuadrilateral(array $A, array $B, array $C, array $D): string
+    {
+        return "  <polygon points=\"{$A['x']},{$A['y']} {$B['x']},{$B['y']} {$C['x']},{$C['y']} {$D['x']},{$D['y']}\" " .
+               "fill=\"none\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2\"/>\n";
+    }
+
+    /**
+     * 17.1 Углы параллелограмма
+     */
+    private function renderParallelogramAngles(array $points, array $center, array $geometry, array $params): string
+    {
+        $A = $points['A'];
+        $B = $points['B'];
+        $C = $points['C'];
+        $D = $points['D'];
+
+        $svg = $this->renderQuadrilateral($A, $B, $C, $D);
+
+        // Дуги углов при A и C (равные)
+        $arcA = $this->makeAngleArc($A, $D, $B, 20);
+        $arcC = $this->makeAngleArc($C, $B, $D, 20);
+        $svg .= "  <path d=\"{$arcA}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.5\"/>\n";
+        $svg .= "  <path d=\"{$arcC}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.5\"/>\n";
+
+        // Дуги углов при B и D (равные)
+        $arcB = $this->makeAngleArc($B, $A, $C, 18);
+        $arcD = $this->makeAngleArc($D, $C, $A, 18);
+        $svg .= "  <path d=\"{$arcB}\" fill=\"none\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.2\"/>\n";
+        $svg .= "  <path d=\"{$arcD}\" fill=\"none\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.2\"/>\n";
+
+        // Вершины
+        $svg .= $this->crosshairs([$A, $B, $C, $D]);
+
+        // Метки
+        $svg .= $this->label('A', $this->labelPos($A, $center, 18));
+        $svg .= $this->label('B', $this->labelPos($B, $center, 18));
+        $svg .= $this->label('C', $this->labelPos($C, $center, 18));
+        $svg .= $this->label('D', $this->labelPos($D, $center, 18));
+
+        return $svg;
+    }
+
+    /**
+     * 17.2 Диагональ параллелограмма
+     */
+    private function renderParallelogramDiagonal(array $points, array $center, array $geometry, array $params): string
+    {
+        $A = $points['A'];
+        $B = $points['B'];
+        $C = $points['C'];
+        $D = $points['D'];
+
+        $svg = $this->renderQuadrilateral($A, $B, $C, $D);
+
+        // Диагональ BD
+        $svg .= "  <line x1=\"{$B['x']}\" y1=\"{$B['y']}\" x2=\"{$D['x']}\" y2=\"{$D['y']}\" " .
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+
+        // Углы при вершине D (диагональ делит угол)
+        $arcDBA = $this->makeAngleArc($D, $A, $B, 22);
+        $arcDBC = $this->makeAngleArc($D, $B, $C, 28);
+        $svg .= "  <path d=\"{$arcDBA}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.5\"/>\n";
+        $svg .= "  <path d=\"{$arcDBC}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1.5\"/>\n";
+
+        // Вершины
+        $svg .= $this->crosshairs([$A, $B, $C, $D]);
+
+        // Метки
+        $svg .= $this->label('A', $this->labelPos($A, $center, 18));
+        $svg .= $this->label('B', $this->labelPos($B, $center, 18));
+        $svg .= $this->label('C', $this->labelPos($C, $center, 18));
+        $svg .= $this->label('D', $this->labelPos($D, $center, 18));
+
+        return $svg;
+    }
+
+    /**
+     * 17.3 Биссектриса угла параллелограмма
+     */
+    private function renderParallelogramBisector(array $points, array $center, array $geometry, array $params): string
+    {
+        $A = $points['A'];
+        $B = $points['B'];
+        $C = $points['C'];
+        $D = $points['D'];
+
+        $svg = $this->renderQuadrilateral($A, $B, $C, $D);
+
+        // Биссектриса из A до стороны BC
+        // Вычисляем направление биссектрисы
+        $bisDir = $this->bisectorDirectionParallelogram($A, $D, $B);
+        // Находим пересечение с BC
+        $E = $this->lineIntersection($A, $bisDir, $B, $C);
+
+        // Биссектриса (пунктир)
+        $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$E['x']}\" y2=\"{$E['y']}\" " .
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+
+        // Точка E
+        $svg .= "  <circle cx=\"{$E['x']}\" cy=\"{$E['y']}\" r=\"3\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
+
+        // Дуги равных половин угла
+        $arcADE = $this->makeAngleArc($A, $D, $E, 25);
+        $arcAEB = $this->makeAngleArc($A, $E, $B, 30);
+        $svg .= "  <path d=\"{$arcADE}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.2\"/>\n";
+        $svg .= "  <path d=\"{$arcAEB}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.2\"/>\n";
+
+        // Вершины
+        $svg .= $this->crosshairs([$A, $B, $C, $D]);
+
+        // Метки
+        $svg .= $this->label('A', $this->labelPos($A, $center, 18));
+        $svg .= $this->label('B', $this->labelPos($B, $center, 18));
+        $svg .= $this->label('C', $this->labelPos($C, $center, 18));
+        $svg .= $this->label('D', $this->labelPos($D, $center, 18));
+        $svg .= $this->label('E', ['x' => $E['x'] + 8, 'y' => $E['y'] - 10], self::COLORS['text_aux'], 12);
+
+        return $svg;
+    }
+
+    /**
+     * Направление биссектрисы угла параллелограмма
+     */
+    private function bisectorDirectionParallelogram(array $vertex, array $p1, array $p2): array
+    {
+        // Единичный вектор от vertex к p1
+        $d1 = $this->distance($vertex, $p1);
+        $u1 = ['x' => ($p1['x'] - $vertex['x']) / $d1, 'y' => ($p1['y'] - $vertex['y']) / $d1];
+
+        // Единичный вектор от vertex к p2
+        $d2 = $this->distance($vertex, $p2);
+        $u2 = ['x' => ($p2['x'] - $vertex['x']) / $d2, 'y' => ($p2['y'] - $vertex['y']) / $d2];
+
+        // Биссектриса = сумма единичных векторов
+        $bx = $u1['x'] + $u2['x'];
+        $by = $u1['y'] + $u2['y'];
+        $blen = sqrt($bx * $bx + $by * $by);
+
+        return ['x' => $bx / $blen, 'y' => $by / $blen];
+    }
+
+    /**
+     * Пересечение луча с отрезком
+     */
+    private function lineIntersection(array $rayOrigin, array $rayDir, array $segP1, array $segP2): array
+    {
+        $dx = $segP2['x'] - $segP1['x'];
+        $dy = $segP2['y'] - $segP1['y'];
+
+        $denom = $rayDir['x'] * $dy - $rayDir['y'] * $dx;
+        if (abs($denom) < 1e-10) {
+            // Параллельные линии - возвращаем середину отрезка
+            return $this->midpoint($segP1, $segP2);
+        }
+
+        $t = (($segP1['x'] - $rayOrigin['x']) * $dy - ($segP1['y'] - $rayOrigin['y']) * $dx) / $denom;
+
+        return [
+            'x' => $rayOrigin['x'] + $t * $rayDir['x'],
+            'y' => $rayOrigin['y'] + $t * $rayDir['y']
+        ];
+    }
+
+    /**
+     * 17.4 Диагонали параллелограмма
+     */
+    private function renderParallelogramDiagonals(array $points, array $center, array $geometry, array $params): string
+    {
+        $A = $points['A'];
+        $B = $points['B'];
+        $C = $points['C'];
+        $D = $points['D'];
+        $O = $points['O'] ?? $this->midpoint($A, $C);
+
+        $svg = $this->renderQuadrilateral($A, $B, $C, $D);
+
+        // Диагонали
+        $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$C['x']}\" y2=\"{$C['y']}\" " .
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+        $svg .= "  <line x1=\"{$B['x']}\" y1=\"{$B['y']}\" x2=\"{$D['x']}\" y2=\"{$D['y']}\" " .
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+
+        // Точка O
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"4\" fill=\"" . self::COLORS['accent'] . "\"/>\n";
+
+        // Маркеры равенства AO = OC
+        $tickAO = $this->equalityTick($A, $O);
+        $tickOC = $this->equalityTick($O, $C);
+        $svg .= $this->renderTick($tickAO);
+        $svg .= $this->renderTick($tickOC);
+
+        // Маркеры равенства BO = OD (двойные)
+        $svg .= $this->renderDoubleEqualityMark($B, $O);
+        $svg .= $this->renderDoubleEqualityMark($O, $D);
+
+        // Вершины
+        $svg .= $this->crosshairs([$A, $B, $C, $D]);
+
+        // Метки
+        $svg .= $this->label('A', $this->labelPos($A, $center, 18));
+        $svg .= $this->label('B', $this->labelPos($B, $center, 18));
+        $svg .= $this->label('C', $this->labelPos($C, $center, 18));
+        $svg .= $this->label('D', $this->labelPos($D, $center, 18));
+        $svg .= $this->label('O', ['x' => $O['x'] + 10, 'y' => $O['y'] - 10], self::COLORS['text_aux'], 12);
+
+        return $svg;
+    }
+
+    /**
+     * 17.5 Равнобедренная трапеция
+     */
+    private function renderIsoscelesTrapezoid(array $points, array $center, array $geometry, array $params): string
+    {
+        $A = $points['A'];
+        $B = $points['B'];
+        $C = $points['C'];
+        $D = $points['D'];
+
+        $svg = $this->renderQuadrilateral($A, $B, $C, $D);
+
+        // Маркеры равенства боковых сторон AB = CD
+        $svg .= $this->renderSingleEqualityMark($A, $B);
+        $svg .= $this->renderSingleEqualityMark($C, $D);
+
+        // Дуги равных углов при основании
+        $arcA = $this->makeAngleArc($A, $D, $B, 22);
+        $arcD = $this->makeAngleArc($D, $C, $A, 22);
+        $svg .= "  <path d=\"{$arcA}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.5\"/>\n";
+        $svg .= "  <path d=\"{$arcD}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.5\"/>\n";
+
+        // Вершины
+        $svg .= $this->crosshairs([$A, $B, $C, $D]);
+
+        // Метки
+        $svg .= $this->label('A', $this->labelPos($A, $center, 18));
+        $svg .= $this->label('B', $this->labelPos($B, $center, 18));
+        $svg .= $this->label('C', $this->labelPos($C, $center, 18));
+        $svg .= $this->label('D', $this->labelPos($D, $center, 18));
+
+        return $svg;
+    }
+
+    /**
+     * 17.7 Прямоугольная трапеция
+     */
+    private function renderRightTrapezoid(array $points, array $center, array $geometry, array $params): string
+    {
+        $A = $points['A'];
+        $B = $points['B'];
+        $C = $points['C'];
+        $D = $points['D'];
+
+        $svg = $this->renderQuadrilateral($A, $B, $C, $D);
+
+        // Прямые углы при A и B
+        $rightAngleA = $this->rightAnglePath($A, $D, $B, 12);
+        $rightAngleB = $this->rightAnglePath($B, $A, $C, 12);
+        $svg .= "  <path d=\"{$rightAngleA}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.2\"/>\n";
+        $svg .= "  <path d=\"{$rightAngleB}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.2\"/>\n";
+
+        // Угол при D
+        $arcD = $this->makeAngleArc($D, $C, $A, 20);
+        $svg .= "  <path d=\"{$arcD}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1.2\"/>\n";
+
+        // Вершины
+        $svg .= $this->crosshairs([$A, $B, $C, $D]);
+
+        // Метки
+        $svg .= $this->label('A', $this->labelPos($A, $center, 18));
+        $svg .= $this->label('B', $this->labelPos($B, $center, 18));
+        $svg .= $this->label('C', $this->labelPos($C, $center, 18));
+        $svg .= $this->label('D', $this->labelPos($D, $center, 18));
+
+        return $svg;
+    }
+
+    /**
+     * 17.8 Трапеция с высотой
+     */
+    private function renderTrapezoidHeight(array $points, array $center, array $geometry, array $params): string
+    {
+        $A = $points['A'];
+        $B = $points['B'];
+        $C = $points['C'];
+        $D = $points['D'];
+
+        $svg = $this->renderQuadrilateral($A, $B, $C, $D);
+
+        // Основание высоты из C на AD
+        $H = $this->altitudeFoot($C, $A, $D);
+
+        // Высота (пунктир)
+        $svg .= "  <line x1=\"{$C['x']}\" y1=\"{$C['y']}\" x2=\"{$H['x']}\" y2=\"{$H['y']}\" " .
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+
+        // Прямой угол
+        $rightAngle = $this->rightAnglePath($H, $A, $C, 10);
+        $svg .= "  <path d=\"{$rightAngle}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.2\"/>\n";
+
+        // Точка H
+        $svg .= "  <circle cx=\"{$H['x']}\" cy=\"{$H['y']}\" r=\"3\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
+
+        // Вершины
+        $svg .= $this->crosshairs([$A, $B, $C, $D]);
+
+        // Метки
+        $svg .= $this->label('A', $this->labelPos($A, $center, 18));
+        $svg .= $this->label('B', $this->labelPos($B, $center, 18));
+        $svg .= $this->label('C', $this->labelPos($C, $center, 18));
+        $svg .= $this->label('D', $this->labelPos($D, $center, 18));
+        $svg .= $this->label('H', ['x' => $H['x'], 'y' => $H['y'] + 18], self::COLORS['text_aux'], 12);
+
+        return $svg;
+    }
+
+    /**
+     * 17.9 Трапеция с диагональю 45°
+     */
+    private function renderTrapezoidDiagonal45(array $points, array $center, array $geometry, array $params): string
+    {
+        $A = $points['A'];
+        $B = $points['B'];
+        $C = $points['C'];
+        $D = $points['D'];
+
+        $svg = $this->renderQuadrilateral($A, $B, $C, $D);
+
+        // Маркеры равенства боковых сторон
+        $svg .= $this->renderSingleEqualityMark($A, $B);
+        $svg .= $this->renderSingleEqualityMark($C, $D);
+
+        // Диагональ AC
+        $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$C['x']}\" y2=\"{$C['y']}\" " .
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+
+        // Угол 45° при A
+        $arcA = $this->makeAngleArc($A, $D, $C, 30);
+        $svg .= "  <path d=\"{$arcA}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.5\"/>\n";
+
+        // Метка угла
+        $angleLabelPos = $this->angleLabelPos($A, $D, $C, 45, 0.5);
+        $svg .= "  <text x=\"{$angleLabelPos['x']}\" y=\"{$angleLabelPos['y']}\" fill=\"" . self::COLORS['accent'] . "\" font-size=\"11\" " .
+                "text-anchor=\"middle\" dominant-baseline=\"middle\">45°</text>\n";
+
+        // Вершины
+        $svg .= $this->crosshairs([$A, $B, $C, $D]);
+
+        // Метки
+        $svg .= $this->label('A', $this->labelPos($A, $center, 18));
+        $svg .= $this->label('B', $this->labelPos($B, $center, 18));
+        $svg .= $this->label('C', $this->labelPos($C, $center, 18));
+        $svg .= $this->label('D', $this->labelPos($D, $center, 18));
+
+        return $svg;
+    }
+
+    /**
+     * 17.10 Прямоугольник с диагоналями
+     */
+    private function renderRectangleDiagonals(array $points, array $center, array $geometry, array $params): string
+    {
+        $A = $points['A'];
+        $B = $points['B'];
+        $C = $points['C'];
+        $D = $points['D'];
+        $O = $points['O'] ?? $this->midpoint($A, $C);
+
+        $svg = $this->renderQuadrilateral($A, $B, $C, $D);
+
+        // Прямые углы
+        $rightAngleA = $this->rightAnglePath($A, $D, $B, 10);
+        $rightAngleB = $this->rightAnglePath($B, $A, $C, 10);
+        $rightAngleC = $this->rightAnglePath($C, $B, $D, 10);
+        $rightAngleD = $this->rightAnglePath($D, $C, $A, 10);
+        $svg .= "  <path d=\"{$rightAngleA}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1\"/>\n";
+        $svg .= "  <path d=\"{$rightAngleB}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1\"/>\n";
+        $svg .= "  <path d=\"{$rightAngleC}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1\"/>\n";
+        $svg .= "  <path d=\"{$rightAngleD}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1\"/>\n";
+
+        // Диагонали
+        $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$C['x']}\" y2=\"{$C['y']}\" " .
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+        $svg .= "  <line x1=\"{$B['x']}\" y1=\"{$B['y']}\" x2=\"{$D['x']}\" y2=\"{$D['y']}\" " .
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+
+        // Точка O
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"4\" fill=\"" . self::COLORS['accent'] . "\"/>\n";
+
+        // Угол между диагоналями
+        $arcO = $this->makeAngleArc($O, $A, $B, 18);
+        $svg .= "  <path d=\"{$arcO}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.5\"/>\n";
+
+        // Вершины
+        $svg .= $this->crosshairs([$A, $B, $C, $D]);
+
+        // Метки
+        $svg .= $this->label('A', $this->labelPos($A, $center, 18));
+        $svg .= $this->label('B', $this->labelPos($B, $center, 18));
+        $svg .= $this->label('C', $this->labelPos($C, $center, 18));
+        $svg .= $this->label('D', $this->labelPos($D, $center, 18));
+        $svg .= $this->label('O', ['x' => $O['x'] + 12, 'y' => $O['y'] - 10], self::COLORS['text_aux'], 12);
+
+        return $svg;
+    }
+
+    /**
+     * 17.11 Углы ромба
+     */
+    private function renderRhombusAngles(array $points, array $center, array $geometry, array $params): string
+    {
+        $A = $points['A'];
+        $B = $points['B'];
+        $C = $points['C'];
+        $D = $points['D'];
+
+        $svg = $this->renderQuadrilateral($A, $B, $C, $D);
+
+        // Маркеры равенства всех сторон
+        $svg .= $this->renderSingleEqualityMark($A, $B);
+        $svg .= $this->renderSingleEqualityMark($B, $C);
+        $svg .= $this->renderSingleEqualityMark($C, $D);
+        $svg .= $this->renderSingleEqualityMark($D, $A);
+
+        // Углы (острые и тупые)
+        $arcA = $this->makeAngleArc($A, $D, $B, 20);
+        $arcC = $this->makeAngleArc($C, $B, $D, 20);
+        $arcB = $this->makeAngleArc($B, $A, $C, 25);
+        $arcD = $this->makeAngleArc($D, $C, $A, 25);
+        $svg .= "  <path d=\"{$arcA}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.5\"/>\n";
+        $svg .= "  <path d=\"{$arcC}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.5\"/>\n";
+        $svg .= "  <path d=\"{$arcB}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1.2\"/>\n";
+        $svg .= "  <path d=\"{$arcD}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1.2\"/>\n";
+
+        // Вершины
+        $svg .= $this->crosshairs([$A, $B, $C, $D]);
+
+        // Метки
+        $svg .= $this->label('A', $this->labelPos($A, $center, 18));
+        $svg .= $this->label('B', $this->labelPos($B, $center, 18));
+        $svg .= $this->label('C', $this->labelPos($C, $center, 18));
+        $svg .= $this->label('D', $this->labelPos($D, $center, 18));
+
+        return $svg;
+    }
+
+    /**
+     * 17.12 Ромб с диагональю
+     */
+    private function renderRhombusDiagonal(array $points, array $center, array $geometry, array $params): string
+    {
+        $A = $points['A'];
+        $B = $points['B'];
+        $C = $points['C'];
+        $D = $points['D'];
+
+        $svg = $this->renderQuadrilateral($A, $B, $C, $D);
+
+        // Диагональ AC
+        $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$C['x']}\" y2=\"{$C['y']}\" " .
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+
+        // Маркеры равенства сторон
+        $svg .= $this->renderSingleEqualityMark($A, $B);
+        $svg .= $this->renderSingleEqualityMark($B, $C);
+        $svg .= $this->renderSingleEqualityMark($C, $D);
+        $svg .= $this->renderSingleEqualityMark($D, $A);
+
+        // Угол ABC
+        $arcB = $this->makeAngleArc($B, $A, $C, 22);
+        $svg .= "  <path d=\"{$arcB}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1.5\"/>\n";
+
+        // Угол ACD (искомый)
+        $arcACD = $this->makeAngleArc($C, $A, $D, 28);
+        $svg .= "  <path d=\"{$arcACD}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.5\"/>\n";
+
+        // Вершины
+        $svg .= $this->crosshairs([$A, $B, $C, $D]);
+
+        // Метки
+        $svg .= $this->label('A', $this->labelPos($A, $center, 18));
+        $svg .= $this->label('B', $this->labelPos($B, $center, 18));
+        $svg .= $this->label('C', $this->labelPos($C, $center, 18));
+        $svg .= $this->label('D', $this->labelPos($D, $center, 18));
+
+        return $svg;
+    }
+
+    /**
+     * 17.13 Высота ромба
+     */
+    private function renderRhombusHeight(array $points, array $center, array $geometry, array $params): string
+    {
+        $A = $points['A'];
+        $B = $points['B'];
+        $C = $points['C'];
+        $D = $points['D'];
+
+        $svg = $this->renderQuadrilateral($A, $B, $C, $D);
+
+        // Основание высоты из C на AD
+        $H = $this->altitudeFoot($C, $A, $D);
+
+        // Высота
+        $svg .= "  <line x1=\"{$C['x']}\" y1=\"{$C['y']}\" x2=\"{$H['x']}\" y2=\"{$H['y']}\" " .
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+
+        // Прямой угол
+        $rightAngle = $this->rightAnglePath($H, $A, $C, 10);
+        $svg .= "  <path d=\"{$rightAngle}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.2\"/>\n";
+
+        // Маркеры равенства сторон
+        $svg .= $this->renderSingleEqualityMark($A, $B);
+        $svg .= $this->renderSingleEqualityMark($B, $C);
+        $svg .= $this->renderSingleEqualityMark($C, $D);
+        $svg .= $this->renderSingleEqualityMark($D, $A);
+
+        // Тупой угол 150°
+        $arcB = $this->makeAngleArc($B, $A, $C, 18);
+        $svg .= "  <path d=\"{$arcB}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1.2\"/>\n";
+
+        // Точка H
+        $svg .= "  <circle cx=\"{$H['x']}\" cy=\"{$H['y']}\" r=\"3\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
+
+        // Вершины
+        $svg .= $this->crosshairs([$A, $B, $C, $D]);
+
+        // Метки
+        $svg .= $this->label('A', $this->labelPos($A, $center, 18));
+        $svg .= $this->label('B', $this->labelPos($B, $center, 18));
+        $svg .= $this->label('C', $this->labelPos($C, $center, 18));
+        $svg .= $this->label('D', $this->labelPos($D, $center, 18));
+        $svg .= $this->label('H', ['x' => $H['x'], 'y' => $H['y'] + 18], self::COLORS['text_aux'], 12);
+
+        return $svg;
+    }
+
+    /**
+     * 17.14 Площадь параллелограмма
+     */
+    private function renderParallelogramArea(array $points, array $center, array $geometry, array $params): string
+    {
+        $A = $points['A'];
+        $B = $points['B'];
+        $C = $points['C'];
+        $D = $points['D'];
+
+        $svg = $this->renderQuadrilateral($A, $B, $C, $D);
+
+        // Высота из B на AD
+        $H = $this->altitudeFoot($B, $A, $D);
+
+        // Высота
+        $svg .= "  <line x1=\"{$B['x']}\" y1=\"{$B['y']}\" x2=\"{$H['x']}\" y2=\"{$H['y']}\" " .
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+
+        // Прямой угол
+        $rightAngle = $this->rightAnglePath($H, $A, $B, 10);
+        $svg .= "  <path d=\"{$rightAngle}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.2\"/>\n";
+
+        // Точка H
+        $svg .= "  <circle cx=\"{$H['x']}\" cy=\"{$H['y']}\" r=\"3\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
+
+        // Вершины
+        $svg .= $this->crosshairs([$A, $B, $C, $D]);
+
+        // Метки
+        $svg .= $this->label('A', $this->labelPos($A, $center, 18));
+        $svg .= $this->label('B', $this->labelPos($B, $center, 18));
+        $svg .= $this->label('C', $this->labelPos($C, $center, 18));
+        $svg .= $this->label('D', $this->labelPos($D, $center, 18));
+        $svg .= $this->label('H', ['x' => $H['x'], 'y' => $H['y'] + 18], self::COLORS['text_aux'], 12);
+
+        return $svg;
+    }
+
+    /**
+     * 17.15 Площадь трапеции
+     */
+    private function renderTrapezoidArea(array $points, array $center, array $geometry, array $params): string
+    {
+        $A = $points['A'];
+        $B = $points['B'];
+        $C = $points['C'];
+        $D = $points['D'];
+
+        $svg = $this->renderQuadrilateral($A, $B, $C, $D);
+
+        // Высота из B на AD
+        $H = $this->altitudeFoot($B, $A, $D);
+
+        // Высота
+        $svg .= "  <line x1=\"{$B['x']}\" y1=\"{$B['y']}\" x2=\"{$H['x']}\" y2=\"{$H['y']}\" " .
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+
+        // Прямой угол
+        $rightAngle = $this->rightAnglePath($H, $A, $B, 10);
+        $svg .= "  <path d=\"{$rightAngle}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.2\"/>\n";
+
+        // Точка H
+        $svg .= "  <circle cx=\"{$H['x']}\" cy=\"{$H['y']}\" r=\"3\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
+
+        // Метка высоты
+        $hLabelPos = $this->labelOnSegment($B, $H, 15);
+        $svg .= "  <text x=\"{$hLabelPos['x']}\" y=\"{$hLabelPos['y']}\" fill=\"" . self::COLORS['aux'] . "\" font-size=\"11\" " .
+                "text-anchor=\"middle\" dominant-baseline=\"middle\">h</text>\n";
+
+        // Вершины
+        $svg .= $this->crosshairs([$A, $B, $C, $D]);
+
+        // Метки
+        $svg .= $this->label('A', $this->labelPos($A, $center, 18));
+        $svg .= $this->label('B', $this->labelPos($B, $center, 18));
+        $svg .= $this->label('C', $this->labelPos($C, $center, 18));
+        $svg .= $this->label('D', $this->labelPos($D, $center, 18));
+
+        return $svg;
+    }
+
+    /**
+     * 17.16 Площадь ромба
+     */
+    private function renderRhombusArea(array $points, array $center, array $geometry, array $params): string
+    {
+        $A = $points['A'];
+        $B = $points['B'];
+        $C = $points['C'];
+        $D = $points['D'];
+        $O = $this->midpoint($A, $C);
+
+        $svg = $this->renderQuadrilateral($A, $B, $C, $D);
+
+        // Диагонали
+        $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$C['x']}\" y2=\"{$C['y']}\" " .
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+        $svg .= "  <line x1=\"{$B['x']}\" y1=\"{$B['y']}\" x2=\"{$D['x']}\" y2=\"{$D['y']}\" " .
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+
+        // Прямой угол в центре
+        $rightAngle = $this->rightAnglePath($O, $A, $B, 10);
+        $svg .= "  <path d=\"{$rightAngle}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.2\"/>\n";
+
+        // Точка O
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"3\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
+
+        // Маркеры равенства сторон
+        $svg .= $this->renderSingleEqualityMark($A, $B);
+        $svg .= $this->renderSingleEqualityMark($B, $C);
+        $svg .= $this->renderSingleEqualityMark($C, $D);
+        $svg .= $this->renderSingleEqualityMark($D, $A);
+
+        // Угол 30°
+        $arcA = $this->makeAngleArc($A, $D, $B, 25);
+        $svg .= "  <path d=\"{$arcA}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1.2\"/>\n";
+
+        // Вершины
+        $svg .= $this->crosshairs([$A, $B, $C, $D]);
+
+        // Метки
+        $svg .= $this->label('A', $this->labelPos($A, $center, 18));
+        $svg .= $this->label('B', $this->labelPos($B, $center, 18));
+        $svg .= $this->label('C', $this->labelPos($C, $center, 18));
+        $svg .= $this->label('D', $this->labelPos($D, $center, 18));
+
+        return $svg;
+    }
+
+    /**
+     * 17.17 Диагональ квадрата
+     */
+    private function renderSquareDiagonal(array $points, array $center, array $geometry, array $params): string
+    {
+        $A = $points['A'];
+        $B = $points['B'];
+        $C = $points['C'];
+        $D = $points['D'];
+
+        $svg = $this->renderQuadrilateral($A, $B, $C, $D);
+
+        // Прямые углы
+        $rightAngleA = $this->rightAnglePath($A, $D, $B, 12);
+        $rightAngleB = $this->rightAnglePath($B, $A, $C, 12);
+        $rightAngleC = $this->rightAnglePath($C, $B, $D, 12);
+        $rightAngleD = $this->rightAnglePath($D, $C, $A, 12);
+        $svg .= "  <path d=\"{$rightAngleA}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1\"/>\n";
+        $svg .= "  <path d=\"{$rightAngleB}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1\"/>\n";
+        $svg .= "  <path d=\"{$rightAngleC}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1\"/>\n";
+        $svg .= "  <path d=\"{$rightAngleD}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1\"/>\n";
+
+        // Диагональ AC
+        $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$C['x']}\" y2=\"{$C['y']}\" " .
+                "stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"2\"/>\n";
+
+        // Маркеры равенства сторон
+        $svg .= $this->renderSingleEqualityMark($A, $B);
+        $svg .= $this->renderSingleEqualityMark($B, $C);
+        $svg .= $this->renderSingleEqualityMark($C, $D);
+        $svg .= $this->renderSingleEqualityMark($D, $A);
+
+        // Вершины
+        $svg .= $this->crosshairs([$A, $B, $C, $D]);
+
+        // Метки
+        $svg .= $this->label('A', $this->labelPos($A, $center, 18));
+        $svg .= $this->label('B', $this->labelPos($B, $center, 18));
+        $svg .= $this->label('C', $this->labelPos($C, $center, 18));
+        $svg .= $this->label('D', $this->labelPos($D, $center, 18));
+
+        return $svg;
+    }
+
+    /**
+     * 17.18 Средняя линия трапеции
+     */
+    private function renderTrapezoidMidline(array $points, array $center, array $geometry, array $params): string
+    {
+        $A = $points['A'];
+        $B = $points['B'];
+        $C = $points['C'];
+        $D = $points['D'];
+
+        $svg = $this->renderQuadrilateral($A, $B, $C, $D);
+
+        // Середины боковых сторон
+        $M = $this->midpoint($A, $B);
+        $N = $this->midpoint($C, $D);
+
+        // Средняя линия MN
+        $svg .= "  <line x1=\"{$M['x']}\" y1=\"{$M['y']}\" x2=\"{$N['x']}\" y2=\"{$N['y']}\" " .
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+
+        // Диагональ AC (пересекает среднюю линию)
+        $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$C['x']}\" y2=\"{$C['y']}\" " .
+                "stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1\" stroke-dasharray=\"4,3\"/>\n";
+
+        // Точка пересечения F
+        $F = $this->lineSegmentIntersection($A, $C, $M, $N);
+        $svg .= "  <circle cx=\"{$F['x']}\" cy=\"{$F['y']}\" r=\"3\" fill=\"" . self::COLORS['accent'] . "\"/>\n";
+
+        // Маркеры равенства AM = MB
+        $tickAM = $this->equalityTick($A, $M);
+        $tickMB = $this->equalityTick($M, $B);
+        $svg .= $this->renderTick($tickAM);
+        $svg .= $this->renderTick($tickMB);
+
+        // Маркеры равенства CN = ND (двойные)
+        $svg .= $this->renderDoubleEqualityMark($C, $N);
+        $svg .= $this->renderDoubleEqualityMark($N, $D);
+
+        // Точки M, N
+        $svg .= "  <circle cx=\"{$M['x']}\" cy=\"{$M['y']}\" r=\"3\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
+        $svg .= "  <circle cx=\"{$N['x']}\" cy=\"{$N['y']}\" r=\"3\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
+
+        // Вершины
+        $svg .= $this->crosshairs([$A, $B, $C, $D]);
+
+        // Метки
+        $svg .= $this->label('A', $this->labelPos($A, $center, 18));
+        $svg .= $this->label('B', $this->labelPos($B, $center, 18));
+        $svg .= $this->label('C', $this->labelPos($C, $center, 18));
+        $svg .= $this->label('D', $this->labelPos($D, $center, 18));
+        $svg .= $this->label('M', ['x' => $M['x'] - 15, 'y' => $M['y']], self::COLORS['text_aux'], 12);
+        $svg .= $this->label('N', ['x' => $N['x'] + 15, 'y' => $N['y']], self::COLORS['text_aux'], 12);
+        $svg .= $this->label('F', ['x' => $F['x'] + 10, 'y' => $F['y'] - 10], self::COLORS['text_aux'], 12);
+
+        return $svg;
+    }
+
+    /**
+     * Пересечение двух отрезков
+     */
+    private function lineSegmentIntersection(array $p1, array $p2, array $p3, array $p4): array
+    {
+        $x1 = $p1['x']; $y1 = $p1['y'];
+        $x2 = $p2['x']; $y2 = $p2['y'];
+        $x3 = $p3['x']; $y3 = $p3['y'];
+        $x4 = $p4['x']; $y4 = $p4['y'];
+
+        $denom = ($x1 - $x2) * ($y3 - $y4) - ($y1 - $y2) * ($x3 - $x4);
+        if (abs($denom) < 1e-10) {
+            return $this->midpoint($p3, $p4);
+        }
+
+        $t = (($x1 - $x3) * ($y3 - $y4) - ($y1 - $y3) * ($x3 - $x4)) / $denom;
+
+        return [
+            'x' => $x1 + $t * ($x2 - $x1),
+            'y' => $y1 + $t * ($y2 - $y1)
+        ];
+    }
+
+    /**
+     * 17.19 Трапеция с углом 30°
+     */
+    private function renderTrapezoid30(array $points, array $center, array $geometry, array $params): string
+    {
+        $A = $points['A'];
+        $B = $points['B'];
+        $C = $points['C'];
+        $D = $points['D'];
+
+        $svg = $this->renderQuadrilateral($A, $B, $C, $D);
+
+        // Высота из B на AD
+        $H = $this->altitudeFoot($B, $A, $D);
+
+        // Высота
+        $svg .= "  <line x1=\"{$B['x']}\" y1=\"{$B['y']}\" x2=\"{$H['x']}\" y2=\"{$H['y']}\" " .
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+
+        // Прямой угол
+        $rightAngle = $this->rightAnglePath($H, $A, $B, 10);
+        $svg .= "  <path d=\"{$rightAngle}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.2\"/>\n";
+
+        // Угол 30° при A
+        $arcA = $this->makeAngleArc($A, $D, $B, 30);
+        $svg .= "  <path d=\"{$arcA}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1.5\"/>\n";
+
+        // Метка угла
+        $angleLabelPos = $this->angleLabelPos($A, $D, $B, 45, 0.5);
+        $svg .= "  <text x=\"{$angleLabelPos['x']}\" y=\"{$angleLabelPos['y']}\" fill=\"" . self::COLORS['service'] . "\" font-size=\"11\" " .
+                "text-anchor=\"middle\" dominant-baseline=\"middle\">30°</text>\n";
+
+        // Точка H
+        $svg .= "  <circle cx=\"{$H['x']}\" cy=\"{$H['y']}\" r=\"3\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
+
+        // Вершины
+        $svg .= $this->crosshairs([$A, $B, $C, $D]);
+
+        // Метки
+        $svg .= $this->label('A', $this->labelPos($A, $center, 18));
+        $svg .= $this->label('B', $this->labelPos($B, $center, 18));
+        $svg .= $this->label('C', $this->labelPos($C, $center, 18));
+        $svg .= $this->label('D', $this->labelPos($D, $center, 18));
+
+        return $svg;
+    }
+
+    /**
+     * 17.20 Прямоугольник с точкой E
+     */
+    private function renderRectanglePointE(array $points, array $center, array $geometry, array $params): string
+    {
+        $A = $points['A'];
+        $B = $points['B'];
+        $C = $points['C'];
+        $D = $points['D'];
+
+        $svg = $this->renderQuadrilateral($A, $B, $C, $D);
+
+        // Прямые углы
+        $rightAngleA = $this->rightAnglePath($A, $D, $B, 10);
+        $rightAngleB = $this->rightAnglePath($B, $A, $C, 10);
+        $rightAngleC = $this->rightAnglePath($C, $B, $D, 10);
+        $rightAngleD = $this->rightAnglePath($D, $C, $A, 10);
+        $svg .= "  <path d=\"{$rightAngleA}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1\"/>\n";
+        $svg .= "  <path d=\"{$rightAngleB}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1\"/>\n";
+        $svg .= "  <path d=\"{$rightAngleC}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1\"/>\n";
+        $svg .= "  <path d=\"{$rightAngleD}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1\"/>\n";
+
+        // Точка E на BC (при угле EAB = 45°, BE = AB)
+        // Для визуализации используем E примерно посередине BC
+        $E = [
+            'x' => $B['x'] + ($C['x'] - $B['x']) * 0.4,
+            'y' => $B['y'] + ($C['y'] - $B['y']) * 0.4
+        ];
+
+        // Отрезок AE
+        $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$E['x']}\" y2=\"{$E['y']}\" " .
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\"/>\n";
+
+        // Отрезок ED
+        $svg .= "  <line x1=\"{$E['x']}\" y1=\"{$E['y']}\" x2=\"{$D['x']}\" y2=\"{$D['y']}\" " .
+                "stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"2\"/>\n";
+
+        // Угол EAB = 45°
+        $arcEAB = $this->makeAngleArc($A, $B, $E, 25);
+        $svg .= "  <path d=\"{$arcEAB}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1.5\"/>\n";
+
+        // Метка угла
+        $angleLabelPos = $this->angleLabelPos($A, $B, $E, 40, 0.5);
+        $svg .= "  <text x=\"{$angleLabelPos['x']}\" y=\"{$angleLabelPos['y']}\" fill=\"" . self::COLORS['service'] . "\" font-size=\"11\" " .
+                "text-anchor=\"middle\" dominant-baseline=\"middle\">45°</text>\n";
+
+        // Точка E
+        $svg .= "  <circle cx=\"{$E['x']}\" cy=\"{$E['y']}\" r=\"4\" fill=\"" . self::COLORS['accent'] . "\"/>\n";
+
+        // Вершины
+        $svg .= $this->crosshairs([$A, $B, $C, $D]);
+
+        // Метки
+        $svg .= $this->label('A', $this->labelPos($A, $center, 18));
+        $svg .= $this->label('B', $this->labelPos($B, $center, 18));
+        $svg .= $this->label('C', $this->labelPos($C, $center, 18));
+        $svg .= $this->label('D', $this->labelPos($D, $center, 18));
+        $svg .= $this->label('E', ['x' => $E['x'] + 12, 'y' => $E['y'] - 5], self::COLORS['text_aux'], 13);
+
+        return $svg;
+    }
+
+    /**
+     * 17.22 Площадь квадрата
+     */
+    private function renderSquareArea(array $points, array $center, array $geometry, array $params): string
+    {
+        $A = $points['A'];
+        $B = $points['B'];
+        $C = $points['C'];
+        $D = $points['D'];
+
+        $svg = $this->renderQuadrilateral($A, $B, $C, $D);
+
+        // Прямые углы
+        $rightAngleA = $this->rightAnglePath($A, $D, $B, 12);
+        $rightAngleB = $this->rightAnglePath($B, $A, $C, 12);
+        $rightAngleC = $this->rightAnglePath($C, $B, $D, 12);
+        $rightAngleD = $this->rightAnglePath($D, $C, $A, 12);
+        $svg .= "  <path d=\"{$rightAngleA}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1\"/>\n";
+        $svg .= "  <path d=\"{$rightAngleB}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1\"/>\n";
+        $svg .= "  <path d=\"{$rightAngleC}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1\"/>\n";
+        $svg .= "  <path d=\"{$rightAngleD}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1\"/>\n";
+
+        // Диагональ BD (данная)
+        $svg .= "  <line x1=\"{$B['x']}\" y1=\"{$B['y']}\" x2=\"{$D['x']}\" y2=\"{$D['y']}\" " .
+                "stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"2\"/>\n";
+
+        // Маркеры равенства сторон
+        $svg .= $this->renderSingleEqualityMark($A, $B);
+        $svg .= $this->renderSingleEqualityMark($B, $C);
+        $svg .= $this->renderSingleEqualityMark($C, $D);
+        $svg .= $this->renderSingleEqualityMark($D, $A);
+
+        // Метка диагонали
+        $diagLabelPos = $this->labelOnSegment($B, $D, 15);
+        $svg .= "  <text x=\"{$diagLabelPos['x']}\" y=\"{$diagLabelPos['y']}\" fill=\"" . self::COLORS['accent'] . "\" font-size=\"12\" " .
+                "text-anchor=\"middle\" dominant-baseline=\"middle\">d</text>\n";
+
+        // Вершины
+        $svg .= $this->crosshairs([$A, $B, $C, $D]);
+
+        // Метки
+        $svg .= $this->label('A', $this->labelPos($A, $center, 18));
+        $svg .= $this->label('B', $this->labelPos($B, $center, 18));
+        $svg .= $this->label('C', $this->labelPos($C, $center, 18));
+        $svg .= $this->label('D', $this->labelPos($D, $center, 18));
 
         return $svg;
     }
