@@ -1316,57 +1316,63 @@ SVG;
      */
     private function renderTangentLines(array $points, array $center, array $geometry, array $params): string
     {
-        // Геометрия с ТОЧНЫМИ целочисленными касательными
-        $O = ['x' => 60, 'y' => 100];  // Центр окружности
-        $R = 60;                         // Радиус
-        $P = ['x' => 180, 'y' => 40];   // Внешняя точка (пересечение касательных)
-        $B = ['x' => 60, 'y' => 40];    // Точка касания (OB вертикально, BP горизонтально)
-        $A = ['x' => 108, 'y' => 136];  // Точка касания (OA·AP = 0, |OA| = 60)
+        // Геометрия с касательными - стиль унифицирован с темами 15/17
+        $O = ['x' => 70, 'y' => 100];   // Центр окружности
+        $R = 55;                         // Радиус
+        $P = ['x' => 190, 'y' => 50];   // Внешняя точка (пересечение касательных)
+        $B = ['x' => 70, 'y' => 45];    // Точка касания (OB вертикально, BP горизонтально)
+        $A = ['x' => 113, 'y' => 140];  // Точка касания
 
         $svg = '';
 
-        // Окружность
-        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"{$R}\" fill=\"none\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"2.5\"/>\n";
+        // Окружность (тонкая линия, отличается от остальных элементов)
+        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"{$R}\" fill=\"none\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"1.5\"/>\n";
 
-        // Линия AB (соединяет точки касания)
-        $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$B['x']}\" y2=\"{$B['y']}\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2.5\"/>\n";
+        // Касательные AP и BP (основные линии - светлые, как стороны в темах 15/17)
+        $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$P['x']}\" y2=\"{$P['y']}\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2\"/>\n";
+        $svg .= "  <line x1=\"{$B['x']}\" y1=\"{$B['y']}\" x2=\"{$P['x']}\" y2=\"{$P['y']}\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2\"/>\n";
 
-        // Касательные (от точек касания к P) — теперь ИСТИННЫЕ касательные
-        $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$P['x']}\" y2=\"{$P['y']}\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"2.5\"/>\n";
-        $svg .= "  <line x1=\"{$B['x']}\" y1=\"{$B['y']}\" x2=\"{$P['x']}\" y2=\"{$P['y']}\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"2.5\"/>\n";
+        // Линия AB (соединяет точки касания) - пунктир как вспомогательная
+        $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$B['x']}\" y2=\"{$B['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
 
-        // Радиусы к точкам касания
-        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$A['x']}\" y2=\"{$A['y']}\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"2\"/>\n";
-        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$B['x']}\" y2=\"{$B['y']}\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"2\"/>\n";
+        // Радиусы к точкам касания (пунктир - вспомогательные линии)
+        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$A['x']}\" y2=\"{$A['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$B['x']}\" y2=\"{$B['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
 
-        // Точки
-        $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"5\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
-        $svg .= "  <circle cx=\"{$A['x']}\" cy=\"{$A['y']}\" r=\"5\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
-        $svg .= "  <circle cx=\"{$B['x']}\" cy=\"{$B['y']}\" r=\"5\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
-        $svg .= "  <circle cx=\"{$P['x']}\" cy=\"{$P['y']}\" r=\"5\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
+        // Прямые углы в точках касания (OA ⊥ AP, OB ⊥ BP)
+        $rightAngleA = $this->rightAnglePath($A, $O, $P, 10);
+        $rightAngleB = $this->rightAnglePath($B, $O, $P, 10);
+        $svg .= "  <path d=\"{$rightAngleA}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1.2\"/>\n";
+        $svg .= "  <path d=\"{$rightAngleB}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1.2\"/>\n";
 
-        // Метки (позиции скорректированы для новой геометрии)
-        $svg .= $this->label('O', ['x' => $O['x'] - 18, 'y' => $O['y'] + 8], self::COLORS['text_aux'], 16);
-        $svg .= $this->label('A', ['x' => $A['x'] + 12, 'y' => $A['y'] + 14], '#60a5fa', 16);
-        $svg .= $this->label('B', ['x' => $B['x'] - 8, 'y' => $B['y'] - 12], '#60a5fa', 16);
-        $svg .= $this->label('P', ['x' => $P['x'] + 10, 'y' => $P['y'] + 8], self::COLORS['text_aux'], 16);
+        // Крестики для точек (как в темах 15/17)
+        $svg .= $this->crosshairs([$O, $A, $B, $P]);
 
-        // Дуга угла в P (между касательными)
-        $arcP = $this->makeAngleArc($P, $A, $B, 28);
-        $svg .= "  <path d=\"{$arcP}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"2\"/>\n";
+        // Метки
+        $svg .= $this->label('O', ['x' => $O['x'] - 15, 'y' => $O['y'] + 5], self::COLORS['text_aux'], 14);
+        $svg .= $this->label('A', ['x' => $A['x'] + 10, 'y' => $A['y'] + 12], self::COLORS['text'], 14);
+        $svg .= $this->label('B', ['x' => $B['x'] - 5, 'y' => $B['y'] - 12], self::COLORS['text'], 14);
+        $svg .= $this->label('P', ['x' => $P['x'] + 10, 'y' => $P['y'] + 5], self::COLORS['text'], 14);
+
+        // Дуга угла в P (между касательными) - акцентный цвет
+        $arcP = $this->makeAngleArc($P, $A, $B, 25);
+        $svg .= "  <path d=\"{$arcP}\" fill=\"none\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.5\"/>\n";
 
         // Подпись угла в P
         if (isset($params['angle'])) {
-            $angleLabelPos = $this->angleLabelPos($P, $A, $B, 45);
-            $svg .= "  <text x=\"{$angleLabelPos['x']}\" y=\"{$angleLabelPos['y']}\" fill=\"" . self::COLORS['accent'] . "\" font-size=\"16\" font-family=\"'Times New Roman', serif\" font-weight=\"700\" class=\"geo-label-bold\" text-anchor=\"middle\">{$params['angle']}°</text>\n";
+            $angleLabelPos = $this->angleLabelPos($P, $A, $B, 42);
+            $svg .= "  <text x=\"{$angleLabelPos['x']}\" y=\"{$angleLabelPos['y']}\" fill=\"" . self::COLORS['accent'] . "\" font-size=\"13\" " .
+                    "text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">{$params['angle']}°</text>\n";
         }
 
-        // Дуга угла ABO (искомый угол)
-        $arcB = $this->makeAngleArc($B, $A, $O, 20);
-        $svg .= "  <path d=\"{$arcB}\" fill=\"none\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"2\"/>\n";
+        // Дуга угла ABO (искомый угол) - вспомогательный цвет
+        $arcB = $this->makeAngleArc($B, $A, $O, 18);
+        $svg .= "  <path d=\"{$arcB}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1.2\"/>\n";
+
         // Вопросительный знак для искомого угла
-        $angleLabelB = $this->angleLabelPos($B, $A, $O, 32);
-        $svg .= "  <text x=\"{$angleLabelB['x']}\" y=\"{$angleLabelB['y']}\" fill=\"" . self::COLORS['circle'] . "\" font-size=\"16\" font-family=\"'Times New Roman', serif\" font-weight=\"700\" text-anchor=\"middle\">?</text>\n";
+        $angleLabelB = $this->angleLabelPos($B, $A, $O, 30);
+        $svg .= "  <text x=\"{$angleLabelB['x']}\" y=\"{$angleLabelB['y']}\" fill=\"" . self::COLORS['service'] . "\" font-size=\"12\" " .
+                "text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">?</text>\n";
 
         return $svg;
     }
