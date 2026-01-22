@@ -86,7 +86,7 @@
     }
     .review-textarea {
         width: 100%;
-        min-height: 120px;
+        min-height: 80px;
         background: #0f172a;
         border: 1px solid #334155;
         border-radius: 8px;
@@ -128,6 +128,68 @@
         font-size: 12px;
         color: #94a3b8;
     }
+    /* Inline report form styles */
+    .inline-report-form {
+        background: #1e293b;
+        border: 1px solid #ef4444;
+        border-radius: 12px;
+        padding: 16px;
+        margin-top: 12px;
+        animation: slideDown 0.2s ease-out;
+    }
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .inline-report-form .form-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 12px;
+        color: #ef4444;
+        font-weight: 600;
+        font-size: 14px;
+    }
+    .inline-report-form .review-textarea {
+        min-height: 80px;
+    }
+    .inline-report-form .form-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 12px;
+    }
+    .inline-report-form .btn-save {
+        flex: 1;
+        padding: 10px 16px;
+        background: #ef4444;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 14px;
+        transition: background 0.2s;
+    }
+    .inline-report-form .btn-save:hover {
+        background: #dc2626;
+    }
+    .inline-report-form .btn-cancel {
+        padding: 10px 16px;
+        background: #334155;
+        color: #94a3b8;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 14px;
+        transition: background 0.2s;
+    }
+    .inline-report-form .btn-cancel:hover {
+        background: #475569;
+    }
+    .task-review-item.has-inline-form {
+        border-color: #ef4444 !important;
+    }
 </style>
 
 {{-- Плавающая панель --}}
@@ -156,31 +218,7 @@
     </button>
 </div>
 
-{{-- Модалка для комментария --}}
-<div id="commentModal" class="review-modal" style="display: none;">
-    <div class="review-modal-content">
-        <h3 class="text-xl font-bold text-white mb-4">🚩 Пометить задание</h3>
-
-        <div id="taskInfo" class="bg-slate-800 rounded-lg p-3 mb-4 text-sm text-slate-300"></div>
-
-        <label class="block text-slate-400 text-sm mb-2">Что не так с заданием?</label>
-        <textarea id="commentText" class="review-textarea" placeholder="Например:
-• Неправильный ответ — в PDF 42, а здесь 24
-• Отсутствует картинка
-• LaTeX формула отображается некорректно
-• Опечатка в условии
-• Неправильно распознана дробь"></textarea>
-
-        <div class="flex gap-3 mt-4">
-            <button onclick="saveComment()" class="review-btn bg-red-600 hover:bg-red-700 text-white flex-1 justify-center">
-                🚩 Сохранить пометку
-            </button>
-            <button onclick="closeCommentModal()" class="review-btn bg-slate-700 hover:bg-slate-600 text-slate-300">
-                Отмена
-            </button>
-        </div>
-    </div>
-</div>
+{{-- Модалка для комментария удалена — используем inline форму --}}
 
 {{-- Модалка экспорта --}}
 <div id="exportModal" class="review-modal" style="display: none;">
@@ -206,9 +244,9 @@
 const TOPIC_ID = '{{ $topicId ?? "00" }}';
 const STORAGE_KEY = `palomatika_reviews_topic_${TOPIC_ID}`;
 
-let currentTaskKey = null;
 let reviews = {};
 let panelHidden = false;
+let activeInlineForm = null; // Контейнер с открытой inline формой
 
 // Загрузка сохранённых пометок
 function loadReviews() {
@@ -279,37 +317,87 @@ function toggleReviewMode() {
     }
 }
 
-// Открыть модалку комментария
-function openCommentModal(taskKey, taskInfo) {
-    currentTaskKey = taskKey;
-    document.getElementById('taskInfo').innerHTML = taskInfo;
-    document.getElementById('commentText').value = reviews[taskKey]?.comment || '';
-    document.getElementById('commentModal').style.display = 'flex';
-    document.getElementById('commentText').focus();
-}
+// Открыть inline форму репорта
+function openInlineReportForm(container, taskKey) {
+    // Закрываем предыдущую форму, если есть
+    if (activeInlineForm && activeInlineForm !== container) {
+        closeInlineForm(activeInlineForm);
+    }
 
-// Закрыть модалку комментария
-function closeCommentModal() {
-    document.getElementById('commentModal').style.display = 'none';
-    currentTaskKey = null;
-}
-
-// Сохранить комментарий
-function saveComment() {
-    const comment = document.getElementById('commentText').value.trim();
-    if (!comment) {
-        alert('Пожалуйста, опишите проблему с заданием');
+    // Проверяем, не открыта ли уже форма в этом контейнере
+    if (container.querySelector('.inline-report-form')) {
         return;
     }
 
-    reviews[currentTaskKey] = {
+    // Находим блок с текстом задания
+    const contentBlock = container.querySelector('.flex-1') || container.querySelector('.p-5') || container;
+
+    // Создаём inline форму
+    const form = document.createElement('div');
+    form.className = 'inline-report-form';
+    form.innerHTML = `
+        <div class="form-header">
+            <span>🚩</span>
+            <span>Пометить задание</span>
+        </div>
+        <textarea class="review-textarea" placeholder="Что не так? Например:&#10;• Неправильный ответ&#10;• Отсутствует картинка&#10;• Опечатка в условии">${reviews[taskKey]?.comment || ''}</textarea>
+        <div class="form-actions">
+            <button class="btn-save" onclick="saveInlineComment(this, '${taskKey}')">🚩 Сохранить</button>
+            <button class="btn-cancel" onclick="closeInlineFormByButton(this)">Отмена</button>
+        </div>
+    `;
+
+    contentBlock.appendChild(form);
+    container.classList.add('has-inline-form');
+    activeInlineForm = container;
+
+    // Фокус на textarea
+    setTimeout(() => {
+        const textarea = form.querySelector('textarea');
+        if (textarea) textarea.focus();
+    }, 50);
+}
+
+// Закрыть inline форму
+function closeInlineForm(container) {
+    const form = container.querySelector('.inline-report-form');
+    if (form) {
+        form.remove();
+    }
+    container.classList.remove('has-inline-form');
+    if (activeInlineForm === container) {
+        activeInlineForm = null;
+    }
+}
+
+// Закрыть форму по кнопке
+function closeInlineFormByButton(button) {
+    const container = button.closest('.task-review-item');
+    if (container) {
+        closeInlineForm(container);
+    }
+}
+
+// Сохранить комментарий из inline формы
+function saveInlineComment(button, taskKey) {
+    const container = button.closest('.task-review-item');
+    const textarea = container.querySelector('.inline-report-form textarea');
+    const comment = textarea.value.trim();
+
+    if (!comment) {
+        alert('Пожалуйста, опишите проблему с заданием');
+        textarea.focus();
+        return;
+    }
+
+    reviews[taskKey] = {
         comment: comment,
         timestamp: new Date().toISOString(),
         topicId: TOPIC_ID
     };
 
     saveReviews();
-    closeCommentModal();
+    closeInlineForm(container);
 }
 
 // Удалить пометку
@@ -457,9 +545,10 @@ function addFlagButton(container, taskKey, taskInfo) {
         if (reviews[taskKey]) {
             if (confirm('Удалить пометку?')) {
                 removeFlag(taskKey);
+                closeInlineForm(container);
             }
         } else {
-            openCommentModal(taskKey, taskInfo);
+            openInlineReportForm(container, taskKey);
         }
     };
     container.style.position = 'relative';
@@ -567,18 +656,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // Автоматический поиск задач после небольшой задержки (для KaTeX)
     setTimeout(autoFindTasks, 500);
 
-    // Закрытие модалок по Escape
+    // Закрытие модалки экспорта по Escape, закрытие inline формы
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
-            closeCommentModal();
             closeExportModal();
+            // Закрываем inline форму
+            if (activeInlineForm) {
+                closeInlineForm(activeInlineForm);
+            }
         }
     });
 
-    // Закрытие модалок по клику вне
-    document.getElementById('commentModal').addEventListener('click', function(e) {
-        if (e.target === this) closeCommentModal();
-    });
+    // Закрытие модалки экспорта по клику вне
     document.getElementById('exportModal').addEventListener('click', function(e) {
         if (e.target === this) closeExportModal();
     });
