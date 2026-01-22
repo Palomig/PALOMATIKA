@@ -82,9 +82,13 @@ jobs:
 
       # Option 2: Webhook trigger (requires DEPLOY_WEBHOOK_SECRET)
       - name: Trigger deploy refresh webhook
-        if: ${{ secrets.DEPLOY_WEBHOOK_SECRET != '' }}
+        continue-on-error: true
         run: |
-          curl -s -X POST "https://cw95865.tmweb.ru/api/deploy/refresh" \
-            -H "X-Deploy-Secret: ${{ secrets.DEPLOY_WEBHOOK_SECRET }}" \
-            -H "Content-Type: application/json" \
-            --max-time 120 || echo "Webhook failed or not configured"
+          if [ -n "${{ secrets.DEPLOY_WEBHOOK_SECRET }}" ]; then
+            curl -s -X POST "https://cw95865.tmweb.ru/api/deploy/refresh" \
+              -H "X-Deploy-Secret: ${{ secrets.DEPLOY_WEBHOOK_SECRET }}" \
+              -H "Content-Type: application/json" \
+              --max-time 120
+          else
+            echo "DEPLOY_WEBHOOK_SECRET not configured, skipping webhook"
+          fi
