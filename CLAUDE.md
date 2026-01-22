@@ -274,19 +274,59 @@ VK_REDIRECT_URI=https://cw95865.tmweb.ru/auth/vkontakte/callback
 
 На GitHub настроен автоматический workflow:
 1. **Auto-merge:** Ветки `claude/*` автоматически мержатся в `main` после push
-2. **Auto-deploy:** После merge в `main` автоматически выполняется deploy на production сервер
+2. **Auto-deploy:** После merge в `main` автоматически выполняется deploy на production сервер через FTP
+3. **Post-deploy refresh:** После FTP deploy вызывается webhook для очистки кэша и регенерации SVG
 
 **ВАЖНО:** Любые изменения в ветках `claude/*` попадут на production автоматически! Тестируйте локально перед push.
 
+### Post-deploy автоматизация
+
+**Команда:** `php artisan deploy:refresh`
+
+Что делает:
+- Очищает все кэши Laravel (config, route, view, cache)
+- Автоматически перегенерирует SVG для тем, где `*_geometry.json` новее чем `*.json`
+- В production — прогревает кэши после очистки
+
+**Опции:**
+```bash
+php artisan deploy:refresh              # Полный refresh
+php artisan deploy:refresh --skip-svg   # Пропустить регенерацию SVG
+php artisan deploy:refresh --force      # Принудительно перегенерировать все SVG
+php artisan deploy:refresh --no-cache   # Не прогревать кэши в production
+```
+
+**Автоматический вызов:**
+
+1. **Webhook (рекомендуется):** Добавьте `DEPLOY_WEBHOOK_SECRET` в GitHub Secrets
+   - GitHub Actions автоматически вызовет `POST /api/deploy/refresh` после FTP deploy
+   - Добавьте ту же переменную в `.env` на сервере
+
+2. **SSH (альтернатива):** Раскомментируйте SSH step в `.github/workflows/auto-merge.yml`
+   - Требуются секреты: `SSH_HOST`, `SSH_USER`, `SSH_KEY`
+
+### Авто-bake при разработке
+
+В **local** environment `TaskDataService` автоматически запускает `svg:bake`, если `geometry.json` файл новее основного JSON. Это позволяет сразу видеть изменения без ручного запуска команд.
+
 ### Команды для ручного деплоя
 ```bash
-# На сервере
+# На сервере — рекомендуемый способ
 cd /home/c/cw95865/OGE
 git pull origin main
 php artisan migrate --force
+php artisan deploy:refresh
+
+# Или по старинке (менее удобно)
+cd /home/c/cw95865/OGE
+git pull origin main
+php artisan migrate --force
+php artisan svg:bake 15
+php artisan svg:bake 16
 php artisan config:clear
 php artisan cache:clear
 php artisan route:clear
+php artisan view:clear
 ```
 
 ---
@@ -487,6 +527,16 @@ VK_CLIENT_SECRET=xxx
 ---
 
 ## История изменений
+
+### 2026-01-21 (v2)
+- **Deploy автоматизация:** Добавлена команда `php artisan deploy:refresh`
+  - Очищает все кэши Laravel одной командой
+  - Автоматически перегенерирует SVG когда `*_geometry.json` новее `*.json`
+  - Прогревает кэши в production после очистки
+  - Поддерживает флаги `--skip-svg`, `--force`, `--no-cache`
+- **Авто-bake в разработке:** `TaskDataService` автоматически вызывает `svg:bake` в local env
+- **Deploy webhook:** Добавлен `POST /api/deploy/refresh` для автоматизации из CI/CD
+- **GitHub Actions:** Добавлен webhook trigger после FTP deploy (требует `DEPLOY_WEBHOOK_SECRET`)
 
 ### 2026-01-21
 - **Static SVG System:** Внедрена система предзаготовленных SVG
