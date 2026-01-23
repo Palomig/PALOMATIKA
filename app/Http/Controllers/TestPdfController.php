@@ -4257,12 +4257,7 @@ class TestPdfController extends Controller
                 $task = $tasksFromZadanie[0];
                 $task['topic_id'] = $topicId;
                 $task['topic_title'] = $topicTitles[$topicId] ?? '';
-
-                // Для геометрических тем (15, 16, 17) рендерим SVG
-                if (in_array($topicId, ['15', '16', '17'])) {
-                    $task = $this->renderGeometrySvgForTask($task);
-                }
-
+                // SVG уже предзаготовлены в JSON (task['task']['svg'])
                 $tasks[] = $task;
             }
         }
@@ -4333,22 +4328,5 @@ class TestPdfController extends Controller
         // Fallback to task generator service
         $tasks = $this->taskGenerator->getRandomTasksFromTopic($topicId, 1);
         return $tasks[0] ?? null;
-    }
-
-    /**
-     * Copy pre-baked SVG to image field for geometry tasks
-     *
-     * SVG is pre-generated via `php artisan svg:bake` and stored in task['task']['svg']
-     * This method copies it to task['task']['image'] for compatibility with templates
-     */
-    protected function renderGeometrySvgForTask(array $task): array
-    {
-        // SVG уже предзаготовлен в task['task']['svg'] через svg:bake
-        // Копируем в task['task']['image'] для совместимости с шаблонами
-        if (isset($task['task']['svg'])) {
-            $task['task']['image'] = $task['task']['svg'];
-        }
-
-        return $task;
     }
 }

@@ -1,23 +1,33 @@
 {{--
     Тип: matching, matching_signs, matching_4 (тема 11)
     Соответствие графиков и формул
+
+    Поддерживает:
+    - task['svg'] — предзаготовленный SVG (Static SVG System)
+    - task['image'] — PNG/JPEG файл (временное решение)
+    - task['options'] — варианты ответов (формулы)
 --}}
 
 @php
     $type = $zadanie['type'] ?? 'matching';
     $tasks = $zadanie['tasks'] ?? [];
     $graphLabels = ['А', 'Б', 'В', 'Г'];
-
-    // Получаем options из zadanie (исправлено в TaskDataService)
-    $options = $zadanie['options'] ?? [];
 @endphp
 
 <div class="space-y-8">
     @foreach($tasks as $taskIndex => $task)
         @php
             $taskKey = "topic_{$topicId}_block_{$block['number']}_zadanie_{$zadanie['number']}_task_{$task['id']}";
+
+            // Проверяем наличие SVG или изображения
+            $hasSvg = !empty($task['svg']);
+            $hasImage = !empty($task['image']);
             $imageName = $task['image'] ?? '';
             $imageUrl = $imageName ? asset("images/tasks/{$topicId}/{$imageName}") : null;
+
+            // Варианты ответов из задачи
+            $taskOptions = $task['options'] ?? [];
+
             $taskInfo = "Блок {$block['number']}, Задание {$zadanie['number']}, Задача {$task['id']}<br>Изображение: {$imageName}";
         @endphp
 
@@ -28,59 +38,35 @@
                 <span class="text-cyan-400 font-bold text-lg">{{ $task['id'] }})</span>
             </div>
 
-            @php
-                $uniqueId = uniqid();
-            @endphp
-
-            @if(!empty($options) && count($options) >= 3)
-                {{-- SVG Графики: генерируются динамически из формул --}}
-                <div class="grid grid-cols-{{ count($options) == 3 ? '3' : '2' }} gap-3 mb-4">
-                    @foreach($options as $optIndex => $formula)
-                        <div class="bg-slate-900/50 rounded-lg p-3">
-                            <div class="text-cyan-400 font-bold text-center mb-2">{{ $graphLabels[$optIndex] ?? ($optIndex + 1) }})</div>
-                            <div id="graph-{{ $uniqueId }}-{{ $optIndex }}" class="w-full aspect-square"></div>
-                        </div>
-                    @endforeach
+            {{-- Отображение графика --}}
+            @if($hasSvg)
+                {{-- Предзаготовленный SVG (Static SVG System) --}}
+                <div class="bg-slate-900/50 rounded-lg p-4 mb-4 flex justify-center">
+                    {!! $task['svg'] !!}
                 </div>
+            @elseif($hasImage)
+                {{-- PNG/JPEG изображение (временное решение) --}}
+                <div class="bg-slate-900/50 rounded-lg p-4 mb-4 flex justify-center">
+                    <img src="{{ $imageUrl }}"
+                         alt="График {{ $task['id'] }}"
+                         class="max-w-full max-h-48 object-contain">
+                </div>
+            @else
+                <div class="text-red-400 text-center p-4 mb-4">
+                    <p class="font-bold mb-2">⚠️ Изображение не найдено</p>
+                    <p class="text-sm text-slate-400">task['svg'] или task['image'] отсутствуют</p>
+                </div>
+            @endif
 
-                <script>
-                    (function() {
-                        const graphFormulas = @json($options);
-                        const uniqueId = "{{ $uniqueId }}";
-
-                        // Ждём загрузки DOM и наличия функции renderSingleGraph
-                        function initGraphs() {
-                            if (typeof renderSingleGraph === 'function') {
-                                graphFormulas.forEach((formula, i) => {
-                                    renderSingleGraph(`graph-${uniqueId}-${i}`, formula);
-                                });
-                            } else {
-                                // Функция ещё не загружена, пробуем через 100ms
-                                setTimeout(initGraphs, 100);
-                            }
-                        }
-
-                        if (document.readyState === 'loading') {
-                            document.addEventListener('DOMContentLoaded', initGraphs);
-                        } else {
-                            initGraphs();
-                        }
-                    })();
-                </script>
-
-                {{-- Формулы для соответствия --}}
+            {{-- Варианты ответов (формулы) --}}
+            @if(!empty($taskOptions))
                 <div class="flex flex-wrap gap-3 justify-center mb-4">
-                    @foreach($options as $i => $option)
+                    @foreach($taskOptions as $i => $option)
                         <div class="bg-slate-700/50 rounded-lg px-4 py-2">
                             <span class="text-amber-400 font-bold">{{ $i + 1 }})</span>
                             <span class="text-slate-200 math-serif ml-2">${{ $option }}$</span>
                         </div>
                     @endforeach
-                </div>
-            @else
-                <div class="text-red-400 text-center p-4">
-                    <p class="font-bold mb-2">⚠️ Формулы не найдены</p>
-                    <p class="text-sm text-slate-400">Для отображения графиков требуется минимум 3 формулы</p>
                 </div>
             @endif
 
@@ -88,11 +74,14 @@
             <div class="mt-4 flex items-center gap-4">
                 <span class="text-slate-400 text-sm">Ответ:</span>
                 <div class="flex gap-1">
-                    @foreach($graphLabels as $label)
+                    @php
+                        $answerCount = count($taskOptions) > 0 ? count($taskOptions) : 4;
+                    @endphp
+                    @for($i = 0; $i < $answerCount; $i++)
                         <div class="w-10 h-10 border border-slate-600 rounded flex items-center justify-center bg-slate-800">
-                            <span class="text-slate-500 text-sm">{{ $label }}</span>
+                            <span class="text-slate-500 text-sm">{{ $graphLabels[$i] ?? ($i + 1) }}</span>
                         </div>
-                    @endforeach
+                    @endfor
                 </div>
             </div>
         </div>

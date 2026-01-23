@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Services\GeometrySvgRenderer;
+use App\Services\GraphSvgRenderer;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 
@@ -10,8 +11,12 @@ use Illuminate\Support\Facades\File;
  * Bake SVG strings into JSON file (one-time generation)
  *
  * This command reads geometry data from topic_XX_geometry.json,
- * renders SVG for each task using GeometrySvgRenderer,
+ * renders SVG for each task using GeometrySvgRenderer or GraphSvgRenderer,
  * and saves the result to topic_XX.json with ready-to-use SVG strings.
+ *
+ * Supported topics:
+ * - 11: Графики функций (GraphSvgRenderer)
+ * - 15, 16, 17: Геометрия (GeometrySvgRenderer)
  *
  * After running this command, the geometry JSON files can be deleted
  * as the SVG is now stored directly in the main JSON.
@@ -19,7 +24,7 @@ use Illuminate\Support\Facades\File;
 class BakeSvgToJson extends Command
 {
     protected $signature = 'svg:bake
-                            {topic : Topic ID (15, 16, 17)}
+                            {topic : Topic ID (11, 15, 16, 17)}
                             {--dry-run : Show what would be done without saving}';
 
     protected $description = 'Bake SVG strings into JSON file (one-time generation)';
