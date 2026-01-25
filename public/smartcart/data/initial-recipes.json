@@ -1,0 +1,230 @@
+{
+  "exported_at": "2026-01-25T00:00:00Z",
+  "version": "1.0.0",
+  "recipes": [
+    {
+      "name": "Курица с рисом в мультиварке",
+      "description": "Простое и сытное блюдо на каждый день. Курица получается сочной, а рис пропитывается ароматами.",
+      "instructions": [
+        "Нарезать лук полукольцами, морковь натереть на крупной тёрке",
+        "Включить мультиварку в режим «Жарка» на 15 минут",
+        "Обжарить лук и морковь до золотистого цвета",
+        "Добавить куриные голени, обжарить со всех сторон",
+        "Засыпать промытый рис, добавить соль и специи",
+        "Залить водой (1:2 к рису), включить режим «Плов» или «Рис» на 45 минут",
+        "После сигнала дать постоять 10 минут, не открывая крышку"
+      ],
+      "cook_time": 45,
+      "prep_time": 15,
+      "servings": 4,
+      "equipment": "мультиварка",
+      "category": "обед",
+      "tags": ["мультиварка", "курица", "рис", "простой"],
+      "image_svg": "<svg viewBox=\"0 0 100 100\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><defs><linearGradient id=\"pot\" x1=\"0%\" y1=\"0%\" x2=\"100%\" y2=\"100%\"><stop offset=\"0%\" stop-color=\"#374151\"/><stop offset=\"100%\" stop-color=\"#1f2937\"/></linearGradient></defs><ellipse cx=\"50\" cy=\"70\" rx=\"35\" ry=\"15\" fill=\"url(#pot)\"/><path d=\"M15 45 Q15 70 50 70 Q85 70 85 45\" fill=\"url(#pot)\"/><ellipse cx=\"50\" cy=\"45\" rx=\"35\" ry=\"12\" fill=\"#4b5563\"/><ellipse cx=\"50\" cy=\"45\" rx=\"30\" ry=\"9\" fill=\"#f59e0b\" opacity=\"0.3\"/><circle cx=\"35\" cy=\"50\" r=\"8\" fill=\"#fbbf24\" opacity=\"0.8\"/><circle cx=\"50\" cy=\"48\" r=\"6\" fill=\"#fcd34d\" opacity=\"0.9\"/><circle cx=\"62\" cy=\"52\" r=\"7\" fill=\"#fbbf24\" opacity=\"0.7\"/><path d=\"M30 35 Q35 25 40 35\" stroke=\"#9ca3af\" stroke-width=\"1.5\" fill=\"none\" opacity=\"0.5\"/><path d=\"M50 32 Q55 22 60 32\" stroke=\"#9ca3af\" stroke-width=\"1.5\" fill=\"none\" opacity=\"0.5\"/><path d=\"M65 36 Q70 26 75 36\" stroke=\"#9ca3af\" stroke-width=\"1.5\" fill=\"none\" opacity=\"0.5\"/></svg>",
+      "ingredients": [
+        { "name": "Голень куриная", "quantity": 900, "unit": "г" },
+        { "name": "Рис", "quantity": 400, "unit": "г" },
+        { "name": "Лук репчатый", "quantity": 150, "unit": "г" },
+        { "name": "Морковь", "quantity": 100, "unit": "г" },
+        { "name": "Масло растительное", "quantity": 30, "unit": "мл", "is_optional": true }
+      ]
+    },
+    {
+      "name": "Гречка с курицей",
+      "description": "Классическое сочетание гречневой каши с куриной грудкой. Полезно и питательно.",
+      "instructions": [
+        "Куриную грудку нарезать небольшими кусочками",
+        "Обжарить курицу на сковороде до золотистой корочки",
+        "Добавить нарезанный лук, обжарить 3-4 минуты",
+        "Переложить в мультиварку, добавить промытую гречку",
+        "Залить водой (1:2), посолить",
+        "Готовить в режиме «Крупа» или «Гречка» 40 минут"
+      ],
+      "cook_time": 40,
+      "prep_time": 10,
+      "servings": 3,
+      "equipment": "мультиварка",
+      "category": "обед",
+      "tags": ["мультиварка", "курица", "гречка", "полезное"],
+      "image_svg": "<svg viewBox=\"0 0 100 100\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"20\" y=\"50\" width=\"60\" height=\"35\" rx=\"5\" fill=\"#1f2937\"/><ellipse cx=\"50\" cy=\"50\" rx=\"30\" ry=\"10\" fill=\"#374151\"/><ellipse cx=\"50\" cy=\"50\" rx=\"25\" ry=\"7\" fill=\"#78350f\"/><circle cx=\"35\" cy=\"48\" r=\"3\" fill=\"#92400e\"/><circle cx=\"45\" cy=\"52\" r=\"2.5\" fill=\"#a16207\"/><circle cx=\"55\" cy=\"49\" r=\"3\" fill=\"#92400e\"/><circle cx=\"62\" cy=\"52\" r=\"2\" fill=\"#a16207\"/><path d=\"M38 38 C40 35, 45 35, 47 38 L45 45 L40 45 Z\" fill=\"#fbbf24\"/><path d=\"M52 36 C54 33, 59 33, 61 36 L59 44 L54 44 Z\" fill=\"#f59e0b\"/></svg>",
+      "ingredients": [
+        { "name": "Грудка куриная", "quantity": 500, "unit": "г" },
+        { "name": "Гречка", "quantity": 400, "unit": "г" },
+        { "name": "Лук репчатый", "quantity": 100, "unit": "г" }
+      ]
+    },
+    {
+      "name": "Тушёная индейка с картофелем",
+      "description": "Нежное мясо индейки с картофелем — сытный ужин для всей семьи.",
+      "instructions": [
+        "Голень индейки разделить на порционные куски",
+        "Картофель очистить и нарезать крупными кубиками",
+        "Лук нарезать полукольцами, морковь — кружочками",
+        "Сложить всё в мультиварку слоями: лук, морковь, мясо, картофель",
+        "Добавить лавровый лист, соль, перец, залить 200 мл воды",
+        "Готовить в режиме «Тушение» 1 час"
+      ],
+      "cook_time": 60,
+      "prep_time": 20,
+      "servings": 4,
+      "equipment": "мультиварка",
+      "category": "ужин",
+      "tags": ["мультиварка", "индейка", "картофель", "тушение"],
+      "image_svg": "<svg viewBox=\"0 0 100 100\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><ellipse cx=\"50\" cy=\"65\" rx=\"35\" ry=\"20\" fill=\"#1f2937\"/><ellipse cx=\"50\" cy=\"60\" rx=\"32\" ry=\"15\" fill=\"#374151\"/><ellipse cx=\"38\" cy=\"58\" rx=\"10\" ry=\"6\" fill=\"#fbbf24\" opacity=\"0.9\"/><ellipse cx=\"60\" cy=\"55\" rx=\"8\" ry=\"5\" fill=\"#f59e0b\" opacity=\"0.8\"/><path d=\"M45 45 Q50 35 55 45\" fill=\"#d97706\"/><circle cx=\"50\" cy=\"50\" r=\"12\" fill=\"#b45309\" opacity=\"0.9\"/><path d=\"M42 52 L44 48 L48 52 Z\" fill=\"#92400e\"/></svg>",
+      "ingredients": [
+        { "name": "Голень индейки", "quantity": 1000, "unit": "г" },
+        { "name": "Картофель", "quantity": 500, "unit": "г" },
+        { "name": "Лук репчатый", "quantity": 100, "unit": "г" },
+        { "name": "Морковь", "quantity": 100, "unit": "г" }
+      ]
+    },
+    {
+      "name": "Куриная грудка в аэрогриле",
+      "description": "Диетическая куриная грудка с хрустящей корочкой. Минимум масла, максимум вкуса.",
+      "instructions": [
+        "Грудку замариновать в специях и оливковом масле на 30 минут",
+        "Разогреть аэрогриль до 180°C",
+        "Выложить грудку на решётку",
+        "Готовить 25 минут, перевернув один раз на середине"
+      ],
+      "cook_time": 25,
+      "prep_time": 35,
+      "servings": 2,
+      "equipment": "аэрогриль",
+      "category": "обед",
+      "tags": ["аэрогриль", "курица", "диетическое", "быстрое"],
+      "image_svg": "<svg viewBox=\"0 0 100 100\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><ellipse cx=\"50\" cy=\"55\" rx=\"30\" ry=\"15\" fill=\"#374151\"/><path d=\"M50 40 Q30 45 30 55 Q30 65 50 70 Q70 65 70 55 Q70 45 50 40\" fill=\"#fbbf24\"/><path d=\"M40 48 Q45 42 55 45 Q65 48 60 55 Q55 62 45 60 Q35 58 40 48\" fill=\"#d97706\"/><line x1=\"35\" y1=\"70\" x2=\"35\" y2=\"80\" stroke=\"#6b7280\" stroke-width=\"2\"/><line x1=\"50\" y1=\"72\" x2=\"50\" y2=\"82\" stroke=\"#6b7280\" stroke-width=\"2\"/><line x1=\"65\" y1=\"70\" x2=\"65\" y2=\"80\" stroke=\"#6b7280\" stroke-width=\"2\"/><path d=\"M30 35 Q35 25 40 35\" stroke=\"#ef4444\" stroke-width=\"1.5\" fill=\"none\" opacity=\"0.6\"/><path d=\"M55 33 Q60 23 65 33\" stroke=\"#f97316\" stroke-width=\"1.5\" fill=\"none\" opacity=\"0.6\"/></svg>",
+      "ingredients": [
+        { "name": "Грудка куриная", "quantity": 500, "unit": "г" },
+        { "name": "Масло оливковое", "quantity": 20, "unit": "мл", "is_optional": true }
+      ]
+    },
+    {
+      "name": "Запечённая рыба",
+      "description": "Филе пангасиуса, запечённое в аэрогриле. Нежное и сочное.",
+      "instructions": [
+        "Филе разморозить и обсушить",
+        "Посолить, поперчить, сбрызнуть лимонным соком",
+        "Разогреть аэрогриль до 180°C",
+        "Запекать 15 минут до готовности"
+      ],
+      "cook_time": 15,
+      "prep_time": 10,
+      "servings": 2,
+      "equipment": "аэрогриль",
+      "category": "ужин",
+      "tags": ["аэрогриль", "рыба", "диетическое", "быстрое"],
+      "image_svg": "<svg viewBox=\"0 0 100 100\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><ellipse cx=\"50\" cy=\"55\" rx=\"35\" ry=\"12\" fill=\"#374151\"/><path d=\"M25 50 Q50 35 75 50 Q50 65 25 50\" fill=\"#60a5fa\"/><circle cx=\"35\" cy=\"48\" r=\"3\" fill=\"#1e3a5f\"/><path d=\"M70 50 L80 45 L80 55 Z\" fill=\"#3b82f6\"/><path d=\"M28 50 Q35 45 42 50\" stroke=\"#93c5fd\" stroke-width=\"1\" fill=\"none\"/><path d=\"M45 48 Q52 43 59 48\" stroke=\"#93c5fd\" stroke-width=\"1\" fill=\"none\"/></svg>",
+      "ingredients": [
+        { "name": "Пангасиус филе", "quantity": 500, "unit": "г" }
+      ]
+    },
+    {
+      "name": "Яйца вкрутую в аэрогриле",
+      "description": "Идеальные яйца вкрутую без воды. Легко чистятся!",
+      "instructions": [
+        "Разогреть аэрогриль до 160°C",
+        "Положить яйца на решётку",
+        "Готовить 12-14 минут",
+        "Переложить в холодную воду на 5 минут"
+      ],
+      "cook_time": 12,
+      "prep_time": 2,
+      "servings": 5,
+      "equipment": "аэрогриль",
+      "category": "завтрак",
+      "tags": ["аэрогриль", "яйца", "быстрое", "простой"],
+      "image_svg": "<svg viewBox=\"0 0 100 100\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><ellipse cx=\"30\" cy=\"55\" rx=\"15\" ry=\"20\" fill=\"#fef3c7\"/><ellipse cx=\"30\" cy=\"55\" rx=\"12\" ry=\"16\" fill=\"#fffbeb\"/><ellipse cx=\"50\" cy=\"58\" rx=\"15\" ry=\"20\" fill=\"#fef3c7\"/><ellipse cx=\"50\" cy=\"58\" rx=\"12\" ry=\"16\" fill=\"#fffbeb\"/><ellipse cx=\"70\" cy=\"55\" rx=\"15\" ry=\"20\" fill=\"#fef3c7\"/><ellipse cx=\"70\" cy=\"55\" rx=\"12\" ry=\"16\" fill=\"#fffbeb\"/></svg>",
+      "ingredients": [
+        { "name": "Яйца С1", "quantity": 10, "unit": "шт" }
+      ]
+    },
+    {
+      "name": "Овсянка на молоке",
+      "description": "Классический завтрак — быстро, полезно, вкусно.",
+      "instructions": [
+        "Вскипятить молоко в кастрюле",
+        "Засыпать овсяные хлопья",
+        "Варить 5-7 минут, помешивая",
+        "Добавить соль, сахар по вкусу"
+      ],
+      "cook_time": 10,
+      "prep_time": 2,
+      "servings": 2,
+      "equipment": "плита",
+      "category": "завтрак",
+      "tags": ["завтрак", "овсянка", "быстрое", "полезное"],
+      "image_svg": "<svg viewBox=\"0 0 100 100\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M25 45 L25 70 Q25 80 50 80 Q75 80 75 70 L75 45\" fill=\"#1f2937\"/><ellipse cx=\"50\" cy=\"45\" rx=\"25\" ry=\"10\" fill=\"#374151\"/><ellipse cx=\"50\" cy=\"45\" rx=\"22\" ry=\"8\" fill=\"#fef3c7\"/><circle cx=\"40\" cy=\"44\" r=\"3\" fill=\"#d97706\" opacity=\"0.5\"/><circle cx=\"55\" cy=\"46\" r=\"2\" fill=\"#b45309\" opacity=\"0.5\"/><circle cx=\"48\" cy=\"43\" r=\"2.5\" fill=\"#92400e\" opacity=\"0.5\"/></svg>",
+      "ingredients": [
+        { "name": "Овсянка", "quantity": 100, "unit": "г" },
+        { "name": "Молоко 3.2%", "quantity": 300, "unit": "мл" }
+      ]
+    },
+    {
+      "name": "Яичница",
+      "description": "Классическая яичница-глазунья на сковороде.",
+      "instructions": [
+        "Разогреть сковороду с маслом",
+        "Аккуратно разбить яйца на сковороду",
+        "Посолить, готовить 3-4 минуты на среднем огне",
+        "Подавать сразу"
+      ],
+      "cook_time": 5,
+      "prep_time": 1,
+      "servings": 1,
+      "equipment": "плита",
+      "category": "завтрак",
+      "tags": ["завтрак", "яйца", "быстрое", "простой"],
+      "image_svg": "<svg viewBox=\"0 0 100 100\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><ellipse cx=\"50\" cy=\"55\" rx=\"35\" ry=\"20\" fill=\"#374151\"/><ellipse cx=\"35\" cy=\"52\" rx=\"18\" ry=\"12\" fill=\"#fefce8\"/><ellipse cx=\"65\" cy=\"55\" rx=\"16\" ry=\"10\" fill=\"#fefce8\"/><ellipse cx=\"35\" cy=\"50\" rx=\"8\" ry=\"6\" fill=\"#fbbf24\"/><ellipse cx=\"65\" cy=\"53\" rx=\"7\" ry=\"5\" fill=\"#f59e0b\"/></svg>",
+      "ingredients": [
+        { "name": "Яйца С1", "quantity": 3, "unit": "шт" },
+        { "name": "Масло сливочное", "quantity": 10, "unit": "г", "is_optional": true }
+      ]
+    },
+    {
+      "name": "Витаминный салат (коул-сло)",
+      "description": "Хрустящий салат из капусты с морковью. Отличный гарнир!",
+      "instructions": [
+        "Капусту тонко нашинковать, посолить и помять руками",
+        "Морковь натереть на крупной тёрке",
+        "Яблоко нарезать соломкой",
+        "Смешать все ингредиенты",
+        "Заправить маслом или майонезом"
+      ],
+      "cook_time": 0,
+      "prep_time": 15,
+      "servings": 4,
+      "equipment": "нож",
+      "category": "салат",
+      "tags": ["салат", "капуста", "витамины", "быстрое"],
+      "image_svg": "<svg viewBox=\"0 0 100 100\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><ellipse cx=\"50\" cy=\"60\" rx=\"35\" ry=\"20\" fill=\"#1f2937\"/><ellipse cx=\"50\" cy=\"55\" rx=\"32\" ry=\"15\" fill=\"#374151\"/><path d=\"M30 50 Q35 45 40 52 Q45 48 50 55 Q55 50 60 54 Q65 48 70 52\" fill=\"#84cc16\" opacity=\"0.8\"/><path d=\"M35 55 Q40 50 45 57\" stroke=\"#f97316\" stroke-width=\"3\" fill=\"none\"/><path d=\"M55 53 Q60 48 65 55\" stroke=\"#fb923c\" stroke-width=\"3\" fill=\"none\"/><circle cx=\"42\" cy=\"52\" r=\"4\" fill=\"#fef08a\" opacity=\"0.6\"/></svg>",
+      "ingredients": [
+        { "name": "Капуста белокочанная", "quantity": 200, "unit": "г" },
+        { "name": "Морковь", "quantity": 100, "unit": "г" },
+        { "name": "Яблоки", "quantity": 100, "unit": "г", "is_optional": true }
+      ]
+    },
+    {
+      "name": "Салат из огурцов и помидоров",
+      "description": "Простой летний салат — свежий и лёгкий.",
+      "instructions": [
+        "Огурцы нарезать полукружиями",
+        "Помидоры нарезать дольками",
+        "Лук нарезать тонкими полукольцами",
+        "Смешать, посолить, заправить маслом"
+      ],
+      "cook_time": 0,
+      "prep_time": 10,
+      "servings": 2,
+      "equipment": "нож",
+      "category": "салат",
+      "tags": ["салат", "овощи", "быстрое", "летний"],
+      "image_svg": "<svg viewBox=\"0 0 100 100\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><ellipse cx=\"50\" cy=\"60\" rx=\"35\" ry=\"18\" fill=\"#1f2937\"/><ellipse cx=\"50\" cy=\"55\" rx=\"32\" ry=\"14\" fill=\"#374151\"/><circle cx=\"35\" cy=\"52\" r=\"10\" fill=\"#ef4444\" opacity=\"0.9\"/><circle cx=\"35\" cy=\"52\" r=\"6\" fill=\"#fca5a5\" opacity=\"0.3\"/><ellipse cx=\"55\" cy=\"55\" rx=\"12\" ry=\"6\" fill=\"#22c55e\" opacity=\"0.9\"/><ellipse cx=\"55\" cy=\"55\" rx=\"8\" ry=\"4\" fill=\"#86efac\" opacity=\"0.3\"/><circle cx=\"68\" cy=\"50\" r=\"8\" fill=\"#dc2626\" opacity=\"0.8\"/></svg>",
+      "ingredients": [
+        { "name": "Огурцы", "quantity": 200, "unit": "г" },
+        { "name": "Помидоры", "quantity": 200, "unit": "г" },
+        { "name": "Лук репчатый", "quantity": 50, "unit": "г" }
+      ]
+    }
+  ]
+}
