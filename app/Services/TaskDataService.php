@@ -412,6 +412,78 @@ class TaskDataService
     }
 
     /**
+     * Получить набор из 3 задач для matching типов (для варианта ОГЭ)
+     * Формат: 3 графика (А, Б, В) и 3 формулы (1, 2, 3)
+     */
+    public function getRandomMatchingSet(string $topicId): ?array
+    {
+        $blocks = $this->getBlocks($topicId);
+        $meta = $this->getTopicMeta($topicId);
+
+        // Собираем все zadaniya с типом matching
+        $matchingZadaniya = [];
+
+        foreach ($blocks as $block) {
+            foreach ($block['zadaniya'] ?? [] as $zadanie) {
+                $type = $zadanie['type'] ?? '';
+                if (in_array($type, ['matching', 'matching_signs', 'matching_4'])) {
+                    $tasks = $zadanie['tasks'] ?? [];
+                    // Нужно минимум 3 задачи
+                    if (count($tasks) >= 3) {
+                        $matchingZadaniya[] = [
+                            'block' => $block,
+                            'zadanie' => $zadanie,
+                        ];
+                    }
+                }
+            }
+        }
+
+        if (empty($matchingZadaniya)) {
+            return null;
+        }
+
+        // Выбираем случайное zadanie
+        $selected = $matchingZadaniya[array_rand($matchingZadaniya)];
+        $block = $selected['block'];
+        $zadanie = $selected['zadanie'];
+        $tasks = $zadanie['tasks'];
+
+        // Выбираем 3 случайных задачи
+        $keys = array_rand($tasks, 3);
+        shuffle($keys);
+
+        $selectedTasks = [];
+        $allFormulas = [];
+
+        foreach ($keys as $key) {
+            $task = $tasks[$key];
+            $selectedTasks[] = $task;
+
+            // Собираем первую формулу (правильный ответ) для каждого графика
+            if (!empty($task['options'][0])) {
+                $allFormulas[] = $task['options'][0];
+            }
+        }
+
+        // Перемешиваем формулы для варианта
+        shuffle($allFormulas);
+
+        return [
+            'topic_id' => $topicId,
+            'topic_title' => $meta['title'],
+            'block_number' => $block['number'],
+            'block_title' => $block['title'],
+            'zadanie_number' => $zadanie['number'],
+            'instruction' => $zadanie['instruction'],
+            'type' => $zadanie['type'],
+            'tasks' => $selectedTasks,          // 3 задачи с графиками
+            'formulas' => $allFormulas,         // 3 перемешанных формулы
+            'is_matching_set' => true,          // Флаг для компонента
+        ];
+    }
+
+    /**
      * Сохранить данные темы в JSON
      */
     public function saveTopicData(string $topicId, array $data): bool
