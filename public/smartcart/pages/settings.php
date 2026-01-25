@@ -204,7 +204,7 @@ require __DIR__ . '/../templates/header.php';
                 </div>
                 <div style="display: flex; gap: 8px; align-items: center;">
                     <button type="button" class="btn btn-primary" onclick="exportSelectedCategories()">
-                        📤 Экспортировать
+                        📋 Копировать
                     </button>
                     <span id="selectedCount" style="font-size: 0.85rem; color: var(--text-muted);">0 товаров</span>
                 </div>
@@ -392,7 +392,7 @@ function updateSelectedCount() {
     document.getElementById('selectedCount').textContent = total.toLocaleString() + ' товаров';
 }
 
-function exportSelectedCategories() {
+async function exportSelectedCategories() {
     const store = document.getElementById('exportStoreSelect').value;
     if (!store) {
         showToast('Выберите магазин', 'error');
@@ -412,8 +412,30 @@ function exportSelectedCategories() {
         url += '&format=' + format;
     }
 
-    // Trigger download
-    window.location.href = url;
+    // Fetch and copy to clipboard
+    try {
+        const btn = document.querySelector('button[onclick="exportSelectedCategories()"]');
+        btn.disabled = true;
+        btn.textContent = '⏳ Загрузка...';
+
+        const resp = await fetch(url);
+        const text = await resp.text();
+
+        await navigator.clipboard.writeText(text);
+
+        btn.textContent = '✅ Скопировано!';
+        showToast('Скопировано в буфер обмена (' + (text.length / 1024).toFixed(1) + ' KB)', 'success');
+
+        setTimeout(() => {
+            btn.disabled = false;
+            btn.textContent = '📋 Копировать';
+        }, 2000);
+    } catch (e) {
+        showToast('Ошибка: ' + e.message, 'error');
+        const btn = document.querySelector('button[onclick="exportSelectedCategories()"]');
+        btn.disabled = false;
+        btn.textContent = '📋 Копировать';
+    }
 }
 
 async function clearPrices() {
