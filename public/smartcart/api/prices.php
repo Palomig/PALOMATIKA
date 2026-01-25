@@ -122,7 +122,7 @@ if ($method === 'GET') {
         // POST /api/prices/bulk - Bulk import from extension
         // Accept both 'store' and 'store_slug' for compatibility
         $storeSlug = $data['store'] ?? $data['store_slug'] ?? null;
-        $category = $data['category'] ?? null;
+        $defaultCategory = $data['category'] ?? null; // Optional top-level category
         $products = $data['products'] ?? [];
 
         // Validate required fields
@@ -133,12 +133,8 @@ if ($method === 'GET') {
             ], 400);
         }
 
-        if (empty($category)) {
-            jsonResponse([
-                'success' => false,
-                'error' => 'category is required'
-            ], 400);
-        }
+        // Category can be at top level OR inside each product
+        // No longer require top-level category
 
         if (!is_array($products) || empty($products)) {
             jsonResponse([
@@ -203,6 +199,9 @@ if ($method === 'GET') {
                 if (str_contains($parsedAt, 'T')) {
                     $parsedAt = date('Y-m-d H:i:s', strtotime($parsedAt));
                 }
+
+                // Category from product or fallback to default
+                $category = $product['category'] ?? $defaultCategory ?? 'other';
 
                 // Check if price already exists (same store + same name)
                 $existing = Database::query(
