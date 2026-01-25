@@ -2,10 +2,11 @@
 /**
  * SmartCart API - Export/Import
  *
- * GET /api/export/all - Export all data
- * GET /api/export/recipes - Export only recipes
- * GET /api/export/prices - Export prices
- * POST /api/import - Import data
+ * GET /api/export.php?type=all - Export all data
+ * GET /api/export.php?type=recipes - Export only recipes
+ * GET /api/export.php?type=prices - Export prices
+ * GET /api/export.php?type=prices&store=perekrestok - Export prices for specific store
+ * POST /api/export.php - Import data
  */
 
 require_once __DIR__ . '/../config.php';
@@ -16,6 +17,7 @@ setCorsHeaders();
 
 $method = $_SERVER['REQUEST_METHOD'];
 $type = $_GET['type'] ?? 'all';
+$storeFilter = $_GET['store'] ?? null;
 
 if ($method === 'GET') {
     $data = [
@@ -54,7 +56,12 @@ if ($method === 'GET') {
 
     if ($type === 'all' || $type === 'prices') {
         // Export prices grouped by store
-        $stores = Database::query("SELECT * FROM stores WHERE is_active = 1");
+        if ($storeFilter) {
+            // Export specific store only
+            $stores = Database::query("SELECT * FROM stores WHERE slug = ? AND is_active = 1", [$storeFilter]);
+        } else {
+            $stores = Database::query("SELECT * FROM stores WHERE is_active = 1");
+        }
         $pricesData = [];
 
         foreach ($stores as $store) {

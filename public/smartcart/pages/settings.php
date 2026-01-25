@@ -11,6 +11,17 @@ $stats = [
     'stores' => Database::query("SELECT COUNT(*) as cnt FROM stores WHERE is_active = 1")[0]['cnt'] ?? 0,
 ];
 
+// Get stores with price counts
+$storesWithPrices = Database::query(
+    "SELECT s.slug, s.name, COUNT(p.id) as price_count
+     FROM stores s
+     LEFT JOIN prices p ON s.id = p.store_id
+     WHERE s.is_active = 1
+     GROUP BY s.id
+     HAVING price_count > 0
+     ORDER BY price_count DESC"
+);
+
 // Handle import
 $importMessage = null;
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['import_file'])) {
@@ -143,15 +154,23 @@ require __DIR__ . '/../templates/header.php';
                 📖 Только рецепты
             </a>
             <a href="<?= BASE_URL ?>/api/export.php?type=prices" class="btn btn-secondary" download>
-                💰 Только цены (<?= number_format($stats['prices']) ?> записей)
-            </a>
-            <a href="<?= BASE_URL ?>/api/export.php?type=products" class="btn btn-secondary" download>
-                📦 Только продукты
-            </a>
-            <a href="<?= BASE_URL ?>/api/export.php?type=stores" class="btn btn-secondary" download>
-                🏪 Только магазины
+                💰 Все цены (<?= number_format($stats['prices']) ?>)
             </a>
         </div>
+
+        <?php if (!empty($storesWithPrices)): ?>
+        <h3 style="margin-top: 20px; margin-bottom: 12px; font-size: 0.9rem; color: var(--text-secondary);">
+            Экспорт по магазинам:
+        </h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <?php foreach ($storesWithPrices as $store): ?>
+            <a href="<?= BASE_URL ?>/api/export.php?type=prices&store=<?= $store['slug'] ?>"
+               class="btn btn-secondary" style="font-size: 0.85rem; padding: 8px 12px;" download>
+                <?= htmlspecialchars($store['name']) ?> (<?= number_format($store['price_count']) ?>)
+            </a>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
     </div>
 
     <!-- Import -->
