@@ -13,7 +13,7 @@ require_once __DIR__ . '/../includes/functions.php';
 setCorsHeaders();
 
 // Version for tracking deployments
-define('API_VERSION', '2.0');
+define('API_VERSION', '3.0');
 
 $recipeId = $_GET['id'] ?? null;
 $storeSlug = $_GET['store'] ?? 'perekrestok';
@@ -50,10 +50,10 @@ $commonExclude = ['приправ', 'соус', 'маринад', 'смесь', 
 
 // Mapping rules: ingredient name -> search terms (no category filter - rely on exclusions)
 $ingredientMapping = [
-    // Курица (ищем сырое мясо)
-    'Грудка куриная' => ['terms' => ['Филе куриное', 'Филе грудки', 'Грудка кур'], 'exclude' => array_merge($commonExclude, ['колбас', 'сосис', 'пельмен', 'фарш', 'Фарш'])],
-    'Голень куриная' => ['terms' => ['Голень кур', 'Голени кур'], 'exclude' => $commonExclude],
-    'Бедро куриное' => ['terms' => ['Филе бедра', 'Бедро кур', 'Бедра кур'], 'exclude' => $commonExclude],
+    // Курица (ищем сырое мясо, исключаем индейку и готовые продукты)
+    'Грудка куриная' => ['terms' => ['Филе куриное', 'Грудка кур', 'грудка куриная'], 'exclude' => array_merge($commonExclude, ['колбас', 'сосис', 'пельмен', 'фарш', 'Фарш', 'индейк', 'Индейк', 'ветчина', 'Ветчина'])],
+    'Голень куриная' => ['terms' => ['Голень кур', 'Голени кур'], 'exclude' => array_merge($commonExclude, ['индейк', 'Индейк'])],
+    'Бедро куриное' => ['terms' => ['Филе бедра', 'Бедро кур', 'Бедра кур'], 'exclude' => array_merge($commonExclude, ['индейк', 'Индейк'])],
 
     // Индейка
     'Филе индейки' => ['terms' => ['Филе индейки', 'Индейка филе'], 'exclude' => $commonExclude],
