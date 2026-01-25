@@ -160,16 +160,57 @@ require __DIR__ . '/../templates/header.php';
 
         <?php if (!empty($storesWithPrices)): ?>
         <h3 style="margin-top: 20px; margin-bottom: 12px; font-size: 0.9rem; color: var(--text-secondary);">
-            Экспорт по магазинам:
+            Экспорт по магазинам и категориям:
         </h3>
-        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
-            <?php foreach ($storesWithPrices as $store): ?>
-            <a href="<?= BASE_URL ?>/api/export.php?type=prices&store=<?= $store['slug'] ?>"
-               class="btn btn-secondary" style="font-size: 0.85rem; padding: 8px 12px;" download>
-                <?= htmlspecialchars($store['name']) ?> (<?= number_format($store['price_count']) ?>)
-            </a>
-            <?php endforeach; ?>
+
+        <!-- Store selector -->
+        <div style="margin-bottom: 16px;">
+            <select id="exportStoreSelect" class="form-input" style="max-width: 300px;" onchange="loadStoreCategories()">
+                <option value="">Выберите магазин...</option>
+                <?php foreach ($storesWithPrices as $store): ?>
+                <option value="<?= $store['slug'] ?>" data-name="<?= htmlspecialchars($store['name']) ?>">
+                    <?= htmlspecialchars($store['name']) ?> (<?= number_format($store['price_count']) ?>)
+                </option>
+                <?php endforeach; ?>
+            </select>
         </div>
+
+        <!-- Categories checkboxes (loaded dynamically) -->
+        <div id="categoriesContainer" style="display: none; margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span style="font-size: 0.85rem; color: var(--text-secondary);">Выберите категории:</span>
+                <div style="display: flex; gap: 8px;">
+                    <button type="button" class="btn btn-secondary" style="font-size: 0.75rem; padding: 4px 8px;" onclick="selectAllCategories()">
+                        Все
+                    </button>
+                    <button type="button" class="btn btn-secondary" style="font-size: 0.75rem; padding: 4px 8px;" onclick="deselectAllCategories()">
+                        Очистить
+                    </button>
+                </div>
+            </div>
+            <div id="categoriesList" style="display: flex; flex-wrap: wrap; gap: 8px; max-height: 200px; overflow-y: auto; padding: 8px; background: var(--bg-tertiary); border-radius: var(--radius-md);"></div>
+            <div style="margin-top: 12px; display: flex; gap: 8px; align-items: center;">
+                <button type="button" class="btn btn-primary" onclick="exportSelectedCategories()">
+                    📤 Экспортировать выбранное
+                </button>
+                <span id="selectedCount" style="font-size: 0.85rem; color: var(--text-muted);">0 товаров</span>
+            </div>
+        </div>
+
+        <!-- Quick export all store buttons -->
+        <details style="margin-top: 12px;">
+            <summary style="cursor: pointer; font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px;">
+                Быстрый экспорт (весь магазин)
+            </summary>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;">
+                <?php foreach ($storesWithPrices as $store): ?>
+                <a href="<?= BASE_URL ?>/api/export.php?type=prices&store=<?= $store['slug'] ?>"
+                   class="btn btn-secondary" style="font-size: 0.85rem; padding: 8px 12px;" download>
+                    <?= htmlspecialchars($store['name']) ?> (<?= number_format($store['price_count']) ?>)
+                </a>
+                <?php endforeach; ?>
+            </div>
+        </details>
         <?php endif; ?>
     </div>
 
@@ -274,6 +315,89 @@ require __DIR__ . '/../templates/header.php';
 <?php
 $pageScripts = <<<'JS'
 <script>
+// Store categories data
+let storeCategories = {};
+
+async function loadStoreCategories() {
+    const select = document.getElementById('exportStoreSelect');
+    const store = select.value;
+    const container = document.getElementById('categoriesContainer');
+    const list = document.getElementById('categoriesList');
+
+    if (!store) {
+        container.style.display = 'none';
+        return;
+    }
+
+    // Fetch categories for this store
+    try {
+        const resp = await fetch(BASE_URL + '/api/categories.php?store=' + store);
+        const data = await resp.json();
+
+        if (data.categories && data.categories.length > 0) {
+            storeCategories = data.categories;
+            list.innerHTML = data.categories.map(cat => `
+                <label style="display: flex; align-items: center; gap: 6px; padding: 6px 10px;
+                             background: var(--bg-secondary); border-radius: var(--radius-sm);
+                             cursor: pointer; font-size: 0.85rem; white-space: nowrap;"
+                       class="category-checkbox">
+                    <input type="checkbox" value="${cat.slug}" data-count="${cat.count}"
+                           onchange="updateSelectedCount()">
+                    <span>${cat.name || cat.slug}</span>
+                    <span style="color: var(--text-muted);">(${cat.count})</span>
+                </label>
+            `).join('');
+            container.style.display = 'block';
+            updateSelectedCount();
+        } else {
+            list.innerHTML = '<span style="color: var(--text-muted);">Нет категорий</span>';
+            container.style.display = 'block';
+        }
+    } catch (e) {
+        list.innerHTML = '<span style="color: var(--accent-red);">Ошибка загрузки</span>';
+        container.style.display = 'block';
+    }
+}
+
+function selectAllCategories() {
+    document.querySelectorAll('#categoriesList input[type="checkbox"]').forEach(cb => cb.checked = true);
+    updateSelectedCount();
+}
+
+function deselectAllCategories() {
+    document.querySelectorAll('#categoriesList input[type="checkbox"]').forEach(cb => cb.checked = false);
+    updateSelectedCount();
+}
+
+function updateSelectedCount() {
+    const checkboxes = document.querySelectorAll('#categoriesList input[type="checkbox"]:checked');
+    let total = 0;
+    checkboxes.forEach(cb => {
+        total += parseInt(cb.dataset.count) || 0;
+    });
+    document.getElementById('selectedCount').textContent = total.toLocaleString() + ' товаров';
+}
+
+function exportSelectedCategories() {
+    const store = document.getElementById('exportStoreSelect').value;
+    if (!store) {
+        showToast('Выберите магазин', 'error');
+        return;
+    }
+
+    const checkboxes = document.querySelectorAll('#categoriesList input[type="checkbox"]:checked');
+    if (checkboxes.length === 0) {
+        showToast('Выберите хотя бы одну категорию', 'error');
+        return;
+    }
+
+    const categories = Array.from(checkboxes).map(cb => cb.value).join(',');
+    const url = BASE_URL + '/api/export.php?type=prices&store=' + store + '&categories=' + encodeURIComponent(categories);
+
+    // Trigger download
+    window.location.href = url;
+}
+
 async function clearPrices() {
     if (!confirm('Удалить все спарсенные цены? Это действие нельзя отменить!')) return;
 
