@@ -64,6 +64,92 @@
             border-radius: 8px;
             padding: 4px 10px;
             font-size: 13px;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .ingredient-tag.has-price {
+            background: rgba(34, 197, 94, 0.2);
+            color: #4ade80;
+        }
+        .ingredient-tag.not-found {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px dashed #f87171;
+        }
+        .ingredient-tag .price-badge {
+            background: rgba(0,0,0,0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .ingredient-tag.loading::after {
+            content: '';
+            width: 12px;
+            height: 12px;
+            border: 2px solid transparent;
+            border-top-color: currentColor;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .missing-panel {
+            position: fixed;
+            bottom: 80px;
+            right: 24px;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 16px;
+            max-width: 320px;
+            max-height: 400px;
+            overflow-y: auto;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+            z-index: 100;
+            display: none;
+        }
+        .missing-panel.show {
+            display: block;
+        }
+        .missing-toggle {
+            position: fixed;
+            bottom: 80px;
+            right: 24px;
+            z-index: 101;
+        }
+        .stats-bar {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+        }
+        .copy-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover {
+            background: #ea580c;
+        }
+        .copy-btn.copied {
+            background: #22c55e;
         }
         .step-number {
             background: var(--accent);
@@ -260,7 +346,7 @@
                                     <h4 class="text-sm font-semibold text-slate-400 mb-2">Ингредиенты:</h4>
                                     <div class="flex flex-wrap gap-2">
                                         @foreach($recipe['ingredients'] as $ing)
-                                            <span class="ingredient-tag">{{ $ing['item'] }} — {{ $ing['amount'] }}</span>
+                                            <span class="ingredient-tag loading" data-ingredient="{{ $ing['item'] }}">{{ $ing['item'] }} — {{ $ing['amount'] }}</span>
                                         @endforeach
                                     </div>
                                 </div>
@@ -301,7 +387,7 @@
                                         <h4 class="text-sm font-semibold text-orange-400 mb-2">🥢 {{ $recipe['dipping_sauce']['title'] }}:</h4>
                                         <div class="flex flex-wrap gap-2">
                                             @foreach($recipe['dipping_sauce']['ingredients'] as $ing)
-                                                <span class="ingredient-tag">{{ $ing['item'] }} — {{ $ing['amount'] }}</span>
+                                                <span class="ingredient-tag loading" data-ingredient="{{ $ing['item'] }}">{{ $ing['item'] }} — {{ $ing['amount'] }}</span>
                                             @endforeach
                                         </div>
                                     </div>
@@ -611,30 +697,174 @@
         @endforeach
     </main>
 
-    <!-- Back to top -->
+    <!-- Stats Bar (fixed at bottom) -->
+    <div id="priceStats" class="fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur border-t border-slate-700 p-3 z-50">
+        <div class="max-w-6xl mx-auto">
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="text-slate-400">Статус:</span>
+                    <span id="loadingStatus" class="text-yellow-400">Загрузка цен...</span>
+                </div>
+                <div class="stat-item">
+                    <span class="text-green-400">✓</span>
+                    <span id="foundCount">0</span>
+                    <span class="text-slate-500">найдено</span>
+                </div>
+                <div class="stat-item">
+                    <span class="text-red-400">✗</span>
+                    <span id="notFoundCount">0</span>
+                    <span class="text-slate-500">не найдено</span>
+                </div>
+                <div class="stat-item">
+                    <span class="text-slate-400">~</span>
+                    <span id="skippedCount">0</span>
+                    <span class="text-slate-500">пропущено</span>
+                </div>
+                <button id="showMissingBtn" class="copy-btn ml-auto" style="display:none" onclick="toggleMissingPanel()">
+                    🛒 Нужно спарсить (<span id="missingBtnCount">0</span>)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Missing Products Panel -->
+    <div id="missingPanel" class="missing-panel">
+        <div class="flex items-center justify-between mb-3">
+            <h3 class="font-bold text-lg">🛒 Нужно спарсить</h3>
+            <button onclick="toggleMissingPanel()" class="text-slate-400 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+        <p class="text-sm text-slate-400 mb-3">Эти продукты отсутствуют в базе. Используй расширение для парсинга:</p>
+        <div id="missingList" class="space-y-2 mb-4 max-h-48 overflow-y-auto"></div>
+        <button id="copyMissingBtn" class="copy-btn w-full" onclick="copyMissingToClipboard()">
+            📋 Скопировать для поиска
+        </button>
+    </div>
+
+    <!-- Back to top (moved up to avoid stats bar) -->
     <button onclick="window.scrollTo({top:0,behavior:'smooth'})"
-            class="fixed bottom-6 right-6 bg-orange-500 hover:bg-orange-600 text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center transition-all">
+            class="fixed bottom-20 right-6 bg-orange-500 hover:bg-orange-600 text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center transition-all z-40">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
         </svg>
     </button>
 
     <script>
+        // Section navigation
         function showSection(key) {
-            // Hide all sections
             document.querySelectorAll('.section-content').forEach(s => s.style.display = 'none');
-            // Show selected
             document.getElementById('section-' + key).style.display = 'block';
-            // Update nav buttons
             document.querySelectorAll('.section-btn').forEach(btn => {
                 btn.classList.remove('active');
                 if (btn.dataset.section === key) btn.classList.add('active');
             });
-            // Scroll to top of content
             window.scrollTo({top: 0, behavior: 'smooth'});
         }
-        // Set first section as active on load
         document.querySelector('.section-btn').classList.add('active');
+
+        // Price loading
+        let missingProducts = [];
+        let priceResults = {};
+
+        async function loadPrices() {
+            // Collect all unique ingredients
+            const ingredientTags = document.querySelectorAll('[data-ingredient]');
+            const ingredients = [...new Set([...ingredientTags].map(el => el.dataset.ingredient))];
+
+            if (ingredients.length === 0) {
+                document.getElementById('loadingStatus').textContent = 'Нет ингредиентов';
+                document.getElementById('loadingStatus').className = 'text-slate-400';
+                return;
+            }
+
+            try {
+                const response = await fetch('/smartcart/api/ingredient-prices.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ingredients, store: 'perekrestok' })
+                });
+
+                const data = await response.json();
+                priceResults = data.results || {};
+                missingProducts = data.missing_for_extension || [];
+
+                // Update stats
+                document.getElementById('foundCount').textContent = data.stats?.found || 0;
+                document.getElementById('notFoundCount').textContent = data.stats?.not_found || 0;
+                document.getElementById('skippedCount').textContent = data.stats?.skipped || 0;
+                document.getElementById('loadingStatus').textContent = 'Цены загружены';
+                document.getElementById('loadingStatus').className = 'text-green-400';
+
+                // Update ingredient tags
+                ingredientTags.forEach(tag => {
+                    const ingredient = tag.dataset.ingredient;
+                    const result = priceResults[ingredient];
+                    tag.classList.remove('loading');
+
+                    if (result) {
+                        if (result.status === 'found') {
+                            tag.classList.add('has-price');
+                            const priceSpan = document.createElement('span');
+                            priceSpan.className = 'price-badge';
+                            priceSpan.textContent = result.price + '₽';
+                            if (result.discount) {
+                                priceSpan.innerHTML = `<s class="text-slate-500">${result.original_price}₽</s> ${result.price}₽`;
+                            }
+                            tag.appendChild(priceSpan);
+                            tag.title = result.product;
+                        } else if (result.status === 'not_found') {
+                            tag.classList.add('not-found');
+                            tag.title = 'Не найден в базе';
+                        }
+                        // 'skip' status - just remove loading class
+                    }
+                });
+
+                // Show missing button if there are missing products
+                if (missingProducts.length > 0) {
+                    document.getElementById('showMissingBtn').style.display = 'block';
+                    document.getElementById('missingBtnCount').textContent = missingProducts.length;
+
+                    // Populate missing list
+                    const missingList = document.getElementById('missingList');
+                    missingList.innerHTML = missingProducts.map(p =>
+                        `<div class="bg-slate-800/50 rounded px-3 py-2 text-sm text-slate-300">${p}</div>`
+                    ).join('');
+                }
+
+            } catch (error) {
+                console.error('Error loading prices:', error);
+                document.getElementById('loadingStatus').textContent = 'Ошибка загрузки';
+                document.getElementById('loadingStatus').className = 'text-red-400';
+
+                // Remove loading class from all tags
+                ingredientTags.forEach(tag => tag.classList.remove('loading'));
+            }
+        }
+
+        function toggleMissingPanel() {
+            const panel = document.getElementById('missingPanel');
+            panel.classList.toggle('show');
+        }
+
+        function copyMissingToClipboard() {
+            const text = missingProducts.join('\n');
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copyMissingBtn');
+                btn.classList.add('copied');
+                btn.textContent = '✓ Скопировано!';
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    btn.textContent = '📋 Скопировать для поиска';
+                }, 2000);
+            });
+        }
+
+        // Load prices on page load
+        document.addEventListener('DOMContentLoaded', loadPrices);
     </script>
 </body>
 </html>
