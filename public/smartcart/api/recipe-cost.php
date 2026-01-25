@@ -12,6 +12,9 @@ require_once __DIR__ . '/../includes/functions.php';
 
 setCorsHeaders();
 
+// Version for tracking deployments
+define('API_VERSION', '2.0');
+
 $recipeId = $_GET['id'] ?? null;
 $storeSlug = $_GET['store'] ?? 'perekrestok';
 
@@ -134,7 +137,7 @@ foreach ($ingredients as $ing) {
 
     if ($bestMatch) {
         // Calculate cost based on quantity needed
-        $productWeight = $bestMatch['weight'] ?: 1000;
+        $productWeight = (float)($bestMatch['weight'] ?: 1000);
         $productUnit = $bestMatch['unit'] ?: 'г';
 
         // Convert units
@@ -161,7 +164,8 @@ foreach ($ingredients as $ing) {
             'product_price' => $bestMatch['price'],
             'product_weight' => $productWeight . ' ' . $productUnit,
             'packages_needed' => $packagesNeeded,
-            'cost' => round($ingredientCost, 2)
+            'cost' => round($ingredientCost, 2),
+            'search_terms' => $mapping['terms']
         ];
     } else {
         $missingIngredients[] = $ingName;
@@ -170,12 +174,14 @@ foreach ($ingredients as $ing) {
             'needed' => $quantity . ' ' . $unit,
             'matched_product' => null,
             'cost' => 0,
-            'error' => 'Не найден подходящий товар'
+            'error' => 'Не найден подходящий товар',
+            'search_terms' => $mapping['terms']
         ];
     }
 }
 
 jsonResponse([
+    'api_version' => API_VERSION,
     'recipe' => [
         'id' => $recipe['id'],
         'name' => $recipe['name'],
