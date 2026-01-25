@@ -212,14 +212,18 @@ class Database {
     private static function seedData(): void {
         $db = self::$instance;
 
-        // Stores
+        // Stores (from extension: perekrestok, magnit, pyaterochka, vkusvill, vkusvill_giper, lenta, lenta_super, dixy, chizhik, verny)
         $stores = [
             ['perekrestok', 'Перекрёсток', 30, 60, 500],
             ['pyaterochka', 'Пятёрочка', 25, 45, 300],
             ['magnit', 'Магнит', 30, 60, 400],
             ['vkusvill', 'ВкусВилл', 30, 60, 600],
+            ['vkusvill_giper', 'ВкусВилл Гипер', 40, 90, 800],
             ['lenta', 'Лента', 40, 90, 500],
+            ['lenta_super', 'Лента Супер', 35, 75, 400],
             ['dixy', 'Дикси', 30, 60, 300],
+            ['chizhik', 'Чижик', 25, 50, 200],
+            ['verny', 'Верный', 30, 60, 350],
         ];
 
         $stmt = $db->prepare("INSERT OR IGNORE INTO stores (slug, name, delivery_time_min, delivery_time_max, min_order) VALUES (?, ?, ?, ?, ?)");
@@ -227,17 +231,40 @@ class Database {
             $stmt->execute($store);
         }
 
-        // Categories
+        // Categories (from extension: chicken, turkey, pork, beef, minced, fish, eggs, milk, cheese, tvorog, smetana, butter, rice, buckwheat, oatmeal, pasta, potato, onion, carrot, cabbage, cucumber, tomato, bread, oil, sugar, salt)
         $categories = [
-            ['meat', 'Мясо и птица', '🍗', 'myaso-i-ptitsa', 1],
-            ['fish', 'Рыба и морепродукты', '🐟', 'ryba-i-moreprodukty', 2],
-            ['dairy', 'Молочные продукты', '🥛', 'molochnye-produkty', 3],
-            ['eggs', 'Яйца', '🥚', 'yaytsa', 4],
-            ['cereals', 'Крупы и макароны', '🌾', 'krupy-i-makarony', 5],
-            ['vegetables', 'Овощи и фрукты', '🥬', 'ovoschi-i-frukty', 6],
-            ['bread', 'Хлеб и выпечка', '🍞', 'khleb-i-vypechka', 7],
-            ['drinks', 'Напитки', '☕', 'napitki', 8],
-            ['sauces', 'Соусы и специи', '🧂', 'sousy-i-spetsii', 9],
+            // Мясо
+            ['chicken', 'Курица', '🍗', 'kuritsa', 1],
+            ['turkey', 'Индейка', '🦃', 'indeyka', 2],
+            ['pork', 'Свинина', '🥓', 'svinina', 3],
+            ['beef', 'Говядина', '🥩', 'govyadina', 4],
+            ['minced', 'Фарш', '🍖', 'farsh', 5],
+            // Рыба
+            ['fish', 'Рыба', '🐟', 'ryba', 6],
+            // Молочные продукты
+            ['eggs', 'Яйца', '🥚', 'yaytsa', 7],
+            ['milk', 'Молоко', '🥛', 'moloko', 8],
+            ['cheese', 'Сыр', '🧀', 'syr', 9],
+            ['tvorog', 'Творог', '🥛', 'tvorog', 10],
+            ['smetana', 'Сметана', '🥄', 'smetana', 11],
+            ['butter', 'Масло сливочное', '🧈', 'maslo', 12],
+            // Крупы
+            ['rice', 'Рис', '🍚', 'ris', 13],
+            ['buckwheat', 'Гречка', '🌾', 'grechka', 14],
+            ['oatmeal', 'Овсянка', '🥣', 'ovsyanka', 15],
+            ['pasta', 'Макароны', '🍝', 'makarony', 16],
+            // Овощи
+            ['potato', 'Картофель', '🥔', 'kartofel', 17],
+            ['onion', 'Лук', '🧅', 'luk', 18],
+            ['carrot', 'Морковь', '🥕', 'morkov', 19],
+            ['cabbage', 'Капуста', '🥬', 'kapusta', 20],
+            ['cucumber', 'Огурцы', '🥒', 'ogurtsy', 21],
+            ['tomato', 'Помидоры', '🍅', 'pomidory', 22],
+            // Прочее
+            ['bread', 'Хлеб', '🍞', 'khleb', 23],
+            ['oil', 'Масло растительное', '🫒', 'maslo-rastitelnoe', 24],
+            ['sugar', 'Сахар', '🍬', 'sakhar', 25],
+            ['salt', 'Соль', '🧂', 'sol', 26],
         ];
 
         $stmt = $db->prepare("INSERT OR IGNORE INTO categories (slug, name, emoji, url_path, sort_order) VALUES (?, ?, ?, ?, ?)");
