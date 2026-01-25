@@ -94,6 +94,10 @@ switch ($path) {
         require __DIR__ . '/pages/settings.php';
         break;
 
+    case 'editor':
+        require __DIR__ . '/pages/editor.php';
+        break;
+
     default:
         // Check if it's a recipe detail page
         if (preg_match('/^recipes\/(\d+)$/', $path, $matches)) {
