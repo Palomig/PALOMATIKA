@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\HomeworkController;
 use App\Http\Controllers\Api\LeaderboardController;
 use App\Http\Controllers\Api\ProgressController;
 use App\Http\Controllers\Api\SkillController;
+use App\Http\Controllers\Api\SmartCartProxyController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\TopicController;
 use App\Http\Controllers\Auth\TelegramBotAuthController;
@@ -35,6 +36,12 @@ Route::post('/referral/track', [OAuthController::class, 'trackReferral']);
 
 // Deploy webhook (called by GitHub Actions after FTP deploy)
 Route::post('/deploy/refresh', [DeployController::class, 'refresh']);
+
+// SmartCart proxy routes (forward to /smartcart/api/*)
+Route::options('/prices/bulk', [SmartCartProxyController::class, 'options']);
+Route::post('/prices/bulk', [SmartCartProxyController::class, 'bulkPrices']);
+Route::get('/stores', [SmartCartProxyController::class, 'stores']);
+Route::get('/cart', [SmartCartProxyController::class, 'cart']);
 
 Route::get('/topics', [TopicController::class, 'index']);
 Route::get('/topics/{topic}', [TopicController::class, 'show']);
