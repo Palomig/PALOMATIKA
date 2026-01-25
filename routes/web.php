@@ -18,6 +18,13 @@ Route::get('/', function () {
     return view('welcome');
 })->name('landing');
 
+// Meal Plan (SmartCart)
+Route::get('/meal-plan', function () {
+    $json = file_get_contents(public_path('smartcart/data/meal-plan.json'));
+    $data = json_decode($json, true);
+    return view('meal-plan', ['data' => $data]);
+})->name('meal-plan');
+
 // Telegram Bot Webhook (excluded from CSRF in VerifyCsrfToken middleware)
 Route::post('/telegram/webhook', [TelegramBotAuthController::class, 'webhook'])
     ->name('telegram.webhook');
