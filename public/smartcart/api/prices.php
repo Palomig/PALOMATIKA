@@ -257,6 +257,17 @@ if ($method === 'GET') {
 
         jsonResponse($response);
 
+    } elseif ($action === 'clear') {
+        // POST /api/prices?action=clear - Clear all prices
+        $count = Database::query("SELECT COUNT(*) as cnt FROM prices")[0]['cnt'];
+        Database::execute("DELETE FROM prices");
+
+        jsonResponse([
+            'success' => true,
+            'message' => "Удалено {$count} записей",
+            'deleted' => (int)$count
+        ]);
+
     } else {
         // POST /api/prices - Single price add
         if (empty($data['store_id']) || empty($data['name']) || empty($data['price'])) {
