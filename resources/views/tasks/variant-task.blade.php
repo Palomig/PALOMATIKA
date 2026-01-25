@@ -24,10 +24,37 @@
         'section' => $taskData['section'] ?? null,
     ];
 
-    // Для statements - передаём все statements
+    // Для statements - выбираем 3 случайных утверждения для варианта ОГЭ
     if ($type === 'statements' && isset($taskData['statements'])) {
-        $zadanie['statements'] = $taskData['statements'];
+        $allStatements = $taskData['statements'];
+
+        // Выбираем 3 случайных утверждения из набора (как в официальном ОГЭ)
+        if (count($allStatements) > 3) {
+            $keys = array_rand($allStatements, 3);
+            if (!is_array($keys)) $keys = [$keys];
+            sort($keys); // Сохраняем порядок для детерминированности
+
+            $selectedStatements = [];
+            $newNumber = 1;
+            foreach ($keys as $key) {
+                $statement = $allStatements[$key];
+                // Перенумеровываем для варианта (1, 2, 3)
+                $statement['display_number'] = $newNumber++;
+                $selectedStatements[] = $statement;
+            }
+            $zadanie['statements'] = $selectedStatements;
+        } else {
+            // Если утверждений 3 или меньше - берём все
+            $selectedStatements = [];
+            $newNumber = 1;
+            foreach ($allStatements as $statement) {
+                $statement['display_number'] = $newNumber++;
+                $selectedStatements[] = $statement;
+            }
+            $zadanie['statements'] = $selectedStatements;
+        }
         $zadanie['tasks'] = [];
+        $zadanie['is_oge_variant'] = true; // Флаг для компонента
     } else {
         // Для обычных типов - оборачиваем одну задачу в массив
         $zadanie['tasks'] = [$taskData['task'] ?? []];

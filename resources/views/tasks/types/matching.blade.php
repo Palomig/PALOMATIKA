@@ -41,19 +41,25 @@
             {{-- Отображение графика --}}
             @if($hasSvg)
                 {{-- Предзаготовленный SVG (Static SVG System) --}}
-                <div class="bg-slate-900/50 rounded-lg p-4 mb-4 flex justify-center">
+                <div class="bg-slate-900/80 rounded-lg p-4 mb-4 flex justify-center">
                     {!! $task['svg'] !!}
+                </div>
+            @elseif($hasImage && str_starts_with($imageName, '<svg'))
+                {{-- Inline SVG --}}
+                <div class="bg-slate-900/80 rounded-lg p-4 mb-4 flex justify-center">
+                    {!! $imageName !!}
                 </div>
             @elseif($hasImage)
                 {{-- PNG/JPEG изображение (временное решение) --}}
-                <div class="bg-slate-900/50 rounded-lg p-4 mb-4 flex justify-center">
+                <div class="bg-white rounded-lg p-4 mb-4 flex justify-center">
                     <img src="{{ $imageUrl }}"
                          alt="График {{ $task['id'] }}"
-                         class="max-w-full max-h-48 object-contain">
+                         class="max-w-full max-h-48 object-contain"
+                         onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-slate-500\'>Изображение не загружено</span>';">
                 </div>
             @else
                 <div class="text-red-400 text-center p-4 mb-4">
-                    <p class="font-bold mb-2">⚠️ Изображение не найдено</p>
+                    <p class="font-bold mb-2">Изображение не найдено</p>
                     <p class="text-sm text-slate-400">task['svg'] или task['image'] отсутствуют</p>
                 </div>
             @endif
