@@ -4242,6 +4242,17 @@ class TestPdfController extends Controller
 
         // Генерируем задания: по одному заданию для каждой темы из случайного выбранного zadanie
         foreach ($zadaniyaByTopic as $topicId => $zadaniyaList) {
+            // Для темы 11 (matching) используем специальный метод для 3 графиков
+            if ($topicId === '11') {
+                $matchingSet = $this->taskDataService->getRandomMatchingSet($topicId);
+                if ($matchingSet) {
+                    $matchingSet['topic_id'] = $topicId;
+                    $matchingSet['topic_title'] = $topicTitles[$topicId] ?? '';
+                    $tasks[] = $matchingSet;
+                }
+                continue;
+            }
+
             // Выбираем случайное zadanie из выбранных для этой темы
             $randomZadanie = $zadaniyaList[array_rand($zadaniyaList)];
 
