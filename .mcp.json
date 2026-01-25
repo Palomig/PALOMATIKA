@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "smartcart": {
+      "command": "node",
+      "args": ["/home/user/PALOMATIKA/mcp-servers/smartcart/index.js"],
+      "env": {
+        "SMARTCART_API_URL": "https://cw95865.tmweb.ru/smartcart"
+      }
+    }
+  }
+}
