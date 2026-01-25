@@ -189,11 +189,25 @@ require __DIR__ . '/../templates/header.php';
                 </div>
             </div>
             <div id="categoriesList" style="display: flex; flex-wrap: wrap; gap: 8px; max-height: 200px; overflow-y: auto; padding: 8px; background: var(--bg-tertiary); border-radius: var(--radius-md);"></div>
-            <div style="margin-top: 12px; display: flex; gap: 8px; align-items: center;">
-                <button type="button" class="btn btn-primary" onclick="exportSelectedCategories()">
-                    📤 Экспортировать выбранное
-                </button>
-                <span id="selectedCount" style="font-size: 0.85rem; color: var(--text-muted);">0 товаров</span>
+            <div style="margin-top: 12px;">
+                <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 10px;">
+                    <span style="font-size: 0.85rem; color: var(--text-secondary);">Формат:</span>
+                    <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 0.85rem;">
+                        <input type="radio" name="exportFormat" value="compact" checked> Компакт
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 0.85rem;">
+                        <input type="radio" name="exportFormat" value="csv"> CSV
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 0.85rem;">
+                        <input type="radio" name="exportFormat" value="full"> Полный
+                    </label>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <button type="button" class="btn btn-primary" onclick="exportSelectedCategories()">
+                        📤 Экспортировать
+                    </button>
+                    <span id="selectedCount" style="font-size: 0.85rem; color: var(--text-muted);">0 товаров</span>
+                </div>
             </div>
         </div>
 
@@ -392,7 +406,11 @@ function exportSelectedCategories() {
     }
 
     const categories = Array.from(checkboxes).map(cb => cb.value).join(',');
-    const url = BASE_URL + '/api/export.php?type=prices&store=' + store + '&categories=' + encodeURIComponent(categories);
+    const format = document.querySelector('input[name="exportFormat"]:checked').value;
+    let url = BASE_URL + '/api/export.php?type=prices&store=' + store + '&categories=' + encodeURIComponent(categories);
+    if (format !== 'full') {
+        url += '&format=' + format;
+    }
 
     // Trigger download
     window.location.href = url;

@@ -20,6 +20,7 @@ $type = $_GET['type'] ?? 'all';
 $storeFilter = $_GET['store'] ?? null;
 $categoryFilter = $_GET['categories'] ?? null; // Comma-separated list of categories
 $categoriesArray = $categoryFilter ? array_map('trim', explode(',', $categoryFilter)) : null;
+$format = $_GET['format'] ?? 'full'; // full, compact, csv
 
 if ($method === 'GET') {
     $data = [
@@ -64,14 +65,49 @@ if ($method === 'GET') {
         } else {
             $stores = Database::query("SELECT * FROM stores WHERE is_active = 1");
         }
-        $pricesData = [];
 
+        // CSV format - flat output
+        if ($format === 'csv') {
+            $csvRows = [];
+            foreach ($stores as $store) {
+                $sql = "SELECT store_product_name, price, weight, unit, category_slug FROM prices WHERE store_id = ? AND is_available = 1";
+                $params = [$store['id']];
+                if ($categoriesArray && count($categoriesArray) > 0) {
+                    $placeholders = implode(',', array_fill(0, count($categoriesArray), '?'));
+                    $sql .= " AND category_slug IN ($placeholders)";
+                    $params = array_merge($params, $categoriesArray);
+                }
+                $prices = Database::query($sql, $params);
+                foreach ($prices as $p) {
+                    $csvRows[] = implode(';', [$store['slug'], $p['store_product_name'], $p['price'], $p['weight'] ?? '', $p['unit'] ?? '', $p['category_slug'] ?? '']);
+                }
+            }
+
+            $filename = "smartcart-prices";
+            if ($storeFilter) $filename .= "-{$storeFilter}";
+            if ($categoryFilter) $filename .= "-" . str_replace(',', '_', $categoryFilter);
+            $filename .= "-" . date('Y-m-d') . ".csv";
+
+            header('Content-Type: text/csv; charset=utf-8');
+            header('Content-Disposition: attachment; filename="' . $filename . '"');
+            echo "store;name;price;weight;unit;category\n";
+            echo implode("\n", $csvRows);
+            exit;
+        }
+
+        $pricesData = [];
         foreach ($stores as $store) {
             // Build query with optional category filter
-            $sql = "SELECT store_product_name as name, price, original_price, discount_percent as discount,
-                        weight, unit, category_slug as category, url, parsed_at
-                 FROM prices
-                 WHERE store_id = ? AND is_available = 1";
+            if ($format === 'compact') {
+                // Compact: only essential fields, short keys
+                $sql = "SELECT store_product_name as n, price as p, weight as w, unit as u, category_slug as c
+                     FROM prices WHERE store_id = ? AND is_available = 1";
+            } else {
+                // Full format
+                $sql = "SELECT store_product_name as name, price, original_price, discount_percent as discount,
+                            weight, unit, category_slug as category, url, parsed_at
+                     FROM prices WHERE store_id = ? AND is_available = 1";
+            }
             $params = [$store['id']];
 
             if ($categoriesArray && count($categoriesArray) > 0) {
@@ -83,11 +119,22 @@ if ($method === 'GET') {
             $sql .= " ORDER BY category_slug, store_product_name";
             $prices = Database::query($sql, $params);
 
+            // Remove null values in compact mode
+            if ($format === 'compact' && !empty($prices)) {
+                $prices = array_map(function($p) {
+                    return array_filter($p, fn($v) => $v !== null && $v !== '');
+                }, $prices);
+            }
+
             if (!empty($prices)) {
-                $pricesData[$store['slug']] = [
-                    'store_name' => $store['name'],
-                    'products' => $prices
-                ];
+                if ($format === 'compact') {
+                    $pricesData[$store['slug']] = $prices;
+                } else {
+                    $pricesData[$store['slug']] = [
+                        'store_name' => $store['name'],
+                        'products' => $prices
+                    ];
+                }
             }
         }
 
@@ -122,8 +169,18 @@ if ($method === 'GET') {
     if ($categoryFilter) {
         $filename .= "-" . str_replace(',', '_', $categoryFilter);
     }
+    if ($format === 'compact') {
+        $filename .= "-compact";
+    }
     $filename .= "-" . date('Y-m-d') . ".json";
     header('Content-Disposition: attachment; filename="' . $filename . '"');
+
+    // Compact format: minified JSON (no whitespace)
+    if ($format === 'compact') {
+        header('Content-Type: application/json');
+        echo json_encode($data, JSON_UNESCAPED_UNICODE);
+        exit;
+    }
 
     jsonResponse($data);
 
