@@ -14,7 +14,41 @@ require_once __DIR__ . '/../config.php';
 require_once __DIR__ . '/../includes/database.php';
 require_once __DIR__ . '/../includes/functions.php';
 
-setCorsHeaders();
+// Special CORS for Yandex Market Delivery
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$allowedOrigins = [
+    'https://market-delivery.yandex.ru',
+    'chrome-extension://',
+];
+
+$corsAllowed = false;
+foreach ($allowedOrigins as $allowed) {
+    if (str_starts_with($origin, $allowed) || $origin === $allowed) {
+        $corsAllowed = true;
+        break;
+    }
+}
+
+// Allow localhost for development
+if (str_contains($origin, 'localhost') || str_contains($origin, '127.0.0.1')) {
+    $corsAllowed = true;
+}
+
+if ($corsAllowed && $origin) {
+    header('Access-Control-Allow-Origin: ' . $origin);
+} else {
+    header('Access-Control-Allow-Origin: *');
+}
+
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+header('Access-Control-Max-Age: 86400');
+
+// Handle preflight
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
 
 $method = $_SERVER['REQUEST_METHOD'];
 $action = $_GET['action'] ?? null;
@@ -86,87 +120,151 @@ if ($method === 'GET') {
 
     if ($action === 'bulk') {
         // POST /api/prices/bulk - Bulk import from extension
-        if (empty($data['store_slug']) || empty($data['products'])) {
-            errorResponse('store_slug and products are required');
+        // Accept both 'store' and 'store_slug' for compatibility
+        $storeSlug = $data['store'] ?? $data['store_slug'] ?? null;
+        $category = $data['category'] ?? null;
+        $products = $data['products'] ?? [];
+
+        // Validate required fields
+        if (empty($storeSlug)) {
+            jsonResponse([
+                'success' => false,
+                'error' => 'store is required'
+            ], 400);
         }
 
-        // Get store
-        $store = Database::query("SELECT id FROM stores WHERE slug = ?", [$data['store_slug']]);
+        if (empty($category)) {
+            jsonResponse([
+                'success' => false,
+                'error' => 'category is required'
+            ], 400);
+        }
+
+        if (!is_array($products) || empty($products)) {
+            jsonResponse([
+                'success' => false,
+                'error' => 'products array is required'
+            ], 400);
+        }
+
+        // Get or create store
+        $store = Database::query("SELECT id FROM stores WHERE slug = ?", [$storeSlug]);
+
         if (empty($store)) {
-            errorResponse('Store not found', 404);
-        }
-        $storeId = $store[0]['id'];
-
-        $parsedAt = $data['parsed_at'] ?? date('Y-m-d H:i:s');
-        $imported = 0;
-        $updated = 0;
-
-        foreach ($data['products'] as $product) {
-            $name = $product['name'] ?? '';
-            if (empty($name)) continue;
-
-            $price = (float)($product['price'] ?? 0);
-            if ($price <= 0) continue;
-
-            $originalPrice = $product['originalPrice'] ?? $product['original_price'] ?? null;
-            $discount = $product['discount'] ?? null;
-            $weight = $product['weight'] ?? null;
-            $unit = $product['unit'] ?? 'г';
-            $url = $product['url'] ?? null;
-            $category = $product['category'] ?? null;
-
-            // Calculate price per kg
-            $pricePerKg = calculatePricePerKg($price, $weight, $unit);
-
-            // Try to match with existing product
-            $productId = null;
-            $existingProducts = Database::query("SELECT id, search_keywords FROM products");
-            foreach ($existingProducts as $ep) {
-                if (matchProduct($name, $ep['search_keywords'] ?? '')) {
-                    $productId = $ep['id'];
-                    break;
-                }
-            }
-
-            // Check if price already exists (same store, similar name)
-            $existing = Database::query(
-                "SELECT id FROM prices WHERE store_id = ? AND store_product_name = ?",
-                [$storeId, $name]
+            // Auto-create store
+            $storeName = ucfirst(str_replace(['_', '-'], ' ', $storeSlug));
+            Database::execute(
+                "INSERT INTO stores (slug, name, delivery_time_min, delivery_time_max, min_order, is_active) VALUES (?, ?, 30, 60, 0, 1)",
+                [$storeSlug, $storeName]
             );
+            $storeId = Database::lastInsertId();
+        } else {
+            $storeId = $store[0]['id'];
+        }
 
-            if (!empty($existing)) {
-                // Update existing price
-                Database::execute(
-                    "UPDATE prices SET
-                        price = ?, original_price = ?, discount_percent = ?,
-                        weight = ?, unit = ?, price_per_kg = ?,
-                        url = ?, category_slug = ?, parsed_at = ?, is_available = 1
-                     WHERE id = ?",
-                    [$price, $originalPrice, $discount, $weight, $unit, $pricePerKg, $url, $category, $parsedAt, $existing[0]['id']]
+        // Get exportedAt or use current time
+        $exportedAt = $data['exportedAt'] ?? $data['parsed_at'] ?? date('Y-m-d H:i:s');
+        if (str_contains($exportedAt, 'T')) {
+            $exportedAt = date('Y-m-d H:i:s', strtotime($exportedAt));
+        }
+
+        $count = 0;
+        $errors = [];
+
+        foreach ($products as $index => $product) {
+            try {
+                $name = trim($product['name'] ?? '');
+                if (empty($name)) {
+                    $errors[] = "Product at index {$index} has no name";
+                    continue;
+                }
+
+                $price = (int)($product['price'] ?? 0);
+                if ($price <= 0) {
+                    $errors[] = "Product '{$name}' has invalid price";
+                    continue;
+                }
+
+                $originalPrice = isset($product['originalPrice']) && $product['originalPrice'] > 0
+                    ? (int)$product['originalPrice']
+                    : null;
+
+                $discount = isset($product['discount']) && $product['discount'] > 0
+                    ? (int)$product['discount']
+                    : null;
+
+                $weight = isset($product['weight']) ? (float)$product['weight'] : null;
+                $unit = $product['unit'] ?? 'г';
+                $pricePerKg = isset($product['pricePerKg']) ? (int)$product['pricePerKg'] : calculatePricePerKg($price, $weight, $unit);
+                $url = $product['url'] ?? null;
+
+                // Individual parsedAt or use exportedAt
+                $parsedAt = $product['parsedAt'] ?? $exportedAt;
+                if (str_contains($parsedAt, 'T')) {
+                    $parsedAt = date('Y-m-d H:i:s', strtotime($parsedAt));
+                }
+
+                // Check if price already exists (same store + same name)
+                $existing = Database::query(
+                    "SELECT id FROM prices WHERE store_id = ? AND store_product_name = ?",
+                    [$storeId, $name]
                 );
-                $updated++;
-            } else {
-                // Insert new price
-                Database::execute(
-                    "INSERT INTO prices (product_id, store_id, store_product_name, price, original_price, discount_percent, weight, unit, price_per_kg, url, category_slug, parsed_at)
-                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                    [$productId, $storeId, $name, $price, $originalPrice, $discount, $weight, $unit, $pricePerKg, $url, $category, $parsedAt]
-                );
-                $imported++;
+
+                if (!empty($existing)) {
+                    // Update existing price
+                    Database::execute(
+                        "UPDATE prices SET
+                            price = ?, original_price = ?, discount_percent = ?,
+                            weight = ?, unit = ?, price_per_kg = ?,
+                            url = ?, category_slug = ?, parsed_at = ?, is_available = 1
+                         WHERE id = ?",
+                        [$price, $originalPrice, $discount, $weight, $unit, $pricePerKg, $url, $category, $parsedAt, $existing[0]['id']]
+                    );
+                } else {
+                    // Try to match with existing product
+                    $productId = null;
+                    $existingProducts = Database::query("SELECT id, search_keywords FROM products");
+                    foreach ($existingProducts as $ep) {
+                        if (!empty($ep['search_keywords']) && matchProduct($name, $ep['search_keywords'])) {
+                            $productId = $ep['id'];
+                            break;
+                        }
+                    }
+
+                    // Insert new price
+                    Database::execute(
+                        "INSERT INTO prices (product_id, store_id, store_product_name, price, original_price, discount_percent, weight, unit, price_per_kg, url, category_slug, parsed_at, is_available)
+                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)",
+                        [$productId, $storeId, $name, $price, $originalPrice, $discount, $weight, $unit, $pricePerKg, $url, $category, $parsedAt]
+                    );
+                }
+
+                $count++;
+
+            } catch (Exception $e) {
+                $errors[] = "Error processing product '{$name}': " . $e->getMessage();
             }
         }
 
-        jsonResponse([
+        $response = [
             'success' => true,
-            'imported' => $imported,
-            'updated' => $updated,
-            'total' => count($data['products'])
-        ]);
+            'message' => "Сохранено {$count} товаров",
+            'count' => $count
+        ];
+
+        if (!empty($errors) && count($errors) <= 5) {
+            $response['warnings'] = $errors;
+        }
+
+        jsonResponse($response);
 
     } else {
         // POST /api/prices - Single price add
         if (empty($data['store_id']) || empty($data['name']) || empty($data['price'])) {
-            errorResponse('store_id, name and price are required');
+            jsonResponse([
+                'success' => false,
+                'error' => 'store_id, name and price are required'
+            ], 400);
         }
 
         $pricePerKg = calculatePricePerKg($data['price'], $data['weight'] ?? null, $data['unit'] ?? 'г');
@@ -196,5 +294,8 @@ if ($method === 'GET') {
     }
 
 } else {
-    errorResponse('Method not allowed', 405);
+    jsonResponse([
+        'success' => false,
+        'error' => 'Method not allowed'
+    ], 405);
 }
