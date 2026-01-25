@@ -1,80 +1,129 @@
 /**
- * 🛒 SmartCart - Popup Script
- * Основная логика всплывающего окна расширения
+ * 🛒 SmartCart - Popup Script v2
+ * С реальными ссылками на магазины и системой сбора цен
  */
 
-// === КОНФИГУРАЦИЯ ===
-const CONFIG = {
-  // Базовый URL Delivery Club
-  deliveryBaseUrl: 'https://market-delivery.yandex.ru',
-  
-  // Категории для парсинга с URL путями
-  categories: [
-    { slug: 'meat', name: 'Мясо и птица', emoji: '🍗', path: 'myaso-i-ptitsa' },
-    { slug: 'fish', name: 'Рыба и морепродукты', emoji: '🐟', path: 'ryba-i-moreprodukty' },
-    { slug: 'dairy', name: 'Молочные продукты', emoji: '🥛', path: 'molochnye-produkty' },
-    { slug: 'eggs', name: 'Яйца', emoji: '🥚', path: 'yaytsa' },
-    { slug: 'cereals', name: 'Крупы и макароны', emoji: '🌾', path: 'krupy-i-makarony' },
-    { slug: 'vegetables', name: 'Овощи и фрукты', emoji: '🥬', path: 'ovoschi-i-frukty' },
-    { slug: 'bread', name: 'Хлеб и выпечка', emoji: '🍞', path: 'khleb-i-vypechka' },
-    { slug: 'drinks', name: 'Напитки', emoji: '☕', path: 'napitki' },
-  ],
-  
-  // Магазины
-  stores: {
-    perekrestok: { name: 'Перекрёсток', slug: 'perekrestok' },
-    pyaterochka: { name: 'Пятёрочка', slug: 'pyaterochka' },
-    magnit: { name: 'Магнит', slug: 'magnit' },
-    vkusvill: { name: 'ВкусВилл', slug: 'vkusvill' },
-    lenta: { name: 'Лента', slug: 'lenta' },
-    dixy: { name: 'Дикси', slug: 'dixy' },
+// === КОНФИГУРАЦИЯ МАГАЗИНОВ ===
+const STORES = {
+  perekrestok: {
+    name: 'Перекрёсток',
+    baseUrl: 'https://market-delivery.yandex.ru/retail/perekrestok?placeSlug=perekrestok_7stl6&relatedBrandSlug=perekrestok',
+    color: '#4CAF50'
+  },
+  magnit: {
+    name: 'Магнит',
+    baseUrl: 'https://market-delivery.yandex.ru/retail/magnit_celevaya?placeSlug=magnit_celevaya_pmnr6&relatedBrandSlug=magnit_celevaya',
+    color: '#E91E63'
+  },
+  pyaterochka: {
+    name: 'Пятёрочка',
+    baseUrl: 'https://market-delivery.yandex.ru/retail/paterocka?placeSlug=pyaterochka_ciskb&relatedBrandSlug=paterocka',
+    color: '#FF5722'
+  },
+  vkusvill: {
+    name: 'ВкусВилл',
+    baseUrl: 'https://market-delivery.yandex.ru/retail/vkusvill?placeSlug=vkusvill_ekspress_cs6mz&relatedBrandSlug=vkusvill',
+    color: '#8BC34A'
+  },
+  vkusvill_giper: {
+    name: 'ВкусВилл Гипер',
+    baseUrl: 'https://market-delivery.yandex.ru/retail/vkusvill_giper?placeSlug=vkusvill_qcpbx&relatedBrandSlug=vkusvill_giper',
+    color: '#689F38'
+  },
+  lenta: {
+    name: 'Гиперлента',
+    baseUrl: 'https://market-delivery.yandex.ru/retail/lenta?placeSlug=lenta_zrmdq&relatedBrandSlug=lenta',
+    color: '#2196F3'
+  },
+  lenta_super: {
+    name: 'Супер Лента',
+    baseUrl: 'https://market-delivery.yandex.ru/retail/lenta_onlajn?placeSlug=lenta_zvdfl&relatedBrandSlug=lenta_onlajn',
+    color: '#1976D2'
+  },
+  dixy: {
+    name: 'Дикси',
+    baseUrl: 'https://market-delivery.yandex.ru/retail/diksi_celevaa?placeSlug=diksi_celevaya_f328j&relatedBrandSlug=diksi_celevaa',
+    color: '#F44336'
+  },
+  chizhik: {
+    name: 'Чижик',
+    baseUrl: 'https://market-delivery.yandex.ru/retail/cizik?placeSlug=chizhik_8csdz&relatedBrandSlug=cizik',
+    color: '#FFC107'
+  },
+  verny: {
+    name: 'Верный',
+    baseUrl: 'https://market-delivery.yandex.ru/retail/vernyj_obaij?placeSlug=vernyj_mira_9a&relatedBrandSlug=vernyj_obaij',
+    color: '#9C27B0'
   }
 };
 
+// === СПИСОК ПРОДУКТОВ ДЛЯ ПОИСКА ===
+const PRODUCTS = [
+  // Мясо - общие запросы
+  { id: 'chicken', name: 'Курица', query: 'курица', emoji: '🍗' },
+  { id: 'turkey', name: 'Индейка', query: 'индейка', emoji: '🦃' },
+  { id: 'pork', name: 'Свинина', query: 'свинина', emoji: '🥩' },
+  { id: 'beef', name: 'Говядина', query: 'говядина', emoji: '🥩' },
+  { id: 'minced', name: 'Фарш', query: 'фарш', emoji: '🍖' },
+  
+  // Рыба
+  { id: 'fish', name: 'Рыба', query: 'рыба', emoji: '🐟' },
+  
+  // Молочка
+  { id: 'eggs', name: 'Яйца', query: 'яйца', emoji: '🥚' },
+  { id: 'milk', name: 'Молоко', query: 'молоко', emoji: '🥛' },
+  { id: 'cheese', name: 'Сыр', query: 'сыр', emoji: '🧀' },
+  { id: 'tvorog', name: 'Творог', query: 'творог', emoji: '🥛' },
+  { id: 'smetana', name: 'Сметана', query: 'сметана', emoji: '🥛' },
+  { id: 'butter', name: 'Масло сливочное', query: 'масло сливочное', emoji: '🧈' },
+  
+  // Крупы
+  { id: 'rice', name: 'Рис', query: 'рис', emoji: '🍚' },
+  { id: 'buckwheat', name: 'Гречка', query: 'гречка', emoji: '🌾' },
+  { id: 'oatmeal', name: 'Овсянка', query: 'овсянка', emoji: '🌾' },
+  { id: 'pasta', name: 'Макароны', query: 'макароны', emoji: '🍝' },
+  
+  // Овощи
+  { id: 'potato', name: 'Картофель', query: 'картофель', emoji: '🥔' },
+  { id: 'onion', name: 'Лук', query: 'лук', emoji: '🧅' },
+  { id: 'carrot', name: 'Морковь', query: 'морковь', emoji: '🥕' },
+  { id: 'cabbage', name: 'Капуста', query: 'капуста', emoji: '🥬' },
+  { id: 'cucumber', name: 'Огурцы', query: 'огурцы', emoji: '🥒' },
+  { id: 'tomato', name: 'Помидоры', query: 'помидоры', emoji: '🍅' },
+  
+  // Другое
+  { id: 'bread', name: 'Хлеб', query: 'хлеб', emoji: '🍞' },
+  { id: 'oil', name: 'Масло растительное', query: 'масло подсолнечное', emoji: '🫒' },
+  { id: 'sugar', name: 'Сахар', query: 'сахар', emoji: '🍬' },
+  { id: 'salt', name: 'Соль', query: 'соль', emoji: '🧂' },
+];
+
 // === СОСТОЯНИЕ ===
 let state = {
-  currentStore: 'perekrestok',
+  currentStore: null,
+  currentProduct: null,
   serverUrl: 'https://cw95865.tmweb.ru',
-  parsedProducts: {},        // { store: { category: [products] } }
-  parsedCategories: {},      // { store: [category_slugs] }
-  shoppingList: [],          // Текущий список покупок
-  currentShoppingItem: null, // Текущий товар для покупки
-  isConnected: false
+  parsedData: {},
+  completedQuests: {},
 };
 
 // === ИНИЦИАЛИЗАЦИЯ ===
 document.addEventListener('DOMContentLoaded', async () => {
   await loadState();
-  initTabs();
-  initStoreSelector();
-  renderCategories();
-  renderStats();
-  initEventListeners();
-  checkConnection();
+  renderUI();
 });
 
-// === ЗАГРУЗКА/СОХРАНЕНИЕ СОСТОЯНИЯ ===
 async function loadState() {
   try {
     const data = await chrome.storage.local.get([
-      'serverUrl',
-      'parsedProducts',
-      'parsedCategories',
-      'shoppingList',
-      'currentStore'
+      'serverUrl', 'parsedData', 'completedQuests', 'currentStore'
     ]);
-    
     if (data.serverUrl) state.serverUrl = data.serverUrl;
-    if (data.parsedProducts) state.parsedProducts = data.parsedProducts;
-    if (data.parsedCategories) state.parsedCategories = data.parsedCategories;
-    if (data.shoppingList) state.shoppingList = data.shoppingList;
+    if (data.parsedData) state.parsedData = data.parsedData;
+    if (data.completedQuests) state.completedQuests = data.completedQuests;
     if (data.currentStore) state.currentStore = data.currentStore;
-    
-    // Обновляем UI
-    document.getElementById('serverUrl').value = state.serverUrl;
-    
   } catch (e) {
-    console.error('Ошибка загрузки состояния:', e);
+    console.error('Ошибка загрузки:', e);
   }
 }
 
@@ -82,9 +131,8 @@ async function saveState() {
   try {
     await chrome.storage.local.set({
       serverUrl: state.serverUrl,
-      parsedProducts: state.parsedProducts,
-      parsedCategories: state.parsedCategories,
-      shoppingList: state.shoppingList,
+      parsedData: state.parsedData,
+      completedQuests: state.completedQuests,
       currentStore: state.currentStore
     });
   } catch (e) {
@@ -92,715 +140,459 @@ async function saveState() {
   }
 }
 
-// === ТАБЫ ===
-function initTabs() {
-  const tabs = document.querySelectorAll('.tab');
+// === РЕНДЕРИНГ ===
+function renderUI() {
+  const app = document.getElementById('app');
   
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-      
-      tab.classList.add('active');
-      const panelId = `panel-${tab.dataset.tab}`;
-      document.getElementById(panelId).classList.add('active');
-      
-      // Обновляем контент при переключении
-      if (tab.dataset.tab === 'shop') {
-        renderShoppingList();
-      } else if (tab.dataset.tab === 'settings') {
-        renderLocalStats();
-      }
+  let totalProducts = 0;
+  let totalStores = 0;
+  Object.entries(state.parsedData).forEach(([store, products]) => {
+    const hasData = Object.keys(products).length > 0;
+    if (hasData) totalStores++;
+    Object.values(products).forEach(items => {
+      totalProducts += items.length;
     });
   });
-}
-
-// === ВЫБОР МАГАЗИНА ===
-function initStoreSelector() {
-  const buttons = document.querySelectorAll('.store-btn');
   
-  // Устанавливаем активный магазин из состояния
-  buttons.forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.store === state.currentStore);
+  app.innerHTML = `
+    <div class="header">
+      <div class="logo">🛒 <span>SmartCart</span></div>
+      <div class="stats-mini">${totalProducts} товаров • ${totalStores} магазинов</div>
+    </div>
     
-    btn.addEventListener('click', () => {
-      buttons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      state.currentStore = btn.dataset.store;
-      saveState();
-      renderCategories();
-    });
-  });
+    <div class="tabs">
+      <button class="tab active" data-tab="collect">📊 Сбор</button>
+      <button class="tab" data-tab="data">💾 Данные</button>
+      <button class="tab" data-tab="settings">⚙️</button>
+    </div>
+    
+    <div class="panel active" id="panel-collect">
+      ${renderCollectPanel()}
+    </div>
+    
+    <div class="panel" id="panel-data">
+      ${renderDataPanel()}
+    </div>
+    
+    <div class="panel" id="panel-settings">
+      ${renderSettingsPanel()}
+    </div>
+    
+    <div class="notification" id="notification"></div>
+  `;
+  
+  initEventListeners();
 }
 
-// === КАТЕГОРИИ ===
-function renderCategories() {
-  const container = document.getElementById('categoryList');
-  const store = state.currentStore;
-  const parsedCats = state.parsedCategories[store] || [];
+function renderCollectPanel() {
+  const storeProgress = {};
+  Object.keys(STORES).forEach(storeId => {
+    const completed = state.completedQuests[storeId]?.length || 0;
+    storeProgress[storeId] = Math.round((completed / PRODUCTS.length) * 100);
+  });
   
-  container.innerHTML = CONFIG.categories.map(cat => {
-    const isParsed = parsedCats.includes(cat.slug);
-    const productCount = state.parsedProducts[store]?.[cat.slug]?.length || 0;
+  return `
+    <div class="section">
+      <div class="section-title">1️⃣ Выбери магазин</div>
+      <div class="store-grid">
+        ${Object.entries(STORES).map(([id, store]) => `
+          <button class="store-btn ${state.currentStore === id ? 'active' : ''}" data-store="${id}">
+            <span class="store-name">${store.name}</span>
+            <span class="store-progress">${storeProgress[id]}%</span>
+          </button>
+        `).join('')}
+      </div>
+    </div>
+    
+    ${state.currentStore ? `
+    <div class="section">
+      <div class="section-title">2️⃣ Кликни на продукт → откроется поиск</div>
+      <div class="product-grid">
+        ${renderProductButtons()}
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-title">3️⃣ На странице нажми</div>
+      <button class="btn btn-primary" id="scanBtn">
+        🔍 Собрать товары со страницы
+      </button>
+    </div>
+    ` : `
+    <div class="empty-hint">👆 Выбери магазин</div>
+    `}
+  `;
+}
+
+function renderProductButtons() {
+  const completed = state.completedQuests[state.currentStore] || [];
+  
+  const categories = {
+    meat: { name: '🍖 Мясо', items: [] },
+    fish: { name: '🐟 Рыба', items: [] },
+    eggs: { name: '🥚 Яйца', items: [] },
+    dairy: { name: '🥛 Молочка', items: [] },
+    cereals: { name: '🌾 Крупы', items: [] },
+    vegetables: { name: '🥬 Овощи', items: [] },
+    bread: { name: '🍞 Хлеб', items: [] },
+    other: { name: '📦 Другое', items: [] },
+  };
+  
+  PRODUCTS.forEach(p => {
+    if (categories[p.category]) {
+      categories[p.category].items.push(p);
+    }
+  });
+  
+  return Object.entries(categories).map(([catId, cat]) => {
+    if (cat.items.length === 0) return '';
     
     return `
-      <button class="category-btn ${isParsed ? 'parsed' : ''}" data-slug="${cat.slug}" data-path="${cat.path}">
-        <span>
-          <span class="emoji">${cat.emoji}</span>
-          ${cat.name}
-        </span>
-        <span class="count">${productCount > 0 ? productCount + ' товаров' : ''}</span>
-        <span class="status-icon">${isParsed ? '✅' : '➡️'}</span>
-      </button>
+      <div class="product-category">
+        <div class="cat-name">${cat.name}</div>
+        ${cat.items.map(p => {
+          const isDone = completed.includes(p.id);
+          const count = state.parsedData[state.currentStore]?.[p.id]?.length || 0;
+          return `
+            <button class="product-btn ${isDone ? 'done' : ''}" data-product="${p.id}">
+              ${p.name}
+              ${count > 0 ? `<span class="cnt">${count}</span>` : ''}
+              ${isDone ? '✓' : ''}
+            </button>
+          `;
+        }).join('')}
+      </div>
     `;
   }).join('');
-  
-  // Обработчики на кнопки категорий
-  container.querySelectorAll('.category-btn').forEach(btn => {
-    btn.addEventListener('click', () => openCategory(btn.dataset.slug, btn.dataset.path));
-  });
 }
 
-async function openCategory(slug, path) {
-  const store = state.currentStore;
+function renderDataPanel() {
+  let totalProducts = 0;
+  const storeStats = [];
   
-  // Формируем URL категории
-  // Примерный формат: https://market-delivery.yandex.ru/retail/{store}/category/{path}
-  const url = `${CONFIG.deliveryBaseUrl}/retail/${store}/category/${path}`;
+  Object.entries(state.parsedData).forEach(([storeId, products]) => {
+    let storeTotal = 0;
+    Object.values(products).forEach(items => {
+      storeTotal += items.length;
+      totalProducts += items.length;
+    });
+    if (storeTotal > 0) {
+      storeStats.push({ name: STORES[storeId]?.name || storeId, count: storeTotal });
+    }
+  });
   
-  try {
-    // Открываем в новой вкладке
-    await chrome.tabs.create({ url, active: true });
+  return `
+    <div class="section">
+      <div class="section-title">📊 Собрано</div>
+      <div class="stats-row">
+        <div class="stat-box"><div class="val">${totalProducts}</div><div class="lbl">товаров</div></div>
+        <div class="stat-box"><div class="val">${storeStats.length}</div><div class="lbl">магазинов</div></div>
+      </div>
+      
+      ${storeStats.map(s => `
+        <div class="data-row">${s.name} <span>${s.count}</span></div>
+      `).join('')}
+    </div>
     
-    showNotification(`📂 Открыта категория: ${slug}`);
-    
-  } catch (e) {
-    console.error('Ошибка открытия категории:', e);
-    showNotification('❌ Не удалось открыть категорию', 'error');
+    <div class="section">
+      <button class="btn" id="exportJsonBtn">💾 Скачать JSON</button>
+      <button class="btn" id="sendServerBtn">📤 Отправить на сервер</button>
+      <button class="btn btn-danger" id="clearDataBtn">🗑️ Очистить всё</button>
+    </div>
+  `;
+}
+
+function renderSettingsPanel() {
+  return `
+    <div class="section">
+      <div class="section-title">🌐 Сервер</div>
+      <input type="text" id="serverUrlInput" class="input" value="${state.serverUrl}">
+      <button class="btn" id="testServerBtn">🔗 Проверить</button>
+    </div>
+    <div class="section">
+      <p class="hint">SmartCart v2.0</p>
+    </div>
+  `;
+}
+
+// === ОБРАБОТЧИКИ ===
+function initEventListeners() {
+  // Табы
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(`panel-${tab.dataset.tab}`).classList.add('active');
+    });
+  });
+  
+  // Магазины
+  document.querySelectorAll('.store-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const storeId = btn.dataset.store;
+      state.currentStore = storeId;
+      state.currentProduct = null;
+      await saveState();
+      
+      // Открываем страницу магазина
+      const store = STORES[storeId];
+      if (store) {
+        chrome.tabs.create({ url: store.baseUrl, active: true });
+      }
+      renderUI();
+    });
+  });
+  
+  // Продукты
+  document.querySelectorAll('.product-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const productId = btn.dataset.product;
+      const product = PRODUCTS.find(p => p.id === productId);
+      const store = STORES[state.currentStore];
+      
+      if (!product || !store) return;
+      
+      state.currentProduct = productId;
+      await saveState();
+      
+      // URL поиска — добавляем query к baseUrl
+      const searchUrl = store.baseUrl + '&query=' + encodeURIComponent(product.query);
+      chrome.tabs.create({ url: searchUrl, active: true });
+    });
+  });
+  
+  // Сканирование
+  const scanBtn = document.getElementById('scanBtn');
+  if (scanBtn) {
+    scanBtn.addEventListener('click', scanPage);
+  }
+  
+  // Экспорт
+  const exportBtn = document.getElementById('exportJsonBtn');
+  if (exportBtn) {
+    exportBtn.addEventListener('click', exportJson);
+  }
+  
+  // Отправка на сервер
+  const sendBtn = document.getElementById('sendServerBtn');
+  if (sendBtn) {
+    sendBtn.addEventListener('click', sendToServer);
+  }
+  
+  // Очистка
+  const clearBtn = document.getElementById('clearDataBtn');
+  if (clearBtn) {
+    clearBtn.addEventListener('click', async () => {
+      if (confirm('Удалить все данные?')) {
+        state.parsedData = {};
+        state.completedQuests = {};
+        await saveState();
+        renderUI();
+        showNotification('Данные удалены');
+      }
+    });
+  }
+  
+  // Тест сервера
+  const testBtn = document.getElementById('testServerBtn');
+  if (testBtn) {
+    testBtn.addEventListener('click', testServer);
+  }
+  
+  // URL сервера
+  const serverInput = document.getElementById('serverUrlInput');
+  if (serverInput) {
+    serverInput.addEventListener('change', async (e) => {
+      state.serverUrl = e.target.value;
+      await saveState();
+    });
   }
 }
 
 // === ПАРСИНГ ===
-async function scanCurrentPage() {
-  const btn = document.getElementById('scanPageBtn');
-  btn.textContent = '⏳ Сканирование...';
+async function scanPage() {
+  const btn = document.getElementById('scanBtn');
+  btn.textContent = '⏳ Сканирую...';
   btn.disabled = true;
   
   try {
-    // Получаем активную вкладку
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     
-    // Проверяем, что мы на нужном сайте
     if (!tab.url.includes('market-delivery.yandex.ru')) {
-      showNotification('⚠️ Откройте market-delivery.yandex.ru', 'error');
+      showNotification('Открой market-delivery.yandex.ru', 'error');
       return;
     }
     
-    // Внедряем скрипт для парсинга
     const results = await chrome.scripting.executeScript({
       target: { tabId: tab.id },
-      func: extractProductsFromPage
+      func: extractProducts
     });
     
-    if (results && results[0] && results[0].result) {
-      const { products, store, category } = results[0].result;
+    if (results && results[0]?.result) {
+      const products = results[0].result;
       
       if (products.length > 0) {
-        // Сохраняем спарсенные данные
-        if (!state.parsedProducts[store]) {
-          state.parsedProducts[store] = {};
+        if (!state.parsedData[state.currentStore]) {
+          state.parsedData[state.currentStore] = {};
         }
         
-        // Добавляем/обновляем товары
-        if (!state.parsedProducts[store][category]) {
-          state.parsedProducts[store][category] = [];
-        }
+        const productKey = state.currentProduct || 'other';
+        state.parsedData[state.currentStore][productKey] = products;
         
-        // Мержим с существующими (обновляем цены)
-        products.forEach(newProduct => {
-          const existingIndex = state.parsedProducts[store][category].findIndex(
-            p => p.name === newProduct.name
-          );
-          
-          if (existingIndex >= 0) {
-            state.parsedProducts[store][category][existingIndex] = newProduct;
-          } else {
-            state.parsedProducts[store][category].push(newProduct);
+        if (state.currentProduct) {
+          if (!state.completedQuests[state.currentStore]) {
+            state.completedQuests[state.currentStore] = [];
           }
-        });
-        
-        // Отмечаем категорию как спарсенную
-        if (!state.parsedCategories[store]) {
-          state.parsedCategories[store] = [];
-        }
-        if (!state.parsedCategories[store].includes(category)) {
-          state.parsedCategories[store].push(category);
+          if (!state.completedQuests[state.currentStore].includes(state.currentProduct)) {
+            state.completedQuests[state.currentStore].push(state.currentProduct);
+          }
         }
         
         await saveState();
-        renderCategories();
-        renderStats();
-        
-        showNotification(`✅ Найдено ${products.length} товаров`);
+        renderUI();
+        showNotification(`✅ Сохранено ${products.length} товаров`);
       } else {
-        showNotification('⚠️ Товары не найдены на странице', 'error');
+        showNotification('Товары не найдены', 'error');
       }
     }
-    
   } catch (e) {
-    console.error('Ошибка парсинга:', e);
-    showNotification('❌ Ошибка парсинга', 'error');
+    console.error('Ошибка:', e);
+    showNotification('Ошибка сканирования', 'error');
   } finally {
     btn.textContent = '🔍 Собрать товары со страницы';
     btn.disabled = false;
   }
 }
 
-// Функция, которая выполняется в контексте страницы
-function extractProductsFromPage() {
+function extractProducts() {
   const products = [];
   
-  // Определяем магазин из URL
-  const url = window.location.href;
-  let store = 'unknown';
-  let category = 'unknown';
-  
-  // Парсим URL вида: /retail/{store}/category/{category}
-  const storeMatch = url.match(/\/retail\/([^\/]+)/);
-  if (storeMatch) store = storeMatch[1];
-  
-  const categoryMatch = url.match(/\/category\/([^\/\?]+)/);
-  if (categoryMatch) {
-    // Конвертируем path в slug
-    const pathToSlug = {
-      'myaso-i-ptitsa': 'meat',
-      'ryba-i-moreprodukty': 'fish',
-      'molochnye-produkty': 'dairy',
-      'yaytsa': 'eggs',
-      'krupy-i-makarony': 'cereals',
-      'ovoschi-i-frukty': 'vegetables',
-      'khleb-i-vypechka': 'bread',
-      'napitki': 'drinks',
-    };
-    category = pathToSlug[categoryMatch[1]] || categoryMatch[1];
-  }
-  
-  // Ищем карточки товаров (селекторы могут меняться!)
   const selectors = [
     '[data-testid="product-card"]',
     '[class*="ProductCard"]',
     '[class*="product-card"]',
-    'article[class*="product"]',
-    '[class*="GoodsList"] > div',
+    '[class*="sku-card"]',
+    'article',
   ];
   
   let cards = [];
-  for (const selector of selectors) {
-    cards = document.querySelectorAll(selector);
+  for (const sel of selectors) {
+    cards = document.querySelectorAll(sel);
     if (cards.length > 0) break;
   }
   
   cards.forEach(card => {
     try {
-      // Название
-      const nameEl = card.querySelector('[class*="name"], [class*="title"], [class*="Name"], h3, h4');
+      const nameEl = card.querySelector('span, h3, h4, [class*="name"], [class*="title"]');
       const name = nameEl?.textContent?.trim();
-      if (!name) return;
+      if (!name || name.length < 3) return;
       
-      // Цена
-      const priceEl = card.querySelector('[class*="price"]:not([class*="old"]), [class*="Price"]:not([class*="Old"])');
-      const priceText = priceEl?.textContent || '';
-      const priceMatch = priceText.match(/(\d+)/);
-      const price = priceMatch ? parseInt(priceMatch[1]) : null;
-      if (!price) return;
+      const allText = card.textContent;
+      const priceMatches = allText.match(/(\d+)\s*₽/g);
+      if (!priceMatches) return;
       
-      // Старая цена
-      const oldPriceEl = card.querySelector('[class*="old"], [class*="Old"], del, s');
-      const oldPriceText = oldPriceEl?.textContent || '';
-      const oldPriceMatch = oldPriceText.match(/(\d+)/);
-      const originalPrice = oldPriceMatch ? parseInt(oldPriceMatch[1]) : null;
+      const prices = priceMatches.map(p => parseInt(p.replace(/\D/g, ''))).filter(p => p > 0);
+      if (prices.length === 0) return;
       
-      // Скидка
-      let discount = null;
-      if (originalPrice && price && originalPrice > price) {
-        discount = Math.round((1 - price / originalPrice) * 100);
+      const price = Math.min(...prices);
+      const originalPrice = prices.length > 1 ? Math.max(...prices) : null;
+      
+      const weightMatch = allText.match(/(\d+(?:[.,]\d+)?)\s*(г|кг|мл|л|шт)/i);
+      const weight = weightMatch ? parseFloat(weightMatch[1].replace(',', '.')) : null;
+      const unit = weightMatch ? weightMatch[2].toLowerCase() : null;
+      
+      let pricePerKg = null;
+      if (weight && unit) {
+        if (unit === 'г') pricePerKg = Math.round(price / weight * 1000);
+        if (unit === 'кг') pricePerKg = Math.round(price / weight);
       }
       
-      // Вес
-      const weightEl = card.querySelector('[class*="weight"], [class*="measure"], [class*="Weight"]');
-      let weight = null;
-      let unit = 'г';
-      if (weightEl) {
-        const weightText = weightEl.textContent;
-        const weightMatch = weightText.match(/(\d+(?:[.,]\d+)?)\s*(г|кг|мл|л|шт)/i);
-        if (weightMatch) {
-          weight = parseFloat(weightMatch[1].replace(',', '.'));
-          unit = weightMatch[2].toLowerCase();
-        }
-      }
-      
-      // URL товара
-      const linkEl = card.querySelector('a[href]');
-      const productUrl = linkEl?.href || '';
+      const link = card.querySelector('a');
+      const url = link?.href || '';
       
       products.push({
-        name,
-        price,
-        originalPrice,
-        discount,
-        weight,
-        unit,
-        url: productUrl,
+        name, price, originalPrice,
+        discount: originalPrice ? Math.round((1 - price / originalPrice) * 100) : null,
+        weight, unit, pricePerKg, url,
         parsedAt: new Date().toISOString()
       });
-      
-    } catch (e) {
-      console.error('Ошибка парсинга карточки:', e);
+    } catch (e) {}
+  });
+  
+  const unique = [];
+  const seen = new Set();
+  products.forEach(p => {
+    const key = `${p.name}-${p.price}`;
+    if (!seen.has(key)) {
+      seen.add(key);
+      unique.push(p);
     }
   });
   
-  return { products, store, category };
+  return unique;
 }
 
-// === ОТПРАВКА НА СЕРВЕР ===
+// === ЭКСПОРТ ===
+function exportJson() {
+  const data = { exportedAt: new Date().toISOString(), stores: state.parsedData };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `smartcart-${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showNotification('JSON сохранён');
+}
+
 async function sendToServer() {
-  const btn = document.getElementById('sendToServerBtn');
-  btn.textContent = '⏳ Отправка...';
+  const btn = document.getElementById('sendServerBtn');
+  btn.textContent = '⏳ ...';
   btn.disabled = true;
   
   try {
-    const store = state.currentStore;
-    const storeProducts = state.parsedProducts[store];
+    const payload = { exportedAt: new Date().toISOString(), stores: {} };
     
-    if (!storeProducts || Object.keys(storeProducts).length === 0) {
-      showNotification('⚠️ Нет данных для отправки', 'error');
-      return;
-    }
-    
-    // Собираем все товары в один массив
-    const allProducts = [];
-    Object.entries(storeProducts).forEach(([category, products]) => {
-      products.forEach(p => {
-        allProducts.push({
-          ...p,
-          category
-        });
+    Object.entries(state.parsedData).forEach(([storeId, products]) => {
+      const all = [];
+      Object.entries(products).forEach(([key, items]) => {
+        items.forEach(item => all.push({ ...item, searchCategory: key }));
       });
+      if (all.length > 0) payload.stores[storeId] = all;
     });
-    
-    const payload = {
-      store_slug: store,
-      parsed_at: new Date().toISOString(),
-      products: allProducts
-    };
     
     const response = await fetch(`${state.serverUrl}/api/prices/bulk`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
     
     if (response.ok) {
-      const result = await response.json();
-      showNotification(`✅ Отправлено ${allProducts.length} товаров`);
+      showNotification('✅ Отправлено');
     } else {
-      throw new Error(`HTTP ${response.status}`);
+      throw new Error();
     }
-    
   } catch (e) {
-    console.error('Ошибка отправки:', e);
-    showNotification('❌ Ошибка отправки на сервер', 'error');
+    showNotification('Ошибка', 'error');
   } finally {
     btn.textContent = '📤 Отправить на сервер';
     btn.disabled = false;
   }
 }
 
-// === СПИСОК ПОКУПОК ===
-function renderShoppingList() {
-  const container = document.getElementById('shoppingList');
-  const card = document.getElementById('shoppingListCard');
-  const alert = document.getElementById('noListAlert');
-  const startBtn = document.getElementById('startShoppingBtn');
-  const compareDiv = document.getElementById('storeCompare');
-  
-  if (state.shoppingList.length === 0) {
-    card.style.display = 'none';
-    alert.style.display = 'block';
-    startBtn.style.display = 'none';
-    compareDiv.style.display = 'none';
-    return;
-  }
-  
-  card.style.display = 'block';
-  alert.style.display = 'none';
-  startBtn.style.display = 'block';
-  
-  // Считаем прогресс
-  const checkedCount = state.shoppingList.filter(i => i.checked).length;
-  document.getElementById('listProgress').textContent = `${checkedCount}/${state.shoppingList.length}`;
-  
-  // Рендерим список
-  container.innerHTML = state.shoppingList.map((item, index) => {
-    const isCurrent = state.currentShoppingItem === index;
-    return `
-      <div class="shopping-item ${item.checked ? 'done' : ''} ${isCurrent ? 'highlight' : ''}" data-index="${index}">
-        <input type="checkbox" class="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleShoppingItem(${index})">
-        <span class="name">${item.name}</span>
-        ${item.expectedPrice ? `<span class="price">${item.expectedPrice}₽</span>` : ''}
-        <button class="go-btn" onclick="goToProduct(${index})">➡️</button>
-      </div>
-    `;
-  }).join('');
-  
-  // Рендерим сравнение магазинов
-  renderStoreComparison();
-}
-
-function renderStoreComparison() {
-  const compareDiv = document.getElementById('storeCompare');
-  const compareList = document.getElementById('compareList');
-  
-  if (state.shoppingList.length === 0) {
-    compareDiv.style.display = 'none';
-    return;
-  }
-  
-  // Считаем стоимость корзины в каждом магазине
-  const totals = {};
-  
-  Object.keys(CONFIG.stores).forEach(storeSlug => {
-    totals[storeSlug] = {
-      name: CONFIG.stores[storeSlug].name,
-      total: 0,
-      available: 0,
-      missing: 0
-    };
-    
-    state.shoppingList.forEach(item => {
-      // Ищем цену этого товара в этом магазине
-      const storeProducts = state.parsedProducts[storeSlug];
-      if (!storeProducts) {
-        totals[storeSlug].missing++;
-        return;
-      }
-      
-      // Ищем по всем категориям
-      let found = false;
-      Object.values(storeProducts).forEach(categoryProducts => {
-        const matchingProduct = categoryProducts.find(p => 
-          p.name.toLowerCase().includes(item.searchTerm?.toLowerCase() || item.name.toLowerCase())
-        );
-        if (matchingProduct && !found) {
-          totals[storeSlug].total += matchingProduct.price;
-          totals[storeSlug].available++;
-          found = true;
-        }
-      });
-      
-      if (!found) {
-        totals[storeSlug].missing++;
-      }
-    });
-  });
-  
-  // Сортируем по цене
-  const sorted = Object.entries(totals)
-    .filter(([_, data]) => data.available > 0)
-    .sort((a, b) => a[1].total - b[1].total);
-  
-  if (sorted.length === 0) {
-    compareDiv.style.display = 'none';
-    return;
-  }
-  
-  compareDiv.style.display = 'block';
-  
-  compareList.innerHTML = sorted.map(([slug, data], index) => {
-    const isBest = index === 0;
-    const deliveryTime = '30-60 мин'; // Можно брать из конфига
-    
-    return `
-      <div class="compare-row ${isBest ? 'best' : ''}">
-        <span class="store-name">${data.name}</span>
-        <span class="total">${data.total}₽</span>
-        <span class="delivery">${deliveryTime}</span>
-        ${isBest ? '<span class="badge">Лучшая цена</span>' : ''}
-      </div>
-    `;
-  }).join('');
-}
-
-// Глобальные функции для onclick
-window.toggleShoppingItem = async (index) => {
-  state.shoppingList[index].checked = !state.shoppingList[index].checked;
-  await saveState();
-  renderShoppingList();
-};
-
-window.goToProduct = async (index) => {
-  const item = state.shoppingList[index];
-  state.currentShoppingItem = index;
-  await saveState();
-  
-  // Если есть URL товара — открываем его
-  if (item.url) {
-    await chrome.tabs.create({ url: item.url, active: true });
-  } else {
-    // Иначе открываем поиск
-    const searchUrl = `${CONFIG.deliveryBaseUrl}/retail/${state.currentStore}/search?query=${encodeURIComponent(item.name)}`;
-    await chrome.tabs.create({ url: searchUrl, active: true });
-  }
-  
-  // Отправляем сообщение content script для подсветки
-  setTimeout(async () => {
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    if (tab) {
-      chrome.tabs.sendMessage(tab.id, {
-        action: 'highlightProduct',
-        searchTerm: item.searchTerm || item.name
-      });
-    }
-  }, 2000);
-  
-  renderShoppingList();
-};
-
-async function importShoppingList() {
+async function testServer() {
   try {
-    // Пробуем загрузить с сервера
-    const response = await fetch(`${state.serverUrl}/api/cart`);
-    
-    if (response.ok) {
-      const data = await response.json();
-      
-      if (data.items && data.items.length > 0) {
-        state.shoppingList = data.items.map(item => ({
-          id: item.id,
-          name: item.name,
-          searchTerm: item.search_term || item.name,
-          quantity: item.quantity || 1,
-          expectedPrice: item.expected_price,
-          url: item.url,
-          checked: false
-        }));
-        
-        await saveState();
-        renderShoppingList();
-        showNotification(`✅ Импортировано ${data.items.length} товаров`);
-      } else {
-        showNotification('⚠️ Список на сервере пуст', 'error');
-      }
-    } else {
-      throw new Error('Ошибка загрузки');
-    }
-    
+    const response = await fetch(`${state.serverUrl}/api/stores`);
+    showNotification(response.ok ? '✅ Сервер OK' : '❌ Ошибка', response.ok ? 'success' : 'error');
   } catch (e) {
-    console.error('Ошибка импорта:', e);
-    
-    // Если сервер недоступен — предлагаем ввести вручную
-    const input = prompt('Введите список покупок (через запятую):');
-    if (input) {
-      state.shoppingList = input.split(',').map((name, i) => ({
-        id: i + 1,
-        name: name.trim(),
-        searchTerm: name.trim(),
-        checked: false
-      }));
-      await saveState();
-      renderShoppingList();
-    }
+    showNotification('❌ Недоступен', 'error');
   }
 }
 
-async function startShopping() {
-  if (state.shoppingList.length === 0) return;
-  
-  // Находим первый невыполненный пункт
-  const firstUnchecked = state.shoppingList.findIndex(i => !i.checked);
-  
-  if (firstUnchecked === -1) {
-    showNotification('✅ Все товары уже куплены!');
-    return;
-  }
-  
-  // Переходим к первому товару
-  goToProduct(firstUnchecked);
-}
-
-// === СТАТИСТИКА ===
-function renderStats() {
-  let totalProducts = 0;
-  
-  Object.values(state.parsedProducts).forEach(storeData => {
-    Object.values(storeData).forEach(categoryProducts => {
-      totalProducts += categoryProducts.length;
-    });
-  });
-  
-  document.getElementById('parsedCount').textContent = totalProducts;
-  
-  // Последний парсинг
-  let lastSync = '—';
-  Object.values(state.parsedProducts).forEach(storeData => {
-    Object.values(storeData).forEach(categoryProducts => {
-      categoryProducts.forEach(p => {
-        if (p.parsedAt) {
-          const date = new Date(p.parsedAt);
-          const now = new Date();
-          const diff = now - date;
-          
-          if (diff < 60000) {
-            lastSync = 'только что';
-          } else if (diff < 3600000) {
-            lastSync = Math.floor(diff / 60000) + ' мин назад';
-          } else if (diff < 86400000) {
-            lastSync = Math.floor(diff / 3600000) + ' ч назад';
-          } else {
-            lastSync = date.toLocaleDateString('ru-RU');
-          }
-        }
-      });
-    });
-  });
-  
-  document.getElementById('lastSync').textContent = lastSync;
-}
-
-function renderLocalStats() {
-  let totalProducts = 0;
-  let storesCount = 0;
-  
-  Object.entries(state.parsedProducts).forEach(([store, storeData]) => {
-    if (Object.keys(storeData).length > 0) storesCount++;
-    Object.values(storeData).forEach(categoryProducts => {
-      totalProducts += categoryProducts.length;
-    });
-  });
-  
-  document.getElementById('localProductsCount').textContent = totalProducts;
-  document.getElementById('localStoresCount').textContent = storesCount;
-}
-
-// === НАСТРОЙКИ ===
-async function testConnection() {
-  const btn = document.getElementById('testConnectionBtn');
-  btn.textContent = '⏳ Проверка...';
-  btn.disabled = true;
-  
-  try {
-    const response = await fetch(`${state.serverUrl}/api/stores`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' }
-    });
-    
-    if (response.ok) {
-      state.isConnected = true;
-      updateConnectionStatus(true);
-      showNotification('✅ Подключение успешно!');
-    } else {
-      throw new Error(`HTTP ${response.status}`);
-    }
-    
-  } catch (e) {
-    state.isConnected = false;
-    updateConnectionStatus(false);
-    showNotification('❌ Не удалось подключиться', 'error');
-  } finally {
-    btn.textContent = '🔗 Проверить подключение';
-    btn.disabled = false;
-  }
-}
-
-function updateConnectionStatus(connected) {
-  const dot = document.getElementById('statusDot');
-  const text = document.getElementById('statusText');
-  
-  if (connected) {
-    dot.classList.remove('offline');
-    text.textContent = 'Подключено';
-  } else {
-    dot.classList.add('offline');
-    text.textContent = 'Офлайн';
-  }
-}
-
-async function exportLocalData() {
-  const data = {
-    exportedAt: new Date().toISOString(),
-    parsedProducts: state.parsedProducts,
-    shoppingList: state.shoppingList
-  };
-  
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `smartcart-export-${new Date().toISOString().slice(0, 10)}.json`;
-  a.click();
-  
-  URL.revokeObjectURL(url);
-  showNotification('✅ Данные экспортированы');
-}
-
-async function clearLocalData() {
-  if (!confirm('Удалить все локальные данные?')) return;
-  
-  state.parsedProducts = {};
-  state.parsedCategories = {};
-  state.shoppingList = [];
-  
-  await saveState();
-  renderCategories();
-  renderStats();
-  renderLocalStats();
-  
-  showNotification('🗑️ Данные удалены');
-}
-
-async function checkConnection() {
-  try {
-    const response = await fetch(`${state.serverUrl}/api/stores`, {
-      method: 'GET'
-    });
-    state.isConnected = response.ok;
-  } catch (e) {
-    state.isConnected = false;
-  }
-  updateConnectionStatus(state.isConnected);
-}
-
-// === ОБРАБОТЧИКИ СОБЫТИЙ ===
-function initEventListeners() {
-  // Парсинг
-  document.getElementById('scanPageBtn').addEventListener('click', scanCurrentPage);
-  document.getElementById('sendToServerBtn').addEventListener('click', sendToServer);
-  
-  // Покупки
-  document.getElementById('importListBtn').addEventListener('click', importShoppingList);
-  document.getElementById('startShoppingBtn').addEventListener('click', startShopping);
-  
-  // Настройки
-  document.getElementById('serverUrl').addEventListener('change', async (e) => {
-    state.serverUrl = e.target.value;
-    await saveState();
-  });
-  
-  document.getElementById('testConnectionBtn').addEventListener('click', testConnection);
-  document.getElementById('exportLocalBtn').addEventListener('click', exportLocalData);
-  document.getElementById('clearLocalBtn').addEventListener('click', clearLocalData);
-}
-
-// === УВЕДОМЛЕНИЯ ===
 function showNotification(message, type = 'success') {
-  const notification = document.getElementById('notification');
-  notification.textContent = message;
-  notification.className = `notification show ${type === 'error' ? 'error' : ''}`;
-  
-  setTimeout(() => {
-    notification.classList.remove('show');
-  }, 2500);
+  const el = document.getElementById('notification');
+  el.textContent = message;
+  el.className = `notification show ${type}`;
+  setTimeout(() => el.classList.remove('show'), 2500);
 }

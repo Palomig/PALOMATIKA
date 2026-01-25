@@ -13,7 +13,6 @@
   
   "host_permissions": [
     "https://market-delivery.yandex.ru/*",
-    "https://eda.yandex.ru/*",
     "https://cw95865.tmweb.ru/*"
   ],
   
@@ -30,11 +29,9 @@
   "content_scripts": [
     {
       "matches": [
-        "https://market-delivery.yandex.ru/*",
-        "https://eda.yandex.ru/*"
+        "https://market-delivery.yandex.ru/*"
       ],
       "js": ["content.js"],
-      "css": ["content.css"],
       "run_at": "document_idle"
     }
   ],
