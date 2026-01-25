@@ -18,6 +18,8 @@ setCorsHeaders();
 $method = $_SERVER['REQUEST_METHOD'];
 $type = $_GET['type'] ?? 'all';
 $storeFilter = $_GET['store'] ?? null;
+$categoryFilter = $_GET['categories'] ?? null; // Comma-separated list of categories
+$categoriesArray = $categoryFilter ? array_map('trim', explode(',', $categoryFilter)) : null;
 
 if ($method === 'GET') {
     $data = [
@@ -65,14 +67,21 @@ if ($method === 'GET') {
         $pricesData = [];
 
         foreach ($stores as $store) {
-            $prices = Database::query(
-                "SELECT store_product_name as name, price, original_price, discount_percent as discount,
+            // Build query with optional category filter
+            $sql = "SELECT store_product_name as name, price, original_price, discount_percent as discount,
                         weight, unit, category_slug as category, url, parsed_at
                  FROM prices
-                 WHERE store_id = ? AND is_available = 1
-                 ORDER BY category_slug, store_product_name",
-                [$store['id']]
-            );
+                 WHERE store_id = ? AND is_available = 1";
+            $params = [$store['id']];
+
+            if ($categoriesArray && count($categoriesArray) > 0) {
+                $placeholders = implode(',', array_fill(0, count($categoriesArray), '?'));
+                $sql .= " AND category_slug IN ($placeholders)";
+                $params = array_merge($params, $categoriesArray);
+            }
+
+            $sql .= " ORDER BY category_slug, store_product_name";
+            $prices = Database::query($sql, $params);
 
             if (!empty($prices)) {
                 $pricesData[$store['slug']] = [
@@ -106,7 +115,14 @@ if ($method === 'GET') {
     }
 
     // Set filename
-    $filename = "smartcart-{$type}-" . date('Y-m-d') . ".json";
+    $filename = "smartcart-{$type}";
+    if ($storeFilter) {
+        $filename .= "-{$storeFilter}";
+    }
+    if ($categoryFilter) {
+        $filename .= "-" . str_replace(',', '_', $categoryFilter);
+    }
+    $filename .= "-" . date('Y-m-d') . ".json";
     header('Content-Disposition: attachment; filename="' . $filename . '"');
 
     jsonResponse($data);
