@@ -105,11 +105,11 @@ foreach ($ingredients as $ing) {
 
     foreach ($mapping['terms'] as $term) {
         // Build query - no category filter, rely on exclusions
-        // Use LIKE with COLLATE NOCASE for case-insensitive search (works with Cyrillic)
+        // Note: COLLATE NOCASE doesn't work with Cyrillic UTF-8, use plain LIKE
         $sql = "SELECT store_product_name as name, price, weight, unit, category_slug
                 FROM prices
                 WHERE store_id = ? AND is_available = 1
-                AND store_product_name LIKE ? COLLATE NOCASE
+                AND store_product_name LIKE ?
                 ORDER BY price ASC LIMIT 30";
         $params = [$storeId, '%' . $term . '%'];
 
