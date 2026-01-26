@@ -13,12 +13,12 @@
 
 <div class="mb-10">
     {{-- Zadanie Header --}}
-    <div class="bg-purple-900/40 rounded-xl p-4 mb-6 border-l-4 border-purple-500">
+    <div class="bg-dark-200 rounded-xl p-4 mb-6 border-l-4 border-accent">
         <h3 class="text-lg font-semibold text-white">
             {{ $zadanie['instruction'] }}
         </h3>
         @if(isset($zadanie['section']))
-            <p class="text-purple-300/60 text-sm mt-1">{{ $zadanie['section'] }}</p>
+            <p class="text-gray-500 text-sm mt-1">{{ $zadanie['section'] }}</p>
         @endif
     </div>
 

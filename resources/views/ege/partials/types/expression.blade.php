@@ -14,11 +14,11 @@
             $taskInfo = "Блок {$block['number']}, Задание {$zadanie['number']}, Задача {$task['id']}<br><code>" . ($task['expression'] ?? '') . "</code>";
         @endphp
 
-        <div class="bg-purple-900/30 rounded-xl p-5 border border-purple-800/40 task-review-item relative"
+        <div class="bg-dark-100 rounded-xl p-5 border border-dark-400/50 task-review-item relative hover:border-accent/30 transition-colors"
              data-task-key="{{ $taskKey }}" data-task-info="{{ $taskInfo }}">
             <div class="flex items-start gap-3">
-                <span class="text-purple-400 font-bold shrink-0">{{ $task['id'] }})</span>
-                <span class="text-purple-100/90 math-serif text-lg">${!! $task['expression'] ?? '' !!}$</span>
+                <span class="text-accent-light font-bold shrink-0">{{ $task['id'] }})</span>
+                <span class="text-gray-200 math-serif text-lg">${!! $task['expression'] ?? '' !!}$</span>
             </div>
         </div>
     @endforeach
