@@ -29,6 +29,8 @@
             @break
 
         @case('expression')
+        @case('equation')
+        @case('probability')
             @include('ege.partials.types.expression', compact('zadanie', 'block', 'topicId'))
             @break
 
@@ -37,6 +39,6 @@
             @break
 
         @default
-            @include('ege.partials.types.geometry', compact('zadanie', 'block', 'topicId'))
+            @include('ege.partials.types.expression', compact('zadanie', 'block', 'topicId'))
     @endswitch
 </div>
