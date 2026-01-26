@@ -2527,7 +2527,11 @@ function geometryEditor() {
         generateSvg() {
             if (this.figures.length === 0) return '';
 
-            // Вычисляем общий bounding box всех фигур
+            // Стандартный viewBox как на страницах тем
+            const targetWidth = 220;
+            const targetHeight = 160;
+
+            // Вычисляем bounding box всех фигур
             let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
 
             this.figures.forEach(figure => {
@@ -2538,51 +2542,64 @@ function geometryEditor() {
                 maxY = Math.max(maxY, bounds.maxY);
             });
 
-            // Добавляем padding для подписей (35px со всех сторон)
-            const padding = 35;
+            // Добавляем padding для подписей (20px)
+            const padding = 20;
             minX -= padding;
             minY -= padding;
             maxX += padding;
             maxY += padding;
 
-            const width = maxX - minX;
-            const height = maxY - minY;
+            const contentWidth = maxX - minX;
+            const contentHeight = maxY - minY;
 
-            // Генерируем SVG только для фигур (без фона и сетки)
+            // Вычисляем масштаб чтобы вписать в targetWidth x targetHeight
+            const scale = Math.min(targetWidth / contentWidth, targetHeight / contentHeight);
+
+            // Смещение для центрирования
+            const offsetX = (targetWidth - contentWidth * scale) / 2 - minX * scale;
+            const offsetY = (targetHeight - contentHeight * scale) / 2 - minY * scale;
+
+            // Генерируем SVG
             let svgContent = '';
 
-            // Фон (тёмный синий как на страницах тем)
+            // Фон
             svgContent += `<rect width="100%" height="100%" fill="${this.colors.background}"/>`;
 
-            // Рендерим фигуры с учётом смещения
+            // Рендерим фигуры с масштабированием
             this.figures.forEach(figure => {
-                const isSelected = false; // При экспорте нет выделения
-                const strokeColor = this.colors.shapeStroke;
-
-                svgContent += `<g transform="translate(${-minX}, ${-minY})">`;
+                svgContent += `<g transform="translate(${offsetX}, ${offsetY}) scale(${scale})">`;
 
                 if (figure.type === 'triangle') {
-                    svgContent += this.renderTriangleForExport(figure, strokeColor);
+                    svgContent += this.renderTriangleForExport(figure);
                 } else if (figure.type === 'quadrilateral') {
-                    svgContent += this.renderQuadrilateralForExport(figure, strokeColor);
+                    svgContent += this.renderQuadrilateralForExport(figure);
                 } else if (figure.type === 'circle') {
-                    svgContent += this.renderCircleForExport(figure, strokeColor);
+                    svgContent += this.renderCircleForExport(figure);
                 }
 
                 svgContent += '</g>';
             });
 
-            return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${Math.round(width)} ${Math.round(height)}">${svgContent}</svg>`;
+            return `<svg viewBox="0 0 ${targetWidth} ${targetHeight}" class="w-full max-w-[250px] h-auto mx-auto">${svgContent}</svg>`;
         },
 
-        // Рендер треугольника для экспорта (без интерактивных элементов)
-        renderTriangleForExport(figure, strokeColor) {
+        // Рендер маркера вершины для экспорта (крестик + круг)
+        renderVertexMarkerForExport(x, y) {
+            return `<g transform="translate(${x}, ${y})">
+    <line x1="-5" y1="0" x2="5" y2="0" stroke="${this.colors.vertexMarker}" stroke-width="1"/>
+    <line x1="0" y1="-5" x2="0" y2="5" stroke="${this.colors.vertexMarker}" stroke-width="1"/>
+    <circle cx="0" cy="0" r="2" fill="none" stroke="${this.colors.vertexMarker}" stroke-width="0.8"/>
+  </g>`;
+        },
+
+        // Рендер треугольника для экспорта
+        renderTriangleForExport(figure) {
             const v = figure.vertices;
             const points = `${v.A.x},${v.A.y} ${v.B.x},${v.B.y} ${v.C.x},${v.C.y}`;
             let svg = '';
 
-            // Основной полигон
-            svg += `<polygon points="${points}" fill="none" stroke="${strokeColor}" stroke-width="1.5" stroke-linejoin="round"/>`;
+            // Основной полигон (stroke-width="2" как в оригинале)
+            svg += `<polygon points="${points}" fill="none" stroke="${this.colors.shapeStroke}" stroke-width="2"/>`;
 
             // Вспомогательные линии
             svg += this.renderTriangleAuxiliaryLines(figure);
@@ -2593,24 +2610,29 @@ function geometryEditor() {
             // Маркеры равенства
             svg += this.renderTriangleEqualityMarks(figure);
 
-            // Подписи вершин (без интерактивных маркеров)
+            // Маркеры вершин (крестик + круг)
+            ['A', 'B', 'C'].forEach(vName => {
+                svg += this.renderVertexMarkerForExport(v[vName].x, v[vName].y);
+            });
+
+            // Подписи вершин
             ['A', 'B', 'C'].forEach(vName => {
                 const vertex = v[vName];
                 const labelPos = this.getLabelPosition(figure, vName);
-                svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${this.colors.label}" font-size="14" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle">${vertex.label || vName}</text>`;
+                svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${this.colors.label}" font-size="14" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label">${vertex.label || vName}</text>`;
             });
 
             return svg;
         },
 
         // Рендер четырёхугольника для экспорта
-        renderQuadrilateralForExport(figure, strokeColor) {
+        renderQuadrilateralForExport(figure) {
             const v = figure.vertices;
             const points = `${v.A.x},${v.A.y} ${v.B.x},${v.B.y} ${v.C.x},${v.C.y} ${v.D.x},${v.D.y}`;
             let svg = '';
 
-            // Основной полигон
-            svg += `<polygon points="${points}" fill="none" stroke="${strokeColor}" stroke-width="1.5" stroke-linejoin="round"/>`;
+            // Основной полигон (stroke-width="2" как в оригинале)
+            svg += `<polygon points="${points}" fill="none" stroke="${this.colors.shapeStroke}" stroke-width="2"/>`;
 
             // Диагонали и вспомогательные линии
             svg += this.renderQuadDiagonals(figure);
@@ -2621,31 +2643,36 @@ function geometryEditor() {
             // Маркеры равенства
             svg += this.renderQuadEqualityMarks(figure);
 
+            // Маркеры вершин (крестик + круг)
+            ['A', 'B', 'C', 'D'].forEach(vName => {
+                svg += this.renderVertexMarkerForExport(v[vName].x, v[vName].y);
+            });
+
             // Подписи вершин
             ['A', 'B', 'C', 'D'].forEach(vName => {
                 const vertex = v[vName];
                 const labelPos = this.getLabelPositionQuad(figure, vName);
-                svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${this.colors.label}" font-size="14" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle">${vertex.label || vName}</text>`;
+                svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${this.colors.label}" font-size="14" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label">${vertex.label || vName}</text>`;
             });
 
             return svg;
         },
 
         // Рендер окружности для экспорта
-        renderCircleForExport(figure, strokeColor) {
+        renderCircleForExport(figure) {
             let svg = '';
             const c = figure.center;
             const r = figure.radius;
 
-            svg += `<circle cx="${c.x}" cy="${c.y}" r="${r}" fill="none" stroke="${this.colors.circleStroke}" stroke-width="1.5"/>`;
+            svg += `<circle cx="${c.x}" cy="${c.y}" r="${r}" fill="none" stroke="${this.colors.circleStroke}" stroke-width="2"/>`;
 
             // Центр
-            svg += `<circle cx="${c.x}" cy="${c.y}" r="2" fill="${this.colors.circleStroke}"/>`;
+            svg += this.renderVertexMarkerForExport(c.x, c.y);
 
             // Хорды, касательные и т.д.
             if (figure.chords) {
                 figure.chords.forEach(chord => {
-                    svg += `<line x1="${chord.point1.x}" y1="${chord.point1.y}" x2="${chord.point2.x}" y2="${chord.point2.y}" stroke="${this.colors.shapeStroke}" stroke-width="1.5"/>`;
+                    svg += `<line x1="${chord.point1.x}" y1="${chord.point1.y}" x2="${chord.point2.x}" y2="${chord.point2.y}" stroke="${this.colors.shapeStroke}" stroke-width="2"/>`;
                 });
             }
 
