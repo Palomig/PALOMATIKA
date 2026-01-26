@@ -1,0 +1,311 @@
+{
+  "topic_id": "12",
+  "exam_type": "ege",
+  "meta": {
+    "title": "Задание 12 — Наибольшее/наименьшее",
+    "description": "Экстремумы функций",
+    "color": "red"
+  },
+  "blocks": [
+    {
+      "number": 1,
+      "title": "Многочлены",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Найдите наибольшее (наименьшее) значение функции на отрезке",
+          "type": "expression",
+          "tasks": [
+            {"id": 1, "text": "$f(x)=x^3-3x^2+4$ на отрезке $[-1; 4]$", "answer": "20"},
+            {"id": 2, "text": "$f(x)=x^3-3x^2+4$ на отрезке $[0; 3]$", "answer": "4"},
+            {"id": 3, "text": "$f(x)=x^3-6x^2+9x+2$ на отрезке $[-1; 4]$", "answer": "6"},
+            {"id": 4, "text": "$f(x)=x^3-6x^2+9x+2$ на отрезке $[0; 4]$", "answer": "6"}
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Найдите наибольшее значение функции на отрезке",
+          "type": "expression",
+          "tasks": [
+            {"id": 5, "text": "$f(x)=x^3-12x+7$ на отрезке $[-3; 1]$", "answer": "23"},
+            {"id": 6, "text": "$f(x)=x^3-12x+7$ на отрезке $[0; 3]$", "answer": "7"},
+            {"id": 7, "text": "$f(x)=x^3-27x+5$ на отрезке $[-4; 0]$", "answer": "59"},
+            {"id": 8, "text": "$f(x)=x^3-27x+5$ на отрезке $[0; 4]$", "answer": "5"}
+          ]
+        },
+        {
+          "number": 3,
+          "instruction": "Найдите наименьшее значение функции на отрезке",
+          "type": "expression",
+          "tasks": [
+            {"id": 9, "text": "$f(x)=x^3-3x+5$ на отрезке $[0; 3]$", "answer": "3"},
+            {"id": 10, "text": "$f(x)=x^3-3x+5$ на отрезке $[-2; 0]$", "answer": "3"},
+            {"id": 11, "text": "$f(x)=x^3-48x+7$ на отрезке $[0; 5]$", "answer": "-121"},
+            {"id": 12, "text": "$f(x)=x^3-48x+7$ на отрезке $[-5; 0]$", "answer": "-121"}
+          ]
+        },
+        {
+          "number": 4,
+          "instruction": "Найдите наибольшее (наименьшее) значение функции на отрезке",
+          "type": "expression",
+          "tasks": [
+            {"id": 13, "text": "$f(x)=x^4-8x^2+3$ на отрезке $[-1; 3]$", "answer": "3"},
+            {"id": 14, "text": "$f(x)=x^4-8x^2+3$ на отрезке $[0; 3]$", "answer": "3"},
+            {"id": 15, "text": "$f(x)=x^4-2x^2+1$ на отрезке $[-2; 2]$", "answer": "9"},
+            {"id": 16, "text": "$f(x)=x^4-2x^2+1$ на отрезке $[0; 2]$", "answer": "9"}
+          ]
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "Дробно-рациональные функции",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Найдите наибольшее значение функции на отрезке",
+          "type": "expression",
+          "tasks": [
+            {"id": 17, "text": "$f(x)=x+\\displaystyle\\frac{4}{x}$ на отрезке $[1; 8]$", "answer": "8.5"},
+            {"id": 18, "text": "$f(x)=x+\\displaystyle\\frac{9}{x}$ на отрезке $[1; 9]$", "answer": "10"},
+            {"id": 19, "text": "$f(x)=x+\\displaystyle\\frac{16}{x}$ на отрезке $[1; 8]$", "answer": "17"},
+            {"id": 20, "text": "$f(x)=x+\\displaystyle\\frac{25}{x}$ на отрезке $[1; 10]$", "answer": "26"}
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Найдите наименьшее значение функции на отрезке",
+          "type": "expression",
+          "tasks": [
+            {"id": 21, "text": "$f(x)=x+\\displaystyle\\frac{4}{x}$ на отрезке $[1; 8]$", "answer": "4"},
+            {"id": 22, "text": "$f(x)=x+\\displaystyle\\frac{9}{x}$ на отрезке $[1; 9]$", "answer": "6"},
+            {"id": 23, "text": "$f(x)=x+\\displaystyle\\frac{16}{x}$ на отрезке $[2; 8]$", "answer": "8"},
+            {"id": 24, "text": "$f(x)=x+\\displaystyle\\frac{25}{x}$ на отрезке $[1; 25]$", "answer": "10"}
+          ]
+        },
+        {
+          "number": 3,
+          "instruction": "Найдите наибольшее (наименьшее) значение функции на отрезке",
+          "type": "expression",
+          "tasks": [
+            {"id": 25, "text": "$f(x)=\\displaystyle\\frac{x^2+1}{x}$ на отрезке $[0.5; 4]$", "answer": "4.25"},
+            {"id": 26, "text": "$f(x)=\\displaystyle\\frac{x^2+4}{x}$ на отрезке $[1; 4]$", "answer": "5"},
+            {"id": 27, "text": "$f(x)=\\displaystyle\\frac{x^2+9}{x}$ на отрезке $[1; 9]$", "answer": "6"},
+            {"id": 28, "text": "$f(x)=\\displaystyle\\frac{x^2+16}{x}$ на отрезке $[2; 8]$", "answer": "8"}
+          ]
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "title": "Показательные и логарифмические функции",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Найдите наибольшее значение функции на отрезке",
+          "type": "expression",
+          "tasks": [
+            {"id": 29, "text": "$f(x)=xe^{1-x}$ на отрезке $[0; 3]$", "answer": "1"},
+            {"id": 30, "text": "$f(x)=xe^{2-x}$ на отрезке $[0; 4]$", "answer": "e"},
+            {"id": 31, "text": "$f(x)=(x-2)e^{x}$ на отрезке $[-1; 2]$", "answer": "0"},
+            {"id": 32, "text": "$f(x)=(x+1)e^{-x}$ на отрезке $[-2; 2]$", "answer": "3/e^2"}
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Найдите наименьшее значение функции на отрезке",
+          "type": "expression",
+          "tasks": [
+            {"id": 33, "text": "$f(x)=xe^{1-x}$ на отрезке $[-1; 3]$", "answer": "-e^2"},
+            {"id": 34, "text": "$f(x)=(x-1)e^{x}$ на отрезке $[-2; 1]$", "answer": "-3/e^2"},
+            {"id": 35, "text": "$f(x)=x^2e^{-x}$ на отрезке $[0; 4]$", "answer": "0"},
+            {"id": 36, "text": "$f(x)=(x^2-4)e^{x}$ на отрезке $[-3; 0]$", "answer": "-4"}
+          ]
+        },
+        {
+          "number": 3,
+          "instruction": "Найдите наибольшее (наименьшее) значение функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 37, "text": "$f(x)=\\ln x - x$ на отрезке $[0.5; 3]$", "answer": "-1"},
+            {"id": 38, "text": "$f(x)=2\\ln x - x$ на отрезке $[1; 4]$", "answer": "2ln2-2"},
+            {"id": 39, "text": "$f(x)=x-\\ln x$ на отрезке $[0.5; e]$", "answer": "1"},
+            {"id": 40, "text": "$f(x)=x^2-2\\ln x$ на отрезке $[0.5; 2]$", "answer": "1"}
+          ]
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "title": "Тригонометрические функции",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Найдите наибольшее значение функции на отрезке",
+          "type": "expression",
+          "tasks": [
+            {"id": 41, "text": "$f(x)=\\sin x + \\cos x$ на отрезке $[0; \\pi]$", "answer": "sqrt(2)"},
+            {"id": 42, "text": "$f(x)=\\sin x - \\cos x$ на отрезке $[0; \\pi]$", "answer": "sqrt(2)"},
+            {"id": 43, "text": "$f(x)=2\\sin x + 2\\cos x$ на отрезке $[0; \\pi/2]$", "answer": "2sqrt(2)"},
+            {"id": 44, "text": "$f(x)=3\\sin x + 4\\cos x$ на отрезке $[0; \\pi]$", "answer": "5"}
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Найдите наименьшее значение функции на отрезке",
+          "type": "expression",
+          "tasks": [
+            {"id": 45, "text": "$f(x)=\\sin x + \\cos x$ на отрезке $[0; 2\\pi]$", "answer": "-sqrt(2)"},
+            {"id": 46, "text": "$f(x)=\\sin x - \\cos x$ на отрезке $[0; 2\\pi]$", "answer": "-sqrt(2)"},
+            {"id": 47, "text": "$f(x)=2\\sin x + \\cos x$ на отрезке $[0; \\pi]$", "answer": "-1"},
+            {"id": 48, "text": "$f(x)=\\sin x + 2\\cos x$ на отрезке $[0; \\pi]$", "answer": "-2"}
+          ]
+        },
+        {
+          "number": 3,
+          "instruction": "Найдите наибольшее (наименьшее) значение функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 49, "text": "$f(x)=\\sin^2 x + 2\\cos x$ на отрезке $[0; \\pi]$. Найдите наибольшее значение.", "answer": "2"},
+            {"id": 50, "text": "$f(x)=\\cos^2 x + 2\\sin x$ на отрезке $[0; \\pi]$. Найдите наибольшее значение.", "answer": "2"},
+            {"id": 51, "text": "$f(x)=\\sin^2 x - 4\\cos x$ на отрезке $[0; \\pi]$. Найдите наибольшее значение.", "answer": "5"},
+            {"id": 52, "text": "$f(x)=\\cos^2 x - 4\\sin x$ на отрезке $[0; \\pi]$. Найдите наименьшее значение.", "answer": "-4"}
+          ]
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "title": "ФИПИ. Типовые задания",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Найдите точку максимума (минимума) функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 53, "text": "$f(x)=(x-4)^2(x+1)+7$. Найдите точку минимума.", "answer": "4"},
+            {"id": 54, "text": "$f(x)=(x+3)^2(x-2)-5$. Найдите точку минимума.", "answer": "-3"},
+            {"id": 55, "text": "$f(x)=(x-5)(x+1)^2+3$. Найдите точку минимума.", "answer": "-1"},
+            {"id": 56, "text": "$f(x)=(x+2)(x-4)^2-1$. Найдите точку минимума.", "answer": "4"}
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Найдите точку максимума функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 57, "text": "$f(x)=(x-4)^2(x+1)+7$", "answer": "-1/3"},
+            {"id": 58, "text": "$f(x)=(x+3)^2(x-2)-5$", "answer": "1/3"},
+            {"id": 59, "text": "$f(x)=(8-x)(x+4)^2$", "answer": "8"},
+            {"id": 60, "text": "$f(x)=(10-x)(x+2)^2$", "answer": "10"}
+          ]
+        },
+        {
+          "number": 3,
+          "instruction": "Найдите точку минимума функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 61, "text": "$f(x)=x^3-243x+17$", "answer": "9"},
+            {"id": 62, "text": "$f(x)=x^3-75x+14$", "answer": "5"},
+            {"id": 63, "text": "$f(x)=x^3-12x+8$", "answer": "2"},
+            {"id": 64, "text": "$f(x)=x^3-48x+5$", "answer": "4"}
+          ]
+        },
+        {
+          "number": 4,
+          "instruction": "Найдите точку максимума функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 65, "text": "$f(x)=x^3-243x+17$", "answer": "-9"},
+            {"id": 66, "text": "$f(x)=x^3-75x+14$", "answer": "-5"},
+            {"id": 67, "text": "$f(x)=x^3-12x+8$", "answer": "-2"},
+            {"id": 68, "text": "$f(x)=x^3-48x+5$", "answer": "-4"}
+          ]
+        },
+        {
+          "number": 5,
+          "instruction": "Найдите точку минимума функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 69, "text": "$f(x)=(x+4)e^{x+4}$", "answer": "-5"},
+            {"id": 70, "text": "$f(x)=(x-3)e^{x-3}$", "answer": "2"},
+            {"id": 71, "text": "$f(x)=(x+7)e^{x+7}$", "answer": "-8"},
+            {"id": 72, "text": "$f(x)=(x-5)e^{x-5}$", "answer": "4"}
+          ]
+        },
+        {
+          "number": 6,
+          "instruction": "Найдите точку максимума функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 73, "text": "$f(x)=(x+4)e^{-x-4}$", "answer": "-3"},
+            {"id": 74, "text": "$f(x)=(x-3)e^{3-x}$", "answer": "4"},
+            {"id": 75, "text": "$f(x)=(x+7)e^{-x-7}$", "answer": "-6"},
+            {"id": 76, "text": "$f(x)=(x-5)e^{5-x}$", "answer": "6"}
+          ]
+        },
+        {
+          "number": 7,
+          "instruction": "Найдите точку минимума функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 77, "text": "$f(x)=x\\ln x - 7x + 6$", "answer": "e^7"},
+            {"id": 78, "text": "$f(x)=x\\ln x - 5x + 3$", "answer": "e^5"},
+            {"id": 79, "text": "$f(x)=x\\ln x - 3x + 1$", "answer": "e^3"},
+            {"id": 80, "text": "$f(x)=x\\ln x - 4x + 2$", "answer": "e^4"}
+          ]
+        },
+        {
+          "number": 8,
+          "instruction": "Найдите точку максимума функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 81, "text": "$f(x)=\\ln(x+5) - x$", "answer": "0"},
+            {"id": 82, "text": "$f(x)=\\ln(x+3) - x$", "answer": "0"},
+            {"id": 83, "text": "$f(x)=\\ln(x+7) - x$", "answer": "0"},
+            {"id": 84, "text": "$f(x)=\\ln(x+4) - x$", "answer": "0"}
+          ]
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "title": "Смешанные задачи",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Найдите наибольшее значение функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 85, "text": "$f(x)=\\sqrt{x^2+2x+10}-x$", "answer": "7"},
+            {"id": 86, "text": "$f(x)=\\sqrt{x^2-4x+13}+x$", "answer": "5"},
+            {"id": 87, "text": "$f(x)=\\sqrt{x^2+6x+25}-x$", "answer": "9"},
+            {"id": 88, "text": "$f(x)=\\sqrt{x^2-8x+41}+x$", "answer": "9"}
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Найдите наименьшее значение функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 89, "text": "$f(x)=\\sqrt{x^2+2x+10}+x$", "answer": "-1"},
+            {"id": 90, "text": "$f(x)=\\sqrt{x^2-4x+13}-x$", "answer": "1"},
+            {"id": 91, "text": "$f(x)=\\sqrt{x^2+6x+25}+x$", "answer": "-7"},
+            {"id": 92, "text": "$f(x)=\\sqrt{x^2-8x+41}-x$", "answer": "1"}
+          ]
+        },
+        {
+          "number": 3,
+          "instruction": "Найдите наибольшее (наименьшее) значение функции на отрезке",
+          "type": "expression",
+          "tasks": [
+            {"id": 93, "text": "$f(x)=|x^2-4x+3|$ на отрезке $[0; 4]$. Найдите наибольшее значение.", "answer": "3"},
+            {"id": 94, "text": "$f(x)=|x^2-6x+5|$ на отрезке $[0; 6]$. Найдите наибольшее значение.", "answer": "5"},
+            {"id": 95, "text": "$f(x)=|x^2-2x-3|$ на отрезке $[-1; 4]$. Найдите наибольшее значение.", "answer": "5"},
+            {"id": 96, "text": "$f(x)=|x^2-4x|$ на отрезке $[0; 5]$. Найдите наибольшее значение.", "answer": "5"}
+          ]
+        }
+      ]
+    }
+  ]
+}
