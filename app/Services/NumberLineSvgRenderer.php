@@ -175,8 +175,8 @@ class NumberLineSvgRenderer
     private function generateNumberLine(array $points, float $minVal, float $maxVal, bool $showRangeTicks = false): string
     {
         $width = 320;
-        $height = 60;
-        $lineY = 30;
+        $height = 70; // Увеличиваем высоту для размещения подписей сверху и снизу
+        $lineY = 35;  // Линия по центру
         $marginLeft = 20;
         $marginRight = 30;
         $lineWidth = $width - $marginLeft - $marginRight;
@@ -188,6 +188,9 @@ class NumberLineSvgRenderer
         $getX = function($value) use ($minVal, $range, $marginLeft, $lineWidth) {
             return $marginLeft + (($value - $minVal) / $range) * $lineWidth;
         };
+
+        // Определяем, нужно ли чередовать позиции подписей
+        $needAlternate = $this->needAlternateLabels($points, $getX);
 
         // Начало SVG
         $svg = "<svg viewBox=\"0 0 {$width} {$height}\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n";
@@ -218,7 +221,7 @@ class NumberLineSvgRenderer
             $svg .= "  <line x1=\"{$x}\" y1=\"" . ($lineY - 7) . "\" x2=\"{$x}\" y2=\"" . ($lineY + 7) . "\" ";
             $svg .= "stroke=\"" . self::COLORS['tick'] . "\" stroke-width=\"1.5\"/>\n";
 
-            // Подпись числа
+            // Подпись числа (всегда снизу)
             $color = ($v == 0) ? self::COLORS['zero'] : self::COLORS['number'];
             $label = $this->formatNumber($v);
             $svg .= "  <text x=\"{$x}\" y=\"" . ($lineY + 22) . "\" text-anchor=\"middle\" ";
@@ -243,17 +246,20 @@ class NumberLineSvgRenderer
             }
         }
 
-        // Точки
-        foreach ($points as $pt) {
+        // Точки с умным позиционированием подписей
+        $labelPositions = $this->calculateLabelPositions($points, $getX, $lineY, $needAlternate);
+
+        foreach ($points as $i => $pt) {
             $x = $getX($pt['value']);
             $label = $pt['label'] ?? '';
 
             // Точка (круг)
             $svg .= "  <circle cx=\"{$x}\" cy=\"{$lineY}\" r=\"5\" fill=\"" . self::COLORS['point'] . "\"/>\n";
 
-            // Подпись точки (выше линии)
-            if ($label) {
-                $svg .= "  <text x=\"{$x}\" y=\"" . ($lineY - 12) . "\" text-anchor=\"middle\" ";
+            // Подпись точки
+            if ($label && isset($labelPositions[$i])) {
+                $labelY = $labelPositions[$i]['y'];
+                $svg .= "  <text x=\"{$x}\" y=\"{$labelY}\" text-anchor=\"middle\" ";
                 $svg .= "fill=\"" . self::COLORS['label'] . "\" font-size=\"14\" font-weight=\"600\" ";
                 $svg .= "font-style=\"italic\">{$label}</text>\n";
             }
@@ -262,6 +268,56 @@ class NumberLineSvgRenderer
         $svg .= "</svg>";
 
         return $svg;
+    }
+
+    /**
+     * Определяет, нужно ли чередовать позиции подписей
+     */
+    private function needAlternateLabels(array $points, callable $getX): bool
+    {
+        if (count($points) < 2) {
+            return false;
+        }
+
+        // Минимальное расстояние между подписями (в пикселях)
+        $minDistance = 18;
+
+        for ($i = 0; $i < count($points) - 1; $i++) {
+            $x1 = $getX($points[$i]['value']);
+            $x2 = $getX($points[$i + 1]['value']);
+
+            if (abs($x2 - $x1) < $minDistance) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Вычисляет позиции подписей с учётом коллизий
+     */
+    private function calculateLabelPositions(array $points, callable $getX, float $lineY, bool $needAlternate): array
+    {
+        $positions = [];
+        $labelAbove = $lineY - 12;  // Позиция выше линии
+        $labelBelow = $lineY + 28;  // Позиция ниже линии (под числами)
+
+        if (!$needAlternate) {
+            // Все подписи сверху
+            foreach ($points as $i => $pt) {
+                $positions[$i] = ['y' => $labelAbove];
+            }
+            return $positions;
+        }
+
+        // Строгое чередование: нечётные сверху, чётные снизу
+        // Это гарантирует, что соседние подписи никогда не будут на одной высоте
+        foreach ($points as $i => $pt) {
+            $positions[$i] = ['y' => ($i % 2 === 0) ? $labelAbove : $labelBelow];
+        }
+
+        return $positions;
     }
 
     /**
