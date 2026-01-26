@@ -2361,7 +2361,7 @@ function geometryEditor() {
             clone.querySelectorAll('[x-show]').forEach(el => el.removeAttribute('x-show'));
             clone.querySelectorAll('[x-for]').forEach(el => el.remove());
             clone.querySelectorAll('template').forEach(el => el.remove());
-            clone.querySelectorAll('[:class]').forEach(el => el.removeAttribute(':class'));
+            clone.querySelectorAll('[\\:class]').forEach(el => el.removeAttribute(':class'));
 
             // Add proper SVG header
             const svgString = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${this.canvasWidth} ${this.canvasHeight}">${clone.innerHTML}</svg>`;
