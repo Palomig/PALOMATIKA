@@ -89,6 +89,33 @@ function bisectorPoint(A, B, C) {
     return pointOnLine(B, C, t);
 }
 
+// 7.1. Единичный вектор направления биссектрисы угла
+function bisectorDirection(vertex, p1, p2) {
+    // Единичный вектор от vertex к p1
+    const dx1 = p1.x - vertex.x;
+    const dy1 = p1.y - vertex.y;
+    const len1 = Math.sqrt(dx1 * dx1 + dy1 * dy1);
+    const u1 = { x: dx1 / len1, y: dy1 / len1 };
+
+    // Единичный вектор от vertex к p2
+    const dx2 = p2.x - vertex.x;
+    const dy2 = p2.y - vertex.y;
+    const len2 = Math.sqrt(dx2 * dx2 + dy2 * dy2);
+    const u2 = { x: dx2 / len2, y: dy2 / len2 };
+
+    // Биссектриса = сумма единичных векторов (нормализованная)
+    const bx = u1.x + u2.x;
+    const by = u1.y + u2.y;
+    const blen = Math.sqrt(bx * bx + by * by);
+
+    if (blen < 1e-10) {
+        // Вырожденный случай — угол 180°, возвращаем перпендикуляр
+        return { x: -u1.y, y: u1.x };
+    }
+
+    return { x: bx / blen, y: by / blen };
+}
+
 // 8. Проверка: является ли угол в вершине прямым (90°)
 function isRightAngle(vertex, p1, p2) {
     const v1 = { x: p1.x - vertex.x, y: p1.y - vertex.y };
@@ -168,6 +195,7 @@ window.pointOnLine = pointOnLine;
 window.labelOnSegment = labelOnSegment;
 window.angleLabelPos = angleLabelPos;
 window.bisectorPoint = bisectorPoint;
+window.bisectorDirection = bisectorDirection;
 window.isRightAngle = isRightAngle;
 window.equalityTick = equalityTick;
 window.doubleEqualityTick = doubleEqualityTick;

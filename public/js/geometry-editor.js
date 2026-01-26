@@ -1086,7 +1086,7 @@ function geometryEditor() {
             return svg;
         },
 
-        // Рендер диагоналей четырёхугольника
+        // Рендер диагоналей и вспомогательных линий четырёхугольника
         renderQuadDiagonals(figure) {
             let svg = '';
             const v = figure.vertices;
@@ -1116,7 +1116,140 @@ function geometryEditor() {
                 }
             }
 
+            // Биссектрисы (фиолетовый, пунктир)
+            const vertexPairs = {
+                'A': ['D', 'B'],
+                'B': ['A', 'C'],
+                'C': ['B', 'D'],
+                'D': ['C', 'A']
+            };
+
+            ['a', 'b', 'c', 'd'].forEach(vKey => {
+                const lineKey = `bisector_${vKey}`;
+                if (lines[lineKey] && lines[lineKey].enabled) {
+                    const vName = vKey.toUpperCase();
+                    const endpoint = this.getQuadBisectorEnd(figure, vName);
+                    const vertex = v[vName];
+                    svg += `<line x1="${vertex.x}" y1="${vertex.y}" x2="${endpoint.x}" y2="${endpoint.y}"
+                            stroke="#a855f7" stroke-width="1" stroke-dasharray="6,4"/>`;
+                    // Точка пересечения
+                    svg += `<circle cx="${endpoint.x}" cy="${endpoint.y}" r="3" fill="#a855f7"/>`;
+                    // Две дуги половинных углов (показывают, что угол делится пополам)
+                    const [prev, next] = vertexPairs[vName];
+                    svg += `<path d="${window.makeAngleArc(vertex, v[prev], endpoint, 20)}"
+                            fill="none" stroke="#a855f7" stroke-width="1"/>`;
+                    svg += `<path d="${window.makeAngleArc(vertex, endpoint, v[next], 20)}"
+                            fill="none" stroke="#a855f7" stroke-width="1"/>`;
+                }
+            });
+
+            // Высоты (зелёный, пунктир)
+            ['a', 'b', 'c', 'd'].forEach(vKey => {
+                const lineKey = `altitude_${vKey}`;
+                if (lines[lineKey] && lines[lineKey].enabled) {
+                    const vName = vKey.toUpperCase();
+                    const altitudeData = this.getQuadAltitudeEnd(figure, vName);
+                    const vertex = v[vName];
+                    svg += `<line x1="${vertex.x}" y1="${vertex.y}" x2="${altitudeData.foot.x}" y2="${altitudeData.foot.y}"
+                            stroke="#10b981" stroke-width="1" stroke-dasharray="6,4"/>`;
+                    // Точка основания высоты
+                    svg += `<circle cx="${altitudeData.foot.x}" cy="${altitudeData.foot.y}" r="3" fill="#10b981"/>`;
+                    // Прямой угол
+                    svg += `<path d="${window.rightAnglePath(altitudeData.foot, vertex, altitudeData.sideEnd, 10)}"
+                            fill="none" stroke="#10b981" stroke-width="1"/>`;
+                    // Подпись точки
+                    const label = lines[lineKey].intersectionLabel || 'H';
+                    svg += `<text x="${altitudeData.foot.x}" y="${altitudeData.foot.y + 15}" fill="#10b981" font-size="12"
+                            font-family="'Times New Roman', serif" font-style="italic" font-weight="500"
+                            text-anchor="middle" dominant-baseline="middle" class="geo-label">${label}</text>`;
+                }
+            });
+
             return svg;
+        },
+
+        // Конечная точка биссектрисы угла четырёхугольника
+        getQuadBisectorEnd(figure, vName) {
+            const v = figure.vertices;
+            const vertexPairs = {
+                'A': { prev: 'D', next: 'B', oppositeSide: ['B', 'C'] },
+                'B': { prev: 'A', next: 'C', oppositeSide: ['C', 'D'] },
+                'C': { prev: 'B', next: 'D', oppositeSide: ['D', 'A'] },
+                'D': { prev: 'C', next: 'A', oppositeSide: ['A', 'B'] }
+            };
+
+            const { prev, next, oppositeSide } = vertexPairs[vName];
+            const vertex = v[vName];
+            const p1 = v[prev];
+            const p2 = v[next];
+
+            // Направление биссектрисы
+            const dir = window.bisectorDirection(vertex, p1, p2);
+
+            // Ищем пересечение с противоположной стороной
+            const sideP1 = v[oppositeSide[0]];
+            const sideP2 = v[oppositeSide[1]];
+            const intersection = this.raySegmentIntersection(vertex, dir, sideP1, sideP2);
+
+            if (intersection) return intersection;
+
+            // Если не пересекает противоположную сторону, пробуем соседние стороны
+            // Сторона от next
+            const nextSideEnd = vertexPairs[next].next;
+            const intersection2 = this.raySegmentIntersection(vertex, dir, v[next], v[nextSideEnd]);
+            if (intersection2) return intersection2;
+
+            // Сторона от prev
+            const prevSidePrev = vertexPairs[prev].prev;
+            const intersection3 = this.raySegmentIntersection(vertex, dir, v[prevSidePrev], v[prev]);
+            if (intersection3) return intersection3;
+
+            // Fallback: продлить на 200px
+            return { x: vertex.x + dir.x * 200, y: vertex.y + dir.y * 200 };
+        },
+
+        // Пересечение луча с отрезком
+        raySegmentIntersection(rayOrigin, rayDir, segP1, segP2) {
+            const dx = segP2.x - segP1.x;
+            const dy = segP2.y - segP1.y;
+            const denom = rayDir.x * dy - rayDir.y * dx;
+            if (Math.abs(denom) < 1e-10) return null;
+            const t = ((segP1.x - rayOrigin.x) * dy - (segP1.y - rayOrigin.y) * dx) / denom;
+            const s = ((segP1.x - rayOrigin.x) * rayDir.y - (segP1.y - rayOrigin.y) * rayDir.x) / denom;
+            if (t > 0.001 && s >= 0 && s <= 1) {
+                return { x: rayOrigin.x + t * rayDir.x, y: rayOrigin.y + t * rayDir.y };
+            }
+            return null;
+        },
+
+        // Основание высоты четырёхугольника
+        getQuadAltitudeEnd(figure, vName) {
+            const v = figure.vertices;
+            // Высота опускается на противоположную сторону
+            const oppositeSides = {
+                'A': ['C', 'D'],  // Высота из A на сторону CD
+                'B': ['D', 'A'],  // Высота из B на сторону DA
+                'C': ['A', 'B'],  // Высота из C на сторону AB
+                'D': ['B', 'C']   // Высота из D на сторону BC
+            };
+
+            const [sideStart, sideEnd] = oppositeSides[vName];
+            const vertex = v[vName];
+            const p1 = v[sideStart];
+            const p2 = v[sideEnd];
+
+            // Проекция vertex на прямую p1-p2
+            const dx = p2.x - p1.x;
+            const dy = p2.y - p1.y;
+            const t = ((vertex.x - p1.x) * dx + (vertex.y - p1.y) * dy) / (dx * dx + dy * dy);
+
+            return {
+                foot: {
+                    x: p1.x + t * dx,
+                    y: p1.y + t * dy
+                },
+                sideEnd: p2
+            };
         },
 
         // Рендер углов четырёхугольника
