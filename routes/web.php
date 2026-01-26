@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\Auth\TelegramBotAuthController;
+use App\Http\Controllers\EgeController;
 use App\Http\Controllers\RepetitorController;
 use App\Http\Controllers\TestPdfController;
 use App\Http\Controllers\TopicController;
@@ -142,6 +143,22 @@ Route::prefix('topics')->name('topics.')->group(function () {
 // OGE Generator (new)
 Route::get('/oge', [TopicController::class, 'ogeGenerator'])->name('oge.generator');
 Route::get('/oge/{hash}', [TopicController::class, 'showOgeVariant'])->name('oge.show');
+
+// ========================================================================
+// ЕГЭ Routes (обособленная система)
+// ========================================================================
+Route::prefix('ege')->name('ege.')->group(function () {
+    Route::get('/', [EgeController::class, 'index'])->name('index');
+    Route::get('/topics/{id}', [EgeController::class, 'show'])->name('show')->where('id', '[0-9]+');
+    Route::get('/generator', [EgeController::class, 'generator'])->name('generator');
+    Route::get('/variant/{hash}', [EgeController::class, 'showVariant'])->name('variant');
+});
+
+// API for EGE tasks
+Route::prefix('api/ege')->group(function () {
+    Route::get('/{topicId}/random', [EgeController::class, 'apiGetRandomTasks']);
+    Route::get('/{topicId}', [EgeController::class, 'apiGetTopicData']);
+});
 
 // API for tasks
 Route::prefix('api/topics')->group(function () {
