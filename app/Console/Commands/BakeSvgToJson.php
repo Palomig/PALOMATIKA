@@ -162,8 +162,8 @@ class BakeSvgToJson extends Command
             foreach ($block['zadaniya'] as $zadanieIndex => &$zadanie) {
                 $type = $zadanie['type'] ?? '';
 
-                // Only process matching types
-                if (!in_array($type, ['matching', 'matching_signs', 'matching_4'])) {
+                // Only process matching types and statements
+                if (!in_array($type, ['matching', 'matching_signs', 'matching_4', 'statements'])) {
                     continue;
                 }
 

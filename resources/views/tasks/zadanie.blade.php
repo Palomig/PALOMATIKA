@@ -76,6 +76,10 @@
             @include('tasks.types.statements', compact('zadanie', 'block', 'topicId'))
             @break
 
+        @case('graph_statements')
+            @include('tasks.types.graph-statements', compact('zadanie', 'block', 'topicId'))
+            @break
+
         @case('graphic')
             @include('tasks.types.graphic', compact('zadanie', 'block', 'topicId'))
             @break
