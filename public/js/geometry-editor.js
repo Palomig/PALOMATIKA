@@ -7,10 +7,10 @@
 
 // Глобальная функция для открытия редактора
 window.openGeometryEditor = function(taskId, existingSvg = null, metadata = null) {
-    const editor = document.getElementById('geometry-editor-modal');
-    if (editor && editor.__x) {
-        editor.__x.$data.open(taskId, existingSvg, metadata);
-    }
+    // Dispatch custom event that Alpine component listens for
+    window.dispatchEvent(new CustomEvent('open-geometry-editor', {
+        detail: { taskId, svg: existingSvg, metadata }
+    }));
 };
 
 // Основной компонент Alpine.js
