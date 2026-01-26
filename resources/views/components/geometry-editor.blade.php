@@ -6,7 +6,7 @@
 --}}
 
 <div id="geometry-editor-modal"
-     class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm"
+     class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
      x-data="geometryEditor()"
      x-show="isOpen"
      x-cloak
