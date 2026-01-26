@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $topicId }}. {{ $topicMeta['title'] }} - ЕГЭ - PALOMATIKA</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- KaTeX для формул --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
@@ -152,6 +153,11 @@
 
 {{-- Инструмент для пометки заданий ЕГЭ --}}
 @include('components.task-review-tool-ege', ['topicId' => $topicId])
+
+{{-- Редактор геометрии (для заданий 1 - планиметрия, 3 - стереометрия) --}}
+@if(in_array($topicId, ['01', '03']))
+    @include('components.geometry-editor')
+@endif
 
 @stack('scripts')
 

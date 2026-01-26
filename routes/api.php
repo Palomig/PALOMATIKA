@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\SmartCartProxyController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\TopicController;
 use App\Http\Controllers\Auth\TelegramBotAuthController;
+use App\Http\Controllers\GeometryEditorController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,6 +37,14 @@ Route::post('/referral/track', [OAuthController::class, 'trackReferral']);
 
 // Deploy webhook (called by GitHub Actions after FTP deploy)
 Route::post('/deploy/refresh', [DeployController::class, 'refresh']);
+
+// Geometry Editor API
+Route::prefix('geometry')->group(function () {
+    Route::get('/stats', [GeometryEditorController::class, 'stats']);
+    Route::get('/{taskId}/load', [GeometryEditorController::class, 'load']);
+    Route::post('/{taskId}/save', [GeometryEditorController::class, 'save']);
+    Route::delete('/{taskId}/metadata', [GeometryEditorController::class, 'delete']);
+});
 
 // SmartCart proxy routes (forward to /smartcart/api/*)
 Route::options('/prices/bulk', [SmartCartProxyController::class, 'options']);

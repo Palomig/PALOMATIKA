@@ -6,6 +6,8 @@
 
 @php
     $tasks = $zadanie['tasks'] ?? [];
+    // Определяем тип экзамена (OGE/EGE) по контексту или URL
+    $examType = request()->is('ege*') ? 'EGE' : 'OGE';
 @endphp
 
 <div class="space-y-6">
@@ -17,6 +19,8 @@
             $hasSvg = !empty($task['svg']);
             $hasImage = !empty($task['image']);
             $hasVisual = $hasSvg || $hasImage;
+            // ID для редактора: {topic}{examType}{taskId}
+            $editorTaskId = $topicId . $examType . $task['id'];
         @endphp
 
         <div class="bg-slate-800/70 rounded-xl border border-slate-700 overflow-hidden task-review-item relative"
@@ -26,7 +30,7 @@
                 {{-- SVG или изображение --}}
                 @if($hasVisual)
                     <div class="lg:w-80 lg:shrink-0 mb-4 lg:mb-0">
-                        <div class="bg-slate-900/50 rounded-lg p-3 flex items-center justify-center min-h-[200px]">
+                        <div class="bg-slate-900/50 rounded-lg p-3 flex items-center justify-center min-h-[200px] relative group">
                             @if($hasSvg)
                                 {{-- Предзаготовленный SVG из JSON --}}
                                 {!! $task['svg'] !!}
@@ -39,6 +43,15 @@
                                      alt="Геометрия {{ $task['id'] }}"
                                      class="max-w-full max-h-full object-contain">
                             @endif
+
+                            {{-- Кнопка редактирования SVG --}}
+                            <button onclick="openGeometryEditor('{{ $editorTaskId }}', {{ json_encode($task['svg'] ?? null) }})"
+                                    class="absolute bottom-2 right-2 p-2 bg-purple-600/80 hover:bg-purple-500 rounded-lg text-white opacity-0 group-hover:opacity-100 transition-all duration-200"
+                                    title="Редактировать изображение">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 @endif
