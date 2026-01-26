@@ -842,9 +842,21 @@ function geometryEditor() {
         renderTriangle(figure, strokeColor, isSelected) {
             const v = figure.vertices;
             const points = `${v.A.x},${v.A.y} ${v.B.x},${v.B.y} ${v.C.x},${v.C.y}`;
-            let svg = `<polygon points="${points}" fill="none" stroke="${strokeColor}" stroke-width="1.5" stroke-linejoin="round"/>`;
+            let svg = '';
 
-            // Vertex markers and labels
+            // 1. Main polygon
+            svg += `<polygon points="${points}" fill="none" stroke="${strokeColor}" stroke-width="1.5" stroke-linejoin="round"/>`;
+
+            // 2. Auxiliary lines (bisectors, medians, altitudes)
+            svg += this.renderTriangleAuxiliaryLines(figure);
+
+            // 3. Angle arcs and values
+            svg += this.renderTriangleAngles(figure);
+
+            // 4. Equality tick marks on sides
+            svg += this.renderTriangleEqualityMarks(figure);
+
+            // 5. Vertex markers and labels
             ['A', 'B', 'C'].forEach(vName => {
                 const vertex = v[vName];
                 const labelPos = this.getLabelPosition(figure, vName);
@@ -855,12 +867,215 @@ function geometryEditor() {
             return svg;
         },
 
+        // Рендер вспомогательных линий (биссектрисы, медианы, высоты)
+        renderTriangleAuxiliaryLines(figure) {
+            let svg = '';
+            const v = figure.vertices;
+            const lines = figure.lines || {};
+
+            // Биссектрисы (фиолетовый, пунктир)
+            ['a', 'b', 'c'].forEach(vKey => {
+                const lineKey = `bisector_${vKey}`;
+                if (lines[lineKey] && lines[lineKey].enabled) {
+                    const vName = vKey.toUpperCase();
+                    const endpoint = this.getBisectorEnd(figure, vName);
+                    const vertex = v[vName];
+                    svg += `<line x1="${vertex.x}" y1="${vertex.y}" x2="${endpoint.x}" y2="${endpoint.y}"
+                            stroke="#a855f7" stroke-width="1" stroke-dasharray="6,4"/>`;
+                    // Точка пересечения
+                    svg += `<circle cx="${endpoint.x}" cy="${endpoint.y}" r="3" fill="#a855f7"/>`;
+                    // Подпись точки
+                    const label = lines[lineKey].intersectionLabel || 'D';
+                    svg += `<text x="${endpoint.x}" y="${endpoint.y + 15}" fill="#a855f7" font-size="12"
+                            font-family="'Times New Roman', serif" font-style="italic" font-weight="500"
+                            text-anchor="middle" dominant-baseline="middle" class="geo-label">${label}</text>`;
+                }
+            });
+
+            // Медианы (синий, пунктир)
+            ['a', 'b', 'c'].forEach(vKey => {
+                const lineKey = `median_${vKey}`;
+                if (lines[lineKey] && lines[lineKey].enabled) {
+                    const vName = vKey.toUpperCase();
+                    const endpoint = this.getMedianEnd(figure, vName);
+                    const vertex = v[vName];
+                    svg += `<line x1="${vertex.x}" y1="${vertex.y}" x2="${endpoint.x}" y2="${endpoint.y}"
+                            stroke="${this.colors.auxiliaryLine}" stroke-width="1" stroke-dasharray="6,4"/>`;
+                    // Точка пересечения (середина стороны)
+                    svg += `<circle cx="${endpoint.x}" cy="${endpoint.y}" r="3" fill="${this.colors.auxiliaryLine}"/>`;
+                    // Подпись точки
+                    const label = lines[lineKey].intersectionLabel || 'M';
+                    svg += `<text x="${endpoint.x}" y="${endpoint.y + 15}" fill="${this.colors.auxiliaryLine}" font-size="12"
+                            font-family="'Times New Roman', serif" font-style="italic" font-weight="500"
+                            text-anchor="middle" dominant-baseline="middle" class="geo-label">${label}</text>`;
+                }
+            });
+
+            // Высоты (зелёный, пунктир)
+            ['a', 'b', 'c'].forEach(vKey => {
+                const lineKey = `altitude_${vKey}`;
+                if (lines[lineKey] && lines[lineKey].enabled) {
+                    const vName = vKey.toUpperCase();
+                    const endpoint = this.getAltitudeEnd(figure, vName);
+                    const vertex = v[vName];
+                    svg += `<line x1="${vertex.x}" y1="${vertex.y}" x2="${endpoint.x}" y2="${endpoint.y}"
+                            stroke="#10b981" stroke-width="1" stroke-dasharray="6,4"/>`;
+                    // Точка пересечения (основание высоты)
+                    svg += `<circle cx="${endpoint.x}" cy="${endpoint.y}" r="3" fill="#10b981"/>`;
+                    // Прямой угол
+                    svg += `<path d="${this.getAltitudeRightAngle(figure, vName)}"
+                            fill="none" stroke="#10b981" stroke-width="1"/>`;
+                    // Подпись точки
+                    const label = lines[lineKey].intersectionLabel || 'H';
+                    svg += `<text x="${endpoint.x}" y="${endpoint.y + 15}" fill="#10b981" font-size="12"
+                            font-family="'Times New Roman', serif" font-style="italic" font-weight="500"
+                            text-anchor="middle" dominant-baseline="middle" class="geo-label">${label}</text>`;
+                }
+            });
+
+            return svg;
+        },
+
+        // Рендер углов (дуги и значения)
+        renderTriangleAngles(figure) {
+            let svg = '';
+            const v = figure.vertices;
+            const angles = figure.angles || {};
+
+            ['A', 'B', 'C'].forEach(vName => {
+                const angleData = angles[vName];
+                if (!angleData) return;
+
+                const isRightAngle = this.isVertexRightAngle(figure, vName);
+
+                // Дуга угла или прямой угол
+                if (angleData.showArc) {
+                    if (isRightAngle) {
+                        // Прямой угол - квадратик
+                        svg += `<path d="${this.getRightAnglePath(figure, vName)}"
+                                fill="none" stroke="${this.colors.angleArc}" stroke-width="1.2"/>`;
+                    } else {
+                        // Обычная дуга
+                        svg += `<path d="${this.getAngleArc(figure, vName)}"
+                                fill="none" stroke="${this.colors.angleArc}" stroke-width="1.2"/>`;
+                    }
+                }
+
+                // Значение угла
+                if (angleData.showValue) {
+                    const labelPos = this.getAngleLabelPos(figure, vName);
+                    const angleValue = this.getAngleValue(figure, vName);
+                    svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${this.colors.angleArc}" font-size="11"
+                            font-family="'Times New Roman', serif" font-weight="500"
+                            text-anchor="middle" dominant-baseline="middle">${angleValue}°</text>`;
+                }
+            });
+
+            return svg;
+        },
+
+        // Рендер маркеров равных сторон
+        renderTriangleEqualityMarks(figure) {
+            let svg = '';
+            const equalGroups = figure.equalGroups || {};
+            const sideGroups = equalGroups.sides || [];
+
+            // Цвета для групп
+            const groupColors = ['#3b82f6', '#f59e0b', '#ef4444'];
+
+            sideGroups.forEach((group, idx) => {
+                const color = groupColors[idx % groupColors.length];
+                const tickCount = group.group; // 1, 2, или 3 черточки
+
+                group.sides.forEach(side => {
+                    // side = 'AB', 'BC', 'AC'
+                    const p1 = figure.vertices[side[0]];
+                    const p2 = figure.vertices[side[1]];
+
+                    if (tickCount === 1) {
+                        const tick = this.getEqualityTick(figure, side);
+                        svg += `<line x1="${tick.x1}" y1="${tick.y1}" x2="${tick.x2}" y2="${tick.y2}"
+                                stroke="${color}" stroke-width="2"/>`;
+                    } else if (tickCount === 2) {
+                        const ticks = this.getDoubleEqualityTick(figure, side);
+                        svg += `<line x1="${ticks.tick1.x1}" y1="${ticks.tick1.y1}" x2="${ticks.tick1.x2}" y2="${ticks.tick1.y2}"
+                                stroke="${color}" stroke-width="2"/>`;
+                        svg += `<line x1="${ticks.tick2.x1}" y1="${ticks.tick2.y1}" x2="${ticks.tick2.x2}" y2="${ticks.tick2.y2}"
+                                stroke="${color}" stroke-width="2"/>`;
+                    } else if (tickCount === 3) {
+                        const ticks = this.getTripleEqualityTick(figure, side);
+                        svg += `<line x1="${ticks.tick1.x1}" y1="${ticks.tick1.y1}" x2="${ticks.tick1.x2}" y2="${ticks.tick1.y2}"
+                                stroke="${color}" stroke-width="2"/>`;
+                        svg += `<line x1="${ticks.tick2.x1}" y1="${ticks.tick2.y1}" x2="${ticks.tick2.x2}" y2="${ticks.tick2.y2}"
+                                stroke="${color}" stroke-width="2"/>`;
+                        svg += `<line x1="${ticks.tick3.x1}" y1="${ticks.tick3.y1}" x2="${ticks.tick3.x2}" y2="${ticks.tick3.y2}"
+                                stroke="${color}" stroke-width="2"/>`;
+                    }
+                });
+            });
+
+            return svg;
+        },
+
+        // Тройная черточка для равных сторон
+        getTripleEqualityTick(figure, sideName) {
+            const v = figure.vertices;
+            const p1 = v[sideName[0]];
+            const p2 = v[sideName[1]];
+
+            const dx = p2.x - p1.x;
+            const dy = p2.y - p1.y;
+            const len = Math.sqrt(dx * dx + dy * dy);
+            const ux = dx / len;
+            const uy = dy / len;
+            const nx = -dy / len;
+            const ny = dx / len;
+
+            const mid = { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 };
+            const length = 8;
+            const gap = 4;
+            const half = length / 2;
+
+            return {
+                tick1: {
+                    x1: mid.x - ux * gap - nx * half,
+                    y1: mid.y - uy * gap - ny * half,
+                    x2: mid.x - ux * gap + nx * half,
+                    y2: mid.y - uy * gap + ny * half
+                },
+                tick2: {
+                    x1: mid.x - nx * half,
+                    y1: mid.y - ny * half,
+                    x2: mid.x + nx * half,
+                    y2: mid.y + ny * half
+                },
+                tick3: {
+                    x1: mid.x + ux * gap - nx * half,
+                    y1: mid.y + uy * gap - ny * half,
+                    x2: mid.x + ux * gap + nx * half,
+                    y2: mid.y + uy * gap + ny * half
+                }
+            };
+        },
+
         renderQuadrilateral(figure, strokeColor, isSelected) {
             const v = figure.vertices;
             const points = `${v.A.x},${v.A.y} ${v.B.x},${v.B.y} ${v.C.x},${v.C.y} ${v.D.x},${v.D.y}`;
-            let svg = `<polygon points="${points}" fill="none" stroke="${strokeColor}" stroke-width="1.5" stroke-linejoin="round"/>`;
+            let svg = '';
 
-            // Vertex markers and labels
+            // 1. Main polygon
+            svg += `<polygon points="${points}" fill="none" stroke="${strokeColor}" stroke-width="1.5" stroke-linejoin="round"/>`;
+
+            // 2. Diagonals
+            svg += this.renderQuadDiagonals(figure);
+
+            // 3. Angle arcs and values
+            svg += this.renderQuadAngles(figure);
+
+            // 4. Equality tick marks on sides
+            svg += this.renderQuadEqualityMarks(figure);
+
+            // 5. Vertex markers and labels
             ['A', 'B', 'C', 'D'].forEach(vName => {
                 const vertex = v[vName];
                 const labelPos = this.getLabelPositionQuad(figure, vName);
@@ -869,6 +1084,194 @@ function geometryEditor() {
             });
 
             return svg;
+        },
+
+        // Рендер диагоналей четырёхугольника
+        renderQuadDiagonals(figure) {
+            let svg = '';
+            const v = figure.vertices;
+            const lines = figure.lines || {};
+
+            // Диагональ AC
+            if (lines.diagonal_ac && lines.diagonal_ac.enabled) {
+                svg += `<line x1="${v.A.x}" y1="${v.A.y}" x2="${v.C.x}" y2="${v.C.y}"
+                        stroke="${this.colors.auxiliaryLine}" stroke-width="1" stroke-dasharray="6,4"/>`;
+            }
+
+            // Диагональ BD
+            if (lines.diagonal_bd && lines.diagonal_bd.enabled) {
+                svg += `<line x1="${v.B.x}" y1="${v.B.y}" x2="${v.D.x}" y2="${v.D.y}"
+                        stroke="${this.colors.auxiliaryLine}" stroke-width="1" stroke-dasharray="6,4"/>`;
+            }
+
+            // Точка пересечения диагоналей (если обе включены)
+            if (lines.diagonal_ac && lines.diagonal_ac.enabled && lines.diagonal_bd && lines.diagonal_bd.enabled) {
+                const intersection = this.getDiagonalsIntersection(figure);
+                if (intersection) {
+                    svg += `<circle cx="${intersection.x}" cy="${intersection.y}" r="3" fill="${this.colors.auxiliaryLine}"/>`;
+                    const label = lines.intersection_label || 'O';
+                    svg += `<text x="${intersection.x}" y="${intersection.y + 15}" fill="${this.colors.auxiliaryLabel}" font-size="12"
+                            font-family="'Times New Roman', serif" font-style="italic" font-weight="500"
+                            text-anchor="middle" dominant-baseline="middle" class="geo-label">${label}</text>`;
+                }
+            }
+
+            return svg;
+        },
+
+        // Рендер углов четырёхугольника
+        renderQuadAngles(figure) {
+            let svg = '';
+            const v = figure.vertices;
+            const angles = figure.angles || {};
+
+            const vertexPairs = {
+                'A': ['D', 'B'],
+                'B': ['A', 'C'],
+                'C': ['B', 'D'],
+                'D': ['C', 'A']
+            };
+
+            ['A', 'B', 'C', 'D'].forEach(vName => {
+                const angleData = angles[vName];
+                if (!angleData) return;
+
+                const [prev, next] = vertexPairs[vName];
+                const vertex = v[vName];
+                const p1 = v[prev];
+                const p2 = v[next];
+
+                // Проверка на прямой угол
+                const isRightAngle = this.isQuadVertexRightAngle(figure, vName);
+
+                if (angleData.showArc) {
+                    if (isRightAngle) {
+                        svg += `<path d="${window.rightAnglePath(vertex, p1, p2, 12)}"
+                                fill="none" stroke="${this.colors.angleArc}" stroke-width="1.2"/>`;
+                    } else {
+                        svg += `<path d="${window.makeAngleArc(vertex, p1, p2, 25)}"
+                                fill="none" stroke="${this.colors.angleArc}" stroke-width="1.2"/>`;
+                    }
+                }
+
+                if (angleData.showValue) {
+                    const labelPos = window.angleLabelPos(vertex, p1, p2, 42, 0.5);
+                    const angleValue = angleData.value || this.calculateQuadAngle(figure, vName);
+                    svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${this.colors.angleArc}" font-size="11"
+                            font-family="'Times New Roman', serif" font-weight="500"
+                            text-anchor="middle" dominant-baseline="middle">${Math.round(angleValue)}°</text>`;
+                }
+            });
+
+            return svg;
+        },
+
+        // Рендер маркеров равных сторон четырёхугольника
+        renderQuadEqualityMarks(figure) {
+            let svg = '';
+            const equalGroups = figure.equalGroups || {};
+            const sideGroups = equalGroups.sides || [];
+
+            const groupColors = ['#3b82f6', '#f59e0b', '#ef4444', '#10b981'];
+
+            sideGroups.forEach((group, idx) => {
+                const color = groupColors[idx % groupColors.length];
+                const tickCount = group.group;
+
+                group.sides.forEach(side => {
+                    const p1 = figure.vertices[side[0]];
+                    const p2 = figure.vertices[side[1]];
+
+                    const tick = this.getQuadEqualityTick(p1, p2, tickCount);
+                    tick.forEach(t => {
+                        svg += `<line x1="${t.x1}" y1="${t.y1}" x2="${t.x2}" y2="${t.y2}"
+                                stroke="${color}" stroke-width="2"/>`;
+                    });
+                });
+            });
+
+            return svg;
+        },
+
+        // Получить черточки равенства для стороны четырёхугольника
+        getQuadEqualityTick(p1, p2, count = 1) {
+            const ticks = [];
+            const dx = p2.x - p1.x;
+            const dy = p2.y - p1.y;
+            const len = Math.sqrt(dx * dx + dy * dy);
+            const ux = dx / len;
+            const uy = dy / len;
+            const nx = -dy / len;
+            const ny = dx / len;
+
+            const mid = { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 };
+            const length = 8;
+            const gap = 4;
+            const half = length / 2;
+
+            for (let i = 0; i < count; i++) {
+                const offset = (i - (count - 1) / 2) * gap;
+                ticks.push({
+                    x1: mid.x + ux * offset - nx * half,
+                    y1: mid.y + uy * offset - ny * half,
+                    x2: mid.x + ux * offset + nx * half,
+                    y2: mid.y + uy * offset + ny * half
+                });
+            }
+
+            return ticks;
+        },
+
+        // Точка пересечения диагоналей
+        getDiagonalsIntersection(figure) {
+            const v = figure.vertices;
+            // Линия AC: A + t*(C-A)
+            // Линия BD: B + s*(D-B)
+            const ax = v.A.x, ay = v.A.y;
+            const cx = v.C.x, cy = v.C.y;
+            const bx = v.B.x, by = v.B.y;
+            const dx = v.D.x, dy = v.D.y;
+
+            const denom = (ax - cx) * (by - dy) - (ay - cy) * (bx - dx);
+            if (Math.abs(denom) < 1e-10) return null;
+
+            const t = ((ax - bx) * (by - dy) - (ay - by) * (bx - dx)) / denom;
+
+            return {
+                x: ax + t * (cx - ax),
+                y: ay + t * (cy - ay)
+            };
+        },
+
+        // Проверка прямого угла в четырёхугольнике
+        isQuadVertexRightAngle(figure, vName) {
+            const angle = this.calculateQuadAngle(figure, vName);
+            return Math.abs(angle - 90) < 1;
+        },
+
+        // Вычисление угла в четырёхугольнике
+        calculateQuadAngle(figure, vName) {
+            const v = figure.vertices;
+            const vertexPairs = {
+                'A': ['D', 'B'],
+                'B': ['A', 'C'],
+                'C': ['B', 'D'],
+                'D': ['C', 'A']
+            };
+            const [prev, next] = vertexPairs[vName];
+            const vertex = v[vName];
+            const p1 = v[prev];
+            const p2 = v[next];
+
+            const v1 = { x: p1.x - vertex.x, y: p1.y - vertex.y };
+            const v2 = { x: p2.x - vertex.x, y: p2.y - vertex.y };
+
+            const dot = v1.x * v2.x + v1.y * v2.y;
+            const len1 = Math.sqrt(v1.x * v1.x + v1.y * v1.y);
+            const len2 = Math.sqrt(v2.x * v2.x + v2.y * v2.y);
+
+            const cos = dot / (len1 * len2);
+            return Math.acos(Math.max(-1, Math.min(1, cos))) * 180 / Math.PI;
         },
 
         renderCircle(figure, isSelected) {
@@ -1252,6 +1655,87 @@ function geometryEditor() {
         },
 
         toggleSideInEqualGroup(groupNum, sideName, checked) {
+            if (!this.selectedFigure) return;
+
+            if (!this.selectedFigure.equalGroups) {
+                this.selectedFigure.equalGroups = { sides: [], angles: [] };
+            }
+
+            let groups = this.selectedFigure.equalGroups.sides;
+            let group = groups.find(g => g.group === groupNum);
+
+            if (checked) {
+                // Remove from other groups first
+                groups.forEach(g => {
+                    const idx = g.sides.indexOf(sideName);
+                    if (idx !== -1) g.sides.splice(idx, 1);
+                });
+
+                if (!group) {
+                    group = { group: groupNum, sides: [] };
+                    groups.push(group);
+                }
+                if (!group.sides.includes(sideName)) {
+                    group.sides.push(sideName);
+                }
+            } else {
+                if (group) {
+                    const idx = group.sides.indexOf(sideName);
+                    if (idx !== -1) group.sides.splice(idx, 1);
+                }
+            }
+
+            // Clean up empty groups
+            this.selectedFigure.equalGroups.sides = groups.filter(g => g.sides.length > 0);
+            this.saveState();
+        },
+
+        // ==================== Quadrilateral Toggles ====================
+
+        toggleQuadAngleArc(vertexName, checked) {
+            if (!this.selectedFigure) return;
+            if (!this.selectedFigure.angles) {
+                this.selectedFigure.angles = {};
+            }
+            if (!this.selectedFigure.angles[vertexName]) {
+                this.selectedFigure.angles[vertexName] = { showArc: false, showValue: false };
+            }
+            this.selectedFigure.angles[vertexName].showArc = checked;
+            this.saveState();
+        },
+
+        toggleQuadAngleValue(vertexName, checked) {
+            if (!this.selectedFigure) return;
+            if (!this.selectedFigure.angles) {
+                this.selectedFigure.angles = {};
+            }
+            if (!this.selectedFigure.angles[vertexName]) {
+                this.selectedFigure.angles[vertexName] = { showArc: false, showValue: false };
+            }
+            this.selectedFigure.angles[vertexName].showValue = checked;
+            this.saveState();
+        },
+
+        toggleQuadLine(lineKey, enabled) {
+            if (!this.selectedFigure) return;
+            if (!this.selectedFigure.lines) {
+                this.selectedFigure.lines = {};
+            }
+            if (!this.selectedFigure.lines[lineKey]) {
+                this.selectedFigure.lines[lineKey] = { enabled: false };
+            }
+            this.selectedFigure.lines[lineKey].enabled = enabled;
+            this.saveState();
+        },
+
+        isQuadSideInEqualGroup(groupNum, sideName) {
+            if (!this.selectedFigure || !this.selectedFigure.equalGroups) return false;
+            const groups = this.selectedFigure.equalGroups.sides || [];
+            const group = groups.find(g => g.group === groupNum);
+            return group ? group.sides.includes(sideName) : false;
+        },
+
+        toggleQuadSideInEqualGroup(groupNum, sideName, checked) {
             if (!this.selectedFigure) return;
 
             if (!this.selectedFigure.equalGroups) {

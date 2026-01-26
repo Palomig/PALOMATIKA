@@ -522,6 +522,81 @@
                                     </button>
                                 </div>
                             </div>
+
+                            {{-- Angles --}}
+                            <div class="bg-[#12121f] rounded-lg p-3">
+                                <h3 class="text-sm font-semibold text-purple-400 mb-3 flex items-center gap-2">
+                                    <span>📐</span> Углы
+                                </h3>
+                                <div class="space-y-2">
+                                    <template x-for="vName in ['A', 'B', 'C', 'D']" :key="'quad-angle-' + vName">
+                                        <div class="flex items-center gap-2">
+                                            <span class="w-8 text-orange-400 font-bold text-sm">∠<span x-text="selectedFigure.vertices[vName].label || vName"></span></span>
+                                            <span class="text-gray-400 text-xs" x-text="Math.round(calculateQuadAngle(selectedFigure, vName)) + '°'"></span>
+                                            <label class="flex items-center gap-1 text-xs text-gray-400 ml-auto">
+                                                <input type="checkbox"
+                                                       :checked="selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].showArc"
+                                                       @change="toggleQuadAngleArc(vName, $event.target.checked)"
+                                                       class="rounded bg-gray-700 border-gray-600">
+                                                дуга
+                                            </label>
+                                            <label class="flex items-center gap-1 text-xs text-gray-400">
+                                                <input type="checkbox"
+                                                       :checked="selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].showValue"
+                                                       @change="toggleQuadAngleValue(vName, $event.target.checked)"
+                                                       class="rounded bg-gray-700 border-gray-600">
+                                                °
+                                            </label>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+
+                            {{-- Diagonals --}}
+                            <div class="bg-[#12121f] rounded-lg p-3">
+                                <h3 class="text-sm font-semibold text-purple-400 mb-3 flex items-center gap-2">
+                                    <span>📏</span> Диагонали
+                                </h3>
+                                <div class="space-y-2">
+                                    <label class="flex items-center gap-2 text-sm text-gray-300">
+                                        <input type="checkbox"
+                                               :checked="selectedFigure.lines && selectedFigure.lines.diagonal_ac && selectedFigure.lines.diagonal_ac.enabled"
+                                               @change="toggleQuadLine('diagonal_ac', $event.target.checked)"
+                                               class="rounded bg-gray-700 border-gray-600">
+                                        Диагональ AC
+                                    </label>
+                                    <label class="flex items-center gap-2 text-sm text-gray-300">
+                                        <input type="checkbox"
+                                               :checked="selectedFigure.lines && selectedFigure.lines.diagonal_bd && selectedFigure.lines.diagonal_bd.enabled"
+                                               @change="toggleQuadLine('diagonal_bd', $event.target.checked)"
+                                               class="rounded bg-gray-700 border-gray-600">
+                                        Диагональ BD
+                                    </label>
+                                </div>
+                            </div>
+
+                            {{-- Equal sides --}}
+                            <div class="bg-[#12121f] rounded-lg p-3">
+                                <h3 class="text-sm font-semibold text-purple-400 mb-3 flex items-center gap-2">
+                                    <span>═</span> Равные стороны
+                                </h3>
+                                <div class="space-y-2">
+                                    <template x-for="group in [1, 2]" :key="'quad-equal-group-' + group">
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-xs text-gray-500 w-16">Группа <span x-text="group"></span>:</span>
+                                            <template x-for="side in ['AB', 'BC', 'CD', 'DA']" :key="'quad-' + side">
+                                                <label class="flex items-center gap-1 text-xs">
+                                                    <input type="checkbox"
+                                                           :checked="isQuadSideInEqualGroup(group, side)"
+                                                           @change="toggleQuadSideInEqualGroup(group, side, $event.target.checked)"
+                                                           class="rounded bg-gray-700 border-gray-600">
+                                                    <span class="text-gray-300" x-text="side"></span>
+                                                </label>
+                                            </template>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
                         </div>
                     </template>
 
