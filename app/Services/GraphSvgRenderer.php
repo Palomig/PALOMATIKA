@@ -15,11 +15,11 @@ namespace App\Services;
  */
 class GraphSvgRenderer
 {
-    // Размеры SVG
-    private const WIDTH = 180;
-    private const HEIGHT = 180;
-    private const PADDING = 25;
-    private const SCALE = 18;
+    // Размеры SVG (увеличены на 30%)
+    private const WIDTH = 234;
+    private const HEIGHT = 234;
+    private const PADDING = 32;
+    private const SCALE = 23;
 
     // Blueprint цветовая схема
     private const COLORS = [
@@ -61,7 +61,7 @@ class GraphSvgRenderer
     {
         $width = self::WIDTH;
         $height = self::HEIGHT;
-        return "<svg viewBox=\"0 0 {$width} {$height}\" class=\"w-full max-w-[180px] h-auto mx-auto\">\n";
+        return "<svg viewBox=\"0 0 {$width} {$height}\" class=\"w-full max-w-[234px] h-auto mx-auto\">\n";
     }
 
     /**
