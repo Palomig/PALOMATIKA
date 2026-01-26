@@ -679,18 +679,32 @@ function geometryEditor() {
         },
 
         // Параллелограмм: AB || CD, AD || BC
+        // Свойство: диагонали делят друг друга пополам, т.е. A + C = B + D
         moveParallelogramVertex(figure, vertex, newX, newY) {
             const v = figure.vertices;
-            const dx = newX - v[vertex].x;
-            const dy = newY - v[vertex].y;
 
+            // Обновляем текущую вершину
             v[vertex].x = newX;
             v[vertex].y = newY;
 
-            // Противоположная вершина двигается так же
+            // Противоположная вершина вычисляется из свойства параллелограмма
+            // A + C = B + D, поэтому:
+            // C = B + D - A
+            // A = B + D - C
+            // B = A + C - D
+            // D = A + C - B
             const opposite = { A: 'C', B: 'D', C: 'A', D: 'B' };
-            v[opposite[vertex]].x += dx;
-            v[opposite[vertex]].y += dy;
+            const oppVertex = opposite[vertex];
+
+            if (vertex === 'A' || vertex === 'C') {
+                // Перемещаем A или C → пересчитываем противоположную, B и D фиксированы
+                v[oppVertex].x = v.B.x + v.D.x - v[vertex].x;
+                v[oppVertex].y = v.B.y + v.D.y - v[vertex].y;
+            } else {
+                // Перемещаем B или D → пересчитываем противоположную, A и C фиксированы
+                v[oppVertex].x = v.A.x + v.C.x - v[vertex].x;
+                v[oppVertex].y = v.A.y + v.C.y - v[vertex].y;
+            }
         },
 
         // Прямоугольник: все углы 90°

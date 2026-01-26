@@ -202,12 +202,6 @@
                             </g>
                         </template>
 
-                        {{-- Debug: static rectangle to test SVG rendering --}}
-                        <rect x="10" y="10" width="50" height="50" fill="red" opacity="0.5"/>
-
-                        {{-- Debug: count of figures --}}
-                        <text x="70" y="35" fill="white" font-size="14" x-text="'Figures: ' + figures.length"></text>
-
                         {{-- Figures - rendered via x-html for SVG compatibility --}}
                         <g x-html="renderAllFigures()"></g>
                     </svg>
