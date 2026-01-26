@@ -19,14 +19,14 @@
             $hasVisual = $hasSvg || $hasImage;
         @endphp
 
-        <div class="bg-purple-900/30 rounded-xl border border-purple-800/40 overflow-hidden task-review-item relative"
+        <div class="bg-dark-100 rounded-xl border border-dark-400/50 overflow-hidden task-review-item relative hover:border-accent/30 transition-colors"
              data-task-key="{{ $taskKey }}" data-task-info="{{ $taskInfo }}">
 
             <div class="p-5 {{ $hasVisual ? 'lg:flex lg:gap-6' : '' }}">
                 {{-- SVG или изображение --}}
                 @if($hasVisual)
                     <div class="lg:w-80 lg:shrink-0 mb-4 lg:mb-0">
-                        <div class="bg-purple-950/50 rounded-lg p-3 flex items-center justify-center min-h-[200px]">
+                        <div class="bg-dark-50 rounded-lg p-3 flex items-center justify-center min-h-[200px]">
                             @if($hasSvg)
                                 {{-- Предзаготовленный SVG из JSON --}}
                                 {!! $task['svg'] !!}
@@ -46,8 +46,8 @@
                 {{-- Текст задачи --}}
                 <div class="flex-1">
                     <div class="flex items-start gap-3">
-                        <span class="text-purple-400 font-bold text-lg shrink-0">{{ $task['id'] }})</span>
-                        <p class="text-purple-100/90 leading-relaxed">{!! $task['text'] ?? '' !!}</p>
+                        <span class="text-accent-light font-bold text-lg shrink-0">{{ $task['id'] }})</span>
+                        <p class="text-gray-200 leading-relaxed">{!! $task['text'] ?? '' !!}</p>
                     </div>
                 </div>
             </div>

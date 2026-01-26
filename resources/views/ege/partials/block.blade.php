@@ -7,14 +7,14 @@
 
 <div class="mb-12">
     {{-- Block Header --}}
-    <div class="flex justify-between items-center mb-6 text-sm text-purple-400/50 italic border-b border-purple-800/30 pb-4">
+    <div class="flex justify-between items-center mb-6 text-sm text-gray-600 italic border-b border-dark-400/30 pb-4">
         <span>Е. А. Ширяева</span>
         <span>Задачник ЕГЭ профиль 2026 (тренажер)</span>
     </div>
 
     <div class="text-center mb-8">
         <h2 class="text-2xl font-bold text-white">Задание {{ ltrim($topicId, '0') }}. {{ $topicMeta['title'] ?? '' }}</h2>
-        <p class="text-purple-400 text-lg mt-1">Блок {{ $block['number'] }}. {{ $block['title'] }}</p>
+        <p class="text-accent-light text-lg mt-1">Блок {{ $block['number'] }}. {{ $block['title'] }}</p>
     </div>
 
     @foreach($block['zadaniya'] ?? [] as $zadanie)

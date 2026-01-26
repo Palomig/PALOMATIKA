@@ -12,8 +12,20 @@
             theme: {
                 extend: {
                     colors: {
-                        dark: { DEFAULT: '#1a1a2e', light: '#252542', lighter: '#2d2d4a' },
-                        coral: { DEFAULT: '#ff6b6b', dark: '#e85555', light: '#ff8585' }
+                        dark: {
+                            DEFAULT: '#06090f',
+                            50: '#0a0f1a',
+                            100: '#0d1320',
+                            200: '#111827',
+                            300: '#1a2332',
+                            400: '#243044',
+                            500: '#2e3d56'
+                        },
+                        accent: {
+                            DEFAULT: '#8b5cf6',
+                            light: '#a78bfa',
+                            dark: '#7c3aed'
+                        }
                     }
                 }
             }
@@ -26,14 +38,18 @@
 
     <style>
         body { font-family: 'Inter', sans-serif; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0f1a; }
+        ::-webkit-scrollbar-thumb { background: #2e3d56; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3d4f6a; }
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-purple-950 via-slate-900 to-slate-900">
+<body class="min-h-screen bg-dark text-gray-200">
 
 <div class="max-w-6xl mx-auto px-4 py-8">
     {{-- Navigation --}}
-    <div class="flex justify-between items-center mb-8 text-sm bg-purple-900/30 rounded-xl p-4 border border-purple-800/50">
-        <a href="{{ route('landing') }}" class="text-purple-400 hover:text-purple-300 transition-colors flex items-center gap-2">
+    <div class="flex justify-between items-center mb-8 text-sm bg-dark-100 rounded-xl p-4 border border-dark-400/50">
+        <a href="{{ route('landing') }}" class="text-accent-light hover:text-accent transition-colors flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
             </svg>
@@ -41,20 +57,20 @@
         </a>
 
         <div class="flex gap-4">
-            <a href="{{ route('topics.index') }}" class="text-purple-400 hover:text-purple-300 transition">ОГЭ</a>
-            <span class="text-purple-300 font-semibold">ЕГЭ</span>
+            <a href="{{ route('topics.index') }}" class="text-gray-400 hover:text-gray-200 transition">ОГЭ</a>
+            <span class="text-accent-light font-semibold">ЕГЭ</span>
         </div>
 
-        <span class="text-purple-500 text-xs">Профильный уровень</span>
+        <span class="text-gray-500 text-xs">Профильный уровень</span>
     </div>
 
     {{-- Header --}}
     <div class="text-center mb-12">
-        <div class="inline-block bg-purple-600/20 text-purple-300 px-4 py-1 rounded-full text-sm font-medium mb-4">
+        <div class="inline-block bg-accent/20 text-accent-light px-4 py-1 rounded-full text-sm font-medium mb-4 border border-accent/30">
             Единый Государственный Экзамен
         </div>
         <h1 class="text-5xl font-bold text-white mb-4">ЕГЭ профиль 2026</h1>
-        <p class="text-purple-300/70 text-xl max-w-2xl mx-auto">
+        <p class="text-gray-400 text-xl max-w-2xl mx-auto">
             Задания для подготовки к профильному уровню ЕГЭ по математике
         </p>
     </div>
@@ -66,13 +82,13 @@
     @endphp
 
     <div class="flex justify-center gap-6 mb-10">
-        <div class="bg-purple-900/30 px-8 py-4 rounded-xl border border-purple-800/50">
-            <span class="text-purple-400 font-bold text-3xl">{{ $availableCount }}</span>
-            <span class="text-purple-300/60 ml-2">из 19 заданий</span>
+        <div class="bg-dark-100 px-8 py-4 rounded-xl border border-dark-400/50">
+            <span class="text-accent-light font-bold text-3xl">{{ $availableCount }}</span>
+            <span class="text-gray-500 ml-2">из 19 заданий</span>
         </div>
-        <div class="bg-purple-900/30 px-8 py-4 rounded-xl border border-purple-800/50">
-            <span class="text-purple-400 font-bold text-3xl">{{ $totalTasks }}</span>
-            <span class="text-purple-300/60 ml-2">задач</span>
+        <div class="bg-dark-100 px-8 py-4 rounded-xl border border-dark-400/50">
+            <span class="text-accent-light font-bold text-3xl">{{ $totalTasks }}</span>
+            <span class="text-gray-500 ml-2">задач</span>
         </div>
     </div>
 
@@ -81,41 +97,40 @@
         @foreach($topics as $topicId => $topic)
             @php
                 $exists = $topic['exists'];
-                $colorClass = $topic['color'] ?? 'purple';
             @endphp
 
             @if($exists)
                 <a href="{{ route('ege.show', ['id' => ltrim($topicId, '0')]) }}"
-                   class="group bg-purple-900/30 hover:bg-purple-800/40 rounded-xl p-5 border border-purple-800/50 hover:border-purple-600/50 transition-all duration-200">
+                   class="group bg-dark-100 hover:bg-dark-200 rounded-xl p-5 border border-dark-400/50 hover:border-accent/50 transition-all duration-200">
                     <div class="flex items-start gap-4">
-                        <div class="bg-purple-600/30 text-purple-300 w-12 h-12 rounded-xl flex items-center justify-center text-lg font-bold shrink-0 group-hover:bg-purple-500/40 transition">
+                        <div class="bg-accent/20 text-accent-light w-12 h-12 rounded-xl flex items-center justify-center text-lg font-bold shrink-0 group-hover:bg-accent/30 transition">
                             {{ ltrim($topicId, '0') }}
                         </div>
                         <div class="flex-1 min-w-0">
-                            <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-purple-200 transition">{{ $topic['title'] }}</h3>
-                            <p class="text-purple-300/60 text-sm mb-3 line-clamp-2">{{ $topic['description'] }}</p>
+                            <h3 class="text-white font-semibold text-lg mb-1 group-hover:text-accent-light transition">{{ $topic['title'] }}</h3>
+                            <p class="text-gray-500 text-sm mb-3 line-clamp-2">{{ $topic['description'] }}</p>
                             @if($topic['stats'])
-                                <div class="flex gap-4 text-xs text-purple-400/70">
+                                <div class="flex gap-4 text-xs text-gray-600">
                                     <span>{{ $topic['stats']['blocks'] }} блоков</span>
                                     <span>{{ $topic['stats']['tasks'] }} задач</span>
                                 </div>
                             @endif
                         </div>
-                        <svg class="w-5 h-5 text-purple-500 group-hover:text-purple-300 transition shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-gray-600 group-hover:text-accent-light transition shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                         </svg>
                     </div>
                 </a>
             @else
-                <div class="bg-slate-800/30 rounded-xl p-5 border border-slate-700/30 opacity-50">
+                <div class="bg-dark-50 rounded-xl p-5 border border-dark-300/30 opacity-40">
                     <div class="flex items-start gap-4">
-                        <div class="bg-slate-700/30 text-slate-500 w-12 h-12 rounded-xl flex items-center justify-center text-lg font-bold shrink-0">
+                        <div class="bg-dark-300/30 text-gray-600 w-12 h-12 rounded-xl flex items-center justify-center text-lg font-bold shrink-0">
                             {{ ltrim($topicId, '0') }}
                         </div>
                         <div class="flex-1 min-w-0">
-                            <h3 class="text-slate-400 font-semibold text-lg mb-1">{{ $topic['title'] }}</h3>
-                            <p class="text-slate-500 text-sm mb-3 line-clamp-2">{{ $topic['description'] }}</p>
-                            <span class="text-xs text-slate-600">Скоро</span>
+                            <h3 class="text-gray-500 font-semibold text-lg mb-1">{{ $topic['title'] }}</h3>
+                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">{{ $topic['description'] }}</p>
+                            <span class="text-xs text-gray-700">Скоро</span>
                         </div>
                     </div>
                 </div>
@@ -124,7 +139,7 @@
     </div>
 
     {{-- Footer --}}
-    <div class="text-center mt-12 text-purple-500/50 text-sm">
+    <div class="text-center mt-12 text-gray-600 text-sm">
         <p>PALOMATIKA - подготовка к ЕГЭ и ОГЭ по математике</p>
     </div>
 </div>
