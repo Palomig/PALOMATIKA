@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $topicId }}. {{ $topicMeta['title'] }} - PALOMATIKA</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- KaTeX для формул --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
@@ -130,6 +131,11 @@
 
 {{-- Инструмент для пометки заданий --}}
 @include('components.task-review-tool', ['topicId' => $topicId])
+
+{{-- Редактор геометрии (только для тем 15-18) --}}
+@if(in_array($topicId, ['15', '16', '17', '18']))
+    @include('components.geometry-editor')
+@endif
 
 @stack('scripts')
 
