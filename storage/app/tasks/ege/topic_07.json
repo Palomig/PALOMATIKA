@@ -1,0 +1,419 @@
+{
+  "topic_id": "07",
+  "exam_type": "ege",
+  "meta": {
+    "title": "Задание 7 — Значение выражения",
+    "description": "Степенные, логарифмические и тригонометрические выражения",
+    "color": "purple"
+  },
+  "blocks": [
+    {
+      "number": 1,
+      "title": "ФИПИ",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
+          "tasks": [
+            {"id": 1, "text": "$(5^4)^6:5^{22}$", "answer": "25"},
+            {"id": 2, "text": "$(4^{15})^5:4^{73}$", "answer": "16"},
+            {"id": 3, "text": "$(2^{16})^5:2^{74}$", "answer": "64"},
+            {"id": 4, "text": "$(3^2)^{17}:3^{31}$", "answer": "27"}
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
+          "tasks": [
+            {"id": 5, "text": "$\\displaystyle\\frac{(3\\sqrt{8})^2}{6}$", "answer": "12"},
+            {"id": 6, "text": "$\\displaystyle\\frac{(5\\sqrt{6})^2}{10}$", "answer": "15"},
+            {"id": 7, "text": "$\\displaystyle\\frac{(6\\sqrt{2})^2}{8}$", "answer": "9"},
+            {"id": 8, "text": "$\\displaystyle\\frac{(2\\sqrt{7})^2}{4}$", "answer": "7"},
+            {"id": 9, "text": "$(\\sqrt{12}-\\sqrt{75})\\cdot\\sqrt{12}$", "answer": "-18"},
+            {"id": 10, "text": "$(\\sqrt{63}-\\sqrt{28})\\cdot\\sqrt{7}$", "answer": "7"},
+            {"id": 11, "text": "$(\\sqrt{32}-\\sqrt{50})\\cdot\\sqrt{8}$", "answer": "-4"},
+            {"id": 12, "text": "$(\\sqrt{75}-\\sqrt{27})\\cdot\\sqrt{3}$", "answer": "6"}
+          ]
+        },
+        {
+          "number": 3,
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
+          "tasks": [
+            {"id": 13, "text": "$\\displaystyle\\frac{3^{9{,}2}}{9^{2{,}6}}$", "answer": "81"},
+            {"id": 14, "text": "$\\displaystyle\\frac{5^{6{,}2}}{25^{2{,}1}}$", "answer": "25"},
+            {"id": 15, "text": "$\\displaystyle\\frac{81^{2{,}6}}{9^{3{,}7}}$", "answer": "27"},
+            {"id": 16, "text": "$\\displaystyle\\frac{16^{3{,}2}}{4^{3{,}9}}$", "answer": "32"},
+            {"id": 17, "text": "$(64^9)^3:(16^5)^8$", "answer": "4"},
+            {"id": 18, "text": "$(9^7)^4:(27^3)^6$", "answer": "9"},
+            {"id": 19, "text": "$(125^8)^3:(25^7)^5$", "answer": "25"},
+            {"id": 20, "text": "$(4^6)^4:(8^5)^3$", "answer": "8"},
+            {"id": 21, "text": "$5^{0{,}06}\\cdot 25^{0{,}97}$", "answer": "25"},
+            {"id": 22, "text": "$3^{1{,}34}\\cdot 9^{0{,}83}$", "answer": "27"},
+            {"id": 23, "text": "$8^{0{,}76}\\cdot 64^{0{,}12}$", "answer": "8"},
+            {"id": 24, "text": "$7^{0{,}04}\\cdot 49^{0{,}48}$", "answer": "7"},
+            {"id": 25, "text": "$4^{\\frac{1}{5}}\\cdot 16^{\\frac{9}{10}}$", "answer": "16"},
+            {"id": 26, "text": "$9^{\\frac{3}{5}}\\cdot 81^{\\frac{7}{10}}$", "answer": "81"},
+            {"id": 27, "text": "$6^{\\frac{5}{7}}\\cdot 36^{\\frac{1}{7}}$", "answer": "6"},
+            {"id": 28, "text": "$5^{\\frac{5}{9}}\\cdot 25^{\\frac{2}{9}}$", "answer": "5"}
+          ]
+        },
+        {
+          "number": 4,
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
+          "tasks": [
+            {"id": 29, "text": "$\\displaystyle\\frac{14^{6{,}4}\\cdot 7^{-5{,}4}}{2^{4{,}4}}$", "answer": "28"},
+            {"id": 30, "text": "$\\displaystyle\\frac{15^{7{,}2}\\cdot 5^{-5{,}2}}{3^{6{,}2}}$", "answer": "75"},
+            {"id": 31, "text": "$\\displaystyle\\frac{21^{4{,}5}\\cdot 3^{-2{,}5}}{7^{3{,}5}}$", "answer": "63"},
+            {"id": 32, "text": "$\\displaystyle\\frac{22^{5{,}1}\\cdot 11^{-4{,}1}}{2^{2{,}1}}$", "answer": "88"}
+          ]
+        },
+        {
+          "number": 5,
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
+          "tasks": [
+            {"id": 33, "text": "$\\displaystyle\\frac{\\sqrt[4]{8}\\cdot\\sqrt[4]{48}}{\\sqrt[4]{24}}$", "answer": "2"},
+            {"id": 34, "text": "$\\displaystyle\\frac{\\sqrt[3]{400}\\cdot\\sqrt[3]{25}}{\\sqrt[3]{80}}$", "answer": "5"},
+            {"id": 35, "text": "$\\displaystyle\\frac{\\sqrt[5]{20}\\cdot\\sqrt[5]{16}}{\\sqrt[5]{10}}$", "answer": "2"},
+            {"id": 36, "text": "$\\displaystyle\\frac{\\sqrt[3]{15}\\cdot\\sqrt[3]{36}}{\\sqrt[3]{20}}$", "answer": "3"},
+            {"id": 37, "text": "$\\displaystyle\\frac{\\sqrt[3]{121}\\cdot\\sqrt[4]{121}}{\\sqrt[12]{121}}$", "answer": "11"},
+            {"id": 38, "text": "$\\displaystyle\\frac{\\sqrt[3]{36}\\cdot\\sqrt[5]{36}}{\\sqrt[30]{36}}$", "answer": "6"},
+            {"id": 39, "text": "$\\displaystyle\\frac{\\sqrt[6]{81}\\cdot\\sqrt[3]{81}}{\\sqrt{81}}$", "answer": "1"},
+            {"id": 40, "text": "$\\displaystyle\\frac{\\sqrt[20]{16}\\cdot\\sqrt[5]{16}}{\\sqrt[4]{16}}$", "answer": "1"}
+          ]
+        },
+        {
+          "number": 6,
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
+          "tasks": [
+            {"id": 41, "text": "$\\log_6 3+\\log_6 2$", "answer": "1"},
+            {"id": 42, "text": "$\\log_8 2+\\log_8 32$", "answer": "2"},
+            {"id": 43, "text": "$\\log_2 56-\\log_2 7$", "answer": "3"},
+            {"id": 44, "text": "$\\log_3 72-\\log_3 8$", "answer": "2"}
+          ]
+        },
+        {
+          "number": 7,
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
+          "tasks": [
+            {"id": 45, "text": "$\\log_7 12{,}25+\\log_7 4$", "answer": "2"},
+            {"id": 46, "text": "$\\log_3 6{,}75+\\log_3 4$", "answer": "3"},
+            {"id": 47, "text": "$\\log_2 6{,}4+\\log_2 10$", "answer": "6"},
+            {"id": 48, "text": "$\\log_4 51{,}2+\\log_4 5$", "answer": "4"},
+            {"id": 49, "text": "$\\log_2 24-\\log_2 0{,}75$", "answer": "5"},
+            {"id": 50, "text": "$\\log_3 121{,}5-\\log_3 1{,}5$", "answer": "4"},
+            {"id": 51, "text": "$\\log_6 135-\\log_6 3{,}75$", "answer": "2"},
+            {"id": 52, "text": "$\\log_5 312{,}5-\\log_5 2{,}5$", "answer": "3"},
+            {"id": 53, "text": "$\\log_{0{,}7} 10-\\log_{0{,}7} 7$", "answer": "-1"},
+            {"id": 54, "text": "$\\log_{0{,}8} 5-\\log_{0{,}8} 4$", "answer": "-1"},
+            {"id": 55, "text": "$\\log_{0{,}5} 4-\\log_{0{,}5} 1$", "answer": "-2"},
+            {"id": 56, "text": "$\\log_{0{,}2} 50-\\log_{0{,}2} 2$", "answer": "-2"}
+          ]
+        },
+        {
+          "number": 8,
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
+          "tasks": [
+            {"id": 57, "text": "$\\displaystyle\\frac{\\log_5 2}{\\log_5 13}+\\log_{13} 0{,}5$", "answer": "0"},
+            {"id": 58, "text": "$\\displaystyle\\frac{\\log_7 40}{\\log_7 8}+\\log_8 0{,}2$", "answer": "1"},
+            {"id": 59, "text": "$\\displaystyle\\frac{\\log_3 50}{\\log_3 5}+\\log_5 0{,}5$", "answer": "2"},
+            {"id": 60, "text": "$\\displaystyle\\frac{\\log_2 4}{\\log_2 14}+\\log_{14} 3{,}5$", "answer": "1"},
+            {"id": 61, "text": "$\\displaystyle\\frac{\\log_9 28}{\\log_9 7}+\\log_7 \\frac{7}{4}$", "answer": "2"},
+            {"id": 62, "text": "$\\displaystyle\\frac{\\log_7 20}{\\log_7 4}+\\log_4 \\frac{1}{5}$", "answer": "1"}
+          ]
+        },
+        {
+          "number": 9,
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
+          "tasks": [
+            {"id": 63, "text": "$6\\log_{\\sqrt[6]{13}} 13$", "answer": "36"},
+            {"id": 64, "text": "$5\\log_{\\sqrt[5]{21}} 21$", "answer": "25"},
+            {"id": 65, "text": "$3\\log_{\\sqrt[4]{5}} 25$", "answer": "24"},
+            {"id": 66, "text": "$2\\log_{\\sqrt[5]{7}} 49$", "answer": "20"},
+            {"id": 67, "text": "$8\\log_5 \\sqrt[4]{5}$", "answer": "2"},
+            {"id": 68, "text": "$9\\log_7 \\sqrt[3]{7}$", "answer": "3"},
+            {"id": 69, "text": "$15\\log_2 \\sqrt[5]{16}$", "answer": "12"},
+            {"id": 70, "text": "$20\\log_3 \\sqrt[4]{27}$", "answer": "15"}
+          ]
+        },
+        {
+          "number": 10,
+          "instruction": "Найдите $\\sin\\alpha$, если...",
+          "type": "expression",
+          "tasks": [
+            {"id": 71, "text": "$\\cos\\alpha=\\displaystyle\\frac{2\\sqrt{6}}{5}$, $\\alpha\\in\\left(0;\\frac{\\pi}{2}\\right)$", "answer": "0.2"},
+            {"id": 72, "text": "$\\cos\\alpha=\\displaystyle\\frac{\\sqrt{19}}{10}$, $\\alpha\\in\\left(0;\\frac{\\pi}{2}\\right)$", "answer": "0.9"},
+            {"id": 73, "text": "$\\cos\\alpha=-\\displaystyle\\frac{\\sqrt{7}}{4}$, $\\alpha\\in\\left(\\frac{\\pi}{2};\\pi\\right)$", "answer": "0.75"},
+            {"id": 74, "text": "$\\cos\\alpha=-\\displaystyle\\frac{\\sqrt{21}}{5}$, $\\alpha\\in\\left(\\frac{\\pi}{2};\\pi\\right)$", "answer": "0.4"},
+            {"id": 75, "text": "$\\cos\\alpha=-\\displaystyle\\frac{\\sqrt{19}}{10}$, $\\alpha\\in\\left(\\pi;\\frac{3\\pi}{2}\\right)$", "answer": "-0.9"},
+            {"id": 76, "text": "$\\cos\\alpha=-\\displaystyle\\frac{\\sqrt{51}}{10}$, $\\alpha\\in\\left(\\pi;\\frac{3\\pi}{2}\\right)$", "answer": "-0.7"},
+            {"id": 77, "text": "$\\cos\\alpha=\\displaystyle\\frac{\\sqrt{91}}{10}$, $\\alpha\\in\\left(\\frac{3\\pi}{2};2\\pi\\right)$", "answer": "-0.3"},
+            {"id": 78, "text": "$\\cos\\alpha=\\displaystyle\\frac{\\sqrt{7}}{4}$, $\\alpha\\in\\left(\\frac{3\\pi}{2};2\\pi\\right)$", "answer": "-0.75"}
+          ]
+        },
+        {
+          "number": 11,
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
+          "tasks": [
+            {"id": 79, "text": "Найдите $3\\cos 2\\alpha$, если $\\sin\\alpha=0{,}6$", "answer": "0.84"},
+            {"id": 80, "text": "Найдите $16\\cos 2\\alpha$, если $\\cos\\alpha=0{,}5$", "answer": "-8"},
+            {"id": 81, "text": "Найдите $4\\cos 2\\alpha$, если $\\sin\\alpha=-0{,}5$", "answer": "2"},
+            {"id": 82, "text": "Найдите $3\\cos 2\\alpha$, если $\\cos\\alpha=-0{,}8$", "answer": "0.84"}
+          ]
+        },
+        {
+          "number": 12,
+          "instruction": "Найдите $\\mathrm{tg}\\,\\alpha$, если...",
+          "type": "expression",
+          "tasks": [
+            {"id": 83, "text": "$\\sin\\alpha=\\displaystyle\\frac{2\\sqrt{29}}{29}$, $\\alpha\\in\\left(0;\\frac{\\pi}{2}\\right)$", "answer": "0.4"},
+            {"id": 84, "text": "$\\sin\\alpha=\\displaystyle\\frac{\\sqrt{26}}{26}$, $\\alpha\\in\\left(0;\\frac{\\pi}{2}\\right)$", "answer": "0.2"},
+            {"id": 85, "text": "$\\cos\\alpha=\\displaystyle\\frac{\\sqrt{17}}{17}$, $\\alpha\\in\\left(0;\\frac{\\pi}{2}\\right)$", "answer": "4"},
+            {"id": 86, "text": "$\\cos\\alpha=\\displaystyle\\frac{\\sqrt{5}}{5}$, $\\alpha\\in\\left(0;\\frac{\\pi}{2}\\right)$", "answer": "2"},
+            {"id": 87, "text": "$\\sin\\alpha=\\displaystyle\\frac{3\\sqrt{34}}{34}$, $\\alpha\\in\\left(\\frac{\\pi}{2};\\pi\\right)$", "answer": "-0.6"},
+            {"id": 88, "text": "$\\sin\\alpha=\\displaystyle\\frac{2\\sqrt{5}}{5}$, $\\alpha\\in\\left(\\frac{\\pi}{2};\\pi\\right)$", "answer": "-2"},
+            {"id": 89, "text": "$\\cos\\alpha=-\\displaystyle\\frac{\\sqrt{10}}{10}$, $\\alpha\\in\\left(\\frac{\\pi}{2};\\pi\\right)$", "answer": "-3"},
+            {"id": 90, "text": "$\\cos\\alpha=-\\displaystyle\\frac{\\sqrt{26}}{26}$, $\\alpha\\in\\left(\\frac{\\pi}{2};\\pi\\right)$", "answer": "-5"}
+          ]
+        },
+        {
+          "number": 13,
+          "instruction": "Найдите $\\mathrm{tg}\\,\\alpha$, если...",
+          "type": "expression",
+          "tasks": [
+            {"id": 91, "text": "$\\sin\\alpha=-\\displaystyle\\frac{4\\sqrt{41}}{41}$, $\\alpha\\in\\left(\\pi;\\frac{3\\pi}{2}\\right)$", "answer": "0.8"},
+            {"id": 92, "text": "$\\sin\\alpha=-\\displaystyle\\frac{5\\sqrt{41}}{41}$, $\\alpha\\in\\left(\\pi;\\frac{3\\pi}{2}\\right)$", "answer": "1.25"},
+            {"id": 93, "text": "$\\cos\\alpha=-\\displaystyle\\frac{5\\sqrt{26}}{26}$, $\\alpha\\in\\left(\\pi;\\frac{3\\pi}{2}\\right)$", "answer": "0.2"},
+            {"id": 94, "text": "$\\cos\\alpha=-\\displaystyle\\frac{2\\sqrt{13}}{13}$, $\\alpha\\in\\left(\\pi;\\frac{3\\pi}{2}\\right)$", "answer": "1.5"},
+            {"id": 95, "text": "$\\sin\\alpha=-\\displaystyle\\frac{\\sqrt{5}}{5}$, $\\alpha\\in\\left(\\frac{3\\pi}{2};2\\pi\\right)$", "answer": "-0.5"},
+            {"id": 96, "text": "$\\sin\\alpha=-\\displaystyle\\frac{3\\sqrt{34}}{34}$, $\\alpha\\in\\left(\\frac{3\\pi}{2};2\\pi\\right)$", "answer": "-0.6"},
+            {"id": 97, "text": "$\\cos\\alpha=\\displaystyle\\frac{5\\sqrt{29}}{29}$, $\\alpha\\in\\left(\\frac{3\\pi}{2};2\\pi\\right)$", "answer": "-0.4"},
+            {"id": 98, "text": "$\\cos\\alpha=\\displaystyle\\frac{\\sqrt{17}}{17}$, $\\alpha\\in\\left(\\frac{3\\pi}{2};2\\pi\\right)$", "answer": "-4"}
+          ]
+        },
+        {
+          "number": 14,
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
+          "tasks": [
+            {"id": 99, "text": "$26\\sqrt{2}\\cos\\displaystyle\\frac{\\pi}{4}\\cos\\frac{4\\pi}{3}$", "answer": "-13"},
+            {"id": 100, "text": "$28\\sqrt{2}\\cos\\displaystyle\\frac{3\\pi}{4}\\cos\\frac{\\pi}{3}$", "answer": "-14"},
+            {"id": 101, "text": "$18\\sqrt{2}\\,\\mathrm{tg}\\,\\displaystyle\\frac{\\pi}{4}\\sin\\frac{\\pi}{4}$", "answer": "18"},
+            {"id": 102, "text": "$12\\sqrt{2}\\,\\mathrm{tg}\\,\\displaystyle\\frac{5\\pi}{4}\\sin\\frac{3\\pi}{4}$", "answer": "12"},
+            {"id": 103, "text": "$\\sqrt{2}\\sin\\displaystyle\\frac{7\\pi}{8}\\cos\\frac{7\\pi}{8}$", "answer": "-0.5"},
+            {"id": 104, "text": "$7\\sqrt{2}\\sin\\displaystyle\\frac{15\\pi}{8}\\cos\\frac{15\\pi}{8}$", "answer": "-3.5"},
+            {"id": 105, "text": "$10\\sqrt{3}\\sin\\displaystyle\\frac{7\\pi}{6}\\cos\\frac{7\\pi}{6}$", "answer": "7.5"},
+            {"id": 106, "text": "$6\\sqrt{3}\\sin\\displaystyle\\frac{5\\pi}{6}\\cos\\frac{5\\pi}{6}$", "answer": "-4.5"},
+            {"id": 107, "text": "$5\\sin\\displaystyle\\frac{13\\pi}{12}\\cos\\frac{13\\pi}{12}$", "answer": "1.25"},
+            {"id": 108, "text": "$7\\sin\\displaystyle\\frac{17\\pi}{12}\\cos\\frac{17\\pi}{12}$", "answer": "1.75"}
+          ]
+        },
+        {
+          "number": 15,
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
+          "tasks": [
+            {"id": 109, "text": "$3\\sqrt{2}\\cos^2\\displaystyle\\frac{9\\pi}{8}-3\\sqrt{2}\\sin^2\\frac{9\\pi}{8}$", "answer": "3"},
+            {"id": 110, "text": "$4\\sqrt{3}\\cos^2\\displaystyle\\frac{7\\pi}{12}-4\\sqrt{3}\\sin^2\\frac{7\\pi}{12}$", "answer": "-6"},
+            {"id": 111, "text": "$\\sqrt{18}\\cos^2\\displaystyle\\frac{7\\pi}{8}-\\sqrt{18}\\sin^2\\frac{7\\pi}{8}$", "answer": "3"},
+            {"id": 112, "text": "$\\sqrt{72}\\cos^2\\displaystyle\\frac{9\\pi}{8}-\\sqrt{72}\\sin^2\\frac{9\\pi}{8}$", "answer": "6"}
+          ]
+        },
+        {
+          "number": 16,
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
+          "tasks": [
+            {"id": 113, "text": "$4\\sqrt{2}\\cos^2\\displaystyle\\frac{7\\pi}{8}-2\\sqrt{2}$", "answer": "2"},
+            {"id": 114, "text": "$2\\sqrt{3}\\cos^2\\displaystyle\\frac{13\\pi}{12}-\\sqrt{3}$", "answer": "1.5"},
+            {"id": 115, "text": "$6\\sqrt{3}\\cos^2\\displaystyle\\frac{\\pi}{12}-3\\sqrt{3}$", "answer": "4.5"},
+            {"id": 116, "text": "$8\\sqrt{2}\\cos^2\\displaystyle\\frac{7\\pi}{8}-4\\sqrt{2}$", "answer": "4"},
+            {"id": 117, "text": "$\\sqrt{2}-2\\sqrt{2}\\sin^2\\displaystyle\\frac{15\\pi}{8}$", "answer": "-1"},
+            {"id": 118, "text": "$5\\sqrt{3}-10\\sqrt{3}\\sin^2\\displaystyle\\frac{13\\pi}{12}$", "answer": "7.5"},
+            {"id": 119, "text": "$\\sqrt{32}-\\sqrt{128}\\sin^2\\displaystyle\\frac{9\\pi}{8}$", "answer": "4"},
+            {"id": 120, "text": "$\\sqrt{27}-\\sqrt{108}\\sin^2\\displaystyle\\frac{11\\pi}{12}$", "answer": "4.5"}
+          ]
+        },
+        {
+          "number": 17,
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
+          "tasks": [
+            {"id": 121, "text": "$\\displaystyle\\frac{16\\sin 98°\\cdot\\cos 98°}{\\sin 196°}$", "answer": "8"},
+            {"id": 122, "text": "$\\displaystyle\\frac{24\\sin 87°\\cdot\\cos 87°}{\\sin 174°}$", "answer": "12"},
+            {"id": 123, "text": "$\\displaystyle\\frac{18\\sin 96°\\cdot\\cos 96°}{\\sin 192°}$", "answer": "9"},
+            {"id": 124, "text": "$\\displaystyle\\frac{28\\sin 73°\\cdot\\cos 73°}{\\sin 146°}$", "answer": "14"},
+            {"id": 125, "text": "$\\displaystyle\\frac{7\\sin 154°}{\\cos 77°\\cdot\\cos 13°}$", "answer": "14"},
+            {"id": 126, "text": "$\\displaystyle\\frac{9\\sin 162°}{\\cos 81°\\cdot\\cos 9°}$", "answer": "18"},
+            {"id": 127, "text": "$\\displaystyle\\frac{8\\sin 130°}{\\cos 65°\\cdot\\cos 25°}$", "answer": "16"},
+            {"id": 128, "text": "$\\displaystyle\\frac{6\\sin 108°}{\\cos 54°\\cdot\\cos 36°}$", "answer": "12"}
+          ]
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "ФИПИ. Расширенная версия",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
+          "tasks": [
+            {"id": 129, "text": "$\\displaystyle\\frac{(\\sqrt{7}+\\sqrt{5})^2}{60+10\\sqrt{35}}$", "answer": "0.2"},
+            {"id": 130, "text": "$\\displaystyle\\frac{(\\sqrt{3}+\\sqrt{7})^2}{40+8\\sqrt{21}}$", "answer": "0.25"},
+            {"id": 131, "text": "$\\displaystyle\\frac{(\\sqrt{3}-\\sqrt{10})^2}{26-4\\sqrt{30}}$", "answer": "0.5"},
+            {"id": 132, "text": "$\\displaystyle\\frac{(\\sqrt{5}-\\sqrt{2})^2}{70-20\\sqrt{10}}$", "answer": "0.1"},
+            {"id": 133, "text": "$\\displaystyle\\frac{\\sqrt{1{,}2}\\cdot\\sqrt{1{,}4}}{\\sqrt{0{,}42}}$", "answer": "2"},
+            {"id": 134, "text": "$\\displaystyle\\frac{\\sqrt{1{,}5}\\cdot\\sqrt{3{,}3}}{\\sqrt{0{,}55}}$", "answer": "3"},
+            {"id": 135, "text": "$\\displaystyle\\frac{\\sqrt{2{,}8}\\cdot\\sqrt{4{,}2}}{\\sqrt{0{,}24}}$", "answer": "7"},
+            {"id": 136, "text": "$\\displaystyle\\frac{\\sqrt{3{,}5}\\cdot\\sqrt{1{,}5}}{\\sqrt{0{,}21}}$", "answer": "5"}
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
+          "tasks": [
+            {"id": 137, "text": "$\\displaystyle\\frac{2^{2{,}5}\\cdot 3^{2{,}5}}{6^{1{,}5}}$", "answer": "6"},
+            {"id": 138, "text": "$\\displaystyle\\frac{5^{1{,}6}\\cdot 7^{4{,}6}}{35^{3{,}6}}$", "answer": "0.2"},
+            {"id": 139, "text": "$\\displaystyle\\frac{2^{2{,}2}\\cdot 6^{3{,}2}}{12^{2{,}2}}$", "answer": "6"},
+            {"id": 140, "text": "$\\displaystyle\\frac{4^{2{,}9}\\cdot 7^{2{,}9}}{28^{1{,}9}}$", "answer": "28"}
+          ]
+        },
+        {
+          "number": 3,
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
+          "tasks": [
+            {"id": 141, "text": "$\\displaystyle\\frac{\\sqrt[15]{5}\\cdot\\sqrt[10]{5}}{\\sqrt[6]{5}}$", "answer": "1"},
+            {"id": 142, "text": "$\\displaystyle\\frac{\\sqrt[28]{3}\\cdot\\sqrt[21]{3}}{\\sqrt[12]{3}}$", "answer": "1"},
+            {"id": 143, "text": "$\\displaystyle\\frac{\\sqrt[40]{10}\\cdot\\sqrt[24]{10}}{\\sqrt[15]{10}}$", "answer": "1"},
+            {"id": 144, "text": "$\\displaystyle\\frac{\\sqrt[36]{17}\\cdot\\sqrt[45]{17}}{\\sqrt[20]{17}}$", "answer": "1"}
+          ]
+        },
+        {
+          "number": 4,
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
+          "tasks": [
+            {"id": 145, "text": "$\\displaystyle\\frac{\\log_7 243}{\\log_7 3}$", "answer": "5"},
+            {"id": 146, "text": "$\\displaystyle\\frac{\\log_3 256}{\\log_3 2}$", "answer": "8"},
+            {"id": 147, "text": "$\\displaystyle\\frac{\\log_2 729}{\\log_2 9}$", "answer": "3"},
+            {"id": 148, "text": "$\\displaystyle\\frac{\\log_{11} 100}{\\log_{11} 10}$", "answer": "2"},
+            {"id": 149, "text": "$\\displaystyle\\frac{\\log_9 5}{\\log_{81} 5}$", "answer": "2"},
+            {"id": 150, "text": "$\\displaystyle\\frac{\\log_2 8}{\\log_{16} 8}$", "answer": "4"},
+            {"id": 151, "text": "$\\displaystyle\\frac{\\log_8 14}{\\log_{64} 14}$", "answer": "2"},
+            {"id": 152, "text": "$\\displaystyle\\frac{\\log_3 17}{\\log_{27} 17}$", "answer": "3"}
+          ]
+        },
+        {
+          "number": 5,
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
+          "tasks": [
+            {"id": 153, "text": "$\\log_3 5\\cdot\\log_5 81$", "answer": "4"},
+            {"id": 154, "text": "$\\log_2 7\\cdot\\log_7 32$", "answer": "5"},
+            {"id": 155, "text": "$\\log_4 3\\cdot\\log_3 16$", "answer": "2"},
+            {"id": 156, "text": "$\\log_5 2\\cdot\\log_2 125$", "answer": "3"},
+            {"id": 157, "text": "$4\\log_{1{,}25} 5\\cdot\\log_5 0{,}8$", "answer": "-4"},
+            {"id": 158, "text": "$7\\log_{2{,}5} 11\\cdot\\log_{11} 0{,}4$", "answer": "-7"}
+          ]
+        },
+        {
+          "number": 6,
+          "instruction": "Найдите $\\cos\\alpha$, если...",
+          "type": "expression",
+          "tasks": [
+            {"id": 159, "text": "$\\sin\\alpha=\\displaystyle\\frac{\\sqrt{7}}{4}$, $\\alpha\\in\\left(0;\\frac{\\pi}{2}\\right)$", "answer": "0.75"},
+            {"id": 160, "text": "$\\sin\\alpha=\\displaystyle\\frac{3\\sqrt{11}}{10}$, $\\alpha\\in\\left(0;\\frac{\\pi}{2}\\right)$", "answer": "0.1"},
+            {"id": 161, "text": "$\\sin\\alpha=\\displaystyle\\frac{\\sqrt{3}}{2}$, $\\alpha\\in\\left(0;\\frac{\\pi}{2}\\right)$", "answer": "0.5"},
+            {"id": 162, "text": "$\\sin\\alpha=\\displaystyle\\frac{7}{25}$, $\\alpha\\in\\left(0;\\frac{\\pi}{2}\\right)$", "answer": "0.96"},
+            {"id": 163, "text": "$\\sin\\alpha=\\displaystyle\\frac{2\\sqrt{6}}{5}$, $\\alpha\\in\\left(\\frac{\\pi}{2};\\pi\\right)$", "answer": "-0.2"},
+            {"id": 164, "text": "$\\sin\\alpha=\\displaystyle\\frac{3\\sqrt{11}}{10}$, $\\alpha\\in\\left(\\frac{\\pi}{2};\\pi\\right)$", "answer": "-0.1"},
+            {"id": 165, "text": "$\\sin\\alpha=\\displaystyle\\frac{\\sqrt{21}}{5}$, $\\alpha\\in\\left(\\frac{\\pi}{2};\\pi\\right)$", "answer": "-0.4"},
+            {"id": 166, "text": "$\\sin\\alpha=\\displaystyle\\frac{\\sqrt{7}}{4}$, $\\alpha\\in\\left(\\frac{\\pi}{2};\\pi\\right)$", "answer": "-0.75"}
+          ]
+        },
+        {
+          "number": 7,
+          "instruction": "Найдите $\\cos\\alpha$, если...",
+          "type": "expression",
+          "tasks": [
+            {"id": 167, "text": "$\\sin\\alpha=-\\displaystyle\\frac{\\sqrt{21}}{5}$, $\\alpha\\in\\left(\\pi;\\frac{3\\pi}{2}\\right)$", "answer": "-0.4"},
+            {"id": 168, "text": "$\\sin\\alpha=-\\displaystyle\\frac{\\sqrt{19}}{10}$, $\\alpha\\in\\left(\\pi;\\frac{3\\pi}{2}\\right)$", "answer": "-0.9"},
+            {"id": 169, "text": "$\\sin\\alpha=-\\displaystyle\\frac{\\sqrt{3}}{2}$, $\\alpha\\in\\left(\\pi;\\frac{3\\pi}{2}\\right)$", "answer": "-0.5"},
+            {"id": 170, "text": "$\\sin\\alpha=-\\displaystyle\\frac{\\sqrt{51}}{10}$, $\\alpha\\in\\left(\\pi;\\frac{3\\pi}{2}\\right)$", "answer": "-0.7"},
+            {"id": 171, "text": "$\\sin\\alpha=-\\displaystyle\\frac{7}{25}$, $\\alpha\\in\\left(\\frac{3\\pi}{2};2\\pi\\right)$", "answer": "0.96"},
+            {"id": 172, "text": "$\\sin\\alpha=-\\displaystyle\\frac{\\sqrt{91}}{10}$, $\\alpha\\in\\left(\\frac{3\\pi}{2};2\\pi\\right)$", "answer": "0.3"},
+            {"id": 173, "text": "$\\sin\\alpha=-\\displaystyle\\frac{2\\sqrt{6}}{5}$, $\\alpha\\in\\left(\\frac{3\\pi}{2};2\\pi\\right)$", "answer": "0.2"},
+            {"id": 174, "text": "$\\sin\\alpha=-\\displaystyle\\frac{\\sqrt{21}}{5}$, $\\alpha\\in\\left(\\frac{3\\pi}{2};2\\pi\\right)$", "answer": "0.4"}
+          ]
+        },
+        {
+          "number": 8,
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
+          "tasks": [
+            {"id": 175, "text": "$12\\sin 150°\\cos 120°$", "answer": "-3"},
+            {"id": 176, "text": "$14\\sin 45°\\cos 135°$", "answer": "-7"},
+            {"id": 177, "text": "$10\\sin 30°\\cos 120°$", "answer": "-2.5"},
+            {"id": 178, "text": "$16\\sin 45°\\cos 135°$", "answer": "-8"},
+            {"id": 179, "text": "$12\\sqrt{2}\\cos(-225°)$", "answer": "-12"},
+            {"id": 180, "text": "$4\\sqrt{3}\\sin(-120°)$", "answer": "-6"},
+            {"id": 181, "text": "$32\\sqrt{2}\\cos(-495°)$", "answer": "32"},
+            {"id": 182, "text": "$26\\sqrt{3}\\cos(-570°)$", "answer": "-39"}
+          ]
+        },
+        {
+          "number": 9,
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
+          "tasks": [
+            {"id": 183, "text": "$\\displaystyle\\frac{21(\\sin^2 66°-\\cos^2 66°)}{2\\cos 132°}$", "answer": "10.5"},
+            {"id": 184, "text": "$\\displaystyle\\frac{23(\\sin^2 72°-\\cos^2 72°)}{2\\cos 144°}$", "answer": "11.5"},
+            {"id": 185, "text": "$\\displaystyle\\frac{25(\\sin^2 68°-\\cos^2 68°)}{2\\cos 136°}$", "answer": "12.5"},
+            {"id": 186, "text": "$\\displaystyle\\frac{19(\\sin^2 77°-\\cos^2 77°)}{2\\cos 154°}$", "answer": "9.5"}
+          ]
+        },
+        {
+          "number": 10,
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
+          "tasks": [
+            {"id": 187, "text": "$\\displaystyle\\frac{7\\cos 80°}{\\sin 10°}-3$", "answer": "4"},
+            {"id": 188, "text": "$\\displaystyle\\frac{51\\cos 4°}{\\sin 86°}+8$", "answer": "59"},
+            {"id": 189, "text": "$\\displaystyle\\frac{35\\cos 11°}{\\sin 79°}-7$", "answer": "28"},
+            {"id": 190, "text": "$\\displaystyle\\frac{2\\cos 53°}{\\sin 37°}+13$", "answer": "15"},
+            {"id": 191, "text": "$\\displaystyle\\frac{-6\\sin 374°}{\\sin 14°}$", "answer": "6"},
+            {"id": 192, "text": "$\\displaystyle\\frac{9\\sin 32°}{\\sin 392°}$", "answer": "9"},
+            {"id": 193, "text": "$\\displaystyle\\frac{-7\\cos 387°}{\\cos 27°}$", "answer": "-7"},
+            {"id": 194, "text": "$\\displaystyle\\frac{14\\cos 101°}{\\cos 461°}$", "answer": "14"}
+          ]
+        },
+        {
+          "number": 11,
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
+          "tasks": [
+            {"id": 195, "text": "$30\\,\\mathrm{tg}\\,3°\\cdot\\mathrm{tg}\\,87°-43$", "answer": "-13"},
+            {"id": 196, "text": "$-42\\,\\mathrm{tg}\\,34°\\cdot\\mathrm{tg}\\,56°+6$", "answer": "-36"},
+            {"id": 197, "text": "$46\\,\\mathrm{tg}\\,7°\\cdot\\mathrm{tg}\\,83°-57$", "answer": "-11"},
+            {"id": 198, "text": "$-27\\,\\mathrm{tg}\\,33°\\cdot\\mathrm{tg}\\,57°+48$", "answer": "21"},
+            {"id": 199, "text": "$12\\,\\mathrm{tg}\\,20°\\cdot\\mathrm{tg}\\,70°-7$", "answer": "5"},
+            {"id": 200, "text": "$-50\\,\\mathrm{tg}\\,9°\\cdot\\mathrm{tg}\\,81°+31$", "answer": "-19"}
+          ]
+        }
+      ]
+    }
+  ]
+}
