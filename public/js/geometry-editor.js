@@ -2501,21 +2501,155 @@ function geometryEditor() {
 
         // ==================== Export/Save ====================
 
+        // Вычислить bounding box фигуры
+        calculateFigureBounds(figure) {
+            let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+
+            if (figure.vertices) {
+                Object.values(figure.vertices).forEach(v => {
+                    minX = Math.min(minX, v.x);
+                    minY = Math.min(minY, v.y);
+                    maxX = Math.max(maxX, v.x);
+                    maxY = Math.max(maxY, v.y);
+                });
+            }
+
+            if (figure.center && figure.radius) {
+                minX = Math.min(minX, figure.center.x - figure.radius);
+                minY = Math.min(minY, figure.center.y - figure.radius);
+                maxX = Math.max(maxX, figure.center.x + figure.radius);
+                maxY = Math.max(maxY, figure.center.y + figure.radius);
+            }
+
+            return { minX, minY, maxX, maxY };
+        },
+
         generateSvg() {
-            const svg = document.getElementById('geometry-canvas');
-            if (!svg) return '';
+            if (this.figures.length === 0) return '';
 
-            // Clone and clean up
-            const clone = svg.cloneNode(true);
-            clone.removeAttribute('x-cloak');
-            clone.querySelectorAll('[x-show]').forEach(el => el.removeAttribute('x-show'));
-            clone.querySelectorAll('[x-for]').forEach(el => el.remove());
-            clone.querySelectorAll('template').forEach(el => el.remove());
-            clone.querySelectorAll('[\\:class]').forEach(el => el.removeAttribute(':class'));
+            // Вычисляем общий bounding box всех фигур
+            let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
 
-            // Add proper SVG header
-            const svgString = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${this.canvasWidth} ${this.canvasHeight}">${clone.innerHTML}</svg>`;
-            return svgString;
+            this.figures.forEach(figure => {
+                const bounds = this.calculateFigureBounds(figure);
+                minX = Math.min(minX, bounds.minX);
+                minY = Math.min(minY, bounds.minY);
+                maxX = Math.max(maxX, bounds.maxX);
+                maxY = Math.max(maxY, bounds.maxY);
+            });
+
+            // Добавляем padding для подписей (35px со всех сторон)
+            const padding = 35;
+            minX -= padding;
+            minY -= padding;
+            maxX += padding;
+            maxY += padding;
+
+            const width = maxX - minX;
+            const height = maxY - minY;
+
+            // Генерируем SVG только для фигур (без фона и сетки)
+            let svgContent = '';
+
+            // Фон (тёмный синий как на страницах тем)
+            svgContent += `<rect width="100%" height="100%" fill="${this.colors.background}"/>`;
+
+            // Рендерим фигуры с учётом смещения
+            this.figures.forEach(figure => {
+                const isSelected = false; // При экспорте нет выделения
+                const strokeColor = this.colors.shapeStroke;
+
+                svgContent += `<g transform="translate(${-minX}, ${-minY})">`;
+
+                if (figure.type === 'triangle') {
+                    svgContent += this.renderTriangleForExport(figure, strokeColor);
+                } else if (figure.type === 'quadrilateral') {
+                    svgContent += this.renderQuadrilateralForExport(figure, strokeColor);
+                } else if (figure.type === 'circle') {
+                    svgContent += this.renderCircleForExport(figure, strokeColor);
+                }
+
+                svgContent += '</g>';
+            });
+
+            return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${Math.round(width)} ${Math.round(height)}">${svgContent}</svg>`;
+        },
+
+        // Рендер треугольника для экспорта (без интерактивных элементов)
+        renderTriangleForExport(figure, strokeColor) {
+            const v = figure.vertices;
+            const points = `${v.A.x},${v.A.y} ${v.B.x},${v.B.y} ${v.C.x},${v.C.y}`;
+            let svg = '';
+
+            // Основной полигон
+            svg += `<polygon points="${points}" fill="none" stroke="${strokeColor}" stroke-width="1.5" stroke-linejoin="round"/>`;
+
+            // Вспомогательные линии
+            svg += this.renderTriangleAuxiliaryLines(figure);
+
+            // Углы
+            svg += this.renderTriangleAngles(figure);
+
+            // Маркеры равенства
+            svg += this.renderTriangleEqualityMarks(figure);
+
+            // Подписи вершин (без интерактивных маркеров)
+            ['A', 'B', 'C'].forEach(vName => {
+                const vertex = v[vName];
+                const labelPos = this.getLabelPosition(figure, vName);
+                svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${this.colors.label}" font-size="14" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle">${vertex.label || vName}</text>`;
+            });
+
+            return svg;
+        },
+
+        // Рендер четырёхугольника для экспорта
+        renderQuadrilateralForExport(figure, strokeColor) {
+            const v = figure.vertices;
+            const points = `${v.A.x},${v.A.y} ${v.B.x},${v.B.y} ${v.C.x},${v.C.y} ${v.D.x},${v.D.y}`;
+            let svg = '';
+
+            // Основной полигон
+            svg += `<polygon points="${points}" fill="none" stroke="${strokeColor}" stroke-width="1.5" stroke-linejoin="round"/>`;
+
+            // Диагонали и вспомогательные линии
+            svg += this.renderQuadDiagonals(figure);
+
+            // Углы
+            svg += this.renderQuadAngles(figure);
+
+            // Маркеры равенства
+            svg += this.renderQuadEqualityMarks(figure);
+
+            // Подписи вершин
+            ['A', 'B', 'C', 'D'].forEach(vName => {
+                const vertex = v[vName];
+                const labelPos = this.getLabelPositionQuad(figure, vName);
+                svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${this.colors.label}" font-size="14" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle">${vertex.label || vName}</text>`;
+            });
+
+            return svg;
+        },
+
+        // Рендер окружности для экспорта
+        renderCircleForExport(figure, strokeColor) {
+            let svg = '';
+            const c = figure.center;
+            const r = figure.radius;
+
+            svg += `<circle cx="${c.x}" cy="${c.y}" r="${r}" fill="none" stroke="${this.colors.circleStroke}" stroke-width="1.5"/>`;
+
+            // Центр
+            svg += `<circle cx="${c.x}" cy="${c.y}" r="2" fill="${this.colors.circleStroke}"/>`;
+
+            // Хорды, касательные и т.д.
+            if (figure.chords) {
+                figure.chords.forEach(chord => {
+                    svg += `<line x1="${chord.point1.x}" y1="${chord.point1.y}" x2="${chord.point2.x}" y2="${chord.point2.y}" stroke="${this.colors.shapeStroke}" stroke-width="1.5"/>`;
+                });
+            }
+
+            return svg;
         },
 
         exportSvg() {
