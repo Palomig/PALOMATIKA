@@ -2,4 +2,6 @@
 !public/
 !tasks/
 !tasks/*.json
+!tasks/ege/
+!tasks/ege/*.json
 !.gitignore
