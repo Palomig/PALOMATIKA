@@ -198,8 +198,7 @@
                                @click.stop="selectFigure(figure)">
 
                                 {{-- Triangle --}}
-                                <template x-if="figure.type === 'triangle'">
-                                    <g>
+                                <g x-show="figure.type === 'triangle'">
                                         {{-- Main shape --}}
                                         <polygon :points="getTrianglePoints(figure)"
                                                  fill="none"
@@ -325,11 +324,9 @@
                                             </g>
                                         </template>
                                     </g>
-                                </template>
 
                                 {{-- Circle --}}
-                                <template x-if="figure.type === 'circle'">
-                                    <g>
+                                <g x-show="figure.type === 'circle'">
                                         <circle :cx="figure.center.x" :cy="figure.center.y" :r="figure.radius"
                                                 fill="none"
                                                 :stroke="selectedFigure && selectedFigure.id === figure.id ? '#a855f7' : '#5a9fcf'"
@@ -441,12 +438,10 @@
                                         <text :x="figure.center.x + 12" :y="figure.center.y - 12"
                                               fill="#f97316" font-size="14" font-weight="bold"
                                               x-text="figure.centerLabel || 'O'"></text>
-                                    </g>
-                                </template>
+                                </g>
 
                                 {{-- Quadrilateral --}}
-                                <template x-if="figure.type === 'quadrilateral'">
-                                    <g>
+                                <g x-show="figure.type === 'quadrilateral'">
                                         <polygon :points="getQuadrilateralPoints(figure)"
                                                  fill="none"
                                                  :stroke="selectedFigure && selectedFigure.id === figure.id ? '#a855f7' : '#8b5cf6'"
@@ -465,12 +460,10 @@
                                                       x-text="vertex.label || vName"></text>
                                             </g>
                                         </template>
-                                    </g>
-                                </template>
+                                </g>
 
                                 {{-- Stereometry figures --}}
-                                <template x-if="figure.type === 'stereometry'">
-                                    <g>
+                                <g x-show="figure.type === 'stereometry'">
                                         {{-- Polyhedra (cube, prism, pyramid) --}}
                                         <template x-if="figure.edges">
                                             <g>
@@ -639,8 +632,7 @@
                                                 </template>
                                             </g>
                                         </template>
-                                    </g>
-                                </template>
+                                </g>
                             </g>
                         </template>
                     </svg>
