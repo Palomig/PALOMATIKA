@@ -122,38 +122,40 @@
                 @if($zadanie['type'] === 'simple_choice' && $svgType === 'three_points')
                     {{-- Simple choice with three points SVG --}}
                     <div class="bg-slate-800/70 rounded-xl p-5 border border-slate-700">
-                        @php
-                            $pts = $zadanie['points'] ?? [];
-                            $values = array_column($pts, 'value');
-                            $minVal = min(min($values), 0);
-                            $maxVal = max($values);
-                            $minTick = floor($minVal) - 1;
-                            $maxTick = ceil($maxVal) + 1;
-                            $range = $maxTick - $minTick;
-                            $tickWidth = 280 / $range;
-                        @endphp
                         <div class="bg-slate-900/50 rounded-lg p-4 mb-4">
-                            <svg viewBox="0 0 320 55" class="w-full h-16 number-line">
-                                <defs>
-                                    <marker id="arrowR3" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto">
-                                        <path d="M0,0 L0,6 L8,3 z" fill="#8B0000"/>
-                                    </marker>
-                                </defs>
-                                {{-- Number line --}}
-                                <line x1="15" y1="25" x2="305" y2="25" stroke="#8B0000" stroke-width="2" marker-end="url(#arrowR3)"/>
-                                {{-- Tick marks --}}
-                                @for($i = $minTick; $i <= $maxTick; $i++)
-                                    <line x1="{{ 15 + ($i - $minTick) * $tickWidth }}" y1="18" x2="{{ 15 + ($i - $minTick) * $tickWidth }}" y2="32" stroke="#8B0000" stroke-width="1.5"/>
-                                @endfor
-                                {{-- Label 0 --}}
-                                <text x="{{ 15 + (0 - $minTick) * $tickWidth }}" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">0</text>
-                                {{-- Points --}}
-                                @foreach($pts as $pt)
-                                    @php $px = 15 + ($pt['value'] - $minTick) * $tickWidth; @endphp
-                                    <circle cx="{{ $px }}" cy="25" r="6" fill="#22c55e"/>
-                                    <text x="{{ $px }}" y="12" text-anchor="middle" fill="#1e40af" font-size="14" font-weight="bold">{{ $pt['label'] }}</text>
-                                @endforeach
-                            </svg>
+                            @if(isset($zadanie['svg']))
+                                {{-- Предзаготовленный SVG из JSON --}}
+                                {!! $zadanie['svg'] !!}
+                            @else
+                                {{-- Fallback: динамическая генерация --}}
+                                @php
+                                    $pts = $zadanie['points'] ?? [];
+                                    $values = array_column($pts, 'value');
+                                    $minVal = min(min($values), 0);
+                                    $maxVal = max($values);
+                                    $minTick = floor($minVal) - 1;
+                                    $maxTick = ceil($maxVal) + 1;
+                                    $range = $maxTick - $minTick;
+                                    $tickWidth = 280 / $range;
+                                @endphp
+                                <svg viewBox="0 0 320 55" class="w-full h-16 number-line">
+                                    <defs>
+                                        <marker id="arrowR3" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto">
+                                            <path d="M0,0 L0,6 L8,3 z" fill="#8B0000"/>
+                                        </marker>
+                                    </defs>
+                                    <line x1="15" y1="25" x2="305" y2="25" stroke="#8B0000" stroke-width="2" marker-end="url(#arrowR3)"/>
+                                    @for($i = $minTick; $i <= $maxTick; $i++)
+                                        <line x1="{{ 15 + ($i - $minTick) * $tickWidth }}" y1="18" x2="{{ 15 + ($i - $minTick) * $tickWidth }}" y2="32" stroke="#8B0000" stroke-width="1.5"/>
+                                    @endfor
+                                    <text x="{{ 15 + (0 - $minTick) * $tickWidth }}" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">0</text>
+                                    @foreach($pts as $pt)
+                                        @php $px = 15 + ($pt['value'] - $minTick) * $tickWidth; @endphp
+                                        <circle cx="{{ $px }}" cy="25" r="6" fill="#22c55e"/>
+                                        <text x="{{ $px }}" y="12" text-anchor="middle" fill="#1e40af" font-size="14" font-weight="bold">{{ $pt['label'] }}</text>
+                                    @endforeach
+                                </svg>
+                            @endif
                         </div>
                         <div class="flex flex-wrap gap-4">
                             @foreach($zadanie['options'] as $i => $option)
@@ -186,12 +188,16 @@
                                     <div class="flex-1">
                                         {{-- SVG Number Line --}}
                                         <div class="bg-slate-900/50 rounded-lg p-4 mb-3">
-                                            @if($svgType === 'single_point' && isset($task['point_value']))
+                                            @if(isset($task['svg']))
+                                                {{-- Предзаготовленный SVG из JSON --}}
+                                                {!! $task['svg'] !!}
+                                            @elseif($svgType === 'single_point' && isset($task['point_value']))
+                                                {{-- Fallback: динамическая генерация для single_point --}}
                                                 @php
                                                     $pointVal = $task['point_value'];
                                                     $pointLabel = $task['point_label'] ?? 'a';
                                                     $maxTick = ceil($pointVal) + 2;
-                                                    $tickWidth = 280 / $maxTick; // ширина единичного отрезка
+                                                    $tickWidth = 280 / $maxTick;
                                                     $pointX = 15 + ($pointVal / $maxTick) * 280;
                                                 @endphp
                                                 <svg viewBox="0 0 320 55" class="w-full h-16 number-line">
@@ -200,20 +206,17 @@
                                                             <path d="M0,0 L0,6 L8,3 z" fill="#8B0000"/>
                                                         </marker>
                                                     </defs>
-                                                    {{-- Main line --}}
                                                     <line x1="15" y1="25" x2="305" y2="25" stroke="#8B0000" stroke-width="2" marker-end="url(#arrowR-{{ $zadanie['number'] }}-{{ $task['id'] }})"/>
-                                                    {{-- Tick marks --}}
                                                     @for($i = 0; $i <= $maxTick; $i++)
                                                         <line x1="{{ 15 + $i * $tickWidth }}" y1="18" x2="{{ 15 + $i * $tickWidth }}" y2="32" stroke="#8B0000" stroke-width="1.5"/>
                                                     @endfor
-                                                    {{-- Labels 0 and 1 --}}
                                                     <text x="{{ 15 }}" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">0</text>
                                                     <text x="{{ 15 + $tickWidth }}" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">1</text>
-                                                    {{-- Point --}}
                                                     <circle cx="{{ $pointX }}" cy="25" r="6" fill="#22c55e"/>
                                                     <text x="{{ $pointX }}" y="12" text-anchor="middle" fill="#1e40af" font-size="14" font-weight="bold">{{ $pointLabel }}</text>
                                                 </svg>
                                             @elseif($svgType === 'two_points' && isset($task['points']))
+                                                {{-- Fallback: динамическая генерация для two_points --}}
                                                 @php
                                                     $pts = $task['points'];
                                                     $values = array_column($pts, 'value');
@@ -230,15 +233,11 @@
                                                             <path d="M0,0 L0,6 L8,3 z" fill="#8B0000"/>
                                                         </marker>
                                                     </defs>
-                                                    {{-- Main line --}}
                                                     <line x1="15" y1="25" x2="305" y2="25" stroke="#8B0000" stroke-width="2" marker-end="url(#arrowR2-{{ $zadanie['number'] }}-{{ $task['id'] }})"/>
-                                                    {{-- Tick marks --}}
                                                     @for($i = $minTick; $i <= $maxTick; $i++)
                                                         <line x1="{{ 15 + ($i - $minTick) * $tickWidth }}" y1="18" x2="{{ 15 + ($i - $minTick) * $tickWidth }}" y2="32" stroke="#8B0000" stroke-width="1.5"/>
                                                     @endfor
-                                                    {{-- Label 0 --}}
                                                     <text x="{{ 15 + (0 - $minTick) * $tickWidth }}" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">0</text>
-                                                    {{-- Points --}}
                                                     @foreach($pts as $pt)
                                                         @php $px = 15 + ($pt['value'] - $minTick) * $tickWidth; @endphp
                                                         <circle cx="{{ $px }}" cy="25" r="6" fill="#22c55e"/>
@@ -275,37 +274,39 @@
                                     <div class="flex-1">
                                         {{-- SVG with four points --}}
                                         <div class="bg-slate-900/50 rounded-lg p-4 mb-3">
-                                            @php
-                                                $fourPts = $task['four_points'] ?? [5, 6, 7, 8];
-                                                $rangeArr = $task['range'] ?? [4, 9];
-                                                $minV = $rangeArr[0];
-                                                $maxV = $rangeArr[1];
-                                                $labels = ['A', 'B', 'C', 'D'];
-                                                $getX = function($v) use ($minV, $maxV) {
-                                                    return 15 + (($v - $minV) / ($maxV - $minV)) * 280;
-                                                };
-                                            @endphp
-                                            <svg viewBox="0 0 320 55" class="w-full h-16 number-line">
-                                                <defs>
-                                                    <marker id="arrowR4-{{ $zadanie['number'] }}-{{ $task['id'] }}" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto">
-                                                        <path d="M0,0 L0,6 L8,3 z" fill="#8B0000"/>
-                                                    </marker>
-                                                </defs>
-                                                {{-- Main line --}}
-                                                <line x1="15" y1="25" x2="305" y2="25" stroke="#8B0000" stroke-width="2" marker-end="url(#arrowR4-{{ $zadanie['number'] }}-{{ $task['id'] }})"/>
-                                                {{-- Tick marks --}}
-                                                @for($i = ceil($minV); $i <= floor($maxV); $i++)
-                                                    <line x1="{{ $getX($i) }}" y1="18" x2="{{ $getX($i) }}" y2="32" stroke="#8B0000" stroke-width="1.5"/>
-                                                @endfor
-                                                {{-- Labels for range boundaries --}}
-                                                <text x="{{ $getX(ceil($minV)) }}" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">{{ ceil($minV) }}</text>
-                                                <text x="{{ $getX(floor($maxV)) }}" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">{{ floor($maxV) }}</text>
-                                                {{-- Four labeled points --}}
-                                                @foreach($fourPts as $idx => $ptVal)
-                                                    <circle cx="{{ $getX($ptVal) }}" cy="25" r="6" fill="#22c55e"/>
-                                                    <text x="{{ $getX($ptVal) }}" y="12" text-anchor="middle" fill="#1e40af" font-size="14" font-weight="bold">{{ $labels[$idx] }}</text>
-                                                @endforeach
-                                            </svg>
+                                            @if(isset($task['svg']))
+                                                {{-- Предзаготовленный SVG из JSON --}}
+                                                {!! $task['svg'] !!}
+                                            @else
+                                                {{-- Fallback: динамическая генерация --}}
+                                                @php
+                                                    $fourPts = $task['four_points'] ?? [5, 6, 7, 8];
+                                                    $rangeArr = $task['range'] ?? [4, 9];
+                                                    $minV = $rangeArr[0];
+                                                    $maxV = $rangeArr[1];
+                                                    $labels = ['A', 'B', 'C', 'D'];
+                                                    $getX = function($v) use ($minV, $maxV) {
+                                                        return 15 + (($v - $minV) / ($maxV - $minV)) * 280;
+                                                    };
+                                                @endphp
+                                                <svg viewBox="0 0 320 55" class="w-full h-16 number-line">
+                                                    <defs>
+                                                        <marker id="arrowR4-{{ $zadanie['number'] }}-{{ $task['id'] }}" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto">
+                                                            <path d="M0,0 L0,6 L8,3 z" fill="#8B0000"/>
+                                                        </marker>
+                                                    </defs>
+                                                    <line x1="15" y1="25" x2="305" y2="25" stroke="#8B0000" stroke-width="2" marker-end="url(#arrowR4-{{ $zadanie['number'] }}-{{ $task['id'] }})"/>
+                                                    @for($i = ceil($minV); $i <= floor($maxV); $i++)
+                                                        <line x1="{{ $getX($i) }}" y1="18" x2="{{ $getX($i) }}" y2="32" stroke="#8B0000" stroke-width="1.5"/>
+                                                    @endfor
+                                                    <text x="{{ $getX(ceil($minV)) }}" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">{{ ceil($minV) }}</text>
+                                                    <text x="{{ $getX(floor($maxV)) }}" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">{{ floor($maxV) }}</text>
+                                                    @foreach($fourPts as $idx => $ptVal)
+                                                        <circle cx="{{ $getX($ptVal) }}" cy="25" r="6" fill="#22c55e"/>
+                                                        <text x="{{ $getX($ptVal) }}" y="12" text-anchor="middle" fill="#1e40af" font-size="14" font-weight="bold">{{ $labels[$idx] }}</text>
+                                                    @endforeach
+                                                </svg>
+                                            @endif
                                         </div>
                                         @if(isset($task['expression']))
                                             <div class="text-slate-200 mb-2">${{ $task['expression'] }}$</div>
@@ -340,35 +341,37 @@
                                     <span class="text-cyan-400 font-bold flex-shrink-0">{{ $task['id'] }}</span>
                                     <div class="flex-1">
                                         <div class="bg-slate-900/50 rounded-lg p-4 mb-3">
-                                            @php
-                                                $rangeArr = $task['range'] ?? [5, 7];
-                                                $minV = $rangeArr[0];
-                                                $maxV = $rangeArr[1];
-                                                $pointA = $task['point_a'] ?? 6;
-                                                $getX = function($v) use ($minV, $maxV) {
-                                                    return 15 + (($v - $minV) / ($maxV - $minV)) * 280;
-                                                };
-                                                $pointX = $getX($pointA);
-                                            @endphp
-                                            <svg viewBox="0 0 320 55" class="w-full h-16 number-line">
-                                                <defs>
-                                                    <marker id="arrowRA-{{ $zadanie['number'] }}-{{ $task['id'] }}" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto">
-                                                        <path d="M0,0 L0,6 L8,3 z" fill="#8B0000"/>
-                                                    </marker>
-                                                </defs>
-                                                {{-- Main line --}}
-                                                <line x1="15" y1="25" x2="305" y2="25" stroke="#8B0000" stroke-width="2" marker-end="url(#arrowRA-{{ $zadanie['number'] }}-{{ $task['id'] }})"/>
-                                                {{-- Tick marks --}}
-                                                @for($i = ceil($minV); $i <= floor($maxV); $i++)
-                                                    <line x1="{{ $getX($i) }}" y1="18" x2="{{ $getX($i) }}" y2="32" stroke="#8B0000" stroke-width="1.5"/>
-                                                @endfor
-                                                {{-- Labels for range boundaries --}}
-                                                <text x="{{ $getX(ceil($minV)) }}" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">{{ ceil($minV) }}</text>
-                                                <text x="{{ $getX(floor($maxV)) }}" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">{{ floor($maxV) }}</text>
-                                                {{-- Point A --}}
-                                                <circle cx="{{ $pointX }}" cy="25" r="6" fill="#22c55e"/>
-                                                <text x="{{ $pointX }}" y="12" text-anchor="middle" fill="#1e40af" font-size="14" font-weight="bold">A</text>
-                                            </svg>
+                                            @if(isset($task['svg']))
+                                                {{-- Предзаготовленный SVG из JSON --}}
+                                                {!! $task['svg'] !!}
+                                            @else
+                                                {{-- Fallback: динамическая генерация --}}
+                                                @php
+                                                    $rangeArr = $task['range'] ?? [5, 7];
+                                                    $minV = $rangeArr[0];
+                                                    $maxV = $rangeArr[1];
+                                                    $pointA = $task['point_a'] ?? 6;
+                                                    $getX = function($v) use ($minV, $maxV) {
+                                                        return 15 + (($v - $minV) / ($maxV - $minV)) * 280;
+                                                    };
+                                                    $pointX = $getX($pointA);
+                                                @endphp
+                                                <svg viewBox="0 0 320 55" class="w-full h-16 number-line">
+                                                    <defs>
+                                                        <marker id="arrowRA-{{ $zadanie['number'] }}-{{ $task['id'] }}" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto">
+                                                            <path d="M0,0 L0,6 L8,3 z" fill="#8B0000"/>
+                                                        </marker>
+                                                    </defs>
+                                                    <line x1="15" y1="25" x2="305" y2="25" stroke="#8B0000" stroke-width="2" marker-end="url(#arrowRA-{{ $zadanie['number'] }}-{{ $task['id'] }})"/>
+                                                    @for($i = ceil($minV); $i <= floor($maxV); $i++)
+                                                        <line x1="{{ $getX($i) }}" y1="18" x2="{{ $getX($i) }}" y2="32" stroke="#8B0000" stroke-width="1.5"/>
+                                                    @endfor
+                                                    <text x="{{ $getX(ceil($minV)) }}" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">{{ ceil($minV) }}</text>
+                                                    <text x="{{ $getX(floor($maxV)) }}" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">{{ floor($maxV) }}</text>
+                                                    <circle cx="{{ $pointX }}" cy="25" r="6" fill="#22c55e"/>
+                                                    <text x="{{ $pointX }}" y="12" text-anchor="middle" fill="#1e40af" font-size="14" font-weight="bold">A</text>
+                                                </svg>
+                                            @endif
                                         </div>
                                         <div class="flex flex-wrap gap-3">
                                             @foreach($task['options'] as $i => $option)
