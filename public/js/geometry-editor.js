@@ -495,7 +495,24 @@ function geometryEditor() {
                     if (vertexCircle) {
                         const vertexName = vertexCircle.getAttribute('data-vertex');
                         this.startDragVertex(figure, vertexName, event);
+                    } else if (figure.vertices) {
+                        // Clicked on the figure but not on a vertex - drag whole figure
+                        this.startDragWholeFigure(figure, event);
+                    } else if (figure.center) {
+                        // Circle - drag by center
+                        this.startDragCenter(figure, event);
                     }
+                    return;
+                }
+            }
+
+            // Check if clicked inside any polygon (for clicks that didn't hit SVG elements)
+            const svg = document.getElementById('geometry-canvas');
+            const pt = this.getSvgPoint(svg, event);
+            for (const figure of this.figures) {
+                if (figure.vertices && this.isPointInPolygon(pt, figure.vertices)) {
+                    this.selectFigure(figure);
+                    this.startDragWholeFigure(figure, event);
                     return;
                 }
             }
@@ -559,6 +576,26 @@ function geometryEditor() {
             } else if (vertex === 'center' && figure.center) {
                 figure.center.x = newX;
                 figure.center.y = newY;
+            } else if (vertex === 'whole' && figure.vertices) {
+                // Перетаскивание всей фигуры
+                const dx = pt.x - this.dragOffset.x;
+                const dy = pt.y - this.dragOffset.y;
+                const initialVertices = this.draggingVertex.initialVertices;
+
+                // Перемещаем все вершины на одинаковое смещение
+                Object.keys(figure.vertices).forEach(vName => {
+                    let newVx = initialVertices[vName].x + dx;
+                    let newVy = initialVertices[vName].y + dy;
+
+                    // Snap to grid
+                    if (this.showGrid) {
+                        newVx = Math.round(newVx / this.gridSize) * this.gridSize;
+                        newVy = Math.round(newVy / this.gridSize) * this.gridSize;
+                    }
+
+                    figure.vertices[vName].x = newVx;
+                    figure.vertices[vName].y = newVy;
+                });
             } else if (figure.vertices && figure.vertices[vertex]) {
                 // Check preset constraints
                 if (figure.preset && figure.preset !== 'free') {
@@ -787,6 +824,53 @@ function geometryEditor() {
             };
         },
 
+        // Проверка, находится ли точка внутри полигона (ray casting algorithm)
+        isPointInPolygon(point, vertices) {
+            const vertexArray = Object.values(vertices);
+            let inside = false;
+            const n = vertexArray.length;
+
+            for (let i = 0, j = n - 1; i < n; j = i++) {
+                const xi = vertexArray[i].x, yi = vertexArray[i].y;
+                const xj = vertexArray[j].x, yj = vertexArray[j].y;
+
+                if (((yi > point.y) !== (yj > point.y)) &&
+                    (point.x < (xj - xi) * (point.y - yi) / (yj - yi) + xi)) {
+                    inside = !inside;
+                }
+            }
+            return inside;
+        },
+
+        // Получить центроид полигона
+        getPolygonCentroid(vertices) {
+            const vertexArray = Object.values(vertices);
+            let cx = 0, cy = 0;
+            vertexArray.forEach(v => {
+                cx += v.x;
+                cy += v.y;
+            });
+            return {
+                x: cx / vertexArray.length,
+                y: cy / vertexArray.length
+            };
+        },
+
+        // Начать перетаскивание всей фигуры
+        startDragWholeFigure(figure, event) {
+            const svg = document.getElementById('geometry-canvas');
+            const pt = this.getSvgPoint(svg, event);
+
+            // Сохраняем начальные позиции всех вершин
+            this.draggingVertex = {
+                figure,
+                vertex: 'whole',
+                initialVertices: JSON.parse(JSON.stringify(figure.vertices))
+            };
+            this.selectedFigure = figure;
+            this.dragOffset = { x: pt.x, y: pt.y };
+        },
+
         // ==================== SVG Rendering (x-html approach for SVG compatibility) ====================
 
         // Цветовая палитра (соответствует оригинальным SVG на страницах тем)
@@ -797,6 +881,8 @@ function geometryEditor() {
             circleStroke: '#5a9fcf',     // Окружности
             auxiliaryLine: '#5a9fcf',    // Вспомогательные линии (пунктир)
             angleArc: '#d4a855',         // Дуги углов (золотой)
+            angleArc2: '#a855d4',        // Дуги углов второй группы (фиолетовый)
+            angleArc3: '#55d4a8',        // Дуги углов третьей группы (бирюзовый)
             vertexMarker: '#7eb8da',     // Маркеры вершин
             label: '#c8dce8',            // Подписи вершин
             auxiliaryLabel: '#5a9fcf',   // Подписи вспомогательных точек
@@ -844,8 +930,11 @@ function geometryEditor() {
             const points = `${v.A.x},${v.A.y} ${v.B.x},${v.B.y} ${v.C.x},${v.C.y}`;
             let svg = '';
 
+            // 0. Hit area for dragging (transparent fill)
+            svg += `<polygon points="${points}" fill="rgba(0,0,0,0.01)" stroke="none" style="cursor: move;"/>`;
+
             // 1. Main polygon
-            svg += `<polygon points="${points}" fill="none" stroke="${strokeColor}" stroke-width="1.5" stroke-linejoin="round"/>`;
+            svg += `<polygon points="${points}" fill="none" stroke="${strokeColor}" stroke-width="1.5" stroke-linejoin="round" style="pointer-events: none;"/>`;
 
             // 2. Auxiliary lines (bisectors, medians, altitudes)
             svg += this.renderTriangleAuxiliaryLines(figure);
@@ -942,22 +1031,32 @@ function geometryEditor() {
             const v = figure.vertices;
             const angles = figure.angles || {};
 
+            // Вычисляем углы и группируем равные
+            const angleValues = {};
+            ['A', 'B', 'C'].forEach(vName => {
+                angleValues[vName] = Math.round(this.getAngleValue(figure, vName));
+            });
+
+            // Назначаем цвета: равные углы - одинаковый цвет
+            const angleColors = this.getAngleColorsForTriangle(angleValues);
+
             ['A', 'B', 'C'].forEach(vName => {
                 const angleData = angles[vName];
                 if (!angleData) return;
 
                 const isRightAngle = this.isVertexRightAngle(figure, vName);
+                const color = angleColors[vName];
 
                 // Дуга угла или прямой угол
                 if (angleData.showArc) {
                     if (isRightAngle) {
                         // Прямой угол - квадратик
                         svg += `<path d="${this.getRightAnglePath(figure, vName)}"
-                                fill="none" stroke="${this.colors.angleArc}" stroke-width="1.2"/>`;
+                                fill="none" stroke="${color}" stroke-width="1.2"/>`;
                     } else {
                         // Обычная дуга
                         svg += `<path d="${this.getAngleArc(figure, vName)}"
-                                fill="none" stroke="${this.colors.angleArc}" stroke-width="1.2"/>`;
+                                fill="none" stroke="${color}" stroke-width="1.2"/>`;
                     }
                 }
 
@@ -965,13 +1064,33 @@ function geometryEditor() {
                 if (angleData.showValue) {
                     const labelPos = this.getAngleLabelPos(figure, vName);
                     const angleValue = this.getAngleValue(figure, vName);
-                    svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${this.colors.angleArc}" font-size="11"
+                    svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${color}" font-size="11"
                             font-family="'Times New Roman', serif" font-weight="500"
                             text-anchor="middle" dominant-baseline="middle">${angleValue}°</text>`;
                 }
             });
 
             return svg;
+        },
+
+        // Получить цвета для углов треугольника (равные углы - одинаковый цвет)
+        getAngleColorsForTriangle(angleValues) {
+            const colors = [this.colors.angleArc, this.colors.angleArc2, this.colors.angleArc3]; // золотой, фиолетовый, бирюзовый
+            const result = {};
+            const usedColors = {};
+
+            ['A', 'B', 'C'].forEach(vName => {
+                const val = angleValues[vName];
+                if (usedColors[val] !== undefined) {
+                    result[vName] = usedColors[val];
+                } else {
+                    const colorIdx = Object.keys(usedColors).length;
+                    usedColors[val] = colors[colorIdx % colors.length];
+                    result[vName] = usedColors[val];
+                }
+            });
+
+            return result;
         },
 
         // Рендер маркеров равных сторон
@@ -1063,8 +1182,11 @@ function geometryEditor() {
             const points = `${v.A.x},${v.A.y} ${v.B.x},${v.B.y} ${v.C.x},${v.C.y} ${v.D.x},${v.D.y}`;
             let svg = '';
 
+            // 0. Hit area for dragging (transparent fill)
+            svg += `<polygon points="${points}" fill="rgba(0,0,0,0.01)" stroke="none" style="cursor: move;"/>`;
+
             // 1. Main polygon
-            svg += `<polygon points="${points}" fill="none" stroke="${strokeColor}" stroke-width="1.5" stroke-linejoin="round"/>`;
+            svg += `<polygon points="${points}" fill="none" stroke="${strokeColor}" stroke-width="1.5" stroke-linejoin="round" style="pointer-events: none;"/>`;
 
             // 2. Diagonals
             svg += this.renderQuadDiagonals(figure);
@@ -1265,6 +1387,13 @@ function geometryEditor() {
                 'D': ['C', 'A']
             };
 
+            // Вычисляем углы и назначаем цвета (равные углы - одинаковый цвет)
+            const angleValues = {};
+            ['A', 'B', 'C', 'D'].forEach(vName => {
+                angleValues[vName] = Math.round(this.calculateQuadAngle(figure, vName));
+            });
+            const angleColors = this.getAngleColorsForQuad(angleValues);
+
             ['A', 'B', 'C', 'D'].forEach(vName => {
                 const angleData = angles[vName];
                 if (!angleData) return;
@@ -1273,6 +1402,7 @@ function geometryEditor() {
                 const vertex = v[vName];
                 const p1 = v[prev];
                 const p2 = v[next];
+                const color = angleColors[vName];
 
                 // Проверка на прямой угол
                 const isRightAngle = this.isQuadVertexRightAngle(figure, vName);
@@ -1280,23 +1410,43 @@ function geometryEditor() {
                 if (angleData.showArc) {
                     if (isRightAngle) {
                         svg += `<path d="${window.rightAnglePath(vertex, p1, p2, 12)}"
-                                fill="none" stroke="${this.colors.angleArc}" stroke-width="1.2"/>`;
+                                fill="none" stroke="${color}" stroke-width="1.2"/>`;
                     } else {
                         svg += `<path d="${window.makeAngleArc(vertex, p1, p2, 25)}"
-                                fill="none" stroke="${this.colors.angleArc}" stroke-width="1.2"/>`;
+                                fill="none" stroke="${color}" stroke-width="1.2"/>`;
                     }
                 }
 
                 if (angleData.showValue) {
                     const labelPos = window.angleLabelPos(vertex, p1, p2, 42, 0.5);
                     const angleValue = angleData.value || this.calculateQuadAngle(figure, vName);
-                    svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${this.colors.angleArc}" font-size="11"
+                    svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${color}" font-size="11"
                             font-family="'Times New Roman', serif" font-weight="500"
                             text-anchor="middle" dominant-baseline="middle">${Math.round(angleValue)}°</text>`;
                 }
             });
 
             return svg;
+        },
+
+        // Получить цвета для углов четырёхугольника (равные углы - одинаковый цвет)
+        getAngleColorsForQuad(angleValues) {
+            const colors = [this.colors.angleArc, this.colors.angleArc2, this.colors.angleArc3, '#d455a8']; // золотой, фиолетовый, бирюзовый, розовый
+            const result = {};
+            const usedColors = {};
+
+            ['A', 'B', 'C', 'D'].forEach(vName => {
+                const val = angleValues[vName];
+                if (usedColors[val] !== undefined) {
+                    result[vName] = usedColors[val];
+                } else {
+                    const colorIdx = Object.keys(usedColors).length;
+                    usedColors[val] = colors[colorIdx % colors.length];
+                    result[vName] = usedColors[val];
+                }
+            });
+
+            return result;
         },
 
         // Рендер маркеров равных сторон четырёхугольника
