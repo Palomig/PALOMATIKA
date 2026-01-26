@@ -1,15 +1,20 @@
 {{--
-    Инструмент для пометки плохих заданий ОГЭ
-    Использование: @include('components.task-review-tool', ['topicId' => '06'])
+    Инструмент для пометки плохих заданий ЕГЭ
+    Использование: @include('components.task-review-tool-ege', ['topicId' => '01'])
 
-    Для ЕГЭ используй: @include('components.task-review-tool-ege', ['topicId' => '01'])
+    Для ОГЭ используй: @include('components.task-review-tool', ['topicId' => '06'])
 
     Работает двумя способами:
     1. Ручной: добавить класс task-review-item и data-атрибуты к элементам
     2. Авто: скрипт сам найдёт задачи по паттернам в DOM
 
-    Данные хранятся в localStorage: palomatika_reviews_oge_topic_{id}
+    Данные хранятся в localStorage: palomatika_reviews_ege_topic_{id}
     Генерирует промпт для Claude с инструкциями по исправлению в JSON файлах.
+
+    Структура данных ЕГЭ:
+    - storage/app/tasks/ege/topic_{id}.json
+    - storage/app/tasks/ege/topic_{id}_geometry.json (для геометрии)
+    - public/images/tasks/ege/{topic}/ (PNG изображения)
 --}}
 
 <style>
@@ -33,7 +38,7 @@
     }
     .review-flag.flagged {
         opacity: 1;
-        background: #ef4444 !important;
+        background: #dc2626 !important;
     }
     .review-flag.not-flagged {
         background: rgba(100, 116, 139, 0.5);
@@ -41,7 +46,7 @@
     .task-container {
         position: relative;
     }
-    .review-panel {
+    .review-panel-ege {
         position: fixed;
         bottom: 20px;
         right: 20px;
@@ -102,7 +107,7 @@
     }
     .review-textarea:focus {
         outline: none;
-        border-color: #3b82f6;
+        border-color: #8b5cf6;
     }
     .prompt-output {
         background: #0f172a;
@@ -116,27 +121,27 @@
         max-height: 400px;
         overflow-y: auto;
     }
-    .badge-count {
-        background: #ef4444;
+    .badge-count-ege {
+        background: #8b5cf6;
         color: white;
         border-radius: 9999px;
         padding: 2px 8px;
         font-size: 12px;
         font-weight: bold;
     }
-    .review-help {
-        background: #1e293b;
-        border: 1px solid #334155;
+    .review-help-ege {
+        background: #1e1b4b;
+        border: 1px solid #4c1d95;
         border-radius: 12px;
         padding: 12px 16px;
         margin-bottom: 8px;
         font-size: 12px;
-        color: #94a3b8;
+        color: #a78bfa;
     }
     /* Inline report form styles */
     .inline-report-form {
         background: #1e293b;
-        border: 1px solid #ef4444;
+        border: 1px solid #8b5cf6;
         border-radius: 12px;
         padding: 16px;
         margin-top: 12px;
@@ -151,7 +156,7 @@
         align-items: center;
         gap: 8px;
         margin-bottom: 12px;
-        color: #ef4444;
+        color: #8b5cf6;
         font-weight: 600;
         font-size: 14px;
     }
@@ -166,7 +171,7 @@
     .inline-report-form .btn-save {
         flex: 1;
         padding: 10px 16px;
-        background: #ef4444;
+        background: #8b5cf6;
         color: white;
         border: none;
         border-radius: 8px;
@@ -176,7 +181,7 @@
         transition: background 0.2s;
     }
     .inline-report-form .btn-save:hover {
-        background: #dc2626;
+        background: #7c3aed;
     }
     .inline-report-form .btn-cancel {
         padding: 10px 16px;
@@ -193,52 +198,50 @@
         background: #475569;
     }
     .task-review-item.has-inline-form {
-        border-color: #ef4444 !important;
+        border-color: #8b5cf6 !important;
     }
 </style>
 
 {{-- Плавающая панель --}}
-<div class="review-panel" id="reviewPanel">
-    <div class="review-help">
-        <strong class="text-white">🔍 Проверка ОГЭ</strong><br>
+<div class="review-panel-ege" id="reviewPanelEge">
+    <div class="review-help-ege">
+        <strong class="text-purple-300">🎓 Проверка ЕГЭ</strong><br>
         Нажмите 🏳️ рядом с заданием чтобы пометить ошибку
     </div>
 
-    <div id="reviewStats" class="text-sm text-slate-400 text-right mb-1"></div>
+    <div id="reviewStatsEge" class="text-sm text-purple-400 text-right mb-1"></div>
 
-    <button onclick="showExportModal()" class="review-btn bg-blue-600 hover:bg-blue-700 text-white">
+    <button onclick="showExportModalEge()" class="review-btn bg-purple-600 hover:bg-purple-700 text-white">
         <span>📋</span>
         <span>Экспорт для Claude</span>
-        <span id="flagCount" class="badge-count" style="display: none;">0</span>
+        <span id="flagCountEge" class="badge-count-ege" style="display: none;">0</span>
     </button>
 
-    <button onclick="clearAllFlags()" class="review-btn bg-slate-700 hover:bg-slate-600 text-slate-300">
+    <button onclick="clearAllFlagsEge()" class="review-btn bg-slate-700 hover:bg-slate-600 text-slate-300">
         <span>🗑️</span>
         <span>Очистить пометки</span>
     </button>
 
-    <button onclick="toggleReviewMode()" id="toggleBtn" class="review-btn bg-slate-800 hover:bg-slate-700 text-slate-400">
-        <span id="toggleIcon">👁️</span>
-        <span id="toggleText">Скрыть панель</span>
+    <button onclick="toggleReviewModeEge()" id="toggleBtnEge" class="review-btn bg-slate-800 hover:bg-slate-700 text-slate-400">
+        <span id="toggleIconEge">👁️</span>
+        <span id="toggleTextEge">Скрыть панель</span>
     </button>
 </div>
 
-{{-- Модалка для комментария удалена — используем inline форму --}}
-
 {{-- Модалка экспорта --}}
-<div id="exportModal" class="review-modal" style="display: none;">
+<div id="exportModalEge" class="review-modal" style="display: none;">
     <div class="review-modal-content" style="max-width: 900px;">
-        <h3 class="text-xl font-bold text-white mb-4">📋 Промпт для Claude (ОГЭ)</h3>
+        <h3 class="text-xl font-bold text-white mb-4">📋 Промпт для Claude (ЕГЭ)</h3>
 
         <p class="text-slate-400 text-sm mb-4">Скопируйте этот текст и отправьте Claude для исправления заданий:</p>
 
-        <div id="promptOutput" class="prompt-output"></div>
+        <div id="promptOutputEge" class="prompt-output"></div>
 
         <div class="flex gap-3 mt-4">
-            <button onclick="copyPrompt()" class="review-btn bg-green-600 hover:bg-green-700 text-white flex-1 justify-center">
+            <button onclick="copyPromptEge()" class="review-btn bg-purple-600 hover:bg-purple-700 text-white flex-1 justify-center">
                 📋 Скопировать
             </button>
-            <button onclick="closeExportModal()" class="review-btn bg-slate-700 hover:bg-slate-600 text-slate-300">
+            <button onclick="closeExportModalEge()" class="review-btn bg-slate-700 hover:bg-slate-600 text-slate-300">
                 Закрыть
             </button>
         </div>
@@ -246,34 +249,34 @@
 </div>
 
 <script>
-const TOPIC_ID = '{{ $topicId ?? "00" }}';
-const EXAM_TYPE = 'oge';
-const STORAGE_KEY = `palomatika_reviews_${EXAM_TYPE}_topic_${TOPIC_ID}`;
+const TOPIC_ID_EGE = '{{ $topicId ?? "00" }}';
+const EXAM_TYPE_EGE = 'ege';
+const STORAGE_KEY_EGE = `palomatika_reviews_${EXAM_TYPE_EGE}_topic_${TOPIC_ID_EGE}`;
 
-let reviews = {};
-let panelHidden = false;
-let activeInlineForm = null; // Контейнер с открытой inline формой
+let reviewsEge = {};
+let panelHiddenEge = false;
+let activeInlineFormEge = null;
 
 // Загрузка сохранённых пометок
-function loadReviews() {
-    const stored = localStorage.getItem(STORAGE_KEY);
+function loadReviewsEge() {
+    const stored = localStorage.getItem(STORAGE_KEY_EGE);
     if (stored) {
-        reviews = JSON.parse(stored);
+        reviewsEge = JSON.parse(stored);
     }
-    updateUI();
+    updateUIEge();
 }
 
 // Сохранение в localStorage
-function saveReviews() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(reviews));
-    updateUI();
+function saveReviewsEge() {
+    localStorage.setItem(STORAGE_KEY_EGE, JSON.stringify(reviewsEge));
+    updateUIEge();
 }
 
 // Обновление UI
-function updateUI() {
-    const count = Object.keys(reviews).length;
-    const countEl = document.getElementById('flagCount');
-    const statsEl = document.getElementById('reviewStats');
+function updateUIEge() {
+    const count = Object.keys(reviewsEge).length;
+    const countEl = document.getElementById('flagCountEge');
+    const statsEl = document.getElementById('reviewStatsEge');
 
     if (count > 0) {
         countEl.style.display = 'inline';
@@ -287,11 +290,11 @@ function updateUI() {
     // Обновляем кнопки флагов
     document.querySelectorAll('.review-flag').forEach(btn => {
         const key = btn.dataset.taskKey;
-        if (reviews[key]) {
+        if (reviewsEge[key]) {
             btn.classList.add('flagged');
             btn.classList.remove('not-flagged');
             btn.textContent = '🚩';
-            btn.title = 'Помечено: ' + reviews[key].comment.substring(0, 50) + '...';
+            btn.title = 'Помечено: ' + reviewsEge[key].comment.substring(0, 50) + '...';
         } else {
             btn.classList.remove('flagged');
             btn.classList.add('not-flagged');
@@ -302,20 +305,20 @@ function updateUI() {
 }
 
 // Переключение видимости панели
-function toggleReviewMode() {
-    panelHidden = !panelHidden;
-    const panel = document.getElementById('reviewPanel');
-    const icon = document.getElementById('toggleIcon');
-    const text = document.getElementById('toggleText');
+function toggleReviewModeEge() {
+    panelHiddenEge = !panelHiddenEge;
+    const panel = document.getElementById('reviewPanelEge');
+    const icon = document.getElementById('toggleIconEge');
+    const text = document.getElementById('toggleTextEge');
 
-    if (panelHidden) {
-        panel.querySelectorAll('.review-btn, .review-help, #reviewStats').forEach(el => {
-            if (el.id !== 'toggleBtn') el.style.display = 'none';
+    if (panelHiddenEge) {
+        panel.querySelectorAll('.review-btn, .review-help-ege, #reviewStatsEge').forEach(el => {
+            if (el.id !== 'toggleBtnEge') el.style.display = 'none';
         });
         icon.textContent = '👁️‍🗨️';
         text.textContent = 'Показать панель';
     } else {
-        panel.querySelectorAll('.review-btn, .review-help, #reviewStats').forEach(el => {
+        panel.querySelectorAll('.review-btn, .review-help-ege, #reviewStatsEge').forEach(el => {
             el.style.display = '';
         });
         icon.textContent = '👁️';
@@ -324,40 +327,35 @@ function toggleReviewMode() {
 }
 
 // Открыть inline форму репорта
-function openInlineReportForm(container, taskKey) {
-    // Закрываем предыдущую форму, если есть
-    if (activeInlineForm && activeInlineForm !== container) {
-        closeInlineForm(activeInlineForm);
+function openInlineReportFormEge(container, taskKey) {
+    if (activeInlineFormEge && activeInlineFormEge !== container) {
+        closeInlineFormEge(activeInlineFormEge);
     }
 
-    // Проверяем, не открыта ли уже форма в этом контейнере
     if (container.querySelector('.inline-report-form')) {
         return;
     }
 
-    // Находим блок с текстом задания
     const contentBlock = container.querySelector('.flex-1') || container.querySelector('.p-5') || container;
 
-    // Создаём inline форму
     const form = document.createElement('div');
     form.className = 'inline-report-form';
     form.innerHTML = `
         <div class="form-header">
             <span>🚩</span>
-            <span>Пометить задание</span>
+            <span>Пометить задание ЕГЭ</span>
         </div>
-        <textarea class="review-textarea" placeholder="Что не так? Например:&#10;• Неправильный ответ&#10;• Отсутствует картинка&#10;• Опечатка в условии">${reviews[taskKey]?.comment || ''}</textarea>
+        <textarea class="review-textarea" placeholder="Что не так? Например:&#10;• Неправильный ответ&#10;• Отсутствует картинка&#10;• Опечатка в условии&#10;• SVG не соответствует условию">${reviewsEge[taskKey]?.comment || ''}</textarea>
         <div class="form-actions">
-            <button class="btn-save" onclick="saveInlineComment(this, '${taskKey}')">🚩 Сохранить</button>
-            <button class="btn-cancel" onclick="closeInlineFormByButton(this)">Отмена</button>
+            <button class="btn-save" onclick="saveInlineCommentEge(this, '${taskKey}')">🚩 Сохранить</button>
+            <button class="btn-cancel" onclick="closeInlineFormByButtonEge(this)">Отмена</button>
         </div>
     `;
 
     contentBlock.appendChild(form);
     container.classList.add('has-inline-form');
-    activeInlineForm = container;
+    activeInlineFormEge = container;
 
-    // Фокус на textarea
     setTimeout(() => {
         const textarea = form.querySelector('textarea');
         if (textarea) textarea.focus();
@@ -365,27 +363,27 @@ function openInlineReportForm(container, taskKey) {
 }
 
 // Закрыть inline форму
-function closeInlineForm(container) {
+function closeInlineFormEge(container) {
     const form = container.querySelector('.inline-report-form');
     if (form) {
         form.remove();
     }
     container.classList.remove('has-inline-form');
-    if (activeInlineForm === container) {
-        activeInlineForm = null;
+    if (activeInlineFormEge === container) {
+        activeInlineFormEge = null;
     }
 }
 
 // Закрыть форму по кнопке
-function closeInlineFormByButton(button) {
+function closeInlineFormByButtonEge(button) {
     const container = button.closest('.task-review-item');
     if (container) {
-        closeInlineForm(container);
+        closeInlineFormEge(container);
     }
 }
 
 // Сохранить комментарий из inline формы
-function saveInlineComment(button, taskKey) {
+function saveInlineCommentEge(button, taskKey) {
     const container = button.closest('.task-review-item');
     const textarea = container.querySelector('.inline-report-form textarea');
     const comment = textarea.value.trim();
@@ -396,48 +394,50 @@ function saveInlineComment(button, taskKey) {
         return;
     }
 
-    reviews[taskKey] = {
+    reviewsEge[taskKey] = {
         comment: comment,
         timestamp: new Date().toISOString(),
-        topicId: TOPIC_ID
+        topicId: TOPIC_ID_EGE,
+        examType: EXAM_TYPE_EGE
     };
 
-    saveReviews();
-    closeInlineForm(container);
+    saveReviewsEge();
+    closeInlineFormEge(container);
 }
 
 // Удалить пометку
-function removeFlag(taskKey) {
-    delete reviews[taskKey];
-    saveReviews();
+function removeFlagEge(taskKey) {
+    delete reviewsEge[taskKey];
+    saveReviewsEge();
 }
 
 // Показать модалку экспорта
-function showExportModal() {
-    const allReviews = getAllReviews();
+function showExportModalEge() {
+    const allReviews = getAllReviewsEge();
 
     if (Object.keys(allReviews).length === 0) {
-        alert('Нет помеченных заданий для экспорта');
+        alert('Нет помеченных заданий ЕГЭ для экспорта');
         return;
     }
 
-    const prompt = generatePrompt(allReviews);
-    document.getElementById('promptOutput').textContent = prompt;
-    document.getElementById('exportModal').style.display = 'flex';
+    const prompt = generatePromptEge(allReviews);
+    document.getElementById('promptOutputEge').textContent = prompt;
+    document.getElementById('exportModalEge').style.display = 'flex';
 }
 
 // Закрыть модалку экспорта
-function closeExportModal() {
-    document.getElementById('exportModal').style.display = 'none';
+function closeExportModalEge() {
+    document.getElementById('exportModalEge').style.display = 'none';
 }
 
-// Собрать все пометки со всех тем ОГЭ (темы 06-19)
-function getAllReviews() {
+// Собрать все пометки со всех тем ЕГЭ (темы 01-19 + возможно больше)
+function getAllReviewsEge() {
     const allReviews = {};
 
-    for (let i = 6; i <= 19; i++) {
+    // ЕГЭ может иметь до 19 заданий (или больше), проверяем все возможные
+    for (let i = 1; i <= 25; i++) {
         const topicId = i.toString().padStart(2, '0');
-        const key = `palomatika_reviews_${EXAM_TYPE}_topic_${topicId}`;
+        const key = `palomatika_reviews_${EXAM_TYPE_EGE}_topic_${topicId}`;
         const stored = localStorage.getItem(key);
         if (stored) {
             const topicReviews = JSON.parse(stored);
@@ -448,8 +448,8 @@ function getAllReviews() {
     return allReviews;
 }
 
-// Генерация промпта для Claude
-function generatePrompt(allReviews) {
+// Генерация промпта для Claude (ЕГЭ)
+function generatePromptEge(allReviews) {
     const reviewsByTopic = {};
 
     // Группируем по темам
@@ -461,18 +461,20 @@ function generatePrompt(allReviews) {
         reviewsByTopic[topicId].push({ key, ...data });
     }
 
-    // Определяем, есть ли геометрические темы (15, 16, 17, 18)
-    const geometryTopics = ['15', '16', '17', '18'];
+    // Геометрические темы ЕГЭ (номера могут отличаться от ОГЭ)
+    // Обычно: планиметрия ~13-16, стереометрия ~14
+    const geometryTopics = ['13', '14', '15', '16'];
     const hasGeometryTopics = Object.keys(reviewsByTopic).some(t => geometryTopics.includes(t));
 
-    let prompt = `# Исправление заданий ОГЭ в PALOMATIKA
+    let prompt = `# Исправление заданий ЕГЭ в PALOMATIKA
 
 Найдены следующие проблемы с заданиями в базе данных.
 
-**Архитектура данных:**
-- Основные данные: \`storage/app/tasks/topic_{id}.json\`
-- Геометрия (темы 15-18): \`storage/app/tasks/topic_{id}_geometry.json\` → затем \`php artisan svg:bake {id}\`
-- Сервис доступа: \`TaskDataService\`
+**Архитектура данных ЕГЭ:**
+- Основные данные: \`storage/app/tasks/ege/topic_{id}.json\`
+- Геометрия: \`storage/app/tasks/ege/topic_{id}_geometry.json\` → затем \`php artisan svg:bake-ege {id}\`
+- Изображения: \`public/images/tasks/ege/{topic}/\`
+- Сервис доступа: \`TaskDataService\` (метод \`getEgeBlocks()\`)
 
 ---
 
@@ -480,12 +482,12 @@ function generatePrompt(allReviews) {
 
     for (const [topicId, topicReviews] of Object.entries(reviewsByTopic).sort()) {
         const isGeometry = geometryTopics.includes(topicId);
-        prompt += `## Тема ${topicId}${isGeometry ? ' (геометрия)' : ''}\n\n`;
-        prompt += `**Файл:** \`storage/app/tasks/topic_${topicId}${isGeometry ? '_geometry' : ''}.json\`\n\n`;
+        prompt += `## Задание ${topicId}${isGeometry ? ' (геометрия)' : ''}\n\n`;
+        prompt += `**Файл:** \`storage/app/tasks/ege/topic_${topicId}${isGeometry ? '_geometry' : ''}.json\`\n\n`;
 
         for (const review of topicReviews) {
-            // Парсим ключ: topic_06_block_1_zadanie_2_task_5
-            const keyMatch = review.key.match(/topic_(\d+)_block_(\d+)_zadanie_(\d+)_task_(\d+)/);
+            // Парсим ключ: ege_topic_01_block_1_zadanie_2_task_5
+            const keyMatch = review.key.match(/ege_topic_(\d+)_block_(\d+)_zadanie_(\d+)_task_(\d+)/);
             if (keyMatch) {
                 const [, , blockNum, zadanieNum, taskNum] = keyMatch;
                 prompt += `### Блок ${blockNum}, Задание ${zadanieNum}, Задача ${taskNum}\n`;
@@ -498,19 +500,19 @@ function generatePrompt(allReviews) {
 
     prompt += `---
 
-## Инструкции для исправления
+## Инструкции для исправления ЕГЭ
 
-### Для обычных тем (06-14, 19):
-1. Открой файл \`storage/app/tasks/topic_{id}.json\`
+### Для обычных заданий:
+1. Открой файл \`storage/app/tasks/ege/topic_{id}.json\`
 2. Найди указанный блок → задание → задачу по номерам
 3. Исправь данные согласно описанию проблемы
 4. Очисти кэш: \`php artisan cache:clear\`
 
-### Для геометрических тем (15-18):
-1. Открой файл \`storage/app/tasks/topic_{id}_geometry.json\`
+### Для геометрических заданий:
+1. Открой файл \`storage/app/tasks/ege/topic_{id}_geometry.json\`
 2. Найди указанный блок → задание → задачу по номерам
 3. Исправь данные (координаты точек, параметры SVG и т.д.)
-4. Перегенерируй SVG: \`php artisan svg:bake {id}\`
+4. Перегенерируй SVG: \`php artisan svg:bake-ege {id}\`
 5. Очисти кэш: \`php artisan cache:clear\`
 
 ### Правила для SVG (см. GEOMETRY_SPEC в CLAUDE.md):
@@ -519,6 +521,10 @@ function generatePrompt(allReviews) {
 - Фигура заполняет ~85% viewBox
 - Используй функции: \`labelPos()\`, \`makeAngleArc()\`, \`rightAnglePath()\`
 
+### Добавление изображений из PDF:
+1. Сохрани PNG в \`public/images/tasks/ege/{topic}/\`
+2. В JSON укажи путь: \`"image": "filename.png"\`
+
 После каждого исправления подтверди изменение.
 `;
 
@@ -526,12 +532,11 @@ function generatePrompt(allReviews) {
 }
 
 // Копирование промпта
-function copyPrompt() {
-    const prompt = document.getElementById('promptOutput').textContent;
+function copyPromptEge() {
+    const prompt = document.getElementById('promptOutputEge').textContent;
     navigator.clipboard.writeText(prompt).then(() => {
         alert('Промпт скопирован в буфер обмена!');
     }).catch(() => {
-        // Fallback
         const textarea = document.createElement('textarea');
         textarea.value = prompt;
         document.body.appendChild(textarea);
@@ -543,21 +548,20 @@ function copyPrompt() {
 }
 
 // Очистить все пометки для текущей темы
-function clearAllFlags() {
-    if (Object.keys(reviews).length === 0) {
+function clearAllFlagsEge() {
+    if (Object.keys(reviewsEge).length === 0) {
         alert('Нет пометок для удаления');
         return;
     }
 
-    if (confirm(`Удалить все ${Object.keys(reviews).length} пометок для темы ${TOPIC_ID}?`)) {
-        reviews = {};
-        saveReviews();
+    if (confirm(`Удалить все ${Object.keys(reviewsEge).length} пометок для задания ЕГЭ ${TOPIC_ID_EGE}?`)) {
+        reviewsEge = {};
+        saveReviewsEge();
     }
 }
 
 // Функция для добавления кнопки флага к задаче
-function addFlagButton(container, taskKey, taskInfo) {
-    // Проверяем, не добавлена ли уже кнопка
+function addFlagButtonEge(container, taskKey, taskInfo) {
     if (container.querySelector('.review-flag')) return;
 
     const btn = document.createElement('button');
@@ -568,13 +572,13 @@ function addFlagButton(container, taskKey, taskInfo) {
     btn.onclick = function(e) {
         e.stopPropagation();
         e.preventDefault();
-        if (reviews[taskKey]) {
+        if (reviewsEge[taskKey]) {
             if (confirm('Удалить пометку?')) {
-                removeFlag(taskKey);
-                closeInlineForm(container);
+                removeFlagEge(taskKey);
+                closeInlineFormEge(container);
             }
         } else {
-            openInlineReportForm(container, taskKey);
+            openInlineReportFormEge(container, taskKey);
         }
     };
     container.style.position = 'relative';
@@ -582,26 +586,23 @@ function addFlagButton(container, taskKey, taskInfo) {
 }
 
 // Автоматический поиск задач на странице
-function autoFindTasks() {
+function autoFindTasksEge() {
     let currentBlock = 1;
     let currentZadanie = 1;
     let taskCounter = 0;
 
-    // Ищем все элементы, которые могут быть задачами
     // 1. Элементы с классом task-review-item (ручная разметка)
     document.querySelectorAll('.task-review-item').forEach(item => {
         const taskKey = item.dataset.taskKey;
         const taskInfo = item.dataset.taskInfo;
         if (taskKey) {
-            addFlagButton(item, taskKey, taskInfo);
+            addFlagButtonEge(item, taskKey, taskInfo);
             taskCounter++;
         }
     });
 
     // 2. Автоматический поиск по паттернам DOM
-    // Ищем блоки
     document.querySelectorAll('[class*="mb-12"], [class*="mb-10"]').forEach(section => {
-        // Ищем заголовок блока
         const blockHeader = section.querySelector('p[class*="text-lg"]');
         if (blockHeader) {
             const blockMatch = blockHeader.textContent.match(/Блок\s*(\d+)/i);
@@ -610,7 +611,6 @@ function autoFindTasks() {
             }
         }
 
-        // Ищем заголовки заданий
         const zadanieHeaders = section.querySelectorAll('h3[class*="font-semibold"]');
         zadanieHeaders.forEach(header => {
             const zadanieMatch = header.textContent.match(/Задание\s*(\d+)/i);
@@ -630,21 +630,17 @@ function autoFindTasks() {
             const container = span.closest('div[class*="rounded"]');
 
             if (container && !container.querySelector('.review-flag')) {
-                // Ищем контекст (блок и задание)
                 let blockNum = currentBlock;
                 let zadanieNum = currentZadanie;
 
-                // Пытаемся найти контекст выше по DOM
                 let parent = container.parentElement;
                 while (parent && parent.tagName !== 'BODY') {
-                    // Ищем заголовок блока
                     const blockP = parent.querySelector('p[class*="text-lg"]');
                     if (blockP) {
                         const match = blockP.textContent.match(/Блок\s*(\d+)/i);
                         if (match) blockNum = parseInt(match[1]);
                     }
 
-                    // Ищем заголовок задания
                     const zadanieH3 = parent.querySelector('h3');
                     if (zadanieH3) {
                         const match = zadanieH3.textContent.match(/Задание\s*(\d+)/i);
@@ -654,55 +650,51 @@ function autoFindTasks() {
                     parent = parent.parentElement;
                 }
 
-                const taskKey = `topic_${TOPIC_ID}_block_${blockNum}_zadanie_${zadanieNum}_task_${taskId}`;
+                // Ключ для ЕГЭ отличается от ОГЭ
+                const taskKey = `ege_topic_${TOPIC_ID_EGE}_block_${blockNum}_zadanie_${zadanieNum}_task_${taskId}`;
 
-                // Собираем информацию о задаче
                 let expression = '';
                 const nextSibling = span.nextSibling || span.nextElementSibling;
                 if (nextSibling) {
                     expression = nextSibling.textContent?.trim() || '';
                 }
 
-                const taskInfo = `Блок ${blockNum}, Задание ${zadanieNum}, Задача ${taskId}<br>` +
+                const taskInfo = `ЕГЭ Задание ${TOPIC_ID_EGE}, Блок ${blockNum}, Задание ${zadanieNum}, Задача ${taskId}<br>` +
                     (expression ? `<code>${expression.substring(0, 100)}</code>` : '');
 
-                addFlagButton(container, taskKey, taskInfo);
+                addFlagButtonEge(container, taskKey, taskInfo);
                 taskCounter++;
             }
         }
     });
 
-    console.log(`[TaskReview] Найдено задач: ${taskCounter}`);
+    console.log(`[TaskReview EGE] Найдено задач: ${taskCounter}`);
 }
 
 // Инициализация
 document.addEventListener('DOMContentLoaded', function() {
-    loadReviews();
+    loadReviewsEge();
 
-    // Автоматический поиск задач после небольшой задержки (для KaTeX)
-    setTimeout(autoFindTasks, 500);
+    setTimeout(autoFindTasksEge, 500);
 
-    // Закрытие модалки экспорта по Escape, закрытие inline формы
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
-            closeExportModal();
-            // Закрываем inline форму
-            if (activeInlineForm) {
-                closeInlineForm(activeInlineForm);
+            closeExportModalEge();
+            if (activeInlineFormEge) {
+                closeInlineFormEge(activeInlineFormEge);
             }
         }
     });
 
-    // Закрытие модалки экспорта по клику вне
-    document.getElementById('exportModal').addEventListener('click', function(e) {
-        if (e.target === this) closeExportModal();
+    document.getElementById('exportModalEge').addEventListener('click', function(e) {
+        if (e.target === this) closeExportModalEge();
     });
 });
 
 // Экспортируем функцию для использования в шаблонах
-window.TaskReview = {
-    addFlagButton: addFlagButton,
-    loadReviews: loadReviews,
-    autoFindTasks: autoFindTasks
+window.TaskReviewEge = {
+    addFlagButton: addFlagButtonEge,
+    loadReviews: loadReviewsEge,
+    autoFindTasks: autoFindTasksEge
 };
 </script>
