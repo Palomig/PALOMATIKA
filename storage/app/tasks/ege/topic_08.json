@@ -1,0 +1,536 @@
+{
+  "topic_id": "08",
+  "exam_type": "ege",
+  "meta": {
+    "title": "Задание 8 — Производные",
+    "description": "Производные и первообразные",
+    "color": "lime"
+  },
+  "blocks": [
+    {
+      "number": 1,
+      "title": "ФИПИ",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Найдите производную функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 1, "text": "$f(x)=x^8-6x^5+4$", "answer": "8x^7-30x^4"},
+            {"id": 2, "text": "$f(x)=x^6+5x^3-2$", "answer": "6x^5+15x^2"},
+            {"id": 3, "text": "$f(x)=x^9-3x^4+7$", "answer": "9x^8-12x^3"},
+            {"id": 4, "text": "$f(x)=x^{10}-4x^7+1$", "answer": "10x^9-28x^6"}
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Найдите значение производной функции в точке $x_0$",
+          "type": "expression",
+          "tasks": [
+            {"id": 5, "text": "$f(x)=x^3-4x^2+7$, $x_0=2$", "answer": "-4"},
+            {"id": 6, "text": "$f(x)=x^3-6x+9$, $x_0=1$", "answer": "-3"},
+            {"id": 7, "text": "$f(x)=x^3+5x^2-3$, $x_0=-2$", "answer": "-8"},
+            {"id": 8, "text": "$f(x)=x^4-4x^3+5$, $x_0=3$", "answer": "0"}
+          ]
+        },
+        {
+          "number": 3,
+          "instruction": "Найдите производную функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 9, "text": "$f(x)=\\displaystyle\\frac{1}{x^4}$", "answer": "-4/x^5"},
+            {"id": 10, "text": "$f(x)=\\displaystyle\\frac{1}{x^3}$", "answer": "-3/x^4"},
+            {"id": 11, "text": "$f(x)=\\displaystyle\\frac{2}{x^5}$", "answer": "-10/x^6"},
+            {"id": 12, "text": "$f(x)=\\displaystyle\\frac{3}{x^2}$", "answer": "-6/x^3"}
+          ]
+        },
+        {
+          "number": 4,
+          "instruction": "Найдите значение производной функции в точке $x_0$",
+          "type": "expression",
+          "tasks": [
+            {"id": 13, "text": "$f(x)=\\displaystyle\\frac{6}{x}$, $x_0=2$", "answer": "-1.5"},
+            {"id": 14, "text": "$f(x)=\\displaystyle\\frac{12}{x}$, $x_0=3$", "answer": "-1.333"},
+            {"id": 15, "text": "$f(x)=\\displaystyle\\frac{8}{x^2}$, $x_0=2$", "answer": "-2"},
+            {"id": 16, "text": "$f(x)=\\displaystyle\\frac{27}{x^3}$, $x_0=3$", "answer": "-3"}
+          ]
+        },
+        {
+          "number": 5,
+          "instruction": "Найдите производную функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 17, "text": "$f(x)=\\sqrt{x}$", "answer": "1/(2sqrt(x))"},
+            {"id": 18, "text": "$f(x)=\\sqrt[3]{x}$", "answer": "1/(3x^(2/3))"},
+            {"id": 19, "text": "$f(x)=4\\sqrt{x}$", "answer": "2/sqrt(x)"},
+            {"id": 20, "text": "$f(x)=6\\sqrt[3]{x^2}$", "answer": "4/cbrt(x)"}
+          ]
+        },
+        {
+          "number": 6,
+          "instruction": "Найдите значение производной функции в точке $x_0$",
+          "type": "expression",
+          "tasks": [
+            {"id": 21, "text": "$f(x)=\\sqrt{x}$, $x_0=4$", "answer": "0.25"},
+            {"id": 22, "text": "$f(x)=\\sqrt{x}$, $x_0=9$", "answer": "0.167"},
+            {"id": 23, "text": "$f(x)=2\\sqrt{x}$, $x_0=16$", "answer": "0.25"},
+            {"id": 24, "text": "$f(x)=3\\sqrt{x}$, $x_0=25$", "answer": "0.3"}
+          ]
+        },
+        {
+          "number": 7,
+          "instruction": "Найдите производную функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 25, "text": "$f(x)=\\sin x + \\cos x$", "answer": "cos(x)-sin(x)"},
+            {"id": 26, "text": "$f(x)=2\\sin x - 3\\cos x$", "answer": "2cos(x)+3sin(x)"},
+            {"id": 27, "text": "$f(x)=\\mathrm{tg}\\,x$", "answer": "1/cos^2(x)"},
+            {"id": 28, "text": "$f(x)=\\mathrm{ctg}\\,x$", "answer": "-1/sin^2(x)"}
+          ]
+        },
+        {
+          "number": 8,
+          "instruction": "Найдите значение производной функции в точке $x_0$",
+          "type": "expression",
+          "tasks": [
+            {"id": 29, "text": "$f(x)=\\sin x$, $x_0=\\displaystyle\\frac{\\pi}{3}$", "answer": "0.5"},
+            {"id": 30, "text": "$f(x)=\\cos x$, $x_0=\\displaystyle\\frac{\\pi}{6}$", "answer": "-0.5"},
+            {"id": 31, "text": "$f(x)=\\sin x$, $x_0=\\displaystyle\\frac{\\pi}{2}$", "answer": "0"},
+            {"id": 32, "text": "$f(x)=\\cos x$, $x_0=\\pi$", "answer": "0"}
+          ]
+        },
+        {
+          "number": 9,
+          "instruction": "Найдите производную функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 33, "text": "$f(x)=e^x$", "answer": "e^x"},
+            {"id": 34, "text": "$f(x)=3e^x$", "answer": "3e^x"},
+            {"id": 35, "text": "$f(x)=e^x+x$", "answer": "e^x+1"},
+            {"id": 36, "text": "$f(x)=e^x-x^2$", "answer": "e^x-2x"}
+          ]
+        },
+        {
+          "number": 10,
+          "instruction": "Найдите значение производной функции в точке $x_0$",
+          "type": "expression",
+          "tasks": [
+            {"id": 37, "text": "$f(x)=e^x$, $x_0=0$", "answer": "1"},
+            {"id": 38, "text": "$f(x)=e^x$, $x_0=1$", "answer": "2.718"},
+            {"id": 39, "text": "$f(x)=e^x+x$, $x_0=0$", "answer": "2"},
+            {"id": 40, "text": "$f(x)=e^x-2x$, $x_0=0$", "answer": "-1"}
+          ]
+        },
+        {
+          "number": 11,
+          "instruction": "Найдите производную функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 41, "text": "$f(x)=\\ln x$", "answer": "1/x"},
+            {"id": 42, "text": "$f(x)=3\\ln x$", "answer": "3/x"},
+            {"id": 43, "text": "$f(x)=\\ln x + x$", "answer": "1/x+1"},
+            {"id": 44, "text": "$f(x)=\\ln x - x^2$", "answer": "1/x-2x"}
+          ]
+        },
+        {
+          "number": 12,
+          "instruction": "Найдите значение производной функции в точке $x_0$",
+          "type": "expression",
+          "tasks": [
+            {"id": 45, "text": "$f(x)=\\ln x$, $x_0=1$", "answer": "1"},
+            {"id": 46, "text": "$f(x)=\\ln x$, $x_0=2$", "answer": "0.5"},
+            {"id": 47, "text": "$f(x)=2\\ln x$, $x_0=4$", "answer": "0.5"},
+            {"id": 48, "text": "$f(x)=\\ln x + x$, $x_0=1$", "answer": "2"}
+          ]
+        },
+        {
+          "number": 13,
+          "instruction": "Найдите производную функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 49, "text": "$f(x)=(2x+1)^5$", "answer": "10(2x+1)^4"},
+            {"id": 50, "text": "$f(x)=(3x-2)^4$", "answer": "12(3x-2)^3"},
+            {"id": 51, "text": "$f(x)=(5x+7)^3$", "answer": "15(5x+7)^2"},
+            {"id": 52, "text": "$f(x)=(4x-1)^6$", "answer": "24(4x-1)^5"}
+          ]
+        },
+        {
+          "number": 14,
+          "instruction": "Найдите значение производной функции в точке $x_0$",
+          "type": "expression",
+          "tasks": [
+            {"id": 53, "text": "$f(x)=(x+1)^4$, $x_0=1$", "answer": "32"},
+            {"id": 54, "text": "$f(x)=(x-2)^3$, $x_0=3$", "answer": "3"},
+            {"id": 55, "text": "$f(x)=(2x+1)^2$, $x_0=0$", "answer": "4"},
+            {"id": 56, "text": "$f(x)=(3x-1)^2$, $x_0=1$", "answer": "12"}
+          ]
+        },
+        {
+          "number": 15,
+          "instruction": "Найдите производную функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 57, "text": "$f(x)=\\sin 3x$", "answer": "3cos(3x)"},
+            {"id": 58, "text": "$f(x)=\\cos 2x$", "answer": "-2sin(2x)"},
+            {"id": 59, "text": "$f(x)=\\sin 5x$", "answer": "5cos(5x)"},
+            {"id": 60, "text": "$f(x)=\\cos 4x$", "answer": "-4sin(4x)"}
+          ]
+        },
+        {
+          "number": 16,
+          "instruction": "Найдите значение производной функции в точке $x_0$",
+          "type": "expression",
+          "tasks": [
+            {"id": 61, "text": "$f(x)=\\sin 2x$, $x_0=\\displaystyle\\frac{\\pi}{4}$", "answer": "0"},
+            {"id": 62, "text": "$f(x)=\\cos 2x$, $x_0=\\displaystyle\\frac{\\pi}{4}$", "answer": "-2"},
+            {"id": 63, "text": "$f(x)=\\sin 3x$, $x_0=\\displaystyle\\frac{\\pi}{6}$", "answer": "0"},
+            {"id": 64, "text": "$f(x)=\\cos 3x$, $x_0=0$", "answer": "0"}
+          ]
+        },
+        {
+          "number": 17,
+          "instruction": "Найдите производную функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 65, "text": "$f(x)=e^{2x}$", "answer": "2e^(2x)"},
+            {"id": 66, "text": "$f(x)=e^{3x}$", "answer": "3e^(3x)"},
+            {"id": 67, "text": "$f(x)=e^{-x}$", "answer": "-e^(-x)"},
+            {"id": 68, "text": "$f(x)=e^{5x}$", "answer": "5e^(5x)"}
+          ]
+        },
+        {
+          "number": 18,
+          "instruction": "Найдите значение производной функции в точке $x_0$",
+          "type": "expression",
+          "tasks": [
+            {"id": 69, "text": "$f(x)=e^{2x}$, $x_0=0$", "answer": "2"},
+            {"id": 70, "text": "$f(x)=e^{-x}$, $x_0=0$", "answer": "-1"},
+            {"id": 71, "text": "$f(x)=e^{3x}$, $x_0=0$", "answer": "3"},
+            {"id": 72, "text": "$f(x)=e^{-2x}$, $x_0=0$", "answer": "-2"}
+          ]
+        },
+        {
+          "number": 19,
+          "instruction": "Найдите производную функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 73, "text": "$f(x)=\\ln(2x+1)$", "answer": "2/(2x+1)"},
+            {"id": 74, "text": "$f(x)=\\ln(3x-2)$", "answer": "3/(3x-2)"},
+            {"id": 75, "text": "$f(x)=\\ln(x^2+1)$", "answer": "2x/(x^2+1)"},
+            {"id": 76, "text": "$f(x)=\\ln(5x+3)$", "answer": "5/(5x+3)"}
+          ]
+        },
+        {
+          "number": 20,
+          "instruction": "Найдите значение производной функции в точке $x_0$",
+          "type": "expression",
+          "tasks": [
+            {"id": 77, "text": "$f(x)=\\ln(x+1)$, $x_0=1$", "answer": "0.5"},
+            {"id": 78, "text": "$f(x)=\\ln(2x)$, $x_0=1$", "answer": "1"},
+            {"id": 79, "text": "$f(x)=\\ln(x^2)$, $x_0=2$", "answer": "1"},
+            {"id": 80, "text": "$f(x)=\\ln(3x+1)$, $x_0=0$", "answer": "3"}
+          ]
+        },
+        {
+          "number": 21,
+          "instruction": "Найдите производную функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 81, "text": "$f(x)=x\\cdot e^x$", "answer": "(x+1)e^x"},
+            {"id": 82, "text": "$f(x)=x^2\\cdot e^x$", "answer": "(x^2+2x)e^x"},
+            {"id": 83, "text": "$f(x)=x\\cdot\\ln x$", "answer": "ln(x)+1"},
+            {"id": 84, "text": "$f(x)=x^2\\cdot\\ln x$", "answer": "2x*ln(x)+x"}
+          ]
+        },
+        {
+          "number": 22,
+          "instruction": "Найдите значение производной функции в точке $x_0$",
+          "type": "expression",
+          "tasks": [
+            {"id": 85, "text": "$f(x)=x\\cdot e^x$, $x_0=0$", "answer": "1"},
+            {"id": 86, "text": "$f(x)=x\\cdot e^x$, $x_0=1$", "answer": "5.436"},
+            {"id": 87, "text": "$f(x)=x\\cdot\\ln x$, $x_0=1$", "answer": "1"},
+            {"id": 88, "text": "$f(x)=x\\cdot\\ln x$, $x_0=e$", "answer": "2"}
+          ]
+        },
+        {
+          "number": 23,
+          "instruction": "Найдите производную функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 89, "text": "$f(x)=\\displaystyle\\frac{x}{x+1}$", "answer": "1/(x+1)^2"},
+            {"id": 90, "text": "$f(x)=\\displaystyle\\frac{x}{x-1}$", "answer": "-1/(x-1)^2"},
+            {"id": 91, "text": "$f(x)=\\displaystyle\\frac{2x}{x+3}$", "answer": "6/(x+3)^2"},
+            {"id": 92, "text": "$f(x)=\\displaystyle\\frac{3x}{x-2}$", "answer": "-6/(x-2)^2"}
+          ]
+        },
+        {
+          "number": 24,
+          "instruction": "Найдите значение производной функции в точке $x_0$",
+          "type": "expression",
+          "tasks": [
+            {"id": 93, "text": "$f(x)=\\displaystyle\\frac{x}{x+1}$, $x_0=1$", "answer": "0.25"},
+            {"id": 94, "text": "$f(x)=\\displaystyle\\frac{x}{x-1}$, $x_0=2$", "answer": "-1"},
+            {"id": 95, "text": "$f(x)=\\displaystyle\\frac{x+1}{x}$, $x_0=1$", "answer": "-1"},
+            {"id": 96, "text": "$f(x)=\\displaystyle\\frac{x-1}{x+1}$, $x_0=0$", "answer": "2"}
+          ]
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "Первообразные",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Найдите общий вид первообразных функции $f(x)$",
+          "type": "expression",
+          "tasks": [
+            {"id": 97, "text": "$f(x)=3x^2$", "answer": "x^3+C"},
+            {"id": 98, "text": "$f(x)=4x^3$", "answer": "x^4+C"},
+            {"id": 99, "text": "$f(x)=6x^5$", "answer": "x^6+C"},
+            {"id": 100, "text": "$f(x)=5x^4$", "answer": "x^5+C"}
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Найдите общий вид первообразных функции $f(x)$",
+          "type": "expression",
+          "tasks": [
+            {"id": 101, "text": "$f(x)=\\cos x$", "answer": "sin(x)+C"},
+            {"id": 102, "text": "$f(x)=\\sin x$", "answer": "-cos(x)+C"},
+            {"id": 103, "text": "$f(x)=2\\cos x$", "answer": "2sin(x)+C"},
+            {"id": 104, "text": "$f(x)=3\\sin x$", "answer": "-3cos(x)+C"}
+          ]
+        },
+        {
+          "number": 3,
+          "instruction": "Найдите общий вид первообразных функции $f(x)$",
+          "type": "expression",
+          "tasks": [
+            {"id": 105, "text": "$f(x)=e^x$", "answer": "e^x+C"},
+            {"id": 106, "text": "$f(x)=2e^x$", "answer": "2e^x+C"},
+            {"id": 107, "text": "$f(x)=e^{2x}$", "answer": "0.5e^(2x)+C"},
+            {"id": 108, "text": "$f(x)=e^{3x}$", "answer": "(1/3)e^(3x)+C"}
+          ]
+        },
+        {
+          "number": 4,
+          "instruction": "Найдите общий вид первообразных функции $f(x)$",
+          "type": "expression",
+          "tasks": [
+            {"id": 109, "text": "$f(x)=\\displaystyle\\frac{1}{x}$", "answer": "ln|x|+C"},
+            {"id": 110, "text": "$f(x)=\\displaystyle\\frac{2}{x}$", "answer": "2ln|x|+C"},
+            {"id": 111, "text": "$f(x)=\\displaystyle\\frac{1}{x^2}$", "answer": "-1/x+C"},
+            {"id": 112, "text": "$f(x)=\\displaystyle\\frac{3}{x^2}$", "answer": "-3/x+C"}
+          ]
+        },
+        {
+          "number": 5,
+          "instruction": "Найдите первообразную $F(x)$ функции $f(x)$, график которой проходит через точку $M$",
+          "type": "expression",
+          "tasks": [
+            {"id": 113, "text": "$f(x)=3x^2$, $M(1; 4)$", "answer": "x^3+3"},
+            {"id": 114, "text": "$f(x)=2x$, $M(2; 7)$", "answer": "x^2+3"},
+            {"id": 115, "text": "$f(x)=4x^3$, $M(1; 2)$", "answer": "x^4+1"},
+            {"id": 116, "text": "$f(x)=6x^2$, $M(1; 5)$", "answer": "2x^3+3"}
+          ]
+        },
+        {
+          "number": 6,
+          "instruction": "Найдите первообразную $F(x)$ функции $f(x)$, график которой проходит через точку $M$",
+          "type": "expression",
+          "tasks": [
+            {"id": 117, "text": "$f(x)=\\cos x$, $M(0; 2)$", "answer": "sin(x)+2"},
+            {"id": 118, "text": "$f(x)=\\sin x$, $M(0; 0)$", "answer": "-cos(x)+1"},
+            {"id": 119, "text": "$f(x)=e^x$, $M(0; 3)$", "answer": "e^x+2"},
+            {"id": 120, "text": "$f(x)=\\displaystyle\\frac{1}{x}$, $M(1; 1)$", "answer": "ln(x)+1"}
+          ]
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "title": "Физический смысл производной",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Материальная точка движется прямолинейно по закону $x(t)$ (где $x$ — расстояние от точки отсчёта в метрах, $t$ — время в секундах). Найдите её скорость (в м/с) в момент времени $t$",
+          "type": "expression",
+          "tasks": [
+            {"id": 121, "text": "$x(t)=t^3-5t^2+2t+3$, $t=2$ с", "answer": "-6"},
+            {"id": 122, "text": "$x(t)=t^3-3t^2+4t-1$, $t=1$ с", "answer": "1"},
+            {"id": 123, "text": "$x(t)=t^3-6t^2+9t+2$, $t=3$ с", "answer": "0"},
+            {"id": 124, "text": "$x(t)=t^3-4t^2+5t$, $t=2$ с", "answer": "1"}
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Материальная точка движется прямолинейно по закону $x(t)$. Найдите её скорость (в м/с) в момент времени $t$",
+          "type": "expression",
+          "tasks": [
+            {"id": 125, "text": "$x(t)=\\displaystyle\\frac{1}{3}t^3-2t^2+3t$, $t=3$ с", "answer": "0"},
+            {"id": 126, "text": "$x(t)=\\displaystyle\\frac{1}{2}t^2-4t+5$, $t=4$ с", "answer": "0"},
+            {"id": 127, "text": "$x(t)=\\displaystyle\\frac{1}{4}t^4-t^3$, $t=2$ с", "answer": "-4"},
+            {"id": 128, "text": "$x(t)=\\displaystyle\\frac{1}{3}t^3-\\frac{1}{2}t^2+t$, $t=1$ с", "answer": "1"}
+          ]
+        },
+        {
+          "number": 3,
+          "instruction": "Материальная точка движется прямолинейно по закону $x(t)$. В какой момент времени (в секундах) её скорость была равна $v$ м/с?",
+          "type": "expression",
+          "tasks": [
+            {"id": 129, "text": "$x(t)=t^2-6t+5$, $v=0$", "answer": "3"},
+            {"id": 130, "text": "$x(t)=t^2-8t+3$, $v=0$", "answer": "4"},
+            {"id": 131, "text": "$x(t)=t^2-10t+7$, $v=2$", "answer": "6"},
+            {"id": 132, "text": "$x(t)=t^2-4t+1$, $v=6$", "answer": "5"}
+          ]
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "title": "Геометрический смысл производной",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Найдите угловой коэффициент касательной к графику функции $y=f(x)$ в точке с абсциссой $x_0$",
+          "type": "expression",
+          "tasks": [
+            {"id": 133, "text": "$f(x)=x^3-2x^2+x$, $x_0=1$", "answer": "0"},
+            {"id": 134, "text": "$f(x)=x^3-3x^2+4$, $x_0=2$", "answer": "0"},
+            {"id": 135, "text": "$f(x)=x^2-4x+5$, $x_0=3$", "answer": "2"},
+            {"id": 136, "text": "$f(x)=x^2+2x-1$, $x_0=-1$", "answer": "0"}
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Прямая $y=kx+b$ является касательной к графику функции $y=f(x)$. Найдите $k$",
+          "type": "expression",
+          "tasks": [
+            {"id": 137, "text": "$y=x^2-6x+5$, касательная в точке $(4; -3)$", "answer": "2"},
+            {"id": 138, "text": "$y=x^2-4x+3$, касательная в точке $(3; 0)$", "answer": "2"},
+            {"id": 139, "text": "$y=x^2+2x-3$, касательная в точке $(1; 0)$", "answer": "4"},
+            {"id": 140, "text": "$y=x^2-8x+12$, касательная в точке $(5; -3)$", "answer": "2"}
+          ]
+        },
+        {
+          "number": 3,
+          "instruction": "Найдите абсциссу точки, в которой касательная к графику функции $y=f(x)$ параллельна прямой $y=kx+b$ или оси абсцисс",
+          "type": "expression",
+          "tasks": [
+            {"id": 141, "text": "$f(x)=x^3-3x^2$, касательная параллельна оси абсцисс", "answer": "0"},
+            {"id": 142, "text": "$f(x)=x^3-6x^2+9x$, касательная параллельна оси абсцисс", "answer": "1"},
+            {"id": 143, "text": "$f(x)=x^2-4x+5$, касательная параллельна $y=2x+1$", "answer": "3"},
+            {"id": 144, "text": "$f(x)=x^2+6x-3$, касательная параллельна $y=4x-7$", "answer": "-1"}
+          ]
+        },
+        {
+          "number": 4,
+          "instruction": "Найдите абсциссу точки, в которой касательная к графику функции $y=f(x)$ параллельна касательной в точке с абсциссой $x_1$ или образует с осью абсцисс угол $\\alpha$",
+          "type": "expression",
+          "tasks": [
+            {"id": 145, "text": "$f(x)=x^3-3x$, касательная образует угол 45° с осью $Ox$", "answer": "-1"},
+            {"id": 146, "text": "$f(x)=x^2-2x$, касательная образует угол 45° с осью $Ox$", "answer": "1.5"},
+            {"id": 147, "text": "$f(x)=x^3-12x$, касательная образует угол 135° с осью $Ox$", "answer": "-2"},
+            {"id": 148, "text": "$f(x)=x^2+4x$, касательная образует угол 135° с осью $Ox$", "answer": "-2.5"}
+          ]
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "title": "ФИПИ. Расширенная версия",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Найдите производную функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 149, "text": "$f(x)=\\sqrt{2x+5}$", "answer": "1/sqrt(2x+5)"},
+            {"id": 150, "text": "$f(x)=\\sqrt{3x-1}$", "answer": "3/(2sqrt(3x-1))"},
+            {"id": 151, "text": "$f(x)=\\sqrt{x^2+1}$", "answer": "x/sqrt(x^2+1)"},
+            {"id": 152, "text": "$f(x)=\\sqrt{4-x^2}$", "answer": "-x/sqrt(4-x^2)"}
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Найдите значение производной функции в точке $x_0$",
+          "type": "expression",
+          "tasks": [
+            {"id": 153, "text": "$f(x)=\\sqrt{x^2+9}$, $x_0=4$", "answer": "0.8"},
+            {"id": 154, "text": "$f(x)=\\sqrt{2x+3}$, $x_0=3$", "answer": "0.333"},
+            {"id": 155, "text": "$f(x)=\\sqrt{x^2+16}$, $x_0=3$", "answer": "0.6"},
+            {"id": 156, "text": "$f(x)=\\sqrt{5x+4}$, $x_0=1$", "answer": "0.833"}
+          ]
+        },
+        {
+          "number": 3,
+          "instruction": "Найдите производную функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 157, "text": "$f(x)=x\\sin x$", "answer": "sin(x)+x*cos(x)"},
+            {"id": 158, "text": "$f(x)=x\\cos x$", "answer": "cos(x)-x*sin(x)"},
+            {"id": 159, "text": "$f(x)=x^2\\sin x$", "answer": "2x*sin(x)+x^2*cos(x)"},
+            {"id": 160, "text": "$f(x)=x^2\\cos x$", "answer": "2x*cos(x)-x^2*sin(x)"}
+          ]
+        },
+        {
+          "number": 4,
+          "instruction": "Найдите значение производной функции в точке $x_0$",
+          "type": "expression",
+          "tasks": [
+            {"id": 161, "text": "$f(x)=x\\sin x$, $x_0=\\displaystyle\\frac{\\pi}{2}$", "answer": "1"},
+            {"id": 162, "text": "$f(x)=x\\cos x$, $x_0=0$", "answer": "1"},
+            {"id": 163, "text": "$f(x)=x\\sin x$, $x_0=\\pi$", "answer": "-\\pi"},
+            {"id": 164, "text": "$f(x)=x\\cos x$, $x_0=\\displaystyle\\frac{\\pi}{2}$", "answer": "-pi/2"}
+          ]
+        },
+        {
+          "number": 5,
+          "instruction": "Найдите производную функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 165, "text": "$f(x)=\\displaystyle\\frac{\\sin x}{x}$", "answer": "(x*cos(x)-sin(x))/x^2"},
+            {"id": 166, "text": "$f(x)=\\displaystyle\\frac{\\cos x}{x}$", "answer": "(-x*sin(x)-cos(x))/x^2"},
+            {"id": 167, "text": "$f(x)=\\displaystyle\\frac{e^x}{x}$", "answer": "e^x*(x-1)/x^2"},
+            {"id": 168, "text": "$f(x)=\\displaystyle\\frac{\\ln x}{x}$", "answer": "(1-ln(x))/x^2"}
+          ]
+        },
+        {
+          "number": 6,
+          "instruction": "Найдите значение производной функции в точке $x_0$",
+          "type": "expression",
+          "tasks": [
+            {"id": 169, "text": "$f(x)=\\displaystyle\\frac{e^x}{x}$, $x_0=1$", "answer": "0"},
+            {"id": 170, "text": "$f(x)=\\displaystyle\\frac{\\ln x}{x}$, $x_0=e$", "answer": "0"},
+            {"id": 171, "text": "$f(x)=\\displaystyle\\frac{e^x}{x+1}$, $x_0=0$", "answer": "0"},
+            {"id": 172, "text": "$f(x)=\\displaystyle\\frac{x}{e^x}$, $x_0=1$", "answer": "0"}
+          ]
+        },
+        {
+          "number": 7,
+          "instruction": "Найдите производную функции",
+          "type": "expression",
+          "tasks": [
+            {"id": 173, "text": "$f(x)=\\sin^2 x$", "answer": "sin(2x)"},
+            {"id": 174, "text": "$f(x)=\\cos^2 x$", "answer": "-sin(2x)"},
+            {"id": 175, "text": "$f(x)=\\sin^3 x$", "answer": "3sin^2(x)*cos(x)"},
+            {"id": 176, "text": "$f(x)=\\cos^3 x$", "answer": "-3cos^2(x)*sin(x)"}
+          ]
+        },
+        {
+          "number": 8,
+          "instruction": "Найдите значение производной функции в точке $x_0$",
+          "type": "expression",
+          "tasks": [
+            {"id": 177, "text": "$f(x)=\\sin^2 x$, $x_0=\\displaystyle\\frac{\\pi}{4}$", "answer": "1"},
+            {"id": 178, "text": "$f(x)=\\cos^2 x$, $x_0=\\displaystyle\\frac{\\pi}{4}$", "answer": "-1"},
+            {"id": 179, "text": "$f(x)=\\sin^2 x$, $x_0=\\displaystyle\\frac{\\pi}{2}$", "answer": "0"},
+            {"id": 180, "text": "$f(x)=\\cos^2 x$, $x_0=0$", "answer": "0"}
+          ]
+        }
+      ]
+    }
+  ]
+}
