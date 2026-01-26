@@ -138,13 +138,34 @@ class NumberLineSvgRenderer
             ];
         }
 
-        // Определяем диапазон
+        // Определяем диапазон с учётом минимального расстояния между точками
+        $minPoint = min($fourPoints);
+        $maxPoint = max($fourPoints);
+        $pointSpread = $maxPoint - $minPoint;
+
         if ($range) {
             $minVal = $range[0];
             $maxVal = $range[1];
         } else {
-            $minVal = floor(min($fourPoints)) - 1;
-            $maxVal = ceil(max($fourPoints)) + 1;
+            $minVal = floor($minPoint) - 1;
+            $maxVal = ceil($maxPoint) + 1;
+        }
+
+        // Проверяем: если точки занимают менее 50% ширины линии, расширяем диапазон
+        $currentRange = $maxVal - $minVal;
+        $spreadRatio = $pointSpread / $currentRange;
+
+        if ($spreadRatio < 0.5 && $pointSpread > 0) {
+            // Рассчитываем новый диапазон так, чтобы точки занимали ~60% ширины
+            $targetRange = $pointSpread / 0.6;
+            $padding = ($targetRange - $pointSpread) / 2;
+            $minVal = $minPoint - $padding;
+            $maxVal = $maxPoint + $padding;
+
+            // Округляем до красивых значений
+            $step = $this->calculateStep($targetRange);
+            $minVal = floor($minVal / $step) * $step;
+            $maxVal = ceil($maxVal / $step) * $step;
         }
 
         return $this->generateNumberLine($points, $minVal, $maxVal, true);
