@@ -575,6 +575,36 @@
                                 </div>
                             </div>
 
+                            {{-- Auxiliary lines (bisectors, altitudes) --}}
+                            <div class="bg-[#12121f] rounded-lg p-3">
+                                <h3 class="text-sm font-semibold text-purple-400 mb-3 flex items-center gap-2">
+                                    <span>📐</span> Вспомогательные линии
+                                </h3>
+                                <div class="space-y-3">
+                                    <template x-for="vName in ['A', 'B', 'C', 'D']" :key="'quad-lines-' + vName">
+                                        <div class="space-y-1">
+                                            <div class="text-xs text-gray-500 mb-1">Из вершины <span x-text="selectedFigure.vertices[vName].label || vName" class="text-orange-400"></span></div>
+                                            <div class="flex flex-wrap gap-2">
+                                                <label class="flex items-center gap-1 text-xs text-gray-300">
+                                                    <input type="checkbox"
+                                                           :checked="selectedFigure.lines && selectedFigure.lines['bisector_' + vName.toLowerCase()] && selectedFigure.lines['bisector_' + vName.toLowerCase()].enabled"
+                                                           @change="toggleQuadLine('bisector_' + vName.toLowerCase(), $event.target.checked)"
+                                                           class="rounded bg-gray-700 border-gray-600">
+                                                    <span class="text-purple-400">Биссектриса</span>
+                                                </label>
+                                                <label class="flex items-center gap-1 text-xs text-gray-300">
+                                                    <input type="checkbox"
+                                                           :checked="selectedFigure.lines && selectedFigure.lines['altitude_' + vName.toLowerCase()] && selectedFigure.lines['altitude_' + vName.toLowerCase()].enabled"
+                                                           @change="toggleQuadLine('altitude_' + vName.toLowerCase(), $event.target.checked)"
+                                                           class="rounded bg-gray-700 border-gray-600">
+                                                    <span class="text-green-400">Высота</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+
                             {{-- Equal sides --}}
                             <div class="bg-[#12121f] rounded-lg p-3">
                                 <h3 class="text-sm font-semibold text-purple-400 mb-3 flex items-center gap-2">
