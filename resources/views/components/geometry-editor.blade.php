@@ -5,6 +5,16 @@
     @include('components.geometry-editor', ['taskId' => '15OGE123'])
 --}}
 
+<style>
+    /* SVG visibility fix for Alpine.js */
+    #geometry-canvas g[x-show] {
+        display: inline !important;
+    }
+    #geometry-canvas g[x-show][style*="display: none"] {
+        display: none !important;
+    }
+</style>
+
 <div id="geometry-editor-modal"
      class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
      x-data="geometryEditor()"
@@ -192,13 +202,23 @@
                             </g>
                         </template>
 
+                        {{-- Debug: static rectangle to test SVG rendering --}}
+                        <rect x="10" y="10" width="50" height="50" fill="red" opacity="0.5"/>
+
+                        {{-- Debug: count of figures --}}
+                        <text x="70" y="35" fill="white" font-size="14" x-text="'Figures: ' + figures.length"></text>
+
                         {{-- Figures --}}
                         <template x-for="(figure, index) in figures" :key="figure.id">
                             <g :class="{'selected-figure': selectedFigure && selectedFigure.id === figure.id}"
                                @click.stop="selectFigure(figure)">
 
+                                {{-- Debug: marker for each figure --}}
+                                <circle :cx="50 + index * 30" cy="80" r="10" fill="lime"/>
+                                <text :x="50 + index * 30" y="100" fill="white" font-size="10" text-anchor="middle" x-text="figure.type.charAt(0).toUpperCase()"></text>
+
                                 {{-- Triangle --}}
-                                <g :style="figure.type === 'triangle' ? '' : 'display: none'">
+                                <g x-show="figure.type === 'triangle'" style="display: inline;">
                                         {{-- Main shape --}}
                                         <polygon :points="getTrianglePoints(figure)"
                                                  fill="none"
@@ -326,7 +346,7 @@
                                     </g>
 
                                 {{-- Circle --}}
-                                <g :style="figure.type === 'circle' ? '' : 'display: none'">
+                                <g x-show="figure.type === 'circle'" style="display: inline;">
                                         <circle :cx="figure.center.x" :cy="figure.center.y" :r="figure.radius"
                                                 fill="none"
                                                 :stroke="selectedFigure && selectedFigure.id === figure.id ? '#a855f7' : '#5a9fcf'"
@@ -441,7 +461,7 @@
                                 </g>
 
                                 {{-- Quadrilateral --}}
-                                <g :style="figure.type === 'quadrilateral' ? '' : 'display: none'">
+                                <g x-show="figure.type === 'quadrilateral'" style="display: inline;">
                                         <polygon :points="getQuadrilateralPoints(figure)"
                                                  fill="none"
                                                  :stroke="selectedFigure && selectedFigure.id === figure.id ? '#a855f7' : '#8b5cf6'"
@@ -463,7 +483,7 @@
                                 </g>
 
                                 {{-- Stereometry figures --}}
-                                <g :style="figure.type === 'stereometry' ? '' : 'display: none'">
+                                <g x-show="figure.type === 'stereometry'" style="display: inline;">
                                         {{-- Polyhedra (cube, prism, pyramid) --}}
                                         <template x-if="figure.edges">
                                             <g>
