@@ -190,12 +190,15 @@
                          @mouseup="onCanvasMouseUp($event)"
                          @mouseleave="onCanvasMouseUp($event)">
 
+                        {{-- Dark background (как в оригинальных SVG) --}}
+                        <rect width="100%" height="100%" fill="#0a1628"/>
+
                         {{-- Grid --}}
                         <template x-if="showGrid">
                             <g class="grid-layer">
                                 <defs>
                                     <pattern :id="'grid-' + gridSize" :width="gridSize" :height="gridSize" patternUnits="userSpaceOnUse">
-                                        <path :d="`M ${gridSize} 0 L 0 0 0 ${gridSize}`" fill="none" stroke="#2a2a4a" stroke-width="0.5"/>
+                                        <path :d="`M ${gridSize} 0 L 0 0 0 ${gridSize}`" fill="none" stroke="#1e3a5f" stroke-width="0.5"/>
                                     </pattern>
                                 </defs>
                                 <rect width="100%" height="100%" :fill="`url(#grid-${gridSize})`"/>

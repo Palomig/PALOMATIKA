@@ -789,22 +789,36 @@ function geometryEditor() {
 
         // ==================== SVG Rendering (x-html approach for SVG compatibility) ====================
 
+        // Цветовая палитра (соответствует оригинальным SVG на страницах тем)
+        colors: {
+            background: '#0a1628',       // Тёмный синий фон
+            shapeStroke: '#c8dce8',      // Основные линии фигур
+            shapeStrokeSelected: '#ffffff', // Выделенная фигура
+            circleStroke: '#5a9fcf',     // Окружности
+            auxiliaryLine: '#5a9fcf',    // Вспомогательные линии (пунктир)
+            angleArc: '#d4a855',         // Дуги углов (золотой)
+            vertexMarker: '#7eb8da',     // Маркеры вершин
+            label: '#c8dce8',            // Подписи вершин
+            auxiliaryLabel: '#5a9fcf',   // Подписи вспомогательных точек
+            hiddenEdge: '#6b7280',       // Скрытые рёбра (стереометрия)
+        },
+
         renderAllFigures() {
             let svg = '';
             this.figures.forEach((figure, index) => {
                 const isSelected = this.selectedFigure && this.selectedFigure.id === figure.id;
-                const strokeColor = isSelected ? '#a855f7' : '#8b5cf6';
+                const strokeColor = isSelected ? this.colors.shapeStrokeSelected : this.colors.shapeStroke;
 
                 svg += `<g class="${isSelected ? 'selected-figure' : ''}" data-figure-id="${figure.id}">`;
 
                 if (figure.type === 'triangle') {
-                    svg += this.renderTriangle(figure, strokeColor);
+                    svg += this.renderTriangle(figure, strokeColor, isSelected);
                 } else if (figure.type === 'quadrilateral') {
-                    svg += this.renderQuadrilateral(figure, strokeColor);
+                    svg += this.renderQuadrilateral(figure, strokeColor, isSelected);
                 } else if (figure.type === 'circle') {
                     svg += this.renderCircle(figure, isSelected);
                 } else if (figure.type === 'stereometry') {
-                    svg += this.renderStereometry(figure, strokeColor);
+                    svg += this.renderStereometry(figure, strokeColor, isSelected);
                 }
 
                 svg += '</g>';
@@ -812,50 +826,63 @@ function geometryEditor() {
             return svg;
         },
 
-        renderTriangle(figure, strokeColor) {
+        // Рендер маркера вершины (крестик с кружком, как в оригинале)
+        renderVertexMarker(x, y, vertexName, isSelected = false) {
+            const color = isSelected ? this.colors.shapeStrokeSelected : this.colors.vertexMarker;
+            return `
+                <g transform="translate(${x}, ${y})" class="cursor-grab" data-vertex="${vertexName}">
+                    <circle cx="0" cy="0" r="10" fill="transparent"/>
+                    <line x1="-5" y1="0" x2="5" y2="0" stroke="${color}" stroke-width="1"/>
+                    <line x1="0" y1="-5" x2="0" y2="5" stroke="${color}" stroke-width="1"/>
+                    <circle cx="0" cy="0" r="2" fill="none" stroke="${color}" stroke-width="0.8"/>
+                </g>
+            `;
+        },
+
+        renderTriangle(figure, strokeColor, isSelected) {
             const v = figure.vertices;
             const points = `${v.A.x},${v.A.y} ${v.B.x},${v.B.y} ${v.C.x},${v.C.y}`;
-            let svg = `<polygon points="${points}" fill="none" stroke="${strokeColor}" stroke-width="2"/>`;
+            let svg = `<polygon points="${points}" fill="none" stroke="${strokeColor}" stroke-width="1.5" stroke-linejoin="round"/>`;
 
-            // Vertex points and labels
+            // Vertex markers and labels
             ['A', 'B', 'C'].forEach(vName => {
                 const vertex = v[vName];
                 const labelPos = this.getLabelPosition(figure, vName);
-                svg += `<circle cx="${vertex.x}" cy="${vertex.y}" r="6" fill="#f97316" class="cursor-grab" data-vertex="${vName}"/>`;
-                svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="#f97316" font-size="16" font-weight="bold" font-style="italic" text-anchor="middle" dominant-baseline="middle">${vertex.label || vName}</text>`;
+                svg += this.renderVertexMarker(vertex.x, vertex.y, vName, isSelected);
+                svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${this.colors.label}" font-size="14" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label">${vertex.label || vName}</text>`;
             });
 
             return svg;
         },
 
-        renderQuadrilateral(figure, strokeColor) {
+        renderQuadrilateral(figure, strokeColor, isSelected) {
             const v = figure.vertices;
             const points = `${v.A.x},${v.A.y} ${v.B.x},${v.B.y} ${v.C.x},${v.C.y} ${v.D.x},${v.D.y}`;
-            let svg = `<polygon points="${points}" fill="none" stroke="${strokeColor}" stroke-width="2"/>`;
+            let svg = `<polygon points="${points}" fill="none" stroke="${strokeColor}" stroke-width="1.5" stroke-linejoin="round"/>`;
 
-            // Vertex points and labels
+            // Vertex markers and labels
             ['A', 'B', 'C', 'D'].forEach(vName => {
                 const vertex = v[vName];
                 const labelPos = this.getLabelPositionQuad(figure, vName);
-                svg += `<circle cx="${vertex.x}" cy="${vertex.y}" r="6" fill="#f97316" class="cursor-grab" data-vertex="${vName}"/>`;
-                svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="#f97316" font-size="16" font-weight="bold" font-style="italic" text-anchor="middle" dominant-baseline="middle">${vertex.label || vName}</text>`;
+                svg += this.renderVertexMarker(vertex.x, vertex.y, vName, isSelected);
+                svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${this.colors.label}" font-size="14" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label">${vertex.label || vName}</text>`;
             });
 
             return svg;
         },
 
         renderCircle(figure, isSelected) {
-            const strokeColor = isSelected ? '#a855f7' : '#5a9fcf';
-            let svg = `<circle cx="${figure.center.x}" cy="${figure.center.y}" r="${figure.radius}" fill="none" stroke="${strokeColor}" stroke-width="2"/>`;
+            const strokeColor = isSelected ? this.colors.shapeStrokeSelected : this.colors.circleStroke;
+            let svg = `<circle cx="${figure.center.x}" cy="${figure.center.y}" r="${figure.radius}" fill="none" stroke="${strokeColor}" stroke-width="1.5"/>`;
 
-            // Center point and label
-            svg += `<circle cx="${figure.center.x}" cy="${figure.center.y}" r="4" fill="#f97316" class="cursor-grab"/>`;
-            svg += `<text x="${figure.center.x + 12}" y="${figure.center.y - 12}" fill="#f97316" font-size="14" font-weight="bold">${figure.centerLabel || 'O'}</text>`;
+            // Center marker and label
+            svg += this.renderVertexMarker(figure.center.x, figure.center.y, 'center', isSelected);
+            svg += `<text x="${figure.center.x}" y="${figure.center.y + 18}" fill="${this.colors.auxiliaryLabel}" font-size="14" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label">${figure.centerLabel || 'O'}</text>`;
 
             return svg;
         },
 
-        renderStereometry(figure, strokeColor) {
+        renderStereometry(figure, strokeColor, isSelected) {
             let svg = '';
 
             if (figure.edges && figure.vertices) {
@@ -864,7 +891,7 @@ function geometryEditor() {
                     const from = figure.vertices[edge.from];
                     const to = figure.vertices[edge.to];
                     if (from && to) {
-                        svg += `<line x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="5,5"/>`;
+                        svg += `<line x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}" stroke="${this.colors.hiddenEdge}" stroke-width="1" stroke-dasharray="6,4"/>`;
                     }
                 });
 
@@ -873,16 +900,17 @@ function geometryEditor() {
                     const from = figure.vertices[edge.from];
                     const to = figure.vertices[edge.to];
                     if (from && to) {
-                        svg += `<line x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}" stroke="${strokeColor}" stroke-width="2"/>`;
+                        svg += `<line x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}" stroke="${strokeColor}" stroke-width="1.5"/>`;
                     }
                 });
 
                 // Vertices
                 Object.entries(figure.vertices).forEach(([vName, vertex]) => {
                     const labelPos = this.getStereometryLabelPos(figure, vName);
-                    const color = vertex.visible !== false ? '#f97316' : '#6b7280';
-                    svg += `<circle cx="${vertex.x}" cy="${vertex.y}" r="5" fill="${color}" class="cursor-grab" data-vertex="${vName}"/>`;
-                    svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${color}" font-size="14" font-weight="bold" font-style="italic" text-anchor="middle" dominant-baseline="middle">${vertex.label || vName}</text>`;
+                    const isHidden = vertex.visible === false;
+                    const labelColor = isHidden ? this.colors.hiddenEdge : this.colors.label;
+                    svg += this.renderVertexMarker(vertex.x, vertex.y, vName, isSelected);
+                    svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${labelColor}" font-size="14" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label">${vertex.label || vName}</text>`;
                 });
             } else if (figure.stereometryType === 'cylinder') {
                 svg += this.renderCylinder(figure);
@@ -903,11 +931,11 @@ function geometryEditor() {
             const h = figure.height;
 
             return `
-                <path d="M ${cx - rx} ${cy} A ${rx} ${ry} 0 0 0 ${cx + rx} ${cy}" fill="none" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="5,5"/>
-                <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="#8b5cf6" stroke-width="2"/>
-                <line x1="${cx - rx}" y1="${cy}" x2="${cx - rx}" y2="${cy - h}" stroke="#8b5cf6" stroke-width="2"/>
-                <line x1="${cx + rx}" y1="${cy}" x2="${cx + rx}" y2="${cy - h}" stroke="#8b5cf6" stroke-width="2"/>
-                <ellipse cx="${cx}" cy="${cy - h}" rx="${rx}" ry="${ry}" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+                <path d="M ${cx - rx} ${cy} A ${rx} ${ry} 0 0 0 ${cx + rx} ${cy}" fill="none" stroke="${this.colors.hiddenEdge}" stroke-width="1" stroke-dasharray="6,4"/>
+                <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="${this.colors.shapeStroke}" stroke-width="1.5"/>
+                <line x1="${cx - rx}" y1="${cy}" x2="${cx - rx}" y2="${cy - h}" stroke="${this.colors.shapeStroke}" stroke-width="1.5"/>
+                <line x1="${cx + rx}" y1="${cy}" x2="${cx + rx}" y2="${cy - h}" stroke="${this.colors.shapeStroke}" stroke-width="1.5"/>
+                <ellipse cx="${cx}" cy="${cy - h}" rx="${rx}" ry="${ry}" fill="none" stroke="${this.colors.shapeStroke}" stroke-width="1.5"/>
             `;
         },
 
@@ -919,11 +947,11 @@ function geometryEditor() {
             const apex = figure.apex;
 
             return `
-                <path d="M ${cx - rx} ${cy} A ${rx} ${ry} 0 0 0 ${cx + rx} ${cy}" fill="none" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="5,5"/>
-                <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="#8b5cf6" stroke-width="2"/>
-                <line x1="${cx - rx}" y1="${cy}" x2="${apex.x}" y2="${apex.y}" stroke="#8b5cf6" stroke-width="2"/>
-                <line x1="${cx + rx}" y1="${cy}" x2="${apex.x}" y2="${apex.y}" stroke="#8b5cf6" stroke-width="2"/>
-                <circle cx="${apex.x}" cy="${apex.y}" r="5" fill="#f97316" class="cursor-grab"/>
+                <path d="M ${cx - rx} ${cy} A ${rx} ${ry} 0 0 0 ${cx + rx} ${cy}" fill="none" stroke="${this.colors.hiddenEdge}" stroke-width="1" stroke-dasharray="6,4"/>
+                <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="${this.colors.shapeStroke}" stroke-width="1.5"/>
+                <line x1="${cx - rx}" y1="${cy}" x2="${apex.x}" y2="${apex.y}" stroke="${this.colors.shapeStroke}" stroke-width="1.5"/>
+                <line x1="${cx + rx}" y1="${cy}" x2="${apex.x}" y2="${apex.y}" stroke="${this.colors.shapeStroke}" stroke-width="1.5"/>
+                ${this.renderVertexMarker(apex.x, apex.y, 'apex', false)}
             `;
         },
 
@@ -934,9 +962,9 @@ function geometryEditor() {
             const ry = r * 0.3;
 
             return `
-                <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#8b5cf6" stroke-width="2"/>
-                <path d="M ${cx - r} ${cy} A ${r} ${ry} 0 0 0 ${cx + r} ${cy}" fill="none" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="5,5"/>
-                <ellipse cx="${cx}" cy="${cy}" rx="${r}" ry="${ry}" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+                <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${this.colors.shapeStroke}" stroke-width="1.5"/>
+                <path d="M ${cx - r} ${cy} A ${r} ${ry} 0 0 0 ${cx + r} ${cy}" fill="none" stroke="${this.colors.hiddenEdge}" stroke-width="1" stroke-dasharray="6,4"/>
+                <ellipse cx="${cx}" cy="${cy}" rx="${r}" ry="${ry}" fill="none" stroke="${this.colors.shapeStroke}" stroke-width="1.5"/>
                 <circle cx="${cx}" cy="${cy}" r="4" fill="#f97316"/>
             `;
         },
