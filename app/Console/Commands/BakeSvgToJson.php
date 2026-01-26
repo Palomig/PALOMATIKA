@@ -163,7 +163,7 @@ class BakeSvgToJson extends Command
                 $type = $zadanie['type'] ?? '';
 
                 // Only process matching types and statements
-                if (!in_array($type, ['matching', 'matching_signs', 'matching_4', 'statements'])) {
+                if (!in_array($type, ['matching', 'matching_signs', 'matching_4', 'statements', 'graph_statements'])) {
                     continue;
                 }
 
