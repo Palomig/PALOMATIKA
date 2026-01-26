@@ -198,7 +198,7 @@
                                @click.stop="selectFigure(figure)">
 
                                 {{-- Triangle --}}
-                                <g x-show="figure.type === 'triangle'">
+                                <g :style="figure.type === 'triangle' ? '' : 'display: none'">
                                         {{-- Main shape --}}
                                         <polygon :points="getTrianglePoints(figure)"
                                                  fill="none"
@@ -326,7 +326,7 @@
                                     </g>
 
                                 {{-- Circle --}}
-                                <g x-show="figure.type === 'circle'">
+                                <g :style="figure.type === 'circle' ? '' : 'display: none'">
                                         <circle :cx="figure.center.x" :cy="figure.center.y" :r="figure.radius"
                                                 fill="none"
                                                 :stroke="selectedFigure && selectedFigure.id === figure.id ? '#a855f7' : '#5a9fcf'"
@@ -441,7 +441,7 @@
                                 </g>
 
                                 {{-- Quadrilateral --}}
-                                <g x-show="figure.type === 'quadrilateral'">
+                                <g :style="figure.type === 'quadrilateral' ? '' : 'display: none'">
                                         <polygon :points="getQuadrilateralPoints(figure)"
                                                  fill="none"
                                                  :stroke="selectedFigure && selectedFigure.id === figure.id ? '#a855f7' : '#8b5cf6'"
@@ -463,7 +463,7 @@
                                 </g>
 
                                 {{-- Stereometry figures --}}
-                                <g x-show="figure.type === 'stereometry'">
+                                <g :style="figure.type === 'stereometry' ? '' : 'display: none'">
                                         {{-- Polyhedra (cube, prism, pyramid) --}}
                                         <template x-if="figure.edges">
                                             <g>
