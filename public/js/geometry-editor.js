@@ -881,7 +881,7 @@ function geometryEditor() {
             circleStroke: '#5a9fcf',     // Окружности
             auxiliaryLine: '#5a9fcf',    // Вспомогательные линии (пунктир)
             angleArc: '#d4a855',         // Дуги углов (золотой)
-            angleArc2: '#a855d4',        // Дуги углов второй группы (фиолетовый)
+            angleArc2: '#5a9fcf',        // Дуги углов второй группы (голубой, как Claude Code)
             angleArc3: '#55d4a8',        // Дуги углов третьей группы (бирюзовый)
             vertexMarker: '#7eb8da',     // Маркеры вершин
             label: '#c8dce8',            // Подписи вершин
@@ -1052,11 +1052,11 @@ function geometryEditor() {
                     if (isRightAngle) {
                         // Прямой угол - квадратик
                         svg += `<path d="${this.getRightAnglePath(figure, vName)}"
-                                fill="none" stroke="${color}" stroke-width="1.2"/>`;
+                                fill="none" stroke="${color}" stroke-width="1.5"/>`;
                     } else {
                         // Обычная дуга
                         svg += `<path d="${this.getAngleArc(figure, vName)}"
-                                fill="none" stroke="${color}" stroke-width="1.2"/>`;
+                                fill="none" stroke="${color}" stroke-width="1.5"/>`;
                     }
                 }
 
@@ -1410,10 +1410,10 @@ function geometryEditor() {
                 if (angleData.showArc) {
                     if (isRightAngle) {
                         svg += `<path d="${window.rightAnglePath(vertex, p1, p2, 12)}"
-                                fill="none" stroke="${color}" stroke-width="1.2"/>`;
+                                fill="none" stroke="${color}" stroke-width="1.5"/>`;
                     } else {
-                        svg += `<path d="${window.makeAngleArc(vertex, p1, p2, 25)}"
-                                fill="none" stroke="${color}" stroke-width="1.2"/>`;
+                        svg += `<path d="${window.makeAngleArc(vertex, p1, p2, 20)}"
+                                fill="none" stroke="${color}" stroke-width="1.5"/>`;
                     }
                 }
 
@@ -1739,7 +1739,7 @@ function geometryEditor() {
                 vertex = v.C; p1 = v.A; p2 = v.B;
             }
 
-            return window.makeAngleArc(vertex, p1, p2, 25);
+            return window.makeAngleArc(vertex, p1, p2, 20);
         },
 
         getRightAnglePath(figure, vertexName) {
@@ -2527,11 +2527,12 @@ function geometryEditor() {
         generateSvg() {
             if (this.figures.length === 0) return '';
 
-            // Стандартный viewBox как на страницах тем
+            // Стандартный viewBox как в Claude Code
             const targetWidth = 220;
             const targetHeight = 160;
+            const padding = 15; // Отступ для меток
 
-            // Вычисляем bounding box всех фигур
+            // 1. Вычисляем bounding box всех фигур в координатах редактора
             let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
 
             this.figures.forEach(figure => {
@@ -2542,8 +2543,7 @@ function geometryEditor() {
                 maxY = Math.max(maxY, bounds.maxY);
             });
 
-            // Добавляем padding для подписей (20px)
-            const padding = 20;
+            // Добавляем padding
             minX -= padding;
             minY -= padding;
             maxX += padding;
@@ -2552,35 +2552,35 @@ function geometryEditor() {
             const contentWidth = maxX - minX;
             const contentHeight = maxY - minY;
 
-            // Вычисляем масштаб чтобы вписать в targetWidth x targetHeight
-            const scale = Math.min(targetWidth / contentWidth, targetHeight / contentHeight);
+            // 2. Вычисляем параметры трансформации
+            const scale = Math.min(
+                (targetWidth - 2 * padding) / contentWidth,
+                (targetHeight - 2 * padding) / contentHeight
+            );
+            const offsetX = padding + (targetWidth - 2 * padding - contentWidth * scale) / 2;
+            const offsetY = padding + (targetHeight - 2 * padding - contentHeight * scale) / 2;
 
-            // Смещение для центрирования
-            const offsetX = (targetWidth - contentWidth * scale) / 2 - minX * scale;
-            const offsetY = (targetHeight - contentHeight * scale) / 2 - minY * scale;
-
-            // Генерируем SVG
-            let svgContent = '';
-
-            // Фон
-            svgContent += `<rect width="100%" height="100%" fill="${this.colors.background}"/>`;
-
-            // Рендерим фигуры с масштабированием
-            this.figures.forEach(figure => {
-                svgContent += `<g transform="translate(${offsetX}, ${offsetY}) scale(${scale})">`;
-
-                if (figure.type === 'triangle') {
-                    svgContent += this.renderTriangleForExport(figure);
-                } else if (figure.type === 'quadrilateral') {
-                    svgContent += this.renderQuadrilateralForExport(figure);
-                } else if (figure.type === 'circle') {
-                    svgContent += this.renderCircleForExport(figure);
-                }
-
-                svgContent += '</g>';
+            // 3. Функция для пересчёта координат (замыкание)
+            const transformPoint = (p) => ({
+                x: offsetX + (p.x - minX) * scale,
+                y: offsetY + (p.y - minY) * scale
             });
 
-            return `<svg viewBox="0 0 ${targetWidth} ${targetHeight}" class="w-full max-w-[250px] h-auto mx-auto">${svgContent}</svg>`;
+            // 4. Генерируем SVG БЕЗ transform
+            let svgContent = '';
+            svgContent += `<rect width="100%" height="100%" fill="${this.colors.background}"/>\n`;
+
+            this.figures.forEach(figure => {
+                if (figure.type === 'triangle') {
+                    svgContent += this.renderTriangleForExportTransformed(figure, transformPoint, scale);
+                } else if (figure.type === 'quadrilateral') {
+                    svgContent += this.renderQuadrilateralForExportTransformed(figure, transformPoint, scale);
+                } else if (figure.type === 'circle') {
+                    svgContent += this.renderCircleForExportTransformed(figure, transformPoint, scale);
+                }
+            });
+
+            return `<svg viewBox="0 0 ${targetWidth} ${targetHeight}" class="w-full max-w-[250px] h-auto mx-auto">\n${svgContent}</svg>`;
         },
 
         // Рендер маркера вершины для экспорта (крестик + круг)
@@ -2677,6 +2677,593 @@ function geometryEditor() {
             }
 
             return svg;
+        },
+
+        // ==================== Transformed Export Methods (без transform) ====================
+
+        /**
+         * Рендер треугольника с пересчитанными координатами (без transform)
+         * Координаты пересчитываются напрямую в viewBox
+         */
+        renderTriangleForExportTransformed(figure, transformPoint, scale) {
+            const v = figure.vertices;
+
+            // Пересчитываем все точки
+            const A = transformPoint(v.A);
+            const B = transformPoint(v.B);
+            const C = transformPoint(v.C);
+
+            // Центр для расчёта позиций меток
+            const center = {
+                x: (A.x + B.x + C.x) / 3,
+                y: (A.y + B.y + C.y) / 3
+            };
+
+            const points = `${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`;
+            let svg = '';
+
+            // Основной полигон (stroke-width="2" как в Claude Code)
+            svg += `  <polygon points="${points}" fill="none" stroke="${this.colors.shapeStroke}" stroke-width="2"/>\n`;
+
+            // Вспомогательные линии (трансформированные)
+            svg += this.renderTriangleAuxiliaryLinesTransformed(figure, transformPoint);
+
+            // Дуги углов (трансформированные)
+            svg += this.renderTriangleAnglesTransformed(figure, A, B, C);
+
+            // Маркеры равенства (трансформированные)
+            svg += this.renderTriangleEqualityMarksTransformed(figure, transformPoint);
+
+            // Маркеры вершин (крестик + круг)
+            svg += this.renderVertexMarkerForExport(A.x, A.y);
+            svg += this.renderVertexMarkerForExport(B.x, B.y);
+            svg += this.renderVertexMarkerForExport(C.x, C.y);
+
+            // Подписи вершин
+            const labelA = this.labelPosFromCenter(A, center, 18);
+            const labelB = this.labelPosFromCenter(B, center, 18);
+            const labelC = this.labelPosFromCenter(C, center, 18);
+
+            svg += this.labelText(v.A.label || 'A', labelA);
+            svg += this.labelText(v.B.label || 'B', labelB);
+            svg += this.labelText(v.C.label || 'C', labelC);
+
+            return svg;
+        },
+
+        /**
+         * Рендер четырёхугольника с пересчитанными координатами (без transform)
+         */
+        renderQuadrilateralForExportTransformed(figure, transformPoint, scale) {
+            const v = figure.vertices;
+
+            // Пересчитываем все точки
+            const A = transformPoint(v.A);
+            const B = transformPoint(v.B);
+            const C = transformPoint(v.C);
+            const D = transformPoint(v.D);
+
+            // Центр для расчёта позиций меток
+            const center = {
+                x: (A.x + B.x + C.x + D.x) / 4,
+                y: (A.y + B.y + C.y + D.y) / 4
+            };
+
+            const points = `${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`;
+            let svg = '';
+
+            // Основной полигон (stroke-width="2" как в Claude Code)
+            svg += `  <polygon points="${points}" fill="none" stroke="${this.colors.shapeStroke}" stroke-width="2"/>\n`;
+
+            // Диагонали и вспомогательные линии (трансформированные)
+            svg += this.renderQuadDiagonalsTransformed(figure, transformPoint);
+
+            // Дуги углов (трансформированные)
+            svg += this.renderQuadAnglesTransformed(figure, A, B, C, D);
+
+            // Маркеры равенства (трансформированные)
+            svg += this.renderQuadEqualityMarksTransformed(figure, transformPoint);
+
+            // Маркеры вершин (крестик + круг)
+            svg += this.renderVertexMarkerForExport(A.x, A.y);
+            svg += this.renderVertexMarkerForExport(B.x, B.y);
+            svg += this.renderVertexMarkerForExport(C.x, C.y);
+            svg += this.renderVertexMarkerForExport(D.x, D.y);
+
+            // Подписи вершин
+            const labelA = this.labelPosFromCenter(A, center, 18);
+            const labelB = this.labelPosFromCenter(B, center, 18);
+            const labelC = this.labelPosFromCenter(C, center, 18);
+            const labelD = this.labelPosFromCenter(D, center, 18);
+
+            svg += this.labelText(v.A.label || 'A', labelA);
+            svg += this.labelText(v.B.label || 'B', labelB);
+            svg += this.labelText(v.C.label || 'C', labelC);
+            svg += this.labelText(v.D.label || 'D', labelD);
+
+            return svg;
+        },
+
+        /**
+         * Рендер окружности с пересчитанными координатами
+         */
+        renderCircleForExportTransformed(figure, transformPoint, scale) {
+            const c = transformPoint(figure.center);
+            const r = figure.radius * scale;
+
+            let svg = '';
+            svg += `  <circle cx="${c.x}" cy="${c.y}" r="${r}" fill="none" stroke="${this.colors.circleStroke}" stroke-width="2"/>\n`;
+            svg += this.renderVertexMarkerForExport(c.x, c.y);
+
+            // Хорды (трансформированные)
+            if (figure.chords) {
+                figure.chords.forEach(chord => {
+                    const p1 = transformPoint(chord.point1);
+                    const p2 = transformPoint(chord.point2);
+                    svg += `  <line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="${this.colors.shapeStroke}" stroke-width="2"/>\n`;
+                });
+            }
+
+            return svg;
+        },
+
+        /**
+         * Рендер дуг углов треугольника (с пересчитанными координатами)
+         */
+        renderTriangleAnglesTransformed(figure, A, B, C) {
+            let svg = '';
+            const angles = figure.angles || {};
+
+            // Цвета для равных/разных углов
+            const arcColors = [this.colors.angleArc, this.colors.angleArc2, this.colors.angleArc3];
+
+            // Вычисляем значения углов для определения равных
+            const angleValues = {
+                A: Math.round(this.calculateAngleFromPoints(A, C, B)),
+                B: Math.round(this.calculateAngleFromPoints(B, A, C)),
+                C: Math.round(this.calculateAngleFromPoints(C, A, B))
+            };
+
+            // Назначаем цвета (равные углы = одинаковый цвет)
+            const usedColors = {};
+            const angleColorMap = {};
+
+            ['A', 'B', 'C'].forEach(vName => {
+                const val = angleValues[vName];
+                if (usedColors[val] !== undefined) {
+                    angleColorMap[vName] = usedColors[val];
+                } else {
+                    const colorIdx = Object.keys(usedColors).length;
+                    usedColors[val] = arcColors[colorIdx % arcColors.length];
+                    angleColorMap[vName] = usedColors[val];
+                }
+            });
+
+            // Рендерим дуги
+            const vertexMap = { A, B, C };
+            const adjacentMap = {
+                A: { p1: C, p2: B },
+                B: { p1: A, p2: C },
+                C: { p1: A, p2: B }
+            };
+
+            ['A', 'B', 'C'].forEach(vName => {
+                const angleData = angles[vName];
+                if (!angleData || !angleData.showArc) return;
+
+                const vertex = vertexMap[vName];
+                const { p1, p2 } = adjacentMap[vName];
+                const color = angleColorMap[vName];
+                const isRight = Math.abs(angleValues[vName] - 90) < 2;
+
+                if (isRight) {
+                    // Прямой угол - квадратик
+                    const path = this.rightAnglePathFromPoints(vertex, p1, p2, 12);
+                    svg += `  <path d="${path}" fill="none" stroke="${color}" stroke-width="1.5"/>\n`;
+                } else {
+                    // Обычная дуга (радиус 20 как в Claude Code)
+                    const arc = this.makeAngleArcFromPoints(vertex, p1, p2, 20);
+                    svg += `  <path d="${arc}" fill="none" stroke="${color}" stroke-width="1.5"/>\n`;
+                }
+
+                // Значение угла (если включено)
+                if (angleData.showValue) {
+                    const labelPos = this.angleLabelPosFromPoints(vertex, p1, p2, 35);
+                    svg += `  <text x="${labelPos.x}" y="${labelPos.y}" fill="${color}" font-size="11" font-family="'Times New Roman', serif" font-weight="500" text-anchor="middle" dominant-baseline="middle">${angleValues[vName]}°</text>\n`;
+                }
+            });
+
+            return svg;
+        },
+
+        /**
+         * Рендер дуг углов четырёхугольника (с пересчитанными координатами)
+         */
+        renderQuadAnglesTransformed(figure, A, B, C, D) {
+            let svg = '';
+            const angles = figure.angles || {};
+
+            const arcColors = [this.colors.angleArc, this.colors.angleArc2, this.colors.angleArc3, '#d455a8'];
+
+            const vertexMap = { A, B, C, D };
+            const adjacentMap = {
+                A: { p1: D, p2: B },
+                B: { p1: A, p2: C },
+                C: { p1: B, p2: D },
+                D: { p1: C, p2: A }
+            };
+
+            // Вычисляем значения углов
+            const angleValues = {};
+            ['A', 'B', 'C', 'D'].forEach(vName => {
+                const vertex = vertexMap[vName];
+                const { p1, p2 } = adjacentMap[vName];
+                angleValues[vName] = Math.round(this.calculateAngleFromPoints(vertex, p1, p2));
+            });
+
+            // Назначаем цвета
+            const usedColors = {};
+            const angleColorMap = {};
+
+            ['A', 'B', 'C', 'D'].forEach(vName => {
+                const val = angleValues[vName];
+                if (usedColors[val] !== undefined) {
+                    angleColorMap[vName] = usedColors[val];
+                } else {
+                    const colorIdx = Object.keys(usedColors).length;
+                    usedColors[val] = arcColors[colorIdx % arcColors.length];
+                    angleColorMap[vName] = usedColors[val];
+                }
+            });
+
+            // Рендерим дуги
+            ['A', 'B', 'C', 'D'].forEach(vName => {
+                const angleData = angles[vName];
+                if (!angleData || !angleData.showArc) return;
+
+                const vertex = vertexMap[vName];
+                const { p1, p2 } = adjacentMap[vName];
+                const color = angleColorMap[vName];
+                const isRight = Math.abs(angleValues[vName] - 90) < 2;
+
+                if (isRight) {
+                    const path = this.rightAnglePathFromPoints(vertex, p1, p2, 12);
+                    svg += `  <path d="${path}" fill="none" stroke="${color}" stroke-width="1.5"/>\n`;
+                } else {
+                    const arc = this.makeAngleArcFromPoints(vertex, p1, p2, 20);
+                    svg += `  <path d="${arc}" fill="none" stroke="${color}" stroke-width="1.5"/>\n`;
+                }
+
+                // Значение угла (если включено)
+                if (angleData.showValue) {
+                    const labelPos = this.angleLabelPosFromPoints(vertex, p1, p2, 35);
+                    svg += `  <text x="${labelPos.x}" y="${labelPos.y}" fill="${color}" font-size="11" font-family="'Times New Roman', serif" font-weight="500" text-anchor="middle" dominant-baseline="middle">${angleValues[vName]}°</text>\n`;
+                }
+            });
+
+            return svg;
+        },
+
+        /**
+         * Рендер вспомогательных линий треугольника (трансформированные)
+         */
+        renderTriangleAuxiliaryLinesTransformed(figure, transformPoint) {
+            let svg = '';
+            const auxLines = figure.auxiliaryLines || [];
+
+            auxLines.forEach(line => {
+                const p1 = transformPoint(line.point1);
+                const p2 = transformPoint(line.point2);
+                const dashArray = line.dashed ? '6,4' : 'none';
+                svg += `  <line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="${this.colors.auxiliaryLine}" stroke-width="1.5" stroke-dasharray="${dashArray}"/>\n`;
+
+                // Точка на линии (если есть)
+                if (line.midpoint) {
+                    const mp = transformPoint(line.midpoint);
+                    svg += this.renderVertexMarkerForExport(mp.x, mp.y);
+                    if (line.midpointLabel) {
+                        const center = { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 };
+                        const labelPos = this.labelPosFromCenter(mp, center, 15);
+                        svg += this.labelText(line.midpointLabel, labelPos, this.colors.auxiliaryLabel);
+                    }
+                }
+            });
+
+            return svg;
+        },
+
+        /**
+         * Рендер диагоналей и вспомогательных линий четырёхугольника (трансформированные)
+         */
+        renderQuadDiagonalsTransformed(figure, transformPoint) {
+            let svg = '';
+
+            // Диагонали
+            if (figure.showDiagonals) {
+                const v = figure.vertices;
+                const A = transformPoint(v.A);
+                const B = transformPoint(v.B);
+                const C = transformPoint(v.C);
+                const D = transformPoint(v.D);
+
+                svg += `  <line x1="${A.x}" y1="${A.y}" x2="${C.x}" y2="${C.y}" stroke="${this.colors.auxiliaryLine}" stroke-width="1.5" stroke-dasharray="6,4"/>\n`;
+                svg += `  <line x1="${B.x}" y1="${B.y}" x2="${D.x}" y2="${D.y}" stroke="${this.colors.auxiliaryLine}" stroke-width="1.5" stroke-dasharray="6,4"/>\n`;
+            }
+
+            // Другие вспомогательные линии
+            const auxLines = figure.auxiliaryLines || [];
+            auxLines.forEach(line => {
+                const p1 = transformPoint(line.point1);
+                const p2 = transformPoint(line.point2);
+                const dashArray = line.dashed !== false ? '6,4' : 'none';
+                svg += `  <line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="${this.colors.auxiliaryLine}" stroke-width="1.5" stroke-dasharray="${dashArray}"/>\n`;
+            });
+
+            return svg;
+        },
+
+        /**
+         * Рендер маркеров равенства треугольника (трансформированные)
+         */
+        renderTriangleEqualityMarksTransformed(figure, transformPoint) {
+            let svg = '';
+            const equalGroups = figure.equalGroups || {};
+            const sideGroups = equalGroups.sides || [];
+
+            const groupColors = ['#3b82f6', '#f59e0b', '#ef4444'];
+
+            sideGroups.forEach((group, idx) => {
+                const color = groupColors[idx % groupColors.length];
+                const tickCount = group.group;
+
+                group.sides.forEach(side => {
+                    const p1 = transformPoint(figure.vertices[side[0]]);
+                    const p2 = transformPoint(figure.vertices[side[1]]);
+
+                    if (tickCount === 1) {
+                        const tick = this.getEqualityTickFromPoints(p1, p2);
+                        svg += `  <line x1="${tick.x1}" y1="${tick.y1}" x2="${tick.x2}" y2="${tick.y2}" stroke="${color}" stroke-width="2"/>\n`;
+                    } else if (tickCount === 2) {
+                        const ticks = this.getDoubleEqualityTickFromPoints(p1, p2);
+                        svg += `  <line x1="${ticks.tick1.x1}" y1="${ticks.tick1.y1}" x2="${ticks.tick1.x2}" y2="${ticks.tick1.y2}" stroke="${color}" stroke-width="2"/>\n`;
+                        svg += `  <line x1="${ticks.tick2.x1}" y1="${ticks.tick2.y1}" x2="${ticks.tick2.x2}" y2="${ticks.tick2.y2}" stroke="${color}" stroke-width="2"/>\n`;
+                    } else if (tickCount === 3) {
+                        const ticks = this.getTripleEqualityTickFromPoints(p1, p2);
+                        svg += `  <line x1="${ticks.tick1.x1}" y1="${ticks.tick1.y1}" x2="${ticks.tick1.x2}" y2="${ticks.tick1.y2}" stroke="${color}" stroke-width="2"/>\n`;
+                        svg += `  <line x1="${ticks.tick2.x1}" y1="${ticks.tick2.y1}" x2="${ticks.tick2.x2}" y2="${ticks.tick2.y2}" stroke="${color}" stroke-width="2"/>\n`;
+                        svg += `  <line x1="${ticks.tick3.x1}" y1="${ticks.tick3.y1}" x2="${ticks.tick3.x2}" y2="${ticks.tick3.y2}" stroke="${color}" stroke-width="2"/>\n`;
+                    }
+                });
+            });
+
+            return svg;
+        },
+
+        /**
+         * Рендер маркеров равенства четырёхугольника (трансформированные)
+         */
+        renderQuadEqualityMarksTransformed(figure, transformPoint) {
+            let svg = '';
+            const equalGroups = figure.equalGroups || {};
+            const sideGroups = equalGroups.sides || [];
+
+            const groupColors = ['#3b82f6', '#f59e0b', '#ef4444', '#10b981'];
+
+            sideGroups.forEach((group, idx) => {
+                const color = groupColors[idx % groupColors.length];
+                const tickCount = group.group;
+
+                group.sides.forEach(side => {
+                    const p1 = transformPoint(figure.vertices[side[0]]);
+                    const p2 = transformPoint(figure.vertices[side[1]]);
+
+                    if (tickCount === 1) {
+                        const tick = this.getEqualityTickFromPoints(p1, p2);
+                        svg += `  <line x1="${tick.x1}" y1="${tick.y1}" x2="${tick.x2}" y2="${tick.y2}" stroke="${color}" stroke-width="2"/>\n`;
+                    } else if (tickCount === 2) {
+                        const ticks = this.getDoubleEqualityTickFromPoints(p1, p2);
+                        svg += `  <line x1="${ticks.tick1.x1}" y1="${ticks.tick1.y1}" x2="${ticks.tick1.x2}" y2="${ticks.tick1.y2}" stroke="${color}" stroke-width="2"/>\n`;
+                        svg += `  <line x1="${ticks.tick2.x1}" y1="${ticks.tick2.y1}" x2="${ticks.tick2.x2}" y2="${ticks.tick2.y2}" stroke="${color}" stroke-width="2"/>\n`;
+                    }
+                });
+            });
+
+            return svg;
+        },
+
+        // ==================== Helper Methods for Transformed Export ====================
+
+        /**
+         * Позиция метки относительно центра
+         */
+        labelPosFromCenter(point, center, distance = 15) {
+            const dx = point.x - center.x;
+            const dy = point.y - center.y;
+            const len = Math.sqrt(dx * dx + dy * dy);
+
+            if (len === 0) {
+                return { x: point.x, y: point.y - distance };
+            }
+
+            return {
+                x: point.x + (dx / len) * distance,
+                y: point.y + (dy / len) * distance
+            };
+        },
+
+        /**
+         * Генерация текстовой метки
+         */
+        labelText(text, pos, color = null, size = 14) {
+            color = color || this.colors.label;
+            return `  <text x="${pos.x}" y="${pos.y}" fill="${color}" font-size="${size}" ` +
+                   `font-family="'Times New Roman', serif" font-style="italic" font-weight="500" ` +
+                   `text-anchor="middle" dominant-baseline="middle" class="geo-label">${text}</text>\n`;
+        },
+
+        /**
+         * Вычисление угла из трёх точек (в градусах)
+         */
+        calculateAngleFromPoints(vertex, p1, p2) {
+            const v1 = { x: p1.x - vertex.x, y: p1.y - vertex.y };
+            const v2 = { x: p2.x - vertex.x, y: p2.y - vertex.y };
+
+            const dot = v1.x * v2.x + v1.y * v2.y;
+            const len1 = Math.sqrt(v1.x * v1.x + v1.y * v1.y);
+            const len2 = Math.sqrt(v2.x * v2.x + v2.y * v2.y);
+
+            const cos = dot / (len1 * len2);
+            return Math.acos(Math.max(-1, Math.min(1, cos))) * 180 / Math.PI;
+        },
+
+        /**
+         * Дуга угла из трёх точек (уже в viewBox координатах)
+         */
+        makeAngleArcFromPoints(vertex, point1, point2, radius) {
+            const angle1 = Math.atan2(point1.y - vertex.y, point1.x - vertex.x);
+            const angle2 = Math.atan2(point2.y - vertex.y, point2.x - vertex.x);
+
+            const x1 = vertex.x + radius * Math.cos(angle1);
+            const y1 = vertex.y + radius * Math.sin(angle1);
+            const x2 = vertex.x + radius * Math.cos(angle2);
+            const y2 = vertex.y + radius * Math.sin(angle2);
+
+            let angleDiff = angle2 - angle1;
+            while (angleDiff > Math.PI) angleDiff -= 2 * Math.PI;
+            while (angleDiff < -Math.PI) angleDiff += 2 * Math.PI;
+
+            const sweep = angleDiff > 0 ? 1 : 0;
+
+            return `M ${x1} ${y1} A ${radius} ${radius} 0 0 ${sweep} ${x2} ${y2}`;
+        },
+
+        /**
+         * Квадратик прямого угла из трёх точек
+         */
+        rightAnglePathFromPoints(vertex, p1, p2, size = 12) {
+            const angle1 = Math.atan2(p1.y - vertex.y, p1.x - vertex.x);
+            const angle2 = Math.atan2(p2.y - vertex.y, p2.x - vertex.x);
+
+            const c1 = {
+                x: vertex.x + size * Math.cos(angle1),
+                y: vertex.y + size * Math.sin(angle1)
+            };
+            const c2 = {
+                x: vertex.x + size * Math.cos(angle2),
+                y: vertex.y + size * Math.sin(angle2)
+            };
+            const diag = {
+                x: c1.x + size * Math.cos(angle2),
+                y: c1.y + size * Math.sin(angle2)
+            };
+
+            return `M ${c1.x} ${c1.y} L ${diag.x} ${diag.y} L ${c2.x} ${c2.y}`;
+        },
+
+        /**
+         * Позиция метки угла из трёх точек
+         */
+        angleLabelPosFromPoints(vertex, p1, p2, labelRadius, bias = 0.5) {
+            const angle1 = Math.atan2(p1.y - vertex.y, p1.x - vertex.x);
+            const angle2 = Math.atan2(p2.y - vertex.y, p2.x - vertex.x);
+
+            let diff = angle2 - angle1;
+            while (diff > Math.PI) diff -= 2 * Math.PI;
+            while (diff < -Math.PI) diff += 2 * Math.PI;
+
+            const midAngle = angle1 + diff * bias;
+
+            return {
+                x: vertex.x + labelRadius * Math.cos(midAngle),
+                y: vertex.y + labelRadius * Math.sin(midAngle)
+            };
+        },
+
+        /**
+         * Маркер равенства из двух точек
+         */
+        getEqualityTickFromPoints(p1, p2, t = 0.5, length = 8) {
+            const mid = {
+                x: p1.x + (p2.x - p1.x) * t,
+                y: p1.y + (p2.y - p1.y) * t
+            };
+            const dx = p2.x - p1.x;
+            const dy = p2.y - p1.y;
+            const len = Math.sqrt(dx * dx + dy * dy);
+            const nx = -dy / len;
+            const ny = dx / len;
+            const half = length / 2;
+            return {
+                x1: mid.x - nx * half,
+                y1: mid.y - ny * half,
+                x2: mid.x + nx * half,
+                y2: mid.y + ny * half
+            };
+        },
+
+        /**
+         * Двойной маркер равенства из двух точек
+         */
+        getDoubleEqualityTickFromPoints(p1, p2, t = 0.5, length = 8, gap = 4) {
+            const dx = p2.x - p1.x;
+            const dy = p2.y - p1.y;
+            const len = Math.sqrt(dx * dx + dy * dy);
+            const ux = dx / len;
+            const uy = dy / len;
+            const nx = -dy / len;
+            const ny = dx / len;
+            const mid = { x: p1.x + dx * t, y: p1.y + dy * t };
+            const half = length / 2;
+            const halfGap = gap / 2;
+            return {
+                tick1: {
+                    x1: mid.x - ux * halfGap - nx * half,
+                    y1: mid.y - uy * halfGap - ny * half,
+                    x2: mid.x - ux * halfGap + nx * half,
+                    y2: mid.y - uy * halfGap + ny * half
+                },
+                tick2: {
+                    x1: mid.x + ux * halfGap - nx * half,
+                    y1: mid.y + uy * halfGap - ny * half,
+                    x2: mid.x + ux * halfGap + nx * half,
+                    y2: mid.y + uy * halfGap + ny * half
+                }
+            };
+        },
+
+        /**
+         * Тройной маркер равенства из двух точек
+         */
+        getTripleEqualityTickFromPoints(p1, p2, t = 0.5, length = 8, gap = 4) {
+            const dx = p2.x - p1.x;
+            const dy = p2.y - p1.y;
+            const len = Math.sqrt(dx * dx + dy * dy);
+            const ux = dx / len;
+            const uy = dy / len;
+            const nx = -dy / len;
+            const ny = dx / len;
+            const mid = { x: p1.x + dx * t, y: p1.y + dy * t };
+            const half = length / 2;
+            return {
+                tick1: {
+                    x1: mid.x - ux * gap - nx * half,
+                    y1: mid.y - uy * gap - ny * half,
+                    x2: mid.x - ux * gap + nx * half,
+                    y2: mid.y - uy * gap + ny * half
+                },
+                tick2: {
+                    x1: mid.x - nx * half,
+                    y1: mid.y - ny * half,
+                    x2: mid.x + nx * half,
+                    y2: mid.y + ny * half
+                },
+                tick3: {
+                    x1: mid.x + ux * gap - nx * half,
+                    y1: mid.y + uy * gap - ny * half,
+                    x2: mid.x + ux * gap + nx * half,
+                    y2: mid.y + uy * gap + ny * half
+                }
+            };
         },
 
         exportSvg() {
