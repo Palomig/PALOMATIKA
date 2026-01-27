@@ -29,8 +29,8 @@
             <div class="p-5 {{ $hasVisual ? 'lg:flex lg:gap-6' : '' }}">
                 {{-- SVG или изображение --}}
                 @if($hasVisual)
-                    <div class="lg:w-80 lg:shrink-0 mb-4 lg:mb-0">
-                        <div class="bg-slate-900/50 rounded-lg p-3 flex items-center justify-center min-h-[200px] relative group">
+                    <div class="lg:w-[400px] lg:shrink-0 mb-4 lg:mb-0">
+                        <div class="bg-slate-900/50 rounded-lg p-4 flex items-center justify-center min-h-[220px] relative group">
                             @if($hasSvg)
                                 {{-- Предзаготовленный SVG из JSON --}}
                                 {!! $task['svg'] !!}
