@@ -2580,7 +2580,7 @@ function geometryEditor() {
                 }
             });
 
-            return `<svg viewBox="0 0 ${targetWidth} ${targetHeight}" class="w-full max-w-[250px] h-auto mx-auto">\n${svgContent}</svg>`;
+            return `<svg viewBox="0 0 ${targetWidth} ${targetHeight}" class="w-full max-w-[350px] h-auto mx-auto">\n${svgContent}</svg>`;
         },
 
         // Рендер маркера вершины для экспорта (крестик + круг)
