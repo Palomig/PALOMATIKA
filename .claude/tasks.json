@@ -1,0 +1,517 @@
+{
+  "project": {
+    "name": "PALOMATIKA",
+    "description": "EdTech SaaS платформа для подготовки к ОГЭ и ЕГЭ по математике",
+    "repository": "https://github.com/Palomig/PALOMATIKA",
+    "startDate": "2026-01-02",
+    "targetDate": "2026-03-01",
+    "productionUrl": "https://cw95865.tmweb.ru"
+  },
+  "phases": [
+    {
+      "id": "phase-mvp",
+      "name": "MVP",
+      "description": "Базовый функционал платформы",
+      "startDate": "2026-01-02",
+      "endDate": "2026-01-15",
+      "color": "#10b981"
+    },
+    {
+      "id": "phase-oge",
+      "name": "ОГЭ База",
+      "description": "Все 14 тем ОГЭ с заданиями",
+      "startDate": "2026-01-11",
+      "endDate": "2026-01-21",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "phase-ege",
+      "name": "ЕГЭ База",
+      "description": "Все 19 заданий ЕГЭ",
+      "startDate": "2026-01-20",
+      "endDate": "2026-02-10",
+      "color": "#8b5cf6"
+    },
+    {
+      "id": "phase-monetization",
+      "name": "Монетизация",
+      "description": "Интеграция оплаты, подписки",
+      "startDate": "2026-02-10",
+      "endDate": "2026-02-25",
+      "color": "#f59e0b"
+    },
+    {
+      "id": "phase-polish",
+      "name": "Полировка",
+      "description": "PWA, уведомления, админ-панель",
+      "startDate": "2026-02-25",
+      "endDate": "2026-03-01",
+      "color": "#ef4444"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "task-001",
+      "title": "Инициализация проекта Laravel",
+      "description": "Создание структуры проекта, настройка конфигов, первичный деплой",
+      "status": "done",
+      "priority": "critical",
+      "phase": "phase-mvp",
+      "createdAt": "2026-01-02T10:00:00Z",
+      "updatedAt": "2026-01-02T18:00:00Z",
+      "completedAt": "2026-01-02T18:00:00Z",
+      "tags": ["backend", "infrastructure"],
+      "subtasks": [
+        {"title": "Создать Laravel проект", "done": true},
+        {"title": "Настроить .env", "done": true},
+        {"title": "Создать миграции (15 шт)", "done": true},
+        {"title": "Создать модели (29 шт)", "done": true}
+      ]
+    },
+    {
+      "id": "task-002",
+      "title": "Авторизация и OAuth",
+      "description": "Email авторизация + Telegram OAuth через Login Widget",
+      "status": "done",
+      "priority": "critical",
+      "phase": "phase-mvp",
+      "createdAt": "2026-01-03T10:00:00Z",
+      "updatedAt": "2026-01-04T16:00:00Z",
+      "completedAt": "2026-01-04T16:00:00Z",
+      "tags": ["backend", "auth"],
+      "subtasks": [
+        {"title": "Laravel Sanctum настройка", "done": true},
+        {"title": "Telegram Login Widget", "done": true},
+        {"title": "Страницы login/register", "done": true},
+        {"title": "OAuth callback handlers", "done": true}
+      ]
+    },
+    {
+      "id": "task-003",
+      "title": "Тёмная тема (Dark Theme)",
+      "description": "Редизайн всех страниц в тёмную тему с coral акцентами",
+      "status": "done",
+      "priority": "high",
+      "phase": "phase-mvp",
+      "createdAt": "2026-01-04T10:00:00Z",
+      "updatedAt": "2026-01-05T20:00:00Z",
+      "completedAt": "2026-01-05T20:00:00Z",
+      "tags": ["frontend", "ui"],
+      "subtasks": [
+        {"title": "Цветовая палитра (dark, coral)", "done": true},
+        {"title": "Layout auth.blade.php", "done": true},
+        {"title": "Layout app.blade.php", "done": true},
+        {"title": "Layout teacher.blade.php", "done": true},
+        {"title": "Все студенческие страницы", "done": true}
+      ]
+    },
+    {
+      "id": "task-004",
+      "title": "API для мобильного приложения",
+      "description": "40+ REST API endpoints для всех функций платформы",
+      "status": "done",
+      "priority": "high",
+      "phase": "phase-mvp",
+      "createdAt": "2026-01-02T14:00:00Z",
+      "updatedAt": "2026-01-05T12:00:00Z",
+      "completedAt": "2026-01-05T12:00:00Z",
+      "tags": ["backend", "api"],
+      "subtasks": [
+        {"title": "AuthController (login, register, me)", "done": true},
+        {"title": "TopicController (темы, прогресс)", "done": true},
+        {"title": "TaskController (задания, попытки)", "done": true},
+        {"title": "ProgressController (статистика)", "done": true},
+        {"title": "BadgeController (достижения)", "done": true},
+        {"title": "LeaderboardController (рейтинги)", "done": true}
+      ]
+    },
+    {
+      "id": "task-005",
+      "title": "Геймификация (Лиги, Бейджи, Дуэли)",
+      "description": "Система мотивации: 6 лиг, 15+ достижений, дуэли между учениками",
+      "status": "done",
+      "priority": "medium",
+      "phase": "phase-mvp",
+      "createdAt": "2026-01-03T10:00:00Z",
+      "updatedAt": "2026-01-06T14:00:00Z",
+      "completedAt": "2026-01-06T14:00:00Z",
+      "tags": ["backend", "gamification"],
+      "subtasks": [
+        {"title": "LeagueSeeder (6 лиг)", "done": true},
+        {"title": "BadgeSeeder (15+ бейджей)", "done": true},
+        {"title": "DuelController", "done": true},
+        {"title": "Страница leaderboard", "done": true},
+        {"title": "Страница badges", "done": true}
+      ]
+    },
+    {
+      "id": "task-006",
+      "title": "Учительская панель",
+      "description": "Dashboard, список учеников, ДЗ, аналитика, заработок",
+      "status": "done",
+      "priority": "medium",
+      "phase": "phase-mvp",
+      "createdAt": "2026-01-03T12:00:00Z",
+      "updatedAt": "2026-01-07T18:00:00Z",
+      "completedAt": "2026-01-07T18:00:00Z",
+      "tags": ["frontend", "teacher"],
+      "subtasks": [
+        {"title": "teacher/dashboard.blade.php", "done": true},
+        {"title": "teacher/students.blade.php", "done": true},
+        {"title": "teacher/homework.blade.php", "done": true},
+        {"title": "teacher/analytics.blade.php", "done": true},
+        {"title": "teacher/earnings.blade.php", "done": true}
+      ]
+    },
+    {
+      "id": "task-007",
+      "title": "TaskDataService — единый источник данных",
+      "description": "JSON-based хранение заданий, централизованный сервис доступа",
+      "status": "done",
+      "priority": "critical",
+      "phase": "phase-oge",
+      "createdAt": "2026-01-11T10:00:00Z",
+      "updatedAt": "2026-01-11T20:00:00Z",
+      "completedAt": "2026-01-11T20:00:00Z",
+      "tags": ["backend", "architecture"],
+      "subtasks": [
+        {"title": "TaskDataService.php", "done": true},
+        {"title": "Формат topic_XX.json", "done": true},
+        {"title": "Кэширование данных", "done": true},
+        {"title": "API методы", "done": true}
+      ]
+    },
+    {
+      "id": "task-008",
+      "title": "ОГЭ Темы 06-14 (Алгебра)",
+      "description": "Дроби, числа, корни, уравнения, вероятность, графики, формулы, неравенства, прогрессии",
+      "status": "done",
+      "priority": "critical",
+      "phase": "phase-oge",
+      "createdAt": "2026-01-11T12:00:00Z",
+      "updatedAt": "2026-01-15T22:00:00Z",
+      "completedAt": "2026-01-15T22:00:00Z",
+      "tags": ["content", "oge"],
+      "subtasks": [
+        {"title": "Тема 06 — Дроби и степени", "done": true},
+        {"title": "Тема 07 — Числа, координатная прямая", "done": true},
+        {"title": "Тема 08 — Квадратные корни", "done": true},
+        {"title": "Тема 09 — Уравнения", "done": true},
+        {"title": "Тема 10 — Теория вероятностей", "done": true},
+        {"title": "Тема 11 — Графики функций", "done": true},
+        {"title": "Тема 12 — Расчёты по формулам", "done": true},
+        {"title": "Тема 13 — Неравенства", "done": true},
+        {"title": "Тема 14 — Прогрессии", "done": true}
+      ]
+    },
+    {
+      "id": "task-009",
+      "title": "ОГЭ Темы 15-17 (Геометрия с SVG)",
+      "description": "Треугольники, окружности, четырёхугольники — с Static SVG System",
+      "status": "done",
+      "priority": "critical",
+      "phase": "phase-oge",
+      "createdAt": "2026-01-16T10:00:00Z",
+      "updatedAt": "2026-01-21T18:00:00Z",
+      "completedAt": "2026-01-21T18:00:00Z",
+      "tags": ["content", "oge", "svg"],
+      "subtasks": [
+        {"title": "Тема 15 — Треугольники (94 SVG)", "done": true},
+        {"title": "Тема 16 — Окружность (126 SVG)", "done": true},
+        {"title": "Тема 17 — Четырёхугольники", "done": true},
+        {"title": "GeometrySvgRenderer.php", "done": true},
+        {"title": "Команда svg:bake", "done": true}
+      ]
+    },
+    {
+      "id": "task-010",
+      "title": "ОГЭ Темы 18-19",
+      "description": "Клетчатая бумага и анализ геометрических высказываний",
+      "status": "done",
+      "priority": "high",
+      "phase": "phase-oge",
+      "createdAt": "2026-01-18T10:00:00Z",
+      "updatedAt": "2026-01-19T16:00:00Z",
+      "completedAt": "2026-01-19T16:00:00Z",
+      "tags": ["content", "oge"],
+      "subtasks": [
+        {"title": "Тема 18 — Фигуры на клетчатой бумаге", "done": true},
+        {"title": "Тема 19 — Анализ геом. высказываний", "done": true}
+      ]
+    },
+    {
+      "id": "task-011",
+      "title": "Генератор вариантов ОГЭ",
+      "description": "Генерация случайных вариантов с детерминированным hash",
+      "status": "done",
+      "priority": "high",
+      "phase": "phase-oge",
+      "createdAt": "2026-01-19T14:00:00Z",
+      "updatedAt": "2026-01-20T12:00:00Z",
+      "completedAt": "2026-01-20T12:00:00Z",
+      "tags": ["feature", "oge"],
+      "subtasks": [
+        {"title": "Страница /oge (генератор)", "done": true},
+        {"title": "Страница /oge/{hash} (вариант)", "done": true},
+        {"title": "Детерминированная генерация по hash", "done": true}
+      ]
+    },
+    {
+      "id": "task-012",
+      "title": "Auto-deploy на Production",
+      "description": "GitHub Actions: auto-merge claude/* веток + FTP deploy на Timeweb",
+      "status": "done",
+      "priority": "high",
+      "phase": "phase-mvp",
+      "createdAt": "2026-01-10T10:00:00Z",
+      "updatedAt": "2026-01-21T14:00:00Z",
+      "completedAt": "2026-01-21T14:00:00Z",
+      "tags": ["infrastructure", "ci-cd"],
+      "subtasks": [
+        {"title": "auto-merge.yml workflow", "done": true},
+        {"title": "FTP deploy action", "done": true},
+        {"title": "deploy:refresh command", "done": true},
+        {"title": "Deploy webhook API", "done": true}
+      ]
+    },
+    {
+      "id": "task-013",
+      "title": "EgeTaskDataService — сервис для ЕГЭ",
+      "description": "Обособленный сервис для работы с данными ЕГЭ",
+      "status": "done",
+      "priority": "critical",
+      "phase": "phase-ege",
+      "createdAt": "2026-01-20T10:00:00Z",
+      "updatedAt": "2026-01-20T18:00:00Z",
+      "completedAt": "2026-01-20T18:00:00Z",
+      "tags": ["backend", "ege"],
+      "subtasks": [
+        {"title": "EgeTaskDataService.php", "done": true},
+        {"title": "EgeController.php", "done": true},
+        {"title": "Формат ege/topic_XX.json", "done": true}
+      ]
+    },
+    {
+      "id": "task-014",
+      "title": "ЕГЭ Задания 01-02, 04-15",
+      "description": "15 заданий ЕГЭ с контентом",
+      "status": "done",
+      "priority": "critical",
+      "phase": "phase-ege",
+      "createdAt": "2026-01-20T12:00:00Z",
+      "updatedAt": "2026-01-27T20:00:00Z",
+      "completedAt": "2026-01-27T20:00:00Z",
+      "tags": ["content", "ege"],
+      "subtasks": [
+        {"title": "Задание 01 — Планиметрия", "done": true},
+        {"title": "Задание 02 — Векторы", "done": true},
+        {"title": "Задание 04 — Вероятности", "done": true},
+        {"title": "Задание 05 — Вероятности (сложные)", "done": true},
+        {"title": "Задание 06 — Уравнения", "done": true},
+        {"title": "Задание 07 — Значения функций", "done": true},
+        {"title": "Задание 08 — Производные", "done": true},
+        {"title": "Задание 09 — Текстовые задачи", "done": true},
+        {"title": "Задание 10 — Графики", "done": true},
+        {"title": "Задание 11 — Логарифмы", "done": true},
+        {"title": "Задание 12 — Оптимизация", "done": true},
+        {"title": "Задание 13 — Планиметрия (сложная)", "done": true},
+        {"title": "Задание 14 — Стереометрия (сложная)", "done": true},
+        {"title": "Задание 15 — Неравенства", "done": true}
+      ]
+    },
+    {
+      "id": "task-015",
+      "title": "ЕГЭ Задание 03 — Стереометрия",
+      "description": "Базовая стереометрия",
+      "status": "todo",
+      "priority": "high",
+      "phase": "phase-ege",
+      "createdAt": "2026-01-28T10:00:00Z",
+      "updatedAt": "2026-01-28T10:00:00Z",
+      "tags": ["content", "ege"],
+      "subtasks": [
+        {"title": "Создать topic_03.json", "done": false},
+        {"title": "Добавить задания", "done": false}
+      ]
+    },
+    {
+      "id": "task-016",
+      "title": "ЕГЭ Задание 16 — Экономическая задача",
+      "description": "Задачи на кредиты, вклады, оптимизацию",
+      "status": "todo",
+      "priority": "high",
+      "phase": "phase-ege",
+      "createdAt": "2026-01-28T10:00:00Z",
+      "updatedAt": "2026-01-28T10:00:00Z",
+      "tags": ["content", "ege"],
+      "subtasks": [
+        {"title": "Создать topic_16.json", "done": false},
+        {"title": "Добавить задания", "done": false}
+      ]
+    },
+    {
+      "id": "task-017",
+      "title": "ЕГЭ Задание 17 — Планиметрическая задача",
+      "description": "Сложная планиметрия с доказательствами",
+      "status": "todo",
+      "priority": "high",
+      "phase": "phase-ege",
+      "createdAt": "2026-01-28T10:00:00Z",
+      "updatedAt": "2026-01-28T10:00:00Z",
+      "tags": ["content", "ege"],
+      "subtasks": [
+        {"title": "Создать topic_17.json", "done": false},
+        {"title": "Добавить задания", "done": false}
+      ]
+    },
+    {
+      "id": "task-018",
+      "title": "ЕГЭ Задание 18 — Параметры",
+      "description": "Задачи с параметрами",
+      "status": "todo",
+      "priority": "high",
+      "phase": "phase-ege",
+      "createdAt": "2026-01-28T10:00:00Z",
+      "updatedAt": "2026-01-28T10:00:00Z",
+      "tags": ["content", "ege"],
+      "subtasks": [
+        {"title": "Создать topic_18.json", "done": false},
+        {"title": "Добавить задания", "done": false}
+      ]
+    },
+    {
+      "id": "task-019",
+      "title": "ЕГЭ Задание 19 — Числа и их свойства",
+      "description": "Олимпиадные задачи на числа",
+      "status": "todo",
+      "priority": "high",
+      "phase": "phase-ege",
+      "createdAt": "2026-01-28T10:00:00Z",
+      "updatedAt": "2026-01-28T10:00:00Z",
+      "tags": ["content", "ege"],
+      "subtasks": [
+        {"title": "Создать topic_19.json", "done": false},
+        {"title": "Добавить задания", "done": false}
+      ]
+    },
+    {
+      "id": "task-020",
+      "title": "VK OAuth",
+      "description": "Настройка авторизации через ВКонтакте",
+      "status": "backlog",
+      "priority": "low",
+      "phase": "phase-polish",
+      "createdAt": "2026-01-28T10:00:00Z",
+      "updatedAt": "2026-01-28T10:00:00Z",
+      "tags": ["backend", "auth"],
+      "subtasks": [
+        {"title": "Создать VK приложение", "done": false},
+        {"title": "Настроить redirect URI", "done": false},
+        {"title": "Добавить VK кнопку", "done": false}
+      ]
+    },
+    {
+      "id": "task-021",
+      "title": "Интеграция оплаты (ЮKassa)",
+      "description": "Подключение платежной системы для подписок",
+      "status": "backlog",
+      "priority": "critical",
+      "phase": "phase-monetization",
+      "createdAt": "2026-01-28T10:00:00Z",
+      "updatedAt": "2026-01-28T10:00:00Z",
+      "tags": ["backend", "payments"],
+      "subtasks": [
+        {"title": "Зарегистрироваться в ЮKassa", "done": false},
+        {"title": "Интегрировать SDK", "done": false},
+        {"title": "Создать страницу оплаты", "done": false},
+        {"title": "Webhook для подтверждения", "done": false},
+        {"title": "Управление подписками", "done": false}
+      ]
+    },
+    {
+      "id": "task-022",
+      "title": "Email уведомления",
+      "description": "Отправка писем: регистрация, напоминания, ДЗ",
+      "status": "backlog",
+      "priority": "medium",
+      "phase": "phase-polish",
+      "createdAt": "2026-01-28T10:00:00Z",
+      "updatedAt": "2026-01-28T10:00:00Z",
+      "tags": ["backend", "notifications"],
+      "subtasks": [
+        {"title": "Настроить SMTP", "done": false},
+        {"title": "Шаблоны писем", "done": false},
+        {"title": "Письмо регистрации", "done": false},
+        {"title": "Напоминания о занятиях", "done": false}
+      ]
+    },
+    {
+      "id": "task-023",
+      "title": "PWA (Progressive Web App)",
+      "description": "Превращение сайта в устанавливаемое приложение",
+      "status": "backlog",
+      "priority": "medium",
+      "phase": "phase-polish",
+      "createdAt": "2026-01-28T10:00:00Z",
+      "updatedAt": "2026-01-28T10:00:00Z",
+      "tags": ["frontend", "pwa"],
+      "subtasks": [
+        {"title": "manifest.json", "done": false},
+        {"title": "Service Worker", "done": false},
+        {"title": "Иконки разных размеров", "done": false},
+        {"title": "Offline режим", "done": false}
+      ]
+    },
+    {
+      "id": "task-024",
+      "title": "Админ-панель",
+      "description": "Интерфейс для управления контентом и пользователями",
+      "status": "backlog",
+      "priority": "medium",
+      "phase": "phase-polish",
+      "createdAt": "2026-01-28T10:00:00Z",
+      "updatedAt": "2026-01-28T10:00:00Z",
+      "tags": ["frontend", "admin"],
+      "subtasks": [
+        {"title": "Управление пользователями", "done": false},
+        {"title": "Редактор заданий", "done": false},
+        {"title": "Статистика платформы", "done": false},
+        {"title": "Управление подписками", "done": false}
+      ]
+    },
+    {
+      "id": "task-025",
+      "title": "Канбан-доска и Роадмап",
+      "description": "Система отслеживания задач проекта с визуализацией",
+      "status": "in-progress",
+      "priority": "high",
+      "phase": "phase-polish",
+      "createdAt": "2026-01-28T12:00:00Z",
+      "updatedAt": "2026-01-28T12:00:00Z",
+      "tags": ["feature", "management"],
+      "subtasks": [
+        {"title": "Структура файлов (.claude/tasks.json)", "done": true},
+        {"title": "API endpoint /api/board", "done": false},
+        {"title": "Страница /kanban", "done": false},
+        {"title": "Страница /roadmap", "done": false},
+        {"title": "Страница /forstas (архитектура)", "done": false}
+      ]
+    }
+  ],
+  "changelog": [
+    {
+      "date": "2026-01-28T12:00:00Z",
+      "taskId": "task-025",
+      "action": "created",
+      "comment": "Создана задача на Канбан-систему"
+    },
+    {
+      "date": "2026-01-28T12:05:00Z",
+      "taskId": "task-025",
+      "action": "status_changed",
+      "from": "todo",
+      "to": "in-progress",
+      "comment": "Начал реализацию"
+    }
+  ]
+}

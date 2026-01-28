@@ -1,0 +1,40 @@
+{
+  "name": "PALOMATIKA",
+  "version": "1.0.0",
+  "description": "EdTech SaaS платформа для подготовки к ОГЭ и ЕГЭ по математике",
+  "stack": {
+    "backend": "Laravel 10 LTS (PHP 8.2+)",
+    "database": "MySQL 8.0",
+    "frontend": "Tailwind CSS 3 + Alpine.js 3 (CDN)",
+    "auth": "Laravel Sanctum + OAuth (Telegram)",
+    "hosting": "Timeweb",
+    "ci_cd": "GitHub Actions"
+  },
+  "urls": {
+    "production": "https://cw95865.tmweb.ru",
+    "repository": "https://github.com/Palomig/PALOMATIKA",
+    "kanban": "/kanban",
+    "roadmap": "/roadmap",
+    "architecture": "/forstas"
+  },
+  "team": [
+    {
+      "role": "owner",
+      "name": "Stas (Forstas)"
+    },
+    {
+      "role": "developer",
+      "name": "Claude Code",
+      "type": "ai"
+    }
+  ],
+  "statistics": {
+    "ogeTopics": 14,
+    "egeTopics": 15,
+    "totalTasks": 1349,
+    "bladeViews": 62,
+    "apiEndpoints": 40,
+    "models": 29
+  },
+  "lastUpdated": "2026-01-28T12:00:00Z"
+}

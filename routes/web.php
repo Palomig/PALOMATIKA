@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\Auth\TelegramBotAuthController;
+use App\Http\Controllers\BoardController;
 use App\Http\Controllers\EgeController;
 use App\Http\Controllers\RepetitorController;
 use App\Http\Controllers\TestPdfController;
@@ -165,6 +166,18 @@ Route::prefix('api/topics')->group(function () {
     Route::get('/{topicId}/random', [TopicController::class, 'apiGetRandomTasks']);
     Route::get('/{topicId}', [TopicController::class, 'apiGetTopicData']);
 });
+
+// ========================================================================
+// Board Routes (Kanban, Roadmap, Architecture)
+// ========================================================================
+Route::prefix('api/board')->group(function () {
+    Route::get('/tasks', [BoardController::class, 'apiGetTasks']);
+    Route::get('/meta', [BoardController::class, 'apiGetMeta']);
+});
+
+Route::get('/kanban', [BoardController::class, 'kanban'])->name('board.kanban');
+Route::get('/roadmap', [BoardController::class, 'roadmap'])->name('board.roadmap');
+Route::get('/forstas', [BoardController::class, 'architecture'])->name('board.architecture');
 
 // Test pages for PDF parsing (legacy, public for development)
 Route::prefix('test')->group(function () {
