@@ -25,3 +25,6 @@ yarn-error.log
 
 # PDF sources (локальные файлы для разработки)
 /pdf-sources/
+
+# Source archives (already extracted)
+*.zip
