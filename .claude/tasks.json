@@ -497,6 +497,24 @@
         {"title": "Страница /roadmap", "done": true},
         {"title": "Страница /forstas (архитектура)", "done": true}
       ]
+    },
+    {
+      "id": "task-026",
+      "title": "Очистка репозитория",
+      "description": "Удаление неиспользуемых файлов, node_modules, ZIP-архивов из git",
+      "status": "done",
+      "priority": "medium",
+      "phase": "phase-polish",
+      "createdAt": "2026-01-28T14:00:00Z",
+      "updatedAt": "2026-01-28T14:30:00Z",
+      "completedAt": "2026-01-28T14:30:00Z",
+      "tags": ["infrastructure", "cleanup"],
+      "subtasks": [
+        {"title": "Удалить node_modules из git", "done": true},
+        {"title": "Удалить ZIP-архивы из git", "done": true},
+        {"title": "Удалить дубликаты PDF", "done": true},
+        {"title": "Обновить .gitignore", "done": true}
+      ]
     }
   ],
   "changelog": [
@@ -521,6 +539,20 @@
       "from": "in-progress",
       "to": "done",
       "comment": "Завершена реализация: kanban, roadmap, forstas страницы"
+    },
+    {
+      "date": "2026-01-28T14:00:00Z",
+      "taskId": "task-026",
+      "action": "created",
+      "comment": "Создана задача на очистку репозитория"
+    },
+    {
+      "date": "2026-01-28T14:30:00Z",
+      "taskId": "task-026",
+      "action": "status_changed",
+      "from": "todo",
+      "to": "done",
+      "comment": "Удалено 779 файлов: node_modules, ZIP-архивы, дубликаты PDF"
     }
   ]
 }
