@@ -483,18 +483,19 @@
       "id": "task-025",
       "title": "Канбан-доска и Роадмап",
       "description": "Система отслеживания задач проекта с визуализацией",
-      "status": "in-progress",
+      "status": "done",
       "priority": "high",
       "phase": "phase-polish",
       "createdAt": "2026-01-28T12:00:00Z",
-      "updatedAt": "2026-01-28T12:00:00Z",
+      "updatedAt": "2026-01-28T13:00:00Z",
+      "completedAt": "2026-01-28T13:00:00Z",
       "tags": ["feature", "management"],
       "subtasks": [
         {"title": "Структура файлов (.claude/tasks.json)", "done": true},
-        {"title": "API endpoint /api/board", "done": false},
-        {"title": "Страница /kanban", "done": false},
-        {"title": "Страница /roadmap", "done": false},
-        {"title": "Страница /forstas (архитектура)", "done": false}
+        {"title": "API endpoint /api/board", "done": true},
+        {"title": "Страница /kanban", "done": true},
+        {"title": "Страница /roadmap", "done": true},
+        {"title": "Страница /forstas (архитектура)", "done": true}
       ]
     }
   ],
@@ -512,6 +513,14 @@
       "from": "todo",
       "to": "in-progress",
       "comment": "Начал реализацию"
+    },
+    {
+      "date": "2026-01-28T13:00:00Z",
+      "taskId": "task-025",
+      "action": "status_changed",
+      "from": "in-progress",
+      "to": "done",
+      "comment": "Завершена реализация: kanban, roadmap, forstas страницы"
     }
   ]
 }
