@@ -941,10 +941,10 @@ function geometryEditor() {
             const color = isSelected ? this.colors.shapeStrokeSelected : this.colors.vertexMarker;
             return `
                 <g transform="translate(${x}, ${y})" class="cursor-grab" data-vertex="${vertexName}">
-                    <circle cx="0" cy="0" r="10" fill="transparent"/>
-                    <line x1="-5" y1="0" x2="5" y2="0" stroke="${color}" stroke-width="1"/>
-                    <line x1="0" y1="-5" x2="0" y2="5" stroke="${color}" stroke-width="1"/>
-                    <circle cx="0" cy="0" r="2" fill="none" stroke="${color}" stroke-width="0.8"/>
+                    <circle cx="0" cy="0" r="17" fill="transparent"/>
+                    <line x1="-9" y1="0" x2="9" y2="0" stroke="${color}" stroke-width="1.75"/>
+                    <line x1="0" y1="-9" x2="0" y2="9" stroke="${color}" stroke-width="1.75"/>
+                    <circle cx="0" cy="0" r="3.5" fill="none" stroke="${color}" stroke-width="1.4"/>
                 </g>
             `;
         },
@@ -958,7 +958,7 @@ function geometryEditor() {
             svg += `<polygon points="${points}" fill="rgba(0,0,0,0.01)" stroke="none" style="cursor: move;"/>`;
 
             // 1. Main polygon
-            svg += `<polygon points="${points}" fill="none" stroke="${strokeColor}" stroke-width="1.5" stroke-linejoin="round" style="pointer-events: none;"/>`;
+            svg += `<polygon points="${points}" fill="none" stroke="${strokeColor}" stroke-width="2.5" stroke-linejoin="round" style="pointer-events: none;"/>`;
 
             // 2. Auxiliary lines (bisectors, medians, altitudes)
             svg += this.renderTriangleAuxiliaryLines(figure);
@@ -974,7 +974,7 @@ function geometryEditor() {
                 const vertex = v[vName];
                 const labelPos = this.getLabelPosition(figure, vName);
                 svg += this.renderVertexMarker(vertex.x, vertex.y, vName, isSelected);
-                svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${this.colors.label}" font-size="14" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label">${vertex.label || vName}</text>`;
+                svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${this.colors.label}" font-size="24" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label">${vertex.label || vName}</text>`;
             });
 
             return svg;
@@ -995,22 +995,22 @@ function geometryEditor() {
                     const endpoint = this.getBisectorEnd(figure, vName);
                     const vertex = v[vName];
                     svg += `<line x1="${vertex.x}" y1="${vertex.y}" x2="${endpoint.x}" y2="${endpoint.y}"
-                            stroke="${this.colors.auxiliaryLine}" stroke-width="1" stroke-dasharray="8,4"/>`;
+                            stroke="${this.colors.auxiliaryLine}" stroke-width="1.75" stroke-dasharray="14,7"/>`;
                     // Точка пересечения
-                    svg += `<circle cx="${endpoint.x}" cy="${endpoint.y}" r="3" fill="${this.colors.auxiliaryLine}"/>`;
+                    svg += `<circle cx="${endpoint.x}" cy="${endpoint.y}" r="5" fill="${this.colors.auxiliaryLine}"/>`;
                     // Подпись точки
                     const label = lines[lineKey].intersectionLabel || 'D';
-                    svg += `<text x="${endpoint.x}" y="${endpoint.y + 15}" fill="${this.colors.auxiliaryLine}" font-size="12"
+                    svg += `<text x="${endpoint.x}" y="${endpoint.y + 15}" fill="${this.colors.auxiliaryLine}" font-size="20"
                             font-family="'Times New Roman', serif" font-style="italic" font-weight="500"
                             text-anchor="middle" dominant-baseline="middle" class="geo-label">${label}</text>`;
 
                     // Дуги половинных углов (если включены)
                     if (lines[lineKey].showHalfArcs) {
                         const [prev, next] = vertexNeighbors[vName];
-                        const arc1 = window.makeAngleArc(vertex, v[prev], endpoint, 20);
-                        const arc2 = window.makeAngleArc(vertex, endpoint, v[next], 25);
-                        svg += `<path d="${arc1}" fill="none" stroke="${this.colors.angleArc}" stroke-width="1.2"/>`;
-                        svg += `<path d="${arc2}" fill="none" stroke="${this.colors.angleArc}" stroke-width="1.2"/>`;
+                        const arc1 = window.makeAngleArc(vertex, v[prev], endpoint, 35);
+                        const arc2 = window.makeAngleArc(vertex, endpoint, v[next], 44);
+                        svg += `<path d="${arc1}" fill="none" stroke="${this.colors.angleArc}" stroke-width="2"/>`;
+                        svg += `<path d="${arc2}" fill="none" stroke="${this.colors.angleArc}" stroke-width="2"/>`;
                     }
                 }
             });
@@ -1023,12 +1023,12 @@ function geometryEditor() {
                     const endpoint = this.getMedianEnd(figure, vName);
                     const vertex = v[vName];
                     svg += `<line x1="${vertex.x}" y1="${vertex.y}" x2="${endpoint.x}" y2="${endpoint.y}"
-                            stroke="${this.colors.auxiliaryLine}" stroke-width="1" stroke-dasharray="8,4"/>`;
+                            stroke="${this.colors.auxiliaryLine}" stroke-width="1.75" stroke-dasharray="14,7"/>`;
                     // Точка пересечения (середина стороны)
-                    svg += `<circle cx="${endpoint.x}" cy="${endpoint.y}" r="3" fill="${this.colors.auxiliaryLine}"/>`;
+                    svg += `<circle cx="${endpoint.x}" cy="${endpoint.y}" r="5" fill="${this.colors.auxiliaryLine}"/>`;
                     // Подпись точки
                     const label = lines[lineKey].intersectionLabel || 'M';
-                    svg += `<text x="${endpoint.x}" y="${endpoint.y + 15}" fill="${this.colors.auxiliaryLine}" font-size="12"
+                    svg += `<text x="${endpoint.x}" y="${endpoint.y + 15}" fill="${this.colors.auxiliaryLine}" font-size="20"
                             font-family="'Times New Roman', serif" font-style="italic" font-weight="500"
                             text-anchor="middle" dominant-baseline="middle" class="geo-label">${label}</text>`;
                 }
@@ -1042,15 +1042,15 @@ function geometryEditor() {
                     const endpoint = this.getAltitudeEnd(figure, vName);
                     const vertex = v[vName];
                     svg += `<line x1="${vertex.x}" y1="${vertex.y}" x2="${endpoint.x}" y2="${endpoint.y}"
-                            stroke="#10b981" stroke-width="1" stroke-dasharray="8,4"/>`;
+                            stroke="#10b981" stroke-width="1.75" stroke-dasharray="14,7"/>`;
                     // Точка пересечения (основание высоты)
-                    svg += `<circle cx="${endpoint.x}" cy="${endpoint.y}" r="3" fill="#10b981"/>`;
+                    svg += `<circle cx="${endpoint.x}" cy="${endpoint.y}" r="5" fill="#10b981"/>`;
                     // Прямой угол
                     svg += `<path d="${this.getAltitudeRightAngle(figure, vName)}"
-                            fill="none" stroke="#10b981" stroke-width="1"/>`;
+                            fill="none" stroke="#10b981" stroke-width="1.75"/>`;
                     // Подпись точки
                     const label = lines[lineKey].intersectionLabel || 'H';
-                    svg += `<text x="${endpoint.x}" y="${endpoint.y + 15}" fill="#10b981" font-size="12"
+                    svg += `<text x="${endpoint.x}" y="${endpoint.y + 15}" fill="#10b981" font-size="20"
                             font-family="'Times New Roman', serif" font-style="italic" font-weight="500"
                             text-anchor="middle" dominant-baseline="middle" class="geo-label">${label}</text>`;
                 }
@@ -1086,11 +1086,11 @@ function geometryEditor() {
                     if (isRightAngle) {
                         // Прямой угол - квадратик
                         svg += `<path d="${this.getRightAnglePath(figure, vName)}"
-                                fill="none" stroke="${color}" stroke-width="1.5"/>`;
+                                fill="none" stroke="${color}" stroke-width="2.5"/>`;
                     } else {
                         // Обычная дуга
                         svg += `<path d="${this.getAngleArc(figure, vName)}"
-                                fill="none" stroke="${color}" stroke-width="1.5"/>`;
+                                fill="none" stroke="${color}" stroke-width="2.5"/>`;
                     }
                 }
 
@@ -1098,7 +1098,7 @@ function geometryEditor() {
                 if (angleData.showValue) {
                     const labelPos = this.getAngleLabelPos(figure, vName);
                     const angleValue = this.getAngleValue(figure, vName);
-                    svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${color}" font-size="11"
+                    svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${color}" font-size="18"
                             font-family="'Times New Roman', serif" font-weight="500"
                             text-anchor="middle" dominant-baseline="middle">${angleValue}°</text>`;
                 }
@@ -1148,21 +1148,21 @@ function geometryEditor() {
                     if (tickCount === 1) {
                         const tick = this.getEqualityTick(figure, side);
                         svg += `<line x1="${tick.x1}" y1="${tick.y1}" x2="${tick.x2}" y2="${tick.y2}"
-                                stroke="${color}" stroke-width="2"/>`;
+                                stroke="${color}" stroke-width="3.5"/>`;
                     } else if (tickCount === 2) {
                         const ticks = this.getDoubleEqualityTick(figure, side);
                         svg += `<line x1="${ticks.tick1.x1}" y1="${ticks.tick1.y1}" x2="${ticks.tick1.x2}" y2="${ticks.tick1.y2}"
-                                stroke="${color}" stroke-width="2"/>`;
+                                stroke="${color}" stroke-width="3.5"/>`;
                         svg += `<line x1="${ticks.tick2.x1}" y1="${ticks.tick2.y1}" x2="${ticks.tick2.x2}" y2="${ticks.tick2.y2}"
-                                stroke="${color}" stroke-width="2"/>`;
+                                stroke="${color}" stroke-width="3.5"/>`;
                     } else if (tickCount === 3) {
                         const ticks = this.getTripleEqualityTick(figure, side);
                         svg += `<line x1="${ticks.tick1.x1}" y1="${ticks.tick1.y1}" x2="${ticks.tick1.x2}" y2="${ticks.tick1.y2}"
-                                stroke="${color}" stroke-width="2"/>`;
+                                stroke="${color}" stroke-width="3.5"/>`;
                         svg += `<line x1="${ticks.tick2.x1}" y1="${ticks.tick2.y1}" x2="${ticks.tick2.x2}" y2="${ticks.tick2.y2}"
-                                stroke="${color}" stroke-width="2"/>`;
+                                stroke="${color}" stroke-width="3.5"/>`;
                         svg += `<line x1="${ticks.tick3.x1}" y1="${ticks.tick3.y1}" x2="${ticks.tick3.x2}" y2="${ticks.tick3.y2}"
-                                stroke="${color}" stroke-width="2"/>`;
+                                stroke="${color}" stroke-width="3.5"/>`;
                     }
                 });
             });
@@ -1220,7 +1220,7 @@ function geometryEditor() {
             svg += `<polygon points="${points}" fill="rgba(0,0,0,0.01)" stroke="none" style="cursor: move;"/>`;
 
             // 1. Main polygon
-            svg += `<polygon points="${points}" fill="none" stroke="${strokeColor}" stroke-width="1.5" stroke-linejoin="round" style="pointer-events: none;"/>`;
+            svg += `<polygon points="${points}" fill="none" stroke="${strokeColor}" stroke-width="2.5" stroke-linejoin="round" style="pointer-events: none;"/>`;
 
             // 2. Diagonals
             svg += this.renderQuadDiagonals(figure);
@@ -1236,7 +1236,7 @@ function geometryEditor() {
                 const vertex = v[vName];
                 const labelPos = this.getLabelPositionQuad(figure, vName);
                 svg += this.renderVertexMarker(vertex.x, vertex.y, vName, isSelected);
-                svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${this.colors.label}" font-size="14" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label">${vertex.label || vName}</text>`;
+                svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${this.colors.label}" font-size="24" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label">${vertex.label || vName}</text>`;
             });
 
             return svg;
@@ -1251,22 +1251,22 @@ function geometryEditor() {
             // Диагональ AC
             if (lines.diagonal_ac && lines.diagonal_ac.enabled) {
                 svg += `<line x1="${v.A.x}" y1="${v.A.y}" x2="${v.C.x}" y2="${v.C.y}"
-                        stroke="${this.colors.auxiliaryLine}" stroke-width="1" stroke-dasharray="8,4"/>`;
+                        stroke="${this.colors.auxiliaryLine}" stroke-width="1.75" stroke-dasharray="14,7"/>`;
             }
 
             // Диагональ BD
             if (lines.diagonal_bd && lines.diagonal_bd.enabled) {
                 svg += `<line x1="${v.B.x}" y1="${v.B.y}" x2="${v.D.x}" y2="${v.D.y}"
-                        stroke="${this.colors.auxiliaryLine}" stroke-width="1" stroke-dasharray="8,4"/>`;
+                        stroke="${this.colors.auxiliaryLine}" stroke-width="1.75" stroke-dasharray="14,7"/>`;
             }
 
             // Точка пересечения диагоналей (если обе включены)
             if (lines.diagonal_ac && lines.diagonal_ac.enabled && lines.diagonal_bd && lines.diagonal_bd.enabled) {
                 const intersection = this.getDiagonalsIntersection(figure);
                 if (intersection) {
-                    svg += `<circle cx="${intersection.x}" cy="${intersection.y}" r="3" fill="${this.colors.auxiliaryLine}"/>`;
+                    svg += `<circle cx="${intersection.x}" cy="${intersection.y}" r="5" fill="${this.colors.auxiliaryLine}"/>`;
                     const label = lines.intersection_label || 'O';
-                    svg += `<text x="${intersection.x}" y="${intersection.y + 15}" fill="${this.colors.auxiliaryLabel}" font-size="12"
+                    svg += `<text x="${intersection.x}" y="${intersection.y + 15}" fill="${this.colors.auxiliaryLabel}" font-size="20"
                             font-family="'Times New Roman', serif" font-style="italic" font-weight="500"
                             text-anchor="middle" dominant-baseline="middle" class="geo-label">${label}</text>`;
                 }
@@ -1287,15 +1287,15 @@ function geometryEditor() {
                     const endpoint = this.getQuadBisectorEnd(figure, vName);
                     const vertex = v[vName];
                     svg += `<line x1="${vertex.x}" y1="${vertex.y}" x2="${endpoint.x}" y2="${endpoint.y}"
-                            stroke="${this.colors.auxiliaryLine}" stroke-width="1" stroke-dasharray="8,4"/>`;
+                            stroke="${this.colors.auxiliaryLine}" stroke-width="1.75" stroke-dasharray="14,7"/>`;
                     // Точка пересечения
-                    svg += `<circle cx="${endpoint.x}" cy="${endpoint.y}" r="3" fill="${this.colors.auxiliaryLine}"/>`;
+                    svg += `<circle cx="${endpoint.x}" cy="${endpoint.y}" r="5" fill="${this.colors.auxiliaryLine}"/>`;
                     // Две дуги половинных углов (показывают, что угол делится пополам)
                     const [prev, next] = vertexPairs[vName];
-                    svg += `<path d="${window.makeAngleArc(vertex, v[prev], endpoint, 20)}"
-                            fill="none" stroke="${this.colors.auxiliaryLine}" stroke-width="1"/>`;
-                    svg += `<path d="${window.makeAngleArc(vertex, endpoint, v[next], 20)}"
-                            fill="none" stroke="${this.colors.auxiliaryLine}" stroke-width="1"/>`;
+                    svg += `<path d="${window.makeAngleArc(vertex, v[prev], endpoint, 35)}"
+                            fill="none" stroke="${this.colors.auxiliaryLine}" stroke-width="1.75"/>`;
+                    svg += `<path d="${window.makeAngleArc(vertex, endpoint, v[next], 35)}"
+                            fill="none" stroke="${this.colors.auxiliaryLine}" stroke-width="1.75"/>`;
                 }
             });
 
@@ -1307,15 +1307,15 @@ function geometryEditor() {
                     const altitudeData = this.getQuadAltitudeEnd(figure, vName);
                     const vertex = v[vName];
                     svg += `<line x1="${vertex.x}" y1="${vertex.y}" x2="${altitudeData.foot.x}" y2="${altitudeData.foot.y}"
-                            stroke="#10b981" stroke-width="1" stroke-dasharray="8,4"/>`;
+                            stroke="#10b981" stroke-width="1.75" stroke-dasharray="14,7"/>`;
                     // Точка основания высоты
-                    svg += `<circle cx="${altitudeData.foot.x}" cy="${altitudeData.foot.y}" r="3" fill="#10b981"/>`;
+                    svg += `<circle cx="${altitudeData.foot.x}" cy="${altitudeData.foot.y}" r="5" fill="#10b981"/>`;
                     // Прямой угол
-                    svg += `<path d="${window.rightAnglePath(altitudeData.foot, vertex, altitudeData.sideEnd, 10)}"
-                            fill="none" stroke="#10b981" stroke-width="1"/>`;
+                    svg += `<path d="${window.rightAnglePath(altitudeData.foot, vertex, altitudeData.sideEnd, 18)}"
+                            fill="none" stroke="#10b981" stroke-width="1.75"/>`;
                     // Подпись точки
                     const label = lines[lineKey].intersectionLabel || 'H';
-                    svg += `<text x="${altitudeData.foot.x}" y="${altitudeData.foot.y + 15}" fill="#10b981" font-size="12"
+                    svg += `<text x="${altitudeData.foot.x}" y="${altitudeData.foot.y + 15}" fill="#10b981" font-size="20"
                             font-family="'Times New Roman', serif" font-style="italic" font-weight="500"
                             text-anchor="middle" dominant-baseline="middle" class="geo-label">${label}</text>`;
                 }
@@ -1443,18 +1443,18 @@ function geometryEditor() {
 
                 if (angleData.showArc) {
                     if (isRightAngle) {
-                        svg += `<path d="${window.rightAnglePath(vertex, p1, p2, 12)}"
-                                fill="none" stroke="${color}" stroke-width="1.5"/>`;
+                        svg += `<path d="${window.rightAnglePath(vertex, p1, p2, 21)}"
+                                fill="none" stroke="${color}" stroke-width="2.5"/>`;
                     } else {
-                        svg += `<path d="${window.makeAngleArc(vertex, p1, p2, 20)}"
-                                fill="none" stroke="${color}" stroke-width="1.5"/>`;
+                        svg += `<path d="${window.makeAngleArc(vertex, p1, p2, 35)}"
+                                fill="none" stroke="${color}" stroke-width="2.5"/>`;
                     }
                 }
 
                 if (angleData.showValue) {
-                    const labelPos = window.angleLabelPos(vertex, p1, p2, 42, 0.5);
+                    const labelPos = window.angleLabelPos(vertex, p1, p2, 73, 0.5);
                     const angleValue = angleData.value || this.calculateQuadAngle(figure, vName);
-                    svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${color}" font-size="11"
+                    svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${color}" font-size="18"
                             font-family="'Times New Roman', serif" font-weight="500"
                             text-anchor="middle" dominant-baseline="middle">${Math.round(angleValue)}°</text>`;
                 }
@@ -1502,7 +1502,7 @@ function geometryEditor() {
                     const tick = this.getQuadEqualityTick(p1, p2, tickCount);
                     tick.forEach(t => {
                         svg += `<line x1="${t.x1}" y1="${t.y1}" x2="${t.x2}" y2="${t.y2}"
-                                stroke="${color}" stroke-width="2"/>`;
+                                stroke="${color}" stroke-width="3.5"/>`;
                     });
                 });
             });
@@ -1593,11 +1593,11 @@ function geometryEditor() {
 
         renderCircle(figure, isSelected) {
             const strokeColor = isSelected ? this.colors.shapeStrokeSelected : this.colors.circleStroke;
-            let svg = `<circle cx="${figure.center.x}" cy="${figure.center.y}" r="${figure.radius}" fill="none" stroke="${strokeColor}" stroke-width="1.5"/>`;
+            let svg = `<circle cx="${figure.center.x}" cy="${figure.center.y}" r="${figure.radius}" fill="none" stroke="${strokeColor}" stroke-width="2.5"/>`;
 
             // Center marker and label
             svg += this.renderVertexMarker(figure.center.x, figure.center.y, 'center', isSelected);
-            svg += `<text x="${figure.center.x}" y="${figure.center.y + 18}" fill="${this.colors.auxiliaryLabel}" font-size="14" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label">${figure.centerLabel || 'O'}</text>`;
+            svg += `<text x="${figure.center.x}" y="${figure.center.y + 18}" fill="${this.colors.auxiliaryLabel}" font-size="24" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label">${figure.centerLabel || 'O'}</text>`;
 
             return svg;
         },
@@ -1611,7 +1611,7 @@ function geometryEditor() {
                     const from = figure.vertices[edge.from];
                     const to = figure.vertices[edge.to];
                     if (from && to) {
-                        svg += `<line x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}" stroke="${this.colors.hiddenEdge}" stroke-width="1" stroke-dasharray="6,4"/>`;
+                        svg += `<line x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}" stroke="${this.colors.hiddenEdge}" stroke-width="1.75" stroke-dasharray="10,7"/>`;
                     }
                 });
 
@@ -1620,7 +1620,7 @@ function geometryEditor() {
                     const from = figure.vertices[edge.from];
                     const to = figure.vertices[edge.to];
                     if (from && to) {
-                        svg += `<line x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}" stroke="${strokeColor}" stroke-width="1.5"/>`;
+                        svg += `<line x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}" stroke="${strokeColor}" stroke-width="2.5"/>`;
                     }
                 });
 
@@ -1630,7 +1630,7 @@ function geometryEditor() {
                     const isHidden = vertex.visible === false;
                     const labelColor = isHidden ? this.colors.hiddenEdge : this.colors.label;
                     svg += this.renderVertexMarker(vertex.x, vertex.y, vName, isSelected);
-                    svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${labelColor}" font-size="14" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label">${vertex.label || vName}</text>`;
+                    svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${labelColor}" font-size="24" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label">${vertex.label || vName}</text>`;
                 });
             } else if (figure.stereometryType === 'cylinder') {
                 svg += this.renderCylinder(figure);
@@ -1651,11 +1651,11 @@ function geometryEditor() {
             const h = figure.height;
 
             return `
-                <path d="M ${cx - rx} ${cy} A ${rx} ${ry} 0 0 0 ${cx + rx} ${cy}" fill="none" stroke="${this.colors.hiddenEdge}" stroke-width="1" stroke-dasharray="6,4"/>
-                <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="${this.colors.shapeStroke}" stroke-width="1.5"/>
-                <line x1="${cx - rx}" y1="${cy}" x2="${cx - rx}" y2="${cy - h}" stroke="${this.colors.shapeStroke}" stroke-width="1.5"/>
-                <line x1="${cx + rx}" y1="${cy}" x2="${cx + rx}" y2="${cy - h}" stroke="${this.colors.shapeStroke}" stroke-width="1.5"/>
-                <ellipse cx="${cx}" cy="${cy - h}" rx="${rx}" ry="${ry}" fill="none" stroke="${this.colors.shapeStroke}" stroke-width="1.5"/>
+                <path d="M ${cx - rx} ${cy} A ${rx} ${ry} 0 0 0 ${cx + rx} ${cy}" fill="none" stroke="${this.colors.hiddenEdge}" stroke-width="1.75" stroke-dasharray="10,7"/>
+                <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="${this.colors.shapeStroke}" stroke-width="2.5"/>
+                <line x1="${cx - rx}" y1="${cy}" x2="${cx - rx}" y2="${cy - h}" stroke="${this.colors.shapeStroke}" stroke-width="2.5"/>
+                <line x1="${cx + rx}" y1="${cy}" x2="${cx + rx}" y2="${cy - h}" stroke="${this.colors.shapeStroke}" stroke-width="2.5"/>
+                <ellipse cx="${cx}" cy="${cy - h}" rx="${rx}" ry="${ry}" fill="none" stroke="${this.colors.shapeStroke}" stroke-width="2.5"/>
             `;
         },
 
@@ -1667,10 +1667,10 @@ function geometryEditor() {
             const apex = figure.apex;
 
             return `
-                <path d="M ${cx - rx} ${cy} A ${rx} ${ry} 0 0 0 ${cx + rx} ${cy}" fill="none" stroke="${this.colors.hiddenEdge}" stroke-width="1" stroke-dasharray="6,4"/>
-                <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="${this.colors.shapeStroke}" stroke-width="1.5"/>
-                <line x1="${cx - rx}" y1="${cy}" x2="${apex.x}" y2="${apex.y}" stroke="${this.colors.shapeStroke}" stroke-width="1.5"/>
-                <line x1="${cx + rx}" y1="${cy}" x2="${apex.x}" y2="${apex.y}" stroke="${this.colors.shapeStroke}" stroke-width="1.5"/>
+                <path d="M ${cx - rx} ${cy} A ${rx} ${ry} 0 0 0 ${cx + rx} ${cy}" fill="none" stroke="${this.colors.hiddenEdge}" stroke-width="1.75" stroke-dasharray="10,7"/>
+                <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="${this.colors.shapeStroke}" stroke-width="2.5"/>
+                <line x1="${cx - rx}" y1="${cy}" x2="${apex.x}" y2="${apex.y}" stroke="${this.colors.shapeStroke}" stroke-width="2.5"/>
+                <line x1="${cx + rx}" y1="${cy}" x2="${apex.x}" y2="${apex.y}" stroke="${this.colors.shapeStroke}" stroke-width="2.5"/>
                 ${this.renderVertexMarker(apex.x, apex.y, 'apex', false)}
             `;
         },
@@ -1682,10 +1682,10 @@ function geometryEditor() {
             const ry = r * 0.3;
 
             return `
-                <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${this.colors.shapeStroke}" stroke-width="1.5"/>
-                <path d="M ${cx - r} ${cy} A ${r} ${ry} 0 0 0 ${cx + r} ${cy}" fill="none" stroke="${this.colors.hiddenEdge}" stroke-width="1" stroke-dasharray="6,4"/>
-                <ellipse cx="${cx}" cy="${cy}" rx="${r}" ry="${ry}" fill="none" stroke="${this.colors.shapeStroke}" stroke-width="1.5"/>
-                <circle cx="${cx}" cy="${cy}" r="4" fill="#f97316"/>
+                <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${this.colors.shapeStroke}" stroke-width="2.5"/>
+                <path d="M ${cx - r} ${cy} A ${r} ${ry} 0 0 0 ${cx + r} ${cy}" fill="none" stroke="${this.colors.hiddenEdge}" stroke-width="1.75" stroke-dasharray="10,7"/>
+                <ellipse cx="${cx}" cy="${cy}" rx="${r}" ry="${ry}" fill="none" stroke="${this.colors.shapeStroke}" stroke-width="2.5"/>
+                <circle cx="${cx}" cy="${cy}" r="7" fill="#f97316"/>
             `;
         },
 
