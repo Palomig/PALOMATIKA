@@ -962,7 +962,7 @@ function geometryEditor() {
             const v = figure.vertices;
             const lines = figure.lines || {};
 
-            // Биссектрисы (фиолетовый, пунктир)
+            // Биссектрисы (голубой, пунктир — как в целевом стиле)
             ['a', 'b', 'c'].forEach(vKey => {
                 const lineKey = `bisector_${vKey}`;
                 if (lines[lineKey] && lines[lineKey].enabled) {
@@ -970,18 +970,18 @@ function geometryEditor() {
                     const endpoint = this.getBisectorEnd(figure, vName);
                     const vertex = v[vName];
                     svg += `<line x1="${vertex.x}" y1="${vertex.y}" x2="${endpoint.x}" y2="${endpoint.y}"
-                            stroke="#a855f7" stroke-width="1" stroke-dasharray="6,4"/>`;
+                            stroke="${this.colors.auxiliaryLine}" stroke-width="1" stroke-dasharray="8,4"/>`;
                     // Точка пересечения
-                    svg += `<circle cx="${endpoint.x}" cy="${endpoint.y}" r="3" fill="#a855f7"/>`;
+                    svg += `<circle cx="${endpoint.x}" cy="${endpoint.y}" r="3" fill="${this.colors.auxiliaryLine}"/>`;
                     // Подпись точки
                     const label = lines[lineKey].intersectionLabel || 'D';
-                    svg += `<text x="${endpoint.x}" y="${endpoint.y + 15}" fill="#a855f7" font-size="12"
+                    svg += `<text x="${endpoint.x}" y="${endpoint.y + 15}" fill="${this.colors.auxiliaryLine}" font-size="12"
                             font-family="'Times New Roman', serif" font-style="italic" font-weight="500"
                             text-anchor="middle" dominant-baseline="middle" class="geo-label">${label}</text>`;
                 }
             });
 
-            // Медианы (синий, пунктир)
+            // Медианы (голубой, пунктир)
             ['a', 'b', 'c'].forEach(vKey => {
                 const lineKey = `median_${vKey}`;
                 if (lines[lineKey] && lines[lineKey].enabled) {
@@ -989,7 +989,7 @@ function geometryEditor() {
                     const endpoint = this.getMedianEnd(figure, vName);
                     const vertex = v[vName];
                     svg += `<line x1="${vertex.x}" y1="${vertex.y}" x2="${endpoint.x}" y2="${endpoint.y}"
-                            stroke="${this.colors.auxiliaryLine}" stroke-width="1" stroke-dasharray="6,4"/>`;
+                            stroke="${this.colors.auxiliaryLine}" stroke-width="1" stroke-dasharray="8,4"/>`;
                     // Точка пересечения (середина стороны)
                     svg += `<circle cx="${endpoint.x}" cy="${endpoint.y}" r="3" fill="${this.colors.auxiliaryLine}"/>`;
                     // Подпись точки
@@ -1008,7 +1008,7 @@ function geometryEditor() {
                     const endpoint = this.getAltitudeEnd(figure, vName);
                     const vertex = v[vName];
                     svg += `<line x1="${vertex.x}" y1="${vertex.y}" x2="${endpoint.x}" y2="${endpoint.y}"
-                            stroke="#10b981" stroke-width="1" stroke-dasharray="6,4"/>`;
+                            stroke="#10b981" stroke-width="1" stroke-dasharray="8,4"/>`;
                     // Точка пересечения (основание высоты)
                     svg += `<circle cx="${endpoint.x}" cy="${endpoint.y}" r="3" fill="#10b981"/>`;
                     // Прямой угол
@@ -1217,13 +1217,13 @@ function geometryEditor() {
             // Диагональ AC
             if (lines.diagonal_ac && lines.diagonal_ac.enabled) {
                 svg += `<line x1="${v.A.x}" y1="${v.A.y}" x2="${v.C.x}" y2="${v.C.y}"
-                        stroke="${this.colors.auxiliaryLine}" stroke-width="1" stroke-dasharray="6,4"/>`;
+                        stroke="${this.colors.auxiliaryLine}" stroke-width="1" stroke-dasharray="8,4"/>`;
             }
 
             // Диагональ BD
             if (lines.diagonal_bd && lines.diagonal_bd.enabled) {
                 svg += `<line x1="${v.B.x}" y1="${v.B.y}" x2="${v.D.x}" y2="${v.D.y}"
-                        stroke="${this.colors.auxiliaryLine}" stroke-width="1" stroke-dasharray="6,4"/>`;
+                        stroke="${this.colors.auxiliaryLine}" stroke-width="1" stroke-dasharray="8,4"/>`;
             }
 
             // Точка пересечения диагоналей (если обе включены)
@@ -1238,7 +1238,7 @@ function geometryEditor() {
                 }
             }
 
-            // Биссектрисы (фиолетовый, пунктир)
+            // Биссектрисы (голубой, пунктир — как в целевом стиле)
             const vertexPairs = {
                 'A': ['D', 'B'],
                 'B': ['A', 'C'],
@@ -1253,15 +1253,15 @@ function geometryEditor() {
                     const endpoint = this.getQuadBisectorEnd(figure, vName);
                     const vertex = v[vName];
                     svg += `<line x1="${vertex.x}" y1="${vertex.y}" x2="${endpoint.x}" y2="${endpoint.y}"
-                            stroke="#a855f7" stroke-width="1" stroke-dasharray="6,4"/>`;
+                            stroke="${this.colors.auxiliaryLine}" stroke-width="1" stroke-dasharray="8,4"/>`;
                     // Точка пересечения
-                    svg += `<circle cx="${endpoint.x}" cy="${endpoint.y}" r="3" fill="#a855f7"/>`;
+                    svg += `<circle cx="${endpoint.x}" cy="${endpoint.y}" r="3" fill="${this.colors.auxiliaryLine}"/>`;
                     // Две дуги половинных углов (показывают, что угол делится пополам)
                     const [prev, next] = vertexPairs[vName];
                     svg += `<path d="${window.makeAngleArc(vertex, v[prev], endpoint, 20)}"
-                            fill="none" stroke="#a855f7" stroke-width="1"/>`;
+                            fill="none" stroke="${this.colors.auxiliaryLine}" stroke-width="1"/>`;
                     svg += `<path d="${window.makeAngleArc(vertex, endpoint, v[next], 20)}"
-                            fill="none" stroke="#a855f7" stroke-width="1"/>`;
+                            fill="none" stroke="${this.colors.auxiliaryLine}" stroke-width="1"/>`;
                 }
             });
 
@@ -1273,7 +1273,7 @@ function geometryEditor() {
                     const altitudeData = this.getQuadAltitudeEnd(figure, vName);
                     const vertex = v[vName];
                     svg += `<line x1="${vertex.x}" y1="${vertex.y}" x2="${altitudeData.foot.x}" y2="${altitudeData.foot.y}"
-                            stroke="#10b981" stroke-width="1" stroke-dasharray="6,4"/>`;
+                            stroke="#10b981" stroke-width="1" stroke-dasharray="8,4"/>`;
                     // Точка основания высоты
                     svg += `<circle cx="${altitudeData.foot.x}" cy="${altitudeData.foot.y}" r="3" fill="#10b981"/>`;
                     // Прямой угол
@@ -2986,8 +2986,8 @@ function geometryEditor() {
                 const C = transformPoint(v.C);
                 const D = transformPoint(v.D);
 
-                svg += `  <line x1="${A.x}" y1="${A.y}" x2="${C.x}" y2="${C.y}" stroke="${this.colors.auxiliaryLine}" stroke-width="1.5" stroke-dasharray="6,4"/>\n`;
-                svg += `  <line x1="${B.x}" y1="${B.y}" x2="${D.x}" y2="${D.y}" stroke="${this.colors.auxiliaryLine}" stroke-width="1.5" stroke-dasharray="6,4"/>\n`;
+                svg += `  <line x1="${A.x}" y1="${A.y}" x2="${C.x}" y2="${C.y}" stroke="${this.colors.auxiliaryLine}" stroke-width="1.5" stroke-dasharray="8,4"/>\n`;
+                svg += `  <line x1="${B.x}" y1="${B.y}" x2="${D.x}" y2="${D.y}" stroke="${this.colors.auxiliaryLine}" stroke-width="1.5" stroke-dasharray="8,4"/>\n`;
             }
 
             // Другие вспомогательные линии
@@ -2995,7 +2995,7 @@ function geometryEditor() {
             auxLines.forEach(line => {
                 const p1 = transformPoint(line.point1);
                 const p2 = transformPoint(line.point2);
-                const dashArray = line.dashed !== false ? '6,4' : 'none';
+                const dashArray = line.dashed !== false ? '8,4' : 'none';
                 svg += `  <line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="${this.colors.auxiliaryLine}" stroke-width="1.5" stroke-dasharray="${dashArray}"/>\n`;
             });
 
