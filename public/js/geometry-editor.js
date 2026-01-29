@@ -56,12 +56,12 @@ function geometryEditor() {
 
         init() {
             // Слушаем события открытия
-            window.addEventListener('open-geometry-editor', (e) => {
-                this.open(e.detail.taskId, e.detail.svg, e.detail.metadata);
+            window.addEventListener('open-geometry-editor', async (e) => {
+                await this.open(e.detail.taskId, e.detail.svg, e.detail.metadata);
             });
         },
 
-        open(taskId, existingSvg = null, metadata = null) {
+        async open(taskId, existingSvg = null, metadata = null) {
             this.taskId = taskId;
             this.isOpen = true;
             this.figures = [];
@@ -69,6 +69,20 @@ function geometryEditor() {
             this.history = [];
             this.historyIndex = -1;
             this.figureCounter = 0;
+
+            // Если metadata не передан — загружаем с сервера
+            if (!metadata && taskId) {
+                try {
+                    const response = await fetch(`/api/geometry/${taskId}/load`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        metadata = data.metadata;
+                        existingSvg = data.svg || existingSvg;
+                    }
+                } catch (e) {
+                    console.warn('Could not load metadata:', e);
+                }
+            }
 
             if (metadata && metadata.created_via === 'editor') {
                 // Загружаем из метаданных
