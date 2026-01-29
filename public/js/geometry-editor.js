@@ -21,9 +21,9 @@ function geometryEditor() {
         taskId: '',
         mode: 'full_edit', // 'full_edit' | 'legacy_view'
 
-        // Canvas
-        canvasWidth: 600,
-        canvasHeight: 500,
+        // Canvas (по умолчанию как в заданиях)
+        canvasWidth: 200,
+        canvasHeight: 160,
         showGrid: false,
         gridSize: 20,
 
@@ -138,14 +138,15 @@ function geometryEditor() {
 
         createTriangle(index) {
             const suffix = index > 1 ? index : '';
+            // Координаты для viewBox 200x160 (как в заданиях)
             return {
                 id: `triangle_${this.figureCounter}`,
                 type: 'triangle',
                 preset: 'free',
                 vertices: {
-                    A: { x: 100, y: 400, label: `A${suffix ? '₊' + suffix : ''}` },
-                    B: { x: 500, y: 400, label: `B${suffix ? '₊' + suffix : ''}` },
-                    C: { x: 300, y: 100, label: `C${suffix ? '₊' + suffix : ''}` }
+                    A: { x: 20, y: 130, label: `A${suffix ? '₊' + suffix : ''}` },
+                    B: { x: 180, y: 130, label: `B${suffix ? '₊' + suffix : ''}` },
+                    C: { x: 100, y: 25, label: `C${suffix ? '₊' + suffix : ''}` }
                 },
                 angles: {
                     A: { value: null, showArc: false, arcType: 'single', showValue: false },
@@ -153,9 +154,9 @@ function geometryEditor() {
                     C: { value: null, showArc: false, arcType: 'single', showValue: false }
                 },
                 lines: {
-                    bisector_a: { enabled: false, intersectionLabel: 'D' },
-                    bisector_b: { enabled: false, intersectionLabel: 'E' },
-                    bisector_c: { enabled: false, intersectionLabel: 'F' },
+                    bisector_a: { enabled: false, intersectionLabel: 'D', showHalfArcs: false },
+                    bisector_b: { enabled: false, intersectionLabel: 'E', showHalfArcs: false },
+                    bisector_c: { enabled: false, intersectionLabel: 'F', showHalfArcs: false },
                     median_a: { enabled: false, intersectionLabel: 'M' },
                     median_b: { enabled: false, intersectionLabel: 'N' },
                     median_c: { enabled: false, intersectionLabel: 'P' },
@@ -169,15 +170,16 @@ function geometryEditor() {
 
         createQuadrilateral(index) {
             const suffix = index > 1 ? index : '';
+            // Координаты для viewBox 200x160
             return {
                 id: `quad_${this.figureCounter}`,
                 type: 'quadrilateral',
                 preset: 'free',
                 vertices: {
-                    A: { x: 100, y: 350, label: `A${suffix ? '₊' + suffix : ''}` },
-                    B: { x: 500, y: 350, label: `B${suffix ? '₊' + suffix : ''}` },
-                    C: { x: 450, y: 100, label: `C${suffix ? '₊' + suffix : ''}` },
-                    D: { x: 150, y: 100, label: `D${suffix ? '₊' + suffix : ''}` }
+                    A: { x: 20, y: 130, label: `A${suffix ? '₊' + suffix : ''}` },
+                    B: { x: 180, y: 130, label: `B${suffix ? '₊' + suffix : ''}` },
+                    C: { x: 160, y: 30, label: `C${suffix ? '₊' + suffix : ''}` },
+                    D: { x: 40, y: 30, label: `D${suffix ? '₊' + suffix : ''}` }
                 },
                 angles: {},
                 lines: {},
@@ -186,11 +188,12 @@ function geometryEditor() {
         },
 
         createCircle(index) {
+            // Координаты для viewBox 200x160
             return {
                 id: `circle_${this.figureCounter}`,
                 type: 'circle',
-                center: { x: 300, y: 250 },
-                radius: 120,
+                center: { x: 100, y: 80 },
+                radius: 50,
                 centerLabel: index > 1 ? `O${index}` : 'O',
                 showDiameter: false,
                 showRadius: false,
@@ -361,28 +364,30 @@ function geometryEditor() {
 
             const cx = this.canvasWidth / 2;
             const cy = this.canvasHeight / 2;
-            const size = 200;
+            // Размер адаптируется к viewBox (80% от меньшей стороны)
+            const size = Math.min(this.canvasWidth, this.canvasHeight) * 0.4;
+            const margin = 15; // Отступ для подписей
 
             switch (preset) {
                 case 'isosceles':
-                    this.selectedFigure.vertices.A = { ...this.selectedFigure.vertices.A, x: cx - size, y: cy + size/2 };
-                    this.selectedFigure.vertices.B = { ...this.selectedFigure.vertices.B, x: cx + size, y: cy + size/2 };
-                    this.selectedFigure.vertices.C = { ...this.selectedFigure.vertices.C, x: cx, y: cy - size };
+                    this.selectedFigure.vertices.A = { ...this.selectedFigure.vertices.A, x: margin, y: this.canvasHeight - margin };
+                    this.selectedFigure.vertices.B = { ...this.selectedFigure.vertices.B, x: this.canvasWidth - margin, y: this.canvasHeight - margin };
+                    this.selectedFigure.vertices.C = { ...this.selectedFigure.vertices.C, x: cx, y: margin };
                     this.selectedFigure.preset = 'isosceles';
                     break;
 
                 case 'equilateral':
-                    const h = size * Math.sqrt(3) / 2;
-                    this.selectedFigure.vertices.A = { ...this.selectedFigure.vertices.A, x: cx - size, y: cy + h/2 };
-                    this.selectedFigure.vertices.B = { ...this.selectedFigure.vertices.B, x: cx + size, y: cy + h/2 };
-                    this.selectedFigure.vertices.C = { ...this.selectedFigure.vertices.C, x: cx, y: cy - h };
+                    const h = size * Math.sqrt(3);
+                    this.selectedFigure.vertices.A = { ...this.selectedFigure.vertices.A, x: cx - size, y: this.canvasHeight - margin };
+                    this.selectedFigure.vertices.B = { ...this.selectedFigure.vertices.B, x: cx + size, y: this.canvasHeight - margin };
+                    this.selectedFigure.vertices.C = { ...this.selectedFigure.vertices.C, x: cx, y: this.canvasHeight - margin - h };
                     this.selectedFigure.preset = 'equilateral';
                     break;
 
                 case 'right':
-                    this.selectedFigure.vertices.A = { ...this.selectedFigure.vertices.A, x: cx - size, y: cy + size };
-                    this.selectedFigure.vertices.B = { ...this.selectedFigure.vertices.B, x: cx + size, y: cy + size };
-                    this.selectedFigure.vertices.C = { ...this.selectedFigure.vertices.C, x: cx - size, y: cy - size };
+                    this.selectedFigure.vertices.A = { ...this.selectedFigure.vertices.A, x: margin, y: this.canvasHeight - margin };
+                    this.selectedFigure.vertices.B = { ...this.selectedFigure.vertices.B, x: this.canvasWidth - margin, y: this.canvasHeight - margin };
+                    this.selectedFigure.vertices.C = { ...this.selectedFigure.vertices.C, x: margin, y: margin };
                     this.selectedFigure.preset = 'right';
                     break;
 
@@ -401,35 +406,39 @@ function geometryEditor() {
 
             const cx = this.canvasWidth / 2;
             const cy = this.canvasHeight / 2;
-            const w = 180, h = 120;
+            const margin = 15;
+            // Размеры адаптируются к viewBox
+            const w = (this.canvasWidth - margin * 2) / 2 * 0.9;
+            const h = (this.canvasHeight - margin * 2) / 2 * 0.8;
+            const offset = w * 0.2; // Смещение для параллелограмма
 
             switch (preset) {
                 case 'parallelogram':
-                    this.selectedFigure.vertices.A = { ...this.selectedFigure.vertices.A, x: cx - w - 40, y: cy + h };
-                    this.selectedFigure.vertices.B = { ...this.selectedFigure.vertices.B, x: cx + w - 40, y: cy + h };
-                    this.selectedFigure.vertices.C = { ...this.selectedFigure.vertices.C, x: cx + w + 40, y: cy - h };
-                    this.selectedFigure.vertices.D = { ...this.selectedFigure.vertices.D, x: cx - w + 40, y: cy - h };
+                    this.selectedFigure.vertices.A = { ...this.selectedFigure.vertices.A, x: margin, y: this.canvasHeight - margin };
+                    this.selectedFigure.vertices.B = { ...this.selectedFigure.vertices.B, x: this.canvasWidth - margin - offset, y: this.canvasHeight - margin };
+                    this.selectedFigure.vertices.C = { ...this.selectedFigure.vertices.C, x: this.canvasWidth - margin, y: margin };
+                    this.selectedFigure.vertices.D = { ...this.selectedFigure.vertices.D, x: margin + offset, y: margin };
                     this.selectedFigure.preset = 'parallelogram';
                     break;
 
                 case 'rectangle':
-                    this.selectedFigure.vertices.A = { ...this.selectedFigure.vertices.A, x: cx - w, y: cy + h };
-                    this.selectedFigure.vertices.B = { ...this.selectedFigure.vertices.B, x: cx + w, y: cy + h };
-                    this.selectedFigure.vertices.C = { ...this.selectedFigure.vertices.C, x: cx + w, y: cy - h };
-                    this.selectedFigure.vertices.D = { ...this.selectedFigure.vertices.D, x: cx - w, y: cy - h };
+                    this.selectedFigure.vertices.A = { ...this.selectedFigure.vertices.A, x: margin, y: this.canvasHeight - margin };
+                    this.selectedFigure.vertices.B = { ...this.selectedFigure.vertices.B, x: this.canvasWidth - margin, y: this.canvasHeight - margin };
+                    this.selectedFigure.vertices.C = { ...this.selectedFigure.vertices.C, x: this.canvasWidth - margin, y: margin };
+                    this.selectedFigure.vertices.D = { ...this.selectedFigure.vertices.D, x: margin, y: margin };
                     this.selectedFigure.preset = 'rectangle';
                     break;
 
                 case 'rhombus':
-                    this.selectedFigure.vertices.A = { ...this.selectedFigure.vertices.A, x: cx - w, y: cy };
-                    this.selectedFigure.vertices.B = { ...this.selectedFigure.vertices.B, x: cx, y: cy + h };
-                    this.selectedFigure.vertices.C = { ...this.selectedFigure.vertices.C, x: cx + w, y: cy };
-                    this.selectedFigure.vertices.D = { ...this.selectedFigure.vertices.D, x: cx, y: cy - h };
+                    this.selectedFigure.vertices.A = { ...this.selectedFigure.vertices.A, x: margin, y: cy };
+                    this.selectedFigure.vertices.B = { ...this.selectedFigure.vertices.B, x: cx, y: this.canvasHeight - margin };
+                    this.selectedFigure.vertices.C = { ...this.selectedFigure.vertices.C, x: this.canvasWidth - margin, y: cy };
+                    this.selectedFigure.vertices.D = { ...this.selectedFigure.vertices.D, x: cx, y: margin };
                     this.selectedFigure.preset = 'rhombus';
                     break;
 
                 case 'square':
-                    const s = 150;
+                    const s = Math.min(this.canvasWidth, this.canvasHeight) / 2 - margin;
                     this.selectedFigure.vertices.A = { ...this.selectedFigure.vertices.A, x: cx - s, y: cy + s };
                     this.selectedFigure.vertices.B = { ...this.selectedFigure.vertices.B, x: cx + s, y: cy + s };
                     this.selectedFigure.vertices.C = { ...this.selectedFigure.vertices.C, x: cx + s, y: cy - s };
@@ -438,10 +447,11 @@ function geometryEditor() {
                     break;
 
                 case 'trapezoid':
-                    this.selectedFigure.vertices.A = { ...this.selectedFigure.vertices.A, x: cx - w - 60, y: cy + h };
-                    this.selectedFigure.vertices.B = { ...this.selectedFigure.vertices.B, x: cx + w + 60, y: cy + h };
-                    this.selectedFigure.vertices.C = { ...this.selectedFigure.vertices.C, x: cx + w - 40, y: cy - h };
-                    this.selectedFigure.vertices.D = { ...this.selectedFigure.vertices.D, x: cx - w + 40, y: cy - h };
+                    const topWidth = w * 0.6;
+                    this.selectedFigure.vertices.A = { ...this.selectedFigure.vertices.A, x: margin, y: this.canvasHeight - margin };
+                    this.selectedFigure.vertices.B = { ...this.selectedFigure.vertices.B, x: this.canvasWidth - margin, y: this.canvasHeight - margin };
+                    this.selectedFigure.vertices.C = { ...this.selectedFigure.vertices.C, x: cx + topWidth, y: margin };
+                    this.selectedFigure.vertices.D = { ...this.selectedFigure.vertices.D, x: cx - topWidth, y: margin };
                     this.selectedFigure.preset = 'trapezoid';
                     break;
 
@@ -963,6 +973,7 @@ function geometryEditor() {
             const lines = figure.lines || {};
 
             // Биссектрисы (голубой, пунктир — как в целевом стиле)
+            const vertexNeighbors = { 'A': ['C', 'B'], 'B': ['A', 'C'], 'C': ['B', 'A'] };
             ['a', 'b', 'c'].forEach(vKey => {
                 const lineKey = `bisector_${vKey}`;
                 if (lines[lineKey] && lines[lineKey].enabled) {
@@ -978,6 +989,15 @@ function geometryEditor() {
                     svg += `<text x="${endpoint.x}" y="${endpoint.y + 15}" fill="${this.colors.auxiliaryLine}" font-size="12"
                             font-family="'Times New Roman', serif" font-style="italic" font-weight="500"
                             text-anchor="middle" dominant-baseline="middle" class="geo-label">${label}</text>`;
+
+                    // Дуги половинных углов (если включены)
+                    if (lines[lineKey].showHalfArcs) {
+                        const [prev, next] = vertexNeighbors[vName];
+                        const arc1 = window.makeAngleArc(vertex, v[prev], endpoint, 20);
+                        const arc2 = window.makeAngleArc(vertex, endpoint, v[next], 25);
+                        svg += `<path d="${arc1}" fill="none" stroke="${this.colors.angleArc}" stroke-width="1.2"/>`;
+                        svg += `<path d="${arc2}" fill="none" stroke="${this.colors.angleArc}" stroke-width="1.2"/>`;
+                    }
                 }
             });
 
@@ -1841,6 +1861,18 @@ function geometryEditor() {
                 this.selectedFigure.lines[lineKey] = { enabled: false };
             }
             this.selectedFigure.lines[lineKey].enabled = enabled;
+            this.saveState();
+        },
+
+        toggleBisectorHalfArcs(lineKey, enabled) {
+            if (!this.selectedFigure) return;
+            if (!this.selectedFigure.lines) {
+                this.selectedFigure.lines = {};
+            }
+            if (!this.selectedFigure.lines[lineKey]) {
+                this.selectedFigure.lines[lineKey] = { enabled: false, showHalfArcs: false };
+            }
+            this.selectedFigure.lines[lineKey].showHalfArcs = enabled;
             this.saveState();
         },
 
