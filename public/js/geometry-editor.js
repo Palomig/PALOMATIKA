@@ -2633,9 +2633,9 @@ function geometryEditor() {
         // Рендер маркера вершины для экспорта (крестик + круг)
         renderVertexMarkerForExport(x, y) {
             return `<g transform="translate(${x}, ${y})">
-    <line x1="-5" y1="0" x2="5" y2="0" stroke="${this.colors.vertexMarker}" stroke-width="1"/>
-    <line x1="0" y1="-5" x2="0" y2="5" stroke="${this.colors.vertexMarker}" stroke-width="1"/>
-    <circle cx="0" cy="0" r="2" fill="none" stroke="${this.colors.vertexMarker}" stroke-width="0.8"/>
+    <line x1="-9" y1="0" x2="9" y2="0" stroke="${this.colors.vertexMarker}" stroke-width="1.75"/>
+    <line x1="0" y1="-9" x2="0" y2="9" stroke="${this.colors.vertexMarker}" stroke-width="1.75"/>
+    <circle cx="0" cy="0" r="3.5" fill="none" stroke="${this.colors.vertexMarker}" stroke-width="1.4"/>
   </g>`;
         },
 
@@ -2749,8 +2749,8 @@ function geometryEditor() {
             const points = `${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`;
             let svg = '';
 
-            // Основной полигон (stroke-width="2" как в Claude Code)
-            svg += `  <polygon points="${points}" fill="none" stroke="${this.colors.shapeStroke}" stroke-width="2"/>\n`;
+            // Основной полигон (stroke-width="2.5" как в редакторе)
+            svg += `  <polygon points="${points}" fill="none" stroke="${this.colors.shapeStroke}" stroke-width="2.5"/>\n`;
 
             // Вспомогательные линии (трансформированные)
             svg += this.renderTriangleAuxiliaryLinesTransformed(figure, transformPoint);
@@ -2767,13 +2767,13 @@ function geometryEditor() {
             svg += this.renderVertexMarkerForExport(C.x, C.y);
 
             // Подписи вершин
-            const labelA = this.labelPosFromCenter(A, center, 18);
-            const labelB = this.labelPosFromCenter(B, center, 18);
-            const labelC = this.labelPosFromCenter(C, center, 18);
+            const labelA = this.labelPosFromCenter(A, center, 22);
+            const labelB = this.labelPosFromCenter(B, center, 22);
+            const labelC = this.labelPosFromCenter(C, center, 22);
 
-            svg += this.labelText(v.A.label || 'A', labelA);
-            svg += this.labelText(v.B.label || 'B', labelB);
-            svg += this.labelText(v.C.label || 'C', labelC);
+            svg += this.labelText(v.A.label || 'A', labelA, null, 24);
+            svg += this.labelText(v.B.label || 'B', labelB, null, 24);
+            svg += this.labelText(v.C.label || 'C', labelC, null, 24);
 
             return svg;
         },
@@ -2799,8 +2799,8 @@ function geometryEditor() {
             const points = `${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`;
             let svg = '';
 
-            // Основной полигон (stroke-width="2" как в Claude Code)
-            svg += `  <polygon points="${points}" fill="none" stroke="${this.colors.shapeStroke}" stroke-width="2"/>\n`;
+            // Основной полигон (stroke-width="2.5" как в редакторе)
+            svg += `  <polygon points="${points}" fill="none" stroke="${this.colors.shapeStroke}" stroke-width="2.5"/>\n`;
 
             // Диагонали и вспомогательные линии (трансформированные)
             svg += this.renderQuadDiagonalsTransformed(figure, transformPoint);
@@ -2818,15 +2818,15 @@ function geometryEditor() {
             svg += this.renderVertexMarkerForExport(D.x, D.y);
 
             // Подписи вершин
-            const labelA = this.labelPosFromCenter(A, center, 18);
-            const labelB = this.labelPosFromCenter(B, center, 18);
-            const labelC = this.labelPosFromCenter(C, center, 18);
-            const labelD = this.labelPosFromCenter(D, center, 18);
+            const labelA = this.labelPosFromCenter(A, center, 22);
+            const labelB = this.labelPosFromCenter(B, center, 22);
+            const labelC = this.labelPosFromCenter(C, center, 22);
+            const labelD = this.labelPosFromCenter(D, center, 22);
 
-            svg += this.labelText(v.A.label || 'A', labelA);
-            svg += this.labelText(v.B.label || 'B', labelB);
-            svg += this.labelText(v.C.label || 'C', labelC);
-            svg += this.labelText(v.D.label || 'D', labelD);
+            svg += this.labelText(v.A.label || 'A', labelA, null, 24);
+            svg += this.labelText(v.B.label || 'B', labelB, null, 24);
+            svg += this.labelText(v.C.label || 'C', labelC, null, 24);
+            svg += this.labelText(v.D.label || 'D', labelD, null, 24);
 
             return svg;
         },
@@ -2839,7 +2839,7 @@ function geometryEditor() {
             const r = figure.radius * scale;
 
             let svg = '';
-            svg += `  <circle cx="${c.x}" cy="${c.y}" r="${r}" fill="none" stroke="${this.colors.circleStroke}" stroke-width="2"/>\n`;
+            svg += `  <circle cx="${c.x}" cy="${c.y}" r="${r}" fill="none" stroke="${this.colors.circleStroke}" stroke-width="2.5"/>\n`;
             svg += this.renderVertexMarkerForExport(c.x, c.y);
 
             // Хорды (трансформированные)
@@ -2847,7 +2847,7 @@ function geometryEditor() {
                 figure.chords.forEach(chord => {
                     const p1 = transformPoint(chord.point1);
                     const p2 = transformPoint(chord.point2);
-                    svg += `  <line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="${this.colors.shapeStroke}" stroke-width="2"/>\n`;
+                    svg += `  <line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="${this.colors.shapeStroke}" stroke-width="2.5"/>\n`;
                 });
             }
 
@@ -2905,18 +2905,18 @@ function geometryEditor() {
 
                 if (isRight) {
                     // Прямой угол - квадратик
-                    const path = this.rightAnglePathFromPoints(vertex, p1, p2, 12);
-                    svg += `  <path d="${path}" fill="none" stroke="${color}" stroke-width="1.5"/>\n`;
+                    const path = this.rightAnglePathFromPoints(vertex, p1, p2, 18);
+                    svg += `  <path d="${path}" fill="none" stroke="${color}" stroke-width="2.5"/>\n`;
                 } else {
-                    // Обычная дуга (радиус 20 как в Claude Code)
-                    const arc = this.makeAngleArcFromPoints(vertex, p1, p2, 20);
-                    svg += `  <path d="${arc}" fill="none" stroke="${color}" stroke-width="1.5"/>\n`;
+                    // Обычная дуга (радиус 30 как в редакторе)
+                    const arc = this.makeAngleArcFromPoints(vertex, p1, p2, 30);
+                    svg += `  <path d="${arc}" fill="none" stroke="${color}" stroke-width="2.5"/>\n`;
                 }
 
                 // Значение угла (если включено)
                 if (angleData.showValue) {
-                    const labelPos = this.angleLabelPosFromPoints(vertex, p1, p2, 35);
-                    svg += `  <text x="${labelPos.x}" y="${labelPos.y}" fill="${color}" font-size="11" font-family="'Times New Roman', serif" font-weight="500" text-anchor="middle" dominant-baseline="middle">${angleValues[vName]}°</text>\n`;
+                    const labelPos = this.angleLabelPosFromPoints(vertex, p1, p2, 50);
+                    svg += `  <text x="${labelPos.x}" y="${labelPos.y}" fill="${color}" font-size="18" font-family="'Times New Roman', serif" font-weight="500" text-anchor="middle" dominant-baseline="middle">${angleValues[vName]}°</text>\n`;
                 }
             });
 
@@ -2974,17 +2974,17 @@ function geometryEditor() {
                 const isRight = Math.abs(angleValues[vName] - 90) < 2;
 
                 if (isRight) {
-                    const path = this.rightAnglePathFromPoints(vertex, p1, p2, 12);
-                    svg += `  <path d="${path}" fill="none" stroke="${color}" stroke-width="1.5"/>\n`;
+                    const path = this.rightAnglePathFromPoints(vertex, p1, p2, 18);
+                    svg += `  <path d="${path}" fill="none" stroke="${color}" stroke-width="2.5"/>\n`;
                 } else {
-                    const arc = this.makeAngleArcFromPoints(vertex, p1, p2, 20);
-                    svg += `  <path d="${arc}" fill="none" stroke="${color}" stroke-width="1.5"/>\n`;
+                    const arc = this.makeAngleArcFromPoints(vertex, p1, p2, 30);
+                    svg += `  <path d="${arc}" fill="none" stroke="${color}" stroke-width="2.5"/>\n`;
                 }
 
                 // Значение угла (если включено)
                 if (angleData.showValue) {
-                    const labelPos = this.angleLabelPosFromPoints(vertex, p1, p2, 35);
-                    svg += `  <text x="${labelPos.x}" y="${labelPos.y}" fill="${color}" font-size="11" font-family="'Times New Roman', serif" font-weight="500" text-anchor="middle" dominant-baseline="middle">${angleValues[vName]}°</text>\n`;
+                    const labelPos = this.angleLabelPosFromPoints(vertex, p1, p2, 50);
+                    svg += `  <text x="${labelPos.x}" y="${labelPos.y}" fill="${color}" font-size="18" font-family="'Times New Roman', serif" font-weight="500" text-anchor="middle" dominant-baseline="middle">${angleValues[vName]}°</text>\n`;
                 }
             });
 
@@ -3018,19 +3018,19 @@ function geometryEditor() {
                     const tEndpoint = transformPoint(endpoint);
                     const vertex = tV[vName];
 
-                    svg += `  <line x1="${vertex.x}" y1="${vertex.y}" x2="${tEndpoint.x}" y2="${tEndpoint.y}" stroke="${this.colors.auxiliaryLine}" stroke-width="1" stroke-dasharray="8,4"/>\n`;
-                    svg += `  <circle cx="${tEndpoint.x}" cy="${tEndpoint.y}" r="3" fill="${this.colors.auxiliaryLine}"/>\n`;
+                    svg += `  <line x1="${vertex.x}" y1="${vertex.y}" x2="${tEndpoint.x}" y2="${tEndpoint.y}" stroke="${this.colors.auxiliaryLine}" stroke-width="1.75" stroke-dasharray="14,7"/>\n`;
+                    svg += `  <circle cx="${tEndpoint.x}" cy="${tEndpoint.y}" r="5" fill="${this.colors.auxiliaryLine}"/>\n`;
 
                     const label = lines[lineKey].intersectionLabel || 'D';
-                    svg += `  <text x="${tEndpoint.x}" y="${tEndpoint.y + 12}" fill="${this.colors.auxiliaryLabel}" font-size="12" font-family="'Times New Roman', serif" font-style="italic" text-anchor="middle">${label}</text>\n`;
+                    svg += `  <text x="${tEndpoint.x}" y="${tEndpoint.y + 18}" fill="${this.colors.auxiliaryLabel}" font-size="20" font-family="'Times New Roman', serif" font-style="italic" text-anchor="middle">${label}</text>\n`;
 
                     // Дуги половинных углов
                     if (lines[lineKey].showHalfArcs) {
                         const [prev, next] = vertexNeighbors[vName];
-                        const arc1 = window.makeAngleArc(vertex, tV[prev], tEndpoint, 15);
-                        const arc2 = window.makeAngleArc(vertex, tEndpoint, tV[next], 18);
-                        svg += `  <path d="${arc1}" fill="none" stroke="${this.colors.angleArc}" stroke-width="1.2"/>\n`;
-                        svg += `  <path d="${arc2}" fill="none" stroke="${this.colors.angleArc}" stroke-width="1.2"/>\n`;
+                        const arc1 = window.makeAngleArc(vertex, tV[prev], tEndpoint, 25);
+                        const arc2 = window.makeAngleArc(vertex, tEndpoint, tV[next], 30);
+                        svg += `  <path d="${arc1}" fill="none" stroke="${this.colors.angleArc}" stroke-width="2"/>\n`;
+                        svg += `  <path d="${arc2}" fill="none" stroke="${this.colors.angleArc}" stroke-width="2"/>\n`;
                     }
                 }
             });
@@ -3044,11 +3044,11 @@ function geometryEditor() {
                     const tEndpoint = transformPoint(endpoint);
                     const vertex = tV[vName];
 
-                    svg += `  <line x1="${vertex.x}" y1="${vertex.y}" x2="${tEndpoint.x}" y2="${tEndpoint.y}" stroke="${this.colors.auxiliaryLine}" stroke-width="1" stroke-dasharray="8,4"/>\n`;
-                    svg += `  <circle cx="${tEndpoint.x}" cy="${tEndpoint.y}" r="3" fill="${this.colors.auxiliaryLine}"/>\n`;
+                    svg += `  <line x1="${vertex.x}" y1="${vertex.y}" x2="${tEndpoint.x}" y2="${tEndpoint.y}" stroke="${this.colors.auxiliaryLine}" stroke-width="1.75" stroke-dasharray="14,7"/>\n`;
+                    svg += `  <circle cx="${tEndpoint.x}" cy="${tEndpoint.y}" r="5" fill="${this.colors.auxiliaryLine}"/>\n`;
 
                     const label = lines[lineKey].intersectionLabel || 'M';
-                    svg += `  <text x="${tEndpoint.x}" y="${tEndpoint.y + 12}" fill="${this.colors.auxiliaryLabel}" font-size="12" font-family="'Times New Roman', serif" font-style="italic" text-anchor="middle">${label}</text>\n`;
+                    svg += `  <text x="${tEndpoint.x}" y="${tEndpoint.y + 18}" fill="${this.colors.auxiliaryLabel}" font-size="20" font-family="'Times New Roman', serif" font-style="italic" text-anchor="middle">${label}</text>\n`;
                 }
             });
 
@@ -3061,11 +3061,11 @@ function geometryEditor() {
                     const tEndpoint = transformPoint(endpoint);
                     const vertex = tV[vName];
 
-                    svg += `  <line x1="${vertex.x}" y1="${vertex.y}" x2="${tEndpoint.x}" y2="${tEndpoint.y}" stroke="${this.colors.auxiliaryLine}" stroke-width="1" stroke-dasharray="8,4"/>\n`;
-                    svg += `  <circle cx="${tEndpoint.x}" cy="${tEndpoint.y}" r="3" fill="${this.colors.auxiliaryLine}"/>\n`;
+                    svg += `  <line x1="${vertex.x}" y1="${vertex.y}" x2="${tEndpoint.x}" y2="${tEndpoint.y}" stroke="${this.colors.auxiliaryLine}" stroke-width="1.75" stroke-dasharray="14,7"/>\n`;
+                    svg += `  <circle cx="${tEndpoint.x}" cy="${tEndpoint.y}" r="5" fill="${this.colors.auxiliaryLine}"/>\n`;
 
                     const label = lines[lineKey].intersectionLabel || 'H';
-                    svg += `  <text x="${tEndpoint.x}" y="${tEndpoint.y + 12}" fill="${this.colors.auxiliaryLabel}" font-size="12" font-family="'Times New Roman', serif" font-style="italic" text-anchor="middle">${label}</text>\n`;
+                    svg += `  <text x="${tEndpoint.x}" y="${tEndpoint.y + 18}" fill="${this.colors.auxiliaryLabel}" font-size="20" font-family="'Times New Roman', serif" font-style="italic" text-anchor="middle">${label}</text>\n`;
                 }
             });
 
@@ -3086,8 +3086,8 @@ function geometryEditor() {
                 const C = transformPoint(v.C);
                 const D = transformPoint(v.D);
 
-                svg += `  <line x1="${A.x}" y1="${A.y}" x2="${C.x}" y2="${C.y}" stroke="${this.colors.auxiliaryLine}" stroke-width="1.5" stroke-dasharray="8,4"/>\n`;
-                svg += `  <line x1="${B.x}" y1="${B.y}" x2="${D.x}" y2="${D.y}" stroke="${this.colors.auxiliaryLine}" stroke-width="1.5" stroke-dasharray="8,4"/>\n`;
+                svg += `  <line x1="${A.x}" y1="${A.y}" x2="${C.x}" y2="${C.y}" stroke="${this.colors.auxiliaryLine}" stroke-width="1.75" stroke-dasharray="14,7"/>\n`;
+                svg += `  <line x1="${B.x}" y1="${B.y}" x2="${D.x}" y2="${D.y}" stroke="${this.colors.auxiliaryLine}" stroke-width="1.75" stroke-dasharray="14,7"/>\n`;
             }
 
             // Другие вспомогательные линии
@@ -3095,8 +3095,8 @@ function geometryEditor() {
             auxLines.forEach(line => {
                 const p1 = transformPoint(line.point1);
                 const p2 = transformPoint(line.point2);
-                const dashArray = line.dashed !== false ? '8,4' : 'none';
-                svg += `  <line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="${this.colors.auxiliaryLine}" stroke-width="1.5" stroke-dasharray="${dashArray}"/>\n`;
+                const dashArray = line.dashed !== false ? '14,7' : 'none';
+                svg += `  <line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="${this.colors.auxiliaryLine}" stroke-width="1.75" stroke-dasharray="${dashArray}"/>\n`;
             });
 
             return svg;
@@ -3122,16 +3122,16 @@ function geometryEditor() {
 
                     if (tickCount === 1) {
                         const tick = this.getEqualityTickFromPoints(p1, p2);
-                        svg += `  <line x1="${tick.x1}" y1="${tick.y1}" x2="${tick.x2}" y2="${tick.y2}" stroke="${color}" stroke-width="2"/>\n`;
+                        svg += `  <line x1="${tick.x1}" y1="${tick.y1}" x2="${tick.x2}" y2="${tick.y2}" stroke="${color}" stroke-width="3.5"/>\n`;
                     } else if (tickCount === 2) {
                         const ticks = this.getDoubleEqualityTickFromPoints(p1, p2);
-                        svg += `  <line x1="${ticks.tick1.x1}" y1="${ticks.tick1.y1}" x2="${ticks.tick1.x2}" y2="${ticks.tick1.y2}" stroke="${color}" stroke-width="2"/>\n`;
-                        svg += `  <line x1="${ticks.tick2.x1}" y1="${ticks.tick2.y1}" x2="${ticks.tick2.x2}" y2="${ticks.tick2.y2}" stroke="${color}" stroke-width="2"/>\n`;
+                        svg += `  <line x1="${ticks.tick1.x1}" y1="${ticks.tick1.y1}" x2="${ticks.tick1.x2}" y2="${ticks.tick1.y2}" stroke="${color}" stroke-width="3.5"/>\n`;
+                        svg += `  <line x1="${ticks.tick2.x1}" y1="${ticks.tick2.y1}" x2="${ticks.tick2.x2}" y2="${ticks.tick2.y2}" stroke="${color}" stroke-width="3.5"/>\n`;
                     } else if (tickCount === 3) {
                         const ticks = this.getTripleEqualityTickFromPoints(p1, p2);
-                        svg += `  <line x1="${ticks.tick1.x1}" y1="${ticks.tick1.y1}" x2="${ticks.tick1.x2}" y2="${ticks.tick1.y2}" stroke="${color}" stroke-width="2"/>\n`;
-                        svg += `  <line x1="${ticks.tick2.x1}" y1="${ticks.tick2.y1}" x2="${ticks.tick2.x2}" y2="${ticks.tick2.y2}" stroke="${color}" stroke-width="2"/>\n`;
-                        svg += `  <line x1="${ticks.tick3.x1}" y1="${ticks.tick3.y1}" x2="${ticks.tick3.x2}" y2="${ticks.tick3.y2}" stroke="${color}" stroke-width="2"/>\n`;
+                        svg += `  <line x1="${ticks.tick1.x1}" y1="${ticks.tick1.y1}" x2="${ticks.tick1.x2}" y2="${ticks.tick1.y2}" stroke="${color}" stroke-width="3.5"/>\n`;
+                        svg += `  <line x1="${ticks.tick2.x1}" y1="${ticks.tick2.y1}" x2="${ticks.tick2.x2}" y2="${ticks.tick2.y2}" stroke="${color}" stroke-width="3.5"/>\n`;
+                        svg += `  <line x1="${ticks.tick3.x1}" y1="${ticks.tick3.y1}" x2="${ticks.tick3.x2}" y2="${ticks.tick3.y2}" stroke="${color}" stroke-width="3.5"/>\n`;
                     }
                 });
             });
@@ -3159,11 +3159,11 @@ function geometryEditor() {
 
                     if (tickCount === 1) {
                         const tick = this.getEqualityTickFromPoints(p1, p2);
-                        svg += `  <line x1="${tick.x1}" y1="${tick.y1}" x2="${tick.x2}" y2="${tick.y2}" stroke="${color}" stroke-width="2"/>\n`;
+                        svg += `  <line x1="${tick.x1}" y1="${tick.y1}" x2="${tick.x2}" y2="${tick.y2}" stroke="${color}" stroke-width="3.5"/>\n`;
                     } else if (tickCount === 2) {
                         const ticks = this.getDoubleEqualityTickFromPoints(p1, p2);
-                        svg += `  <line x1="${ticks.tick1.x1}" y1="${ticks.tick1.y1}" x2="${ticks.tick1.x2}" y2="${ticks.tick1.y2}" stroke="${color}" stroke-width="2"/>\n`;
-                        svg += `  <line x1="${ticks.tick2.x1}" y1="${ticks.tick2.y1}" x2="${ticks.tick2.x2}" y2="${ticks.tick2.y2}" stroke="${color}" stroke-width="2"/>\n`;
+                        svg += `  <line x1="${ticks.tick1.x1}" y1="${ticks.tick1.y1}" x2="${ticks.tick1.x2}" y2="${ticks.tick1.y2}" stroke="${color}" stroke-width="3.5"/>\n`;
+                        svg += `  <line x1="${ticks.tick2.x1}" y1="${ticks.tick2.y1}" x2="${ticks.tick2.x2}" y2="${ticks.tick2.y2}" stroke="${color}" stroke-width="3.5"/>\n`;
                     }
                 });
             });
