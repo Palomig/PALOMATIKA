@@ -10,6 +10,13 @@
     $examType = request()->is('ege*') ? 'EGE' : 'OGE';
 @endphp
 
+@once
+<style>
+    /* Принудительное масштабирование SVG до 350px (переопределяет бейкнутый max-w-[250px]) */
+    .geo-svg-wrap svg { max-width: 350px !important; width: 100%; height: auto; }
+</style>
+@endonce
+
 <div class="space-y-6">
     @foreach($tasks as $task)
         @php
@@ -30,7 +37,7 @@
                 {{-- SVG или изображение --}}
                 @if($hasVisual)
                     <div class="lg:w-[400px] lg:shrink-0 mb-4 lg:mb-0">
-                        <div class="bg-slate-900/50 rounded-lg p-4 flex items-center justify-center min-h-[220px] relative group">
+                        <div class="bg-slate-900/50 rounded-lg p-4 flex items-center justify-center min-h-[280px] relative group geo-svg-wrap">
                             @if($hasSvg)
                                 {{-- Предзаготовленный SVG из JSON --}}
                                 {!! $task['svg'] !!}
