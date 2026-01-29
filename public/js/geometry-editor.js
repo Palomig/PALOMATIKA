@@ -21,9 +21,9 @@ function geometryEditor() {
         taskId: '',
         mode: 'full_edit', // 'full_edit' | 'legacy_view'
 
-        // Canvas (по умолчанию как в заданиях)
-        canvasWidth: 200,
-        canvasHeight: 160,
+        // Canvas (350×280 — как отображается на странице заданий)
+        canvasWidth: 350,
+        canvasHeight: 280,
         showGrid: false,
         gridSize: 20,
 
@@ -138,15 +138,15 @@ function geometryEditor() {
 
         createTriangle(index) {
             const suffix = index > 1 ? index : '';
-            // Координаты для viewBox 200x160 (как в заданиях)
+            // Координаты для viewBox 350×280 (масштаб ×1.75 от 200×160)
             return {
                 id: `triangle_${this.figureCounter}`,
                 type: 'triangle',
                 preset: 'free',
                 vertices: {
-                    A: { x: 20, y: 130, label: `A${suffix ? '₊' + suffix : ''}` },
-                    B: { x: 180, y: 130, label: `B${suffix ? '₊' + suffix : ''}` },
-                    C: { x: 100, y: 25, label: `C${suffix ? '₊' + suffix : ''}` }
+                    A: { x: 35, y: 228, label: `A${suffix ? '₊' + suffix : ''}` },
+                    B: { x: 315, y: 228, label: `B${suffix ? '₊' + suffix : ''}` },
+                    C: { x: 175, y: 44, label: `C${suffix ? '₊' + suffix : ''}` }
                 },
                 angles: {
                     A: { value: null, showArc: false, arcType: 'single', showValue: false },
@@ -170,16 +170,16 @@ function geometryEditor() {
 
         createQuadrilateral(index) {
             const suffix = index > 1 ? index : '';
-            // Координаты для viewBox 200x160
+            // Координаты для viewBox 350×280 (масштаб ×1.75)
             return {
                 id: `quad_${this.figureCounter}`,
                 type: 'quadrilateral',
                 preset: 'free',
                 vertices: {
-                    A: { x: 20, y: 130, label: `A${suffix ? '₊' + suffix : ''}` },
-                    B: { x: 180, y: 130, label: `B${suffix ? '₊' + suffix : ''}` },
-                    C: { x: 160, y: 30, label: `C${suffix ? '₊' + suffix : ''}` },
-                    D: { x: 40, y: 30, label: `D${suffix ? '₊' + suffix : ''}` }
+                    A: { x: 35, y: 228, label: `A${suffix ? '₊' + suffix : ''}` },
+                    B: { x: 315, y: 228, label: `B${suffix ? '₊' + suffix : ''}` },
+                    C: { x: 280, y: 53, label: `C${suffix ? '₊' + suffix : ''}` },
+                    D: { x: 70, y: 53, label: `D${suffix ? '₊' + suffix : ''}` }
                 },
                 angles: {},
                 lines: {},
@@ -188,12 +188,12 @@ function geometryEditor() {
         },
 
         createCircle(index) {
-            // Координаты для viewBox 200x160
+            // Координаты для viewBox 350×280 (масштаб ×1.75)
             return {
                 id: `circle_${this.figureCounter}`,
                 type: 'circle',
-                center: { x: 100, y: 80 },
-                radius: 50,
+                center: { x: 175, y: 140 },
+                radius: 88,
                 centerLabel: index > 1 ? `O${index}` : 'O',
                 showDiameter: false,
                 showRadius: false,
