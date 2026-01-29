@@ -178,15 +178,15 @@
                         <input type="number" x-model.number="canvasHeight" min="100" max="600" step="10"
                                class="w-14 px-1 py-1 text-xs bg-[#1e1e32] text-gray-200 rounded border border-gray-600 text-center"
                                title="Высота">
-                        <button @click="canvasWidth = 200; canvasHeight = 160"
+                        <button @click="canvasWidth = 350; canvasHeight = 280"
                                 class="px-2 py-1 text-xs bg-[#1e1e32] hover:bg-[#2a2a42] text-gray-400 rounded"
                                 title="Стандартный размер (как в заданиях)">
-                            200×160
+                            350×280
                         </button>
-                        <button @click="canvasWidth = 250; canvasHeight = 200"
+                        <button @click="canvasWidth = 400; canvasHeight = 320"
                                 class="px-2 py-1 text-xs bg-[#1e1e32] hover:bg-[#2a2a42] text-gray-400 rounded"
-                                title="Средний размер">
-                            250×200
+                                title="Большой размер">
+                            400×320
                         </button>
                     </div>
 
@@ -203,9 +203,9 @@
                 </div>
 
                 {{-- SVG Canvas --}}
-                <div class="flex-1 relative overflow-hidden" id="canvas-container">
+                <div class="flex-1 flex items-center justify-center overflow-auto bg-[#0a0a14]" id="canvas-container">
                     <svg id="geometry-canvas"
-                         class="w-full h-full"
+                         :style="`width: ${canvasWidth}px; height: ${canvasHeight}px`"
                          :viewBox="`0 0 ${canvasWidth} ${canvasHeight}`"
                          @mousedown="onCanvasMouseDown($event)"
                          @mousemove="onCanvasMouseMove($event)"
