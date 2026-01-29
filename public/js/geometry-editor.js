@@ -2560,8 +2560,9 @@ function geometryEditor() {
             if (this.figures.length === 0) return '';
 
             // Стандартный viewBox как в Claude Code
-            const targetWidth = 220;
-            const targetHeight = 160;
+            // Размеры экспорта = размеры редактора (WYSIWYG)
+            const targetWidth = 350;
+            const targetHeight = 280;
             const padding = 15; // Отступ для меток
 
             // 1. Вычисляем bounding box всех фигур в координатах редактора
@@ -2978,26 +2979,79 @@ function geometryEditor() {
 
         /**
          * Рендер вспомогательных линий треугольника (трансформированные)
+         * Читает из figure.lines (bisector_a, median_a, altitude_a и т.д.)
          */
         renderTriangleAuxiliaryLinesTransformed(figure, transformPoint) {
             let svg = '';
-            const auxLines = figure.auxiliaryLines || [];
+            const v = figure.vertices;
+            const lines = figure.lines || {};
 
-            auxLines.forEach(line => {
-                const p1 = transformPoint(line.point1);
-                const p2 = transformPoint(line.point2);
-                const dashArray = line.dashed ? '6,4' : 'none';
-                svg += `  <line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="${this.colors.auxiliaryLine}" stroke-width="1.5" stroke-dasharray="${dashArray}"/>\n`;
+            // Трансформируем вершины
+            const tV = {
+                A: transformPoint(v.A),
+                B: transformPoint(v.B),
+                C: transformPoint(v.C)
+            };
 
-                // Точка на линии (если есть)
-                if (line.midpoint) {
-                    const mp = transformPoint(line.midpoint);
-                    svg += this.renderVertexMarkerForExport(mp.x, mp.y);
-                    if (line.midpointLabel) {
-                        const center = { x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2 };
-                        const labelPos = this.labelPosFromCenter(mp, center, 15);
-                        svg += this.labelText(line.midpointLabel, labelPos, this.colors.auxiliaryLabel);
+            const vertexNeighbors = { 'A': ['C', 'B'], 'B': ['A', 'C'], 'C': ['B', 'A'] };
+
+            // Биссектрисы
+            ['a', 'b', 'c'].forEach(vKey => {
+                const lineKey = `bisector_${vKey}`;
+                if (lines[lineKey] && lines[lineKey].enabled) {
+                    const vName = vKey.toUpperCase();
+                    const endpoint = this.getBisectorEnd(figure, vName);
+                    const tEndpoint = transformPoint(endpoint);
+                    const vertex = tV[vName];
+
+                    svg += `  <line x1="${vertex.x}" y1="${vertex.y}" x2="${tEndpoint.x}" y2="${tEndpoint.y}" stroke="${this.colors.auxiliaryLine}" stroke-width="1" stroke-dasharray="8,4"/>\n`;
+                    svg += `  <circle cx="${tEndpoint.x}" cy="${tEndpoint.y}" r="3" fill="${this.colors.auxiliaryLine}"/>\n`;
+
+                    const label = lines[lineKey].intersectionLabel || 'D';
+                    svg += `  <text x="${tEndpoint.x}" y="${tEndpoint.y + 12}" fill="${this.colors.auxiliaryLabel}" font-size="12" font-family="'Times New Roman', serif" font-style="italic" text-anchor="middle">${label}</text>\n`;
+
+                    // Дуги половинных углов
+                    if (lines[lineKey].showHalfArcs) {
+                        const [prev, next] = vertexNeighbors[vName];
+                        const arc1 = window.makeAngleArc(vertex, tV[prev], tEndpoint, 15);
+                        const arc2 = window.makeAngleArc(vertex, tEndpoint, tV[next], 18);
+                        svg += `  <path d="${arc1}" fill="none" stroke="${this.colors.angleArc}" stroke-width="1.2"/>\n`;
+                        svg += `  <path d="${arc2}" fill="none" stroke="${this.colors.angleArc}" stroke-width="1.2"/>\n`;
                     }
+                }
+            });
+
+            // Медианы
+            ['a', 'b', 'c'].forEach(vKey => {
+                const lineKey = `median_${vKey}`;
+                if (lines[lineKey] && lines[lineKey].enabled) {
+                    const vName = vKey.toUpperCase();
+                    const endpoint = this.getMedianEnd(figure, vName);
+                    const tEndpoint = transformPoint(endpoint);
+                    const vertex = tV[vName];
+
+                    svg += `  <line x1="${vertex.x}" y1="${vertex.y}" x2="${tEndpoint.x}" y2="${tEndpoint.y}" stroke="${this.colors.auxiliaryLine}" stroke-width="1" stroke-dasharray="8,4"/>\n`;
+                    svg += `  <circle cx="${tEndpoint.x}" cy="${tEndpoint.y}" r="3" fill="${this.colors.auxiliaryLine}"/>\n`;
+
+                    const label = lines[lineKey].intersectionLabel || 'M';
+                    svg += `  <text x="${tEndpoint.x}" y="${tEndpoint.y + 12}" fill="${this.colors.auxiliaryLabel}" font-size="12" font-family="'Times New Roman', serif" font-style="italic" text-anchor="middle">${label}</text>\n`;
+                }
+            });
+
+            // Высоты
+            ['a', 'b', 'c'].forEach(vKey => {
+                const lineKey = `altitude_${vKey}`;
+                if (lines[lineKey] && lines[lineKey].enabled) {
+                    const vName = vKey.toUpperCase();
+                    const endpoint = this.getAltitudeEnd(figure, vName);
+                    const tEndpoint = transformPoint(endpoint);
+                    const vertex = tV[vName];
+
+                    svg += `  <line x1="${vertex.x}" y1="${vertex.y}" x2="${tEndpoint.x}" y2="${tEndpoint.y}" stroke="${this.colors.auxiliaryLine}" stroke-width="1" stroke-dasharray="8,4"/>\n`;
+                    svg += `  <circle cx="${tEndpoint.x}" cy="${tEndpoint.y}" r="3" fill="${this.colors.auxiliaryLine}"/>\n`;
+
+                    const label = lines[lineKey].intersectionLabel || 'H';
+                    svg += `  <text x="${tEndpoint.x}" y="${tEndpoint.y + 12}" fill="${this.colors.auxiliaryLabel}" font-size="12" font-family="'Times New Roman', serif" font-style="italic" text-anchor="middle">${label}</text>\n`;
                 }
             });
 
@@ -3340,6 +3394,7 @@ function geometryEditor() {
                 if (response.ok) {
                     alert('Изображение сохранено!');
                     this.close();
+                    location.reload(); // Обновить страницу чтобы показать изменения
                 } else {
                     const error = await response.json();
                     alert('Ошибка сохранения: ' + (error.message || 'Неизвестная ошибка'));
