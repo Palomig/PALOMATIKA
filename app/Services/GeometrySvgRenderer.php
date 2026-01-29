@@ -1282,7 +1282,7 @@ SVG;
         $svg .= "  <polygon points=\"{$A['x']},{$A['y']} {$B['x']},{$B['y']} {$C['x']},{$C['y']} {$D['x']},{$D['y']}\" fill=\"none\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2\"/>\n";
 
         // Радиус к A (пунктир)
-        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$A['x']}\" y2=\"{$A['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$A['x']}\" y2=\"{$A['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
         // Крестики для точек
         $svg .= $this->crosshairs([$O, $A, $B, $C, $D]);
@@ -1331,11 +1331,11 @@ SVG;
         $svg .= "  <line x1=\"{$B['x']}\" y1=\"{$B['y']}\" x2=\"{$P['x']}\" y2=\"{$P['y']}\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2\"/>\n";
 
         // Линия AB (соединяет точки касания) - пунктир как вспомогательная
-        $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$B['x']}\" y2=\"{$B['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+        $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$B['x']}\" y2=\"{$B['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
         // Радиусы к точкам касания (пунктир - вспомогательные линии)
-        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$A['x']}\" y2=\"{$A['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
-        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$B['x']}\" y2=\"{$B['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$A['x']}\" y2=\"{$A['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
+        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$B['x']}\" y2=\"{$B['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
         // Прямые углы в точках касания (OA ⊥ AP, OB ⊥ BP) - белый цвет для контраста с пунктиром
         $rightAngleA = $this->rightAnglePath($A, $O, $P, 10);
@@ -1401,8 +1401,8 @@ SVG;
         $svg .= "  <polygon points=\"{$A['x']},{$A['y']} {$B['x']},{$B['y']} {$C['x']},{$C['y']}\" fill=\"none\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2\"/>\n";
 
         // Центральный угол (радиусы OA и OB) - пунктир как вспомогательные
-        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$A['x']}\" y2=\"{$A['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
-        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$B['x']}\" y2=\"{$B['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$A['x']}\" y2=\"{$A['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
+        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$B['x']}\" y2=\"{$B['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
         // Дуга центрального угла AOB (уменьшена для текста)
         $arcO = $this->makeAngleArc($O, $A, $B, 18);
@@ -1499,8 +1499,8 @@ SVG;
         $svg .= "  <line x1=\"{$N['x']}\" y1=\"{$N['y']}\" x2=\"{$B['x']}\" y2=\"{$B['y']}\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"2\"/>\n";
 
         // Линии к M (вспомогательные пунктиром)
-        $svg .= "  <line x1=\"{$M['x']}\" y1=\"{$M['y']}\" x2=\"{$N['x']}\" y2=\"{$N['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
-        $svg .= "  <line x1=\"{$M['x']}\" y1=\"{$M['y']}\" x2=\"{$B['x']}\" y2=\"{$B['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+        $svg .= "  <line x1=\"{$M['x']}\" y1=\"{$M['y']}\" x2=\"{$N['x']}\" y2=\"{$N['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
+        $svg .= "  <line x1=\"{$M['x']}\" y1=\"{$M['y']}\" x2=\"{$B['x']}\" y2=\"{$B['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
         // Прямой угол в N (вписанный угол, опирающийся на диаметр = 90°) - белый для контраста
         $rightAngleN = $this->rightAnglePath($N, $A, $B, 10);
@@ -1548,7 +1548,7 @@ SVG;
         $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"{$r}\" fill=\"none\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"1.5\"/>\n";
 
         // Радиус к основанию (пунктирная линия)
-        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$O['x']}\" y2=\"170\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$O['x']}\" y2=\"170\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
         // Крестик для центра
         $svg .= $this->crosshairs([$O]);
@@ -1584,7 +1584,7 @@ SVG;
 
         if ($find === 'area' && isset($params['radius'])) {
             // Задачи 39-42: дан радиус, найти площадь - показываем радиус пунктиром
-            $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"195\" y2=\"{$O['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+            $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"195\" y2=\"{$O['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
             $svg .= "  <text x=\"152\" y=\"85\" fill=\"" . self::COLORS['accent'] . "\" font-size=\"13\" font-family=\"'Times New Roman', serif\" font-weight=\"500\" class=\"geo-label\">r={$params['radius']}</text>\n";
         } else if (isset($params['side'])) {
             // Задачи 35-38: дана сторона, найти радиус - показываем сторону
@@ -1658,7 +1658,7 @@ SVG;
         $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"{$r}\" fill=\"none\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"1.5\"/>\n";
 
         // Диагональ (пунктир)
-        $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$C['x']}\" y2=\"{$C['y']}\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+        $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$C['x']}\" y2=\"{$C['y']}\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
         // Крестики
         $svg .= $this->crosshairs([$O, $A, $B, $C, $D]);
@@ -1789,7 +1789,7 @@ SVG;
         $svg .= "  <polygon points=\"{$A['x']},{$A['y']} {$B['x']},{$B['y']} {$C['x']},{$C['y']} {$D['x']},{$D['y']}\" fill=\"none\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2\"/>\n";
 
         // Радиус (пунктир)
-        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$A['x']}\" y2=\"{$A['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$A['x']}\" y2=\"{$A['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
         // Крестики
         $svg .= $this->crosshairs([$O, $A, $B, $C, $D]);
@@ -1829,7 +1829,7 @@ SVG;
         $svg .= "  <polygon points=\"{$A['x']},{$A['y']} {$B['x']},{$B['y']} {$C['x']},{$C['y']}\" fill=\"none\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2\"/>\n";
 
         // Радиус (пунктир)
-        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$A['x']}\" y2=\"{$A['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$A['x']}\" y2=\"{$A['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
         // Крестики
         $svg .= $this->crosshairs([$O, $A, $B, $C]);
@@ -1869,7 +1869,7 @@ SVG;
         $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"" . round($r) . "\" fill=\"none\" stroke=\"" . self::COLORS['circle'] . "\" stroke-width=\"1.5\"/>\n";
 
         // Радиус к основанию (пунктир)
-        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$O['x']}\" y2=\"" . ($cy + $h / 3) . "\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$O['x']}\" y2=\"" . ($cy + $h / 3) . "\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
         // Крестики для точек
         $svg .= $this->crosshairs([$O, $A, $B, $C]);
@@ -1911,8 +1911,8 @@ SVG;
         $svg .= "  <polygon points=\"{$A['x']},{$A['y']} {$B['x']},{$B['y']} {$C['x']},{$C['y']} {$D['x']},{$D['y']}\" fill=\"none\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2\"/>\n";
 
         // Диагонали (пунктир)
-        $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$C['x']}\" y2=\"{$C['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
-        $svg .= "  <line x1=\"{$B['x']}\" y1=\"{$B['y']}\" x2=\"{$D['x']}\" y2=\"{$D['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+        $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$C['x']}\" y2=\"{$C['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
+        $svg .= "  <line x1=\"{$B['x']}\" y1=\"{$B['y']}\" x2=\"{$D['x']}\" y2=\"{$D['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
         // Угол A (акцент)
         $arcA = $this->makeAngleArc($A, $D, $B, 20);
@@ -2039,7 +2039,7 @@ SVG;
         $svg .= "  <path d=\"{$arcC}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1.5\"/>\n";
 
         // Радиус (пунктир)
-        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$A['x']}\" y2=\"{$A['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+        $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$A['x']}\" y2=\"{$A['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
         // Крестики для всех точек
         $svg .= $this->crosshairs([$O, $A, $B, $C]);
@@ -2116,7 +2116,7 @@ SVG;
 
         // Диагональ BD
         $svg .= "  <line x1=\"{$B['x']}\" y1=\"{$B['y']}\" x2=\"{$D['x']}\" y2=\"{$D['y']}\" " .
-                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
         // Углы при вершине D (диагональ делит угол)
         $arcDBA = $this->makeAngleArc($D, $A, $B, 22);
@@ -2156,7 +2156,7 @@ SVG;
 
         // Биссектриса (пунктир)
         $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$E['x']}\" y2=\"{$E['y']}\" " .
-                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
         // Точка E
         $svg .= "  <circle cx=\"{$E['x']}\" cy=\"{$E['y']}\" r=\"3\" fill=\"" . self::COLORS['circle'] . "\"/>\n";
@@ -2238,9 +2238,9 @@ SVG;
 
         // Диагонали
         $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$C['x']}\" y2=\"{$C['y']}\" " .
-                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
         $svg .= "  <line x1=\"{$B['x']}\" y1=\"{$B['y']}\" x2=\"{$D['x']}\" y2=\"{$D['y']}\" " .
-                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
         // Точка O
         $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"4\" fill=\"" . self::COLORS['accent'] . "\"/>\n";
@@ -2353,7 +2353,7 @@ SVG;
 
         // Высота (пунктир)
         $svg .= "  <line x1=\"{$C['x']}\" y1=\"{$C['y']}\" x2=\"{$H['x']}\" y2=\"{$H['y']}\" " .
-                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
         // Прямой угол
         $rightAngle = $this->rightAnglePath($H, $A, $C, 10);
@@ -2393,7 +2393,7 @@ SVG;
 
         // Диагональ AC
         $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$C['x']}\" y2=\"{$C['y']}\" " .
-                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
         // Угол 45° при A
         $arcA = $this->makeAngleArc($A, $D, $C, 30);
@@ -2441,9 +2441,9 @@ SVG;
 
         // Диагонали
         $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$C['x']}\" y2=\"{$C['y']}\" " .
-                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
         $svg .= "  <line x1=\"{$B['x']}\" y1=\"{$B['y']}\" x2=\"{$D['x']}\" y2=\"{$D['y']}\" " .
-                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
         // Точка O
         $svg .= "  <circle cx=\"{$O['x']}\" cy=\"{$O['y']}\" r=\"4\" fill=\"" . self::COLORS['accent'] . "\"/>\n";
@@ -2519,7 +2519,7 @@ SVG;
 
         // Диагональ AC
         $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$C['x']}\" y2=\"{$C['y']}\" " .
-                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
         // Маркеры равенства сторон
         $svg .= $this->renderSingleEqualityMark($A, $B);
@@ -2564,7 +2564,7 @@ SVG;
 
         // Высота
         $svg .= "  <line x1=\"{$C['x']}\" y1=\"{$C['y']}\" x2=\"{$H['x']}\" y2=\"{$H['y']}\" " .
-                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
         // Прямой угол
         $rightAngle = $this->rightAnglePath($H, $A, $C, 10);
@@ -2613,7 +2613,7 @@ SVG;
 
         // Высота
         $svg .= "  <line x1=\"{$B['x']}\" y1=\"{$B['y']}\" x2=\"{$H['x']}\" y2=\"{$H['y']}\" " .
-                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
         // Прямой угол
         $rightAngle = $this->rightAnglePath($H, $A, $B, 10);
@@ -2652,7 +2652,7 @@ SVG;
 
         // Высота
         $svg .= "  <line x1=\"{$B['x']}\" y1=\"{$B['y']}\" x2=\"{$H['x']}\" y2=\"{$H['y']}\" " .
-                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
         // Прямой угол
         $rightAngle = $this->rightAnglePath($H, $A, $B, 10);
@@ -2693,9 +2693,9 @@ SVG;
 
         // Диагонали
         $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$C['x']}\" y2=\"{$C['y']}\" " .
-                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
         $svg .= "  <line x1=\"{$B['x']}\" y1=\"{$B['y']}\" x2=\"{$D['x']}\" y2=\"{$D['y']}\" " .
-                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
         // Прямой угол в центре
         $rightAngle = $this->rightAnglePath($O, $A, $B, 10);
@@ -2788,7 +2788,7 @@ SVG;
 
         // Средняя линия MN
         $svg .= "  <line x1=\"{$M['x']}\" y1=\"{$M['y']}\" x2=\"{$N['x']}\" y2=\"{$N['y']}\" " .
-                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
         // Диагональ AC (пересекает среднюю линию)
         $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$C['x']}\" y2=\"{$C['y']}\" " .
@@ -2867,7 +2867,7 @@ SVG;
 
         // Высота
         $svg .= "  <line x1=\"{$B['x']}\" y1=\"{$B['y']}\" x2=\"{$H['x']}\" y2=\"{$H['y']}\" " .
-                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n";
+                "stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
         // Прямой угол
         $rightAngle = $this->rightAnglePath($H, $A, $B, 10);
