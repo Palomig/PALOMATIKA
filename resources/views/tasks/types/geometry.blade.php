@@ -12,8 +12,10 @@
 
 @once
 <style>
-    /* Принудительное масштабирование SVG до 350px (переопределяет бейкнутый max-w-[250px]) */
-    .geo-svg-wrap svg { max-width: 350px !important; width: 100%; height: auto; }
+    /* Принудительно масштабирует геометрический SVG до 350px.
+       Переопределяет бейкнутый max-w-[250px] внутри SVG.
+       Селектор > svg затрагивает только прямого потомка (не иконку в кнопке). */
+    .geo-svg-force > svg { max-width: 350px !important; width: 100%; height: auto; }
 </style>
 @endonce
 
@@ -37,13 +39,17 @@
                 {{-- SVG или изображение --}}
                 @if($hasVisual)
                     <div class="lg:w-[400px] lg:shrink-0 mb-4 lg:mb-0">
-                        <div class="bg-slate-900/50 rounded-lg p-4 flex items-center justify-center min-h-[280px] relative group geo-svg-wrap">
+                        <div class="bg-slate-900/50 rounded-lg p-4 flex items-center justify-center min-h-[280px] relative group">
                             @if($hasSvg)
                                 {{-- Предзаготовленный SVG из JSON --}}
-                                {!! $task['svg'] !!}
+                                <div class="geo-svg-force">
+                                    {!! $task['svg'] !!}
+                                </div>
                             @elseif(str_starts_with($task['image'], '<svg'))
                                 {{-- Inline SVG (legacy) --}}
-                                {!! $task['image'] !!}
+                                <div class="geo-svg-force">
+                                    {!! $task['image'] !!}
+                                </div>
                             @else
                                 {{-- PNG/JPG файл --}}
                                 <img src="{{ asset('images/tasks/' . $topicId . '/' . $task['image']) }}"
