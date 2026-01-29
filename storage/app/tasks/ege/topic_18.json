@@ -1,0 +1,356 @@
+{
+  "topic_id": "18",
+  "exam_type": "ege",
+  "meta": {
+    "title": "Задание 18 — Параметры",
+    "description": "Задачи с параметрами",
+    "color": "indigo"
+  },
+  "blocks": [
+    {
+      "number": 1,
+      "title": "Линейные уравнения с параметром",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Найдите все значения параметра $a$, при которых уравнение имеет ровно один корень.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 1, "text": "$ax + 3 = 2x + a$", "answer": "$a \\neq 2$"},
+            {"id": 2, "text": "$ax - 5 = 3x + 2a$", "answer": "$a \\neq 3$"},
+            {"id": 3, "text": "$(a-1)x = a^2 - 1$", "answer": "$a \\neq 1$"},
+            {"id": 4, "text": "$(a+2)x = a^2 - 4$", "answer": "$a \\neq -2$"}
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Найдите все значения параметра $a$, при которых уравнение не имеет корней.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 5, "text": "$ax + 1 = 2x + a$", "answer": "$a = 2$"},
+            {"id": 6, "text": "$(a-3)x = 2a - 6$", "answer": "нет таких $a$"},
+            {"id": 7, "text": "$ax - 2a = 3x - 6$", "answer": "нет таких $a$"},
+            {"id": 8, "text": "$(a^2 - 1)x = a - 1$", "answer": "$a = -1$"}
+          ]
+        },
+        {
+          "number": 3,
+          "instruction": "Найдите все значения параметра $a$, при которых уравнение имеет бесконечно много корней.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 9, "text": "$(a-2)x = 2a - 4$", "answer": "$a = 2$"},
+            {"id": 10, "text": "$(a+1)x = a^2 - 1$", "answer": "$a = -1$"},
+            {"id": 11, "text": "$a(x-1) = 2(x-1)$", "answer": "$a = 2$"},
+            {"id": 12, "text": "$(a^2-4)x = 2(a-2)$", "answer": "$a = 2$"}
+          ]
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "Квадратные уравнения с параметром",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Найдите все значения параметра $a$, при которых уравнение имеет два различных корня.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 13, "text": "$x^2 - 2ax + a + 2 = 0$", "answer": "$a < -1$ или $a > 2$"},
+            {"id": 14, "text": "$x^2 + ax + a = 0$", "answer": "$a < 0$ или $a > 4$"},
+            {"id": 15, "text": "$x^2 - 4x + a = 0$", "answer": "$a < 4$"},
+            {"id": 16, "text": "$ax^2 - 2x + 1 = 0$, $a \\neq 0$", "answer": "$0 < a < 1$"}
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Найдите все значения параметра $a$, при которых уравнение имеет единственный корень.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 17, "text": "$x^2 - 2ax + a^2 - 1 = 0$", "answer": "нет таких $a$"},
+            {"id": 18, "text": "$ax^2 + 2x - 1 = 0$", "answer": "$a = 0$ или $a = -1$"},
+            {"id": 19, "text": "$x^2 + 2ax + a^2 = 0$", "answer": "любое $a \\in \\mathbb{R}$"},
+            {"id": 20, "text": "$(a-1)x^2 - 2(a+1)x + a + 3 = 0$", "answer": "$a = 1$ или $a = -1$"}
+          ]
+        },
+        {
+          "number": 3,
+          "instruction": "Найдите все значения параметра $a$, при которых оба корня уравнения положительны.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 21, "text": "$x^2 - 2ax + a + 6 = 0$", "answer": "$a > 3$"},
+            {"id": 22, "text": "$x^2 + ax + 2a = 0$", "answer": "$-8 < a < 0$"},
+            {"id": 23, "text": "$x^2 - (a+1)x + a = 0$", "answer": "$a > 1$"},
+            {"id": 24, "text": "$x^2 - 2ax + 3a - 2 = 0$", "answer": "$a > 2$"}
+          ]
+        },
+        {
+          "number": 4,
+          "instruction": "Найдите все значения параметра $a$, при которых корни уравнения имеют разные знаки.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 25, "text": "$x^2 - 2x + a = 0$", "answer": "$a < 0$"},
+            {"id": 26, "text": "$x^2 + ax - 2 = 0$", "answer": "любое $a \\in \\mathbb{R}$"},
+            {"id": 27, "text": "$x^2 - 3x + a - 1 = 0$", "answer": "$a < 1$"},
+            {"id": 28, "text": "$x^2 + (a-1)x - a = 0$", "answer": "$a > 0$"}
+          ]
+        },
+        {
+          "number": 5,
+          "instruction": "Найдите все значения параметра $a$, при которых хотя бы один корень уравнения принадлежит промежутку $[0; 2]$.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 29, "text": "$x^2 - 2x + a = 0$", "answer": "$-3 \\leq a \\leq 1$"},
+            {"id": 30, "text": "$x^2 - ax + 1 = 0$", "answer": "$a \\geq 2$"},
+            {"id": 31, "text": "$x^2 + 2ax - 3 = 0$", "answer": "$-\\frac{1}{4} \\leq a \\leq \\frac{3}{2}$"},
+            {"id": 32, "text": "$x^2 - (a+1)x + a = 0$", "answer": "$0 \\leq a \\leq 2$"}
+          ]
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "title": "Неравенства с параметром",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Найдите все значения параметра $a$, при которых неравенство выполняется при всех $x$.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 33, "text": "$x^2 + 2x + a > 0$", "answer": "$a > 1$"},
+            {"id": 34, "text": "$x^2 - 4x + a \\geq 0$", "answer": "$a \\geq 4$"},
+            {"id": 35, "text": "$ax^2 + 2x + 1 > 0$", "answer": "$a \\geq 1$"},
+            {"id": 36, "text": "$x^2 + ax + a > 0$", "answer": "$0 < a < 4$"}
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Найдите все значения параметра $a$, при которых неравенство не имеет решений.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 37, "text": "$x^2 + 2x + a < 0$", "answer": "$a > 1$"},
+            {"id": 38, "text": "$x^2 - 6x + a \\leq 0$", "answer": "$a > 9$"},
+            {"id": 39, "text": "$-x^2 + 4x + a > 0$", "answer": "$a < -4$"},
+            {"id": 40, "text": "$ax^2 + x + 1 < 0$", "answer": "$a \\geq \\frac{1}{4}$"}
+          ]
+        },
+        {
+          "number": 3,
+          "instruction": "Найдите все значения параметра $a$, при которых множество решений неравенства содержит отрезок $[1; 3]$.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 41, "text": "$x^2 - 4x + a \\leq 0$", "answer": "$a \\leq 3$"},
+            {"id": 42, "text": "$-x^2 + 2x + a \\geq 0$", "answer": "$a \\geq 3$"},
+            {"id": 43, "text": "$x^2 + ax - 6 < 0$", "answer": "$-2 \\leq a \\leq 1$"},
+            {"id": 44, "text": "$x^2 - (a+1)x + a \\leq 0$", "answer": "$1 \\leq a \\leq 3$"}
+          ]
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "title": "Системы уравнений с параметром",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Найдите все значения параметра $a$, при которых система имеет единственное решение.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 45, "text": "$\\begin{cases} x + y = a \\\\ xy = 1 \\end{cases}$", "answer": "$a = -2$ или $a = 2$"},
+            {"id": 46, "text": "$\\begin{cases} x + y = 2 \\\\ xy = a \\end{cases}$", "answer": "$a = 1$"},
+            {"id": 47, "text": "$\\begin{cases} x - y = a \\\\ x^2 + y^2 = 2 \\end{cases}$", "answer": "$a = -2$ или $a = 2$"},
+            {"id": 48, "text": "$\\begin{cases} y = x^2 \\\\ y = ax + 1 \\end{cases}$", "answer": "$a = -2$ или $a = 2$"}
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Найдите все значения параметра $a$, при которых система имеет ровно два решения.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 49, "text": "$\\begin{cases} x^2 + y^2 = 4 \\\\ y = x + a \\end{cases}$", "answer": "$-2\\sqrt{2} < a < 2\\sqrt{2}$"},
+            {"id": 50, "text": "$\\begin{cases} y = x^2 \\\\ y = 2x + a \\end{cases}$", "answer": "$a > -1$"},
+            {"id": 51, "text": "$\\begin{cases} |x| + |y| = 2 \\\\ y = a \\end{cases}$", "answer": "$-2 < a < 2$, $a \\neq 0$"},
+            {"id": 52, "text": "$\\begin{cases} x^2 + y^2 = 1 \\\\ x + y = a \\end{cases}$", "answer": "$-\\sqrt{2} < a < \\sqrt{2}$"}
+          ]
+        },
+        {
+          "number": 3,
+          "instruction": "Найдите все значения параметра $a$, при которых система не имеет решений.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 53, "text": "$\\begin{cases} x^2 + y^2 = 1 \\\\ x + y = a \\end{cases}$", "answer": "$|a| > \\sqrt{2}$"},
+            {"id": 54, "text": "$\\begin{cases} y = |x| \\\\ y = a \\end{cases}$", "answer": "$a < 0$"},
+            {"id": 55, "text": "$\\begin{cases} y = x^2 + 1 \\\\ y = ax \\end{cases}$", "answer": "$-2 < a < 2$"},
+            {"id": 56, "text": "$\\begin{cases} x^2 + y^2 = 4 \\\\ y = x + a \\end{cases}$", "answer": "$|a| > 2\\sqrt{2}$"}
+          ]
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "title": "Уравнения с модулем и параметром",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Найдите все значения параметра $a$, при которых уравнение имеет ровно два корня.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 57, "text": "$|x - 2| = a$", "answer": "$a > 0$"},
+            {"id": 58, "text": "$|x^2 - 4| = a$", "answer": "$a > 4$"},
+            {"id": 59, "text": "$|x - 1| + |x + 1| = a$", "answer": "$a > 2$"},
+            {"id": 60, "text": "$||x| - 2| = a$", "answer": "$0 < a < 2$"}
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Найдите все значения параметра $a$, при которых уравнение имеет ровно четыре корня.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 61, "text": "$|x^2 - 4| = a$", "answer": "$0 < a < 4$"},
+            {"id": 62, "text": "$||x| - 3| = a$", "answer": "$0 < a < 3$"},
+            {"id": 63, "text": "$|x^2 - 2|x| - 3| = a$", "answer": "$0 < a < 3$"},
+            {"id": 64, "text": "$||x - 1| - 2| = a$", "answer": "$0 < a < 2$"}
+          ]
+        },
+        {
+          "number": 3,
+          "instruction": "Найдите все значения параметра $a$, при которых уравнение имеет ровно три корня.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 65, "text": "$|x^2 - 4| = a$", "answer": "$a = 4$"},
+            {"id": 66, "text": "$||x| - 2| = a$", "answer": "$a = 2$"},
+            {"id": 67, "text": "$|x^2 - 2|x|| = a$", "answer": "$a = 1$"},
+            {"id": 68, "text": "$||x - 1| - 2| = a$", "answer": "$a = 2$"}
+          ]
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "title": "ФИПИ. Типовые задания",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Найдите все значения параметра $a$, при каждом из которых уравнение имеет единственный корень.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 69, "text": "$\\sqrt{x-a} = x - 2$", "answer": "$a = 2$"},
+            {"id": 70, "text": "$\\sqrt{x+a} = x - 1$", "answer": "$a = -\\frac{3}{4}$"},
+            {"id": 71, "text": "$\\sqrt{2x-a} = x$", "answer": "$a = \\frac{1}{2}$"},
+            {"id": 72, "text": "$\\sqrt{a-x} = x + 2$", "answer": "$a = -\\frac{7}{4}$"}
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Найдите все значения параметра $a$, при каждом из которых система имеет ровно одно решение.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 73, "text": "$\\begin{cases} (x-a)^2 + y^2 = 4 \\\\ y = |x| \\end{cases}$", "answer": "$a = 0$"},
+            {"id": 74, "text": "$\\begin{cases} x^2 + (y-a)^2 = 1 \\\\ y = |x| \\end{cases}$", "answer": "$a = 1 - \\frac{\\sqrt{2}}{2}$ или $a = 1$"},
+            {"id": 75, "text": "$\\begin{cases} |x-a| + |y| = 1 \\\\ y = x^2 \\end{cases}$", "answer": "$|a| = 1 + \\frac{1}{4}$"},
+            {"id": 76, "text": "$\\begin{cases} (x-a)^2 + y^2 = 9 \\\\ y = |x-1| \\end{cases}$", "answer": "$a = 1$ при $|a-1| = \\frac{3\\sqrt{2}}{2}$"}
+          ]
+        },
+        {
+          "number": 3,
+          "instruction": "Найдите все значения параметра $a$, при каждом из которых множество решений уравнения состоит из одного отрезка длины 4.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 77, "text": "$|x^2 - 4x| \\leq a$", "answer": "$a = 4$"},
+            {"id": 78, "text": "$|x^2 - 2x - 3| \\leq a$", "answer": "$a = 4$"},
+            {"id": 79, "text": "$|x^2 - 6x + 5| \\leq a$", "answer": "$a = 4$"},
+            {"id": 80, "text": "$|x^2 + 2x - 8| \\leq a$", "answer": "$a = 9$"}
+          ]
+        },
+        {
+          "number": 4,
+          "instruction": "Найдите все значения параметра $a$, при каждом из которых уравнение имеет ровно два корня.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 81, "text": "$9^x - 2 \\cdot 3^x - a = 0$", "answer": "$a > -1$"},
+            {"id": 82, "text": "$4^x - 3 \\cdot 2^x + a = 0$", "answer": "$a < \\frac{9}{4}$"},
+            {"id": 83, "text": "$\\log_2^2 x - 3\\log_2 x + a = 0$", "answer": "$a < \\frac{9}{4}$"},
+            {"id": 84, "text": "$\\log_3^2 x + \\log_3 x - a = 0$", "answer": "$a > -\\frac{1}{4}$"}
+          ]
+        },
+        {
+          "number": 5,
+          "instruction": "Найдите все значения параметра $a$, при которых уравнение $f(x) = a$ имеет ровно 3 решения.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 85, "text": "$f(x) = |x^2 - 4|$, $f(x) = a$", "answer": "$a = 4$"},
+            {"id": 86, "text": "$f(x) = |x^2 - 2|x| - 3|$, $f(x) = a$", "answer": "$a = 3$ или $a = 4$"},
+            {"id": 87, "text": "$f(x) = ||x| - 2|$, $f(x) = a$", "answer": "$a = 2$"},
+            {"id": 88, "text": "$f(x) = x^3 - 3x$, $f(x) = a$", "answer": "$a = -2$ или $a = 2$"}
+          ]
+        },
+        {
+          "number": 6,
+          "instruction": "Найдите все значения параметра $a$, при которых неравенство выполняется при всех $x \\in [0; 1]$.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 89, "text": "$x^2 - ax + 1 \\geq 0$", "answer": "$a \\leq 2$"},
+            {"id": 90, "text": "$x^2 + ax - 2 < 0$", "answer": "$a < 1$"},
+            {"id": 91, "text": "$ax^2 - 2x + 1 > 0$", "answer": "$a > 1$"},
+            {"id": 92, "text": "$x^2 - x + a \\geq 0$", "answer": "$a \\geq 0$"}
+          ]
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "title": "Графический метод",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Найдите все значения параметра $a$, при которых графики функций имеют ровно одну общую точку.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 93, "text": "$y = x^2$ и $y = 2x + a$", "answer": "$a = -1$"},
+            {"id": 94, "text": "$y = |x|$ и $y = x + a$", "answer": "$a = 0$"},
+            {"id": 95, "text": "$y = \\sqrt{x}$ и $y = x + a$", "answer": "$a = \\frac{1}{4}$"},
+            {"id": 96, "text": "$y = x^2 - 2x$ и $y = a$", "answer": "$a = -1$"}
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Найдите все значения параметра $a$, при которых графики функций имеют ровно две общие точки.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 97, "text": "$y = x^2$ и $y = 2x + a$", "answer": "$a > -1$"},
+            {"id": 98, "text": "$y = |x|$ и $y = a$", "answer": "$a > 0$"},
+            {"id": 99, "text": "$y = |x-1| + |x+1|$ и $y = a$", "answer": "$a > 2$"},
+            {"id": 100, "text": "$y = x^2 - 4$ и $y = |a|$", "answer": "$|a| > 4$"}
+          ]
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "title": "Задачи повышенной сложности",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Найдите все значения параметра $a$, при которых выполняется указанное условие.",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 101, "text": "Уравнение $x^2 + ax + a^2 - 3 = 0$ имеет два корня, причём один из них больше 1, а другой меньше 1.", "answer": "$-1 < a < 2$"},
+            {"id": 102, "text": "Уравнение $x^2 - 2ax + a + 2 = 0$ имеет два корня, принадлежащих промежутку $(-1; 3)$.", "answer": "$-1 < a < 2$"},
+            {"id": 103, "text": "Неравенство $x^2 - 2ax + a^2 - 4 < 0$ имеет решения на промежутке $(1; 5)$.", "answer": "$-1 < a < 7$"},
+            {"id": 104, "text": "Система $\\begin{cases} x^2 + y^2 \\leq 4 \\\\ y \\geq x + a \\end{cases}$ имеет единственное решение.", "answer": "$a = 2\\sqrt{2}$ или $a = -2\\sqrt{2}$"}
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "При каких значениях параметра $a$ выполняется указанное условие?",
+          "type": "word_problem",
+          "tasks": [
+            {"id": 105, "text": "Множество решений неравенства $|x-a| + |x+a| \\leq 4$ содержит отрезок $[-1; 1]$.", "answer": "$|a| \\leq 1$"},
+            {"id": 106, "text": "Уравнение $|x-a| = |x^2 - 1|$ имеет ровно 3 решения.", "answer": "$a = -1$ или $a = 1$"},
+            {"id": 107, "text": "Для любого $x \\in [0; 2]$ выполняется неравенство $x^2 - 2ax + a + 2 > 0$.", "answer": "$a < 2$"},
+            {"id": 108, "text": "Расстояние от точки $(a; 0)$ до прямой $y = x$ равно расстоянию до параболы $y = x^2$.", "answer": "$a = \\frac{1 + \\sqrt{2}}{2}$"}
+          ]
+        }
+      ]
+    }
+  ]
+}
