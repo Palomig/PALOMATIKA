@@ -168,6 +168,28 @@
                         <span class="text-xs text-gray-500">px</span>
                     </div>
 
+                    {{-- ViewBox settings --}}
+                    <div class="flex items-center gap-2 ml-4 border-l border-gray-700 pl-4">
+                        <label class="text-xs text-gray-400">ViewBox:</label>
+                        <input type="number" x-model.number="canvasWidth" min="100" max="800" step="10"
+                               class="w-14 px-1 py-1 text-xs bg-[#1e1e32] text-gray-200 rounded border border-gray-600 text-center"
+                               title="Ширина">
+                        <span class="text-xs text-gray-500">×</span>
+                        <input type="number" x-model.number="canvasHeight" min="100" max="600" step="10"
+                               class="w-14 px-1 py-1 text-xs bg-[#1e1e32] text-gray-200 rounded border border-gray-600 text-center"
+                               title="Высота">
+                        <button @click="canvasWidth = 200; canvasHeight = 160"
+                                class="px-2 py-1 text-xs bg-[#1e1e32] hover:bg-[#2a2a42] text-gray-400 rounded"
+                                title="Стандартный размер (как в заданиях)">
+                            200×160
+                        </button>
+                        <button @click="canvasWidth = 250; canvasHeight = 200"
+                                class="px-2 py-1 text-xs bg-[#1e1e32] hover:bg-[#2a2a42] text-gray-400 rounded"
+                                title="Средний размер">
+                            250×200
+                        </button>
+                    </div>
+
                     <div class="flex-1"></div>
 
                     {{-- Delete selected --}}
@@ -351,6 +373,15 @@
                                                            @change="toggleLine('bisector_' + vName.toLowerCase(), $event.target.checked)"
                                                            class="rounded bg-gray-700 border-gray-600">
                                                     <span class="text-purple-400">Биссектриса</span>
+                                                </label>
+                                                {{-- Дуги половинных углов (показывается когда биссектриса включена) --}}
+                                                <label x-show="selectedFigure.lines && selectedFigure.lines['bisector_' + vName.toLowerCase()] && selectedFigure.lines['bisector_' + vName.toLowerCase()].enabled"
+                                                       class="flex items-center gap-1 text-xs text-gray-300 ml-2">
+                                                    <input type="checkbox"
+                                                           :checked="selectedFigure.lines && selectedFigure.lines['bisector_' + vName.toLowerCase()] && selectedFigure.lines['bisector_' + vName.toLowerCase()].showHalfArcs"
+                                                           @change="toggleBisectorHalfArcs('bisector_' + vName.toLowerCase(), $event.target.checked)"
+                                                           class="rounded bg-gray-700 border-gray-600">
+                                                    <span class="text-amber-400">дуги</span>
                                                 </label>
                                                 <label class="flex items-center gap-1 text-xs text-gray-300">
                                                     <input type="checkbox"
