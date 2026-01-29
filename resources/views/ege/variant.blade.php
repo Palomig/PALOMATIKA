@@ -236,6 +236,12 @@
                         @if(!empty($task['expression']))
                             <p class="text-gray-200 text-lg mt-2 latex-content">${{ $task['expression'] }}$</p>
                         @endif
+                        @if(!empty($task['interval']))
+                            <p class="text-gray-300 mt-4 latex-content">
+                                <span class="text-fuchsia-400 font-medium">б)</span>
+                                Укажите корни, принадлежащие промежутку {{ $task['interval'] }}
+                            </p>
+                        @endif
                     </div>
                     <div class="p-5 border-t border-dark-400/30">
                         <p class="text-gray-500 text-sm italic">Запишите решение и ответ на отдельном листе.</p>
