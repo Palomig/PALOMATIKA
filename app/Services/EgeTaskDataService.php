@@ -289,6 +289,49 @@ class EgeTaskDataService
     }
 
     /**
+     * Получить случайные задания из конкретного zadanie
+     */
+    public function getRandomTasksFromZadanie(string $topicId, int $blockNumber, int $zadanieNumber, int $count = 1): array
+    {
+        $blocks = $this->getBlocks($topicId);
+        $meta = $this->getTopicMeta($topicId);
+
+        foreach ($blocks as $block) {
+            if (($block['number'] ?? 0) != $blockNumber) continue;
+
+            foreach ($block['zadaniya'] ?? [] as $zadanie) {
+                if (($zadanie['number'] ?? 0) != $zadanieNumber) continue;
+
+                $tasks = $zadanie['tasks'] ?? [];
+                if (empty($tasks)) return [];
+
+                $selectedKeys = array_rand($tasks, min($count, count($tasks)));
+                if (!is_array($selectedKeys)) $selectedKeys = [$selectedKeys];
+
+                $result = [];
+                foreach ($selectedKeys as $key) {
+                    $result[] = [
+                        'topic_id' => $topicId,
+                        'exam_type' => 'ege',
+                        'topic_title' => $meta['title'],
+                        'block_number' => $block['number'],
+                        'block_title' => $block['title'],
+                        'zadanie_number' => $zadanie['number'],
+                        'instruction' => $zadanie['instruction'],
+                        'type' => $zadanie['type'] ?? 'word_problem',
+                        'svg_type' => $zadanie['svg_type'] ?? null,
+                        'task' => $tasks[$key],
+                    ];
+                }
+
+                return $result;
+            }
+        }
+
+        return [];
+    }
+
+    /**
      * Очистить весь кэш данных
      */
     public function clearCache(): void

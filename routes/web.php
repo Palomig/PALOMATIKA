@@ -157,6 +157,7 @@ Route::prefix('ege')->name('ege.')->group(function () {
 
 // API for EGE tasks
 Route::prefix('api/ege')->group(function () {
+    Route::post('/save-variant', [EgeController::class, 'saveVariant'])->name('api.ege.save-variant');
     Route::get('/{topicId}/random', [EgeController::class, 'apiGetRandomTasks']);
     Route::get('/{topicId}', [EgeController::class, 'apiGetTopicData']);
 });

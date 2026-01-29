@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\EgeTaskDataService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Контроллер для страниц с заданиями ЕГЭ
@@ -62,8 +63,78 @@ class EgeController extends Controller
      */
     public function generator()
     {
-        $topics = $this->taskService->getAvailableTopics();
-        return view('ege.generator', compact('topics'));
+        $topicIds = [];
+        for ($i = 1; $i <= 19; $i++) {
+            $topicIds[] = str_pad($i, 2, '0', STR_PAD_LEFT);
+        }
+
+        $topicsWithZadaniya = [];
+
+        foreach ($topicIds as $topicId) {
+            try {
+                if (!$this->taskService->topicDataExists($topicId)) {
+                    continue;
+                }
+
+                $topicMeta = $this->taskService->getTopicMeta($topicId);
+                $blocks = $this->taskService->getBlocks($topicId);
+
+                if (empty($blocks)) {
+                    continue;
+                }
+
+                $zadaniyaData = [];
+                foreach ($blocks as $block) {
+                    $blockTitle = $block['title'] ?? "Блок {$block['number']}";
+
+                    foreach ($block['zadaniya'] ?? [] as $zadanie) {
+                        $example = null;
+
+                        if (isset($zadanie['tasks'][0])) {
+                            $firstTask = $zadanie['tasks'][0];
+                            $example = [
+                                'type' => $zadanie['type'] ?? 'word_problem',
+                                'instruction' => $zadanie['instruction'] ?? '',
+                                'expression' => $firstTask['expression'] ?? '',
+                                'text' => $firstTask['text'] ?? '',
+                                'image' => $firstTask['image'] ?? null,
+                            ];
+                        }
+
+                        $zadaniyaData[] = [
+                            'zadanie_id' => "{$topicId}_{$block['number']}_{$zadanie['number']}",
+                            'block_number' => $block['number'],
+                            'block_title' => $blockTitle,
+                            'zadanie_number' => $zadanie['number'],
+                            'instruction' => $zadanie['instruction'] ?? '',
+                            'example' => $example,
+                        ];
+                    }
+                }
+
+                if (!empty($zadaniyaData)) {
+                    // Категории ЕГЭ: часть 1 (1-12) vs часть 2 (13-19)
+                    $topicNum = (int) ltrim($topicId, '0');
+                    $category = $topicNum <= 12 ? 'part1' : 'part2';
+
+                    $topicsWithZadaniya[] = [
+                        'topic_id' => $topicId,
+                        'topic_number' => ltrim($topicId, '0'),
+                        'title' => $topicMeta['title'],
+                        'color' => $topicMeta['color'] ?? 'gray',
+                        'category' => $category,
+                        'zadaniya' => $zadaniyaData,
+                    ];
+                }
+            } catch (\Exception $e) {
+                \Log::warning("Failed to load EGE topic {$topicId}: " . $e->getMessage());
+                continue;
+            }
+        }
+
+        return view('ege.generator', [
+            'topicsWithZadaniya' => $topicsWithZadaniya
+        ]);
     }
 
     /**
@@ -71,23 +142,102 @@ class EgeController extends Controller
      */
     public function showVariant(string $hash)
     {
-        // Используем хэш как seed для детерминированной генерации
+        if (!preg_match('/^[a-zA-Z0-9]{5,8}$/', $hash)) {
+            abort(404);
+        }
+
         $seed = crc32($hash);
         mt_srand($seed);
 
-        $tasks = [];
-        $availableTopics = array_keys($this->taskService->getAvailableTopics());
+        $variantNumber = (abs($seed) % 999) + 1;
 
-        foreach ($availableTopics as $topicId) {
-            $randomTasks = $this->taskService->getRandomTasks($topicId, 1);
-            if (!empty($randomTasks)) {
-                $tasks[] = $randomTasks[0];
+        // Загружаем выбранные zadaniya из кэша
+        $selectedZadaniya = Cache::get("ege_variant_{$hash}");
+
+        if (!$selectedZadaniya) {
+            // По умолчанию: все zadaniya из всех доступных тем
+            $selectedZadaniya = [];
+            for ($i = 1; $i <= 19; $i++) {
+                $topicId = str_pad($i, 2, '0', STR_PAD_LEFT);
+                if (!$this->taskService->topicDataExists($topicId)) continue;
+
+                $blocks = $this->taskService->getBlocks($topicId);
+                foreach ($blocks as $block) {
+                    foreach ($block['zadaniya'] ?? [] as $zadanie) {
+                        $selectedZadaniya[] = "{$topicId}_{$block['number']}_{$zadanie['number']}";
+                    }
+                }
             }
         }
 
-        mt_srand(); // Сбрасываем seed
+        // Группируем по темам
+        $zadaniyaByTopic = [];
+        foreach ($selectedZadaniya as $zadanieId) {
+            $parts = explode('_', $zadanieId);
+            if (count($parts) !== 3) continue;
 
-        return view('ege.variant', compact('tasks', 'hash'));
+            [$topicId, $blockNumber, $zadanieNumber] = $parts;
+            if (!isset($zadaniyaByTopic[$topicId])) {
+                $zadaniyaByTopic[$topicId] = [];
+            }
+            $zadaniyaByTopic[$topicId][] = [
+                'block' => (int) $blockNumber,
+                'zadanie' => (int) $zadanieNumber,
+            ];
+        }
+
+        // Генерируем по одному заданию на тему
+        $tasks = [];
+        foreach ($zadaniyaByTopic as $topicId => $zadaniyaList) {
+            $randomZadanie = $zadaniyaList[array_rand($zadaniyaList)];
+
+            $tasksFromZadanie = $this->taskService->getRandomTasksFromZadanie(
+                $topicId,
+                $randomZadanie['block'],
+                $randomZadanie['zadanie'],
+                1
+            );
+
+            if (!empty($tasksFromZadanie)) {
+                $tasks[] = $tasksFromZadanie[0];
+            }
+        }
+
+        mt_srand();
+
+        return view('ege.variant', [
+            'tasks' => $tasks,
+            'variantNumber' => $variantNumber,
+            'variantHash' => $hash,
+            'selectedZadaniya' => $selectedZadaniya,
+        ]);
+    }
+
+    /**
+     * Сохранить конфигурацию варианта ЕГЭ
+     */
+    public function saveVariant(Request $request)
+    {
+        $hash = $request->input('hash');
+        $zadaniya = $request->input('zadaniya');
+
+        if (!preg_match('/^[a-zA-Z0-9]{5,8}$/', $hash)) {
+            return response()->json(['error' => 'Invalid hash format'], 400);
+        }
+
+        if (!is_array($zadaniya) || empty($zadaniya)) {
+            return response()->json(['error' => 'Invalid zadaniya'], 400);
+        }
+
+        foreach ($zadaniya as $zadanie) {
+            if (!preg_match('/^\d{2}_\d+_\d+$/', $zadanie)) {
+                return response()->json(['error' => 'Invalid zadanie format'], 400);
+            }
+        }
+
+        Cache::put("ege_variant_{$hash}", $zadaniya, now()->addDays(30));
+
+        return response()->json(['success' => true, 'hash' => $hash]);
     }
 
     /**

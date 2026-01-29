@@ -75,6 +75,14 @@
         </p>
     </div>
 
+    {{-- Generator Button --}}
+    <div class="flex justify-center mb-8">
+        <a href="{{ route('ege.generator') }}"
+           class="px-8 py-4 bg-gradient-to-r from-accent to-accent-dark hover:from-accent-light hover:to-accent text-white font-semibold text-lg rounded-xl shadow-lg shadow-accent/25 hover:shadow-accent/40 transition-all">
+            Генератор вариантов ЕГЭ
+        </a>
+    </div>
+
     {{-- Stats overview --}}
     @php
         $availableCount = collect($topics)->filter(fn($t) => $t['exists'])->count();
