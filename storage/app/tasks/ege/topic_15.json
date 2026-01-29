@@ -13,57 +13,57 @@
       "zadaniya": [
         {
           "number": 1,
-          "instruction": "а) Решите неравенство. б) Найдите все решения, принадлежащие промежутку.",
-          "type": "equation_ab",
+          "instruction": "Решите неравенство",
+          "type": "inequality",
           "tasks": [
-            {"id": 1, "text": "$2^x > 8$", "interval": "$[0; 10]$", "answer_a": "$x > 3$", "answer_b": "$4, 5, 6, 7, 8, 9, 10$ (целые)"},
-            {"id": 2, "text": "$3^x \\leq 27$", "interval": "$[-5; 5]$", "answer_a": "$x \\leq 3$", "answer_b": "$x \\in [-5; 3]$"},
-            {"id": 3, "text": "$5^x < 125$", "interval": "$[-2; 4]$", "answer_a": "$x < 3$", "answer_b": "$x \\in [-2; 3)$"},
-            {"id": 4, "text": "$4^x \\geq 16$", "interval": "$[0; 6]$", "answer_a": "$x \\geq 2$", "answer_b": "$x \\in [2; 6]$"}
+            {"id": 1, "text": "$2^x > 8$", "answer": "x > 3"},
+            {"id": 2, "text": "$3^x \\leq 27$", "answer": "x <= 3"},
+            {"id": 3, "text": "$5^x < 125$", "answer": "x < 3"},
+            {"id": 4, "text": "$4^x \\geq 16$", "answer": "x >= 2"}
           ]
         },
         {
           "number": 2,
-          "instruction": "а) Решите неравенство. б) Найдите все решения, принадлежащие промежутку.",
-          "type": "equation_ab",
+          "instruction": "Решите неравенство",
+          "type": "inequality",
           "tasks": [
-            {"id": 5, "text": "$2^{x-1} > 4$", "interval": "$[1; 7]$", "answer_a": "$x > 3$", "answer_b": "$x \\in (3; 7]$"},
-            {"id": 6, "text": "$3^{x+2} \\leq 81$", "interval": "$[-4; 4]$", "answer_a": "$x \\leq 2$", "answer_b": "$x \\in [-4; 2]$"},
-            {"id": 7, "text": "$5^{2x-1} < 25$", "interval": "$[-1; 3]$", "answer_a": "$x < 1{,}5$", "answer_b": "$x \\in [-1; 1{,}5)$"},
-            {"id": 8, "text": "$7^{x+1} \\geq 49$", "interval": "$[-2; 5]$", "answer_a": "$x \\geq 1$", "answer_b": "$x \\in [1; 5]$"}
+            {"id": 5, "text": "$2^{x-1} > 4$", "answer": "x > 3"},
+            {"id": 6, "text": "$3^{x+2} \\leq 81$", "answer": "x <= 2"},
+            {"id": 7, "text": "$5^{2x-1} < 25$", "answer": "x < 1.5"},
+            {"id": 8, "text": "$7^{x+1} \\geq 49$", "answer": "x >= 1"}
           ]
         },
         {
           "number": 3,
-          "instruction": "а) Решите неравенство. б) Найдите все решения, принадлежащие промежутку.",
-          "type": "equation_ab",
+          "instruction": "Решите неравенство",
+          "type": "inequality",
           "tasks": [
-            {"id": 9, "text": "$\\left(\\displaystyle\\frac{1}{2}\\right)^x > 4$", "interval": "$[-5; 0]$", "answer_a": "$x < -2$", "answer_b": "$x \\in [-5; -2)$"},
-            {"id": 10, "text": "$\\left(\\displaystyle\\frac{1}{3}\\right)^x \\leq 9$", "interval": "$[-4; 4]$", "answer_a": "$x \\geq -2$", "answer_b": "$x \\in [-2; 4]$"},
-            {"id": 11, "text": "$\\left(\\displaystyle\\frac{1}{5}\\right)^x < 25$", "interval": "$[-3; 3]$", "answer_a": "$x > -2$", "answer_b": "$x \\in (-2; 3]$"},
-            {"id": 12, "text": "$\\left(\\displaystyle\\frac{1}{4}\\right)^x \\geq 16$", "interval": "$[-6; 0]$", "answer_a": "$x \\leq -2$", "answer_b": "$x \\in [-6; -2]$"}
+            {"id": 9, "text": "$\\left(\\displaystyle\\frac{1}{2}\\right)^x > 4$", "answer": "x < -2"},
+            {"id": 10, "text": "$\\left(\\displaystyle\\frac{1}{3}\\right)^x \\leq 9$", "answer": "x >= -2"},
+            {"id": 11, "text": "$\\left(\\displaystyle\\frac{1}{5}\\right)^x < 25$", "answer": "x > -2"},
+            {"id": 12, "text": "$\\left(\\displaystyle\\frac{1}{4}\\right)^x \\geq 16$", "answer": "x <= -2"}
           ]
         },
         {
           "number": 4,
-          "instruction": "а) Решите неравенство. б) Найдите все решения, принадлежащие промежутку.",
-          "type": "equation_ab",
+          "instruction": "Решите неравенство",
+          "type": "inequality",
           "tasks": [
-            {"id": 13, "text": "$4^x - 5 \\cdot 2^x + 4 < 0$", "interval": "$[-1; 3]$", "answer_a": "$x \\in (0; 2)$", "answer_b": "$x \\in (0; 2)$"},
-            {"id": 14, "text": "$9^x - 10 \\cdot 3^x + 9 \\leq 0$", "interval": "$[-2; 4]$", "answer_a": "$x \\in [0; 2]$", "answer_b": "$x \\in [0; 2]$"},
-            {"id": 15, "text": "$25^x - 6 \\cdot 5^x + 5 > 0$", "interval": "$[-1; 2]$", "answer_a": "$x \\in (-\\infty; 0) \\cup (1; +\\infty)$", "answer_b": "$x \\in [-1; 0) \\cup (1; 2]$"},
-            {"id": 16, "text": "$4^x - 3 \\cdot 2^x - 4 \\geq 0$", "interval": "$[0; 5]$", "answer_a": "$x \\in [2; +\\infty)$", "answer_b": "$x \\in [2; 5]$"}
+            {"id": 13, "text": "$4^x - 5 \\cdot 2^x + 4 < 0$", "answer": "(0; 2)"},
+            {"id": 14, "text": "$9^x - 10 \\cdot 3^x + 9 \\leq 0$", "answer": "[0; 2]"},
+            {"id": 15, "text": "$25^x - 6 \\cdot 5^x + 5 > 0$", "answer": "(-inf; 0) U (1; +inf)"},
+            {"id": 16, "text": "$4^x - 3 \\cdot 2^x - 4 \\geq 0$", "answer": "[2; +inf)"}
           ]
         },
         {
           "number": 5,
-          "instruction": "а) Решите неравенство. б) Найдите все решения, принадлежащие промежутку.",
-          "type": "equation_ab",
+          "instruction": "Решите неравенство",
+          "type": "inequality",
           "tasks": [
-            {"id": 17, "text": "$2^{x+1} + 2^x > 12$", "interval": "$[0; 5]$", "answer_a": "$x > 2$", "answer_b": "$x \\in (2; 5]$"},
-            {"id": 18, "text": "$3^{x+1} - 3^x \\leq 18$", "interval": "$[-3; 4]$", "answer_a": "$x \\leq 2$", "answer_b": "$x \\in [-3; 2]$"},
-            {"id": 19, "text": "$5^{x+2} - 5^{x+1} < 100$", "interval": "$[-2; 3]$", "answer_a": "$x < 1$", "answer_b": "$x \\in [-2; 1)$"},
-            {"id": 20, "text": "$4^{x+1} + 4^x \\geq 80$", "interval": "$[0; 6]$", "answer_a": "$x \\geq 2$", "answer_b": "$x \\in [2; 6]$"}
+            {"id": 17, "text": "$2^{x+1} + 2^x > 12$", "answer": "x > 2"},
+            {"id": 18, "text": "$3^{x+1} - 3^x \\leq 18$", "answer": "x <= 2"},
+            {"id": 19, "text": "$5^{x+2} - 5^{x+1} < 100$", "answer": "x < 1"},
+            {"id": 20, "text": "$4^{x+1} + 4^x \\geq 80$", "answer": "x >= 2"}
           ]
         }
       ]
@@ -74,57 +74,57 @@
       "zadaniya": [
         {
           "number": 1,
-          "instruction": "а) Решите неравенство. б) Найдите все решения, принадлежащие промежутку.",
-          "type": "equation_ab",
+          "instruction": "Решите неравенство",
+          "type": "inequality",
           "tasks": [
-            {"id": 21, "text": "$\\log_2 x > 3$", "interval": "$[1; 20]$", "answer_a": "$x > 8$", "answer_b": "$x \\in (8; 20]$"},
-            {"id": 22, "text": "$\\log_3 x \\leq 2$", "interval": "$[1; 15]$", "answer_a": "$x \\in (0; 9]$", "answer_b": "$x \\in [1; 9]$"},
-            {"id": 23, "text": "$\\log_5 x < 2$", "interval": "$[1; 30]$", "answer_a": "$x \\in (0; 25)$", "answer_b": "$x \\in [1; 25)$"},
-            {"id": 24, "text": "$\\log_4 x \\geq 3$", "interval": "$[50; 100]$", "answer_a": "$x \\in [64; +\\infty)$", "answer_b": "$x \\in [64; 100]$"}
+            {"id": 21, "text": "$\\log_2 x > 3$", "answer": "x > 8"},
+            {"id": 22, "text": "$\\log_3 x \\leq 2$", "answer": "(0; 9]"},
+            {"id": 23, "text": "$\\log_5 x < 2$", "answer": "(0; 25)"},
+            {"id": 24, "text": "$\\log_4 x \\geq 3$", "answer": "[64; +inf)"}
           ]
         },
         {
           "number": 2,
-          "instruction": "а) Решите неравенство. б) Найдите все решения, принадлежащие промежутку.",
-          "type": "equation_ab",
+          "instruction": "Решите неравенство",
+          "type": "inequality",
           "tasks": [
-            {"id": 25, "text": "$\\log_{0{,}5} x > 2$", "interval": "$[0{,}1; 1]$", "answer_a": "$x \\in (0; 0{,}25)$", "answer_b": "$x \\in [0{,}1; 0{,}25)$"},
-            {"id": 26, "text": "$\\log_{0{,}3} x \\leq -1$", "interval": "$[1; 10]$", "answer_a": "$x \\in [\\frac{10}{3}; +\\infty)$", "answer_b": "$x \\in [\\frac{10}{3}; 10]$"},
-            {"id": 27, "text": "$\\log_{0{,}2} x < -2$", "interval": "$[20; 50]$", "answer_a": "$x \\in (25; +\\infty)$", "answer_b": "$x \\in (25; 50]$"},
-            {"id": 28, "text": "$\\log_{0{,}1} x \\geq 1$", "interval": "$[0{,}01; 0{,}5]$", "answer_a": "$x \\in (0; 0{,}1]$", "answer_b": "$x \\in [0{,}01; 0{,}1]$"}
+            {"id": 25, "text": "$\\log_{0.5} x > 2$", "answer": "(0; 0.25)"},
+            {"id": 26, "text": "$\\log_{0.3} x \\leq -1$", "answer": "[10/3; +inf)"},
+            {"id": 27, "text": "$\\log_{0.2} x < -2$", "answer": "(25; +inf)"},
+            {"id": 28, "text": "$\\log_{0.1} x \\geq 1$", "answer": "(0; 0.1]"}
           ]
         },
         {
           "number": 3,
-          "instruction": "а) Решите неравенство. б) Найдите все решения, принадлежащие промежутку.",
-          "type": "equation_ab",
+          "instruction": "Решите неравенство",
+          "type": "inequality",
           "tasks": [
-            {"id": 29, "text": "$\\log_2(x-1) > 2$", "interval": "$[2; 10]$", "answer_a": "$x > 5$", "answer_b": "$x \\in (5; 10]$"},
-            {"id": 30, "text": "$\\log_3(x+2) \\leq 1$", "interval": "$[-1; 5]$", "answer_a": "$x \\in (-2; 1]$", "answer_b": "$x \\in [-1; 1]$"},
-            {"id": 31, "text": "$\\log_5(2x-1) < 1$", "interval": "$[1; 4]$", "answer_a": "$x \\in (0{,}5; 3)$", "answer_b": "$x \\in [1; 3)$"},
-            {"id": 32, "text": "$\\log_4(3x+1) \\geq 2$", "interval": "$[3; 10]$", "answer_a": "$x \\in [5; +\\infty)$", "answer_b": "$x \\in [5; 10]$"}
+            {"id": 29, "text": "$\\log_2(x-1) > 2$", "answer": "x > 5"},
+            {"id": 30, "text": "$\\log_3(x+2) \\leq 1$", "answer": "(-2; 1]"},
+            {"id": 31, "text": "$\\log_5(2x-1) < 1$", "answer": "(0.5; 3)"},
+            {"id": 32, "text": "$\\log_4(3x+1) \\geq 2$", "answer": "[5; +inf)"}
           ]
         },
         {
           "number": 4,
-          "instruction": "а) Решите неравенство. б) Найдите все решения, принадлежащие промежутку.",
-          "type": "equation_ab",
+          "instruction": "Решите неравенство",
+          "type": "inequality",
           "tasks": [
-            {"id": 33, "text": "$\\log_2(x+3) + \\log_2(x-1) > 3$", "interval": "$[2; 7]$", "answer_a": "$x > 3$", "answer_b": "$x \\in (3; 7]$"},
-            {"id": 34, "text": "$\\log_3(x+5) + \\log_3(x-1) \\leq 2$", "interval": "$[2; 6]$", "answer_a": "$x \\in (1; 4]$", "answer_b": "$x \\in [2; 4]$"},
-            {"id": 35, "text": "$\\log_5(x+4) - \\log_5(x-2) < 1$", "interval": "$[3; 10]$", "answer_a": "$x \\in (3; +\\infty)$", "answer_b": "$x \\in (3; 10]$"},
-            {"id": 36, "text": "$\\log_4(x+7) - \\log_4(x-1) \\geq 1$", "interval": "$[2; 8]$", "answer_a": "$x \\in (1; 5]$", "answer_b": "$x \\in [2; 5]$"}
+            {"id": 33, "text": "$\\log_2(x+3) + \\log_2(x-1) > 3$", "answer": "x > 3"},
+            {"id": 34, "text": "$\\log_3(x+5) + \\log_3(x-1) \\leq 2$", "answer": "(1; 4]"},
+            {"id": 35, "text": "$\\log_5(x+4) - \\log_5(x-2) < 1$", "answer": "(3; +inf)"},
+            {"id": 36, "text": "$\\log_4(x+7) - \\log_4(x-1) \\geq 1$", "answer": "(1; 5]"}
           ]
         },
         {
           "number": 5,
-          "instruction": "а) Решите неравенство. б) Найдите все решения, принадлежащие промежутку.",
-          "type": "equation_ab",
+          "instruction": "Решите неравенство",
+          "type": "inequality",
           "tasks": [
-            {"id": 37, "text": "$\\log_3^2 x - 4\\log_3 x + 3 < 0$", "interval": "$[1; 30]$", "answer_a": "$x \\in (3; 27)$", "answer_b": "$x \\in (3; 27)$"},
-            {"id": 38, "text": "$\\log_2^2 x - 5\\log_2 x + 4 \\leq 0$", "interval": "$[1; 20]$", "answer_a": "$x \\in [2; 16]$", "answer_b": "$x \\in [2; 16]$"},
-            {"id": 39, "text": "$\\log_5^2 x - 3\\log_5 x + 2 > 0$", "interval": "$[1; 30]$", "answer_a": "$x \\in (0; 5) \\cup (25; +\\infty)$", "answer_b": "$x \\in [1; 5) \\cup (25; 30]$"},
-            {"id": 40, "text": "$\\log_4^2 x - 2\\log_4 x - 3 \\geq 0$", "interval": "$[0{,}1; 100]$", "answer_a": "$x \\in (0; 0{,}25] \\cup [64; +\\infty)$", "answer_b": "$x \\in [0{,}1; 0{,}25] \\cup [64; 100]$"}
+            {"id": 37, "text": "$\\log_3^2 x - 4\\log_3 x + 3 < 0$", "answer": "(3; 27)"},
+            {"id": 38, "text": "$\\log_2^2 x - 5\\log_2 x + 4 \\leq 0$", "answer": "[2; 16]"},
+            {"id": 39, "text": "$\\log_5^2 x - 3\\log_5 x + 2 > 0$", "answer": "(0; 5) U (25; +inf)"},
+            {"id": 40, "text": "$\\log_4^2 x - 2\\log_4 x - 3 \\geq 0$", "answer": "(0; 0.25] U [64; +inf)"}
           ]
         }
       ]
@@ -135,24 +135,24 @@
       "zadaniya": [
         {
           "number": 1,
-          "instruction": "а) Решите неравенство. б) Найдите все решения, принадлежащие промежутку.",
-          "type": "equation_ab",
+          "instruction": "Решите неравенство",
+          "type": "inequality",
           "tasks": [
-            {"id": 41, "text": "$\\log_{x}(x+6) \\geq 2$", "interval": "$[1; 5]$", "answer_a": "$x \\in (1; 3]$", "answer_b": "$x \\in (1; 3]$"},
-            {"id": 42, "text": "$\\log_{x}(2x+3) > 2$", "interval": "$[1; 4]$", "answer_a": "$x \\in (1; 3)$", "answer_b": "$x \\in (1; 3)$"},
-            {"id": 43, "text": "$\\log_{x}(x+2) \\leq 2$", "interval": "$[0{,}5; 3]$", "answer_a": "$x \\in (0; 1) \\cup (1; 2]$", "answer_b": "$x \\in [0{,}5; 1) \\cup (1; 2]$"},
-            {"id": 44, "text": "$\\log_{x}(3x-2) < 2$", "interval": "$[0{,}7; 3]$", "answer_a": "$x \\in (\\frac{2}{3}; 1) \\cup (1; 2)$", "answer_b": "$x \\in [0{,}7; 1) \\cup (1; 2)$"}
+            {"id": 41, "text": "$\\log_{x}(x+6) \\geq 2$", "answer": "(1; 3]"},
+            {"id": 42, "text": "$\\log_{x}(2x+3) > 2$", "answer": "(1; 3)"},
+            {"id": 43, "text": "$\\log_{x}(x+2) \\leq 2$", "answer": "(0; 1) U (1; 2]"},
+            {"id": 44, "text": "$\\log_{x}(3x-2) < 2$", "answer": "(2/3; 1) U (1; 2)"}
           ]
         },
         {
           "number": 2,
-          "instruction": "а) Решите неравенство. б) Найдите все решения, принадлежащие промежутку.",
-          "type": "equation_ab",
+          "instruction": "Решите неравенство",
+          "type": "inequality",
           "tasks": [
-            {"id": 45, "text": "$\\log_{x-1}(x+3) > 1$", "interval": "$[2; 6]$", "answer_a": "$x \\in (1; 2) \\cup (2; +\\infty)$", "answer_b": "$x \\in (2; 6]$"},
-            {"id": 46, "text": "$\\log_{x+2}(x-1) \\leq 1$", "interval": "$[2; 8]$", "answer_a": "$x \\in (1; +\\infty)$", "answer_b": "$x \\in [2; 8]$"},
-            {"id": 47, "text": "$\\log_{x-2}(x+4) < 2$", "interval": "$[3; 10]$", "answer_a": "$x \\in (2; 3) \\cup (6; +\\infty)$", "answer_b": "$x \\in (6; 10]$"},
-            {"id": 48, "text": "$\\log_{2x-1}(x+5) \\geq 1$", "interval": "$[1; 10]$", "answer_a": "$x \\in (0{,}5; 1) \\cup [6; +\\infty)$", "answer_b": "$x \\in [6; 10]$"}
+            {"id": 45, "text": "$\\log_{x-1}(x+3) > 1$", "answer": "(1; 2) U (2; +inf)"},
+            {"id": 46, "text": "$\\log_{x+2}(x-1) \\leq 1$", "answer": "(1; +inf)"},
+            {"id": 47, "text": "$\\log_{x-2}(x+4) < 2$", "answer": "(2; 3) U (6; +inf)"},
+            {"id": 48, "text": "$\\log_{2x-1}(x+5) \\geq 1$", "answer": "(0.5; 1) U [6; +inf)"}
           ]
         }
       ]
@@ -163,35 +163,35 @@
       "zadaniya": [
         {
           "number": 1,
-          "instruction": "а) Решите неравенство. б) Найдите все решения, принадлежащие промежутку.",
-          "type": "equation_ab",
+          "instruction": "Решите неравенство",
+          "type": "inequality",
           "tasks": [
-            {"id": 49, "text": "$2^x \\cdot 3^x > 36$", "interval": "$[0; 5]$", "answer_a": "$x > 2$", "answer_b": "$x \\in (2; 5]$"},
-            {"id": 50, "text": "$3^x \\cdot 5^x \\leq 225$", "interval": "$[-1; 4]$", "answer_a": "$x \\leq 2$", "answer_b": "$x \\in [-1; 2]$"},
-            {"id": 51, "text": "$2^x : 3^x < \\displaystyle\\frac{8}{27}$", "interval": "$[1; 6]$", "answer_a": "$x > 3$", "answer_b": "$x \\in (3; 6]$"},
-            {"id": 52, "text": "$5^x : 2^x \\geq 62{,}5$", "interval": "$[0; 6]$", "answer_a": "$x \\geq 3$", "answer_b": "$x \\in [3; 6]$"}
+            {"id": 49, "text": "$2^x \\cdot 3^x > 36$", "answer": "x > 2"},
+            {"id": 50, "text": "$3^x \\cdot 5^x \\leq 225$", "answer": "x <= 2"},
+            {"id": 51, "text": "$2^x : 3^x < \\displaystyle\\frac{8}{27}$", "answer": "x > 3"},
+            {"id": 52, "text": "$5^x : 2^x \\geq 62.5$", "answer": "x >= 3"}
           ]
         },
         {
           "number": 2,
-          "instruction": "а) Решите неравенство. б) Найдите все решения, принадлежащие промежутку.",
-          "type": "equation_ab",
+          "instruction": "Решите неравенство",
+          "type": "inequality",
           "tasks": [
-            {"id": 53, "text": "$\\displaystyle\\frac{2^x - 8}{x - 3} > 0$", "interval": "$[0; 6]$", "answer_a": "$x \\in (-\\infty; 3) \\cup (3; +\\infty)$", "answer_b": "$x \\in [0; 3) \\cup (3; 6]$"},
-            {"id": 54, "text": "$\\displaystyle\\frac{3^x - 27}{x - 3} \\leq 0$", "interval": "$[0; 5]$", "answer_a": "$x < 3$", "answer_b": "$x \\in [0; 3)$"},
-            {"id": 55, "text": "$\\displaystyle\\frac{\\log_2 x - 3}{x - 8} < 0$", "interval": "$[1; 12]$", "answer_a": "$x \\in (0; 8)$", "answer_b": "$x \\in [1; 8)$"},
-            {"id": 56, "text": "$\\displaystyle\\frac{\\log_3 x - 2}{x - 9} \\geq 0$", "interval": "$[1; 15]$", "answer_a": "$x \\in (0; 9) \\cup (9; +\\infty)$", "answer_b": "$x \\in [1; 9) \\cup (9; 15]$"}
+            {"id": 53, "text": "$\\displaystyle\\frac{2^x - 8}{x - 3} > 0$", "answer": "x < 3 или x > 3"},
+            {"id": 54, "text": "$\\displaystyle\\frac{3^x - 27}{x - 3} \\leq 0$", "answer": "x < 3"},
+            {"id": 55, "text": "$\\displaystyle\\frac{\\log_2 x - 3}{x - 8} < 0$", "answer": "(0; 8)"},
+            {"id": 56, "text": "$\\displaystyle\\frac{\\log_3 x - 2}{x - 9} \\geq 0$", "answer": "(0; 9) U (9; +inf)"}
           ]
         },
         {
           "number": 3,
-          "instruction": "а) Решите неравенство. б) Найдите все решения, принадлежащие промежутку.",
-          "type": "equation_ab",
+          "instruction": "Решите неравенство",
+          "type": "inequality",
           "tasks": [
-            {"id": 57, "text": "$(x-2) \\cdot 3^x > 0$", "interval": "$[-1; 5]$", "answer_a": "$x > 2$", "answer_b": "$x \\in (2; 5]$"},
-            {"id": 58, "text": "$(x+1) \\cdot 2^x \\leq 0$", "interval": "$[-4; 2]$", "answer_a": "$x \\leq -1$", "answer_b": "$x \\in [-4; -1]$"},
-            {"id": 59, "text": "$(x^2-4) \\cdot 5^x < 0$", "interval": "$[-3; 3]$", "answer_a": "$x \\in (-2; 2)$", "answer_b": "$x \\in (-2; 2)$"},
-            {"id": 60, "text": "$(x^2-9) \\cdot 4^x \\geq 0$", "interval": "$[-5; 5]$", "answer_a": "$x \\in (-\\infty; -3] \\cup [3; +\\infty)$", "answer_b": "$x \\in [-5; -3] \\cup [3; 5]$"}
+            {"id": 57, "text": "$(x-2) \\cdot 3^x > 0$", "answer": "x > 2"},
+            {"id": 58, "text": "$(x+1) \\cdot 2^x \\leq 0$", "answer": "x <= -1"},
+            {"id": 59, "text": "$(x^2-4) \\cdot 5^x < 0$", "answer": "(-2; 2)"},
+            {"id": 60, "text": "$(x^2-9) \\cdot 4^x \\geq 0$", "answer": "(-inf; -3] U [3; +inf)"}
           ]
         }
       ]
@@ -202,68 +202,68 @@
       "zadaniya": [
         {
           "number": 1,
-          "instruction": "а) Решите неравенство. б) Найдите все решения, принадлежащие промежутку.",
-          "type": "equation_ab",
+          "instruction": "Решите неравенство",
+          "type": "inequality",
           "tasks": [
-            {"id": 61, "text": "$\\log_{5-x}(x^2-10x+25) \\geq 2$", "interval": "$[-2; 5)$", "answer_a": "$x \\in (-\\infty; 4]$", "answer_b": "$x \\in [-2; 4]$"},
-            {"id": 62, "text": "$\\log_{x-3}(x^2-6x+9) \\leq 2$", "interval": "$(3; 8]$", "answer_a": "$x \\in (3; 4]$", "answer_b": "$x \\in (3; 4]$"},
-            {"id": 63, "text": "$\\log_{x+2}(x^2+4x+4) > 2$", "interval": "$(-2; 3]$", "answer_a": "$x \\in (-2; -1)$", "answer_b": "$x \\in (-2; -1)$"},
-            {"id": 64, "text": "$\\log_{4-x}(x^2-8x+16) < 2$", "interval": "$[0; 4)$", "answer_a": "$x \\in (3; 4)$", "answer_b": "$x \\in (3; 4)$"}
+            {"id": 61, "text": "$\\log_{5-x}(x^2-10x+25) \\geq 2$", "answer": "(-inf; 4]"},
+            {"id": 62, "text": "$\\log_{x-3}(x^2-6x+9) \\leq 2$", "answer": "(3; 4]"},
+            {"id": 63, "text": "$\\log_{x+2}(x^2+4x+4) > 2$", "answer": "(-2; -1)"},
+            {"id": 64, "text": "$\\log_{4-x}(x^2-8x+16) < 2$", "answer": "(3; 4)"}
           ]
         },
         {
           "number": 2,
-          "instruction": "а) Решите неравенство. б) Найдите все решения, принадлежащие промежутку.",
-          "type": "equation_ab",
+          "instruction": "Решите неравенство",
+          "type": "inequality",
           "tasks": [
-            {"id": 65, "text": "$\\log_3(3^x+8) \\leq 2 + \\log_3(3^{x-2}+1)$", "interval": "$[-2; 4]$", "answer_a": "$x \\leq 2$", "answer_b": "$x \\in [-2; 2]$"},
-            {"id": 66, "text": "$\\log_2(2^x+3) > 1 + \\log_2(2^{x-1}+1)$", "interval": "$[-1; 5]$", "answer_a": "$x > 1$", "answer_b": "$x \\in (1; 5]$"},
-            {"id": 67, "text": "$\\log_5(5^x-4) \\geq 1 + \\log_5(5^{x-1}-1)$", "interval": "$[0; 4]$", "answer_a": "$x \\in [1; +\\infty)$", "answer_b": "$x \\in [1; 4]$"},
-            {"id": 68, "text": "$\\log_4(4^x+15) < 2 + \\log_4(4^{x-1}+1)$", "interval": "$[-1; 5]$", "answer_a": "$x < 2$", "answer_b": "$x \\in [-1; 2)$"}
+            {"id": 65, "text": "$\\log_3(3^x+8) \\leq 2 + \\log_3(3^{x-2}+1)$", "answer": "x <= 2"},
+            {"id": 66, "text": "$\\log_2(2^x+3) > 1 + \\log_2(2^{x-1}+1)$", "answer": "x > 1"},
+            {"id": 67, "text": "$\\log_5(5^x-4) \\geq 1 + \\log_5(5^{x-1}-1)$", "answer": "[1; +inf)"},
+            {"id": 68, "text": "$\\log_4(4^x+15) < 2 + \\log_4(4^{x-1}+1)$", "answer": "x < 2"}
           ]
         },
         {
           "number": 3,
-          "instruction": "а) Решите неравенство. б) Найдите все решения, принадлежащие промежутку.",
-          "type": "equation_ab",
+          "instruction": "Решите неравенство",
+          "type": "inequality",
           "tasks": [
-            {"id": 69, "text": "$\\displaystyle\\frac{\\log_5(x-2)-\\log_5 3}{\\log_5(x-4)} \\geq 1$", "interval": "$(4; 8]$", "answer_a": "$x \\in (4; 5]$", "answer_b": "$x \\in (4; 5]$"},
-            {"id": 70, "text": "$\\displaystyle\\frac{\\log_3(x+1)-\\log_3 2}{\\log_3(x-1)} \\leq 1$", "interval": "$(1; 6]$", "answer_a": "$x \\in (1; 3]$", "answer_b": "$x \\in (1; 3]$"},
-            {"id": 71, "text": "$\\displaystyle\\frac{\\log_2(x-1)+\\log_2 3}{\\log_2(x+2)} > 1$", "interval": "$(1; 7]$", "answer_a": "$x \\in (1; 5)$", "answer_b": "$x \\in (1; 5)$"},
-            {"id": 72, "text": "$\\displaystyle\\frac{\\log_4(x+3)-\\log_4 2}{\\log_4(x+1)} < 1$", "interval": "$(-1; 4]$", "answer_a": "$x \\in (-1; 1)$", "answer_b": "$x \\in (-1; 1)$"}
+            {"id": 69, "text": "$\\displaystyle\\frac{\\log_5(x-2)-\\log_5 3}{\\log_5(x-4)} \\geq 1$", "answer": "(4; 5]"},
+            {"id": 70, "text": "$\\displaystyle\\frac{\\log_3(x+1)-\\log_3 2}{\\log_3(x-1)} \\leq 1$", "answer": "(1; 3]"},
+            {"id": 71, "text": "$\\displaystyle\\frac{\\log_2(x-1)+\\log_2 3}{\\log_2(x+2)} > 1$", "answer": "(1; 5)"},
+            {"id": 72, "text": "$\\displaystyle\\frac{\\log_4(x+3)-\\log_4 2}{\\log_4(x+1)} < 1$", "answer": "(-1; 1)"}
           ]
         },
         {
           "number": 4,
-          "instruction": "а) Решите неравенство. б) Найдите все решения, принадлежащие промежутку.",
-          "type": "equation_ab",
+          "instruction": "Решите неравенство",
+          "type": "inequality",
           "tasks": [
-            {"id": 73, "text": "$\\log_{\\frac{1}{3}}(9^x-6 \\cdot 3^x+9) \\geq -2$", "interval": "$[-1; 3]$", "answer_a": "$x \\in [0; \\log_3 5]$", "answer_b": "$x \\in [0; \\log_3 5]$"},
-            {"id": 74, "text": "$\\log_{\\frac{1}{2}}(4^x-5 \\cdot 2^x+4) > -2$", "interval": "$[-1; 3]$", "answer_a": "$x \\in (0; 2)$", "answer_b": "$x \\in (0; 2)$"},
-            {"id": 75, "text": "$\\log_{\\frac{1}{5}}(25^x-4 \\cdot 5^x-5) \\leq -2$", "interval": "$[0; 3]$", "answer_a": "$x \\in [\\log_5 5; +\\infty) = [1; +\\infty)$", "answer_b": "$x \\in [1; 3]$"},
-            {"id": 76, "text": "$\\log_{\\frac{1}{4}}(16^x-3 \\cdot 4^x-4) < -2$", "interval": "$[0; 2]$", "answer_a": "$x \\in (\\log_4 4; \\log_4 5) = (1; \\log_4 5)$", "answer_b": "$x \\in (1; \\log_4 5)$"}
+            {"id": 73, "text": "$\\log_{\\frac{1}{3}}(9^x-6 \\cdot 3^x+9) \\geq -2$", "answer": "[0; log_3(5)]"},
+            {"id": 74, "text": "$\\log_{\\frac{1}{2}}(4^x-5 \\cdot 2^x+4) > -2$", "answer": "(0; 2)"},
+            {"id": 75, "text": "$\\log_{\\frac{1}{5}}(25^x-4 \\cdot 5^x-5) \\leq -2$", "answer": "[log_5(5); +inf)"},
+            {"id": 76, "text": "$\\log_{\\frac{1}{4}}(16^x-3 \\cdot 4^x-4) < -2$", "answer": "(log_4(4); log_4(5))"}
           ]
         },
         {
           "number": 5,
-          "instruction": "а) Решите неравенство. б) Найдите все решения, принадлежащие промежутку.",
-          "type": "equation_ab",
+          "instruction": "Решите неравенство",
+          "type": "inequality",
           "tasks": [
-            {"id": 77, "text": "$5^{x^2-3x} \\leq 5^{4-3x+x^2} - 24$", "interval": "$[0; 5]$", "answer_a": "$x \\in [2; +\\infty)$", "answer_b": "$x \\in [2; 5]$"},
-            {"id": 78, "text": "$3^{x^2-2x} > 3^{3-2x+x^2} - 24$", "interval": "$[-2; 5]$", "answer_a": "$x \\in (-\\infty; 3)$", "answer_b": "$x \\in [-2; 3)$"},
-            {"id": 79, "text": "$2^{x^2+x} + 6 \\geq 2^{2+x+x^2}$", "interval": "$[-3; 3]$", "answer_a": "$x \\in [-1; 1]$", "answer_b": "$x \\in [-1; 1]$"},
-            {"id": 80, "text": "$4^{x^2-x} + 12 < 4^{2-x+x^2}$", "interval": "$[-1; 4]$", "answer_a": "$x \\in (-\\infty; 1) \\cup (2; +\\infty)$", "answer_b": "$x \\in [-1; 1) \\cup (2; 4]$"}
+            {"id": 77, "text": "$5^{x^2-3x} \\leq 5^{4-3x+x^2} - 24$", "answer": "[2; +inf)"},
+            {"id": 78, "text": "$3^{x^2-2x} > 3^{3-2x+x^2} - 24$", "answer": "(-inf; 3)"},
+            {"id": 79, "text": "$2^{x^2+x} + 6 \\geq 2^{2+x+x^2}$", "answer": "[-1; 1]"},
+            {"id": 80, "text": "$4^{x^2-x} + 12 < 4^{2-x+x^2}$", "answer": "(-inf; 1) U (2; +inf)"}
           ]
         },
         {
           "number": 6,
-          "instruction": "а) Решите неравенство. б) Найдите все решения, принадлежащие промежутку.",
-          "type": "equation_ab",
+          "instruction": "Решите неравенство",
+          "type": "inequality",
           "tasks": [
-            {"id": 81, "text": "$\\log_{x^2-5x+7}(x-3) \\geq 0$", "interval": "$[3; 8]$", "answer_a": "$x \\in [4; +\\infty)$", "answer_b": "$x \\in [4; 8]$"},
-            {"id": 82, "text": "$\\log_{x^2-4x+5}(x-2) \\leq 0$", "interval": "$(2; 6]$", "answer_a": "$x \\in (2; 3]$", "answer_b": "$x \\in (2; 3]$"},
-            {"id": 83, "text": "$\\log_{x^2+2x+3}(x+1) > 0$", "interval": "$(-1; 5]$", "answer_a": "$x \\in (0; +\\infty)$", "answer_b": "$x \\in (0; 5]$"},
-            {"id": 84, "text": "$\\log_{x^2-6x+10}(x-3) < 0$", "interval": "$(3; 7]$", "answer_a": "$x \\in (3; 4)$", "answer_b": "$x \\in (3; 4)$"}
+            {"id": 81, "text": "$\\log_{x^2-5x+7}(x-3) \\geq 0$", "answer": "[4; +inf)"},
+            {"id": 82, "text": "$\\log_{x^2-4x+5}(x-2) \\leq 0$", "answer": "(2; 3]"},
+            {"id": 83, "text": "$\\log_{x^2+2x+3}(x+1) > 0$", "answer": "(0; +inf)"},
+            {"id": 84, "text": "$\\log_{x^2-6x+10}(x-3) < 0$", "answer": "(3; 4)"}
           ]
         }
       ]
