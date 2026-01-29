@@ -28,6 +28,10 @@
             @include('ege.partials.types.geometry', compact('zadanie', 'block', 'topicId'))
             @break
 
+        @case('equation_ab')
+            @include('ege.partials.types.equation-ab', compact('zadanie', 'block', 'topicId'))
+            @break
+
         @case('expression')
         @case('equation')
         @case('probability')
