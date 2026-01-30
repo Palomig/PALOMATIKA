@@ -364,6 +364,16 @@
                                                        class="flex-1 h-1 accent-orange-500">
                                                 <span class="text-[10px] text-gray-500 w-6" x-text="(selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].arcRadius) || 30"></span>
                                             </div>
+                                            {{-- Arc stroke width slider (visible when arc is on) --}}
+                                            <div x-show="selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].showArc"
+                                                 class="flex items-center gap-2 pl-8">
+                                                <span class="text-[10px] text-gray-500 w-6">W</span>
+                                                <input type="range" min="0.5" max="6" step="0.5"
+                                                       :value="(selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].arcStrokeWidth) || 2.5"
+                                                       @input="setArcStrokeWidth(vName, $event.target.value)"
+                                                       class="flex-1 h-1 accent-orange-500">
+                                                <span class="text-[10px] text-gray-500 w-6" x-text="(selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].arcStrokeWidth) || 2.5"></span>
+                                            </div>
                                             {{-- Label offset controls (visible when value is on) --}}
                                             <div x-show="selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].showValue"
                                                  class="flex items-center gap-2 pl-8">

@@ -1193,17 +1193,18 @@ function geometryEditor() {
 
                 const isRightAngle = this.isVertexRightAngle(figure, vName);
                 const color = angleColors[vName];
+                const arcSW = (angleData.arcStrokeWidth != null) ? angleData.arcStrokeWidth : 2.5;
 
                 // Дуга угла или прямой угол
                 if (angleData.showArc) {
                     if (isRightAngle) {
                         // Прямой угол - квадратик
                         svg += `<path d="${this.getRightAnglePath(figure, vName)}"
-                                fill="none" stroke="${color}" stroke-width="2.5"/>`;
+                                fill="none" stroke="${color}" stroke-width="${arcSW}"/>`;
                     } else {
                         // Обычная дуга
                         svg += `<path d="${this.getAngleArc(figure, vName)}"
-                                fill="none" stroke="${color}" stroke-width="2.5"/>`;
+                                fill="none" stroke="${color}" stroke-width="${arcSW}"/>`;
                     }
                 }
 
@@ -1559,14 +1560,15 @@ function geometryEditor() {
                 const isRightAngle = this.isQuadVertexRightAngle(figure, vName);
 
                 const arcR = angleData.arcRadius || 30;
+                const arcSW = (angleData.arcStrokeWidth != null) ? angleData.arcStrokeWidth : 2.5;
 
                 if (angleData.showArc) {
                     if (isRightAngle) {
                         svg += `<path d="${window.rightAnglePath(vertex, p1, p2, Math.round(arcR * 0.6))}"
-                                fill="none" stroke="${color}" stroke-width="2.5"/>`;
+                                fill="none" stroke="${color}" stroke-width="${arcSW}"/>`;
                     } else {
                         svg += `<path d="${window.makeAngleArc(vertex, p1, p2, arcR)}"
-                                fill="none" stroke="${color}" stroke-width="2.5"/>`;
+                                fill="none" stroke="${color}" stroke-width="${arcSW}"/>`;
                     }
                 }
 
@@ -2000,6 +2002,15 @@ function geometryEditor() {
                 this.selectedFigure.angles[vertexName] = { showArc: false, showValue: false, arcRadius: 30, labelDx: 0, labelDy: 0 };
             }
             this.selectedFigure.angles[vertexName].arcRadius = parseInt(value) || 30;
+            this.saveState();
+        },
+
+        setArcStrokeWidth(vertexName, value) {
+            if (!this.selectedFigure || !this.selectedFigure.angles) return;
+            if (!this.selectedFigure.angles[vertexName]) {
+                this.selectedFigure.angles[vertexName] = { showArc: false, showValue: false, arcRadius: 30, arcStrokeWidth: 2.5, labelDx: 0, labelDy: 0 };
+            }
+            this.selectedFigure.angles[vertexName].arcStrokeWidth = parseFloat(value) || 2.5;
             this.saveState();
         },
 
@@ -3065,13 +3076,14 @@ function geometryEditor() {
                 const color = angleColorMap[vName];
                 const isRight = Math.abs(angleValues[vName] - 90) < 2;
                 const arcR = angleData.arcRadius || 30;
+                const arcSW = (angleData.arcStrokeWidth != null) ? angleData.arcStrokeWidth : 2.5;
 
                 if (isRight) {
                     const path = this.rightAnglePathFromPoints(vertex, p1, p2, Math.round(arcR * 0.6));
-                    svg += `  <path d="${path}" fill="none" stroke="${color}" stroke-width="2.5"/>\n`;
+                    svg += `  <path d="${path}" fill="none" stroke="${color}" stroke-width="${arcSW}"/>\n`;
                 } else {
                     const arc = this.makeAngleArcFromPoints(vertex, p1, p2, arcR);
-                    svg += `  <path d="${arc}" fill="none" stroke="${color}" stroke-width="2.5"/>\n`;
+                    svg += `  <path d="${arc}" fill="none" stroke="${color}" stroke-width="${arcSW}"/>\n`;
                 }
 
                 // Значение угла (если включено)
@@ -3136,13 +3148,14 @@ function geometryEditor() {
                 const color = angleColorMap[vName];
                 const isRight = Math.abs(angleValues[vName] - 90) < 2;
                 const arcR = angleData.arcRadius || 30;
+                const arcSW = (angleData.arcStrokeWidth != null) ? angleData.arcStrokeWidth : 2.5;
 
                 if (isRight) {
                     const path = this.rightAnglePathFromPoints(vertex, p1, p2, Math.round(arcR * 0.6));
-                    svg += `  <path d="${path}" fill="none" stroke="${color}" stroke-width="2.5"/>\n`;
+                    svg += `  <path d="${path}" fill="none" stroke="${color}" stroke-width="${arcSW}"/>\n`;
                 } else {
                     const arc = this.makeAngleArcFromPoints(vertex, p1, p2, arcR);
-                    svg += `  <path d="${arc}" fill="none" stroke="${color}" stroke-width="2.5"/>\n`;
+                    svg += `  <path d="${arc}" fill="none" stroke="${color}" stroke-width="${arcSW}"/>\n`;
                 }
 
                 // Значение угла (если включено)
