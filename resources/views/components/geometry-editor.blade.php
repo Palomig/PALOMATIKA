@@ -331,27 +331,53 @@
                                 </h3>
                                 <div class="space-y-2">
                                     <template x-for="vName in ['A', 'B', 'C']" :key="'angle-' + vName">
-                                        <div class="flex items-center gap-2">
-                                            <span class="w-8 text-orange-400 font-bold">∠<span x-text="selectedFigure.vertices[vName].label || vName"></span></span>
-                                            <input type="number" min="1" max="178"
-                                                   :value="getAngleValue(selectedFigure, vName)"
-                                                   @change="setAngleValue(vName, $event.target.value)"
-                                                   class="w-16 px-2 py-1 text-sm bg-[#1e1e32] text-gray-200 rounded border border-gray-600">
-                                            <span class="text-gray-500 text-xs">°</span>
-                                            <label class="flex items-center gap-1 text-xs text-gray-400 ml-auto">
-                                                <input type="checkbox"
-                                                       :checked="selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].showArc"
-                                                       @change="toggleAngleArc(vName, $event.target.checked)"
-                                                       class="rounded bg-gray-700 border-gray-600">
-                                                дуга
-                                            </label>
-                                            <label class="flex items-center gap-1 text-xs text-gray-400">
-                                                <input type="checkbox"
-                                                       :checked="selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].showValue"
-                                                       @change="toggleAngleValue(vName, $event.target.checked)"
-                                                       class="rounded bg-gray-700 border-gray-600">
-                                                °
-                                            </label>
+                                        <div class="space-y-1">
+                                            <div class="flex items-center gap-2">
+                                                <span class="w-8 text-orange-400 font-bold">∠<span x-text="selectedFigure.vertices[vName].label || vName"></span></span>
+                                                <input type="number" min="1" max="178"
+                                                       :value="getAngleValue(selectedFigure, vName)"
+                                                       @change="setAngleValue(vName, $event.target.value)"
+                                                       class="w-16 px-2 py-1 text-sm bg-[#1e1e32] text-gray-200 rounded border border-gray-600">
+                                                <span class="text-gray-500 text-xs">°</span>
+                                                <label class="flex items-center gap-1 text-xs text-gray-400 ml-auto">
+                                                    <input type="checkbox"
+                                                           :checked="selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].showArc"
+                                                           @change="toggleAngleArc(vName, $event.target.checked)"
+                                                           class="rounded bg-gray-700 border-gray-600">
+                                                    дуга
+                                                </label>
+                                                <label class="flex items-center gap-1 text-xs text-gray-400">
+                                                    <input type="checkbox"
+                                                           :checked="selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].showValue"
+                                                           @change="toggleAngleValue(vName, $event.target.checked)"
+                                                           class="rounded bg-gray-700 border-gray-600">
+                                                    °
+                                                </label>
+                                            </div>
+                                            {{-- Arc radius slider (visible when arc is on) --}}
+                                            <div x-show="selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].showArc"
+                                                 class="flex items-center gap-2 pl-8">
+                                                <span class="text-[10px] text-gray-500 w-6">R</span>
+                                                <input type="range" min="10" max="80" step="1"
+                                                       :value="(selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].arcRadius) || 30"
+                                                       @input="setArcRadius(vName, $event.target.value)"
+                                                       class="flex-1 h-1 accent-orange-500">
+                                                <span class="text-[10px] text-gray-500 w-6" x-text="(selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].arcRadius) || 30"></span>
+                                            </div>
+                                            {{-- Label offset controls (visible when value is on) --}}
+                                            <div x-show="selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].showValue"
+                                                 class="flex items-center gap-2 pl-8">
+                                                <span class="text-[10px] text-gray-500">dx</span>
+                                                <input type="number" min="-50" max="50"
+                                                       :value="(selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].labelDx) || 0"
+                                                       @change="setAngleLabelOffset(vName, 'dx', $event.target.value)"
+                                                       class="w-12 px-1 py-0.5 text-[10px] bg-[#1e1e32] text-gray-300 rounded border border-gray-600">
+                                                <span class="text-[10px] text-gray-500">dy</span>
+                                                <input type="number" min="-50" max="50"
+                                                       :value="(selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].labelDy) || 0"
+                                                       @change="setAngleLabelOffset(vName, 'dy', $event.target.value)"
+                                                       class="w-12 px-1 py-0.5 text-[10px] bg-[#1e1e32] text-gray-300 rounded border border-gray-600">
+                                            </div>
                                         </div>
                                     </template>
                                 </div>
@@ -561,23 +587,49 @@
                                 </h3>
                                 <div class="space-y-2">
                                     <template x-for="vName in ['A', 'B', 'C', 'D']" :key="'quad-angle-' + vName">
-                                        <div class="flex items-center gap-2">
-                                            <span class="w-8 text-orange-400 font-bold text-sm">∠<span x-text="selectedFigure.vertices[vName].label || vName"></span></span>
-                                            <span class="text-gray-400 text-xs" x-text="Math.round(calculateQuadAngle(selectedFigure, vName)) + '°'"></span>
-                                            <label class="flex items-center gap-1 text-xs text-gray-400 ml-auto">
-                                                <input type="checkbox"
-                                                       :checked="selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].showArc"
-                                                       @change="toggleQuadAngleArc(vName, $event.target.checked)"
-                                                       class="rounded bg-gray-700 border-gray-600">
-                                                дуга
-                                            </label>
-                                            <label class="flex items-center gap-1 text-xs text-gray-400">
-                                                <input type="checkbox"
-                                                       :checked="selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].showValue"
-                                                       @change="toggleQuadAngleValue(vName, $event.target.checked)"
-                                                       class="rounded bg-gray-700 border-gray-600">
-                                                °
-                                            </label>
+                                        <div class="space-y-1">
+                                            <div class="flex items-center gap-2">
+                                                <span class="w-8 text-orange-400 font-bold text-sm">∠<span x-text="selectedFigure.vertices[vName].label || vName"></span></span>
+                                                <span class="text-gray-400 text-xs" x-text="Math.round(calculateQuadAngle(selectedFigure, vName)) + '°'"></span>
+                                                <label class="flex items-center gap-1 text-xs text-gray-400 ml-auto">
+                                                    <input type="checkbox"
+                                                           :checked="selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].showArc"
+                                                           @change="toggleQuadAngleArc(vName, $event.target.checked)"
+                                                           class="rounded bg-gray-700 border-gray-600">
+                                                    дуга
+                                                </label>
+                                                <label class="flex items-center gap-1 text-xs text-gray-400">
+                                                    <input type="checkbox"
+                                                           :checked="selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].showValue"
+                                                           @change="toggleQuadAngleValue(vName, $event.target.checked)"
+                                                           class="rounded bg-gray-700 border-gray-600">
+                                                    °
+                                                </label>
+                                            </div>
+                                            {{-- Arc radius slider --}}
+                                            <div x-show="selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].showArc"
+                                                 class="flex items-center gap-2 pl-8">
+                                                <span class="text-[10px] text-gray-500 w-6">R</span>
+                                                <input type="range" min="10" max="80" step="1"
+                                                       :value="(selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].arcRadius) || 30"
+                                                       @input="setArcRadius(vName, $event.target.value)"
+                                                       class="flex-1 h-1 accent-orange-500">
+                                                <span class="text-[10px] text-gray-500 w-6" x-text="(selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].arcRadius) || 30"></span>
+                                            </div>
+                                            {{-- Label offset controls --}}
+                                            <div x-show="selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].showValue"
+                                                 class="flex items-center gap-2 pl-8">
+                                                <span class="text-[10px] text-gray-500">dx</span>
+                                                <input type="number" min="-50" max="50"
+                                                       :value="(selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].labelDx) || 0"
+                                                       @change="setAngleLabelOffset(vName, 'dx', $event.target.value)"
+                                                       class="w-12 px-1 py-0.5 text-[10px] bg-[#1e1e32] text-gray-300 rounded border border-gray-600">
+                                                <span class="text-[10px] text-gray-500">dy</span>
+                                                <input type="number" min="-50" max="50"
+                                                       :value="(selectedFigure.angles && selectedFigure.angles[vName] && selectedFigure.angles[vName].labelDy) || 0"
+                                                       @change="setAngleLabelOffset(vName, 'dy', $event.target.value)"
+                                                       class="w-12 px-1 py-0.5 text-[10px] bg-[#1e1e32] text-gray-300 rounded border border-gray-600">
+                                            </div>
                                         </div>
                                     </template>
                                 </div>

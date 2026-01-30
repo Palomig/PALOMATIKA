@@ -163,9 +163,9 @@ function geometryEditor() {
                     C: { x: 175, y: 44, label: `C${suffix ? '₊' + suffix : ''}` }
                 },
                 angles: {
-                    A: { value: null, showArc: false, arcType: 'single', showValue: false },
-                    B: { value: null, showArc: false, arcType: 'single', showValue: false },
-                    C: { value: null, showArc: false, arcType: 'single', showValue: false }
+                    A: { value: null, showArc: false, arcType: 'single', showValue: false, arcRadius: 30, labelDx: 0, labelDy: 0 },
+                    B: { value: null, showArc: false, arcType: 'single', showValue: false, arcRadius: 30, labelDx: 0, labelDy: 0 },
+                    C: { value: null, showArc: false, arcType: 'single', showValue: false, arcRadius: 30, labelDx: 0, labelDy: 0 }
                 },
                 lines: {
                     bisector_a: { enabled: false, intersectionLabel: 'D', showHalfArcs: false },
@@ -1441,20 +1441,24 @@ function geometryEditor() {
                 // Проверка на прямой угол
                 const isRightAngle = this.isQuadVertexRightAngle(figure, vName);
 
+                const arcR = angleData.arcRadius || 30;
+
                 if (angleData.showArc) {
                     if (isRightAngle) {
-                        svg += `<path d="${window.rightAnglePath(vertex, p1, p2, 21)}"
+                        svg += `<path d="${window.rightAnglePath(vertex, p1, p2, Math.round(arcR * 0.6))}"
                                 fill="none" stroke="${color}" stroke-width="2.5"/>`;
                     } else {
-                        svg += `<path d="${window.makeAngleArc(vertex, p1, p2, 35)}"
+                        svg += `<path d="${window.makeAngleArc(vertex, p1, p2, arcR)}"
                                 fill="none" stroke="${color}" stroke-width="2.5"/>`;
                     }
                 }
 
                 if (angleData.showValue) {
-                    const labelPos = window.angleLabelPos(vertex, p1, p2, 73, 0.5);
+                    const basePos = window.angleLabelPos(vertex, p1, p2, arcR + 20, 0.5);
+                    const lx = basePos.x + (angleData.labelDx || 0);
+                    const ly = basePos.y + (angleData.labelDy || 0);
                     const angleValue = angleData.value || this.calculateQuadAngle(figure, vName);
-                    svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${color}" font-size="18"
+                    svg += `<text x="${lx}" y="${ly}" fill="${color}" font-size="18"
                             font-family="'Times New Roman', serif" font-weight="500"
                             text-anchor="middle" dominant-baseline="middle">${Math.round(angleValue)}°</text>`;
                 }
@@ -1773,7 +1777,8 @@ function geometryEditor() {
                 vertex = v.C; p1 = v.A; p2 = v.B;
             }
 
-            return window.makeAngleArc(vertex, p1, p2, 20);
+            const r = (figure.angles && figure.angles[vertexName] && figure.angles[vertexName].arcRadius) || 30;
+            return window.makeAngleArc(vertex, p1, p2, r);
         },
 
         getRightAnglePath(figure, vertexName) {
@@ -1788,7 +1793,8 @@ function geometryEditor() {
                 vertex = v.C; p1 = v.A; p2 = v.B;
             }
 
-            return window.rightAnglePath(vertex, p1, p2, 12);
+            const r = (figure.angles && figure.angles[vertexName] && figure.angles[vertexName].arcRadius) || 30;
+            return window.rightAnglePath(vertex, p1, p2, Math.round(r * 0.6));
         },
 
         getAngleLabelPos(figure, vertexName) {
@@ -1803,7 +1809,12 @@ function geometryEditor() {
                 vertex = v.C; p1 = v.A; p2 = v.B;
             }
 
-            return window.angleLabelPos(vertex, p1, p2, 42, 0.5);
+            const r = (figure.angles && figure.angles[vertexName] && figure.angles[vertexName].arcRadius) || 30;
+            const basePos = window.angleLabelPos(vertex, p1, p2, r + 20, 0.5);
+            const angleData = figure.angles && figure.angles[vertexName];
+            const dx = (angleData && angleData.labelDx) || 0;
+            const dy = (angleData && angleData.labelDy) || 0;
+            return { x: basePos.x + dx, y: basePos.y + dy };
         },
 
         setAngleValue(vertexName, value) {
@@ -1816,7 +1827,7 @@ function geometryEditor() {
                 this.selectedFigure.angles = {};
             }
             if (!this.selectedFigure.angles[vertexName]) {
-                this.selectedFigure.angles[vertexName] = { showArc: false, showValue: false };
+                this.selectedFigure.angles[vertexName] = { showArc: false, showValue: false, arcRadius: 30, labelDx: 0, labelDy: 0 };
             }
             this.selectedFigure.angles[vertexName].value = angle;
 
@@ -1849,7 +1860,7 @@ function geometryEditor() {
         toggleAngleArc(vertexName, checked) {
             if (!this.selectedFigure || !this.selectedFigure.angles) return;
             if (!this.selectedFigure.angles[vertexName]) {
-                this.selectedFigure.angles[vertexName] = { showArc: false, showValue: false };
+                this.selectedFigure.angles[vertexName] = { showArc: false, showValue: false, arcRadius: 30, labelDx: 0, labelDy: 0 };
             }
             this.selectedFigure.angles[vertexName].showArc = checked;
             this.saveState();
@@ -1858,9 +1869,31 @@ function geometryEditor() {
         toggleAngleValue(vertexName, checked) {
             if (!this.selectedFigure || !this.selectedFigure.angles) return;
             if (!this.selectedFigure.angles[vertexName]) {
-                this.selectedFigure.angles[vertexName] = { showArc: false, showValue: false };
+                this.selectedFigure.angles[vertexName] = { showArc: false, showValue: false, arcRadius: 30, labelDx: 0, labelDy: 0 };
             }
             this.selectedFigure.angles[vertexName].showValue = checked;
+            this.saveState();
+        },
+
+        setArcRadius(vertexName, value) {
+            if (!this.selectedFigure || !this.selectedFigure.angles) return;
+            if (!this.selectedFigure.angles[vertexName]) {
+                this.selectedFigure.angles[vertexName] = { showArc: false, showValue: false, arcRadius: 30, labelDx: 0, labelDy: 0 };
+            }
+            this.selectedFigure.angles[vertexName].arcRadius = parseInt(value) || 30;
+            this.saveState();
+        },
+
+        setAngleLabelOffset(vertexName, axis, value) {
+            if (!this.selectedFigure || !this.selectedFigure.angles) return;
+            if (!this.selectedFigure.angles[vertexName]) {
+                this.selectedFigure.angles[vertexName] = { showArc: false, showValue: false, arcRadius: 30, labelDx: 0, labelDy: 0 };
+            }
+            if (axis === 'dx') {
+                this.selectedFigure.angles[vertexName].labelDx = parseInt(value) || 0;
+            } else {
+                this.selectedFigure.angles[vertexName].labelDy = parseInt(value) || 0;
+            }
             this.saveState();
         },
 
@@ -2027,7 +2060,7 @@ function geometryEditor() {
                 this.selectedFigure.angles = {};
             }
             if (!this.selectedFigure.angles[vertexName]) {
-                this.selectedFigure.angles[vertexName] = { showArc: false, showValue: false };
+                this.selectedFigure.angles[vertexName] = { showArc: false, showValue: false, arcRadius: 30, labelDx: 0, labelDy: 0 };
             }
             this.selectedFigure.angles[vertexName].showArc = checked;
             this.saveState();
@@ -2039,7 +2072,7 @@ function geometryEditor() {
                 this.selectedFigure.angles = {};
             }
             if (!this.selectedFigure.angles[vertexName]) {
-                this.selectedFigure.angles[vertexName] = { showArc: false, showValue: false };
+                this.selectedFigure.angles[vertexName] = { showArc: false, showValue: false, arcRadius: 30, labelDx: 0, labelDy: 0 };
             }
             this.selectedFigure.angles[vertexName].showValue = checked;
             this.saveState();
@@ -2902,21 +2935,22 @@ function geometryEditor() {
                 const { p1, p2 } = adjacentMap[vName];
                 const color = angleColorMap[vName];
                 const isRight = Math.abs(angleValues[vName] - 90) < 2;
+                const arcR = angleData.arcRadius || 30;
 
                 if (isRight) {
-                    // Прямой угол - квадратик
-                    const path = this.rightAnglePathFromPoints(vertex, p1, p2, 18);
+                    const path = this.rightAnglePathFromPoints(vertex, p1, p2, Math.round(arcR * 0.6));
                     svg += `  <path d="${path}" fill="none" stroke="${color}" stroke-width="2.5"/>\n`;
                 } else {
-                    // Обычная дуга (радиус 30 как в редакторе)
-                    const arc = this.makeAngleArcFromPoints(vertex, p1, p2, 30);
+                    const arc = this.makeAngleArcFromPoints(vertex, p1, p2, arcR);
                     svg += `  <path d="${arc}" fill="none" stroke="${color}" stroke-width="2.5"/>\n`;
                 }
 
                 // Значение угла (если включено)
                 if (angleData.showValue) {
-                    const labelPos = this.angleLabelPosFromPoints(vertex, p1, p2, 50);
-                    svg += `  <text x="${labelPos.x}" y="${labelPos.y}" fill="${color}" font-size="18" font-family="'Times New Roman', serif" font-weight="500" text-anchor="middle" dominant-baseline="middle">${angleValues[vName]}°</text>\n`;
+                    const basePos = this.angleLabelPosFromPoints(vertex, p1, p2, arcR + 20);
+                    const lx = basePos.x + (angleData.labelDx || 0);
+                    const ly = basePos.y + (angleData.labelDy || 0);
+                    svg += `  <text x="${lx}" y="${ly}" fill="${color}" font-size="18" font-family="'Times New Roman', serif" font-weight="500" text-anchor="middle" dominant-baseline="middle">${angleValues[vName]}°</text>\n`;
                 }
             });
 
@@ -2972,19 +3006,22 @@ function geometryEditor() {
                 const { p1, p2 } = adjacentMap[vName];
                 const color = angleColorMap[vName];
                 const isRight = Math.abs(angleValues[vName] - 90) < 2;
+                const arcR = angleData.arcRadius || 30;
 
                 if (isRight) {
-                    const path = this.rightAnglePathFromPoints(vertex, p1, p2, 18);
+                    const path = this.rightAnglePathFromPoints(vertex, p1, p2, Math.round(arcR * 0.6));
                     svg += `  <path d="${path}" fill="none" stroke="${color}" stroke-width="2.5"/>\n`;
                 } else {
-                    const arc = this.makeAngleArcFromPoints(vertex, p1, p2, 30);
+                    const arc = this.makeAngleArcFromPoints(vertex, p1, p2, arcR);
                     svg += `  <path d="${arc}" fill="none" stroke="${color}" stroke-width="2.5"/>\n`;
                 }
 
                 // Значение угла (если включено)
                 if (angleData.showValue) {
-                    const labelPos = this.angleLabelPosFromPoints(vertex, p1, p2, 50);
-                    svg += `  <text x="${labelPos.x}" y="${labelPos.y}" fill="${color}" font-size="18" font-family="'Times New Roman', serif" font-weight="500" text-anchor="middle" dominant-baseline="middle">${angleValues[vName]}°</text>\n`;
+                    const basePos = this.angleLabelPosFromPoints(vertex, p1, p2, arcR + 20);
+                    const lx = basePos.x + (angleData.labelDx || 0);
+                    const ly = basePos.y + (angleData.labelDy || 0);
+                    svg += `  <text x="${lx}" y="${ly}" fill="${color}" font-size="18" font-family="'Times New Roman', serif" font-weight="500" text-anchor="middle" dominant-baseline="middle">${angleValues[vName]}°</text>\n`;
                 }
             });
 
