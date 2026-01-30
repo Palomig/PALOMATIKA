@@ -493,12 +493,47 @@ function geometryEditor() {
         },
 
         startDragLabel(figure, labelName, event) {
+            const svg = document.getElementById('geometry-canvas');
+            const pt = this.getSvgPoint(svg, event);
+
+            // Check if it's an auxiliary point label (aux_bisector_a, aux_median_b, etc.)
+            if (labelName.startsWith('aux_')) {
+                const lineKey = labelName.substring(4); // e.g. "bisector_a"
+                if (!figure.lines || !figure.lines[lineKey]) return;
+                this.draggingVertex = { figure, vertex: labelName, type: 'auxLabel', lineKey };
+                this.selectedFigure = figure;
+
+                // Get the current aux endpoint position
+                const vKey = lineKey.split('_')[1]; // 'a', 'b', 'c', 'd'
+                const vName = vKey.toUpperCase();
+                let endpointPos;
+                if (lineKey.startsWith('bisector_')) {
+                    endpointPos = figure.type === 'triangle'
+                        ? this.getBisectorEnd(figure, vName)
+                        : this.getQuadBisectorEnd(figure, vName);
+                } else if (lineKey.startsWith('median_')) {
+                    endpointPos = this.getMedianEnd(figure, vName);
+                } else if (lineKey.startsWith('altitude_')) {
+                    const altData = figure.type === 'triangle'
+                        ? this.getAltitudeEnd(figure, vName)
+                        : this.getQuadAltitudeEnd(figure, vName);
+                    endpointPos = altData.foot || altData;
+                }
+                if (!endpointPos) return;
+
+                const auxDx = figure.lines[lineKey].labelDx || 0;
+                const auxDy = figure.lines[lineKey].labelDy || 0;
+                const currentX = endpointPos.x + auxDx;
+                const currentY = endpointPos.y + 15 + auxDy;
+
+                this.dragOffset = { x: pt.x - currentX, y: pt.y - currentY };
+                return;
+            }
+
+            // Vertex label
             if (!figure.vertices || !figure.vertices[labelName]) return;
             this.draggingVertex = { figure, vertex: labelName, type: 'label' };
             this.selectedFigure = figure;
-
-            const svg = document.getElementById('geometry-canvas');
-            const pt = this.getSvgPoint(svg, event);
 
             // Compute the current rendered label position
             let labelPos;
@@ -622,6 +657,28 @@ function geometryEditor() {
                 const pointKey = this.draggingVertex.pointKey;
                 secant[pointKey].x = newX;
                 secant[pointKey].y = newY;
+            } else if (dragType === 'auxLabel') {
+                // Dragging an auxiliary point label — update line's labelDx/labelDy
+                const lineKey = this.draggingVertex.lineKey;
+                const vKey = lineKey.split('_')[1];
+                const vName = vKey.toUpperCase();
+                let endpointPos;
+                if (lineKey.startsWith('bisector_')) {
+                    endpointPos = figure.type === 'triangle'
+                        ? this.getBisectorEnd(figure, vName)
+                        : this.getQuadBisectorEnd(figure, vName);
+                } else if (lineKey.startsWith('median_')) {
+                    endpointPos = this.getMedianEnd(figure, vName);
+                } else if (lineKey.startsWith('altitude_')) {
+                    const altData = figure.type === 'triangle'
+                        ? this.getAltitudeEnd(figure, vName)
+                        : this.getQuadAltitudeEnd(figure, vName);
+                    endpointPos = altData.foot || altData;
+                }
+                if (endpointPos && figure.lines && figure.lines[lineKey]) {
+                    figure.lines[lineKey].labelDx = Math.round(newX - endpointPos.x);
+                    figure.lines[lineKey].labelDy = Math.round(newY - (endpointPos.y + 15));
+                }
             } else if (dragType === 'label') {
                 // Dragging a vertex label — update labelDx/labelDy
                 let basePos;
@@ -1044,17 +1101,21 @@ function geometryEditor() {
                             stroke="${this.colors.auxiliaryLine}" stroke-width="1.75" stroke-dasharray="14,7"/>`;
                     // Точка пересечения
                     svg += `<circle cx="${endpoint.x}" cy="${endpoint.y}" r="5" fill="${this.colors.auxiliaryLine}"/>`;
-                    // Подпись точки
+                    // Подпись точки (draggable)
                     const label = lines[lineKey].intersectionLabel || 'D';
-                    svg += `<text x="${endpoint.x}" y="${endpoint.y + 15}" fill="${this.colors.auxiliaryLine}" font-size="20"
+                    const auxLabelDx = lines[lineKey].labelDx || 0;
+                    const auxLabelDy = lines[lineKey].labelDy || 0;
+                    svg += `<text x="${endpoint.x + auxLabelDx}" y="${endpoint.y + 15 + auxLabelDy}" fill="${this.colors.auxiliaryLine}" font-size="20"
                             font-family="'Times New Roman', serif" font-style="italic" font-weight="500"
-                            text-anchor="middle" dominant-baseline="middle" class="geo-label">${label}</text>`;
+                            text-anchor="middle" dominant-baseline="middle" class="geo-label"
+                            data-label="aux_${lineKey}" style="cursor: move; pointer-events: auto;">${label}</text>`;
 
                     // Дуги половинных углов (если включены)
                     if (lines[lineKey].showHalfArcs) {
                         const [prev, next] = vertexNeighbors[vName];
-                        const arc1 = window.makeAngleArc(vertex, v[prev], endpoint, 35);
-                        const arc2 = window.makeAngleArc(vertex, endpoint, v[next], 44);
+                        const halfArcR = (figure.angles && figure.angles[vName] && figure.angles[vName].arcRadius) || 30;
+                        const arc1 = window.makeAngleArc(vertex, v[prev], endpoint, halfArcR);
+                        const arc2 = window.makeAngleArc(vertex, endpoint, v[next], halfArcR + 9);
                         svg += `<path d="${arc1}" fill="none" stroke="${this.colors.angleArc}" stroke-width="2"/>`;
                         svg += `<path d="${arc2}" fill="none" stroke="${this.colors.angleArc}" stroke-width="2"/>`;
                     }
@@ -1072,11 +1133,14 @@ function geometryEditor() {
                             stroke="${this.colors.auxiliaryLine}" stroke-width="1.75" stroke-dasharray="14,7"/>`;
                     // Точка пересечения (середина стороны)
                     svg += `<circle cx="${endpoint.x}" cy="${endpoint.y}" r="5" fill="${this.colors.auxiliaryLine}"/>`;
-                    // Подпись точки
+                    // Подпись точки (draggable)
                     const label = lines[lineKey].intersectionLabel || 'M';
-                    svg += `<text x="${endpoint.x}" y="${endpoint.y + 15}" fill="${this.colors.auxiliaryLine}" font-size="20"
+                    const auxLabelDx = lines[lineKey].labelDx || 0;
+                    const auxLabelDy = lines[lineKey].labelDy || 0;
+                    svg += `<text x="${endpoint.x + auxLabelDx}" y="${endpoint.y + 15 + auxLabelDy}" fill="${this.colors.auxiliaryLine}" font-size="20"
                             font-family="'Times New Roman', serif" font-style="italic" font-weight="500"
-                            text-anchor="middle" dominant-baseline="middle" class="geo-label">${label}</text>`;
+                            text-anchor="middle" dominant-baseline="middle" class="geo-label"
+                            data-label="aux_${lineKey}" style="cursor: move; pointer-events: auto;">${label}</text>`;
                 }
             });
 
@@ -1094,11 +1158,14 @@ function geometryEditor() {
                     // Прямой угол
                     svg += `<path d="${this.getAltitudeRightAngle(figure, vName)}"
                             fill="none" stroke="#10b981" stroke-width="1.75"/>`;
-                    // Подпись точки
+                    // Подпись точки (draggable)
                     const label = lines[lineKey].intersectionLabel || 'H';
-                    svg += `<text x="${endpoint.x}" y="${endpoint.y + 15}" fill="#10b981" font-size="20"
+                    const auxLabelDx = lines[lineKey].labelDx || 0;
+                    const auxLabelDy = lines[lineKey].labelDy || 0;
+                    svg += `<text x="${endpoint.x + auxLabelDx}" y="${endpoint.y + 15 + auxLabelDy}" fill="#10b981" font-size="20"
                             font-family="'Times New Roman', serif" font-style="italic" font-weight="500"
-                            text-anchor="middle" dominant-baseline="middle" class="geo-label">${label}</text>`;
+                            text-anchor="middle" dominant-baseline="middle" class="geo-label"
+                            data-label="aux_${lineKey}" style="cursor: move; pointer-events: auto;">${label}</text>`;
                 }
             });
 
@@ -1338,9 +1405,10 @@ function geometryEditor() {
                     svg += `<circle cx="${endpoint.x}" cy="${endpoint.y}" r="5" fill="${this.colors.auxiliaryLine}"/>`;
                     // Две дуги половинных углов (показывают, что угол делится пополам)
                     const [prev, next] = vertexPairs[vName];
-                    svg += `<path d="${window.makeAngleArc(vertex, v[prev], endpoint, 35)}"
+                    const halfArcR = (figure.angles && figure.angles[vName] && figure.angles[vName].arcRadius) || 30;
+                    svg += `<path d="${window.makeAngleArc(vertex, v[prev], endpoint, halfArcR)}"
                             fill="none" stroke="${this.colors.auxiliaryLine}" stroke-width="1.75"/>`;
-                    svg += `<path d="${window.makeAngleArc(vertex, endpoint, v[next], 35)}"
+                    svg += `<path d="${window.makeAngleArc(vertex, endpoint, v[next], halfArcR)}"
                             fill="none" stroke="${this.colors.auxiliaryLine}" stroke-width="1.75"/>`;
                 }
             });
@@ -1359,11 +1427,14 @@ function geometryEditor() {
                     // Прямой угол
                     svg += `<path d="${window.rightAnglePath(altitudeData.foot, vertex, altitudeData.sideEnd, 18)}"
                             fill="none" stroke="#10b981" stroke-width="1.75"/>`;
-                    // Подпись точки
+                    // Подпись точки (draggable)
                     const label = lines[lineKey].intersectionLabel || 'H';
-                    svg += `<text x="${altitudeData.foot.x}" y="${altitudeData.foot.y + 15}" fill="#10b981" font-size="20"
+                    const auxLabelDx = lines[lineKey].labelDx || 0;
+                    const auxLabelDy = lines[lineKey].labelDy || 0;
+                    svg += `<text x="${altitudeData.foot.x + auxLabelDx}" y="${altitudeData.foot.y + 15 + auxLabelDy}" fill="#10b981" font-size="20"
                             font-family="'Times New Roman', serif" font-style="italic" font-weight="500"
-                            text-anchor="middle" dominant-baseline="middle" class="geo-label">${label}</text>`;
+                            text-anchor="middle" dominant-baseline="middle" class="geo-label"
+                            data-label="aux_${lineKey}" style="cursor: move; pointer-events: auto;">${label}</text>`;
                 }
             });
 
@@ -3107,13 +3178,16 @@ function geometryEditor() {
                     svg += `  <circle cx="${tEndpoint.x}" cy="${tEndpoint.y}" r="5" fill="${this.colors.auxiliaryLine}"/>\n`;
 
                     const label = lines[lineKey].intersectionLabel || 'D';
-                    svg += `  <text x="${tEndpoint.x}" y="${tEndpoint.y + 18}" fill="${this.colors.auxiliaryLabel}" font-size="20" font-family="'Times New Roman', serif" font-style="italic" text-anchor="middle">${label}</text>\n`;
+                    const auxLDx = lines[lineKey].labelDx || 0;
+                    const auxLDy = lines[lineKey].labelDy || 0;
+                    svg += `  <text x="${tEndpoint.x + auxLDx}" y="${tEndpoint.y + 18 + auxLDy}" fill="${this.colors.auxiliaryLabel}" font-size="20" font-family="'Times New Roman', serif" font-style="italic" text-anchor="middle">${label}</text>\n`;
 
                     // Дуги половинных углов
                     if (lines[lineKey].showHalfArcs) {
                         const [prev, next] = vertexNeighbors[vName];
-                        const arc1 = window.makeAngleArc(vertex, tV[prev], tEndpoint, 25);
-                        const arc2 = window.makeAngleArc(vertex, tEndpoint, tV[next], 30);
+                        const halfArcR = (figure.angles && figure.angles[vName] && figure.angles[vName].arcRadius) || 30;
+                        const arc1 = window.makeAngleArc(vertex, tV[prev], tEndpoint, halfArcR);
+                        const arc2 = window.makeAngleArc(vertex, tEndpoint, tV[next], halfArcR + 9);
                         svg += `  <path d="${arc1}" fill="none" stroke="${this.colors.angleArc}" stroke-width="2"/>\n`;
                         svg += `  <path d="${arc2}" fill="none" stroke="${this.colors.angleArc}" stroke-width="2"/>\n`;
                     }
@@ -3133,7 +3207,9 @@ function geometryEditor() {
                     svg += `  <circle cx="${tEndpoint.x}" cy="${tEndpoint.y}" r="5" fill="${this.colors.auxiliaryLine}"/>\n`;
 
                     const label = lines[lineKey].intersectionLabel || 'M';
-                    svg += `  <text x="${tEndpoint.x}" y="${tEndpoint.y + 18}" fill="${this.colors.auxiliaryLabel}" font-size="20" font-family="'Times New Roman', serif" font-style="italic" text-anchor="middle">${label}</text>\n`;
+                    const auxLDx = lines[lineKey].labelDx || 0;
+                    const auxLDy = lines[lineKey].labelDy || 0;
+                    svg += `  <text x="${tEndpoint.x + auxLDx}" y="${tEndpoint.y + 18 + auxLDy}" fill="${this.colors.auxiliaryLabel}" font-size="20" font-family="'Times New Roman', serif" font-style="italic" text-anchor="middle">${label}</text>\n`;
                 }
             });
 
@@ -3150,7 +3226,9 @@ function geometryEditor() {
                     svg += `  <circle cx="${tEndpoint.x}" cy="${tEndpoint.y}" r="5" fill="${this.colors.auxiliaryLine}"/>\n`;
 
                     const label = lines[lineKey].intersectionLabel || 'H';
-                    svg += `  <text x="${tEndpoint.x}" y="${tEndpoint.y + 18}" fill="${this.colors.auxiliaryLabel}" font-size="20" font-family="'Times New Roman', serif" font-style="italic" text-anchor="middle">${label}</text>\n`;
+                    const auxLDx = lines[lineKey].labelDx || 0;
+                    const auxLDy = lines[lineKey].labelDy || 0;
+                    svg += `  <text x="${tEndpoint.x + auxLDx}" y="${tEndpoint.y + 18 + auxLDy}" fill="${this.colors.auxiliaryLabel}" font-size="20" font-family="'Times New Roman', serif" font-style="italic" text-anchor="middle">${label}</text>\n`;
                 }
             });
 
