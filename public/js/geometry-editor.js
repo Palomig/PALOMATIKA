@@ -158,9 +158,9 @@ function geometryEditor() {
                 type: 'triangle',
                 preset: 'free',
                 vertices: {
-                    A: { x: 35, y: 228, label: `A${suffix ? '₊' + suffix : ''}` },
-                    B: { x: 315, y: 228, label: `B${suffix ? '₊' + suffix : ''}` },
-                    C: { x: 175, y: 44, label: `C${suffix ? '₊' + suffix : ''}` }
+                    A: { x: 35, y: 228, label: `A${suffix ? '₊' + suffix : ''}`, labelDx: 0, labelDy: 0 },
+                    B: { x: 315, y: 228, label: `B${suffix ? '₊' + suffix : ''}`, labelDx: 0, labelDy: 0 },
+                    C: { x: 175, y: 44, label: `C${suffix ? '₊' + suffix : ''}`, labelDx: 0, labelDy: 0 }
                 },
                 angles: {
                     A: { value: null, showArc: false, arcType: 'single', showValue: false, arcRadius: 30, labelDx: 0, labelDy: 0 },
@@ -190,10 +190,10 @@ function geometryEditor() {
                 type: 'quadrilateral',
                 preset: 'free',
                 vertices: {
-                    A: { x: 35, y: 228, label: `A${suffix ? '₊' + suffix : ''}` },
-                    B: { x: 315, y: 228, label: `B${suffix ? '₊' + suffix : ''}` },
-                    C: { x: 280, y: 53, label: `C${suffix ? '₊' + suffix : ''}` },
-                    D: { x: 70, y: 53, label: `D${suffix ? '₊' + suffix : ''}` }
+                    A: { x: 35, y: 228, label: `A${suffix ? '₊' + suffix : ''}`, labelDx: 0, labelDy: 0 },
+                    B: { x: 315, y: 228, label: `B${suffix ? '₊' + suffix : ''}`, labelDx: 0, labelDy: 0 },
+                    C: { x: 280, y: 53, label: `C${suffix ? '₊' + suffix : ''}`, labelDx: 0, labelDy: 0 },
+                    D: { x: 70, y: 53, label: `D${suffix ? '₊' + suffix : ''}`, labelDx: 0, labelDy: 0 }
                 },
                 angles: {},
                 lines: {},
@@ -492,6 +492,28 @@ function geometryEditor() {
             };
         },
 
+        startDragLabel(figure, labelName, event) {
+            if (!figure.vertices || !figure.vertices[labelName]) return;
+            this.draggingVertex = { figure, vertex: labelName, type: 'label' };
+            this.selectedFigure = figure;
+
+            const svg = document.getElementById('geometry-canvas');
+            const pt = this.getSvgPoint(svg, event);
+
+            // Compute the current rendered label position
+            let labelPos;
+            if (figure.type === 'triangle') {
+                labelPos = this.getLabelPosition(figure, labelName);
+            } else {
+                labelPos = this.getLabelPositionQuad(figure, labelName);
+            }
+
+            this.dragOffset = {
+                x: pt.x - labelPos.x,
+                y: pt.y - labelPos.y
+            };
+        },
+
         startDragCenter(figure, event) {
             this.draggingVertex = { figure, vertex: 'center' };
             this.selectedFigure = figure;
@@ -513,6 +535,14 @@ function geometryEditor() {
                 const figure = this.figures.find(f => f.id === figureId);
                 if (figure) {
                     this.selectFigure(figure);
+
+                    // Check if clicked on a vertex label (drag label offset)
+                    const labelEl = event.target.closest('[data-label]');
+                    if (labelEl) {
+                        const labelName = labelEl.getAttribute('data-label');
+                        this.startDragLabel(figure, labelName, event);
+                        return;
+                    }
 
                     // Check if clicked on a vertex
                     const vertexCircle = event.target.closest('[data-vertex]');
@@ -592,6 +622,22 @@ function geometryEditor() {
                 const pointKey = this.draggingVertex.pointKey;
                 secant[pointKey].x = newX;
                 secant[pointKey].y = newY;
+            } else if (dragType === 'label') {
+                // Dragging a vertex label — update labelDx/labelDy
+                let basePos;
+                if (figure.type === 'triangle') {
+                    const center = this.getTriangleCenter(figure);
+                    basePos = window.labelPos(figure.vertices[vertex], center, 22);
+                } else {
+                    const vv = figure.vertices;
+                    const center = {
+                        x: (vv.A.x + vv.B.x + vv.C.x + vv.D.x) / 4,
+                        y: (vv.A.y + vv.B.y + vv.C.y + vv.D.y) / 4
+                    };
+                    basePos = window.labelPos(figure.vertices[vertex], center, 22);
+                }
+                figure.vertices[vertex].labelDx = Math.round(newX - basePos.x);
+                figure.vertices[vertex].labelDy = Math.round(newY - basePos.y);
             } else if (dragType === 'apex') {
                 figure.apex.x = newX;
                 figure.apex.y = newY;
@@ -974,7 +1020,7 @@ function geometryEditor() {
                 const vertex = v[vName];
                 const labelPos = this.getLabelPosition(figure, vName);
                 svg += this.renderVertexMarker(vertex.x, vertex.y, vName, isSelected);
-                svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${this.colors.label}" font-size="24" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label">${vertex.label || vName}</text>`;
+                svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${this.colors.label}" font-size="24" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label" data-label="${vName}" style="cursor: move; pointer-events: auto;">${vertex.label || vName}</text>`;
             });
 
             return svg;
@@ -1236,7 +1282,7 @@ function geometryEditor() {
                 const vertex = v[vName];
                 const labelPos = this.getLabelPositionQuad(figure, vName);
                 svg += this.renderVertexMarker(vertex.x, vertex.y, vName, isSelected);
-                svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${this.colors.label}" font-size="24" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label">${vertex.label || vName}</text>`;
+                svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${this.colors.label}" font-size="24" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label" data-label="${vName}" style="cursor: move; pointer-events: auto;">${vertex.label || vName}</text>`;
             });
 
             return svg;
@@ -1714,7 +1760,8 @@ function geometryEditor() {
             const v = figure.vertices;
             const center = this.getTriangleCenter(figure);
             const point = v[vertexName];
-            return window.labelPos(point, center, 22);
+            const base = window.labelPos(point, center, 22);
+            return { x: base.x + (point.labelDx || 0), y: base.y + (point.labelDy || 0) };
         },
 
         getLabelPositionQuad(figure, vertexName) {
@@ -1724,7 +1771,8 @@ function geometryEditor() {
                 y: (v.A.y + v.B.y + v.C.y + v.D.y) / 4
             };
             const point = v[vertexName];
-            return window.labelPos(point, center, 22);
+            const base = window.labelPos(point, center, 22);
+            return { x: base.x + (point.labelDx || 0), y: base.y + (point.labelDy || 0) };
         },
 
         // ==================== Angles ====================
@@ -2799,14 +2847,14 @@ function geometryEditor() {
             svg += this.renderVertexMarkerForExport(B.x, B.y);
             svg += this.renderVertexMarkerForExport(C.x, C.y);
 
-            // Подписи вершин
+            // Подписи вершин (с учётом labelDx/labelDy)
             const labelA = this.labelPosFromCenter(A, center, 22);
             const labelB = this.labelPosFromCenter(B, center, 22);
             const labelC = this.labelPosFromCenter(C, center, 22);
 
-            svg += this.labelText(v.A.label || 'A', labelA, null, 24);
-            svg += this.labelText(v.B.label || 'B', labelB, null, 24);
-            svg += this.labelText(v.C.label || 'C', labelC, null, 24);
+            svg += this.labelText(v.A.label || 'A', { x: labelA.x + (v.A.labelDx || 0), y: labelA.y + (v.A.labelDy || 0) }, null, 24);
+            svg += this.labelText(v.B.label || 'B', { x: labelB.x + (v.B.labelDx || 0), y: labelB.y + (v.B.labelDy || 0) }, null, 24);
+            svg += this.labelText(v.C.label || 'C', { x: labelC.x + (v.C.labelDx || 0), y: labelC.y + (v.C.labelDy || 0) }, null, 24);
 
             return svg;
         },
@@ -2850,16 +2898,16 @@ function geometryEditor() {
             svg += this.renderVertexMarkerForExport(C.x, C.y);
             svg += this.renderVertexMarkerForExport(D.x, D.y);
 
-            // Подписи вершин
+            // Подписи вершин (с учётом labelDx/labelDy)
             const labelA = this.labelPosFromCenter(A, center, 22);
             const labelB = this.labelPosFromCenter(B, center, 22);
             const labelC = this.labelPosFromCenter(C, center, 22);
             const labelD = this.labelPosFromCenter(D, center, 22);
 
-            svg += this.labelText(v.A.label || 'A', labelA, null, 24);
-            svg += this.labelText(v.B.label || 'B', labelB, null, 24);
-            svg += this.labelText(v.C.label || 'C', labelC, null, 24);
-            svg += this.labelText(v.D.label || 'D', labelD, null, 24);
+            svg += this.labelText(v.A.label || 'A', { x: labelA.x + (v.A.labelDx || 0), y: labelA.y + (v.A.labelDy || 0) }, null, 24);
+            svg += this.labelText(v.B.label || 'B', { x: labelB.x + (v.B.labelDx || 0), y: labelB.y + (v.B.labelDy || 0) }, null, 24);
+            svg += this.labelText(v.C.label || 'C', { x: labelC.x + (v.C.labelDx || 0), y: labelC.y + (v.C.labelDy || 0) }, null, 24);
+            svg += this.labelText(v.D.label || 'D', { x: labelD.x + (v.D.labelDx || 0), y: labelD.y + (v.D.labelDy || 0) }, null, 24);
 
             return svg;
         },
