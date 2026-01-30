@@ -424,6 +424,17 @@
                                                     <span class="text-green-400">Высота</span>
                                                 </label>
                                             </div>
+                                            {{-- Half-arc radius slider (visible when bisector arcs are on) --}}
+                                            <div x-show="selectedFigure.lines && selectedFigure.lines['bisector_' + vName.toLowerCase()] && selectedFigure.lines['bisector_' + vName.toLowerCase()].showHalfArcs"
+                                                 class="flex items-center gap-2 pl-4 mt-1">
+                                                <span class="text-[10px] text-gray-500 w-6">R</span>
+                                                <input type="range" min="10" max="80" step="1"
+                                                       :value="(selectedFigure.lines && selectedFigure.lines['bisector_' + vName.toLowerCase()] && selectedFigure.lines['bisector_' + vName.toLowerCase()].halfArcRadius) || 30"
+                                                       @input="setHalfArcRadius('bisector_' + vName.toLowerCase(), $event.target.value)"
+                                                       class="flex-1 h-1 accent-amber-500">
+                                                <span class="text-[10px] text-gray-500 w-6"
+                                                      x-text="(selectedFigure.lines && selectedFigure.lines['bisector_' + vName.toLowerCase()] && selectedFigure.lines['bisector_' + vName.toLowerCase()].halfArcRadius) || 30"></span>
+                                            </div>
                                         </div>
                                     </template>
                                 </div>
@@ -682,6 +693,17 @@
                                                            class="rounded bg-gray-700 border-gray-600">
                                                     <span class="text-green-400">Высота</span>
                                                 </label>
+                                            </div>
+                                            {{-- Half-arc radius slider for quad bisector --}}
+                                            <div x-show="selectedFigure.lines && selectedFigure.lines['bisector_' + vName.toLowerCase()] && selectedFigure.lines['bisector_' + vName.toLowerCase()].enabled"
+                                                 class="flex items-center gap-2 pl-4 mt-1">
+                                                <span class="text-[10px] text-gray-500 w-10">R дуг</span>
+                                                <input type="range" min="10" max="80" step="1"
+                                                       :value="(selectedFigure.lines && selectedFigure.lines['bisector_' + vName.toLowerCase()] && selectedFigure.lines['bisector_' + vName.toLowerCase()].halfArcRadius) || 30"
+                                                       @input="setHalfArcRadius('bisector_' + vName.toLowerCase(), $event.target.value)"
+                                                       class="flex-1 h-1 accent-amber-500">
+                                                <span class="text-[10px] text-gray-500 w-6"
+                                                      x-text="(selectedFigure.lines && selectedFigure.lines['bisector_' + vName.toLowerCase()] && selectedFigure.lines['bisector_' + vName.toLowerCase()].halfArcRadius) || 30"></span>
                                             </div>
                                         </div>
                                     </template>

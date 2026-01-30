@@ -1113,7 +1113,7 @@ function geometryEditor() {
                     // Дуги половинных углов (если включены)
                     if (lines[lineKey].showHalfArcs) {
                         const [prev, next] = vertexNeighbors[vName];
-                        const halfArcR = (figure.angles && figure.angles[vName] && figure.angles[vName].arcRadius) || 30;
+                        const halfArcR = lines[lineKey].halfArcRadius || 30;
                         const arc1 = window.makeAngleArc(vertex, v[prev], endpoint, halfArcR);
                         const arc2 = window.makeAngleArc(vertex, endpoint, v[next], halfArcR + 9);
                         svg += `<path d="${arc1}" fill="none" stroke="${this.colors.angleArc}" stroke-width="2"/>`;
@@ -1405,7 +1405,7 @@ function geometryEditor() {
                     svg += `<circle cx="${endpoint.x}" cy="${endpoint.y}" r="5" fill="${this.colors.auxiliaryLine}"/>`;
                     // Две дуги половинных углов (показывают, что угол делится пополам)
                     const [prev, next] = vertexPairs[vName];
-                    const halfArcR = (figure.angles && figure.angles[vName] && figure.angles[vName].arcRadius) || 30;
+                    const halfArcR = lines[lineKey].halfArcRadius || 30;
                     svg += `<path d="${window.makeAngleArc(vertex, v[prev], endpoint, halfArcR)}"
                             fill="none" stroke="${this.colors.auxiliaryLine}" stroke-width="1.75"/>`;
                     svg += `<path d="${window.makeAngleArc(vertex, endpoint, v[next], halfArcR)}"
@@ -2013,6 +2013,16 @@ function geometryEditor() {
             } else {
                 this.selectedFigure.angles[vertexName].labelDy = parseInt(value) || 0;
             }
+            this.saveState();
+        },
+
+        setHalfArcRadius(lineKey, value) {
+            if (!this.selectedFigure) return;
+            if (!this.selectedFigure.lines) this.selectedFigure.lines = {};
+            if (!this.selectedFigure.lines[lineKey]) {
+                this.selectedFigure.lines[lineKey] = { enabled: false, showHalfArcs: false };
+            }
+            this.selectedFigure.lines[lineKey].halfArcRadius = parseInt(value) || 30;
             this.saveState();
         },
 
@@ -3185,7 +3195,7 @@ function geometryEditor() {
                     // Дуги половинных углов
                     if (lines[lineKey].showHalfArcs) {
                         const [prev, next] = vertexNeighbors[vName];
-                        const halfArcR = (figure.angles && figure.angles[vName] && figure.angles[vName].arcRadius) || 30;
+                        const halfArcR = lines[lineKey].halfArcRadius || 30;
                         const arc1 = window.makeAngleArc(vertex, tV[prev], tEndpoint, halfArcR);
                         const arc2 = window.makeAngleArc(vertex, tEndpoint, tV[next], halfArcR + 9);
                         svg += `  <path d="${arc1}" fill="none" stroke="${this.colors.angleArc}" stroke-width="2"/>\n`;
