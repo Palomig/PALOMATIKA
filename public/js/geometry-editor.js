@@ -1114,10 +1114,11 @@ function geometryEditor() {
                     if (lines[lineKey].showHalfArcs) {
                         const [prev, next] = vertexNeighbors[vName];
                         const halfArcR = lines[lineKey].halfArcRadius || 30;
+                        const halfArcSW = (lines[lineKey].halfArcStrokeWidth != null) ? lines[lineKey].halfArcStrokeWidth : 2;
                         const arc1 = window.makeAngleArc(vertex, v[prev], endpoint, halfArcR);
                         const arc2 = window.makeAngleArc(vertex, endpoint, v[next], halfArcR + 9);
-                        svg += `<path d="${arc1}" fill="none" stroke="${this.colors.angleArc}" stroke-width="2"/>`;
-                        svg += `<path d="${arc2}" fill="none" stroke="${this.colors.angleArc}" stroke-width="2"/>`;
+                        svg += `<path d="${arc1}" fill="none" stroke="${this.colors.angleArc}" stroke-width="${halfArcSW}"/>`;
+                        svg += `<path d="${arc2}" fill="none" stroke="${this.colors.angleArc}" stroke-width="${halfArcSW}"/>`;
                     }
                 }
             });
@@ -1407,10 +1408,11 @@ function geometryEditor() {
                     // Две дуги половинных углов (показывают, что угол делится пополам)
                     const [prev, next] = vertexPairs[vName];
                     const halfArcR = lines[lineKey].halfArcRadius || 30;
+                    const halfArcSW = (lines[lineKey].halfArcStrokeWidth != null) ? lines[lineKey].halfArcStrokeWidth : 1.75;
                     svg += `<path d="${window.makeAngleArc(vertex, v[prev], endpoint, halfArcR)}"
-                            fill="none" stroke="${this.colors.auxiliaryLine}" stroke-width="1.75"/>`;
+                            fill="none" stroke="${this.colors.auxiliaryLine}" stroke-width="${halfArcSW}"/>`;
                     svg += `<path d="${window.makeAngleArc(vertex, endpoint, v[next], halfArcR)}"
-                            fill="none" stroke="${this.colors.auxiliaryLine}" stroke-width="1.75"/>`;
+                            fill="none" stroke="${this.colors.auxiliaryLine}" stroke-width="${halfArcSW}"/>`;
                 }
             });
 
@@ -2034,6 +2036,16 @@ function geometryEditor() {
                 this.selectedFigure.lines[lineKey] = { enabled: false, showHalfArcs: false };
             }
             this.selectedFigure.lines[lineKey].halfArcRadius = parseInt(value) || 30;
+            this.saveState();
+        },
+
+        setHalfArcStrokeWidth(lineKey, value) {
+            if (!this.selectedFigure) return;
+            if (!this.selectedFigure.lines) this.selectedFigure.lines = {};
+            if (!this.selectedFigure.lines[lineKey]) {
+                this.selectedFigure.lines[lineKey] = { enabled: false, showHalfArcs: false };
+            }
+            this.selectedFigure.lines[lineKey].halfArcStrokeWidth = parseFloat(value) || 2;
             this.saveState();
         },
 
@@ -3209,10 +3221,11 @@ function geometryEditor() {
                     if (lines[lineKey].showHalfArcs) {
                         const [prev, next] = vertexNeighbors[vName];
                         const halfArcR = lines[lineKey].halfArcRadius || 30;
+                        const halfArcSW = (lines[lineKey].halfArcStrokeWidth != null) ? lines[lineKey].halfArcStrokeWidth : 2;
                         const arc1 = window.makeAngleArc(vertex, tV[prev], tEndpoint, halfArcR);
                         const arc2 = window.makeAngleArc(vertex, tEndpoint, tV[next], halfArcR + 9);
-                        svg += `  <path d="${arc1}" fill="none" stroke="${this.colors.angleArc}" stroke-width="2"/>\n`;
-                        svg += `  <path d="${arc2}" fill="none" stroke="${this.colors.angleArc}" stroke-width="2"/>\n`;
+                        svg += `  <path d="${arc1}" fill="none" stroke="${this.colors.angleArc}" stroke-width="${halfArcSW}"/>\n`;
+                        svg += `  <path d="${arc2}" fill="none" stroke="${this.colors.angleArc}" stroke-width="${halfArcSW}"/>\n`;
                     }
                 }
             });

@@ -445,6 +445,17 @@
                                                 <span class="text-[10px] text-gray-500 w-6"
                                                       x-text="(selectedFigure.lines && selectedFigure.lines['bisector_' + vName.toLowerCase()] && selectedFigure.lines['bisector_' + vName.toLowerCase()].halfArcRadius) || 30"></span>
                                             </div>
+                                            {{-- Half-arc stroke width slider --}}
+                                            <div x-show="selectedFigure.lines && selectedFigure.lines['bisector_' + vName.toLowerCase()] && selectedFigure.lines['bisector_' + vName.toLowerCase()].showHalfArcs"
+                                                 class="flex items-center gap-2 pl-4">
+                                                <span class="text-[10px] text-gray-500 w-6">W</span>
+                                                <input type="range" min="0.5" max="6" step="0.5"
+                                                       :value="(selectedFigure.lines && selectedFigure.lines['bisector_' + vName.toLowerCase()] && selectedFigure.lines['bisector_' + vName.toLowerCase()].halfArcStrokeWidth) || 2"
+                                                       @input="setHalfArcStrokeWidth('bisector_' + vName.toLowerCase(), $event.target.value)"
+                                                       class="flex-1 h-1 accent-amber-500">
+                                                <span class="text-[10px] text-gray-500 w-6"
+                                                      x-text="(selectedFigure.lines && selectedFigure.lines['bisector_' + vName.toLowerCase()] && selectedFigure.lines['bisector_' + vName.toLowerCase()].halfArcStrokeWidth) || 2"></span>
+                                            </div>
                                         </div>
                                     </template>
                                 </div>
@@ -714,6 +725,17 @@
                                                        class="flex-1 h-1 accent-amber-500">
                                                 <span class="text-[10px] text-gray-500 w-6"
                                                       x-text="(selectedFigure.lines && selectedFigure.lines['bisector_' + vName.toLowerCase()] && selectedFigure.lines['bisector_' + vName.toLowerCase()].halfArcRadius) || 30"></span>
+                                            </div>
+                                            {{-- Half-arc stroke width slider for quad bisector --}}
+                                            <div x-show="selectedFigure.lines && selectedFigure.lines['bisector_' + vName.toLowerCase()] && selectedFigure.lines['bisector_' + vName.toLowerCase()].enabled"
+                                                 class="flex items-center gap-2 pl-4">
+                                                <span class="text-[10px] text-gray-500 w-10">W дуг</span>
+                                                <input type="range" min="0.5" max="6" step="0.5"
+                                                       :value="(selectedFigure.lines && selectedFigure.lines['bisector_' + vName.toLowerCase()] && selectedFigure.lines['bisector_' + vName.toLowerCase()].halfArcStrokeWidth) || 2"
+                                                       @input="setHalfArcStrokeWidth('bisector_' + vName.toLowerCase(), $event.target.value)"
+                                                       class="flex-1 h-1 accent-amber-500">
+                                                <span class="text-[10px] text-gray-500 w-6"
+                                                      x-text="(selectedFigure.lines && selectedFigure.lines['bisector_' + vName.toLowerCase()] && selectedFigure.lines['bisector_' + vName.toLowerCase()].halfArcStrokeWidth) || 2"></span>
                                             </div>
                                         </div>
                                     </template>
