@@ -488,7 +488,8 @@
 
                     {{-- Circle properties --}}
                     <template x-if="selectedFigure && selectedFigure.type === 'circle'">
-                        <div class="space-y-4">
+                        <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-1">
+                            {{-- Basic circle params --}}
                             <div class="bg-[#12121f] rounded-lg p-3">
                                 <h3 class="text-sm font-semibold text-purple-400 mb-3">⭕ Окружность</h3>
                                 <div class="space-y-2">
@@ -516,9 +517,9 @@
                                 </div>
                             </div>
 
-                            {{-- Circle elements --}}
+                            {{-- Diameter & Radius --}}
                             <div class="bg-[#12121f] rounded-lg p-3">
-                                <h3 class="text-sm font-semibold text-purple-400 mb-3">📏 Элементы</h3>
+                                <h3 class="text-sm font-semibold text-purple-400 mb-3">📏 Диаметр и радиус</h3>
                                 <div class="space-y-2">
                                     <label class="flex items-center gap-2 text-sm text-gray-300">
                                         <input type="checkbox"
@@ -527,6 +528,29 @@
                                                class="rounded bg-gray-700 border-gray-600">
                                         Диаметр
                                     </label>
+                                    <template x-if="selectedFigure.showDiameter">
+                                        <div class="pl-6 space-y-1">
+                                            <div class="flex items-center gap-2">
+                                                <span class="text-gray-500 text-xs">Угол:</span>
+                                                <input type="number" :value="selectedFigure.diameterAngle || 0" min="0" max="360"
+                                                       @change="selectedFigure.diameterAngle = parseInt($event.target.value); saveState()"
+                                                       class="w-16 px-2 py-1 text-xs bg-[#1e1e32] text-gray-200 rounded border border-gray-600">
+                                                <span class="text-gray-500 text-xs">°</span>
+                                            </div>
+                                            <div class="flex items-center gap-2">
+                                                <span class="text-gray-500 text-xs">Точка 1:</span>
+                                                <input type="text" :value="selectedFigure.diameterLabel1 || ''"
+                                                       @change="selectedFigure.diameterLabel1 = $event.target.value; saveState()"
+                                                       placeholder="A"
+                                                       class="w-10 px-2 py-1 text-xs bg-[#1e1e32] text-orange-400 rounded border border-gray-600 text-center">
+                                                <span class="text-gray-500 text-xs">Точка 2:</span>
+                                                <input type="text" :value="selectedFigure.diameterLabel2 || ''"
+                                                       @change="selectedFigure.diameterLabel2 = $event.target.value; saveState()"
+                                                       placeholder="B"
+                                                       class="w-10 px-2 py-1 text-xs bg-[#1e1e32] text-orange-400 rounded border border-gray-600 text-center">
+                                            </div>
+                                        </div>
+                                    </template>
                                     <label class="flex items-center gap-2 text-sm text-gray-300">
                                         <input type="checkbox"
                                                :checked="selectedFigure.showRadius"
@@ -534,19 +558,251 @@
                                                class="rounded bg-gray-700 border-gray-600">
                                         Радиус
                                     </label>
-                                    <button @click="addChord()"
-                                            class="w-full px-3 py-2 bg-[#1e1e32] hover:bg-[#2a2a42] rounded text-sm text-gray-300 text-left">
-                                        + Добавить хорду
-                                    </button>
-                                    <button @click="addTangent()"
-                                            class="w-full px-3 py-2 bg-[#1e1e32] hover:bg-[#2a2a42] rounded text-sm text-gray-300 text-left">
-                                        + Добавить касательную
-                                    </button>
-                                    <button @click="addSecant()"
-                                            class="w-full px-3 py-2 bg-[#1e1e32] hover:bg-[#2a2a42] rounded text-sm text-gray-300 text-left">
-                                        + Добавить секущую
-                                    </button>
+                                    <template x-if="selectedFigure.showRadius">
+                                        <div class="pl-6 space-y-1">
+                                            <div class="flex items-center gap-2">
+                                                <span class="text-gray-500 text-xs">Угол:</span>
+                                                <input type="number" :value="selectedFigure.radiusAngle || 45" min="0" max="360"
+                                                       @change="selectedFigure.radiusAngle = parseInt($event.target.value); saveState()"
+                                                       class="w-16 px-2 py-1 text-xs bg-[#1e1e32] text-gray-200 rounded border border-gray-600">
+                                                <span class="text-gray-500 text-xs">°</span>
+                                            </div>
+                                            <div class="flex items-center gap-2">
+                                                <span class="text-gray-500 text-xs">Метка:</span>
+                                                <input type="text" :value="selectedFigure.radiusLabel || ''"
+                                                       @change="selectedFigure.radiusLabel = $event.target.value; saveState()"
+                                                       placeholder="r"
+                                                       class="w-16 px-2 py-1 text-xs bg-[#1e1e32] text-orange-400 rounded border border-gray-600 text-center">
+                                            </div>
+                                        </div>
+                                    </template>
                                 </div>
+                            </div>
+
+                            {{-- Chords --}}
+                            <div class="bg-[#12121f] rounded-lg p-3">
+                                <h3 class="text-sm font-semibold text-purple-400 mb-2">🎵 Хорды</h3>
+                                <template x-if="selectedFigure.chords && selectedFigure.chords.length > 0">
+                                    <div class="space-y-2 mb-2">
+                                        <template x-for="(chord, i) in selectedFigure.chords" :key="chord.id">
+                                            <div class="bg-[#1a1a2e] rounded p-2 space-y-1">
+                                                <div class="flex items-center justify-between">
+                                                    <span class="text-xs text-gray-400" x-text="'Хорда ' + (i+1)"></span>
+                                                    <button @click="removeChord(i)" class="text-red-400 hover:text-red-300 text-xs">✕</button>
+                                                </div>
+                                                <div class="flex items-center gap-1">
+                                                    <span class="text-gray-500 text-xs">Т1:</span>
+                                                    <input type="text" :value="chord.label1" @change="chord.label1 = $event.target.value; saveState()"
+                                                           class="w-8 px-1 py-0.5 text-xs bg-[#1e1e32] text-orange-400 rounded border border-gray-600 text-center">
+                                                    <span class="text-gray-500 text-xs">Т2:</span>
+                                                    <input type="text" :value="chord.label2" @change="chord.label2 = $event.target.value; saveState()"
+                                                           class="w-8 px-1 py-0.5 text-xs bg-[#1e1e32] text-orange-400 rounded border border-gray-600 text-center">
+                                                    <label class="flex items-center gap-1 text-xs text-gray-400 ml-1">
+                                                        <input type="checkbox" :checked="chord.showRightAngle"
+                                                               @change="chord.showRightAngle = $event.target.checked; saveState()"
+                                                               class="rounded bg-gray-700 border-gray-600 w-3 h-3">
+                                                        ∟
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+                                <button @click="addChord()" class="w-full px-3 py-1.5 bg-[#1e1e32] hover:bg-[#2a2a42] rounded text-sm text-gray-300 text-left">+ Хорда</button>
+                            </div>
+
+                            {{-- Tangent lines --}}
+                            <div class="bg-[#12121f] rounded-lg p-3">
+                                <h3 class="text-sm font-semibold text-purple-400 mb-2">↗ Касательные</h3>
+                                <template x-if="selectedFigure.tangents && selectedFigure.tangents.length > 0">
+                                    <div class="space-y-2 mb-2">
+                                        <template x-for="(tangent, i) in selectedFigure.tangents" :key="tangent.id">
+                                            <div class="bg-[#1a1a2e] rounded p-2 space-y-1">
+                                                <div class="flex items-center justify-between">
+                                                    <span class="text-xs text-gray-400" x-text="'Касательная ' + (i+1)"></span>
+                                                    <button @click="removeTangent(i)" class="text-red-400 hover:text-red-300 text-xs">✕</button>
+                                                </div>
+                                                <div class="flex items-center gap-1 flex-wrap">
+                                                    <span class="text-gray-500 text-xs">Внеш:</span>
+                                                    <input type="text" :value="tangent.label" @change="tangent.label = $event.target.value; saveState()"
+                                                           class="w-8 px-1 py-0.5 text-xs bg-[#1e1e32] text-orange-400 rounded border border-gray-600 text-center">
+                                                    <span class="text-gray-500 text-xs">Кас1:</span>
+                                                    <input type="text" :value="tangent.tangentLabel1 || ''" @change="tangent.tangentLabel1 = $event.target.value; saveState()"
+                                                           class="w-8 px-1 py-0.5 text-xs bg-[#1e1e32] text-orange-400 rounded border border-gray-600 text-center">
+                                                    <span class="text-gray-500 text-xs">Кас2:</span>
+                                                    <input type="text" :value="tangent.tangentLabel2 || ''" @change="tangent.tangentLabel2 = $event.target.value; saveState()"
+                                                           class="w-8 px-1 py-0.5 text-xs bg-[#1e1e32] text-orange-400 rounded border border-gray-600 text-center">
+                                                </div>
+                                                <div class="flex items-center gap-2 flex-wrap">
+                                                    <label class="flex items-center gap-1 text-xs text-gray-400">
+                                                        <input type="checkbox" :checked="tangent.showRightAngles !== false"
+                                                               @change="tangent.showRightAngles = $event.target.checked; saveState()"
+                                                               class="rounded bg-gray-700 border-gray-600 w-3 h-3">
+                                                        ∟
+                                                    </label>
+                                                    <label class="flex items-center gap-1 text-xs text-gray-400">
+                                                        <input type="checkbox" :checked="tangent.showRadii !== false"
+                                                               @change="tangent.showRadii = $event.target.checked; saveState()"
+                                                               class="rounded bg-gray-700 border-gray-600 w-3 h-3">
+                                                        R
+                                                    </label>
+                                                    <label class="flex items-center gap-1 text-xs text-gray-400">
+                                                        <input type="checkbox" :checked="tangent.showAngle"
+                                                               @change="tangent.showAngle = $event.target.checked; saveState()"
+                                                               class="rounded bg-gray-700 border-gray-600 w-3 h-3">
+                                                        ∠
+                                                    </label>
+                                                    <template x-if="tangent.showAngle">
+                                                        <input type="text" :value="tangent.angleValue || ''" @change="tangent.angleValue = $event.target.value; saveState()"
+                                                               placeholder="56" class="w-10 px-1 py-0.5 text-xs bg-[#1e1e32] text-yellow-400 rounded border border-gray-600 text-center">
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+                                <button @click="addTangent()" class="w-full px-3 py-1.5 bg-[#1e1e32] hover:bg-[#2a2a42] rounded text-sm text-gray-300 text-left">+ Касательная</button>
+                            </div>
+
+                            {{-- Secant lines --}}
+                            <div class="bg-[#12121f] rounded-lg p-3">
+                                <h3 class="text-sm font-semibold text-purple-400 mb-2">↔ Секущие</h3>
+                                <template x-if="selectedFigure.secants && selectedFigure.secants.length > 0">
+                                    <div class="space-y-2 mb-2">
+                                        <template x-for="(secant, i) in selectedFigure.secants" :key="secant.id">
+                                            <div class="bg-[#1a1a2e] rounded p-2 space-y-1">
+                                                <div class="flex items-center justify-between">
+                                                    <span class="text-xs text-gray-400" x-text="'Секущая ' + (i+1)"></span>
+                                                    <button @click="removeSecant(i)" class="text-red-400 hover:text-red-300 text-xs">✕</button>
+                                                </div>
+                                                <div class="flex items-center gap-1">
+                                                    <span class="text-gray-500 text-xs">Т1:</span>
+                                                    <input type="text" :value="secant.label1 || ''" @change="secant.label1 = $event.target.value; saveState()"
+                                                           class="w-8 px-1 py-0.5 text-xs bg-[#1e1e32] text-orange-400 rounded border border-gray-600 text-center">
+                                                    <span class="text-gray-500 text-xs">Т2:</span>
+                                                    <input type="text" :value="secant.label2 || ''" @change="secant.label2 = $event.target.value; saveState()"
+                                                           class="w-8 px-1 py-0.5 text-xs bg-[#1e1e32] text-orange-400 rounded border border-gray-600 text-center">
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+                                <button @click="addSecant()" class="w-full px-3 py-1.5 bg-[#1e1e32] hover:bg-[#2a2a42] rounded text-sm text-gray-300 text-left">+ Секущая</button>
+                            </div>
+
+                            {{-- Inscribed angles --}}
+                            <div class="bg-[#12121f] rounded-lg p-3">
+                                <h3 class="text-sm font-semibold text-purple-400 mb-2">📐 Вписанные углы</h3>
+                                <template x-if="selectedFigure.inscribedAngles && selectedFigure.inscribedAngles.length > 0">
+                                    <div class="space-y-2 mb-2">
+                                        <template x-for="(insc, i) in selectedFigure.inscribedAngles" :key="insc.id">
+                                            <div class="bg-[#1a1a2e] rounded p-2 space-y-1">
+                                                <div class="flex items-center justify-between">
+                                                    <span class="text-xs text-gray-400" x-text="'Вписанный угол ' + (i+1)"></span>
+                                                    <button @click="removeInscribedAngle(i)" class="text-red-400 hover:text-red-300 text-xs">✕</button>
+                                                </div>
+                                                <div class="flex items-center gap-1 flex-wrap">
+                                                    <span class="text-gray-500 text-xs">Верш:</span>
+                                                    <input type="text" :value="insc.vertexLabel || ''" @change="insc.vertexLabel = $event.target.value; saveState()"
+                                                           class="w-8 px-1 py-0.5 text-xs bg-[#1e1e32] text-orange-400 rounded border border-gray-600 text-center">
+                                                    <span class="text-gray-500 text-xs">Т1:</span>
+                                                    <input type="text" :value="insc.label1 || ''" @change="insc.label1 = $event.target.value; saveState()"
+                                                           class="w-8 px-1 py-0.5 text-xs bg-[#1e1e32] text-orange-400 rounded border border-gray-600 text-center">
+                                                    <span class="text-gray-500 text-xs">Т2:</span>
+                                                    <input type="text" :value="insc.label2 || ''" @change="insc.label2 = $event.target.value; saveState()"
+                                                           class="w-8 px-1 py-0.5 text-xs bg-[#1e1e32] text-orange-400 rounded border border-gray-600 text-center">
+                                                </div>
+                                                <div class="flex items-center gap-2 flex-wrap">
+                                                    <span class="text-gray-500 text-xs">∠°:</span>
+                                                    <input type="text" :value="insc.angleValue || ''" @change="insc.angleValue = $event.target.value; saveState()"
+                                                           placeholder="45" class="w-10 px-1 py-0.5 text-xs bg-[#1e1e32] text-yellow-400 rounded border border-gray-600 text-center">
+                                                    <label class="flex items-center gap-1 text-xs text-gray-400">
+                                                        <input type="checkbox" :checked="insc.showChord"
+                                                               @change="insc.showChord = $event.target.checked; saveState()"
+                                                               class="rounded bg-gray-700 border-gray-600 w-3 h-3">
+                                                        Хорда
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+                                <button @click="addInscribedAngle()" class="w-full px-3 py-1.5 bg-[#1e1e32] hover:bg-[#2a2a42] rounded text-sm text-gray-300 text-left">+ Вписанный угол</button>
+                            </div>
+
+                            {{-- Highlighted arcs --}}
+                            <div class="bg-[#12121f] rounded-lg p-3">
+                                <h3 class="text-sm font-semibold text-purple-400 mb-2">🌈 Дуги</h3>
+                                <template x-if="selectedFigure.highlightedArcs && selectedFigure.highlightedArcs.length > 0">
+                                    <div class="space-y-2 mb-2">
+                                        <template x-for="(arc, i) in selectedFigure.highlightedArcs" :key="arc.id">
+                                            <div class="bg-[#1a1a2e] rounded p-2 space-y-1">
+                                                <div class="flex items-center justify-between">
+                                                    <span class="text-xs text-gray-400" x-text="'Дуга ' + (i+1)"></span>
+                                                    <button @click="removeHighlightedArc(i)" class="text-red-400 hover:text-red-300 text-xs">✕</button>
+                                                </div>
+                                                <div class="flex items-center gap-1">
+                                                    <span class="text-gray-500 text-xs">От:</span>
+                                                    <input type="number" :value="arc.startAngle" min="0" max="360"
+                                                           @change="arc.startAngle = parseInt($event.target.value); saveState()"
+                                                           class="w-14 px-1 py-0.5 text-xs bg-[#1e1e32] text-gray-200 rounded border border-gray-600">
+                                                    <span class="text-gray-500 text-xs">До:</span>
+                                                    <input type="number" :value="arc.endAngle" min="0" max="360"
+                                                           @change="arc.endAngle = parseInt($event.target.value); saveState()"
+                                                           class="w-14 px-1 py-0.5 text-xs bg-[#1e1e32] text-gray-200 rounded border border-gray-600">
+                                                    <input type="color" :value="arc.color || '#22c55e'"
+                                                           @change="arc.color = $event.target.value; saveState()"
+                                                           class="w-6 h-6 rounded border border-gray-600 bg-transparent cursor-pointer">
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+                                <button @click="addHighlightedArc()" class="w-full px-3 py-1.5 bg-[#1e1e32] hover:bg-[#2a2a42] rounded text-sm text-gray-300 text-left">+ Дуга</button>
+                            </div>
+
+                            {{-- Inscribed polygon --}}
+                            <div class="bg-[#12121f] rounded-lg p-3">
+                                <h3 class="text-sm font-semibold text-purple-400 mb-2">🔷 Вписанный многоугольник</h3>
+                                <template x-if="selectedFigure.inscribedPolygon">
+                                    <div class="space-y-2 mb-2">
+                                        <div class="bg-[#1a1a2e] rounded p-2 space-y-1">
+                                            <div class="flex items-center justify-between">
+                                                <span class="text-xs text-gray-400" x-text="selectedFigure.inscribedPolygon.sides === 3 ? 'Треугольник' : 'Четырёхугольник'"></span>
+                                                <button @click="removeInscribedPolygon()" class="text-red-400 hover:text-red-300 text-xs">✕</button>
+                                            </div>
+                                            <template x-for="(v, idx) in selectedFigure.inscribedPolygon.vertices" :key="idx">
+                                                <div class="flex items-center gap-1">
+                                                    <input type="text" :value="v.label" @change="v.label = $event.target.value; saveState()"
+                                                           class="w-8 px-1 py-0.5 text-xs bg-[#1e1e32] text-orange-400 rounded border border-gray-600 text-center">
+                                                    <span class="text-gray-500 text-xs" x-text="Math.round(v.x) + ',' + Math.round(v.y)"></span>
+                                                </div>
+                                            </template>
+                                            <template x-if="selectedFigure.inscribedPolygon.sides === 4">
+                                                <div class="flex items-center gap-2">
+                                                    <label class="flex items-center gap-1 text-xs text-gray-400">
+                                                        <input type="checkbox" :checked="selectedFigure.inscribedPolygon.showRightAngles"
+                                                               @change="selectedFigure.inscribedPolygon.showRightAngles = $event.target.checked; saveState()"
+                                                               class="rounded bg-gray-700 border-gray-600 w-3 h-3">
+                                                        ∟
+                                                    </label>
+                                                    <label class="flex items-center gap-1 text-xs text-gray-400">
+                                                        <input type="checkbox" :checked="selectedFigure.inscribedPolygon.showDiagonals"
+                                                               @change="selectedFigure.inscribedPolygon.showDiagonals = $event.target.checked; saveState()"
+                                                               class="rounded bg-gray-700 border-gray-600 w-3 h-3">
+                                                        Диагонали
+                                                    </label>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </template>
+                                <template x-if="!selectedFigure.inscribedPolygon">
+                                    <div class="flex gap-2">
+                                        <button @click="addInscribedPolygon(3)" class="flex-1 px-3 py-1.5 bg-[#1e1e32] hover:bg-[#2a2a42] rounded text-sm text-gray-300">△</button>
+                                        <button @click="addInscribedPolygon(4)" class="flex-1 px-3 py-1.5 bg-[#1e1e32] hover:bg-[#2a2a42] rounded text-sm text-gray-300">□</button>
+                                    </div>
+                                </template>
                             </div>
                         </div>
                     </template>
