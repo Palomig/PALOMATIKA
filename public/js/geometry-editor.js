@@ -378,6 +378,86 @@ function geometryEditor() {
             }
         },
 
+        // ==================== Layers Panel ====================
+
+        toggleFigureVisibility(figure) {
+            figure.hidden = !figure.hidden;
+            this.saveState();
+        },
+
+        getFigureIcon(figure) {
+            switch (figure.type) {
+                case 'triangle': return '△';
+                case 'quadrilateral': return '▢';
+                case 'circle': return '⭕';
+                case 'stereometry': return '⬡';
+                default: return '?';
+            }
+        },
+
+        getFigureName(figure) {
+            if (figure.type === 'triangle') {
+                const v = figure.vertices;
+                return `Треугольник ${v.A?.label || 'A'}${v.B?.label || 'B'}${v.C?.label || 'C'}`;
+            } else if (figure.type === 'quadrilateral') {
+                const v = figure.vertices;
+                return `Четырёхуг. ${v.A?.label || 'A'}${v.B?.label || 'B'}${v.C?.label || 'C'}${v.D?.label || 'D'}`;
+            } else if (figure.type === 'circle') {
+                return `Окружность ${figure.centerLabel || 'O'} (R=${Math.round(figure.radius)})`;
+            } else if (figure.type === 'stereometry') {
+                return figure.stereometryType || 'Стереометрия';
+            }
+            return 'Фигура';
+        },
+
+        getCircleFigures() {
+            return this.figures.filter(f => f.type === 'circle');
+        },
+
+        setConstrainToCircle(circleId) {
+            if (!this.selectedFigure) return;
+            this.selectedFigure.constrainToCircle = circleId || null;
+            // If binding to a circle, snap vertices to circle now
+            if (circleId) {
+                const circle = this.figures.find(f => f.id === circleId);
+                if (circle && this.selectedFigure.vertices) {
+                    const cx = circle.center.x;
+                    const cy = circle.center.y;
+                    const r = circle.radius;
+                    Object.keys(this.selectedFigure.vertices).forEach(vName => {
+                        const v = this.selectedFigure.vertices[vName];
+                        const dx = v.x - cx;
+                        const dy = v.y - cy;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist > 0) {
+                            v.x = cx + (dx / dist) * r;
+                            v.y = cy + (dy / dist) * r;
+                        }
+                    });
+                }
+            }
+            this.saveState();
+        },
+
+        moveFigureUp(idx) {
+            if (idx <= 0) return;
+            const temp = this.figures[idx];
+            this.figures[idx] = this.figures[idx - 1];
+            this.figures[idx - 1] = temp;
+            // Force Alpine reactivity
+            this.figures = [...this.figures];
+            this.saveState();
+        },
+
+        moveFigureDown(idx) {
+            if (idx >= this.figures.length - 1) return;
+            const temp = this.figures[idx];
+            this.figures[idx] = this.figures[idx + 1];
+            this.figures[idx + 1] = temp;
+            this.figures = [...this.figures];
+            this.saveState();
+        },
+
         // ==================== Triangle Presets ====================
 
         applyPreset(preset) {
@@ -798,8 +878,26 @@ function geometryEditor() {
                     figure.vertices[vName].y = newVy;
                 });
             } else if (figure.vertices && figure.vertices[vertex]) {
-                // Check preset constraints
-                if (figure.preset && figure.preset !== 'free') {
+                // Check circle constraint first
+                if (figure.constrainToCircle) {
+                    const circle = this.figures.find(f => f.id === figure.constrainToCircle);
+                    if (circle) {
+                        const cx = circle.center.x;
+                        const cy = circle.center.y;
+                        const r = circle.radius;
+                        const dx = newX - cx;
+                        const dy = newY - cy;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist > 0) {
+                            figure.vertices[vertex].x = cx + (dx / dist) * r;
+                            figure.vertices[vertex].y = cy + (dy / dist) * r;
+                        }
+                    } else {
+                        figure.vertices[vertex].x = newX;
+                        figure.vertices[vertex].y = newY;
+                    }
+                } else if (figure.preset && figure.preset !== 'free') {
+                    // Check preset constraints
                     this.moveVertexWithConstraints(figure, vertex, newX, newY);
                 } else {
                     figure.vertices[vertex].x = newX;
@@ -1093,6 +1191,9 @@ function geometryEditor() {
         renderAllFigures() {
             let svg = '';
             this.figures.forEach((figure, index) => {
+                // Skip hidden figures
+                if (figure.hidden) return;
+
                 const isSelected = this.selectedFigure && this.selectedFigure.id === figure.id;
                 const strokeColor = isSelected ? this.colors.shapeStrokeSelected : this.colors.shapeStroke;
 
