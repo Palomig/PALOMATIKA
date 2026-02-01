@@ -573,16 +573,22 @@ function geometryEditor() {
 
             // Handle circle sub-element vertices
             if (figure.type === 'circle') {
-                const match = vertexName.match(/^(chord|tangent|secant|insc|poly)_(\d+)_(p1|p2|ext|v|tp0|tp1|int\d+)$/);
+                const match = vertexName.match(/^(chord|tangent|secant|insc|central|poly)_(\d+)_(p1|p2|ext|v|tp0|tp1|int\d+)$/);
                 if (match) {
                     const [, elemType, indexStr, pointKey] = match;
                     const index = parseInt(indexStr);
                     let targetPoint = null;
 
-                    if (elemType === 'chord' && figure.chords && figure.chords[index]) {
+                    if (elemType === 'central' && figure.centralAngles && figure.centralAngles[index]) {
+                        const ca = figure.centralAngles[index];
+                        const caKey = pointKey === 'p1' ? 'point1' : 'point2';
+                        targetPoint = ca[caKey];
+                        this.draggingVertex = { figure, centralAngle: ca, pointKey: caKey, type: 'centralAngle' };
+                    } else if (elemType === 'chord' && figure.chords && figure.chords[index]) {
                         const chord = figure.chords[index];
-                        targetPoint = chord[pointKey];
-                        this.draggingVertex = { figure, chord, pointKey, type: 'chord' };
+                        const chordKey = pointKey === 'p1' ? 'point1' : 'point2';
+                        targetPoint = chord[chordKey];
+                        this.draggingVertex = { figure, chord, pointKey: chordKey, type: 'chord' };
                     } else if (elemType === 'tangent' && figure.tangents && figure.tangents[index]) {
                         if (pointKey === 'ext') {
                             targetPoint = figure.tangents[index].externalPoint;
@@ -590,11 +596,13 @@ function geometryEditor() {
                         }
                     } else if (elemType === 'secant' && figure.secants && figure.secants[index]) {
                         const secant = figure.secants[index];
-                        targetPoint = secant[pointKey];
-                        this.draggingVertex = { figure, secant, pointKey, type: 'secant' };
+                        const secKey = pointKey === 'p1' ? 'point1' : 'point2';
+                        targetPoint = secant[secKey];
+                        this.draggingVertex = { figure, secant, pointKey: secKey, type: 'secant' };
                     } else if (elemType === 'insc' && figure.inscribedAngles && figure.inscribedAngles[index]) {
                         const insc = figure.inscribedAngles[index];
-                        const key = pointKey === 'v' ? 'vertex' : pointKey;
+                        // Map p1->point1, p2->point2, v->vertex
+                        const key = pointKey === 'v' ? 'vertex' : (pointKey === 'p1' ? 'point1' : 'point2');
                         targetPoint = insc[key];
                         this.draggingVertex = { figure, inscribed: insc, pointKey: key, type: 'inscribedAngle' };
                     } else if (elemType === 'poly' && figure.inscribedPolygon) {
@@ -767,7 +775,21 @@ function geometryEditor() {
             const dragType = this.draggingVertex.type;
 
             // Handle different drag types
-            if (dragType === 'chord') {
+            if (dragType === 'centralAngle') {
+                const ca = this.draggingVertex.centralAngle;
+                const pointKey = this.draggingVertex.pointKey;
+                // Constrain to circle
+                const cx = figure.center.x;
+                const cy = figure.center.y;
+                const r = figure.radius;
+                const dx = newX - cx;
+                const dy = newY - cy;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist > 0) {
+                    ca[pointKey].x = cx + (dx / dist) * r;
+                    ca[pointKey].y = cy + (dy / dist) * r;
+                }
+            } else if (dragType === 'chord') {
                 const chord = this.draggingVertex.chord;
                 const pointKey = this.draggingVertex.pointKey;
                 // Constrain to circle
@@ -2080,6 +2102,38 @@ function geometryEditor() {
                 });
             }
 
+            // Central angles
+            if (figure.centralAngles) {
+                figure.centralAngles.forEach((ca, i) => {
+                    // Radii from center to points on circle
+                    if (ca.showRadii !== false) {
+                        svg += `<line x1="${cx}" y1="${cy}" x2="${ca.point1.x}" y2="${ca.point1.y}" stroke="${this.colors.shapeStroke}" stroke-width="2.5"/>`;
+                        svg += `<line x1="${cx}" y1="${cy}" x2="${ca.point2.x}" y2="${ca.point2.y}" stroke="${this.colors.shapeStroke}" stroke-width="2.5"/>`;
+                    }
+                    // Angle arc at center
+                    const arcR = ca.arcRadius || 30;
+                    const arcPath = window.makeAngleArc({x: cx, y: cy}, ca.point1, ca.point2, arcR);
+                    svg += `<path d="${arcPath}" fill="none" stroke="${this.colors.angleArc}" stroke-width="2"/>`;
+                    // Angle value
+                    if (ca.angleValue) {
+                        const aPos = this.angleLabelPosCalc({x: cx, y: cy}, ca.point1, ca.point2, arcR + 18);
+                        svg += `<text x="${aPos.x}" y="${aPos.y}" fill="${this.colors.angleArc}" font-size="18" font-family="'Times New Roman', serif" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label">${ca.angleValue}°</text>`;
+                    }
+                    // Point markers on circle
+                    svg += this.renderVertexMarker(ca.point1.x, ca.point1.y, `central_${i}_p1`, isSelected);
+                    svg += this.renderVertexMarker(ca.point2.x, ca.point2.y, `central_${i}_p2`, isSelected);
+                    // Labels
+                    if (ca.label1) {
+                        const lp = this.labelPosFromCenter(ca.point1, {x: cx, y: cy}, 20);
+                        svg += `<text x="${lp.x}" y="${lp.y}" fill="${this.colors.label}" font-size="22" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label">${ca.label1}</text>`;
+                    }
+                    if (ca.label2) {
+                        const lp = this.labelPosFromCenter(ca.point2, {x: cx, y: cy}, 20);
+                        svg += `<text x="${lp.x}" y="${lp.y}" fill="${this.colors.label}" font-size="22" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label">${ca.label2}</text>`;
+                    }
+                });
+            }
+
             // Highlighted arcs
             if (figure.highlightedArcs) {
                 figure.highlightedArcs.forEach(arc => {
@@ -2831,6 +2885,38 @@ function geometryEditor() {
                 arcRadius: 25,
                 showChord: false
             });
+            this.saveState();
+        },
+
+        addCentralAngle() {
+            if (!this.selectedFigure || this.selectedFigure.type !== 'circle') return;
+            if (!this.selectedFigure.centralAngles) this.selectedFigure.centralAngles = [];
+
+            const r = this.selectedFigure.radius;
+            const cx = this.selectedFigure.center.x;
+            const cy = this.selectedFigure.center.y;
+            const existingCount = this.selectedFigure.centralAngles.length;
+            const baseAngle = existingCount * 60;
+
+            const a1 = (baseAngle - 45) * Math.PI / 180;
+            const a2 = (baseAngle + 45) * Math.PI / 180;
+
+            this.selectedFigure.centralAngles.push({
+                id: `central_${Date.now()}`,
+                point1: { x: Math.round(cx + r * Math.cos(a1)), y: Math.round(cy + r * Math.sin(a1)) },
+                point2: { x: Math.round(cx + r * Math.cos(a2)), y: Math.round(cy + r * Math.sin(a2)) },
+                label1: 'A',
+                label2: 'B',
+                angleValue: '',
+                arcRadius: 30,
+                showRadii: true
+            });
+            this.saveState();
+        },
+
+        removeCentralAngle(index) {
+            if (!this.selectedFigure || !this.selectedFigure.centralAngles) return;
+            this.selectedFigure.centralAngles.splice(index, 1);
             this.saveState();
         },
 
@@ -3672,6 +3758,35 @@ function geometryEditor() {
                     }
                     if (insc.showChord) {
                         svg += `  <line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="${this.colors.shapeStroke}" stroke-width="2"/>\n`;
+                    }
+                });
+            }
+
+            // Central angles
+            if (figure.centralAngles) {
+                figure.centralAngles.forEach(ca => {
+                    const p1 = transformPoint(ca.point1);
+                    const p2 = transformPoint(ca.point2);
+                    if (ca.showRadii !== false) {
+                        svg += `  <line x1="${c.x}" y1="${c.y}" x2="${p1.x}" y2="${p1.y}" stroke="${this.colors.shapeStroke}" stroke-width="2.5"/>\n`;
+                        svg += `  <line x1="${c.x}" y1="${c.y}" x2="${p2.x}" y2="${p2.y}" stroke="${this.colors.shapeStroke}" stroke-width="2.5"/>\n`;
+                    }
+                    const arcR = (ca.arcRadius || 30) * scale;
+                    const arcPath = window.makeAngleArc(c, p1, p2, arcR);
+                    svg += `  <path d="${arcPath}" fill="none" stroke="${this.colors.angleArc}" stroke-width="2"/>\n`;
+                    if (ca.angleValue) {
+                        const aPos = this.angleLabelPosCalc(c, p1, p2, arcR + 14);
+                        svg += `  <text x="${aPos.x}" y="${aPos.y}" fill="${this.colors.angleArc}" font-size="13" font-family="'Times New Roman', serif" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label">${ca.angleValue}°</text>\n`;
+                    }
+                    svg += this.renderVertexMarkerForExport(p1.x, p1.y);
+                    svg += this.renderVertexMarkerForExport(p2.x, p2.y);
+                    if (ca.label1) {
+                        const lp = this.labelPosFromCenter(p1, c, 16);
+                        svg += `  <text x="${lp.x}" y="${lp.y}" fill="${this.colors.label}" font-size="14" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label">${ca.label1}</text>\n`;
+                    }
+                    if (ca.label2) {
+                        const lp = this.labelPosFromCenter(p2, c, 16);
+                        svg += `  <text x="${lp.x}" y="${lp.y}" fill="${this.colors.label}" font-size="14" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label">${ca.label2}</text>\n`;
                     }
                 });
             }
