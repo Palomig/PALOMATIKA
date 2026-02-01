@@ -285,9 +285,86 @@
                 </div>
             </div>
 
-            {{-- Properties panel --}}
-            <div class="w-80 border-l border-purple-500/20 bg-[#1a1a2e] overflow-y-auto">
+            {{-- Right sidebar: Layers + Properties --}}
+            <div class="w-80 border-l border-purple-500/20 bg-[#1a1a2e] flex flex-col overflow-hidden">
+
+                {{-- Layers panel (top) --}}
+                <div class="border-b border-purple-500/20 flex-shrink-0">
+                    <div class="px-4 py-2 flex items-center justify-between">
+                        <h3 class="text-sm font-semibold text-purple-400 flex items-center gap-1.5">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                            </svg>
+                            Слои
+                        </h3>
+                        <span class="text-xs text-gray-500" x-text="figures.length + ' фигур'"></span>
+                    </div>
+                    <div class="px-2 pb-2 space-y-0.5 max-h-[200px] overflow-y-auto">
+                        <template x-for="(figure, idx) in figures" :key="figure.id">
+                            <div @click="selectFigure(figure)"
+                                 :class="{'bg-purple-600/30 border-purple-500/50': selectedFigure && selectedFigure.id === figure.id, 'bg-[#12121f] border-transparent hover:bg-[#1e1e32]': !selectedFigure || selectedFigure.id !== figure.id}"
+                                 class="flex items-center gap-2 px-2 py-1.5 rounded border cursor-pointer transition-colors group">
+
+                                {{-- Visibility toggle --}}
+                                <button @click.stop="toggleFigureVisibility(figure)"
+                                        :class="figure.hidden ? 'text-gray-600' : 'text-gray-300'"
+                                        class="hover:text-white flex-shrink-0 w-5 h-5 flex items-center justify-center">
+                                    <svg x-show="!figure.hidden" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                    </svg>
+                                    <svg x-show="figure.hidden" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
+                                    </svg>
+                                </button>
+
+                                {{-- Figure icon --}}
+                                <span class="text-sm flex-shrink-0" x-text="getFigureIcon(figure)"></span>
+
+                                {{-- Figure name --}}
+                                <span class="text-xs text-gray-300 truncate flex-1" x-text="getFigureName(figure)"></span>
+
+                                {{-- Circle constraint indicator --}}
+                                <template x-if="figure.constrainToCircle">
+                                    <span class="text-[10px] text-purple-400 flex-shrink-0" title="Привязан к окружности">⊙</span>
+                                </template>
+
+                                {{-- Move buttons --}}
+                                <div class="flex-shrink-0 flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button @click.stop="moveFigureUp(idx)" x-show="idx > 0"
+                                            class="text-gray-500 hover:text-gray-300 text-xs leading-none px-0.5">▲</button>
+                                    <button @click.stop="moveFigureDown(idx)" x-show="idx < figures.length - 1"
+                                            class="text-gray-500 hover:text-gray-300 text-xs leading-none px-0.5">▼</button>
+                                </div>
+                            </div>
+                        </template>
+                        <div x-show="figures.length === 0" class="text-center py-3 text-gray-600 text-xs">
+                            Нет фигур
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Properties panel (bottom, scrollable) --}}
+                <div class="flex-1 overflow-y-auto">
                 <div class="p-4 space-y-4">
+
+                    {{-- Circle constraint selector --}}
+                    <template x-if="selectedFigure && (selectedFigure.type === 'triangle' || selectedFigure.type === 'quadrilateral') && getCircleFigures().length > 0">
+                        <div class="bg-[#12121f] rounded-lg p-3">
+                            <h3 class="text-sm font-semibold text-purple-400 mb-2 flex items-center gap-1.5">
+                                <span>⊙</span> Привязка к окружности
+                            </h3>
+                            <select @change="setConstrainToCircle($event.target.value)"
+                                    :value="selectedFigure.constrainToCircle || ''"
+                                    class="w-full px-2 py-1.5 text-sm bg-[#1e1e32] text-gray-200 rounded border border-gray-600">
+                                <option value="">Нет привязки</option>
+                                <template x-for="cf in getCircleFigures()" :key="cf.id">
+                                    <option :value="cf.id" x-text="'⭕ ' + (cf.centerLabel || 'O') + ' (R=' + Math.round(cf.radius) + ')'"></option>
+                                </template>
+                            </select>
+                            <p class="text-xs text-gray-500 mt-1">Вершины будут перемещаться по окружности</p>
+                        </div>
+                    </template>
 
                     {{-- No selection --}}
                     <div x-show="!selectedFigure" class="text-center py-8 text-gray-500">
@@ -1185,6 +1262,7 @@
                         </div>
                     </template>
                 </div>
+            </div>
             </div>
         </div>
     </div>
