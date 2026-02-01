@@ -807,6 +807,43 @@
                                 <button @click="addInscribedAngle()" class="w-full px-3 py-1.5 bg-[#1e1e32] hover:bg-[#2a2a42] rounded text-sm text-gray-300 text-left">+ Вписанный угол</button>
                             </div>
 
+                            {{-- Central angles --}}
+                            <div class="bg-[#12121f] rounded-lg p-3">
+                                <h3 class="text-sm font-semibold text-purple-400 mb-2">🎯 Центральные углы</h3>
+                                <template x-if="selectedFigure.centralAngles && selectedFigure.centralAngles.length > 0">
+                                    <div class="space-y-2 mb-2">
+                                        <template x-for="(ca, i) in selectedFigure.centralAngles" :key="ca.id">
+                                            <div class="bg-[#1a1a2e] rounded p-2 space-y-1">
+                                                <div class="flex items-center justify-between">
+                                                    <span class="text-xs text-gray-400" x-text="'Центральный угол ' + (i+1)"></span>
+                                                    <button @click="removeCentralAngle(i)" class="text-red-400 hover:text-red-300 text-xs">✕</button>
+                                                </div>
+                                                <div class="flex items-center gap-1 flex-wrap">
+                                                    <span class="text-gray-500 text-xs">Т1:</span>
+                                                    <input type="text" :value="ca.label1 || ''" @change="ca.label1 = $event.target.value; saveState()"
+                                                           class="w-8 px-1 py-0.5 text-xs bg-[#1e1e32] text-orange-400 rounded border border-gray-600 text-center">
+                                                    <span class="text-gray-500 text-xs">Т2:</span>
+                                                    <input type="text" :value="ca.label2 || ''" @change="ca.label2 = $event.target.value; saveState()"
+                                                           class="w-8 px-1 py-0.5 text-xs bg-[#1e1e32] text-orange-400 rounded border border-gray-600 text-center">
+                                                </div>
+                                                <div class="flex items-center gap-2 flex-wrap">
+                                                    <span class="text-gray-500 text-xs">∠°:</span>
+                                                    <input type="text" :value="ca.angleValue || ''" @change="ca.angleValue = $event.target.value; saveState()"
+                                                           placeholder="90" class="w-10 px-1 py-0.5 text-xs bg-[#1e1e32] text-yellow-400 rounded border border-gray-600 text-center">
+                                                    <label class="flex items-center gap-1 text-xs text-gray-400">
+                                                        <input type="checkbox" :checked="ca.showRadii !== false"
+                                                               @change="ca.showRadii = $event.target.checked; saveState()"
+                                                               class="rounded bg-gray-700 border-gray-600 w-3 h-3">
+                                                        Радиусы
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+                                <button @click="addCentralAngle()" class="w-full px-3 py-1.5 bg-[#1e1e32] hover:bg-[#2a2a42] rounded text-sm text-gray-300 text-left">+ Центральный угол</button>
+                            </div>
+
                             {{-- Highlighted arcs --}}
                             <div class="bg-[#12121f] rounded-lg p-3">
                                 <h3 class="text-sm font-semibold text-purple-400 mb-2">🌈 Дуги</h3>
