@@ -168,9 +168,9 @@ function geometryEditor() {
                     C: { value: null, showArc: false, arcType: 'single', showValue: false, arcRadius: 30, labelDx: 0, labelDy: 0 }
                 },
                 lines: {
-                    bisector_a: { enabled: false, intersectionLabel: 'D', showHalfArcs: false },
-                    bisector_b: { enabled: false, intersectionLabel: 'E', showHalfArcs: false },
-                    bisector_c: { enabled: false, intersectionLabel: 'F', showHalfArcs: false },
+                    bisector_a: { enabled: false, intersectionLabel: 'D', showHalfArcs: false, halfArcRadius: 30, halfArcStrokeWidth: 2, labelDx: 0, labelDy: 0 },
+                    bisector_b: { enabled: false, intersectionLabel: 'E', showHalfArcs: false, halfArcRadius: 30, halfArcStrokeWidth: 2, labelDx: 0, labelDy: 0 },
+                    bisector_c: { enabled: false, intersectionLabel: 'F', showHalfArcs: false, halfArcRadius: 30, halfArcStrokeWidth: 2, labelDx: 0, labelDy: 0 },
                     median_a: { enabled: false, intersectionLabel: 'M' },
                     median_b: { enabled: false, intersectionLabel: 'N' },
                     median_c: { enabled: false, intersectionLabel: 'P' },
@@ -2033,9 +2033,10 @@ function geometryEditor() {
             if (!this.selectedFigure) return;
             if (!this.selectedFigure.lines) this.selectedFigure.lines = {};
             if (!this.selectedFigure.lines[lineKey]) {
-                this.selectedFigure.lines[lineKey] = { enabled: false, showHalfArcs: false };
+                this.selectedFigure.lines[lineKey] = { enabled: false, showHalfArcs: false, halfArcRadius: 30, halfArcStrokeWidth: 2, labelDx: 0, labelDy: 0 };
             }
             this.selectedFigure.lines[lineKey].halfArcRadius = parseInt(value) || 30;
+            this.figures = [...this.figures]; // force Alpine reactivity
             this.saveState();
         },
 
@@ -2043,9 +2044,10 @@ function geometryEditor() {
             if (!this.selectedFigure) return;
             if (!this.selectedFigure.lines) this.selectedFigure.lines = {};
             if (!this.selectedFigure.lines[lineKey]) {
-                this.selectedFigure.lines[lineKey] = { enabled: false, showHalfArcs: false };
+                this.selectedFigure.lines[lineKey] = { enabled: false, showHalfArcs: false, halfArcRadius: 30, halfArcStrokeWidth: 2, labelDx: 0, labelDy: 0 };
             }
             this.selectedFigure.lines[lineKey].halfArcStrokeWidth = parseFloat(value) || 2;
+            this.figures = [...this.figures]; // force Alpine reactivity
             this.saveState();
         },
 
@@ -2069,7 +2071,7 @@ function geometryEditor() {
                 this.selectedFigure.lines = {};
             }
             if (!this.selectedFigure.lines[lineKey]) {
-                this.selectedFigure.lines[lineKey] = { enabled: false, showHalfArcs: false };
+                this.selectedFigure.lines[lineKey] = { enabled: false, showHalfArcs: false, halfArcRadius: 30, halfArcStrokeWidth: 2, labelDx: 0, labelDy: 0 };
             }
             this.selectedFigure.lines[lineKey].showHalfArcs = enabled;
             this.saveState();
