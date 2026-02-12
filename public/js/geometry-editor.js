@@ -4612,8 +4612,11 @@ function geometryEditor() {
 
         loadFromMetadata(metadata) {
             if (metadata.canvas) {
-                this.canvasWidth = metadata.canvas.width || 600;
-                this.canvasHeight = metadata.canvas.height || 500;
+                const isTopic18 = /^18(OGE|EGE)\d+$/i.test(this.taskId || '');
+                const minCanvasWidth = isTopic18 ? 350 : 220;
+                const minCanvasHeight = isTopic18 ? 280 : 180;
+                this.canvasWidth = Math.max(minCanvasWidth, metadata.canvas.width || 350);
+                this.canvasHeight = Math.max(minCanvasHeight, metadata.canvas.height || 280);
                 this.showGrid = metadata.canvas.showGrid || false;
                 this.gridSize = metadata.canvas.gridSize || 20;
             }
@@ -4717,7 +4720,9 @@ function geometryEditor() {
                         }
                     });
 
-                    if (nearest && nearestDistance <= 26) {
+                    // Keep only truly-near labels as vertex labels.
+                    // This prevents mid-segment text (A/B/etc.) from being reassigned to vertices.
+                    if (nearest && nearestDistance <= 16) {
                         label = nearest.text;
                         usedTextIds.add(nearest.id);
                     }
@@ -4779,8 +4784,8 @@ function geometryEditor() {
                         return {
                             created_via: 'editor',
                             canvas: {
-                                width: Math.max(220, canvasWidth),
-                                height: Math.max(180, canvasHeight),
+                                width: Math.max(350, canvasWidth),
+                                height: Math.max(280, canvasHeight),
                                 showGrid: true,
                                 gridSize: Math.max(10, Math.min(50, Math.round(gridSize)))
                             },
@@ -4827,8 +4832,8 @@ function geometryEditor() {
                 return {
                     created_via: 'editor',
                     canvas: {
-                        width: Math.max(220, canvasWidth),
-                        height: Math.max(180, canvasHeight),
+                        width: Math.max(350, canvasWidth),
+                        height: Math.max(280, canvasHeight),
                         showGrid: true,
                         gridSize: Math.max(10, Math.min(50, Math.round(gridSize)))
                     },
