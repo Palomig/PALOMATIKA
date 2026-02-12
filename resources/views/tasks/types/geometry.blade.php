@@ -46,7 +46,7 @@
                                 <div class="geo-svg-force">
                                     {!! $task['svg'] !!}
                                 </div>
-                            @elseif(str_starts_with($task['image'], '<svg'))
+                            @elseif(!empty($task['image']) && \Illuminate\Support\Str::startsWith($task['image'], '<svg'))
                                 {{-- Inline SVG (legacy) --}}
                                 <div class="geo-svg-force">
                                     {!! $task['image'] !!}
