@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UI/UX Pro Max — Design Catalog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0f;--bg2:#12121a;--bg3:#1a1a28;--bg4:#22223a;
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --accent:#6366f1;--accent2:#818cf8;--accent-glow:rgba(99,102,241,.15);
+  --green:#10b981;--amber:#f59e0b;--rose:#f43f5e;--cyan:#06b6d4;--purple:#a855f7;
+  --border:rgba(255,255,255,.06);--card-bg:rgba(255,255,255,.03);
+  --radius:16px;--mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+::selection{background:var(--accent);color:#fff}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
+
+/* HEADER */
+.header{position:sticky;top:0;z-index:100;background:rgba(10,10,15,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 2rem}
+.header-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{font-weight:800;font-size:1.15rem;background:linear-gradient(135deg,var(--accent),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.logo span{font-weight:400;opacity:.6;-webkit-text-fill-color:var(--text2)}
+.nav{display:flex;gap:4px}
+.nav a{padding:6px 14px;border-radius:8px;color:var(--text2);text-decoration:none;font-size:.82rem;font-weight:500;transition:.2s}
+.nav a:hover,.nav a.active{color:var(--text);background:var(--card-bg)}
+.search-box{position:relative}
+.search-box input{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:7px 14px 7px 36px;color:var(--text);font-size:.82rem;width:220px;outline:none;transition:.2s}
+.search-box input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+.search-box svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text3);width:16px;height:16px}
+
+/* HERO */
+.hero{text-align:center;padding:5rem 2rem 3rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:800px;height:800px;background:radial-gradient(circle,var(--accent-glow) 0%,transparent 70%);pointer-events:none}
+.hero h1{font-size:clamp(2.2rem,5vw,3.8rem);font-weight:900;letter-spacing:-.03em;line-height:1.1;margin-bottom:1rem;position:relative}
+.hero h1 em{font-style:normal;background:linear-gradient(135deg,var(--accent),var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--text2);max-width:600px;margin:0 auto;font-size:1.05rem}
+.stats-row{display:flex;justify-content:center;gap:3rem;margin-top:2.5rem;position:relative}
+.stat{text-align:center}
+.stat .num{font-size:2rem;font-weight:800;color:var(--accent2)}
+.stat .label{font-size:.75rem;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+
+/* SECTION */
+.section{max-width:1400px;margin:0 auto;padding:3rem 2rem}
+.section-header{display:flex;align-items:center;gap:12px;margin-bottom:2rem}
+.section-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.section-header h2{font-size:1.5rem;font-weight:700;letter-spacing:-.02em}
+.section-header .count{font-size:.75rem;color:var(--text3);background:var(--bg3);padding:3px 10px;border-radius:20px;margin-left:8px}
+
+/* TABS */
+.tabs{display:flex;gap:4px;margin-bottom:1.5rem;flex-wrap:wrap}
+.tab{padding:6px 16px;border-radius:8px;font-size:.8rem;font-weight:500;color:var(--text2);background:transparent;border:1px solid transparent;cursor:pointer;transition:.2s;white-space:nowrap}
+.tab:hover{color:var(--text);background:var(--card-bg)}
+.tab.active{color:var(--accent2);background:var(--accent-glow);border-color:rgba(99,102,241,.2)}
+
+/* CARDS */
+.grid{display:grid;gap:16px}
+.grid-3{grid-template-columns:repeat(auto-fill,minmax(380px,1fr))}
+.grid-4{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.grid-2{grid-template-columns:repeat(auto-fill,minmax(500px,1fr))}
+
+.card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;transition:.25s;position:relative;overflow:hidden}
+.card:hover{border-color:rgba(255,255,255,.1);transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.3)}
+.card-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.75rem}
+.card-num{font-size:.65rem;font-family:var(--mono);color:var(--text3);background:var(--bg3);padding:2px 8px;border-radius:6px}
+.card-title{font-size:1rem;font-weight:700;margin-bottom:4px}
+.card-type{font-size:.7rem;font-weight:600;padding:2px 8px;border-radius:6px;display:inline-block;margin-bottom:.5rem}
+.card-desc{font-size:.8rem;color:var(--text2);line-height:1.5;margin-bottom:.75rem}
+.card-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:.5rem}
+.badge{font-size:.65rem;padding:2px 8px;border-radius:6px;font-weight:500}
+.badge-green{background:rgba(16,185,129,.12);color:var(--green)}
+.badge-amber{background:rgba(245,158,11,.12);color:var(--amber)}
+.badge-rose{background:rgba(244,63,94,.12);color:var(--rose)}
+.badge-cyan{background:rgba(6,182,212,.12);color:var(--cyan)}
+.badge-purple{background:rgba(168,85,247,.12);color:var(--purple)}
+.badge-blue{background:rgba(99,102,241,.12);color:var(--accent2)}
+
+/* COLOR SWATCHES */
+.swatch-row{display:flex;gap:4px;margin:8px 0}
+.swatch{width:28px;height:28px;border-radius:8px;border:1px solid rgba(255,255,255,.1);cursor:pointer;position:relative;transition:.15s}
+.swatch:hover{transform:scale(1.2);z-index:2;box-shadow:0 4px 12px rgba(0,0,0,.4)}
+.swatch[data-tip]::after{content:attr(data-tip);position:absolute;bottom:-24px;left:50%;transform:translateX(-50%);font-size:.6rem;font-family:var(--mono);color:var(--text2);background:var(--bg2);padding:2px 6px;border-radius:4px;white-space:nowrap;opacity:0;pointer-events:none;transition:.15s}
+.swatch:hover::after{opacity:1}
+
+/* FONT PREVIEW */
+.font-preview{margin-top:.75rem;padding:.75rem;background:var(--bg2);border-radius:10px}
+.font-heading{font-size:1.3rem;font-weight:700;margin-bottom:2px}
+.font-body{font-size:.85rem;color:var(--text2)}
+
+/* CODE BLOCK */
+.code-block{font-family:var(--mono);font-size:.7rem;background:var(--bg2);padding:8px 12px;border-radius:8px;color:var(--cyan);overflow-x:auto;margin-top:.5rem;border:1px solid var(--border)}
+
+/* CHECKLIST */
+.checklist{display:flex;flex-wrap:wrap;gap:4px;margin-top:.5rem}
+.check-item{font-size:.65rem;color:var(--text3);background:var(--bg2);padding:2px 8px;border-radius:4px}
+.check-item::before{content:'✓ ';color:var(--green)}
+
+/* LANDING PATTERNS */
+.pattern-steps{display:flex;gap:4px;flex-wrap:wrap;margin:.5rem 0}
+.step{font-size:.65rem;color:var(--text2);background:var(--bg3);padding:3px 8px;border-radius:6px;position:relative}
+.step::before{content:attr(data-n);color:var(--accent2);font-weight:700;margin-right:4px}
+
+/* COLLAPSIBLE */
+.collapse-toggle{display:flex;align-items:center;gap:6px;color:var(--accent2);font-size:.75rem;cursor:pointer;margin-top:.5rem;user-select:none}
+.collapse-toggle:hover{color:var(--text)}
+.collapse-toggle svg{transition:.2s;width:14px;height:14px}
+.collapse-toggle.open svg{transform:rotate(90deg)}
+.collapse-content{max-height:0;overflow:hidden;transition:.3s ease}
+.collapse-content.open{max-height:1000px}
+
+/* PRODUCT COLORS */
+.product-colors{display:flex;gap:6px;margin:8px 0;align-items:center}
+.product-color{width:24px;height:24px;border-radius:6px;border:2px solid var(--bg);position:relative}
+.product-color-label{font-size:.6rem;color:var(--text3)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .nav{display:none}
+  .grid-3,.grid-2{grid-template-columns:1fr}
+  .grid-4{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+  .stats-row{gap:1.5rem}
+  .hero h1{font-size:2rem}
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.card{animation:fadeUp .4s ease backwards}
+.grid .card:nth-child(2){animation-delay:.05s}
+.grid .card:nth-child(3){animation-delay:.1s}
+.grid .card:nth-child(4){animation-delay:.15s}
+.grid .card:nth-child(5){animation-delay:.2s}
+.grid .card:nth-child(6){animation-delay:.25s}
+
+/* BACK TO TOP */
+.back-top{position:fixed;bottom:2rem;right:2rem;width:44px;height:44px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:.3s;z-index:99;border:none;box-shadow:0 4px 20px rgba(99,102,241,.3)}
+.back-top.visible{opacity:1}
+.back-top:hover{transform:translateY(-2px)}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">UI/UX Pro Max <span>— Design Catalog</span></div>
+    <nav class="nav" id="nav">
+      <a href="#styles" class="active">Styles</a>
+      <a href="#palettes">Palettes</a>
+      <a href="#typography">Typography</a>
+      <a href="#charts">Charts</a>
+      <a href="#products">Products</a>
+      <a href="#landing">Landing</a>
+      <a href="#guidelines">UX Guide</a>
+    </nav>
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="search" placeholder="Search everything..." autocomplete="off">
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>The Complete <em>UI/UX</em> Reference</h1>
+  <p>50 design styles, 29 color palettes, 57 font pairings, 25 chart types, 29 product guides, and 29 landing page patterns — all in one place.</p>
+  <div class="stats-row">
+    <div class="stat"><div class="num">50</div><div class="label">Design Styles</div></div>
+    <div class="stat"><div class="num">29</div><div class="label">Color Palettes</div></div>
+    <div class="stat"><div class="num">57</div><div class="label">Font Pairings</div></div>
+    <div class="stat"><div class="num">25</div><div class="label">Chart Types</div></div>
+    <div class="stat"><div class="num">29</div><div class="label">Landing Patterns</div></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ STYLES ═══════════════════ -->
+<section class="section" id="styles">
+  <div class="section-header">
+    <div class="section-icon" style="background:var(--accent-glow)">🎨</div>
+    <h2>Design Styles</h2>
+    <span class="count">50 styles</span>
+  </div>
+  <div class="tabs" id="style-tabs">
+    <button class="tab active" data-filter="all">All</button>
+    <button class="tab" data-filter="General">General</button>
+    <button class="tab" data-filter="Landing Page">Landing Page</button>
+    <button class="tab" data-filter="BI/Analytics">BI / Analytics</button>
+  </div>
+  <div class="grid grid-3" id="styles-grid"></div>
+</section>
+
+<!-- ═══════════════════ PALETTES ═══════════════════ -->
+<section class="section" id="palettes">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(16,185,129,.12)">🎯</div>
+    <h2>Product Color Palettes</h2>
+    <span class="count">29 palettes</span>
+  </div>
+  <div class="grid grid-4" id="palettes-grid"></div>
+</section>
+
+<!-- ═══════════════════ TYPOGRAPHY ═══════════════════ -->
+<section class="section" id="typography">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(168,85,247,.12)">Aa</div>
+    <h2>Font Pairings</h2>
+    <span class="count">57 pairings</span>
+  </div>
+  <div class="tabs" id="font-tabs">
+    <button class="tab active" data-filter="all">All</button>
+    <button class="tab" data-filter="Sans + Sans">Sans + Sans</button>
+    <button class="tab" data-filter="Serif + Sans">Serif + Sans</button>
+    <button class="tab" data-filter="Display + Sans">Display + Sans</button>
+    <button class="tab" data-filter="Mono">Mono</button>
+    <button class="tab" data-filter="Script">Script</button>
+  </div>
+  <div class="grid grid-3" id="typography-grid"></div>
+</section>
+
+<!-- ═══════════════════ CHARTS ═══════════════════ -->
+<section class="section" id="charts">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(245,158,11,.12)">📊</div>
+    <h2>Chart & Data Visualization Guide</h2>
+    <span class="count">25 types</span>
+  </div>
+  <div class="grid grid-3" id="charts-grid"></div>
+</section>
+
+<!-- ═══════════════════ PRODUCTS ═══════════════════ -->
+<section class="section" id="products">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(6,182,212,.12)">🚀</div>
+    <h2>Product Style Recommendations</h2>
+    <span class="count">29 products</span>
+  </div>
+  <div class="grid grid-3" id="products-grid"></div>
+</section>
+
+<!-- ═══════════════════ LANDING ═══════════════════ -->
+<section class="section" id="landing">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(244,63,94,.12)">📄</div>
+    <h2>Landing Page Patterns</h2>
+    <span class="count">29 patterns</span>
+  </div>
+  <div class="grid grid-3" id="landing-grid"></div>
+</section>
+
+<!-- ═══════════════════ UX GUIDELINES ═══════════════════ -->
+<section class="section" id="guidelines">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(99,102,241,.12)">⚡</div>
+    <h2>UX Guidelines & Anti-Patterns</h2>
+    <span class="count">30+ rules</span>
+  </div>
+  <div class="tabs" id="ux-tabs">
+    <button class="tab active" data-filter="all">All</button>
+    <button class="tab" data-filter="Accessibility">Accessibility</button>
+    <button class="tab" data-filter="Focus">Focus</button>
+    <button class="tab" data-filter="Forms">Forms</button>
+    <button class="tab" data-filter="Performance">Performance</button>
+    <button class="tab" data-filter="State">State</button>
+    <button class="tab" data-filter="Anti-Pattern">Anti-Pattern</button>
+  </div>
+  <div class="grid grid-3" id="ux-grid"></div>
+</section>
+
+<div style="height:6rem"></div>
+
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0})">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m18 15-6-6-6 6"/></svg>
+</button>
+
+<script>
+// ─── DATA ───
+const STYLES = [
+  {n:1,name:"Minimalism & Swiss Style",type:"General",colors:["#000000","#FFFFFF","#F5F1E8","#808080"],effects:"Subtle hover 200-250ms, smooth transitions, sharp shadows",bestFor:"Enterprise apps, dashboards, documentation, SaaS",light:"✓",dark:"✓",perf:"⚡ Excellent",a11y:"✓ AAA",mobile:"✓ High",conversion:"◐ Medium",complexity:"Low",era:"1950s Swiss",keywords:"Clean, simple, spacious, functional, white space",css:"display: grid, gap: 2rem, font-family: sans-serif, max-width: 1200px",prompt:"Design a minimalist landing page. Use: white space, geometric layouts, sans-serif fonts, high contrast, grid-based structure, essential elements only.",checklist:["Grid-based layout 12-16 columns","Typography hierarchy clear","No unnecessary decorations","WCAG AAA contrast verified","Mobile responsive grid"]},
+  {n:2,name:"Neumorphism",type:"General",colors:["#C8E0F4","#F5E0E8","#E8E8E8"],effects:"Soft box-shadow multiple layers, smooth press 150ms",bestFor:"Health/wellness apps, meditation, fitness trackers",light:"✓",dark:"◐",perf:"⚡ Good",a11y:"⚠ Low contrast",mobile:"✓ Good",conversion:"◐ Medium",complexity:"Medium",era:"2020s Modern",keywords:"Soft UI, embossed, debossed, rounded 12-16px",css:"border-radius: 12-16px, box-shadow: multiple layers",prompt:"Create a neumorphic UI with soft 3D effects. Use light pastels, rounded corners (12-16px), subtle soft shadows.",checklist:["Rounded corners 12-16px","Multiple shadow layers","Pastel color verified","Monochromatic palette"]},
+  {n:3,name:"Glassmorphism",type:"General",colors:["rgba(255,255,255,0.15)","#0080FF","#8B00FF","#FF1493","#20B2AA"],effects:"Backdrop blur 10-20px, subtle border, light reflection",bestFor:"Modern SaaS, financial dashboards, modal overlays, navigation",light:"✓",dark:"✓",perf:"⚠ Good",a11y:"⚠ 4.5:1",mobile:"✓ Good",conversion:"✓ High",complexity:"Medium",era:"2020s Modern",keywords:"Frosted glass, transparent, blurred, layered, vibrant",css:"backdrop-filter: blur(15px), background: rgba(255,255,255,0.15), border: 1px solid rgba(255,255,255,0.2)",prompt:"Design a glassmorphic interface with frosted glass effect. Use backdrop blur (10-20px), translucent overlays.",checklist:["Backdrop-filter blur 10-20px","Translucent white 15-30%","Subtle border 1px","Text contrast 4.5:1"]},
+  {n:4,name:"Brutalism",type:"General",colors:["#FF0000","#0000FF","#FFFF00","#000000","#FFFFFF"],effects:"No smooth transitions, sharp corners, bold 700+",bestFor:"Design portfolios, artistic projects, counter-culture brands",light:"✓",dark:"✓",perf:"⚡ Excellent",a11y:"✓ AAA",mobile:"◐ Medium",conversion:"✗ Low",complexity:"Low",era:"1950s Brutalist",keywords:"Raw, unpolished, stark, high contrast, asymmetric",css:"border-radius: 0px, transition: none, font-weight: 700+, border: 2-4px solid",prompt:"Create a brutalist design with raw, stark aesthetic. Pure primary colors, no smooth transitions, bold typography.",checklist:["No border-radius","No transitions","Bold typography 700+","Pure primary colors"]},
+  {n:5,name:"3D & Hyperrealism",type:"General",colors:["#001F3F","#228B22","#800020","#FFD700","#C0C0C0"],effects:"WebGL/Three.js, realistic shadows, parallax 3-5 layers",bestFor:"Gaming, product showcase, immersive experiences, architectural viz",light:"◐",dark:"◐",perf:"❌ Poor",a11y:"⚠ Not accessible",mobile:"✗ Low",conversion:"◐ Medium",complexity:"High",era:"2020s Modern",keywords:"Depth, realistic textures, 3D models, immersive",css:"perspective: 1000px, WebGL canvas, Three.js/Babylon.js",prompt:"Build an immersive 3D interface using realistic textures, 3D models, complex shadows, parallax scrolling.",checklist:["WebGL/Three.js integrated","3D models loaded","Parallax 3-5 layers","Realistic lighting"]},
+  {n:6,name:"Vibrant & Block-based",type:"General",colors:["#39FF14","#BF00FF","#FF1493","#00FFFF","#FFAA00"],effects:"Large sections 48px+ gaps, animated patterns, scroll-snap",bestFor:"Startups, creative agencies, gaming, social media, youth",light:"✓",dark:"✓",perf:"⚡ Good",a11y:"◐ WCAG",mobile:"✓ High",conversion:"✓ High",complexity:"Medium",era:"2020s Modern",keywords:"Bold, energetic, playful, block layout, geometric",css:"display: flex/grid with 48px+ gaps, font-size: 32px+, neon colors",prompt:"Design an energetic, vibrant interface with bold block layouts, large typography 32px+.",checklist:["Block layout 48px+ gaps","Large typography 32px+","4-6 vibrant colors","High contrast 7:1+"]},
+  {n:7,name:"Dark Mode (OLED)",type:"General",colors:["#000000","#121212","#0A0E27","#39FF14","#0080FF","#FFD700"],effects:"Minimal glow, dark-to-light transitions, high readability",bestFor:"Night-mode apps, coding platforms, entertainment, OLED devices",light:"✗",dark:"✓ Only",perf:"⚡ Excellent",a11y:"✓ AAA",mobile:"✓ High",conversion:"◐ Low",complexity:"Low",era:"2020s Modern",keywords:"Dark theme, OLED, night mode, power efficient",css:"background: #000000 or #121212, text-shadow: 0 0 10px neon-color (sparingly)",prompt:"Create an OLED-optimized dark interface with deep black, vibrant neon accents.",checklist:["Deep black #000 or #121212","Vibrant neon accents","Text contrast 7:1+","OLED power optimization"]},
+  {n:8,name:"Accessible & Ethical",type:"General",colors:["#000000","#FFFFFF","#22C55E","#EF4444"],effects:"Clear focus rings 3-4px, ARIA labels, 44x44px touch targets",bestFor:"Government, healthcare, education, inclusive products",light:"✓",dark:"✓",perf:"⚡ Excellent",a11y:"✓ AAA",mobile:"✓ High",conversion:"✓ High",complexity:"Low",era:"Universal",keywords:"High contrast, large text 16px+, keyboard navigation, WCAG",css:"font-size: 16px+, outline: 3-4px on focus-visible, touch-target: 44x44px",prompt:"Design with WCAG AAA compliance. High contrast 7:1+, large text, keyboard navigation, screen reader optimization.",checklist:["WCAG AAA verified","7:1+ contrast","Keyboard navigation","Focus visible 3-4px","Touch targets 44x44px"]},
+  {n:9,name:"Claymorphism",type:"General",colors:["#FDBCB4","#ADD8E6","#98FF98","#E6E6FA"],effects:"Inner+outer shadows, soft press 200ms, fluffy elements",bestFor:"Educational apps, children's apps, SaaS, creative tools, casual games",light:"✓",dark:"◐",perf:"⚡ Good",a11y:"⚠ 4.5:1",mobile:"✓ High",conversion:"✓ High",complexity:"Medium",era:"2020s Modern",keywords:"Soft 3D, chunky, playful, toy-like, bubbly, thick borders",css:"border-radius: 16-24px, border: 3-4px solid, box-shadow: inner+outer",prompt:"Design a playful, toy-like interface with soft 3D, chunky elements, pastel colors.",checklist:["Border-radius 16-24px","Thick borders 3-4px","Double shadows","Pastel colors"]},
+  {n:10,name:"Aurora UI",type:"General",colors:["#0080FF","#FF1493","#00FFFF"],effects:"Large flowing gradients, 8-12s animations, depth via color",bestFor:"Modern SaaS, creative agencies, music platforms, hero sections",light:"✓",dark:"✓",perf:"⚠ Good",a11y:"⚠ Text contrast",mobile:"✓ Good",conversion:"✓ High",complexity:"Medium",era:"2020s Modern",keywords:"Vibrant gradients, Northern Lights, mesh gradient, luminous",css:"background: conic-gradient, animation: 8-12s, background-size: 200% 200%",prompt:"Create a vibrant gradient interface inspired by Northern Lights with mesh gradients.",checklist:["Mesh gradients","8-12s animation loop","Complementary colors","Smooth transitions"]},
+  {n:11,name:"Retro-Futurism",type:"General",colors:["#0080FF","#FF006E","#00FFFF","#1A1A2E","#5D34D0"],effects:"CRT scanlines, neon glow, glitch effects (skew/offset)",bestFor:"Gaming, entertainment, music platforms, tech brands",light:"✓",dark:"✓ Dark focused",perf:"⚠ Moderate",a11y:"⚠ High contrast/strain",mobile:"◐ Medium",conversion:"◐ Medium",complexity:"Medium",era:"1980s Retro",keywords:"Vintage sci-fi, 80s aesthetic, neon glow, cyberpunk, synthwave",css:"text-shadow: neon glow, monospace font, glitch animation",prompt:"Build a retro-futuristic (cyberpunk/vaporwave) interface with neon colors on dark.",checklist:["Neon colors","CRT scanlines","Glitch animations","Monospace font"]},
+  {n:12,name:"Flat Design",type:"General",colors:["#FF0000","#FF8800","#0000FF","#00AA00"],effects:"No gradients/shadows, simple hover, fast 150-200ms",bestFor:"Web apps, mobile apps, startup MVPs, SaaS, dashboards",light:"✓",dark:"✓",perf:"⚡ Excellent",a11y:"✓ AAA",mobile:"✓ High",conversion:"✓ High",complexity:"Low",era:"2010s Modern",keywords:"2D, minimalist, bold colors, no shadows, icon-heavy",css:"box-shadow: none, background: solid, border-radius: 0-4px, fill: solid",prompt:"Create a flat, 2D interface with bold colors, no shadows, clean lines.",checklist:["No shadows/gradients","4-6 solid colors max","Simple shapes","Fast loading"]},
+  {n:13,name:"Liquid Glass",type:"General",colors:["#FF69B4","#00FFFF","#8B5CF6"],effects:"Morphing SVG/CSS, fluid animations 400-600ms, chromatic aberration",bestFor:"Premium SaaS, high-end e-commerce, creative platforms",light:"✓",dark:"✓",perf:"⚠ Moderate-Poor",a11y:"⚠ Text contrast",mobile:"◐ Medium",conversion:"✓ High",complexity:"High",era:"2020s Modern",keywords:"Flowing glass, morphing, fluid effects, translucent, iridescent",css:"animation: morphing SVG 400-600ms, backdrop-filter: blur + saturate",prompt:"Create a premium liquid glass effect with morphing shapes, chromatic aberration.",checklist:["Morphing animations","Chromatic aberration","Dynamic blur","Iridescent gradients"]},
+  {n:14,name:"Motion-Driven",type:"General",colors:["#22C55E","#EF4444","#0080FF"],effects:"Scroll animations, hover 300-400ms, parallax 3-5 layers",bestFor:"Portfolio sites, storytelling, interactive experiences, SaaS",light:"✓",dark:"✓",perf:"⚠ Good",a11y:"⚠ prefers-reduced-motion",mobile:"✓ Good",conversion:"✓ High",complexity:"High",era:"2020s Modern",keywords:"Animation-heavy, microinteractions, scroll effects, parallax",css:"Intersection Observer, transform: translateY/X, will-change: transform",prompt:"Build an animation-heavy interface with scroll-triggered animations, parallax 3-5 layers.",checklist:["Scroll animations","Parallax 3-5 layers","GPU accelerated","Reduced motion respected"]},
+  {n:15,name:"Neubrutalism",type:"General",colors:["#FFEB3B","#FF5252","#2196F3","#000000"],effects:"box-shadow: 4px 4px 0 #000, border: 3px solid #000",bestFor:"Gen Z brands, startups, creative agencies, Figma-style",light:"✓",dark:"✓",perf:"⚡ Excellent",a11y:"✓ AAA",mobile:"✓ High",conversion:"✓ High",complexity:"Low",era:"2020s Modern",keywords:"Bold borders, black outlines, primary colors, thick shadows, Gen Z",css:"border: 3px solid black, box-shadow: 5px 5px 0px black, font-weight: 700",prompt:"Design a neubrutalist interface: high contrast, hard borders, bright pop colors, hard shadows.",checklist:["Hard borders 2-4px","Hard offset shadows","Bold typography","No blurs/gradients"]},
+  {n:16,name:"Bento Box Grid",type:"General",colors:["#FFFFFF","#F5F5F5","#F5F5F7"],effects:"grid-template varied spans, rounded-xl 16px, subtle shadows",bestFor:"Dashboards, product pages, portfolios, Apple-style marketing",light:"✓",dark:"✓",perf:"⚡ Excellent",a11y:"✓ AA",mobile:"✓ High",conversion:"✓ High",complexity:"Low",era:"2020s Apple",keywords:"Modular cards, asymmetric grid, varied sizes, Apple-style, dashboard tiles",css:"display: grid, grid-template-columns: repeat(4, 1fr), gap: 16px, border-radius: 24px",prompt:"Design a Bento Box grid with modular cards, varied sizes, Apple-style aesthetic.",checklist:["Grid responsive 4→2→1","Card spans varied","Rounded corners consistent","Hover scale 1.02"]},
+  {n:17,name:"Cyberpunk UI",type:"General",colors:["#00FF00","#FF00FF","#00FFFF","#0D0D0D"],effects:"Neon glow, glitch animations, scanlines, terminal fonts",bestFor:"Gaming, tech products, crypto apps, sci-fi, developer tools",light:"✗",dark:"✓ Only",perf:"⚠ Moderate",a11y:"⚠ Limited",mobile:"◐ Medium",conversion:"◐ Medium",complexity:"Medium",era:"2020s Cyberpunk",keywords:"Neon, dark mode, terminal, HUD, sci-fi, glitch, matrix",css:"background: #0D0D0D, color: neon, font-family: monospace, text-shadow: glow",prompt:"Design a cyberpunk interface: neon colors on dark, terminal aesthetic, glitch effects.",checklist:["Dark background only","Neon accents","Monospace font","Terminal aesthetic"]},
+  {n:18,name:"Organic Biophilic",type:"General",colors:["#228B22","#8B4513","#87CEEB","#F5F5DC"],effects:"Rounded corners 16-24px, organic curves, natural shadows, SVG shapes",bestFor:"Wellness apps, sustainability brands, eco products, health",light:"✓",dark:"✓",perf:"⚡ Excellent",a11y:"✓ AA",mobile:"✓ High",conversion:"✓ High",complexity:"Low",era:"2020s Sustainable",keywords:"Nature, organic shapes, green, sustainable, flowing, earthy",css:"border-radius: 16-24px, background: earth tones, SVG organic shapes",prompt:"Design a biophilic interface: nature-inspired colors, organic curved shapes, earthy palette.",checklist:["Earth tones dominant","Organic curves","Natural textures subtle","Calming feel"]},
+  {n:19,name:"AI-Native UI",type:"General",colors:["#6366F1","#10B981","#F5F5F5"],effects:"Typing indicator 3-dot pulse, streaming text, context cards",bestFor:"AI products, chatbots, voice assistants, copilots",light:"✓",dark:"✓",perf:"⚡ Excellent",a11y:"✓ AA",mobile:"✓ High",conversion:"✓ High",complexity:"Low",era:"2020s AI-Era",keywords:"Chatbot, conversational, voice, assistant, agentic, streaming",css:"chat bubble flex, typing animation, input: sticky bottom, context cards",prompt:"Design an AI-native interface: minimal chrome, conversational layout, streaming text, typing indicators.",checklist:["Chat layout responsive","Typing indicator smooth","Input always visible","AI responses distinct"]},
+  {n:20,name:"Memphis Design",type:"General",colors:["#FF71CE","#FFCE5C","#86CCCA","#6A7BB4"],effects:"transform: rotate(), clip-path: polygon(), mix-blend-mode",bestFor:"Creative agencies, music sites, youth brands, event promotion",light:"✓",dark:"✓",perf:"⚡ Excellent",a11y:"⚠ Check contrast",mobile:"✓ Good",conversion:"◐ Medium",complexity:"Medium",era:"1980s Postmodern",keywords:"80s, geometric, playful, postmodern, shapes, squiggles, bold",css:"clip-path: polygon(), repeating patterns, transform: rotate()",prompt:"Design a Memphis style interface: bold geometric shapes, bright clashing colors, 80s postmodern.",checklist:["Geometric shapes","Colors bold/clashing","Layout asymmetric","80s vibe"]},
+];
+
+const PALETTES = [
+  {n:1,name:"SaaS (General)",primary:"#2563EB",secondary:"#3B82F6",cta:"#F97316",bg:"#F8FAFC",text:"#1E293B",border:"#E2E8F0",note:"Trust blue + orange CTA contrast"},
+  {n:2,name:"Micro SaaS",primary:"#6366F1",secondary:"#818CF8",cta:"#10B981",bg:"#F5F3FF",text:"#1E1B4B",border:"#E0E7FF",note:"Indigo primary + emerald CTA"},
+  {n:3,name:"E-commerce",primary:"#059669",secondary:"#10B981",cta:"#F97316",bg:"#ECFDF5",text:"#064E3B",border:"#A7F3D0",note:"Success green + urgency orange"},
+  {n:4,name:"E-commerce Luxury",primary:"#1C1917",secondary:"#44403C",cta:"#CA8A04",bg:"#FAFAF9",text:"#0C0A09",border:"#D6D3D1",note:"Premium dark + gold accent"},
+  {n:5,name:"Service Landing",primary:"#0EA5E9",secondary:"#38BDF8",cta:"#F97316",bg:"#F0F9FF",text:"#0C4A6E",border:"#BAE6FD",note:"Sky blue trust + warm CTA"},
+  {n:6,name:"B2B Service",primary:"#0F172A",secondary:"#334155",cta:"#0369A1",bg:"#F8FAFC",text:"#020617",border:"#E2E8F0",note:"Professional navy + blue CTA"},
+  {n:7,name:"Financial Dashboard",primary:"#0F172A",secondary:"#1E293B",cta:"#22C55E",bg:"#020617",text:"#F8FAFC",border:"#334155",note:"Dark bg + green positive indicators"},
+  {n:8,name:"Analytics Dashboard",primary:"#1E40AF",secondary:"#3B82F6",cta:"#F59E0B",bg:"#F8FAFC",text:"#1E3A8A",border:"#DBEAFE",note:"Blue data + amber highlights"},
+  {n:9,name:"Healthcare App",primary:"#0891B2",secondary:"#22D3EE",cta:"#059669",bg:"#ECFEFF",text:"#164E63",border:"#A5F3FC",note:"Calm cyan + health green"},
+  {n:10,name:"Educational App",primary:"#4F46E5",secondary:"#818CF8",cta:"#F97316",bg:"#EEF2FF",text:"#1E1B4B",border:"#C7D2FE",note:"Playful indigo + energetic orange"},
+  {n:11,name:"Creative Agency",primary:"#EC4899",secondary:"#F472B6",cta:"#06B6D4",bg:"#FDF2F8",text:"#831843",border:"#FBCFE8",note:"Bold pink + cyan accent"},
+  {n:12,name:"Portfolio",primary:"#18181B",secondary:"#3F3F46",cta:"#2563EB",bg:"#FAFAFA",text:"#09090B",border:"#E4E4E7",note:"Monochrome + blue accent"},
+  {n:13,name:"Gaming",primary:"#7C3AED",secondary:"#A78BFA",cta:"#F43F5E",bg:"#0F0F23",text:"#E2E8F0",border:"#4C1D95",note:"Neon purple + rose action"},
+  {n:14,name:"Government",primary:"#0F172A",secondary:"#334155",cta:"#0369A1",bg:"#F8FAFC",text:"#020617",border:"#E2E8F0",note:"High contrast navy + blue"},
+  {n:15,name:"Fintech / Crypto",primary:"#F59E0B",secondary:"#FBBF24",cta:"#8B5CF6",bg:"#0F172A",text:"#F8FAFC",border:"#334155",note:"Gold trust + purple tech"},
+  {n:16,name:"Social Media",primary:"#E11D48",secondary:"#FB7185",cta:"#2563EB",bg:"#FFF1F2",text:"#881337",border:"#FECDD3",note:"Vibrant rose + engagement blue"},
+  {n:17,name:"Productivity Tool",primary:"#0D9488",secondary:"#14B8A6",cta:"#F97316",bg:"#F0FDFA",text:"#134E4A",border:"#99F6E4",note:"Teal focus + action orange"},
+  {n:18,name:"Design System",primary:"#4F46E5",secondary:"#6366F1",cta:"#F97316",bg:"#EEF2FF",text:"#312E81",border:"#C7D2FE",note:"Indigo brand + doc hierarchy"},
+  {n:19,name:"AI / Chatbot",primary:"#7C3AED",secondary:"#A78BFA",cta:"#06B6D4",bg:"#FAF5FF",text:"#1E1B4B",border:"#DDD6FE",note:"AI purple + cyan interactions"},
+  {n:20,name:"NFT / Web3",primary:"#8B5CF6",secondary:"#A78BFA",cta:"#FBBF24",bg:"#0F0F23",text:"#F8FAFC",border:"#4C1D95",note:"Purple tech + gold value"},
+  {n:21,name:"Creator Economy",primary:"#EC4899",secondary:"#F472B6",cta:"#F97316",bg:"#FDF2F8",text:"#831843",border:"#FBCFE8",note:"Creator pink + engagement orange"},
+  {n:22,name:"Sustainability / ESG",primary:"#059669",secondary:"#10B981",cta:"#0891B2",bg:"#ECFDF5",text:"#064E3B",border:"#A7F3D0",note:"Nature green + ocean blue"},
+  {n:23,name:"Remote Work",primary:"#6366F1",secondary:"#818CF8",cta:"#10B981",bg:"#F5F3FF",text:"#312E81",border:"#E0E7FF",note:"Calm indigo + success green"},
+  {n:24,name:"Mental Health",primary:"#8B5CF6",secondary:"#C4B5FD",cta:"#10B981",bg:"#FAF5FF",text:"#4C1D95",border:"#EDE9FE",note:"Calming lavender + wellness green"},
+  {n:25,name:"Pet Tech",primary:"#F97316",secondary:"#FB923C",cta:"#2563EB",bg:"#FFF7ED",text:"#9A3412",border:"#FED7AA",note:"Playful orange + trust blue"},
+  {n:26,name:"Smart Home / IoT",primary:"#1E293B",secondary:"#334155",cta:"#22C55E",bg:"#0F172A",text:"#F8FAFC",border:"#475569",note:"Dark tech + status green"},
+  {n:27,name:"EV / Charging",primary:"#0891B2",secondary:"#22D3EE",cta:"#22C55E",bg:"#ECFEFF",text:"#164E63",border:"#A5F3FC",note:"Electric cyan + eco green"},
+  {n:28,name:"Subscription Box",primary:"#D946EF",secondary:"#E879F9",cta:"#F97316",bg:"#FDF4FF",text:"#86198F",border:"#F5D0FE",note:"Excitement purple + urgency orange"},
+  {n:29,name:"Podcast Platform",primary:"#1E1B4B",secondary:"#312E81",cta:"#F97316",bg:"#0F0F23",text:"#F8FAFC",border:"#4338CA",note:"Dark audio + warm accent"},
+];
+
+const FONTS = [
+  {n:1,name:"Classic Elegant",cat:"Serif + Sans",h:"Playfair Display",b:"Inter",mood:"elegant, luxury, sophisticated",bestFor:"Luxury brands, fashion, editorial",css:"@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');"},
+  {n:2,name:"Modern Professional",cat:"Sans + Sans",h:"Poppins",b:"Open Sans",mood:"modern, professional, clean, corporate",bestFor:"SaaS, corporate sites, startups",css:"@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap');"},
+  {n:3,name:"Tech Startup",cat:"Sans + Sans",h:"Space Grotesk",b:"DM Sans",mood:"tech, startup, innovative, bold",bestFor:"Tech companies, AI products, dev tools",css:"@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');"},
+  {n:4,name:"Editorial Classic",cat:"Serif + Serif",h:"Cormorant Garamond",b:"Libre Baskerville",mood:"editorial, classic, literary, refined",bestFor:"Publishing, blogs, news sites",css:"@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&display=swap');"},
+  {n:5,name:"Minimal Swiss",cat:"Sans + Sans",h:"Inter",b:"Inter",mood:"minimal, clean, swiss, functional",bestFor:"Dashboards, admin panels, design systems",css:"@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');"},
+  {n:6,name:"Playful Creative",cat:"Display + Sans",h:"Fredoka",b:"Nunito",mood:"playful, friendly, fun, creative",bestFor:"Children's apps, educational, gaming",css:"@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@300;400;500;600;700&display=swap');"},
+  {n:7,name:"Bold Statement",cat:"Display + Sans",h:"Bebas Neue",b:"Source Sans 3",mood:"bold, impactful, dramatic",bestFor:"Marketing sites, portfolios, event pages",css:"@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+3:wght@300;400;500;600;700&display=swap');"},
+  {n:8,name:"Wellness Calm",cat:"Serif + Sans",h:"Lora",b:"Raleway",mood:"calm, wellness, health, natural",bestFor:"Health apps, wellness, spa, meditation",css:"@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Raleway:wght@300;400;500;600;700&display=swap');"},
+  {n:9,name:"Developer Mono",cat:"Mono + Sans",h:"JetBrains Mono",b:"IBM Plex Sans",mood:"code, developer, technical, precise",bestFor:"Developer tools, documentation, CLI apps",css:"@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');"},
+  {n:10,name:"Retro Vintage",cat:"Display + Sans",h:"Abril Fatface",b:"Merriweather",mood:"retro, vintage, nostalgic, dramatic",bestFor:"Vintage brands, breweries, restaurants",css:"@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Merriweather:wght@300;400;700&display=swap');"},
+  {n:11,name:"Geometric Modern",cat:"Sans + Sans",h:"Outfit",b:"Work Sans",mood:"geometric, modern, clean, contemporary",bestFor:"General purpose, agencies, landing pages",css:"@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Work+Sans:wght@300;400;500;600;700&display=swap');"},
+  {n:12,name:"Luxury Serif",cat:"Serif + Sans",h:"Cormorant",b:"Montserrat",mood:"luxury, high-end, fashion, elegant",bestFor:"Fashion brands, jewelry, high-end services",css:"@import url('https://fonts.googleapis.com/css2?family=Cormorant:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap');"},
+  {n:13,name:"Friendly SaaS",cat:"Sans + Sans",h:"Plus Jakarta Sans",b:"Plus Jakarta Sans",mood:"friendly, modern, saas, approachable",bestFor:"SaaS products, web apps, dashboards",css:"@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');"},
+  {n:14,name:"News Editorial",cat:"Serif + Sans",h:"Newsreader",b:"Roboto",mood:"news, editorial, trustworthy",bestFor:"News sites, blogs, journalism",css:"@import url('https://fonts.googleapis.com/css2?family=Newsreader:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap');"},
+  {n:15,name:"Handwritten Charm",cat:"Script + Sans",h:"Caveat",b:"Quicksand",mood:"handwritten, personal, friendly",bestFor:"Personal blogs, invitations, lifestyle",css:"@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Quicksand:wght@300;400;500;600;700&display=swap');"},
+  {n:16,name:"Brutalist Raw",cat:"Mono + Mono",h:"Space Mono",b:"Space Mono",mood:"brutalist, raw, technical, stark",bestFor:"Brutalist designs, developer portfolios",css:"@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');"},
+  {n:17,name:"Fashion Forward",cat:"Sans + Sans",h:"Syne",b:"Manrope",mood:"fashion, avant-garde, creative, edgy",bestFor:"Fashion brands, art galleries, design studios",css:"@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700&display=swap');"},
+  {n:18,name:"Gaming Bold",cat:"Display + Sans",h:"Russo One",b:"Chakra Petch",mood:"gaming, bold, action, esports",bestFor:"Gaming, esports, competitive sports",css:"@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700&family=Russo+One&display=swap');"},
+  {n:19,name:"Startup Bold",cat:"Sans + Sans",h:"Outfit",b:"Rubik",mood:"startup, bold, innovative, dynamic",bestFor:"Startups, pitch decks, product launches",css:"@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Rubik:wght@300;400;500;600;700&display=swap');"},
+  {n:20,name:"Dashboard Data",cat:"Mono + Sans",h:"Fira Code",b:"Fira Sans",mood:"dashboard, data, analytics, precise",bestFor:"Dashboards, analytics, admin panels",css:"@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Fira+Sans:wght@300;400;500;600;700&display=swap');"},
+];
+
+const CHARTS = [
+  {n:1,type:"Line Chart",kw:"trend, time-series, growth",secondary:"Area Chart, Smooth Area",colors:"Primary: #0080FF, 20% opacity fill",perf:"⚡ Excellent",a11y:"✓ Clear line patterns",lib:"Chart.js, Recharts, ApexCharts",interact:"Hover + Zoom"},
+  {n:2,type:"Bar Chart",kw:"compare, categories, ranking",secondary:"Column Chart, Grouped Bar",colors:"Each bar distinct color, sorted desc",perf:"⚡ Excellent",a11y:"✓ Easy to compare",lib:"Chart.js, Recharts, D3.js",interact:"Hover + Sort"},
+  {n:3,type:"Pie / Donut",kw:"part-to-whole, percentage, proportion",secondary:"Stacked Bar, Treemap",colors:"5-6 max, contrasting palette",perf:"⚡ Good (limit 6)",a11y:"⚠ Use stacked bar instead if >5",lib:"Chart.js, Recharts, D3.js",interact:"Hover + Drill"},
+  {n:4,type:"Scatter / Bubble",kw:"correlation, distribution, pattern",secondary:"Heat Map, Matrix",colors:"Gradient blue-red, opacity 0.6-0.8",perf:"⚠ Moderate",a11y:"⚠ Provide data table",lib:"D3.js, Plotly, Recharts",interact:"Hover + Brush"},
+  {n:5,type:"Heat Map",kw:"heatmap, intensity, density, matrix",secondary:"Grid Heat Map, Bubble Heat",colors:"Cool (blue) → Hot (red)",perf:"⚡ Excellent",a11y:"⚠ Colorblind: pattern overlay",lib:"D3.js, Plotly, ApexCharts",interact:"Hover + Zoom"},
+  {n:6,type:"Choropleth Map",kw:"geographic, map, location, spatial",secondary:"Geographic Heat Map",colors:"Single color gradient or categorized",perf:"⚠ Moderate",a11y:"⚠ Include text labels",lib:"D3.js, Mapbox, Leaflet",interact:"Pan + Zoom + Drill"},
+  {n:7,type:"Funnel / Sankey",kw:"funnel, flow, conversion",secondary:"Waterfall (for flows)",colors:"Stage gradient, show %",perf:"⚡ Good",a11y:"✓ Clear stage labels",lib:"D3.js, Recharts, Custom SVG",interact:"Hover + Drill"},
+  {n:8,type:"Gauge / Bullet",kw:"performance, target, KPI",secondary:"Dial, Thermometer",colors:"Red→Yellow→Green gradient",perf:"⚡ Good",a11y:"✓ Add numerical value",lib:"D3.js, ApexCharts, Custom SVG",interact:"Hover"},
+  {n:9,type:"Forecast Line",kw:"forecast, confidence band, prediction",secondary:"Ribbon Chart",colors:"Actual: #0080FF, Forecast: dashed",perf:"⚡ Good",a11y:"✓ Distinguish actual vs forecast",lib:"Chart.js, ApexCharts, Plotly",interact:"Hover + Toggle"},
+  {n:10,type:"Anomaly Detection",kw:"anomaly, alert, outlier",secondary:"Scatter with Alert",colors:"Normal: #0080FF, Anomaly: #FF0000",perf:"⚡ Good",a11y:"✓ Marker + text annotation",lib:"D3.js, Plotly, ApexCharts",interact:"Hover + Alert"},
+  {n:11,type:"Treemap",kw:"hierarchical, nested, proportional",secondary:"Sunburst, Nested Donut, Icicle",colors:"Parent distinct hues, children lighter",perf:"⚠ Moderate",a11y:"⚠ Provide table alternative",lib:"D3.js, Recharts, ApexCharts",interact:"Hover + Drilldown"},
+  {n:12,type:"Sankey Diagram",kw:"flow, process, connections",secondary:"Alluvial, Chord Diagram",colors:"Gradient source→target, opacity 0.4-0.6",perf:"⚠ Moderate",a11y:"⚠ Provide flow table",lib:"D3.js (d3-sankey), Plotly",interact:"Hover + Drilldown"},
+  {n:13,type:"Waterfall Chart",kw:"cumulative, changes, increment",secondary:"Stacked Bar, Cascade",colors:"Increases: #4CAF50, Decreases: #F44336",perf:"⚡ Good",a11y:"✓ Clear directional colors",lib:"ApexCharts, Highcharts, Plotly",interact:"Hover"},
+  {n:14,type:"Radar / Spider",kw:"multi-variable, comparison, profile",secondary:"Parallel Coordinates, Grouped Bar",colors:"#0080FF 20% fill, distinct per dataset",perf:"⚡ Good",a11y:"⚠ Limit 5-8 axes",lib:"Chart.js, Recharts, ApexCharts",interact:"Hover + Toggle"},
+  {n:15,type:"Candlestick",kw:"stock, trading, OHLC, finance",secondary:"OHLC Bar, Heikin-Ashi",colors:"Bullish: #26A69A, Bearish: #EF5350",perf:"⚡ Good",a11y:"⚠ Provide OHLC table",lib:"TradingView, ApexCharts",interact:"Real-time + Zoom"},
+];
+
+const LANDING = [
+  {n:1,name:"Hero + Features + CTA",steps:["Hero with headline","Value prop","Key features 3-5","CTA section","Footer"],cta:"Hero (sticky) + Bottom",color:"Hero: Brand. Features: #FAFAFA. CTA: Contrasting accent",conversion:"Deep CTA placement. Contrasting color (7:1). Sticky navbar CTA."},
+  {n:2,name:"Hero + Testimonials + CTA",steps:["Hero","Problem statement","Solution overview","Testimonials carousel","CTA"],cta:"Hero (sticky) + Post-testimonials",color:"Hero: Brand. Testimonials: #F5F5F5. CTA: Vibrant",conversion:"Social proof before CTA. 3-5 testimonials with photos."},
+  {n:3,name:"Product Demo + Features",steps:["Hero","Product video/mockup","Feature breakdown","Comparison","CTA"],cta:"Video center + CTA bottom",color:"Video: Brand overlay. Features: Icon #0080FF",conversion:"Embedded demo increases engagement. Auto-play muted."},
+  {n:4,name:"Minimal Single Column",steps:["Hero headline","Short description","Benefit bullets (3 max)","CTA","Footer"],cta:"Center large CTA",color:"Brand + white + accent. Buttons: 7:1+",conversion:"Single CTA focus. Large typography. Mobile-first."},
+  {n:5,name:"Funnel (3-Step)",steps:["Hero","Step 1: Problem","Step 2: Solution","Step 3: Action","CTA progression"],cta:"Each step: mini-CTA. Final: main CTA",color:"Step 1: Red. Step 2: Orange. Step 3: Green",conversion:"Progressive disclosure. Multiple CTAs."},
+  {n:6,name:"Comparison Table + CTA",steps:["Hero","Problem intro","Comparison table","Pricing","CTA"],cta:"Table right column + below table",color:"Your product: highlight yellow/green. Others: neutral",conversion:"Show unique value. 35% higher conversion."},
+  {n:7,name:"Lead Magnet + Form",steps:["Hero benefit headline","Lead magnet preview","Minimal form (3 fields)","CTA submit"],cta:"Form CTA: Submit button",color:"Form: white bg. Inputs: #CCC border. CTA: Brand",conversion:"Form fields ≤ 3. Valuable lead magnet preview."},
+  {n:8,name:"Pricing Page + CTA",steps:["Hero pricing headline","Price comparison cards","Feature comparison","FAQ section","Final CTA"],cta:"Each card + Sticky nav + Bottom",color:"Free: Grey. Starter: Blue. Pro: Green/Gold. Enterprise: Dark",conversion:"Recommend mid-tier. Annual discount 20-30%."},
+  {n:9,name:"Video-First Hero",steps:["Hero with video BG","Key features overlay","Benefits section","CTA"],cta:"Overlay on video + Bottom section",color:"Dark overlay 60%. Brand accent CTA. White text",conversion:"86% higher engagement. Add captions. Compress video."},
+  {n:10,name:"Scroll-Triggered Story",steps:["Intro hook","Chapter 1: Problem","Chapter 2: Journey","Chapter 3: Solution","Climax CTA"],cta:"End of each chapter + Final CTA",color:"Each chapter distinct color. Building intensity",conversion:"3x time-on-page. Progress indicator."},
+  {n:11,name:"Waitlist / Coming Soon",steps:["Hero with countdown","Product teaser","Email capture form","Social proof"],cta:"Email form prominent + Sticky on scroll",color:"Dark + accent highlights. Urgency indicators",conversion:"Scarcity + exclusivity. Referral program."},
+  {n:12,name:"App Store Style",steps:["Hero with device mockup","Screenshots carousel","Features with icons","Reviews/ratings","Download CTAs"],cta:"Download buttons throughout",color:"Dark/light matching app store. Stars: gold",conversion:"Real screenshots. 4.5+ stars. QR code for mobile."},
+  {n:13,name:"Bento Grid Showcase",steps:["Hero","Bento Grid features","Detail Cards","Tech Specs","CTA"],cta:"Floating Action Button or Bottom",color:"Cards: #F5F5F7 or Glass. Icons: Vibrant brand",conversion:"Scannable value props. High info density. Mobile stack."},
+  {n:14,name:"Before-After Transformation",steps:["Hero problem state","Transformation slider","How it works","Results CTA"],cta:"After transformation reveal + Bottom",color:"Before: muted/grey. After: vibrant. Success green",conversion:"Visual proof. 45% higher conversion. Specific metrics."},
+];
+
+const UX_RULES = [
+  {n:1,cat:"Accessibility",issue:"Icon Button Labels",sev:"Critical",doThis:'Add aria-label to icon buttons',dont:'Icon button without label',good:'<button aria-label="Close"><XIcon /></button>',bad:'<button><XIcon /></button>'},
+  {n:2,cat:"Accessibility",issue:"Form Control Labels",sev:"Critical",doThis:'Use label element or aria-label',dont:'Input without accessible name',good:'<label for="email">Email</label><input id="email" />',bad:'<input placeholder="Email" />'},
+  {n:3,cat:"Accessibility",issue:"Keyboard Handlers",sev:"High",doThis:'Add onKeyDown alongside onClick',dont:'Click-only interaction',good:'<div onClick={fn} onKeyDown={fn} tabIndex={0}>',bad:'<div onClick={fn}>'},
+  {n:4,cat:"Accessibility",issue:"Semantic HTML",sev:"High",doThis:'Use button/a/label elements',dont:'Div with role attribute',good:'<button onClick={fn}>Submit</button>',bad:'<div role="button" onClick={fn}>Submit</div>'},
+  {n:5,cat:"Focus",issue:"Visible Focus States",sev:"Critical",doThis:'Use :focus-visible with ring/outline',dont:'No focus indication',good:'focus-visible:ring-2 focus-visible:ring-blue-500',bad:'outline-none // no replacement'},
+  {n:6,cat:"Focus",issue:"Never Remove Outline",sev:"Critical",doThis:'Replace outline with visible alternative',dont:'Remove outline completely',good:'focus:outline-none focus:ring-2',bad:'focus:outline-none // nothing else'},
+  {n:7,cat:"Forms",issue:"Autocomplete Attribute",sev:"High",doThis:'Add appropriate autocomplete value',dont:'Missing autocomplete',good:'<input autocomplete="email" type="email" />',bad:'<input type="email" />'},
+  {n:8,cat:"Forms",issue:"Never Block Paste",sev:"High",doThis:'Allow paste on all inputs',dont:'Block paste on password/code',good:'<input type="password" />',bad:'<input onPaste={e => e.preventDefault()} />'},
+  {n:9,cat:"Forms",issue:"Inline Errors",sev:"High",doThis:'Inline error with focus on first error',dont:'Single error at top',good:'<input /><span class="text-red-500">{error}</span>',bad:'<div class="error">{allErrors}</div>'},
+  {n:10,cat:"Performance",issue:"Virtualize Lists",sev:"High",doThis:'Use virtual list for 50+ items',dont:'Render all items',good:'<VirtualList items={items} />',bad:'items.map(item => <Item />)'},
+  {n:11,cat:"Performance",issue:"Lazy Load Images",sev:"Medium",doThis:'Use loading="lazy" for below-fold',dont:'Load all images eagerly',good:'<img loading="lazy" src="..." />',bad:'<img src="..." />'},
+  {n:12,cat:"State",issue:"URL Reflects State",sev:"High",doThis:'Sync filters/tabs/pagination to URL',dont:'State only in memory',good:'?tab=settings&page=2',bad:'useState only // lost on refresh'},
+  {n:13,cat:"State",issue:"Confirm Destructive Actions",sev:"High",doThis:'Show confirmation dialog',dont:'Delete without confirmation',good:'if (confirm("Delete?")) delete()',bad:'onClick={delete}'},
+  {n:14,cat:"Anti-Pattern",issue:"No Zoom Disable",sev:"Critical",doThis:'Allow user zoom',dont:'Disable zoom in viewport',good:'<meta name="viewport" content="width=device-width">',bad:'<meta content="maximum-scale=1">'},
+  {n:15,cat:"Anti-Pattern",issue:"No transition: all",sev:"Medium",doThis:'Transition specific properties',dont:'transition: all',good:'transition-colors duration-200',bad:'transition-all duration-200'},
+  {n:16,cat:"Anti-Pattern",issue:"Outline Replacement",sev:"Critical",doThis:'Provide visible focus replacement',dont:'Remove outline with nothing',good:'focus:outline-none focus:ring-2 focus:ring-blue-500',bad:'focus:outline-none // alone'},
+];
+
+// ─── RENDER ───
+
+function esc(s){return s.replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+function renderStyles(filter='all'){
+  const grid=document.getElementById('styles-grid');
+  const items=filter==='all'?STYLES:STYLES.filter(s=>s.type===filter);
+  grid.innerHTML=items.map(s=>`
+    <div class="card" data-search="${(s.name+' '+s.keywords+' '+s.type+' '+s.bestFor).toLowerCase()}">
+      <div class="card-head">
+        <div>
+          <span class="card-type badge-${s.type==='General'?'blue':s.type==='Landing Page'?'rose':'amber'}" style="background:${s.type==='General'?'rgba(99,102,241,.12)':s.type==='Landing Page'?'rgba(244,63,94,.12)':'rgba(245,158,11,.12)'};color:${s.type==='General'?'var(--accent2)':s.type==='Landing Page'?'var(--rose)':'var(--amber)'}">${s.type}</span>
+          <div class="card-title">${s.name}</div>
+        </div>
+        <span class="card-num">#${String(s.n).padStart(2,'0')}</span>
+      </div>
+      <div class="swatch-row">${s.colors.map(c=>`<div class="swatch" style="background:${c}" data-tip="${c}"></div>`).join('')}</div>
+      <div class="card-desc">${s.keywords}</div>
+      <div class="card-meta">
+        <span class="badge ${s.perf.includes('Excellent')?'badge-green':s.perf.includes('Good')?'badge-cyan':'badge-rose'}">${s.perf}</span>
+        <span class="badge ${s.a11y.includes('AAA')?'badge-green':s.a11y.includes('AA')?'badge-cyan':'badge-amber'}">${s.a11y}</span>
+        <span class="badge badge-purple">${s.complexity}</span>
+        <span class="badge badge-blue">${s.era}</span>
+      </div>
+      <div style="font-size:.75rem;color:var(--text2);margin-top:.5rem"><strong style="color:var(--text)">Best for:</strong> ${s.bestFor}</div>
+      <div class="collapse-toggle" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg> Details & CSS
+      </div>
+      <div class="collapse-content">
+        <div style="margin-top:.5rem">
+          <div style="font-size:.7rem;color:var(--text3);margin-bottom:4px">CSS Hints:</div>
+          <div class="code-block">${esc(s.css)}</div>
+        </div>
+        ${s.prompt?`<div style="margin-top:.5rem"><div style="font-size:.7rem;color:var(--text3);margin-bottom:4px">AI Prompt:</div><div style="font-size:.75rem;color:var(--text2);background:var(--bg2);padding:8px 12px;border-radius:8px;border:1px solid var(--border)">${s.prompt}</div></div>`:''}
+        ${s.checklist?`<div class="checklist">${s.checklist.map(c=>`<span class="check-item">${c}</span>`).join('')}</div>`:''}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderPalettes(){
+  const grid=document.getElementById('palettes-grid');
+  grid.innerHTML=PALETTES.map(p=>`
+    <div class="card" data-search="${(p.name+' '+p.note).toLowerCase()}">
+      <div class="card-head">
+        <div class="card-title">${p.name}</div>
+        <span class="card-num">#${String(p.n).padStart(2,'0')}</span>
+      </div>
+      <div class="swatch-row">
+        <div class="swatch" style="background:${p.primary};width:36px;height:36px" data-tip="Primary ${p.primary}"></div>
+        <div class="swatch" style="background:${p.secondary};width:36px;height:36px" data-tip="Secondary ${p.secondary}"></div>
+        <div class="swatch" style="background:${p.cta};width:36px;height:36px" data-tip="CTA ${p.cta}"></div>
+        <div class="swatch" style="background:${p.bg};width:36px;height:36px" data-tip="BG ${p.bg}"></div>
+        <div class="swatch" style="background:${p.text};width:36px;height:36px" data-tip="Text ${p.text}"></div>
+        <div class="swatch" style="background:${p.border};width:36px;height:36px" data-tip="Border ${p.border}"></div>
+      </div>
+      <div style="display:flex;gap:16px;margin-top:8px;font-size:.65rem;color:var(--text3)">
+        <span>Primary</span><span>Secondary</span><span>CTA</span><span>BG</span><span>Text</span><span>Border</span>
+      </div>
+      <div style="margin-top:10px;font-size:.8rem;color:var(--text2)">${p.note}</div>
+      <div class="code-block">--primary: ${p.primary}; --secondary: ${p.secondary}; --cta: ${p.cta}; --bg: ${p.bg}; --text: ${p.text}; --border: ${p.border};</div>
+    </div>
+  `).join('');
+}
+
+function renderFonts(filter='all'){
+  const grid=document.getElementById('typography-grid');
+  const items=filter==='all'?FONTS:FONTS.filter(f=>{
+    if(filter==='Mono') return f.cat.includes('Mono');
+    if(filter==='Script') return f.cat.includes('Script');
+    return f.cat===filter;
+  });
+  grid.innerHTML=items.map(f=>`
+    <div class="card" data-search="${(f.name+' '+f.cat+' '+f.h+' '+f.b+' '+f.mood+' '+f.bestFor).toLowerCase()}">
+      <div class="card-head">
+        <div>
+          <span class="card-type" style="background:rgba(168,85,247,.12);color:var(--purple)">${f.cat}</span>
+          <div class="card-title">${f.name}</div>
+        </div>
+        <span class="card-num">#${String(f.n).padStart(2,'0')}</span>
+      </div>
+      <div style="font-size:.8rem;color:var(--text2);margin-bottom:4px">${f.mood}</div>
+      <div style="font-size:.75rem;color:var(--text)"><strong>Best for:</strong> ${f.bestFor}</div>
+      <div style="margin-top:.75rem;padding:.75rem;background:var(--bg2);border-radius:10px">
+        <div style="font-size:1.3rem;font-weight:700;margin-bottom:4px">Heading: ${f.h}</div>
+        <div style="font-size:.85rem;color:var(--text2)">Body: ${f.b} — The quick brown fox jumps over the lazy dog</div>
+      </div>
+      <div class="code-block" style="font-size:.6rem;word-break:break-all">${esc(f.css)}</div>
+    </div>
+  `).join('');
+}
+
+function renderCharts(){
+  const grid=document.getElementById('charts-grid');
+  grid.innerHTML=CHARTS.map(c=>`
+    <div class="card" data-search="${(c.type+' '+c.kw+' '+c.lib).toLowerCase()}">
+      <div class="card-head">
+        <div class="card-title">${c.type}</div>
+        <span class="card-num">#${String(c.n).padStart(2,'0')}</span>
+      </div>
+      <div class="card-desc">${c.kw}</div>
+      <div class="card-meta">
+        <span class="badge ${c.perf.includes('Excellent')?'badge-green':'badge-cyan'}">${c.perf}</span>
+        <span class="badge ${c.a11y.startsWith('✓')?'badge-green':'badge-amber'}">${c.a11y}</span>
+      </div>
+      <div style="font-size:.75rem;margin-top:.5rem"><span style="color:var(--text3)">Also:</span> <span style="color:var(--text2)">${c.secondary}</span></div>
+      <div style="font-size:.75rem;margin-top:4px"><span style="color:var(--text3)">Colors:</span> <span style="color:var(--text2)">${c.colors}</span></div>
+      <div style="font-size:.75rem;margin-top:4px"><span style="color:var(--text3)">Libraries:</span> <span style="color:var(--cyan)">${c.lib}</span></div>
+      <div style="font-size:.75rem;margin-top:4px"><span style="color:var(--text3)">Interaction:</span> <span style="color:var(--purple)">${c.interact}</span></div>
+    </div>
+  `).join('');
+}
+
+function renderLanding(){
+  const grid=document.getElementById('landing-grid');
+  grid.innerHTML=LANDING.map(l=>`
+    <div class="card" data-search="${(l.name+' '+l.conversion).toLowerCase()}">
+      <div class="card-head">
+        <div class="card-title">${l.name}</div>
+        <span class="card-num">#${String(l.n).padStart(2,'0')}</span>
+      </div>
+      <div class="pattern-steps">${l.steps.map((s,i)=>`<span class="step" data-n="${i+1}.">${s}</span>`).join('')}</div>
+      <div style="font-size:.75rem;margin-top:.5rem"><span style="color:var(--text3)">CTA:</span> <span style="color:var(--green)">${l.cta}</span></div>
+      <div style="font-size:.75rem;margin-top:4px"><span style="color:var(--text3)">Colors:</span> <span style="color:var(--text2)">${l.color}</span></div>
+      <div style="font-size:.75rem;margin-top:6px;color:var(--amber)">${l.conversion}</div>
+    </div>
+  `).join('');
+}
+
+function renderUX(filter='all'){
+  const grid=document.getElementById('ux-grid');
+  const items=filter==='all'?UX_RULES:UX_RULES.filter(r=>r.cat===filter);
+  grid.innerHTML=items.map(r=>`
+    <div class="card" data-search="${(r.cat+' '+r.issue+' '+r.doThis).toLowerCase()}">
+      <div class="card-head">
+        <div>
+          <span class="card-type" style="background:${r.sev==='Critical'?'rgba(244,63,94,.12)':r.sev==='High'?'rgba(245,158,11,.12)':'rgba(99,102,241,.12)'};color:${r.sev==='Critical'?'var(--rose)':r.sev==='High'?'var(--amber)':'var(--accent2)'}">${r.sev}</span>
+          <div class="card-title">${r.issue}</div>
+        </div>
+        <span class="badge badge-blue">${r.cat}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:.5rem">
+        <div style="font-size:.75rem"><span style="color:var(--green)">Do:</span> <span style="color:var(--text2)">${r.doThis}</span></div>
+        <div style="font-size:.75rem"><span style="color:var(--rose)">Don't:</span> <span style="color:var(--text2)">${r.dont}</span></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:.5rem">
+        <div class="code-block" style="border-color:rgba(16,185,129,.2)">${esc(r.good)}</div>
+        <div class="code-block" style="border-color:rgba(244,63,94,.2)">${esc(r.bad)}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ─── INIT ───
+renderStyles();renderPalettes();renderFonts();renderCharts();renderLanding();renderUX();
+
+// Tabs
+document.querySelectorAll('.tabs').forEach(tabGroup=>{
+  tabGroup.addEventListener('click',e=>{
+    if(!e.target.classList.contains('tab'))return;
+    tabGroup.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    e.target.classList.add('active');
+    const f=e.target.dataset.filter;
+    const id=tabGroup.id;
+    if(id==='style-tabs')renderStyles(f);
+    else if(id==='font-tabs')renderFonts(f);
+    else if(id==='ux-tabs')renderUX(f);
+  });
+});
+
+// Search
+const searchInput=document.getElementById('search');
+searchInput.addEventListener('input',()=>{
+  const q=searchInput.value.toLowerCase().trim();
+  document.querySelectorAll('.card[data-search]').forEach(card=>{
+    card.style.display=!q||card.dataset.search.includes(q)?'':'none';
+  });
+});
+
+// Nav active
+const sections=document.querySelectorAll('.section');
+const navLinks=document.querySelectorAll('.nav a');
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      navLinks.forEach(l=>l.classList.remove('active'));
+      const link=document.querySelector(`.nav a[href="#${e.target.id}"]`);
+      if(link)link.classList.add('active');
+    }
+  });
+},{threshold:.2});
+sections.forEach(s=>observer.observe(s));
+
+// Back to top
+window.addEventListener('scroll',()=>{
+  document.getElementById('backTop').classList.toggle('visible',window.scrollY>400);
+});
+</script>
+</body>
+</html>
