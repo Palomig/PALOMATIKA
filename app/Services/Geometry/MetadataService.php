@@ -136,17 +136,35 @@ class MetadataService
     }
 
     /**
-     * Парсинг taskId для получения информации
-     * Формат: {номер_задания}{OGE|EGE}{номер_задачи}
-     * Пример: 15OGE123, 3EGE456
+     * Парсинг taskId для получения информации.
+     *
+     * Поддерживаемые форматы:
+     * - Legacy: {topic}{OGE|EGE}{task}
+     *   Пример: 18OGE7
+     * - Unique: {topic}{OGE|EGE}B{block}Z{zadanie}T{task}
+     *   Пример: 18OGEB1Z9T7
      */
     public function parseTaskId(string $taskId): array
     {
-        // Паттерн: число + OGE/EGE + число
+        // Unique формат (приоритетный).
+        if (preg_match('/^(\d+)(OGE|EGE)B(\d+)Z(\d+)T(\d+)$/i', $taskId, $matches)) {
+            return [
+                'topic_number' => (int) $matches[1],
+                'exam_type' => strtolower($matches[2]),
+                'block_number' => (int) $matches[3],
+                'zadanie_number' => (int) $matches[4],
+                'task_number' => (int) $matches[5],
+                'valid' => true
+            ];
+        }
+
+        // Legacy: число + OGE/EGE + число.
         if (preg_match('/^(\d+)(OGE|EGE)(\d+)$/', $taskId, $matches)) {
             return [
                 'topic_number' => (int) $matches[1],
                 'exam_type' => strtolower($matches[2]),
+                'block_number' => null,
+                'zadanie_number' => null,
                 'task_number' => (int) $matches[3],
                 'valid' => true
             ];
@@ -155,6 +173,8 @@ class MetadataService
         return [
             'topic_number' => null,
             'exam_type' => null,
+            'block_number' => null,
+            'zadanie_number' => null,
             'task_number' => null,
             'valid' => false
         ];

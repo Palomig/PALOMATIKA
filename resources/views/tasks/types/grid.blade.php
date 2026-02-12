@@ -37,7 +37,8 @@
             $taskInfo = "Блок {$block['number']}, Задание {$zadanie['number']}, Задача {$task['id']}<br>Изображение: {$imageName}";
             $hasQuestion = !empty($task['question']);
             $hasSvg = !empty($task['svg']);
-            $editorTaskId = $topicId . $examType . $task['id'];
+            // Уникальный ID для редактора (иначе task.id повторяется между заданиями).
+            $editorTaskId = $topicId . $examType . 'B' . $block['number'] . 'Z' . $zadanie['number'] . 'T' . $task['id'];
             $editorSvg = $task['svg'] ?? ((\Illuminate\Support\Str::startsWith($task['image'] ?? '', '<svg')) ? $task['image'] : null);
         @endphp
 

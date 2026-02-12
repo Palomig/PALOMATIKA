@@ -77,7 +77,9 @@ function geometryEditor() {
                     if (response.ok) {
                         const data = await response.json();
                         metadata = data.metadata;
-                        existingSvg = data.svg || existingSvg;
+                        // Keep the caller-provided SVG for the clicked card.
+                        // API SVG is fallback only.
+                        existingSvg = existingSvg || data.svg;
                     }
                 } catch (e) {
                     console.warn('Could not load metadata:', e);

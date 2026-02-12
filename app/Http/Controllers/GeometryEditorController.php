@@ -169,7 +169,7 @@ class GeometryEditorController extends Controller
             foreach ($data['blocks'] ?? [] as $block) {
                 foreach ($block['zadaniya'] ?? [] as $zadanie) {
                     foreach ($zadanie['tasks'] ?? [] as $task) {
-                        if (($task['id'] ?? null) == $parsed['task_number']) {
+                        if ($this->taskMatchesParsed($parsed, $block, $zadanie, $task)) {
                             return $task['svg'] ?? $task['image'] ?? null;
                         }
                     }
@@ -218,7 +218,7 @@ class GeometryEditorController extends Controller
         foreach ($data['blocks'] as &$block) {
             foreach ($block['zadaniya'] as &$zadanie) {
                 foreach ($zadanie['tasks'] as &$task) {
-                    if (($task['id'] ?? null) == $parsed['task_number']) {
+                    if ($this->taskMatchesParsed($parsed, $block, $zadanie, $task)) {
                         $task['svg'] = $svg;
                         $found = true;
                         break 3;
@@ -236,5 +236,25 @@ class GeometryEditorController extends Controller
         file_put_contents($path, $json);
 
         Log::info("Updated SVG in topic file for task: {$taskId}");
+    }
+
+    private function taskMatchesParsed(array $parsed, array $block, array $zadanie, array $task): bool
+    {
+        $taskId = (int) ($task['id'] ?? 0);
+        if ($taskId !== (int) ($parsed['task_number'] ?? 0)) {
+            return false;
+        }
+
+        // For unique IDs we also require matching block and zadanie.
+        if (($parsed['block_number'] ?? null) !== null) {
+            if ((int) ($block['number'] ?? 0) !== (int) $parsed['block_number']) {
+                return false;
+            }
+            if ((int) ($zadanie['number'] ?? 0) !== (int) ($parsed['zadanie_number'] ?? 0)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

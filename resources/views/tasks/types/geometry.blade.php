@@ -28,8 +28,8 @@
             $hasSvg = !empty($task['svg']);
             $hasImage = !empty($task['image']);
             $hasVisual = $hasSvg || $hasImage;
-            // ID для редактора: {topic}{examType}{taskId}
-            $editorTaskId = $topicId . $examType . $task['id'];
+            // Уникальный ID для редактора (task.id повторяется в разных заданиях).
+            $editorTaskId = $topicId . $examType . 'B' . $block['number'] . 'Z' . $zadanie['number'] . 'T' . $task['id'];
         @endphp
 
         <div class="bg-slate-800/70 rounded-xl border border-slate-700 overflow-hidden task-review-item relative"
