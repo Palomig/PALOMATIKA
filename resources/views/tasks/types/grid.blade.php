@@ -27,6 +27,7 @@
             $imageName = getGridImagePath($task['image'] ?? '', $block['number'], $zadanie['number'], $task['id']);
             $taskInfo = "Блок {$block['number']}, Задание {$zadanie['number']}, Задача {$task['id']}<br>Изображение: {$imageName}";
             $hasQuestion = !empty($task['question']);
+            $hasSvg = !empty($task['svg']);
         @endphp
 
         <div class="bg-slate-800/70 rounded-xl border border-slate-700 overflow-hidden task-review-item relative"
@@ -42,7 +43,9 @@
 
             {{-- Изображение --}}
             <div class="p-3 bg-white">
-                @if(str_starts_with($task['image'] ?? '', '<svg'))
+                @if($hasSvg)
+                    {!! $task['svg'] !!}
+                @elseif(str_starts_with($task['image'] ?? '', '<svg'))
                     {!! $task['image'] !!}
                 @else
                     <img src="{{ asset('images/tasks/18/' . $imageName) }}"

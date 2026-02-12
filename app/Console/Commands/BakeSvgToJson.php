@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Services\GeometrySvgRenderer;
 use App\Services\GraphSvgRenderer;
+use App\Services\GridSvgRenderer;
 use App\Services\NumberLineSvgRenderer;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\File;
  * Supported topics:
  * - 07: Координатная прямая (NumberLineSvgRenderer)
  * - 11: Графики функций (GraphSvgRenderer)
+ * - 18: Фигуры на клетчатой бумаге (GridSvgRenderer)
  * - 15, 16, 17: Геометрия (GeometrySvgRenderer)
  *
  * After running this command, the geometry JSON files can be deleted
@@ -26,7 +28,7 @@ use Illuminate\Support\Facades\File;
 class BakeSvgToJson extends Command
 {
     protected $signature = 'svg:bake
-                            {topic : Topic ID (7, 11, 15, 16, 17)}
+                            {topic : Topic ID (7, 11, 15, 16, 17, 18)}
                             {--dry-run : Show what would be done without saving}';
 
     protected $description = 'Bake SVG strings into JSON file (one-time generation)';
@@ -44,6 +46,11 @@ class BakeSvgToJson extends Command
         // Topic 11 (graphs) uses different approach - reads from main JSON
         if ($topicId === '11') {
             return $this->handleTopic11($dryRun);
+        }
+
+        // Topic 18 (grid figures) - reads from main JSON
+        if ($topicId === '18') {
+            return $this->handleTopic18($dryRun);
         }
 
         $geometryPath = storage_path("app/tasks/topic_{$topicId}_geometry.json");
@@ -353,6 +360,102 @@ class BakeSvgToJson extends Command
         // Save to main JSON file
         $outputPath = storage_path("app/tasks/topic_07.json");
 
+        $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
+        if (File::put($outputPath, $json) === false) {
+            $this->error("Failed to write to: {$outputPath}");
+            return Command::FAILURE;
+        }
+
+        $this->newLine();
+        $this->info("✅ Done! Generated {$count} SVGs ({$errors} errors, {$skipped} skipped)");
+        $this->info("   Saved to: {$outputPath}");
+        $this->newLine();
+        $this->comment("Next steps:");
+        $this->comment("  1. Clear cache: php artisan cache:clear");
+
+        return Command::SUCCESS;
+    }
+
+    /**
+     * Handle topic 18 (grid figures) - generates SVG for deterministic grid tasks
+     */
+    private function handleTopic18(bool $dryRun): int
+    {
+        $inputPath = storage_path("app/tasks/topic_18.json");
+
+        if (!File::exists($inputPath)) {
+            $this->error("Topic file not found: {$inputPath}");
+            return Command::FAILURE;
+        }
+
+        $this->info("Reading topic 18 data from: topic_18.json");
+
+        $data = json_decode(File::get($inputPath), true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $this->error("JSON parse error: " . json_last_error_msg());
+            return Command::FAILURE;
+        }
+
+        $renderer = new GridSvgRenderer();
+        $count = 0;
+        $errors = 0;
+        $skipped = 0;
+
+        foreach ($data['blocks'] as $blockIndex => &$block) {
+            $blockNumber = (int) ($block['number'] ?? 0);
+            $this->info("Block {$blockNumber}: {$block['title']}");
+
+            foreach ($block['zadaniya'] as $zadanieIndex => &$zadanie) {
+                $type = $zadanie['type'] ?? null;
+                $zadanieNumber = (int) ($zadanie['number'] ?? 0);
+
+                if (!$type || !$renderer->supports($type)) {
+                    $skipped++;
+                    continue;
+                }
+
+                if (!isset($zadanie['tasks']) || empty($zadanie['tasks'])) {
+                    $skipped++;
+                    continue;
+                }
+
+                $this->line("  Zadanie {$zadanieNumber}: {$type}");
+
+                foreach ($zadanie['tasks'] as $taskIndex => &$task) {
+                    try {
+                        $svg = $renderer->render($blockNumber, $zadanieNumber, (int) $taskIndex, $task);
+
+                        if (empty($svg)) {
+                            $skipped++;
+                            $this->warn("    ⚠️  Task {$task['id']}: skipped (no deterministic SVG variant)");
+                            continue;
+                        }
+
+                        $task['svg'] = $svg;
+
+                        $this->line("    ✓ Task {$task['id']}: baked");
+                        $count++;
+                    } catch (\Exception $e) {
+                        $this->error("    ✗ Task {$task['id']}: " . $e->getMessage());
+                        $errors++;
+                    }
+                }
+            }
+        }
+
+        if ($dryRun) {
+            $this->newLine();
+            $this->info("DRY RUN: Would generate {$count} SVGs ({$errors} errors, {$skipped} skipped)");
+            $this->info("No files were modified.");
+            return Command::SUCCESS;
+        }
+
+        $data['exported_at'] = now()->toIso8601String();
+        $data['svg_baked'] = true;
+
+        $outputPath = storage_path("app/tasks/topic_18.json");
         $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
         if (File::put($outputPath, $json) === false) {
