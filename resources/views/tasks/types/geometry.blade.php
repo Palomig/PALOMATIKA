@@ -12,10 +12,10 @@
 
 @once
 <style>
-    /* Как на других страницах: ограничиваем SVG до 250px и центрируем.
+    /* Как на теме 18: ограничиваем SVG до 350px и центрируем.
        Важно: применяем к любому вложенному <svg>, т.к. в payload бывает обёртка. */
-    .geo-svg-force { max-width: 250px; width: 100%; margin: 0 auto; }
-    .geo-svg-force svg { max-width: 250px !important; width: auto !important; height: auto !important; display: block; margin: 0 auto; }
+    .geo-svg-force { max-width: 350px; width: 100%; margin: 0 auto; }
+    .geo-svg-force svg { max-width: 350px !important; width: auto !important; height: auto !important; display: block; margin: 0 auto; }
 </style>
 @endonce
 
