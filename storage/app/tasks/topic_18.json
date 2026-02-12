@@ -6,7 +6,7 @@
         "color": "fuchsia",
         "icon": "grid"
     },
-    "exported_at": "2026-01-13T07:51:15+00:00",
+    "exported_at": "2026-02-12T19:04:11Z",
     "blocks": [
         {
             "number": 1,
@@ -19,27 +19,33 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "image": "oge18_p1_img1.png"
+                            "image": "oge18_p1_img1.png",
+                            "svg": "<svg viewBox=\"0 0 190 136\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-2f221a18\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"136\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"136\" fill=\"url(#grid-2f221a18)\"/>\n  <polygon points=\"5,5 5,113 149,113\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"5\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"5\" cy=\"113\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"107\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"149\" cy=\"113\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"153\" y=\"107\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n</svg>"
                         },
                         {
                             "id": 2,
-                            "image": "oge18_p1_img2.png"
+                            "image": "oge18_p1_img2.png",
+                            "svg": "<svg viewBox=\"0 0 136 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-4f57d0ec\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"100\" fill=\"url(#grid-4f57d0ec)\"/>\n  <polygon points=\"5,5 5,77 95,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"5\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"5\" cy=\"77\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"71\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"95\" cy=\"77\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"99\" y=\"71\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n</svg>"
                         },
                         {
                             "id": 3,
-                            "image": "oge18_p1_img3.png"
+                            "image": "oge18_p1_img3.png",
+                            "svg": "<svg viewBox=\"0 0 172 82\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-98c1d2a9\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"82\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"82\" fill=\"url(#grid-98c1d2a9)\"/>\n  <polygon points=\"5,5 5,59 131,59\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"5\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"5\" cy=\"59\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"53\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"131\" cy=\"59\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"135\" y=\"53\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n</svg>"
                         },
                         {
                             "id": 4,
-                            "image": "oge18_p1_img4.png"
+                            "image": "oge18_p1_img4.png",
+                            "svg": "<svg viewBox=\"0 0 136 154\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-f951c0a9\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"154\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"154\" fill=\"url(#grid-f951c0a9)\"/>\n  <polygon points=\"5,5 5,131 95,131\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"5\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"5\" cy=\"131\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"125\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"95\" cy=\"131\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"99\" y=\"125\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n</svg>"
                         },
                         {
                             "id": 5,
-                            "image": "oge18_p1_img5.png"
+                            "image": "oge18_p1_img5.png",
+                            "svg": "<svg viewBox=\"0 0 118 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-a70c48e2\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"118\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"118\" height=\"118\" fill=\"url(#grid-a70c48e2)\"/>\n  <polygon points=\"5,5 5,95 77,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"5\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"5\" cy=\"95\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"89\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"77\" cy=\"95\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"81\" y=\"89\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n</svg>"
                         },
                         {
                             "id": 6,
-                            "image": "oge18_p1_img6.png"
+                            "image": "oge18_p1_img6.png",
+                            "svg": "<svg viewBox=\"0 0 154 64\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-732e8532\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"64\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"64\" fill=\"url(#grid-732e8532)\"/>\n  <polygon points=\"5,5 5,41 113,41\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"5\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"5\" cy=\"41\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"35\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"113\" cy=\"41\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"117\" y=\"35\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n</svg>"
                         }
                     ]
                 },
@@ -50,27 +56,33 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "image": "oge18_p1_img7.png"
+                            "image": "oge18_p1_img7.png",
+                            "svg": "<svg viewBox=\"0 0 154 136\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-6151f5ab\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"136\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"136\" fill=\"url(#grid-6151f5ab)\"/>\n  <polygon points=\"5,59 59,5 113,59 59,113\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"5\" cy=\"59\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"53\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"59\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"63\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"113\" cy=\"59\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"117\" y=\"53\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n  <circle cx=\"59\" cy=\"113\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"63\" y=\"107\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">D</text>\n</svg>"
                         },
                         {
                             "id": 2,
-                            "image": "oge18_p1_img8.png"
+                            "image": "oge18_p1_img8.png",
+                            "svg": "<svg viewBox=\"0 0 190 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-e61730e6\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"100\" fill=\"url(#grid-e61730e6)\"/>\n  <polygon points=\"5,41 77,5 149,41 77,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"5\" cy=\"41\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"35\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"77\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"81\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"149\" cy=\"41\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"153\" y=\"35\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n  <circle cx=\"77\" cy=\"77\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"81\" y=\"71\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">D</text>\n</svg>"
                         },
                         {
                             "id": 3,
-                            "image": "oge18_p1_img9.png"
+                            "image": "oge18_p1_img9.png",
+                            "svg": "<svg viewBox=\"0 0 172 136\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-453e406d\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"136\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"136\" fill=\"url(#grid-453e406d)\"/>\n  <polygon points=\"23,59 77,5 131,59 77,113\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"23\" cy=\"59\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"27\" y=\"53\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"77\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"81\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"131\" cy=\"59\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"135\" y=\"53\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n  <circle cx=\"77\" cy=\"113\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"81\" y=\"107\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">D</text>\n</svg>"
                         },
                         {
                             "id": 4,
-                            "image": "oge18_p1_img10.png"
+                            "image": "oge18_p1_img10.png",
+                            "svg": "<svg viewBox=\"0 0 154 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-f69160b1\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"url(#grid-f69160b1)\"/>\n  <polygon points=\"5,41 59,5 113,41 59,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"5\" cy=\"41\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"35\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"59\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"63\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"113\" cy=\"41\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"117\" y=\"35\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n  <circle cx=\"59\" cy=\"77\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"63\" y=\"71\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">D</text>\n</svg>"
                         },
                         {
                             "id": 5,
-                            "image": "oge18_p1_img11.png"
+                            "image": "oge18_p1_img11.png",
+                            "svg": "<svg viewBox=\"0 0 118 136\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-2cec0f1f\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"118\" height=\"136\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"118\" height=\"136\" fill=\"url(#grid-2cec0f1f)\"/>\n  <polygon points=\"5,59 41,5 77,59 41,113\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"5\" cy=\"59\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"53\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"41\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"45\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"77\" cy=\"59\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"81\" y=\"53\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n  <circle cx=\"41\" cy=\"113\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"45\" y=\"107\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">D</text>\n</svg>"
                         },
                         {
                             "id": 6,
-                            "image": "oge18_p1_img12.png"
+                            "image": "oge18_p1_img12.png",
+                            "svg": "<svg viewBox=\"0 0 208 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-a6f2ab89\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"208\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"208\" height=\"100\" fill=\"url(#grid-a6f2ab89)\"/>\n  <polygon points=\"23,41 95,5 167,41 95,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"23\" cy=\"41\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"27\" y=\"35\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"95\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"99\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"167\" cy=\"41\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"171\" y=\"35\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n  <circle cx=\"95\" cy=\"77\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"99\" y=\"71\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">D</text>\n</svg>"
                         }
                     ]
                 },
@@ -82,32 +94,38 @@
                         {
                             "id": 1,
                             "question": "Во сколько раз отрезок AM короче отрезка CM?",
-                            "image": "oge18_p2_img1.png"
+                            "image": "oge18_p2_img1.png",
+                            "svg": "<svg viewBox=\"0 0 190 136\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-b425e0c7\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"136\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"136\" fill=\"url(#grid-b425e0c7)\"/>\n  <polygon points=\"5,113 77,5 149,113 41,59\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"5\" cy=\"113\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"107\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"77\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"81\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"149\" cy=\"113\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"153\" y=\"107\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n  <circle cx=\"41\" cy=\"59\" r=\"3.5\" fill=\"#d4a855\"/>\n  <text x=\"45\" y=\"53\" fill=\"#d4a855\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">M</text>\n</svg>"
                         },
                         {
                             "id": 2,
                             "question": "Во сколько раз отрезок AM длиннее отрезка CM?",
-                            "image": "oge18_p2_img2.png"
+                            "image": "oge18_p2_img2.png",
+                            "svg": "<svg viewBox=\"0 0 190 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-bc5861c5\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"100\" fill=\"url(#grid-bc5861c5)\"/>\n  <polygon points=\"23,77 77,5 149,77 113,41\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"23\" cy=\"77\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"27\" y=\"71\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"77\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"81\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"149\" cy=\"77\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"153\" y=\"71\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n  <circle cx=\"113\" cy=\"41\" r=\"3.5\" fill=\"#d4a855\"/>\n  <text x=\"117\" y=\"35\" fill=\"#d4a855\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">M</text>\n</svg>"
                         },
                         {
                             "id": 3,
                             "question": "Во сколько раз отрезок BM короче отрезка CM?",
-                            "image": "oge18_p2_img3.png"
+                            "image": "oge18_p2_img3.png",
+                            "svg": "<svg viewBox=\"0 0 154 136\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-e0260672\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"136\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"136\" fill=\"url(#grid-e0260672)\"/>\n  <polygon points=\"5,113 41,41 113,113 23,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"5\" cy=\"113\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"107\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"41\" cy=\"41\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"45\" y=\"35\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"113\" cy=\"113\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"117\" y=\"107\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n  <circle cx=\"23\" cy=\"77\" r=\"3.5\" fill=\"#d4a855\"/>\n  <text x=\"27\" y=\"71\" fill=\"#d4a855\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">M</text>\n</svg>"
                         },
                         {
                             "id": 4,
                             "question": "Во сколько раз отрезок BM длиннее отрезка CM?",
-                            "image": "oge18_p2_img4.png"
+                            "image": "oge18_p2_img4.png",
+                            "svg": "<svg viewBox=\"0 0 172 136\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-d3205b31\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"136\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"136\" fill=\"url(#grid-d3205b31)\"/>\n  <polygon points=\"23,113 95,5 131,113 59,59\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"23\" cy=\"113\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"27\" y=\"107\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"95\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"99\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"131\" cy=\"113\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"135\" y=\"107\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n  <circle cx=\"59\" cy=\"59\" r=\"3.5\" fill=\"#d4a855\"/>\n  <text x=\"63\" y=\"53\" fill=\"#d4a855\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">M</text>\n</svg>"
                         },
                         {
                             "id": 5,
                             "question": "Во сколько раз отрезок AM короче отрезка BM?",
-                            "image": "oge18_p2_img5.png"
+                            "image": "oge18_p2_img5.png",
+                            "svg": "<svg viewBox=\"0 0 154 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-de76b774\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"url(#grid-de76b774)\"/>\n  <polygon points=\"5,77 77,5 113,77 95,41\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"5\" cy=\"77\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"71\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"77\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"81\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"113\" cy=\"77\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"117\" y=\"71\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n  <circle cx=\"95\" cy=\"41\" r=\"3.5\" fill=\"#d4a855\"/>\n  <text x=\"99\" y=\"35\" fill=\"#d4a855\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">M</text>\n</svg>"
                         },
                         {
                             "id": 6,
                             "question": "Во сколько раз отрезок AM длиннее отрезка BM?",
-                            "image": "oge18_p2_img6.png"
+                            "image": "oge18_p2_img6.png",
+                            "svg": "<svg viewBox=\"0 0 208 136\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-7e114f49\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"208\" height=\"136\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"208\" height=\"136\" fill=\"url(#grid-7e114f49)\"/>\n  <polygon points=\"23,113 77,5 167,113 41,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"23\" cy=\"113\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"27\" y=\"107\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"77\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"81\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"167\" cy=\"113\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"171\" y=\"107\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n  <circle cx=\"41\" cy=\"77\" r=\"3.5\" fill=\"#d4a855\"/>\n  <text x=\"45\" y=\"71\" fill=\"#d4a855\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">M</text>\n</svg>"
                         }
                     ]
                 },
@@ -118,39 +136,48 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "image": "oge18_p2_img7.png"
+                            "image": "oge18_p2_img7.png",
+                            "svg": "<svg viewBox=\"0 0 154 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-a4e1cd31\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"118\" fill=\"url(#grid-a4e1cd31)\"/>\n  <polygon points=\"23,95 23,23 113,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 2,
-                            "image": "oge18_p2_img8.png"
+                            "image": "oge18_p2_img8.png",
+                            "svg": "<svg viewBox=\"0 0 154 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-6b735339\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"url(#grid-6b735339)\"/>\n  <polygon points=\"5,77 59,5 113,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 3,
-                            "image": "oge18_p2_img9.png"
+                            "image": "oge18_p2_img9.png",
+                            "svg": "<svg viewBox=\"0 0 136 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-b7301e97\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"100\" fill=\"url(#grid-b7301e97)\"/>\n  <polygon points=\"23,77 23,23 95,23 95,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 4,
-                            "image": "oge18_p2_img10.png"
+                            "image": "oge18_p2_img10.png",
+                            "svg": "<svg viewBox=\"0 0 136 82\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-11fe06b7\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"82\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"82\" fill=\"url(#grid-11fe06b7)\"/>\n  <polygon points=\"5,59 41,5 95,59\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 5,
-                            "image": "oge18_p2_img11.png"
+                            "image": "oge18_p2_img11.png",
+                            "svg": "<svg viewBox=\"0 0 172 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-afe1a52c\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"118\" fill=\"url(#grid-afe1a52c)\"/>\n  <polygon points=\"23,95 59,23 131,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 6,
-                            "image": "oge18_p2_img12.png"
+                            "image": "oge18_p2_img12.png",
+                            "svg": "<svg viewBox=\"0 0 118 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-c1bd8f65\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"118\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"118\" height=\"100\" fill=\"url(#grid-c1bd8f65)\"/>\n  <polygon points=\"5,77 5,23 77,23 77,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 7,
-                            "image": "oge18_p3_img1.png"
+                            "image": "oge18_p3_img1.png",
+                            "svg": "<svg viewBox=\"0 0 154 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-d19c5eaf\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"url(#grid-d19c5eaf)\"/>\n  <polygon points=\"23,77 41,23 113,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 8,
-                            "image": "oge18_p3_img2.png"
+                            "image": "oge18_p3_img2.png",
+                            "svg": "<svg viewBox=\"0 0 154 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-fd48d5bd\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"118\" fill=\"url(#grid-fd48d5bd)\"/>\n  <polygon points=\"5,95 41,5 113,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 9,
-                            "image": "oge18_p3_img3.png"
+                            "image": "oge18_p3_img3.png",
+                            "svg": "<svg viewBox=\"0 0 136 82\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-2784d9f8\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"82\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"82\" fill=\"url(#grid-2784d9f8)\"/>\n  <polygon points=\"23,59 23,5 95,5 95,59\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         }
                     ]
                 },
@@ -161,39 +188,48 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "image": "oge18_p3_img4.png"
+                            "image": "oge18_p3_img4.png",
+                            "svg": "<svg viewBox=\"0 0 154 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-0f42756e\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"url(#grid-0f42756e)\"/>\n  <polygon points=\"23,77 23,23 77,23 113,59 77,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 2,
-                            "image": "oge18_p3_img5.png"
+                            "image": "oge18_p3_img5.png",
+                            "svg": "<svg viewBox=\"0 0 136 82\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-79cef670\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"82\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"82\" fill=\"url(#grid-79cef670)\"/>\n  <polygon points=\"5,59 41,5 95,5 95,59\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 3,
-                            "image": "oge18_p3_img6.png"
+                            "image": "oge18_p3_img6.png",
+                            "svg": "<svg viewBox=\"0 0 154 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-a8de7bef\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"118\" fill=\"url(#grid-a8de7bef)\"/>\n  <polygon points=\"23,95 23,41 59,5 113,41 113,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 4,
-                            "image": "oge18_p3_img7.png"
+                            "image": "oge18_p3_img7.png",
+                            "svg": "<svg viewBox=\"0 0 172 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-0dfb91a1\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"100\" fill=\"url(#grid-0dfb91a1)\"/>\n  <polygon points=\"5,77 41,23 95,23 131,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 5,
-                            "image": "oge18_p3_img8.png"
+                            "image": "oge18_p3_img8.png",
+                            "svg": "<svg viewBox=\"0 0 136 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-15d69c4a\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"100\" fill=\"url(#grid-15d69c4a)\"/>\n  <polygon points=\"23,77 23,23 59,23 95,59 59,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 6,
-                            "image": "oge18_p3_img9.png"
+                            "image": "oge18_p3_img9.png",
+                            "svg": "<svg viewBox=\"0 0 154 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-2f3bf40b\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"118\" fill=\"url(#grid-2f3bf40b)\"/>\n  <polygon points=\"5,95 5,41 59,5 113,41 113,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 7,
-                            "image": "oge18_p3_img10.png"
+                            "image": "oge18_p3_img10.png",
+                            "svg": "<svg viewBox=\"0 0 154 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-85bc6bda\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"118\" fill=\"url(#grid-85bc6bda)\"/>\n  <polygon points=\"23,59 59,5 113,59 77,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 8,
-                            "image": "oge18_p3_img11.png"
+                            "image": "oge18_p3_img11.png",
+                            "svg": "<svg viewBox=\"0 0 136 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-811ad11a\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"100\" fill=\"url(#grid-811ad11a)\"/>\n  <polygon points=\"5,77 23,23 77,23 95,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 9,
-                            "image": "oge18_p3_img12.png"
+                            "image": "oge18_p3_img12.png",
+                            "svg": "<svg viewBox=\"0 0 154 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-f875a27f\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"118\" fill=\"url(#grid-f875a27f)\"/>\n  <polygon points=\"23,95 41,23 95,23 113,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         }
                     ]
                 },
@@ -204,39 +240,48 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "image": "oge18_p3_img13.png"
+                            "image": "oge18_p3_img13.png",
+                            "svg": "<svg viewBox=\"0 0 172 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-eb1e930f\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"118\" fill=\"url(#grid-eb1e930f)\"/>\n  <polygon points=\"41,95 5,59 41,5 95,5 131,59 95,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 2,
-                            "image": "oge18_p3_img14.png"
+                            "image": "oge18_p3_img14.png",
+                            "svg": "<svg viewBox=\"0 0 154 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-0770a18a\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"url(#grid-0770a18a)\"/>\n  <polygon points=\"23,77 5,41 41,5 95,5 113,41 77,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 3,
-                            "image": "oge18_p3_img15.png"
+                            "image": "oge18_p3_img15.png",
+                            "svg": "<svg viewBox=\"0 0 154 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-1d9b9a5f\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"url(#grid-1d9b9a5f)\"/>\n  <polygon points=\"41,77 5,41 41,5 77,5 113,41 77,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 4,
-                            "image": "oge18_p4_img1.png"
+                            "image": "oge18_p4_img1.png",
+                            "svg": "<svg viewBox=\"0 0 136 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-ae64ace2\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"118\" fill=\"url(#grid-ae64ace2)\"/>\n  <polygon points=\"23,95 5,59 23,23 77,23 95,59 77,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 5,
-                            "image": "oge18_p4_img2.png"
+                            "image": "oge18_p4_img2.png",
+                            "svg": "<svg viewBox=\"0 0 154 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-36526bb2\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"url(#grid-36526bb2)\"/>\n  <polygon points=\"41,77 23,41 41,5 95,5 113,41 95,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 6,
-                            "image": "oge18_p4_img3.png"
+                            "image": "oge18_p4_img3.png",
+                            "svg": "<svg viewBox=\"0 0 172 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-e4fd4f5f\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"118\" fill=\"url(#grid-e4fd4f5f)\"/>\n  <polygon points=\"23,95 5,41 41,5 95,5 131,41 113,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 7,
-                            "image": "oge18_p4_img4.png"
+                            "image": "oge18_p4_img4.png",
+                            "svg": "<svg viewBox=\"0 0 190 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-4997ff8c\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"118\" fill=\"url(#grid-4997ff8c)\"/>\n  <polygon points=\"41,95 5,41 41,5 113,5 149,41 113,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 8,
-                            "image": "oge18_p4_img5.png"
+                            "image": "oge18_p4_img5.png",
+                            "svg": "<svg viewBox=\"0 0 154 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-62ced043\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"url(#grid-62ced043)\"/>\n  <polygon points=\"23,77 5,41 23,5 95,5 113,41 95,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 9,
-                            "image": "oge18_p4_img6.png"
+                            "image": "oge18_p4_img6.png",
+                            "svg": "<svg viewBox=\"0 0 154 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-b8cb4f29\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"118\" fill=\"url(#grid-b8cb4f29)\"/>\n  <polygon points=\"41,95 23,59 41,23 95,23 113,59 95,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         }
                     ]
                 },
@@ -247,39 +292,48 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "image": "oge18_p4_img7.png"
+                            "image": "oge18_p4_img7.png",
+                            "svg": "<svg viewBox=\"0 0 172 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-da76a88f\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"118\" fill=\"url(#grid-da76a88f)\"/>\n  <polygon points=\"5,95 5,41 41,5 95,5 131,59 95,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 2,
-                            "image": "oge18_p4_img8.png"
+                            "image": "oge18_p4_img8.png",
+                            "svg": "<svg viewBox=\"0 0 154 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-0dcaa28b\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"url(#grid-0dcaa28b)\"/>\n  <polygon points=\"23,77 23,23 59,5 113,23 113,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 3,
-                            "image": "oge18_p4_img9.png"
+                            "image": "oge18_p4_img9.png",
+                            "svg": "<svg viewBox=\"0 0 136 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-a25ef987\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"118\" fill=\"url(#grid-a25ef987)\"/>\n  <polygon points=\"5,95 5,23 59,23 95,59 95,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 4,
-                            "image": "oge18_p4_img10.png"
+                            "image": "oge18_p4_img10.png",
+                            "svg": "<svg viewBox=\"0 0 154 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-dc827850\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"118\" fill=\"url(#grid-dc827850)\"/>\n  <polygon points=\"23,95 5,41 59,5 113,41 95,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 5,
-                            "image": "oge18_p4_img11.png"
+                            "image": "oge18_p4_img11.png",
+                            "svg": "<svg viewBox=\"0 0 172 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-b1c04aad\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"100\" fill=\"url(#grid-b1c04aad)\"/>\n  <polygon points=\"5,77 41,23 95,23 131,77 77,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 6,
-                            "image": "oge18_p4_img12.png"
+                            "image": "oge18_p4_img12.png",
+                            "svg": "<svg viewBox=\"0 0 172 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-6656836d\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"118\" fill=\"url(#grid-6656836d)\"/>\n  <polygon points=\"23,95 23,41 77,5 131,41 131,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 7,
-                            "image": "oge18_p4_img13.png"
+                            "image": "oge18_p4_img13.png",
+                            "svg": "<svg viewBox=\"0 0 136 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-9c4b0b5d\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"100\" fill=\"url(#grid-9c4b0b5d)\"/>\n  <polygon points=\"5,77 5,23 41,5 95,23 95,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 8,
-                            "image": "oge18_p4_img14.png"
+                            "image": "oge18_p4_img14.png",
+                            "svg": "<svg viewBox=\"0 0 172 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-720c9912\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"118\" fill=\"url(#grid-720c9912)\"/>\n  <polygon points=\"23,95 5,59 41,5 113,5 131,59 95,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         },
                         {
                             "id": 9,
-                            "image": "oge18_p4_img15.png"
+                            "image": "oge18_p4_img15.png",
+                            "svg": "<svg viewBox=\"0 0 136 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-abef3a15\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"100\" fill=\"url(#grid-abef3a15)\"/>\n  <polygon points=\"41,77 5,41 41,5 95,41 77,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>"
                         }
                     ]
                 },
@@ -290,27 +344,33 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "image": "oge18_p5_img1.png"
+                            "image": "oge18_p5_img1.png",
+                            "svg": "<svg viewBox=\"0 0 118 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-7bb95ef9\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"118\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"118\" height=\"100\" fill=\"url(#grid-7bb95ef9)\"/>\n  <line x1=\"23\" y1=\"77\" x2=\"77\" y2=\"23\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"23\" cy=\"77\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"27\" y=\"71\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"77\" cy=\"23\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"81\" y=\"17\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n</svg>"
                         },
                         {
                             "id": 2,
-                            "image": "oge18_p5_img2.png"
+                            "image": "oge18_p5_img2.png",
+                            "svg": "<svg viewBox=\"0 0 136 82\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-74472bf0\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"82\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"82\" fill=\"url(#grid-74472bf0)\"/>\n  <line x1=\"5\" y1=\"59\" x2=\"95\" y2=\"23\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"5\" cy=\"59\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"53\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"95\" cy=\"23\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"99\" y=\"17\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n</svg>"
                         },
                         {
                             "id": 3,
-                            "image": "oge18_p5_img3.png"
+                            "image": "oge18_p5_img3.png",
+                            "svg": "<svg viewBox=\"0 0 154 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-b89c9e3d\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"118\" fill=\"url(#grid-b89c9e3d)\"/>\n  <line x1=\"23\" y1=\"95\" x2=\"113\" y2=\"41\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"23\" cy=\"95\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"27\" y=\"89\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"113\" cy=\"41\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"117\" y=\"35\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n</svg>"
                         },
                         {
                             "id": 4,
-                            "image": "oge18_p5_img4.png"
+                            "image": "oge18_p5_img4.png",
+                            "svg": "<svg viewBox=\"0 0 136 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-e228f40d\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"100\" fill=\"url(#grid-e228f40d)\"/>\n  <line x1=\"41\" y1=\"77\" x2=\"95\" y2=\"5\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"41\" cy=\"77\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"45\" y=\"71\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"95\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"99\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n</svg>"
                         },
                         {
                             "id": 5,
-                            "image": "oge18_p5_img5.png"
+                            "image": "oge18_p5_img5.png",
+                            "svg": "<svg viewBox=\"0 0 100 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-59b505d4\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"100\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"100\" height=\"100\" fill=\"url(#grid-59b505d4)\"/>\n  <line x1=\"5\" y1=\"77\" x2=\"59\" y2=\"5\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"5\" cy=\"77\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"71\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"59\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"63\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n</svg>"
                         },
                         {
                             "id": 6,
-                            "image": "oge18_p5_img6.png"
+                            "image": "oge18_p5_img6.png",
+                            "svg": "<svg viewBox=\"0 0 136 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-b9199783\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"118\" fill=\"url(#grid-b9199783)\"/>\n  <line x1=\"23\" y1=\"95\" x2=\"95\" y2=\"23\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"23\" cy=\"95\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"27\" y=\"89\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"95\" cy=\"23\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"99\" y=\"17\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n</svg>"
                         }
                     ]
                 },
@@ -321,27 +381,33 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "image": "oge18_p5_img7.png"
+                            "image": "oge18_p5_img7.png",
+                            "svg": "<svg viewBox=\"0 0 172 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-e02ec69c\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"118\" fill=\"url(#grid-e02ec69c)\"/>\n  <polygon points=\"5,95 59,5 131,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"5\" cy=\"95\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"89\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"59\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"63\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"131\" cy=\"95\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"135\" y=\"89\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n</svg>"
                         },
                         {
                             "id": 2,
-                            "image": "oge18_p5_img8.png"
+                            "image": "oge18_p5_img8.png",
+                            "svg": "<svg viewBox=\"0 0 190 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-853b38a0\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"100\" fill=\"url(#grid-853b38a0)\"/>\n  <polygon points=\"23,77 77,5 149,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"23\" cy=\"77\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"27\" y=\"71\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"77\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"81\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"149\" cy=\"77\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"153\" y=\"71\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n</svg>"
                         },
                         {
                             "id": 3,
-                            "image": "oge18_p5_img9.png"
+                            "image": "oge18_p5_img9.png",
+                            "svg": "<svg viewBox=\"0 0 154 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-4301da26\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"118\" fill=\"url(#grid-4301da26)\"/>\n  <polygon points=\"5,95 41,23 113,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"5\" cy=\"95\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"89\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"41\" cy=\"23\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"45\" y=\"17\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"113\" cy=\"95\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"117\" y=\"89\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n</svg>"
                         },
                         {
                             "id": 4,
-                            "image": "oge18_p5_img10.png"
+                            "image": "oge18_p5_img10.png",
+                            "svg": "<svg viewBox=\"0 0 190 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-3b69cb0b\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"118\" fill=\"url(#grid-3b69cb0b)\"/>\n  <polygon points=\"23,95 95,5 149,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"23\" cy=\"95\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"27\" y=\"89\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"95\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"99\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"149\" cy=\"95\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"153\" y=\"89\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n</svg>"
                         },
                         {
                             "id": 5,
-                            "image": "oge18_p6_img1.png"
+                            "image": "oge18_p6_img1.png",
+                            "svg": "<svg viewBox=\"0 0 154 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-a7842e89\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"url(#grid-a7842e89)\"/>\n  <polygon points=\"5,77 77,5 113,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"5\" cy=\"77\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"71\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"77\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"81\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"113\" cy=\"77\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"117\" y=\"71\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n</svg>"
                         },
                         {
                             "id": 6,
-                            "image": "oge18_p6_img2.png"
+                            "image": "oge18_p6_img2.png",
+                            "svg": "<svg viewBox=\"0 0 208 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-220e3886\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"208\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"208\" height=\"118\" fill=\"url(#grid-220e3886)\"/>\n  <polygon points=\"23,95 77,5 167,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"23\" cy=\"95\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"27\" y=\"89\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"77\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"81\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"167\" cy=\"95\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"171\" y=\"89\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n</svg>"
                         }
                     ]
                 },
@@ -352,39 +418,48 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "image": "oge18_p6_img3.png"
+                            "image": "oge18_p6_img3.png",
+                            "svg": "<svg viewBox=\"0 0 190 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-d3457e8f\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"100\" fill=\"url(#grid-d3457e8f)\"/>\n  <polygon points=\"5,77 41,5 113,5 149,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"23\" cy=\"41\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"27\" y=\"35\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"131\" cy=\"41\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"135\" y=\"35\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n</svg>"
                         },
                         {
                             "id": 2,
-                            "image": "oge18_p6_img4.png"
+                            "image": "oge18_p6_img4.png",
+                            "svg": "<svg viewBox=\"0 0 172 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-1a4c52e2\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"118\" fill=\"url(#grid-1a4c52e2)\"/>\n  <polygon points=\"23,95 23,23 95,23 131,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"23\" cy=\"59\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"27\" y=\"53\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"113\" cy=\"59\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"117\" y=\"53\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n</svg>"
                         },
                         {
                             "id": 3,
-                            "image": "oge18_p6_img5.png"
+                            "image": "oge18_p6_img5.png",
+                            "svg": "<svg viewBox=\"0 0 154 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-db16ec69\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"url(#grid-db16ec69)\"/>\n  <polygon points=\"5,77 59,5 113,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"23\" cy=\"41\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"27\" y=\"35\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"95\" cy=\"41\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"99\" y=\"35\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n</svg>"
                         },
                         {
                             "id": 4,
-                            "image": "oge18_p6_img6.png"
+                            "image": "oge18_p6_img6.png",
+                            "svg": "<svg viewBox=\"0 0 172 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-975cc804\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"118\" fill=\"url(#grid-975cc804)\"/>\n  <polygon points=\"23,95 5,41 77,5 131,41 113,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"41\" cy=\"23\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"45\" y=\"17\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"95\" cy=\"23\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"99\" y=\"17\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n</svg>"
                         },
                         {
                             "id": 5,
-                            "image": "oge18_p6_img7.png"
+                            "image": "oge18_p6_img7.png",
+                            "svg": "<svg viewBox=\"0 0 172 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-1795832b\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"100\" fill=\"url(#grid-1795832b)\"/>\n  <polygon points=\"5,77 41,23 95,23 131,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"23\" cy=\"41\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"27\" y=\"35\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"113\" cy=\"41\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"117\" y=\"35\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n</svg>"
                         },
                         {
                             "id": 6,
-                            "image": "oge18_p6_img8.png"
+                            "image": "oge18_p6_img8.png",
+                            "svg": "<svg viewBox=\"0 0 154 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-207bf099\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"118\" fill=\"url(#grid-207bf099)\"/>\n  <polygon points=\"23,95 23,23 113,23 113,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"23\" cy=\"59\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"27\" y=\"53\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"113\" cy=\"59\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"117\" y=\"53\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n</svg>"
                         },
                         {
                             "id": 7,
-                            "image": "oge18_p6_img9.png"
+                            "image": "oge18_p6_img9.png",
+                            "svg": "<svg viewBox=\"0 0 172 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-be06edd1\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"100\" fill=\"url(#grid-be06edd1)\"/>\n  <polygon points=\"5,77 59,5 131,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"41\" cy=\"41\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"45\" y=\"35\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"95\" cy=\"41\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"99\" y=\"35\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n</svg>"
                         },
                         {
                             "id": 8,
-                            "image": "oge18_p6_img10.png"
+                            "image": "oge18_p6_img10.png",
+                            "svg": "<svg viewBox=\"0 0 172 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-1243783e\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"118\" fill=\"url(#grid-1243783e)\"/>\n  <polygon points=\"23,95 41,23 113,23 131,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"41\" cy=\"59\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"45\" y=\"53\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"113\" cy=\"59\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"117\" y=\"53\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n</svg>"
                         },
                         {
                             "id": 9,
-                            "image": "oge18_p6_img11.png"
+                            "image": "oge18_p6_img11.png",
+                            "svg": "<svg viewBox=\"0 0 136 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-a2dd7928\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"118\" fill=\"url(#grid-a2dd7928)\"/>\n  <polygon points=\"5,95 5,23 95,23 95,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"5\" cy=\"59\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"53\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"95\" cy=\"59\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"99\" y=\"53\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n</svg>"
                         }
                     ]
                 },
@@ -395,39 +470,48 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "image": "oge18_p6_img12.png"
+                            "image": "oge18_p6_img12.png",
+                            "svg": "<svg viewBox=\"0 0 190 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-070a4bbb\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"118\" fill=\"url(#grid-070a4bbb)\"/>\n  <polygon points=\"5,95 41,23 113,23 149,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"5\" cy=\"95\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"89\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"41\" cy=\"23\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"45\" y=\"17\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"113\" cy=\"23\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"117\" y=\"17\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n  <circle cx=\"149\" cy=\"95\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"153\" y=\"89\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">D</text>\n</svg>"
                         },
                         {
                             "id": 2,
-                            "image": "oge18_p6_img13.png"
+                            "image": "oge18_p6_img13.png",
+                            "svg": "<svg viewBox=\"0 0 172 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-bfab870f\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"100\" fill=\"url(#grid-bfab870f)\"/>\n  <polygon points=\"23,77 59,5 95,5 131,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"23\" cy=\"77\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"27\" y=\"71\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"59\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"63\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"95\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"99\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n  <circle cx=\"131\" cy=\"77\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"135\" y=\"71\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">D</text>\n</svg>"
                         },
                         {
                             "id": 3,
-                            "image": "oge18_p7_img1.png"
+                            "image": "oge18_p7_img1.png",
+                            "svg": "<svg viewBox=\"0 0 172 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-9aa5cd9c\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"118\" fill=\"url(#grid-9aa5cd9c)\"/>\n  <polygon points=\"5,95 23,41 95,41 131,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"5\" cy=\"95\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"89\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"23\" cy=\"41\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"27\" y=\"35\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"95\" cy=\"41\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"99\" y=\"35\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n  <circle cx=\"131\" cy=\"95\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"135\" y=\"89\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">D</text>\n</svg>"
                         },
                         {
                             "id": 4,
-                            "image": "oge18_p7_img2.png"
+                            "image": "oge18_p7_img2.png",
+                            "svg": "<svg viewBox=\"0 0 190 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-fd04a386\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"100\" fill=\"url(#grid-fd04a386)\"/>\n  <polygon points=\"23,77 41,23 113,23 149,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"23\" cy=\"77\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"27\" y=\"71\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"41\" cy=\"23\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"45\" y=\"17\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"113\" cy=\"23\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"117\" y=\"17\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n  <circle cx=\"149\" cy=\"77\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"153\" y=\"71\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">D</text>\n</svg>"
                         },
                         {
                             "id": 5,
-                            "image": "oge18_p7_img3.png"
+                            "image": "oge18_p7_img3.png",
+                            "svg": "<svg viewBox=\"0 0 154 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-65b3e7e1\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"118\" fill=\"url(#grid-65b3e7e1)\"/>\n  <polygon points=\"5,95 41,5 77,5 113,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"5\" cy=\"95\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"89\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"41\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"45\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"77\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"81\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n  <circle cx=\"113\" cy=\"95\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"117\" y=\"89\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">D</text>\n</svg>"
                         },
                         {
                             "id": 6,
-                            "image": "oge18_p7_img4.png"
+                            "image": "oge18_p7_img4.png",
+                            "svg": "<svg viewBox=\"0 0 208 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-d331116e\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"208\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"208\" height=\"118\" fill=\"url(#grid-d331116e)\"/>\n  <polygon points=\"23,95 59,23 131,23 167,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"23\" cy=\"95\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"27\" y=\"89\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"59\" cy=\"23\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"63\" y=\"17\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"131\" cy=\"23\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"135\" y=\"17\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n  <circle cx=\"167\" cy=\"95\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"171\" y=\"89\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">D</text>\n</svg>"
                         },
                         {
                             "id": 7,
-                            "image": "oge18_p7_img5.png"
+                            "image": "oge18_p7_img5.png",
+                            "svg": "<svg viewBox=\"0 0 154 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-9b902ac3\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"100\" fill=\"url(#grid-9b902ac3)\"/>\n  <polygon points=\"5,77 23,23 95,23 113,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"5\" cy=\"77\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"71\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"23\" cy=\"23\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"27\" y=\"17\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"95\" cy=\"23\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"99\" y=\"17\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n  <circle cx=\"113\" cy=\"77\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"117\" y=\"71\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">D</text>\n</svg>"
                         },
                         {
                             "id": 8,
-                            "image": "oge18_p7_img6.png"
+                            "image": "oge18_p7_img6.png",
+                            "svg": "<svg viewBox=\"0 0 190 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-fb9dc0c2\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"118\" fill=\"url(#grid-fb9dc0c2)\"/>\n  <polygon points=\"23,95 41,41 113,41 149,95\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"23\" cy=\"95\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"27\" y=\"89\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"41\" cy=\"41\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"45\" y=\"35\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"113\" cy=\"41\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"117\" y=\"35\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n  <circle cx=\"149\" cy=\"95\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"153\" y=\"89\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">D</text>\n</svg>"
                         },
                         {
                             "id": 9,
-                            "image": "oge18_p7_img7.png"
+                            "image": "oge18_p7_img7.png",
+                            "svg": "<svg viewBox=\"0 0 190 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-8804ec8f\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"100\" fill=\"url(#grid-8804ec8f)\"/>\n  <polygon points=\"5,77 41,5 113,5 149,77\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"5\" cy=\"77\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"9\" y=\"71\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">A</text>\n  <circle cx=\"41\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"45\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">B</text>\n  <circle cx=\"113\" cy=\"5\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"117\" y=\"-1\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">C</text>\n  <circle cx=\"149\" cy=\"77\" r=\"3.5\" fill=\"#7eb8da\"/>\n  <text x=\"153\" y=\"71\" fill=\"#c8dce8\" font-size=\"13\" font-weight=\"bold\" font-style=\"italic\">D</text>\n</svg>"
                         }
                     ]
                 },
@@ -438,39 +522,48 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "image": "oge18_p7_img8.png"
+                            "image": "oge18_p7_img8.png",
+                            "svg": "<svg viewBox=\"0 0 190 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-8ae5f4b3\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"118\" fill=\"url(#grid-8ae5f4b3)\"/>\n  <circle cx=\"41\" cy=\"59\" r=\"36.0\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"41\" cy=\"59\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"131\" cy=\"59\" r=\"18.0\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"131\" cy=\"59\" r=\"3\" fill=\"#7eb8da\"/>\n</svg>"
                         },
                         {
                             "id": 2,
-                            "image": "oge18_p7_img9.png"
+                            "image": "oge18_p7_img9.png",
+                            "svg": "<svg viewBox=\"0 0 226 136\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-89c2727a\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"226\" height=\"136\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"226\" height=\"136\" fill=\"url(#grid-89c2727a)\"/>\n  <circle cx=\"41\" cy=\"59\" r=\"36.0\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"41\" cy=\"59\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"131\" cy=\"59\" r=\"54.0\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"131\" cy=\"59\" r=\"3\" fill=\"#7eb8da\"/>\n</svg>"
                         },
                         {
                             "id": 3,
-                            "image": "oge18_p7_img10.png"
+                            "image": "oge18_p7_img10.png",
+                            "svg": "<svg viewBox=\"0 0 154 136\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-b72f2b14\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"136\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"154\" height=\"136\" fill=\"url(#grid-b72f2b14)\"/>\n  <circle cx=\"59\" cy=\"59\" r=\"54.0\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"59\" cy=\"59\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"59\" cy=\"59\" r=\"18.0\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"59\" cy=\"59\" r=\"3\" fill=\"#7eb8da\"/>\n</svg>"
                         },
                         {
                             "id": 4,
-                            "image": "oge18_p7_img11.png"
+                            "image": "oge18_p7_img11.png",
+                            "svg": "<svg viewBox=\"0 0 190 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-e36dd569\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"190\" height=\"100\" fill=\"url(#grid-e36dd569)\"/>\n  <circle cx=\"41\" cy=\"41\" r=\"18.0\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"41\" cy=\"41\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"113\" cy=\"41\" r=\"36.0\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"113\" cy=\"41\" r=\"3\" fill=\"#7eb8da\"/>\n</svg>"
                         },
                         {
                             "id": 5,
-                            "image": "oge18_p7_img12.png"
+                            "image": "oge18_p7_img12.png",
+                            "svg": "<svg viewBox=\"0 0 244 136\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-8f713ad1\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"244\" height=\"136\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"244\" height=\"136\" fill=\"url(#grid-8f713ad1)\"/>\n  <circle cx=\"59\" cy=\"59\" r=\"36.0\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"59\" cy=\"59\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"149\" cy=\"59\" r=\"54.0\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"149\" cy=\"59\" r=\"3\" fill=\"#7eb8da\"/>\n</svg>"
                         },
                         {
                             "id": 6,
-                            "image": "oge18_p8_img1.png"
+                            "image": "oge18_p8_img1.png",
+                            "svg": "<svg viewBox=\"0 0 226 136\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-423e6c1f\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"226\" height=\"136\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"226\" height=\"136\" fill=\"url(#grid-423e6c1f)\"/>\n  <circle cx=\"59\" cy=\"59\" r=\"54.0\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"59\" cy=\"59\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"149\" cy=\"59\" r=\"36.0\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"149\" cy=\"59\" r=\"3\" fill=\"#7eb8da\"/>\n</svg>"
                         },
                         {
                             "id": 7,
-                            "image": "oge18_p8_img2.png"
+                            "image": "oge18_p8_img2.png",
+                            "svg": "<svg viewBox=\"0 0 172 100\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-8e7a2b5f\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"100\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"172\" height=\"100\" fill=\"url(#grid-8e7a2b5f)\"/>\n  <circle cx=\"41\" cy=\"41\" r=\"36.0\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"41\" cy=\"41\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"113\" cy=\"41\" r=\"18.0\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"113\" cy=\"41\" r=\"3\" fill=\"#7eb8da\"/>\n</svg>"
                         },
                         {
                             "id": 8,
-                            "image": "oge18_p8_img3.png"
+                            "image": "oge18_p8_img3.png",
+                            "svg": "<svg viewBox=\"0 0 136 118\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-e3907d16\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"118\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"136\" height=\"118\" fill=\"url(#grid-e3907d16)\"/>\n  <circle cx=\"59\" cy=\"59\" r=\"18.0\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"59\" cy=\"59\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"59\" cy=\"59\" r=\"36.0\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"59\" cy=\"59\" r=\"3\" fill=\"#7eb8da\"/>\n</svg>"
                         },
                         {
                             "id": 9,
-                            "image": "oge18_p8_img4.png"
+                            "image": "oge18_p8_img4.png",
+                            "svg": "<svg viewBox=\"0 0 244 136\" class=\"w-full max-w-[260px] h-auto mx-auto rounded\">\n  <defs>\n    <pattern id=\"grid-50ea60ad\" width=\"18\" height=\"18\" patternUnits=\"userSpaceOnUse\">\n      <path d=\"M 18 0 L 0 0 0 18\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.8\"/>\n    </pattern>\n  </defs>\n  <rect x=\"0\" y=\"0\" width=\"244\" height=\"136\" fill=\"#0a1628\"/>\n  <rect x=\"0\" y=\"0\" width=\"244\" height=\"136\" fill=\"url(#grid-50ea60ad)\"/>\n  <circle cx=\"41\" cy=\"59\" r=\"36.0\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"41\" cy=\"59\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"149\" cy=\"59\" r=\"54.0\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"149\" cy=\"59\" r=\"3\" fill=\"#7eb8da\"/>\n</svg>"
                         }
                     ]
                 }
@@ -811,5 +904,6 @@
                 }
             ]
         }
-    ]
+    ],
+    "svg_baked": true
 }
