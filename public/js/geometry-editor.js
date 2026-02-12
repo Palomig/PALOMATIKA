@@ -3495,6 +3495,19 @@ function geometryEditor() {
             // 4. Генерируем SVG БЕЗ transform
             let svgContent = '';
             svgContent += `<rect width="100%" height="100%" fill="${this.colors.background}"/>\n`;
+            if (this.showGrid) {
+                svgContent += this.renderGridForExportTransformed({
+                    minX,
+                    minY,
+                    maxX,
+                    maxY,
+                    offsetX,
+                    offsetY,
+                    scale,
+                    targetWidth,
+                    targetHeight
+                });
+            }
 
             this.figures.forEach(figure => {
                 if (figure.type === 'triangle') {
@@ -3509,6 +3522,40 @@ function geometryEditor() {
             });
 
             return `<svg viewBox="0 0 ${targetWidth} ${targetHeight}" class="w-full max-w-[350px] h-auto mx-auto">\n${svgContent}</svg>`;
+        },
+
+        renderGridForExportTransformed(params) {
+            const {
+                minX, minY, maxX, maxY,
+                offsetX, offsetY, scale,
+                targetWidth, targetHeight
+            } = params;
+
+            const baseStep = Math.max(8, parseInt(this.gridSize, 10) || 20);
+            const step = baseStep * scale;
+            if (!Number.isFinite(step) || step < 2) return '';
+
+            let svg = '';
+
+            const startNX = Math.floor(minX / baseStep);
+            const endNX = Math.ceil(maxX / baseStep);
+            for (let n = startNX; n <= endNX; n++) {
+                const x = offsetX + (n * baseStep - minX) * scale;
+                if (x < 0 || x > targetWidth) continue;
+                const major = Math.abs(n % 5) === 0;
+                svg += `  <line x1="${x}" y1="0" x2="${x}" y2="${targetHeight}" stroke="${major ? '#3a6f99' : '#2b5f88'}" stroke-width="${major ? 0.9 : 0.6}" opacity="${major ? 0.8 : 0.6}"/>\n`;
+            }
+
+            const startNY = Math.floor(minY / baseStep);
+            const endNY = Math.ceil(maxY / baseStep);
+            for (let n = startNY; n <= endNY; n++) {
+                const y = offsetY + (n * baseStep - minY) * scale;
+                if (y < 0 || y > targetHeight) continue;
+                const major = Math.abs(n % 5) === 0;
+                svg += `  <line x1="0" y1="${y}" x2="${targetWidth}" y2="${y}" stroke="${major ? '#3a6f99' : '#2b5f88'}" stroke-width="${major ? 0.9 : 0.6}" opacity="${major ? 0.8 : 0.6}"/>\n`;
+            }
+
+            return svg;
         },
 
         // Рендер маркера вершины для экспорта (крестик + круг)
