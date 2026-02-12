@@ -52,6 +52,10 @@ function geometryEditor() {
             return this.historyIndex < this.history.length - 1;
         },
 
+        isTopic18TaskId(taskId) {
+            return /^18(OGE|EGE)(?:\d+|B\d+Z\d+T\d+)$/i.test(taskId || '');
+        },
+
         // ==================== Lifecycle ====================
 
         init() {
@@ -4614,7 +4618,7 @@ function geometryEditor() {
 
         loadFromMetadata(metadata) {
             if (metadata.canvas) {
-                const isTopic18 = /^18(OGE|EGE)\d+$/i.test(this.taskId || '');
+                const isTopic18 = this.isTopic18TaskId(this.taskId);
                 const minCanvasWidth = isTopic18 ? 350 : 220;
                 const minCanvasHeight = isTopic18 ? 280 : 180;
                 this.canvasWidth = Math.max(minCanvasWidth, metadata.canvas.width || 350);
@@ -4631,7 +4635,7 @@ function geometryEditor() {
 
         tryCreateEditableFromLegacySvg(taskId, svgString) {
             // Автоконвертация только для темы 18 (grid-figures)
-            if (!taskId || !/^18(OGE|EGE)\d+$/i.test(taskId) || !svgString) return null;
+            if (!taskId || !this.isTopic18TaskId(taskId) || !svgString) return null;
 
             try {
                 const parser = new DOMParser();
