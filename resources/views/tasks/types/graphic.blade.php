@@ -55,7 +55,7 @@
 
             // Особый случай: просто "x" или "-x"
             if (preg_match('/^-?x/', $side) && $coef == 0) {
-                $coef = str_starts_with($side, '-') ? -1 : 1;
+                $coef = \Illuminate\Support\Str::startsWith($side, '-') ? -1 : 1;
             }
 
             return ['coef' => $coef, 'const' => $const];

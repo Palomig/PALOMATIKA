@@ -38,7 +38,7 @@
                         @if($hasSvg)
                             {{-- Предзаготовленный SVG (Static SVG System) --}}
                             {!! $task['svg'] !!}
-                        @elseif($hasImage && str_starts_with($imageName, '<svg'))
+                        @elseif($hasImage && \Illuminate\Support\Str::startsWith($imageName, '<svg'))
                             {{-- Inline SVG --}}
                             {!! $imageName !!}
                         @elseif($hasImage)

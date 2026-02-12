@@ -30,7 +30,7 @@
                             @if($hasSvg)
                                 {{-- Предзаготовленный SVG из JSON --}}
                                 {!! $task['svg'] !!}
-                            @elseif(str_starts_with($task['image'], '<svg'))
+                            @elseif(\Illuminate\Support\Str::startsWith($task['image'], '<svg'))
                                 {{-- Inline SVG (legacy) --}}
                                 {!! $task['image'] !!}
                             @else

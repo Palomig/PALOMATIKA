@@ -15,8 +15,8 @@
     $interval = str_replace('−', '-', $interval); // юникод минус
 
     // Определяем тип скобок и значения
-    $leftOpen = str_starts_with($interval, '(');
-    $rightOpen = str_ends_with($interval, ')');
+    $leftOpen = \Illuminate\Support\Str::startsWith($interval, '(');
+    $rightOpen = \Illuminate\Support\Str::endsWith($interval, ')');
 
     // Извлекаем значения
     preg_match('/[\(\[](.+);(.+)[\)\]]/', $interval, $matches);

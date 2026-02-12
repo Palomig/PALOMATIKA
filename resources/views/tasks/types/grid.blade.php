@@ -11,7 +11,7 @@
     // Формат в JSON: oge18_pX_imgY.png → Формат реальных файлов: task18_bBLOCK_zZADANIE_ID.png
     function getGridImagePath($originalImage, $blockNumber, $zadanieNumber, $taskId) {
         // Если файл уже в новом формате - возвращаем как есть
-        if (str_starts_with($originalImage, 'task18_')) {
+        if (\Illuminate\Support\Str::startsWith($originalImage, 'task18_')) {
             return $originalImage;
         }
 
@@ -45,7 +45,7 @@
             <div class="p-3 bg-white">
                 @if($hasSvg)
                     {!! $task['svg'] !!}
-                @elseif(str_starts_with($task['image'] ?? '', '<svg'))
+                @elseif(\Illuminate\Support\Str::startsWith($task['image'] ?? '', '<svg'))
                     {!! $task['image'] !!}
                 @else
                     <img src="{{ asset('images/tasks/18/' . $imageName) }}"
