@@ -23,11 +23,11 @@ class GraphSvgRenderer
 
     // Blueprint цветовая схема
     private const COLORS = [
-        'bg' => '#0f172a',
-        'grid' => '#334155',
-        'axis' => '#64748b',
-        'graph' => '#10b981',
-        'text' => '#94a3b8',
+        'bg' => '#0a1628',
+        'grid' => '#1a3a5c',
+        'axis' => '#7eb8da',
+        'graph' => '#d4a855',
+        'text' => '#c8dce8',
     ];
 
     /**

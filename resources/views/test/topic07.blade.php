@@ -141,18 +141,18 @@
                                 <svg viewBox="0 0 320 55" class="w-full h-16 number-line">
                                     <defs>
                                         <marker id="arrowR3" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto">
-                                            <path d="M0,0 L0,6 L8,3 z" fill="#8B0000"/>
+                                            <path d="M0,0 L0,6 L8,3 z" fill="#c8dce8"/>
                                         </marker>
                                     </defs>
-                                    <line x1="15" y1="25" x2="305" y2="25" stroke="#8B0000" stroke-width="2" marker-end="url(#arrowR3)"/>
+                                    <line x1="15" y1="25" x2="305" y2="25" stroke="#c8dce8" stroke-width="2" marker-end="url(#arrowR3)"/>
                                     @for($i = $minTick; $i <= $maxTick; $i++)
-                                        <line x1="{{ 15 + ($i - $minTick) * $tickWidth }}" y1="18" x2="{{ 15 + ($i - $minTick) * $tickWidth }}" y2="32" stroke="#8B0000" stroke-width="1.5"/>
+                                        <line x1="{{ 15 + ($i - $minTick) * $tickWidth }}" y1="18" x2="{{ 15 + ($i - $minTick) * $tickWidth }}" y2="32" stroke="#7eb8da" stroke-width="1.5"/>
                                     @endfor
-                                    <text x="{{ 15 + (0 - $minTick) * $tickWidth }}" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">0</text>
+                                    <text x="{{ 15 + (0 - $minTick) * $tickWidth }}" y="48" text-anchor="middle" fill="#c8dce8" font-size="13" font-weight="bold">0</text>
                                     @foreach($pts as $pt)
                                         @php $px = 15 + ($pt['value'] - $minTick) * $tickWidth; @endphp
-                                        <circle cx="{{ $px }}" cy="25" r="6" fill="#22c55e"/>
-                                        <text x="{{ $px }}" y="12" text-anchor="middle" fill="#1e40af" font-size="14" font-weight="bold">{{ $pt['label'] }}</text>
+                                        <circle cx="{{ $px }}" cy="25" r="6" fill="#d4a855"/>
+                                        <text x="{{ $px }}" y="12" text-anchor="middle" fill="#c8dce8" font-size="14" font-weight="bold">{{ $pt['label'] }}</text>
                                     @endforeach
                                 </svg>
                             @endif
@@ -203,17 +203,17 @@
                                                 <svg viewBox="0 0 320 55" class="w-full h-16 number-line">
                                                     <defs>
                                                         <marker id="arrowR-{{ $zadanie['number'] }}-{{ $task['id'] }}" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto">
-                                                            <path d="M0,0 L0,6 L8,3 z" fill="#8B0000"/>
+                                                            <path d="M0,0 L0,6 L8,3 z" fill="#c8dce8"/>
                                                         </marker>
                                                     </defs>
-                                                    <line x1="15" y1="25" x2="305" y2="25" stroke="#8B0000" stroke-width="2" marker-end="url(#arrowR-{{ $zadanie['number'] }}-{{ $task['id'] }})"/>
+                                                    <line x1="15" y1="25" x2="305" y2="25" stroke="#c8dce8" stroke-width="2" marker-end="url(#arrowR-{{ $zadanie['number'] }}-{{ $task['id'] }})"/>
                                                     @for($i = 0; $i <= $maxTick; $i++)
-                                                        <line x1="{{ 15 + $i * $tickWidth }}" y1="18" x2="{{ 15 + $i * $tickWidth }}" y2="32" stroke="#8B0000" stroke-width="1.5"/>
+                                                        <line x1="{{ 15 + $i * $tickWidth }}" y1="18" x2="{{ 15 + $i * $tickWidth }}" y2="32" stroke="#7eb8da" stroke-width="1.5"/>
                                                     @endfor
-                                                    <text x="{{ 15 }}" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">0</text>
-                                                    <text x="{{ 15 + $tickWidth }}" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">1</text>
-                                                    <circle cx="{{ $pointX }}" cy="25" r="6" fill="#22c55e"/>
-                                                    <text x="{{ $pointX }}" y="12" text-anchor="middle" fill="#1e40af" font-size="14" font-weight="bold">{{ $pointLabel }}</text>
+                                                    <text x="{{ 15 }}" y="48" text-anchor="middle" fill="#c8dce8" font-size="13" font-weight="bold">0</text>
+                                                    <text x="{{ 15 + $tickWidth }}" y="48" text-anchor="middle" fill="#c8dce8" font-size="13" font-weight="bold">1</text>
+                                                    <circle cx="{{ $pointX }}" cy="25" r="6" fill="#d4a855"/>
+                                                    <text x="{{ $pointX }}" y="12" text-anchor="middle" fill="#c8dce8" font-size="14" font-weight="bold">{{ $pointLabel }}</text>
                                                 </svg>
                                             @elseif($svgType === 'two_points' && isset($task['points']))
                                                 {{-- Fallback: динамическая генерация для two_points --}}
@@ -230,18 +230,18 @@
                                                 <svg viewBox="0 0 320 55" class="w-full h-16 number-line">
                                                     <defs>
                                                         <marker id="arrowR2-{{ $zadanie['number'] }}-{{ $task['id'] }}" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto">
-                                                            <path d="M0,0 L0,6 L8,3 z" fill="#8B0000"/>
+                                                            <path d="M0,0 L0,6 L8,3 z" fill="#c8dce8"/>
                                                         </marker>
                                                     </defs>
-                                                    <line x1="15" y1="25" x2="305" y2="25" stroke="#8B0000" stroke-width="2" marker-end="url(#arrowR2-{{ $zadanie['number'] }}-{{ $task['id'] }})"/>
+                                                    <line x1="15" y1="25" x2="305" y2="25" stroke="#c8dce8" stroke-width="2" marker-end="url(#arrowR2-{{ $zadanie['number'] }}-{{ $task['id'] }})"/>
                                                     @for($i = $minTick; $i <= $maxTick; $i++)
-                                                        <line x1="{{ 15 + ($i - $minTick) * $tickWidth }}" y1="18" x2="{{ 15 + ($i - $minTick) * $tickWidth }}" y2="32" stroke="#8B0000" stroke-width="1.5"/>
+                                                        <line x1="{{ 15 + ($i - $minTick) * $tickWidth }}" y1="18" x2="{{ 15 + ($i - $minTick) * $tickWidth }}" y2="32" stroke="#7eb8da" stroke-width="1.5"/>
                                                     @endfor
-                                                    <text x="{{ 15 + (0 - $minTick) * $tickWidth }}" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">0</text>
+                                                    <text x="{{ 15 + (0 - $minTick) * $tickWidth }}" y="48" text-anchor="middle" fill="#c8dce8" font-size="13" font-weight="bold">0</text>
                                                     @foreach($pts as $pt)
                                                         @php $px = 15 + ($pt['value'] - $minTick) * $tickWidth; @endphp
-                                                        <circle cx="{{ $px }}" cy="25" r="6" fill="#22c55e"/>
-                                                        <text x="{{ $px }}" y="12" text-anchor="middle" fill="#1e40af" font-size="14" font-weight="bold">{{ $pt['label'] }}</text>
+                                                        <circle cx="{{ $px }}" cy="25" r="6" fill="#d4a855"/>
+                                                        <text x="{{ $px }}" y="12" text-anchor="middle" fill="#c8dce8" font-size="14" font-weight="bold">{{ $pt['label'] }}</text>
                                                     @endforeach
                                                 </svg>
                                             @endif
@@ -292,18 +292,18 @@
                                                 <svg viewBox="0 0 320 55" class="w-full h-16 number-line">
                                                     <defs>
                                                         <marker id="arrowR4-{{ $zadanie['number'] }}-{{ $task['id'] }}" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto">
-                                                            <path d="M0,0 L0,6 L8,3 z" fill="#8B0000"/>
+                                                            <path d="M0,0 L0,6 L8,3 z" fill="#c8dce8"/>
                                                         </marker>
                                                     </defs>
-                                                    <line x1="15" y1="25" x2="305" y2="25" stroke="#8B0000" stroke-width="2" marker-end="url(#arrowR4-{{ $zadanie['number'] }}-{{ $task['id'] }})"/>
+                                                    <line x1="15" y1="25" x2="305" y2="25" stroke="#c8dce8" stroke-width="2" marker-end="url(#arrowR4-{{ $zadanie['number'] }}-{{ $task['id'] }})"/>
                                                     @for($i = ceil($minV); $i <= floor($maxV); $i++)
-                                                        <line x1="{{ $getX($i) }}" y1="18" x2="{{ $getX($i) }}" y2="32" stroke="#8B0000" stroke-width="1.5"/>
+                                                        <line x1="{{ $getX($i) }}" y1="18" x2="{{ $getX($i) }}" y2="32" stroke="#7eb8da" stroke-width="1.5"/>
                                                     @endfor
-                                                    <text x="{{ $getX(ceil($minV)) }}" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">{{ ceil($minV) }}</text>
-                                                    <text x="{{ $getX(floor($maxV)) }}" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">{{ floor($maxV) }}</text>
+                                                    <text x="{{ $getX(ceil($minV)) }}" y="48" text-anchor="middle" fill="#c8dce8" font-size="13" font-weight="bold">{{ ceil($minV) }}</text>
+                                                    <text x="{{ $getX(floor($maxV)) }}" y="48" text-anchor="middle" fill="#c8dce8" font-size="13" font-weight="bold">{{ floor($maxV) }}</text>
                                                     @foreach($fourPts as $idx => $ptVal)
-                                                        <circle cx="{{ $getX($ptVal) }}" cy="25" r="6" fill="#22c55e"/>
-                                                        <text x="{{ $getX($ptVal) }}" y="12" text-anchor="middle" fill="#1e40af" font-size="14" font-weight="bold">{{ $labels[$idx] }}</text>
+                                                        <circle cx="{{ $getX($ptVal) }}" cy="25" r="6" fill="#d4a855"/>
+                                                        <text x="{{ $getX($ptVal) }}" y="12" text-anchor="middle" fill="#c8dce8" font-size="14" font-weight="bold">{{ $labels[$idx] }}</text>
                                                     @endforeach
                                                 </svg>
                                             @endif
@@ -359,17 +359,17 @@
                                                 <svg viewBox="0 0 320 55" class="w-full h-16 number-line">
                                                     <defs>
                                                         <marker id="arrowRA-{{ $zadanie['number'] }}-{{ $task['id'] }}" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto">
-                                                            <path d="M0,0 L0,6 L8,3 z" fill="#8B0000"/>
+                                                            <path d="M0,0 L0,6 L8,3 z" fill="#c8dce8"/>
                                                         </marker>
                                                     </defs>
-                                                    <line x1="15" y1="25" x2="305" y2="25" stroke="#8B0000" stroke-width="2" marker-end="url(#arrowRA-{{ $zadanie['number'] }}-{{ $task['id'] }})"/>
+                                                    <line x1="15" y1="25" x2="305" y2="25" stroke="#c8dce8" stroke-width="2" marker-end="url(#arrowRA-{{ $zadanie['number'] }}-{{ $task['id'] }})"/>
                                                     @for($i = ceil($minV); $i <= floor($maxV); $i++)
-                                                        <line x1="{{ $getX($i) }}" y1="18" x2="{{ $getX($i) }}" y2="32" stroke="#8B0000" stroke-width="1.5"/>
+                                                        <line x1="{{ $getX($i) }}" y1="18" x2="{{ $getX($i) }}" y2="32" stroke="#7eb8da" stroke-width="1.5"/>
                                                     @endfor
-                                                    <text x="{{ $getX(ceil($minV)) }}" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">{{ ceil($minV) }}</text>
-                                                    <text x="{{ $getX(floor($maxV)) }}" y="48" text-anchor="middle" fill="#1e40af" font-size="13" font-weight="bold">{{ floor($maxV) }}</text>
-                                                    <circle cx="{{ $pointX }}" cy="25" r="6" fill="#22c55e"/>
-                                                    <text x="{{ $pointX }}" y="12" text-anchor="middle" fill="#1e40af" font-size="14" font-weight="bold">A</text>
+                                                    <text x="{{ $getX(ceil($minV)) }}" y="48" text-anchor="middle" fill="#c8dce8" font-size="13" font-weight="bold">{{ ceil($minV) }}</text>
+                                                    <text x="{{ $getX(floor($maxV)) }}" y="48" text-anchor="middle" fill="#c8dce8" font-size="13" font-weight="bold">{{ floor($maxV) }}</text>
+                                                    <circle cx="{{ $pointX }}" cy="25" r="6" fill="#d4a855"/>
+                                                    <text x="{{ $pointX }}" y="12" text-anchor="middle" fill="#c8dce8" font-size="14" font-weight="bold">A</text>
                                                 </svg>
                                             @endif
                                         </div>

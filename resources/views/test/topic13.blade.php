@@ -161,30 +161,30 @@
                                                 <svg viewBox="0 0 280 60" class="w-full h-14 number-line">
                                                     <defs>
                                                         <marker id="arrowLeft-{{ $task['id'] }}" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-                                                            <path d="M9,0 L9,6 L0,3 z" fill="#8b5cf6"/>
+                                                            <path d="M9,0 L9,6 L0,3 z" fill="#d4a855"/>
                                                         </marker>
                                                         <marker id="arrowRight-{{ $task['id'] }}" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
-                                                            <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
+                                                            <path d="M0,0 L0,6 L9,3 z" fill="#7eb8da"/>
                                                         </marker>
                                                     </defs>
 
                                                     {{-- Числовая прямая --}}
-                                                    <line x1="20" y1="30" x2="260" y2="30" stroke="#64748b" stroke-width="2" marker-end="url(#arrowRight-{{ $task['id'] }})"/>
+                                                    <line x1="20" y1="30" x2="260" y2="30" stroke="#7eb8da" stroke-width="2" marker-end="url(#arrowRight-{{ $task['id'] }})"/>
 
                                                     {{-- Заштрихованный интервал --}}
-                                                    <line x1="20" y1="30" :x2="pointX" y2="30" stroke="#8b5cf6" stroke-width="4" marker-start="url(#arrowLeft-{{ $task['id'] }})"/>
+                                                    <line x1="20" y1="30" :x2="pointX" y2="30" stroke="#d4a855" stroke-width="4" marker-start="url(#arrowLeft-{{ $task['id'] }})"/>
 
                                                     {{-- Точка --}}
-                                                    <circle :cx="pointX" cy="30" r="6" :fill="inclusive ? '#8b5cf6' : '#1e293b'" stroke="#8b5cf6" stroke-width="2"/>
+                                                    <circle :cx="pointX" cy="30" r="6" :fill="inclusive ? '#d4a855' : '#0a1628'" stroke="#d4a855" stroke-width="2"/>
 
                                                     {{-- Подпись точки --}}
-                                                    <text :x="pointX" y="52" fill="#e2e8f0" font-size="14" text-anchor="middle" x-text="pointLabel"></text>
+                                                    <text :x="pointX" y="52" fill="#c8dce8" font-size="14" text-anchor="middle" x-text="pointLabel"></text>
 
                                                     {{-- Ноль --}}
                                                     <template x-if="showZero">
                                                         <g>
-                                                            <line :x1="zeroX" y1="25" :x2="zeroX" y2="35" stroke="#64748b" stroke-width="1.5"/>
-                                                            <text :x="zeroX" y="18" fill="#94a3b8" font-size="12" text-anchor="middle">0</text>
+                                                            <line :x1="zeroX" y1="25" :x2="zeroX" y2="35" stroke="#7eb8da" stroke-width="1.5"/>
+                                                            <text :x="zeroX" y="18" fill="#d4a855" font-size="12" text-anchor="middle">0</text>
                                                         </g>
                                                     </template>
                                                 </svg>
@@ -195,30 +195,30 @@
                                                 <svg viewBox="0 0 280 60" class="w-full h-14 number-line">
                                                     <defs>
                                                         <marker id="arrowRightPurple-{{ $task['id'] }}" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
-                                                            <path d="M0,0 L0,6 L9,3 z" fill="#8b5cf6"/>
+                                                            <path d="M0,0 L0,6 L9,3 z" fill="#d4a855"/>
                                                         </marker>
                                                         <marker id="arrowLeftGray-{{ $task['id'] }}" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-                                                            <path d="M9,0 L9,6 L0,3 z" fill="#64748b"/>
+                                                            <path d="M9,0 L9,6 L0,3 z" fill="#7eb8da"/>
                                                         </marker>
                                                     </defs>
 
                                                     {{-- Числовая прямая --}}
-                                                    <line x1="20" y1="30" x2="260" y2="30" stroke="#64748b" stroke-width="2" marker-start="url(#arrowLeftGray-{{ $task['id'] }})"/>
+                                                    <line x1="20" y1="30" x2="260" y2="30" stroke="#7eb8da" stroke-width="2" marker-start="url(#arrowLeftGray-{{ $task['id'] }})"/>
 
                                                     {{-- Заштрихованный интервал --}}
-                                                    <line :x1="pointX" y1="30" x2="260" y2="30" stroke="#8b5cf6" stroke-width="4" marker-end="url(#arrowRightPurple-{{ $task['id'] }})"/>
+                                                    <line :x1="pointX" y1="30" x2="260" y2="30" stroke="#d4a855" stroke-width="4" marker-end="url(#arrowRightPurple-{{ $task['id'] }})"/>
 
                                                     {{-- Точка --}}
-                                                    <circle :cx="pointX" cy="30" r="6" :fill="inclusive ? '#8b5cf6' : '#1e293b'" stroke="#8b5cf6" stroke-width="2"/>
+                                                    <circle :cx="pointX" cy="30" r="6" :fill="inclusive ? '#d4a855' : '#0a1628'" stroke="#d4a855" stroke-width="2"/>
 
                                                     {{-- Подпись точки --}}
-                                                    <text :x="pointX" y="52" fill="#e2e8f0" font-size="14" text-anchor="middle" x-text="pointLabel"></text>
+                                                    <text :x="pointX" y="52" fill="#c8dce8" font-size="14" text-anchor="middle" x-text="pointLabel"></text>
 
                                                     {{-- Ноль --}}
                                                     <template x-if="showZero">
                                                         <g>
-                                                            <line :x1="zeroX" y1="25" :x2="zeroX" y2="35" stroke="#64748b" stroke-width="1.5"/>
-                                                            <text :x="zeroX" y="18" fill="#94a3b8" font-size="12" text-anchor="middle">0</text>
+                                                            <line :x1="zeroX" y1="25" :x2="zeroX" y2="35" stroke="#7eb8da" stroke-width="1.5"/>
+                                                            <text :x="zeroX" y="18" fill="#d4a855" font-size="12" text-anchor="middle">0</text>
                                                         </g>
                                                     </template>
                                                 </svg>
@@ -229,35 +229,35 @@
                                                 <svg viewBox="0 0 280 60" class="w-full h-14 number-line">
                                                     <defs>
                                                         <marker id="arrowLeftSeg-{{ $task['id'] }}" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-                                                            <path d="M9,0 L9,6 L0,3 z" fill="#64748b"/>
+                                                            <path d="M9,0 L9,6 L0,3 z" fill="#7eb8da"/>
                                                         </marker>
                                                         <marker id="arrowRightSeg-{{ $task['id'] }}" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
-                                                            <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
+                                                            <path d="M0,0 L0,6 L9,3 z" fill="#7eb8da"/>
                                                         </marker>
                                                     </defs>
 
                                                     {{-- Числовая прямая --}}
-                                                    <line x1="20" y1="30" x2="260" y2="30" stroke="#64748b" stroke-width="2"
+                                                    <line x1="20" y1="30" x2="260" y2="30" stroke="#7eb8da" stroke-width="2"
                                                         marker-start="url(#arrowLeftSeg-{{ $task['id'] }})" marker-end="url(#arrowRightSeg-{{ $task['id'] }})"/>
 
                                                     {{-- Заштрихованный интервал --}}
-                                                    <line :x1="point1X" y1="30" :x2="point2X" y2="30" stroke="#8b5cf6" stroke-width="4"/>
+                                                    <line :x1="point1X" y1="30" :x2="point2X" y2="30" stroke="#d4a855" stroke-width="4"/>
 
                                                     {{-- Точка 1 --}}
-                                                    <circle :cx="point1X" cy="30" r="6" :fill="inclusive1 ? '#8b5cf6' : '#1e293b'" stroke="#8b5cf6" stroke-width="2"/>
+                                                    <circle :cx="point1X" cy="30" r="6" :fill="inclusive1 ? '#d4a855' : '#0a1628'" stroke="#d4a855" stroke-width="2"/>
 
                                                     {{-- Точка 2 --}}
-                                                    <circle :cx="point2X" cy="30" r="6" :fill="inclusive2 ? '#8b5cf6' : '#1e293b'" stroke="#8b5cf6" stroke-width="2"/>
+                                                    <circle :cx="point2X" cy="30" r="6" :fill="inclusive2 ? '#d4a855' : '#0a1628'" stroke="#d4a855" stroke-width="2"/>
 
                                                     {{-- Подписи точек --}}
-                                                    <text :x="point1X" y="52" fill="#e2e8f0" font-size="14" text-anchor="middle" x-text="point1Label"></text>
-                                                    <text :x="point2X" y="52" fill="#e2e8f0" font-size="14" text-anchor="middle" x-text="point2Label"></text>
+                                                    <text :x="point1X" y="52" fill="#c8dce8" font-size="14" text-anchor="middle" x-text="point1Label"></text>
+                                                    <text :x="point2X" y="52" fill="#c8dce8" font-size="14" text-anchor="middle" x-text="point2Label"></text>
 
                                                     {{-- Ноль --}}
                                                     <template x-if="showZero">
                                                         <g>
-                                                            <line :x1="zeroX" y1="25" :x2="zeroX" y2="35" stroke="#64748b" stroke-width="1.5"/>
-                                                            <text :x="zeroX" y="18" fill="#94a3b8" font-size="12" text-anchor="middle">0</text>
+                                                            <line :x1="zeroX" y1="25" :x2="zeroX" y2="35" stroke="#7eb8da" stroke-width="1.5"/>
+                                                            <text :x="zeroX" y="18" fill="#d4a855" font-size="12" text-anchor="middle">0</text>
                                                         </g>
                                                     </template>
                                                 </svg>

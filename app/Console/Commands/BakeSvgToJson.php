@@ -48,7 +48,7 @@ class BakeSvgToJson extends Command
             return $this->handleTopic11($dryRun);
         }
 
-        // Topic 18 (grid figures) - reads from main JSON
+        // Topic 18 (grid figures) - reads from geometry JSON
         if ($topicId === '18') {
             return $this->handleTopic18($dryRun);
         }
@@ -378,23 +378,28 @@ class BakeSvgToJson extends Command
     }
 
     /**
-     * Handle topic 18 (grid figures) - generates SVG for deterministic grid tasks
+     * Handle topic 18 (grid figures)
+     *
+     * Reads topic_18_geometry.json and bakes SVG into topic_18.json.
+     * Supports both formats:
+     * - legacy tasks (geometry + deterministic renderer variants)
+     * - new tasks (task-level grid payload)
      */
     private function handleTopic18(bool $dryRun): int
     {
-        $inputPath = storage_path("app/tasks/topic_18.json");
+        $geometryPath = storage_path('app/tasks/topic_18_geometry.json');
 
-        if (!File::exists($inputPath)) {
-            $this->error("Topic file not found: {$inputPath}");
+        if (!File::exists($geometryPath)) {
+            $this->error("Geometry file not found: {$geometryPath}");
             return Command::FAILURE;
         }
 
-        $this->info("Reading topic 18 data from: topic_18.json");
+        $this->info('Reading geometry data from: topic_18_geometry.json');
 
-        $data = json_decode(File::get($inputPath), true);
+        $data = json_decode(File::get($geometryPath), true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            $this->error("JSON parse error: " . json_last_error_msg());
+            $this->error('JSON parse error: ' . json_last_error_msg());
             return Command::FAILURE;
         }
 
@@ -404,38 +409,40 @@ class BakeSvgToJson extends Command
         $skipped = 0;
 
         foreach ($data['blocks'] as $blockIndex => &$block) {
-            $blockNumber = (int) ($block['number'] ?? 0);
-            $this->info("Block {$blockNumber}: {$block['title']}");
+            $this->info("Block {$block['number']}: {$block['title']}");
 
             foreach ($block['zadaniya'] as $zadanieIndex => &$zadanie) {
-                $type = $zadanie['type'] ?? null;
+                $this->line("  Zadanie {$zadanie['number']}: {$zadanie['instruction']}");
+
+                if (empty($zadanie['tasks'])) {
+                    $skipped++;
+                    continue;
+                }
+
                 $zadanieNumber = (int) ($zadanie['number'] ?? 0);
-
-                if (!$type || !$renderer->supports($type)) {
-                    $skipped++;
-                    continue;
-                }
-
-                if (!isset($zadanie['tasks']) || empty($zadanie['tasks'])) {
-                    $skipped++;
-                    continue;
-                }
-
-                $this->line("  Zadanie {$zadanieNumber}: {$type}");
+                $blockNumber = (int) ($block['number'] ?? 0);
 
                 foreach ($zadanie['tasks'] as $taskIndex => &$task) {
                     try {
-                        $svg = $renderer->render($blockNumber, $zadanieNumber, (int) $taskIndex, $task);
+                        $gridPayload = $task['grid'] ?? ($task['geometry']['grid'] ?? null);
 
-                        if (empty($svg)) {
+                        // Preferred for new payloads.
+                        if (!empty($gridPayload) && method_exists($renderer, 'renderFromGrid')) {
+                            $svg = $renderer->renderFromGrid($gridPayload);
+                        } else {
+                            // Legacy deterministic rendering keeps existing topic_18 geometry compatible.
+                            $svg = $renderer->render($blockNumber, $zadanieNumber, (int) $taskIndex, $task);
+                        }
+
+                        if ($svg === '') {
+                            $this->warn("    ⚠️  Task {$task['id']}: skipped (no SVG variant)");
                             $skipped++;
-                            $this->warn("    ⚠️  Task {$task['id']}: skipped (no deterministic SVG variant)");
                             continue;
                         }
 
                         $task['svg'] = $svg;
 
-                        $this->line("    ✓ Task {$task['id']}: baked");
+                        $this->line("    ✓ Task {$task['id']}");
                         $count++;
                     } catch (\Exception $e) {
                         $this->error("    ✗ Task {$task['id']}: " . $e->getMessage());
@@ -448,14 +455,16 @@ class BakeSvgToJson extends Command
         if ($dryRun) {
             $this->newLine();
             $this->info("DRY RUN: Would generate {$count} SVGs ({$errors} errors, {$skipped} skipped)");
-            $this->info("No files were modified.");
             return Command::SUCCESS;
         }
 
+        // Обновляем метаданные
         $data['exported_at'] = now()->toIso8601String();
         $data['svg_baked'] = true;
 
-        $outputPath = storage_path("app/tasks/topic_18.json");
+        // Сохраняем в основной JSON файл
+        $outputPath = storage_path('app/tasks/topic_18.json');
+
         $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
         if (File::put($outputPath, $json) === false) {
@@ -467,8 +476,8 @@ class BakeSvgToJson extends Command
         $this->info("✅ Done! Generated {$count} SVGs ({$errors} errors, {$skipped} skipped)");
         $this->info("   Saved to: {$outputPath}");
         $this->newLine();
-        $this->comment("Next steps:");
-        $this->comment("  1. Clear cache: php artisan cache:clear");
+        $this->comment('Next steps:');
+        $this->comment('  1. Clear cache: php artisan cache:clear');
 
         return Command::SUCCESS;
     }

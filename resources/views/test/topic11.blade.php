@@ -184,22 +184,22 @@
                                         <div class="bg-slate-900/50 rounded-lg p-4">
                                             <div class="text-center text-white font-bold mb-3">y = ax² + c</div>
                                             <svg viewBox="0 0 200 200" class="w-full max-w-xs mx-auto">
-                                                <rect width="200" height="200" fill="#0f172a"/>
-                                                <g stroke="#334155" stroke-width="0.5">
+                                                <rect width="200" height="200" fill="#0a1628"/>
+                                                <g stroke="#1a3a5c" stroke-width="0.5">
                                                     <template x-for="i in 9"><line :x1="20*i" y1="10" :x2="20*i" y2="190"/></template>
                                                     <template x-for="i in 9"><line x1="10" :y1="20*i" x2="190" :y2="20*i"/></template>
                                                 </g>
-                                                <line x1="10" y1="100" x2="190" y2="100" stroke="#64748b" stroke-width="1.5"/>
-                                                <line x1="100" y1="10" x2="100" y2="190" stroke="#64748b" stroke-width="1.5"/>
-                                                <polygon points="187,97 187,103 193,100" fill="#64748b"/>
-                                                <polygon points="97,13 103,13 100,7" fill="#64748b"/>
-                                                <text x="193" y="104" fill="#94a3b8" font-size="12" font-style="italic">x</text>
-                                                <text x="104" y="15" fill="#94a3b8" font-size="12" font-style="italic">y</text>
-                                                <text x="92" y="112" fill="#94a3b8" font-size="10">0</text>
-                                                <text x="118" y="112" fill="#94a3b8" font-size="10">1</text>
-                                                <text x="104" y="82" fill="#94a3b8" font-size="10">1</text>
+                                                <line x1="10" y1="100" x2="190" y2="100" stroke="#7eb8da" stroke-width="1.5"/>
+                                                <line x1="100" y1="10" x2="100" y2="190" stroke="#7eb8da" stroke-width="1.5"/>
+                                                <polygon points="187,97 187,103 193,100" fill="#7eb8da"/>
+                                                <polygon points="97,13 103,13 100,7" fill="#7eb8da"/>
+                                                <text x="193" y="104" fill="#c8dce8" font-size="12" font-style="italic">x</text>
+                                                <text x="104" y="15" fill="#c8dce8" font-size="12" font-style="italic">y</text>
+                                                <text x="92" y="112" fill="#c8dce8" font-size="10">0</text>
+                                                <text x="118" y="112" fill="#c8dce8" font-size="10">1</text>
+                                                <text x="104" y="82" fill="#c8dce8" font-size="10">1</text>
                                                 {{-- Parabola --}}
-                                                <path :d="parabolaPath" stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                                                <path :d="parabolaPath" stroke="#d4a855" stroke-width="2.5" fill="none" stroke-linecap="round"/>
                                             </svg>
                                         </div>
 
@@ -254,22 +254,22 @@
                                         <div class="bg-slate-900/50 rounded-lg p-4">
                                             <div class="text-center text-white font-bold mb-3">y = kx + b</div>
                                             <svg viewBox="0 0 200 200" class="w-full max-w-xs mx-auto">
-                                                <rect width="200" height="200" fill="#0f172a"/>
-                                                <g stroke="#334155" stroke-width="0.5">
+                                                <rect width="200" height="200" fill="#0a1628"/>
+                                                <g stroke="#1a3a5c" stroke-width="0.5">
                                                     <template x-for="i in 9"><line :x1="20*i" y1="10" :x2="20*i" y2="190"/></template>
                                                     <template x-for="i in 9"><line x1="10" :y1="20*i" x2="190" :y2="20*i"/></template>
                                                 </g>
-                                                <line x1="10" y1="100" x2="190" y2="100" stroke="#64748b" stroke-width="1.5"/>
-                                                <line x1="100" y1="10" x2="100" y2="190" stroke="#64748b" stroke-width="1.5"/>
-                                                <polygon points="187,97 187,103 193,100" fill="#64748b"/>
-                                                <polygon points="97,13 103,13 100,7" fill="#64748b"/>
-                                                <text x="193" y="104" fill="#94a3b8" font-size="12" font-style="italic">x</text>
-                                                <text x="104" y="15" fill="#94a3b8" font-size="12" font-style="italic">y</text>
-                                                <text x="92" y="112" fill="#94a3b8" font-size="10">0</text>
-                                                <text x="118" y="112" fill="#94a3b8" font-size="10">1</text>
-                                                <text x="104" y="82" fill="#94a3b8" font-size="10">1</text>
+                                                <line x1="10" y1="100" x2="190" y2="100" stroke="#7eb8da" stroke-width="1.5"/>
+                                                <line x1="100" y1="10" x2="100" y2="190" stroke="#7eb8da" stroke-width="1.5"/>
+                                                <polygon points="187,97 187,103 193,100" fill="#7eb8da"/>
+                                                <polygon points="97,13 103,13 100,7" fill="#7eb8da"/>
+                                                <text x="193" y="104" fill="#c8dce8" font-size="12" font-style="italic">x</text>
+                                                <text x="104" y="15" fill="#c8dce8" font-size="12" font-style="italic">y</text>
+                                                <text x="92" y="112" fill="#c8dce8" font-size="10">0</text>
+                                                <text x="118" y="112" fill="#c8dce8" font-size="10">1</text>
+                                                <text x="104" y="82" fill="#c8dce8" font-size="10">1</text>
                                                 <line :x1="lineX1" :y1="lineY1" :x2="lineX2" :y2="lineY2"
-                                                      stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
+                                                      stroke="#d4a855" stroke-width="2.5" stroke-linecap="round"/>
                                             </svg>
                                         </div>
 
@@ -397,7 +397,7 @@
         const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
         bg.setAttribute('width', WIDTH);
         bg.setAttribute('height', HEIGHT);
-        bg.setAttribute('fill', '#0f172a');
+        bg.setAttribute('fill', '#0a1628');
         svg.appendChild(bg);
 
         // Grid
@@ -409,7 +409,7 @@
             vLine.setAttribute('y1', PADDING - 5);
             vLine.setAttribute('x2', CENTER_X + i * SCALE);
             vLine.setAttribute('y2', HEIGHT - PADDING + 5);
-            vLine.setAttribute('stroke', '#334155');
+            vLine.setAttribute('stroke', '#1a3a5c');
             vLine.setAttribute('stroke-width', '0.5');
             gridGroup.appendChild(vLine);
 
@@ -419,7 +419,7 @@
             hLine.setAttribute('y1', CENTER_Y + i * SCALE);
             hLine.setAttribute('x2', WIDTH - PADDING + 5);
             hLine.setAttribute('y2', CENTER_Y + i * SCALE);
-            hLine.setAttribute('stroke', '#334155');
+            hLine.setAttribute('stroke', '#1a3a5c');
             hLine.setAttribute('stroke-width', '0.5');
             gridGroup.appendChild(hLine);
         }
@@ -431,7 +431,7 @@
         xAxis.setAttribute('y1', CENTER_Y);
         xAxis.setAttribute('x2', WIDTH - PADDING + 5);
         xAxis.setAttribute('y2', CENTER_Y);
-        xAxis.setAttribute('stroke', '#64748b');
+        xAxis.setAttribute('stroke', '#7eb8da');
         xAxis.setAttribute('stroke-width', '1.5');
         svg.appendChild(xAxis);
 
@@ -441,27 +441,27 @@
         yAxis.setAttribute('y1', PADDING - 5);
         yAxis.setAttribute('x2', CENTER_X);
         yAxis.setAttribute('y2', HEIGHT - PADDING + 5);
-        yAxis.setAttribute('stroke', '#64748b');
+        yAxis.setAttribute('stroke', '#7eb8da');
         yAxis.setAttribute('stroke-width', '1.5');
         svg.appendChild(yAxis);
 
         // X arrow
         const xArrow = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
         xArrow.setAttribute('points', `${WIDTH-PADDING+2},${CENTER_Y-3} ${WIDTH-PADDING+2},${CENTER_Y+3} ${WIDTH-PADDING+8},${CENTER_Y}`);
-        xArrow.setAttribute('fill', '#64748b');
+        xArrow.setAttribute('fill', '#7eb8da');
         svg.appendChild(xArrow);
 
         // Y arrow
         const yArrow = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
         yArrow.setAttribute('points', `${CENTER_X-3},${PADDING-2} ${CENTER_X+3},${PADDING-2} ${CENTER_X},${PADDING-8}`);
-        yArrow.setAttribute('fill', '#64748b');
+        yArrow.setAttribute('fill', '#7eb8da');
         svg.appendChild(yArrow);
 
         // Axis labels
         const xLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         xLabel.setAttribute('x', WIDTH - PADDING + 10);
         xLabel.setAttribute('y', CENTER_Y + 4);
-        xLabel.setAttribute('fill', '#94a3b8');
+        xLabel.setAttribute('fill', '#c8dce8');
         xLabel.setAttribute('font-size', '11');
         xLabel.setAttribute('font-style', 'italic');
         xLabel.textContent = 'x';
@@ -470,7 +470,7 @@
         const yLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         yLabel.setAttribute('x', CENTER_X + 5);
         yLabel.setAttribute('y', PADDING - 10);
-        yLabel.setAttribute('fill', '#94a3b8');
+        yLabel.setAttribute('fill', '#c8dce8');
         yLabel.setAttribute('font-size', '11');
         yLabel.setAttribute('font-style', 'italic');
         yLabel.textContent = 'y';
@@ -480,7 +480,7 @@
         const origin = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         origin.setAttribute('x', CENTER_X - 10);
         origin.setAttribute('y', CENTER_Y + 12);
-        origin.setAttribute('fill', '#94a3b8');
+        origin.setAttribute('fill', '#c8dce8');
         origin.setAttribute('font-size', '10');
         origin.textContent = '0';
         svg.appendChild(origin);
@@ -489,7 +489,7 @@
         const oneX = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         oneX.setAttribute('x', CENTER_X + SCALE - 2);
         oneX.setAttribute('y', CENTER_Y + 12);
-        oneX.setAttribute('fill', '#94a3b8');
+        oneX.setAttribute('fill', '#c8dce8');
         oneX.setAttribute('font-size', '10');
         oneX.textContent = '1';
         svg.appendChild(oneX);
@@ -498,7 +498,7 @@
         const oneY = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         oneY.setAttribute('x', CENTER_X + 5);
         oneY.setAttribute('y', CENTER_Y - SCALE + 4);
-        oneY.setAttribute('fill', '#94a3b8');
+        oneY.setAttribute('fill', '#c8dce8');
         oneY.setAttribute('font-size', '10');
         oneY.textContent = '1';
         svg.appendChild(oneY);
@@ -512,7 +512,7 @@
             xTick.setAttribute('y1', CENTER_Y - 2);
             xTick.setAttribute('x2', CENTER_X + i * SCALE);
             xTick.setAttribute('y2', CENTER_Y + 2);
-            xTick.setAttribute('stroke', '#64748b');
+            xTick.setAttribute('stroke', '#7eb8da');
             xTick.setAttribute('stroke-width', '1');
             svg.appendChild(xTick);
 
@@ -522,7 +522,7 @@
             yTick.setAttribute('y1', CENTER_Y - i * SCALE);
             yTick.setAttribute('x2', CENTER_X + 2);
             yTick.setAttribute('y2', CENTER_Y - i * SCALE);
-            yTick.setAttribute('stroke', '#64748b');
+            yTick.setAttribute('stroke', '#7eb8da');
             yTick.setAttribute('stroke-width', '1');
             svg.appendChild(yTick);
         }
@@ -532,7 +532,7 @@
         if (pathData) {
             const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
             path.setAttribute('d', pathData);
-            path.setAttribute('stroke', '#10b981');
+            path.setAttribute('stroke', '#d4a855');
             path.setAttribute('stroke-width', '2');
             path.setAttribute('fill', 'none');
             path.setAttribute('stroke-linecap', 'round');

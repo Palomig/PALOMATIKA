@@ -1224,6 +1224,25 @@ function geometryEditor() {
             hiddenEdge: '#6b7280',       // Скрытые рёбра (стереометрия)
         },
 
+        renderGrid() {
+            if (!this.showGrid) return '';
+
+            const step = Math.max(8, parseInt(this.gridSize, 10) || 20);
+            let svg = '';
+
+            for (let x = 0; x <= this.canvasWidth; x += step) {
+                const major = (x / step) % 5 === 0;
+                svg += `<line x1="${x}" y1="0" x2="${x}" y2="${this.canvasHeight}" stroke="${major ? '#3a6f99' : '#2b5f88'}" stroke-width="${major ? 0.9 : 0.6}" opacity="${major ? 0.8 : 0.6}"/>`;
+            }
+
+            for (let y = 0; y <= this.canvasHeight; y += step) {
+                const major = (y / step) % 5 === 0;
+                svg += `<line x1="0" y1="${y}" x2="${this.canvasWidth}" y2="${y}" stroke="${major ? '#3a6f99' : '#2b5f88'}" stroke-width="${major ? 0.9 : 0.6}" opacity="${major ? 0.8 : 0.6}"/>`;
+            }
+
+            return svg;
+        },
+
         renderAllFigures() {
             let svg = '';
             this.figures.forEach((figure, index) => {

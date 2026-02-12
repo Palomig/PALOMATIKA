@@ -65,18 +65,18 @@
     <defs>
         {{-- Паттерн штриховки --}}
         <pattern id="hatch_{{ $uniqueId }}" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
-            <line x1="0" y1="0" x2="0" y2="6" stroke="#10b981" stroke-width="1.5"/>
+            <line x1="0" y1="0" x2="0" y2="6" stroke="#7eb8da" stroke-width="1.5"/>
         </pattern>
 
         {{-- Маркер стрелки --}}
         <marker id="arrow_{{ $uniqueId }}" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
-            <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
+            <path d="M0,0 L0,6 L9,3 z" fill="#3a5a7c"/>
         </marker>
     </defs>
 
     {{-- Основная линия --}}
     <line x1="{{ $lineStart }}" y1="{{ $lineY }}" x2="{{ $lineEnd }}" y2="{{ $lineY }}"
-          stroke="#64748b" stroke-width="2" marker-end="url(#arrow_{{ $uniqueId }})"/>
+          stroke="#3a5a7c" stroke-width="2" marker-end="url(#arrow_{{ $uniqueId }})"/>
 
     {{-- Штриховка интервала --}}
     @if($leftInf && !$rightInf)
@@ -97,13 +97,13 @@
     @if(!$leftInf)
         @if($leftOpen)
             {{-- Открытый интервал - пустой кружок --}}
-            <circle cx="{{ $leftX }}" cy="{{ $lineY }}" r="5" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+            <circle cx="{{ $leftX }}" cy="{{ $lineY }}" r="5" fill="#0a1628" stroke="#7eb8da" stroke-width="2"/>
         @else
             {{-- Закрытый интервал - заполненный кружок --}}
-            <circle cx="{{ $leftX }}" cy="{{ $lineY }}" r="5" fill="#10b981"/>
+            <circle cx="{{ $leftX }}" cy="{{ $lineY }}" r="5" fill="#7eb8da"/>
         @endif
         {{-- Подпись --}}
-        <text x="{{ $leftX }}" y="{{ $lineY + 18 }}" text-anchor="middle" fill="#94a3b8" font-size="12" font-weight="500">
+        <text x="{{ $leftX }}" y="{{ $lineY + 18 }}" text-anchor="middle" fill="#c8dce8" font-size="12" font-weight="500">
             {{ str_replace('.', ',', $leftVal) }}
         </text>
     @endif
@@ -112,13 +112,13 @@
     @if(!$rightInf)
         @if($rightOpen)
             {{-- Открытый интервал - пустой кружок --}}
-            <circle cx="{{ $rightX }}" cy="{{ $lineY }}" r="5" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+            <circle cx="{{ $rightX }}" cy="{{ $lineY }}" r="5" fill="#0a1628" stroke="#7eb8da" stroke-width="2"/>
         @else
             {{-- Закрытый интервал - заполненный кружок --}}
-            <circle cx="{{ $rightX }}" cy="{{ $lineY }}" r="5" fill="#10b981"/>
+            <circle cx="{{ $rightX }}" cy="{{ $lineY }}" r="5" fill="#7eb8da"/>
         @endif
         {{-- Подпись --}}
-        <text x="{{ $rightX }}" y="{{ $lineY + 18 }}" text-anchor="middle" fill="#94a3b8" font-size="12" font-weight="500">
+        <text x="{{ $rightX }}" y="{{ $lineY + 18 }}" text-anchor="middle" fill="#c8dce8" font-size="12" font-weight="500">
             {{ str_replace('.', ',', $rightVal) }}
         </text>
     @endif

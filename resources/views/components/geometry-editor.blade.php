@@ -216,16 +216,7 @@
                         <rect width="100%" height="100%" fill="#0a1628"/>
 
                         {{-- Grid --}}
-                        <template x-if="showGrid">
-                            <g class="grid-layer">
-                                <defs>
-                                    <pattern :id="'grid-' + gridSize" :width="gridSize" :height="gridSize" patternUnits="userSpaceOnUse">
-                                        <path :d="`M ${gridSize} 0 L 0 0 0 ${gridSize}`" fill="none" stroke="#1e3a5f" stroke-width="0.5"/>
-                                    </pattern>
-                                </defs>
-                                <rect width="100%" height="100%" :fill="`url(#grid-${gridSize})`"/>
-                            </g>
-                        </template>
+                        <g class="grid-layer" x-html="renderGrid()"></g>
 
                         {{-- Figures - rendered via x-html for SVG compatibility --}}
                         <g x-html="renderAllFigures()"></g>
