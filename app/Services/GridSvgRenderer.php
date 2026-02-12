@@ -17,7 +17,7 @@ class GridSvgRenderer
     private const TYPES = ['grid_image', 'grid_image_with_question'];
 
     private const GRID_SIZE = 18;
-    private const PADDING = 5;
+    private const PADDING = 0;
 
     private const COLORS = [
         'bg' => '#0a1628',
