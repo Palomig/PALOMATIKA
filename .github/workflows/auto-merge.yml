@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - 'claude/**'
+      - 'main'
 
 jobs:
   auto-merge:
+    if: startsWith(github.ref, 'refs/heads/claude/')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -37,6 +39,11 @@ jobs:
 
   deploy:
     needs: auto-merge
+    if: |
+      always() && (
+        github.ref == 'refs/heads/main' ||
+        (startsWith(github.ref, 'refs/heads/claude/') && needs.auto-merge.result == 'success')
+      )
     runs-on: ubuntu-latest
 
     steps:
