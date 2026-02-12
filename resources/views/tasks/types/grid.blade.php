@@ -22,12 +22,13 @@
 
 @once
 <style>
-    .grid-svg-wrap { max-width: 250px; margin: 0 auto; }
-    .grid-svg-wrap svg { max-width: 250px !important; width: 100% !important; height: auto !important; display: block; margin: 0 auto; }
+    /* Масштабируем SVG в теме 18 так же, как в темах 15-17 (до 350px). */
+    .topic18-svg-force { width: 350px; max-width: 100%; margin-left: auto; margin-right: auto; }
+    .topic18-svg-force > svg { max-width: 350px !important; width: 100%; height: auto; }
 </style>
 @endonce
 
-<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
     @foreach($tasks as $task)
         @php
             $taskKey = "topic_{$topicId}_block_{$block['number']}_zadanie_{$zadanie['number']}_task_{$task['id']}";
@@ -49,20 +50,22 @@
             </div>
 
             {{-- Изображение --}}
-            <div class="p-3 bg-white">
+            <div class="p-3">
                 @if($hasSvg)
-                    <div class="grid-svg-wrap">
+                    <div class="topic18-svg-force">
                         {!! $task['svg'] !!}
                     </div>
                 @elseif(\Illuminate\Support\Str::startsWith($task['image'] ?? '', '<svg'))
-                    <div class="grid-svg-wrap">
+                    <div class="topic18-svg-force">
                         {!! $task['image'] !!}
                     </div>
                 @else
-                    <img src="{{ asset('images/tasks/18/' . $imageName) }}"
-                         alt="Клетчатая бумага {{ $task['id'] }}"
-                         class="w-full h-auto"
-                         onerror="this.onerror=null; this.src='{{ asset('images/placeholder-grid.svg') }}'; this.alt='Изображение не найдено';">
+                    <div class="bg-white rounded topic18-svg-force">
+                        <img src="{{ asset('images/tasks/18/' . $imageName) }}"
+                             alt="Клетчатая бумага {{ $task['id'] }}"
+                             class="w-full h-auto"
+                             onerror="this.onerror=null; this.src='{{ asset('images/placeholder-grid.svg') }}'; this.alt='Изображение не найдено';">
+                    </div>
                 @endif
             </div>
         </div>
