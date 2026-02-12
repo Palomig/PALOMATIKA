@@ -89,8 +89,15 @@ function geometryEditor() {
                 this.mode = 'full_edit';
                 this.loadFromMetadata(metadata);
             } else if (existingSvg) {
-                // Legacy SVG
-                this.mode = 'legacy_view';
+                // Для темы 18 пробуем конвертировать legacy SVG в редактируемую фигуру
+                const converted = this.tryCreateEditableFromLegacySvg(taskId, existingSvg);
+                if (converted) {
+                    this.mode = 'full_edit';
+                    this.loadFromMetadata(converted);
+                } else {
+                    // Legacy SVG
+                    this.mode = 'legacy_view';
+                }
             } else {
                 // Новое изображение
                 this.mode = 'full_edit';
@@ -389,6 +396,7 @@ function geometryEditor() {
             switch (figure.type) {
                 case 'triangle': return '△';
                 case 'quadrilateral': return '▢';
+                case 'polygon': return '⬠';
                 case 'circle': return '⭕';
                 case 'stereometry': return '⬡';
                 default: return '?';
@@ -402,6 +410,9 @@ function geometryEditor() {
             } else if (figure.type === 'quadrilateral') {
                 const v = figure.vertices;
                 return `Четырёхуг. ${v.A?.label || 'A'}${v.B?.label || 'B'}${v.C?.label || 'C'}${v.D?.label || 'D'}`;
+            } else if (figure.type === 'polygon') {
+                const count = figure.vertexOrder ? figure.vertexOrder.length : Object.keys(figure.vertices || {}).length;
+                return `Многоугольник (${count})`;
             } else if (figure.type === 'circle') {
                 return `Окружность ${figure.centerLabel || 'O'} (R=${Math.round(figure.radius)})`;
             } else if (figure.type === 'stereometry') {
@@ -861,12 +872,15 @@ function geometryEditor() {
                 if (figure.type === 'triangle') {
                     const center = this.getTriangleCenter(figure);
                     basePos = window.labelPos(figure.vertices[vertex], center, 22);
-                } else {
+                } else if (figure.type === 'quadrilateral') {
                     const vv = figure.vertices;
                     const center = {
                         x: (vv.A.x + vv.B.x + vv.C.x + vv.D.x) / 4,
                         y: (vv.A.y + vv.B.y + vv.C.y + vv.D.y) / 4
                     };
+                    basePos = window.labelPos(figure.vertices[vertex], center, 22);
+                } else {
+                    const center = this.getPolygonCentroid(figure.vertices);
                     basePos = window.labelPos(figure.vertices[vertex], center, 22);
                 }
                 figure.vertices[vertex].labelDx = Math.round(newX - basePos.x);
@@ -1225,6 +1239,8 @@ function geometryEditor() {
                     svg += this.renderTriangle(figure, strokeColor, isSelected);
                 } else if (figure.type === 'quadrilateral') {
                     svg += this.renderQuadrilateral(figure, strokeColor, isSelected);
+                } else if (figure.type === 'polygon') {
+                    svg += this.renderPolygonFigure(figure, strokeColor, isSelected);
                 } else if (figure.type === 'circle') {
                     svg += this.renderCircle(figure, isSelected);
                 } else if (figure.type === 'stereometry') {
@@ -1549,6 +1565,47 @@ function geometryEditor() {
                 const labelPos = this.getLabelPositionQuad(figure, vName);
                 svg += this.renderVertexMarker(vertex.x, vertex.y, vName, isSelected);
                 svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${this.colors.label}" font-size="24" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label" data-label="${vName}" style="cursor: move; pointer-events: auto;">${vertex.label || vName}</text>`;
+            });
+
+            return svg;
+        },
+
+        renderPolygonFigure(figure, strokeColor, isSelected) {
+            const order = figure.vertexOrder || Object.keys(figure.vertices || {});
+            const points = order.map(k => `${figure.vertices[k].x},${figure.vertices[k].y}`).join(' ');
+            const center = this.getPolygonCentroid(figure.vertices);
+            let svg = '';
+
+            svg += `<polygon points="${points}" fill="rgba(0,0,0,0.01)" stroke="none" style="cursor: move;"/>`;
+            svg += `<polygon points="${points}" fill="${figure.fillColor || 'none'}" stroke="${figure.strokeColor || strokeColor}" stroke-width="${figure.strokeWidth || 2.5}" stroke-linejoin="round" style="pointer-events: none;"/>`;
+
+            (figure.extraLines || []).forEach(line => {
+                const dash = line.dasharray ? ` stroke-dasharray="${line.dasharray}"` : '';
+                svg += `<line x1="${line.x1}" y1="${line.y1}" x2="${line.x2}" y2="${line.y2}" stroke="${line.stroke || this.colors.auxiliaryLine}" stroke-width="${line.strokeWidth || 1.5}"${dash}/>`;
+            });
+
+            (figure.extraPaths || []).forEach(path => {
+                const dash = path.dasharray ? ` stroke-dasharray="${path.dasharray}"` : '';
+                svg += `<path d="${path.d}" fill="${path.fill ?? 'none'}" stroke="${path.stroke || this.colors.auxiliaryLine}" stroke-width="${path.strokeWidth || 1.2}"${dash}/>`;
+            });
+
+            (figure.extraCircles || []).forEach(c => {
+                svg += `<circle cx="${c.cx}" cy="${c.cy}" r="${c.r}" fill="${c.fill || 'none'}" stroke="${c.stroke || this.colors.vertexMarker}" stroke-width="${c.strokeWidth || 1}"/>`;
+            });
+
+            (figure.freeTexts || []).forEach(t => {
+                svg += `<text x="${t.x}" y="${t.y}" fill="${t.fill || this.colors.label}" font-size="${t.fontSize || 11}" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="${t.anchor || 'middle'}" dominant-baseline="middle">${t.text}</text>`;
+            });
+
+            order.forEach((key, idx) => {
+                const vertex = figure.vertices[key];
+                const base = this.labelPosFromCenter(vertex, center, 22);
+                const labelPos = {
+                    x: base.x + (vertex.labelDx || 0),
+                    y: base.y + (vertex.labelDy || 0),
+                };
+                svg += this.renderVertexMarker(vertex.x, vertex.y, key, isSelected);
+                svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${this.colors.label}" font-size="24" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label" data-label="${key}" style="cursor: move; pointer-events: auto;">${vertex.label || `P${idx + 1}`}</text>`;
             });
 
             return svg;
@@ -3425,6 +3482,8 @@ function geometryEditor() {
                     svgContent += this.renderTriangleForExportTransformed(figure, transformPoint, scale);
                 } else if (figure.type === 'quadrilateral') {
                     svgContent += this.renderQuadrilateralForExportTransformed(figure, transformPoint, scale);
+                } else if (figure.type === 'polygon') {
+                    svgContent += this.renderPolygonForExportTransformed(figure, transformPoint, scale);
                 } else if (figure.type === 'circle') {
                     svgContent += this.renderCircleForExportTransformed(figure, transformPoint, scale);
                 }
@@ -3616,6 +3675,49 @@ function geometryEditor() {
             svg += this.labelText(v.B.label || 'B', { x: labelB.x + (v.B.labelDx || 0), y: labelB.y + (v.B.labelDy || 0) }, null, 24);
             svg += this.labelText(v.C.label || 'C', { x: labelC.x + (v.C.labelDx || 0), y: labelC.y + (v.C.labelDy || 0) }, null, 24);
             svg += this.labelText(v.D.label || 'D', { x: labelD.x + (v.D.labelDx || 0), y: labelD.y + (v.D.labelDy || 0) }, null, 24);
+
+            return svg;
+        },
+
+        renderPolygonForExportTransformed(figure, transformPoint, scale) {
+            const order = figure.vertexOrder || Object.keys(figure.vertices || {});
+            const transformed = order.map(k => ({ key: k, ...transformPoint(figure.vertices[k]) }));
+            const center = {
+                x: transformed.reduce((sum, p) => sum + p.x, 0) / transformed.length,
+                y: transformed.reduce((sum, p) => sum + p.y, 0) / transformed.length
+            };
+
+            let svg = '';
+            const points = transformed.map(p => `${p.x},${p.y}`).join(' ');
+            svg += `  <polygon points="${points}" fill="${figure.fillColor || 'none'}" stroke="${figure.strokeColor || this.colors.shapeStroke}" stroke-width="${figure.strokeWidth || 2.5}"/>\n`;
+
+            (figure.extraLines || []).forEach(line => {
+                const p1 = transformPoint({ x: line.x1, y: line.y1 });
+                const p2 = transformPoint({ x: line.x2, y: line.y2 });
+                const dash = line.dasharray ? ` stroke-dasharray="${line.dasharray}"` : '';
+                svg += `  <line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="${line.stroke || this.colors.auxiliaryLine}" stroke-width="${line.strokeWidth || 1.5}"${dash}/>\n`;
+            });
+
+            (figure.extraCircles || []).forEach(circle => {
+                const c = transformPoint({ x: circle.cx, y: circle.cy });
+                svg += `  <circle cx="${c.x}" cy="${c.y}" r="${(circle.r || 1) * scale}" fill="${circle.fill || 'none'}" stroke="${circle.stroke || this.colors.vertexMarker}" stroke-width="${circle.strokeWidth || 1}"/>\n`;
+            });
+
+            (figure.freeTexts || []).forEach(text => {
+                const t = transformPoint({ x: text.x, y: text.y });
+                svg += `  <text x="${t.x}" y="${t.y}" fill="${text.fill || this.colors.label}" font-size="${text.fontSize || 11}" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="${text.anchor || 'middle'}" dominant-baseline="middle">${text.text}</text>\n`;
+            });
+
+            transformed.forEach((point, idx) => {
+                const original = figure.vertices[point.key];
+                const base = this.labelPosFromCenter(point, center, 22);
+                const labelPos = {
+                    x: base.x + (original.labelDx || 0),
+                    y: base.y + (original.labelDy || 0)
+                };
+                svg += this.renderVertexMarkerForExport(point.x, point.y);
+                svg += this.labelText(original.label || `P${idx + 1}`, labelPos, null, 24);
+            });
 
             return svg;
         },
@@ -4453,6 +4555,222 @@ function geometryEditor() {
             if (metadata.figures) {
                 this.figures = metadata.figures;
                 this.figureCounter = this.figures.length;
+            }
+        },
+
+        tryCreateEditableFromLegacySvg(taskId, svgString) {
+            // Автоконвертация только для темы 18 (grid-figures)
+            if (!taskId || !/^18(OGE|EGE)\d+$/i.test(taskId) || !svgString) return null;
+
+            try {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(svgString, 'image/svg+xml');
+                const svg = doc.querySelector('svg');
+                if (!svg) return null;
+
+                let canvasWidth = this.canvasWidth;
+                let canvasHeight = this.canvasHeight;
+                const viewBox = (svg.getAttribute('viewBox') || '').trim().split(/\s+/).map(Number);
+                if (viewBox.length === 4 && Number.isFinite(viewBox[2]) && Number.isFinite(viewBox[3])) {
+                    canvasWidth = Math.round(viewBox[2]);
+                    canvasHeight = Math.round(viewBox[3]);
+                }
+
+                let gridSize = 20;
+                const pattern = doc.querySelector('pattern');
+                if (pattern) {
+                    const pSize = parseFloat(pattern.getAttribute('width') || '');
+                    if (Number.isFinite(pSize) && pSize > 0) gridSize = pSize;
+                }
+
+                const visibleLines = Array.from(doc.querySelectorAll('line'))
+                    .filter(line => !line.closest('defs'));
+
+                let polygon = doc.querySelector('polygon');
+                let polygonPoints = [];
+                if (polygon) {
+                    const pointTokens = (polygon.getAttribute('points') || '').trim().split(/\s+/);
+                    polygonPoints = pointTokens.map(token => {
+                        const [x, y] = token.split(',').map(Number);
+                        return { x, y };
+                    }).filter(p => Number.isFinite(p.x) && Number.isFinite(p.y));
+                }
+
+                // Fallback: если <polygon> нет, пробуем собрать вершины из концов отрезков
+                if (polygonPoints.length < 3) {
+                    const uniquePoints = [];
+                    const addUnique = (x, y) => {
+                        if (!Number.isFinite(x) || !Number.isFinite(y)) return;
+                        const exists = uniquePoints.some(p => Math.abs(p.x - x) < 0.5 && Math.abs(p.y - y) < 0.5);
+                        if (!exists) uniquePoints.push({ x, y });
+                    };
+                    visibleLines.forEach(line => {
+                        addUnique(parseFloat(line.getAttribute('x1') || ''), parseFloat(line.getAttribute('y1') || ''));
+                        addUnique(parseFloat(line.getAttribute('x2') || ''), parseFloat(line.getAttribute('y2') || ''));
+                    });
+
+                    if (uniquePoints.length >= 3) {
+                        const cx = uniquePoints.reduce((s, p) => s + p.x, 0) / uniquePoints.length;
+                        const cy = uniquePoints.reduce((s, p) => s + p.y, 0) / uniquePoints.length;
+                        polygonPoints = uniquePoints
+                            .slice()
+                            .sort((a, b) => Math.atan2(a.y - cy, a.x - cx) - Math.atan2(b.y - cy, b.x - cx));
+                    }
+                }
+
+                const texts = Array.from(doc.querySelectorAll('text')).map((el, id) => ({
+                    id,
+                    text: (el.textContent || '').trim(),
+                    x: parseFloat(el.getAttribute('x') || '0'),
+                    y: parseFloat(el.getAttribute('y') || '0'),
+                    fill: el.getAttribute('fill') || this.colors.label,
+                    fontSize: parseFloat(el.getAttribute('font-size') || '11'),
+                    anchor: el.getAttribute('text-anchor') || 'middle'
+                })).filter(t => t.text && Number.isFinite(t.x) && Number.isFinite(t.y));
+
+                const usedTextIds = new Set();
+                const vertices = {};
+                const vertexOrder = [];
+
+                polygonPoints.forEach((point, index) => {
+                    const key = `P${index + 1}`;
+                    vertexOrder.push(key);
+
+                    let label = key;
+                    let nearest = null;
+                    let nearestDistance = Infinity;
+
+                    texts.forEach(t => {
+                        if (usedTextIds.has(t.id)) return;
+                        const dx = t.x - point.x;
+                        const dy = t.y - point.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < nearestDistance) {
+                            nearestDistance = dist;
+                            nearest = t;
+                        }
+                    });
+
+                    if (nearest && nearestDistance <= 26) {
+                        label = nearest.text;
+                        usedTextIds.add(nearest.id);
+                    }
+
+                    vertices[key] = {
+                        x: point.x,
+                        y: point.y,
+                        label,
+                        labelDx: 0,
+                        labelDy: 0
+                    };
+                });
+
+                const extraLines = visibleLines.map(line => ({
+                    x1: parseFloat(line.getAttribute('x1') || '0'),
+                    y1: parseFloat(line.getAttribute('y1') || '0'),
+                    x2: parseFloat(line.getAttribute('x2') || '0'),
+                    y2: parseFloat(line.getAttribute('y2') || '0'),
+                    stroke: line.getAttribute('stroke') || this.colors.auxiliaryLine,
+                    strokeWidth: parseFloat(line.getAttribute('stroke-width') || '1.5'),
+                    dasharray: line.getAttribute('stroke-dasharray') || null
+                })).filter(l => [l.x1, l.y1, l.x2, l.y2].every(Number.isFinite));
+
+                const extraPaths = Array.from(doc.querySelectorAll('path'))
+                .filter(path => !path.closest('defs'))
+                .map(path => ({
+                    d: path.getAttribute('d') || '',
+                    stroke: path.getAttribute('stroke') || this.colors.auxiliaryLine,
+                    strokeWidth: parseFloat(path.getAttribute('stroke-width') || '1.2'),
+                    fill: path.getAttribute('fill') || 'none',
+                    dasharray: path.getAttribute('stroke-dasharray') || null
+                })).filter(p => p.d);
+
+                const extraCircles = Array.from(doc.querySelectorAll('circle'))
+                .filter(circle => !circle.closest('defs'))
+                .map(circle => ({
+                    cx: parseFloat(circle.getAttribute('cx') || '0'),
+                    cy: parseFloat(circle.getAttribute('cy') || '0'),
+                    r: parseFloat(circle.getAttribute('r') || '0'),
+                    stroke: circle.getAttribute('stroke') || this.colors.vertexMarker,
+                    strokeWidth: parseFloat(circle.getAttribute('stroke-width') || '1'),
+                    fill: circle.getAttribute('fill') || 'none'
+                })).filter(c => Number.isFinite(c.cx) && Number.isFinite(c.cy) && Number.isFinite(c.r) && c.r > 0 && c.r <= 4);
+
+                const freeTexts = texts.filter(t => !usedTextIds.has(t.id));
+
+                // Circle-only fallback (для заданий с окружностями без полигона)
+                if (polygonPoints.length < 3) {
+                    const circles = Array.from(doc.querySelectorAll('circle'))
+                        .filter(circle => !circle.closest('defs'))
+                        .map(circle => ({
+                            cx: parseFloat(circle.getAttribute('cx') || '0'),
+                            cy: parseFloat(circle.getAttribute('cy') || '0'),
+                            r: parseFloat(circle.getAttribute('r') || '0')
+                        }))
+                        .filter(c => Number.isFinite(c.cx) && Number.isFinite(c.cy) && Number.isFinite(c.r) && c.r > 8);
+
+                    if (circles.length > 0) {
+                        return {
+                            created_via: 'editor',
+                            canvas: {
+                                width: Math.max(220, canvasWidth),
+                                height: Math.max(180, canvasHeight),
+                                showGrid: true,
+                                gridSize: Math.max(10, Math.min(50, Math.round(gridSize)))
+                            },
+                            figures: circles.map((c, idx) => ({
+                                id: `circle_legacy_${idx + 1}`,
+                                type: 'circle',
+                                center: { x: c.cx, y: c.cy },
+                                radius: c.r,
+                                centerLabel: idx === 0 ? 'O' : `O${idx + 1}`,
+                                showDiameter: false,
+                                showRadius: false,
+                                diameterAngle: 0,
+                                diameterLabel1: '',
+                                diameterLabel2: '',
+                                radiusAngle: 45,
+                                radiusLabel: '',
+                                chords: [],
+                                tangents: [],
+                                secants: [],
+                                inscribedAngles: [],
+                                highlightedArcs: [],
+                                inscribedPolygon: null
+                            }))
+                        };
+                    }
+
+                    return null;
+                }
+
+                const figure = {
+                    id: `polygon_${Date.now()}`,
+                    type: 'polygon',
+                    vertices,
+                    vertexOrder,
+                    fillColor: polygon?.getAttribute('fill') || 'none',
+                    strokeColor: polygon?.getAttribute('stroke') || this.colors.shapeStroke,
+                    strokeWidth: parseFloat(polygon?.getAttribute('stroke-width') || '2.5'),
+                    extraLines,
+                    extraPaths,
+                    extraCircles,
+                    freeTexts
+                };
+
+                return {
+                    created_via: 'editor',
+                    canvas: {
+                        width: Math.max(220, canvasWidth),
+                        height: Math.max(180, canvasHeight),
+                        showGrid: true,
+                        gridSize: Math.max(10, Math.min(50, Math.round(gridSize)))
+                    },
+                    figures: [figure]
+                };
+            } catch (e) {
+                console.warn('Legacy SVG conversion failed:', e);
+                return null;
             }
         },
 
