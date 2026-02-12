@@ -12,11 +12,10 @@
 
 @once
 <style>
-    /* Принудительно масштабирует геометрический SVG до 350px.
-       Переопределяет бейкнутый max-w-[250px] внутри SVG.
-       Селектор > svg затрагивает только прямого потомка (не иконку в кнопке). */
-    .geo-svg-force { width: 350px; max-width: 100%; }
-    .geo-svg-force > svg { max-width: 350px !important; width: 100%; height: auto; }
+    /* Как на других страницах: ограничиваем SVG до 250px и центрируем.
+       Важно: применяем к любому вложенному <svg>, т.к. в payload бывает обёртка. */
+    .geo-svg-force { max-width: 250px; width: 100%; margin: 0 auto; }
+    .geo-svg-force svg { max-width: 250px !important; width: auto !important; height: auto !important; display: block; margin: 0 auto; }
 </style>
 @endonce
 
