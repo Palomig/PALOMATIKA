@@ -5,11 +5,11 @@ Last updated: 2026-02-13
 ## Phase 1 - Foundation
 
 - [x] `2026-02-13` Establish continuity artifacts (`.claude/ui-improvement-progress.md`, `.claude/ui-design-system.md`)
-  commit: `TBD`
+  commit: `731e4e5`
 - [x] `2026-02-13` Switch landing to centralized design tokens via `partials/head-config.blade.php`
-  commit: `TBD`
+  commit: `731e4e5`
 - [x] `2026-02-13` Create reusable UI Blade components in `resources/views/components/ui/`
-  commit: `TBD`
+  commit: `731e4e5`
 
 ## Phase 2 - UX Flow
 
