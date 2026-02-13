@@ -36,9 +36,21 @@
                 transform: translateY(0);
             }
         }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal {
+                opacity: 1;
+                transform: none;
+                animation: none;
+            }
+        }
     </style>
 </head>
 <body x-data="landingPage()" class="landing-bg min-h-screen text-white">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 bg-coral text-white px-4 py-2 rounded-lg">
+        Перейти к содержимому
+    </a>
+
     <div class="absolute inset-0 pointer-events-none grid-pattern"></div>
 
     <header class="sticky top-0 z-40 transition-all duration-300"
@@ -90,7 +102,7 @@
         </div>
     </header>
 
-    <main id="top">
+    <main id="main-content">
         <section class="relative pt-14 pb-20 sm:pt-20 sm:pb-24">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="grid lg:grid-cols-2 gap-10 items-center">
@@ -118,8 +130,8 @@
                         </div>
                     </div>
 
-                    <x-ui.card id="how" class="bg-dark-light/80 border-white/10 rounded-3xl p-6 sm:p-8 shadow-2xl">
-                        <h2 class="text-2xl font-bold mb-3">Мини-демо пазла</h2>
+                    <x-ui.card id="how" class="bg-dark-light/80 border-white/10 rounded-3xl p-6 sm:p-8 shadow-2xl" aria-labelledby="demo-title">
+                        <h2 id="demo-title" class="text-2xl font-bold mb-3">Мини-демо пазла</h2>
                         <p class="text-gray-300 text-sm mb-6">Выбери блоки для формулы Пифагора: <span class="font-semibold">c² = ? + ?</span></p>
 
                         <div class="flex items-center justify-center gap-3 flex-wrap mb-5">
@@ -140,7 +152,7 @@
                             </div>
                         </div>
 
-                        <p class="mt-4 text-sm" :class="messageClass" x-text="message"></p>
+                        <p class="mt-4 text-sm" :class="messageClass" x-text="message" aria-live="polite"></p>
                         <button type="button" @click="reset()" class="mt-4 text-sm text-gray-300 hover:text-white underline">Сбросить</button>
                     </x-ui.card>
                 </div>
@@ -209,22 +221,28 @@
                         <h3 class="text-xl font-bold mb-4">Частые возражения</h3>
                         <div class="space-y-2">
                             <button type="button" class="w-full text-left px-3 py-2 rounded-lg bg-dark hover:bg-dark-lighter transition"
+                                    :aria-expanded="(objectionOpen === 1).toString()"
+                                    aria-controls="objection-1"
                                     @click="objectionOpen = objectionOpen === 1 ? null : 1">
                                 Это подойдет, если база слабая?
                             </button>
-                            <p x-show="objectionOpen === 1" x-cloak class="text-sm text-gray-300 px-3">Да. Платформа начинается с диагностики и ведет от базы к сложным номерам по шагам.</p>
+                            <p id="objection-1" x-show="objectionOpen === 1" x-cloak class="text-sm text-gray-300 px-3">Да. Платформа начинается с диагностики и ведет от базы к сложным номерам по шагам.</p>
 
                             <button type="button" class="w-full text-left px-3 py-2 rounded-lg bg-dark hover:bg-dark-lighter transition"
+                                    :aria-expanded="(objectionOpen === 2).toString()"
+                                    aria-controls="objection-2"
                                     @click="objectionOpen = objectionOpen === 2 ? null : 2">
                                 Нужна ли помощь репетитора?
                             </button>
-                            <p x-show="objectionOpen === 2" x-cloak class="text-sm text-gray-300 px-3">Можно заниматься самостоятельно, но с репетитором эффект обычно еще выше за счет разбора ошибок.</p>
+                            <p id="objection-2" x-show="objectionOpen === 2" x-cloak class="text-sm text-gray-300 px-3">Можно заниматься самостоятельно, но с репетитором эффект обычно еще выше за счет разбора ошибок.</p>
 
                             <button type="button" class="w-full text-left px-3 py-2 rounded-lg bg-dark hover:bg-dark-lighter transition"
+                                    :aria-expanded="(objectionOpen === 3).toString()"
+                                    aria-controls="objection-3"
                                     @click="objectionOpen = objectionOpen === 3 ? null : 3">
                                 Что если не понравится?
                             </button>
-                            <p x-show="objectionOpen === 3" x-cloak class="text-sm text-gray-300 px-3">Есть бесплатный период. За это время можно пройти диагностику и оценить формат без риска.</p>
+                            <p id="objection-3" x-show="objectionOpen === 3" x-cloak class="text-sm text-gray-300 px-3">Есть бесплатный период. За это время можно пройти диагностику и оценить формат без риска.</p>
                         </div>
                     </x-ui.card>
                 </div>
@@ -275,10 +293,10 @@
                     <table class="w-full min-w-[720px] text-sm">
                         <thead class="bg-dark/80">
                             <tr class="text-left">
-                                <th class="px-4 py-3 text-gray-300">Параметр</th>
-                                <th class="px-4 py-3 text-coral">PALOMATIKA</th>
-                                <th class="px-4 py-3 text-gray-300">Обычные тест-платформы</th>
-                                <th class="px-4 py-3 text-gray-300">Крупные онлайн-школы</th>
+                                <th scope="col" class="px-4 py-3 text-gray-300">Параметр</th>
+                                <th scope="col" class="px-4 py-3 text-coral">PALOMATIKA</th>
+                                <th scope="col" class="px-4 py-3 text-gray-300">Обычные тест-платформы</th>
+                                <th scope="col" class="px-4 py-3 text-gray-300">Крупные онлайн-школы</th>
                             </tr>
                         </thead>
                         <tbody class="bg-dark-light/70">
