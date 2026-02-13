@@ -58,7 +58,35 @@
                     <x-ui.button href="/login" variant="ghost">Войти</x-ui.button>
                     <x-ui.button href="/register" variant="primary">Попробовать бесплатно</x-ui.button>
                 </div>
+
+                <button type="button"
+                        class="sm:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/20 text-gray-200 hover:bg-white/10 transition"
+                        @click="mobileMenuOpen = !mobileMenuOpen"
+                        :aria-expanded="mobileMenuOpen.toString()"
+                        aria-label="Открыть меню">
+                    <svg x-show="!mobileMenuOpen" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                    <svg x-show="mobileMenuOpen" x-cloak class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
             </nav>
+
+            <div x-show="mobileMenuOpen" x-cloak x-transition
+                 class="sm:hidden pb-4 border-t border-white/10">
+                <div class="pt-4 grid gap-3">
+                    <x-ui.button href="/register" variant="primary" class="w-full justify-center" @click="mobileMenuOpen = false">
+                        🎯 Начать бесплатно
+                    </x-ui.button>
+                    <x-ui.button href="/login" variant="outline" class="w-full justify-center" @click="mobileMenuOpen = false">
+                        Войти в аккаунт
+                    </x-ui.button>
+                    <x-ui.button href="#how" variant="ghost" class="w-full justify-center" @click="mobileMenuOpen = false">
+                        Как это работает
+                    </x-ui.button>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -154,6 +182,7 @@
         function landingPage() {
             return {
                 scrolled: false,
+                mobileMenuOpen: false,
                 selected: [],
                 message: 'Выбери два блока для формулы.',
                 messageClass: 'text-gray-300',
