@@ -22,8 +22,8 @@ Last updated: 2026-02-13
 
 ## Phase 3 - Polish and QA
 
-- [ ] Accessibility pass (focus order, contrast, keyboard flow)
-  commit: `-`
+- [x] Accessibility pass (focus order, contrast, keyboard flow)
+  commit: `4decf02`
 - [ ] Responsive pass for 320px/768px/1024px
   commit: `-`
 - [ ] Performance cleanup (reduce duplicate styles/scripts)
