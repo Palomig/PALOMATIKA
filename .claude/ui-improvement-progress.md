@@ -13,12 +13,12 @@ Last updated: 2026-02-13
 
 ## Phase 2 - UX Flow
 
-- [ ] Improve header/mobile nav behavior and CTA consistency
-  commit: `-`
-- [ ] Add trust blocks (results, social proof, objections)
-  commit: `-`
-- [ ] Add clear pricing/comparison section with conversion-focused CTA
-  commit: `-`
+- [x] Improve header/mobile nav behavior and CTA consistency
+  commit: `a28db81`
+- [x] Add trust blocks (results, social proof, objections)
+  commit: `3b71afb`
+- [x] Add clear pricing/comparison section with conversion-focused CTA
+  commit: `72655eb`
 
 ## Phase 3 - Polish and QA
 
