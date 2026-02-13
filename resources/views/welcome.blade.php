@@ -373,6 +373,7 @@
         function landingPage() {
             return {
                 scrolled: false,
+                scrollTicking: false,
                 mobileMenuOpen: false,
                 objectionOpen: null,
                 selected: [],
@@ -380,12 +381,28 @@
                 messageClass: 'text-gray-300',
 
                 init() {
-                    this.onScroll();
-                    window.addEventListener('scroll', () => this.onScroll());
+                    this.handleScroll();
+                    window.addEventListener('scroll', () => this.handleScroll(), { passive: true });
+                    window.addEventListener('resize', () => {
+                        if (window.innerWidth >= 640) {
+                            this.mobileMenuOpen = false;
+                        }
+                    });
                 },
 
                 onScroll() {
                     this.scrolled = window.scrollY > 10;
+                },
+
+                handleScroll() {
+                    if (this.scrollTicking) {
+                        return;
+                    }
+                    this.scrollTicking = true;
+                    requestAnimationFrame(() => {
+                        this.onScroll();
+                        this.scrollTicking = false;
+                    });
                 },
 
                 pick(item) {
