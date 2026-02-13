@@ -24,7 +24,7 @@ Last updated: 2026-02-13
 
 - [x] Accessibility pass (focus order, contrast, keyboard flow)
   commit: `4decf02`
-- [ ] Responsive pass for 320px/768px/1024px
-  commit: `-`
-- [ ] Performance cleanup (reduce duplicate styles/scripts)
-  commit: `-`
+- [x] Responsive pass for 320px/768px/1024px
+  commit: `ae424e8`
+- [x] Performance cleanup (reduce duplicate styles/scripts)
+  commit: `d33dfc1`
