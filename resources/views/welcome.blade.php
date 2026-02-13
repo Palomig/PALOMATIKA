@@ -1,225 +1,205 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>PALOMATIKA - Подготовка к ОГЭ по математике</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        dark: {
-                            DEFAULT: '#1a1a2e',
-                            light: '#252542',
-                            lighter: '#2d2d4a',
-                        },
-                        coral: {
-                            DEFAULT: '#ff6b6b',
-                            dark: '#e85555',
-                            light: '#ff8585',
-                        }
-                    }
-                }
+    <meta name="description" content="PALOMATIKA помогает сдать ОГЭ по математике через пазловый формат задач, диагностику пробелов и адаптивный трек обучения.">
+    @include('partials.head-config')
+
+    <style>
+        .landing-bg {
+            background:
+                radial-gradient(1200px 600px at 85% -10%, rgba(255, 107, 107, 0.20), transparent 60%),
+                radial-gradient(900px 420px at 0% 0%, rgba(56, 189, 248, 0.12), transparent 50%),
+                #090c16;
+        }
+
+        .grid-pattern {
+            background-image:
+                linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+            background-size: 36px 36px;
+            mask-image: radial-gradient(circle at center, black 42%, transparent 85%);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(18px);
+            animation: revealUp .7s ease forwards;
+        }
+        .reveal.delay-1 { animation-delay: .1s; }
+        .reveal.delay-2 { animation-delay: .2s; }
+        .reveal.delay-3 { animation-delay: .3s; }
+
+        @keyframes revealUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
-    </script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body class="bg-dark min-h-screen">
-    <!-- Header -->
-    <header class="container mx-auto px-4 py-6">
-        <nav class="flex justify-between items-center">
-            <div class="flex items-center">
-                <div class="w-10 h-10 bg-coral rounded-xl flex items-center justify-center mr-3">
-                    <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                    </svg>
-                </div>
-                <span class="text-2xl font-bold text-white">PALOMATIKA</span>
-            </div>
-            <div class="space-x-4">
-                <a href="/login" class="text-gray-300 hover:text-white transition">Войти</a>
-                <a href="/register" class="bg-coral text-white px-5 py-2.5 rounded-xl font-medium hover:bg-coral-dark transition">
-                    Начать бесплатно
+<body x-data="landingPage()" class="landing-bg min-h-screen text-white">
+    <div class="absolute inset-0 pointer-events-none grid-pattern"></div>
+
+    <header class="sticky top-0 z-40 transition-all duration-300"
+            :class="scrolled ? 'bg-dark/90 backdrop-blur border-b border-white/10' : 'bg-transparent'">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <nav class="h-20 flex items-center justify-between">
+                <a href="#top" class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-xl bg-coral flex items-center justify-center shadow-glow-coral">
+                        <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                    </span>
+                    <span class="text-2xl font-bold">PALOMATIKA</span>
                 </a>
-            </div>
-        </nav>
+
+                <div class="hidden sm:flex items-center gap-3">
+                    <x-ui.button href="/login" variant="ghost">Войти</x-ui.button>
+                    <x-ui.button href="/register" variant="primary">Попробовать бесплатно</x-ui.button>
+                </div>
+            </nav>
+        </div>
     </header>
 
-    <!-- Hero Section -->
-    <main class="container mx-auto px-4 py-16">
-        <div class="text-center max-w-4xl mx-auto">
-            <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">
-                Сдай ОГЭ по математике на <span class="text-coral">5</span>
-            </h1>
-            <p class="text-xl text-gray-400 mb-8">
-                Интерактивная платформа с пазловым методом обучения.
-                Разбирай задачи по шагам, отслеживай прогресс, соревнуйся с друзьями.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="/register" class="bg-coral text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-coral-dark transition shadow-lg shadow-coral/30">
-                    Начать подготовку
-                </a>
-                <a href="#features" class="border-2 border-gray-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-dark-light transition">
-                    Узнать больше
-                </a>
-            </div>
-            <p class="text-gray-500 mt-4 text-sm">7 дней бесплатного доступа ко всем функциям</p>
-        </div>
+    <main id="top">
+        <section class="relative pt-14 pb-20 sm:pt-20 sm:pb-24">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid lg:grid-cols-2 gap-10 items-center">
+                    <div>
+                        <p class="reveal inline-flex items-center gap-2 text-sm text-gray-300 border border-white/15 rounded-full px-4 py-2 mb-6">
+                            <span class="w-2 h-2 rounded-full bg-success"></span>
+                            7 дней бесплатно, без привязки карты
+                        </p>
+                        <h1 class="reveal delay-1 text-4xl sm:text-5xl lg:text-6xl leading-tight font-bold">
+                            Сдай ОГЭ по математике на <span class="text-coral">5</span>
+                            через понимание, а не зубрежку
+                        </h1>
+                        <p class="reveal delay-2 mt-6 text-lg text-gray-300 max-w-xl">
+                            Система показывает, где именно пробел, и ведет по шагам: от ошибки к теме, от темы к уверенному решению.
+                        </p>
+                        <div class="reveal delay-3 mt-8 flex flex-col sm:flex-row gap-4">
+                            <x-ui.button href="/register" variant="primary" size="lg">🎯 Начать бесплатно</x-ui.button>
+                            <x-ui.button href="#how" variant="outline" size="lg">Посмотреть демо</x-ui.button>
+                        </div>
+                        <div class="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-xl">
+                            <x-ui.stat value="5600+" label="задач" />
+                            <x-ui.stat value="25" label="номеров ОГЭ" />
+                            <x-ui.stat value="107" label="навыков" />
+                            <x-ui.stat value="AI" label="подсказки" />
+                        </div>
+                    </div>
 
-        <!-- Stats -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 max-w-4xl mx-auto">
-            <div class="bg-dark-light border border-gray-800 rounded-2xl p-6 text-center">
-                <div class="text-3xl font-bold text-coral">25</div>
-                <div class="text-gray-400 text-sm mt-1">Номеров ОГЭ</div>
+                    <x-ui.card id="how" class="bg-dark-light/80 border-white/10 rounded-3xl p-6 sm:p-8 shadow-2xl">
+                        <h2 class="text-2xl font-bold mb-3">Мини-демо пазла</h2>
+                        <p class="text-gray-300 text-sm mb-6">Выбери блоки для формулы Пифагора: <span class="font-semibold">c² = ? + ?</span></p>
+
+                        <div class="flex items-center justify-center gap-3 flex-wrap mb-5">
+                            <template x-for="item in ['a²', 'b²', 'a+b', 'ab']" :key="item">
+                                <button type="button" @click="pick(item)"
+                                    class="px-4 py-2 rounded-lg border transition"
+                                    :class="selected.includes(item) ? 'bg-coral border-coral text-white' : 'border-white/20 text-gray-200 hover:bg-white/10'"
+                                    x-text="item"></button>
+                            </template>
+                        </div>
+
+                        <div class="rounded-xl bg-dark-lighter border border-white/10 p-4 text-center">
+                            <div class="text-lg sm:text-xl">
+                                c² =
+                                <span class="inline-flex min-w-[70px] justify-center font-semibold" x-text="selected[0] || '____'"></span>
+                                +
+                                <span class="inline-flex min-w-[70px] justify-center font-semibold" x-text="selected[1] || '____'"></span>
+                            </div>
+                        </div>
+
+                        <p class="mt-4 text-sm" :class="messageClass" x-text="message"></p>
+                        <button type="button" @click="reset()" class="mt-4 text-sm text-gray-300 hover:text-white underline">Сбросить</button>
+                    </x-ui.card>
+                </div>
             </div>
-            <div class="bg-dark-light border border-gray-800 rounded-2xl p-6 text-center">
-                <div class="text-3xl font-bold text-coral">5600+</div>
-                <div class="text-gray-400 text-sm mt-1">Задач</div>
+        </section>
+
+        <section class="py-16 sm:py-20 border-y border-white/10 bg-dark-light/60">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl sm:text-4xl text-center font-bold">Почему обычные тесты тормозят прогресс</h2>
+                <div class="mt-10 grid md:grid-cols-2 gap-6">
+                    <x-ui.card class="border-danger/40 bg-danger/10">
+                        <h3 class="text-xl text-red-200 mb-3 font-bold">❌ Обычные тесты</h3>
+                        <ul class="space-y-2 text-gray-300">
+                            <li>Ты ошибся, но не понимаешь почему.</li>
+                            <li>Непонятно, что повторить в первую очередь.</li>
+                            <li>Зубрежка без устойчивого результата.</li>
+                        </ul>
+                    </x-ui.card>
+                    <x-ui.card class="border-success/40 bg-success/10">
+                        <h3 class="text-xl text-green-200 mb-3 font-bold">✅ PALOMATIKA</h3>
+                        <ul class="space-y-2 text-gray-200">
+                            <li>Показываем причину ошибки, а не только факт.</li>
+                            <li>Даем персональный маршрут закрытия пробелов.</li>
+                            <li>Учишься мыслить шагами, а не угадывать.</li>
+                        </ul>
+                    </x-ui.card>
+                </div>
             </div>
-            <div class="bg-dark-light border border-gray-800 rounded-2xl p-6 text-center">
-                <div class="text-3xl font-bold text-coral">107</div>
-                <div class="text-gray-400 text-sm mt-1">Навыков</div>
-            </div>
-            <div class="bg-dark-light border border-gray-800 rounded-2xl p-6 text-center">
-                <div class="text-3xl font-bold text-coral">AI</div>
-                <div class="text-gray-400 text-sm mt-1">Подсказки</div>
-            </div>
-        </div>
+        </section>
     </main>
 
-    <!-- Features -->
-    <section id="features" class="py-20 bg-dark-light">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center text-white mb-12">
-                Почему PALOMATIKA?
-            </h2>
-            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                <div class="p-6 rounded-2xl bg-dark border border-gray-800">
-                    <div class="w-12 h-12 bg-coral/20 rounded-xl flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-coral" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-white mb-2">Пазловый метод</h3>
-                    <p class="text-gray-400">
-                        Разбивай сложные задачи на простые шаги. Собирай решение как пазл из готовых блоков.
-                    </p>
-                </div>
-
-                <div class="p-6 rounded-2xl bg-dark border border-gray-800">
-                    <div class="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-white mb-2">Умная аналитика</h3>
-                    <p class="text-gray-400">
-                        Система отслеживает твои слабые места и подбирает задачи для их проработки.
-                    </p>
-                </div>
-
-                <div class="p-6 rounded-2xl bg-dark border border-gray-800">
-                    <div class="w-12 h-12 bg-amber-500/20 rounded-xl flex items-center justify-center mb-4">
-                        <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-white mb-2">Дуэли и лиги</h3>
-                    <p class="text-gray-400">
-                        Соревнуйся с одноклассниками, поднимайся в рейтинге, зарабатывай бейджи.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Pricing -->
-    <section class="py-20 bg-dark">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center text-white mb-12">
-                Тарифы
-            </h2>
-            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                <div class="bg-dark-light border border-gray-800 rounded-2xl p-8">
-                    <h3 class="text-xl font-semibold text-white">Старт</h3>
-                    <div class="mt-4">
-                        <span class="text-4xl font-bold text-white">499</span>
-                        <span class="text-gray-500">/мес</span>
-                    </div>
-                    <ul class="mt-6 space-y-3 text-gray-400">
-                        <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Все номера ОГЭ</li>
-                        <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Базовая аналитика</li>
-                        <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Дуэли</li>
-                    </ul>
-                    <button class="mt-8 w-full py-3 border-2 border-coral text-coral rounded-xl font-medium hover:bg-coral/10 transition">
-                        Выбрать
-                    </button>
-                </div>
-
-                <div class="bg-gradient-to-br from-coral to-coral-dark rounded-2xl p-8 transform scale-105 shadow-xl shadow-coral/20">
-                    <div class="text-white/80 text-sm font-medium mb-2">Популярный</div>
-                    <h3 class="text-xl font-semibold text-white">Стандарт</h3>
-                    <div class="mt-4">
-                        <span class="text-4xl font-bold text-white">799</span>
-                        <span class="text-white/70">/мес</span>
-                    </div>
-                    <ul class="mt-6 space-y-3 text-white/90">
-                        <li class="flex items-center"><svg class="w-5 h-5 text-white mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Всё из Старт</li>
-                        <li class="flex items-center"><svg class="w-5 h-5 text-white mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Расширенная аналитика</li>
-                        <li class="flex items-center"><svg class="w-5 h-5 text-white mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Теория по темам</li>
-                        <li class="flex items-center"><svg class="w-5 h-5 text-white mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Домашние задания</li>
-                    </ul>
-                    <button class="mt-8 w-full py-3 bg-white text-coral rounded-xl font-medium hover:bg-gray-100 transition">
-                        Выбрать
-                    </button>
-                </div>
-
-                <div class="bg-dark-light border border-gray-800 rounded-2xl p-8">
-                    <h3 class="text-xl font-semibold text-white">Премиум</h3>
-                    <div class="mt-4">
-                        <span class="text-4xl font-bold text-white">1299</span>
-                        <span class="text-gray-500">/мес</span>
-                    </div>
-                    <ul class="mt-6 space-y-3 text-gray-400">
-                        <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Всё из Стандарт</li>
-                        <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>AI-подсказки</li>
-                        <li class="flex items-center"><svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Приоритетная поддержка</li>
-                    </ul>
-                    <button class="mt-8 w-full py-3 border-2 border-coral text-coral rounded-xl font-medium hover:bg-coral/10 transition">
-                        Выбрать
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-dark-light border-t border-gray-800 py-12">
-        <div class="container mx-auto px-4 text-center">
-            <div class="flex items-center justify-center mb-4">
-                <div class="w-10 h-10 bg-coral rounded-xl flex items-center justify-center mr-3">
-                    <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                    </svg>
-                </div>
-                <span class="text-2xl font-bold text-white">PALOMATIKA</span>
-            </div>
-            <p class="text-gray-400 mb-8">Подготовка к ОГЭ по математике нового поколения</p>
-            <div class="flex justify-center space-x-6 text-gray-500">
-                <a href="#" class="hover:text-coral transition">Политика конфиденциальности</a>
-                <a href="#" class="hover:text-coral transition">Условия использования</a>
-                <a href="#" class="hover:text-coral transition">Контакты</a>
-            </div>
-            <p class="text-gray-600 mt-8 text-sm">&copy; {{ date('Y') }} PALOMATIKA. Все права защищены.</p>
+    <footer class="border-t border-white/10 bg-dark/90">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 text-center">
+            <p class="text-gray-400">© {{ date('Y') }} PALOMATIKA. Подготовка к ОГЭ по математике нового поколения.</p>
         </div>
     </footer>
+
+    <script>
+        function landingPage() {
+            return {
+                scrolled: false,
+                selected: [],
+                message: 'Выбери два блока для формулы.',
+                messageClass: 'text-gray-300',
+
+                init() {
+                    this.onScroll();
+                    window.addEventListener('scroll', () => this.onScroll());
+                },
+
+                onScroll() {
+                    this.scrolled = window.scrollY > 10;
+                },
+
+                pick(item) {
+                    if (this.selected.includes(item)) {
+                        this.selected = this.selected.filter(v => v !== item);
+                    } else if (this.selected.length < 2) {
+                        this.selected.push(item);
+                    }
+                    this.evaluate();
+                },
+
+                evaluate() {
+                    if (this.selected.length < 2) {
+                        this.message = 'Выбери два блока для формулы.';
+                        this.messageClass = 'text-gray-300';
+                        return;
+                    }
+
+                    const ok = this.selected.includes('a²') && this.selected.includes('b²');
+                    if (ok) {
+                        this.message = 'Верно. Так и строится первый шаг решения.';
+                        this.messageClass = 'text-green-300';
+                    } else {
+                        this.message = 'Почти. Для теоремы Пифагора нужно a² и b².';
+                        this.messageClass = 'text-red-300';
+                    }
+                },
+
+                reset() {
+                    this.selected = [];
+                    this.message = 'Выбери два блока для формулы.';
+                    this.messageClass = 'text-gray-300';
+                }
+            };
+        }
+    </script>
 </body>
 </html>
