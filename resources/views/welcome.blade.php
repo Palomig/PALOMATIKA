@@ -44,6 +44,13 @@
                 animation: none;
             }
         }
+
+        @media (max-width: 380px) {
+            .hero-tight {
+                font-size: 2rem;
+                line-height: 1.15;
+            }
+        }
     </style>
 </head>
 <body x-data="landingPage()" class="landing-bg min-h-screen text-white">
@@ -111,7 +118,7 @@
                             <span class="w-2 h-2 rounded-full bg-success"></span>
                             7 дней бесплатно, без привязки карты
                         </p>
-                        <h1 class="reveal delay-1 text-4xl sm:text-5xl lg:text-6xl leading-tight font-bold">
+                        <h1 class="hero-tight reveal delay-1 text-4xl sm:text-5xl lg:text-6xl leading-tight font-bold">
                             Сдай ОГЭ по математике на <span class="text-coral">5</span>
                             через понимание, а не зубрежку
                         </h1>
@@ -289,7 +296,7 @@
                     </x-ui.card>
                 </div>
 
-                <div class="mt-10 overflow-x-auto rounded-card border border-white/10">
+                <div class="mt-10 overflow-x-auto rounded-card border border-white/10 hidden md:block">
                     <table class="w-full min-w-[720px] text-sm">
                         <thead class="bg-dark/80">
                             <tr class="text-left">
@@ -320,6 +327,33 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+
+                <div class="mt-10 md:hidden space-y-3">
+                    <x-ui.card>
+                        <h3 class="font-semibold text-coral mb-2">PALOMATIKA</h3>
+                        <ul class="text-sm text-gray-200 space-y-1">
+                            <li>Диагностика причин ошибок: Да</li>
+                            <li>Пазловый формат решения: Да</li>
+                            <li>Средняя цена в месяц: 799₽</li>
+                        </ul>
+                    </x-ui.card>
+                    <x-ui.card>
+                        <h3 class="font-semibold text-gray-200 mb-2">Обычные тест-платформы</h3>
+                        <ul class="text-sm text-gray-300 space-y-1">
+                            <li>Диагностика причин ошибок: Частично</li>
+                            <li>Пазловый формат решения: Нет</li>
+                            <li>Средняя цена в месяц: 0-990₽</li>
+                        </ul>
+                    </x-ui.card>
+                    <x-ui.card>
+                        <h3 class="font-semibold text-gray-200 mb-2">Крупные онлайн-школы</h3>
+                        <ul class="text-sm text-gray-300 space-y-1">
+                            <li>Диагностика причин ошибок: Зависит от тарифа</li>
+                            <li>Пазловый формат решения: Нет</li>
+                            <li>Средняя цена в месяц: от 4000₽</li>
+                        </ul>
+                    </x-ui.card>
                 </div>
 
                 <div class="mt-8 text-center">
