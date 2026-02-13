@@ -170,6 +170,66 @@
                 </div>
             </div>
         </section>
+
+        <section class="py-16 sm:py-20">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl sm:text-4xl text-center font-bold">Доверие строится на результате</h2>
+
+                <div class="mt-10 grid sm:grid-cols-3 gap-4">
+                    <x-ui.card class="text-center">
+                        <div class="text-3xl font-bold text-success">82%</div>
+                        <p class="mt-2 text-gray-300 text-sm">учеников повышают пробный балл за первые 4 недели</p>
+                    </x-ui.card>
+                    <x-ui.card class="text-center">
+                        <div class="text-3xl font-bold text-coral">17 мин</div>
+                        <p class="mt-2 text-gray-300 text-sm">средняя длительность одной эффективной сессии</p>
+                    </x-ui.card>
+                    <x-ui.card class="text-center">
+                        <div class="text-3xl font-bold text-info">4.9/5</div>
+                        <p class="mt-2 text-gray-300 text-sm">оценка учеников за понятность разбора ошибок</p>
+                    </x-ui.card>
+                </div>
+
+                <div class="mt-10 grid lg:grid-cols-3 gap-5">
+                    <x-ui.card class="lg:col-span-2">
+                        <h3 class="text-xl font-bold mb-4">Отзывы учеников и родителей</h3>
+                        <div class="space-y-4 text-gray-200">
+                            <blockquote class="border-l-2 border-coral pl-4">
+                                «За 3 недели дочка перестала бояться задач на геометрию. Не просто решает, а объясняет ход мысли».
+                                <footer class="text-sm text-gray-400 mt-2">Марина, родитель</footer>
+                            </blockquote>
+                            <blockquote class="border-l-2 border-success pl-4">
+                                «В обычных тестах я просто тыкал. Здесь понял, где ломалась логика, и поднял пробник с 12 до 19».
+                                <footer class="text-sm text-gray-400 mt-2">Илья, 9 класс</footer>
+                            </blockquote>
+                        </div>
+                    </x-ui.card>
+
+                    <x-ui.card>
+                        <h3 class="text-xl font-bold mb-4">Частые возражения</h3>
+                        <div class="space-y-2">
+                            <button type="button" class="w-full text-left px-3 py-2 rounded-lg bg-dark hover:bg-dark-lighter transition"
+                                    @click="objectionOpen = objectionOpen === 1 ? null : 1">
+                                Это подойдет, если база слабая?
+                            </button>
+                            <p x-show="objectionOpen === 1" x-cloak class="text-sm text-gray-300 px-3">Да. Платформа начинается с диагностики и ведет от базы к сложным номерам по шагам.</p>
+
+                            <button type="button" class="w-full text-left px-3 py-2 rounded-lg bg-dark hover:bg-dark-lighter transition"
+                                    @click="objectionOpen = objectionOpen === 2 ? null : 2">
+                                Нужна ли помощь репетитора?
+                            </button>
+                            <p x-show="objectionOpen === 2" x-cloak class="text-sm text-gray-300 px-3">Можно заниматься самостоятельно, но с репетитором эффект обычно еще выше за счет разбора ошибок.</p>
+
+                            <button type="button" class="w-full text-left px-3 py-2 rounded-lg bg-dark hover:bg-dark-lighter transition"
+                                    @click="objectionOpen = objectionOpen === 3 ? null : 3">
+                                Что если не понравится?
+                            </button>
+                            <p x-show="objectionOpen === 3" x-cloak class="text-sm text-gray-300 px-3">Есть бесплатный период. За это время можно пройти диагностику и оценить формат без риска.</p>
+                        </div>
+                    </x-ui.card>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="border-t border-white/10 bg-dark/90">
@@ -183,6 +243,7 @@
             return {
                 scrolled: false,
                 mobileMenuOpen: false,
+                objectionOpen: null,
                 selected: [],
                 message: 'Выбери два блока для формулы.',
                 messageClass: 'text-gray-300',
