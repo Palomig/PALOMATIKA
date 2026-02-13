@@ -403,6 +403,7 @@ function geometryEditor() {
                 case 'triangle': return '△';
                 case 'quadrilateral': return '▢';
                 case 'polygon': return '⬠';
+                case 'segment': return '／';
                 case 'circle': return '⭕';
                 case 'stereometry': return '⬡';
                 default: return '?';
@@ -419,6 +420,9 @@ function geometryEditor() {
             } else if (figure.type === 'polygon') {
                 const count = figure.vertexOrder ? figure.vertexOrder.length : Object.keys(figure.vertices || {}).length;
                 return `Многоугольник (${count})`;
+            } else if (figure.type === 'segment') {
+                const v = figure.vertices || {};
+                return `Отрезок ${v.A?.label || 'A'}${v.B?.label || 'B'}`;
             } else if (figure.type === 'circle') {
                 return `Окружность ${figure.centerLabel || 'O'} (R=${Math.round(figure.radius)})`;
             } else if (figure.type === 'stereometry') {
@@ -695,8 +699,15 @@ function geometryEditor() {
             let labelPos;
             if (figure.type === 'triangle') {
                 labelPos = this.getLabelPosition(figure, labelName);
-            } else {
+            } else if (figure.type === 'quadrilateral') {
                 labelPos = this.getLabelPositionQuad(figure, labelName);
+            } else {
+                const v = figure.vertices?.[labelName];
+                if (!v) return;
+                labelPos = {
+                    x: v.x + (v.labelDx || 0),
+                    y: v.y + (v.labelDy || 0)
+                };
             }
 
             this.dragOffset = {
@@ -1266,6 +1277,8 @@ function geometryEditor() {
                     svg += this.renderQuadrilateral(figure, strokeColor, isSelected);
                 } else if (figure.type === 'polygon') {
                     svg += this.renderPolygonFigure(figure, strokeColor, isSelected);
+                } else if (figure.type === 'segment') {
+                    svg += this.renderSegmentFigure(figure, strokeColor, isSelected);
                 } else if (figure.type === 'circle') {
                     svg += this.renderCircle(figure, isSelected);
                 } else if (figure.type === 'stereometry') {
@@ -1632,6 +1645,32 @@ function geometryEditor() {
                 svg += this.renderVertexMarker(vertex.x, vertex.y, key, isSelected);
                 svg += `<text x="${labelPos.x}" y="${labelPos.y}" fill="${this.colors.label}" font-size="24" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label" data-label="${key}" style="cursor: move; pointer-events: auto;">${vertex.label || `P${idx + 1}`}</text>`;
             });
+
+            return svg;
+        },
+
+        renderSegmentFigure(figure, strokeColor, isSelected) {
+            const v = figure.vertices || {};
+            const A = v.A;
+            const B = v.B;
+            if (!A || !B) return '';
+
+            const dash = figure.dasharray ? ` stroke-dasharray="${figure.dasharray}"` : '';
+            const color = figure.strokeColor || this.colors.auxiliaryLine;
+            const width = figure.strokeWidth || 2;
+            let svg = '';
+
+            // Wide transparent hit area to drag the whole segment.
+            svg += `<line x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}" stroke="transparent" stroke-width="16" style="cursor: move;"/>`;
+            svg += `<line x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}" stroke="${isSelected ? this.colors.shapeStrokeSelected : color}" stroke-width="${width}"${dash} style="pointer-events: none;"/>`;
+
+            svg += this.renderVertexMarker(A.x, A.y, 'A', isSelected);
+            svg += this.renderVertexMarker(B.x, B.y, 'B', isSelected);
+
+            const pA = { x: A.x + (A.labelDx || 0), y: A.y + (A.labelDy || 0) };
+            const pB = { x: B.x + (B.labelDx || 0), y: B.y + (B.labelDy || 0) };
+            svg += `<text x="${pA.x}" y="${pA.y}" fill="${this.colors.label}" font-size="24" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label" data-label="A" style="cursor: move; pointer-events: auto;">${A.label || 'A'}</text>`;
+            svg += `<text x="${pB.x}" y="${pB.y}" fill="${this.colors.label}" font-size="24" font-family="'Times New Roman', serif" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle" class="geo-label" data-label="B" style="cursor: move; pointer-events: auto;">${B.label || 'B'}</text>`;
 
             return svg;
         },
@@ -3522,6 +3561,8 @@ function geometryEditor() {
                     svgContent += this.renderQuadrilateralForExportTransformed(figure, transformPoint, scale);
                 } else if (figure.type === 'polygon') {
                     svgContent += this.renderPolygonForExportTransformed(figure, transformPoint, scale);
+                } else if (figure.type === 'segment') {
+                    svgContent += this.renderSegmentForExportTransformed(figure, transformPoint, scale);
                 } else if (figure.type === 'circle') {
                     svgContent += this.renderCircleForExportTransformed(figure, transformPoint, scale);
                 }
@@ -3791,6 +3832,27 @@ function geometryEditor() {
                 svg += this.labelText(original.label || `P${idx + 1}`, labelPos, null, 24);
             });
 
+            return svg;
+        },
+
+        renderSegmentForExportTransformed(figure, transformPoint, scale) {
+            const v = figure.vertices || {};
+            const A0 = v.A;
+            const B0 = v.B;
+            if (!A0 || !B0) return '';
+
+            const A = transformPoint(A0);
+            const B = transformPoint(B0);
+            const color = figure.strokeColor || this.colors.auxiliaryLine;
+            const width = figure.strokeWidth || 2;
+            const dash = figure.dasharray ? ` stroke-dasharray="${figure.dasharray}"` : '';
+
+            let svg = '';
+            svg += `  <line x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}" stroke="${color}" stroke-width="${width}"${dash}/>\n`;
+            svg += this.renderVertexMarkerForExport(A.x, A.y);
+            svg += this.renderVertexMarkerForExport(B.x, B.y);
+            svg += this.labelText(A0.label || 'A', { x: A.x + (A0.labelDx || 0), y: A.y + (A0.labelDy || 0) }, null, 24);
+            svg += this.labelText(B0.label || 'B', { x: B.x + (B0.labelDx || 0), y: B.y + (B0.labelDy || 0) }, null, 24);
             return svg;
         },
 
@@ -4742,7 +4804,7 @@ function geometryEditor() {
                     };
                 });
 
-                const extraLines = visibleLines.map(line => ({
+                let extraLines = visibleLines.map(line => ({
                     x1: parseFloat(line.getAttribute('x1') || '0'),
                     y1: parseFloat(line.getAttribute('y1') || '0'),
                     x2: parseFloat(line.getAttribute('x2') || '0'),
@@ -4773,7 +4835,48 @@ function geometryEditor() {
                     fill: circle.getAttribute('fill') || 'none'
                 })).filter(c => Number.isFinite(c.cx) && Number.isFinite(c.cy) && Number.isFinite(c.r) && c.r > 0 && c.r <= 4);
 
-                const freeTexts = texts.filter(t => !usedTextIds.has(t.id));
+                // Extract standalone labeled segments (e.g. AB) to separate editable layers.
+                const segmentFigures = [];
+                const claimedTextIds = new Set();
+                const linesForPolygon = [];
+                extraLines.forEach((line, idx) => {
+                    const near = (p, t) => Math.hypot((p.x - t.x), (p.y - t.y));
+                    const p1 = { x: line.x1, y: line.y1 };
+                    const p2 = { x: line.x2, y: line.y2 };
+                    const candidates = texts.filter(t => !usedTextIds.has(t.id) && !claimedTextIds.has(t.id) && /^[A-Za-zА-Яа-я]\d*$/.test(t.text || ''));
+                    let tA = null, dA = Infinity;
+                    let tB = null, dB = Infinity;
+                    candidates.forEach(t => {
+                        const d1 = near(p1, t);
+                        if (d1 < dA) { dA = d1; tA = t; }
+                        const d2 = near(p2, t);
+                        if (d2 < dB) { dB = d2; tB = t; }
+                    });
+
+                    const shouldExtract = !!(line.dasharray && tA && tB && tA.id !== tB.id && dA <= 28 && dB <= 28);
+                    if (!shouldExtract) {
+                        linesForPolygon.push(line);
+                        return;
+                    }
+
+                    claimedTextIds.add(tA.id);
+                    claimedTextIds.add(tB.id);
+
+                    segmentFigures.push({
+                        id: `segment_legacy_${Date.now()}_${idx}`,
+                        type: 'segment',
+                        vertices: {
+                            A: { x: line.x1, y: line.y1, label: tA.text || 'A', labelDx: 0, labelDy: 0 },
+                            B: { x: line.x2, y: line.y2, label: tB.text || 'B', labelDx: 0, labelDy: 0 }
+                        },
+                        strokeColor: line.stroke || this.colors.auxiliaryLine,
+                        strokeWidth: line.strokeWidth || 2,
+                        dasharray: line.dasharray || '10,6'
+                    });
+                });
+                extraLines = linesForPolygon;
+
+                const freeTexts = texts.filter(t => !usedTextIds.has(t.id) && !claimedTextIds.has(t.id));
 
                 // Circle-only fallback (для заданий с окружностями без полигона)
                 if (polygonPoints.length < 3) {
@@ -4843,7 +4946,7 @@ function geometryEditor() {
                         showGrid: true,
                         gridSize: Math.max(10, Math.min(50, Math.round(gridSize)))
                     },
-                    figures: [figure]
+                    figures: [figure, ...segmentFigures]
                 };
             } catch (e) {
                 console.warn('Legacy SVG conversion failed:', e);
