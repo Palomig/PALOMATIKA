@@ -4,6 +4,7 @@
     @param array $taskData - данные из getRandomTasksFromZadanie или getRandomMatchingSet
     @param int $taskNumber - номер задания в варианте (6-19)
     @param string $color - цвет акцента
+    @param bool $studentMode - интерактивный режим для ученика
 --}}
 
 @php
@@ -72,7 +73,7 @@
 
 {{-- Matching Set (3 графика для ОГЭ) --}}
 @if($isMatchingSet)
-    <div class="task-card mb-8 bg-dark-light/35 rounded-xl border border-slate-800 overflow-hidden">
+    <div class="task-card mb-8 bg-dark-light/35 rounded-xl border border-slate-800 overflow-hidden" data-task-number="{{ $taskNumber }}">
         {{-- Task Header --}}
         <div class="bg-slate-900/40 p-4 border-b border-slate-800 flex items-center gap-4">
             <div class="w-11 h-11 rounded-lg border border-{{ $color }}-700/60 bg-{{ $color }}-900/20 text-{{ $color }}-300 flex items-center justify-center font-semibold text-lg">
@@ -88,10 +89,31 @@
         <div class="p-5">
             @include('tasks.types.matching-variant', compact('taskData', 'taskNumber', 'color'))
         </div>
+
+        <div class="p-5 border-t border-slate-800">
+            <div class="flex flex-wrap items-center gap-3">
+                <span class="text-slate-400 text-sm font-medium">Ответ:</span>
+                <input type="text"
+                       class="js-answer-input flex-1 max-w-xs px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-{{ $color }}-600 transition-colors"
+                       placeholder="Введите ответ">
+
+                @if(!empty($studentMode))
+                    <button type="button"
+                            class="js-answer-ok px-3 py-2 rounded-lg bg-emerald-700 text-white hover:bg-emerald-600 transition text-sm">
+                        ОК
+                    </button>
+                    <button type="button"
+                            class="js-answer-edit px-3 py-2 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-700 transition text-sm">
+                        ✎ Редактировать
+                    </button>
+                    <span class="js-save-status text-xs text-slate-500"></span>
+                @endif
+            </div>
+        </div>
     </div>
 @else
     {{-- Обычный формат задания --}}
-    <div class="task-card mb-8 bg-dark-light/35 rounded-xl border border-slate-800 overflow-hidden">
+    <div class="task-card mb-8 bg-dark-light/35 rounded-xl border border-slate-800 overflow-hidden" data-task-number="{{ $taskNumber }}">
         {{-- Task Header --}}
         <div class="bg-slate-900/40 p-4 border-b border-slate-800 flex items-center gap-4">
             <div class="w-11 h-11 rounded-lg border border-{{ $color }}-700/60 bg-{{ $color }}-900/20 text-{{ $color }}-300 flex items-center justify-center font-semibold text-lg">
@@ -169,11 +191,23 @@
 
         {{-- Answer Field --}}
         <div class="p-5 border-t border-slate-800">
-            <div class="flex items-center gap-4">
+            <div class="flex flex-wrap items-center gap-3">
                 <span class="text-slate-400 text-sm font-medium">Ответ:</span>
                 <input type="text"
-                       class="flex-1 max-w-xs px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-{{ $color }}-600 transition-colors"
+                       class="js-answer-input flex-1 max-w-xs px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-{{ $color }}-600 transition-colors"
                        placeholder="Введите ответ">
+
+                @if(!empty($studentMode))
+                    <button type="button"
+                            class="js-answer-ok px-3 py-2 rounded-lg bg-emerald-700 text-white hover:bg-emerald-600 transition text-sm">
+                        ОК
+                    </button>
+                    <button type="button"
+                            class="js-answer-edit px-3 py-2 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-700 transition text-sm">
+                        ✎ Редактировать
+                    </button>
+                    <span class="js-save-status text-xs text-slate-500"></span>
+                @endif
             </div>
         </div>
     </div>

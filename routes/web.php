@@ -4,8 +4,10 @@ use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\Auth\TelegramBotAuthController;
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\EgeController;
+use App\Http\Controllers\OgeAttemptController;
 use App\Http\Controllers\RepetitorController;
 use App\Http\Controllers\TestPdfController;
+use App\Http\Controllers\Teacher\OgeReviewController;
 use App\Http\Controllers\TopicController;
 use Illuminate\Support\Facades\Route;
 
@@ -122,6 +124,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/earnings', function () {
             return view('teacher.earnings');
         })->name('earnings');
+
+        Route::prefix('oge')->name('oge.')->middleware('role:teacher,admin')->group(function () {
+            Route::get('/teachers', [OgeReviewController::class, 'teachers'])->name('teachers');
+            Route::get('/teachers/{teacherId}/variants', [OgeReviewController::class, 'variants'])->name('variants');
+            Route::get('/variants/{variantId}/results', [OgeReviewController::class, 'results'])->name('results');
+        });
     });
 
     // Logout
@@ -142,8 +150,12 @@ Route::prefix('topics')->name('topics.')->group(function () {
 });
 
 // OGE Generator (new url, shared implementation with legacy test pages)
-Route::get('/oge', [TestPdfController::class, 'ogeGenerator'])->name('oge.generator');
-Route::get('/oge/{hash}', [TestPdfController::class, 'showOgeVariant'])->name('oge.show');
+Route::middleware(['auth', 'role:teacher,admin'])->group(function () {
+    Route::get('/oge', [TestPdfController::class, 'ogeGenerator'])->name('oge.generator');
+});
+Route::middleware(['auth', 'role:student,teacher,admin'])->group(function () {
+    Route::get('/oge/{hash}', [TestPdfController::class, 'showOgeVariant'])->name('oge.show');
+});
 
 // ========================================================================
 // ЕГЭ Routes (обособленная система)
@@ -166,6 +178,16 @@ Route::prefix('api/ege')->group(function () {
 Route::prefix('api/topics')->group(function () {
     Route::get('/{topicId}/random', [TopicController::class, 'apiGetRandomTasks']);
     Route::get('/{topicId}', [TopicController::class, 'apiGetTopicData']);
+});
+
+// API for OGE attempts (student solving flow)
+Route::prefix('api/oge')->middleware(['auth', 'role:student,admin'])->group(function () {
+    Route::post('/variants/{hash}/attempt/start', [OgeAttemptController::class, 'start'])->name('api.oge.attempt.start');
+    Route::post('/attempts/{attempt}/tasks/{taskNumber}/focus', [OgeAttemptController::class, 'focus'])->name('api.oge.attempt.focus');
+    Route::post('/attempts/{attempt}/tasks/{taskNumber}/blur', [OgeAttemptController::class, 'blur'])->name('api.oge.attempt.blur');
+    Route::post('/attempts/{attempt}/tasks/{taskNumber}/commit', [OgeAttemptController::class, 'commit'])->name('api.oge.attempt.commit');
+    Route::post('/attempts/{attempt}/heartbeat', [OgeAttemptController::class, 'heartbeat'])->name('api.oge.attempt.heartbeat');
+    Route::post('/attempts/{attempt}/submit', [OgeAttemptController::class, 'submit'])->name('api.oge.attempt.submit');
 });
 
 // ========================================================================
@@ -215,9 +237,13 @@ Route::prefix('test')->group(function () {
     Route::post('/generator/generate', [TestPdfController::class, 'generateRandomTest'])->name('test.generator.generate');
 
     // OGE Variant Generator (tasks 6-19)
-    Route::get('/oge', [TestPdfController::class, 'ogeGenerator'])->name('test.oge.generator');
-    Route::post('/oge/save', [TestPdfController::class, 'saveVariant'])->name('test.oge.save');
-    Route::get('/oge/{hash}', [TestPdfController::class, 'showOgeVariant'])->name('test.oge.show');
+    Route::middleware(['auth', 'role:teacher,admin'])->group(function () {
+        Route::get('/oge', [TestPdfController::class, 'ogeGenerator'])->name('test.oge.generator');
+        Route::post('/oge/save', [TestPdfController::class, 'saveVariant'])->name('test.oge.save');
+    });
+    Route::middleware(['auth', 'role:student,teacher,admin'])->group(function () {
+        Route::get('/oge/{hash}', [TestPdfController::class, 'showOgeVariant'])->name('test.oge.show');
+    });
 
     // Legacy
     Route::post('/parse-pdf', [TestPdfController::class, 'parsePdf'])->name('test.parsePdf');

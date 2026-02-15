@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OgeVariant;
 use App\Services\PdfParserService;
 use App\Services\PdfTaskParser;
 use App\Services\TaskGeneratorService;
@@ -4311,6 +4312,19 @@ class TestPdfController extends Controller
 
         // Store in cache for 30 days
         \Cache::put("oge_variant_{$hash}", $zadaniya, now()->addDays(30));
+
+        // Persist canonical variant metadata for assessment workflow
+        OgeVariant::updateOrCreate(
+            ['hash' => $hash],
+            [
+                'owner_teacher_id' => auth()->id(),
+                'title' => "Вариант {$hash}",
+                'config_json' => [
+                    'zadaniya' => $zadaniya,
+                    'source' => 'generator',
+                ],
+            ]
+        );
 
         return response()->json(['success' => true, 'hash' => $hash]);
     }

@@ -129,6 +129,16 @@ class User extends Authenticatable
         return $this->hasMany(UserDailyStat::class);
     }
 
+    public function ownedOgeVariants(): HasMany
+    {
+        return $this->hasMany(OgeVariant::class, 'owner_teacher_id');
+    }
+
+    public function ogeAttempts(): HasMany
+    {
+        return $this->hasMany(OgeAttempt::class, 'student_id');
+    }
+
     // Helpers
 
     public function isStudent(): bool
