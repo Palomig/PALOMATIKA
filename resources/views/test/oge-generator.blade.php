@@ -56,7 +56,8 @@
             </button>
         </div>
 
-        <div x-show="templates.length === 0" class="text-slate-500 text-sm">Сохранённых шаблонов пока нет.</div>
+        <div x-show="isTemplatesLoading" class="text-slate-500 text-sm">Загрузка шаблонов...</div>
+        <div x-show="!isTemplatesLoading && templates.length === 0" class="text-slate-500 text-sm">Сохранённых шаблонов пока нет.</div>
 
         <div x-show="templates.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             <template x-for="template in templates" :key="template.id">
@@ -194,9 +195,19 @@ function ogeGenerator() {
     return {
         selectedZadaniya: defaultZadaniya,
         expandedTopics: topicsData.map(t => t.topic_id),
-        templates: JSON.parse(localStorage.getItem('ogeTemplates') || '[]'),
+        templates: [],
+        isTemplatesLoading: false,
         showSaveTemplateModal: false,
         newTemplateName: '',
+        api: {
+            list: '/api/oge/templates',
+            store: '/api/oge/templates',
+            destroy: (id) => `/api/oge/templates/${id}`,
+        },
+
+        init() {
+            this.fetchTemplates();
+        },
 
         toggleTopic(topicId) {
             const index = this.expandedTopics.indexOf(topicId);
@@ -287,32 +298,89 @@ function ogeGenerator() {
             }
         },
 
-        saveTemplate() {
+        async fetchTemplates() {
+            this.isTemplatesLoading = true;
+
+            try {
+                const response = await fetch(this.api.list, {
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Failed to load templates: ${response.status}`);
+                }
+
+                const payload = await response.json();
+                this.templates = Array.isArray(payload.templates) ? payload.templates : [];
+            } catch (error) {
+                console.error('Error loading templates:', error);
+                this.templates = [];
+            } finally {
+                this.isTemplatesLoading = false;
+            }
+        },
+
+        async saveTemplate() {
             if (!this.newTemplateName.trim()) return;
 
-            const newTemplate = {
-                id: Date.now().toString(),
-                name: this.newTemplateName.trim(),
-                zadaniya: [...this.selectedZadaniya],
-                createdAt: new Date().toISOString()
-            };
+            try {
+                const response = await fetch(this.api.store, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({
+                        name: this.newTemplateName.trim(),
+                        zadaniya: [...this.selectedZadaniya]
+                    })
+                });
 
-            this.templates.push(newTemplate);
-            localStorage.setItem('ogeTemplates', JSON.stringify(this.templates));
-            this.newTemplateName = '';
-            this.showSaveTemplateModal = false;
+                if (!response.ok) {
+                    throw new Error(`Failed to save template: ${response.status}`);
+                }
+
+                const payload = await response.json();
+                if (payload?.template) {
+                    this.templates.unshift(payload.template);
+                }
+
+                this.newTemplateName = '';
+                this.showSaveTemplateModal = false;
+            } catch (error) {
+                console.error('Error saving template:', error);
+            }
         },
 
         loadTemplate(templateId) {
-            const template = this.templates.find(t => t.id === templateId);
+            const template = this.templates.find(t => String(t.id) === String(templateId));
             if (!template) return;
             this.selectedZadaniya = [...template.zadaniya];
         },
 
-        deleteTemplate(templateId) {
+        async deleteTemplate(templateId) {
             if (!confirm('Удалить этот шаблон?')) return;
-            this.templates = this.templates.filter(t => t.id !== templateId);
-            localStorage.setItem('ogeTemplates', JSON.stringify(this.templates));
+
+            try {
+                const response = await fetch(this.api.destroy(templateId), {
+                    method: 'DELETE',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Failed to delete template: ${response.status}`);
+                }
+
+                this.templates = this.templates.filter(t => String(t.id) !== String(templateId));
+            } catch (error) {
+                console.error('Error deleting template:', error);
+            }
         }
     }
 }

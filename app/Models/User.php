@@ -139,6 +139,11 @@ class User extends Authenticatable
         return $this->hasMany(OgeAttempt::class, 'student_id');
     }
 
+    public function ogeGeneratorTemplates(): HasMany
+    {
+        return $this->hasMany(OgeGeneratorTemplate::class, 'user_id');
+    }
+
     // Helpers
 
     public function isStudent(): bool

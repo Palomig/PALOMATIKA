@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\TelegramBotAuthController;
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\EgeController;
 use App\Http\Controllers\OgeAttemptController;
+use App\Http\Controllers\OgeTemplateController;
 use App\Http\Controllers\RepetitorController;
 use App\Http\Controllers\TestPdfController;
 use App\Http\Controllers\Teacher\OgeReviewController;
@@ -181,6 +182,12 @@ Route::prefix('api/topics')->group(function () {
 });
 
 // API for OGE attempts (student solving flow)
+Route::prefix('api/oge')->middleware(['auth', 'role:teacher,admin'])->group(function () {
+    Route::get('/templates', [OgeTemplateController::class, 'index'])->name('api.oge.templates.index');
+    Route::post('/templates', [OgeTemplateController::class, 'store'])->name('api.oge.templates.store');
+    Route::delete('/templates/{templateId}', [OgeTemplateController::class, 'destroy'])->name('api.oge.templates.destroy');
+});
+
 Route::prefix('api/oge')->middleware(['auth', 'role:student,admin'])->group(function () {
     Route::post('/variants/{hash}/attempt/start', [OgeAttemptController::class, 'start'])->name('api.oge.attempt.start');
     Route::post('/attempts/{attempt}/tasks/{taskNumber}/focus', [OgeAttemptController::class, 'focus'])->name('api.oge.attempt.focus');
