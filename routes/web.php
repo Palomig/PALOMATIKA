@@ -10,6 +10,7 @@ use App\Http\Controllers\RepetitorController;
 use App\Http\Controllers\TestPdfController;
 use App\Http\Controllers\Teacher\StudentGroupController;
 use App\Http\Controllers\Teacher\OgeReviewController;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\TopicController;
@@ -66,7 +67,17 @@ Route::middleware('guest')->group(function () {
         $request->session()->regenerate();
 
         $user = $request->user();
-        $token = $user->createToken('web-login')->plainTextToken;
+        $token = null;
+
+        // Optional API token: web session login must work even if sanctum table is missing.
+        try {
+            $token = $user->createToken('web-login')->plainTextToken;
+        } catch (\Throwable $e) {
+            Log::warning('Failed to create web-login API token', [
+                'user_id' => $user->id,
+                'error' => $e->getMessage(),
+            ]);
+        }
 
         return response()->json([
             'success' => true,
