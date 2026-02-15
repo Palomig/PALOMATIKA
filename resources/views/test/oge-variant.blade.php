@@ -64,14 +64,16 @@
 <body class="min-h-screen bg-dark-50 text-slate-200">
 
 <div class="max-w-5xl mx-auto px-4 py-8">
-    {{-- Navigation --}}
-    <div class="no-print flex flex-wrap justify-between items-center mb-8 text-sm bg-dark-light/40 rounded-xl p-4 border border-slate-800 gap-3">
-        <a href="{{ $generatorRoute }}" class="text-slate-300 hover:text-white transition">← К генератору</a>
-        <div class="flex gap-2">
-            <a href="{{ route($variantRouteName, ['hash' => $newHash]) }}" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Новый вариант</a>
-            <button onclick="window.print()" class="px-3 py-1.5 rounded-lg bg-emerald-700 text-white hover:bg-emerald-600 transition">Печать</button>
+    @if(!$studentMode)
+        {{-- Navigation --}}
+        <div class="no-print flex flex-wrap justify-between items-center mb-8 text-sm bg-dark-light/40 rounded-xl p-4 border border-slate-800 gap-3">
+            <a href="{{ $generatorRoute }}" class="text-slate-300 hover:text-white transition">← К генератору</a>
+            <div class="flex gap-2">
+                <a href="{{ route($variantRouteName, ['hash' => $newHash]) }}" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Новый вариант</a>
+                <button onclick="window.print()" class="px-3 py-1.5 rounded-lg bg-emerald-700 text-white hover:bg-emerald-600 transition">Печать</button>
+            </div>
         </div>
-    </div>
+    @endif
 
     {{-- Header --}}
     <header class="mb-8">
@@ -165,21 +167,23 @@
         </div>
     @endif
 
-    {{-- Footer --}}
-    <div class="no-print text-center mt-10">
-        <div class="bg-dark-light/40 rounded-xl p-6 border border-slate-800">
-            <p class="text-slate-400 mb-2">Вариант: <code class="bg-slate-800 px-2 py-1 rounded text-emerald-300">{{ $variantHash ?? 'unknown' }}</code></p>
-            <p class="text-slate-500 text-sm mb-4">Ссылка на этот вариант сохраняется — можно поделиться</p>
-            <div class="flex justify-center gap-4">
-                <button onclick="window.print()" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-lg transition-colors">
-                    Распечатать
-                </button>
-                <a href="{{ route($variantRouteName, ['hash' => $footerHash]) }}" class="px-6 py-3 bg-emerald-700 hover:bg-emerald-600 text-white rounded-lg transition-colors">
-                    Новый вариант
-                </a>
+    @if(!$studentMode)
+        {{-- Footer --}}
+        <div class="no-print text-center mt-10">
+            <div class="bg-dark-light/40 rounded-xl p-6 border border-slate-800">
+                <p class="text-slate-400 mb-2">Вариант: <code class="bg-slate-800 px-2 py-1 rounded text-emerald-300">{{ $variantHash ?? 'unknown' }}</code></p>
+                <p class="text-slate-500 text-sm mb-4">Ссылка на этот вариант сохраняется — можно поделиться</p>
+                <div class="flex justify-center gap-4">
+                    <button onclick="window.print()" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-lg transition-colors">
+                        Распечатать
+                    </button>
+                    <a href="{{ route($variantRouteName, ['hash' => $footerHash]) }}" class="px-6 py-3 bg-emerald-700 hover:bg-emerald-600 text-white rounded-lg transition-colors">
+                        Новый вариант
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
+    @endif
 </div>
 
 @if($studentMode)

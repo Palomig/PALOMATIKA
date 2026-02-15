@@ -28,8 +28,8 @@
         @endforeach
     </div>
 @elseif($hasLongExpressions)
-    {{-- Длинные выражения - по 2 в ряд --}}
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {{-- Длинные выражения - по одному в ряд --}}
+    <div class="space-y-4">
         @foreach($tasks as $task)
             @php
                 $taskKey = "topic_{$topicId}_block_{$block['number']}_zadanie_{$zadanie['number']}_task_{$task['id']}";
@@ -38,7 +38,9 @@
             <div class="bg-slate-800/70 rounded-lg p-4 border border-slate-700 hover:border-slate-600 transition-colors task-review-item relative"
                  data-task-key="{{ $taskKey }}" data-task-info="{{ $taskInfo }}">
                 <span class="text-blue-400 font-bold">{{ $task['id'] }})</span>
-                <span class="text-slate-200 ml-2 math-serif">${{ $task['expression'] }}$</span>
+                <div class="inline-block max-w-full align-middle overflow-x-auto ml-2">
+                    <span class="text-slate-200 math-serif whitespace-nowrap">${{ $task['expression'] }}$</span>
+                </div>
             </div>
         @endforeach
     </div>
