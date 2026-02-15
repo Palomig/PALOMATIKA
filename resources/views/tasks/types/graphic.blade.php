@@ -127,11 +127,14 @@
 @endphp
 
 <div class="space-y-6">
-    @foreach($tasks as $task)
+    @foreach($tasks as $taskIndex => $taskRaw)
         @php
-            $taskKey = "topic_{$topicId}_block_{$block['number']}_zadanie_{$zadanie['number']}_task_{$task['id']}";
-            $expression = $task['expression'] ?? '';
-            $taskInfo = "Блок {$block['number']}, Задание {$zadanie['number']}, Задача {$task['id']}";
+            $task = is_array($taskRaw) ? $taskRaw : [];
+            $taskId = $task['id'] ?? ($taskIndex + 1);
+            $expression = (string) ($task['expression'] ?? '');
+
+            $taskKey = "topic_{$topicId}_block_{$block['number']}_zadanie_{$zadanie['number']}_task_{$taskId}";
+            $taskInfo = "Блок {$block['number']}, Задание {$zadanie['number']}, Задача {$taskId}";
 
             // Решаем неравенство
             $solved = solveLinearInequality($expression);
@@ -163,7 +166,7 @@
 
             {{-- Выражение --}}
             <div class="flex items-start gap-3 mb-4">
-                <span class="text-cyan-400 font-bold text-lg">{{ $task['id'] }})</span>
+                <span class="text-cyan-400 font-bold text-lg">{{ $taskId }})</span>
                 <span class="text-slate-200 math-serif text-xl">${{ $expression }}$</span>
             </div>
 
