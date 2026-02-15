@@ -4,9 +4,23 @@
 @section('header', 'Аналитика')
 
 @section('content')
-<div x-data="analyticsPage()">
+<div x-data="analyticsPage()" class="space-y-5">
+    <section class="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-dark-light p-5 sm:p-6">
+        <div class="absolute top-0 right-0 h-full w-1/2 bg-gradient-to-l from-emerald-500/10 to-transparent pointer-events-none"></div>
+        <div class="relative flex flex-wrap items-end justify-between gap-3">
+            <div>
+                <p class="text-xs uppercase tracking-[0.2em] text-gray-500 font-semibold mb-2">Performance</p>
+                <h2 class="text-2xl font-semibold text-white">Аналитика результативности</h2>
+                <p class="text-sm text-gray-500 mt-1">Сравнивайте динамику точности, активности и прогресса по темам и ученикам.</p>
+            </div>
+            <a href="/teacher/homework" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-coral text-white text-xs font-semibold hover:bg-coral-dark transition">
+                Перейти к заданиям
+            </a>
+        </div>
+    </section>
+
     {{-- Period selector --}}
-    <div class="flex items-center gap-1.5 mb-6 bg-dark-light rounded-xl p-1 border border-white/[0.06] w-fit">
+    <div class="flex items-center gap-1.5 bg-dark-light rounded-xl p-1 border border-white/[0.06] w-fit">
         <template x-for="p in [{key:'week',label:'Неделя'},{key:'month',label:'Месяц'},{key:'all',label:'Всё время'}]" :key="p.key">
             <button @click="period = p.key"
                     :class="period === p.key
@@ -18,7 +32,7 @@
     </div>
 
     {{-- Overview stats --}}
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="bg-dark-light rounded-2xl p-5 border border-white/[0.06]">
             <div class="flex items-center justify-between mb-2">
                 <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Задач решено</span>
@@ -48,7 +62,7 @@
     </div>
 
     {{-- Topic performance --}}
-    <div class="bg-dark-light rounded-2xl border border-white/[0.06] mb-5 overflow-hidden">
+    <div class="bg-dark-light rounded-2xl border border-white/[0.06] overflow-hidden">
         <div class="px-5 py-4 border-b border-white/[0.06]">
             <h3 class="font-semibold text-white text-[15px]">Успеваемость по темам</h3>
         </div>

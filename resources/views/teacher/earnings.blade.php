@@ -4,9 +4,23 @@
 @section('header', 'Заработок')
 
 @section('content')
-<div x-data="earningsPage()">
+<div x-data="earningsPage()" class="space-y-5">
+    <section class="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-dark-light p-5 sm:p-6">
+        <div class="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-coral/12 to-transparent pointer-events-none"></div>
+        <div class="relative flex flex-wrap items-end justify-between gap-3">
+            <div>
+                <p class="text-xs uppercase tracking-[0.2em] text-gray-500 font-semibold mb-2">Finance</p>
+                <h2 class="text-2xl font-semibold text-white">Доход и выплаты</h2>
+                <p class="text-sm text-gray-500 mt-1">Контролируйте баланс, выплаты и динамику реферального дохода в одном месте.</p>
+            </div>
+            <a href="/teacher" class="inline-flex items-center px-3 py-2 rounded-xl border border-white/[0.1] text-xs font-semibold text-gray-300 hover:text-white hover:bg-white/[0.03] transition">
+                Назад к обзору
+            </a>
+        </div>
+    </section>
+
     {{-- Balance card --}}
-    <div class="relative overflow-hidden bg-gradient-to-br from-coral to-coral-dark rounded-2xl p-6 text-white mb-6">
+    <div class="relative overflow-hidden bg-gradient-to-br from-coral to-coral-dark rounded-2xl p-6 text-white">
         <div class="absolute -right-6 -top-6 w-32 h-32 bg-white/[0.08] rounded-full blur-xl"></div>
         <div class="absolute -left-4 -bottom-4 w-24 h-24 bg-black/[0.1] rounded-full blur-lg"></div>
         <div class="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -33,7 +47,7 @@
     </div>
 
     {{-- Stats --}}
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div class="bg-dark-light rounded-2xl p-5 border border-white/[0.06]">
             <div class="flex items-center gap-3 mb-3">
                 <div class="w-10 h-10 bg-emerald-500/15 rounded-xl flex items-center justify-center">
@@ -70,7 +84,7 @@
     </div>
 
     {{-- How it works --}}
-    <div class="bg-dark-light rounded-2xl border border-white/[0.06] p-6 mb-5">
+    <div class="bg-dark-light rounded-2xl border border-white/[0.06] p-6">
         <h3 class="font-semibold text-white text-[15px] mb-5">Как это работает</h3>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
             <div class="flex items-start gap-3">

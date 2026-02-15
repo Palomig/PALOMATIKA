@@ -4,9 +4,24 @@
 @section('header', 'Ученики')
 
 @section('content')
-<div x-data="studentsPage()">
+<div x-data="studentsPage()" class="space-y-5">
+    <section class="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-dark-light p-5 sm:p-6">
+        <div class="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-blue-500/10 to-transparent pointer-events-none"></div>
+        <div class="relative flex flex-wrap items-end justify-between gap-3">
+            <div>
+                <p class="text-xs uppercase tracking-[0.2em] text-gray-500 font-semibold mb-2">Students CRM</p>
+                <h2 class="text-2xl font-semibold text-white">Управление учениками</h2>
+                <p class="text-sm text-gray-500 mt-1">Фильтруйте, проверяйте риски и переходите к действиям за 2-3 клика.</p>
+            </div>
+            <div class="flex gap-2">
+                <a href="/teacher/groups" class="inline-flex items-center px-3 py-2 rounded-xl border border-white/[0.1] text-xs font-semibold text-gray-300 hover:text-white hover:bg-white/[0.03] transition">Группы</a>
+                <a href="/teacher/homework" class="inline-flex items-center px-3 py-2 rounded-xl bg-coral text-xs font-semibold text-white hover:bg-coral-dark transition">Домашние задания</a>
+            </div>
+        </div>
+    </section>
+
     {{-- Actions bar --}}
-    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-5">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
             <div class="relative w-full sm:w-64">
                 <svg class="w-4 h-4 text-gray-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">

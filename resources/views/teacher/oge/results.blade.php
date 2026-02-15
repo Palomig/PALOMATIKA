@@ -8,7 +8,8 @@
 
 <div class="space-y-5">
     {{-- Header card --}}
-    <div class="bg-dark-light rounded-2xl border border-white/[0.06] p-5">
+    <div class="relative overflow-hidden bg-dark-light rounded-2xl border border-white/[0.06] p-5 sm:p-6">
+        <div class="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-violet-500/10 to-transparent pointer-events-none"></div>
         <a href="{{ route('teacher.oge.variants', $variant->owner_teacher_id) }}"
            class="inline-flex items-center gap-1.5 text-xs font-medium text-coral hover:text-coral-light transition mb-3">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -16,7 +17,8 @@
             </svg>
             К вариантам учителя
         </a>
-        <h2 class="text-white text-lg font-semibold">Вариант {{ $variant->hash }}</h2>
+        <p class="text-xs uppercase tracking-[0.2em] text-gray-500 font-semibold mb-2">Exam review</p>
+        <h2 class="text-white text-2xl font-semibold">Вариант {{ $variant->hash }}</h2>
         <div class="flex flex-wrap gap-x-4 gap-y-1 mt-1.5 text-sm text-gray-500">
             <span>Владелец: <span class="text-gray-300">{{ $variant->ownerTeacher->name ?? '—' }}</span></span>
             <span>Попыток: <span class="text-gray-300">{{ $attempts->count() }}</span></span>

@@ -5,9 +5,13 @@
 
 @section('content')
 <div class="space-y-5">
-    <div class="bg-dark-light rounded-2xl border border-white/[0.06] p-5">
-        <h2 class="text-white text-lg font-semibold mb-1">Учителя</h2>
-        <p class="text-sm text-gray-500">Выбери учителя, чтобы открыть список его вариантов ОГЭ (режим просмотра).</p>
+    <div class="relative overflow-hidden bg-dark-light rounded-2xl border border-white/[0.06] p-5 sm:p-6">
+        <div class="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-violet-500/10 to-transparent pointer-events-none"></div>
+        <div class="relative">
+            <p class="text-xs uppercase tracking-[0.2em] text-gray-500 font-semibold mb-2">Exam review</p>
+            <h2 class="text-white text-2xl font-semibold mb-1">Учителя и варианты ОГЭ</h2>
+            <p class="text-sm text-gray-500">Выберите преподавателя, чтобы перейти к его вариантам и детальным результатам учеников.</p>
+        </div>
     </div>
 
     <div class="bg-dark-light rounded-2xl border border-white/[0.06] overflow-hidden">
