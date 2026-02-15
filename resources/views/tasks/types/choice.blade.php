@@ -10,6 +10,8 @@
     $options = $zadanie['options'] ?? [];
     $tasks = $zadanie['tasks'] ?? [];
     $isVariant = $isVariant ?? false;
+    $showTaskAnswer = !$isVariant;
+    $answerResolver = app(\App\Services\TaskAnswerResolver::class);
 
     // Функция для определения, является ли опция интервалом
     if (!function_exists('isIntervalOption')) {
@@ -159,6 +161,11 @@
                         </div>
                     @endif
                 @endif
+
+                @include('tasks.partials.task-answer', [
+                    'showTaskAnswer' => $showTaskAnswer,
+                    'taskAnswer' => $answerResolver->resolveFromTaskAndZadanie($zadanie, $task),
+                ])
             </div>
         @endforeach
     </div>

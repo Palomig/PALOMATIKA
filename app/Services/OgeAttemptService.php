@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\OgeAttempt;
 use App\Models\OgeAttemptAnswer;
 use App\Models\OgeAttemptEvent;
+use App\Models\OgeAttemptScoring;
 use App\Models\OgeAttemptTaskTiming;
 use App\Models\OgeVariant;
 use App\Models\User;
@@ -12,6 +13,12 @@ use Illuminate\Support\Facades\DB;
 
 class OgeAttemptService
 {
+    public function __construct(
+        private readonly OgeVariantBuilderService $variantBuilder,
+        private readonly TaskAnswerResolver $answerResolver,
+    ) {
+    }
+
     public function resolveVariant(string $hash, ?int $ownerTeacherId = null): OgeVariant
     {
         $variant = OgeVariant::where('hash', $hash)->first();
@@ -100,6 +107,8 @@ class OgeAttemptService
             $answerProjection->last_committed_at = now();
             $answerProjection->save();
 
+            $this->upsertScoringForTask($attempt, $taskNumber, $answerProjection->current_answer);
+
             return $answerProjection;
         });
     }
@@ -119,13 +128,33 @@ class OgeAttemptService
                 ]
             );
 
+            $now = now();
+
             if ($eventType === 'task_focused') {
                 $timing->focus_count += 1;
-                $timing->last_focus_at = now();
+                $timing->last_focus_at = $now;
+                $timing->last_heartbeat_at = $now;
             }
 
             if ($eventType === 'heartbeat') {
-                $timing->last_heartbeat_at = now();
+                if ($timing->last_focus_at) {
+                    $anchor = $timing->last_heartbeat_at ?? $timing->last_focus_at;
+                    $delta = $anchor ? $anchor->diffInMilliseconds($now) : 0;
+                    $timing->active_ms += min(max($delta, 0), 30000);
+                }
+
+                $timing->last_heartbeat_at = $now;
+            }
+
+            if ($eventType === 'task_blurred') {
+                if ($timing->last_focus_at) {
+                    $anchor = $timing->last_heartbeat_at ?? $timing->last_focus_at;
+                    $delta = $anchor ? $anchor->diffInMilliseconds($now) : 0;
+                    $timing->active_ms += min(max($delta, 0), 30000);
+                }
+
+                $timing->last_focus_at = null;
+                $timing->last_heartbeat_at = null;
             }
 
             $timing->save();
@@ -139,6 +168,8 @@ class OgeAttemptService
         return DB::transaction(function () use ($attempt, $clientTs) {
             $this->appendEvent($attempt, 'attempt_submitted', null, [], $clientTs);
 
+            $this->finalizeOpenTimings($attempt);
+
             $attempt->update([
                 'status' => 'submitted',
                 'submitted_at' => now(),
@@ -146,9 +177,89 @@ class OgeAttemptService
             ]);
 
             OgeAttemptAnswer::where('attempt_id', $attempt->id)->update(['is_final' => true]);
+            $this->scoreAttempt($attempt->fresh(['variant', 'answers']));
 
             return $attempt->fresh();
         });
     }
-}
 
+    public function rebuildScoring(OgeAttempt $attempt): void
+    {
+        DB::transaction(function () use ($attempt) {
+            $this->scoreAttempt($attempt->fresh(['variant', 'answers']));
+        });
+    }
+
+    private function finalizeOpenTimings(OgeAttempt $attempt): void
+    {
+        $attempt->loadMissing('taskTimings');
+
+        $now = now();
+        foreach ($attempt->taskTimings as $timing) {
+            if (!$timing->last_focus_at) {
+                continue;
+            }
+
+            $anchor = $timing->last_heartbeat_at ?? $timing->last_focus_at;
+            $delta = $anchor ? $anchor->diffInMilliseconds($now) : 0;
+            $timing->active_ms += min(max($delta, 0), 30000);
+            $timing->last_focus_at = null;
+            $timing->last_heartbeat_at = null;
+            $timing->save();
+        }
+    }
+
+    private function scoreAttempt(OgeAttempt $attempt): void
+    {
+        $hash = $attempt->variant?->hash;
+        if (!$hash) {
+            return;
+        }
+
+        $selected = $attempt->variant?->config_json['zadaniya'] ?? null;
+        $variantPayload = $this->variantBuilder->build($hash, is_array($selected) ? $selected : null);
+        $tasks = $variantPayload['tasks'] ?? [];
+
+        $correctByTaskNumber = [];
+        foreach ($tasks as $index => $taskData) {
+            $taskNumber = 6 + $index;
+            $correctByTaskNumber[$taskNumber] = $this->answerResolver->resolveFromVariantTask($taskData);
+        }
+
+        $attempt->loadMissing('answers');
+        foreach ($attempt->answers as $answer) {
+            $taskNumber = (int) $answer->task_number;
+            $this->persistScoringRow($attempt->id, $taskNumber, $answer->current_answer, $correctByTaskNumber[$taskNumber] ?? null);
+        }
+    }
+
+    private function upsertScoringForTask(OgeAttempt $attempt, int $taskNumber, ?string $userAnswer): void
+    {
+        $attempt->loadMissing('variant');
+        $hash = $attempt->variant?->hash;
+        if (!$hash) {
+            return;
+        }
+
+        $selected = $attempt->variant?->config_json['zadaniya'] ?? null;
+        $variantPayload = $this->variantBuilder->build($hash, is_array($selected) ? $selected : null);
+        $taskData = $variantPayload['tasks'][$taskNumber - 6] ?? null;
+        $correct = is_array($taskData) ? $this->answerResolver->resolveFromVariantTask($taskData) : null;
+
+        $this->persistScoringRow($attempt->id, $taskNumber, $userAnswer, $correct);
+    }
+
+    private function persistScoringRow(int $attemptId, int $taskNumber, ?string $userAnswer, ?string $correctAnswer): void
+    {
+        $isCorrect = $this->answerResolver->isCorrect($userAnswer, $correctAnswer);
+
+        OgeAttemptScoring::updateOrCreate(
+            ['attempt_id' => $attemptId, 'task_number' => $taskNumber],
+            [
+                'is_correct' => $isCorrect,
+                'correct_answer' => $correctAnswer,
+                'checked_at' => now(),
+            ],
+        );
+    }
+}

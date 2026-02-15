@@ -7,6 +7,7 @@ use App\Services\PdfParserService;
 use App\Services\PdfTaskParser;
 use App\Services\TaskGeneratorService;
 use App\Services\AdvancedPdfParser;
+use App\Services\OgeVariantBuilderService;
 use App\Services\TaskDataService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -19,17 +20,20 @@ class TestPdfController extends Controller
     protected TaskGeneratorService $taskGenerator;
     protected AdvancedPdfParser $advancedParser;
     protected TaskDataService $taskDataService;
+    protected OgeVariantBuilderService $ogeVariantBuilder;
 
     public function __construct(
         PdfParserService $pdfParser,
         TaskGeneratorService $taskGenerator,
         AdvancedPdfParser $advancedParser,
-        TaskDataService $taskDataService
+        TaskDataService $taskDataService,
+        OgeVariantBuilderService $ogeVariantBuilder
     ) {
         $this->pdfParser = $pdfParser;
         $this->taskGenerator = $taskGenerator;
         $this->advancedParser = $advancedParser;
         $this->taskDataService = $taskDataService;
+        $this->ogeVariantBuilder = $ogeVariantBuilder;
     }
 
     /**
@@ -4214,119 +4218,26 @@ class TestPdfController extends Controller
             abort(404);
         }
 
-        // Use hash as seed for deterministic random generation
-        $seed = crc32($hash);
-        mt_srand($seed);
-
-        // Extract variant number from hash
-        $variantNumber = (abs($seed) % 999) + 1;
-
-        // Try to load zadaniya from cache first (stored by saveVariant)
-        $selectedZadaniya = \Cache::get("oge_variant_{$hash}");
-
-        // Fallback to query parameter if not in cache (for backward compatibility)
-        if (!$selectedZadaniya) {
-            $zadaniyaParam = $request->query('zadaniya');
-            $selectedZadaniya = [];
-
-            if ($zadaniyaParam) {
-                // Parse zadaniya from query string (format: "06_1_2,06_2_3,07_1_1,15_3_2")
-                $selectedZadaniya = explode(',', $zadaniyaParam);
-                // Validate zadanie format (должно быть XX_Y_Z, где XX - topic_id, Y - block_number, Z - zadanie_number)
-                $selectedZadaniya = array_filter($selectedZadaniya, function($zadanie) {
-                    return preg_match('/^\d{2}_\d+_\d+$/', $zadanie);
-                });
-            }
+        // Backward compatibility: query-based selected zadaniya.
+        $selectedFromQuery = null;
+        $zadaniyaParam = $request->query('zadaniya');
+        if (is_string($zadaniyaParam) && $zadaniyaParam !== '') {
+            $selectedFromQuery = array_values(array_filter(
+                explode(',', $zadaniyaParam),
+                fn ($zadanie) => (bool) preg_match('/^\d{2}_\d+_\d+$/', (string) $zadanie),
+            ));
         }
 
-        // Если zadaniya не указаны, используем дефолтные (все zadaniya тем 06-17, кроме 18-19)
-        if (empty($selectedZadaniya)) {
-            $defaultTopics = ['06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17'];
-            foreach ($defaultTopics as $topicId) {
-                $blocks = $this->taskDataService->getBlocks($topicId);
-                foreach ($blocks as $block) {
-                    foreach ($block['zadaniya'] ?? [] as $zadanie) {
-                        $selectedZadaniya[] = "{$topicId}_{$block['number']}_{$zadanie['number']}";
-                    }
-                }
-            }
-        }
-
-        $tasks = [];
-        $topicTitles = [
-            '06' => 'Дроби и степени',
-            '07' => 'Числа, координатная прямая',
-            '08' => 'Квадратные корни и степени',
-            '09' => 'Уравнения',
-            '10' => 'Теория вероятностей',
-            '11' => 'Графики функций',
-            '12' => 'Расчёты по формулам',
-            '13' => 'Неравенства',
-            '14' => 'Прогрессии',
-            '15' => 'Треугольники',
-            '16' => 'Окружность',
-            '17' => 'Четырёхугольники',
-            '18' => 'Фигуры на клетчатой бумаге',
-            '19' => 'Анализ геометрических высказываний',
-        ];
-
-        // Группируем zadaniya по темам для генерации по одному заданию на тему
-        $zadaniyaByTopic = [];
-        foreach ($selectedZadaniya as $zadanieId) {
-            $parts = explode('_', $zadanieId);
-            if (count($parts) !== 3) continue;
-
-            list($topicId, $blockNumber, $zadanieNumber) = $parts;
-            if (!isset($zadaniyaByTopic[$topicId])) {
-                $zadaniyaByTopic[$topicId] = [];
-            }
-            $zadaniyaByTopic[$topicId][] = [
-                'block' => (int)$blockNumber,
-                'zadanie' => (int)$zadanieNumber
-            ];
-        }
-
-        // Генерируем задания: по одному заданию для каждой темы из случайного выбранного zadanie
-        foreach ($zadaniyaByTopic as $topicId => $zadaniyaList) {
-            // Для темы 11 (matching) используем специальный метод для 3 графиков
-            if ($topicId === '11') {
-                $matchingSet = $this->taskDataService->getRandomMatchingSet($topicId);
-                if ($matchingSet) {
-                    $matchingSet['topic_id'] = $topicId;
-                    $matchingSet['topic_title'] = $topicTitles[$topicId] ?? '';
-                    $tasks[] = $matchingSet;
-                }
-                continue;
-            }
-
-            // Выбираем случайное zadanie из выбранных для этой темы
-            $randomZadanie = $zadaniyaList[array_rand($zadaniyaList)];
-
-            // Получаем случайное задание из этого zadanie
-            $tasksFromZadanie = $this->taskDataService->getRandomTasksFromZadanie(
-                $topicId,
-                $randomZadanie['block'],
-                $randomZadanie['zadanie'],
-                1
-            );
-
-            if (!empty($tasksFromZadanie)) {
-                $task = $tasksFromZadanie[0];
-                $task['topic_id'] = $topicId;
-                $task['topic_title'] = $topicTitles[$topicId] ?? '';
-                // SVG уже предзаготовлены в JSON (task['task']['svg'])
-                $tasks[] = $task;
-            }
-        }
-
-        // Reset random seed
-        mt_srand();
+        $variantPayload = $this->ogeVariantBuilder->build(
+            $hash,
+            !empty($selectedFromQuery) ? $selectedFromQuery : null
+        );
 
         return view('test.oge-variant', [
-            'tasks' => $tasks,
-            'variantNumber' => $variantNumber,
+            'tasks' => $variantPayload['tasks'] ?? [],
+            'variantNumber' => $variantPayload['variantNumber'] ?? 1,
             'variantHash' => $hash,
-            'selectedZadaniya' => $selectedZadaniya,
+            'selectedZadaniya' => $variantPayload['selectedZadaniya'] ?? [],
         ]);
     }
 

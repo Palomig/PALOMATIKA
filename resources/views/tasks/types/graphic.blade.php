@@ -6,6 +6,8 @@
 @php
     $tasks = $zadanie['tasks'] ?? [];
     $isVariant = $isVariant ?? false;
+    $showTaskAnswer = !$isVariant;
+    $answerResolver = app(\App\Services\TaskAnswerResolver::class);
 
     // Функция для решения линейного неравенства ax + b >= cx + d
     // и генерации вариантов ответов
@@ -184,6 +186,11 @@
                     </div>
                 @endforeach
             </div>
+
+            @include('tasks.partials.task-answer', [
+                'showTaskAnswer' => $showTaskAnswer,
+                'taskAnswer' => $answerResolver->resolveFromTaskAndZadanie($zadanie, $task),
+            ])
         </div>
     @endforeach
 </div>

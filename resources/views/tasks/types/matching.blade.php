@@ -14,6 +14,8 @@
     $type = $zadanie['type'] ?? 'matching';
     $tasks = $zadanie['tasks'] ?? [];
     $graphLabels = ['А', 'Б', 'В', 'Г'];
+    $showTaskAnswer = !($isVariant ?? false);
+    $answerResolver = app(\App\Services\TaskAnswerResolver::class);
 
     // Группируем tasks по 3 для формата ОГЭ
     $taskGroups = array_chunk($tasks, 3);
@@ -84,6 +86,13 @@
                                 @else
                                     <span class="text-slate-500 text-sm">Нет изображения</span>
                                 @endif
+                            </div>
+
+                            <div class="px-3 pb-3">
+                                @include('tasks.partials.task-answer', [
+                                    'showTaskAnswer' => $showTaskAnswer,
+                                    'taskAnswer' => $answerResolver->resolveFromTaskAndZadanie($zadanie, $task),
+                                ])
                             </div>
                         </div>
                     @endforeach

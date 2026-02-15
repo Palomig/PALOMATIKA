@@ -11,6 +11,8 @@
 @php
     $tasks = $zadanie['tasks'] ?? [];
     $isVariant = $isVariant ?? false;
+    $showTaskAnswer = !$isVariant;
+    $answerResolver = app(\App\Services\TaskAnswerResolver::class);
 @endphp
 
 <div class="space-y-8">
@@ -73,6 +75,11 @@
                        class="w-24 px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white text-center"
                        placeholder="123">
             </div>
+
+            @include('tasks.partials.task-answer', [
+                'showTaskAnswer' => $showTaskAnswer,
+                'taskAnswer' => $answerResolver->resolveFromTaskAndZadanie($zadanie, $task),
+            ])
         </div>
     @endforeach
 </div>

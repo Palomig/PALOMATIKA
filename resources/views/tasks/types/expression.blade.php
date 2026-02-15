@@ -9,6 +9,8 @@
     $hasLongExpressions = collect($tasks)->contains(fn($t) => strlen($t['expression'] ?? '') > 50);
     $hasDenominator = isset($tasks[0]['denominator']);
     $isVariant = $isVariant ?? false;
+    $showTaskAnswer = !$isVariant;
+    $answerResolver = app(\App\Services\TaskAnswerResolver::class);
     $isCoreExpressionTopic = in_array((string) $topicId, ['06', '08', '09'], true);
     $expressionStyle = ($isVariant && $isCoreExpressionTopic) ? 'font-size:115%;' : '';
 @endphp
@@ -27,6 +29,10 @@
             <span class="text-blue-400 font-bold">{{ $taskId }})</span>
         @endif
         <span class="text-slate-200 {{ $isVariant ? '' : 'ml-2' }} math-serif whitespace-nowrap" style="{{ $expressionStyle }}">${{ $expression }}$</span>
+        @include('tasks.partials.task-answer', [
+            'showTaskAnswer' => $showTaskAnswer,
+            'taskAnswer' => $answerResolver->resolveFromTaskAndZadanie($zadanie, $task),
+        ])
     </div>
 @elseif($hasDenominator)
     {{-- Задание со знаменателем - формат параграфа --}}
@@ -46,6 +52,10 @@
                     Представьте выражение ${{ $expression }}$ в виде дроби со знаменателем {{ $task['denominator'] }}.
                     В ответ запишите числитель полученной дроби.
                 </span>
+                @include('tasks.partials.task-answer', [
+                    'showTaskAnswer' => $showTaskAnswer,
+                    'taskAnswer' => $answerResolver->resolveFromTaskAndZadanie($zadanie, $task),
+                ])
             </div>
         @endforeach
     </div>
@@ -66,6 +76,10 @@
                 <div class="inline-block max-w-full align-middle overflow-x-auto ml-2">
                     <span class="text-slate-200 math-serif whitespace-nowrap" style="{{ $expressionStyle }}">${{ $expression }}$</span>
                 </div>
+                @include('tasks.partials.task-answer', [
+                    'showTaskAnswer' => $showTaskAnswer,
+                    'taskAnswer' => $answerResolver->resolveFromTaskAndZadanie($zadanie, $task),
+                ])
             </div>
         @endforeach
     </div>
@@ -84,6 +98,10 @@
                     <span class="text-blue-400 font-bold">{{ $task['id'] }})</span>
                 @endif
                 <span class="text-slate-200 {{ $isVariant ? '' : 'ml-2' }} math-serif" style="{{ $expressionStyle }}">${{ $expression }}$</span>
+                @include('tasks.partials.task-answer', [
+                    'showTaskAnswer' => $showTaskAnswer,
+                    'taskAnswer' => $answerResolver->resolveFromTaskAndZadanie($zadanie, $task),
+                ])
             </div>
         @endforeach
     </div>

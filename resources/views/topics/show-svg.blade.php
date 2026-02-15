@@ -24,6 +24,7 @@
     </style>
     @endpush
 </head>
+@php($answerResolver = app(\App\Services\TaskAnswerResolver::class))
 <body class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
 
 <div class="max-w-7xl mx-auto px-4 py-8">
@@ -100,6 +101,9 @@
                 {{-- Tasks Grid --}}
                 <div class="grid md:grid-cols-2 {{ count($zadanie['tasks'] ?? []) > 6 ? 'lg:grid-cols-3' : '' }} gap-4">
                     @foreach($zadanie['tasks'] ?? [] as $task)
+                        @php
+                            $taskAnswer = $answerResolver->resolveFromTaskAndZadanie($zadanie, $task);
+                        @endphp
                         <div class="bg-slate-800 rounded-xl p-5 border border-slate-700 hover:border-slate-600 transition-all hover:shadow-lg hover:shadow-slate-900/50">
                             <div class="text-emerald-400 font-semibold mb-3">{{ $task['id'] ?? $loop->iteration }}.</div>
                             <div class="text-slate-200 text-sm leading-relaxed mb-4">{{ $task['text'] ?? '' }}</div>
@@ -117,12 +121,10 @@
 
 
                             {{-- Answer --}}
-                            @if(isset($task['answer']))
-                                <div class="mt-3 text-sm">
-                                    <span class="text-slate-500">Ответ:</span>
-                                    <span class="text-emerald-400 font-mono ml-2">{{ $task['answer'] }}</span>
-                                </div>
-                            @endif
+                            <div class="mt-3 text-sm">
+                                <span class="text-slate-500">Ответ:</span>
+                                <span class="text-emerald-400 font-mono ml-2">{{ $taskAnswer ?? 'нет в базе' }}</span>
+                            </div>
                         </div>
                     @endforeach
                 </div>

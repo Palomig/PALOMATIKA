@@ -8,6 +8,8 @@
     $tasks = $zadanie['tasks'] ?? [];
     $examType = request()->is('ege*') ? 'EGE' : 'OGE';
     $isVariant = $isVariant ?? false;
+    $showTaskAnswer = !$isVariant;
+    $answerResolver = app(\App\Services\TaskAnswerResolver::class);
 
     // Функция для преобразования имени файла из JSON в реальное имя
     // Формат в JSON: oge18_pX_imgY.png → Формат реальных файлов: task18_bBLOCK_zZADANIE_ID.png
@@ -85,6 +87,13 @@
                         </svg>
                     </button>
                 @endif
+            </div>
+
+            <div class="px-3 pb-3">
+                @include('tasks.partials.task-answer', [
+                    'showTaskAnswer' => $showTaskAnswer,
+                    'taskAnswer' => $answerResolver->resolveFromTaskAndZadanie($zadanie, $task),
+                ])
             </div>
         </div>
     @endforeach

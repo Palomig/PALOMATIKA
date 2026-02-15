@@ -9,6 +9,8 @@
     // Определяем тип экзамена (OGE/EGE) по контексту или URL
     $examType = request()->is('ege*') ? 'EGE' : 'OGE';
     $isVariant = $isVariant ?? false;
+    $showTaskAnswer = !$isVariant;
+    $answerResolver = app(\App\Services\TaskAnswerResolver::class);
 @endphp
 
 @once
@@ -78,6 +80,11 @@
                         @endif
                         <p class="text-slate-200 leading-relaxed">{!! $task['text'] ?? '' !!}</p>
                     </div>
+
+                    @include('tasks.partials.task-answer', [
+                        'showTaskAnswer' => $showTaskAnswer,
+                        'taskAnswer' => $answerResolver->resolveFromTaskAndZadanie($zadanie, $task),
+                    ])
                 </div>
             </div>
         </div>
