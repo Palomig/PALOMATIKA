@@ -72,14 +72,14 @@
 
 {{-- Matching Set (3 графика для ОГЭ) --}}
 @if($isMatchingSet)
-    <div class="task-card mb-8 bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
+    <div class="task-card mb-8 bg-dark-light/35 rounded-xl border border-slate-800 overflow-hidden">
         {{-- Task Header --}}
-        <div class="bg-slate-800 p-4 border-b border-slate-700 flex items-center gap-4">
-            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-{{ $color }}-500 to-{{ $color }}-600 flex items-center justify-center text-white font-bold text-xl shadow-lg">
+        <div class="bg-slate-900/40 p-4 border-b border-slate-800 flex items-center gap-4">
+            <div class="w-11 h-11 rounded-lg border border-{{ $color }}-700/60 bg-{{ $color }}-900/20 text-{{ $color }}-300 flex items-center justify-center font-semibold text-lg">
                 {{ $taskNumber }}
             </div>
             <div class="flex-1">
-                <div class="text-white font-medium">{{ $instruction }}</div>
+                <div class="text-white font-medium leading-snug">{{ $instruction }}</div>
                 <div class="text-slate-500 text-sm mt-1">{{ $topicTitle }}</div>
             </div>
         </div>
@@ -91,14 +91,14 @@
     </div>
 @else
     {{-- Обычный формат задания --}}
-    <div class="task-card mb-8 bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
+    <div class="task-card mb-8 bg-dark-light/35 rounded-xl border border-slate-800 overflow-hidden">
         {{-- Task Header --}}
-        <div class="bg-slate-800 p-4 border-b border-slate-700 flex items-center gap-4">
-            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-{{ $color }}-500 to-{{ $color }}-600 flex items-center justify-center text-white font-bold text-xl shadow-lg">
+        <div class="bg-slate-900/40 p-4 border-b border-slate-800 flex items-center gap-4">
+            <div class="w-11 h-11 rounded-lg border border-{{ $color }}-700/60 bg-{{ $color }}-900/20 text-{{ $color }}-300 flex items-center justify-center font-semibold text-lg">
                 {{ $taskNumber }}
             </div>
             <div class="flex-1">
-                <div class="text-white font-medium">{{ $instruction }}</div>
+                <div class="text-white font-medium leading-snug">{{ $instruction }}</div>
                 <div class="text-slate-500 text-sm mt-1">{{ $topicTitle }}</div>
             </div>
         </div>
@@ -168,11 +168,11 @@
         </div>
 
         {{-- Answer Field --}}
-        <div class="p-5 border-t border-slate-700">
+        <div class="p-5 border-t border-slate-800">
             <div class="flex items-center gap-4">
                 <span class="text-slate-400 text-sm font-medium">Ответ:</span>
                 <input type="text"
-                       class="flex-1 max-w-xs px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-{{ $color }}-500 transition-colors"
+                       class="flex-1 max-w-xs px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-{{ $color }}-600 transition-colors"
                        placeholder="Введите ответ">
             </div>
         </div>

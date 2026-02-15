@@ -141,9 +141,9 @@ Route::prefix('topics')->name('topics.')->group(function () {
     Route::get('/{id}/svg', [TopicController::class, 'showWithServerSvg'])->name('svg')->where('id', '[0-9]+');
 });
 
-// OGE Generator (new)
-Route::get('/oge', [TopicController::class, 'ogeGenerator'])->name('oge.generator');
-Route::get('/oge/{hash}', [TopicController::class, 'showOgeVariant'])->name('oge.show');
+// OGE Generator (new url, shared implementation with legacy test pages)
+Route::get('/oge', [TestPdfController::class, 'ogeGenerator'])->name('oge.generator');
+Route::get('/oge/{hash}', [TestPdfController::class, 'showOgeVariant'])->name('oge.show');
 
 // ========================================================================
 // ЕГЭ Routes (обособленная система)
