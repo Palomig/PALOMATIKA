@@ -148,6 +148,38 @@
                     </svg>
                 </button>
                 <h1 class="text-lg font-semibold text-white flex-1">@yield('header', $role === 'teacher' ? 'Панель учителя' : 'Личный кабинет')</h1>
+                {{-- Theme switcher --}}
+                <div x-data="themeSwitcher()" class="relative ml-3">
+                    <button @click="open = !open" class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg border border-gray-700 hover:border-gray-500 transition" title="Цветовая схема">
+                        <span class="w-3 h-3 rounded-full ring-1 ring-white/20" :style="'background:' + currentAccent"></span>
+                        <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+                        </svg>
+                    </button>
+                    <div x-show="open" x-cloak @click.away="open = false"
+                         x-transition:enter="transition ease-out duration-150"
+                         x-transition:enter-start="opacity-0 scale-95"
+                         x-transition:enter-end="opacity-100 scale-100"
+                         x-transition:leave="transition ease-in duration-100"
+                         x-transition:leave-start="opacity-100 scale-100"
+                         x-transition:leave-end="opacity-0 scale-95"
+                         class="absolute right-0 mt-2 w-52 bg-dark-light rounded-xl border border-gray-700 shadow-xl p-2 z-50">
+                        <div class="text-xs text-gray-500 px-2 py-1.5 uppercase tracking-wider">Цветовая схема</div>
+                        <template x-for="(theme, key) in themes" :key="key">
+                            <button @click="setTheme(key)"
+                                    class="w-full flex items-center gap-3 px-2.5 py-2 rounded-lg transition text-sm"
+                                    :class="current === key ? 'bg-coral/10 text-white' : 'text-gray-400 hover:bg-dark-lighter hover:text-white'">
+                                <span class="w-4 h-4 rounded-full ring-1 ring-white/20 flex-shrink-0"
+                                      :style="'background:' + theme.coral.DEFAULT"></span>
+                                <span class="flex-1 text-left" x-text="theme.label"></span>
+                                <svg x-show="current === key" class="w-4 h-4 text-coral flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                </svg>
+                            </button>
+                        </template>
+                    </div>
+                </div>
+
                 @if($isAdmin)
                     <div class="hidden md:flex items-center gap-2 ml-3">
                         <span class="text-xs text-gray-400">Режим:</span>
@@ -183,6 +215,22 @@
     </div>
 
     <script>
+    function themeSwitcher() {
+        return {
+            open: false,
+            themes: window.__themes,
+            current: window.__currentTheme,
+            get currentAccent() {
+                return this.themes[this.current]?.coral?.DEFAULT || '#ff6b6b';
+            },
+            setTheme(key) {
+                if (key === this.current) { this.open = false; return; }
+                localStorage.setItem('palomatika_theme', key);
+                window.location.reload();
+            }
+        };
+    }
+
     function dashboardApp(role) {
         return {
             sidebarOpen: window.innerWidth >= 1024,
