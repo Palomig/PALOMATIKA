@@ -5,6 +5,7 @@
 
 @php
     $tasks = $zadanie['tasks'] ?? [];
+    $isVariant = $isVariant ?? false;
 
     // Функция для решения линейного неравенства ax + b >= cx + d
     // и генерации вариантов ответов
@@ -166,7 +167,9 @@
 
             {{-- Выражение --}}
             <div class="flex items-start gap-3 mb-4">
-                <span class="text-cyan-400 font-bold text-lg">{{ $taskId }})</span>
+                @if(!$isVariant)
+                    <span class="text-cyan-400 font-bold text-lg">{{ $taskId }})</span>
+                @endif
                 <span class="text-slate-200 math-serif text-xl">${{ $expression }}$</span>
             </div>
 

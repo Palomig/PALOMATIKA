@@ -26,6 +26,12 @@
             pointer-events: none;
         }
         .katex { font-size: 1.02em; }
+        .task-card .task-review-item {
+            background: transparent !important;
+            border: none !important;
+            border-radius: 0 !important;
+            padding: 0 !important;
+        }
         .save-flash {
             animation: saveBlink 0.4s ease-in-out 5;
         }
@@ -333,6 +339,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     client_ts: new Date().toISOString(),
                 });
                 input.disabled = true;
+                edit.classList.remove('hidden');
                 showStatus('Сохранено', 'success');
             } catch (e) {
                 console.error('commit failed', e);

@@ -114,8 +114,8 @@
                         ОК
                     </button>
                     <button type="button"
-                            class="js-answer-edit px-3 py-2 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-700 transition text-sm">
-                        ✎ Редактировать
+                            class="js-answer-edit hidden px-3 py-2 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-700 transition text-sm">
+                        Редактировать
                     </button>
                     <span class="js-save-status text-xs text-emerald-400 opacity-0"></span>
                 @endif
@@ -166,7 +166,7 @@
                 }
 
                 try {
-                    echo view($taskView, compact('zadanie', 'block', 'topicId'))->render();
+                    echo view($taskView, compact('zadanie', 'block', 'topicId') + ['isVariant' => true])->render();
                 } catch (\Throwable $e) {
                     \Log::warning('Task variant render failed', [
                         'task_number' => $taskNumber ?? null,
@@ -195,8 +195,8 @@
                         ОК
                     </button>
                     <button type="button"
-                            class="js-answer-edit px-3 py-2 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-700 transition text-sm">
-                        ✎ Редактировать
+                            class="js-answer-edit hidden px-3 py-2 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-700 transition text-sm">
+                        Редактировать
                     </button>
                     <span class="js-save-status text-xs text-emerald-400 opacity-0"></span>
                 @endif

@@ -5,6 +5,7 @@
 
 @php
     $tasks = $zadanie['tasks'] ?? [];
+    $isVariant = $isVariant ?? false;
 @endphp
 
 <div class="space-y-4">
@@ -18,7 +19,9 @@
              data-task-key="{{ $taskKey }}" data-task-info="{{ $taskInfo }}">
 
             <div class="flex items-start gap-3">
-                <span class="text-green-400 font-bold text-lg shrink-0">{{ $task['id'] }})</span>
+                @if(!$isVariant)
+                    <span class="text-green-400 font-bold text-lg shrink-0">{{ $task['id'] }})</span>
+                @endif
                 <p class="text-slate-200 leading-relaxed">{!! nl2br(e($task['text'] ?? '')) !!}</p>
             </div>
         </div>

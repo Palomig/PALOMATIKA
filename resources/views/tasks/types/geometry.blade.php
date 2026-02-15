@@ -8,6 +8,7 @@
     $tasks = $zadanie['tasks'] ?? [];
     // Определяем тип экзамена (OGE/EGE) по контексту или URL
     $examType = request()->is('ege*') ? 'EGE' : 'OGE';
+    $isVariant = $isVariant ?? false;
 @endphp
 
 @once
@@ -72,7 +73,9 @@
                 {{-- Текст задачи --}}
                 <div class="flex-1">
                     <div class="flex items-start gap-3">
-                        <span class="text-red-400 font-bold text-lg shrink-0">{{ $task['id'] }})</span>
+                        @if(!$isVariant)
+                            <span class="text-red-400 font-bold text-lg shrink-0">{{ $task['id'] }})</span>
+                        @endif
                         <p class="text-slate-200 leading-relaxed">{!! $task['text'] ?? '' !!}</p>
                     </div>
                 </div>

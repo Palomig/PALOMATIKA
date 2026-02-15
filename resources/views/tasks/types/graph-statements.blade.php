@@ -10,6 +10,7 @@
 
 @php
     $tasks = $zadanie['tasks'] ?? [];
+    $isVariant = $isVariant ?? false;
 @endphp
 
 <div class="space-y-8">
@@ -27,7 +28,9 @@
              data-task-key="{{ $taskKey }}">
 
             <div class="flex items-center gap-2 mb-4">
-                <span class="text-cyan-400 font-bold text-lg">{{ $task['id'] }})</span>
+                @if(!$isVariant)
+                    <span class="text-cyan-400 font-bold text-lg">{{ $task['id'] }})</span>
+                @endif
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

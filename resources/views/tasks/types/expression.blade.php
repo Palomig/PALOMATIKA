@@ -8,6 +8,9 @@
     $tasksCount = count($tasks);
     $hasLongExpressions = collect($tasks)->contains(fn($t) => strlen($t['expression'] ?? '') > 50);
     $hasDenominator = isset($tasks[0]['denominator']);
+    $isVariant = $isVariant ?? false;
+    $isCoreExpressionTopic = in_array((string) $topicId, ['06', '08', '09'], true);
+    $expressionStyle = ($isVariant && $isCoreExpressionTopic) ? 'font-size:115%;' : '';
 @endphp
 
 @if($tasksCount === 1 && !$hasDenominator)
@@ -20,8 +23,10 @@
     @endphp
     <div class="task-review-item relative py-1 overflow-x-auto"
          data-task-key="{{ $taskKey }}" data-task-info="{{ $taskInfo }}">
-        <span class="text-blue-400 font-bold">{{ $taskId }})</span>
-        <span class="text-slate-200 ml-2 math-serif whitespace-nowrap">${{ $expression }}$</span>
+        @if(!$isVariant)
+            <span class="text-blue-400 font-bold">{{ $taskId }})</span>
+        @endif
+        <span class="text-slate-200 {{ $isVariant ? '' : 'ml-2' }} math-serif whitespace-nowrap" style="{{ $expressionStyle }}">${{ $expression }}$</span>
     </div>
 @elseif($hasDenominator)
     {{-- Задание со знаменателем - формат параграфа --}}
@@ -34,7 +39,9 @@
             @endphp
             <div class="bg-slate-800/70 rounded-xl p-4 border border-slate-700 task-review-item relative"
                  data-task-key="{{ $taskKey }}" data-task-info="{{ $taskInfo }}">
-                <span class="text-blue-400 font-bold">{{ $task['id'] }})</span>
+                @if(!$isVariant)
+                    <span class="text-blue-400 font-bold">{{ $task['id'] }})</span>
+                @endif
                 <span class="text-slate-200 ml-2">
                     Представьте выражение ${{ $expression }}$ в виде дроби со знаменателем {{ $task['denominator'] }}.
                     В ответ запишите числитель полученной дроби.
@@ -53,9 +60,11 @@
             @endphp
             <div class="bg-slate-800/70 rounded-lg p-4 border border-slate-700 hover:border-slate-600 transition-colors task-review-item relative"
                  data-task-key="{{ $taskKey }}" data-task-info="{{ $taskInfo }}">
-                <span class="text-blue-400 font-bold">{{ $task['id'] }})</span>
+                @if(!$isVariant)
+                    <span class="text-blue-400 font-bold">{{ $task['id'] }})</span>
+                @endif
                 <div class="inline-block max-w-full align-middle overflow-x-auto ml-2">
-                    <span class="text-slate-200 math-serif whitespace-nowrap">${{ $expression }}$</span>
+                    <span class="text-slate-200 math-serif whitespace-nowrap" style="{{ $expressionStyle }}">${{ $expression }}$</span>
                 </div>
             </div>
         @endforeach
@@ -71,8 +80,10 @@
             @endphp
             <div class="bg-slate-800/70 rounded-lg p-3 border border-slate-700 hover:border-slate-600 transition-colors task-review-item relative"
                  data-task-key="{{ $taskKey }}" data-task-info="{{ $taskInfo }}">
-                <span class="text-blue-400 font-bold">{{ $task['id'] }})</span>
-                <span class="text-slate-200 ml-2 math-serif">${{ $expression }}$</span>
+                @if(!$isVariant)
+                    <span class="text-blue-400 font-bold">{{ $task['id'] }})</span>
+                @endif
+                <span class="text-slate-200 {{ $isVariant ? '' : 'ml-2' }} math-serif" style="{{ $expressionStyle }}">${{ $expression }}$</span>
             </div>
         @endforeach
     </div>

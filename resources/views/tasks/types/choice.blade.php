@@ -9,6 +9,7 @@
     $points = $zadanie['points'] ?? [];
     $options = $zadanie['options'] ?? [];
     $tasks = $zadanie['tasks'] ?? [];
+    $isVariant = $isVariant ?? false;
 
     // Функция для определения, является ли опция интервалом
     if (!function_exists('isIntervalOption')) {
@@ -80,7 +81,9 @@
                  data-task-key="{{ $taskKey }}" data-task-info="{{ $taskInfo }}">
 
                 <div class="flex items-start gap-3 mb-3">
-                    <span class="text-cyan-400 font-bold text-lg">{{ $taskId }})</span>
+                    @if(!$isVariant)
+                        <span class="text-cyan-400 font-bold text-lg">{{ $taskId }})</span>
+                    @endif
                     @if(isset($task['expression']))
                         <span class="text-slate-200 math-serif text-lg">${{ $task['expression'] }}$</span>
                     @elseif(isset($task['left']) && isset($task['right']))

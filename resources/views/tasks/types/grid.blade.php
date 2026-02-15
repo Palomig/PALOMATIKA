@@ -7,6 +7,7 @@
     $type = $zadanie['type'] ?? 'grid_image';
     $tasks = $zadanie['tasks'] ?? [];
     $examType = request()->is('ege*') ? 'EGE' : 'OGE';
+    $isVariant = $isVariant ?? false;
 
     // Функция для преобразования имени файла из JSON в реальное имя
     // Формат в JSON: oge18_pX_imgY.png → Формат реальных файлов: task18_bBLOCK_zZADANIE_ID.png
@@ -45,13 +46,15 @@
         <div class="bg-slate-800/70 rounded-xl border border-slate-700 overflow-hidden task-review-item relative"
              data-task-key="{{ $taskKey }}" data-task-info="{{ $taskInfo }}">
 
-            {{-- Номер задачи --}}
-            <div class="bg-slate-700/50 px-3 py-1.5 flex items-center gap-2">
-                <span class="text-fuchsia-400 font-bold">{{ $task['id'] }})</span>
-                @if($hasQuestion)
-                    <span class="text-slate-400 text-sm truncate">{{ $task['question'] }}</span>
-                @endif
-            </div>
+            @if(!$isVariant)
+                {{-- Номер задачи --}}
+                <div class="bg-slate-700/50 px-3 py-1.5 flex items-center gap-2">
+                    <span class="text-fuchsia-400 font-bold">{{ $task['id'] }})</span>
+                    @if($hasQuestion)
+                        <span class="text-slate-400 text-sm truncate">{{ $task['question'] }}</span>
+                    @endif
+                </div>
+            @endif
 
             {{-- Изображение --}}
             <div class="p-3 relative group">
