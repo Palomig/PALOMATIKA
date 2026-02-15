@@ -360,6 +360,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (finishButton) {
         finishButton.addEventListener('click', async () => {
             if (locked) return;
+
+            const confirmed = window.confirm('Подтвердите завершение варианта. После отправки ответы нельзя будет изменить.');
+            if (!confirmed) return;
+
             finishButton.disabled = true;
             finishButton.textContent = 'Отправляем...';
 
