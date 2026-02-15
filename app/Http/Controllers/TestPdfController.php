@@ -46,7 +46,7 @@ class TestPdfController extends Controller
     {
         $availableTopics = $this->taskGenerator->getAvailableTopics();
 
-        // Add manual topics (06-13, 18-19) which have structured data in controller
+        // Add manual topics (06-19) which have structured data in controller
         $manualTopics = [
             ['topic_id' => '06', 'title' => 'Вычисления', 'tasks_count' => 174],
             ['topic_id' => '07', 'title' => 'Числа, координатная прямая', 'tasks_count' => 85],
@@ -56,6 +56,10 @@ class TestPdfController extends Controller
             ['topic_id' => '11', 'title' => 'Графики функций', 'tasks_count' => 120],
             ['topic_id' => '12', 'title' => 'Расчеты по формулам', 'tasks_count' => 100],
             ['topic_id' => '13', 'title' => 'Неравенства', 'tasks_count' => 150],
+            ['topic_id' => '14', 'title' => 'Прогрессии', 'tasks_count' => 120],
+            ['topic_id' => '15', 'title' => 'Треугольники', 'tasks_count' => 120],
+            ['topic_id' => '16', 'title' => 'Окружность', 'tasks_count' => 120],
+            ['topic_id' => '17', 'title' => 'Четырёхугольники', 'tasks_count' => 120],
             ['topic_id' => '18', 'title' => 'Фигуры на квадратной решётке', 'tasks_count' => 161],
             ['topic_id' => '19', 'title' => 'Анализ геометрических высказываний', 'tasks_count' => 136],
         ];
@@ -99,7 +103,7 @@ class TestPdfController extends Controller
         foreach ($topicIds as $topicId) {
             $topicId = str_pad($topicId, 2, '0', STR_PAD_LEFT);
 
-            // Check if it's a manual topic (06-13)
+            // Check if it's a manual topic (06-19)
             if ($topicId === '06') {
                 $tasks = $this->getRandomTasksFromManualData06($tasksPerTopic);
             } elseif ($topicId === '07') {
@@ -116,6 +120,14 @@ class TestPdfController extends Controller
                 $tasks = $this->getRandomTasksFromManualData12($tasksPerTopic);
             } elseif ($topicId === '13') {
                 $tasks = $this->getRandomTasksFromManualData13($tasksPerTopic);
+            } elseif ($topicId === '14') {
+                $tasks = $this->getRandomTasksFromManualData14($tasksPerTopic);
+            } elseif ($topicId === '15') {
+                $tasks = $this->getRandomTasksFromManualData15($tasksPerTopic);
+            } elseif ($topicId === '16') {
+                $tasks = $this->getRandomTasksFromManualData16($tasksPerTopic);
+            } elseif ($topicId === '17') {
+                $tasks = $this->getRandomTasksFromManualData17($tasksPerTopic);
             } elseif ($topicId === '18') {
                 $tasks = $this->getRandomTasksFromManualData18($tasksPerTopic);
             } elseif ($topicId === '19') {
