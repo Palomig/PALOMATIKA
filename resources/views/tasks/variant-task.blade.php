@@ -159,6 +159,8 @@
                     $taskView = 'tasks.types.grid';
                 } elseif ($type === 'statements') {
                     $taskView = 'tasks.types.statements';
+                } elseif ($type === 'graph_statements') {
+                    $taskView = 'tasks.types.graph-statements';
                 } elseif ($type === 'graphic') {
                     $taskView = 'tasks.types.graphic';
                 }

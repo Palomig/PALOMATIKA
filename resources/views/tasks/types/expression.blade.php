@@ -5,11 +5,25 @@
 
 @php
     $tasks = $zadanie['tasks'] ?? [];
+    $tasksCount = count($tasks);
     $hasLongExpressions = collect($tasks)->contains(fn($t) => strlen($t['expression'] ?? '') > 50);
     $hasDenominator = isset($tasks[0]['denominator']);
 @endphp
 
-@if($hasDenominator)
+@if($tasksCount === 1 && !$hasDenominator)
+    @php
+        $task = $tasks[0] ?? [];
+        $expression = preg_replace('/\s+/u', ' ', trim((string) ($task['expression'] ?? '')));
+        $taskId = $task['id'] ?? 1;
+        $taskKey = "topic_{$topicId}_block_{$block['number']}_zadanie_{$zadanie['number']}_task_{$taskId}";
+        $taskInfo = "Блок {$block['number']} ({$block['title']}), Задание {$zadanie['number']}, Задача {$taskId}<br>Выражение: <code>{$expression}</code>";
+    @endphp
+    <div class="task-review-item relative py-1 overflow-x-auto"
+         data-task-key="{{ $taskKey }}" data-task-info="{{ $taskInfo }}">
+        <span class="text-blue-400 font-bold">{{ $taskId }})</span>
+        <span class="text-slate-200 ml-2 math-serif whitespace-nowrap">${{ $expression }}$</span>
+    </div>
+@elseif($hasDenominator)
     {{-- Задание со знаменателем - формат параграфа --}}
     <div class="space-y-3">
         @foreach($tasks as $task)
