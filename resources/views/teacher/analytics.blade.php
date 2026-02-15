@@ -5,102 +5,99 @@
 
 @section('content')
 <div x-data="analyticsPage()">
-    <!-- Period selector -->
-    <div class="flex items-center justify-between mb-6">
-        <div class="flex space-x-2">
-            <button @click="period = 'week'"
-                    :class="period === 'week' ? 'bg-coral text-white' : 'bg-dark-light text-gray-400 border border-gray-700'"
-                    class="px-4 py-2 rounded-lg font-medium transition">
-                Неделя
-            </button>
-            <button @click="period = 'month'"
-                    :class="period === 'month' ? 'bg-coral text-white' : 'bg-dark-light text-gray-400 border border-gray-700'"
-                    class="px-4 py-2 rounded-lg font-medium transition">
-                Месяц
-            </button>
-            <button @click="period = 'all'"
-                    :class="period === 'all' ? 'bg-coral text-white' : 'bg-dark-light text-gray-400 border border-gray-700'"
-                    class="px-4 py-2 rounded-lg font-medium transition">
-                Всё время
-            </button>
-        </div>
+    {{-- Period selector --}}
+    <div class="flex items-center gap-1.5 mb-6 bg-dark-light rounded-xl p-1 border border-white/[0.06] w-fit">
+        <template x-for="p in [{key:'week',label:'Неделя'},{key:'month',label:'Месяц'},{key:'all',label:'Всё время'}]" :key="p.key">
+            <button @click="period = p.key"
+                    :class="period === p.key
+                        ? 'bg-coral text-white shadow-lg shadow-coral/10'
+                        : 'text-gray-400 hover:text-white'"
+                    class="px-4 py-2 rounded-lg text-sm font-medium transition-all"
+                    x-text="p.label"></button>
+        </template>
     </div>
 
-    <!-- Overview stats -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div class="bg-dark-light rounded-xl p-4 border border-gray-800">
-            <div class="text-2xl font-bold text-coral" x-text="stats.total_tasks_solved"></div>
-            <div class="text-gray-400 text-sm">задач решено</div>
-            <div class="text-xs mt-1" :class="stats.tasks_change >= 0 ? 'text-green-400' : 'text-red-400'"
-                 x-text="(stats.tasks_change >= 0 ? '+' : '') + stats.tasks_change + '%'"></div>
-        </div>
-        <div class="bg-dark-light rounded-xl p-4 border border-gray-800">
-            <div class="text-2xl font-bold text-green-400" x-text="stats.avg_accuracy + '%'"></div>
-            <div class="text-gray-400 text-sm">средняя точность</div>
-            <div class="text-xs mt-1" :class="stats.accuracy_change >= 0 ? 'text-green-400' : 'text-red-400'"
-                 x-text="(stats.accuracy_change >= 0 ? '+' : '') + stats.accuracy_change + '%'"></div>
-        </div>
-        <div class="bg-dark-light rounded-xl p-4 border border-gray-800">
-            <div class="text-2xl font-bold text-amber-400" x-text="stats.active_students"></div>
-            <div class="text-gray-400 text-sm">активных учеников</div>
-        </div>
-        <div class="bg-dark-light rounded-xl p-4 border border-gray-800">
-            <div class="text-2xl font-bold text-blue-400" x-text="stats.avg_streak"></div>
-            <div class="text-gray-400 text-sm">средний стрик</div>
-        </div>
-    </div>
-
-    <!-- Topic performance -->
-    <div class="bg-dark-light rounded-xl border border-gray-800 mb-6">
-        <div class="p-4 border-b border-gray-700">
-            <h3 class="font-semibold text-white">Успеваемость по темам</h3>
-        </div>
-        <div class="p-4">
-            <div class="space-y-4">
-                <template x-for="topic in topicStats" :key="topic.id">
-                    <div>
-                        <div class="flex items-center justify-between mb-1">
-                            <span class="text-sm text-gray-300" x-text="'№' + topic.oge_number + ' ' + topic.name"></span>
-                            <span class="text-sm font-medium"
-                                  :class="topic.accuracy >= 70 ? 'text-green-400' : topic.accuracy >= 50 ? 'text-amber-400' : 'text-red-400'"
-                                  x-text="topic.accuracy + '%'"></span>
-                        </div>
-                        <div class="bg-gray-700 rounded-full h-2">
-                            <div class="rounded-full h-2 transition-all"
-                                 :class="topic.accuracy >= 70 ? 'bg-green-500' : topic.accuracy >= 50 ? 'bg-amber-500' : 'bg-red-500'"
-                                 :style="'width: ' + topic.accuracy + '%'"></div>
-                        </div>
-                        <div class="flex justify-between text-xs text-gray-500 mt-1">
-                            <span x-text="topic.tasks_count + ' задач'"></span>
-                            <span x-text="topic.students_count + ' учеников'"></span>
-                        </div>
-                    </div>
-                </template>
+    {{-- Overview stats --}}
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="bg-dark-light rounded-2xl p-5 border border-white/[0.06]">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Задач решено</span>
+                <span class="text-[11px] font-medium tabular-nums px-1.5 py-0.5 rounded"
+                      :class="stats.tasks_change >= 0 ? 'text-emerald-400 bg-emerald-500/10' : 'text-red-400 bg-red-500/10'"
+                      x-text="(stats.tasks_change >= 0 ? '+' : '') + stats.tasks_change + '%'"></span>
             </div>
+            <div class="text-2xl font-bold text-white tabular-nums" x-text="stats.total_tasks_solved"></div>
+        </div>
+        <div class="bg-dark-light rounded-2xl p-5 border border-white/[0.06]">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Ср. точность</span>
+                <span class="text-[11px] font-medium tabular-nums px-1.5 py-0.5 rounded"
+                      :class="stats.accuracy_change >= 0 ? 'text-emerald-400 bg-emerald-500/10' : 'text-red-400 bg-red-500/10'"
+                      x-text="(stats.accuracy_change >= 0 ? '+' : '') + stats.accuracy_change + '%'"></span>
+            </div>
+            <div class="text-2xl font-bold text-white tabular-nums" x-text="stats.avg_accuracy + '%'"></div>
+        </div>
+        <div class="bg-dark-light rounded-2xl p-5 border border-white/[0.06]">
+            <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Активных</span>
+            <div class="text-2xl font-bold text-white mt-2 tabular-nums" x-text="stats.active_students"></div>
+        </div>
+        <div class="bg-dark-light rounded-2xl p-5 border border-white/[0.06]">
+            <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Ср. стрик</span>
+            <div class="text-2xl font-bold text-white mt-2 tabular-nums" x-text="stats.avg_streak"></div>
         </div>
     </div>
 
-    <!-- Student leaderboard -->
-    <div class="bg-dark-light rounded-xl border border-gray-800">
-        <div class="p-4 border-b border-gray-700">
-            <h3 class="font-semibold text-white">Рейтинг учеников</h3>
+    {{-- Topic performance --}}
+    <div class="bg-dark-light rounded-2xl border border-white/[0.06] mb-5 overflow-hidden">
+        <div class="px-5 py-4 border-b border-white/[0.06]">
+            <h3 class="font-semibold text-white text-[15px]">Успеваемость по темам</h3>
         </div>
-        <div class="divide-y divide-gray-800">
+        <div class="p-5 space-y-5">
+            <template x-for="topic in topicStats" :key="topic.id">
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm text-gray-300" x-text="'#' + topic.oge_number + ' ' + topic.name"></span>
+                        <span class="text-sm font-semibold tabular-nums"
+                              :class="topic.accuracy >= 70 ? 'text-emerald-400' : topic.accuracy >= 50 ? 'text-amber-400' : 'text-red-400'"
+                              x-text="topic.accuracy + '%'"></span>
+                    </div>
+                    <div class="bg-white/[0.06] rounded-full h-2">
+                        <div class="rounded-full h-2 transition-all"
+                             :class="topic.accuracy >= 70 ? 'bg-emerald-500' : topic.accuracy >= 50 ? 'bg-amber-500' : 'bg-red-500'"
+                             :style="'width: ' + topic.accuracy + '%'"></div>
+                    </div>
+                    <div class="flex justify-between text-[11px] text-gray-600 mt-1.5">
+                        <span x-text="topic.tasks_count + ' задач'"></span>
+                        <span x-text="topic.students_count + ' учеников'"></span>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+
+    {{-- Student leaderboard --}}
+    <div class="bg-dark-light rounded-2xl border border-white/[0.06] overflow-hidden">
+        <div class="px-5 py-4 border-b border-white/[0.06]">
+            <h3 class="font-semibold text-white text-[15px]">Рейтинг учеников</h3>
+        </div>
+        <div class="divide-y divide-white/[0.04]">
             <template x-for="(student, index) in studentRanking" :key="student.id">
-                <div class="flex items-center p-4">
-                    <div class="w-8 text-center font-medium"
-                         :class="index < 3 ? 'text-amber-400' : 'text-gray-500'"
-                         x-text="index + 1"></div>
-                    <div class="w-10 h-10 bg-coral/20 rounded-full flex items-center justify-center ml-2">
-                        <span class="text-coral font-medium" x-text="student.name?.charAt(0)"></span>
+                <div class="flex items-center gap-3 px-5 py-3.5 hover:bg-white/[0.02] transition-colors">
+                    <div class="w-7 text-center">
+                        <span class="text-sm font-bold tabular-nums"
+                              :class="index === 0 ? 'text-amber-400' : index === 1 ? 'text-gray-300' : index === 2 ? 'text-amber-600' : 'text-gray-600'"
+                              x-text="index + 1"></span>
                     </div>
-                    <div class="ml-3 flex-1">
-                        <div class="font-medium text-white" x-text="student.name"></div>
-                        <div class="text-xs text-gray-500" x-text="student.tasks_solved + ' задач'"></div>
+                    <div class="w-9 h-9 bg-coral/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <span class="text-sm font-semibold text-coral" x-text="student.name?.charAt(0)"></span>
                     </div>
-                    <div class="text-right">
-                        <div class="font-medium text-green-400" x-text="student.accuracy + '%'"></div>
-                        <div class="text-xs text-gray-500">точность</div>
+                    <div class="flex-1 min-w-0">
+                        <div class="text-sm font-medium text-white truncate" x-text="student.name"></div>
+                        <div class="text-[11px] text-gray-500" x-text="student.tasks_solved + ' задач'"></div>
+                    </div>
+                    <div class="text-right flex-shrink-0">
+                        <div class="text-sm font-semibold text-emerald-400 tabular-nums" x-text="student.accuracy + '%'"></div>
+                        <div class="text-[11px] text-gray-600">точность</div>
                     </div>
                 </div>
             </template>

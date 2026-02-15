@@ -5,154 +5,155 @@
 
 @section('content')
 <div x-data="teacherDashboard()">
-    <!-- Stats -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <div class="bg-dark-light rounded-xl p-6 border border-gray-800">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-3xl font-bold text-blue-400" x-text="stats.total_students || 0"></div>
-                    <div class="text-gray-400 text-sm">учеников</div>
-                </div>
-                <div class="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                    <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+    {{-- Stats row --}}
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="relative overflow-hidden bg-dark-light rounded-2xl p-5 border border-white/[0.06] group hover:border-blue-500/20 transition-colors">
+            <div class="absolute -right-3 -top-3 w-16 h-16 bg-blue-500/[0.07] rounded-full blur-sm group-hover:bg-blue-500/[0.12] transition"></div>
+            <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 bg-blue-500/15 rounded-xl flex items-center justify-center">
+                    <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
                     </svg>
                 </div>
+                <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Ученики</span>
             </div>
+            <div class="text-3xl font-bold text-white" x-text="stats.total_students || 0"></div>
         </div>
-        <div class="bg-dark-light rounded-xl p-6 border border-gray-800">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-3xl font-bold text-green-400" x-text="stats.active_subscriptions || 0"></div>
-                    <div class="text-gray-400 text-sm">активных подписок</div>
-                </div>
-                <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center">
-                    <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+
+        <div class="relative overflow-hidden bg-dark-light rounded-2xl p-5 border border-white/[0.06] group hover:border-emerald-500/20 transition-colors">
+            <div class="absolute -right-3 -top-3 w-16 h-16 bg-emerald-500/[0.07] rounded-full blur-sm group-hover:bg-emerald-500/[0.12] transition"></div>
+            <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 bg-emerald-500/15 rounded-xl flex items-center justify-center">
+                    <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </div>
+                <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Подписки</span>
             </div>
+            <div class="text-3xl font-bold text-white" x-text="stats.active_subscriptions || 0"></div>
         </div>
-        <div class="bg-dark-light rounded-xl p-6 border border-gray-800">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-3xl font-bold text-amber-400" x-text="stats.pending_homework || 0"></div>
-                    <div class="text-gray-400 text-sm">невыполненных ДЗ</div>
-                </div>
-                <div class="w-12 h-12 bg-amber-500/20 rounded-lg flex items-center justify-center">
-                    <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+
+        <div class="relative overflow-hidden bg-dark-light rounded-2xl p-5 border border-white/[0.06] group hover:border-amber-500/20 transition-colors">
+            <div class="absolute -right-3 -top-3 w-16 h-16 bg-amber-500/[0.07] rounded-full blur-sm group-hover:bg-amber-500/[0.12] transition"></div>
+            <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 bg-amber-500/15 rounded-xl flex items-center justify-center">
+                    <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </div>
+                <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Ожидают ДЗ</span>
             </div>
+            <div class="text-3xl font-bold text-white" x-text="stats.pending_homework || 0"></div>
         </div>
-        <div class="bg-dark-light rounded-xl p-6 border border-gray-800">
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="text-3xl font-bold text-coral" x-text="formatMoney(stats.monthly_earnings || 0)"></div>
-                    <div class="text-gray-400 text-sm">заработок за месяц</div>
-                </div>
-                <div class="w-12 h-12 bg-coral/20 rounded-lg flex items-center justify-center">
-                    <svg class="w-6 h-6 text-coral" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+
+        <div class="relative overflow-hidden bg-dark-light rounded-2xl p-5 border border-white/[0.06] group hover:border-coral/20 transition-colors">
+            <div class="absolute -right-3 -top-3 w-16 h-16 bg-coral/[0.07] rounded-full blur-sm group-hover:bg-coral/[0.12] transition"></div>
+            <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 bg-coral/15 rounded-xl flex items-center justify-center">
+                    <svg class="w-5 h-5 text-coral" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </div>
+                <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Заработок</span>
             </div>
+            <div class="text-3xl font-bold text-white" x-text="formatMoney(stats.monthly_earnings || 0)"></div>
         </div>
     </div>
 
-    <!-- Two columns -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- Recent activity -->
-        <div class="bg-dark-light rounded-xl border border-gray-800">
-            <div class="p-4 border-b border-gray-700 flex items-center justify-between">
-                <h3 class="font-semibold text-white">Последняя активность учеников</h3>
-                <a href="/teacher/students" class="text-coral text-sm hover:text-coral-light transition">Все</a>
+    {{-- Two columns --}}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        {{-- Recent activity --}}
+        <div class="bg-dark-light rounded-2xl border border-white/[0.06] overflow-hidden">
+            <div class="px-5 py-4 border-b border-white/[0.06] flex items-center justify-between">
+                <h3 class="font-semibold text-white text-[15px]">Последняя активность</h3>
+                <a href="/teacher/students" class="text-xs font-medium text-coral hover:text-coral-light transition">Все ученики</a>
             </div>
-            <div class="divide-y divide-gray-800">
+            <div class="divide-y divide-white/[0.04]">
                 <template x-for="activity in recentActivity" :key="activity.id">
-                    <div class="flex items-center p-4">
-                        <div class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center">
-                            <span class="text-gray-300 font-medium" x-text="activity.student?.name?.charAt(0) || '?'"></span>
+                    <div class="flex items-center gap-3 px-5 py-3.5 hover:bg-white/[0.02] transition-colors">
+                        <div class="w-9 h-9 rounded-xl bg-coral/10 flex items-center justify-center flex-shrink-0">
+                            <span class="text-sm font-semibold text-coral" x-text="activity.student?.name?.charAt(0) || '?'"></span>
                         </div>
-                        <div class="ml-3 flex-1">
-                            <div class="text-sm font-medium text-white" x-text="activity.student?.name"></div>
-                            <div class="text-xs text-gray-500" x-text="activity.description"></div>
+                        <div class="flex-1 min-w-0">
+                            <div class="text-sm font-medium text-white truncate" x-text="activity.student?.name"></div>
+                            <div class="text-xs text-gray-500 truncate" x-text="activity.description"></div>
                         </div>
-                        <div class="text-xs text-gray-500" x-text="activity.time_ago"></div>
+                        <span class="text-[11px] text-gray-600 flex-shrink-0" x-text="activity.time_ago"></span>
                     </div>
                 </template>
-                <div x-show="recentActivity.length === 0" class="p-8 text-center text-gray-500">
+                <div x-show="recentActivity.length === 0" class="px-5 py-10 text-center text-gray-600 text-sm">
                     Нет активности
                 </div>
             </div>
         </div>
 
-        <!-- Students needing attention -->
-        <div class="bg-dark-light rounded-xl border border-gray-800">
-            <div class="p-4 border-b border-gray-700">
-                <h3 class="font-semibold text-white">Требуют внимания</h3>
+        {{-- Needs attention --}}
+        <div class="bg-dark-light rounded-2xl border border-white/[0.06] overflow-hidden">
+            <div class="px-5 py-4 border-b border-white/[0.06]">
+                <h3 class="font-semibold text-white text-[15px]">Требуют внимания</h3>
             </div>
-            <div class="divide-y divide-gray-800">
+            <div class="divide-y divide-white/[0.04]">
                 <template x-for="student in needsAttention" :key="student.id">
-                    <div class="flex items-center p-4">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center"
-                             :class="student.issue === 'inactive' ? 'bg-red-500/20' : 'bg-amber-500/20'">
-                            <span :class="student.issue === 'inactive' ? 'text-red-400' : 'text-amber-400'"
+                    <div class="flex items-center gap-3 px-5 py-3.5 hover:bg-white/[0.02] transition-colors">
+                        <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+                             :class="student.issue === 'inactive' ? 'bg-red-500/10' : 'bg-amber-500/10'">
+                            <span class="text-sm font-semibold"
+                                  :class="student.issue === 'inactive' ? 'text-red-400' : 'text-amber-400'"
                                   x-text="student.name?.charAt(0) || '?'"></span>
                         </div>
-                        <div class="ml-3 flex-1">
+                        <div class="flex-1 min-w-0">
                             <div class="text-sm font-medium text-white" x-text="student.name"></div>
                             <div class="text-xs"
-                                 :class="student.issue === 'inactive' ? 'text-red-400' : 'text-amber-400'"
+                                 :class="student.issue === 'inactive' ? 'text-red-400/80' : 'text-amber-400/80'"
                                  x-text="student.issue_text"></div>
                         </div>
                         <a :href="'/teacher/students/' + student.id"
-                           class="text-coral text-sm hover:text-coral-light transition">Подробнее</a>
+                           class="text-xs font-medium text-coral hover:text-coral-light transition flex-shrink-0">Открыть</a>
                     </div>
                 </template>
-                <div x-show="needsAttention.length === 0" class="p-8 text-center text-gray-500">
-                    Все ученики активны!
+                <div x-show="needsAttention.length === 0" class="px-5 py-10 text-center text-sm">
+                    <div class="text-emerald-400/80 mb-1">Все ученики активны</div>
+                    <div class="text-gray-600 text-xs">Ничего не требует внимания</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Homework overview -->
-    <div class="mt-6 bg-dark-light rounded-xl border border-gray-800">
-        <div class="p-4 border-b border-gray-700 flex items-center justify-between">
-            <h3 class="font-semibold text-white">Домашние задания</h3>
-            <a href="/teacher/homework" class="text-coral text-sm hover:text-coral-light transition">Все задания</a>
+    {{-- Homework overview --}}
+    <div class="mt-5 bg-dark-light rounded-2xl border border-white/[0.06] overflow-hidden">
+        <div class="px-5 py-4 border-b border-white/[0.06] flex items-center justify-between">
+            <h3 class="font-semibold text-white text-[15px]">Домашние задания</h3>
+            <a href="/teacher/homework" class="text-xs font-medium text-coral hover:text-coral-light transition">Все задания</a>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full">
-                <thead class="bg-dark">
-                    <tr>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Задание</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ученики</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Выполнено</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Срок</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Статус</th>
+                <thead>
+                    <tr class="border-b border-white/[0.06]">
+                        <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Задание</th>
+                        <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Ученики</th>
+                        <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Выполнено</th>
+                        <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Срок</th>
+                        <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Статус</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-800">
+                <tbody class="divide-y divide-white/[0.04]">
                     <template x-for="hw in recentHomework" :key="hw.id">
-                        <tr class="hover:bg-gray-800/50">
-                            <td class="px-4 py-3 text-sm text-white" x-text="hw.title"></td>
-                            <td class="px-4 py-3 text-sm text-gray-400" x-text="hw.assigned_count"></td>
-                            <td class="px-4 py-3">
-                                <div class="flex items-center">
-                                    <div class="w-24 bg-gray-700 rounded-full h-2 mr-2">
-                                        <div class="bg-green-500 rounded-full h-2"
+                        <tr class="hover:bg-white/[0.02] transition-colors">
+                            <td class="px-5 py-3.5 text-sm font-medium text-white" x-text="hw.title"></td>
+                            <td class="px-5 py-3.5 text-sm text-gray-400" x-text="hw.assigned_count"></td>
+                            <td class="px-5 py-3.5">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-20 bg-white/[0.06] rounded-full h-1.5">
+                                        <div class="bg-coral rounded-full h-1.5 transition-all"
                                              :style="'width: ' + hw.completion_rate + '%'"></div>
                                     </div>
-                                    <span class="text-sm text-gray-400" x-text="hw.completion_rate + '%'"></span>
+                                    <span class="text-xs text-gray-500 tabular-nums" x-text="hw.completion_rate + '%'"></span>
                                 </div>
                             </td>
-                            <td class="px-4 py-3 text-sm text-gray-400" x-text="hw.due_date"></td>
-                            <td class="px-4 py-3">
-                                <span class="px-2 py-1 text-xs rounded-full"
-                                      :class="hw.is_overdue ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'"
+                            <td class="px-5 py-3.5 text-sm text-gray-500" x-text="hw.due_date"></td>
+                            <td class="px-5 py-3.5">
+                                <span class="inline-flex items-center px-2.5 py-1 text-[11px] font-medium rounded-lg"
+                                      :class="hw.is_overdue ? 'bg-red-500/10 text-red-400' : 'bg-emerald-500/10 text-emerald-400'"
                                       x-text="hw.is_overdue ? 'Просрочено' : 'Активно'"></span>
                             </td>
                         </tr>

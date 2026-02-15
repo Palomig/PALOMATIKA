@@ -5,182 +5,192 @@
 
 @section('content')
 <div x-data="homeworkPage()">
-    <!-- Actions -->
-    <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center space-x-4">
-            <select x-model="statusFilter" class="bg-dark border border-gray-700 rounded-lg px-4 py-2 text-white">
-                <option value="">Все</option>
-                <option value="active">Активные</option>
-                <option value="completed">Завершённые</option>
-                <option value="overdue">Просроченные</option>
-            </select>
-        </div>
+    {{-- Actions bar --}}
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-5">
+        <select x-model="statusFilter" class="bg-dark-light border border-white/[0.06] rounded-xl px-4 py-2.5 text-sm text-white focus:ring-2 focus:ring-coral/40 focus:border-coral/30 transition">
+            <option value="">Все</option>
+            <option value="active">Активные</option>
+            <option value="completed">Завершённые</option>
+            <option value="overdue">Просроченные</option>
+        </select>
         <button @click="showCreateModal = true"
-                class="bg-coral text-white px-4 py-2 rounded-lg font-medium hover:bg-coral-dark transition">
-            + Создать задание
+                class="inline-flex items-center gap-2 bg-coral text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-coral-dark transition shadow-lg shadow-coral/10 hover:shadow-coral/20">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+            </svg>
+            Создать задание
         </button>
     </div>
 
-    <!-- Homework list -->
+    {{-- Homework list --}}
     <div class="space-y-4">
         <template x-for="hw in filteredHomework" :key="hw.id">
-            <div class="bg-dark-light rounded-xl border border-gray-800 p-6">
-                <div class="flex items-start justify-between mb-4">
-                    <div>
-                        <h3 class="font-semibold text-white text-lg" x-text="hw.title"></h3>
-                        <p class="text-gray-500 text-sm" x-text="hw.description"></p>
+            <div class="bg-dark-light rounded-2xl border border-white/[0.06] overflow-hidden hover:border-white/[0.1] transition-colors">
+                <div class="p-5">
+                    <div class="flex items-start justify-between gap-3 mb-4">
+                        <div>
+                            <h3 class="font-semibold text-white" x-text="hw.title"></h3>
+                            <p class="text-sm text-gray-500 mt-0.5" x-text="hw.description"></p>
+                        </div>
+                        <span class="inline-flex items-center px-2.5 py-1 text-[11px] font-medium rounded-lg flex-shrink-0"
+                              :class="{
+                                  'bg-emerald-500/10 text-emerald-400': hw.status === 'active',
+                                  'bg-white/[0.04] text-gray-500': hw.status === 'completed',
+                                  'bg-red-500/10 text-red-400': hw.status === 'overdue'
+                              }"
+                              x-text="statusLabels[hw.status]"></span>
                     </div>
-                    <span class="px-3 py-1 text-sm rounded-full"
-                          :class="{
-                              'bg-green-500/20 text-green-400': hw.status === 'active',
-                              'bg-gray-700 text-gray-400': hw.status === 'completed',
-                              'bg-red-500/20 text-red-400': hw.status === 'overdue'
-                          }"
-                          x-text="statusLabels[hw.status]"></span>
-                </div>
 
-                <div class="grid grid-cols-4 gap-4 mb-4">
-                    <div>
-                        <div class="text-sm text-gray-500">Назначено</div>
-                        <div class="font-medium text-white" x-text="hw.assigned_count + ' ученикам'"></div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+                        <div class="bg-dark/50 rounded-xl p-3">
+                            <div class="text-[11px] text-gray-500 mb-0.5">Назначено</div>
+                            <div class="text-sm font-medium text-white" x-text="hw.assigned_count + ' уч.'"></div>
+                        </div>
+                        <div class="bg-dark/50 rounded-xl p-3">
+                            <div class="text-[11px] text-gray-500 mb-0.5">Выполнено</div>
+                            <div class="text-sm font-medium text-white" x-text="hw.completed_count + ' (' + hw.completion_rate + '%)'"></div>
+                        </div>
+                        <div class="bg-dark/50 rounded-xl p-3">
+                            <div class="text-[11px] text-gray-500 mb-0.5">Средний балл</div>
+                            <div class="text-sm font-medium text-white" x-text="hw.avg_score + '%'"></div>
+                        </div>
+                        <div class="bg-dark/50 rounded-xl p-3">
+                            <div class="text-[11px] text-gray-500 mb-0.5">Дедлайн</div>
+                            <div class="text-sm font-medium text-white" x-text="hw.due_date"></div>
+                        </div>
                     </div>
-                    <div>
-                        <div class="text-sm text-gray-500">Выполнено</div>
-                        <div class="font-medium text-white" x-text="hw.completed_count + ' (' + hw.completion_rate + '%)'"></div>
-                    </div>
-                    <div>
-                        <div class="text-sm text-gray-500">Средний балл</div>
-                        <div class="font-medium text-white" x-text="hw.avg_score + '%'"></div>
-                    </div>
-                    <div>
-                        <div class="text-sm text-gray-500">Дедлайн</div>
-                        <div class="font-medium text-white" x-text="hw.due_date"></div>
-                    </div>
-                </div>
 
-                <!-- Progress bar -->
-                <div class="mb-4">
-                    <div class="flex justify-between text-sm text-gray-500 mb-1">
-                        <span>Прогресс выполнения</span>
-                        <span x-text="hw.completion_rate + '%'"></span>
+                    {{-- Progress bar --}}
+                    <div class="mb-4">
+                        <div class="flex justify-between text-[11px] text-gray-500 mb-1.5">
+                            <span>Прогресс выполнения</span>
+                            <span class="tabular-nums" x-text="hw.completion_rate + '%'"></span>
+                        </div>
+                        <div class="bg-white/[0.06] rounded-full h-1.5">
+                            <div class="bg-coral rounded-full h-1.5 transition-all"
+                                 :style="'width: ' + hw.completion_rate + '%'"></div>
+                        </div>
                     </div>
-                    <div class="bg-gray-700 rounded-full h-2">
-                        <div class="bg-coral rounded-full h-2 transition-all"
-                             :style="'width: ' + hw.completion_rate + '%'"></div>
-                    </div>
-                </div>
 
-                <!-- Student results -->
-                <div class="border-t border-gray-700 pt-4">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-sm font-medium text-gray-400">Результаты учеников</span>
+                    {{-- Student results toggle --}}
+                    <div class="border-t border-white/[0.04] pt-3">
                         <button @click="hw.showDetails = !hw.showDetails"
-                                class="text-coral text-sm hover:text-coral-light transition"
-                                x-text="hw.showDetails ? 'Скрыть' : 'Показать'"></button>
-                    </div>
-                    <div x-show="hw.showDetails" x-collapse>
-                        <div class="space-y-2 mt-3">
-                            <template x-for="result in hw.results" :key="result.student_id">
-                                <div class="flex items-center justify-between p-3 bg-dark rounded-lg">
-                                    <div class="flex items-center">
-                                        <div class="w-8 h-8 bg-coral/20 rounded-full flex items-center justify-center">
-                                            <span class="text-coral text-sm font-medium"
-                                                  x-text="result.student_name?.charAt(0)"></span>
+                                class="flex items-center gap-2 text-xs font-medium text-gray-400 hover:text-white transition">
+                            <svg class="w-3.5 h-3.5 transition-transform" :class="hw.showDetails ? 'rotate-90' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                            </svg>
+                            <span x-text="hw.showDetails ? 'Скрыть результаты' : 'Показать результаты'"></span>
+                        </button>
+                        <div x-show="hw.showDetails" x-collapse class="mt-3">
+                            <div class="space-y-1.5">
+                                <template x-for="result in hw.results" :key="result.student_id">
+                                    <div class="flex items-center justify-between px-3 py-2.5 bg-dark/50 rounded-xl">
+                                        <div class="flex items-center gap-2.5">
+                                            <div class="w-7 h-7 bg-coral/10 rounded-lg flex items-center justify-center">
+                                                <span class="text-xs font-semibold text-coral" x-text="result.student_name?.charAt(0)"></span>
+                                            </div>
+                                            <span class="text-sm text-white" x-text="result.student_name"></span>
                                         </div>
-                                        <span class="ml-3 text-white" x-text="result.student_name"></span>
+                                        <div class="flex items-center gap-3">
+                                            <span class="text-sm font-medium tabular-nums"
+                                                  :class="result.completed ? 'text-emerald-400' : 'text-gray-600'"
+                                                  x-text="result.completed ? result.score + '%' : 'Не выполнено'"></span>
+                                            <span class="text-[11px] text-gray-600" x-text="result.completed_at || ''"></span>
+                                        </div>
                                     </div>
-                                    <div class="flex items-center space-x-4">
-                                        <span class="text-sm"
-                                              :class="result.completed ? 'text-green-400' : 'text-gray-500'"
-                                              x-text="result.completed ? result.score + '%' : 'Не выполнено'"></span>
-                                        <span class="text-xs text-gray-500" x-text="result.completed_at || ''"></span>
-                                    </div>
-                                </div>
-                            </template>
+                                </template>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </template>
 
-        <div x-show="filteredHomework.length === 0" class="bg-dark-light rounded-xl border border-gray-800 p-12 text-center">
-            <svg class="w-16 h-16 mx-auto text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-            </svg>
-            <p class="text-gray-500">Нет домашних заданий</p>
+        <div x-show="filteredHomework.length === 0" class="bg-dark-light rounded-2xl border border-white/[0.06] p-12 text-center">
+            <div class="w-14 h-14 bg-white/[0.04] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <svg class="w-7 h-7 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                </svg>
+            </div>
+            <p class="text-gray-500 text-sm mb-3">Нет домашних заданий</p>
             <button @click="showCreateModal = true"
-                    class="mt-4 text-coral font-medium hover:text-coral-light transition">
+                    class="text-sm font-medium text-coral hover:text-coral-light transition">
                 Создать первое задание
             </button>
         </div>
     </div>
 
-    <!-- Create modal -->
+    {{-- Create modal --}}
     <div x-show="showCreateModal" x-cloak
-         class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4"
+         class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+         x-transition:enter="transition ease-out duration-200"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
          @click.self="showCreateModal = false">
-        <div class="bg-dark-light rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-gray-700">
-            <div class="p-6 border-b border-gray-700">
-                <h2 class="text-xl font-semibold text-white">Создать домашнее задание</h2>
+        <div class="bg-dark-light rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto border border-white/[0.08] shadow-2xl">
+            <div class="px-6 py-4 border-b border-white/[0.06]">
+                <h2 class="text-lg font-semibold text-white">Создать домашнее задание</h2>
             </div>
             <div class="p-6 space-y-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-400 mb-1">Название</label>
+                    <label class="block text-xs font-medium text-gray-400 mb-1.5">Название</label>
                     <input type="text" x-model="newHomework.title"
-                           class="w-full px-4 py-2 bg-dark border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-coral focus:border-transparent"
+                           class="w-full px-4 py-2.5 bg-dark border border-white/[0.08] rounded-xl text-sm text-white placeholder-gray-500 focus:ring-2 focus:ring-coral/40 focus:border-coral/30 transition"
                            placeholder="Например: Квадратные уравнения">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-400 mb-1">Описание</label>
+                    <label class="block text-xs font-medium text-gray-400 mb-1.5">Описание</label>
                     <textarea x-model="newHomework.description"
-                              class="w-full px-4 py-2 bg-dark border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-coral focus:border-transparent"
+                              class="w-full px-4 py-2.5 bg-dark border border-white/[0.08] rounded-xl text-sm text-white placeholder-gray-500 focus:ring-2 focus:ring-coral/40 focus:border-coral/30 transition"
                               rows="2" placeholder="Краткое описание задания"></textarea>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-400 mb-1">Тема</label>
+                    <label class="block text-xs font-medium text-gray-400 mb-1.5">Тема</label>
                     <select x-model="newHomework.topic_id"
-                            class="w-full px-4 py-2 bg-dark border border-gray-700 rounded-lg text-white">
+                            class="w-full px-4 py-2.5 bg-dark border border-white/[0.08] rounded-xl text-sm text-white focus:ring-2 focus:ring-coral/40 focus:border-coral/30 transition">
                         <option value="">Выберите тему</option>
                         <template x-for="topic in topics" :key="topic.id">
-                            <option :value="topic.id" x-text="'№' + topic.oge_number + ' ' + topic.name"></option>
+                            <option :value="topic.id" x-text="'#' + topic.oge_number + ' ' + topic.name"></option>
                         </template>
                     </select>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-400 mb-1">Количество задач</label>
-                    <input type="number" x-model="newHomework.tasks_count"
-                           class="w-full px-4 py-2 bg-dark border border-gray-700 rounded-lg text-white"
-                           min="1" max="20" value="5">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1.5">Количество задач</label>
+                        <input type="number" x-model="newHomework.tasks_count"
+                               class="w-full px-4 py-2.5 bg-dark border border-white/[0.08] rounded-xl text-sm text-white focus:ring-2 focus:ring-coral/40 focus:border-coral/30 transition"
+                               min="1" max="20" value="5">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1.5">Дедлайн</label>
+                        <input type="date" x-model="newHomework.due_date"
+                               class="w-full px-4 py-2.5 bg-dark border border-white/[0.08] rounded-xl text-sm text-white focus:ring-2 focus:ring-coral/40 focus:border-coral/30 transition">
+                    </div>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-400 mb-1">Дедлайн</label>
-                    <input type="date" x-model="newHomework.due_date"
-                           class="w-full px-4 py-2 bg-dark border border-gray-700 rounded-lg text-white">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-400 mb-2">Назначить ученикам</label>
-                    <div class="space-y-2 max-h-40 overflow-y-auto">
-                        <label class="flex items-center p-2 hover:bg-gray-800/50 rounded cursor-pointer">
-                            <input type="checkbox" @change="toggleAllStudents" class="mr-3 text-coral">
-                            <span class="font-medium text-white">Выбрать всех</span>
+                    <label class="block text-xs font-medium text-gray-400 mb-2">Назначить ученикам</label>
+                    <div class="space-y-1 max-h-40 overflow-y-auto bg-dark/50 rounded-xl p-2">
+                        <label class="flex items-center p-2 hover:bg-white/[0.03] rounded-lg cursor-pointer transition">
+                            <input type="checkbox" @change="toggleAllStudents" class="mr-3 rounded border-gray-600 text-coral focus:ring-coral/40 bg-dark">
+                            <span class="text-sm font-medium text-white">Выбрать всех</span>
                         </label>
                         <template x-for="student in students" :key="student.id">
-                            <label class="flex items-center p-2 hover:bg-gray-800/50 rounded cursor-pointer">
+                            <label class="flex items-center p-2 hover:bg-white/[0.03] rounded-lg cursor-pointer transition">
                                 <input type="checkbox" :value="student.id"
-                                       x-model="newHomework.student_ids" class="mr-3 text-coral">
-                                <span class="text-gray-300" x-text="student.name"></span>
+                                       x-model="newHomework.student_ids" class="mr-3 rounded border-gray-600 text-coral focus:ring-coral/40 bg-dark">
+                                <span class="text-sm text-gray-300" x-text="student.name"></span>
                             </label>
                         </template>
                     </div>
                 </div>
             </div>
-            <div class="p-6 border-t border-gray-700 flex space-x-4">
+            <div class="px-6 py-4 border-t border-white/[0.06] flex gap-3">
                 <button @click="showCreateModal = false"
-                        class="flex-1 py-2 border border-gray-700 rounded-lg text-gray-400 hover:text-white hover:border-gray-600 transition">
+                        class="flex-1 py-2.5 border border-white/[0.08] rounded-xl text-sm text-gray-400 hover:text-white hover:bg-white/[0.04] transition">
                     Отмена
                 </button>
                 <button @click="createHomework"
-                        class="flex-1 py-2 bg-coral text-white rounded-lg font-medium hover:bg-coral-dark transition">
+                        class="flex-1 py-2.5 bg-coral text-white rounded-xl text-sm font-medium hover:bg-coral-dark transition shadow-lg shadow-coral/10">
                     Создать
                 </button>
             </div>
@@ -220,7 +230,6 @@ function homeworkPage() {
         },
 
         async loadHomework() {
-            // Mock data
             this.homework = [
                 {
                     id: 1,
@@ -293,7 +302,6 @@ function homeworkPage() {
         },
 
         async createHomework() {
-            // API call would go here
             alert('Домашнее задание создано!');
             this.showCreateModal = false;
             this.newHomework = {
