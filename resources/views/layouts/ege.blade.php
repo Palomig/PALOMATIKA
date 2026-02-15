@@ -1,89 +1,28 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $topicId }}. {{ $topicMeta['title'] }} - ЕГЭ - PALOMATIKA</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    {{-- KaTeX для формул --}}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-            onload="renderMathWithDisplayStyle()"></script>
-    <script>
-        function renderMathWithDisplayStyle() {
-            document.querySelectorAll('body *').forEach(el => {
-                if (el.childNodes.length === 1 && el.childNodes[0].nodeType === 3) {
-                    let text = el.childNodes[0].textContent;
-                    if (text.includes('$') && text.includes('\\frac')) {
-                        text = text.replace(/\\frac\{/g, '\\displaystyle\\frac{');
-                        el.childNodes[0].textContent = text;
-                    }
-                }
-            });
-            renderMathInElement(document.body, {
-                delimiters: [
-                    {left: '$$', right: '$$', display: true},
-                    {left: '$', right: '$', display: false}
-                ]
-            });
-        }
-    </script>
-
-    {{-- Alpine.js для интерактивности --}}
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-    {{-- Tailwind CSS --}}
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        // Very dark blue-black theme
-                        dark: {
-                            DEFAULT: '#06090f',
-                            50: '#0a0f1a',
-                            100: '#0d1320',
-                            200: '#111827',
-                            300: '#1a2332',
-                            400: '#243044',
-                            500: '#2e3d56'
-                        },
-                        accent: {
-                            DEFAULT: '#8b5cf6',
-                            light: '#a78bfa',
-                            dark: '#7c3aed'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-
-    {{-- Fonts --}}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
+    @include('partials.head-config')
+    @include('partials.head-katex')
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap" rel="stylesheet">
+    @push('styles')
     <style>
-        [x-cloak] { display: none !important; }
-        body { font-family: 'Inter', sans-serif; }
         .math-serif { font-family: 'PT Serif', Georgia, serif; }
         .number-line { font-family: 'Times New Roman', serif; }
         .geo-label { font-family: 'PT Serif', serif; font-style: italic; }
         .katex { font-size: 1.1em; }
 
-        /* Custom scrollbar */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        /* EGE scrollbar override */
         ::-webkit-scrollbar-track { background: #0a0f1a; }
-        ::-webkit-scrollbar-thumb { background: #2e3d56; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #2e3d56; }
         ::-webkit-scrollbar-thumb:hover { background: #3d4f6a; }
-    </style>
 
-    @stack('styles')
+        /* EGE darker theme */
+        body.ege-theme { background: #06090f; }
+    </style>
+    @endpush
 </head>
-<body class="min-h-screen bg-dark text-gray-200">
+<body class="min-h-screen bg-dark text-gray-200 ege-theme">
 
 <div class="max-w-6xl mx-auto px-4 py-8">
     {{-- Navigation --}}

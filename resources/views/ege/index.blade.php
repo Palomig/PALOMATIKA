@@ -1,50 +1,21 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ЕГЭ профиль - Задания - PALOMATIKA</title>
-
-    {{-- Tailwind CSS --}}
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        dark: {
-                            DEFAULT: '#06090f',
-                            50: '#0a0f1a',
-                            100: '#0d1320',
-                            200: '#111827',
-                            300: '#1a2332',
-                            400: '#243044',
-                            500: '#2e3d56'
-                        },
-                        accent: {
-                            DEFAULT: '#8b5cf6',
-                            light: '#a78bfa',
-                            dark: '#7c3aed'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-
-    {{-- Fonts --}}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+    @include('partials.head-config')
+    @push('styles')
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        /* EGE scrollbar override */
         ::-webkit-scrollbar-track { background: #0a0f1a; }
-        ::-webkit-scrollbar-thumb { background: #2e3d56; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #2e3d56; }
         ::-webkit-scrollbar-thumb:hover { background: #3d4f6a; }
+
+        /* EGE darker theme */
+        body.ege-theme { background: #06090f; }
     </style>
+    @endpush
 </head>
-<body class="min-h-screen bg-dark text-gray-200">
+<body class="min-h-screen bg-dark text-gray-200 ege-theme">
 
 <div class="max-w-6xl mx-auto px-4 py-8">
     {{-- Navigation --}}

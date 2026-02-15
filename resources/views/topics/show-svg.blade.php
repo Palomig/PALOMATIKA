@@ -1,49 +1,12 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $topicId }}. {{ $topicMeta['title'] }} (SVG) - PALOMATIKA</title>
-
-    {{-- KaTeX --}}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-            onload="renderMath()"></script>
-    <script>
-        function renderMath() {
-            renderMathInElement(document.body, {
-                delimiters: [
-                    {left: '$$', right: '$$', display: true},
-                    {left: '$', right: '$', display: false}
-                ]
-            });
-        }
-    </script>
-
-    {{-- Tailwind CSS --}}
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        dark: { DEFAULT: '#1a1a2e', light: '#252542', lighter: '#2d2d4a' },
-                        coral: { DEFAULT: '#ff6b6b', dark: '#e85555', light: '#ff8585' }
-                    }
-                }
-            }
-        }
-    </script>
-
-    {{-- Fonts --}}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
+    @include('partials.head-config')
+    @include('partials.head-katex')
+    @push('styles')
     <style>
-        body { font-family: 'Inter', sans-serif; }
         .katex { font-size: 1.1em; }
-        /* GEOMETRY_SPEC: стили для SVG меток (синхронизировано с topic16.blade.php) */
         .geo-label {
             font-family: 'Times New Roman', serif;
             font-style: italic;
@@ -59,6 +22,7 @@
             pointer-events: none;
         }
     </style>
+    @endpush
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
 

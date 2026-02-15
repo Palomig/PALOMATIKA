@@ -1,43 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Панель учителя') - PALOMATIKA</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        dark: {
-                            DEFAULT: '#1a1a2e',
-                            light: '#252542',
-                            lighter: '#2d2d4a',
-                        },
-                        coral: {
-                            DEFAULT: '#ff6b6b',
-                            dark: '#e85555',
-                            light: '#ff8585',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        [x-cloak] { display: none !important; }
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #1a1a2e; }
-        ::-webkit-scrollbar-thumb { background: #3d3d5c; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #4d4d6a; }
-    </style>
-    @stack('styles')
+    @include('partials.head-config')
 </head>
 <body class="bg-dark min-h-screen" x-data="teacherApp()">
     <div class="flex">
@@ -112,7 +77,7 @@
                         <div class="flex items-center">
                             <input type="text" readonly :value="referralLink"
                                    class="flex-1 bg-dark-light text-white text-sm px-3 py-2 rounded-lg border border-gray-700 focus:outline-none focus:border-coral">
-                            <button @click="copyReferralLink" class="ml-2 text-gray-400 hover:text-coral transition p-2">
+                            <button @click="copyReferralLink" class="ml-2 text-gray-400 hover:text-coral transition p-2" aria-label="Копировать ссылку">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
                                 </svg>
@@ -140,7 +105,7 @@
         <div class="flex-1 lg:ml-64">
             <!-- Top bar -->
             <header class="sticky top-0 z-20 bg-dark-light/80 backdrop-blur-lg border-b border-gray-800 h-16 flex items-center px-4">
-                <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden text-gray-400 hover:text-white mr-4">
+                <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden text-gray-400 hover:text-white mr-4" aria-label="Открыть меню">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>

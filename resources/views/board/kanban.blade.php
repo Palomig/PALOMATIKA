@@ -1,43 +1,13 @@
 <!DOCTYPE html>
 <html lang="ru" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kanban - PALOMATIKA</title>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        dark: {
-                            DEFAULT: '#1a1a2e',
-                            light: '#252542',
-                            lighter: '#2d2d4a',
-                        },
-                        coral: {
-                            DEFAULT: '#ff6b6b',
-                            dark: '#e85555',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    @include('partials.head-config')
+    @push('styles')
     <style>
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #1a1a2e; }
-        ::-webkit-scrollbar-thumb { background: #3d3d5c; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #4d4d6c; }
         .kanban-column { min-height: calc(100vh - 200px); }
     </style>
+    @endpush
 </head>
 <body class="bg-dark text-gray-100 min-h-screen font-sans">
 

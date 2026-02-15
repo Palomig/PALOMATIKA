@@ -1,61 +1,24 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Генератор вариантов ЕГЭ - PALOMATIKA</title>
-
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        dark: {
-                            DEFAULT: '#06090f',
-                            50: '#0a0f1a',
-                            100: '#0d1320',
-                            200: '#111827',
-                            300: '#1a2332',
-                            400: '#243044',
-                            500: '#2e3d56'
-                        },
-                        accent: {
-                            DEFAULT: '#8b5cf6',
-                            light: '#a78bfa',
-                            dark: '#7c3aed'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-
-    <!-- Alpine.js -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
-    <!-- KaTeX -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+    @include('partials.head-config')
+    @include('partials.head-katex')
+    @push('styles')
     <style>
-        body { font-family: 'Inter', sans-serif; }
         .katex { font-size: 1.1em; }
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
+
+        /* EGE scrollbar override */
         ::-webkit-scrollbar-track { background: #0a0f1a; }
-        ::-webkit-scrollbar-thumb { background: #2e3d56; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #2e3d56; }
         ::-webkit-scrollbar-thumb:hover { background: #3d4f6a; }
-        [x-cloak] { display: none !important; }
+
+        /* EGE darker theme */
+        body.ege-theme { background: #06090f; }
     </style>
+    @endpush
 </head>
-<body class="min-h-screen bg-dark text-gray-200" x-data="egeGenerator()">
+<body class="min-h-screen bg-dark text-gray-200 ege-theme" x-data="egeGenerator()">
 
 <div class="max-w-7xl mx-auto px-4 py-8">
     {{-- Navigation --}}

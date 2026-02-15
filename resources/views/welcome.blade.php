@@ -261,36 +261,47 @@
                 <h2 class="text-3xl sm:text-4xl text-center font-bold">Тарифы и сравнение</h2>
                 <p class="mt-3 text-center text-gray-300">Начни с бесплатного периода, затем выбери комфортный ритм подготовки.</p>
 
-                <div class="mt-10 grid md:grid-cols-3 gap-5">
+                <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    <x-ui.card>
+                        <p class="text-sm text-gray-400">Free</p>
+                        <p class="mt-2 text-4xl font-bold text-white">0₽</p>
+                        <ul class="mt-5 space-y-2 text-gray-300 text-sm">
+                            <li>5 задач в день</li>
+                            <li>Базовая статистика</li>
+                            <li>Все номера ОГЭ</li>
+                        </ul>
+                        <x-ui.button href="/register" variant="outline" class="w-full mt-6 justify-center">Начать бесплатно</x-ui.button>
+                    </x-ui.card>
+
                     <x-ui.card>
                         <p class="text-sm text-gray-400">Старт</p>
-                        <p class="mt-2 text-4xl font-bold text-white">499₽<span class="text-base text-gray-400">/мес</span></p>
+                        <p class="mt-2 text-4xl font-bold text-white">290₽<span class="text-base text-gray-400">/мес</span></p>
                         <ul class="mt-5 space-y-2 text-gray-300 text-sm">
-                            <li>Все номера ОГЭ</li>
+                            <li>Безлимит задач</li>
+                            <li>Все темы ОГЭ</li>
                             <li>Пазловый тренажер</li>
-                            <li>Базовая аналитика</li>
                         </ul>
                         <x-ui.button href="/register" variant="outline" class="w-full mt-6 justify-center">Выбрать Старт</x-ui.button>
                     </x-ui.card>
 
                     <x-ui.card class="border-coral/60 shadow-glow-coral">
                         <p class="inline-flex px-3 py-1 rounded-badge bg-coral/20 text-coral text-xs font-semibold">Популярный</p>
-                        <p class="mt-2 text-4xl font-bold text-white">799₽<span class="text-base text-gray-400">/мес</span></p>
+                        <p class="mt-2 text-4xl font-bold text-white">490₽<span class="text-base text-gray-400">/мес</span></p>
                         <ul class="mt-5 space-y-2 text-gray-200 text-sm">
                             <li>Все из Старт</li>
-                            <li>Расширенная диагностика пробелов</li>
-                            <li>Домашние задания и трек прогресса</li>
+                            <li>ДЗ от учителя</li>
+                            <li>Детальная аналитика пробелов</li>
                         </ul>
                         <x-ui.button href="/register" variant="primary" class="w-full mt-6 justify-center">Выбрать Стандарт</x-ui.button>
                     </x-ui.card>
 
                     <x-ui.card>
                         <p class="text-sm text-gray-400">Премиум</p>
-                        <p class="mt-2 text-4xl font-bold text-white">1299₽<span class="text-base text-gray-400">/мес</span></p>
+                        <p class="mt-2 text-4xl font-bold text-white">790₽<span class="text-base text-gray-400">/мес</span></p>
                         <ul class="mt-5 space-y-2 text-gray-300 text-sm">
                             <li>Все из Стандарт</li>
+                            <li>ИИ-подсказки</li>
                             <li>Приоритетная поддержка</li>
-                            <li>Персональные рекомендации</li>
                         </ul>
                         <x-ui.button href="/register" variant="outline" class="w-full mt-6 justify-center">Выбрать Премиум</x-ui.button>
                     </x-ui.card>
@@ -321,7 +332,7 @@
                             </tr>
                             <tr class="border-t border-white/10">
                                 <td class="px-4 py-3 text-gray-300">Средняя цена в месяц</td>
-                                <td class="px-4 py-3 text-white font-semibold">799₽</td>
+                                <td class="px-4 py-3 text-white font-semibold">490₽</td>
                                 <td class="px-4 py-3 text-gray-300">0-990₽</td>
                                 <td class="px-4 py-3 text-gray-300">от 4000₽</td>
                             </tr>
@@ -335,7 +346,7 @@
                         <ul class="text-sm text-gray-200 space-y-1">
                             <li>Диагностика причин ошибок: Да</li>
                             <li>Пазловый формат решения: Да</li>
-                            <li>Средняя цена в месяц: 799₽</li>
+                            <li>Средняя цена в месяц: 490₽</li>
                         </ul>
                     </x-ui.card>
                     <x-ui.card>
