@@ -10,6 +10,7 @@
     $uniqueId = uniqid('int_');
 
     // Парсим интервал
+    $interval = is_scalar($interval ?? null) ? (string) $interval : '';
     $interval = str_replace(' ', '', $interval);
     $interval = str_replace(',', '.', $interval); // 0,5 -> 0.5
     $interval = str_replace('−', '-', $interval); // юникод минус

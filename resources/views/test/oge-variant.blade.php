@@ -129,12 +129,25 @@
             $color = $accentColors[$topicId] ?? 'blue';
         @endphp
 
-        @include('tasks.variant-task', [
-            'taskData' => $taskData,
-            'taskNumber' => $taskNumber,
-            'color' => $color,
-            'studentMode' => $studentMode,
-        ])
+        @php
+            try {
+                echo view('tasks.variant-task', [
+                    'taskData' => $taskData,
+                    'taskNumber' => $taskNumber,
+                    'color' => $color,
+                    'studentMode' => $studentMode,
+                ])->render();
+            } catch (\Throwable $e) {
+                \Log::warning('OGE variant task card render failed', [
+                    'variant_hash' => $variantHash ?? null,
+                    'task_number' => $taskNumber,
+                    'topic_id' => $topicId ?? null,
+                    'error' => $e->getMessage(),
+                ]);
+
+                echo '<div class="mb-8 rounded-xl border border-amber-700/50 bg-amber-900/20 p-4 text-sm text-amber-200">Одно из заданий не удалось отобразить. Остальная часть варианта доступна.</div>';
+            }
+        @endphp
     @endforeach
 
     @if($studentMode)

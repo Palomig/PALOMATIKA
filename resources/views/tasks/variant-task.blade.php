@@ -87,7 +87,20 @@
 
         {{-- Matching Variant Content (3 графика + 3 формулы) --}}
         <div class="p-5">
-            @include('tasks.types.matching-variant', compact('taskData', 'taskNumber', 'color'))
+            @php
+                try {
+                    echo view('tasks.types.matching-variant', compact('taskData', 'taskNumber', 'color'))->render();
+                } catch (\Throwable $e) {
+                    \Log::warning('Matching variant render failed', [
+                        'task_number' => $taskNumber ?? null,
+                        'topic_id' => $topicId ?? null,
+                        'view' => 'tasks.types.matching-variant',
+                        'error' => $e->getMessage(),
+                    ]);
+
+                    echo '<div class="rounded-lg border border-amber-700/50 bg-amber-900/20 p-3 text-sm text-amber-200">Не удалось отрисовать блок сопоставления. Попробуйте открыть другой вариант.</div>';
+                }
+            @endphp
         </div>
 
         <div class="p-5 border-t border-slate-800">
@@ -127,66 +140,46 @@
 
         {{-- Task Content - используем существующие компоненты --}}
         <div class="p-5">
-            @switch($type)
-                @case('expression')
-                    @include('tasks.types.expression', compact('zadanie', 'block', 'topicId'))
-                    @break
+            @php
+                $taskView = 'tasks.types.expression';
 
-                @case('choice')
-                @case('simple_choice')
-                @case('fraction_choice')
-                @case('interval_choice')
-                @case('between_fractions')
-                @case('segment_choice')
-                @case('fraction_options')
-                @case('decimal_choice')
-                @case('sqrt_choice')
-                @case('sqrt_interval')
-                @case('sqrt_segment')
-                @case('sqrt_options')
-                @case('comparison')
-                @case('power_choice')
-                @case('compare_fractions')
-                @case('false_statements')
-                @case('ordering')
-                @case('point_value')
-                @case('fraction_point')
-                @case('count_integers')
-                @case('negative_segment')
-                @case('negative_interval')
-                    @include('tasks.types.choice', compact('zadanie', 'block', 'topicId'))
-                    @break
+                if (in_array($type, [
+                    'choice', 'simple_choice', 'fraction_choice', 'interval_choice',
+                    'between_fractions', 'segment_choice', 'fraction_options',
+                    'decimal_choice', 'sqrt_choice', 'sqrt_interval', 'sqrt_segment',
+                    'sqrt_options', 'comparison', 'power_choice', 'compare_fractions',
+                    'false_statements', 'ordering', 'point_value', 'fraction_point',
+                    'count_integers', 'negative_segment', 'negative_interval'
+                ], true)) {
+                    $taskView = 'tasks.types.choice';
+                } elseif ($type === 'word_problem') {
+                    $taskView = 'tasks.types.word-problem';
+                } elseif (in_array($type, ['matching', 'matching_signs', 'matching_4'], true)) {
+                    $taskView = 'tasks.types.matching';
+                } elseif ($type === 'geometry') {
+                    $taskView = 'tasks.types.geometry';
+                } elseif (in_array($type, ['grid_image', 'grid_image_with_question'], true)) {
+                    $taskView = 'tasks.types.grid';
+                } elseif ($type === 'statements') {
+                    $taskView = 'tasks.types.statements';
+                } elseif ($type === 'graphic') {
+                    $taskView = 'tasks.types.graphic';
+                }
 
-                @case('word_problem')
-                    @include('tasks.types.word-problem', compact('zadanie', 'block', 'topicId'))
-                    @break
+                try {
+                    echo view($taskView, compact('zadanie', 'block', 'topicId'))->render();
+                } catch (\Throwable $e) {
+                    \Log::warning('Task variant render failed', [
+                        'task_number' => $taskNumber ?? null,
+                        'topic_id' => $topicId ?? null,
+                        'type' => $type ?? null,
+                        'view' => $taskView,
+                        'error' => $e->getMessage(),
+                    ]);
 
-                @case('matching')
-                @case('matching_signs')
-                @case('matching_4')
-                    @include('tasks.types.matching', compact('zadanie', 'block', 'topicId'))
-                    @break
-
-                @case('geometry')
-                    @include('tasks.types.geometry', compact('zadanie', 'block', 'topicId'))
-                    @break
-
-                @case('grid_image')
-                @case('grid_image_with_question')
-                    @include('tasks.types.grid', compact('zadanie', 'block', 'topicId'))
-                    @break
-
-                @case('statements')
-                    @include('tasks.types.statements', compact('zadanie', 'block', 'topicId'))
-                    @break
-
-                @case('graphic')
-                    @include('tasks.types.graphic', compact('zadanie', 'block', 'topicId'))
-                    @break
-
-                @default
-                    @include('tasks.types.expression', compact('zadanie', 'block', 'topicId'))
-            @endswitch
+                    echo '<div class="rounded-lg border border-amber-700/50 bg-amber-900/20 p-3 text-sm text-amber-200">Не удалось отрисовать это задание полностью. Попробуйте открыть другой вариант.</div>';
+                }
+            @endphp
         </div>
 
         {{-- Answer Field --}}

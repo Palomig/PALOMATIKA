@@ -65,11 +65,13 @@
 {{-- Задачи --}}
 @if(!empty($tasks))
     <div class="space-y-4">
-        @foreach($tasks as $task)
+        @foreach($tasks as $taskRaw)
             @php
-                $taskKey = "topic_{$topicId}_block_{$block['number']}_zadanie_{$zadanie['number']}_task_{$task['id']}";
+                $task = is_array($taskRaw) ? $taskRaw : [];
+                $taskId = $task['id'] ?? ($loop->index + 1);
+                $taskKey = "topic_{$topicId}_block_{$block['number']}_zadanie_{$zadanie['number']}_task_{$taskId}";
                 $taskText = $task['expression'] ?? $task['text'] ?? '';
-                $taskInfo = "Блок {$block['number']}, Задание {$zadanie['number']}, Задача {$task['id']}<br><code>" . substr($taskText, 0, 80) . "</code>";
+                $taskInfo = "Блок {$block['number']}, Задание {$zadanie['number']}, Задача {$taskId}<br><code>" . substr((string) $taskText, 0, 80) . "</code>";
                 $taskPoints = $task['points'] ?? [];
                 $taskOptions = $task['options'] ?? $options;
             @endphp
@@ -78,7 +80,7 @@
                  data-task-key="{{ $taskKey }}" data-task-info="{{ $taskInfo }}">
 
                 <div class="flex items-start gap-3 mb-3">
-                    <span class="text-cyan-400 font-bold text-lg">{{ $task['id'] }})</span>
+                    <span class="text-cyan-400 font-bold text-lg">{{ $taskId }})</span>
                     @if(isset($task['expression']))
                         <span class="text-slate-200 math-serif text-lg">${{ $task['expression'] }}$</span>
                     @elseif(isset($task['left']) && isset($task['right']))
@@ -122,7 +124,7 @@
                                         @endif
                                     </div>
                                     @if($option !== 'нет решений' && $option !== '(-∞; +∞)')
-                                        @if(str_contains($option, '∪'))
+                                        @if(str_contains((string) $option, '∪'))
                                             {{-- Объединение интервалов --}}
                                             @php
                                                 $parts = explode('∪', $option);
@@ -144,7 +146,7 @@
                         <div class="flex flex-wrap gap-3 mt-3">
                             @foreach($taskOptions as $i => $option)
                                 <span class="bg-slate-700/70 text-slate-300 px-4 py-2 rounded-lg hover:bg-slate-600 cursor-pointer transition">
-                                    @if(str_contains($option, '\\'))
+                                    @if(str_contains((string) $option, '\\'))
                                         {{ $i + 1 }}) ${{ $option }}$
                                     @else
                                         {{ $i + 1 }}) {{ $option }}
