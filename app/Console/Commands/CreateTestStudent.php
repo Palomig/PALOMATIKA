@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Models\User;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Hash;
 
 class CreateTestStudent extends Command
 {
@@ -34,7 +33,7 @@ class CreateTestStudent extends Command
         /** @var User $user */
         $user = User::query()->firstOrNew(['email' => $email]);
         $user->name = $name !== '' ? $name : 'Тестовый Ученик';
-        $user->password = Hash::make($password);
+        $user->password = $password;
         $user->role = 'student';
 
         if (!$user->email_verified_at) {

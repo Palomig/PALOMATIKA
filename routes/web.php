@@ -10,6 +10,8 @@ use App\Http\Controllers\RepetitorController;
 use App\Http\Controllers\TestPdfController;
 use App\Http\Controllers\Teacher\StudentGroupController;
 use App\Http\Controllers\Teacher\OgeReviewController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\TopicController;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +46,34 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', function () {
         return view('auth.login');
     })->name('login');
+
+    Route::post('/login', function (Request $request) {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+            'remember' => 'sometimes|boolean',
+        ]);
+
+        if (!Auth::attempt([
+            'email' => $credentials['email'],
+            'password' => $credentials['password'],
+        ], (bool) ($credentials['remember'] ?? false))) {
+            return response()->json([
+                'message' => 'Неверный email или пароль',
+            ], 422);
+        }
+
+        $request->session()->regenerate();
+
+        $user = $request->user();
+        $token = $user->createToken('web-login')->plainTextToken;
+
+        return response()->json([
+            'success' => true,
+            'user' => $user,
+            'token' => $token,
+        ]);
+    })->name('login.attempt');
 
     Route::get('/register', function () {
         return view('auth.register');
