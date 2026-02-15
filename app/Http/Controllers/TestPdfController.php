@@ -11,6 +11,7 @@ use App\Services\TaskDataService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class TestPdfController extends Controller
 {
@@ -129,7 +130,7 @@ class TestPdfController extends Controller
             } elseif ($topicId === '17') {
                 $tasks = $this->getRandomTasksFromManualData17($tasksPerTopic);
             } elseif ($topicId === '18') {
-                $tasks = $this->getRandomTasksFromManualData18($tasksPerTopic);
+                $tasks = $this->taskGenerator->getRandomTasksFromTopic('18', $tasksPerTopic);
             } elseif ($topicId === '19') {
                 $tasks = $this->getRandomTasksFromManualData19($tasksPerTopic);
             } else {
@@ -146,7 +147,27 @@ class TestPdfController extends Controller
             $task['test_number'] = $index + 1;
         }
 
-        return view('test.random-test', compact('testTasks'));
+        $hash = Str::lower(Str::random(8));
+        \Cache::put("custom_random_test_{$hash}", $testTasks, now()->addDays(7));
+
+        return redirect()->route('test.generator.show', ['hash' => $hash]);
+    }
+
+    public function showGeneratedRandomTest(string $hash)
+    {
+        if (!preg_match('/^[a-z0-9]{8}$/', $hash)) {
+            abort(404);
+        }
+
+        $testTasks = \Cache::get("custom_random_test_{$hash}");
+        if (!is_array($testTasks) || empty($testTasks)) {
+            abort(404);
+        }
+
+        return view('test.random-test', [
+            'testTasks' => $testTasks,
+            'testHash' => $hash,
+        ]);
     }
 
     /**
@@ -4322,18 +4343,26 @@ class TestPdfController extends Controller
         // Store in cache for 30 days
         \Cache::put("oge_variant_{$hash}", $zadaniya, now()->addDays(30));
 
-        // Persist canonical variant metadata for assessment workflow
-        OgeVariant::updateOrCreate(
-            ['hash' => $hash],
-            [
-                'owner_teacher_id' => auth()->id(),
-                'title' => "Вариант {$hash}",
-                'config_json' => [
-                    'zadaniya' => $zadaniya,
-                    'source' => 'generator',
-                ],
-            ]
-        );
+        // Persist canonical variant metadata for assessment workflow.
+        // If DB schema is not ready on hosting, keep generator working via cache.
+        try {
+            OgeVariant::updateOrCreate(
+                ['hash' => $hash],
+                [
+                    'owner_teacher_id' => auth()->id(),
+                    'title' => "Вариант {$hash}",
+                    'config_json' => [
+                        'zadaniya' => $zadaniya,
+                        'source' => 'generator',
+                    ],
+                ]
+            );
+        } catch (\Throwable $e) {
+            \Log::warning('Failed to persist OGE variant metadata', [
+                'hash' => $hash,
+                'error' => $e->getMessage(),
+            ]);
+        }
 
         return response()->json(['success' => true, 'hash' => $hash]);
     }

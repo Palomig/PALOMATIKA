@@ -253,6 +253,9 @@ Route::prefix('test')->group(function () {
     // Test Generator
     Route::get('/generator', [TestPdfController::class, 'testGenerator'])->name('test.generator');
     Route::post('/generator/generate', [TestPdfController::class, 'generateRandomTest'])->name('test.generator.generate');
+    Route::get('/generator/result/{hash}', [TestPdfController::class, 'showGeneratedRandomTest'])
+        ->where('hash', '[a-z0-9]{8}')
+        ->name('test.generator.show');
 
     // OGE Variant Generator (tasks 6-19)
     Route::middleware(['auth', 'role:teacher,admin'])->group(function () {
