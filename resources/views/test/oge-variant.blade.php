@@ -26,6 +26,13 @@
             pointer-events: none;
         }
         .katex { font-size: 1.02em; }
+        .save-flash {
+            animation: saveBlink 0.4s ease-in-out 5;
+        }
+        @keyframes saveBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.2; }
+        }
 
         /* Print styles */
         @media print {
@@ -263,6 +270,35 @@ document.addEventListener('DOMContentLoaded', async () => {
         const ok = card.querySelector('.js-answer-ok');
         const edit = card.querySelector('.js-answer-edit');
         const status = card.querySelector('.js-save-status');
+        let statusResetTimer = null;
+
+        function showStatus(message, mode = 'info') {
+            if (!status) return;
+            if (statusResetTimer) {
+                clearTimeout(statusResetTimer);
+                statusResetTimer = null;
+            }
+
+            status.textContent = message;
+            status.classList.remove('opacity-0', 'save-flash', 'text-emerald-400', 'text-red-400', 'text-slate-500');
+            status.classList.add('opacity-100');
+
+            if (mode === 'success') {
+                status.classList.add('text-emerald-400', 'save-flash');
+                statusResetTimer = setTimeout(() => {
+                    status.classList.remove('save-flash');
+                    status.classList.add('opacity-0');
+                }, 2000);
+                return;
+            }
+
+            if (mode === 'error') {
+                status.classList.add('text-red-400');
+                return;
+            }
+
+            status.classList.add('text-slate-400');
+        }
 
         if (!input || !ok || !edit) return;
 
@@ -289,7 +325,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (!answer) return;
 
             ok.disabled = true;
-            if (status) status.textContent = 'Сохраняем...';
+            showStatus('Сохраняем...');
 
             try {
                 await post(api.commit(attemptId, taskNumber), {
@@ -297,10 +333,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                     client_ts: new Date().toISOString(),
                 });
                 input.disabled = true;
-                if (status) status.textContent = 'Сохранено';
+                showStatus('Сохранено', 'success');
             } catch (e) {
                 console.error('commit failed', e);
-                if (status) status.textContent = 'Ошибка сохранения';
+                showStatus('Ошибка сохранения', 'error');
             } finally {
                 ok.disabled = false;
             }
@@ -310,7 +346,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (locked) return;
             input.disabled = false;
             input.focus();
-            if (status) status.textContent = 'Режим редактирования';
+            showStatus('Режим редактирования');
         });
     });
 

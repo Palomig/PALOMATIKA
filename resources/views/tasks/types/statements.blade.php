@@ -9,13 +9,41 @@
 @php
     $statements = $zadanie['statements'] ?? [];
     $isOgeVariant = $zadanie['is_oge_variant'] ?? false;
+
+    $normalizeStatement = function ($statement, int $fallbackNumber) {
+        if (is_string($statement) || is_numeric($statement)) {
+            return [
+                'display_number' => $fallbackNumber,
+                'id' => $fallbackNumber,
+                'text' => (string) $statement,
+                'is_true' => false,
+            ];
+        }
+
+        if (!is_array($statement)) {
+            return [
+                'display_number' => $fallbackNumber,
+                'id' => $fallbackNumber,
+                'text' => '',
+                'is_true' => false,
+            ];
+        }
+
+        return [
+            'display_number' => $statement['display_number'] ?? $fallbackNumber,
+            'id' => $statement['id'] ?? $fallbackNumber,
+            'text' => (string) ($statement['text'] ?? ''),
+            'is_true' => (bool) ($statement['is_true'] ?? false),
+        ];
+    };
 @endphp
 
 @if($isOgeVariant)
     {{-- Формат ОГЭ: 3 утверждения с простой нумерацией --}}
     <div class="space-y-4">
-        @foreach($statements as $statement)
+        @foreach($statements as $rawStatement)
             @php
+                $statement = $normalizeStatement($rawStatement, $loop->iteration);
                 $displayNumber = $statement['display_number'] ?? $loop->iteration;
             @endphp
 
@@ -42,8 +70,9 @@
             </button>
         </div>
 
-        @foreach($statements as $statement)
+        @foreach($statements as $rawStatement)
             @php
+                $statement = $normalizeStatement($rawStatement, $loop->iteration);
                 $taskKey = "topic_{$topicId}_block_{$block['number']}_zadanie_{$zadanie['number']}_statement_{$statement['id']}";
                 $isTrue = $statement['is_true'] ?? false;
                 $taskInfo = "Блок {$block['number']}, Задание {$zadanie['number']}, Утверждение {$statement['id']}<br>Верно: " . ($isTrue ? 'Да' : 'Нет');

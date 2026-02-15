@@ -13,7 +13,6 @@
 
     // Извлекаем данные
     $topicId = $taskData['topic_id'] ?? '';
-    $topicTitle = $taskData['topic_title'] ?? '';
     $instruction = $taskData['instruction'] ?? '';
     $type = $taskData['type'] ?? 'expression';
 
@@ -81,7 +80,6 @@
             </div>
             <div class="flex-1">
                 <div class="text-white font-medium leading-snug">{{ $instruction }}</div>
-                <div class="text-slate-500 text-sm mt-1">{{ $topicTitle }}</div>
             </div>
         </div>
 
@@ -119,7 +117,7 @@
                             class="js-answer-edit px-3 py-2 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-700 transition text-sm">
                         ✎ Редактировать
                     </button>
-                    <span class="js-save-status text-xs text-slate-500"></span>
+                    <span class="js-save-status text-xs text-emerald-400 opacity-0"></span>
                 @endif
             </div>
         </div>
@@ -134,7 +132,6 @@
             </div>
             <div class="flex-1">
                 <div class="text-white font-medium leading-snug">{{ $instruction }}</div>
-                <div class="text-slate-500 text-sm mt-1">{{ $topicTitle }}</div>
             </div>
         </div>
 
@@ -199,7 +196,7 @@
                             class="js-answer-edit px-3 py-2 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-700 transition text-sm">
                         ✎ Редактировать
                     </button>
-                    <span class="js-save-status text-xs text-slate-500"></span>
+                    <span class="js-save-status text-xs text-emerald-400 opacity-0"></span>
                 @endif
             </div>
         </div>
