@@ -235,8 +235,7 @@ class TestPdfController extends Controller
      */
     protected function getRandomTasksFromManualData15(int $count): array
     {
-        $blocks = $this->getAllBlocksData15();
-        return $this->extractRandomTasks($blocks, '15', 'Треугольники', $count);
+        return $this->taskGenerator->getRandomTasksFromTopic('15', $count);
     }
 
     /**
@@ -244,8 +243,7 @@ class TestPdfController extends Controller
      */
     protected function getRandomTasksFromManualData16(int $count): array
     {
-        $blocks = $this->getAllBlocksData16();
-        return $this->extractRandomTasks($blocks, '16', 'Окружность', $count);
+        return $this->taskGenerator->getRandomTasksFromTopic('16', $count);
     }
 
     /**
@@ -253,8 +251,7 @@ class TestPdfController extends Controller
      */
     protected function getRandomTasksFromManualData17(int $count): array
     {
-        $blocks = $this->getAllBlocksData17();
-        return $this->extractRandomTasks($blocks, '17', 'Четырёхугольники', $count);
+        return $this->taskGenerator->getRandomTasksFromTopic('17', $count);
     }
 
     /**
