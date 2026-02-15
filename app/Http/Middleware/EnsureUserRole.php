@@ -21,11 +21,19 @@ class EnsureUserRole
             abort(401);
         }
 
-        if (empty($roles) || in_array($user->role, $roles, true)) {
+        // Admin can switch view mode to simulate teacher/student permissions.
+        $effectiveRole = $user->role;
+        if ($user->role === 'admin') {
+            $viewAs = $request->session()->get('view_as_role');
+            if (in_array($viewAs, ['student', 'teacher'], true)) {
+                $effectiveRole = $viewAs;
+            }
+        }
+
+        if (empty($roles) || in_array($effectiveRole, $roles, true)) {
             return $next($request);
         }
 
         abort(403);
     }
 }
-

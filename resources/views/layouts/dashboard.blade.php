@@ -9,7 +9,11 @@
     Sections: @yield('title'), @yield('header'), @yield('content')
     Stacks:   @stack('scripts')
 --}}
-@php $role = $role ?? 'student'; @endphp
+@php
+    $role = $role ?? 'student';
+    $isAdmin = auth()->check() && auth()->user()->role === 'admin';
+    $viewAsRole = $isAdmin ? (session('view_as_role') ?? null) : null;
+@endphp
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -143,7 +147,32 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
                 </button>
-                <h1 class="text-lg font-semibold text-white">@yield('header', $role === 'teacher' ? 'Панель учителя' : 'Личный кабинет')</h1>
+                <h1 class="text-lg font-semibold text-white flex-1">@yield('header', $role === 'teacher' ? 'Панель учителя' : 'Личный кабинет')</h1>
+                @if($isAdmin)
+                    <div class="hidden md:flex items-center gap-2 ml-3">
+                        <span class="text-xs text-gray-400">Режим:</span>
+                        <form action="{{ route('view-as.set', ['role' => 'student']) }}" method="POST">
+                            @csrf
+                            <button type="submit"
+                                    class="px-2.5 py-1 rounded-lg text-xs border transition {{ $viewAsRole === 'student' ? 'border-coral text-coral bg-coral/10' : 'border-gray-700 text-gray-300 hover:border-gray-500' }}">
+                                Ученик
+                            </button>
+                        </form>
+                        <form action="{{ route('view-as.set', ['role' => 'teacher']) }}" method="POST">
+                            @csrf
+                            <button type="submit"
+                                    class="px-2.5 py-1 rounded-lg text-xs border transition {{ $viewAsRole === 'teacher' ? 'border-coral text-coral bg-coral/10' : 'border-gray-700 text-gray-300 hover:border-gray-500' }}">
+                                Учитель
+                            </button>
+                        </form>
+                        <form action="{{ route('view-as.clear') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="px-2.5 py-1 rounded-lg text-xs border border-gray-700 text-gray-300 hover:border-gray-500 transition">
+                                Сброс
+                            </button>
+                        </form>
+                    </div>
+                @endif
             </header>
 
             {{-- Page content --}}

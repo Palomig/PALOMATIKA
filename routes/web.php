@@ -113,7 +113,29 @@ Route::prefix('repetitor')->name('repetitor.')->group(function () {
 
 // Authenticated routes
 Route::middleware(['auth'])->group(function () {
+    Route::post('/view-as/clear', function (Request $request) {
+        abort_unless($request->user()?->role === 'admin', 403);
+
+        $request->session()->forget('view_as_role');
+        return redirect()->to('/dashboard');
+    })->name('view-as.clear');
+
+    Route::post('/view-as/{role}', function (Request $request, string $role) {
+        abort_unless($request->user()?->role === 'admin', 403);
+        abort_unless(in_array($role, ['student', 'teacher'], true), 404);
+
+        $request->session()->put('view_as_role', $role);
+
+        return redirect()->to($role === 'teacher' ? '/teacher' : '/dashboard');
+    })->name('view-as.set');
+
     Route::get('/dashboard', function () {
+        $user = auth()->user();
+        $viewAsRole = $user && $user->role === 'admin' ? session('view_as_role') : null;
+        if ($viewAsRole === 'teacher') {
+            return redirect()->to('/teacher');
+        }
+
         return view('dashboard');
     })->name('dashboard');
 
@@ -141,6 +163,12 @@ Route::middleware(['auth'])->group(function () {
     // Teacher pages
     Route::prefix('teacher')->name('teacher.')->group(function () {
         Route::get('/', function () {
+            $user = auth()->user();
+            $viewAsRole = $user && $user->role === 'admin' ? session('view_as_role') : null;
+            if ($viewAsRole === 'student') {
+                return redirect()->to('/dashboard');
+            }
+
             return view('teacher.dashboard');
         })->name('dashboard');
 

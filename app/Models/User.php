@@ -172,6 +172,11 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
+    public function isSuperuser(): bool
+    {
+        return $this->isAdmin();
+    }
+
     public function hasActiveSubscription(): bool
     {
         if ($this->trial_ends_at && $this->trial_ends_at->isFuture()) {
