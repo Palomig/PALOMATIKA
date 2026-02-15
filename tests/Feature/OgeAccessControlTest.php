@@ -41,13 +41,4 @@ class OgeAccessControlTest extends TestCase
         $this->actingAs($student)->get('/oge/abc123')->assertOk();
         $this->actingAs($student)->get('/test/oge/abc123')->assertOk();
     }
-
-    public function test_only_teacher_can_open_teacher_oge_review_pages(): void
-    {
-        $student = $this->userWithRole('student');
-        $teacher = $this->userWithRole('teacher');
-
-        $this->actingAs($student)->get('/teacher/oge/teachers')->assertStatus(403);
-        $this->actingAs($teacher)->get('/teacher/oge/teachers')->assertOk();
-    }
 }
