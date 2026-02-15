@@ -11,6 +11,12 @@
     </svg>
     Ученики
 </a>
+<a href="/teacher/groups" class="flex items-center px-3 py-2.5 rounded-xl transition {{ request()->is('teacher/groups*') ? 'bg-coral/10 text-coral' : 'text-gray-400 hover:bg-dark-lighter hover:text-white' }}">
+    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5V4H2v16h5m10 0v-2a4 4 0 00-8 0v2m8 0H9m8-10a4 4 0 11-8 0 4 4 0 018 0z"/>
+    </svg>
+    Группы
+</a>
 <a href="/teacher/homework" class="flex items-center px-3 py-2.5 rounded-xl transition {{ request()->is('teacher/homework*') ? 'bg-coral/10 text-coral' : 'text-gray-400 hover:bg-dark-lighter hover:text-white' }}">
     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>

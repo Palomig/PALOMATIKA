@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -127,6 +128,16 @@ class User extends Authenticatable
     public function dailyStats(): HasMany
     {
         return $this->hasMany(UserDailyStat::class);
+    }
+
+    public function ownedStudentGroups(): HasMany
+    {
+        return $this->hasMany(StudentGroup::class, 'owner_teacher_id');
+    }
+
+    public function studentGroups(): BelongsToMany
+    {
+        return $this->belongsToMany(StudentGroup::class, 'student_group_members', 'student_id', 'group_id');
     }
 
     public function ownedOgeVariants(): HasMany

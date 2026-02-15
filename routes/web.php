@@ -8,6 +8,7 @@ use App\Http\Controllers\OgeAttemptController;
 use App\Http\Controllers\OgeTemplateController;
 use App\Http\Controllers\RepetitorController;
 use App\Http\Controllers\TestPdfController;
+use App\Http\Controllers\Teacher\StudentGroupController;
 use App\Http\Controllers\Teacher\OgeReviewController;
 use App\Http\Controllers\TopicController;
 use Illuminate\Support\Facades\Route;
@@ -109,6 +110,16 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/students/{id}', function ($id) {
             return view('teacher.students', ['studentId' => $id]);
         })->name('students.show');
+
+        Route::middleware('role:teacher,admin')->prefix('groups')->name('groups.')->group(function () {
+            Route::get('/', [StudentGroupController::class, 'index'])->name('index');
+            Route::get('/data', [StudentGroupController::class, 'groups'])->name('data');
+            Route::get('/students', [StudentGroupController::class, 'students'])->name('students');
+            Route::post('/', [StudentGroupController::class, 'store'])->name('store');
+            Route::post('/{group}/students', [StudentGroupController::class, 'addStudent'])->name('students.add');
+            Route::delete('/{group}/students/{studentId}', [StudentGroupController::class, 'removeStudent'])->name('students.remove');
+            Route::delete('/{group}', [StudentGroupController::class, 'destroy'])->name('destroy');
+        });
 
         Route::get('/homework', function () {
             return view('teacher.homework');
