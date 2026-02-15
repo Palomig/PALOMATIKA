@@ -149,6 +149,10 @@ class TestPdfController extends Controller
 
         $hash = Str::lower(Str::random(8));
         \Cache::put("custom_random_test_{$hash}", $testTasks, now()->addDays(7));
+        Storage::disk('local')->put(
+            "custom_random_tests/{$hash}.json",
+            json_encode($testTasks, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+        );
 
         return redirect()->route('test.generator.show', ['hash' => $hash]);
     }
@@ -160,6 +164,17 @@ class TestPdfController extends Controller
         }
 
         $testTasks = \Cache::get("custom_random_test_{$hash}");
+
+        if ((!is_array($testTasks) || empty($testTasks)) && Storage::disk('local')->exists("custom_random_tests/{$hash}.json")) {
+            $raw = Storage::disk('local')->get("custom_random_tests/{$hash}.json");
+            $decoded = json_decode($raw, true);
+
+            if (is_array($decoded) && !empty($decoded)) {
+                $testTasks = $decoded;
+                \Cache::put("custom_random_test_{$hash}", $testTasks, now()->addDays(7));
+            }
+        }
+
         if (!is_array($testTasks) || empty($testTasks)) {
             abort(404);
         }
