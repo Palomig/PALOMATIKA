@@ -22,14 +22,17 @@
     @if($role === 'student')
         @include('partials.head-katex')
     @endif
+    @if($role !== 'teacher')
     <script>
         window.__uiMode = localStorage.getItem('palomatika_ui_mode') || 'dark';
         if (!['light', 'dark'].includes(window.__uiMode)) window.__uiMode = 'dark';
         document.documentElement.setAttribute('data-ui-mode', window.__uiMode);
     </script>
+    @endif
     <style>
         .sidebar-gradient { background: linear-gradient(180deg, var(--scroll-track, #1a1a2e) 0%, rgba(0,0,0,0.2) 100%); }
 
+        @if($role !== 'teacher')
         :root[data-ui-mode="dark"] {
             --teacher-bg: #0d111d;
             --teacher-surface: #171d2e;
@@ -57,52 +60,278 @@
             --teacher-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
             --teacher-topbar: rgba(242, 245, 251, 0.85);
         }
+        @endif
 
+        /* === SugarCRM-inspired Teacher Shell === */
         .teacher-shell {
-            background:
-                radial-gradient(circle at 5% -10%, color-mix(in oklab, var(--focus-ring) 14%, transparent), transparent 45%),
-                radial-gradient(circle at 90% 0%, color-mix(in oklab, var(--focus-ring) 10%, transparent), transparent 38%),
-                var(--teacher-bg);
-            color: var(--teacher-text);
+            --tsh-bg: #eef1f8;
+            --tsh-surface: #ffffff;
+            --tsh-surface-soft: #f5f7fb;
+            --tsh-text: #1a1d26;
+            --tsh-muted: #6b7280;
+            --tsh-subtle: #9ca3af;
+            --tsh-border: rgba(0, 0, 0, 0.06);
+            --tsh-border-soft: rgba(0, 0, 0, 0.04);
+            --tsh-hover: rgba(0, 0, 0, 0.02);
+            --tsh-shadow: 0 1px 2px rgba(0,0,0,0.03), 0 6px 18px rgba(0,0,0,0.05);
+            --tsh-shadow-lg: 0 2px 8px rgba(0,0,0,0.04), 0 12px 28px rgba(0,0,0,0.08);
+            --tsh-accent: #1a1d26;
+            --tsh-accent-soft: #f0f2f5;
+            --tsh-blue: #4f8af7;
+            --tsh-blue-soft: #eef4ff;
+            --tsh-sidebar-w: 80px;
+            background: var(--tsh-bg);
+            color: var(--tsh-text);
         }
 
         .teacher-shell .bg-dark,
         .teacher-shell .bg-dark-light,
         .teacher-shell .bg-dark-lighter {
-            background-color: var(--teacher-surface) !important;
+            background-color: var(--tsh-surface) !important;
         }
 
         .teacher-shell .bg-dark\/50,
         .teacher-shell .bg-dark\/60,
         .teacher-shell .bg-dark\/70,
         .teacher-shell .bg-dark\/80 {
-            background-color: var(--teacher-surface-soft) !important;
+            background-color: var(--tsh-surface-soft) !important;
         }
 
-        .teacher-shell .text-white { color: var(--teacher-text) !important; }
+        .teacher-shell .text-white { color: var(--tsh-text) !important; }
         .teacher-shell .text-gray-600,
         .teacher-shell .text-gray-500,
-        .teacher-shell .text-gray-400 { color: var(--teacher-muted) !important; }
-        .teacher-shell .text-gray-300 { color: color-mix(in oklab, var(--teacher-text) 82%, transparent) !important; }
-        .teacher-shell .text-gray-200 { color: color-mix(in oklab, var(--teacher-text) 90%, transparent) !important; }
+        .teacher-shell .text-gray-400 { color: var(--tsh-muted) !important; }
+        .teacher-shell .text-gray-300 { color: #374151 !important; }
+        .teacher-shell .text-gray-200 { color: #1f2937 !important; }
+        .teacher-shell .text-gray-700 { color: #9ca3af !important; }
 
-        .teacher-shell [class*="border-white"] { border-color: var(--teacher-border-soft) !important; }
-        .teacher-shell [class*="bg-white/"] { background-color: var(--teacher-hover) !important; }
+        .teacher-shell [class*="border-white"] { border-color: var(--tsh-border) !important; }
+        .teacher-shell [class*="bg-white/"] { background-color: var(--tsh-hover) !important; }
 
         .teacher-shell .rounded-2xl {
-            box-shadow: var(--teacher-shadow);
+            box-shadow: var(--tsh-shadow);
+            border-color: transparent !important;
         }
 
-        .teacher-shell aside {
-            background: color-mix(in oklab, var(--teacher-surface) 95%, transparent) !important;
-            border-color: var(--teacher-border) !important;
+        /* Sidebar — compact icon-only */
+        .teacher-shell aside.tsh-sidebar {
+            width: var(--tsh-sidebar-w);
+            background: var(--tsh-surface) !important;
+            border-right: 1px solid var(--tsh-border) !important;
+            box-shadow: 1px 0 8px rgba(0,0,0,0.03);
         }
 
-        .teacher-shell header {
-            background: var(--teacher-topbar) !important;
-            border-color: var(--teacher-border-soft) !important;
+        .teacher-shell header.tsh-header {
+            background: rgba(255,255,255,0.86) !important;
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid var(--tsh-border) !important;
+            min-height: 72px;
         }
 
+        /* Tab navigation in header */
+        .tsh-tabs {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .tsh-tab {
+            padding: 7px 16px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--tsh-muted);
+            transition: all 0.2s;
+            white-space: nowrap;
+            text-decoration: none;
+        }
+        .tsh-tab:hover {
+            color: var(--tsh-text);
+            background: var(--tsh-accent-soft);
+        }
+        .tsh-tab.active {
+            background: var(--tsh-accent);
+            color: #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+        }
+
+        /* Card styles */
+        .tsh-card {
+            background: var(--tsh-surface);
+            border-radius: 16px;
+            box-shadow: var(--tsh-shadow);
+            border: none;
+            overflow: hidden;
+        }
+        .tsh-card-soft {
+            background: var(--tsh-surface-soft);
+            border-radius: 12px;
+            border: none;
+        }
+
+        /* Hero typography */
+        .tsh-page-kicker {
+            font-size: 11px;
+            line-height: 1.1;
+            text-transform: uppercase;
+            letter-spacing: .18em;
+            font-weight: 700;
+            margin-bottom: .65rem;
+            color: var(--tsh-subtle);
+        }
+        .tsh-page-title {
+            font-size: clamp(1.75rem, 2vw, 2.05rem);
+            line-height: 1.1;
+            font-weight: 700;
+            letter-spacing: -0.015em;
+            color: var(--tsh-text);
+        }
+        .tsh-page-subtitle {
+            margin-top: .55rem;
+            font-size: .94rem;
+            line-height: 1.45;
+            color: var(--tsh-muted);
+            max-width: 68ch;
+        }
+
+        /* Stat cards with soft colored backgrounds */
+        .tsh-stat-blue { background: linear-gradient(135deg, #eef4ff 0%, #f8faff 100%); }
+        .tsh-stat-green { background: linear-gradient(135deg, #ecfdf5 0%, #f5fdf9 100%); }
+        .tsh-stat-amber { background: linear-gradient(135deg, #fffbeb 0%, #fffdf5 100%); }
+        .tsh-stat-coral { background: linear-gradient(135deg, #fff1f2 0%, #fff8f8 100%); }
+        .tsh-stat-violet { background: linear-gradient(135deg, #f5f3ff 0%, #faf8ff 100%); }
+
+        /* Avatar with status badge */
+        .tsh-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .tsh-avatar-sm { width: 32px; height: 32px; font-size: 12px; }
+        .tsh-avatar-lg { width: 48px; height: 48px; font-size: 16px; }
+
+        /* Badge on avatar */
+        .tsh-badge {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--tsh-surface);
+        }
+
+        /* Action buttons like in SugarCRM */
+        .tsh-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid var(--tsh-border);
+            background: var(--tsh-surface);
+            color: var(--tsh-muted);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .tsh-btn:hover {
+            background: var(--tsh-accent-soft);
+            color: var(--tsh-text);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .tsh-btn-primary {
+            background: var(--tsh-accent);
+            color: #fff;
+            border: none;
+        }
+        .tsh-btn-primary:hover {
+            background: #2d3140;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* App action buttons */
+        .tsh-action-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #fff;
+            background: var(--tsh-accent);
+            border: 1px solid transparent;
+            transition: all .2s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,.12);
+        }
+        .tsh-action-primary:hover {
+            opacity: .92;
+            box-shadow: 0 8px 18px rgba(0,0,0,.16);
+        }
+
+        .tsh-action-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1rem;
+            border-radius: 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--tsh-text);
+            background: var(--tsh-surface);
+            border: 1px solid var(--tsh-border);
+            transition: all .2s ease;
+        }
+        .tsh-action-secondary:hover {
+            background: var(--tsh-surface-soft);
+            border-color: var(--tsh-border-soft);
+        }
+
+        /* Progress bar SugarCRM style */
+        .tsh-progress {
+            height: 4px;
+            border-radius: 2px;
+            background: #e5e7eb;
+            overflow: hidden;
+        }
+        .tsh-progress-bar {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+
+        /* Table styles */
+        .teacher-shell table th {
+            background: var(--tsh-surface-soft);
+        }
+        .teacher-shell table tr:hover td {
+            background: var(--tsh-surface-soft);
+        }
+
+        /* Sticky sidebar cell in teacher-shell */
+        .teacher-shell .sticky { background: var(--tsh-surface) !important; }
+
+        /* Scrollbar for teacher-shell */
+        .teacher-shell ::-webkit-scrollbar-track { background: var(--tsh-surface-soft); }
+        .teacher-shell ::-webkit-scrollbar-thumb { background: #d1d5db; }
+        .teacher-shell ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+        /* Page-in animation */
         .teacher-shell main {
             animation: teacherPageIn .42s cubic-bezier(0.16, 1, 0.3, 1);
         }
@@ -111,9 +340,173 @@
             0% { opacity: 0; transform: translateY(6px); }
             100% { opacity: 1; transform: translateY(0); }
         }
+
+        /* Mobile: expand sidebar on open */
+        @media (max-width: 1023px) {
+            .teacher-shell aside.tsh-sidebar {
+                width: 300px;
+            }
+            .teacher-shell aside.tsh-sidebar .tsh-nav-label { display: block; }
+        }
+
+        /* Input overrides for light theme */
+        .teacher-shell input,
+        .teacher-shell select,
+        .teacher-shell textarea {
+            background-color: var(--tsh-surface-soft) !important;
+            border-color: var(--tsh-border) !important;
+            color: var(--tsh-text) !important;
+        }
+        .teacher-shell input::placeholder,
+        .teacher-shell textarea::placeholder {
+            color: var(--tsh-subtle) !important;
+        }
+        .teacher-shell input:focus,
+        .teacher-shell select:focus,
+        .teacher-shell textarea:focus {
+            border-color: var(--tsh-blue) !important;
+            box-shadow: 0 0 0 3px rgba(79, 138, 247, 0.12) !important;
+        }
+
+        /* Modal overrides */
+        .teacher-shell .fixed.inset-0 .bg-dark-light,
+        .teacher-shell .fixed.inset-0 [class*="bg-dark"] {
+            background-color: var(--tsh-surface) !important;
+        }
     </style>
 </head>
-<body class="bg-dark min-h-screen antialiased {{ $role === 'teacher' ? 'teacher-shell' : '' }}" x-data="dashboardApp('{{ $role }}')">
+<body class="{{ $role === 'teacher' ? 'bg-transparent teacher-shell' : 'bg-dark' }} min-h-screen antialiased" x-data="dashboardApp('{{ $role }}')">
+    @if($role === 'teacher')
+    {{-- ========== TEACHER LAYOUT (SugarCRM-style) ========== --}}
+    <div class="flex min-h-screen">
+        {{-- Compact Icon Sidebar --}}
+        <aside class="tsh-sidebar fixed inset-y-0 left-0 z-30 flex flex-col items-center py-4 transition-transform duration-300 ease-out"
+               :class="{ '-translate-x-full lg:translate-x-0': !sidebarOpen, 'translate-x-0': sidebarOpen }"
+               @click.away="if(window.innerWidth < 1024) sidebarOpen = false"
+               aria-label="Навигация">
+
+            {{-- Logo --}}
+            <a href="/teacher" class="w-11 h-11 rounded-full border border-gray-200 flex items-center justify-center mb-6 bg-white text-gray-800 shadow-sm hover:shadow transition-shadow">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                </svg>
+            </a>
+
+            {{-- Navigation icons --}}
+            <nav class="flex-1 flex flex-col items-center gap-1" aria-label="Основная навигация">
+                @include('layouts.partials.nav-teacher')
+            </nav>
+
+            {{-- Bottom actions --}}
+            <div class="flex flex-col items-center gap-2 mt-4">
+                {{-- Settings/Theme --}}
+                <div x-data="{ showSettings: false }" class="relative">
+                    <button @click="showSettings = !showSettings" class="tsh-btn w-10 h-10" title="Настройки">
+                        <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                    </button>
+                </div>
+
+                {{-- Logout --}}
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="tsh-btn w-10 h-10" title="Выйти">
+                        <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </aside>
+
+        {{-- Mobile overlay --}}
+        <div x-show="sidebarOpen && window.innerWidth < 1024" x-cloak
+             @click="sidebarOpen = false"
+             class="fixed inset-0 bg-black/30 backdrop-blur-sm z-20 lg:hidden"
+             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+             x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"></div>
+
+        {{-- Main content area --}}
+        <div class="flex-1 lg:ml-20">
+            {{-- Top header with tabs --}}
+            <header class="tsh-header sticky top-0 z-20 flex items-center px-4 sm:px-7 gap-4">
+                {{-- Mobile menu button --}}
+                <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden w-9 h-9 flex items-center justify-center rounded-xl text-gray-500 hover:text-gray-800 hover:bg-gray-100 transition mr-1" aria-label="Открыть меню">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+
+                {{-- Tab navigation --}}
+                <nav class="tsh-tabs flex-1 overflow-x-auto scrollbar-none justify-center">
+                    @php
+                        $teacherTabs = [
+                            ['url' => '/teacher', 'match' => 'teacher', 'exact' => true, 'label' => 'Обзор'],
+                            ['url' => '/teacher/students', 'match' => 'teacher/students*', 'label' => 'Ученики'],
+                            ['url' => '/teacher/groups', 'match' => 'teacher/groups*', 'label' => 'Группы'],
+                            ['url' => '/teacher/homework', 'match' => 'teacher/homework*', 'label' => 'Задания'],
+                            ['url' => '/teacher/analytics', 'match' => 'teacher/analytics*', 'label' => 'Аналитика'],
+                            ['url' => '/teacher/oge/teachers', 'match' => 'teacher/oge*', 'label' => 'ОГЭ'],
+                            ['url' => '/teacher/earnings', 'match' => 'teacher/earnings*', 'label' => 'Заработок'],
+                        ];
+                    @endphp
+                    @foreach($teacherTabs as $tab)
+                        @php
+                            $tabActive = isset($tab['exact']) && $tab['exact']
+                                ? request()->is($tab['match']) && !request()->is($tab['match'] . '/*')
+                                : request()->is($tab['match']);
+                        @endphp
+                        <a href="{{ $tab['url'] }}" class="tsh-tab {{ $tabActive ? 'active' : '' }}">{{ $tab['label'] }}</a>
+                    @endforeach
+                </nav>
+
+                {{-- Right actions --}}
+                <div class="flex items-center gap-2 flex-shrink-0">
+                    {{-- Search --}}
+                    <button class="tsh-btn w-10 h-10" title="Поиск">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </button>
+
+                    {{-- Notifications --}}
+                    <button class="tsh-btn w-10 h-10 relative" title="Уведомления">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        <span class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full"></span>
+                    </button>
+
+                    {{-- User avatar --}}
+                    <div class="tsh-avatar w-10 h-10 bg-gradient-to-br from-gray-200 to-gray-300 text-gray-600 text-xs cursor-pointer ml-1" title="Профиль" x-text="user?.name?.charAt(0) || '?'"></div>
+
+                    @if($isAdmin)
+                        <div class="hidden md:flex items-center gap-1.5 ml-2 pl-3 border-l border-gray-200">
+                            <span class="text-[10px] text-gray-400 font-medium uppercase tracking-wider mr-1">Mode</span>
+                            <form action="{{ route('view-as.set', ['role' => 'student']) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="px-2 py-1 rounded-full text-[11px] font-medium transition {{ $viewAsRole === 'student' ? 'bg-gray-900 text-white' : 'text-gray-400 hover:text-gray-700 hover:bg-gray-100' }}">S</button>
+                            </form>
+                            <form action="{{ route('view-as.set', ['role' => 'teacher']) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="px-2 py-1 rounded-full text-[11px] font-medium transition {{ $viewAsRole === 'teacher' ? 'bg-gray-900 text-white' : 'text-gray-400 hover:text-gray-700 hover:bg-gray-100' }}">T</button>
+                            </form>
+                            <form action="{{ route('view-as.clear') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="px-2 py-1 rounded-full text-[11px] font-medium text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition">R</button>
+                            </form>
+                        </div>
+                    @endif
+                </div>
+            </header>
+
+            {{-- Page content --}}
+            <main class="p-4 sm:p-6 lg:p-8">
+                <div class="max-w-[1560px] mx-auto">
+                    @yield('content')
+                </div>
+            </main>
+        </div>
+    </div>
+
+    @else
+    {{-- ========== STUDENT LAYOUT (original) ========== --}}
     <div class="flex">
         {{-- Sidebar --}}
         <aside class="fixed inset-y-0 left-0 w-72 bg-dark-light z-30 transform transition-transform duration-300 ease-out flex flex-col border-r border-white/[0.06]"
@@ -123,7 +516,7 @@
 
             {{-- Logo --}}
             <div class="flex items-center justify-between h-16 px-5 flex-shrink-0">
-                <a href="{{ $role === 'teacher' ? '/teacher' : '/dashboard' }}" class="flex items-center gap-3">
+                <a href="/dashboard" class="flex items-center gap-3">
                     <div class="w-9 h-9 bg-gradient-to-br from-coral to-coral-dark rounded-xl flex items-center justify-center shadow-lg shadow-coral/20">
                         <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
@@ -131,9 +524,6 @@
                     </div>
                     <div>
                         <span class="text-lg font-bold text-white tracking-tight">PALOMATIKA</span>
-                        @if($role === 'teacher')
-                            <span class="block text-[10px] font-semibold text-coral uppercase tracking-widest">Teacher</span>
-                        @endif
                     </div>
                 </a>
                 <button @click="sidebarOpen = false" class="lg:hidden w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:text-white hover:bg-dark-lighter transition" aria-label="Закрыть меню">
@@ -149,25 +539,19 @@
                     </div>
                     <div class="flex-1 min-w-0">
                         <div class="font-medium text-white text-sm truncate" x-text="user?.name || 'Загрузка...'"></div>
-                        @if($role === 'teacher')
-                            <div class="text-xs text-gray-500">Преподаватель</div>
-                        @else
-                            <div class="text-xs text-gray-500" x-text="'Уровень ' + (user?.level || 1)"></div>
-                        @endif
+                        <div class="text-xs text-gray-500" x-text="'Уровень ' + (user?.level || 1)"></div>
                     </div>
                 </div>
-                @if($role === 'student')
-                    <div class="mt-3">
-                        <div class="flex justify-between text-[10px] text-gray-500 mb-1.5 font-medium">
-                            <span x-text="(user?.xp || 0) + ' XP'"></span>
-                            <span x-text="(user?.next_level_xp || 100) + ' XP'"></span>
-                        </div>
-                        <div class="bg-dark rounded-full h-1.5 overflow-hidden">
-                            <div class="bg-gradient-to-r from-coral to-coral-light rounded-full h-1.5 transition-all duration-500"
-                                 :style="'width: ' + ((user?.xp || 0) / (user?.next_level_xp || 100) * 100) + '%'"></div>
-                        </div>
+                <div class="mt-3">
+                    <div class="flex justify-between text-[10px] text-gray-500 mb-1.5 font-medium">
+                        <span x-text="(user?.xp || 0) + ' XP'"></span>
+                        <span x-text="(user?.next_level_xp || 100) + ' XP'"></span>
                     </div>
-                @endif
+                    <div class="bg-dark rounded-full h-1.5 overflow-hidden">
+                        <div class="bg-gradient-to-r from-coral to-coral-light rounded-full h-1.5 transition-all duration-500"
+                             :style="'width: ' + ((user?.xp || 0) / (user?.next_level_xp || 100) * 100) + '%'"></div>
+                    </div>
+                </div>
             </div>
 
             {{-- Section label --}}
@@ -177,43 +561,21 @@
 
             {{-- Navigation --}}
             <nav class="flex-1 px-3 overflow-y-auto" aria-label="Основная навигация">
-                @if($role === 'teacher')
-                    @include('layouts.partials.nav-teacher')
-                @else
-                    @include('layouts.partials.nav-student')
-                @endif
+                @include('layouts.partials.nav-student')
             </nav>
 
             {{-- Bottom widget --}}
-            @if($role === 'teacher')
-                <div class="px-3 py-4 border-t border-white/[0.04]">
-                    <div class="bg-dark/50 rounded-xl p-3.5 border border-white/[0.04]">
-                        <div class="flex items-center gap-2 mb-2.5">
-                            <svg class="w-4 h-4 text-coral" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
-                            <span class="text-xs font-medium text-gray-300">Реферальная ссылка</span>
+            <div class="px-3 py-4 border-t border-white/[0.04]">
+                <div class="bg-gradient-to-br from-orange-500/90 to-coral rounded-xl p-4 text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-2xl font-bold" x-text="streak?.current_streak || 0"></div>
+                            <div class="text-orange-100 text-xs font-medium">дней подряд</div>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <input type="text" readonly :value="referralLink"
-                                   class="flex-1 bg-dark text-white text-xs px-3 py-2 rounded-lg border border-white/[0.06] focus:outline-none focus:border-coral/50 font-mono truncate">
-                            <button @click="copyReferralLink()" class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-coral/10 text-coral hover:bg-coral/20 transition" aria-label="Копировать">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                            </button>
-                        </div>
+                        <div class="text-3xl">🔥</div>
                     </div>
                 </div>
-            @else
-                <div class="px-3 py-4 border-t border-white/[0.04]">
-                    <div class="bg-gradient-to-br from-orange-500/90 to-coral rounded-xl p-4 text-white">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <div class="text-2xl font-bold" x-text="streak?.current_streak || 0"></div>
-                                <div class="text-orange-100 text-xs font-medium">дней подряд</div>
-                            </div>
-                            <div class="text-3xl">🔥</div>
-                        </div>
-                    </div>
-                </div>
-            @endif
+            </div>
 
             {{-- Logout --}}
             <div class="px-3 pb-4">
@@ -244,26 +606,10 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
                 <div class="flex-1 min-w-0">
-                    <h1 class="text-base sm:text-lg font-semibold text-white truncate">@yield('header', $role === 'teacher' ? 'Панель учителя' : 'Личный кабинет')</h1>
+                    <h1 class="text-base sm:text-lg font-semibold text-white truncate">@yield('header', 'Личный кабинет')</h1>
                 </div>
 
                 <div class="flex items-center gap-2">
-                    @if($role === 'teacher')
-                        <div x-data="uiModeSwitcher()" class="relative">
-                            <button @click="toggleMode()"
-                                    class="inline-flex items-center gap-1.5 h-9 px-2.5 rounded-xl border border-white/[0.08] hover:border-white/[0.15] bg-dark-light/50 transition text-xs font-semibold"
-                                    :title="mode === 'dark' ? 'Включить светлую тему' : 'Включить тёмную тему'">
-                                <svg x-show="mode === 'dark'" x-cloak class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m8-9h1M3 12H2m15.364 6.364l.707.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
-                                </svg>
-                                <svg x-show="mode === 'light'" x-cloak class="w-3.5 h-3.5 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
-                                </svg>
-                                <span x-text="mode === 'dark' ? 'Тёмная' : 'Светлая'"></span>
-                            </button>
-                        </div>
-                    @endif
-
                     {{-- Theme switcher --}}
                     <div x-data="themeSwitcher()" class="relative">
                         <button @click="open = !open"
@@ -329,21 +675,24 @@
             </main>
         </div>
     </div>
+    @endif
 
     <script>
-    function uiModeSwitcher() {
-        return {
-            mode: window.__uiMode || 'dark',
-            apply() {
-                document.documentElement.setAttribute('data-ui-mode', this.mode);
-                localStorage.setItem('palomatika_ui_mode', this.mode);
-            },
-            toggleMode() {
-                this.mode = this.mode === 'dark' ? 'light' : 'dark';
-                this.apply();
-            }
-        };
-    }
+    @if($role !== 'teacher')
+        function uiModeSwitcher() {
+            return {
+                mode: window.__uiMode || 'dark',
+                apply() {
+                    document.documentElement.setAttribute('data-ui-mode', this.mode);
+                    localStorage.setItem('palomatika_ui_mode', this.mode);
+                },
+                toggleMode() {
+                    this.mode = this.mode === 'dark' ? 'light' : 'dark';
+                    this.apply();
+                }
+            };
+        }
+    @endif
 
     function themeSwitcher() {
         return {
