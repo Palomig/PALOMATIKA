@@ -450,5 +450,6 @@
             };
         }
     </script>
+    @include('layouts.partials.palette-switcher')
 </body>
 </html>

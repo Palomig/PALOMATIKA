@@ -868,6 +868,8 @@
     }
     </script>
 
+    @include('layouts.partials.palette-switcher')
+
     @stack('scripts')
 </body>
 </html>

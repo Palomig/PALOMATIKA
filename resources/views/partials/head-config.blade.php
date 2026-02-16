@@ -8,93 +8,119 @@
 {{-- Tailwind CSS via CDN --}}
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
-    // === Theme System ===
-    window.__themes = {
-        coral: {
-            label: 'Коралл',
-            dark: {
-                DEFAULT: '#1a1a2e', light: '#252542', lighter: '#2d2d4a',
-                50: '#0f0f1e', 100: '#12122a', 200: '#1a1a2e',
-                300: '#252542', 400: '#2d2d4a', 500: '#3d3d5c', 600: '#4d4d6a',
-            },
-            coral: {
-                DEFAULT: '#ff6b6b', dark: '#e85555', light: '#ff8585',
-                50: '#fff1f1', 100: '#ffe0e0', 200: '#ffc7c7', 300: '#ff9e9e',
-                400: '#ff8585', 500: '#ff6b6b', 600: '#e85555',
-                700: '#c43030', 800: '#a32828', 900: '#872525',
-            },
-            scrollTrack: '#1a1a2e', scrollThumb: '#3d3d5c', scrollHover: '#4d4d6a',
-            skeletonA: '#252542', skeletonB: '#2d2d4a',
-        },
-        ocean: {
-            label: 'Океан',
-            dark: {
-                DEFAULT: '#0c1222', light: '#162032', lighter: '#1e2d42',
-                50: '#060b14', 100: '#081019', 200: '#0c1222',
-                300: '#162032', 400: '#1e2d42', 500: '#2a3f5a', 600: '#3a5070',
-            },
-            coral: {
-                DEFAULT: '#06b6d4', dark: '#0891b2', light: '#22d3ee',
-                50: '#ecfeff', 100: '#cffafe', 200: '#a5f3fc', 300: '#67e8f9',
-                400: '#22d3ee', 500: '#06b6d4', 600: '#0891b2',
-                700: '#0e7490', 800: '#155e75', 900: '#164e63',
-            },
-            scrollTrack: '#0c1222', scrollThumb: '#2a3f5a', scrollHover: '#3a5070',
-            skeletonA: '#162032', skeletonB: '#1e2d42',
-        },
-        emerald: {
-            label: 'Изумруд',
-            dark: {
-                DEFAULT: '#0a1518', light: '#12272a', lighter: '#1a3538',
-                50: '#050c0e', 100: '#071012', 200: '#0a1518',
-                300: '#12272a', 400: '#1a3538', 500: '#264a4e', 600: '#356064',
-            },
-            coral: {
-                DEFAULT: '#10b981', dark: '#059669', light: '#34d399',
-                50: '#ecfdf5', 100: '#d1fae5', 200: '#a7f3d0', 300: '#6ee7b7',
-                400: '#34d399', 500: '#10b981', 600: '#059669',
-                700: '#047857', 800: '#065f46', 900: '#064e3b',
-            },
-            scrollTrack: '#0a1518', scrollThumb: '#264a4e', scrollHover: '#356064',
-            skeletonA: '#12272a', skeletonB: '#1a3538',
-        },
-        amethyst: {
-            label: 'Аметист',
-            dark: {
-                DEFAULT: '#150f28', light: '#221b3a', lighter: '#2e254c',
-                50: '#0b0816', 100: '#0f0b1e', 200: '#150f28',
-                300: '#221b3a', 400: '#2e254c', 500: '#3f3566', 600: '#504580',
-            },
-            coral: {
-                DEFAULT: '#a855f7', dark: '#9333ea', light: '#c084fc',
-                50: '#faf5ff', 100: '#f3e8ff', 200: '#e9d5ff', 300: '#d8b4fe',
-                400: '#c084fc', 500: '#a855f7', 600: '#9333ea',
-                700: '#7e22ce', 800: '#6b21a8', 900: '#581c87',
-            },
-            scrollTrack: '#150f28', scrollThumb: '#3f3566', scrollHover: '#504580',
-            skeletonA: '#221b3a', skeletonB: '#2e254c',
-        },
-        sunset: {
-            label: 'Закат',
-            dark: {
-                DEFAULT: '#1a1410', light: '#2a2118', lighter: '#382e22',
-                50: '#100c08', 100: '#14100b', 200: '#1a1410',
-                300: '#2a2118', 400: '#382e22', 500: '#4d4030', 600: '#625340',
-            },
-            coral: {
-                DEFAULT: '#f59e0b', dark: '#d97706', light: '#fbbf24',
-                50: '#fffbeb', 100: '#fef3c7', 200: '#fde68a', 300: '#fcd34d',
-                400: '#fbbf24', 500: '#f59e0b', 600: '#d97706',
-                700: '#b45309', 800: '#92400e', 900: '#78350f',
-            },
-            scrollTrack: '#1a1410', scrollThumb: '#4d4030', scrollHover: '#625340',
-            skeletonA: '#2a2118', skeletonB: '#382e22',
-        },
-    };
+    // === Theme System (29 palettes from ui-catalog) ===
+    window.__themeCatalog = [
+        { key: 'saas-general', label: 'SaaS (General)', primary: '#2563EB', secondary: '#3B82F6', cta: '#F97316', bg: '#F8FAFC', text: '#1E293B', border: '#E2E8F0' },
+        { key: 'micro-saas', label: 'Micro SaaS', primary: '#6366F1', secondary: '#818CF8', cta: '#10B981', bg: '#F5F3FF', text: '#1E1B4B', border: '#E0E7FF' },
+        { key: 'e-commerce', label: 'E-commerce', primary: '#059669', secondary: '#10B981', cta: '#F97316', bg: '#ECFDF5', text: '#064E3B', border: '#A7F3D0' },
+        { key: 'e-commerce-luxury', label: 'E-commerce Luxury', primary: '#1C1917', secondary: '#44403C', cta: '#CA8A04', bg: '#FAFAF9', text: '#0C0A09', border: '#D6D3D1' },
+        { key: 'service-landing', label: 'Service Landing', primary: '#0EA5E9', secondary: '#38BDF8', cta: '#F97316', bg: '#F0F9FF', text: '#0C4A6E', border: '#BAE6FD' },
+        { key: 'b2b-service', label: 'B2B Service', primary: '#0F172A', secondary: '#334155', cta: '#0369A1', bg: '#F8FAFC', text: '#020617', border: '#E2E8F0' },
+        { key: 'financial-dashboard', label: 'Financial Dashboard', primary: '#0F172A', secondary: '#1E293B', cta: '#22C55E', bg: '#020617', text: '#F8FAFC', border: '#334155' },
+        { key: 'analytics-dashboard', label: 'Analytics Dashboard', primary: '#1E40AF', secondary: '#3B82F6', cta: '#F59E0B', bg: '#F8FAFC', text: '#1E3A8A', border: '#DBEAFE' },
+        { key: 'healthcare-app', label: 'Healthcare App', primary: '#0891B2', secondary: '#22D3EE', cta: '#059669', bg: '#ECFEFF', text: '#164E63', border: '#A5F3FC' },
+        { key: 'educational-app', label: 'Educational App', primary: '#4F46E5', secondary: '#818CF8', cta: '#F97316', bg: '#EEF2FF', text: '#1E1B4B', border: '#C7D2FE' },
+        { key: 'creative-agency', label: 'Creative Agency', primary: '#EC4899', secondary: '#F472B6', cta: '#06B6D4', bg: '#FDF2F8', text: '#831843', border: '#FBCFE8' },
+        { key: 'portfolio', label: 'Portfolio', primary: '#18181B', secondary: '#3F3F46', cta: '#2563EB', bg: '#FAFAFA', text: '#09090B', border: '#E4E4E7' },
+        { key: 'gaming', label: 'Gaming', primary: '#7C3AED', secondary: '#A78BFA', cta: '#F43F5E', bg: '#0F0F23', text: '#E2E8F0', border: '#4C1D95' },
+        { key: 'government', label: 'Government', primary: '#0F172A', secondary: '#334155', cta: '#0369A1', bg: '#F8FAFC', text: '#020617', border: '#E2E8F0' },
+        { key: 'fintech-crypto', label: 'Fintech / Crypto', primary: '#F59E0B', secondary: '#FBBF24', cta: '#8B5CF6', bg: '#0F172A', text: '#F8FAFC', border: '#334155' },
+        { key: 'social-media', label: 'Social Media', primary: '#E11D48', secondary: '#FB7185', cta: '#2563EB', bg: '#FFF1F2', text: '#881337', border: '#FECDD3' },
+        { key: 'productivity-tool', label: 'Productivity Tool', primary: '#0D9488', secondary: '#14B8A6', cta: '#F97316', bg: '#F0FDFA', text: '#134E4A', border: '#99F6E4' },
+        { key: 'design-system', label: 'Design System', primary: '#4F46E5', secondary: '#6366F1', cta: '#F97316', bg: '#EEF2FF', text: '#312E81', border: '#C7D2FE' },
+        { key: 'ai-chatbot', label: 'AI / Chatbot', primary: '#7C3AED', secondary: '#A78BFA', cta: '#06B6D4', bg: '#FAF5FF', text: '#1E1B4B', border: '#DDD6FE' },
+        { key: 'nft-web3', label: 'NFT / Web3', primary: '#8B5CF6', secondary: '#A78BFA', cta: '#FBBF24', bg: '#0F0F23', text: '#F8FAFC', border: '#4C1D95' },
+        { key: 'creator-economy', label: 'Creator Economy', primary: '#EC4899', secondary: '#F472B6', cta: '#F97316', bg: '#FDF2F8', text: '#831843', border: '#FBCFE8' },
+        { key: 'sustainability-esg', label: 'Sustainability / ESG', primary: '#059669', secondary: '#10B981', cta: '#0891B2', bg: '#ECFDF5', text: '#064E3B', border: '#A7F3D0' },
+        { key: 'remote-work', label: 'Remote Work', primary: '#6366F1', secondary: '#818CF8', cta: '#10B981', bg: '#F5F3FF', text: '#312E81', border: '#E0E7FF' },
+        { key: 'mental-health', label: 'Mental Health', primary: '#8B5CF6', secondary: '#C4B5FD', cta: '#10B981', bg: '#FAF5FF', text: '#4C1D95', border: '#EDE9FE' },
+        { key: 'pet-tech', label: 'Pet Tech', primary: '#F97316', secondary: '#FB923C', cta: '#2563EB', bg: '#FFF7ED', text: '#9A3412', border: '#FED7AA' },
+        { key: 'smart-home-iot', label: 'Smart Home / IoT', primary: '#1E293B', secondary: '#334155', cta: '#22C55E', bg: '#0F172A', text: '#F8FAFC', border: '#475569' },
+        { key: 'ev-charging', label: 'EV / Charging', primary: '#0891B2', secondary: '#22D3EE', cta: '#22C55E', bg: '#ECFEFF', text: '#164E63', border: '#A5F3FC' },
+        { key: 'subscription-box', label: 'Subscription Box', primary: '#D946EF', secondary: '#E879F9', cta: '#F97316', bg: '#FDF4FF', text: '#86198F', border: '#F5D0FE' },
+        { key: 'podcast-platform', label: 'Podcast Platform', primary: '#1E1B4B', secondary: '#312E81', cta: '#F97316', bg: '#0F0F23', text: '#F8FAFC', border: '#4338CA' }
+    ];
 
-    // Read theme from localStorage (default: coral)
-    window.__currentTheme = localStorage.getItem('palomatika_theme') || 'coral';
-    if (!window.__themes[window.__currentTheme]) window.__currentTheme = 'coral';
+    function clamp(n, min, max) { return Math.min(max, Math.max(min, n)); }
+    function hexToRgb(hex) {
+        const h = hex.replace('#', '');
+        const m = h.length === 3
+            ? h.split('').map(c => c + c).join('')
+            : h;
+        return {
+            r: parseInt(m.slice(0, 2), 16),
+            g: parseInt(m.slice(2, 4), 16),
+            b: parseInt(m.slice(4, 6), 16),
+        };
+    }
+    function rgbToHex(r, g, b) {
+        const toHex = (v) => clamp(Math.round(v), 0, 255).toString(16).padStart(2, '0');
+        return '#' + toHex(r) + toHex(g) + toHex(b);
+    }
+    function mix(hexA, hexB, ratio) {
+        const a = hexToRgb(hexA);
+        const b = hexToRgb(hexB);
+        const p = clamp(ratio, 0, 1);
+        return rgbToHex(
+            a.r + (b.r - a.r) * p,
+            a.g + (b.g - a.g) * p,
+            a.b + (b.b - a.b) * p
+        );
+    }
+    function makeThemeFromPalette(p) {
+        const darkBase = p.bg;
+        const track = mix(darkBase, '#000000', 0.08);
+        const thumb = mix(darkBase, p.text, 0.25);
+        const hover = mix(darkBase, p.text, 0.38);
+        return {
+            label: p.label,
+            dark: {
+                DEFAULT: darkBase,
+                light: mix(darkBase, '#ffffff', 0.08),
+                lighter: mix(darkBase, '#ffffff', 0.14),
+                50: mix(darkBase, '#000000', 0.12),
+                100: mix(darkBase, '#000000', 0.06),
+                200: darkBase,
+                300: mix(darkBase, '#ffffff', 0.08),
+                400: mix(darkBase, '#ffffff', 0.14),
+                500: mix(darkBase, '#ffffff', 0.22),
+                600: mix(darkBase, '#ffffff', 0.30),
+            },
+            coral: {
+                DEFAULT: p.primary,
+                dark: p.cta,
+                light: p.secondary,
+                50: mix(p.primary, '#ffffff', 0.92),
+                100: mix(p.primary, '#ffffff', 0.82),
+                200: mix(p.primary, '#ffffff', 0.68),
+                300: mix(p.primary, '#ffffff', 0.50),
+                400: mix(p.primary, '#ffffff', 0.28),
+                500: p.primary,
+                600: mix(p.primary, '#000000', 0.14),
+                700: mix(p.primary, '#000000', 0.24),
+                800: mix(p.primary, '#000000', 0.34),
+                900: mix(p.primary, '#000000', 0.44),
+            },
+            scrollTrack: track,
+            scrollThumb: thumb,
+            scrollHover: hover,
+            skeletonA: mix(darkBase, '#ffffff', 0.05),
+            skeletonB: mix(darkBase, '#ffffff', 0.11),
+        };
+    }
+
+    window.__themes = Object.fromEntries(
+        window.__themeCatalog.map(p => [p.key, makeThemeFromPalette(p)])
+    );
+
+    // Legacy alias for older saved value
+    window.__themes.coral = window.__themes['educational-app'];
+
+    // Read theme from localStorage
+    window.__currentTheme = localStorage.getItem('palomatika_theme') || 'educational-app';
+    if (!window.__themes[window.__currentTheme]) {
+        window.__currentTheme = window.__themes['educational-app'] ? 'educational-app' : Object.keys(window.__themes)[0];
+    }
     const _t = window.__themes[window.__currentTheme];
 
     // Set CSS custom properties for non-Tailwind styles
