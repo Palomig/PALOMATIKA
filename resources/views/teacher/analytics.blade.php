@@ -6,7 +6,7 @@
 @section('content')
 <div x-data="analyticsPage()" class="space-y-5">
     <section class="relative overflow-hidden rounded-2xl tsh-card p-5 sm:p-6">
-        <div class="absolute top-0 right-0 h-full w-1/2 bg-gradient-to-l from-emerald-50 to-transparent pointer-events-none"></div>
+        <div class="absolute top-0 right-0 h-full w-1/2 bg-gradient-to-l from-emerald-50/80 to-transparent pointer-events-none"></div>
         <div class="relative flex flex-wrap items-end justify-between gap-3">
             <div>
                 <p class="tsh-page-kicker">Performance</p>
@@ -32,8 +32,8 @@
     </div>
 
     {{-- Overview stats --}}
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="tsh-card rounded-2xl p-5">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="tsh-card rounded-2xl p-4 sm:p-5" style="background: #ffffff">
             <div class="flex items-center justify-between mb-2">
                 <span class="text-xs font-medium uppercase tracking-wider" style="color: var(--tsh-muted)">Задач решено</span>
                 <span class="text-[11px] font-medium tabular-nums px-1.5 py-0.5 rounded"
@@ -42,7 +42,7 @@
             </div>
             <div class="text-2xl font-bold tabular-nums" style="color: var(--tsh-text)" x-text="stats.total_tasks_solved"></div>
         </div>
-        <div class="tsh-card rounded-2xl p-5">
+        <div class="tsh-card rounded-2xl p-4 sm:p-5" style="background: #ffffff">
             <div class="flex items-center justify-between mb-2">
                 <span class="text-xs font-medium uppercase tracking-wider" style="color: var(--tsh-muted)">Ср. точность</span>
                 <span class="text-[11px] font-medium tabular-nums px-1.5 py-0.5 rounded"
@@ -51,11 +51,11 @@
             </div>
             <div class="text-2xl font-bold tabular-nums" style="color: var(--tsh-text)" x-text="stats.avg_accuracy + '%'"></div>
         </div>
-        <div class="tsh-card rounded-2xl p-5">
+        <div class="tsh-card rounded-2xl p-4 sm:p-5" style="background: #ffffff">
             <span class="text-xs font-medium uppercase tracking-wider" style="color: var(--tsh-muted)">Активных</span>
             <div class="text-2xl font-bold mt-2 tabular-nums" style="color: var(--tsh-text)" x-text="stats.active_students"></div>
         </div>
-        <div class="tsh-card rounded-2xl p-5">
+        <div class="tsh-card rounded-2xl p-4 sm:p-5" style="background: #ffffff">
             <span class="text-xs font-medium uppercase tracking-wider" style="color: var(--tsh-muted)">Ср. стрик</span>
             <div class="text-2xl font-bold mt-2 tabular-nums" style="color: var(--tsh-text)" x-text="stats.avg_streak"></div>
         </div>

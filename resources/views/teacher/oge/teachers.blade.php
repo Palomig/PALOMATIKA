@@ -6,7 +6,7 @@
 @section('content')
 <div class="space-y-5">
     <div class="relative overflow-hidden tsh-card p-5 sm:p-6">
-        <div class="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-violet-50 to-transparent pointer-events-none"></div>
+        <div class="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-violet-50/80 to-transparent pointer-events-none"></div>
         <div class="relative">
             <p class="tsh-page-kicker">Exam review</p>
             <h2 class="tsh-page-title">Учителя и варианты ОГЭ</h2>
@@ -17,7 +17,7 @@
     <div class="tsh-card overflow-hidden">
         <table class="w-full text-sm">
             <thead>
-                <tr style="color: var(--tsh-subtle); background: var(--tsh-surface-soft)">
+                <tr style="color: var(--tsh-subtle); background: var(--tsh-surface-soft); border-bottom: 1px solid var(--tsh-border-soft)">
                     <th class="text-left px-5 py-3 text-[11px] font-semibold uppercase tracking-wider">Учитель</th>
                     <th class="text-left px-5 py-3 text-[11px] font-semibold uppercase tracking-wider">Email</th>
                     <th class="text-left px-5 py-3 text-[11px] font-semibold uppercase tracking-wider">Вариантов</th>
@@ -28,7 +28,7 @@
                 @forelse($teachers as $teacher)
                     <tr style="border-top: 1px solid var(--tsh-border-soft)"
                         onmouseover="this.style.background='var(--tsh-surface-soft)'"
-                        onmouseout="this.style.background='white'">
+                        onmouseout="this.style.background='transparent'">
                         <td class="px-5 py-3.5">
                             <div class="flex items-center gap-3">
                                 <div class="w-9 h-9 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center flex-shrink-0">

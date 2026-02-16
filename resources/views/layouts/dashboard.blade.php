@@ -73,8 +73,8 @@
             --tsh-border: rgba(0, 0, 0, 0.06);
             --tsh-border-soft: rgba(0, 0, 0, 0.04);
             --tsh-hover: rgba(0, 0, 0, 0.02);
-            --tsh-shadow: 0 1px 2px rgba(0,0,0,0.03), 0 6px 18px rgba(0,0,0,0.05);
-            --tsh-shadow-lg: 0 2px 8px rgba(0,0,0,0.04), 0 12px 28px rgba(0,0,0,0.08);
+            --tsh-shadow: 0 1px 2px rgba(15, 23, 42, 0.02);
+            --tsh-shadow-lg: 0 4px 14px rgba(15, 23, 42, 0.06);
             --tsh-accent: #1a1d26;
             --tsh-accent-soft: #f0f2f5;
             --tsh-blue: #4f8af7;
@@ -110,7 +110,7 @@
 
         .teacher-shell .rounded-2xl {
             box-shadow: var(--tsh-shadow);
-            border-color: transparent !important;
+            border-color: var(--tsh-border-soft) !important;
         }
 
         /* Sidebar — compact icon-only */
@@ -122,11 +122,11 @@
         }
 
         .teacher-shell header.tsh-header {
-            background: rgba(255,255,255,0.86) !important;
+            background: rgba(255,255,255,0.92) !important;
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border-bottom: 1px solid var(--tsh-border) !important;
-            min-height: 72px;
+            min-height: 68px;
         }
 
         /* Tab navigation in header */
@@ -136,7 +136,7 @@
             gap: 4px;
         }
         .tsh-tab {
-            padding: 7px 16px;
+            padding: 8px 16px;
             border-radius: 999px;
             font-size: 14px;
             font-weight: 500;
@@ -160,13 +160,13 @@
             background: var(--tsh-surface);
             border-radius: 16px;
             box-shadow: var(--tsh-shadow);
-            border: none;
+            border: 1px solid var(--tsh-border-soft);
             overflow: hidden;
         }
         .tsh-card-soft {
             background: var(--tsh-surface-soft);
             border-radius: 12px;
-            border: none;
+            border: 1px solid var(--tsh-border-soft);
         }
 
         /* Hero typography */
@@ -270,7 +270,7 @@
             align-items: center;
             gap: 0.5rem;
             padding: 0.625rem 1rem;
-            border-radius: 0.75rem;
+            border-radius: 0.9rem;
             font-size: 0.875rem;
             font-weight: 600;
             color: #fff;
@@ -289,7 +289,7 @@
             align-items: center;
             gap: 0.5rem;
             padding: 0.625rem 1rem;
-            border-radius: 0.75rem;
+            border-radius: 0.9rem;
             font-size: 0.875rem;
             font-weight: 600;
             color: var(--tsh-text);
@@ -467,32 +467,21 @@
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     </button>
 
-                    {{-- Notifications --}}
-                    <button class="tsh-btn w-10 h-10 relative" title="Уведомления">
+                    {{-- Mail --}}
+                    <button class="tsh-btn w-10 h-10 relative" title="Сообщения">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                         <span class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full"></span>
                     </button>
 
-                    {{-- User avatar --}}
-                    <div class="tsh-avatar w-10 h-10 bg-gradient-to-br from-gray-200 to-gray-300 text-gray-600 text-xs cursor-pointer ml-1" title="Профиль" x-text="user?.name?.charAt(0) || '?'"></div>
+                    {{-- Notifications --}}
+                    <button class="tsh-btn w-10 h-10" title="Уведомления">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2c0 .5-.2 1-.6 1.4L4 17h5m6 0a3 3 0 11-6 0m6 0H9"/>
+                        </svg>
+                    </button>
 
-                    @if($isAdmin)
-                        <div class="hidden md:flex items-center gap-1.5 ml-2 pl-3 border-l border-gray-200">
-                            <span class="text-[10px] text-gray-400 font-medium uppercase tracking-wider mr-1">Mode</span>
-                            <form action="{{ route('view-as.set', ['role' => 'student']) }}" method="POST">
-                                @csrf
-                                <button type="submit" class="px-2 py-1 rounded-full text-[11px] font-medium transition {{ $viewAsRole === 'student' ? 'bg-gray-900 text-white' : 'text-gray-400 hover:text-gray-700 hover:bg-gray-100' }}">S</button>
-                            </form>
-                            <form action="{{ route('view-as.set', ['role' => 'teacher']) }}" method="POST">
-                                @csrf
-                                <button type="submit" class="px-2 py-1 rounded-full text-[11px] font-medium transition {{ $viewAsRole === 'teacher' ? 'bg-gray-900 text-white' : 'text-gray-400 hover:text-gray-700 hover:bg-gray-100' }}">T</button>
-                            </form>
-                            <form action="{{ route('view-as.clear') }}" method="POST">
-                                @csrf
-                                <button type="submit" class="px-2 py-1 rounded-full text-[11px] font-medium text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition">R</button>
-                            </form>
-                        </div>
-                    @endif
+                    {{-- User avatar --}}
+                    <div class="tsh-avatar w-10 h-10 bg-gradient-to-br from-orange-200 via-amber-100 to-stone-300 text-gray-700 text-xs cursor-pointer ml-1" title="Профиль" x-text="user?.name?.charAt(0) || '?'"></div>
                 </div>
             </header>
 
