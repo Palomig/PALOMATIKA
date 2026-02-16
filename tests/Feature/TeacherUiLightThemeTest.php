@@ -18,7 +18,7 @@ class TeacherUiLightThemeTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('teacher-shell', false);
-        $response->assertSee('--tsh-bg: #eef1f8', false);
+        $response->assertSee('--tsh-bg: #eceff5', false);
         $response->assertDontSee("window.__uiMode = localStorage.getItem('palomatika_ui_mode') || 'dark'", false);
         $response->assertDontSee(":root[data-ui-mode=\"dark\"]", false);
     }

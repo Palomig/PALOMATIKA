@@ -64,23 +64,25 @@
 
         /* === SugarCRM-inspired Teacher Shell === */
         .teacher-shell {
-            --tsh-bg: #eef1f8;
-            --tsh-surface: #ffffff;
-            --tsh-surface-soft: #f5f7fb;
-            --tsh-text: #1a1d26;
-            --tsh-muted: #6b7280;
-            --tsh-subtle: #9ca3af;
-            --tsh-border: rgba(0, 0, 0, 0.06);
-            --tsh-border-soft: rgba(0, 0, 0, 0.04);
-            --tsh-hover: rgba(0, 0, 0, 0.02);
-            --tsh-shadow: 0 1px 2px rgba(15, 23, 42, 0.02);
-            --tsh-shadow-lg: 0 4px 14px rgba(15, 23, 42, 0.06);
-            --tsh-accent: #1a1d26;
-            --tsh-accent-soft: #f0f2f5;
-            --tsh-blue: #4f8af7;
-            --tsh-blue-soft: #eef4ff;
+            --tsh-bg: #eceff5;
+            --tsh-surface: #f8fafd;
+            --tsh-surface-soft: #eef3fa;
+            --tsh-text: #171a24;
+            --tsh-muted: #6a7283;
+            --tsh-subtle: #97a1b5;
+            --tsh-border: rgba(113, 125, 150, 0.2);
+            --tsh-border-soft: rgba(113, 125, 150, 0.14);
+            --tsh-hover: rgba(52, 68, 93, 0.04);
+            --tsh-shadow: 0 1px 2px rgba(26, 37, 57, 0.02);
+            --tsh-shadow-lg: 0 6px 14px rgba(26, 37, 57, 0.05);
+            --tsh-accent: #0f1118;
+            --tsh-accent-soft: #edf1f7;
+            --tsh-blue: #83aef5;
+            --tsh-blue-soft: #edf3ff;
             --tsh-sidebar-w: 80px;
-            background: var(--tsh-bg);
+            background:
+                radial-gradient(900px 420px at 74% -160px, #f7f9ff 0%, rgba(247,249,255,0) 72%),
+                linear-gradient(180deg, #eceff5 0%, #edf2f9 56%, #e9eff8 100%);
             color: var(--tsh-text);
         }
 
@@ -109,6 +111,7 @@
         .teacher-shell [class*="bg-white/"] { background-color: var(--tsh-hover) !important; }
 
         .teacher-shell .rounded-2xl {
+            border-radius: 24px !important;
             box-shadow: var(--tsh-shadow);
             border-color: var(--tsh-border-soft) !important;
         }
@@ -116,13 +119,13 @@
         /* Sidebar — compact icon-only */
         .teacher-shell aside.tsh-sidebar {
             width: var(--tsh-sidebar-w);
-            background: var(--tsh-surface) !important;
+            background: #f7f9fd !important;
             border-right: 1px solid var(--tsh-border) !important;
-            box-shadow: 1px 0 8px rgba(0,0,0,0.03);
+            box-shadow: 1px 0 0 rgba(113, 125, 150, 0.12);
         }
 
         .teacher-shell header.tsh-header {
-            background: rgba(255,255,255,0.92) !important;
+            background: rgba(248,250,253,0.94) !important;
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border-bottom: 1px solid var(--tsh-border) !important;
@@ -157,15 +160,15 @@
 
         /* Card styles */
         .tsh-card {
-            background: var(--tsh-surface);
-            border-radius: 16px;
+            background: #f4f7fd;
+            border-radius: 24px;
             box-shadow: var(--tsh-shadow);
             border: 1px solid var(--tsh-border-soft);
             overflow: hidden;
         }
         .tsh-card-soft {
-            background: var(--tsh-surface-soft);
-            border-radius: 12px;
+            background: #f7f9fd;
+            border-radius: 18px;
             border: 1px solid var(--tsh-border-soft);
         }
 
@@ -242,7 +245,7 @@
             height: 40px;
             border-radius: 50%;
             border: 1px solid var(--tsh-border);
-            background: var(--tsh-surface);
+            background: #f7f9fd;
             color: var(--tsh-muted);
             transition: all 0.2s;
             cursor: pointer;
@@ -293,7 +296,7 @@
             font-size: 0.875rem;
             font-weight: 600;
             color: var(--tsh-text);
-            background: var(--tsh-surface);
+            background: #f7f9fd;
             border: 1px solid var(--tsh-border);
             transition: all .2s ease;
         }

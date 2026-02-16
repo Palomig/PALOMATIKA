@@ -6,7 +6,7 @@
 @section('content')
 <div x-data="homeworkPage()" class="space-y-5">
     <section class="relative overflow-hidden rounded-2xl tsh-card p-5 sm:p-6">
-        <div class="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-amber-50/80 to-transparent pointer-events-none"></div>
+        <div class="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-amber-100/45 to-transparent pointer-events-none"></div>
         <div class="relative flex flex-wrap items-end justify-between gap-3">
             <div>
                 <p class="tsh-page-kicker">Homework flow</p>

@@ -6,7 +6,7 @@
 @section('content')
 <div class="space-y-5">
     <div class="relative overflow-hidden tsh-card p-5 sm:p-6">
-        <div class="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-violet-50/80 to-transparent pointer-events-none"></div>
+        <div class="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-violet-100/45 to-transparent pointer-events-none"></div>
         <div class="relative">
             <p class="tsh-page-kicker">Exam review</p>
             <h2 class="tsh-page-title">Учителя и варианты ОГЭ</h2>
@@ -31,7 +31,7 @@
                         onmouseout="this.style.background='transparent'">
                         <td class="px-5 py-3.5">
                             <div class="flex items-center gap-3">
-                                <div class="w-9 h-9 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                <div class="w-9 h-9 bg-[#e7effe] text-[#5f87d8] rounded-full flex items-center justify-center flex-shrink-0">
                                     <span class="text-sm font-semibold">{{ substr($teacher->name, 0, 1) }}</span>
                                 </div>
                                 <span class="font-medium" style="color: var(--tsh-text)">{{ $teacher->name }}</span>
