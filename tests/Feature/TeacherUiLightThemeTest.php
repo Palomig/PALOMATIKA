@@ -19,7 +19,7 @@ class TeacherUiLightThemeTest extends TestCase
         $response->assertOk();
         $response->assertSee('teacher-shell', false);
         $response->assertSee('window.__teacherUiMode = "light"', false);
-        $response->assertSee('--tsh-bg: #f5f7fb', false);
+        $response->assertSee('--tsh-bg: #EEF2FF', false);
         $response->assertDontSee("window.__uiMode = localStorage.getItem('palomatika_ui_mode') || 'dark'", false);
     }
 
@@ -43,7 +43,7 @@ class TeacherUiLightThemeTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('window.__teacherUiMode = "dark"', false);
-        $response->assertSee('--tsh-bg: #0f172a', false);
+        $response->assertSee('--tsh-bg: #111433', false);
     }
 
     public function test_teacher_layout_uses_wide_sidebar_navigation_shell(): void
@@ -51,7 +51,8 @@ class TeacherUiLightThemeTest extends TestCase
         $response = $this->actingAs($this->teacher())->get('/teacher/students');
 
         $response->assertOk();
-        $response->assertSee('tsh-sidebar-wide', false);
+        $response->assertSee('tsh-fluid-shell', false);
+        $response->assertSee('--tsh-primary: #4F46E5', false);
         $response->assertDontSee('tsh-tabs', false);
     }
 }
