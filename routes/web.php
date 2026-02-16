@@ -162,6 +162,24 @@ Route::middleware(['auth'])->group(function () {
 
     // Teacher pages
     Route::prefix('teacher')->name('teacher.')->group(function () {
+        Route::post('/ui-mode', function (Request $request) {
+            $user = $request->user();
+
+            abort_unless($user, 401);
+
+            $validated = $request->validate([
+                'mode' => 'required|in:light,dark',
+            ]);
+
+            $user->teacher_ui_mode = $validated['mode'];
+            $user->save();
+
+            return response()->json([
+                'ok' => true,
+                'mode' => $user->teacher_ui_mode,
+            ]);
+        })->middleware('role:teacher,admin')->name('ui-mode');
+
         Route::get('/', function () {
             $user = auth()->user();
             $viewAsRole = $user && $user->role === 'admin' ? session('view_as_role') : null;
