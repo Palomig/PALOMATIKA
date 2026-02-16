@@ -70,7 +70,7 @@
 
         /* === Teacher shell (Tabler-inspired) === */
         .teacher-shell {
-            --tsh-sidebar-w: 64px;
+            --tsh-sidebar-w: 256px;
             background: var(--tsh-bg);
             color: var(--tsh-text);
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, Helvetica, Arial, sans-serif;
@@ -142,12 +142,12 @@
             border-radius: 12px !important;
         }
 
-        /* Sidebar — compact icon-only */
+        /* Sidebar — wide nav */
         .teacher-shell aside.tsh-sidebar {
             width: var(--tsh-sidebar-w);
             background: var(--tsh-surface) !important;
             border-right: 1px solid var(--tsh-border) !important;
-            box-shadow: none;
+            box-shadow: var(--tsh-shadow);
         }
 
         .teacher-shell header.tsh-header {
@@ -158,31 +158,19 @@
             min-height: 54px;
         }
 
-        /* Tab navigation in header */
-        .tsh-tabs {
+        .tsh-sidebar-wide {
             display: flex;
-            align-items: center;
-            gap: 1px;
+            flex-direction: column;
+            align-items: stretch;
         }
-        .tsh-tab {
-            padding: 6px 14px;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: 500;
-            color: var(--tsh-subtle);
-            transition: all 0.15s ease;
-            white-space: nowrap;
-            text-decoration: none;
+
+        .tsh-brand {
+            border-bottom: 1px solid var(--tsh-border);
         }
-        .tsh-tab:hover {
-            color: var(--tsh-text);
-            background: var(--tsh-hover);
-        }
-        .tsh-tab.active {
+
+        .tsh-brand-mark {
             background: var(--tsh-accent);
             color: #fff;
-            font-weight: 600;
-            box-shadow: var(--tsh-shadow);
         }
 
         /* Card styles */
@@ -374,7 +362,6 @@
             .teacher-shell aside.tsh-sidebar {
                 width: 280px;
             }
-            .teacher-shell aside.tsh-sidebar .tsh-nav-label { display: block; }
         }
 
         /* Input overrides */
@@ -407,28 +394,45 @@
     @if($role === 'teacher')
     {{-- ========== TEACHER LAYOUT (Tabler-inspired) ========== --}}
     <div class="flex min-h-screen">
-        {{-- Compact Icon Sidebar --}}
-        <aside class="tsh-sidebar fixed inset-y-0 left-0 z-30 flex flex-col items-center py-4 transition-transform duration-300 ease-out"
+        {{-- Wide Sidebar --}}
+        <aside class="tsh-sidebar tsh-sidebar-wide fixed inset-y-0 left-0 z-30 transition-transform duration-300 ease-out"
                :class="{ '-translate-x-full lg:translate-x-0': !sidebarOpen, 'translate-x-0': sidebarOpen }"
                @click.away="if(window.innerWidth < 1024) sidebarOpen = false"
                aria-label="Навигация">
 
-            {{-- Logo --}}
-            <a href="/teacher" class="w-9 h-9 rounded-lg flex items-center justify-center mb-4 bg-[#2c3345] text-white hover:bg-[#3a4055] transition-colors" title="PALOMATIKA">
-                <svg class="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                </svg>
-            </a>
+            {{-- Brand --}}
+            <div class="tsh-brand px-4 py-4">
+                <a href="/teacher" class="flex items-center gap-3" title="PALOMATIKA">
+                    <span class="tsh-brand-mark w-9 h-9 rounded-xl flex items-center justify-center">
+                        <svg class="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        </svg>
+                    </span>
+                    <span class="text-sm font-bold tracking-wide" style="color: var(--tsh-text)">PALOMATIKA</span>
+                </a>
+            </div>
 
-            {{-- Navigation icons --}}
-            <nav class="flex-1 flex flex-col items-center gap-1" aria-label="Основная навигация">
+            {{-- User card --}}
+            <div class="mx-3 mt-3 mb-2 p-3 rounded-xl border" style="border-color: var(--tsh-border); background: var(--tsh-surface-soft);">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-lg flex items-center justify-center text-sm font-semibold border"
+                         style="background: var(--tsh-accent-soft); color: var(--tsh-text); border-color: var(--tsh-border);"
+                         x-text="user?.name?.charAt(0) || '?'"></div>
+                    <div class="min-w-0">
+                        <div class="text-sm font-semibold truncate" style="color: var(--tsh-text)" x-text="user?.name || 'Учитель'"></div>
+                        <div class="text-xs truncate" style="color: var(--tsh-muted)">Teacher panel</div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Navigation --}}
+            <nav class="flex-1 px-3 overflow-y-auto" aria-label="Основная навигация">
                 @include('layouts.partials.nav-teacher')
             </nav>
 
             {{-- Bottom actions --}}
-            <div class="flex flex-col items-center gap-1.5 mt-3">
-                {{-- UI mode --}}
-                <button @click="toggleTeacherMode()" class="tsh-btn w-8 h-8" :title="teacherUiMode === 'dark' ? 'Светлая тема' : 'Тёмная тема'">
+            <div class="px-3 py-3 border-t flex items-center gap-2" style="border-color: var(--tsh-border)">
+                <button @click="toggleTeacherMode()" class="tsh-btn flex-1" :title="teacherUiMode === 'dark' ? 'Светлая тема' : 'Тёмная тема'">
                     <svg x-show="teacherUiMode === 'light'" class="w-[16px] h-[16px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.7">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/>
                     </svg>
@@ -436,11 +440,9 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364 6.364l-1.414-1.414M7.05 7.05 5.636 5.636m12.728 0L16.95 7.05M7.05 16.95l-1.414 1.414M12 16a4 4 0 100-8 4 4 0 000 8z"/>
                     </svg>
                 </button>
-
-                {{-- Logout --}}
-                <form action="{{ route('logout') }}" method="POST">
+                <form action="{{ route('logout') }}" method="POST" class="flex-1">
                     @csrf
-                    <button type="submit" class="tsh-btn w-8 h-8" title="Выйти">
+                    <button type="submit" class="tsh-btn w-full" title="Выйти">
                         <svg class="w-[16px] h-[16px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.7">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                         </svg>
@@ -457,36 +459,20 @@
              x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"></div>
 
         {{-- Main content area --}}
-        <div class="flex-1 lg:ml-[64px]">
-            {{-- Top header with tabs --}}
+        <div class="flex-1 lg:ml-[256px]">
+            {{-- Top header --}}
             <header class="tsh-header sticky top-0 z-20 flex items-center px-4 sm:px-6 gap-3">
                 {{-- Mobile menu button --}}
                 <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden tsh-btn w-9 h-9 mr-1" aria-label="Открыть меню">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
 
-                {{-- Tab navigation --}}
-                <nav class="tsh-tabs flex-1 overflow-x-auto scrollbar-none justify-center">
-                    @php
-                        $teacherTabs = [
-                            ['url' => '/teacher', 'match' => 'teacher', 'exact' => true, 'label' => 'Обзор'],
-                            ['url' => '/teacher/students', 'match' => 'teacher/students*', 'label' => 'Ученики'],
-                            ['url' => '/teacher/groups', 'match' => 'teacher/groups*', 'label' => 'Группы'],
-                            ['url' => '/teacher/homework', 'match' => 'teacher/homework*', 'label' => 'Задания'],
-                            ['url' => '/teacher/analytics', 'match' => 'teacher/analytics*', 'label' => 'Аналитика'],
-                            ['url' => '/teacher/oge/teachers', 'match' => 'teacher/oge*', 'label' => 'ОГЭ'],
-                            ['url' => '/teacher/earnings', 'match' => 'teacher/earnings*', 'label' => 'Заработок'],
-                        ];
-                    @endphp
-                    @foreach($teacherTabs as $tab)
-                        @php
-                            $tabActive = isset($tab['exact']) && $tab['exact']
-                                ? request()->is($tab['match']) && !request()->is($tab['match'] . '/*')
-                                : request()->is($tab['match']);
-                        @endphp
-                        <a href="{{ $tab['url'] }}" class="tsh-tab {{ $tabActive ? 'active' : '' }}">{{ $tab['label'] }}</a>
-                    @endforeach
-                </nav>
+                <div class="flex-1 min-w-0">
+                    <div class="text-[11px] uppercase tracking-wider font-semibold" style="color: var(--tsh-subtle)">Teacher workspace</div>
+                    <h1 class="text-base sm:text-lg font-semibold truncate" style="color: var(--tsh-text)">
+                        @yield('header', 'Панель учителя')
+                    </h1>
+                </div>
 
                 {{-- Right actions --}}
                 <div class="flex items-center gap-1 flex-shrink-0">
