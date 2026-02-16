@@ -4,16 +4,15 @@
 @section('header', 'Домашние задания')
 
 @section('content')
-<div x-data="homeworkPage()" class="space-y-5">
-    <section class="relative overflow-hidden rounded-2xl tsh-card p-5 sm:p-6">
-        <div class="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-amber-100/45 to-transparent pointer-events-none"></div>
-        <div class="relative flex flex-wrap items-end justify-between gap-3">
+<div x-data="homeworkPage()" class="space-y-4">
+    <section class="tsh-card p-5 sm:p-6">
+        <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
                 <p class="tsh-page-kicker">Homework flow</p>
                 <h2 class="tsh-page-title">Домашние задания и контроль выполнения</h2>
                 <p class="tsh-page-subtitle">Отслеживайте прогресс по каждому заданию и быстро открывайте результаты по ученикам.</p>
             </div>
-            <a href="/teacher/analytics" class="tsh-action-secondary text-xs">
+            <a href="/teacher/analytics" class="tsh-action-secondary">
                 Смотреть аналитику
             </a>
         </div>
@@ -89,7 +88,7 @@
                     {{-- Student results toggle --}}
                     <div class="pt-3" style="border-top: 1px solid var(--tsh-border-soft)">
                         <button @click="hw.showDetails = !hw.showDetails"
-                                class="flex items-center gap-2 text-xs font-medium transition" style="color: var(--tsh-subtle)" onmouseover="this.style.color='var(--tsh-text)'" onmouseout="this.style.color='var(--tsh-subtle)'">
+                                class="flex items-center gap-2 text-xs font-medium transition hover:text-[#1a1d26]" style="color: var(--tsh-subtle)">
                             <svg class="w-3.5 h-3.5 transition-transform" :class="hw.showDetails ? 'rotate-90' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
                             </svg>
@@ -128,7 +127,7 @@
             </div>
             <p class="text-sm mb-3" style="color: var(--tsh-muted)">Нет домашних заданий</p>
             <button @click="showCreateModal = true"
-                    class="text-sm font-medium transition" style="color: var(--tsh-accent)" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+                    class="text-sm font-medium transition hover:opacity-80" style="color: var(--tsh-accent)"
                 Создать первое задание
             </button>
         </div>
@@ -184,12 +183,12 @@
                 <div>
                     <label class="block text-xs font-medium mb-2" style="color: var(--tsh-subtle)">Назначить ученикам</label>
                     <div class="space-y-1 max-h-40 overflow-y-auto tsh-card-soft rounded-xl p-2">
-                        <label class="flex items-center p-2 rounded-lg cursor-pointer transition" onmouseover="this.style.background='var(--tsh-surface-soft)'" onmouseout="this.style.background='transparent'">
+                        <label class="flex items-center p-2 rounded-lg cursor-pointer transition hover:bg-[#f9fafb]">
                             <input type="checkbox" @change="toggleAllStudents" class="mr-3 rounded text-blue-500" style="border-color: var(--tsh-border)">
                             <span class="text-sm font-medium" style="color: var(--tsh-text)">Выбрать всех</span>
                         </label>
                         <template x-for="student in students" :key="student.id">
-                            <label class="flex items-center p-2 rounded-lg cursor-pointer transition" onmouseover="this.style.background='var(--tsh-surface-soft)'" onmouseout="this.style.background='transparent'">
+                            <label class="flex items-center p-2 rounded-lg cursor-pointer transition hover:bg-[#f9fafb]">
                                 <input type="checkbox" :value="student.id"
                                        x-model="newHomework.student_ids" class="mr-3 rounded text-blue-500" style="border-color: var(--tsh-border)">
                                 <span class="text-sm" style="color: var(--tsh-text)" x-text="student.name"></span>

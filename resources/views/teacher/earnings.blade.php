@@ -4,16 +4,15 @@
 @section('header', 'Заработок')
 
 @section('content')
-<div x-data="earningsPage()" class="space-y-5">
-    <section class="relative overflow-hidden rounded-2xl tsh-card p-5 sm:p-6">
-        <div class="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-rose-50 to-transparent pointer-events-none"></div>
-        <div class="relative flex flex-wrap items-end justify-between gap-3">
+<div x-data="earningsPage()" class="space-y-4">
+    <section class="tsh-card p-5 sm:p-6">
+        <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
                 <p class="tsh-page-kicker">Finance</p>
                 <h2 class="tsh-page-title">Доход и выплаты</h2>
                 <p class="tsh-page-subtitle">Контролируйте баланс, выплаты и динамику реферального дохода в одном месте.</p>
             </div>
-            <a href="/teacher" class="tsh-action-secondary text-xs">
+            <a href="/teacher" class="tsh-action-secondary">
                 Назад к обзору
             </a>
         </div>
@@ -21,12 +20,12 @@
 
     {{-- Balance card --}}
     <div class="relative overflow-hidden tsh-card p-6">
-        <div class="absolute -right-8 -top-8 w-36 h-36 rounded-full blur-2xl" style="background: #edf2ff"></div>
-        <div class="absolute -left-8 -bottom-8 w-28 h-28 rounded-full blur-xl" style="background: #fff1f2"></div>
+        <div class="absolute -right-8 -top-8 w-36 h-36 rounded-full blur-3xl opacity-40" style="background: #dbeafe"></div>
+        <div class="absolute -left-8 -bottom-8 w-28 h-28 rounded-full blur-2xl opacity-30" style="background: #fecaca"></div>
         <div class="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-                <div class="text-xs font-medium uppercase tracking-wider mb-1" style="color: var(--tsh-subtle)">Доступно к выводу</div>
-                <div class="text-4xl font-bold tracking-tight" style="color: var(--tsh-text)" x-text="formatMoney(balance.available)"></div>
+                <div class="text-[10.5px] font-medium uppercase tracking-wider mb-1" style="color: var(--tsh-subtle)">Доступно к выводу</div>
+                <div class="text-3xl font-bold tracking-tight" style="color: var(--tsh-text)" x-text="formatMoney(balance.available)"></div>
             </div>
             <button @click="showPayoutModal = true"
                     :disabled="balance.available < 1000"
@@ -55,9 +54,9 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                     </svg>
                 </div>
-                <span class="text-xs font-medium uppercase tracking-wider" style="color: var(--tsh-muted)">Этот месяц</span>
+                <span class="text-[10.5px] font-medium uppercase tracking-wider" style="color: var(--tsh-subtle)">Этот месяц</span>
             </div>
-            <div class="text-2xl font-bold" style="color: var(--tsh-text)" x-text="formatMoney(stats.this_month)"></div>
+            <div class="text-xl font-bold" style="color: var(--tsh-text)" x-text="formatMoney(stats.this_month)"></div>
         </div>
         <div class="tsh-card tsh-stat-blue rounded-2xl p-5">
             <div class="flex items-center gap-3 mb-3">
@@ -66,9 +65,9 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
                     </svg>
                 </div>
-                <span class="text-xs font-medium uppercase tracking-wider" style="color: var(--tsh-muted)">Рефералы</span>
+                <span class="text-[10.5px] font-medium uppercase tracking-wider" style="color: var(--tsh-subtle)">Рефералы</span>
             </div>
-            <div class="text-2xl font-bold" style="color: var(--tsh-text)" x-text="stats.active_referrals"></div>
+            <div class="text-xl font-bold" style="color: var(--tsh-text)" x-text="stats.active_referrals"></div>
         </div>
         <div class="tsh-card tsh-stat-coral rounded-2xl p-5">
             <div class="flex items-center gap-3 mb-3">
@@ -77,9 +76,9 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z"/>
                     </svg>
                 </div>
-                <span class="text-xs font-medium uppercase tracking-wider" style="color: var(--tsh-muted)">Комиссия</span>
+                <span class="text-[10.5px] font-medium uppercase tracking-wider" style="color: var(--tsh-subtle)">Комиссия</span>
             </div>
-            <div class="text-2xl font-bold" style="color: var(--tsh-text)" x-text="stats.commission_rate + '%'"></div>
+            <div class="text-xl font-bold" style="color: var(--tsh-text)" x-text="stats.commission_rate + '%'"></div>
         </div>
     </div>
 
@@ -130,10 +129,9 @@
         </div>
         <div>
             <template x-for="tx in transactions" :key="tx.id">
-                <div class="flex items-center gap-3 px-5 py-3.5 transition-colors"
-                     style="border-bottom: 1px solid var(--tsh-border-soft)"
-                     onmouseover="this.style.background='var(--tsh-surface-soft)'"
-                     onmouseout="this.style.background='transparent'">
+                <div class="flex items-center gap-3 px-5 py-3.5 transition-colors hover:bg-[#f9fafb]"
+                     style="border-bottom: 1px solid rgba(0,0,0,0.04)"
+>
                     <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
                          :class="tx.type === 'earning' ? 'bg-emerald-100 text-emerald-500' : 'bg-blue-100 text-blue-500'">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -172,19 +170,13 @@
                     <label class="block text-xs font-medium mb-1.5" style="color: var(--tsh-muted)">Сумма вывода</label>
                     <input type="number" x-model="payoutAmount"
                            :max="balance.available"
-                           class="w-full px-4 py-2.5 rounded-xl text-sm focus:ring-2 transition"
-                           style="background: white; border: 1px solid var(--tsh-border); color: var(--tsh-text); outline: none"
-                           onfocus="this.style.borderColor='var(--tsh-blue)'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.1)'"
-                           onblur="this.style.borderColor='var(--tsh-border)'; this.style.boxShadow='none'">
+                           class="w-full px-4 py-2.5 rounded-xl text-sm transition focus:ring-2 focus:ring-blue-100 focus:border-blue-400">
                     <div class="text-[11px] mt-1" style="color: var(--tsh-subtle)">Минимум: 1 000 ₽</div>
                 </div>
                 <div>
                     <label class="block text-xs font-medium mb-1.5" style="color: var(--tsh-muted)">Номер карты</label>
                     <input type="text" x-model="cardNumber" placeholder="0000 0000 0000 0000"
-                           class="w-full px-4 py-2.5 rounded-xl text-sm focus:ring-2 transition"
-                           style="background: white; border: 1px solid var(--tsh-border); color: var(--tsh-text); outline: none"
-                           onfocus="this.style.borderColor='var(--tsh-blue)'; this.style.boxShadow='0 0 0 3px rgba(59, 130, 246, 0.1)'"
-                           onblur="this.style.borderColor='var(--tsh-border)'; this.style.boxShadow='none'">
+                           class="w-full px-4 py-2.5 rounded-xl text-sm transition focus:ring-2 focus:ring-blue-100 focus:border-blue-400">
                 </div>
             </div>
             <div class="flex gap-3">

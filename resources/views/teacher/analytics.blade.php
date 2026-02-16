@@ -4,59 +4,58 @@
 @section('header', 'Аналитика')
 
 @section('content')
-<div x-data="analyticsPage()" class="space-y-5">
-    <section class="relative overflow-hidden rounded-2xl tsh-card p-5 sm:p-6">
-        <div class="absolute top-0 right-0 h-full w-1/2 bg-gradient-to-l from-emerald-100/45 to-transparent pointer-events-none"></div>
-        <div class="relative flex flex-wrap items-end justify-between gap-3">
+<div x-data="analyticsPage()" class="space-y-4">
+    <section class="tsh-card p-5 sm:p-6">
+        <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
                 <p class="tsh-page-kicker">Performance</p>
                 <h2 class="tsh-page-title">Аналитика результативности</h2>
                 <p class="tsh-page-subtitle">Сравнивайте динамику точности, активности и прогресса по темам и ученикам.</p>
             </div>
-            <a href="/teacher/homework" class="tsh-action-primary text-xs">
+            <a href="/teacher/homework" class="tsh-action-primary">
                 Перейти к заданиям
             </a>
         </div>
     </section>
 
     {{-- Period selector --}}
-    <div class="flex items-center gap-1.5 p-1 w-fit">
+    <div class="flex items-center gap-1 p-0.5 w-fit bg-[#eef0f4] rounded-lg">
         <template x-for="p in [{key:'week',label:'Неделя'},{key:'month',label:'Месяц'},{key:'all',label:'Всё время'}]" :key="p.key">
             <button @click="period = p.key"
                     :class="period === p.key
-                        ? 'bg-gray-900 text-white shadow-md'
-                        : 'text-gray-400 hover:text-gray-700 hover:bg-gray-100'"
-                    class="px-4 py-2 rounded-full text-sm font-medium transition-all"
+                        ? 'bg-[#2c3345] text-white shadow-sm'
+                        : 'text-[#8c95a6] hover:text-[#222630]'"
+                    class="px-3.5 py-1.5 rounded-md text-[13px] font-medium transition-all"
                     x-text="p.label"></button>
         </template>
     </div>
 
     {{-- Overview stats --}}
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <div class="tsh-card rounded-2xl p-4 sm:p-5" style="background: #f9fbff">
+        <div class="tsh-card rounded-2xl p-4" >
             <div class="flex items-center justify-between mb-2">
-                <span class="text-xs font-medium uppercase tracking-wider" style="color: var(--tsh-muted)">Задач решено</span>
+                <span class="text-[10.5px] font-medium uppercase tracking-wider" style="color: var(--tsh-subtle)">Задач решено</span>
                 <span class="text-[11px] font-medium tabular-nums px-1.5 py-0.5 rounded"
                       :class="stats.tasks_change >= 0 ? 'bg-emerald-50 text-emerald-500' : 'bg-red-50 text-red-500'"
                       x-text="(stats.tasks_change >= 0 ? '+' : '') + stats.tasks_change + '%'"></span>
             </div>
-            <div class="text-2xl font-bold tabular-nums" style="color: var(--tsh-text)" x-text="stats.total_tasks_solved"></div>
+            <div class="text-xl font-bold tabular-nums" style="color: var(--tsh-text)" x-text="stats.total_tasks_solved"></div>
         </div>
-        <div class="tsh-card rounded-2xl p-4 sm:p-5" style="background: #f9fbff">
+        <div class="tsh-card rounded-2xl p-4" >
             <div class="flex items-center justify-between mb-2">
-                <span class="text-xs font-medium uppercase tracking-wider" style="color: var(--tsh-muted)">Ср. точность</span>
+                <span class="text-[10.5px] font-medium uppercase tracking-wider" style="color: var(--tsh-subtle)">Ср. точность</span>
                 <span class="text-[11px] font-medium tabular-nums px-1.5 py-0.5 rounded"
                       :class="stats.accuracy_change >= 0 ? 'bg-emerald-50 text-emerald-500' : 'bg-red-50 text-red-500'"
                       x-text="(stats.accuracy_change >= 0 ? '+' : '') + stats.accuracy_change + '%'"></span>
             </div>
-            <div class="text-2xl font-bold tabular-nums" style="color: var(--tsh-text)" x-text="stats.avg_accuracy + '%'"></div>
+            <div class="text-xl font-bold tabular-nums" style="color: var(--tsh-text)" x-text="stats.avg_accuracy + '%'"></div>
         </div>
-        <div class="tsh-card rounded-2xl p-4 sm:p-5" style="background: #f9fbff">
-            <span class="text-xs font-medium uppercase tracking-wider" style="color: var(--tsh-muted)">Активных</span>
+        <div class="tsh-card rounded-2xl p-4" >
+            <span class="text-[10.5px] font-medium uppercase tracking-wider" style="color: var(--tsh-subtle)">Активных</span>
             <div class="text-2xl font-bold mt-2 tabular-nums" style="color: var(--tsh-text)" x-text="stats.active_students"></div>
         </div>
-        <div class="tsh-card rounded-2xl p-4 sm:p-5" style="background: #f9fbff">
-            <span class="text-xs font-medium uppercase tracking-wider" style="color: var(--tsh-muted)">Ср. стрик</span>
+        <div class="tsh-card rounded-2xl p-4" >
+            <span class="text-[10.5px] font-medium uppercase tracking-wider" style="color: var(--tsh-subtle)">Ср. стрик</span>
             <div class="text-2xl font-bold mt-2 tabular-nums" style="color: var(--tsh-text)" x-text="stats.avg_streak"></div>
         </div>
     </div>
@@ -96,10 +95,9 @@
         </div>
         <div style="border-top: 1px solid var(--tsh-border-soft)">
             <template x-for="(student, index) in studentRanking" :key="student.id">
-                <div class="flex items-center gap-3 px-5 py-3.5 transition-colors"
-                     style="border-top: 1px solid var(--tsh-border-soft)"
-                     onmouseover="this.style.background='var(--tsh-surface-soft)'"
-                     onmouseout="this.style.background='transparent'">
+                <div class="flex items-center gap-3 px-5 py-3.5 transition-colors hover:bg-[#f9fafb]"
+                     style="border-top: 1px solid rgba(0,0,0,0.04)"
+>
                     <div class="w-7 text-center">
                         <span class="text-sm font-bold tabular-nums"
                               :class="index === 0 ? 'text-amber-500' : index === 1 ? 'text-gray-400' : index === 2 ? 'text-amber-600' : 'text-gray-400'"

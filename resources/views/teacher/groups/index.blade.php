@@ -23,15 +23,11 @@
     <section class="tsh-card rounded-2xl p-5">
         <div class="flex flex-wrap items-center gap-3">
             <input x-model="newGroupName" type="text" placeholder="Название группы"
-                   class="min-w-[200px] flex-1 px-4 py-2.5 rounded-xl text-sm transition focus:ring-2 focus:outline-none"
-                   style="border: 1px solid var(--tsh-border); color: var(--tsh-text); background: white"
-                   onfocus="this.style.borderColor='var(--tsh-accent)'; this.style.boxShadow='0 0 0 3px rgba(99, 102, 241, 0.1)'"
-                   onblur="this.style.borderColor='var(--tsh-border)'; this.style.boxShadow='none'">
+                   class="min-w-[200px] flex-1 px-4 py-2.5 rounded-xl text-sm transition focus:ring-2 focus:outline-none focus:!border-blue-400 focus:!ring-2 focus:!ring-blue-100"
+                   style="border: 1px solid var(--tsh-border); color: var(--tsh-text); background: white">
             <input x-model="newGroupDescription" type="text" placeholder="Описание (опционально)"
-                   class="min-w-[200px] flex-1 px-4 py-2.5 rounded-xl text-sm transition focus:ring-2 focus:outline-none"
-                   style="border: 1px solid var(--tsh-border); color: var(--tsh-text); background: white"
-                   onfocus="this.style.borderColor='var(--tsh-accent)'; this.style.boxShadow='0 0 0 3px rgba(99, 102, 241, 0.1)'"
-                   onblur="this.style.borderColor='var(--tsh-border)'; this.style.boxShadow='none'">
+                   class="min-w-[200px] flex-1 px-4 py-2.5 rounded-xl text-sm transition focus:ring-2 focus:outline-none focus:!border-blue-400 focus:!ring-2 focus:!ring-blue-100"
+                   style="border: 1px solid var(--tsh-border); color: var(--tsh-text); background: white">
             <button @click="createGroup()" :disabled="!newGroupName.trim()"
                     :class="!newGroupName.trim() ? 'opacity-50 cursor-not-allowed' : ''"
                     class="tsh-action-primary text-sm font-medium">
@@ -61,10 +57,8 @@
                                 <span class="inline-flex items-center px-2.5 py-1 text-[11px] font-medium rounded-full bg-blue-50 text-blue-600 tabular-nums"
                                       x-text="group.students_count + ' уч.'"></span>
                                 <button @click="deleteGroup(group.id)"
-                                        class="w-8 h-8 rounded-lg flex items-center justify-center transition"
-                                        style="color: var(--tsh-muted)"
-                                        onmouseover="this.style.color='#dc2626'; this.style.background='#fee2e2'"
-                                        onmouseout="this.style.color='var(--tsh-muted)'; this.style.background='transparent'">
+                                        class="w-8 h-8 rounded-lg flex items-center justify-center transition hover:bg-red-50 hover:text-red-600"
+                                        style="color: var(--tsh-muted)">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                     </svg>
@@ -81,10 +75,8 @@
                                          style="border: 1px solid var(--tsh-border-soft); color: var(--tsh-text)">
                                         <span x-text="student.name"></span>
                                         <button @click="removeStudent(group.id, student.id)"
-                                                class="transition ml-0.5"
-                                                style="color: var(--tsh-subtle)"
-                                                onmouseover="this.style.color='#dc2626'"
-                                                onmouseout="this.style.color='var(--tsh-subtle)'">
+                                                class="transition ml-0.5 hover:text-red-600"
+                                                style="color: var(--tsh-subtle)">
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
                                             </svg>
@@ -97,10 +89,8 @@
                         {{-- Add student --}}
                         <div class="flex flex-wrap gap-2 items-center pt-3" style="border-top: 1px solid var(--tsh-border-soft)">
                             <select x-model.number="studentToAdd[group.id]"
-                                    class="min-w-[200px] flex-1 px-3 py-2 rounded-xl text-sm transition focus:ring-2 focus:outline-none"
-                                    style="border: 1px solid var(--tsh-border); color: var(--tsh-text); background: white"
-                                    onfocus="this.style.borderColor='var(--tsh-accent)'; this.style.boxShadow='0 0 0 3px rgba(99, 102, 241, 0.1)'"
-                                    onblur="this.style.borderColor='var(--tsh-border)'; this.style.boxShadow='none'">
+                                    class="min-w-[200px] flex-1 px-3 py-2 rounded-xl text-sm transition focus:ring-2 focus:outline-none focus:!border-blue-400 focus:!ring-2 focus:!ring-blue-100"
+                                    style="border: 1px solid var(--tsh-border); color: var(--tsh-text); background: white">
                                 <option value="">Добавить ученика...</option>
                                 <template x-for="student in availableStudentsForGroup(group)" :key="student.id">
                                     <option :value="student.id" x-text="student.name + (student.email ? ' (' + student.email + ')' : '')"></option>

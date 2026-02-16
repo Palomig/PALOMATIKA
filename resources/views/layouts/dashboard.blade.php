@@ -64,26 +64,25 @@
 
         /* === SugarCRM-inspired Teacher Shell === */
         .teacher-shell {
-            --tsh-bg: #eceff5;
-            --tsh-surface: #f8fafd;
-            --tsh-surface-soft: #eef3fa;
-            --tsh-text: #171a24;
-            --tsh-muted: #6a7283;
-            --tsh-subtle: #97a1b5;
-            --tsh-border: rgba(113, 125, 150, 0.2);
-            --tsh-border-soft: rgba(113, 125, 150, 0.14);
-            --tsh-hover: rgba(52, 68, 93, 0.04);
-            --tsh-shadow: 0 1px 2px rgba(26, 37, 57, 0.02);
-            --tsh-shadow-lg: 0 6px 14px rgba(26, 37, 57, 0.05);
-            --tsh-accent: #0f1118;
-            --tsh-accent-soft: #edf1f7;
-            --tsh-blue: #83aef5;
+            --tsh-bg: #f5f6f8;
+            --tsh-surface: #ffffff;
+            --tsh-surface-soft: #f7f8fa;
+            --tsh-text: #222630;
+            --tsh-muted: #5f6775;
+            --tsh-subtle: #8c95a6;
+            --tsh-border: rgba(0, 0, 0, 0.07);
+            --tsh-border-soft: rgba(0, 0, 0, 0.04);
+            --tsh-hover: rgba(0, 0, 0, 0.025);
+            --tsh-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+            --tsh-shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --tsh-accent: #2c3345;
+            --tsh-accent-soft: #eef0f4;
+            --tsh-blue: #4a8af5;
             --tsh-blue-soft: #edf3ff;
-            --tsh-sidebar-w: 80px;
-            background:
-                radial-gradient(900px 420px at 74% -160px, #f7f9ff 0%, rgba(247,249,255,0) 72%),
-                linear-gradient(180deg, #eceff5 0%, #edf2f9 56%, #e9eff8 100%);
+            --tsh-sidebar-w: 64px;
+            background: var(--tsh-bg);
             color: var(--tsh-text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, Helvetica, Arial, sans-serif;
         }
 
         .teacher-shell .bg-dark,
@@ -111,98 +110,97 @@
         .teacher-shell [class*="bg-white/"] { background-color: var(--tsh-hover) !important; }
 
         .teacher-shell .rounded-2xl {
-            border-radius: 24px !important;
-            box-shadow: var(--tsh-shadow);
-            border-color: var(--tsh-border-soft) !important;
+            border-radius: 12px !important;
         }
 
         /* Sidebar — compact icon-only */
         .teacher-shell aside.tsh-sidebar {
             width: var(--tsh-sidebar-w);
-            background: #f7f9fd !important;
-            border-right: 1px solid var(--tsh-border) !important;
-            box-shadow: 1px 0 0 rgba(113, 125, 150, 0.12);
+            background: #ffffff !important;
+            border-right: 1px solid rgba(0,0,0,0.05) !important;
+            box-shadow: none;
         }
 
         .teacher-shell header.tsh-header {
-            background: rgba(248,250,253,0.94) !important;
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border-bottom: 1px solid var(--tsh-border) !important;
-            min-height: 68px;
+            background: rgba(255,255,255,0.96) !important;
+            backdrop-filter: blur(12px) saturate(140%);
+            -webkit-backdrop-filter: blur(12px) saturate(140%);
+            border-bottom: 1px solid rgba(0,0,0,0.05) !important;
+            min-height: 54px;
         }
 
         /* Tab navigation in header */
         .tsh-tabs {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 1px;
         }
         .tsh-tab {
-            padding: 8px 16px;
-            border-radius: 999px;
-            font-size: 14px;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 13px;
             font-weight: 500;
-            color: var(--tsh-muted);
-            transition: all 0.2s;
+            color: var(--tsh-subtle);
+            transition: all 0.15s ease;
             white-space: nowrap;
             text-decoration: none;
         }
         .tsh-tab:hover {
             color: var(--tsh-text);
-            background: var(--tsh-accent-soft);
+            background: rgba(0,0,0,0.035);
         }
         .tsh-tab.active {
             background: var(--tsh-accent);
             color: #fff;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+            font-weight: 600;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
         }
 
         /* Card styles */
         .tsh-card {
-            background: #f4f7fd;
-            border-radius: 24px;
-            box-shadow: var(--tsh-shadow);
-            border: 1px solid var(--tsh-border-soft);
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.05);
             overflow: hidden;
         }
         .tsh-card-soft {
-            background: #f7f9fd;
-            border-radius: 18px;
-            border: 1px solid var(--tsh-border-soft);
+            background: var(--tsh-surface-soft);
+            border-radius: 10px;
+            border: 1px solid rgba(0,0,0,0.03);
         }
 
         /* Hero typography */
         .tsh-page-kicker {
-            font-size: 11px;
+            font-size: 10.5px;
             line-height: 1.1;
             text-transform: uppercase;
-            letter-spacing: .18em;
-            font-weight: 700;
-            margin-bottom: .65rem;
-            color: var(--tsh-subtle);
+            letter-spacing: .14em;
+            font-weight: 600;
+            margin-bottom: .5rem;
+            color: var(--tsh-blue);
         }
         .tsh-page-title {
-            font-size: clamp(1.75rem, 2vw, 2.05rem);
-            line-height: 1.1;
+            font-size: clamp(1.35rem, 1.8vw, 1.6rem);
+            line-height: 1.2;
             font-weight: 700;
-            letter-spacing: -0.015em;
+            letter-spacing: -0.01em;
             color: var(--tsh-text);
         }
         .tsh-page-subtitle {
-            margin-top: .55rem;
-            font-size: .94rem;
+            margin-top: .4rem;
+            font-size: .85rem;
             line-height: 1.45;
             color: var(--tsh-muted);
-            max-width: 68ch;
+            max-width: 60ch;
         }
 
-        /* Stat cards with soft colored backgrounds */
-        .tsh-stat-blue { background: linear-gradient(135deg, #eef4ff 0%, #f8faff 100%); }
-        .tsh-stat-green { background: linear-gradient(135deg, #ecfdf5 0%, #f5fdf9 100%); }
-        .tsh-stat-amber { background: linear-gradient(135deg, #fffbeb 0%, #fffdf5 100%); }
-        .tsh-stat-coral { background: linear-gradient(135deg, #fff1f2 0%, #fff8f8 100%); }
-        .tsh-stat-violet { background: linear-gradient(135deg, #f5f3ff 0%, #faf8ff 100%); }
+        /* Stat cards — clean white, no colored borders */
+        .tsh-stat-blue,
+        .tsh-stat-green,
+        .tsh-stat-amber,
+        .tsh-stat-coral,
+        .tsh-stat-violet { background: #ffffff; }
 
         /* Avatar with status badge */
         .tsh-avatar {
@@ -241,19 +239,18 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 1px solid var(--tsh-border);
-            background: #f7f9fd;
-            color: var(--tsh-muted);
-            transition: all 0.2s;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            border: 1px solid rgba(0,0,0,0.06);
+            background: transparent;
+            color: var(--tsh-subtle);
+            transition: all 0.15s ease;
             cursor: pointer;
         }
         .tsh-btn:hover {
-            background: var(--tsh-accent-soft);
+            background: rgba(0,0,0,0.035);
             color: var(--tsh-text);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         }
 
         .tsh-btn-primary {
@@ -262,92 +259,91 @@
             border: none;
         }
         .tsh-btn-primary:hover {
-            background: #2d3140;
+            background: #3a4055;
             color: #fff;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
         /* App action buttons */
         .tsh-action-primary {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.625rem 1rem;
-            border-radius: 0.9rem;
-            font-size: 0.875rem;
+            gap: 0.4rem;
+            padding: 7px 16px;
+            border-radius: 8px;
+            font-size: 13px;
             font-weight: 600;
             color: #fff;
             background: var(--tsh-accent);
             border: 1px solid transparent;
-            transition: all .2s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,.12);
+            transition: all .15s ease;
         }
         .tsh-action-primary:hover {
-            opacity: .92;
-            box-shadow: 0 8px 18px rgba(0,0,0,.16);
+            background: #3a4055;
         }
 
         .tsh-action-secondary {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.625rem 1rem;
-            border-radius: 0.9rem;
-            font-size: 0.875rem;
-            font-weight: 600;
+            gap: 0.4rem;
+            padding: 7px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
             color: var(--tsh-text);
-            background: #f7f9fd;
-            border: 1px solid var(--tsh-border);
-            transition: all .2s ease;
+            background: #ffffff;
+            border: 1px solid rgba(0,0,0,0.1);
+            transition: all .15s ease;
         }
         .tsh-action-secondary:hover {
-            background: var(--tsh-surface-soft);
-            border-color: var(--tsh-border-soft);
+            background: #f7f8fa;
+            border-color: rgba(0,0,0,0.14);
         }
 
         /* Progress bar SugarCRM style */
         .tsh-progress {
-            height: 4px;
+            height: 3px;
             border-radius: 2px;
-            background: #e5e7eb;
+            background: #eef0f3;
             overflow: hidden;
         }
         .tsh-progress-bar {
             height: 100%;
             border-radius: 2px;
-            transition: width 0.5s ease;
+            transition: width 0.4s ease;
         }
 
         /* Table styles */
         .teacher-shell table th {
-            background: var(--tsh-surface-soft);
+            background: #fafbfc;
+            font-size: 11px;
         }
         .teacher-shell table tr:hover td {
-            background: var(--tsh-surface-soft);
+            background: #fafbfc;
         }
 
         /* Sticky sidebar cell in teacher-shell */
-        .teacher-shell .sticky { background: var(--tsh-surface) !important; }
+        .teacher-shell .sticky { background: #ffffff !important; }
 
         /* Scrollbar for teacher-shell */
-        .teacher-shell ::-webkit-scrollbar-track { background: var(--tsh-surface-soft); }
-        .teacher-shell ::-webkit-scrollbar-thumb { background: #d1d5db; }
-        .teacher-shell ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+        .teacher-shell ::-webkit-scrollbar { width: 6px; height: 6px; }
+        .teacher-shell ::-webkit-scrollbar-track { background: transparent; }
+        .teacher-shell ::-webkit-scrollbar-thumb { background: #d4d6db; border-radius: 3px; }
+        .teacher-shell ::-webkit-scrollbar-thumb:hover { background: #a1a5ae; }
 
         /* Page-in animation */
         .teacher-shell main {
-            animation: teacherPageIn .42s cubic-bezier(0.16, 1, 0.3, 1);
+            animation: teacherPageIn .3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         @keyframes teacherPageIn {
-            0% { opacity: 0; transform: translateY(6px); }
+            0% { opacity: 0; transform: translateY(4px); }
             100% { opacity: 1; transform: translateY(0); }
         }
 
         /* Mobile: expand sidebar on open */
         @media (max-width: 1023px) {
             .teacher-shell aside.tsh-sidebar {
-                width: 300px;
+                width: 280px;
             }
             .teacher-shell aside.tsh-sidebar .tsh-nav-label { display: block; }
         }
@@ -356,8 +352,8 @@
         .teacher-shell input,
         .teacher-shell select,
         .teacher-shell textarea {
-            background-color: var(--tsh-surface-soft) !important;
-            border-color: var(--tsh-border) !important;
+            background-color: #ffffff !important;
+            border-color: rgba(0,0,0,0.1) !important;
             color: var(--tsh-text) !important;
         }
         .teacher-shell input::placeholder,
@@ -368,13 +364,13 @@
         .teacher-shell select:focus,
         .teacher-shell textarea:focus {
             border-color: var(--tsh-blue) !important;
-            box-shadow: 0 0 0 3px rgba(79, 138, 247, 0.12) !important;
+            box-shadow: 0 0 0 3px rgba(74, 138, 245, 0.1) !important;
         }
 
         /* Modal overrides */
         .teacher-shell .fixed.inset-0 .bg-dark-light,
         .teacher-shell .fixed.inset-0 [class*="bg-dark"] {
-            background-color: var(--tsh-surface) !important;
+            background-color: #ffffff !important;
         }
     </style>
 </head>
@@ -389,8 +385,8 @@
                aria-label="Навигация">
 
             {{-- Logo --}}
-            <a href="/teacher" class="w-11 h-11 rounded-full border border-gray-200 flex items-center justify-center mb-6 bg-white text-gray-800 shadow-sm hover:shadow transition-shadow">
-                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <a href="/teacher" class="w-9 h-9 rounded-lg flex items-center justify-center mb-4 bg-[#2c3345] text-white hover:bg-[#3a4055] transition-colors" title="PALOMATIKA">
+                <svg class="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
                 </svg>
             </a>
@@ -401,22 +397,20 @@
             </nav>
 
             {{-- Bottom actions --}}
-            <div class="flex flex-col items-center gap-2 mt-4">
-                {{-- Settings/Theme --}}
-                <div x-data="{ showSettings: false }" class="relative">
-                    <button @click="showSettings = !showSettings" class="tsh-btn w-10 h-10" title="Настройки">
-                        <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                        </svg>
-                    </button>
-                </div>
+            <div class="flex flex-col items-center gap-1.5 mt-3">
+                {{-- Settings --}}
+                <button class="tsh-btn w-8 h-8" title="Настройки">
+                    <svg class="w-[16px] h-[16px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.7">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                </button>
 
                 {{-- Logout --}}
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="tsh-btn w-10 h-10" title="Выйти">
-                        <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+                    <button type="submit" class="tsh-btn w-8 h-8" title="Выйти">
+                        <svg class="w-[16px] h-[16px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.7">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
                         </svg>
                     </button>
@@ -432,9 +426,9 @@
              x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"></div>
 
         {{-- Main content area --}}
-        <div class="flex-1 lg:ml-20">
+        <div class="flex-1 lg:ml-[64px]">
             {{-- Top header with tabs --}}
-            <header class="tsh-header sticky top-0 z-20 flex items-center px-4 sm:px-7 gap-4">
+            <header class="tsh-header sticky top-0 z-20 flex items-center px-4 sm:px-6 gap-3">
                 {{-- Mobile menu button --}}
                 <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden w-9 h-9 flex items-center justify-center rounded-xl text-gray-500 hover:text-gray-800 hover:bg-gray-100 transition mr-1" aria-label="Открыть меню">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
@@ -464,33 +458,35 @@
                 </nav>
 
                 {{-- Right actions --}}
-                <div class="flex items-center gap-2 flex-shrink-0">
+                <div class="flex items-center gap-1 flex-shrink-0">
                     {{-- Search --}}
-                    <button class="tsh-btn w-10 h-10" title="Поиск">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    </button>
-
-                    {{-- Mail --}}
-                    <button class="tsh-btn w-10 h-10 relative" title="Сообщения">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                        <span class="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full"></span>
+                    <button class="tsh-btn" title="Поиск">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.7"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     </button>
 
                     {{-- Notifications --}}
-                    <button class="tsh-btn w-10 h-10" title="Уведомления">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <button class="tsh-btn relative" title="Уведомления">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.7">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 10-12 0v3.2c0 .5-.2 1-.6 1.4L4 17h5m6 0a3 3 0 11-6 0m6 0H9"/>
+                        </svg>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                    </button>
+
+                    {{-- Help --}}
+                    <button class="tsh-btn" title="Помощь">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.7">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </button>
 
                     {{-- User avatar --}}
-                    <div class="tsh-avatar w-10 h-10 bg-gradient-to-br from-orange-200 via-amber-100 to-stone-300 text-gray-700 text-xs cursor-pointer ml-1" title="Профиль" x-text="user?.name?.charAt(0) || '?'"></div>
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center text-[#4a5568] text-xs font-semibold cursor-pointer ml-1" title="Профиль" x-text="user?.name?.charAt(0) || '?'"></div>
                 </div>
             </header>
 
             {{-- Page content --}}
-            <main class="p-4 sm:p-6 lg:p-8">
-                <div class="max-w-[1560px] mx-auto">
+            <main class="p-4 sm:p-5 lg:p-6">
+                <div class="max-w-[1440px] mx-auto">
                     @yield('content')
                 </div>
             </main>
