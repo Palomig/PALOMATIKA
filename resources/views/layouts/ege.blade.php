@@ -99,7 +99,6 @@
 @endif
 
 @stack('scripts')
-@include('layouts.partials.palette-switcher')
 
 </body>
 </html>
