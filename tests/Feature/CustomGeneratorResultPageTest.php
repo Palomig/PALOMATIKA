@@ -146,4 +146,32 @@ class CustomGeneratorResultPageTest extends TestCase
         $response->assertSee('Введите номер ответа');
         $response->assertDontSee('type="radio"', false);
     }
+
+    public function test_result_page_renders_statements_for_topic_19_tasks(): void
+    {
+        $hash = 'uvwx1234';
+
+        Cache::put("custom_random_test_{$hash}", [[
+            'test_number' => 1,
+            'topic_id' => '19',
+            'topic_title' => 'Анализ геометрических высказываний',
+            'block_number' => 2,
+            'zadanie_number' => 5,
+            'instruction' => 'Укажите номера верных утверждений.',
+            'type' => 'statements',
+            'task' => [
+                'statements' => [
+                    ['id' => 29, 'text' => 'Утверждение A'],
+                    ['id' => 30, 'text' => 'Утверждение B'],
+                ],
+            ],
+        ]], now()->addMinutes(5));
+
+        $response = $this->get("/test/generator/result/{$hash}");
+
+        $response->assertOk();
+        $response->assertSee('29. Утверждение A');
+        $response->assertSee('30. Утверждение B');
+        $response->assertSee('Введите номера верных утверждений');
+    }
 }

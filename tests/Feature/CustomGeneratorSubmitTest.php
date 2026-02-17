@@ -16,4 +16,20 @@ class CustomGeneratorSubmitTest extends TestCase
         $response->assertOk();
         $response->assertSee('Кастомный тест ОГЭ');
     }
+
+    public function test_can_generate_test_with_topics_15_to_19_and_render_each_topic(): void
+    {
+        $response = $this->followingRedirects()->post('/test/generator/generate', [
+            'topics' => ['15', '16', '17', '18', '19'],
+            'tasks_per_topic' => 1,
+        ]);
+
+        $response->assertOk();
+        $response->assertSee('Кастомный тест ОГЭ');
+        $response->assertSee('15.');
+        $response->assertSee('16.');
+        $response->assertSee('17.');
+        $response->assertSee('18.');
+        $response->assertSee('19.');
+    }
 }

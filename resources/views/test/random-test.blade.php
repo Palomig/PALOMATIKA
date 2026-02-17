@@ -53,6 +53,7 @@
             $inlineSvgFromImage = null;
             $svgType = $testTask['svg_type'] ?? ($task['svg_type'] ?? null);
             $points = $task['points'] ?? ($testTask['points'] ?? null);
+            $statements = $task['statements'] ?? ($testTask['statements'] ?? null);
 
             if (!empty($task['image'])) {
                 $imageRaw = (string) $task['image'];
@@ -132,6 +133,26 @@
                 <div class="mt-4">
                     <label class="block text-sm text-slate-400 mb-2">Номер ответа:</label>
                     <input type="text" class="w-full sm:w-64 px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-100 placeholder-slate-500" placeholder="Введите номер ответа">
+                </div>
+            @elseif(!empty($statements))
+                <div class="grid gap-2">
+                    @foreach($statements as $statement)
+                        @php
+                            $statementId = is_array($statement) ? ($statement['id'] ?? null) : null;
+                            $statementText = is_array($statement) ? ($statement['text'] ?? '') : (string) $statement;
+                        @endphp
+                        <div class="rounded-lg border border-slate-700 bg-slate-900/35 px-3 py-2 text-slate-300">
+                            @if($statementId)
+                                {{ $statementId }}. {{ $statementText }}
+                            @else
+                                {{ $statementText }}
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+                <div class="mt-4">
+                    <label class="block text-sm text-slate-400 mb-2">Номера верных утверждений:</label>
+                    <input type="text" class="w-full sm:w-64 px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-100 placeholder-slate-500" placeholder="Введите номера верных утверждений">
                 </div>
             @else
                 <div>

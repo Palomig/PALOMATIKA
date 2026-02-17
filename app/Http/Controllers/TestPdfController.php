@@ -128,15 +128,30 @@ class TestPdfController extends Controller
             } elseif ($topicId === '14') {
                 $tasks = $this->getRandomTasksFromManualData14($tasksPerTopic);
             } elseif ($topicId === '15') {
-                $tasks = $this->getRandomTasksFromManualData15($tasksPerTopic);
+                $tasks = $this->taskDataService->getRandomTasks('15', $tasksPerTopic);
+                if (empty($tasks)) {
+                    $tasks = $this->getRandomTasksFromManualData15($tasksPerTopic);
+                }
             } elseif ($topicId === '16') {
-                $tasks = $this->getRandomTasksFromManualData16($tasksPerTopic);
+                $tasks = $this->taskDataService->getRandomTasks('16', $tasksPerTopic);
+                if (empty($tasks)) {
+                    $tasks = $this->getRandomTasksFromManualData16($tasksPerTopic);
+                }
             } elseif ($topicId === '17') {
-                $tasks = $this->getRandomTasksFromManualData17($tasksPerTopic);
+                $tasks = $this->taskDataService->getRandomTasks('17', $tasksPerTopic);
+                if (empty($tasks)) {
+                    $tasks = $this->getRandomTasksFromManualData17($tasksPerTopic);
+                }
             } elseif ($topicId === '18') {
-                $tasks = $this->taskGenerator->getRandomTasksFromTopic('18', $tasksPerTopic);
+                $tasks = $this->taskDataService->getRandomTasks('18', $tasksPerTopic);
+                if (empty($tasks)) {
+                    $tasks = $this->getRandomTasksFromManualData18($tasksPerTopic);
+                }
             } elseif ($topicId === '19') {
-                $tasks = $this->getRandomTasksFromManualData19($tasksPerTopic);
+                $tasks = $this->taskDataService->getRandomTasks('19', $tasksPerTopic);
+                if (empty($tasks)) {
+                    $tasks = $this->getRandomTasksFromManualData19($tasksPerTopic);
+                }
             } else {
                 $tasks = $this->taskGenerator->getRandomTasksFromTopic($topicId, $tasksPerTopic);
             }
