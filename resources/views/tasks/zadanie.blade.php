@@ -14,9 +14,16 @@
 <div class="mb-10">
     {{-- Zadanie Header --}}
     <div class="bg-slate-800 rounded-xl p-4 mb-6 border-l-4 border-{{ $color }}-500">
-        <h3 class="text-lg font-semibold text-white">
-            Задание {{ $zadanie['number'] }}. {{ $zadanie['instruction'] }}
-        </h3>
+        <div class="flex items-start justify-between gap-3">
+            <h3 class="text-lg font-semibold text-white">
+                Задание {{ $zadanie['number'] }}. {{ $zadanie['instruction'] }}
+            </h3>
+            <a href="{{ route('topics.export', ['id' => (int) $topicId, 'block' => $block['number'] ?? null, 'zadanie' => $zadanie['number']]) }}"
+               class="shrink-0 inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-700 text-slate-200 hover:bg-slate-600 transition text-xs font-medium"
+               title="Скачать JSON для нейросети">
+                <span>Экспорт JSON</span>
+            </a>
+        </div>
         @if(isset($zadanie['section']))
             <p class="text-slate-400 text-sm mt-1">{{ $zadanie['section'] }}</p>
         @endif

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\TaskAnswerProvenanceService;
+use App\Services\TaskAnswerResolver;
 use App\Services\TaskDataService;
 use Illuminate\Http\Request;
 
@@ -14,11 +15,17 @@ class TopicController extends Controller
 {
     protected TaskDataService $taskService;
     protected TaskAnswerProvenanceService $answerProvenanceService;
+    protected TaskAnswerResolver $taskAnswerResolver;
 
-    public function __construct(TaskDataService $taskService, TaskAnswerProvenanceService $answerProvenanceService)
+    public function __construct(
+        TaskDataService $taskService,
+        TaskAnswerProvenanceService $answerProvenanceService,
+        TaskAnswerResolver $taskAnswerResolver
+    )
     {
         $this->taskService = $taskService;
         $this->answerProvenanceService = $answerProvenanceService;
+        $this->taskAnswerResolver = $taskAnswerResolver;
     }
 
     /**
@@ -167,6 +174,126 @@ class TopicController extends Controller
             'stats' => $this->taskService->getTopicStats($topicId),
             'blocks' => $this->taskService->getBlocks($topicId),
         ]);
+    }
+
+    /**
+     * Экспорт заданий с ответами в JSON (удобно для LLM).
+     * Поддержка двух режимов:
+     * - весь topic: /topics/{id}/export
+     * - конкретное задание: /topics/{id}/export?block=1&zadanie=1
+     */
+    public function export(Request $request, string $id)
+    {
+        $topicId = str_pad($id, 2, '0', STR_PAD_LEFT);
+
+        if (!$this->taskService->topicDataExists($topicId)) {
+            abort(404, "Тема {$topicId} не найдена");
+        }
+
+        $blockFilter = $request->integer('block');
+        $zadanieFilter = $request->integer('zadanie');
+
+        $blocks = $this->taskService->getBlocks($topicId);
+        $topicMeta = $this->taskService->getTopicMeta($topicId);
+        $overrides = $this->answerProvenanceService->getOverridesForTopic($topicId);
+
+        $exportBlocks = [];
+
+        foreach ($blocks as $block) {
+            $blockNumber = (int) ($block['number'] ?? 0);
+            if ($blockFilter && $blockFilter !== $blockNumber) {
+                continue;
+            }
+
+            $exportZadaniya = [];
+            foreach (($block['zadaniya'] ?? []) as $zadanie) {
+                $zadanieNumber = (int) ($zadanie['number'] ?? 0);
+                if ($zadanieFilter && $zadanieFilter !== $zadanieNumber) {
+                    continue;
+                }
+
+                $tasks = [];
+                foreach (($zadanie['tasks'] ?? []) as $task) {
+                    $taskId = (int) ($task['id'] ?? 0);
+                    $taskKey = "topic_{$topicId}_block_{$blockNumber}_zadanie_{$zadanieNumber}_task_{$taskId}";
+                    $override = $overrides[$taskKey] ?? null;
+
+                    $answer = $this->taskAnswerResolver->resolveFromTaskAndZadanie($zadanie, $task);
+                    $source = 'ai';
+                    $sourceLabel = 'AI';
+
+                    if ($override) {
+                        $answer = (string) ($override['answer'] ?? '');
+                        $source = (string) ($override['source'] ?? 'manual');
+                        $sourceLabel = (string) ($override['source_label'] ?? 'Ручной');
+                    }
+
+                    if (is_string($answer) && mb_strtolower(trim($answer)) === TaskAnswerResolver::UNKNOWN_ANSWER) {
+                        $answer = null;
+                    }
+
+                    $tasks[] = [
+                        'task_id' => $taskId,
+                        'task_key' => $taskKey,
+                        'answer' => $answer !== null && $answer !== '' ? (string) $answer : null,
+                        'answer_status' => ($answer !== null && $answer !== '') ? 'known' : 'missing',
+                        'answer_source' => $source,
+                        'answer_source_label' => $sourceLabel,
+                        'task' => $task,
+                    ];
+                }
+
+                $exportZadaniya[] = [
+                    'number' => $zadanieNumber,
+                    'instruction' => (string) ($zadanie['instruction'] ?? ''),
+                    'type' => (string) ($zadanie['type'] ?? ''),
+                    'section' => $zadanie['section'] ?? null,
+                    'tasks' => $tasks,
+                ];
+            }
+
+            if (!empty($exportZadaniya)) {
+                $exportBlocks[] = [
+                    'number' => $blockNumber,
+                    'title' => (string) ($block['title'] ?? ''),
+                    'zadaniya' => $exportZadaniya,
+                ];
+            }
+        }
+
+        if (empty($exportBlocks)) {
+            abort(404, 'Запрошенные блок/задание не найдены');
+        }
+
+        $payload = [
+            'exam' => 'OGE',
+            'topic_id' => $topicId,
+            'topic_title' => (string) ($topicMeta['title'] ?? ''),
+            'exported_at' => now()->toIso8601String(),
+            'filters' => [
+                'block' => $blockFilter ?: null,
+                'zadanie' => $zadanieFilter ?: null,
+            ],
+            'blocks' => $exportBlocks,
+        ];
+
+        $fileName = "oge_topic_{$topicId}";
+        if ($blockFilter) {
+            $fileName .= "_block_{$blockFilter}";
+        }
+        if ($zadanieFilter) {
+            $fileName .= "_zadanie_{$zadanieFilter}";
+        }
+        $fileName .= '.json';
+
+        return response(
+            json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+            200,
+            [
+                'Content-Type' => 'application/json; charset=UTF-8',
+                'Content-Disposition' => 'attachment; filename="' . $fileName . '"',
+            ]
+        );
     }
 
     // ========================================================================
