@@ -4,28 +4,9 @@
 @section('header', 'Обзор')
 
 @section('content')
-<div x-data="teacherDashboard()" class="space-y-5">
-    <section class="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-dark-light p-5 sm:p-6">
-        <div class="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-coral/10 to-transparent pointer-events-none"></div>
-        <div class="relative flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-                <p class="text-xs uppercase tracking-[0.2em] text-gray-500 font-semibold mb-2">Teacher workspace</p>
-                <h2 class="text-2xl font-semibold text-white">Пульс класса и ключевые действия</h2>
-                <p class="text-sm text-gray-500 mt-1 max-w-2xl">Сначала проверяйте активность и риски, затем переходите к ДЗ и ученикам. Эта страница собрана для быстрого ежедневного цикла преподавателя.</p>
-            </div>
-            <div class="flex flex-wrap gap-2">
-                <a href="/teacher/homework" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-coral text-white text-xs font-semibold hover:bg-coral-dark transition">
-                    Назначить ДЗ
-                </a>
-                <a href="/teacher/students" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-white/[0.1] text-sm text-gray-300 hover:text-white hover:bg-white/[0.03] transition">
-                    Перейти к ученикам
-                </a>
-            </div>
-        </div>
-    </section>
-
+<div x-data="teacherDashboard()">
     {{-- Stats row --}}
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div class="relative overflow-hidden bg-dark-light rounded-2xl p-5 border border-white/[0.06] group hover:border-blue-500/20 transition-colors">
             <div class="absolute -right-3 -top-3 w-16 h-16 bg-blue-500/[0.07] rounded-full blur-sm group-hover:bg-blue-500/[0.12] transition"></div>
             <div class="flex items-center gap-3 mb-3">
@@ -139,7 +120,7 @@
     </div>
 
     {{-- Homework overview --}}
-    <div class="bg-dark-light rounded-2xl border border-white/[0.06] overflow-hidden">
+    <div class="mt-5 bg-dark-light rounded-2xl border border-white/[0.06] overflow-hidden">
         <div class="px-5 py-4 border-b border-white/[0.06] flex items-center justify-between">
             <h3 class="font-semibold text-white text-[15px]">Домашние задания</h3>
             <a href="/teacher/homework" class="text-xs font-medium text-coral hover:text-coral-light transition">Все задания</a>

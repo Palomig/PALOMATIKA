@@ -4,23 +4,9 @@
 @section('header', 'Домашние задания')
 
 @section('content')
-<div x-data="homeworkPage()" class="space-y-5">
-    <section class="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-dark-light p-5 sm:p-6">
-        <div class="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-amber-500/10 to-transparent pointer-events-none"></div>
-        <div class="relative flex flex-wrap items-end justify-between gap-3">
-            <div>
-                <p class="text-xs uppercase tracking-[0.2em] text-gray-500 font-semibold mb-2">Homework flow</p>
-                <h2 class="text-2xl font-semibold text-white">Домашние задания и контроль выполнения</h2>
-                <p class="text-sm text-gray-500 mt-1">Отслеживайте прогресс по каждому заданию и быстро открывайте результаты по ученикам.</p>
-            </div>
-            <a href="/teacher/analytics" class="inline-flex items-center px-3 py-2 rounded-xl border border-white/[0.1] text-xs font-semibold text-gray-300 hover:text-white hover:bg-white/[0.03] transition">
-                Смотреть аналитику
-            </a>
-        </div>
-    </section>
-
+<div x-data="homeworkPage()">
     {{-- Actions bar --}}
-    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-5">
         <select x-model="statusFilter" class="bg-dark-light border border-white/[0.06] rounded-xl px-4 py-2.5 text-sm text-white focus:ring-2 focus:ring-coral/40 focus:border-coral/30 transition">
             <option value="">Все</option>
             <option value="active">Активные</option>

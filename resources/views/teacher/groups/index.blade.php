@@ -5,20 +5,6 @@
 
 @section('content')
 <div x-data="studentGroupsPage()" class="space-y-5">
-    <section class="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-dark-light p-5 sm:p-6">
-        <div class="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-indigo-500/10 to-transparent pointer-events-none"></div>
-        <div class="relative flex flex-wrap items-end justify-between gap-3">
-            <div>
-                <p class="text-xs uppercase tracking-[0.2em] text-gray-500 font-semibold mb-2">Group orchestration</p>
-                <h2 class="text-2xl font-semibold text-white">Группы учеников</h2>
-                <p class="text-sm text-gray-500 mt-1">Собирайте потоки и назначайте учеников пакетно для более удобного контроля программы.</p>
-            </div>
-            <a href="/teacher/students" class="inline-flex items-center px-3 py-2 rounded-xl border border-white/[0.1] text-xs font-semibold text-gray-300 hover:text-white hover:bg-white/[0.03] transition">
-                К списку учеников
-            </a>
-        </div>
-    </section>
-
     {{-- Create group --}}
     <section class="bg-dark-light rounded-2xl border border-white/[0.06] p-5">
         <div class="flex flex-wrap items-center gap-3">
