@@ -125,8 +125,17 @@
             @if(!empty($task['options']))
                 <div class="grid gap-2">
                     @foreach($task['options'] as $index => $option)
+                        @php
+                            $optionText = trim((string) $option);
+                            $alreadyMathWrapped = \Illuminate\Support\Str::startsWith($optionText, '$')
+                                && \Illuminate\Support\Str::endsWith($optionText, '$');
+                            $looksLikeLatex = preg_match('/\\\\[a-zA-Z]+|\\^|_|\\{|\\}/', $optionText) === 1;
+                            $displayOption = (!$alreadyMathWrapped && $looksLikeLatex)
+                                ? '$' . $optionText . '$'
+                                : $optionText;
+                        @endphp
                         <div class="rounded-lg border border-slate-700 bg-slate-900/35 px-3 py-2 text-slate-300 latex-content">
-                            {{ $index + 1 }}. {{ $option }}
+                            {{ $index + 1 }}. {{ $displayOption }}
                         </div>
                     @endforeach
                 </div>

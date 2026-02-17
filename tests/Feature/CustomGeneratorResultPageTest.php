@@ -206,4 +206,27 @@ class CustomGeneratorResultPageTest extends TestCase
         $response->assertDontSee('4. D');
         $response->assertDontSee('53. A');
     }
+
+    public function test_result_page_wraps_latex_like_options_with_math_delimiters(): void
+    {
+        $hash = 'cdef9012';
+
+        Cache::put("custom_random_test_{$hash}", [[
+            'test_number' => 1,
+            'topic_id' => '07',
+            'topic_title' => 'Числа, координатная прямая',
+            'block_number' => 1,
+            'zadanie_number' => 15,
+            'instruction' => 'Одно из чисел отмечено на прямой точкой A. Какое это число?',
+            'task' => [
+                'options' => ['\\frac{75}{23}', '\\frac{85}{23}', '\\frac{97}{23}', '\\frac{110}{23}'],
+            ],
+        ]], now()->addMinutes(5));
+
+        $response = $this->get("/test/generator/result/{$hash}");
+
+        $response->assertOk();
+        $response->assertSee('1. $\\frac{75}{23}$');
+        $response->assertSee('2. $\\frac{85}{23}$');
+    }
 }
