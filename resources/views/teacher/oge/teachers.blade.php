@@ -6,8 +6,19 @@
 @section('content')
 <div class="space-y-5">
     <div class="bg-dark-light rounded-2xl border border-white/[0.06] p-5">
-        <h2 class="text-white text-lg font-semibold mb-1">Учителя</h2>
-        <p class="text-sm text-gray-500">Выбери учителя, чтобы открыть список его вариантов ОГЭ (режим просмотра).</p>
+        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+            <div>
+                <h2 class="text-white text-lg font-semibold mb-1">Учителя</h2>
+                <p class="text-sm text-gray-500">Выбери учителя, чтобы открыть список его вариантов ОГЭ (режим просмотра).</p>
+            </div>
+            <a href="{{ route('oge.generator') }}"
+               class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-coral text-white text-sm font-medium hover:bg-coral-dark transition whitespace-nowrap">
+                Открыть генератор
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-7-7 7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
     </div>
 
     <div class="bg-dark-light rounded-2xl border border-white/[0.06] overflow-hidden">

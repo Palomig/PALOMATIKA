@@ -41,4 +41,15 @@ class OgeAccessControlTest extends TestCase
         $this->actingAs($student)->get('/oge/abc123')->assertOk();
         $this->actingAs($student)->get('/test/oge/abc123')->assertOk();
     }
+
+    public function test_oge_teachers_page_has_link_to_new_generator(): void
+    {
+        $teacher = $this->userWithRole('teacher');
+        $this->actingAs($teacher);
+
+        $response = $this->view('teacher.oge.teachers', ['teachers' => collect()]);
+
+        $response->assertSee('Открыть генератор');
+        $response->assertSee(route('oge.generator'));
+    }
 }
