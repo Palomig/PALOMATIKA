@@ -4,22 +4,20 @@
 @section('header', 'Обзор')
 
 @section('content')
-<div x-data="teacherDashboard()" class="space-y-6">
-    {{-- Welcome hero --}}
-    <section class="tsh-card p-6 sm:p-8 relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-blue-50 to-transparent pointer-events-none"></div>
+<div x-data="teacherDashboard()" class="space-y-5">
+    <section class="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-dark-light p-5 sm:p-6">
+        <div class="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-coral/10 to-transparent pointer-events-none"></div>
         <div class="relative flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-                <p class="tsh-page-kicker">Teacher workspace</p>
-                <h2 class="tsh-page-title">Пульс класса и ключевые действия</h2>
-                <p class="tsh-page-subtitle">Сначала проверяйте активность и риски, затем переходите к ДЗ и ученикам.</p>
+                <p class="text-xs uppercase tracking-[0.2em] text-gray-500 font-semibold mb-2">Teacher workspace</p>
+                <h2 class="text-2xl font-semibold text-white">Пульс класса и ключевые действия</h2>
+                <p class="text-sm text-gray-500 mt-1 max-w-2xl">Сначала проверяйте активность и риски, затем переходите к ДЗ и ученикам. Эта страница собрана для быстрого ежедневного цикла преподавателя.</p>
             </div>
             <div class="flex flex-wrap gap-2">
-                <a href="/teacher/homework" class="tsh-action-primary">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                <a href="/teacher/homework" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-coral text-white text-xs font-semibold hover:bg-coral-dark transition">
                     Назначить ДЗ
                 </a>
-                <a href="/teacher/students" class="tsh-action-secondary font-medium">
+                <a href="/teacher/students" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-white/[0.1] text-sm text-gray-300 hover:text-white hover:bg-white/[0.03] transition">
                     Перейти к ученикам
                 </a>
             </div>
@@ -28,148 +26,153 @@
 
     {{-- Stats row --}}
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="tsh-card tsh-stat-blue p-5 group hover:shadow-lg transition-shadow">
+        <div class="relative overflow-hidden bg-dark-light rounded-2xl p-5 border border-white/[0.06] group hover:border-blue-500/20 transition-colors">
+            <div class="absolute -right-3 -top-3 w-16 h-16 bg-blue-500/[0.07] rounded-full blur-sm group-hover:bg-blue-500/[0.12] transition"></div>
             <div class="flex items-center gap-3 mb-3">
-                <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-                    <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+                <div class="w-10 h-10 bg-blue-500/15 rounded-xl flex items-center justify-center">
+                    <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
                     </svg>
                 </div>
-                <span class="text-xs font-semibold text-blue-400 uppercase tracking-wider">Ученики</span>
+                <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Ученики</span>
             </div>
-            <div class="text-3xl font-bold text-gray-900" x-text="stats.total_students || 0"></div>
+            <div class="text-3xl font-bold text-white" x-text="stats.total_students || 0"></div>
         </div>
 
-        <div class="tsh-card tsh-stat-green p-5 group hover:shadow-lg transition-shadow">
+        <div class="relative overflow-hidden bg-dark-light rounded-2xl p-5 border border-white/[0.06] group hover:border-emerald-500/20 transition-colors">
+            <div class="absolute -right-3 -top-3 w-16 h-16 bg-emerald-500/[0.07] rounded-full blur-sm group-hover:bg-emerald-500/[0.12] transition"></div>
             <div class="flex items-center gap-3 mb-3">
-                <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center">
-                    <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+                <div class="w-10 h-10 bg-emerald-500/15 rounded-xl flex items-center justify-center">
+                    <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </div>
-                <span class="text-xs font-semibold text-emerald-400 uppercase tracking-wider">Подписки</span>
+                <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Подписки</span>
             </div>
-            <div class="text-3xl font-bold text-gray-900" x-text="stats.active_subscriptions || 0"></div>
+            <div class="text-3xl font-bold text-white" x-text="stats.active_subscriptions || 0"></div>
         </div>
 
-        <div class="tsh-card tsh-stat-amber p-5 group hover:shadow-lg transition-shadow">
+        <div class="relative overflow-hidden bg-dark-light rounded-2xl p-5 border border-white/[0.06] group hover:border-amber-500/20 transition-colors">
+            <div class="absolute -right-3 -top-3 w-16 h-16 bg-amber-500/[0.07] rounded-full blur-sm group-hover:bg-amber-500/[0.12] transition"></div>
             <div class="flex items-center gap-3 mb-3">
-                <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-                    <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+                <div class="w-10 h-10 bg-amber-500/15 rounded-xl flex items-center justify-center">
+                    <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </div>
-                <span class="text-xs font-semibold text-amber-400 uppercase tracking-wider">Ожидают ДЗ</span>
+                <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Ожидают ДЗ</span>
             </div>
-            <div class="text-3xl font-bold text-gray-900" x-text="stats.pending_homework || 0"></div>
+            <div class="text-3xl font-bold text-white" x-text="stats.pending_homework || 0"></div>
         </div>
 
-        <div class="tsh-card tsh-stat-coral p-5 group hover:shadow-lg transition-shadow">
+        <div class="relative overflow-hidden bg-dark-light rounded-2xl p-5 border border-white/[0.06] group hover:border-coral/20 transition-colors">
+            <div class="absolute -right-3 -top-3 w-16 h-16 bg-coral/[0.07] rounded-full blur-sm group-hover:bg-coral/[0.12] transition"></div>
             <div class="flex items-center gap-3 mb-3">
-                <div class="w-10 h-10 bg-red-100 rounded-xl flex items-center justify-center">
-                    <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+                <div class="w-10 h-10 bg-coral/15 rounded-xl flex items-center justify-center">
+                    <svg class="w-5 h-5 text-coral" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                     </svg>
                 </div>
-                <span class="text-xs font-semibold text-red-300 uppercase tracking-wider">Заработок</span>
+                <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Заработок</span>
             </div>
-            <div class="text-3xl font-bold text-gray-900" x-text="formatMoney(stats.monthly_earnings || 0)"></div>
+            <div class="text-3xl font-bold text-white" x-text="formatMoney(stats.monthly_earnings || 0)"></div>
         </div>
     </div>
 
     {{-- Two columns --}}
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {{-- Recent activity --}}
-        <div class="tsh-card">
-            <div class="px-5 py-4 flex items-center justify-between" style="border-bottom: 1px solid var(--tsh-border)">
-                <h3 class="font-semibold text-[15px]" style="color: var(--tsh-text)">Последняя активность</h3>
-                <a href="/teacher/students" class="text-xs font-medium transition" style="color: var(--tsh-blue)">Все ученики</a>
+        <div class="bg-dark-light rounded-2xl border border-white/[0.06] overflow-hidden">
+            <div class="px-5 py-4 border-b border-white/[0.06] flex items-center justify-between">
+                <h3 class="font-semibold text-white text-[15px]">Последняя активность</h3>
+                <a href="/teacher/students" class="text-xs font-medium text-coral hover:text-coral-light transition">Все ученики</a>
             </div>
-            <div>
+            <div class="divide-y divide-white/[0.04]">
                 <template x-for="activity in recentActivity" :key="activity.id">
-                    <div class="flex items-center gap-3 px-5 py-3.5 transition-colors" style="border-bottom: 1px solid var(--tsh-border-soft)" onmouseover="this.style.background='var(--tsh-surface-soft)'" onmouseout="this.style.background='transparent'">
-                        <div class="tsh-avatar-sm bg-blue-100 text-blue-600 rounded-full" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px;flex-shrink:0;">
-                            <span x-text="activity.student?.name?.charAt(0) || '?'"></span>
+                    <div class="flex items-center gap-3 px-5 py-3.5 hover:bg-white/[0.02] transition-colors">
+                        <div class="w-9 h-9 rounded-xl bg-coral/10 flex items-center justify-center flex-shrink-0">
+                            <span class="text-sm font-semibold text-coral" x-text="activity.student?.name?.charAt(0) || '?'"></span>
                         </div>
                         <div class="flex-1 min-w-0">
-                            <div class="text-sm font-medium truncate" style="color: var(--tsh-text)" x-text="activity.student?.name"></div>
-                            <div class="text-xs truncate" style="color: var(--tsh-muted)" x-text="activity.description"></div>
+                            <div class="text-sm font-medium text-white truncate" x-text="activity.student?.name"></div>
+                            <div class="text-xs text-gray-500 truncate" x-text="activity.description"></div>
                         </div>
-                        <span class="text-[11px] flex-shrink-0" style="color: var(--tsh-subtle)" x-text="activity.time_ago"></span>
+                        <span class="text-[11px] text-gray-600 flex-shrink-0" x-text="activity.time_ago"></span>
                     </div>
                 </template>
-                <div x-show="recentActivity.length === 0" class="px-5 py-10 text-center text-sm" style="color: var(--tsh-subtle)">
+                <div x-show="recentActivity.length === 0" class="px-5 py-10 text-center text-gray-600 text-sm">
                     Нет активности
                 </div>
             </div>
         </div>
 
         {{-- Needs attention --}}
-        <div class="tsh-card">
-            <div class="px-5 py-4" style="border-bottom: 1px solid var(--tsh-border)">
-                <h3 class="font-semibold text-[15px]" style="color: var(--tsh-text)">Требуют внимания</h3>
+        <div class="bg-dark-light rounded-2xl border border-white/[0.06] overflow-hidden">
+            <div class="px-5 py-4 border-b border-white/[0.06]">
+                <h3 class="font-semibold text-white text-[15px]">Требуют внимания</h3>
             </div>
-            <div>
+            <div class="divide-y divide-white/[0.04]">
                 <template x-for="student in needsAttention" :key="student.id">
-                    <div class="flex items-center gap-3 px-5 py-3.5 transition-colors" style="border-bottom: 1px solid var(--tsh-border-soft)" onmouseover="this.style.background='var(--tsh-surface-soft)'" onmouseout="this.style.background='transparent'">
-                        <div class="rounded-full flex items-center justify-center flex-shrink-0" style="width:36px;height:36px;"
-                             :class="student.issue === 'inactive' ? 'bg-red-100' : 'bg-amber-100'">
+                    <div class="flex items-center gap-3 px-5 py-3.5 hover:bg-white/[0.02] transition-colors">
+                        <div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+                             :class="student.issue === 'inactive' ? 'bg-red-500/10' : 'bg-amber-500/10'">
                             <span class="text-sm font-semibold"
-                                  :class="student.issue === 'inactive' ? 'text-red-500' : 'text-amber-500'"
+                                  :class="student.issue === 'inactive' ? 'text-red-400' : 'text-amber-400'"
                                   x-text="student.name?.charAt(0) || '?'"></span>
                         </div>
                         <div class="flex-1 min-w-0">
-                            <div class="text-sm font-medium" style="color: var(--tsh-text)" x-text="student.name"></div>
+                            <div class="text-sm font-medium text-white" x-text="student.name"></div>
                             <div class="text-xs"
-                                 :class="student.issue === 'inactive' ? 'text-red-400' : 'text-amber-500'"
+                                 :class="student.issue === 'inactive' ? 'text-red-400/80' : 'text-amber-400/80'"
                                  x-text="student.issue_text"></div>
                         </div>
                         <a :href="'/teacher/students/' + student.id"
-                           class="text-xs font-medium transition" style="color: var(--tsh-blue)">Открыть</a>
+                           class="text-xs font-medium text-coral hover:text-coral-light transition flex-shrink-0">Открыть</a>
                     </div>
                 </template>
                 <div x-show="needsAttention.length === 0" class="px-5 py-10 text-center text-sm">
-                    <div class="text-emerald-500 mb-1">Все ученики активны</div>
-                    <div class="text-xs" style="color: var(--tsh-subtle)">Ничего не требует внимания</div>
+                    <div class="text-emerald-400/80 mb-1">Все ученики активны</div>
+                    <div class="text-gray-600 text-xs">Ничего не требует внимания</div>
                 </div>
             </div>
         </div>
     </div>
 
     {{-- Homework overview --}}
-    <div class="tsh-card">
-        <div class="px-5 py-4 flex items-center justify-between" style="border-bottom: 1px solid var(--tsh-border)">
-            <h3 class="font-semibold text-[15px]" style="color: var(--tsh-text)">Домашние задания</h3>
-            <a href="/teacher/homework" class="text-xs font-medium transition" style="color: var(--tsh-blue)">Все задания</a>
+    <div class="bg-dark-light rounded-2xl border border-white/[0.06] overflow-hidden">
+        <div class="px-5 py-4 border-b border-white/[0.06] flex items-center justify-between">
+            <h3 class="font-semibold text-white text-[15px]">Домашние задания</h3>
+            <a href="/teacher/homework" class="text-xs font-medium text-coral hover:text-coral-light transition">Все задания</a>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full">
                 <thead>
-                    <tr>
-                        <th class="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider" style="color: var(--tsh-subtle); background: var(--tsh-surface-soft)">Задание</th>
-                        <th class="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider" style="color: var(--tsh-subtle); background: var(--tsh-surface-soft)">Ученики</th>
-                        <th class="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider" style="color: var(--tsh-subtle); background: var(--tsh-surface-soft)">Выполнено</th>
-                        <th class="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider" style="color: var(--tsh-subtle); background: var(--tsh-surface-soft)">Срок</th>
-                        <th class="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider" style="color: var(--tsh-subtle); background: var(--tsh-surface-soft)">Статус</th>
+                    <tr class="border-b border-white/[0.06]">
+                        <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Задание</th>
+                        <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Ученики</th>
+                        <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Выполнено</th>
+                        <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Срок</th>
+                        <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Статус</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-white/[0.04]">
                     <template x-for="hw in recentHomework" :key="hw.id">
-                        <tr class="transition-colors" style="border-bottom: 1px solid var(--tsh-border-soft)" onmouseover="this.style.background='var(--tsh-surface-soft)'" onmouseout="this.style.background='transparent'">
-                            <td class="px-5 py-3.5 text-sm font-medium" style="color: var(--tsh-text)" x-text="hw.title"></td>
-                            <td class="px-5 py-3.5 text-sm" style="color: var(--tsh-muted)" x-text="hw.assigned_count"></td>
+                        <tr class="hover:bg-white/[0.02] transition-colors">
+                            <td class="px-5 py-3.5 text-sm font-medium text-white" x-text="hw.title"></td>
+                            <td class="px-5 py-3.5 text-sm text-gray-400" x-text="hw.assigned_count"></td>
                             <td class="px-5 py-3.5">
                                 <div class="flex items-center gap-2.5">
-                                    <div class="tsh-progress w-20">
-                                        <div class="tsh-progress-bar bg-blue-400" :style="'width: ' + hw.completion_rate + '%'"></div>
+                                    <div class="w-20 bg-white/[0.06] rounded-full h-1.5">
+                                        <div class="bg-coral rounded-full h-1.5 transition-all"
+                                             :style="'width: ' + hw.completion_rate + '%'"></div>
                                     </div>
-                                    <span class="text-xs tabular-nums" style="color: var(--tsh-muted)" x-text="hw.completion_rate + '%'"></span>
+                                    <span class="text-xs text-gray-500 tabular-nums" x-text="hw.completion_rate + '%'"></span>
                                 </div>
                             </td>
-                            <td class="px-5 py-3.5 text-sm" style="color: var(--tsh-muted)" x-text="hw.due_date"></td>
+                            <td class="px-5 py-3.5 text-sm text-gray-500" x-text="hw.due_date"></td>
                             <td class="px-5 py-3.5">
-                                <span class="inline-flex items-center px-2.5 py-1 text-[11px] font-medium rounded-full"
-                                      :class="hw.is_overdue ? 'bg-red-50 text-red-500' : 'bg-emerald-50 text-emerald-500'"
+                                <span class="inline-flex items-center px-2.5 py-1 text-[11px] font-medium rounded-lg"
+                                      :class="hw.is_overdue ? 'bg-red-500/10 text-red-400' : 'bg-emerald-500/10 text-emerald-400'"
                                       x-text="hw.is_overdue ? 'Просрочено' : 'Активно'"></span>
                             </td>
                         </tr>
