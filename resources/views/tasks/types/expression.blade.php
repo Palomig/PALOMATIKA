@@ -23,7 +23,7 @@
         $taskKey = "topic_{$topicId}_block_{$block['number']}_zadanie_{$zadanie['number']}_task_{$taskId}";
         $taskInfo = "Блок {$block['number']} ({$block['title']}), Задание {$zadanie['number']}, Задача {$taskId}<br>Выражение: <code>{$expression}</code>";
     @endphp
-    <div class="task-review-item relative py-1 overflow-x-auto"
+    <div class="task-review-item relative py-1 overflow-x-auto overflow-y-hidden"
          data-task-key="{{ $taskKey }}" data-task-info="{{ $taskInfo }}">
         @if(!$isVariant)
             <span class="text-blue-400 font-bold">{{ $taskId }})</span>
@@ -73,7 +73,7 @@
                 @if(!$isVariant)
                     <span class="text-blue-400 font-bold">{{ $task['id'] }})</span>
                 @endif
-                <div class="inline-block max-w-full align-middle overflow-x-auto ml-2">
+                <div class="inline-block max-w-full align-middle overflow-x-auto overflow-y-hidden ml-2">
                     <span class="text-slate-200 math-serif whitespace-nowrap" style="{{ $expressionStyle }}">${{ $expression }}$</span>
                 </div>
                 @include('tasks.partials.task-answer', [
