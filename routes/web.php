@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\Auth\TelegramBotAuthController;
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\EgeController;
+use App\Http\Controllers\AdminTaskAnswerController;
 use App\Http\Controllers\OgeAttemptController;
 use App\Http\Controllers\OgeTemplateController;
 use App\Http\Controllers\RepetitorController;
@@ -223,7 +224,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // New unified topic pages (JSON-based)
-Route::prefix('topics')->name('topics.')->group(function () {
+Route::middleware(['auth', 'role:teacher,admin'])->prefix('topics')->name('topics.')->group(function () {
     Route::get('/', [TopicController::class, 'index'])->name('index');
     Route::get('/{id}', [TopicController::class, 'show'])->name('show')->where('id', '[0-9]+');
     // Server-side SVG rendering (new!)
@@ -256,9 +257,13 @@ Route::prefix('api/ege')->group(function () {
 });
 
 // API for tasks
-Route::prefix('api/topics')->group(function () {
+Route::prefix('api/topics')->middleware(['auth', 'role:teacher,admin'])->group(function () {
     Route::get('/{topicId}/random', [TopicController::class, 'apiGetRandomTasks']);
     Route::get('/{topicId}', [TopicController::class, 'apiGetTopicData']);
+});
+
+Route::prefix('api/topics')->middleware(['auth', 'role:admin'])->group(function () {
+    Route::patch('/{topicId}/answers', [AdminTaskAnswerController::class, 'update']);
 });
 
 // API for OGE attempts (student solving flow)

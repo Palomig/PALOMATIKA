@@ -536,4 +536,60 @@ class TaskDataService
             Cache::forget("topic_data_{$topicId}");
         }
     }
+
+    public function isValidTaskKey(string $taskKey, ?string $topicId = null): bool
+    {
+        $matches = [];
+        if (!preg_match('/^topic_(\d{2})_block_(\d+)_zadanie_(\d+)_task_(\d+)$/', $taskKey, $matches)) {
+            return false;
+        }
+
+        if ($topicId === null) {
+            return true;
+        }
+
+        return $matches[1] === str_pad($topicId, 2, '0', STR_PAD_LEFT);
+    }
+
+    public function taskExistsByKey(string $topicId, string $taskKey): bool
+    {
+        $topicId = str_pad($topicId, 2, '0', STR_PAD_LEFT);
+        if (!$this->isValidTaskKey($taskKey, $topicId)) {
+            return false;
+        }
+
+        preg_match('/^topic_\d{2}_block_(\d+)_zadanie_(\d+)_task_(\d+)$/', $taskKey, $matches);
+        $blockNumber = (int) ($matches[1] ?? 0);
+        $zadanieNumber = (int) ($matches[2] ?? 0);
+        $taskId = (int) ($matches[3] ?? 0);
+
+        if ($blockNumber < 1 || $zadanieNumber < 1 || $taskId < 1) {
+            return false;
+        }
+
+        $blocks = $this->getBlocks($topicId);
+        foreach ($blocks as $block) {
+            if ((int) ($block['number'] ?? 0) !== $blockNumber) {
+                continue;
+            }
+
+            foreach ($block['zadaniya'] ?? [] as $zadanie) {
+                if ((int) ($zadanie['number'] ?? 0) !== $zadanieNumber) {
+                    continue;
+                }
+
+                foreach ($zadanie['tasks'] ?? [] as $task) {
+                    if ((int) ($task['id'] ?? 0) === $taskId) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            return false;
+        }
+
+        return false;
+    }
 }

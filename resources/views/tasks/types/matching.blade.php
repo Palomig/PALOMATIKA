@@ -59,6 +59,8 @@
                             $imageName = $task['image'] ?? '';
                             $imageUrl = $imageName ? asset("images/tasks/{$topicId}/{$imageName}") : null;
                             $label = $graphLabels[$taskIndex] ?? ($taskIndex + 1);
+                            $taskId = $task['id'] ?? ($taskIndex + 1);
+                            $taskKey = "topic_{$topicId}_block_{$block['number']}_zadanie_{$zadanie['number']}_task_{$taskId}";
                         @endphp
 
                         <div class="bg-slate-900/60 rounded-xl border border-slate-700 overflow-hidden">

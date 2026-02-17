@@ -52,8 +52,10 @@ Route::post('/prices/bulk', [SmartCartProxyController::class, 'bulkPrices']);
 Route::get('/stores', [SmartCartProxyController::class, 'stores']);
 Route::get('/cart', [SmartCartProxyController::class, 'cart']);
 
-Route::get('/topics', [TopicController::class, 'index']);
-Route::get('/topics/{topic}', [TopicController::class, 'show']);
+Route::middleware(['auth:sanctum', 'role:teacher,admin'])->group(function () {
+    Route::get('/topics', [TopicController::class, 'index']);
+    Route::get('/topics/{topic}', [TopicController::class, 'show']);
+});
 
 Route::get('/skills', [SkillController::class, 'index']);
 Route::get('/skills/by-category', [SkillController::class, 'byCategory']);

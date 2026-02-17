@@ -12,9 +12,9 @@ class OgePagesTest extends TestCase
         return User::factory()->make(['role' => $role]);
     }
 
-    public function test_topics_index_page_loads(): void
+    public function test_topics_index_page_loads_for_teacher(): void
     {
-        $response = $this->get('/topics');
+        $response = $this->actingAs($this->userWithRole('teacher'))->get('/topics');
 
         $response->assertOk();
         $response->assertSee('База заданий ОГЭ');

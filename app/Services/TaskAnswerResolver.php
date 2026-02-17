@@ -30,7 +30,11 @@ class TaskAnswerResolver
         foreach (['answer', 'correct_answer'] as $key) {
             if (isset($task[$key]) && $task[$key] !== null && $task[$key] !== '') {
                 $value = trim((string) $task[$key]);
-                return mb_strtolower($value) === self::UNKNOWN_ANSWER ? null : $value;
+                if (mb_strtolower($value) === self::UNKNOWN_ANSWER) {
+                    continue;
+                }
+
+                return $value;
             }
         }
 
@@ -47,6 +51,24 @@ class TaskAnswerResolver
 
         if ($type === 'graph_statements' && !empty($task['formula'])) {
             return (string) $task['formula'];
+        }
+
+        if ($type === 'count_integers' && !empty($task['left']) && !empty($task['right'])) {
+            $betweenCount = $this->countIntegersBetween((string) $task['left'], (string) $task['right']);
+            if ($betweenCount !== null) {
+                return (string) $betweenCount;
+            }
+        }
+
+        if ($this->isChoiceType($type)) {
+            if (isset($task['correct']) && is_numeric($task['correct'])) {
+                return (string) ((int) $task['correct'] + 1);
+            }
+
+            if (!empty($task['options']) || !empty($zadanie['options'])) {
+                // В JSON выборных задач первый вариант хранится как корректный.
+                return '1';
+            }
         }
 
         if (isset($task['correct']) && is_numeric($task['correct'])) {
@@ -174,15 +196,19 @@ class TaskAnswerResolver
             return null;
         }
 
-        if (preg_match('/[a-zA-Zа-яА-Я=]/u', $expr)) {
-            return null;
-        }
+        $expr = str_replace(['\\left', '\\right'], '', $expr);
+        $expr = str_replace('{,}', '.', $expr);
+        $expr = preg_replace('/(\d+)\s*\\\\frac\s*\{([^{}]+)\}\s*\{([^{}]+)\}/', '(($1)+(($2)/($3)))', $expr) ?? $expr;
 
-        $expr = str_replace(['$', '−', '–', '\\cdot', '\\times', '{', '}', ','], ['', '-', '-', '*', '*', '(', ')', '.'], $expr);
-
-        while (preg_match('/\\\\frac\(([^()]+)\)\(([^()]+)\)/', $expr, $m)) {
+        while (preg_match('/\\\\frac\s*\{([^{}]+)\}\s*\{([^{}]+)\}/', $expr, $m)) {
             $expr = str_replace($m[0], '((' . $m[1] . ')/(' . $m[2] . '))', $expr);
         }
+
+        $expr = str_replace(
+            ['$', '−', '–', '\\cdot', '\\times', '\\div', ':', '{', '}', ','],
+            ['', '-', '-', '*', '*', '/', '/', '(', ')', '.'],
+            $expr
+        );
 
         while (preg_match('/\\\\sqrt\(([^()]+)\)/', $expr, $m)) {
             if (!is_numeric($m[1])) {
@@ -192,9 +218,12 @@ class TaskAnswerResolver
         }
 
         $expr = str_replace('^', '**', $expr);
+        $expr = preg_replace('/(\d)\(/', '$1*(', $expr) ?? $expr;
+        $expr = preg_replace('/\)(\d)/', ')*$1', $expr) ?? $expr;
+        $expr = str_replace(')(', ')*(', $expr);
         $expr = preg_replace('/\s+/', '', $expr) ?? '';
 
-        if ($expr === '' || !preg_match('/^[0-9\.\+\-\*\/\(\)]+$/', $expr)) {
+        if ($expr === '' || preg_match('/[a-zA-Zа-яА-Я=]/u', $expr) || !preg_match('/^[0-9\.\+\-\*\/\(\)]+$/', $expr)) {
             return null;
         }
 
@@ -215,5 +244,50 @@ class TaskAnswerResolver
         }
 
         return rtrim(rtrim(sprintf('%.10F', $num), '0'), '.');
+    }
+
+    private function countIntegersBetween(string $leftExpr, string $rightExpr): ?int
+    {
+        $left = $this->evaluateMathExpression($leftExpr);
+        $right = $this->evaluateMathExpression($rightExpr);
+
+        if ($left === null || $right === null || !is_numeric($left) || !is_numeric($right)) {
+            return null;
+        }
+
+        $min = min((float) $left, (float) $right);
+        $max = max((float) $left, (float) $right);
+        $start = (int) floor($min) + 1;
+        $end = (int) ceil($max) - 1;
+
+        return max(0, $end - $start + 1);
+    }
+
+    private function isChoiceType(string $type): bool
+    {
+        return in_array($type, [
+            'choice',
+            'simple_choice',
+            'fraction_choice',
+            'interval_choice',
+            'between_fractions',
+            'segment_choice',
+            'fraction_options',
+            'decimal_choice',
+            'sqrt_choice',
+            'sqrt_interval',
+            'sqrt_segment',
+            'sqrt_options',
+            'comparison',
+            'power_choice',
+            'compare_fractions',
+            'false_statements',
+            'ordering',
+            'point_value',
+            'fraction_point',
+            'count_integers',
+            'negative_segment',
+            'negative_interval',
+        ], true);
     }
 }

@@ -18,99 +18,123 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "expression": "\\frac{3}{4} \\cdot \\frac{6}{5}"
+                            "expression": "\\frac{3}{4} \\cdot \\frac{6}{5}",
+                            "answer": "0.9"
                         },
                         {
                             "id": 7,
-                            "expression": "\\frac{12}{5} : \\frac{15}{2}"
+                            "expression": "\\frac{12}{5} : \\frac{15}{2}",
+                            "answer": "0.32"
                         },
                         {
                             "id": 13,
-                            "expression": "\\frac{1}{4} \\cdot \\frac{3}{25}"
+                            "expression": "\\frac{1}{4} \\cdot \\frac{3}{25}",
+                            "answer": "0.03"
                         },
                         {
                             "id": 19,
-                            "expression": "\\frac{14}{25} + \\frac{3}{2}"
+                            "expression": "\\frac{14}{25} + \\frac{3}{2}",
+                            "answer": "2.06"
                         },
                         {
                             "id": 2,
-                            "expression": "\\frac{21}{5} \\cdot \\frac{3}{7}"
+                            "expression": "\\frac{21}{5} \\cdot \\frac{3}{7}",
+                            "answer": "1.8"
                         },
                         {
                             "id": 8,
-                            "expression": "\\frac{6}{5} : \\frac{4}{11}"
+                            "expression": "\\frac{6}{5} : \\frac{4}{11}",
+                            "answer": "3.3"
                         },
                         {
                             "id": 14,
-                            "expression": "\\frac{1}{5} \\cdot \\frac{27}{50}"
+                            "expression": "\\frac{1}{5} \\cdot \\frac{27}{50}",
+                            "answer": "0.108"
                         },
                         {
                             "id": 20,
-                            "expression": "\\frac{9}{4} + \\frac{8}{5}"
+                            "expression": "\\frac{9}{4} + \\frac{8}{5}",
+                            "answer": "3.85"
                         },
                         {
                             "id": 3,
-                            "expression": "\\frac{3}{5} \\cdot \\frac{25}{4}"
+                            "expression": "\\frac{3}{5} \\cdot \\frac{25}{4}",
+                            "answer": "3.75"
                         },
                         {
                             "id": 9,
-                            "expression": "\\frac{3}{5} : \\frac{4}{35}"
+                            "expression": "\\frac{3}{5} : \\frac{4}{35}",
+                            "answer": "5.25"
                         },
                         {
                             "id": 15,
-                            "expression": "\\frac{1}{2} \\cdot \\frac{9}{25}"
+                            "expression": "\\frac{1}{2} \\cdot \\frac{9}{25}",
+                            "answer": "0.18"
                         },
                         {
                             "id": 21,
-                            "expression": "\\frac{11}{5} + \\frac{13}{4}"
+                            "expression": "\\frac{11}{5} + \\frac{13}{4}",
+                            "answer": "5.45"
                         },
                         {
                             "id": 4,
-                            "expression": "\\frac{9}{5} \\cdot \\frac{2}{3}"
+                            "expression": "\\frac{9}{5} \\cdot \\frac{2}{3}",
+                            "answer": "1.2"
                         },
                         {
                             "id": 10,
-                            "expression": "\\frac{15}{4} : \\frac{3}{7}"
+                            "expression": "\\frac{15}{4} : \\frac{3}{7}",
+                            "answer": "8.75"
                         },
                         {
                             "id": 16,
-                            "expression": "\\frac{1}{5} \\cdot \\frac{3}{4}"
+                            "expression": "\\frac{1}{5} \\cdot \\frac{3}{4}",
+                            "answer": "0.15"
                         },
                         {
                             "id": 22,
-                            "expression": "\\frac{1}{10} + \\frac{21}{50}"
+                            "expression": "\\frac{1}{10} + \\frac{21}{50}",
+                            "answer": "0.52"
                         },
                         {
                             "id": 5,
-                            "expression": "\\frac{5}{3} \\cdot \\frac{9}{2}"
+                            "expression": "\\frac{5}{3} \\cdot \\frac{9}{2}",
+                            "answer": "7.5"
                         },
                         {
                             "id": 11,
-                            "expression": "\\frac{21}{2} : \\frac{3}{5}"
+                            "expression": "\\frac{21}{2} : \\frac{3}{5}",
+                            "answer": "17.5"
                         },
                         {
                             "id": 17,
-                            "expression": "\\frac{1}{2} \\cdot \\frac{13}{50}"
+                            "expression": "\\frac{1}{2} \\cdot \\frac{13}{50}",
+                            "answer": "0.13"
                         },
                         {
                             "id": 23,
-                            "expression": "\\frac{3}{4} + \\frac{7}{25}"
+                            "expression": "\\frac{3}{4} + \\frac{7}{25}",
+                            "answer": "1.03"
                         },
                         {
                             "id": 6,
-                            "expression": "\\frac{7}{5} \\cdot \\frac{12}{35}"
+                            "expression": "\\frac{7}{5} \\cdot \\frac{12}{35}",
+                            "answer": "0.48"
                         },
                         {
                             "id": 12,
-                            "expression": "\\frac{14}{5} : \\frac{7}{2}"
+                            "expression": "\\frac{14}{5} : \\frac{7}{2}",
+                            "answer": "0.8"
                         },
                         {
                             "id": 18,
-                            "expression": "\\frac{1}{10} \\cdot \\frac{23}{20}"
+                            "expression": "\\frac{1}{10} \\cdot \\frac{23}{20}",
+                            "answer": "0.115"
                         },
                         {
                             "id": 24,
-                            "expression": "\\frac{4}{25} + \\frac{15}{4}"
+                            "expression": "\\frac{4}{25} + \\frac{15}{4}",
+                            "answer": "3.91"
                         }
                     ]
                 },
@@ -120,51 +144,63 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "expression": "9{,}3 + 7{,}8"
+                            "expression": "9{,}3 + 7{,}8",
+                            "answer": "17.1"
                         },
                         {
                             "id": 4,
-                            "expression": "5{,}7 - 7{,}6"
+                            "expression": "5{,}7 - 7{,}6",
+                            "answer": "-1.9"
                         },
                         {
                             "id": 7,
-                            "expression": "5{,}2 \\cdot 3{,}1"
+                            "expression": "5{,}2 \\cdot 3{,}1",
+                            "answer": "16.12"
                         },
                         {
                             "id": 10,
-                            "expression": "\\frac{8{,}2}{4{,}1}"
+                            "expression": "\\frac{8{,}2}{4{,}1}",
+                            "answer": "2"
                         },
                         {
                             "id": 2,
-                            "expression": "8{,}7 + 4{,}6"
+                            "expression": "8{,}7 + 4{,}6",
+                            "answer": "13.3"
                         },
                         {
                             "id": 5,
-                            "expression": "4{,}9 - 9{,}4"
+                            "expression": "4{,}9 - 9{,}4",
+                            "answer": "-4.5"
                         },
                         {
                             "id": 8,
-                            "expression": "2{,}1 \\cdot 9{,}6"
+                            "expression": "2{,}1 \\cdot 9{,}6",
+                            "answer": "20.16"
                         },
                         {
                             "id": 11,
-                            "expression": "\\frac{13{,}2}{1{,}2}"
+                            "expression": "\\frac{13{,}2}{1{,}2}",
+                            "answer": "11"
                         },
                         {
                             "id": 3,
-                            "expression": "6{,}9 + 7{,}4"
+                            "expression": "6{,}9 + 7{,}4",
+                            "answer": "14.3"
                         },
                         {
                             "id": 6,
-                            "expression": "6{,}1 - 2{,}5"
+                            "expression": "6{,}1 - 2{,}5",
+                            "answer": "3.6"
                         },
                         {
                             "id": 9,
-                            "expression": "8{,}9 \\cdot 4{,}3"
+                            "expression": "8{,}9 \\cdot 4{,}3",
+                            "answer": "38.27"
                         },
                         {
                             "id": 12,
-                            "expression": "\\frac{6{,}5}{1{,}3}"
+                            "expression": "\\frac{6{,}5}{1{,}3}",
+                            "answer": "5"
                         }
                     ]
                 },
@@ -175,32 +211,38 @@
                         {
                             "id": 1,
                             "expression": "\\frac{7}{9} - \\frac{2}{5}",
-                            "denominator": 90
+                            "denominator": 90,
+                            "answer": "0.3777777778"
                         },
                         {
                             "id": 2,
                             "expression": "\\frac{6}{7} - \\frac{3}{5}",
-                            "denominator": 70
+                            "denominator": 70,
+                            "answer": "0.2571428571"
                         },
                         {
                             "id": 3,
                             "expression": "\\frac{1}{7} + \\frac{3}{4}",
-                            "denominator": 56
+                            "denominator": 56,
+                            "answer": "0.8928571429"
                         },
                         {
                             "id": 4,
                             "expression": "\\frac{5}{8} + \\frac{1}{3}",
-                            "denominator": 48
+                            "denominator": 48,
+                            "answer": "0.9583333333"
                         },
                         {
                             "id": 5,
                             "expression": "\\frac{3}{4} - \\frac{8}{11}",
-                            "denominator": 88
+                            "denominator": 88,
+                            "answer": "0.0227272727"
                         },
                         {
                             "id": 6,
                             "expression": "\\frac{2}{3} - \\frac{7}{13}",
-                            "denominator": 78
+                            "denominator": 78,
+                            "answer": "0.1282051282"
                         }
                     ]
                 },
@@ -210,27 +252,33 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "expression": "\\frac{1}{\\frac{1}{30} + \\frac{1}{42}}"
+                            "expression": "\\frac{1}{\\frac{1}{30} + \\frac{1}{42}}",
+                            "answer": "17.5"
                         },
                         {
                             "id": 3,
-                            "expression": "\\frac{1}{\\frac{1}{36} + \\frac{1}{45}}"
+                            "expression": "\\frac{1}{\\frac{1}{36} + \\frac{1}{45}}",
+                            "answer": "20"
                         },
                         {
                             "id": 5,
-                            "expression": "\\frac{1}{\\frac{1}{21} + \\frac{1}{28}}"
+                            "expression": "\\frac{1}{\\frac{1}{21} + \\frac{1}{28}}",
+                            "answer": "12"
                         },
                         {
                             "id": 2,
-                            "expression": "\\frac{1}{\\frac{1}{36} - \\frac{1}{44}}"
+                            "expression": "\\frac{1}{\\frac{1}{36} - \\frac{1}{44}}",
+                            "answer": "198"
                         },
                         {
                             "id": 4,
-                            "expression": "\\frac{1}{\\frac{1}{35} - \\frac{1}{60}}"
+                            "expression": "\\frac{1}{\\frac{1}{35} - \\frac{1}{60}}",
+                            "answer": "84"
                         },
                         {
                             "id": 6,
-                            "expression": "\\frac{1}{\\frac{1}{72} - \\frac{1}{99}}"
+                            "expression": "\\frac{1}{\\frac{1}{72} - \\frac{1}{99}}",
+                            "answer": "264"
                         }
                     ]
                 }
@@ -246,51 +294,63 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "expression": "\\left(\\frac{17}{10} - \\frac{1}{20}\\right) \\cdot \\frac{2}{15}"
+                            "expression": "\\left(\\frac{17}{10} - \\frac{1}{20}\\right) \\cdot \\frac{2}{15}",
+                            "answer": "0.22"
                         },
                         {
                             "id": 4,
-                            "expression": "\\left(\\frac{10}{13} + \\frac{15}{4}\\right) \\cdot \\frac{26}{5}"
+                            "expression": "\\left(\\frac{10}{13} + \\frac{15}{4}\\right) \\cdot \\frac{26}{5}",
+                            "answer": "23.5"
                         },
                         {
                             "id": 7,
-                            "expression": "\\left(\\frac{3}{4} - \\frac{1}{6}\\right) \\cdot 3"
+                            "expression": "\\left(\\frac{3}{4} - \\frac{1}{6}\\right) \\cdot 3",
+                            "answer": "1.75"
                         },
                         {
                             "id": 10,
-                            "expression": "\\left(\\frac{2}{20} + \\frac{7}{30}\\right) \\cdot 15"
+                            "expression": "\\left(\\frac{2}{20} + \\frac{7}{30}\\right) \\cdot 15",
+                            "answer": "5"
                         },
                         {
                             "id": 2,
-                            "expression": "\\left(\\frac{5}{22} - \\frac{8}{11}\\right) \\cdot \\frac{11}{5}"
+                            "expression": "\\left(\\frac{5}{22} - \\frac{8}{11}\\right) \\cdot \\frac{11}{5}",
+                            "answer": "-1.1"
                         },
                         {
                             "id": 5,
-                            "expression": "\\left(\\frac{17}{26} + \\frac{11}{13}\\right) \\cdot \\frac{17}{6}"
+                            "expression": "\\left(\\frac{17}{26} + \\frac{11}{13}\\right) \\cdot \\frac{17}{6}",
+                            "answer": "4.25"
                         },
                         {
                             "id": 8,
-                            "expression": "\\left(\\frac{2}{5} + \\frac{13}{15}\\right) \\cdot 6"
+                            "expression": "\\left(\\frac{2}{5} + \\frac{13}{15}\\right) \\cdot 6",
+                            "answer": "7.6"
                         },
                         {
                             "id": 11,
-                            "expression": "\\left(\\frac{9}{10} - \\frac{7}{15}\\right) \\cdot 3"
+                            "expression": "\\left(\\frac{9}{10} - \\frac{7}{15}\\right) \\cdot 3",
+                            "answer": "1.3"
                         },
                         {
                             "id": 3,
-                            "expression": "\\left(\\frac{5}{26} - \\frac{3}{25}\\right) \\cdot \\frac{13}{2}"
+                            "expression": "\\left(\\frac{5}{26} - \\frac{3}{25}\\right) \\cdot \\frac{13}{2}",
+                            "answer": "0.47"
                         },
                         {
                             "id": 6,
-                            "expression": "\\left(\\frac{11}{12} + \\frac{11}{20}\\right) \\cdot \\frac{15}{8}"
+                            "expression": "\\left(\\frac{11}{12} + \\frac{11}{20}\\right) \\cdot \\frac{15}{8}",
+                            "answer": "2.75"
                         },
                         {
                             "id": 9,
-                            "expression": "\\left(\\frac{3}{8} - \\frac{1}{20}\\right) \\cdot 10"
+                            "expression": "\\left(\\frac{3}{8} - \\frac{1}{20}\\right) \\cdot 10",
+                            "answer": "3.25"
                         },
                         {
                             "id": 12,
-                            "expression": "\\left(\\frac{1}{6} + \\frac{1}{4}\\right) \\cdot 9"
+                            "expression": "\\left(\\frac{1}{6} + \\frac{1}{4}\\right) \\cdot 9",
+                            "answer": "3.75"
                         }
                     ]
                 },
@@ -300,51 +360,63 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "expression": "\\left(\\frac{9}{16} + 2\\frac{3}{8}\\right) \\cdot 4"
+                            "expression": "\\left(\\frac{9}{16} + 2\\frac{3}{8}\\right) \\cdot 4",
+                            "answer": "11.75"
                         },
                         {
                             "id": 5,
-                            "expression": "\\left(1\\frac{3}{4} + 2\\frac{4}{5}\\right) \\cdot 30"
+                            "expression": "\\left(1\\frac{3}{4} + 2\\frac{4}{5}\\right) \\cdot 30",
+                            "answer": "136.5"
                         },
                         {
                             "id": 9,
-                            "expression": "4\\frac{7}{8} : \\left(2\\frac{3}{4} + 1\\frac{10}{19}\\right)"
+                            "expression": "4\\frac{7}{8} : \\left(2\\frac{3}{4} + 1\\frac{10}{19}\\right)",
+                            "answer": "1.14"
                         },
                         {
                             "id": 2,
-                            "expression": "\\left(\\frac{4}{9} - 3\\frac{1}{15}\\right) \\cdot 9"
+                            "expression": "\\left(\\frac{4}{9} - 3\\frac{1}{15}\\right) \\cdot 9",
+                            "answer": "-23.6"
                         },
                         {
                             "id": 6,
-                            "expression": "\\left(\\frac{1}{13} - 2\\frac{3}{4}\\right) \\cdot 26"
+                            "expression": "\\left(\\frac{1}{13} - 2\\frac{3}{4}\\right) \\cdot 26",
+                            "answer": "-69.5"
                         },
                         {
                             "id": 10,
-                            "expression": "1\\frac{1}{12} : \\left(1\\frac{13}{18} - 2\\frac{5}{9}\\right)"
+                            "expression": "1\\frac{1}{12} : \\left(1\\frac{13}{18} - 2\\frac{5}{9}\\right)",
+                            "answer": "-1.3"
                         },
                         {
                             "id": 3,
-                            "expression": "\\left(2\\frac{3}{4} + 2\\frac{1}{5}\\right) \\cdot 16"
+                            "expression": "\\left(2\\frac{3}{4} + 2\\frac{1}{5}\\right) \\cdot 16",
+                            "answer": "79.2"
                         },
                         {
                             "id": 7,
-                            "expression": "1\\frac{8}{17} : \\left(\\frac{12}{17} + 2\\frac{7}{11}\\right)"
+                            "expression": "1\\frac{8}{17} : \\left(\\frac{12}{17} + 2\\frac{7}{11}\\right)",
+                            "answer": "0.44"
                         },
                         {
                             "id": 11,
-                            "expression": "3\\frac{1}{2} : \\left(1\\frac{4}{15} + 2\\frac{9}{10}\\right)"
+                            "expression": "3\\frac{1}{2} : \\left(1\\frac{4}{15} + 2\\frac{9}{10}\\right)",
+                            "answer": "0.84"
                         },
                         {
                             "id": 4,
-                            "expression": "\\left(1\\frac{11}{16} - 3\\frac{7}{8}\\right) \\cdot 4"
+                            "expression": "\\left(1\\frac{11}{16} - 3\\frac{7}{8}\\right) \\cdot 4",
+                            "answer": "-8.75"
                         },
                         {
                             "id": 8,
-                            "expression": "3\\frac{4}{9} : \\left(1\\frac{5}{9} - \\frac{4}{7}\\right)"
+                            "expression": "3\\frac{4}{9} : \\left(1\\frac{5}{9} - \\frac{4}{7}\\right)",
+                            "answer": "3.5"
                         },
                         {
                             "id": 12,
-                            "expression": "4\\frac{1}{4} : \\left(2\\frac{7}{10} - 3\\frac{1}{8}\\right)"
+                            "expression": "4\\frac{1}{4} : \\left(2\\frac{7}{10} - 3\\frac{1}{8}\\right)",
+                            "answer": "-10"
                         }
                     ]
                 },
@@ -354,27 +426,33 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "expression": "10 \\cdot \\left(\\frac{1}{5}\\right)^2 - 12 \\cdot \\frac{1}{5}"
+                            "expression": "10 \\cdot \\left(\\frac{1}{5}\\right)^2 - 12 \\cdot \\frac{1}{5}",
+                            "answer": "-2"
                         },
                         {
                             "id": 3,
-                            "expression": "21 \\cdot \\left(\\frac{1}{7}\\right)^2 - 10 \\cdot \\frac{1}{7}"
+                            "expression": "21 \\cdot \\left(\\frac{1}{7}\\right)^2 - 10 \\cdot \\frac{1}{7}",
+                            "answer": "-1"
                         },
                         {
                             "id": 5,
-                            "expression": "18 \\cdot \\left(\\frac{1}{9}\\right)^2 - 20 \\cdot \\frac{1}{9}"
+                            "expression": "18 \\cdot \\left(\\frac{1}{9}\\right)^2 - 20 \\cdot \\frac{1}{9}",
+                            "answer": "-2"
                         },
                         {
                             "id": 2,
-                            "expression": "8 \\cdot \\left(\\frac{1}{4}\\right)^2 - 14 \\cdot \\frac{1}{4}"
+                            "expression": "8 \\cdot \\left(\\frac{1}{4}\\right)^2 - 14 \\cdot \\frac{1}{4}",
+                            "answer": "-3"
                         },
                         {
                             "id": 4,
-                            "expression": "6 \\cdot \\left(\\frac{1}{3}\\right)^2 - 17 \\cdot \\frac{1}{3}"
+                            "expression": "6 \\cdot \\left(\\frac{1}{3}\\right)^2 - 17 \\cdot \\frac{1}{3}",
+                            "answer": "-5"
                         },
                         {
                             "id": 6,
-                            "expression": "15 \\cdot \\left(\\frac{1}{5}\\right)^2 - 8 \\cdot \\frac{1}{5}"
+                            "expression": "15 \\cdot \\left(\\frac{1}{5}\\right)^2 - 8 \\cdot \\frac{1}{5}",
+                            "answer": "-1"
                         }
                     ]
                 },
@@ -384,99 +462,123 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "expression": "\\frac{2{,}1}{6{,}6 - 2{,}4}"
+                            "expression": "\\frac{2{,}1}{6{,}6 - 2{,}4}",
+                            "answer": "0.5"
                         },
                         {
                             "id": 7,
-                            "expression": "\\frac{9{,}5 + 8{,}9}{2{,}3}"
+                            "expression": "\\frac{9{,}5 + 8{,}9}{2{,}3}",
+                            "answer": "8"
                         },
                         {
                             "id": 13,
-                            "expression": "\\frac{27}{3 \\cdot 4{,}5}"
+                            "expression": "\\frac{27}{3 \\cdot 4{,}5}",
+                            "answer": "2"
                         },
                         {
                             "id": 19,
-                            "expression": "\\frac{8{,}4 \\cdot 1{,}3}{0{,}7}"
+                            "expression": "\\frac{8{,}4 \\cdot 1{,}3}{0{,}7}",
+                            "answer": "15.6"
                         },
                         {
                             "id": 2,
-                            "expression": "\\frac{7{,}2}{8{,}3 - 8{,}6}"
+                            "expression": "\\frac{7{,}2}{8{,}3 - 8{,}6}",
+                            "answer": "-24"
                         },
                         {
                             "id": 8,
-                            "expression": "\\frac{6{,}8 - 4{,}7}{1{,}4}"
+                            "expression": "\\frac{6{,}8 - 4{,}7}{1{,}4}",
+                            "answer": "1.5"
                         },
                         {
                             "id": 14,
-                            "expression": "\\frac{16}{3{,}2 \\cdot 2}"
+                            "expression": "\\frac{16}{3{,}2 \\cdot 2}",
+                            "answer": "2.5"
                         },
                         {
                             "id": 20,
-                            "expression": "\\frac{4{,}4 \\cdot 0{,}3}{6{,}6}"
+                            "expression": "\\frac{4{,}4 \\cdot 0{,}3}{6{,}6}",
+                            "answer": "0.2"
                         },
                         {
                             "id": 3,
-                            "expression": "\\frac{9{,}2}{0{,}5 - 2{,}8}"
+                            "expression": "\\frac{9{,}2}{0{,}5 - 2{,}8}",
+                            "answer": "-4"
                         },
                         {
                             "id": 9,
-                            "expression": "\\frac{7{,}5 + 3{,}5}{2{,}5}"
+                            "expression": "\\frac{7{,}5 + 3{,}5}{2{,}5}",
+                            "answer": "4.4"
                         },
                         {
                             "id": 15,
-                            "expression": "\\frac{36}{4 \\cdot 4{,}5}"
+                            "expression": "\\frac{36}{4 \\cdot 4{,}5}",
+                            "answer": "2"
                         },
                         {
                             "id": 21,
-                            "expression": "\\frac{4{,}8 \\cdot 0{,}4}{0{,}6}"
+                            "expression": "\\frac{4{,}8 \\cdot 0{,}4}{0{,}6}",
+                            "answer": "3.2"
                         },
                         {
                             "id": 4,
-                            "expression": "\\frac{1{,}6}{2{,}5 + 0{,}7}"
+                            "expression": "\\frac{1{,}6}{2{,}5 + 0{,}7}",
+                            "answer": "0.5"
                         },
                         {
                             "id": 10,
-                            "expression": "\\frac{6{,}9 - 4{,}1}{0{,}2}"
+                            "expression": "\\frac{6{,}9 - 4{,}1}{0{,}2}",
+                            "answer": "14"
                         },
                         {
                             "id": 16,
-                            "expression": "\\frac{21}{17{,}5 \\cdot 0{,}8}"
+                            "expression": "\\frac{21}{17{,}5 \\cdot 0{,}8}",
+                            "answer": "1.5"
                         },
                         {
                             "id": 22,
-                            "expression": "\\frac{8{,}8 \\cdot 0{,}8}{4{,}4}"
+                            "expression": "\\frac{8{,}8 \\cdot 0{,}8}{4{,}4}",
+                            "answer": "1.6"
                         },
                         {
                             "id": 5,
-                            "expression": "\\frac{5{,}6}{1{,}9 + 2{,}1}"
+                            "expression": "\\frac{5{,}6}{1{,}9 + 2{,}1}",
+                            "answer": "1.4"
                         },
                         {
                             "id": 11,
-                            "expression": "\\frac{1{,}7 + 3{,}8}{2{,}2}"
+                            "expression": "\\frac{1{,}7 + 3{,}8}{2{,}2}",
+                            "answer": "2.5"
                         },
                         {
                             "id": 17,
-                            "expression": "\\frac{22}{4{,}4 \\cdot 2{,}5}"
+                            "expression": "\\frac{22}{4{,}4 \\cdot 2{,}5}",
+                            "answer": "2"
                         },
                         {
                             "id": 23,
-                            "expression": "\\frac{0{,}3 \\cdot 7{,}5}{0{,}5}"
+                            "expression": "\\frac{0{,}3 \\cdot 7{,}5}{0{,}5}",
+                            "answer": "4.5"
                         },
                         {
                             "id": 6,
-                            "expression": "\\frac{9{,}4}{4{,}1 + 5{,}3}"
+                            "expression": "\\frac{9{,}4}{4{,}1 + 5{,}3}",
+                            "answer": "1"
                         },
                         {
                             "id": 12,
-                            "expression": "\\frac{7{,}2 - 6{,}1}{2{,}2}"
+                            "expression": "\\frac{7{,}2 - 6{,}1}{2{,}2}",
+                            "answer": "0.5"
                         },
                         {
                             "id": 18,
-                            "expression": "\\frac{7}{12{,}5 \\cdot 1{,}4}"
+                            "expression": "\\frac{7}{12{,}5 \\cdot 1{,}4}",
+                            "answer": "0.4"
                         },
                         {
                             "id": 24,
-                            "expression": "\\frac{5{,}6 \\cdot 0{,}3}{0{,}8}"
+                            "expression": "\\frac{5{,}6 \\cdot 0{,}3}{0{,}8}",
+                            "answer": "2.1"
                         }
                     ]
                 },
@@ -486,27 +588,33 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "expression": "\\frac{0{,}9}{1 + \\frac{1}{5}}"
+                            "expression": "\\frac{0{,}9}{1 + \\frac{1}{5}}",
+                            "answer": "0.75"
                         },
                         {
                             "id": 2,
-                            "expression": "\\frac{2{,}6}{1 - \\frac{1}{14}}"
+                            "expression": "\\frac{2{,}6}{1 - \\frac{1}{14}}",
+                            "answer": "2.8"
                         },
                         {
                             "id": 3,
-                            "expression": "\\frac{1{,}3}{1 + \\frac{1}{12}}"
+                            "expression": "\\frac{1{,}3}{1 + \\frac{1}{12}}",
+                            "answer": "1.2"
                         },
                         {
                             "id": 4,
-                            "expression": "\\frac{1{,}2}{1 - \\frac{1}{3}}"
+                            "expression": "\\frac{1{,}2}{1 - \\frac{1}{3}}",
+                            "answer": "1.8"
                         },
                         {
                             "id": 5,
-                            "expression": "\\frac{0{,}6}{1 + \\frac{1}{2}}"
+                            "expression": "\\frac{0{,}6}{1 + \\frac{1}{2}}",
+                            "answer": "0.4"
                         },
                         {
                             "id": 6,
-                            "expression": "\\frac{0{,}8}{1 - \\frac{1}{9}}"
+                            "expression": "\\frac{0{,}8}{1 - \\frac{1}{9}}",
+                            "answer": "0.9"
                         }
                     ]
                 },
@@ -516,75 +624,93 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "expression": "-7 \\cdot (-4{,}7) - 6{,}8"
+                            "expression": "-7 \\cdot (-4{,}7) - 6{,}8",
+                            "answer": "26.1"
                         },
                         {
                             "id": 7,
-                            "expression": "-0{,}8 \\cdot (-10)^2 - 95"
+                            "expression": "-0{,}8 \\cdot (-10)^2 - 95",
+                            "answer": "-175"
                         },
                         {
                             "id": 13,
-                            "expression": "30 - 0{,}8 \\cdot (-10)^2"
+                            "expression": "30 - 0{,}8 \\cdot (-10)^2",
+                            "answer": "-50"
                         },
                         {
                             "id": 2,
-                            "expression": "-13 \\cdot (-9{,}3) - 7{,}8"
+                            "expression": "-13 \\cdot (-9{,}3) - 7{,}8",
+                            "answer": "113.1"
                         },
                         {
                             "id": 8,
-                            "expression": "0{,}7 \\cdot (-10)^3 - 20"
+                            "expression": "0{,}7 \\cdot (-10)^3 - 20",
+                            "answer": "-720"
                         },
                         {
                             "id": 14,
-                            "expression": "80 + 0{,}4 \\cdot (-10)^3"
+                            "expression": "80 + 0{,}4 \\cdot (-10)^3",
+                            "answer": "-320"
                         },
                         {
                             "id": 3,
-                            "expression": "-12 \\cdot (-8{,}6) - 9{,}4"
+                            "expression": "-12 \\cdot (-8{,}6) - 9{,}4",
+                            "answer": "93.8"
                         },
                         {
                             "id": 9,
-                            "expression": "-0{,}2 \\cdot (-10)^2 + 55"
+                            "expression": "-0{,}2 \\cdot (-10)^2 + 55",
+                            "answer": "35"
                         },
                         {
                             "id": 15,
-                            "expression": "55 + 0{,}2 \\cdot (-10)^2"
+                            "expression": "55 + 0{,}2 \\cdot (-10)^2",
+                            "answer": "75"
                         },
                         {
                             "id": 4,
-                            "expression": "7{,}6 - 8 \\cdot (-5{,}2)"
+                            "expression": "7{,}6 - 8 \\cdot (-5{,}2)",
+                            "answer": "49.2"
                         },
                         {
                             "id": 10,
-                            "expression": "0{,}9 \\cdot (-10)^3 + 50"
+                            "expression": "0{,}9 \\cdot (-10)^3 + 50",
+                            "answer": "-850"
                         },
                         {
                             "id": 16,
-                            "expression": "-60 + 0{,}4 \\cdot (-10)^2"
+                            "expression": "-60 + 0{,}4 \\cdot (-10)^2",
+                            "answer": "-20"
                         },
                         {
                             "id": 5,
-                            "expression": "6{,}8 - 11 \\cdot (-6{,}1)"
+                            "expression": "6{,}8 - 11 \\cdot (-6{,}1)",
+                            "answer": "73.9"
                         },
                         {
                             "id": 11,
-                            "expression": "-0{,}7 \\cdot (-10)^2 - 120"
+                            "expression": "-0{,}7 \\cdot (-10)^2 - 120",
+                            "answer": "-190"
                         },
                         {
                             "id": 17,
-                            "expression": "-80 + 0{,}3 \\cdot (-10)^3"
+                            "expression": "-80 + 0{,}3 \\cdot (-10)^3",
+                            "answer": "-380"
                         },
                         {
                             "id": 6,
-                            "expression": "5{,}3 - 9 \\cdot (-4{,}4)"
+                            "expression": "5{,}3 - 9 \\cdot (-4{,}4)",
+                            "answer": "44.9"
                         },
                         {
                             "id": 12,
-                            "expression": "0{,}6 \\cdot (-10)^3 + 50"
+                            "expression": "0{,}6 \\cdot (-10)^3 + 50",
+                            "answer": "-550"
                         },
                         {
                             "id": 18,
-                            "expression": "-45 + 0{,}5 \\cdot (-10)^2"
+                            "expression": "-45 + 0{,}5 \\cdot (-10)^2",
+                            "answer": "5"
                         }
                     ]
                 },
@@ -594,51 +720,63 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "expression": "(2{,}6 \\cdot 10^{-2}) \\cdot (9 \\cdot 10^{-3})"
+                            "expression": "(2{,}6 \\cdot 10^{-2}) \\cdot (9 \\cdot 10^{-3})",
+                            "answer": "0.000234"
                         },
                         {
                             "id": 7,
-                            "expression": "(7 \\cdot 10^3)^2 \\cdot (16 \\cdot 10^{-4})"
+                            "expression": "(7 \\cdot 10^3)^2 \\cdot (16 \\cdot 10^{-4})",
+                            "answer": "78400"
                         },
                         {
                             "id": 2,
-                            "expression": "(1{,}6 \\cdot 10^{-5}) \\cdot (6 \\cdot 10^{-2})"
+                            "expression": "(1{,}6 \\cdot 10^{-5}) \\cdot (6 \\cdot 10^{-2})",
+                            "answer": "0.00000096"
                         },
                         {
                             "id": 8,
-                            "expression": "(2 \\cdot 10^2)^4 \\cdot (19 \\cdot 10^{-6})"
+                            "expression": "(2 \\cdot 10^2)^4 \\cdot (19 \\cdot 10^{-6})",
+                            "answer": "30400"
                         },
                         {
                             "id": 3,
-                            "expression": "(1{,}7 \\cdot 10^{-3}) \\cdot (5 \\cdot 10^{-4})"
+                            "expression": "(1{,}7 \\cdot 10^{-3}) \\cdot (5 \\cdot 10^{-4})",
+                            "answer": "0.00000085"
                         },
                         {
                             "id": 9,
-                            "expression": "(8 \\cdot 10^2)^2 \\cdot (3 \\cdot 10^{-2})"
+                            "expression": "(8 \\cdot 10^2)^2 \\cdot (3 \\cdot 10^{-2})",
+                            "answer": "19200"
                         },
                         {
                             "id": 4,
-                            "expression": "(2{,}1 \\cdot 10^{-2}) \\cdot (2 \\cdot 10^{-2})"
+                            "expression": "(2{,}1 \\cdot 10^{-2}) \\cdot (2 \\cdot 10^{-2})",
+                            "answer": "0.00042"
                         },
                         {
                             "id": 10,
-                            "expression": "(9 \\cdot 10^{-2})^2 \\cdot (11 \\cdot 10^5)"
+                            "expression": "(9 \\cdot 10^{-2})^2 \\cdot (11 \\cdot 10^5)",
+                            "answer": "8910"
                         },
                         {
                             "id": 5,
-                            "expression": "(2{,}2 \\cdot 10^{-2}) \\cdot (3 \\cdot 10^{-4})"
+                            "expression": "(2{,}2 \\cdot 10^{-2}) \\cdot (3 \\cdot 10^{-4})",
+                            "answer": "0.0000066"
                         },
                         {
                             "id": 11,
-                            "expression": "(16 \\cdot 10^{-2})^2 \\cdot (13 \\cdot 10^4)"
+                            "expression": "(16 \\cdot 10^{-2})^2 \\cdot (13 \\cdot 10^4)",
+                            "answer": "3328"
                         },
                         {
                             "id": 6,
-                            "expression": "(1{,}2 \\cdot 10^{-3}) \\cdot (7 \\cdot 10^{-2})"
+                            "expression": "(1{,}2 \\cdot 10^{-3}) \\cdot (7 \\cdot 10^{-2})",
+                            "answer": "0.000084"
                         },
                         {
                             "id": 12,
-                            "expression": "(14 \\cdot 10^{-2})^2 \\cdot (12 \\cdot 10^3)"
+                            "expression": "(14 \\cdot 10^{-2})^2 \\cdot (12 \\cdot 10^3)",
+                            "answer": "235.2"
                         }
                     ]
                 },
@@ -648,27 +786,33 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "expression": "0{,}7 \\cdot (-10)^3 - 4 \\cdot (-10)^2 - 63"
+                            "expression": "0{,}7 \\cdot (-10)^3 - 4 \\cdot (-10)^2 - 63",
+                            "answer": "-1163"
                         },
                         {
                             "id": 4,
-                            "expression": "-0{,}7 \\cdot (-10)^4 - 8 \\cdot (-10)^2 - 26"
+                            "expression": "-0{,}7 \\cdot (-10)^4 - 8 \\cdot (-10)^2 - 26",
+                            "answer": "-7826"
                         },
                         {
                             "id": 2,
-                            "expression": "-0{,}4 \\cdot (-10)^4 + 3 \\cdot (-10)^2 - 98"
+                            "expression": "-0{,}4 \\cdot (-10)^4 + 3 \\cdot (-10)^2 - 98",
+                            "answer": "-3798"
                         },
                         {
                             "id": 5,
-                            "expression": "0{,}4 \\cdot (-10)^3 + 7 \\cdot (-10)^2 + 64"
+                            "expression": "0{,}4 \\cdot (-10)^3 + 7 \\cdot (-10)^2 + 64",
+                            "answer": "364"
                         },
                         {
                             "id": 3,
-                            "expression": "0{,}8 \\cdot (-10)^4 + 3 \\cdot (-10)^3 + 78"
+                            "expression": "0{,}8 \\cdot (-10)^4 + 3 \\cdot (-10)^3 + 78",
+                            "answer": "5078"
                         },
                         {
                             "id": 6,
-                            "expression": "-0{,}3 \\cdot (-10)^4 + 4 \\cdot (-10)^2 - 59"
+                            "expression": "-0{,}3 \\cdot (-10)^4 + 4 \\cdot (-10)^2 - 59",
+                            "answer": "-2659"
                         }
                     ]
                 },
@@ -678,27 +822,33 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "expression": "0{,}0006 \\cdot 6 \\cdot 600000"
+                            "expression": "0{,}0006 \\cdot 6 \\cdot 600000",
+                            "answer": "2160"
                         },
                         {
                             "id": 4,
-                            "expression": "0{,}005 \\cdot 0{,}5 \\cdot 50"
+                            "expression": "0{,}005 \\cdot 0{,}5 \\cdot 50",
+                            "answer": "0.125"
                         },
                         {
                             "id": 2,
-                            "expression": "0{,}007 \\cdot 0{,}7 \\cdot 70"
+                            "expression": "0{,}007 \\cdot 0{,}7 \\cdot 70",
+                            "answer": "0.343"
                         },
                         {
                             "id": 5,
-                            "expression": "0{,}003 \\cdot 0{,}0003 \\cdot 300"
+                            "expression": "0{,}003 \\cdot 0{,}0003 \\cdot 300",
+                            "answer": "0.00027"
                         },
                         {
                             "id": 3,
-                            "expression": "0{,}0008 \\cdot 0{,}008 \\cdot 80000"
+                            "expression": "0{,}0008 \\cdot 0{,}008 \\cdot 80000",
+                            "answer": "0.512"
                         },
                         {
                             "id": 6,
-                            "expression": "0{,}004 \\cdot 0{,}04 \\cdot 40000"
+                            "expression": "0{,}004 \\cdot 0{,}04 \\cdot 40000",
+                            "answer": "6.4"
                         }
                     ]
                 },
@@ -708,27 +858,33 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "expression": "-0{,}2 \\cdot (-7)^4 - 1 \\cdot (-7)^3 - 13"
+                            "expression": "-0{,}2 \\cdot (-7)^4 - 1 \\cdot (-7)^3 - 13",
+                            "answer": "-150.2"
                         },
                         {
                             "id": 4,
-                            "expression": "0{,}5 \\cdot (-6)^4 + 2 \\cdot (-6)^2 - 30"
+                            "expression": "0{,}5 \\cdot (-6)^4 + 2 \\cdot (-6)^2 - 30",
+                            "answer": "690"
                         },
                         {
                             "id": 2,
-                            "expression": "-0{,}9 \\cdot (-2)^3 + 2{,}9 \\cdot (-2)^2 - 22"
+                            "expression": "-0{,}9 \\cdot (-2)^3 + 2{,}9 \\cdot (-2)^2 - 22",
+                            "answer": "-3.2"
                         },
                         {
                             "id": 5,
-                            "expression": "-1{,}1 \\cdot (-3)^4 - 0{,}9 \\cdot (-3)^3 - 15"
+                            "expression": "-1{,}1 \\cdot (-3)^4 - 0{,}9 \\cdot (-3)^3 - 15",
+                            "answer": "-79.8"
                         },
                         {
                             "id": 3,
-                            "expression": "0{,}1 \\cdot (-8)^3 + 0{,}2 \\cdot (-8)^2 - 25"
+                            "expression": "0{,}1 \\cdot (-8)^3 + 0{,}2 \\cdot (-8)^2 - 25",
+                            "answer": "-63.4"
                         },
                         {
                             "id": 6,
-                            "expression": "0{,}2 \\cdot (-4)^3 + 3 \\cdot (-4)^2 - 17"
+                            "expression": "0{,}2 \\cdot (-4)^3 + 3 \\cdot (-4)^2 - 17",
+                            "answer": "18.2"
                         }
                     ]
                 },
@@ -738,27 +894,33 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "expression": "1 \\cdot 10^{-1} + 7 \\cdot 10^{-3} + 2 \\cdot 10^{-4}"
+                            "expression": "1 \\cdot 10^{-1} + 7 \\cdot 10^{-3} + 2 \\cdot 10^{-4}",
+                            "answer": "0.1072"
                         },
                         {
                             "id": 4,
-                            "expression": "8 \\cdot 10^0 + 9 \\cdot 10^{-2} + 3 \\cdot 10^{-4}"
+                            "expression": "8 \\cdot 10^0 + 9 \\cdot 10^{-2} + 3 \\cdot 10^{-4}",
+                            "answer": "8.0903"
                         },
                         {
                             "id": 2,
-                            "expression": "9 \\cdot 10^1 + 3 \\cdot 10^{-3} + 8 \\cdot 10^{-4}"
+                            "expression": "9 \\cdot 10^1 + 3 \\cdot 10^{-3} + 8 \\cdot 10^{-4}",
+                            "answer": "90.0038"
                         },
                         {
                             "id": 5,
-                            "expression": "6 \\cdot 10^1 + 7 \\cdot 10^{-2} + 5 \\cdot 10^{-3}"
+                            "expression": "6 \\cdot 10^1 + 7 \\cdot 10^{-2} + 5 \\cdot 10^{-3}",
+                            "answer": "60.075"
                         },
                         {
                             "id": 3,
-                            "expression": "2 \\cdot 10^0 + 6 \\cdot 10^{-1} + 4 \\cdot 10^{-3}"
+                            "expression": "2 \\cdot 10^0 + 6 \\cdot 10^{-1} + 4 \\cdot 10^{-3}",
+                            "answer": "2.604"
                         },
                         {
                             "id": 6,
-                            "expression": "5 \\cdot 10^{-1} + 6 \\cdot 10^{-2} + 4 \\cdot 10^{-4}"
+                            "expression": "5 \\cdot 10^{-1} + 6 \\cdot 10^{-2} + 4 \\cdot 10^{-4}",
+                            "answer": "0.5604"
                         }
                     ]
                 }
@@ -774,27 +936,33 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "expression": "\\left(\\frac{1}{17} + 1\\frac{1}{4}\\right) : \\frac{1}{34}"
+                            "expression": "\\left(\\frac{1}{17} + 1\\frac{1}{4}\\right) : \\frac{1}{34}",
+                            "answer": "44.5"
                         },
                         {
                             "id": 3,
-                            "expression": "\\left(\\frac{7}{9} + 1\\frac{4}{5}\\right) : \\frac{1}{18}"
+                            "expression": "\\left(\\frac{7}{9} + 1\\frac{4}{5}\\right) : \\frac{1}{18}",
+                            "answer": "46.4"
                         },
                         {
                             "id": 5,
-                            "expression": "\\left(\\frac{13}{24} + 1\\frac{1}{15}\\right) : \\frac{1}{24}"
+                            "expression": "\\left(\\frac{13}{24} + 1\\frac{1}{15}\\right) : \\frac{1}{24}",
+                            "answer": "38.6"
                         },
                         {
                             "id": 2,
-                            "expression": "\\left(\\frac{3}{4} - 2\\frac{9}{10}\\right) : \\frac{1}{12}"
+                            "expression": "\\left(\\frac{3}{4} - 2\\frac{9}{10}\\right) : \\frac{1}{12}",
+                            "answer": "-25.8"
                         },
                         {
                             "id": 4,
-                            "expression": "\\left(\\frac{4}{11} - 2\\frac{1}{4}\\right) : \\frac{1}{22}"
+                            "expression": "\\left(\\frac{4}{11} - 2\\frac{1}{4}\\right) : \\frac{1}{22}",
+                            "answer": "-41.5"
                         },
                         {
                             "id": 6,
-                            "expression": "\\left(\\frac{15}{26} - 2\\frac{3}{4}\\right) : \\frac{1}{26}"
+                            "expression": "\\left(\\frac{15}{26} - 2\\frac{3}{4}\\right) : \\frac{1}{26}",
+                            "answer": "-56.5"
                         }
                     ]
                 },
@@ -804,27 +972,33 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "expression": "\\frac{\\frac{1}{20} + \\frac{1}{12}}{\\frac{1}{27}}"
+                            "expression": "\\frac{\\frac{1}{20} + \\frac{1}{12}}{\\frac{1}{27}}",
+                            "answer": "3.6"
                         },
                         {
                             "id": 3,
-                            "expression": "\\frac{\\frac{1}{18} + \\frac{1}{45}}{\\frac{5}{27}}"
+                            "expression": "\\frac{\\frac{1}{18} + \\frac{1}{45}}{\\frac{5}{27}}",
+                            "answer": "0.42"
                         },
                         {
                             "id": 5,
-                            "expression": "\\frac{\\frac{1}{28} + \\frac{1}{42}}{\\frac{1}{21}}"
+                            "expression": "\\frac{\\frac{1}{28} + \\frac{1}{42}}{\\frac{1}{21}}",
+                            "answer": "1.25"
                         },
                         {
                             "id": 2,
-                            "expression": "\\frac{\\frac{1}{12} - \\frac{1}{21}}{\\frac{1}{70}}"
+                            "expression": "\\frac{\\frac{1}{12} - \\frac{1}{21}}{\\frac{1}{70}}",
+                            "answer": "2.5"
                         },
                         {
                             "id": 4,
-                            "expression": "\\frac{\\frac{1}{72} - \\frac{1}{88}}{\\frac{5}{99}}"
+                            "expression": "\\frac{\\frac{1}{72} - \\frac{1}{88}}{\\frac{5}{99}}",
+                            "answer": "0.05"
                         },
                         {
                             "id": 6,
-                            "expression": "\\frac{\\frac{1}{40} - \\frac{1}{65}}{\\frac{1}{78}}"
+                            "expression": "\\frac{\\frac{1}{40} - \\frac{1}{65}}{\\frac{1}{78}}",
+                            "answer": "0.75"
                         }
                     ]
                 },
@@ -834,19 +1008,23 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "expression": "1{,}9 - 3{,}5 \\cdot 7{,}2"
+                            "expression": "1{,}9 - 3{,}5 \\cdot 7{,}2",
+                            "answer": "-23.3"
                         },
                         {
                             "id": 3,
-                            "expression": "5{,}1 + 2{,}8 \\cdot 2{,}5"
+                            "expression": "5{,}1 + 2{,}8 \\cdot 2{,}5",
+                            "answer": "12.1"
                         },
                         {
                             "id": 2,
-                            "expression": "-9{,}2 - 0{,}4 \\cdot 6{,}5"
+                            "expression": "-9{,}2 - 0{,}4 \\cdot 6{,}5",
+                            "answer": "-11.8"
                         },
                         {
                             "id": 4,
-                            "expression": "-3{,}6 + 7{,}2 \\cdot 1{,}5"
+                            "expression": "-3{,}6 + 7{,}2 \\cdot 1{,}5",
+                            "answer": "7.2"
                         }
                     ]
                 },
@@ -856,19 +1034,23 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "expression": "\\frac{3}{16} : \\left(-\\frac{5}{56}\\right) + 3{,}8"
+                            "expression": "\\frac{3}{16} : \\left(-\\frac{5}{56}\\right) + 3{,}8",
+                            "answer": "1.7"
                         },
                         {
                             "id": 3,
-                            "expression": "-\\frac{14}{23} : \\frac{35}{46} + 2{,}9"
+                            "expression": "-\\frac{14}{23} : \\frac{35}{46} + 2{,}9",
+                            "answer": "2.1"
                         },
                         {
                             "id": 2,
-                            "expression": "\\frac{7}{18} : \\left(-\\frac{10}{27}\\right) - 2{,}4"
+                            "expression": "\\frac{7}{18} : \\left(-\\frac{10}{27}\\right) - 2{,}4",
+                            "answer": "-3.45"
                         },
                         {
                             "id": 4,
-                            "expression": "-\\frac{15}{58} : \\frac{3}{29} - 5{,}63"
+                            "expression": "-\\frac{15}{58} : \\frac{3}{29} - 5{,}63",
+                            "answer": "-8.13"
                         }
                     ]
                 },
@@ -878,51 +1060,63 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "expression": "\\frac{2}{5} + \\frac{3}{11}"
+                            "expression": "\\frac{2}{5} + \\frac{3}{11}",
+                            "answer": "0.6727272727"
                         },
                         {
                             "id": 4,
-                            "expression": "\\frac{1}{45} + \\frac{5}{9}"
+                            "expression": "\\frac{1}{45} + \\frac{5}{9}",
+                            "answer": "0.5777777778"
                         },
                         {
                             "id": 7,
-                            "expression": "3\\frac{1}{12} - 2\\frac{1}{4}"
+                            "expression": "3\\frac{1}{12} - 2\\frac{1}{4}",
+                            "answer": "0.8333333333"
                         },
                         {
                             "id": 10,
-                            "expression": "9\\frac{2}{15} - 8\\frac{32}{33}"
+                            "expression": "9\\frac{2}{15} - 8\\frac{32}{33}",
+                            "answer": "0.1636363636"
                         },
                         {
                             "id": 2,
-                            "expression": "\\frac{7}{13} + \\frac{1}{3}"
+                            "expression": "\\frac{7}{13} + \\frac{1}{3}",
+                            "answer": "0.8717948718"
                         },
                         {
                             "id": 5,
-                            "expression": "\\frac{3}{20} + \\frac{7}{36}"
+                            "expression": "\\frac{3}{20} + \\frac{7}{36}",
+                            "answer": "0.3444444444"
                         },
                         {
                             "id": 8,
-                            "expression": "5\\frac{1}{15} - 4\\frac{2}{5}"
+                            "expression": "5\\frac{1}{15} - 4\\frac{2}{5}",
+                            "answer": "0.6666666667"
                         },
                         {
                             "id": 11,
-                            "expression": "2\\frac{3}{28} - 1\\frac{17}{36}"
+                            "expression": "2\\frac{3}{28} - 1\\frac{17}{36}",
+                            "answer": "0.6349206349"
                         },
                         {
                             "id": 3,
-                            "expression": "\\frac{5}{7} + \\frac{4}{21}"
+                            "expression": "\\frac{5}{7} + \\frac{4}{21}",
+                            "answer": "0.9047619048"
                         },
                         {
                             "id": 6,
-                            "expression": "\\frac{2}{45} + \\frac{9}{35}"
+                            "expression": "\\frac{2}{45} + \\frac{9}{35}",
+                            "answer": "0.3015873016"
                         },
                         {
                             "id": 9,
-                            "expression": "7\\frac{1}{18} - 6\\frac{13}{14}"
+                            "expression": "7\\frac{1}{18} - 6\\frac{13}{14}",
+                            "answer": "0.126984127"
                         },
                         {
                             "id": 12,
-                            "expression": "6\\frac{2}{21} - 5\\frac{31}{33}"
+                            "expression": "6\\frac{2}{21} - 5\\frac{31}{33}",
+                            "answer": "0.1558441558"
                         }
                     ]
                 },
@@ -932,67 +1126,83 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "expression": "1\\frac{19}{29} \\cdot \\frac{7}{48}"
+                            "expression": "1\\frac{19}{29} \\cdot \\frac{7}{48}",
+                            "answer": "0.2413793103"
                         },
                         {
                             "id": 5,
-                            "expression": "\\frac{7}{12} : 2\\frac{1}{4}"
+                            "expression": "\\frac{7}{12} : 2\\frac{1}{4}",
+                            "answer": "0.2592592593"
                         },
                         {
                             "id": 9,
-                            "expression": "\\frac{1}{15} + 4\\frac{4}{5} \\cdot \\frac{2}{21}"
+                            "expression": "\\frac{1}{15} + 4\\frac{4}{5} \\cdot \\frac{2}{21}",
+                            "answer": "0.5238095238"
                         },
                         {
                             "id": 13,
-                            "expression": "4\\frac{25}{27} - \\frac{3}{38} \\cdot \\frac{5}{22}"
+                            "expression": "4\\frac{25}{27} - \\frac{3}{38} \\cdot \\frac{5}{22}",
+                            "answer": "4.9079833422"
                         },
                         {
                             "id": 2,
-                            "expression": "1\\frac{13}{58} \\cdot \\frac{9}{71}"
+                            "expression": "1\\frac{13}{58} \\cdot \\frac{9}{71}",
+                            "answer": "0.1551724138"
                         },
                         {
                             "id": 6,
-                            "expression": "\\frac{9}{14} : 1\\frac{4}{7}"
+                            "expression": "\\frac{9}{14} : 1\\frac{4}{7}",
+                            "answer": "0.4090909091"
                         },
                         {
                             "id": 10,
-                            "expression": "\\frac{3}{20} + 3\\frac{3}{4} \\cdot \\frac{1}{27}"
+                            "expression": "\\frac{3}{20} + 3\\frac{3}{4} \\cdot \\frac{1}{27}",
+                            "answer": "0.2888888889"
                         },
                         {
                             "id": 14,
-                            "expression": "6\\frac{24}{35} - \\frac{1}{9} \\cdot \\frac{4}{15}"
+                            "expression": "6\\frac{24}{35} - \\frac{1}{9} \\cdot \\frac{4}{15}",
+                            "answer": "6.6560846561"
                         },
                         {
                             "id": 3,
-                            "expression": "1\\frac{15}{34} \\cdot \\frac{17}{49}"
+                            "expression": "1\\frac{15}{34} \\cdot \\frac{17}{49}",
+                            "answer": "0.5"
                         },
                         {
                             "id": 7,
-                            "expression": "\\frac{8}{11} : 2\\frac{2}{5}"
+                            "expression": "\\frac{8}{11} : 2\\frac{2}{5}",
+                            "answer": "0.303030303"
                         },
                         {
                             "id": 11,
-                            "expression": "\\frac{1}{14} + 2\\frac{1}{12} \\cdot \\frac{2}{15}"
+                            "expression": "\\frac{1}{14} + 2\\frac{1}{12} \\cdot \\frac{2}{15}",
+                            "answer": "0.3492063492"
                         },
                         {
                             "id": 15,
-                            "expression": "2\\frac{39}{40} - \\frac{2}{7} \\cdot \\frac{3}{28}"
+                            "expression": "2\\frac{39}{40} - \\frac{2}{7} \\cdot \\frac{3}{28}",
+                            "answer": "2.9443877551"
                         },
                         {
                             "id": 4,
-                            "expression": "1\\frac{11}{45} \\cdot \\frac{25}{56}"
+                            "expression": "1\\frac{11}{45} \\cdot \\frac{25}{56}",
+                            "answer": "0.5555555556"
                         },
                         {
                             "id": 8,
-                            "expression": "\\frac{6}{13} : 1\\frac{1}{8}"
+                            "expression": "\\frac{6}{13} : 1\\frac{1}{8}",
+                            "answer": "0.4102564103"
                         },
                         {
                             "id": 12,
-                            "expression": "\\frac{10}{21} + 2\\frac{2}{15} \\cdot \\frac{3}{14}"
+                            "expression": "\\frac{10}{21} + 2\\frac{2}{15} \\cdot \\frac{3}{14}",
+                            "answer": "0.9333333333"
                         },
                         {
                             "id": 16,
-                            "expression": "5\\frac{25}{28} - \\frac{4}{45} \\cdot \\frac{5}{39}"
+                            "expression": "5\\frac{25}{28} - \\frac{4}{45} \\cdot \\frac{5}{39}",
+                            "answer": "5.8814611315"
                         }
                     ]
                 }

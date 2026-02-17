@@ -192,6 +192,20 @@
     .inline-report-form .btn-cancel:hover {
         background: #475569;
     }
+    .inline-report-form .btn-answer-edit {
+        padding: 10px 16px;
+        background: #1d4ed8;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 14px;
+        transition: background 0.2s;
+    }
+    .inline-report-form .btn-answer-edit:hover {
+        background: #1e40af;
+    }
     .task-review-item.has-inline-form {
         border-color: #ef4444 !important;
     }
@@ -338,6 +352,8 @@ function openInlineReportForm(container, taskKey) {
     // Находим блок с текстом задания
     const contentBlock = container.querySelector('.flex-1') || container.querySelector('.p-5') || container;
 
+    const hasAnswerEditor = !!container.querySelector('.js-task-answer-edit-toggle');
+
     // Создаём inline форму
     const form = document.createElement('div');
     form.className = 'inline-report-form';
@@ -348,6 +364,7 @@ function openInlineReportForm(container, taskKey) {
         </div>
         <textarea class="review-textarea" placeholder="Что не так? Например:&#10;• Неправильный ответ&#10;• Отсутствует картинка&#10;• Опечатка в условии">${reviews[taskKey]?.comment || ''}</textarea>
         <div class="form-actions">
+            ${hasAnswerEditor ? '<button class="btn-answer-edit" onclick="openAnswerEditorFromReview(this)">✏️ Править ответ</button>' : ''}
             <button class="btn-save" onclick="saveInlineComment(this, '${taskKey}')">🚩 Сохранить</button>
             <button class="btn-cancel" onclick="closeInlineFormByButton(this)">Отмена</button>
         </div>
@@ -362,6 +379,18 @@ function openInlineReportForm(container, taskKey) {
         const textarea = form.querySelector('textarea');
         if (textarea) textarea.focus();
     }, 50);
+}
+
+function openAnswerEditorFromReview(button) {
+    const container = button.closest('.task-review-item');
+    if (!container) return;
+
+    const editToggle = container.querySelector('.js-task-answer-edit-toggle');
+    if (!editToggle) return;
+
+    editToggle.click();
+    closeInlineForm(container);
+    editToggle.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 // Закрыть inline форму

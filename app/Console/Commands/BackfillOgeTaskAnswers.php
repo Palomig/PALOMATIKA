@@ -50,9 +50,21 @@ class BackfillOgeTaskAnswers extends Command
 
             $changed = false;
 
-            foreach ($data['blocks'] ?? [] as &$block) {
-                foreach ($block['zadaniya'] ?? [] as &$zadanie) {
-                    foreach ($zadanie['tasks'] ?? [] as &$task) {
+            if (!isset($data['blocks']) || !is_array($data['blocks'])) {
+                continue;
+            }
+
+            foreach ($data['blocks'] as $blockIndex => &$block) {
+                if (!isset($block['zadaniya']) || !is_array($block['zadaniya'])) {
+                    continue;
+                }
+
+                foreach ($block['zadaniya'] as $zadanieIndex => &$zadanie) {
+                    if (!isset($zadanie['tasks']) || !is_array($zadanie['tasks'])) {
+                        continue;
+                    }
+
+                    foreach ($zadanie['tasks'] as $taskIndex => &$task) {
                         $totalTasks++;
                         $answer = $this->answerResolver->resolveFromTaskAndZadanie($zadanie, $task);
 

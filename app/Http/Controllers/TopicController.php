@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\TaskAnswerProvenanceService;
 use App\Services\TaskDataService;
 use Illuminate\Http\Request;
 
@@ -12,10 +13,12 @@ use Illuminate\Http\Request;
 class TopicController extends Controller
 {
     protected TaskDataService $taskService;
+    protected TaskAnswerProvenanceService $answerProvenanceService;
 
-    public function __construct(TaskDataService $taskService)
+    public function __construct(TaskDataService $taskService, TaskAnswerProvenanceService $answerProvenanceService)
     {
         $this->taskService = $taskService;
+        $this->answerProvenanceService = $answerProvenanceService;
     }
 
     /**
@@ -57,8 +60,9 @@ class TopicController extends Controller
         $blocks = $this->taskService->getBlocks($topicId);
         $topicMeta = $this->taskService->getTopicMeta($topicId);
         $stats = $this->taskService->getTopicStats($topicId);
+        $answerOverrides = $this->answerProvenanceService->getOverridesForTopic($topicId);
 
-        return view('topics.show', compact('blocks', 'topicId', 'topicMeta', 'stats'));
+        return view('topics.show', compact('blocks', 'topicId', 'topicMeta', 'stats', 'answerOverrides'));
     }
 
     /**
@@ -188,8 +192,9 @@ class TopicController extends Controller
         $blocks = $this->taskService->getBlocks($topicId);
         $topicMeta = $this->taskService->getTopicMeta($topicId);
         $stats = $this->taskService->getTopicStats($topicId);
+        $answerOverrides = $this->answerProvenanceService->getOverridesForTopic($topicId);
 
-        return view('topics.show-svg', compact('blocks', 'topicId', 'topicMeta', 'stats'));
+        return view('topics.show-svg', compact('blocks', 'topicId', 'topicMeta', 'stats', 'answerOverrides'));
     }
 
     /**
