@@ -57,10 +57,6 @@
         const toHex = (v) => clamp(Math.round(v), 0, 255).toString(16).padStart(2, '0');
         return '#' + toHex(r) + toHex(g) + toHex(b);
     }
-    function rgbaFromHex(hex, alpha) {
-        const c = hexToRgb(hex);
-        return 'rgba(' + c.r + ', ' + c.g + ', ' + c.b + ', ' + clamp(alpha, 0, 1) + ')';
-    }
     function mix(hexA, hexB, ratio) {
         const a = hexToRgb(hexA);
         const b = hexToRgb(hexB);
@@ -126,9 +122,6 @@
         window.__currentTheme = window.__themes['educational-app'] ? 'educational-app' : Object.keys(window.__themes)[0];
     }
     const _t = window.__themes[window.__currentTheme];
-    const _p = (window.__themeCatalog || []).find(p => p.key === window.__currentTheme)
-        || (window.__themeCatalog || []).find(p => p.key === 'educational-app')
-        || null;
 
     // Set CSS custom properties for non-Tailwind styles
     document.documentElement.style.setProperty('--scroll-track', _t.scrollTrack);
@@ -137,30 +130,6 @@
     document.documentElement.style.setProperty('--skeleton-a', _t.skeletonA);
     document.documentElement.style.setProperty('--skeleton-b', _t.skeletonB);
     document.documentElement.style.setProperty('--focus-ring', _t.coral.DEFAULT);
-    if (_p) {
-        document.documentElement.style.setProperty('--site-primary', _p.primary);
-        document.documentElement.style.setProperty('--site-secondary', _p.secondary);
-        document.documentElement.style.setProperty('--site-cta', _p.cta);
-        document.documentElement.style.setProperty('--site-bg', _p.bg);
-        document.documentElement.style.setProperty('--site-surface', mix(_p.bg, '#ffffff', 0.88));
-        document.documentElement.style.setProperty('--site-surface-soft', mix(_p.bg, '#ffffff', 0.72));
-        document.documentElement.style.setProperty('--site-text', _p.text);
-        document.documentElement.style.setProperty('--site-muted', mix(_p.text, '#64748b', 0.45));
-        document.documentElement.style.setProperty('--site-subtle', mix(_p.text, '#94a3b8', 0.62));
-        document.documentElement.style.setProperty('--site-border', _p.border);
-        document.documentElement.style.setProperty('--site-border-soft', mix(_p.border, '#ffffff', 0.34));
-        document.documentElement.style.setProperty('--site-hover', rgbaFromHex(_p.primary, 0.10));
-
-        document.documentElement.style.setProperty('--site-dark-bg', mix('#0b1028', _p.primary, 0.22));
-        document.documentElement.style.setProperty('--site-dark-surface', mix('#111a3c', _p.primary, 0.16));
-        document.documentElement.style.setProperty('--site-dark-surface-soft', mix('#1a2750', _p.primary, 0.20));
-        document.documentElement.style.setProperty('--site-dark-text', mix('#ffffff', _p.secondary, 0.08));
-        document.documentElement.style.setProperty('--site-dark-muted', mix('#cbd5e1', _p.secondary, 0.26));
-        document.documentElement.style.setProperty('--site-dark-subtle', mix('#94a3b8', _p.secondary, 0.24));
-        document.documentElement.style.setProperty('--site-dark-border', rgbaFromHex(_p.secondary, 0.34));
-        document.documentElement.style.setProperty('--site-dark-border-soft', rgbaFromHex(_p.secondary, 0.22));
-        document.documentElement.style.setProperty('--site-dark-hover', rgbaFromHex(_p.secondary, 0.18));
-    }
 
     tailwind.config = {
         theme: {
