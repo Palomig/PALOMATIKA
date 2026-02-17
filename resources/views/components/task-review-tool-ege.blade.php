@@ -562,6 +562,10 @@ function clearAllFlagsEge() {
 
 // Функция для добавления кнопки флага к задаче
 function addFlagButtonEge(container, taskKey, taskInfo) {
+    // Для узких строк с горизонтальным скроллом флажок визуально ломается (похоже на фиолетовую "палку").
+    // Пропускаем такие контейнеры.
+    if (container.classList.contains('overflow-x-auto')) return;
+
     if (container.querySelector('.review-flag')) return;
 
     const btn = document.createElement('button');
