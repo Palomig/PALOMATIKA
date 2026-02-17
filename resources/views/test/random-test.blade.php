@@ -22,11 +22,16 @@
 <body class="min-h-screen bg-dark-50 text-slate-200">
 @php
     $shareUrl = isset($testHash) ? route('test.generator.show', ['hash' => $testHash]) : null;
+    $studentMode = auth()->check() && auth()->user()->role === 'student';
 @endphp
 
 <div class="max-w-5xl mx-auto px-4 py-8">
     <div class="no-print flex flex-wrap items-center justify-between gap-3 mb-6 rounded-xl border border-slate-800 bg-dark-light/40 px-4 py-3 text-sm">
-        <a href="{{ route('test.generator') }}" class="text-slate-300 hover:text-white transition">← К генератору</a>
+        @if($studentMode)
+            <a href="/dashboard" class="text-slate-300 hover:text-white transition">← В кабинет</a>
+        @else
+            <a href="{{ route('test.generator') }}" class="text-slate-300 hover:text-white transition">← К генератору</a>
+        @endif
         <div class="flex items-center gap-2">
             @if($shareUrl)
                 <button type="button" onclick="copyShareUrl()" class="px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition">Копировать ссылку</button>
@@ -134,15 +139,24 @@
                                 ? '$' . $optionText . '$'
                                 : $optionText;
                         @endphp
-                        <div class="rounded-lg border border-slate-700 bg-slate-900/35 px-3 py-2 text-slate-300 latex-content">
-                            {{ $index + 1 }}. {{ $displayOption }}
-                        </div>
+                        @if($studentMode)
+                            <label class="flex items-start gap-3 rounded-lg border border-slate-700 bg-slate-900/35 px-3 py-2 hover:bg-slate-900/60 transition cursor-pointer">
+                                <input type="radio" name="answer_{{ $testTask['topic_id'] }}_{{ $testTask['block_number'] }}_{{ $testTask['zadanie_number'] }}" value="{{ $index + 1 }}" class="mt-1">
+                                <span class="text-slate-300 latex-content">{{ $index + 1 }}. {{ $displayOption }}</span>
+                            </label>
+                        @else
+                            <div class="rounded-lg border border-slate-700 bg-slate-900/35 px-3 py-2 text-slate-300 latex-content">
+                                {{ $index + 1 }}. {{ $displayOption }}
+                            </div>
+                        @endif
                     @endforeach
                 </div>
-                <div class="mt-4">
-                    <label class="block text-sm text-slate-400 mb-2">Номер ответа:</label>
-                    <input type="text" class="w-full sm:w-64 px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-100 placeholder-slate-500" placeholder="Введите номер ответа">
-                </div>
+                @if(!$studentMode)
+                    <div class="mt-4">
+                        <label class="block text-sm text-slate-400 mb-2">Номер ответа:</label>
+                        <input type="text" class="w-full sm:w-64 px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-100 placeholder-slate-500" placeholder="Введите номер ответа">
+                    </div>
+                @endif
             @elseif(!empty($statements))
                 <div class="grid gap-2">
                     @foreach(array_slice($statements, 0, 3) as $statement)

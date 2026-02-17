@@ -2,11 +2,17 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
 
 class CustomGeneratorResultPageTest extends TestCase
 {
+    private function userWithRole(string $role): User
+    {
+        return User::factory()->make(['role' => $role]);
+    }
+
     public function test_cached_custom_test_result_page_is_accessible_by_hash(): void
     {
         $hash = 'abcd1234';
@@ -228,5 +234,29 @@ class CustomGeneratorResultPageTest extends TestCase
         $response->assertOk();
         $response->assertSee('1. $\\frac{75}{23}$');
         $response->assertSee('2. $\\frac{85}{23}$');
+    }
+
+    public function test_student_sees_selectable_options_instead_of_teacher_number_input(): void
+    {
+        $hash = 'ghij3456';
+        $student = $this->userWithRole('student');
+
+        Cache::put("custom_random_test_{$hash}", [[
+            'test_number' => 1,
+            'topic_id' => '07',
+            'topic_title' => 'Числа, координатная прямая',
+            'block_number' => 1,
+            'zadanie_number' => 15,
+            'instruction' => 'Выберите верный вариант.',
+            'task' => [
+                'options' => ['\\frac{75}{23}', '\\frac{85}{23}', '\\frac{97}{23}', '\\frac{110}{23}'],
+            ],
+        ]], now()->addMinutes(5));
+
+        $response = $this->actingAs($student)->get("/test/generator/result/{$hash}");
+
+        $response->assertOk();
+        $response->assertSee('type="radio"', false);
+        $response->assertDontSee('Введите номер ответа');
     }
 }
