@@ -121,7 +121,7 @@
     {{-- Tasks - используем унифицированный адаптер --}}
     @foreach($tasks as $index => $taskData)
         @php
-            $taskNumber = 6 + $index;
+            $taskNumber = (int) ($taskData['task_number'] ?? (6 + $index));
             $topicId = $taskData['topic_id'] ?? '';
 
             // Определяем цвет акцента для разных тем

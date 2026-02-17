@@ -4330,6 +4330,7 @@ class TestPdfController extends Controller
         return array_map(function (array $task): array {
             $adapted = [
                 'topic_id' => $task['topic_id'] ?? '',
+                'task_number' => (int) ($task['topic_id'] ?? 0),
                 'topic_title' => $task['topic_title'] ?? '',
                 'block_number' => $task['block_number'] ?? 1,
                 'block_title' => $task['block_title'] ?? '',

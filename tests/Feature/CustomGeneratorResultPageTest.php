@@ -284,4 +284,46 @@ class CustomGeneratorResultPageTest extends TestCase
         $response->assertSee('Вариант №');
         $response->assertSee('УНИКАЛЬНЫЙ МАРКЕР КАСТОМ');
     }
+
+    public function test_custom_hash_uses_exam_task_numbers_not_sequential_indices(): void
+    {
+        $hash = 'opqr1234';
+        $student = $this->userWithRole('student');
+
+        Cache::put("custom_random_test_{$hash}", [
+            [
+                'test_number' => 1,
+                'topic_id' => '13',
+                'topic_title' => 'Неравенства',
+                'block_number' => 1,
+                'zadanie_number' => 2,
+                'instruction' => 'Неравенства',
+                'type' => 'graphic',
+                'task' => [
+                    'expression' => 'x > 1',
+                    'options' => ['(1; +\\infty)', '(-\\infty; 1]'],
+                ],
+            ],
+            [
+                'test_number' => 2,
+                'topic_id' => '15',
+                'topic_title' => 'Треугольники',
+                'block_number' => 1,
+                'zadanie_number' => 1,
+                'instruction' => 'Треугольники',
+                'type' => 'word_problem',
+                'task' => [
+                    'text' => 'Найдите сторону',
+                ],
+            ],
+        ], now()->addMinutes(5));
+
+        $response = $this->actingAs($student)->get("/oge/{$hash}");
+
+        $response->assertOk();
+        $response->assertSee('data-task-number="13"', false);
+        $response->assertSee('data-task-number="15"', false);
+        $response->assertDontSee('data-task-number="6"', false);
+        $response->assertDontSee('data-task-number="7"', false);
+    }
 }
