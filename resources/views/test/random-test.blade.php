@@ -79,8 +79,9 @@
 
         <article class="task-card rounded-xl border border-slate-800 bg-dark-light/35 p-5 mb-4">
             <div class="flex flex-wrap items-start justify-between gap-3 mb-4">
-                <div class="w-10 h-10 rounded-lg bg-emerald-700/70 text-white font-semibold flex items-center justify-center">
-                    {{ $testTask['test_number'] }}
+                <div class="w-10 h-10 rounded-lg bg-emerald-700/70 text-white font-semibold flex items-center justify-center"
+                     data-exam-number="{{ (int) ($testTask['topic_id'] ?? 0) }}">
+                    {{ (int) ($testTask['topic_id'] ?? 0) }}
                 </div>
                 <div class="text-right text-xs text-slate-500">
                     <div class="inline-block px-2 py-1 rounded bg-slate-800 text-slate-300 mb-1">
@@ -123,11 +124,14 @@
             @if(!empty($task['options']))
                 <div class="grid gap-2">
                     @foreach($task['options'] as $index => $option)
-                        <label class="flex items-start gap-3 rounded-lg border border-slate-700 bg-slate-900/35 px-3 py-2 hover:bg-slate-900/60 transition cursor-pointer">
-                            <input type="radio" name="answer_{{ $testTask['test_number'] }}" value="{{ $index }}" class="mt-1">
-                            <span class="text-slate-300 latex-content">{{ $option }}</span>
-                        </label>
+                        <div class="rounded-lg border border-slate-700 bg-slate-900/35 px-3 py-2 text-slate-300 latex-content">
+                            {{ $index + 1 }}. {{ $option }}
+                        </div>
                     @endforeach
+                </div>
+                <div class="mt-4">
+                    <label class="block text-sm text-slate-400 mb-2">Номер ответа:</label>
+                    <input type="text" class="w-full sm:w-64 px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-100 placeholder-slate-500" placeholder="Введите номер ответа">
                 </div>
             @else
                 <div>

@@ -78,4 +78,72 @@ class CustomGeneratorResultPageTest extends TestCase
         $response->assertOk();
         $response->assertSee('number-line', false);
     }
+
+    public function test_result_page_sorts_tasks_by_exam_number_and_shows_exam_number_in_badge(): void
+    {
+        $hash = 'mnop3456';
+
+        Cache::put("custom_random_test_{$hash}", [
+            [
+                'test_number' => 1,
+                'topic_id' => '09',
+                'topic_title' => 'Уравнения',
+                'block_number' => 1,
+                'zadanie_number' => 2,
+                'instruction' => 'task-9',
+                'task' => ['text' => 'A'],
+            ],
+            [
+                'test_number' => 2,
+                'topic_id' => '06',
+                'topic_title' => 'Вычисления',
+                'block_number' => 1,
+                'zadanie_number' => 4,
+                'instruction' => 'task-6',
+                'task' => ['text' => 'B'],
+            ],
+            [
+                'test_number' => 3,
+                'topic_id' => '07',
+                'topic_title' => 'Числа',
+                'block_number' => 1,
+                'zadanie_number' => 1,
+                'instruction' => 'task-7',
+                'task' => ['text' => 'C'],
+            ],
+        ], now()->addMinutes(5));
+
+        $response = $this->get("/test/generator/result/{$hash}");
+
+        $response->assertOk();
+        $response->assertSeeInOrder(['task-6', 'task-7', 'task-9']);
+        $response->assertSee('data-exam-number="6"', false);
+    }
+
+    public function test_result_page_renders_choice_answers_as_numbered_list_with_number_input(): void
+    {
+        $hash = 'qrst7890';
+
+        Cache::put("custom_random_test_{$hash}", [[
+            'test_number' => 1,
+            'topic_id' => '07',
+            'topic_title' => 'Числа',
+            'block_number' => 2,
+            'zadanie_number' => 1,
+            'instruction' => 'Выберите верный вариант',
+            'task' => [
+                'options' => ['opt A', 'opt B', 'opt C', 'opt D'],
+            ],
+        ]], now()->addMinutes(5));
+
+        $response = $this->get("/test/generator/result/{$hash}");
+
+        $response->assertOk();
+        $response->assertSee('1. opt A');
+        $response->assertSee('2. opt B');
+        $response->assertSee('3. opt C');
+        $response->assertSee('4. opt D');
+        $response->assertSee('Введите номер ответа');
+        $response->assertDontSee('type="radio"', false);
+    }
 }

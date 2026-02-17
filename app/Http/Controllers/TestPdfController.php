@@ -183,6 +183,18 @@ class TestPdfController extends Controller
             abort(404);
         }
 
+        usort($testTasks, function (array $left, array $right): int {
+            $leftTopic = (int) ($left['topic_id'] ?? 0);
+            $rightTopic = (int) ($right['topic_id'] ?? 0);
+            $topicCompare = $leftTopic <=> $rightTopic;
+
+            if ($topicCompare !== 0) {
+                return $topicCompare;
+            }
+
+            return (int) ($left['zadanie_number'] ?? 0) <=> (int) ($right['zadanie_number'] ?? 0);
+        });
+
         return view('test.random-test', [
             'testTasks' => $testTasks,
             'testHash' => $hash,
