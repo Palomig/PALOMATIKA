@@ -114,45 +114,6 @@
             --tsh-topbar: rgba(24, 33, 56, 0.88);
         }
 
-        /* Dark-mode compatibility layer for legacy hardcoded teacher colors */
-        :root[data-ui-mode="dark"] .teacher-shell .text-\[\#222630\],
-        :root[data-ui-mode="dark"] .teacher-shell .text-\[\#1a1d26\] {
-            color: var(--tsh-text) !important;
-        }
-
-        :root[data-ui-mode="dark"] .teacher-shell .text-\[\#5f6775\],
-        :root[data-ui-mode="dark"] .teacher-shell .text-\[\#8c95a6\],
-        :root[data-ui-mode="dark"] .teacher-shell .text-\[\#a0a8b8\] {
-            color: var(--tsh-muted) !important;
-        }
-
-        :root[data-ui-mode="dark"] .teacher-shell .text-\[\#4a8af5\],
-        :root[data-ui-mode="dark"] .teacher-shell .hover\:text-\[\#4a8af5\]:hover,
-        :root[data-ui-mode="dark"] .teacher-shell .text-\[\#3a7ae5\],
-        :root[data-ui-mode="dark"] .teacher-shell .hover\:text-\[\#3a7ae5\]:hover {
-            color: var(--tsh-blue) !important;
-        }
-
-        :root[data-ui-mode="dark"] .teacher-shell .bg-\[\#f7f8fa\],
-        :root[data-ui-mode="dark"] .teacher-shell .bg-\[\#fafbfc\],
-        :root[data-ui-mode="dark"] .teacher-shell .bg-\[\#f9fafb\],
-        :root[data-ui-mode="dark"] .teacher-shell .bg-\[\#eef0f4\] {
-            background-color: var(--tsh-surface-soft) !important;
-        }
-
-        :root[data-ui-mode="dark"] .teacher-shell .hover\:bg-\[\#fafbfc\]:hover,
-        :root[data-ui-mode="dark"] .teacher-shell .hover\:bg-\[\#f9fafb\]:hover,
-        :root[data-ui-mode="dark"] .teacher-shell .hover\:bg-\[\#eef0f4\]:hover {
-            background-color: var(--tsh-hover) !important;
-        }
-
-        :root[data-ui-mode="dark"] .teacher-shell [style*="color: #222630"],
-        :root[data-ui-mode="dark"] .teacher-shell [style*="color:#222630"],
-        :root[data-ui-mode="dark"] .teacher-shell [style*="color: #1a1d26"],
-        :root[data-ui-mode="dark"] .teacher-shell [style*="color:#1a1d26"] {
-            color: var(--tsh-text) !important;
-        }
-
         .teacher-shell .bg-dark,
         .teacher-shell .bg-dark-light,
         .teacher-shell .bg-dark-lighter {
