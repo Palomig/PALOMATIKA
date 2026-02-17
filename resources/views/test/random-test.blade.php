@@ -50,19 +50,28 @@
         @php
             $task = $testTask['task'] ?? [];
             $resolvedImage = null;
+            $inlineSvgFromImage = null;
+            $svgType = $testTask['svg_type'] ?? ($task['svg_type'] ?? null);
+            $points = $task['points'] ?? ($testTask['points'] ?? null);
 
             if (!empty($task['image'])) {
-                $image = ltrim((string) $task['image'], '/');
-                $candidates = [
-                    "images/tasks/{$testTask['topic_id']}/{$image}",
-                    "images/tasks/{$image}",
-                    $image,
-                ];
+                $imageRaw = (string) $task['image'];
 
-                foreach ($candidates as $candidate) {
-                    if (file_exists(public_path($candidate))) {
-                        $resolvedImage = asset($candidate);
-                        break;
+                if (\Illuminate\Support\Str::startsWith($imageRaw, '<svg')) {
+                    $inlineSvgFromImage = $imageRaw;
+                } else {
+                    $image = ltrim($imageRaw, '/');
+                    $candidates = [
+                        "images/tasks/{$testTask['topic_id']}/{$image}",
+                        "images/tasks/{$image}",
+                        $image,
+                    ];
+
+                    foreach ($candidates as $candidate) {
+                        if (file_exists(public_path($candidate))) {
+                            $resolvedImage = asset($candidate);
+                            break;
+                        }
                     }
                 }
             }
@@ -85,6 +94,16 @@
 
             @if(!empty($task['svg']))
                 <div class="task-svg-wrap rounded-lg border border-slate-700 bg-slate-900/40 p-3 mb-4 overflow-auto">{!! $task['svg'] !!}</div>
+            @elseif($inlineSvgFromImage)
+                <div class="task-svg-wrap rounded-lg border border-slate-700 bg-slate-900/40 p-3 mb-4 overflow-auto">{!! $inlineSvgFromImage !!}</div>
+            @elseif($svgType)
+                <div class="rounded-lg border border-slate-700 bg-slate-900/40 p-3 mb-4">
+                    @include('tasks.partials.number-line', [
+                        'points' => $points,
+                        'svgType' => $svgType,
+                        'task' => $task,
+                    ])
+                </div>
             @elseif($resolvedImage)
                 <div class="task-image-wrap rounded-lg border border-slate-700 bg-slate-900/40 p-3 mb-4 text-center">
                     <img src="{{ $resolvedImage }}" alt="Иллюстрация задания" loading="lazy">
