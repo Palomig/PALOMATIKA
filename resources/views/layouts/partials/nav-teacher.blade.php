@@ -1,4 +1,4 @@
-{{-- Teacher navigation — Tabler-style wide sidebar --}}
+{{-- Teacher navigation — SugarCRM-style compact icon sidebar --}}
 @php
     $navItems = [
         ['url' => '/teacher', 'match' => 'teacher', 'exact' => true, 'label' => 'Обзор', 'icon' => 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'],
@@ -18,18 +18,17 @@
             : request()->is($item['match']);
     @endphp
     <a href="{{ $item['url'] }}"
-       class="group flex items-center gap-3 w-full px-3 py-2.5 rounded-xl transition-all duration-150
+       class="group relative flex items-center justify-center w-9 h-9 rounded-lg transition-all duration-150
               {{ $isActive
-                  ? 'bg-[var(--tsh-accent-soft)] text-[var(--tsh-accent)]'
-                  : 'text-[var(--tsh-muted)] hover:bg-[var(--tsh-hover)] hover:text-[var(--tsh-text)]' }}"
+                  ? 'bg-[#2c3345] text-white'
+                  : 'text-[#8c95a6] hover:bg-[#eef0f4] hover:text-[#222630]' }}"
        title="{{ $item['label'] }}">
-        <span class="w-8 h-8 rounded-lg border flex items-center justify-center flex-shrink-0"
-              style="border-color: var(--tsh-border); background: var(--tsh-surface);">
-            <svg class="w-[16px] h-[16px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.7">
-                <path stroke-linecap="round" stroke-linejoin="round" d="{{ $item['icon'] }}"/>
-            </svg>
+        <svg class="w-[17px] h-[17px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.7">
+            <path stroke-linecap="round" stroke-linejoin="round" d="{{ $item['icon'] }}"/>
+        </svg>
+        {{-- Tooltip --}}
+        <span class="tsh-nav-label hidden lg:block absolute left-full ml-2.5 px-2 py-1 bg-[#2c3345] text-white text-[11px] font-medium rounded-md whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity shadow-lg z-50">
+            {{ $item['label'] }}
         </span>
-        <span class="tsh-nav-label text-sm font-medium">{{ $item['label'] }}</span>
-        <span class="ml-auto w-1.5 h-1.5 rounded-full {{ $isActive ? 'bg-[var(--tsh-accent)]' : 'bg-transparent' }}"></span>
     </a>
 @endforeach

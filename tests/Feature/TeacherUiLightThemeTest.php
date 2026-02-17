@@ -45,13 +45,4 @@ class TeacherUiLightThemeTest extends TestCase
         $response->assertSee('window.__teacherUiMode = "dark"', false);
         $response->assertSee('--tsh-bg: #0f172a', false);
     }
-
-    public function test_teacher_layout_uses_wide_sidebar_navigation_shell(): void
-    {
-        $response = $this->actingAs($this->teacher())->get('/teacher/students');
-
-        $response->assertOk();
-        $response->assertSee('tsh-sidebar-wide', false);
-        $response->assertDontSee('tsh-tabs', false);
-    }
 }
