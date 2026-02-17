@@ -20,8 +20,8 @@
     <a href="{{ $item['url'] }}"
        class="group relative flex items-center justify-center w-11 h-11 rounded-full transition-all duration-200
               {{ $isActive
-                  ? 'bg-gray-900 text-white shadow-sm shadow-black/10'
-                  : 'text-gray-400 hover:bg-gray-100/90 hover:text-gray-700' }}"
+                  ? 'bg-gray-900 text-white shadow-md shadow-black/10'
+                  : 'text-gray-400 hover:bg-gray-100 hover:text-gray-700' }}"
        title="{{ $item['label'] }}">
         <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
             <path stroke-linecap="round" stroke-linejoin="round" d="{{ $item['icon'] }}"/>

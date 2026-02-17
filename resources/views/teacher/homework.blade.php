@@ -6,7 +6,7 @@
 @section('content')
 <div x-data="homeworkPage()" class="space-y-5">
     <section class="relative overflow-hidden rounded-2xl tsh-card p-5 sm:p-6">
-        <div class="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-amber-50/80 to-transparent pointer-events-none"></div>
+        <div class="absolute inset-y-0 right-0 w-1/2 bg-gradient-to-l from-amber-50 to-transparent pointer-events-none"></div>
         <div class="relative flex flex-wrap items-end justify-between gap-3">
             <div>
                 <p class="tsh-page-kicker">Homework flow</p>
@@ -21,7 +21,7 @@
 
     {{-- Actions bar --}}
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-        <select x-model="statusFilter" class="rounded-xl px-4 py-2.5 text-sm transition min-w-[144px]" style="border: 1px solid var(--tsh-border)">
+        <select x-model="statusFilter" class="rounded-xl px-4 py-2.5 text-sm transition" style="border: 1px solid var(--tsh-border)">
             <option value="">Все</option>
             <option value="active">Активные</option>
             <option value="completed">Завершённые</option>
@@ -39,7 +39,7 @@
     {{-- Homework list --}}
     <div class="space-y-4">
         <template x-for="hw in filteredHomework" :key="hw.id">
-            <div class="tsh-card rounded-2xl overflow-hidden transition-colors">
+            <div class="tsh-card rounded-2xl overflow-hidden transition-colors" onmouseover="this.style.borderColor='var(--tsh-border)'" onmouseout="this.style.borderColor='transparent'" style="border: 1px solid transparent">
                 <div class="p-5">
                     <div class="flex items-start justify-between gap-3 mb-4">
                         <div>
