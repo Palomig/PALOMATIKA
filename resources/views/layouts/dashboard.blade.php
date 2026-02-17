@@ -77,85 +77,79 @@
         }
 
         :root[data-ui-mode="light"] .teacher-shell {
-            --tsh-primary: #4F46E5;
-            --tsh-secondary: #818CF8;
-            --tsh-cta: #F97316;
-            --tsh-bg: #EEF2FF;
-            --tsh-surface: #FFFFFF;
-            --tsh-surface-soft: #EEF2FF;
-            --tsh-text: #1E1B4B;
-            --tsh-muted: #4C4A78;
-            --tsh-subtle: #6D6AA2;
-            --tsh-border: #C7D2FE;
-            --tsh-border-soft: rgba(199, 210, 254, 0.7);
-            --tsh-hover: rgba(79, 70, 229, 0.08);
-            --tsh-shadow: 0 1px 2px rgba(30, 27, 75, 0.08);
-            --tsh-shadow-lg: 0 14px 28px rgba(79, 70, 229, 0.12);
-            --tsh-accent: var(--tsh-primary);
-            --tsh-accent-soft: rgba(79, 70, 229, 0.1);
-            --tsh-blue: var(--tsh-primary);
-            --tsh-blue-soft: rgba(79, 70, 229, 0.15);
-            --tsh-topbar: #FFFFFF;
+            --tsh-bg: #f5f7fb;
+            --tsh-surface: #ffffff;
+            --tsh-surface-soft: #f6f8fc;
+            --tsh-text: #1f2937;
+            --tsh-muted: #5b6474;
+            --tsh-subtle: #8a93a3;
+            --tsh-border: rgba(15, 23, 42, 0.1);
+            --tsh-border-soft: rgba(15, 23, 42, 0.06);
+            --tsh-hover: rgba(15, 23, 42, 0.045);
+            --tsh-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+            --tsh-shadow-lg: 0 8px 28px rgba(15, 23, 42, 0.1);
+            --tsh-accent: #2f3a4d;
+            --tsh-accent-soft: #eef2f8;
+            --tsh-blue: #206bc4;
+            --tsh-blue-soft: #e9f2fe;
+            --tsh-topbar: rgba(255, 255, 255, 0.94);
         }
 
         :root[data-ui-mode="dark"] .teacher-shell {
-            --tsh-primary: #818CF8;
-            --tsh-secondary: #A5B4FC;
-            --tsh-cta: #FB923C;
-            --tsh-bg: #111433;
-            --tsh-surface: #1B2250;
-            --tsh-surface-soft: #242C63;
-            --tsh-text: #E7E9FF;
-            --tsh-muted: #B6BCEB;
-            --tsh-subtle: #929AD0;
-            --tsh-border: rgba(129, 140, 248, 0.32);
-            --tsh-border-soft: rgba(129, 140, 248, 0.2);
-            --tsh-hover: rgba(129, 140, 248, 0.18);
-            --tsh-shadow: 0 1px 2px rgba(8, 12, 38, 0.45);
-            --tsh-shadow-lg: 0 20px 40px rgba(8, 12, 38, 0.5);
-            --tsh-accent: var(--tsh-primary);
-            --tsh-accent-soft: rgba(129, 140, 248, 0.2);
-            --tsh-blue: var(--tsh-primary);
-            --tsh-blue-soft: rgba(129, 140, 248, 0.22);
-            --tsh-topbar: #1B2250;
+            --tsh-bg: #0f172a;
+            --tsh-surface: #182138;
+            --tsh-surface-soft: #1d2943;
+            --tsh-text: #e5e7eb;
+            --tsh-muted: #a8b0be;
+            --tsh-subtle: #8993a7;
+            --tsh-border: rgba(148, 163, 184, 0.22);
+            --tsh-border-soft: rgba(148, 163, 184, 0.14);
+            --tsh-hover: rgba(148, 163, 184, 0.12);
+            --tsh-shadow: 0 1px 2px rgba(2, 6, 23, 0.5);
+            --tsh-shadow-lg: 0 18px 40px rgba(2, 6, 23, 0.45);
+            --tsh-accent: #3f8cff;
+            --tsh-accent-soft: rgba(63, 140, 255, 0.16);
+            --tsh-blue: #3f8cff;
+            --tsh-blue-soft: rgba(63, 140, 255, 0.16);
+            --tsh-topbar: rgba(24, 33, 56, 0.88);
         }
 
-        /* Compatibility layer for legacy hardcoded teacher colors */
-        .teacher-shell .text-\[\#222630\],
-        .teacher-shell .text-\[\#1a1d26\] {
+        /* Dark-mode compatibility layer for legacy hardcoded teacher colors */
+        :root[data-ui-mode="dark"] .teacher-shell .text-\[\#222630\],
+        :root[data-ui-mode="dark"] .teacher-shell .text-\[\#1a1d26\] {
             color: var(--tsh-text) !important;
         }
 
-        .teacher-shell .text-\[\#5f6775\],
-        .teacher-shell .text-\[\#8c95a6\],
-        .teacher-shell .text-\[\#a0a8b8\] {
+        :root[data-ui-mode="dark"] .teacher-shell .text-\[\#5f6775\],
+        :root[data-ui-mode="dark"] .teacher-shell .text-\[\#8c95a6\],
+        :root[data-ui-mode="dark"] .teacher-shell .text-\[\#a0a8b8\] {
             color: var(--tsh-muted) !important;
         }
 
-        .teacher-shell .text-\[\#4a8af5\],
-        .teacher-shell .hover\:text-\[\#4a8af5\]:hover,
-        .teacher-shell .text-\[\#3a7ae5\],
-        .teacher-shell .hover\:text-\[\#3a7ae5\]:hover {
+        :root[data-ui-mode="dark"] .teacher-shell .text-\[\#4a8af5\],
+        :root[data-ui-mode="dark"] .teacher-shell .hover\:text-\[\#4a8af5\]:hover,
+        :root[data-ui-mode="dark"] .teacher-shell .text-\[\#3a7ae5\],
+        :root[data-ui-mode="dark"] .teacher-shell .hover\:text-\[\#3a7ae5\]:hover {
             color: var(--tsh-blue) !important;
         }
 
-        .teacher-shell .bg-\[\#f7f8fa\],
-        .teacher-shell .bg-\[\#fafbfc\],
-        .teacher-shell .bg-\[\#f9fafb\],
-        .teacher-shell .bg-\[\#eef0f4\] {
+        :root[data-ui-mode="dark"] .teacher-shell .bg-\[\#f7f8fa\],
+        :root[data-ui-mode="dark"] .teacher-shell .bg-\[\#fafbfc\],
+        :root[data-ui-mode="dark"] .teacher-shell .bg-\[\#f9fafb\],
+        :root[data-ui-mode="dark"] .teacher-shell .bg-\[\#eef0f4\] {
             background-color: var(--tsh-surface-soft) !important;
         }
 
-        .teacher-shell .hover\:bg-\[\#fafbfc\]:hover,
-        .teacher-shell .hover\:bg-\[\#f9fafb\]:hover,
-        .teacher-shell .hover\:bg-\[\#eef0f4\]:hover {
+        :root[data-ui-mode="dark"] .teacher-shell .hover\:bg-\[\#fafbfc\]:hover,
+        :root[data-ui-mode="dark"] .teacher-shell .hover\:bg-\[\#f9fafb\]:hover,
+        :root[data-ui-mode="dark"] .teacher-shell .hover\:bg-\[\#eef0f4\]:hover {
             background-color: var(--tsh-hover) !important;
         }
 
-        .teacher-shell [style*="color: #222630"],
-        .teacher-shell [style*="color:#222630"],
-        .teacher-shell [style*="color: #1a1d26"],
-        .teacher-shell [style*="color:#1a1d26"] {
+        :root[data-ui-mode="dark"] .teacher-shell [style*="color: #222630"],
+        :root[data-ui-mode="dark"] .teacher-shell [style*="color:#222630"],
+        :root[data-ui-mode="dark"] .teacher-shell [style*="color: #1a1d26"],
+        :root[data-ui-mode="dark"] .teacher-shell [style*="color:#1a1d26"] {
             color: var(--tsh-text) !important;
         }
 
@@ -216,11 +210,6 @@
         .tsh-brand-mark {
             background: var(--tsh-accent);
             color: #fff;
-        }
-
-        .tsh-fluid-shell {
-            width: 100%;
-            background: var(--tsh-bg);
         }
 
         /* Card styles */
@@ -321,12 +310,12 @@
         }
 
         .tsh-btn-primary {
-            background: var(--tsh-primary);
+            background: var(--tsh-accent);
             color: #fff;
             border: none;
         }
         .tsh-btn-primary:hover {
-            background: var(--tsh-secondary);
+            background: #3a4055;
             color: #fff;
         }
 
@@ -340,12 +329,12 @@
             font-size: 13px;
             font-weight: 600;
             color: #fff;
-            background: var(--tsh-cta);
+            background: var(--tsh-accent);
             border: 1px solid transparent;
             transition: all .15s ease;
         }
         .tsh-action-primary:hover {
-            filter: brightness(1.06);
+            background: #3a4055;
         }
 
         .tsh-action-secondary {
@@ -443,7 +432,7 @@
 <body class="{{ $role === 'teacher' ? 'bg-transparent teacher-shell' : 'bg-dark' }} min-h-screen antialiased" x-data="dashboardApp('{{ $role }}')">
     @if($role === 'teacher')
     {{-- ========== TEACHER LAYOUT (Tabler-inspired) ========== --}}
-    <div class="tsh-fluid-shell flex min-h-screen">
+    <div class="flex min-h-screen">
         {{-- Wide Sidebar --}}
         <aside class="tsh-sidebar tsh-sidebar-wide fixed inset-y-0 left-0 z-30 transition-transform duration-300 ease-out"
                :class="{ '-translate-x-full lg:translate-x-0': !sidebarOpen, 'translate-x-0': sidebarOpen }"
@@ -565,7 +554,7 @@
 
             {{-- Page content --}}
             <main class="p-4 sm:p-5 lg:p-6">
-                <div class="w-full">
+                <div class="max-w-[1440px] mx-auto">
                     @yield('content')
                 </div>
             </main>
