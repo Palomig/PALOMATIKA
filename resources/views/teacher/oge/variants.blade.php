@@ -34,7 +34,9 @@
             </thead>
             <tbody>
                 @forelse($variants as $variant)
-                    <tr class="hover:bg-[#f9fafb]" style="border-top: 1px solid var(--tsh-border-soft)">
+                    <tr style="border-top: 1px solid var(--tsh-border-soft)"
+                        onmouseover="this.style.background='var(--tsh-surface-soft)'"
+                        onmouseout="this.style.background='white'">
                         <td class="px-5 py-3.5">
                             <span class="font-mono bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-md text-xs">{{ $variant->hash }}</span>
                         </td>

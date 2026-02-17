@@ -26,7 +26,9 @@
             </thead>
             <tbody>
                 @forelse($teachers as $teacher)
-                    <tr class="hover:bg-[#f9fafb]" style="border-top: 1px solid var(--tsh-border-soft)">
+                    <tr style="border-top: 1px solid var(--tsh-border-soft)"
+                        onmouseover="this.style.background='var(--tsh-surface-soft)'"
+                        onmouseout="this.style.background='transparent'">
                         <td class="px-5 py-3.5">
                             <div class="flex items-center gap-3">
                                 <div class="w-9 h-9 bg-[#e7effe] text-[#5f87d8] rounded-full flex items-center justify-center flex-shrink-0">

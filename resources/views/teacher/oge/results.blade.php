@@ -48,7 +48,9 @@
                             $totalMs = (int) $attempt->taskTimings->sum('active_ms');
                             $totalMinutes = round($totalMs / 60000, 1);
                         @endphp
-                        <tr class="align-top hover:bg-[#f9fafb]" style="border-top: 1px solid var(--tsh-border-soft)">
+                        <tr class="align-top" style="border-top: 1px solid var(--tsh-border-soft)"
+                            onmouseover="this.style.background='var(--tsh-surface-soft)'"
+                            onmouseout="this.style.background='white'">
                             <td class="px-4 py-3 sticky left-0" style="background: var(--tsh-surface)">
                                 <div class="flex items-center gap-2.5">
                                     <div class="w-7 h-7 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center flex-shrink-0">

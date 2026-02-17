@@ -18,16 +18,16 @@
             : request()->is($item['match']);
     @endphp
     <a href="{{ $item['url'] }}"
-       class="group relative flex items-center justify-center w-9 h-9 rounded-lg transition-all duration-150
+       class="group relative flex items-center justify-center w-11 h-11 rounded-full transition-all duration-200
               {{ $isActive
-                  ? 'bg-[#2c3345] text-white'
-                  : 'text-[#8c95a6] hover:bg-[#eef0f4] hover:text-[#222630]' }}"
+                  ? 'bg-gray-900 text-white shadow-sm shadow-black/10'
+                  : 'text-gray-400 bg-[#f7f9fd] border border-[rgba(113,125,150,0.18)] hover:bg-[#f1f5fc] hover:text-gray-700' }}"
        title="{{ $item['label'] }}">
-        <svg class="w-[17px] h-[17px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.7">
+        <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
             <path stroke-linecap="round" stroke-linejoin="round" d="{{ $item['icon'] }}"/>
         </svg>
         {{-- Tooltip --}}
-        <span class="tsh-nav-label hidden lg:block absolute left-full ml-2.5 px-2 py-1 bg-[#2c3345] text-white text-[11px] font-medium rounded-md whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity shadow-lg z-50">
+        <span class="tsh-nav-label hidden lg:block absolute left-full ml-3 px-2.5 py-1 bg-gray-900 text-white text-xs font-medium rounded-lg whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity shadow-lg z-50">
             {{ $item['label'] }}
         </span>
     </a>
