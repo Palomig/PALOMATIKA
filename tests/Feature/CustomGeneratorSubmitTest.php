@@ -32,4 +32,20 @@ class CustomGeneratorSubmitTest extends TestCase
         $response->assertSee('18.');
         $response->assertSee('19.');
     }
+
+    public function test_topic_19_generation_renders_three_numbered_statements(): void
+    {
+        $response = $this->followingRedirects()->post('/test/generator/generate', [
+            'topics' => ['19'],
+            'tasks_per_topic' => 1,
+        ]);
+
+        $response->assertOk();
+        $response->assertSee('19.');
+        $response->assertSee('1.');
+        $response->assertSee('2.');
+        $response->assertSee('3.');
+        $response->assertSee('Введите номера верных утверждений');
+        $response->assertDontSee('15. ', false);
+    }
 }

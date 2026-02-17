@@ -136,17 +136,12 @@
                 </div>
             @elseif(!empty($statements))
                 <div class="grid gap-2">
-                    @foreach($statements as $statement)
+                    @foreach(array_slice($statements, 0, 3) as $statement)
                         @php
-                            $statementId = is_array($statement) ? ($statement['id'] ?? null) : null;
                             $statementText = is_array($statement) ? ($statement['text'] ?? '') : (string) $statement;
                         @endphp
                         <div class="rounded-lg border border-slate-700 bg-slate-900/35 px-3 py-2 text-slate-300">
-                            @if($statementId)
-                                {{ $statementId }}. {{ $statementText }}
-                            @else
-                                {{ $statementText }}
-                            @endif
+                            {{ $loop->iteration }}. {{ $statementText }}
                         </div>
                     @endforeach
                 </div>

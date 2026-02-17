@@ -156,6 +156,7 @@ class TestPdfController extends Controller
                 $tasks = $this->taskGenerator->getRandomTasksFromTopic($topicId, $tasksPerTopic);
             }
 
+            $tasks = array_map(fn(array $task): array => $this->normalizeCustomTask($task), $tasks);
             $testTasks = array_merge($testTasks, $tasks);
         }
 
@@ -214,6 +215,33 @@ class TestPdfController extends Controller
             'testTasks' => $testTasks,
             'testHash' => $hash,
         ]);
+    }
+
+    /**
+     * Normalize task payload for stable rendering in custom generator result page.
+     */
+    protected function normalizeCustomTask(array $task): array
+    {
+        if (($task['topic_id'] ?? null) !== '19') {
+            return $task;
+        }
+
+        $rawStatements = [];
+        if (isset($task['task']['statements']) && is_array($task['task']['statements'])) {
+            $rawStatements = $task['task']['statements'];
+        } elseif (isset($task['statements']) && is_array($task['statements'])) {
+            $rawStatements = $task['statements'];
+        }
+
+        if (empty($rawStatements)) {
+            return $task;
+        }
+
+        shuffle($rawStatements);
+        $task['task']['statements'] = array_values(array_slice($rawStatements, 0, 3));
+        unset($task['statements']);
+
+        return $task;
     }
 
     /**

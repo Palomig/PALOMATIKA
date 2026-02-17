@@ -170,8 +170,40 @@ class CustomGeneratorResultPageTest extends TestCase
         $response = $this->get("/test/generator/result/{$hash}");
 
         $response->assertOk();
-        $response->assertSee('29. Утверждение A');
-        $response->assertSee('30. Утверждение B');
+        $response->assertSee('1. Утверждение A');
+        $response->assertSee('2. Утверждение B');
         $response->assertSee('Введите номера верных утверждений');
+    }
+
+    public function test_result_page_renders_only_three_statements_for_topic_19(): void
+    {
+        $hash = 'yzab5678';
+
+        Cache::put("custom_random_test_{$hash}", [[
+            'test_number' => 1,
+            'topic_id' => '19',
+            'topic_title' => 'Анализ геометрических высказываний',
+            'block_number' => 1,
+            'zadanie_number' => 3,
+            'instruction' => 'Укажите номера верных утверждений.',
+            'type' => 'statements',
+            'task' => [
+                'statements' => [
+                    ['id' => 53, 'text' => 'A'],
+                    ['id' => 54, 'text' => 'B'],
+                    ['id' => 55, 'text' => 'C'],
+                    ['id' => 56, 'text' => 'D'],
+                ],
+            ],
+        ]], now()->addMinutes(5));
+
+        $response = $this->get("/test/generator/result/{$hash}");
+
+        $response->assertOk();
+        $response->assertSee('1. A');
+        $response->assertSee('2. B');
+        $response->assertSee('3. C');
+        $response->assertDontSee('4. D');
+        $response->assertDontSee('53. A');
     }
 }
