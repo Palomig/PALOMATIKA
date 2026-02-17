@@ -562,9 +562,9 @@ function clearAllFlagsEge() {
 
 // Функция для добавления кнопки флага к задаче
 function addFlagButtonEge(container, taskKey, taskInfo) {
-    // Для узких строк с горизонтальным скроллом флажок визуально ломается (похоже на фиолетовую "палку").
-    // Пропускаем такие контейнеры.
-    if (container.classList.contains('overflow-x-auto')) return;
+    // Для задач с горизонтальным скроллом KaTeX флажок визуально ломается (выглядит как "фиолетовая палка").
+    // Пропускаем и сами такие контейнеры, и контейнеры с вложенным overflow-блоком.
+    if (container.classList.contains('overflow-x-auto') || container.querySelector('.overflow-x-auto')) return;
 
     if (container.querySelector('.review-flag')) return;
 
