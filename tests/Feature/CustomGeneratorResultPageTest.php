@@ -259,4 +259,29 @@ class CustomGeneratorResultPageTest extends TestCase
         $response->assertSee('type="radio"', false);
         $response->assertDontSee('Введите номер ответа');
     }
+
+    public function test_custom_hash_is_rendered_via_oge_route_with_same_template(): void
+    {
+        $hash = 'klmn7890';
+        $student = $this->userWithRole('student');
+
+        Cache::put("custom_random_test_{$hash}", [[
+            'test_number' => 1,
+            'topic_id' => '15',
+            'topic_title' => 'Треугольники',
+            'block_number' => 2,
+            'zadanie_number' => 3,
+            'instruction' => 'УНИКАЛЬНЫЙ МАРКЕР КАСТОМ',
+            'type' => 'word_problem',
+            'task' => [
+                'text' => 'Текст кастомной задачи',
+            ],
+        ]], now()->addMinutes(5));
+
+        $response = $this->actingAs($student)->get("/oge/{$hash}");
+
+        $response->assertOk();
+        $response->assertSee('Вариант №');
+        $response->assertSee('УНИКАЛЬНЫЙ МАРКЕР КАСТОМ');
+    }
 }

@@ -174,7 +174,7 @@ class TestPdfController extends Controller
             json_encode($testTasks, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
         );
 
-        return redirect()->route('test.generator.show', ['hash' => $hash]);
+        return redirect()->route('oge.show', ['hash' => $hash]);
     }
 
     public function showGeneratedRandomTest(string $hash)
@@ -183,17 +183,7 @@ class TestPdfController extends Controller
             abort(404);
         }
 
-        $testTasks = \Cache::get("custom_random_test_{$hash}");
-
-        if ((!is_array($testTasks) || empty($testTasks)) && Storage::disk('local')->exists("custom_random_tests/{$hash}.json")) {
-            $raw = Storage::disk('local')->get("custom_random_tests/{$hash}.json");
-            $decoded = json_decode($raw, true);
-
-            if (is_array($decoded) && !empty($decoded)) {
-                $testTasks = $decoded;
-                \Cache::put("custom_random_test_{$hash}", $testTasks, now()->addDays(7));
-            }
-        }
+        $testTasks = $this->loadCustomRandomTestByHash($hash);
 
         if (!is_array($testTasks) || empty($testTasks)) {
             abort(404);
@@ -4273,6 +4263,28 @@ class TestPdfController extends Controller
             abort(404);
         }
 
+        $customTasks = $this->loadCustomRandomTestByHash(strtolower($hash));
+        if (is_array($customTasks) && !empty($customTasks)) {
+            usort($customTasks, function (array $left, array $right): int {
+                $leftTopic = (int) ($left['topic_id'] ?? 0);
+                $rightTopic = (int) ($right['topic_id'] ?? 0);
+                $topicCompare = $leftTopic <=> $rightTopic;
+
+                if ($topicCompare !== 0) {
+                    return $topicCompare;
+                }
+
+                return (int) ($left['zadanie_number'] ?? 0) <=> (int) ($right['zadanie_number'] ?? 0);
+            });
+
+            return view('test.oge-variant', [
+                'tasks' => $this->adaptCustomTasksForOgeVariant($customTasks),
+                'variantNumber' => 1,
+                'variantHash' => $hash,
+                'selectedZadaniya' => [],
+            ]);
+        }
+
         // Backward compatibility: query-based selected zadaniya.
         $selectedFromQuery = null;
         $zadaniyaParam = $request->query('zadaniya');
@@ -4294,6 +4306,56 @@ class TestPdfController extends Controller
             'variantHash' => $hash,
             'selectedZadaniya' => $variantPayload['selectedZadaniya'] ?? [],
         ]);
+    }
+
+    protected function loadCustomRandomTestByHash(string $hash): ?array
+    {
+        $testTasks = \Cache::get("custom_random_test_{$hash}");
+
+        if ((!is_array($testTasks) || empty($testTasks)) && Storage::disk('local')->exists("custom_random_tests/{$hash}.json")) {
+            $raw = Storage::disk('local')->get("custom_random_tests/{$hash}.json");
+            $decoded = json_decode($raw, true);
+
+            if (is_array($decoded) && !empty($decoded)) {
+                $testTasks = $decoded;
+                \Cache::put("custom_random_test_{$hash}", $testTasks, now()->addDays(7));
+            }
+        }
+
+        return is_array($testTasks) ? $testTasks : null;
+    }
+
+    protected function adaptCustomTasksForOgeVariant(array $customTasks): array
+    {
+        return array_map(function (array $task): array {
+            $adapted = [
+                'topic_id' => $task['topic_id'] ?? '',
+                'topic_title' => $task['topic_title'] ?? '',
+                'block_number' => $task['block_number'] ?? 1,
+                'block_title' => $task['block_title'] ?? '',
+                'zadanie_number' => $task['zadanie_number'] ?? 1,
+                'instruction' => $task['instruction'] ?? '',
+                'type' => $task['type'] ?? 'expression',
+                'svg_type' => $task['svg_type'] ?? null,
+                'points' => $task['points'] ?? null,
+                'options' => $task['options'] ?? null,
+                'section' => $task['section'] ?? null,
+                'task' => $task['task'] ?? [],
+            ];
+
+            $taskStatements = $task['task']['statements'] ?? null;
+            if (($adapted['type'] ?? null) === 'statements' && is_array($taskStatements)) {
+                $adapted['selected_statements'] = array_values(array_map(
+                    fn($statement, $idx) => is_array($statement)
+                        ? array_merge(['display_number' => $idx + 1], $statement)
+                        : ['display_number' => $idx + 1, 'text' => (string) $statement],
+                    array_slice($taskStatements, 0, 3),
+                    array_keys(array_slice($taskStatements, 0, 3))
+                ));
+            }
+
+            return $adapted;
+        }, $customTasks);
     }
 
     /**
