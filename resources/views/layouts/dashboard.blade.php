@@ -13,7 +13,6 @@
     $role = $role ?? 'student';
     $isAdmin = auth()->check() && auth()->user()->role === 'admin';
     $viewAsRole = $isAdmin ? (session('view_as_role') ?? null) : null;
-    $teacherUiMode = ($role === 'teacher' && auth()->check() && auth()->user()->teacher_ui_mode === 'dark') ? 'dark' : 'light';
 @endphp
 <!DOCTYPE html>
 <html lang="ru">
@@ -23,12 +22,7 @@
     @if($role === 'student')
         @include('partials.head-katex')
     @endif
-    @if($role === 'teacher')
-    <script>
-        window.__teacherUiMode = @json($teacherUiMode);
-        document.documentElement.setAttribute('data-ui-mode', window.__teacherUiMode);
-    </script>
-    @else
+    @if($role !== 'teacher')
     <script>
         window.__uiMode = localStorage.getItem('palomatika_ui_mode') || 'dark';
         if (!['light', 'dark'].includes(window.__uiMode)) window.__uiMode = 'dark';
@@ -68,50 +62,27 @@
         }
         @endif
 
-        /* === Teacher shell (Tabler-inspired) === */
+        /* === SugarCRM-inspired Teacher Shell === */
         .teacher-shell {
+            --tsh-bg: #f5f6f8;
+            --tsh-surface: #ffffff;
+            --tsh-surface-soft: #f7f8fa;
+            --tsh-text: #222630;
+            --tsh-muted: #5f6775;
+            --tsh-subtle: #8c95a6;
+            --tsh-border: rgba(0, 0, 0, 0.07);
+            --tsh-border-soft: rgba(0, 0, 0, 0.04);
+            --tsh-hover: rgba(0, 0, 0, 0.025);
+            --tsh-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+            --tsh-shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --tsh-accent: #2c3345;
+            --tsh-accent-soft: #eef0f4;
+            --tsh-blue: #4a8af5;
+            --tsh-blue-soft: #edf3ff;
             --tsh-sidebar-w: 64px;
             background: var(--tsh-bg);
             color: var(--tsh-text);
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        :root[data-ui-mode="light"] .teacher-shell {
-            --tsh-bg: #f5f7fb;
-            --tsh-surface: #ffffff;
-            --tsh-surface-soft: #f6f8fc;
-            --tsh-text: #1f2937;
-            --tsh-muted: #5b6474;
-            --tsh-subtle: #8a93a3;
-            --tsh-border: rgba(15, 23, 42, 0.1);
-            --tsh-border-soft: rgba(15, 23, 42, 0.06);
-            --tsh-hover: rgba(15, 23, 42, 0.045);
-            --tsh-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
-            --tsh-shadow-lg: 0 8px 28px rgba(15, 23, 42, 0.1);
-            --tsh-accent: #2f3a4d;
-            --tsh-accent-soft: #eef2f8;
-            --tsh-blue: #206bc4;
-            --tsh-blue-soft: #e9f2fe;
-            --tsh-topbar: rgba(255, 255, 255, 0.94);
-        }
-
-        :root[data-ui-mode="dark"] .teacher-shell {
-            --tsh-bg: #0f172a;
-            --tsh-surface: #182138;
-            --tsh-surface-soft: #1d2943;
-            --tsh-text: #e5e7eb;
-            --tsh-muted: #a8b0be;
-            --tsh-subtle: #8993a7;
-            --tsh-border: rgba(148, 163, 184, 0.22);
-            --tsh-border-soft: rgba(148, 163, 184, 0.14);
-            --tsh-hover: rgba(148, 163, 184, 0.12);
-            --tsh-shadow: 0 1px 2px rgba(2, 6, 23, 0.5);
-            --tsh-shadow-lg: 0 18px 40px rgba(2, 6, 23, 0.45);
-            --tsh-accent: #3f8cff;
-            --tsh-accent-soft: rgba(63, 140, 255, 0.16);
-            --tsh-blue: #3f8cff;
-            --tsh-blue-soft: rgba(63, 140, 255, 0.16);
-            --tsh-topbar: rgba(24, 33, 56, 0.88);
         }
 
         .teacher-shell .bg-dark,
@@ -131,9 +102,9 @@
         .teacher-shell .text-gray-600,
         .teacher-shell .text-gray-500,
         .teacher-shell .text-gray-400 { color: var(--tsh-muted) !important; }
-        .teacher-shell .text-gray-300 { color: var(--tsh-subtle) !important; }
-        .teacher-shell .text-gray-200 { color: var(--tsh-text) !important; }
-        .teacher-shell .text-gray-700 { color: var(--tsh-subtle) !important; }
+        .teacher-shell .text-gray-300 { color: #374151 !important; }
+        .teacher-shell .text-gray-200 { color: #1f2937 !important; }
+        .teacher-shell .text-gray-700 { color: #9ca3af !important; }
 
         .teacher-shell [class*="border-white"] { border-color: var(--tsh-border) !important; }
         .teacher-shell [class*="bg-white/"] { background-color: var(--tsh-hover) !important; }
@@ -145,16 +116,16 @@
         /* Sidebar — compact icon-only */
         .teacher-shell aside.tsh-sidebar {
             width: var(--tsh-sidebar-w);
-            background: var(--tsh-surface) !important;
-            border-right: 1px solid var(--tsh-border) !important;
+            background: #ffffff !important;
+            border-right: 1px solid rgba(0,0,0,0.05) !important;
             box-shadow: none;
         }
 
         .teacher-shell header.tsh-header {
-            background: var(--tsh-topbar) !important;
+            background: rgba(255,255,255,0.96) !important;
             backdrop-filter: blur(12px) saturate(140%);
             -webkit-backdrop-filter: blur(12px) saturate(140%);
-            border-bottom: 1px solid var(--tsh-border) !important;
+            border-bottom: 1px solid rgba(0,0,0,0.05) !important;
             min-height: 54px;
         }
 
@@ -176,27 +147,27 @@
         }
         .tsh-tab:hover {
             color: var(--tsh-text);
-            background: var(--tsh-hover);
+            background: rgba(0,0,0,0.035);
         }
         .tsh-tab.active {
             background: var(--tsh-accent);
             color: #fff;
             font-weight: 600;
-            box-shadow: var(--tsh-shadow);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
         }
 
         /* Card styles */
         .tsh-card {
-            background: var(--tsh-surface);
+            background: #ffffff;
             border-radius: 12px;
-            box-shadow: var(--tsh-shadow);
-            border: 1px solid var(--tsh-border);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.05);
             overflow: hidden;
         }
         .tsh-card-soft {
             background: var(--tsh-surface-soft);
             border-radius: 10px;
-            border: 1px solid var(--tsh-border-soft);
+            border: 1px solid rgba(0,0,0,0.03);
         }
 
         /* Hero typography */
@@ -229,7 +200,7 @@
         .tsh-stat-green,
         .tsh-stat-amber,
         .tsh-stat-coral,
-        .tsh-stat-violet { background: var(--tsh-surface); }
+        .tsh-stat-violet { background: #ffffff; }
 
         /* Avatar with status badge */
         .tsh-avatar {
@@ -271,14 +242,14 @@
             width: 34px;
             height: 34px;
             border-radius: 8px;
-            border: 1px solid var(--tsh-border);
+            border: 1px solid rgba(0,0,0,0.06);
             background: transparent;
             color: var(--tsh-subtle);
             transition: all 0.15s ease;
             cursor: pointer;
         }
         .tsh-btn:hover {
-            background: var(--tsh-hover);
+            background: rgba(0,0,0,0.035);
             color: var(--tsh-text);
         }
 
@@ -319,20 +290,20 @@
             font-size: 13px;
             font-weight: 500;
             color: var(--tsh-text);
-            background: var(--tsh-surface);
-            border: 1px solid var(--tsh-border);
+            background: #ffffff;
+            border: 1px solid rgba(0,0,0,0.1);
             transition: all .15s ease;
         }
         .tsh-action-secondary:hover {
-            background: var(--tsh-hover);
-            border-color: var(--tsh-border);
+            background: #f7f8fa;
+            border-color: rgba(0,0,0,0.14);
         }
 
         /* Progress bar SugarCRM style */
         .tsh-progress {
             height: 3px;
             border-radius: 2px;
-            background: var(--tsh-accent-soft);
+            background: #eef0f3;
             overflow: hidden;
         }
         .tsh-progress-bar {
@@ -343,21 +314,21 @@
 
         /* Table styles */
         .teacher-shell table th {
-            background: var(--tsh-surface-soft);
+            background: #fafbfc;
             font-size: 11px;
         }
         .teacher-shell table tr:hover td {
-            background: var(--tsh-surface-soft);
+            background: #fafbfc;
         }
 
         /* Sticky sidebar cell in teacher-shell */
-        .teacher-shell .sticky { background: var(--tsh-surface) !important; }
+        .teacher-shell .sticky { background: #ffffff !important; }
 
         /* Scrollbar for teacher-shell */
         .teacher-shell ::-webkit-scrollbar { width: 6px; height: 6px; }
         .teacher-shell ::-webkit-scrollbar-track { background: transparent; }
-        .teacher-shell ::-webkit-scrollbar-thumb { background: var(--tsh-subtle); border-radius: 3px; }
-        .teacher-shell ::-webkit-scrollbar-thumb:hover { background: var(--tsh-muted); }
+        .teacher-shell ::-webkit-scrollbar-thumb { background: #d4d6db; border-radius: 3px; }
+        .teacher-shell ::-webkit-scrollbar-thumb:hover { background: #a1a5ae; }
 
         /* Page-in animation */
         .teacher-shell main {
@@ -377,12 +348,12 @@
             .teacher-shell aside.tsh-sidebar .tsh-nav-label { display: block; }
         }
 
-        /* Input overrides */
+        /* Input overrides for light theme */
         .teacher-shell input,
         .teacher-shell select,
         .teacher-shell textarea {
-            background-color: var(--tsh-surface) !important;
-            border-color: var(--tsh-border) !important;
+            background-color: #ffffff !important;
+            border-color: rgba(0,0,0,0.1) !important;
             color: var(--tsh-text) !important;
         }
         .teacher-shell input::placeholder,
@@ -393,19 +364,19 @@
         .teacher-shell select:focus,
         .teacher-shell textarea:focus {
             border-color: var(--tsh-blue) !important;
-            box-shadow: 0 0 0 3px var(--tsh-blue-soft) !important;
+            box-shadow: 0 0 0 3px rgba(74, 138, 245, 0.1) !important;
         }
 
         /* Modal overrides */
         .teacher-shell .fixed.inset-0 .bg-dark-light,
         .teacher-shell .fixed.inset-0 [class*="bg-dark"] {
-            background-color: var(--tsh-surface) !important;
+            background-color: #ffffff !important;
         }
     </style>
 </head>
 <body class="{{ $role === 'teacher' ? 'bg-transparent teacher-shell' : 'bg-dark' }} min-h-screen antialiased" x-data="dashboardApp('{{ $role }}')">
     @if($role === 'teacher')
-    {{-- ========== TEACHER LAYOUT (Tabler-inspired) ========== --}}
+    {{-- ========== TEACHER LAYOUT (SugarCRM-style) ========== --}}
     <div class="flex min-h-screen">
         {{-- Compact Icon Sidebar --}}
         <aside class="tsh-sidebar fixed inset-y-0 left-0 z-30 flex flex-col items-center py-4 transition-transform duration-300 ease-out"
@@ -427,13 +398,11 @@
 
             {{-- Bottom actions --}}
             <div class="flex flex-col items-center gap-1.5 mt-3">
-                {{-- UI mode --}}
-                <button @click="toggleTeacherMode()" class="tsh-btn w-8 h-8" :title="teacherUiMode === 'dark' ? 'Светлая тема' : 'Тёмная тема'">
-                    <svg x-show="teacherUiMode === 'light'" class="w-[16px] h-[16px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.7">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/>
-                    </svg>
-                    <svg x-show="teacherUiMode === 'dark'" x-cloak class="w-[16px] h-[16px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.7">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364 6.364l-1.414-1.414M7.05 7.05 5.636 5.636m12.728 0L16.95 7.05M7.05 16.95l-1.414 1.414M12 16a4 4 0 100-8 4 4 0 000 8z"/>
+                {{-- Settings --}}
+                <button class="tsh-btn w-8 h-8" title="Настройки">
+                    <svg class="w-[16px] h-[16px]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.7">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                     </svg>
                 </button>
 
@@ -461,7 +430,7 @@
             {{-- Top header with tabs --}}
             <header class="tsh-header sticky top-0 z-20 flex items-center px-4 sm:px-6 gap-3">
                 {{-- Mobile menu button --}}
-                <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden tsh-btn w-9 h-9 mr-1" aria-label="Открыть меню">
+                <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden w-9 h-9 flex items-center justify-center rounded-xl text-gray-500 hover:text-gray-800 hover:bg-gray-100 transition mr-1" aria-label="Открыть меню">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                 </button>
 
@@ -490,16 +459,6 @@
 
                 {{-- Right actions --}}
                 <div class="flex items-center gap-1 flex-shrink-0">
-                    {{-- Light / dark --}}
-                    <button @click="toggleTeacherMode()" class="tsh-btn" :title="teacherUiMode === 'dark' ? 'Светлая тема' : 'Тёмная тема'">
-                        <svg x-show="teacherUiMode === 'light'" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.7">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/>
-                        </svg>
-                        <svg x-show="teacherUiMode === 'dark'" x-cloak class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.7">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364 6.364l-1.414-1.414M7.05 7.05 5.636 5.636m12.728 0L16.95 7.05M7.05 16.95l-1.414 1.414M12 16a4 4 0 100-8 4 4 0 000 8z"/>
-                        </svg>
-                    </button>
-
                     {{-- Search --}}
                     <button class="tsh-btn" title="Поиск">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.7"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
@@ -521,9 +480,7 @@
                     </button>
 
                     {{-- User avatar --}}
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-semibold cursor-pointer ml-1 border"
-                         style="background: var(--tsh-accent-soft); color: var(--tsh-text); border-color: var(--tsh-border);"
-                         title="Профиль" x-text="user?.name?.charAt(0) || '?'"></div>
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center text-[#4a5568] text-xs font-semibold cursor-pointer ml-1" title="Профиль" x-text="user?.name?.charAt(0) || '?'"></div>
                 </div>
             </header>
 
@@ -748,8 +705,6 @@
             streak: null,
             referralLink: '',
             role: role,
-            teacherUiMode: window.__teacherUiMode || 'light',
-            teacherUiModeSaving: false,
 
             async init() {
                 window.addEventListener('resize', () => {
@@ -791,38 +746,6 @@
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 };
-            },
-
-            async toggleTeacherMode() {
-                if (this.role !== 'teacher' || this.teacherUiModeSaving) return;
-
-                const previousMode = this.teacherUiMode;
-                const nextMode = this.teacherUiMode === 'dark' ? 'light' : 'dark';
-
-                this.teacherUiMode = nextMode;
-                document.documentElement.setAttribute('data-ui-mode', nextMode);
-                this.teacherUiModeSaving = true;
-
-                try {
-                    const response = await fetch('{{ route('teacher.ui-mode') }}', {
-                        method: 'POST',
-                        headers: {
-                            ...this.getAuthHeaders(),
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
-                        },
-                        body: JSON.stringify({ mode: nextMode })
-                    });
-
-                    if (!response.ok) {
-                        throw new Error('Failed to persist teacher UI mode');
-                    }
-                } catch (e) {
-                    this.teacherUiMode = previousMode;
-                    document.documentElement.setAttribute('data-ui-mode', previousMode);
-                    console.error('Failed to save teacher UI mode', e);
-                } finally {
-                    this.teacherUiModeSaving = false;
-                }
             },
 
             copyReferralLink() {

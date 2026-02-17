@@ -18,9 +18,9 @@ class TeacherUiLightThemeTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('teacher-shell', false);
-        $response->assertSee('window.__teacherUiMode = "light"', false);
-        $response->assertSee('--tsh-bg: #f5f7fb', false);
+        $response->assertSee('--tsh-bg: #eceff5', false);
         $response->assertDontSee("window.__uiMode = localStorage.getItem('palomatika_ui_mode') || 'dark'", false);
+        $response->assertDontSee(":root[data-ui-mode=\"dark\"]", false);
     }
 
     public function test_teacher_earnings_page_avoids_dark_gradient_cards(): void
@@ -30,19 +30,5 @@ class TeacherUiLightThemeTest extends TestCase
         $response->assertOk();
         $response->assertDontSee('bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 text-white', false);
         $response->assertSee('tsh-card', false);
-    }
-
-    public function test_teacher_dashboard_applies_dark_mode_from_user_preference(): void
-    {
-        $teacher = User::factory()->make([
-            'role' => 'teacher',
-            'teacher_ui_mode' => 'dark',
-        ]);
-
-        $response = $this->actingAs($teacher)->get('/teacher');
-
-        $response->assertOk();
-        $response->assertSee('window.__teacherUiMode = "dark"', false);
-        $response->assertSee('--tsh-bg: #0f172a', false);
     }
 }
