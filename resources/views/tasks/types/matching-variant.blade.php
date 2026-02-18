@@ -34,7 +34,7 @@
                     </div>
 
                     {{-- Изображение графика --}}
-                    <div class="p-3 bg-white min-h-[150px] flex items-center justify-center">
+                    <div class="p-3 bg-transparent min-h-[150px] flex items-center justify-center">
                         @if($hasSvg)
                             {{-- Предзаготовленный SVG (Static SVG System) --}}
                             {!! $task['svg'] !!}
