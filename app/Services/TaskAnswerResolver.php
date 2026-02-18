@@ -196,40 +196,29 @@ class TaskAnswerResolver
             return null;
         }
 
-        $expr = str_replace(['\\left', '\\right'], '', $expr);
-        $expr = str_replace('{,}', '.', $expr);
-        $expr = preg_replace('/(\d+)\s*\\\\frac\s*\{([^{}]+)\}\s*\{([^{}]+)\}/', '(($1)+(($2)/($3)))', $expr) ?? $expr;
-
-        while (preg_match('/\\\\frac\s*\{([^{}]+)\}\s*\{([^{}]+)\}/', $expr, $m)) {
-            $expr = str_replace($m[0], '((' . $m[1] . ')/(' . $m[2] . '))', $expr);
+        // Поддержка хвоста вида "\text{ при } a = 3, b = 5".
+        [$mathPart, $variables] = $this->splitExpressionAndAssignments($expr);
+        $converted = $this->latexToMathExpression($mathPart);
+        if ($converted === null || $converted === '') {
+            return null;
         }
 
-        $expr = str_replace(
-            ['$', '−', '–', '\\cdot', '\\times', '\\div', ':', '{', '}', ','],
-            ['', '-', '-', '*', '*', '/', '/', '(', ')', '.'],
-            $expr
-        );
-
-        while (preg_match('/\\\\sqrt\(([^()]+)\)/', $expr, $m)) {
-            if (!is_numeric($m[1])) {
-                return null;
-            }
-            $expr = str_replace($m[0], (string) sqrt((float) $m[1]), $expr);
+        foreach ($variables as $name => $value) {
+            $converted = preg_replace('/\b' . preg_quote($name, '/') . '\b/u', '(' . $value . ')', $converted) ?? $converted;
         }
 
-        $expr = str_replace('^', '**', $expr);
-        $expr = preg_replace('/(\d)\(/', '$1*(', $expr) ?? $expr;
-        $expr = preg_replace('/\)(\d)/', ')*$1', $expr) ?? $expr;
-        $expr = str_replace(')(', ')*(', $expr);
-        $expr = preg_replace('/\s+/', '', $expr) ?? '';
-
-        if ($expr === '' || preg_match('/[a-zA-Zа-яА-Я=]/u', $expr) || !preg_match('/^[0-9\.\+\-\*\/\(\)]+$/', $expr)) {
+        $converted = preg_replace('/\s+/', '', $converted) ?? '';
+        if ($converted === '' || preg_match('/[^0-9\.\+\-\*\/\(\),a-zA-Z_]/', $converted)) {
+            return null;
+        }
+        // После подстановки переменных должны остаться только sqrt/pow как функции.
+        if (preg_match('/[a-zA-Z_]+/', $converted, $m) && !in_array($m[0], ['sqrt', 'pow'], true)) {
             return null;
         }
 
         try {
             /** @var mixed $value */
-            $value = eval('return ' . $expr . ';');
+            $value = eval('return ' . $converted . ';');
         } catch (\Throwable) {
             return null;
         }
@@ -244,6 +233,169 @@ class TaskAnswerResolver
         }
 
         return rtrim(rtrim(sprintf('%.10F', $num), '0'), '.');
+    }
+
+    /**
+     * @return array{0:string,1:array<string,float>}
+     */
+    private function splitExpressionAndAssignments(string $expr): array
+    {
+        $expr = str_replace(['\\left', '\\right', '\\displaystyle', '$', '−', '–'], ['', '', '', '', '-', '-'], $expr);
+        $expr = str_replace('{,}', '.', $expr);
+
+        $parts = preg_split('/\\\\text\s*\{\s*при\s*\}/u', $expr, 2);
+        $math = trim((string) ($parts[0] ?? ''));
+        $vars = [];
+
+        if (!isset($parts[1])) {
+            return [$math, $vars];
+        }
+
+        $tail = trim($parts[1]);
+        foreach (preg_split('/\s*,\s*/', $tail) as $assignment) {
+            if (!preg_match('/^([a-zA-Z]+)\s*=\s*(.+)$/u', trim($assignment), $m)) {
+                continue;
+            }
+            $name = $m[1];
+            $raw = trim($m[2]);
+            $value = $this->parseAssignedValue($raw);
+            if ($value === null) {
+                continue;
+            }
+            $vars[$name] = $value;
+        }
+
+        return [$math, $vars];
+    }
+
+    private function parseAssignedValue(string $raw): ?float
+    {
+        $raw = str_replace(' ', '', $raw);
+        $raw = str_replace(',', '.', $raw);
+
+        if (preg_match('/^(-?\d+)\\\\frac\{(\d+)\}\{(\d+)\}$/', $raw, $m)) {
+            $whole = (int) $m[1];
+            $num = (int) $m[2];
+            $den = (int) $m[3];
+            if ($den === 0) {
+                return null;
+            }
+            if ($whole < 0) {
+                return $whole - ($num / $den);
+            }
+            return $whole + ($num / $den);
+        }
+
+        if (preg_match('/^(-?)\\\\frac\{(\d+)\}\{(\d+)\}$/', $raw, $m)) {
+            $sign = $m[1] === '-' ? -1.0 : 1.0;
+            $num = (int) $m[2];
+            $den = (int) $m[3];
+            if ($den === 0) {
+                return null;
+            }
+            return $sign * ($num / $den);
+        }
+
+        if (is_numeric($raw)) {
+            return (float) $raw;
+        }
+
+        return null;
+    }
+
+    private function latexToMathExpression(string $expr): ?string
+    {
+        $s = trim($expr);
+        if ($s === '') {
+            return null;
+        }
+
+        $s = str_replace(['\\cdot', '\\times', ':', '\\div'], ['*', '*', '/', '/'], $s);
+        $s = str_replace(['{,}', ','], ['.', '.'], $s);
+
+        // Коэффициент перед \sqrt: 5\sqrt{...} -> 5*\sqrt{...}
+        $s = preg_replace('/(\d)\s*\\\\sqrt/u', '$1*\\\\sqrt', $s) ?? $s;
+
+        // \frac{a}{b} -> ((a)/(b)), рекурсивно для вложенных фракций.
+        while (($pos = strpos($s, '\\frac')) !== false) {
+            $num = $this->extractBraced($s, $pos + 5);
+            if ($num === null) {
+                return null;
+            }
+            [$numExpr, $afterNum] = $num;
+            $den = $this->extractBraced($s, $afterNum);
+            if ($den === null) {
+                return null;
+            }
+            [$denExpr, $afterDen] = $den;
+
+            $replacement = '((' . $numExpr . ')/(' . $denExpr . '))';
+            $s = substr($s, 0, $pos) . $replacement . substr($s, $afterDen);
+        }
+
+        // \sqrt{a} -> sqrt(a)
+        while (($pos = strpos($s, '\\sqrt')) !== false) {
+            $radicand = $this->extractBraced($s, $pos + 5);
+            if ($radicand === null) {
+                return null;
+            }
+            [$body, $after] = $radicand;
+            $replacement = 'sqrt(' . $body . ')';
+            $s = substr($s, 0, $pos) . $replacement . substr($s, $after);
+        }
+
+        // Приводим "16a" к "16*a" до разбора степеней, чтобы не получить "(16a)^n".
+        $s = preg_replace('/(\d)([a-zA-Z])/u', '$1*$2', $s) ?? $s;
+
+        // Степени вида a^{14}
+        $s = preg_replace('/([a-zA-Z0-9\)\.]+)\^\{([^{}]+)\}/u', '($1)**($2)', $s) ?? $s;
+        // Степени вида a^2
+        $s = preg_replace('/([a-zA-Z0-9\)\.]+)\^(-?[0-9]+)/u', '($1)**($2)', $s) ?? $s;
+
+        // Преобразуем оставшиеся фигурные скобки в круглые.
+        $s = str_replace(['{', '}'], ['(', ')'], $s);
+
+        // Неявные умножения.
+        $s = preg_replace('/(\d)([a-zA-Z\(])/u', '$1*$2', $s) ?? $s;
+        $s = preg_replace('/([a-zA-Z\)])(\d)/u', '$1*$2', $s) ?? $s;
+        $s = preg_replace('/(?<!sqrt)(?<!pow)([a-zA-Z\)])\(/u', '$1*(', $s) ?? $s;
+        $s = preg_replace('/\)([a-zA-Z\(])/u', ')*$1', $s) ?? $s;
+        // Разделяем только пары одиночных переменных вида "ab" -> "a*b",
+        // не трогая имена функций вроде sqrt/pow.
+        $s = preg_replace('/\b([a-zA-Z])([a-zA-Z])\b/u', '$1*$2', $s) ?? $s;
+        $s = str_replace(['sqrt*(', 'pow*('], ['sqrt(', 'pow('], $s);
+
+        return $s;
+    }
+
+    /**
+     * @return array{0:string,1:int}|null
+     */
+    private function extractBraced(string $s, int $start): ?array
+    {
+        while (isset($s[$start]) && ctype_space($s[$start])) {
+            $start++;
+        }
+        if (!isset($s[$start]) || $s[$start] !== '{') {
+            return null;
+        }
+
+        $depth = 0;
+        $i = $start;
+        $len = strlen($s);
+        for (; $i < $len; $i++) {
+            if ($s[$i] === '{') {
+                $depth++;
+            } elseif ($s[$i] === '}') {
+                $depth--;
+                if ($depth === 0) {
+                    $content = substr($s, $start + 1, $i - $start - 1);
+                    return [$content, $i + 1];
+                }
+            }
+        }
+
+        return null;
     }
 
     private function countIntegersBetween(string $leftExpr, string $rightExpr): ?int

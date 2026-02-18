@@ -57,4 +57,28 @@ class TaskAnswerResolverTest extends TestCase
         $this->assertTrue($resolver->isCorrect('2 4 1', '241'));
         $this->assertFalse($resolver->isCorrect('241', '214'));
     }
+
+    public function test_resolves_latex_with_variable_assignments_in_text_clause(): void
+    {
+        $resolver = new TaskAnswerResolver();
+
+        $answer = $resolver->resolveFromTaskAndZadanie(
+            ['type' => 'expression'],
+            ['expression' => '\sqrt{\frac{16a^{14}}{a^8}} \text{ при } a = 3']
+        );
+
+        $this->assertSame('108', $answer);
+    }
+
+    public function test_resolves_latex_with_sqrt_products_and_coefficients(): void
+    {
+        $resolver = new TaskAnswerResolver();
+
+        $answer = $resolver->resolveFromTaskAndZadanie(
+            ['type' => 'expression'],
+            ['expression' => '5\sqrt{11} \cdot 2\sqrt{2} \cdot \sqrt{22}']
+        );
+
+        $this->assertSame('220', $answer);
+    }
 }
