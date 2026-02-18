@@ -166,7 +166,7 @@
     @endforeach
 
     @if($studentMode)
-        <div id="attempt-bottom-bar" class="no-print sticky bottom-4 z-30 mt-6">
+        <div id="attempt-bottom-bar" class="no-print mt-10">
             <div class="rounded-xl border border-slate-700 bg-slate-900/95 backdrop-blur p-4 flex flex-wrap items-center justify-between gap-3 shadow-lg">
                 <div>
                     <p class="text-white text-sm font-medium">Ответы сохраняются по кнопке «ОК»</p>
