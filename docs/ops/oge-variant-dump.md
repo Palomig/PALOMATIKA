@@ -20,3 +20,11 @@ JSON report with:
 - per-attempt student/status/timestamps
 - per-task answers/timings/scoring
 - away-time totals from meta and events
+
+## Audit cleanup (manual only)
+
+Run only when needed:
+
+```bash
+php artisan audit:prune --days=90
+```

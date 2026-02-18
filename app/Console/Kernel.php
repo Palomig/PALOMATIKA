@@ -12,7 +12,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('audit:prune --days=90')->dailyAt('03:30');
+        // Audit prune is manual-only by request.
     }
 
     /**
