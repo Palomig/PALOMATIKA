@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\TaskAnswerOverride;
 use App\Models\User;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
@@ -105,5 +106,34 @@ class AdminTaskAnswerUpdateApiTest extends TestCase
                 'answer' => '',
             ])
             ->assertStatus(422);
+    }
+
+    public function test_admin_can_patch_task_answer_when_override_tables_are_missing(): void
+    {
+        Schema::dropIfExists('task_answer_override_logs');
+        Schema::dropIfExists('task_answer_overrides');
+
+        $admin = User::factory()->create(['role' => 'admin', 'name' => 'Maria']);
+        $topicPath = storage_path('app/tasks/topic_06.json');
+        $original = File::get($topicPath);
+
+        try {
+            $this->actingAs($admin)
+                ->patchJson('/api/topics/06/answers', [
+                    'task_key' => 'topic_06_block_1_zadanie_1_task_1',
+                    'answer' => '220',
+                ])
+                ->assertOk()
+                ->assertJsonPath('source', 'file')
+                ->assertJsonPath('source_label', 'JSON')
+                ->assertJsonPath('updated_by_name', 'Maria');
+
+            $topicData = json_decode(File::get($topicPath), true);
+            $taskAnswer = $topicData['blocks'][0]['zadaniya'][0]['tasks'][0]['answer'] ?? null;
+
+            $this->assertSame('220', $taskAnswer);
+        } finally {
+            File::put($topicPath, $original);
+        }
     }
 }

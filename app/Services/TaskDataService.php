@@ -592,4 +592,61 @@ class TaskDataService
 
         return false;
     }
+
+    public function updateTaskAnswerByKey(string $topicId, string $taskKey, string $answer): bool
+    {
+        $topicId = str_pad($topicId, 2, '0', STR_PAD_LEFT);
+        if (!$this->isValidTaskKey($taskKey, $topicId)) {
+            return false;
+        }
+
+        preg_match('/^topic_\d{2}_block_(\d+)_zadanie_(\d+)_task_(\d+)$/', $taskKey, $matches);
+        $blockNumber = (int) ($matches[1] ?? 0);
+        $zadanieNumber = (int) ($matches[2] ?? 0);
+        $taskId = (int) ($matches[3] ?? 0);
+
+        if ($blockNumber < 1 || $zadanieNumber < 1 || $taskId < 1) {
+            return false;
+        }
+
+        $topicData = $this->getTopicData($topicId);
+        if (empty($topicData) || !isset($topicData['blocks']) || !is_array($topicData['blocks'])) {
+            return false;
+        }
+
+        $updated = false;
+        foreach ($topicData['blocks'] as $blockIndex => $block) {
+            if ((int) ($block['number'] ?? 0) !== $blockNumber) {
+                continue;
+            }
+
+            if (!isset($topicData['blocks'][$blockIndex]['zadaniya']) || !is_array($topicData['blocks'][$blockIndex]['zadaniya'])) {
+                continue;
+            }
+
+            foreach ($topicData['blocks'][$blockIndex]['zadaniya'] as $zadanieIndex => $zadanie) {
+                if ((int) ($zadanie['number'] ?? 0) !== $zadanieNumber) {
+                    continue;
+                }
+
+                if (!isset($topicData['blocks'][$blockIndex]['zadaniya'][$zadanieIndex]['tasks']) || !is_array($topicData['blocks'][$blockIndex]['zadaniya'][$zadanieIndex]['tasks'])) {
+                    continue;
+                }
+
+                foreach ($topicData['blocks'][$blockIndex]['zadaniya'][$zadanieIndex]['tasks'] as $taskIndex => $task) {
+                    if ((int) ($task['id'] ?? 0) === $taskId) {
+                        $topicData['blocks'][$blockIndex]['zadaniya'][$zadanieIndex]['tasks'][$taskIndex]['answer'] = $answer;
+                        $updated = true;
+                        break 3;
+                    }
+                }
+            }
+        }
+
+        if (!$updated) {
+            return false;
+        }
+
+        return $this->saveTopicData($topicId, $topicData);
+    }
 }
