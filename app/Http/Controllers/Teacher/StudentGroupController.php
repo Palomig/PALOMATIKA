@@ -5,11 +5,16 @@ namespace App\Http\Controllers\Teacher;
 use App\Http\Controllers\Controller;
 use App\Models\StudentGroup;
 use App\Models\TeacherStudent;
+use App\Services\AuditLogger;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class StudentGroupController extends Controller
 {
+    public function __construct(private readonly AuditLogger $auditLogger)
+    {
+    }
+
     public function index()
     {
         return view('teacher.groups.index');
@@ -83,6 +88,22 @@ class StudentGroupController extends Controller
             'description' => isset($validated['description']) ? trim($validated['description']) : null,
         ]);
 
+        $this->auditLogger->log([
+            'event_type' => 'student_group_created',
+            'category' => 'teacher',
+            'severity' => 'info',
+            'actor_user_id' => $request->user()->id,
+            'actor_role' => $request->user()->role,
+            'subject_type' => 'student_group',
+            'subject_id' => $group->id,
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'payload_json' => [
+                'owner_teacher_id' => $group->owner_teacher_id,
+                'name' => $group->name,
+            ],
+        ]);
+
         return response()->json([
             'success' => true,
             'group' => [
@@ -117,6 +138,21 @@ class StudentGroupController extends Controller
 
         $group->students()->syncWithoutDetaching([(int) $validated['student_id']]);
 
+        $this->auditLogger->log([
+            'event_type' => 'student_group_student_added',
+            'category' => 'teacher',
+            'severity' => 'info',
+            'actor_user_id' => $request->user()->id,
+            'actor_role' => $request->user()->role,
+            'subject_type' => 'student_group',
+            'subject_id' => $group->id,
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'payload_json' => [
+                'student_id' => (int) $validated['student_id'],
+            ],
+        ]);
+
         return response()->json(['success' => true]);
     }
 
@@ -126,6 +162,21 @@ class StudentGroupController extends Controller
 
         $group->students()->detach($studentId);
 
+        $this->auditLogger->log([
+            'event_type' => 'student_group_student_removed',
+            'category' => 'teacher',
+            'severity' => 'info',
+            'actor_user_id' => $request->user()->id,
+            'actor_role' => $request->user()->role,
+            'subject_type' => 'student_group',
+            'subject_id' => $group->id,
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'payload_json' => [
+                'student_id' => $studentId,
+            ],
+        ]);
+
         return response()->json(['success' => true]);
     }
 
@@ -133,7 +184,20 @@ class StudentGroupController extends Controller
     {
         $this->authorizeOwnership($request, $group);
 
+        $groupId = $group->id;
         $group->delete();
+
+        $this->auditLogger->log([
+            'event_type' => 'student_group_deleted',
+            'category' => 'teacher',
+            'severity' => 'info',
+            'actor_user_id' => $request->user()->id,
+            'actor_role' => $request->user()->role,
+            'subject_type' => 'student_group',
+            'subject_id' => $groupId,
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
 
         return response()->json(['success' => true]);
     }

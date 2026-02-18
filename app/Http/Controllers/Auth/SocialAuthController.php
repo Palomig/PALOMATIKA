@@ -4,13 +4,17 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Services\AuditLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialAuthController extends Controller
 {
+    public function __construct(private readonly AuditLogger $auditLogger)
+    {
+    }
+
     /**
      * Redirect to OAuth provider
      */
@@ -40,6 +44,15 @@ class SocialAuthController extends Controller
         try {
             $socialUser = Socialite::driver($provider)->user();
         } catch (\Exception $e) {
+            $this->auditLogger->log([
+                'event_type' => 'oauth_login_failed',
+                'category' => 'auth',
+                'severity' => 'warning',
+                'subject_type' => 'provider',
+                'subject_id' => $provider,
+                'ip' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
             return redirect()->route('login')
                 ->with('error', 'Ошибка авторизации. Попробуйте ещё раз.');
         }
@@ -47,6 +60,18 @@ class SocialAuthController extends Controller
         $user = $this->findOrCreateUser($socialUser, $provider);
 
         Auth::login($user, true);
+
+        $this->auditLogger->log([
+            'event_type' => 'oauth_login_success',
+            'category' => 'auth',
+            'severity' => 'info',
+            'actor_user_id' => $user->id,
+            'actor_role' => $user->role,
+            'subject_type' => 'provider',
+            'subject_id' => $provider,
+            'ip' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+        ]);
 
         return redirect()->intended('/dashboard');
     }
@@ -67,6 +92,15 @@ class SocialAuthController extends Controller
 
         if (!$this->verifyTelegramAuth($authData)) {
             \Log::error('Telegram auth verification failed');
+            $this->auditLogger->log([
+                'event_type' => 'telegram_login_failed',
+                'category' => 'auth',
+                'severity' => 'warning',
+                'subject_type' => 'provider',
+                'subject_id' => 'telegram',
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]);
             return redirect()->route('login')
                 ->with('error', 'Ошибка авторизации Telegram.');
         }
@@ -78,6 +112,18 @@ class SocialAuthController extends Controller
         \Log::info('User found/created', ['user_id' => $user->id]);
 
         Auth::login($user, true);
+
+        $this->auditLogger->log([
+            'event_type' => 'telegram_login_success',
+            'category' => 'auth',
+            'severity' => 'info',
+            'actor_user_id' => $user->id,
+            'actor_role' => $user->role,
+            'subject_type' => 'provider',
+            'subject_id' => 'telegram',
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
 
         return redirect()->intended('/dashboard');
     }

@@ -8,9 +8,11 @@ use App\Http\Controllers\AdminTaskAnswerController;
 use App\Http\Controllers\OgeAttemptController;
 use App\Http\Controllers\OgeTemplateController;
 use App\Http\Controllers\RepetitorController;
+use App\Http\Controllers\Teacher\AuditController as TeacherAuditController;
 use App\Http\Controllers\TestPdfController;
 use App\Http\Controllers\Teacher\StudentGroupController;
 use App\Http\Controllers\Teacher\OgeReviewController;
+use App\Services\AuditLogger;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -60,6 +62,19 @@ Route::middleware('guest')->group(function () {
             'email' => $credentials['email'],
             'password' => $credentials['password'],
         ], (bool) ($credentials['remember'] ?? false))) {
+            app(AuditLogger::class)->log([
+                'event_type' => 'login_failed',
+                'category' => 'auth',
+                'severity' => 'warning',
+                'subject_type' => 'email',
+                'subject_id' => strtolower($credentials['email']),
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'payload_json' => [
+                    'method' => 'password',
+                ],
+            ]);
+
             return response()->json([
                 'message' => 'Неверный email или пароль',
             ], 422);
@@ -81,6 +96,22 @@ Route::middleware('guest')->group(function () {
         }
 
         $redirectTo = redirect()->intended('/dashboard')->getTargetUrl();
+
+        app(AuditLogger::class)->log([
+            'event_type' => 'login_success',
+            'category' => 'auth',
+            'severity' => 'info',
+            'actor_user_id' => $user->id,
+            'actor_role' => $user->role,
+            'subject_type' => 'user',
+            'subject_id' => $user->id,
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'payload_json' => [
+                'method' => 'password',
+                'remember' => (bool) ($credentials['remember'] ?? false),
+            ],
+        ]);
 
         return response()->json([
             'success' => true,
@@ -120,6 +151,18 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/view-as/clear', function (Request $request) {
         abort_unless($request->user()?->role === 'admin', 403);
 
+        app(AuditLogger::class)->log([
+            'event_type' => 'view_as_cleared',
+            'category' => 'admin',
+            'severity' => 'info',
+            'actor_user_id' => $request->user()->id,
+            'actor_role' => $request->user()->role,
+            'subject_type' => 'view_as_role',
+            'subject_id' => (string) ($request->session()->get('view_as_role') ?? ''),
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
+
         $request->session()->forget('view_as_role');
         return redirect()->to('/dashboard');
     })->name('view-as.clear');
@@ -129,6 +172,18 @@ Route::middleware(['auth'])->group(function () {
         abort_unless(in_array($role, ['student', 'teacher'], true), 404);
 
         $request->session()->put('view_as_role', $role);
+
+        app(AuditLogger::class)->log([
+            'event_type' => 'view_as_set',
+            'category' => 'admin',
+            'severity' => 'info',
+            'actor_user_id' => $request->user()->id,
+            'actor_role' => $request->user()->role,
+            'subject_type' => 'view_as_role',
+            'subject_id' => $role,
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
 
         return redirect()->to($role === 'teacher' ? '/teacher' : '/dashboard');
     })->name('view-as.set');
@@ -210,6 +265,10 @@ Route::middleware(['auth'])->group(function () {
             return view('teacher.earnings');
         })->name('earnings');
 
+        Route::middleware('role:teacher,admin')->group(function () {
+            Route::get('/audit', [TeacherAuditController::class, 'index'])->name('audit.index');
+        });
+
         Route::prefix('oge')->name('oge.')->middleware('role:teacher,admin')->group(function () {
             Route::get('/teachers', [OgeReviewController::class, 'teachers'])->name('teachers');
             Route::get('/teachers/{teacherId}/variants', [OgeReviewController::class, 'variants'])->name('variants');
@@ -219,6 +278,21 @@ Route::middleware(['auth'])->group(function () {
 
     // Logout
     Route::post('/logout', function () {
+        $user = request()->user();
+        if ($user) {
+            app(AuditLogger::class)->log([
+                'event_type' => 'logout',
+                'category' => 'auth',
+                'severity' => 'info',
+                'actor_user_id' => $user->id,
+                'actor_role' => $user->role,
+                'subject_type' => 'user',
+                'subject_id' => $user->id,
+                'ip' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
+        }
+
         auth()->logout();
         request()->session()->invalidate();
         request()->session()->regenerateToken();
@@ -284,6 +358,13 @@ Route::prefix('api/oge')->middleware(['auth', 'role:student,admin'])->group(func
     Route::post('/attempts/{attempt}/tasks/{taskNumber}/commit', [OgeAttemptController::class, 'commit'])->name('api.oge.attempt.commit');
     Route::post('/attempts/{attempt}/heartbeat', [OgeAttemptController::class, 'heartbeat'])->name('api.oge.attempt.heartbeat');
     Route::post('/attempts/{attempt}/submit', [OgeAttemptController::class, 'submit'])->name('api.oge.attempt.submit');
+});
+
+Route::prefix('api/audit')->middleware(['auth', 'role:teacher,admin'])->group(function () {
+    Route::get('/events', [TeacherAuditController::class, 'events'])->name('api.audit.events');
+    Route::get('/events/export', [TeacherAuditController::class, 'export'])->name('api.audit.events.export');
+    Route::get('/events/{event}', [TeacherAuditController::class, 'show'])->name('api.audit.events.show');
+    Route::get('/meta', [TeacherAuditController::class, 'meta'])->name('api.audit.meta');
 });
 
 // ========================================================================

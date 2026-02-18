@@ -6,6 +6,7 @@ use App\Models\TaskAnswerOverride;
 use App\Models\TaskAnswerOverrideLog;
 use App\Services\TaskAnswerProvenanceService;
 use App\Services\TaskDataService;
+use App\Services\AuditLogger;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -16,6 +17,7 @@ class AdminTaskAnswerController extends Controller
     public function __construct(
         private readonly TaskDataService $taskDataService,
         private readonly TaskAnswerProvenanceService $provenanceService,
+        private readonly AuditLogger $auditLogger,
     ) {
     }
 
@@ -69,6 +71,23 @@ class AdminTaskAnswerController extends Controller
                     'changed_by_user_id' => $user->id,
                 ]);
 
+                $this->auditLogger->log([
+                    'event_type' => 'admin_answer_updated',
+                    'category' => 'admin',
+                    'severity' => 'info',
+                    'actor_user_id' => $user->id,
+                    'actor_role' => $user->role,
+                    'subject_type' => 'task_key',
+                    'subject_id' => $taskKey,
+                    'ip' => $request->ip(),
+                    'user_agent' => $request->userAgent(),
+                    'payload_json' => [
+                        'topic_id' => $topicId,
+                        'old_answer' => $oldAnswer,
+                        'new_answer' => $answer,
+                    ],
+                ]);
+
                 $sourceLabel = $this->provenanceService->sourceLabel('manual', $user->name);
 
                 return response()->json([
@@ -92,6 +111,22 @@ class AdminTaskAnswerController extends Controller
                 'message' => 'Не удалось сохранить ответ.',
             ], 500);
         }
+
+        $this->auditLogger->log([
+            'event_type' => 'admin_answer_updated_file_fallback',
+            'category' => 'admin',
+            'severity' => 'warning',
+            'actor_user_id' => $user->id,
+            'actor_role' => $user->role,
+            'subject_type' => 'task_key',
+            'subject_id' => $taskKey,
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'payload_json' => [
+                'topic_id' => $topicId,
+                'new_answer' => $answer,
+            ],
+        ]);
 
         return response()->json([
             'task_key' => $taskKey,

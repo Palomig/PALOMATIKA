@@ -5,12 +5,17 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\TelegramAuthToken;
 use App\Models\User;
+use App\Services\AuditLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class TelegramBotAuthController extends Controller
 {
+    public function __construct(private readonly AuditLogger $auditLogger)
+    {
+    }
+
     /**
      * Generate a new auth token and return deep link
      */
@@ -75,6 +80,15 @@ class TelegramBotAuthController extends Controller
             ->first();
 
         if (!$authToken || $authToken->isExpired()) {
+            $this->auditLogger->log([
+                'event_type' => 'telegram_token_login_failed',
+                'category' => 'auth',
+                'severity' => 'warning',
+                'subject_type' => 'telegram_token',
+                'subject_id' => $token,
+                'ip' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
             return redirect()->route('login')
                 ->with('error', 'Сессия авторизации истекла. Попробуйте снова.');
         }
@@ -87,6 +101,18 @@ class TelegramBotAuthController extends Controller
 
         // Log in the user with session
         Auth::login($user, true);
+
+        $this->auditLogger->log([
+            'event_type' => 'telegram_token_login_success',
+            'category' => 'auth',
+            'severity' => 'info',
+            'actor_user_id' => $user->id,
+            'actor_role' => $user->role,
+            'subject_type' => 'telegram_token',
+            'subject_id' => $token,
+            'ip' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+        ]);
 
         return redirect()->intended('/dashboard');
     }

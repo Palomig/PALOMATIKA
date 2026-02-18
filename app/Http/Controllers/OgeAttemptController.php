@@ -4,12 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\OgeAttempt;
 use App\Services\OgeAttemptService;
+use App\Services\AuditLogger;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class OgeAttemptController extends Controller
 {
-    public function __construct(private readonly OgeAttemptService $attemptService)
+    public function __construct(
+        private readonly OgeAttemptService $attemptService,
+        private readonly AuditLogger $auditLogger,
+    )
     {
     }
 
@@ -20,6 +24,11 @@ class OgeAttemptController extends Controller
         [$variant, $attempt] = $this->attemptService->startAttempt($student, $hash, [
             'user_agent' => $request->userAgent(),
             'ip' => $request->ip(),
+        ]);
+
+        $this->logAudit($request, 'attempt_started', $student->id, $student->role, 'oge_attempt', $attempt->id, [
+            'variant_id' => $variant->id,
+            'variant_hash' => $variant->hash,
         ]);
 
         return response()->json([
@@ -39,6 +48,11 @@ class OgeAttemptController extends Controller
 
         $timing = $this->attemptService->touchTiming($attempt, $taskNumber, 'task_focused', $request->input('client_ts'));
 
+        $this->logAudit($request, 'task_focused', $request->user()->id, $request->user()->role, 'oge_attempt', $attempt->id, [
+            'task_number' => $taskNumber,
+            'focus_count' => $timing->focus_count,
+        ]);
+
         return response()->json(['success' => true, 'focus_count' => $timing->focus_count]);
     }
 
@@ -49,6 +63,11 @@ class OgeAttemptController extends Controller
         $this->validateTaskNumber($taskNumber);
 
         $timing = $this->attemptService->touchTiming($attempt, $taskNumber, 'task_blurred', $request->input('client_ts'));
+
+        $this->logAudit($request, 'task_blurred', $request->user()->id, $request->user()->role, 'oge_attempt', $attempt->id, [
+            'task_number' => $taskNumber,
+            'active_ms' => $timing->active_ms,
+        ]);
 
         return response()->json(['success' => true, 'task_number' => $timing->task_number]);
     }
@@ -75,6 +94,12 @@ class OgeAttemptController extends Controller
             ], $request->input('client_ts'));
         }
 
+        $this->logAudit($request, 'heartbeat', $request->user()->id, $request->user()->role, 'oge_attempt', $attempt->id, [
+            'active_task' => $taskNumber,
+            'visible' => $visible,
+            'away_ms' => $awayMs,
+        ]);
+
         $attempt->update(['last_seen_at' => now()]);
 
         return response()->json(['success' => true]);
@@ -98,6 +123,11 @@ class OgeAttemptController extends Controller
             $validated['client_ts'] ?? null
         );
 
+        $this->logAudit($request, 'answer_committed', $request->user()->id, $request->user()->role, 'oge_attempt', $attempt->id, [
+            'task_number' => $taskNumber,
+            'commits_count' => $answer->commits_count,
+        ]);
+
         return response()->json([
             'success' => true,
             'task_number' => $taskNumber,
@@ -112,6 +142,10 @@ class OgeAttemptController extends Controller
         $this->guardActiveAttempt($attempt);
 
         $attempt = $this->attemptService->submitAttempt($attempt, $request->input('client_ts'));
+
+        $this->logAudit($request, 'attempt_submitted', $request->user()->id, $request->user()->role, 'oge_attempt', $attempt->id, [
+            'status' => $attempt->status,
+        ]);
 
         return response()->json([
             'success' => true,
@@ -139,5 +173,28 @@ class OgeAttemptController extends Controller
         if ($taskNumber < 6 || $taskNumber > 19) {
             abort(422, 'Invalid task number');
         }
+    }
+
+    private function logAudit(
+        Request $request,
+        string $eventType,
+        ?int $actorUserId,
+        ?string $actorRole,
+        ?string $subjectType,
+        $subjectId,
+        array $payload = []
+    ): void {
+        $this->auditLogger->log([
+            'event_type' => $eventType,
+            'category' => 'oge',
+            'severity' => 'info',
+            'actor_user_id' => $actorUserId,
+            'actor_role' => $actorRole,
+            'subject_type' => $subjectType,
+            'subject_id' => $subjectId,
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'payload_json' => $payload,
+        ]);
     }
 }
