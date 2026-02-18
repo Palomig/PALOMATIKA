@@ -937,32 +937,32 @@
                         {
                             "id": 1,
                             "expression": "\\left(\\frac{1}{17} + 1\\frac{1}{4}\\right) : \\frac{1}{34}",
-                            "answer": "44.5"
+                            "answer": "34"
                         },
                         {
                             "id": 3,
                             "expression": "\\left(\\frac{7}{9} + 1\\frac{4}{5}\\right) : \\frac{1}{18}",
-                            "answer": "46.4"
+                            "answer": "50"
                         },
                         {
                             "id": 5,
                             "expression": "\\left(\\frac{13}{24} + 1\\frac{1}{15}\\right) : \\frac{1}{24}",
-                            "answer": "38.6"
+                            "answer": "2"
                         },
                         {
                             "id": 2,
                             "expression": "\\left(\\frac{3}{4} - 2\\frac{9}{10}\\right) : \\frac{1}{12}",
-                            "answer": "-25.8"
+                            "answer": "18"
                         },
                         {
                             "id": 4,
                             "expression": "\\left(\\frac{4}{11} - 2\\frac{1}{4}\\right) : \\frac{1}{22}",
-                            "answer": "-41.5"
+                            "answer": "46"
                         },
                         {
                             "id": 6,
                             "expression": "\\left(\\frac{15}{26} - 2\\frac{3}{4}\\right) : \\frac{1}{26}",
-                            "answer": "-56.5"
+                            "answer": "10"
                         }
                     ]
                 },
