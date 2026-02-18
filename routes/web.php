@@ -80,10 +80,13 @@ Route::middleware('guest')->group(function () {
             ]);
         }
 
+        $redirectTo = redirect()->intended('/dashboard')->getTargetUrl();
+
         return response()->json([
             'success' => true,
             'user' => $user,
             'token' => $token,
+            'redirect_to' => $redirectTo,
         ]);
     })->name('login.attempt');
 

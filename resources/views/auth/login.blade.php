@@ -181,7 +181,7 @@ function loginForm() {
                 if (data.token) {
                     localStorage.setItem('auth_token', data.token);
                 }
-                window.location.href = '/dashboard';
+                window.location.href = data.redirect_to || '/dashboard';
             } catch (err) {
                 this.error = err.message;
                 this.shaking = true;
