@@ -59,8 +59,20 @@ class OgeAttemptController extends Controller
         $this->guardActiveAttempt($attempt);
 
         $taskNumber = (int) $request->input('active_task', 0);
-        if ($taskNumber >= 6 && $taskNumber <= 19) {
+        $visible = (bool) $request->boolean('visible', true);
+        if ($visible && $taskNumber >= 6 && $taskNumber <= 19) {
             $this->attemptService->touchTiming($attempt, $taskNumber, 'heartbeat', $request->input('client_ts'));
+        }
+
+        $awayMs = (int) $request->input('away_ms', 0);
+        if ($awayMs > 0) {
+            $meta = $attempt->device_meta ?? [];
+            $meta['away_ms_total'] = (int) ($meta['away_ms_total'] ?? 0) + $awayMs;
+            $attempt->device_meta = $meta;
+
+            $this->attemptService->appendEvent($attempt, 'tab_away', null, [
+                'away_ms' => $awayMs,
+            ], $request->input('client_ts'));
         }
 
         $attempt->update(['last_seen_at' => now()]);
@@ -129,4 +141,3 @@ class OgeAttemptController extends Controller
         }
     }
 }
-

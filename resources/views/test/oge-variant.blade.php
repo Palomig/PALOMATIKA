@@ -166,7 +166,7 @@
     @endforeach
 
     @if($studentMode)
-        <div class="no-print sticky bottom-4 z-30 mt-6">
+        <div id="attempt-bottom-bar" class="no-print sticky bottom-4 z-30 mt-6">
             <div class="rounded-xl border border-slate-700 bg-slate-900/95 backdrop-blur p-4 flex flex-wrap items-center justify-between gap-3 shadow-lg">
                 <div>
                     <p class="text-white text-sm font-medium">Ответы сохраняются по кнопке «ОК»</p>
@@ -200,15 +200,33 @@
 </div>
 
 @if($studentMode)
-<script>
+<script type="module">
+import {
+    domRectToPlain,
+    viewportRectFromWindow,
+    pickLeadingTask,
+    isScrollSettled,
+} from '/js/oge-task-visibility.mjs';
+
 document.addEventListener('DOMContentLoaded', async () => {
     const variantHash = @json($variantHash ?? '');
     const csrf = document.querySelector('meta[name="csrf-token"]')?.content;
     const finishButton = document.getElementById('finish-attempt-btn');
+    const bottomBar = document.getElementById('attempt-bottom-bar');
 
     let attemptId = null;
     let locked = false;
     let activeTask = null;
+    let candidateTask = null;
+    let candidateSinceMs = 0;
+    let lastScrollAtMs = performance.now();
+    let hiddenSinceMs = document.hidden ? Date.now() : null;
+    let pendingAwayMs = 0;
+
+    const SCROLL_SETTLE_MS = 400;
+    const FOCUS_DELAY_MS = 5000;
+    const TRACKER_TICK_MS = 250;
+    const MIN_VISIBLE_RATIO = 0.15;
 
     const cards = [...document.querySelectorAll('.task-card[data-task-number]')];
 
@@ -250,6 +268,92 @@ document.addEventListener('DOMContentLoaded', async () => {
     function setAllLocked(isLocked) {
         cards.forEach(card => setCardLocked(card, isLocked));
         if (finishButton) finishButton.disabled = isLocked;
+    }
+
+    async function activateTask(taskNumber) {
+        if (activeTask === taskNumber || !attemptId || locked) return;
+
+        try {
+            await post(api.focus(attemptId, taskNumber), { client_ts: new Date().toISOString() });
+            activeTask = taskNumber;
+        } catch (e) {
+            console.error('focus failed', e);
+        }
+    }
+
+    async function deactivateTask(taskNumber = activeTask) {
+        if (!taskNumber || !attemptId || locked) return;
+
+        try {
+            await post(api.blur(attemptId, taskNumber), { client_ts: new Date().toISOString() });
+        } catch (e) {
+            console.error('blur failed', e);
+        } finally {
+            if (activeTask === taskNumber) {
+                activeTask = null;
+            }
+        }
+    }
+
+    function getBlockerRects() {
+        if (!bottomBar || document.hidden) return [];
+        const rect = bottomBar.getBoundingClientRect();
+        if (rect.width <= 0 || rect.height <= 0) return [];
+        if (rect.bottom <= 0 || rect.top >= window.innerHeight) return [];
+        return [domRectToPlain(rect)];
+    }
+
+    function pickCurrentLeader() {
+        const viewport = viewportRectFromWindow(window);
+        const blockers = getBlockerRects();
+        const tasks = cards.map(card => ({
+            taskNumber: Number(card.dataset.taskNumber),
+            rect: domRectToPlain(card.getBoundingClientRect()),
+        }));
+
+        const lead = pickLeadingTask(tasks, viewport, blockers);
+        if (!lead || lead.visibleRatio < MIN_VISIBLE_RATIO) {
+            return null;
+        }
+
+        return lead;
+    }
+
+    async function processVisibilityTracking() {
+        if (!attemptId || locked || document.hidden) {
+            candidateTask = null;
+            candidateSinceMs = 0;
+            await deactivateTask();
+            return;
+        }
+
+        const nowMs = performance.now();
+        if (!isScrollSettled(nowMs, lastScrollAtMs, SCROLL_SETTLE_MS)) {
+            candidateTask = null;
+            candidateSinceMs = 0;
+            await deactivateTask();
+            return;
+        }
+
+        const leader = pickCurrentLeader();
+
+        if (!leader) {
+            candidateTask = null;
+            candidateSinceMs = 0;
+            await deactivateTask();
+            return;
+        }
+
+        if (candidateTask !== leader.taskNumber) {
+            candidateTask = leader.taskNumber;
+            candidateSinceMs = nowMs;
+            await deactivateTask();
+            return;
+        }
+
+        if (!activeTask && nowMs - candidateSinceMs >= FOCUS_DELAY_MS) {
+            await activateTask(candidateTask);
+        }
     }
 
     try {
@@ -308,24 +412,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (!input || !ok || !edit) return;
 
-        input.addEventListener('focus', async () => {
-            activeTask = taskNumber;
-            try {
-                await post(api.focus(attemptId, taskNumber), { client_ts: new Date().toISOString() });
-            } catch (e) {
-                console.error('focus failed', e);
-            }
-        });
-
-        input.addEventListener('blur', async () => {
-            activeTask = null;
-            try {
-                await post(api.blur(attemptId, taskNumber), { client_ts: new Date().toISOString() });
-            } catch (e) {
-                console.error('blur failed', e);
-            }
-        });
-
         ok.addEventListener('click', async () => {
             const answer = input.value.trim();
             if (!answer) return;
@@ -357,6 +443,34 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     });
 
+    window.addEventListener('scroll', () => {
+        lastScrollAtMs = performance.now();
+        candidateTask = null;
+        candidateSinceMs = 0;
+    }, { passive: true });
+
+    window.addEventListener('resize', () => {
+        candidateTask = null;
+        candidateSinceMs = 0;
+    });
+
+    document.addEventListener('visibilitychange', async () => {
+        if (document.hidden) {
+            hiddenSinceMs = Date.now();
+            candidateTask = null;
+            candidateSinceMs = 0;
+            await deactivateTask();
+            return;
+        }
+
+        if (hiddenSinceMs) {
+            pendingAwayMs += Math.max(0, Date.now() - hiddenSinceMs);
+            hiddenSinceMs = null;
+        }
+
+        lastScrollAtMs = performance.now();
+    });
+
     if (finishButton) {
         finishButton.addEventListener('click', async () => {
             if (locked) return;
@@ -368,6 +482,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             finishButton.textContent = 'Отправляем...';
 
             try {
+                await deactivateTask();
                 await post(api.submit(attemptId), { client_ts: new Date().toISOString() });
                 locked = true;
                 setAllLocked(true);
@@ -380,14 +495,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    setInterval(() => {
+        processVisibilityTracking().catch((e) => {
+            console.error('tracking failed', e);
+        });
+    }, TRACKER_TICK_MS);
+
     setInterval(async () => {
         if (!attemptId || locked) return;
         try {
+            const awayMs = pendingAwayMs;
             await post(api.heartbeat(attemptId), {
                 active_task: activeTask,
                 visible: !document.hidden,
+                away_ms: awayMs,
                 client_ts: new Date().toISOString(),
             });
+            pendingAwayMs = Math.max(0, pendingAwayMs - awayMs);
         } catch (e) {
             console.error('heartbeat failed', e);
         }
