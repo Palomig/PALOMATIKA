@@ -37,7 +37,14 @@
             @endforeach
         </div>
 
-        <span class="text-gray-500 text-xs">{{ $stats['tasks'] ?? 0 }} заданий</span>
+        <div class="flex items-center gap-3">
+            <a href="{{ route('topics.export', ['id' => (int) $topicId]) }}"
+               class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-700 text-slate-200 hover:bg-slate-600 transition text-xs font-medium"
+               title="Скачать JSON всех заданий и ответов текущей темы">
+                Экспорт всех заданий
+            </a>
+            <span class="text-gray-500 text-xs">{{ $stats['tasks'] ?? 0 }} заданий</span>
+        </div>
     </div>
 
     {{-- Header --}}
