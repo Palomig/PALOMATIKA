@@ -48,14 +48,27 @@ class OgeVariantBuilderService
                 continue;
             }
 
-            [$topicId, $blockNumber, $zadanieNumber] = $parts;
-            $zadaniyaByTopic[$topicId][] = [
+            [$topicIdRaw, $blockNumber, $zadanieNumber] = $parts;
+            $topicId = str_pad((string) $topicIdRaw, 2, '0', STR_PAD_LEFT);
+            $topicKey = 't' . $topicId; // Префикс не даёт PHP приводить ключ к int.
+
+            if (!isset($zadaniyaByTopic[$topicKey])) {
+                $zadaniyaByTopic[$topicKey] = [
+                    'topic_id' => $topicId,
+                    'zadaniya' => [],
+                ];
+            }
+
+            $zadaniyaByTopic[$topicKey]['zadaniya'][] = [
                 'block' => (int) $blockNumber,
                 'zadanie' => (int) $zadanieNumber,
             ];
         }
 
-        foreach ($zadaniyaByTopic as $topicId => $zadaniyaList) {
+        foreach ($zadaniyaByTopic as $topicGroup) {
+            $topicId = $topicGroup['topic_id'];
+            $zadaniyaList = $topicGroup['zadaniya'];
+
             if ($topicId === '11') {
                 $matchingSet = $this->taskDataService->getRandomMatchingSet($topicId);
                 if ($matchingSet) {
