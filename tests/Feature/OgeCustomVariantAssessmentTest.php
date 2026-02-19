@@ -235,4 +235,82 @@ class OgeCustomVariantAssessmentTest extends TestCase
         $this->assertSame($teacher->id, (int) $variant->owner_teacher_id);
         $this->assertSame('custom_random', $variant->config_json['source'] ?? null);
     }
+
+    public function test_resume_submitted_attempt_renders_locked_inputs(): void
+    {
+        $student = User::factory()->create(['role' => 'student']);
+        $hash = 'subm1234';
+
+        Cache::put("custom_random_test_{$hash}", [[
+            'test_number' => 1,
+            'topic_id' => '15',
+            'topic_title' => 'Треугольники',
+            'block_number' => 1,
+            'zadanie_number' => 1,
+            'instruction' => 'Лочим форму',
+            'type' => 'word_problem',
+            'task' => [
+                'text' => 'Найдите ответ',
+                'answer' => '5',
+            ],
+        ]], now()->addMinutes(5));
+
+        $variant = OgeVariant::create([
+            'hash' => $hash,
+            'config_json' => [
+                'source' => 'custom_random',
+            ],
+        ]);
+
+        OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $student->id,
+            'status' => 'submitted',
+            'started_at' => now()->subMinutes(10),
+            'submitted_at' => now()->subMinute(),
+        ]);
+
+        $response = $this->actingAs($student)->get("/oge/{$hash}");
+
+        $response->assertOk();
+        $response->assertSee('data-attempt-locked="1"', false);
+        $response->assertSee('js-answer-input', false);
+        $response->assertSee('disabled', false);
+    }
+
+    public function test_custom_tasks_with_same_topic_get_unique_attempt_task_keys(): void
+    {
+        $student = User::factory()->create(['role' => 'student']);
+        $hash = 'dupt1234';
+
+        Cache::put("custom_random_test_{$hash}", [
+            [
+                'test_number' => 1,
+                'topic_id' => '15',
+                'topic_title' => 'Треугольники',
+                'block_number' => 1,
+                'zadanie_number' => 1,
+                'instruction' => 'Задание 1',
+                'type' => 'word_problem',
+                'task' => ['text' => 'A', 'answer' => '1'],
+            ],
+            [
+                'test_number' => 2,
+                'topic_id' => '15',
+                'topic_title' => 'Треугольники',
+                'block_number' => 1,
+                'zadanie_number' => 2,
+                'instruction' => 'Задание 2',
+                'type' => 'word_problem',
+                'task' => ['text' => 'B', 'answer' => '2'],
+            ],
+        ], now()->addMinutes(5));
+
+        $response = $this->actingAs($student)->get("/oge/{$hash}");
+
+        $response->assertOk();
+        $response->assertSee('data-task-number="15"', false);
+        $response->assertSee('data-attempt-task-number="1"', false);
+        $response->assertSee('data-attempt-task-number="2"', false);
+    }
 }

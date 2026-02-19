@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\OgeVariant;
+use App\Models\OgeAttempt;
 use App\Services\AuditLogger;
 use App\Services\PdfParserService;
 use App\Services\PdfTaskParser;
@@ -4288,6 +4289,7 @@ class TestPdfController extends Controller
             ]);
         }
         $shouldUseCustomFlow = !$persistedVariant || $persistedVariant->isCustomRandom();
+        $initialAttemptLocked = $this->resolveInitialAttemptLockState($persistedVariant, $hash);
 
         $customTasks = $shouldUseCustomFlow ? $this->loadCustomRandomTestByHash($hash) : null;
         if (is_array($customTasks) && !empty($customTasks)) {
@@ -4310,6 +4312,7 @@ class TestPdfController extends Controller
                 'variantNumber' => 1,
                 'variantHash' => $hash,
                 'selectedZadaniya' => [],
+                'initialAttemptLocked' => $initialAttemptLocked,
             ]);
         }
 
@@ -4333,6 +4336,7 @@ class TestPdfController extends Controller
             'variantNumber' => $variantPayload['variantNumber'] ?? 1,
             'variantHash' => $hash,
             'selectedZadaniya' => $variantPayload['selectedZadaniya'] ?? [],
+            'initialAttemptLocked' => $initialAttemptLocked,
         ]);
     }
 
@@ -4375,10 +4379,30 @@ class TestPdfController extends Controller
 
     protected function adaptCustomTasksForOgeVariant(array $customTasks): array
     {
-        return array_map(function (array $task): array {
+        $usedAttemptNumbers = [];
+        $nextFallbackAttemptNumber = 1;
+
+        $adaptedTasks = [];
+        foreach ($customTasks as $index => $task) {
+            $displayTaskNumber = (int) ($task['task_number'] ?? $task['topic_id'] ?? 0);
+            $attemptTaskNumber = (int) ($task['attempt_task_number'] ?? $task['test_number'] ?? ($index + 1));
+            if ($attemptTaskNumber < 1 || $attemptTaskNumber > 255) {
+                $attemptTaskNumber = $nextFallbackAttemptNumber;
+            }
+
+            while (isset($usedAttemptNumbers[$attemptTaskNumber]) || $attemptTaskNumber < 1 || $attemptTaskNumber > 255) {
+                $attemptTaskNumber = $nextFallbackAttemptNumber++;
+                if ($nextFallbackAttemptNumber > 255) {
+                    $nextFallbackAttemptNumber = 1;
+                }
+            }
+
+            $usedAttemptNumbers[$attemptTaskNumber] = true;
+
             $adapted = [
                 'topic_id' => $task['topic_id'] ?? '',
-                'task_number' => (int) ($task['topic_id'] ?? 0),
+                'task_number' => $displayTaskNumber,
+                'attempt_task_number' => $attemptTaskNumber,
                 'topic_title' => $task['topic_title'] ?? '',
                 'block_number' => $task['block_number'] ?? 1,
                 'block_title' => $task['block_title'] ?? '',
@@ -4403,8 +4427,39 @@ class TestPdfController extends Controller
                 ));
             }
 
-            return $adapted;
-        }, $customTasks);
+            $adaptedTasks[] = $adapted;
+        }
+
+        return $adaptedTasks;
+    }
+
+    protected function resolveInitialAttemptLockState(?OgeVariant $persistedVariant, string $hash): bool
+    {
+        $user = auth()->user();
+        if (!$user || $user->role !== 'student') {
+            return false;
+        }
+
+        $variant = $persistedVariant;
+        if (!$variant) {
+            try {
+                $variant = OgeVariant::where('hash', $hash)->first();
+            } catch (\Throwable) {
+                return false;
+            }
+        }
+
+        if (!$variant) {
+            return false;
+        }
+
+        $attempt = OgeAttempt::query()
+            ->where('variant_id', $variant->id)
+            ->where('student_id', $user->id)
+            ->orderByDesc('id')
+            ->first();
+
+        return $attempt?->status === 'submitted';
     }
 
     protected function persistCustomVariantMetadata(string $hash, array $customTasks): void
@@ -4781,6 +4836,7 @@ class TestPdfController extends Controller
 
         foreach ($customTasks as $index => &$task) {
             $task['test_number'] = $index + 1;
+            $task['attempt_task_number'] = $index + 1;
         }
         unset($task);
 

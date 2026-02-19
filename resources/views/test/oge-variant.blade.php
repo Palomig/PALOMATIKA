@@ -122,6 +122,7 @@
     @foreach($tasks as $index => $taskData)
         @php
             $taskNumber = (int) ($taskData['task_number'] ?? (6 + $index));
+            $attemptTaskNumber = (int) ($taskData['attempt_task_number'] ?? $taskNumber);
             $topicId = $taskData['topic_id'] ?? '';
 
             // Определяем цвет акцента для разных тем
@@ -149,8 +150,10 @@
                 echo view('tasks.variant-task', [
                     'taskData' => $taskData,
                     'taskNumber' => $taskNumber,
+                    'attemptTaskNumber' => $attemptTaskNumber,
                     'color' => $color,
                     'studentMode' => $studentMode,
+                    'initialLocked' => !empty($initialAttemptLocked),
                 ])->render();
             } catch (\Throwable $e) {
                 \Log::warning('OGE variant task card render failed', [
@@ -171,9 +174,11 @@
                 <div>
                     <p class="text-white text-sm font-medium">Ответы сохраняются по кнопке «ОК»</p>
                     <p class="text-slate-500 text-xs">После «Завершить вариант» редактирование будет заблокировано.</p>
+                    <p id="attempt-error" class="mt-2 text-sm text-red-400 hidden"></p>
                 </div>
                 <button id="finish-attempt-btn"
-                        class="px-5 py-2.5 rounded-lg bg-emerald-700 text-white hover:bg-emerald-600 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                        class="px-5 py-2.5 rounded-lg bg-emerald-700 text-white hover:bg-emerald-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        @if(!empty($initialAttemptLocked)) disabled @endif>
                     Завершить вариант
                 </button>
             </div>
@@ -207,15 +212,23 @@ import {
     pickLeadingTask,
     isScrollSettled,
 } from '/js/oge-task-visibility.mjs';
+import {
+    applyCommitSuccessToCard,
+    resolveAttemptTaskNumber,
+    setAllCardsLocked,
+    shouldLockForConflict,
+} from '/js/oge-attempt-ui.mjs';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const variantHash = @json($variantHash ?? '');
     const csrf = document.querySelector('meta[name="csrf-token"]')?.content;
     const finishButton = document.getElementById('finish-attempt-btn');
     const bottomBar = document.getElementById('attempt-bottom-bar');
+    const errorNode = document.getElementById('attempt-error');
+    const initialLocked = @json((bool) ($initialAttemptLocked ?? false));
 
     let attemptId = null;
-    let locked = false;
+    let locked = initialLocked;
     let activeTask = null;
     let candidateTask = null;
     let candidateSinceMs = 0;
@@ -228,7 +241,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const TRACKER_TICK_MS = 250;
     const MIN_VISIBLE_RATIO = 0.15;
 
-    const cards = [...document.querySelectorAll('.task-card[data-task-number]')];
+    const cards = [...document.querySelectorAll('.task-card[data-attempt-task-number], .task-card[data-task-number]')];
 
     const api = {
         start: `/api/oge/variants/${variantHash}/attempt/start`,
@@ -238,6 +251,31 @@ document.addEventListener('DOMContentLoaded', async () => {
         heartbeat: (id) => `/api/oge/attempts/${id}/heartbeat`,
         submit: (id) => `/api/oge/attempts/${id}/submit`,
     };
+
+    function getErrorMessage(error, fallback) {
+        const detail = error?.payload?.message;
+        if (typeof detail === 'string' && detail.trim() !== '') {
+            return detail.trim();
+        }
+
+        if (error?.status === 409) {
+            return 'Вариант уже был отправлен.';
+        }
+
+        return fallback;
+    }
+
+    function showGlobalError(message) {
+        if (!errorNode) return;
+        errorNode.textContent = message;
+        errorNode.classList.remove('hidden');
+    }
+
+    function hideGlobalError() {
+        if (!errorNode) return;
+        errorNode.textContent = '';
+        errorNode.classList.add('hidden');
+    }
 
     async function post(url, body = {}) {
         const response = await fetch(url, {
@@ -249,25 +287,28 @@ document.addEventListener('DOMContentLoaded', async () => {
             body: JSON.stringify(body),
         });
 
-        if (!response.ok) {
-            throw new Error(`Request failed: ${response.status}`);
+        let payload = null;
+        const contentType = response.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+            payload = await response.json().catch(() => null);
+        } else {
+            const raw = await response.text().catch(() => '');
+            payload = raw ? { message: raw } : null;
         }
 
-        return response.json();
+        if (!response.ok) {
+            const error = new Error(`Request failed: ${response.status}`);
+            error.status = response.status;
+            error.payload = payload;
+            throw error;
+        }
+
+        return payload ?? {};
     }
 
-    function setCardLocked(card, isLocked) {
-        const input = card.querySelector('.js-answer-input');
-        const ok = card.querySelector('.js-answer-ok');
-        const edit = card.querySelector('.js-answer-edit');
-        if (input) input.disabled = isLocked;
-        if (ok) ok.disabled = isLocked;
-        if (edit) edit.disabled = isLocked;
-    }
-
-    function setAllLocked(isLocked) {
-        cards.forEach(card => setCardLocked(card, isLocked));
-        if (finishButton) finishButton.disabled = isLocked;
+    setAllCardsLocked(cards, finishButton, locked);
+    if (locked && finishButton) {
+        finishButton.textContent = 'Вариант уже отправлен';
     }
 
     async function activateTask(taskNumber) {
@@ -307,7 +348,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const viewport = viewportRectFromWindow(window);
         const blockers = getBlockerRects();
         const tasks = cards.map(card => ({
-            taskNumber: Number(card.dataset.taskNumber),
+            taskNumber: resolveAttemptTaskNumber(card),
             rect: domRectToPlain(card.getBoundingClientRect()),
         }));
 
@@ -362,20 +403,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         locked = !!startRes.locked;
 
         if (locked) {
-            setAllLocked(true);
+            setAllCardsLocked(cards, finishButton, true);
             if (finishButton) {
                 finishButton.textContent = 'Вариант уже отправлен';
             }
             return;
         }
     } catch (e) {
-        console.error('Failed to start attempt', e);
-        setAllLocked(true);
+        showGlobalError(getErrorMessage(e, 'Не удалось запустить попытку. Обновите страницу.'));
+        setAllCardsLocked(cards, finishButton, true);
         return;
     }
 
     cards.forEach(card => {
-        const taskNumber = Number(card.dataset.taskNumber);
+        const taskNumber = resolveAttemptTaskNumber(card);
         const input = card.querySelector('.js-answer-input');
         const ok = card.querySelector('.js-answer-ok');
         const edit = card.querySelector('.js-answer-edit');
@@ -418,20 +459,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             ok.disabled = true;
             showStatus('Сохраняем...');
+            hideGlobalError();
 
             try {
                 await post(api.commit(attemptId, taskNumber), {
                     answer,
                     client_ts: new Date().toISOString(),
                 });
-                input.disabled = true;
-                edit.classList.remove('hidden');
+                applyCommitSuccessToCard(card);
                 showStatus('Сохранено', 'success');
             } catch (e) {
-                console.error('commit failed', e);
-                showStatus('Ошибка сохранения', 'error');
+                if (shouldLockForConflict(e)) {
+                    locked = true;
+                    setAllCardsLocked(cards, finishButton, true);
+                    if (finishButton) {
+                        finishButton.textContent = 'Вариант уже отправлен';
+                    }
+                }
+                showStatus(getErrorMessage(e, 'Ошибка сохранения'), 'error');
             } finally {
-                ok.disabled = false;
+                ok.disabled = locked;
             }
         });
 
@@ -480,15 +527,24 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             finishButton.disabled = true;
             finishButton.textContent = 'Отправляем...';
+            hideGlobalError();
 
             try {
                 await deactivateTask();
                 await post(api.submit(attemptId), { client_ts: new Date().toISOString() });
                 locked = true;
-                setAllLocked(true);
+                setAllCardsLocked(cards, finishButton, true);
                 finishButton.textContent = 'Вариант отправлен';
             } catch (e) {
-                console.error('submit failed', e);
+                if (shouldLockForConflict(e)) {
+                    locked = true;
+                    setAllCardsLocked(cards, finishButton, true);
+                    finishButton.textContent = 'Вариант уже отправлен';
+                    showGlobalError(getErrorMessage(e, 'Вариант уже отправлен и заблокирован.'));
+                    return;
+                }
+
+                showGlobalError(getErrorMessage(e, 'Ошибка отправки варианта. Попробуйте снова.'));
                 finishButton.disabled = false;
                 finishButton.textContent = 'Завершить вариант';
             }

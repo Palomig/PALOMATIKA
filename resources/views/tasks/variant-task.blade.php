@@ -3,8 +3,10 @@
     Преобразует данные из TaskDataService в формат для tasks/types компонентов
     @param array $taskData - данные из getRandomTasksFromZadanie или getRandomMatchingSet
     @param int $taskNumber - номер задания в варианте (6-19)
+    @param int|null $attemptTaskNumber - стабильный ключ задания для API попытки
     @param string $color - цвет акцента
     @param bool $studentMode - интерактивный режим для ученика
+    @param bool $initialLocked - вариант уже отправлен, поля должны быть заблокированы
 --}}
 
 @php
@@ -72,11 +74,21 @@
         'number' => $taskData['block_number'] ?? 1,
         'title' => $taskData['block_title'] ?? '',
     ];
+
+    $attemptTaskNumber = isset($attemptTaskNumber) ? (int) $attemptTaskNumber : (int) ($taskData['attempt_task_number'] ?? $taskNumber);
+    if ($attemptTaskNumber < 1) {
+        $attemptTaskNumber = (int) $taskNumber;
+    }
+
+    $initialLocked = !empty($initialLocked);
 @endphp
 
 {{-- Matching Set (3 графика для ОГЭ) --}}
 @if($isMatchingSet)
-    <div class="task-card mb-8 bg-dark-light/35 rounded-xl border border-slate-800 overflow-hidden" data-task-number="{{ $taskNumber }}">
+    <div class="task-card mb-8 bg-dark-light/35 rounded-xl border border-slate-800 overflow-hidden"
+         data-task-number="{{ $taskNumber }}"
+         data-attempt-task-number="{{ $attemptTaskNumber }}"
+         data-attempt-locked="{{ $initialLocked ? '1' : '0' }}">
         {{-- Task Header --}}
         <div class="bg-slate-900/40 p-4 border-b border-slate-800 flex items-center gap-4">
             <div class="w-11 h-11 rounded-lg border border-{{ $color }}-700/60 bg-{{ $color }}-900/20 text-{{ $color }}-300 flex items-center justify-center font-semibold text-lg">
@@ -110,15 +122,18 @@
                 <span class="text-slate-400 text-sm font-medium">Ответ:</span>
                 <input type="text"
                        class="js-answer-input flex-1 max-w-xs px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-{{ $color }}-600 transition-colors"
-                       placeholder="Введите ответ">
+                       placeholder="Введите ответ"
+                       @if($initialLocked) disabled @endif>
 
                 @if(!empty($studentMode))
                     <button type="button"
-                            class="js-answer-ok px-3 py-2 rounded-lg bg-emerald-700 text-white hover:bg-emerald-600 transition text-sm">
+                            class="js-answer-ok px-3 py-2 rounded-lg bg-emerald-700 text-white hover:bg-emerald-600 transition text-sm"
+                            @if($initialLocked) disabled @endif>
                         ОК
                     </button>
                     <button type="button"
-                            class="js-answer-edit hidden px-3 py-2 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-700 transition text-sm">
+                            class="js-answer-edit hidden px-3 py-2 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-700 transition text-sm"
+                            @if($initialLocked) disabled @endif>
                         Редактировать
                     </button>
                     <span class="js-save-status text-xs text-emerald-400 opacity-0"></span>
@@ -128,7 +143,10 @@
     </div>
 @else
     {{-- Обычный формат задания --}}
-    <div class="task-card mb-8 bg-dark-light/35 rounded-xl border border-slate-800 overflow-hidden" data-task-number="{{ $taskNumber }}">
+    <div class="task-card mb-8 bg-dark-light/35 rounded-xl border border-slate-800 overflow-hidden"
+         data-task-number="{{ $taskNumber }}"
+         data-attempt-task-number="{{ $attemptTaskNumber }}"
+         data-attempt-locked="{{ $initialLocked ? '1' : '0' }}">
         {{-- Task Header --}}
         <div class="bg-slate-900/40 p-4 border-b border-slate-800 flex items-center gap-4">
             <div class="w-11 h-11 rounded-lg border border-{{ $color }}-700/60 bg-{{ $color }}-900/20 text-{{ $color }}-300 flex items-center justify-center font-semibold text-lg">
@@ -191,15 +209,18 @@
                 <span class="text-slate-400 text-sm font-medium">Ответ:</span>
                 <input type="text"
                        class="js-answer-input flex-1 max-w-xs px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-{{ $color }}-600 transition-colors"
-                       placeholder="Введите ответ">
+                       placeholder="Введите ответ"
+                       @if($initialLocked) disabled @endif>
 
                 @if(!empty($studentMode))
                     <button type="button"
-                            class="js-answer-ok px-3 py-2 rounded-lg bg-emerald-700 text-white hover:bg-emerald-600 transition text-sm">
+                            class="js-answer-ok px-3 py-2 rounded-lg bg-emerald-700 text-white hover:bg-emerald-600 transition text-sm"
+                            @if($initialLocked) disabled @endif>
                         ОК
                     </button>
                     <button type="button"
-                            class="js-answer-edit hidden px-3 py-2 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-700 transition text-sm">
+                            class="js-answer-edit hidden px-3 py-2 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-700 transition text-sm"
+                            @if($initialLocked) disabled @endif>
                         Редактировать
                     </button>
                     <span class="js-save-status text-xs text-emerald-400 opacity-0"></span>
