@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\Auth\TelegramBotAuthController;
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\EgeController;
+use App\Http\Controllers\JarvisMaterialPageController;
 use App\Http\Controllers\AdminTaskAnswerController;
 use App\Http\Controllers\OgeAttemptController;
 use App\Http\Controllers\OgeTemplateController;
@@ -29,6 +30,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 })->name('landing');
+
+Route::get('/materials', [JarvisMaterialPageController::class, 'index'])->name('materials.index');
+Route::get('/materials/{slug}', [JarvisMaterialPageController::class, 'show'])->name('materials.show');
 
 // Meal Plan (SmartCart)
 Route::get('/meal-plan', function () {
@@ -267,6 +271,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::middleware('role:teacher,admin')->group(function () {
             Route::get('/audit', [TeacherAuditController::class, 'index'])->name('audit.index');
+            Route::get('/materials', [JarvisMaterialPageController::class, 'teacherIndex'])->name('materials.index');
         });
 
         Route::prefix('oge')->name('oge.')->middleware('role:teacher,admin')->group(function () {

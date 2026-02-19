@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\OAuthController;
 use App\Http\Controllers\Api\BadgeController;
 use App\Http\Controllers\Api\DuelController;
 use App\Http\Controllers\Api\HomeworkController;
+use App\Http\Controllers\Api\JarvisMaterialController;
 use App\Http\Controllers\Api\LeaderboardController;
 use App\Http\Controllers\Api\ProgressController;
 use App\Http\Controllers\Api\SkillController;
@@ -63,6 +64,15 @@ Route::middleware(['auth:sanctum', 'role:teacher,admin', 'throttle:oge-variants-
     Route::post('/oge/variants/custom-random', [TestPdfController::class, 'apiCreateOgeCustomRandomVariantV1']);
     Route::get('/oge/variants/{hash}', [TestPdfController::class, 'apiGetOgeVariantV1'])
         ->where('hash', '[a-z0-9]{5,16}');
+});
+
+Route::middleware(['auth:sanctum', 'role:teacher,admin'])->prefix('materials')->group(function () {
+    Route::get('/', [JarvisMaterialController::class, 'index']);
+    Route::post('/', [JarvisMaterialController::class, 'store']);
+    Route::get('/{material}', [JarvisMaterialController::class, 'show']);
+    Route::patch('/{material}', [JarvisMaterialController::class, 'update']);
+    Route::post('/{material}/publish', [JarvisMaterialController::class, 'publish']);
+    Route::post('/{material}/archive', [JarvisMaterialController::class, 'archive']);
 });
 
 Route::get('/skills', [SkillController::class, 'index']);

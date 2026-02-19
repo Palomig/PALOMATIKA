@@ -145,6 +145,11 @@ class User extends Authenticatable
         return $this->hasMany(OgeVariant::class, 'owner_teacher_id');
     }
 
+    public function ownedJarvisMaterials(): HasMany
+    {
+        return $this->hasMany(JarvisMaterial::class, 'owner_teacher_id');
+    }
+
     public function ogeAttempts(): HasMany
     {
         return $this->hasMany(OgeAttempt::class, 'student_id');

@@ -35,6 +35,12 @@
     </svg>
     ОГЭ варианты
 </a>
+<a href="/teacher/materials" class="flex items-center px-3 py-2.5 rounded-xl transition {{ request()->is('teacher/materials*') ? 'bg-coral/10 text-coral' : 'text-gray-400 hover:bg-dark-lighter hover:text-white' }}">
+    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.483 9.246 5 7.5 5 4.462 5 2 6.462 2 8.267V19c0-1.805 2.462-3.267 5.5-3.267 1.746 0 3.332.483 4.5 1.253m0-10.733C13.168 5.483 14.754 5 16.5 5 19.538 5 22 6.462 22 8.267V19c0-1.805-2.462-3.267-5.5-3.267-1.746 0-3.332.483-4.5 1.253"/>
+    </svg>
+    Материалы
+</a>
 <a href="/teacher/audit" class="flex items-center px-3 py-2.5 rounded-xl transition {{ request()->is('teacher/audit*') ? 'bg-coral/10 text-coral' : 'text-gray-400 hover:bg-dark-lighter hover:text-white' }}">
     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h6l5 5v11a2 2 0 01-2 2z"/>
