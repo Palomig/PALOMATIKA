@@ -291,4 +291,28 @@ class OgeVariantV1ApiTest extends TestCase
             ->assertJsonPath('data.config_json.source', 'custom_random')
             ->assertJsonPath('data.config_json.topics.0', '06');
     }
+
+    public function test_custom_random_endpoint_keeps_all_requested_topics_in_payload(): void
+    {
+        $teacher = User::factory()->create(['role' => 'teacher']);
+        Sanctum::actingAs($teacher);
+
+        $response = $this->postJson('/api/oge/variants/custom-random', [
+            'hash' => 'topicfix1',
+            'topics' => ['06', '08', '09', '15', '16', '18'],
+            'tasks_per_topic' => 1,
+        ])
+            ->assertCreated();
+
+        $taskNumbers = $response->json('data.config_json.custom_task_numbers');
+        sort($taskNumbers);
+        $this->assertSame([6, 8, 9, 15, 16, 18], $taskNumbers);
+
+        $taskTopics = array_values(array_unique(array_map(
+            static fn (array $task): int => (int) ($task['topic_id'] ?? 0),
+            $response->json('data.custom_tasks')
+        )));
+        sort($taskTopics);
+        $this->assertSame([6, 8, 9, 15, 16, 18], $taskTopics);
+    }
 }

@@ -4756,6 +4756,7 @@ class TestPdfController extends Controller
         $customTasks = [];
 
         foreach ($topics as $topicId) {
+            $generatedForTopic = 0;
             for ($index = 0; $index < $tasksPerTopic; $index++) {
                 $task = $this->getOneRandomTaskForOge($topicId);
                 if (!is_array($task) || empty($task)) {
@@ -4763,6 +4764,16 @@ class TestPdfController extends Controller
                 }
 
                 $customTasks[] = $this->normalizeCustomTask($task);
+                $generatedForTopic++;
+            }
+
+            if ($generatedForTopic === 0) {
+                \Log::warning('OGE custom random topic returned no tasks', [
+                    'topic_id' => $topicId,
+                    'tasks_per_topic' => $tasksPerTopic,
+                    'request_id' => $requestId,
+                    'owner_teacher_id' => $ownerTeacherId,
+                ]);
             }
         }
 
@@ -5082,15 +5093,19 @@ class TestPdfController extends Controller
      */
     protected function getOneRandomTaskForOge(string $topicId): ?array
     {
-        // Use existing methods to get random tasks
-        $methodName = 'getRandomTasksFromManualData' . $topicId;
+        $tasks = $this->taskDataService->getRandomTasks($topicId, 1);
+        if (!empty($tasks)) {
+            return $tasks[0] ?? null;
+        }
 
+        // Fallback to legacy/manual helpers for topics backed by embedded datasets.
+        $methodName = 'getRandomTasksFromManualData' . $topicId;
         if (method_exists($this, $methodName)) {
             $tasks = $this->$methodName(1);
             return $tasks[0] ?? null;
         }
 
-        // Fallback to task generator service
+        // Last-resort fallback for dynamic topic sources.
         $tasks = $this->taskGenerator->getRandomTasksFromTopic($topicId, 1);
         return $tasks[0] ?? null;
     }
