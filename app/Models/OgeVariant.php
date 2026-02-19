@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class OgeVariant extends Model
 {
+    public const SOURCE_GENERATOR = 'generator';
+    public const SOURCE_CUSTOM_RANDOM = 'custom_random';
+
     protected $fillable = [
         'hash',
         'owner_teacher_id',
@@ -30,5 +33,16 @@ class OgeVariant extends Model
     {
         return $this->hasMany(OgeAttempt::class, 'variant_id');
     }
-}
 
+    public function source(): string
+    {
+        $source = $this->config_json['source'] ?? self::SOURCE_GENERATOR;
+
+        return is_string($source) && $source !== '' ? $source : self::SOURCE_GENERATOR;
+    }
+
+    public function isCustomRandom(): bool
+    {
+        return $this->source() === self::SOURCE_CUSTOM_RANDOM;
+    }
+}

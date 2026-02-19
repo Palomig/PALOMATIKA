@@ -174,6 +174,8 @@ class TestPdfController extends Controller
             json_encode($testTasks, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
         );
 
+        $this->persistCustomVariantMetadata($hash, $testTasks);
+
         return redirect()->route('oge.show', ['hash' => $hash]);
     }
 
@@ -4266,8 +4268,21 @@ class TestPdfController extends Controller
         // Normalize to lowercase for consistent cache/DB lookups
         $hash = strtolower($hash);
 
-        $customTasks = $this->loadCustomRandomTestByHash($hash);
+        $persistedVariant = null;
+        try {
+            $persistedVariant = OgeVariant::where('hash', $hash)->first();
+        } catch (\Throwable $e) {
+            \Log::warning('Unable to resolve persisted OGE variant metadata for hash', [
+                'hash' => $hash,
+                'error' => $e->getMessage(),
+            ]);
+        }
+        $shouldUseCustomFlow = !$persistedVariant || $persistedVariant->isCustomRandom();
+
+        $customTasks = $shouldUseCustomFlow ? $this->loadCustomRandomTestByHash($hash) : null;
         if (is_array($customTasks) && !empty($customTasks)) {
+            $this->persistCustomVariantMetadata($hash, $customTasks);
+
             usort($customTasks, function (array $left, array $right): int {
                 $leftTopic = (int) ($left['topic_id'] ?? 0);
                 $rightTopic = (int) ($right['topic_id'] ?? 0);
@@ -4362,6 +4377,50 @@ class TestPdfController extends Controller
         }, $customTasks);
     }
 
+    protected function persistCustomVariantMetadata(string $hash, array $customTasks): void
+    {
+        try {
+            $ownerTeacherId = $this->resolveOwnerTeacherId();
+            $taskNumbers = array_values(array_unique(array_filter(array_map(
+                fn (array $task): int => (int) ($task['topic_id'] ?? 0),
+                $customTasks
+            ), fn (int $taskNumber): bool => $taskNumber > 0 && $taskNumber <= 255)));
+            sort($taskNumbers);
+
+            $updatePayload = [
+                'title' => "Кастомный вариант {$hash}",
+                'config_json' => [
+                    'source' => OgeVariant::SOURCE_CUSTOM_RANDOM,
+                    'custom_task_numbers' => $taskNumbers,
+                ],
+            ];
+
+            if ($ownerTeacherId !== null) {
+                $updatePayload['owner_teacher_id'] = $ownerTeacherId;
+            }
+
+            OgeVariant::updateOrCreate(
+                ['hash' => $hash],
+                $updatePayload
+            );
+        } catch (\Throwable $e) {
+            \Log::warning('Failed to persist custom random variant metadata', [
+                'hash' => $hash,
+                'error' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    protected function resolveOwnerTeacherId(): ?int
+    {
+        $user = auth()->user();
+        if (!$user) {
+            return null;
+        }
+
+        return in_array($user->role, ['teacher', 'admin'], true) ? (int) $user->id : null;
+    }
+
     /**
      * Save OGE variant configuration to cache
      */
@@ -4400,7 +4459,7 @@ class TestPdfController extends Controller
                     'title' => "Вариант {$hash}",
                     'config_json' => [
                         'zadaniya' => $zadaniya,
-                        'source' => 'generator',
+                        'source' => OgeVariant::SOURCE_GENERATOR,
                     ],
                 ]
             );

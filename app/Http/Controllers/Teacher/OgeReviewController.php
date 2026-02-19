@@ -44,7 +44,32 @@ class OgeReviewController extends Controller
             ->orderByDesc('created_at')
             ->get();
 
-        return view('teacher.oge.results', compact('variant', 'attempts'));
+        $taskNumbers = $this->resolveTaskNumbers($variant, $attempts);
+
+        return view('teacher.oge.results', compact('variant', 'attempts', 'taskNumbers'));
+    }
+
+    private function resolveTaskNumbers(OgeVariant $variant, $attempts): array
+    {
+        if (!$variant->isCustomRandom()) {
+            return range(6, 19);
+        }
+
+        $configNumbers = $variant->config_json['custom_task_numbers'] ?? [];
+        $fromConfig = is_array($configNumbers)
+            ? array_values(array_filter(array_map('intval', $configNumbers), fn (int $number): bool => $number > 0 && $number <= 255))
+            : [];
+
+        $fromAttempts = $attempts
+            ->flatMap(fn ($attempt) => $attempt->answers->pluck('task_number'))
+            ->map(fn ($number) => (int) $number)
+            ->filter(fn (int $number): bool => $number > 0 && $number <= 255)
+            ->values()
+            ->all();
+
+        $resolved = array_values(array_unique(array_merge($fromConfig, $fromAttempts)));
+        sort($resolved);
+
+        return !empty($resolved) ? $resolved : range(1, 19);
     }
 }
-

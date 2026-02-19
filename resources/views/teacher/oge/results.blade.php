@@ -4,8 +4,6 @@
 @section('header', 'ОГЭ: Результаты варианта')
 
 @section('content')
-@php $taskNumbers = range(6, 19); @endphp
-
 <div class="space-y-5">
     {{-- Header card --}}
     <div class="bg-dark-light rounded-2xl border border-white/[0.06] p-5">
@@ -20,6 +18,9 @@
         <div class="flex flex-wrap gap-x-4 gap-y-1 mt-1.5 text-sm text-gray-500">
             <span>Владелец: <span class="text-gray-300">{{ $variant->ownerTeacher->name ?? '—' }}</span></span>
             <span>Попыток: <span class="text-gray-300">{{ $attempts->count() }}</span></span>
+            @if($variant->isCustomRandom())
+                <span>Тип: <span class="text-sky-300">Кастомный</span></span>
+            @endif
         </div>
     </div>
 

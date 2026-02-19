@@ -256,6 +256,10 @@ class OgeAttemptService
             return $cache[$attemptId] = [];
         }
 
+        if ($attempt->variant?->isCustomRandom()) {
+            return $cache[$attemptId] = [];
+        }
+
         $selected = $attempt->variant?->config_json['zadaniya'] ?? null;
         $variantPayload = $this->variantBuilder->build($hash, is_array($selected) ? $selected : null);
 

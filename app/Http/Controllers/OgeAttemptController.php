@@ -79,7 +79,7 @@ class OgeAttemptController extends Controller
 
         $taskNumber = (int) $request->input('active_task', 0);
         $visible = (bool) $request->boolean('visible', true);
-        if ($visible && $taskNumber >= 6 && $taskNumber <= 19) {
+        if ($visible && $this->isValidTaskNumber($taskNumber)) {
             $this->attemptService->touchTiming($attempt, $taskNumber, 'heartbeat', $request->input('client_ts'));
         }
 
@@ -170,9 +170,14 @@ class OgeAttemptController extends Controller
 
     private function validateTaskNumber(int $taskNumber): void
     {
-        if ($taskNumber < 6 || $taskNumber > 19) {
+        if (!$this->isValidTaskNumber($taskNumber)) {
             abort(422, 'Invalid task number');
         }
+    }
+
+    private function isValidTaskNumber(int $taskNumber): bool
+    {
+        return $taskNumber >= 1 && $taskNumber <= 255;
     }
 
     private function logAudit(

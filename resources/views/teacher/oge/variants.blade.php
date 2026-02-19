@@ -36,7 +36,14 @@
                         <td class="px-5 py-3.5">
                             <span class="font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md text-xs">{{ $variant->hash }}</span>
                         </td>
-                        <td class="px-5 py-3.5 text-white font-medium">{{ $variant->title ?? 'Вариант ' . $variant->hash }}</td>
+                        <td class="px-5 py-3.5 text-white font-medium">
+                            <div class="flex items-center gap-2">
+                                <span>{{ $variant->title ?? 'Вариант ' . $variant->hash }}</span>
+                                @if($variant->isCustomRandom())
+                                    <span class="inline-flex items-center px-2 py-0.5 text-[10px] font-medium rounded-md bg-sky-500/15 text-sky-300">Кастомный</span>
+                                @endif
+                            </div>
+                        </td>
                         <td class="px-5 py-3.5">
                             <span class="inline-flex items-center px-2.5 py-1 text-[11px] font-medium rounded-lg bg-white/[0.04] text-gray-300 tabular-nums">
                                 {{ $variant->attempts_count }}
