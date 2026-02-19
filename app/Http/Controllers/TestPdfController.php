@@ -3,16 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\OgeVariant;
+use App\Services\AuditLogger;
 use App\Services\PdfParserService;
 use App\Services\PdfTaskParser;
 use App\Services\TaskGeneratorService;
 use App\Services\AdvancedPdfParser;
 use App\Services\OgeVariantBuilderService;
 use App\Services\TaskDataService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
 
 class TestPdfController extends Controller
 {
@@ -21,19 +27,22 @@ class TestPdfController extends Controller
     protected AdvancedPdfParser $advancedParser;
     protected TaskDataService $taskDataService;
     protected OgeVariantBuilderService $ogeVariantBuilder;
+    protected AuditLogger $auditLogger;
 
     public function __construct(
         PdfParserService $pdfParser,
         TaskGeneratorService $taskGenerator,
         AdvancedPdfParser $advancedParser,
         TaskDataService $taskDataService,
-        OgeVariantBuilderService $ogeVariantBuilder
+        OgeVariantBuilderService $ogeVariantBuilder,
+        AuditLogger $auditLogger
     ) {
         $this->pdfParser = $pdfParser;
         $this->taskGenerator = $taskGenerator;
         $this->advancedParser = $advancedParser;
         $this->taskDataService = $taskDataService;
         $this->ogeVariantBuilder = $ogeVariantBuilder;
+        $this->auditLogger = $auditLogger;
     }
 
     /**
@@ -4328,7 +4337,7 @@ class TestPdfController extends Controller
 
     protected function loadCustomRandomTestByHash(string $hash): ?array
     {
-        $testTasks = \Cache::get("custom_random_test_{$hash}");
+        $testTasks = Cache::get("custom_random_test_{$hash}");
 
         if ((!is_array($testTasks) || empty($testTasks)) && Storage::disk('local')->exists("custom_random_tests/{$hash}.json")) {
             $raw = Storage::disk('local')->get("custom_random_tests/{$hash}.json");
@@ -4336,7 +4345,27 @@ class TestPdfController extends Controller
 
             if (is_array($decoded) && !empty($decoded)) {
                 $testTasks = $decoded;
-                \Cache::put("custom_random_test_{$hash}", $testTasks, now()->addDays(7));
+                Cache::put("custom_random_test_{$hash}", $testTasks, now()->addDays(7));
+            }
+        }
+
+        if (!is_array($testTasks) || empty($testTasks)) {
+            try {
+                $variant = OgeVariant::where('hash', $hash)->first();
+                $fromDb = $variant?->config_json['custom_tasks'] ?? null;
+                if (is_array($fromDb) && !empty($fromDb)) {
+                    $testTasks = $fromDb;
+                    Cache::put("custom_random_test_{$hash}", $testTasks, now()->addDays(7));
+                    Storage::disk('local')->put(
+                        "custom_random_tests/{$hash}.json",
+                        json_encode($testTasks, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+                    );
+                }
+            } catch (\Throwable $e) {
+                \Log::warning('Unable to load custom random variant payload from DB', [
+                    'hash' => $hash,
+                    'error' => $e->getMessage(),
+                ]);
             }
         }
 
@@ -4394,6 +4423,10 @@ class TestPdfController extends Controller
                     'custom_task_numbers' => $taskNumbers,
                 ],
             ];
+            $updatePayload = array_merge(
+                $updatePayload,
+                $this->buildCanonicalVariantColumns(OgeVariant::SOURCE_CUSTOM_RANDOM)
+            );
 
             if ($ownerTeacherId !== null) {
                 $updatePayload['owner_teacher_id'] = $ownerTeacherId;
@@ -4447,7 +4480,7 @@ class TestPdfController extends Controller
         }
 
         // Store in cache for 30 days
-        \Cache::put("oge_variant_{$hash}", $zadaniya, now()->addDays(30));
+        Cache::put("oge_variant_{$hash}", $zadaniya, now()->addDays(30));
 
         // Persist canonical variant metadata for assessment workflow.
         // If DB schema is not ready on hosting, keep generator working via cache.
@@ -4457,6 +4490,7 @@ class TestPdfController extends Controller
                 [
                     'owner_teacher_id' => auth()->id(),
                     'title' => "Вариант {$hash}",
+                    ...$this->buildCanonicalVariantColumns(OgeVariant::SOURCE_GENERATOR),
                     'config_json' => [
                         'zadaniya' => $zadaniya,
                         'source' => OgeVariant::SOURCE_GENERATOR,
@@ -4471,6 +4505,445 @@ class TestPdfController extends Controller
         }
 
         return response()->json(['success' => true, 'hash' => $hash]);
+    }
+
+    public function apiCreateOgeGeneratorVariantV1(Request $request): JsonResponse
+    {
+        $source = OgeVariant::SOURCE_GENERATOR;
+        $requestId = $this->resolveRequestId($request);
+        $ownerTeacherId = (int) auth()->id();
+        $externalRef = $request->input('external_ref');
+        $externalRef = is_string($externalRef) && $externalRef !== '' ? $externalRef : null;
+
+        $validator = Validator::make($request->all(), [
+            'hash' => ['nullable', 'regex:/^[a-z0-9]{5,16}$/'],
+            'zadaniya' => ['required', 'array', 'min:1'],
+            'zadaniya.*' => ['required', 'string', 'regex:/^\\d{2}_\\d+_\\d+$/'],
+            'external_ref' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        if ($validator->fails()) {
+            $this->auditVariantCreate(
+                $request,
+                'oge.variant.create.failed',
+                'warning',
+                $source,
+                null,
+                $ownerTeacherId,
+                $externalRef,
+                [
+                    'reason' => 'validation_failed',
+                    'errors' => $validator->errors()->toArray(),
+                ],
+                $requestId
+            );
+
+            return response()->json([
+                'message' => 'The given data was invalid.',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $validated = $validator->validated();
+        $selectedHash = isset($validated['hash']) ? strtolower((string) $validated['hash']) : null;
+        $zadaniya = array_values($validated['zadaniya']);
+
+        if ($externalRef !== null && $this->ogeVariantColumnExists('external_ref')) {
+            $existingByExternalRef = OgeVariant::query()
+                ->where('owner_teacher_id', $ownerTeacherId)
+                ->where('external_ref', $externalRef)
+                ->first();
+
+            if ($existingByExternalRef) {
+                return response()->json([
+                    'data' => $this->formatVariantApiResponse($existingByExternalRef, true),
+                ], 200);
+            }
+        }
+
+        if ($selectedHash !== null && OgeVariant::where('hash', $selectedHash)->exists()) {
+            $this->auditVariantCreate(
+                $request,
+                'oge.variant.create.failed',
+                'warning',
+                $source,
+                $selectedHash,
+                $ownerTeacherId,
+                $externalRef,
+                ['reason' => 'hash_conflict'],
+                $requestId
+            );
+
+            return response()->json(['message' => 'Variant hash already exists.'], 409);
+        }
+
+        $hash = $selectedHash ?? $this->generateUniqueApiVariantHash();
+
+        try {
+            $variant = DB::transaction(function () use ($hash, $ownerTeacherId, $zadaniya, $externalRef) {
+                $payload = [
+                    'hash' => $hash,
+                    'owner_teacher_id' => $ownerTeacherId,
+                    'title' => "Вариант {$hash}",
+                    'config_json' => [
+                        'zadaniya' => $zadaniya,
+                        'source' => OgeVariant::SOURCE_GENERATOR,
+                    ],
+                ];
+
+                $payload = array_merge(
+                    $payload,
+                    $this->buildCanonicalVariantColumns(
+                        OgeVariant::SOURCE_GENERATOR,
+                        $externalRef,
+                        'api_v1_generator'
+                    )
+                );
+
+                return OgeVariant::create($payload);
+            });
+
+            Cache::put("oge_variant_{$hash}", $zadaniya, now()->addDays(30));
+
+            $this->auditVariantCreate(
+                $request,
+                'oge.variant.create.success',
+                'info',
+                $source,
+                $hash,
+                $ownerTeacherId,
+                $externalRef,
+                ['idempotent' => false],
+                $requestId
+            );
+
+            return response()->json([
+                'data' => $this->formatVariantApiResponse($variant, false),
+            ], 201);
+        } catch (\Throwable $e) {
+            $this->auditVariantCreate(
+                $request,
+                'oge.variant.create.failed',
+                'error',
+                $source,
+                $hash,
+                $ownerTeacherId,
+                $externalRef,
+                ['reason' => 'exception', 'error' => $e->getMessage()],
+                $requestId
+            );
+
+            return response()->json(['message' => 'Failed to create variant.'], 500);
+        }
+    }
+
+    public function apiCreateOgeCustomRandomVariantV1(Request $request): JsonResponse
+    {
+        $source = OgeVariant::SOURCE_CUSTOM_RANDOM;
+        $requestId = $this->resolveRequestId($request);
+        $ownerTeacherId = (int) auth()->id();
+        $externalRef = $request->input('external_ref');
+        $externalRef = is_string($externalRef) && $externalRef !== '' ? $externalRef : null;
+
+        $validator = Validator::make($request->all(), [
+            'hash' => ['nullable', 'regex:/^[a-z0-9]{5,16}$/'],
+            'topics' => ['required', 'array', 'min:1'],
+            'topics.*' => ['required', 'string', 'regex:/^\\d{1,2}$/'],
+            'tasks_per_topic' => ['nullable', 'integer', 'min:1', 'max:10'],
+            'external_ref' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        if ($validator->fails()) {
+            $this->auditVariantCreate(
+                $request,
+                'oge.variant.create.failed',
+                'warning',
+                $source,
+                null,
+                $ownerTeacherId,
+                $externalRef,
+                [
+                    'reason' => 'validation_failed',
+                    'errors' => $validator->errors()->toArray(),
+                ],
+                $requestId
+            );
+
+            return response()->json([
+                'message' => 'The given data was invalid.',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $validated = $validator->validated();
+        $selectedHash = isset($validated['hash']) ? strtolower((string) $validated['hash']) : null;
+        $tasksPerTopic = (int) ($validated['tasks_per_topic'] ?? 1);
+        $topics = array_values(array_unique(array_map(
+            fn (string $topicId): string => str_pad($topicId, 2, '0', STR_PAD_LEFT),
+            $validated['topics']
+        )));
+
+        if ($externalRef !== null && $this->ogeVariantColumnExists('external_ref')) {
+            $existingByExternalRef = OgeVariant::query()
+                ->where('owner_teacher_id', $ownerTeacherId)
+                ->where('external_ref', $externalRef)
+                ->first();
+
+            if ($existingByExternalRef) {
+                return response()->json([
+                    'data' => $this->formatVariantApiResponse($existingByExternalRef, true),
+                ], 200);
+            }
+        }
+
+        if ($selectedHash !== null && OgeVariant::where('hash', $selectedHash)->exists()) {
+            $this->auditVariantCreate(
+                $request,
+                'oge.variant.create.failed',
+                'warning',
+                $source,
+                $selectedHash,
+                $ownerTeacherId,
+                $externalRef,
+                ['reason' => 'hash_conflict'],
+                $requestId
+            );
+
+            return response()->json(['message' => 'Variant hash already exists.'], 409);
+        }
+
+        $hash = $selectedHash ?? $this->generateUniqueApiVariantHash();
+        $customTasks = [];
+
+        foreach ($topics as $topicId) {
+            for ($index = 0; $index < $tasksPerTopic; $index++) {
+                $task = $this->getOneRandomTaskForOge($topicId);
+                if (!is_array($task) || empty($task)) {
+                    continue;
+                }
+
+                $customTasks[] = $this->normalizeCustomTask($task);
+            }
+        }
+
+        shuffle($customTasks);
+
+        foreach ($customTasks as $index => &$task) {
+            $task['test_number'] = $index + 1;
+        }
+        unset($task);
+
+        if (empty($customTasks)) {
+            $this->auditVariantCreate(
+                $request,
+                'oge.variant.create.failed',
+                'warning',
+                $source,
+                $hash,
+                $ownerTeacherId,
+                $externalRef,
+                ['reason' => 'empty_payload'],
+                $requestId
+            );
+
+            return response()->json(['message' => 'Unable to generate tasks for selected topics.'], 422);
+        }
+
+        $taskNumbers = array_values(array_unique(array_filter(array_map(
+            fn (array $task): int => (int) ($task['topic_id'] ?? 0),
+            $customTasks
+        ), fn (int $taskNumber): bool => $taskNumber > 0 && $taskNumber <= 255)));
+        sort($taskNumbers);
+
+        try {
+            $variant = DB::transaction(function () use ($hash, $ownerTeacherId, $externalRef, $topics, $tasksPerTopic, $taskNumbers, $customTasks) {
+                $payload = [
+                    'hash' => $hash,
+                    'owner_teacher_id' => $ownerTeacherId,
+                    'title' => "Кастомный вариант {$hash}",
+                    'config_json' => [
+                        'source' => OgeVariant::SOURCE_CUSTOM_RANDOM,
+                        'topics' => $topics,
+                        'tasks_per_topic' => $tasksPerTopic,
+                        'custom_task_numbers' => $taskNumbers,
+                        'custom_tasks' => $customTasks,
+                    ],
+                ];
+
+                $payload = array_merge(
+                    $payload,
+                    $this->buildCanonicalVariantColumns(
+                        OgeVariant::SOURCE_CUSTOM_RANDOM,
+                        $externalRef,
+                        'api_v1_custom_random'
+                    )
+                );
+
+                return OgeVariant::create($payload);
+            });
+
+            Cache::put("custom_random_test_{$hash}", $customTasks, now()->addDays(7));
+            Storage::disk('local')->put(
+                "custom_random_tests/{$hash}.json",
+                json_encode($customTasks, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+            );
+
+            $this->auditVariantCreate(
+                $request,
+                'oge.variant.create.success',
+                'info',
+                $source,
+                $hash,
+                $ownerTeacherId,
+                $externalRef,
+                ['idempotent' => false],
+                $requestId
+            );
+
+            return response()->json([
+                'data' => $this->formatVariantApiResponse($variant, false),
+            ], 201);
+        } catch (\Throwable $e) {
+            $this->auditVariantCreate(
+                $request,
+                'oge.variant.create.failed',
+                'error',
+                $source,
+                $hash,
+                $ownerTeacherId,
+                $externalRef,
+                ['reason' => 'exception', 'error' => $e->getMessage()],
+                $requestId
+            );
+
+            return response()->json(['message' => 'Failed to create variant.'], 500);
+        }
+    }
+
+    public function apiGetOgeVariantV1(Request $request, string $hash): JsonResponse
+    {
+        $variant = OgeVariant::where('hash', strtolower($hash))->first();
+        if (!$variant) {
+            return response()->json(['message' => 'Variant not found.'], 404);
+        }
+
+        $expand = (string) $request->query('expand', '');
+        $includeFull = $expand === 'full';
+
+        return response()->json([
+            'data' => $this->formatVariantApiResponse($variant, false, $includeFull),
+        ]);
+    }
+
+    protected function formatVariantApiResponse(OgeVariant $variant, bool $idempotent, bool $includeFull = true): array
+    {
+        $data = [
+            'hash' => $variant->hash,
+            'url' => url("/oge/{$variant->hash}"),
+            'source' => $variant->source(),
+            'owner_teacher_id' => $variant->owner_teacher_id,
+            'external_ref' => $variant->external_ref,
+            'created_via' => $variant->created_via,
+            'idempotent' => $idempotent,
+            'created_at' => optional($variant->created_at)->toISOString(),
+            'updated_at' => optional($variant->updated_at)->toISOString(),
+        ];
+
+        if ($includeFull) {
+            $config = is_array($variant->config_json) ? $variant->config_json : [];
+
+            if (($variant->source() === OgeVariant::SOURCE_CUSTOM_RANDOM) && empty($config['custom_tasks'])) {
+                $loadedTasks = $this->loadCustomRandomTestByHash($variant->hash);
+                if (is_array($loadedTasks) && !empty($loadedTasks)) {
+                    $config['custom_tasks'] = $loadedTasks;
+                }
+            }
+
+            $data['config_json'] = $config;
+            $data['custom_tasks'] = is_array($config['custom_tasks'] ?? null) ? $config['custom_tasks'] : [];
+        }
+
+        return $data;
+    }
+
+    protected function auditVariantCreate(
+        Request $request,
+        string $eventType,
+        string $severity,
+        string $source,
+        ?string $hash,
+        ?int $ownerTeacherId,
+        ?string $externalRef,
+        array $extraPayload = [],
+        ?string $requestId = null
+    ): void {
+        $payload = array_merge([
+            'source' => $source,
+            'hash' => $hash,
+            'owner_teacher_id' => $ownerTeacherId,
+            'external_ref' => $externalRef,
+        ], $extraPayload);
+
+        $this->auditLogger->log([
+            'event_type' => $eventType,
+            'category' => 'oge',
+            'severity' => $severity,
+            'actor_user_id' => auth()->id(),
+            'actor_role' => auth()->user()?->role,
+            'subject_type' => 'oge_variant',
+            'subject_id' => $hash,
+            'request_id' => $requestId,
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'payload_json' => $payload,
+        ]);
+    }
+
+    protected function resolveRequestId(Request $request): ?string
+    {
+        $requestId = $request->header('X-Request-Id');
+        if (!is_string($requestId) || $requestId === '') {
+            return null;
+        }
+
+        return Str::substr($requestId, 0, 64);
+    }
+
+    protected function buildCanonicalVariantColumns(string $source, ?string $externalRef = null, ?string $createdVia = null): array
+    {
+        $payload = [];
+
+        if ($this->ogeVariantColumnExists('source')) {
+            $payload['source'] = $source;
+        }
+
+        if ($externalRef !== null && $this->ogeVariantColumnExists('external_ref')) {
+            $payload['external_ref'] = $externalRef;
+        }
+
+        if ($createdVia !== null && $this->ogeVariantColumnExists('created_via')) {
+            $payload['created_via'] = $createdVia;
+        }
+
+        return $payload;
+    }
+
+    protected function ogeVariantColumnExists(string $column): bool
+    {
+        try {
+            return Schema::hasTable('oge_variants') && Schema::hasColumn('oge_variants', $column);
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
+
+    protected function generateUniqueApiVariantHash(): string
+    {
+        do {
+            $hash = Str::lower(Str::random(8));
+        } while (OgeVariant::where('hash', $hash)->exists());
+
+        return $hash;
     }
 
     /**

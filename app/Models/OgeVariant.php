@@ -15,6 +15,9 @@ class OgeVariant extends Model
         'hash',
         'owner_teacher_id',
         'title',
+        'source',
+        'external_ref',
+        'created_via',
         'config_json',
     ];
 
@@ -36,7 +39,7 @@ class OgeVariant extends Model
 
     public function source(): string
     {
-        $source = $this->config_json['source'] ?? self::SOURCE_GENERATOR;
+        $source = $this->attributes['source'] ?? ($this->config_json['source'] ?? self::SOURCE_GENERATOR);
 
         return is_string($source) && $source !== '' ? $source : self::SOURCE_GENERATOR;
     }

@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\TopicController;
 use App\Http\Controllers\Auth\TelegramBotAuthController;
 use App\Http\Controllers\GeometryEditorController;
+use App\Http\Controllers\TestPdfController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -55,6 +56,13 @@ Route::get('/cart', [SmartCartProxyController::class, 'cart']);
 Route::middleware(['auth:sanctum', 'role:teacher,admin'])->group(function () {
     Route::get('/topics', [TopicController::class, 'index']);
     Route::get('/topics/{topic}', [TopicController::class, 'show']);
+});
+
+Route::middleware(['auth:sanctum', 'role:teacher,admin', 'throttle:oge-variants-v1'])->group(function () {
+    Route::post('/oge/variants/generator', [TestPdfController::class, 'apiCreateOgeGeneratorVariantV1']);
+    Route::post('/oge/variants/custom-random', [TestPdfController::class, 'apiCreateOgeCustomRandomVariantV1']);
+    Route::get('/oge/variants/{hash}', [TestPdfController::class, 'apiGetOgeVariantV1'])
+        ->where('hash', '[a-z0-9]{5,16}');
 });
 
 Route::get('/skills', [SkillController::class, 'index']);
