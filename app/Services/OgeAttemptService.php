@@ -211,19 +211,9 @@ class OgeAttemptService
 
     private function scoreAttempt(OgeAttempt $attempt): void
     {
-        $hash = $attempt->variant?->hash;
-        if (!$hash) {
+        $correctByTaskNumber = $this->getCorrectAnswerMap($attempt);
+        if (empty($correctByTaskNumber)) {
             return;
-        }
-
-        $selected = $attempt->variant?->config_json['zadaniya'] ?? null;
-        $variantPayload = $this->variantBuilder->build($hash, is_array($selected) ? $selected : null);
-        $tasks = $variantPayload['tasks'] ?? [];
-
-        $correctByTaskNumber = [];
-        foreach ($tasks as $index => $taskData) {
-            $taskNumber = 6 + $index;
-            $correctByTaskNumber[$taskNumber] = $this->answerResolver->resolveFromVariantTask($taskData);
         }
 
         $attempt->loadMissing('answers');
@@ -241,12 +231,41 @@ class OgeAttemptService
             return;
         }
 
-        $selected = $attempt->variant?->config_json['zadaniya'] ?? null;
-        $variantPayload = $this->variantBuilder->build($hash, is_array($selected) ? $selected : null);
-        $taskData = $variantPayload['tasks'][$taskNumber - 6] ?? null;
-        $correct = is_array($taskData) ? $this->answerResolver->resolveFromVariantTask($taskData) : null;
+        $correctMap = $this->getCorrectAnswerMap($attempt);
+        $correct = $correctMap[$taskNumber] ?? null;
 
         $this->persistScoringRow($attempt->id, $taskNumber, $userAnswer, $correct);
+    }
+
+    /**
+     * Build a task_number => correct_answer map for the variant, cached per request.
+     *
+     * @return array<int, string|null>
+     */
+    private function getCorrectAnswerMap(OgeAttempt $attempt): array
+    {
+        static $cache = [];
+
+        $attemptId = $attempt->id;
+        if (isset($cache[$attemptId])) {
+            return $cache[$attemptId];
+        }
+
+        $hash = $attempt->variant?->hash;
+        if (!$hash) {
+            return $cache[$attemptId] = [];
+        }
+
+        $selected = $attempt->variant?->config_json['zadaniya'] ?? null;
+        $variantPayload = $this->variantBuilder->build($hash, is_array($selected) ? $selected : null);
+
+        $map = [];
+        foreach ($variantPayload['tasks'] ?? [] as $index => $taskData) {
+            $tn = (int) ($taskData['task_number'] ?? (6 + $index));
+            $map[$tn] = $this->answerResolver->resolveFromVariantTask($taskData);
+        }
+
+        return $cache[$attemptId] = $map;
     }
 
     private function persistScoringRow(int $attemptId, int $taskNumber, ?string $userAnswer, ?string $correctAnswer): void

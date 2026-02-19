@@ -74,6 +74,7 @@ class OgeVariantBuilderService
                 if ($matchingSet) {
                     $matchingSet['topic_id'] = $topicId;
                     $matchingSet['topic_title'] = $topicTitles[$topicId] ?? '';
+                    $matchingSet['task_number'] = (int) ltrim($topicId, '0');
                     $matchingSet['correct_answer'] = $this->buildMatchingCorrectAnswer($matchingSet);
                     $tasks[] = $matchingSet;
                 }
@@ -96,6 +97,7 @@ class OgeVariantBuilderService
             $task = $tasksFromZadanie[0];
             $task['topic_id'] = $topicId;
             $task['topic_title'] = $topicTitles[$topicId] ?? '';
+            $task['task_number'] = (int) ltrim($topicId, '0');
             $task = $this->enrichTaskWithCorrectAnswer($task);
             $tasks[] = $task;
         }

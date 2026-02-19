@@ -4263,7 +4263,10 @@ class TestPdfController extends Controller
             abort(404);
         }
 
-        $customTasks = $this->loadCustomRandomTestByHash(strtolower($hash));
+        // Normalize to lowercase for consistent cache/DB lookups
+        $hash = strtolower($hash);
+
+        $customTasks = $this->loadCustomRandomTestByHash($hash);
         if (is_array($customTasks) && !empty($customTasks)) {
             usort($customTasks, function (array $left, array $right): int {
                 $leftTopic = (int) ($left['topic_id'] ?? 0);
@@ -4364,11 +4367,11 @@ class TestPdfController extends Controller
      */
     public function saveVariant(Request $request)
     {
-        $hash = $request->input('hash');
+        $hash = strtolower((string) $request->input('hash'));
         $zadaniya = $request->input('zadaniya');
 
         // Validate hash format
-        if (!preg_match('/^[a-zA-Z0-9]{5,8}$/', $hash)) {
+        if (!preg_match('/^[a-z0-9]{5,8}$/', $hash)) {
             return response()->json(['error' => 'Invalid hash format'], 400);
         }
 
