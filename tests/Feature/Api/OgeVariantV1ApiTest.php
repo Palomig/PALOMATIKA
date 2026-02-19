@@ -100,6 +100,20 @@ class OgeVariantV1ApiTest extends TestCase
         ])->assertStatus(403);
     }
 
+    public function test_admin_can_create_variant_via_api_without_session_crash(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+        Sanctum::actingAs($admin);
+
+        $this->postJson('/api/oge/variants/generator', [
+            'hash' => 'admv1101',
+            'zadaniya' => ['06_1_1'],
+        ])
+            ->assertCreated()
+            ->assertJsonPath('data.hash', 'admv1101')
+            ->assertJsonPath('data.owner_teacher_id', $admin->id);
+    }
+
     public function test_generator_endpoint_is_idempotent_by_external_ref_per_owner(): void
     {
         $teacher = User::factory()->create(['role' => 'teacher']);
@@ -144,6 +158,59 @@ class OgeVariantV1ApiTest extends TestCase
             'topics' => ['06'],
             'tasks_per_topic' => 1,
         ])->assertStatus(409);
+    }
+
+    public function test_generator_duplicate_external_ref_returns_idempotent_instead_of_500(): void
+    {
+        $teacher = User::factory()->create(['role' => 'teacher']);
+        Sanctum::actingAs($teacher);
+        OgeVariant::create([
+            'hash' => 'racepre1',
+            'owner_teacher_id' => $teacher->id,
+            'title' => 'Preexisting variant',
+            'source' => 'generator',
+            'external_ref' => 'race-ext-1',
+            'created_via' => 'api_v1_generator',
+            'config_json' => [
+                'zadaniya' => ['06_1_1'],
+                'source' => 'generator',
+            ],
+        ]);
+
+        $this->postJson('/api/oge/variants/generator', [
+            'hash' => 'raceut11',
+            'zadaniya' => ['06_1_1'],
+            'external_ref' => 'race-ext-1',
+        ])
+            ->assertOk()
+            ->assertJsonPath('data.hash', 'racepre1')
+            ->assertJsonPath('data.idempotent', true);
+
+        $this->assertDatabaseCount('oge_variants', 1);
+    }
+
+    public function test_generator_returns_conflict_when_hash_already_exists(): void
+    {
+        $teacher = User::factory()->create(['role' => 'teacher']);
+        Sanctum::actingAs($teacher);
+        OgeVariant::create([
+            'hash' => 'racehash',
+            'owner_teacher_id' => $teacher->id,
+            'title' => 'Preexisting hash variant',
+            'source' => 'generator',
+            'external_ref' => 'race-hash-ext',
+            'created_via' => 'api_v1_generator',
+            'config_json' => [
+                'zadaniya' => ['06_1_1'],
+                'source' => 'generator',
+            ],
+        ]);
+
+        $this->postJson('/api/oge/variants/generator', [
+            'hash' => 'racehash',
+            'zadaniya' => ['06_1_1'],
+        ])
+            ->assertStatus(409);
     }
 
     public function test_generator_and_custom_random_create_successfully(): void

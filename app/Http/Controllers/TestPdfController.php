@@ -10,6 +10,7 @@ use App\Services\TaskGeneratorService;
 use App\Services\AdvancedPdfParser;
 use App\Services\OgeVariantBuilderService;
 use App\Services\TaskDataService;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -4621,6 +4622,45 @@ class TestPdfController extends Controller
                 'data' => $this->formatVariantApiResponse($variant, false),
             ], 201);
         } catch (\Throwable $e) {
+            $conflict = $this->resolveVariantCreateConflict($e, $ownerTeacherId, $externalRef, $hash);
+            if ($conflict !== null) {
+                if ($conflict['type'] === 'idempotent') {
+                    /** @var OgeVariant $variant */
+                    $variant = $conflict['variant'];
+                    $this->auditVariantCreate(
+                        $request,
+                        'oge.variant.create.success',
+                        'info',
+                        $source,
+                        $variant->hash,
+                        $ownerTeacherId,
+                        $externalRef,
+                        ['idempotent' => true],
+                        $requestId
+                    );
+
+                    return response()->json([
+                        'data' => $this->formatVariantApiResponse($variant, true),
+                    ], 200);
+                }
+
+                if ($conflict['type'] === 'hash_conflict') {
+                    $this->auditVariantCreate(
+                        $request,
+                        'oge.variant.create.failed',
+                        'warning',
+                        $source,
+                        $hash,
+                        $ownerTeacherId,
+                        $externalRef,
+                        ['reason' => 'hash_conflict'],
+                        $requestId
+                    );
+
+                    return response()->json(['message' => 'Variant hash already exists.'], 409);
+                }
+            }
+
             $this->auditVariantCreate(
                 $request,
                 'oge.variant.create.failed',
@@ -4804,6 +4844,45 @@ class TestPdfController extends Controller
                 'data' => $this->formatVariantApiResponse($variant, false),
             ], 201);
         } catch (\Throwable $e) {
+            $conflict = $this->resolveVariantCreateConflict($e, $ownerTeacherId, $externalRef, $hash);
+            if ($conflict !== null) {
+                if ($conflict['type'] === 'idempotent') {
+                    /** @var OgeVariant $variant */
+                    $variant = $conflict['variant'];
+                    $this->auditVariantCreate(
+                        $request,
+                        'oge.variant.create.success',
+                        'info',
+                        $source,
+                        $variant->hash,
+                        $ownerTeacherId,
+                        $externalRef,
+                        ['idempotent' => true],
+                        $requestId
+                    );
+
+                    return response()->json([
+                        'data' => $this->formatVariantApiResponse($variant, true),
+                    ], 200);
+                }
+
+                if ($conflict['type'] === 'hash_conflict') {
+                    $this->auditVariantCreate(
+                        $request,
+                        'oge.variant.create.failed',
+                        'warning',
+                        $source,
+                        $hash,
+                        $ownerTeacherId,
+                        $externalRef,
+                        ['reason' => 'hash_conflict'],
+                        $requestId
+                    );
+
+                    return response()->json(['message' => 'Variant hash already exists.'], 409);
+                }
+            }
+
             $this->auditVariantCreate(
                 $request,
                 'oge.variant.create.failed',
@@ -4864,6 +4943,50 @@ class TestPdfController extends Controller
         }
 
         return $data;
+    }
+
+    protected function resolveVariantCreateConflict(\Throwable $e, int $ownerTeacherId, ?string $externalRef, string $hash): ?array
+    {
+        if (!$this->isUniqueConstraintViolation($e)) {
+            return null;
+        }
+
+        if ($externalRef !== null && $this->ogeVariantColumnExists('external_ref')) {
+            $existingByExternalRef = OgeVariant::query()
+                ->where('owner_teacher_id', $ownerTeacherId)
+                ->where('external_ref', $externalRef)
+                ->first();
+
+            if ($existingByExternalRef) {
+                return [
+                    'type' => 'idempotent',
+                    'variant' => $existingByExternalRef,
+                ];
+            }
+        }
+
+        if (OgeVariant::where('hash', $hash)->exists()) {
+            return ['type' => 'hash_conflict'];
+        }
+
+        return null;
+    }
+
+    protected function isUniqueConstraintViolation(\Throwable $e): bool
+    {
+        if (!$e instanceof QueryException) {
+            return false;
+        }
+
+        $sqlState = (string) ($e->errorInfo[0] ?? $e->getCode());
+        $driverCode = (string) ($e->errorInfo[1] ?? '');
+        $message = Str::lower($e->getMessage());
+
+        return in_array($sqlState, ['23000', '23505'], true)
+            || $driverCode === '1062'
+            || str_contains($message, 'unique constraint')
+            || str_contains($message, 'unique failed')
+            || str_contains($message, 'duplicate entry');
     }
 
     protected function auditVariantCreate(

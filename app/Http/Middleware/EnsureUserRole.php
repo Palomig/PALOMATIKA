@@ -24,7 +24,7 @@ class EnsureUserRole
         // Admin can switch view mode to simulate teacher/student permissions.
         $effectiveRole = $user->role;
         if ($user->role === 'admin') {
-            $viewAs = $request->session()->get('view_as_role');
+            $viewAs = $request->hasSession() ? $request->session()->get('view_as_role') : null;
             if (in_array($viewAs, ['student', 'teacher'], true)) {
                 $effectiveRole = $viewAs;
             }
