@@ -211,13 +211,13 @@ import {
     viewportRectFromWindow,
     pickLeadingTask,
     isScrollSettled,
-} from '/js/oge-task-visibility.mjs';
+} from '/js/oge-task-visibility.js';
 import {
     applyCommitSuccessToCard,
     resolveAttemptTaskNumber,
     setAllCardsLocked,
     shouldLockForConflict,
-} from '/js/oge-attempt-ui.mjs';
+} from '/js/oge-attempt-ui.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
     const variantHash = @json($variantHash ?? '');
