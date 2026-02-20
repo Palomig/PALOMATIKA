@@ -7,6 +7,8 @@ use App\Models\OgeAttemptAnswer;
 use App\Models\OgeAttemptTaskTiming;
 use App\Models\OgeVariant;
 use App\Models\User;
+use App\Services\OgeVariantBuilderService;
+use App\Services\TaskAnswerResolver;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
@@ -312,5 +314,187 @@ class OgeCustomVariantAssessmentTest extends TestCase
         $response->assertSee('data-task-number="15"', false);
         $response->assertSee('data-attempt-task-number="1"', false);
         $response->assertSee('data-attempt-task-number="2"', false);
+    }
+
+    public function test_submit_custom_random_attempt_scores_using_custom_tasks_answers(): void
+    {
+        $student = User::factory()->create(['role' => 'student']);
+        $variant = OgeVariant::create([
+            'hash' => 'scorcr01',
+            'config_json' => [
+                'source' => 'custom_random',
+                'custom_tasks' => [
+                    [
+                        'attempt_task_number' => 1,
+                        'task_number' => 1,
+                        'type' => 'word_problem',
+                        'task' => ['answer' => '42'],
+                    ],
+                    [
+                        'attempt_task_number' => 2,
+                        'task_number' => 2,
+                        'type' => 'word_problem',
+                        'task' => ['answer' => '99'],
+                    ],
+                ],
+            ],
+        ]);
+
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $student->id,
+            'status' => 'active',
+            'started_at' => now(),
+        ]);
+
+        $this->actingAs($student)
+            ->postJson("/api/oge/attempts/{$attempt->id}/tasks/1/commit", [
+                'answer' => '42',
+            ])
+            ->assertOk();
+
+        $this->actingAs($student)
+            ->postJson("/api/oge/attempts/{$attempt->id}/tasks/2/commit", [
+                'answer' => '12',
+            ])
+            ->assertOk();
+
+        $this->actingAs($student)
+            ->postJson("/api/oge/attempts/{$attempt->id}/submit")
+            ->assertOk()
+            ->assertJsonPath('status', 'scored');
+
+        $this->assertDatabaseHas('oge_attempt_scorings', [
+            'attempt_id' => $attempt->id,
+            'task_number' => 1,
+            'is_correct' => 1,
+            'correct_answer' => '42',
+        ]);
+        $this->assertDatabaseHas('oge_attempt_scorings', [
+            'attempt_id' => $attempt->id,
+            'task_number' => 2,
+            'is_correct' => 0,
+            'correct_answer' => '99',
+        ]);
+        $this->assertDatabaseHas('oge_attempts', [
+            'id' => $attempt->id,
+            'status' => 'scored',
+        ]);
+    }
+
+    public function test_submit_marks_attempt_error_when_scoring_fails(): void
+    {
+        $student = User::factory()->create(['role' => 'student']);
+        $variant = OgeVariant::create([
+            'hash' => 'scorcr02',
+            'config_json' => [
+                'source' => 'custom_random',
+                'custom_tasks' => [
+                    [
+                        'attempt_task_number' => 1,
+                        'task_number' => 1,
+                        'type' => 'word_problem',
+                        'task' => ['answer' => '42'],
+                    ],
+                ],
+            ],
+        ]);
+
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $student->id,
+            'status' => 'active',
+            'started_at' => now(),
+        ]);
+
+        OgeAttemptAnswer::create([
+            'attempt_id' => $attempt->id,
+            'task_number' => 1,
+            'current_answer' => '42',
+            'commits_count' => 1,
+        ]);
+
+        $this->app->bind(TaskAnswerResolver::class, function () {
+            return new class extends TaskAnswerResolver
+            {
+                public function isCorrect(?string $userAnswer, ?string $correctAnswer): ?bool
+                {
+                    throw new \RuntimeException('scoring-broken');
+                }
+            };
+        });
+
+        $this->actingAs($student)
+            ->postJson("/api/oge/attempts/{$attempt->id}/submit")
+            ->assertStatus(500);
+
+        $this->assertDatabaseHas('oge_attempts', [
+            'id' => $attempt->id,
+            'status' => 'error',
+        ]);
+        $this->assertDatabaseHas('oge_attempt_events', [
+            'attempt_id' => $attempt->id,
+            'event_type' => 'attempt_scoring_failed',
+        ]);
+    }
+
+    public function test_submit_generator_variant_scoring_remains_unchanged(): void
+    {
+        $student = User::factory()->create(['role' => 'student']);
+
+        $this->app->bind(OgeVariantBuilderService::class, function () {
+            return new class extends OgeVariantBuilderService
+            {
+                public function __construct()
+                {
+                }
+
+                public function build(string $hash, ?array $selectedZadaniya = null): array
+                {
+                    return [
+                        'tasks' => [
+                            [
+                                'task_number' => 6,
+                                'correct_answer' => '77',
+                            ],
+                        ],
+                        'variantNumber' => 1,
+                        'selectedZadaniya' => [],
+                    ];
+                }
+            };
+        });
+
+        $variant = OgeVariant::create([
+            'hash' => 'genok001',
+            'config_json' => [
+                'source' => 'generator',
+            ],
+        ]);
+
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $student->id,
+            'status' => 'active',
+            'started_at' => now(),
+        ]);
+
+        $this->actingAs($student)
+            ->postJson("/api/oge/attempts/{$attempt->id}/tasks/6/commit", [
+                'answer' => '77',
+            ])
+            ->assertOk();
+
+        $this->actingAs($student)
+            ->postJson("/api/oge/attempts/{$attempt->id}/submit")
+            ->assertOk()
+            ->assertJsonPath('status', 'scored');
+
+        $this->assertDatabaseHas('oge_attempt_scorings', [
+            'attempt_id' => $attempt->id,
+            'task_number' => 6,
+            'is_correct' => 1,
+            'correct_answer' => '77',
+        ]);
     }
 }

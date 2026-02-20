@@ -10,6 +10,7 @@ use App\Models\OgeAttemptTaskTiming;
 use App\Models\OgeVariant;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class OgeAttemptService
 {
@@ -165,7 +166,7 @@ class OgeAttemptService
 
     public function submitAttempt(OgeAttempt $attempt, $clientTs = null): OgeAttempt
     {
-        return DB::transaction(function () use ($attempt, $clientTs) {
+        DB::transaction(function () use ($attempt, $clientTs) {
             $this->appendEvent($attempt, 'attempt_submitted', null, [], $clientTs);
 
             $this->finalizeOpenTimings($attempt);
@@ -177,10 +178,30 @@ class OgeAttemptService
             ]);
 
             OgeAttemptAnswer::where('attempt_id', $attempt->id)->update(['is_final' => true]);
-            $this->scoreAttempt($attempt->fresh(['variant', 'answers']));
-
-            return $attempt->fresh();
         });
+
+        try {
+            $this->scoreAttempt($attempt->fresh(['variant', 'answers']));
+            $attempt->update(['status' => 'scored']);
+            $this->appendEvent($attempt, 'attempt_scored');
+        } catch (\Throwable $e) {
+            $attempt->update(['status' => 'error']);
+            $this->appendEvent($attempt, 'attempt_scoring_failed', null, [
+                'error' => $e->getMessage(),
+                'exception' => $e::class,
+            ]);
+
+            Log::error('OGE attempt scoring failed after submit', [
+                'attempt_id' => $attempt->id,
+                'variant_id' => $attempt->variant_id,
+                'student_id' => $attempt->student_id,
+                'error' => $e->getMessage(),
+            ]);
+
+            throw $e;
+        }
+
+        return $attempt->fresh();
     }
 
     public function rebuildScoring(OgeAttempt $attempt): void
@@ -246,18 +267,42 @@ class OgeAttemptService
     {
         static $cache = [];
 
-        $attemptId = $attempt->id;
-        if (isset($cache[$attemptId])) {
-            return $cache[$attemptId];
+        $cacheKey = implode(':', [
+            (string) $attempt->id,
+            (string) ($attempt->variant_id ?? 0),
+            (string) ($attempt->variant?->hash ?? ''),
+        ]);
+
+        if (isset($cache[$cacheKey])) {
+            return $cache[$cacheKey];
         }
 
         $hash = $attempt->variant?->hash;
         if (!$hash) {
-            return $cache[$attemptId] = [];
+            return $cache[$cacheKey] = [];
         }
 
         if ($attempt->variant?->isCustomRandom()) {
-            return $cache[$attemptId] = [];
+            $customTasks = $attempt->variant?->config_json['custom_tasks'] ?? [];
+            if (!is_array($customTasks) || empty($customTasks)) {
+                return $cache[$cacheKey] = [];
+            }
+
+            $map = [];
+            foreach ($customTasks as $index => $taskData) {
+                if (!is_array($taskData)) {
+                    continue;
+                }
+
+                $tn = (int) ($taskData['attempt_task_number'] ?? $taskData['task_number'] ?? $taskData['test_number'] ?? ($index + 1));
+                if ($tn < 1 || $tn > 255) {
+                    continue;
+                }
+
+                $map[$tn] = $this->answerResolver->resolveFromVariantTask($taskData);
+            }
+
+            return $cache[$cacheKey] = $map;
         }
 
         $selected = $attempt->variant?->config_json['zadaniya'] ?? null;
@@ -269,7 +314,7 @@ class OgeAttemptService
             $map[$tn] = $this->answerResolver->resolveFromVariantTask($taskData);
         }
 
-        return $cache[$attemptId] = $map;
+        return $cache[$cacheKey] = $map;
     }
 
     private function persistScoringRow(int $attemptId, int $taskNumber, ?string $userAnswer, ?string $correctAnswer): void

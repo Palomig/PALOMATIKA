@@ -4459,7 +4459,7 @@ class TestPdfController extends Controller
             ->orderByDesc('id')
             ->first();
 
-        return $attempt?->status === 'submitted';
+        return ($attempt?->status ?? 'active') !== 'active';
     }
 
     protected function persistCustomVariantMetadata(string $hash, array $customTasks): void

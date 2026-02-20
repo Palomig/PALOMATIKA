@@ -36,7 +36,7 @@ class OgeAttemptController extends Controller
             'variant_id' => $variant->id,
             'attempt_id' => $attempt->id,
             'status' => $attempt->status,
-            'locked' => $attempt->status === 'submitted',
+            'locked' => $attempt->status !== 'active',
         ]);
     }
 
