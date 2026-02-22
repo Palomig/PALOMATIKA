@@ -105,42 +105,42 @@
                         {
                             "id": 1,
                             "expression": "\\sqrt{\\frac{1}{16}x^6y^4} \\text{ при } x = 2, y = 5",
-                            "answer": "0.048828125"
+                            "answer": "50"
                         },
                         {
                             "id": 2,
                             "expression": "\\sqrt{\\frac{1}{25}x^8y^2} \\text{ при } x = 3, y = 5",
-                            "answer": "0.0010368"
+                            "answer": "81"
                         },
                         {
                             "id": 3,
                             "expression": "\\sqrt{\\frac{1}{4}x^2y^8} \\text{ при } x = 5, y = 2",
-                            "answer": "20"
+                            "answer": "40"
                         },
                         {
                             "id": 4,
                             "expression": "\\sqrt{\\frac{1}{9}x^4y^{10}} \\text{ при } x = 3, y = 2",
-                            "answer": "3.5555555556"
+                            "answer": "96"
                         },
                         {
                             "id": 5,
                             "expression": "\\sqrt{\\frac{1}{4}x^8y^4} \\text{ при } x = 2, y = 3",
-                            "answer": "0.5625"
+                            "answer": "72"
                         },
                         {
                             "id": 6,
                             "expression": "\\sqrt{\\frac{1}{25}x^4y^8} \\text{ при } x = 5, y = 2",
-                            "answer": "0.64"
+                            "answer": "80"
                         },
                         {
                             "id": 7,
                             "expression": "\\sqrt{\\frac{1}{9}x^2y^6} \\text{ при } x = 7, y = 3",
-                            "answer": "21"
+                            "answer": "63"
                         },
                         {
                             "id": 8,
                             "expression": "\\sqrt{\\frac{1}{16}x^{10}y^2} \\text{ при } x = 2, y = 3",
-                            "answer": "0"
+                            "answer": "24"
                         }
                     ]
                 },
@@ -385,32 +385,32 @@
                         {
                             "id": 1,
                             "expression": "5\\sqrt{11} \\cdot 2\\sqrt{2} \\cdot \\sqrt{22}",
-                            "answer": "5355.205222581"
+                            "answer": "220"
                         },
                         {
                             "id": 2,
                             "expression": "7\\sqrt{15} \\cdot 2\\sqrt{2} \\cdot \\sqrt{30}",
-                            "answer": "8664.5975422534"
+                            "answer": "420"
                         },
                         {
                             "id": 3,
                             "expression": "4\\sqrt{17} \\cdot 5\\sqrt{2} \\cdot \\sqrt{34}",
-                            "answer": "13227.8337677572"
+                            "answer": "680"
                         },
                         {
                             "id": 4,
                             "expression": "4\\sqrt{5} \\cdot 3\\sqrt{3} \\cdot \\sqrt{15}",
-                            "answer": "5190.7157938842"
+                            "answer": "180"
                         },
                         {
                             "id": 5,
                             "expression": "10\\sqrt{7} \\cdot 2\\sqrt{6} \\cdot \\sqrt{42}",
-                            "answer": "14933.8607474442"
+                            "answer": "840"
                         },
                         {
                             "id": 6,
                             "expression": "5\\sqrt{13} \\cdot 2\\sqrt{3} \\cdot \\sqrt{39}",
-                            "answer": "7275.1638996859"
+                            "answer": "390"
                         }
                     ]
                 },
