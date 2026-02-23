@@ -173,7 +173,7 @@ Route::middleware(['auth'])->group(function () {
         ]);
 
         $request->session()->forget('view_as_role');
-        return redirect()->to('/dashboard');
+        return redirect()->back()->withInput();
     })->name('view-as.clear');
 
     Route::post('/view-as/{role}', function (Request $request, string $role) {
@@ -194,7 +194,7 @@ Route::middleware(['auth'])->group(function () {
             'user_agent' => $request->userAgent(),
         ]);
 
-        return redirect()->to($role === 'teacher' ? '/teacher' : '/dashboard');
+        return redirect()->back()->withInput();
     })->name('view-as.set');
 
     Route::get('/dashboard', function () {

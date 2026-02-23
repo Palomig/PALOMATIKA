@@ -11,8 +11,6 @@
 --}}
 @php
     $role = $role ?? 'student';
-    $isAdmin = auth()->check() && auth()->user()->role === 'admin';
-    $viewAsRole = $isAdmin ? (session('view_as_role') ?? null) : null;
 @endphp
 <!DOCTYPE html>
 <html lang="ru">
@@ -123,38 +121,6 @@
                     </div>
                 @endif
 
-                @if($isAdmin)
-                {{-- Admin role switcher (sidebar) --}}
-                <div class="p-4 border-t border-gray-800">
-                    <div class="text-xs text-gray-500 uppercase tracking-wider mb-2 px-1">Просмотр как</div>
-                    <div class="flex gap-2">
-                        <form action="{{ route('view-as.set', ['role' => 'student']) }}" method="POST" class="flex-1">
-                            @csrf
-                            <button type="submit"
-                                    class="w-full px-3 py-2 rounded-lg text-xs font-medium border transition {{ $viewAsRole === 'student' ? 'border-coral text-coral bg-coral/10' : 'border-gray-700 text-gray-400 hover:text-white hover:border-gray-500' }}">
-                                Ученик
-                            </button>
-                        </form>
-                        <form action="{{ route('view-as.set', ['role' => 'teacher']) }}" method="POST" class="flex-1">
-                            @csrf
-                            <button type="submit"
-                                    class="w-full px-3 py-2 rounded-lg text-xs font-medium border transition {{ $viewAsRole === 'teacher' ? 'border-coral text-coral bg-coral/10' : 'border-gray-700 text-gray-400 hover:text-white hover:border-gray-500' }}">
-                                Учитель
-                            </button>
-                        </form>
-                        @if($viewAsRole)
-                        <form action="{{ route('view-as.clear') }}" method="POST">
-                            @csrf
-                            <button type="submit" title="Сброс"
-                                    class="px-3 py-2 rounded-lg text-xs border border-gray-700 text-gray-400 hover:text-white hover:border-gray-500 transition">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                            </button>
-                        </form>
-                        @endif
-                    </div>
-                </div>
-                @endif
-
                 {{-- Logout --}}
                 <div class="p-4 border-t border-gray-800">
                     <form action="{{ route('logout') }}" method="POST">
@@ -212,50 +178,7 @@
                     </div>
                 </div>
 
-                @if($isAdmin)
-                    <div class="flex items-center gap-1.5 ml-2 sm:gap-2 sm:ml-3">
-                        <form action="{{ route('view-as.set', ['role' => 'student']) }}" method="POST">
-                            @csrf
-                            <button type="submit" title="Режим ученика"
-                                    class="px-2 py-1 sm:px-2.5 rounded-lg text-xs border transition {{ $viewAsRole === 'student' ? 'border-coral text-coral bg-coral/10' : 'border-gray-700 text-gray-300 hover:border-gray-500' }}">
-                                <span class="hidden sm:inline">Ученик</span>
-                                <svg class="w-4 h-4 sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                            </button>
-                        </form>
-                        <form action="{{ route('view-as.set', ['role' => 'teacher']) }}" method="POST">
-                            @csrf
-                            <button type="submit" title="Режим учителя"
-                                    class="px-2 py-1 sm:px-2.5 rounded-lg text-xs border transition {{ $viewAsRole === 'teacher' ? 'border-coral text-coral bg-coral/10' : 'border-gray-700 text-gray-300 hover:border-gray-500' }}">
-                                <span class="hidden sm:inline">Учитель</span>
-                                <svg class="w-4 h-4 sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
-                            </button>
-                        </form>
-                        @if($viewAsRole)
-                        <form action="{{ route('view-as.clear') }}" method="POST">
-                            @csrf
-                            <button type="submit" title="Вернуться в режим админа"
-                                    class="px-2 py-1 sm:px-2.5 rounded-lg text-xs border border-gray-700 text-gray-300 hover:border-gray-500 transition">
-                                <span class="hidden sm:inline">Сброс</span>
-                                <svg class="w-4 h-4 sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                            </button>
-                        </form>
-                        @endif
-                    </div>
-                @endif
             </header>
-
-            @if($isAdmin && $viewAsRole)
-            {{-- Admin view-as banner --}}
-            <div class="bg-coral/10 border-b border-coral/20 px-4 py-2 flex items-center justify-between">
-                <span class="text-xs text-coral">
-                    Вы просматриваете как <strong>{{ $viewAsRole === 'teacher' ? 'учитель' : 'ученик' }}</strong>
-                </span>
-                <form action="{{ route('view-as.clear') }}" method="POST" class="inline">
-                    @csrf
-                    <button type="submit" class="text-xs text-coral hover:text-coral-light underline transition">Выйти из режима</button>
-                </form>
-            </div>
-            @endif
 
             {{-- Page content --}}
             <main class="p-6">
