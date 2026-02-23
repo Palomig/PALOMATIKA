@@ -143,7 +143,12 @@ class OgeAttemptController extends Controller
         $this->authorizeAttempt($request, $attempt);
         $this->guardActiveAttempt($attempt);
 
-        $attempt = $this->attemptService->submitAttempt($attempt, $request->input('client_ts'));
+        try {
+            $attempt = $this->attemptService->submitAttempt($attempt, $request->input('client_ts'));
+        } catch (\Throwable $e) {
+            // Scoring may fail but attempt is already submitted — don't return 500
+            $attempt = $attempt->fresh();
+        }
 
         $this->logAudit($request, 'attempt_submitted', $request->user()->id, $request->user()->role, 'oge_attempt', $attempt->id, [
             'status' => $attempt->status,

@@ -3,8 +3,11 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Injects a floating admin role-switcher widget before </body>
@@ -15,6 +18,15 @@ class InjectAdminSwitcher
     public function handle(Request $request, Closure $next): Response
     {
         $response = $next($request);
+
+        // Skip non-injectable response types
+        if (
+            $response instanceof RedirectResponse
+            || $response instanceof BinaryFileResponse
+            || $response instanceof StreamedResponse
+        ) {
+            return $response;
+        }
 
         // Only inject into HTML responses for authenticated admin users
         if (
