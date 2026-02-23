@@ -157,7 +157,9 @@ class TaskDataService
             }
 
             $content = File::get($filePath);
-            return json_decode($content, true) ?? [];
+            $data = json_decode($content, true) ?? [];
+
+            return app(OptionRenderModePolicy::class)->normalizeTopicData($topicId, $data);
         });
     }
 

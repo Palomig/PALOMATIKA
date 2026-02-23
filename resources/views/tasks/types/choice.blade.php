@@ -13,36 +13,7 @@
     $isVariant = $isVariant ?? false;
     $showTaskAnswer = !$isVariant;
     $answerResolver = app(\App\Services\TaskAnswerResolver::class);
-
-    // Функция для определения, является ли опция интервалом
-    if (!function_exists('isIntervalOption')) {
-        function isIntervalOption($option) {
-            // Паттерны интервалов: (-∞; a], [a; b], (a; +∞), etc.
-            $option = trim($option);
-            // Проверяем наличие точки с запятой и скобок
-            if (preg_match('/^[\(\[].*?;.*?[\)\]]$/', $option)) {
-                return true;
-            }
-            // Объединение интервалов: (-∞; a] ∪ [b; +∞)
-            if (str_contains($option, '∪')) {
-                return true;
-            }
-            return false;
-        }
-    }
-
-    // Проверяем, все ли опции являются интервалами (для темы 13)
-    if (!function_exists('allOptionsAreIntervals')) {
-        function allOptionsAreIntervals($options) {
-            if (empty($options)) return false;
-            foreach ($options as $opt) {
-                if (!isIntervalOption($opt) && $opt !== 'нет решений' && $opt !== '(-∞; +∞)') {
-                    return false;
-                }
-            }
-            return true;
-        }
-    }
+    $optionRenderPolicy = app(\App\Services\OptionRenderModePolicy::class);
 @endphp
 
 {{-- Если есть общие points на уровне задания --}}
@@ -133,11 +104,12 @@
                 {{-- Варианты ответа --}}
                 @if(!empty($taskOptions))
                     @php
-                        $useIntervalSvg = match ($taskOptionsRenderMode) {
-                            'text_options' => false,
-                            'visual_options' => true,
-                            default => ((string) ($topicId ?? '') !== '13') && allOptionsAreIntervals($taskOptions),
-                        };
+                        $useIntervalSvg = $optionRenderPolicy->shouldRenderIntervalSvg(
+                            (string) ($topicId ?? ''),
+                            $taskOptionsRenderMode,
+                            $optionsRenderMode,
+                            is_array($taskOptions) ? $taskOptions : []
+                        );
                     @endphp
 
                     @if($useIntervalSvg)
