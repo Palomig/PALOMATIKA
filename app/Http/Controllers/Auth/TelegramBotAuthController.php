@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\OgeVariant;
 use App\Models\TelegramAuthToken;
 use App\Models\User;
 use App\Services\AuditLogger;
@@ -153,7 +154,7 @@ class TelegramBotAuthController extends Controller
 
         Auth::login($user, true);
         $request->session()->regenerate();
-        $redirectTo = redirect()->intended('/dashboard')->getTargetUrl();
+        $redirectTo = $this->resolvePostLoginRedirect($authFields);
 
         $this->auditLogger->log([
             'event_type' => 'telegram_webapp_login_success',
@@ -476,5 +477,25 @@ class TelegramBotAuthController extends Controller
             'avatar' => $telegramUser['photo_url'] ?? null,
             'trial_ends_at' => now()->addDays(7),
         ]);
+    }
+
+    /**
+     * @param array<string, string> $authFields
+     */
+    private function resolvePostLoginRedirect(array $authFields): string
+    {
+        $startParam = trim((string) ($authFields['start_param'] ?? ''));
+
+        if ($startParam !== '') {
+            if (preg_match('/^oge_variant_(\d+)$/', $startParam, $matches)) {
+                $variantId = (int) $matches[1];
+                $variant = OgeVariant::find($variantId);
+                if ($variant && !empty($variant->hash)) {
+                    return url('/oge/' . $variant->hash);
+                }
+            }
+        }
+
+        return redirect()->intended('/dashboard')->getTargetUrl();
     }
 }
