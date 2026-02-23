@@ -41,16 +41,17 @@
 @if(!empty($tasks))
     <div class="space-y-4">
         @foreach($tasks as $taskRaw)
-            @php
-                $task = is_array($taskRaw) ? $taskRaw : [];
+                @php
+                    $task = is_array($taskRaw) ? $taskRaw : [];
                 $taskId = $task['id'] ?? ($loop->index + 1);
                 $taskKey = "topic_{$topicId}_block_{$block['number']}_zadanie_{$zadanie['number']}_task_{$taskId}";
                 $taskText = $task['expression'] ?? $task['text'] ?? '';
                 $taskInfo = "Блок {$block['number']}, Задание {$zadanie['number']}, Задача {$taskId}<br><code>" . substr((string) $taskText, 0, 80) . "</code>";
                 $taskPoints = $task['points'] ?? [];
-                $taskOptions = $task['options'] ?? $options;
-                $taskOptionsRenderMode = $task['options_render_mode'] ?? $optionsRenderMode ?? null;
-            @endphp
+                    $taskOptions = $task['options'] ?? $options;
+                    $taskGraphOptions = is_array($task['graph_options'] ?? null) ? $task['graph_options'] : [];
+                    $taskOptionsRenderMode = $task['options_render_mode'] ?? $optionsRenderMode ?? null;
+                @endphp
 
             <div class="bg-slate-800/70 rounded-xl p-5 border border-slate-700 task-review-item relative"
                  data-task-key="{{ $taskKey }}" data-task-info="{{ $taskInfo }}">
@@ -82,7 +83,7 @@
                     ])
                 @endif
 
-                @if(!empty($task['svg']) && is_string($task['svg']))
+                @if(empty($taskGraphOptions) && !empty($task['svg']) && is_string($task['svg']))
                     <div class="mt-4 mb-2">
                         <div class="bg-white rounded-lg p-2 overflow-hidden">
                             {!! $task['svg'] !!}
@@ -108,7 +109,28 @@
                 @endif
 
                 {{-- Варианты ответа --}}
-                @if(!empty($taskOptions))
+                @if(!empty($taskGraphOptions))
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4" data-graph-options="topic13-z10">
+                        @foreach($taskGraphOptions as $graphOption)
+                            @php
+                                $graphOptionIndex = (int) ($graphOption['index'] ?? ($loop->index + 1));
+                                $graphOptionSvg = is_string($graphOption['svg'] ?? null) ? $graphOption['svg'] : '';
+                                $graphOptionText = (string) ($graphOption['text'] ?? '');
+                            @endphp
+                            <div class="bg-slate-700/50 rounded-lg p-3 hover:bg-slate-700 cursor-pointer transition border border-slate-600"
+                                 data-z10-option-panel="{{ $graphOptionIndex }}"
+                                 data-option-index="{{ $graphOptionIndex }}"
+                                 @if($graphOptionText !== '') data-option-text="{{ $graphOptionText }}" @endif>
+                                <div class="flex items-start gap-2">
+                                    <span class="text-cyan-400 font-bold shrink-0">{{ $graphOptionIndex }})</span>
+                                    <div class="flex-1 bg-white rounded p-1 overflow-hidden">
+                                        {!! $graphOptionSvg !!}
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @elseif(!empty($taskOptions))
                     @php
                         $useIntervalSvg = $optionRenderPolicy->shouldRenderIntervalSvg(
                             (string) ($topicId ?? ''),

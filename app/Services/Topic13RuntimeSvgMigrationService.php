@@ -32,6 +32,17 @@ class Topic13RuntimeSvgMigrationService
                     continue;
                 }
 
+                if ($number === 10) {
+                    $graphOptions = $this->topic13Z10GraphOptionsForImage($task['image']);
+                    if ($graphOptions !== null) {
+                        $task['graph_options'] = $graphOptions;
+                        $task['graph_options_mode'] = 'compact_number_line';
+                        $task['runtime_svg_migration'] = 'topic13_b1_z10_13_phase2';
+                        $zadanie['tasks'][$taskIndex] = $task;
+                    }
+                    continue;
+                }
+
                 if (!empty($task['svg']) && is_string($task['svg'])) {
                     continue;
                 }
@@ -297,13 +308,16 @@ class Topic13RuntimeSvgMigrationService
     /**
      * @param array{kind:string,intervals?:array<int,array{l:?float,r:?float,li:bool,ri:bool}>} $solution
      */
-    private function renderSolutionSvg(array $solution): ?string
+    private function renderSolutionSvg(array $solution, array $config = []): ?string
     {
-        $width = 360;
-        $height = 78;
-        $lineY = 34;
-        $leftPad = 26;
-        $rightPad = 334;
+        $mode = (string) ($config['mode'] ?? 'solution');
+        $isCompactOption = $mode === 'compact_option';
+
+        $width = $isCompactOption ? 300 : 360;
+        $height = $isCompactOption ? 42 : 78;
+        $lineY = $isCompactOption ? 16 : 34;
+        $leftPad = $isCompactOption ? 14 : 26;
+        $rightPad = $isCompactOption ? 286 : 334;
         $usable = $rightPad - $leftPad;
 
         $finite = [];
@@ -325,9 +339,14 @@ class Topic13RuntimeSvgMigrationService
             return $leftPad + (($value - $min) / ($max - $min)) * $usable;
         };
 
-        $uid = substr(md5(json_encode($solution)), 0, 10);
+        $uidSeed = json_encode([$solution, $config], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $uid = substr(md5((string) $uidSeed), 0, 10);
         $svg = [];
-        $svg[] = "<svg viewBox=\"0 0 {$width} {$height}\" class=\"w-full max-w-[360px] h-auto mx-auto number-line semantic-runtime-svg\" data-runtime-svg=\"topic13-b1-z10-13\">";
+        if ($isCompactOption) {
+            $svg[] = "<svg viewBox=\"0 0 {$width} {$height}\" class=\"w-full h-auto number-line semantic-runtime-svg\" data-runtime-svg=\"topic13-b1-z10-option\" data-label-mode=\"boundary-only\">";
+        } else {
+            $svg[] = "<svg viewBox=\"0 0 {$width} {$height}\" class=\"w-full max-w-[360px] h-auto mx-auto number-line semantic-runtime-svg\" data-runtime-svg=\"topic13-b1-z10-13\">";
+        }
         $svg[] = '  <defs>';
         $svg[] = "    <marker id=\"arrow-r-{$uid}\" markerWidth=\"8\" markerHeight=\"8\" refX=\"0\" refY=\"3\" orient=\"auto\">";
         $svg[] = '      <path d="M0,0 L0,6 L7,3 z" fill="#c8dce8"/>';
@@ -335,36 +354,56 @@ class Topic13RuntimeSvgMigrationService
         $svg[] = "    <marker id=\"arrow-l-{$uid}\" markerWidth=\"8\" markerHeight=\"8\" refX=\"7\" refY=\"3\" orient=\"auto\">";
         $svg[] = '      <path d="M7,0 L7,6 L0,3 z" fill="#c8dce8"/>';
         $svg[] = '    </marker>';
+        if ($isCompactOption) {
+            $svg[] = "    <pattern id=\"hatch-{$uid}\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(28)\">";
+            $svg[] = '      <line x1="0" y1="0" x2="0" y2="6" stroke="#111827" stroke-width="1"/>';
+            $svg[] = '    </pattern>';
+        }
         $svg[] = '  </defs>';
-        $svg[] = '  <rect width="100%" height="100%" fill="#ffffff"/>';
-        $svg[] = "  <line x1=\"{$leftPad}\" y1=\"{$lineY}\" x2=\"{$rightPad}\" y2=\"{$lineY}\" stroke=\"#334155\" stroke-width=\"2\" marker-start=\"url(#arrow-l-{$uid})\" marker-end=\"url(#arrow-r-{$uid})\"/>";
+        $svg[] = $isCompactOption ? '  <rect width="100%" height="100%" fill="transparent"/>' : '  <rect width="100%" height="100%" fill="#ffffff"/>';
+        $axisStroke = $isCompactOption ? '#111827' : '#334155';
+        $svg[] = "  <line x1=\"{$leftPad}\" y1=\"{$lineY}\" x2=\"{$rightPad}\" y2=\"{$lineY}\" stroke=\"{$axisStroke}\" stroke-width=\"2\" marker-start=\"url(#arrow-l-{$uid})\" marker-end=\"url(#arrow-r-{$uid})\"/>";
 
-        foreach ($this->ticks($min, $max) as $tick) {
-            $x = round($toX($tick), 2);
-            $label = $this->formatTick($tick);
-            $svg[] = "  <line x1=\"{$x}\" y1=\"" . ($lineY - 7) . "\" x2=\"{$x}\" y2=\"" . ($lineY + 7) . "\" stroke=\"#64748b\" stroke-width=\"1.2\"/>";
-            $svg[] = "  <text x=\"{$x}\" y=\"58\" text-anchor=\"middle\" fill=\"#334155\" font-size=\"11\">{$label}</text>";
+        if (!$isCompactOption) {
+            foreach ($this->ticks($min, $max) as $tick) {
+                $x = round($toX($tick), 2);
+                $label = $this->formatTick($tick);
+                $svg[] = "  <line x1=\"{$x}\" y1=\"" . ($lineY - 7) . "\" x2=\"{$x}\" y2=\"" . ($lineY + 7) . "\" stroke=\"#64748b\" stroke-width=\"1.2\"/>";
+                $svg[] = "  <text x=\"{$x}\" y=\"58\" text-anchor=\"middle\" fill=\"#334155\" font-size=\"11\" data-label-role=\"tick\">{$label}</text>";
+            }
         }
 
         if ($solution['kind'] === 'all') {
-            $svg[] = "  <line x1=\"{$leftPad}\" y1=\"{$lineY}\" x2=\"{$rightPad}\" y2=\"{$lineY}\" stroke=\"#0ea5e9\" stroke-width=\"5\" opacity=\"0.85\" stroke-linecap=\"round\"/>";
+            if ($isCompactOption) {
+                $svg[] = "  <rect x=\"{$leftPad}\" y=\"" . ($lineY - 4) . "\" width=\"{$usable}\" height=\"8\" fill=\"url(#hatch-{$uid})\" opacity=\"0.95\"/>";
+            } else {
+                $svg[] = "  <line x1=\"{$leftPad}\" y1=\"{$lineY}\" x2=\"{$rightPad}\" y2=\"{$lineY}\" stroke=\"#0ea5e9\" stroke-width=\"5\" opacity=\"0.85\" stroke-linecap=\"round\"/>";
+            }
         } elseif ($solution['kind'] === 'intervals') {
             foreach ($solution['intervals'] as $interval) {
                 $x1 = $interval['l'] === null ? $leftPad : round($toX((float) $interval['l']), 2);
                 $x2 = $interval['r'] === null ? $rightPad : round($toX((float) $interval['r']), 2);
-                $svg[] = "  <line x1=\"{$x1}\" y1=\"{$lineY}\" x2=\"{$x2}\" y2=\"{$lineY}\" stroke=\"#0ea5e9\" stroke-width=\"5\" opacity=\"0.85\" stroke-linecap=\"round\"/>";
+                if ($isCompactOption) {
+                    $rectX = min($x1, $x2);
+                    $rectW = max(0.0, abs($x2 - $x1));
+                    $svg[] = "  <rect x=\"{$rectX}\" y=\"" . ($lineY - 4) . "\" width=\"{$rectW}\" height=\"8\" fill=\"url(#hatch-{$uid})\" opacity=\"0.95\"/>";
+                } else {
+                    $svg[] = "  <line x1=\"{$x1}\" y1=\"{$lineY}\" x2=\"{$x2}\" y2=\"{$lineY}\" stroke=\"#0ea5e9\" stroke-width=\"5\" opacity=\"0.85\" stroke-linecap=\"round\"/>";
+                }
 
                 if ($interval['l'] !== null) {
-                    $svg[] = $this->endpointCircle((float) $interval['l'], $interval['li'], $toX, $lineY);
-                    $svg[] = $this->endpointLabel((float) $interval['l'], $toX);
+                    $svg[] = $this->endpointMarker((float) $interval['l'], $interval['li'], $toX, $lineY, $isCompactOption);
+                    $svg[] = $this->endpointLabel((float) $interval['l'], $toX, $isCompactOption);
                 }
                 if ($interval['r'] !== null && ($interval['l'] === null || abs((float) $interval['r'] - (float) ($interval['l'] ?? 0.0)) > 1e-9)) {
-                    $svg[] = $this->endpointCircle((float) $interval['r'], $interval['ri'], $toX, $lineY);
-                    $svg[] = $this->endpointLabel((float) $interval['r'], $toX);
+                    $svg[] = $this->endpointMarker((float) $interval['r'], $interval['ri'], $toX, $lineY, $isCompactOption);
+                    $svg[] = $this->endpointLabel((float) $interval['r'], $toX, $isCompactOption);
                 }
             }
         } else {
-            $svg[] = '  <text x="180" y="28" text-anchor="middle" fill="#64748b" font-size="12">нет решений</text>';
+            $noX = $isCompactOption ? ($width / 2) : 180;
+            $noY = $isCompactOption ? 18 : 28;
+            $svg[] = "  <text x=\"{$noX}\" y=\"{$noY}\" text-anchor=\"middle\" fill=\"#64748b\" font-size=\"12\">нет решений</text>";
         }
 
         $svg[] = '</svg>';
@@ -437,9 +476,21 @@ class Topic13RuntimeSvgMigrationService
         return 10 * $pow;
     }
 
-    private function endpointCircle(float $value, bool $closed, callable $toX, int $lineY): string
+    private function endpointMarker(float $value, bool $closed, callable $toX, int $lineY, bool $compactOption): string
     {
         $x = round($toX($value), 2);
+        if ($compactOption) {
+            if ($closed) {
+                return "  <circle cx=\"{$x}\" cy=\"{$lineY}\" r=\"3.5\" fill=\"#111827\" stroke=\"#111827\" stroke-width=\"1\"/>";
+            }
+
+            $size = 7;
+            $half = $size / 2;
+            $rectX = round($x - $half, 2);
+            $rectY = round($lineY - $half, 2);
+            return "  <rect x=\"{$rectX}\" y=\"{$rectY}\" width=\"{$size}\" height=\"{$size}\" fill=\"#ffffff\" stroke=\"#111827\" stroke-width=\"1.2\"/>";
+        }
+
         if ($closed) {
             return "  <circle cx=\"{$x}\" cy=\"{$lineY}\" r=\"5\" fill=\"#0284c7\" stroke=\"#ffffff\" stroke-width=\"1.5\"/>";
         }
@@ -447,11 +498,15 @@ class Topic13RuntimeSvgMigrationService
         return "  <circle cx=\"{$x}\" cy=\"{$lineY}\" r=\"5\" fill=\"#ffffff\" stroke=\"#0284c7\" stroke-width=\"2\"/>";
     }
 
-    private function endpointLabel(float $value, callable $toX): string
+    private function endpointLabel(float $value, callable $toX, bool $compactOption): string
     {
         $x = round($toX($value), 2);
         $label = $this->formatTick($value);
-        return "  <text x=\"{$x}\" y=\"18\" text-anchor=\"middle\" fill=\"#0f172a\" font-size=\"11\">{$label}</text>";
+        if ($compactOption) {
+            return "  <text x=\"{$x}\" y=\"34\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"9\" data-label-role=\"boundary\" data-label-pos=\"below\">{$label}</text>";
+        }
+
+        return "  <text x=\"{$x}\" y=\"18\" text-anchor=\"middle\" fill=\"#0f172a\" font-size=\"11\" data-label-role=\"boundary\" data-label-pos=\"above\">{$label}</text>";
     }
 
     private function formatTick(float $value): string
@@ -461,5 +516,152 @@ class Topic13RuntimeSvgMigrationService
         }
 
         return rtrim(rtrim(number_format($value, 3, '.', ''), '0'), '.');
+    }
+
+    /**
+     * @return list<array{index:int,svg:string,text:string}>
+     */
+    private function topic13Z10GraphOptionsForImage(string $image): ?array
+    {
+        $imageMap = $this->topic13Z10ImageOptionMap();
+        $items = $imageMap[$image] ?? null;
+        if (!is_array($items)) {
+            return null;
+        }
+
+        $options = [];
+        foreach ($items as $index => $solution) {
+            if (!is_array($solution)) {
+                continue;
+            }
+
+            $svg = $this->renderSolutionSvg($solution, ['mode' => 'compact_option']);
+            if (!is_string($svg) || $svg === '') {
+                continue;
+            }
+
+            $options[] = [
+                'index' => $index + 1,
+                'svg' => $svg,
+                'text' => $this->solutionToText($solution),
+            ];
+        }
+
+        return count($options) === 4 ? $options : null;
+    }
+
+    /**
+     * @return array<string,list<array{kind:string,intervals?:array<int,array{l:?float,r:?float,li:bool,ri:bool}>}>>
+     */
+    private function topic13Z10ImageOptionMap(): array
+    {
+        return [
+            'img-026.png' => [
+                $this->intervals([['l' => -1.0, 'r' => 9.0, 'li' => false, 'ri' => false]]),
+                $this->intervals([
+                    ['l' => null, 'r' => -1.0, 'li' => false, 'ri' => false],
+                    ['l' => 9.0, 'r' => null, 'li' => false, 'ri' => false],
+                ]),
+                $this->intervals([['l' => 9.0, 'r' => null, 'li' => false, 'ri' => false]]),
+                $this->intervals([['l' => -1.0, 'r' => null, 'li' => false, 'ri' => false]]),
+            ],
+            'img-027.png' => [
+                $this->intervals([
+                    ['l' => null, 'r' => 0.0, 'li' => false, 'ri' => true],
+                    ['l' => 7.0, 'r' => null, 'li' => true, 'ri' => false],
+                ]),
+                $this->intervals([['l' => 0.0, 'r' => null, 'li' => true, 'ri' => false]]),
+                $this->intervals([['l' => 0.0, 'r' => 7.0, 'li' => true, 'ri' => true]]),
+                $this->intervals([['l' => 7.0, 'r' => null, 'li' => true, 'ri' => false]]),
+            ],
+            'img-028.png' => [
+                $this->intervals([['l' => 0.0, 'r' => 6.0, 'li' => false, 'ri' => false]]),
+                $this->intervals([
+                    ['l' => null, 'r' => 0.0, 'li' => false, 'ri' => false],
+                    ['l' => 6.0, 'r' => null, 'li' => false, 'ri' => false],
+                ]),
+                $this->intervals([['l' => 6.0, 'r' => null, 'li' => false, 'ri' => false]]),
+                $this->intervals([['l' => 0.0, 'r' => null, 'li' => false, 'ri' => false]]),
+            ],
+            'img-029.png' => [
+                $this->intervals([['l' => 8.0, 'r' => null, 'li' => false, 'ri' => false]]),
+                $this->intervals([
+                    ['l' => null, 'r' => 0.0, 'li' => false, 'ri' => false],
+                    ['l' => 8.0, 'r' => null, 'li' => false, 'ri' => false],
+                ]),
+                $this->intervals([['l' => 0.0, 'r' => 8.0, 'li' => false, 'ri' => false]]),
+                $this->intervals([['l' => 0.0, 'r' => null, 'li' => false, 'ri' => false]]),
+            ],
+            'img-030.png' => [
+                $this->intervals([
+                    ['l' => null, 'r' => 0.0, 'li' => false, 'ri' => true],
+                    ['l' => 4.0, 'r' => null, 'li' => true, 'ri' => false],
+                ]),
+                $this->intervals([['l' => 0.0, 'r' => null, 'li' => true, 'ri' => false]]),
+                $this->intervals([['l' => 0.0, 'r' => 4.0, 'li' => true, 'ri' => true]]),
+                $this->intervals([['l' => 4.0, 'r' => null, 'li' => true, 'ri' => false]]),
+            ],
+            'img-031.png' => [
+                $this->intervals([['l' => 0.0, 'r' => null, 'li' => true, 'ri' => false]]),
+                $this->intervals([['l' => 0.0, 'r' => 7.0, 'li' => true, 'ri' => true]]),
+                $this->intervals([
+                    ['l' => null, 'r' => 0.0, 'li' => false, 'ri' => true],
+                    ['l' => 7.0, 'r' => null, 'li' => true, 'ri' => false],
+                ]),
+                $this->intervals([['l' => 7.0, 'r' => null, 'li' => true, 'ri' => false]]),
+            ],
+            'img-032.png' => [
+                $this->intervals([
+                    ['l' => null, 'r' => 0.0, 'li' => false, 'ri' => true],
+                    ['l' => 5.0, 'r' => null, 'li' => true, 'ri' => false],
+                ]),
+                $this->intervals([['l' => 0.0, 'r' => 5.0, 'li' => true, 'ri' => true]]),
+                $this->intervals([['l' => 5.0, 'r' => null, 'li' => true, 'ri' => false]]),
+                $this->intervals([['l' => 0.0, 'r' => null, 'li' => true, 'ri' => false]]),
+            ],
+            'img-033.png' => [
+                $this->intervals([['l' => 1.0, 'r' => null, 'li' => true, 'ri' => false]]),
+                $this->intervals([
+                    ['l' => null, 'r' => 0.0, 'li' => false, 'ri' => true],
+                    ['l' => 1.0, 'r' => null, 'li' => true, 'ri' => false],
+                ]),
+                $this->intervals([['l' => 0.0, 'r' => null, 'li' => true, 'ri' => false]]),
+                $this->intervals([['l' => 0.0, 'r' => 1.0, 'li' => true, 'ri' => true]]),
+            ],
+            'img-034.png' => [
+                $this->intervals([
+                    ['l' => null, 'r' => 0.0, 'li' => false, 'ri' => false],
+                    ['l' => 2.0, 'r' => null, 'li' => false, 'ri' => false],
+                ]),
+                $this->intervals([['l' => 2.0, 'r' => null, 'li' => false, 'ri' => false]]),
+                $this->intervals([['l' => 0.0, 'r' => 2.0, 'li' => false, 'ri' => false]]),
+                $this->intervals([['l' => 0.0, 'r' => null, 'li' => false, 'ri' => false]]),
+            ],
+        ];
+    }
+
+    /**
+     * @param array{kind:string,intervals?:array<int,array{l:?float,r:?float,li:bool,ri:bool}>} $solution
+     */
+    private function solutionToText(array $solution): string
+    {
+        if (($solution['kind'] ?? null) === 'none') {
+            return 'нет решений';
+        }
+
+        if (($solution['kind'] ?? null) === 'all') {
+            return '(-∞; +∞)';
+        }
+
+        $parts = [];
+        foreach (($solution['intervals'] ?? []) as $interval) {
+            $left = ($interval['li'] ?? false) ? '[' : '(';
+            $right = ($interval['ri'] ?? false) ? ']' : ')';
+            $l = ($interval['l'] ?? null) === null ? '-∞' : $this->formatTick((float) $interval['l']);
+            $r = ($interval['r'] ?? null) === null ? '+∞' : $this->formatTick((float) $interval['r']);
+            $parts[] = $left . $l . '; ' . $r . $right;
+        }
+
+        return implode(' ∪ ', $parts);
     }
 }
