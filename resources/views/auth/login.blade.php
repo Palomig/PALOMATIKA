@@ -212,13 +212,21 @@ function telegramAuth() {
             }
 
             try {
+                const webApp = this.getTelegramWebApp();
+                const startParam = (webApp && webApp.initDataUnsafe && webApp.initDataUnsafe.start_param)
+                    ? webApp.initDataUnsafe.start_param
+                    : null;
+
                 const response = await fetch('/api/telegram/generate-token', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json',
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    }
+                    },
+                    body: JSON.stringify({
+                        startParam,
+                    })
                 });
 
                 const data = await response.json();

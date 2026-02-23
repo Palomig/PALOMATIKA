@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Services\AuditLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -23,6 +24,8 @@ class TelegramBotAuthController extends Controller
      */
     public function generateToken(Request $request)
     {
+        $startParam = trim((string) $request->input('startParam', ''));
+
         // Clean up expired tokens
         TelegramAuthToken::where('expires_at', '<', now())->delete();
 
@@ -34,6 +37,10 @@ class TelegramBotAuthController extends Controller
             'status' => 'pending',
             'expires_at' => now()->addMinutes(5),
         ]);
+
+        if ($startParam !== '') {
+            Cache::put($this->startParamCacheKey($token), $startParam, now()->addMinutes(10));
+        }
 
         $botUsername = config('services.telegram.bot_username');
         $deepLink = "https://t.me/{$botUsername}?start={$token}";
@@ -63,9 +70,16 @@ class TelegramBotAuthController extends Controller
         if ($authToken->isAuthenticated()) {
             // Return authenticated status with login URL
             // Frontend will redirect to this URL for actual login
+            $loginUrl = route('telegram.login', ['token' => $token]);
+            $startParam = Cache::get($this->startParamCacheKey($token));
+            if (is_string($startParam) && $startParam !== '') {
+                $separator = str_contains($loginUrl, '?') ? '&' : '?';
+                $loginUrl .= $separator . 'startapp=' . rawurlencode($startParam);
+            }
+
             return response()->json([
                 'status' => 'authenticated',
-                'login_url' => route('telegram.login', ['token' => $token]),
+                'login_url' => $loginUrl,
             ]);
         }
 
@@ -219,6 +233,16 @@ class TelegramBotAuthController extends Controller
         // Log in the user with session
         Auth::login($user, true);
 
+        $startParam = trim((string) request()->query('startapp', ''));
+        if ($startParam === '') {
+            $cachedStartParam = Cache::get($this->startParamCacheKey($token));
+            if (is_string($cachedStartParam)) {
+                $startParam = trim($cachedStartParam);
+            }
+        }
+
+        Cache::forget($this->startParamCacheKey($token));
+
         $this->auditLogger->log([
             'event_type' => 'telegram_token_login_success',
             'category' => 'auth',
@@ -230,6 +254,11 @@ class TelegramBotAuthController extends Controller
             'ip' => request()->ip(),
             'user_agent' => request()->userAgent(),
         ]);
+
+        if ($startParam !== '') {
+            $redirectTo = $this->resolvePostLoginRedirect(['start_param' => $startParam]);
+            return redirect()->to($redirectTo);
+        }
 
         return redirect()->intended('/dashboard');
     }
@@ -306,6 +335,11 @@ class TelegramBotAuthController extends Controller
         // Send confirmation message + explicit login button fallback for Mini App flows
         $name = $from['first_name'] ?? 'пользователь';
         $loginUrl = route('telegram.login', ['token' => $token]);
+        $startParam = Cache::get($this->startParamCacheKey($token));
+        if (is_string($startParam) && trim($startParam) !== '') {
+            $separator = str_contains($loginUrl, '?') ? '&' : '?';
+            $loginUrl .= $separator . 'startapp=' . rawurlencode(trim($startParam));
+        }
 
         $webAppBaseUrl = trim((string) config('services.telegram.webapp_base_url', ''));
         $button = [
@@ -504,5 +538,10 @@ class TelegramBotAuthController extends Controller
         }
 
         return redirect()->intended('/dashboard')->getTargetUrl();
+    }
+
+    private function startParamCacheKey(string $token): string
+    {
+        return 'telegram_auth_start_param:' . $token;
     }
 }
