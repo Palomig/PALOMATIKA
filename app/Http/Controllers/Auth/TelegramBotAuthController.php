@@ -299,16 +299,22 @@ class TelegramBotAuthController extends Controller
         $name = $from['first_name'] ?? 'пользователь';
         $loginUrl = route('telegram.login', ['token' => $token]);
 
+        $webAppBaseUrl = trim((string) config('services.telegram.webapp_base_url', ''));
+        $button = [
+            'text' => 'Открыть сайт после входа',
+        ];
+
+        if ($webAppBaseUrl !== '') {
+            $button['web_app'] = ['url' => $loginUrl];
+        } else {
+            $button['url'] = $loginUrl;
+        }
+
         $this->sendTelegramMessage(
             $from['id'],
             "✅ Вход выполнен успешно!\n\nПривет, {$name}! Если сайт не вошёл автоматически, нажмите кнопку ниже:",
             [
-                'inline_keyboard' => [[
-                    [
-                        'text' => 'Открыть сайт после входа',
-                        'url' => $loginUrl,
-                    ],
-                ]],
+                'inline_keyboard' => [[$button]],
             ]
         );
     }
