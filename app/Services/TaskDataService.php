@@ -276,6 +276,7 @@ class TaskDataService
                             'instruction' => $zadanie['instruction'],
                             'type' => $zadanie['type'] ?? 'expression',
                             'svg_type' => $zadanie['svg_type'] ?? null,
+                            'options_render_mode' => $zadanie['options_render_mode'] ?? null,
                             'points' => $zadanie['points'] ?? null,
                             'options' => $zadanie['options'] ?? null,
                             'task' => $task,
@@ -330,6 +331,7 @@ class TaskDataService
                                 'instruction' => $zadanie['instruction'],
                                 'type' => $zadanie['type'] ?? 'expression',
                                 'svg_type' => $zadanie['svg_type'] ?? null,
+                                'options_render_mode' => $zadanie['options_render_mode'] ?? null,
                                 'points' => $zadanie['points'] ?? null,
                                 'options' => $zadanie['options'] ?? null,
                                 'task' => $task,
@@ -388,6 +390,7 @@ class TaskDataService
                                     'instruction' => $zadanie['instruction'],
                                     'type' => $zadanie['type'] ?? 'expression',
                                     'svg_type' => $zadanie['svg_type'] ?? null,
+                                    'options_render_mode' => $zadanie['options_render_mode'] ?? null,
                                     'points' => $zadanie['points'] ?? null,
                                     // Сначала проверяем options в задаче (для matching), затем в задании
                                     'options' => $task['options'] ?? $zadanie['options'] ?? null,

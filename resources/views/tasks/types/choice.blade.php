@@ -9,6 +9,7 @@
     $points = $zadanie['points'] ?? [];
     $options = $zadanie['options'] ?? [];
     $tasks = $zadanie['tasks'] ?? [];
+    $optionsRenderMode = $zadanie['options_render_mode'] ?? null;
     $isVariant = $isVariant ?? false;
     $showTaskAnswer = !$isVariant;
     $answerResolver = app(\App\Services\TaskAnswerResolver::class);
@@ -77,6 +78,7 @@
                 $taskInfo = "Блок {$block['number']}, Задание {$zadanie['number']}, Задача {$taskId}<br><code>" . substr((string) $taskText, 0, 80) . "</code>";
                 $taskPoints = $task['points'] ?? [];
                 $taskOptions = $task['options'] ?? $options;
+                $taskOptionsRenderMode = $task['options_render_mode'] ?? $optionsRenderMode ?? null;
             @endphp
 
             <div class="bg-slate-800/70 rounded-xl p-5 border border-slate-700 task-review-item relative"
@@ -131,7 +133,11 @@
                 {{-- Варианты ответа --}}
                 @if(!empty($taskOptions))
                     @php
-                        $useIntervalSvg = allOptionsAreIntervals($taskOptions);
+                        $useIntervalSvg = match ($taskOptionsRenderMode) {
+                            'text_options' => false,
+                            'visual_options' => true,
+                            default => ((string) ($topicId ?? '') !== '13') && allOptionsAreIntervals($taskOptions),
+                        };
                     @endphp
 
                     @if($useIntervalSvg)

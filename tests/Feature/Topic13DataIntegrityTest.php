@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Services\TaskDataService;
+use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
 
 class Topic13DataIntegrityTest extends TestCase
@@ -67,5 +69,25 @@ class Topic13DataIntegrityTest extends TestCase
         $this->assertCount(6, $b2z8['tasks'] ?? []);
         $this->assertSame('img-081.png', $b2z8['tasks'][0]['image'] ?? null);
         $this->assertSame('img-086.png', $b2z8['tasks'][5]['image'] ?? null);
+    }
+
+    public function test_topic_13_zadanie_1_options_render_as_plain_text_not_interval_svg(): void
+    {
+        Cache::forget('topic_data_13');
+
+        $blocks = app(TaskDataService::class)->getBlocks('13');
+        $zadanie = $blocks[0]['zadaniya'][0] ?? null;
+
+        $this->assertIsArray($zadanie);
+
+        $view = $this->view('tasks.types.choice', [
+            'zadanie' => $zadanie,
+            'block' => ['number' => 1],
+            'topicId' => '13',
+            'isVariant' => true,
+        ]);
+
+        $view->assertSee('1) [-0,2; +∞)');
+        $view->assertDontSee('pattern id="hatch_', false);
     }
 }

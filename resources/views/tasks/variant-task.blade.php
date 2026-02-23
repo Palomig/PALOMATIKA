@@ -24,6 +24,7 @@
         'instruction' => $instruction,
         'type' => $type,
         'svg_type' => $taskData['svg_type'] ?? null,
+        'options_render_mode' => $taskData['options_render_mode'] ?? null,
         'points' => $taskData['points'] ?? null,
         'options' => $taskData['options'] ?? null,
         'section' => $taskData['section'] ?? null,

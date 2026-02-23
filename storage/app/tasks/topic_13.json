@@ -16,6 +16,7 @@
                     "number": 1,
                     "instruction": "Укажите решение неравенства",
                     "type": "choice",
+                    "options_render_mode": "text_options",
                     "tasks": [
                         {
                             "id": 1,
@@ -103,6 +104,7 @@
                     "number": 2,
                     "instruction": "Укажите решение системы неравенств",
                     "type": "choice",
+                    "options_render_mode": "text_options",
                     "tasks": [
                         {
                             "id": 1,
@@ -242,6 +244,7 @@
                     "number": 4,
                     "instruction": "Укажите решение системы неравенств",
                     "type": "choice",
+                    "options_render_mode": "text_options",
                     "tasks": [
                         {
                             "id": 1,
@@ -381,6 +384,7 @@
                     "number": 6,
                     "instruction": "Укажите решение неравенства.",
                     "type": "choice",
+                    "options_render_mode": "text_options",
                     "tasks": [
                         {
                             "id": 1,
@@ -530,6 +534,7 @@
                     "number": 8,
                     "instruction": "Укажите решение неравенства.",
                     "type": "choice",
+                    "options_render_mode": "text_options",
                     "tasks": [
                         {
                             "id": 1,
@@ -627,6 +632,7 @@
                     "number": 9,
                     "instruction": "Укажите решение неравенства.",
                     "type": "choice",
+                    "options_render_mode": "text_options",
                     "tasks": [
                         {
                             "id": 1,
@@ -1055,6 +1061,7 @@
                     "number": 2,
                     "instruction": "Укажите решение неравенства.",
                     "type": "choice",
+                    "options_render_mode": "text_options",
                     "tasks": [
                         {
                             "id": 1,
