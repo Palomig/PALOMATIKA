@@ -106,15 +106,16 @@ class Topic13DataIntegrityTest extends TestCase
         $this->assertSame(11, $z11['number'] ?? null);
         $this->assertSame(12, $z12['number'] ?? null);
 
-        // PDF page boundary: Zadanie 10 ends with item 9 graph; the next graph belongs to Zadanie 11 item 1.
-        $this->assertSame('img-035.png', $z10['tasks'][8]['image'] ?? null);
+        // PDF page boundary: Zadanie 10 item 9 is the final 4-option graph panel (0 and 3), then Zadanie 11 starts.
+        $this->assertSame('img-026.png', $z10['tasks'][0]['image'] ?? null);
+        $this->assertSame('img-034.png', $z10['tasks'][8]['image'] ?? null);
         $this->assertSame('3x - x^2 \\leq 0', $z10['tasks'][8]['expression'] ?? null);
 
         // Zadanie 11 item 1 options are for x^2 - 49 and must use the closed segment [-7; 7] graph.
-        $this->assertSame('img-037.png', $z11['tasks'][0]['image'] ?? null);
-        $this->assertSame('img-044.png', $z11['tasks'][7]['image'] ?? null);
+        $this->assertSame('img-035.png', $z11['tasks'][0]['image'] ?? null);
+        $this->assertSame('img-042.png', $z11['tasks'][7]['image'] ?? null);
 
         // Zadanie 12 starts on the next image after Zadanie 11 item 8.
-        $this->assertSame('img-045.png', $z12['tasks'][0]['image'] ?? null);
+        $this->assertSame('img-043.png', $z12['tasks'][0]['image'] ?? null);
     }
 }
