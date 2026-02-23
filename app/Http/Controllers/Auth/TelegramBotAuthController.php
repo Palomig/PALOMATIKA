@@ -25,6 +25,9 @@ class TelegramBotAuthController extends Controller
     public function generateToken(Request $request)
     {
         $startParam = trim((string) $request->input('startParam', ''));
+        if ($startParam === '' && $request->hasSession()) {
+            $startParam = trim((string) $request->session()->get('telegram_start_param', ''));
+        }
 
         // Clean up expired tokens
         TelegramAuthToken::where('expires_at', '<', now())->delete();
@@ -171,6 +174,10 @@ class TelegramBotAuthController extends Controller
         $request->session()->regenerate();
 
         $fallbackStartParam = trim((string) $request->input('startParam', ''));
+        if ($fallbackStartParam === '') {
+            $fallbackStartParam = trim((string) $request->session()->get('telegram_start_param', ''));
+        }
+
         if ($fallbackStartParam !== '' && empty($authFields['start_param'])) {
             $authFields['start_param'] = $fallbackStartParam;
         }
@@ -240,8 +247,12 @@ class TelegramBotAuthController extends Controller
                 $startParam = trim($cachedStartParam);
             }
         }
+        if ($startParam === '') {
+            $startParam = trim((string) request()->session()->get('telegram_start_param', ''));
+        }
 
         Cache::forget($this->startParamCacheKey($token));
+        request()->session()->forget('telegram_start_param');
 
         $this->auditLogger->log([
             'event_type' => 'telegram_token_login_success',
