@@ -355,6 +355,7 @@ Route::prefix('api/oge')->middleware(['auth', 'role:teacher,admin'])->group(func
     Route::post('/templates', [OgeTemplateController::class, 'store'])->name('api.oge.templates.store');
     Route::delete('/templates/{templateId}', [OgeTemplateController::class, 'destroy'])->name('api.oge.templates.destroy');
     Route::get('/attempts/{attempt}/result', [OgeAttemptController::class, 'result'])->name('api.oge.attempt.result');
+    Route::get('/attempts/{attempt}/telegram-summary', [OgeAttemptController::class, 'telegramSummary'])->name('api.oge.attempt.telegram-summary');
 });
 
 Route::prefix('api/oge')->middleware(['auth', 'role:student,admin'])->group(function () {

@@ -345,4 +345,133 @@ class OgeAttemptResultsStatusApiTest extends TestCase
         $this->assertFalse($task6['is_correct'] ?? true);
         $this->assertSame('99', $task6['correct_answer'] ?? null);
     }
+
+    public function test_teacher_can_fetch_telegram_summary_payload_for_generator_attempt(): void
+    {
+        $teacher = User::factory()->create(['role' => 'teacher']);
+        $student = User::factory()->create(['role' => 'student', 'name' => 'Ivan Student']);
+        $variant = OgeVariant::create([
+            'hash' => 'tggen001',
+            'owner_teacher_id' => $teacher->id,
+            'title' => 'Generator Variant',
+            'config_json' => ['source' => 'generator'],
+        ]);
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $student->id,
+            'status' => 'scored',
+            'started_at' => now()->subMinutes(15),
+            'submitted_at' => now()->subMinutes(2),
+        ]);
+
+        OgeAttemptAnswer::create([
+            'attempt_id' => $attempt->id,
+            'task_number' => 6,
+            'current_answer' => '77',
+            'commits_count' => 1,
+            'is_final' => true,
+        ]);
+        OgeAttemptScoring::create([
+            'attempt_id' => $attempt->id,
+            'task_number' => 6,
+            'is_correct' => true,
+            'correct_answer' => '77',
+            'checked_at' => now()->subMinute(),
+        ]);
+
+        $response = $this->actingAs($teacher)
+            ->getJson("/api/oge/attempts/{$attempt->id}/telegram-summary")
+            ->assertOk()
+            ->assertJsonPath('success', true)
+            ->assertJsonPath('contract.name', 'oge_attempt_telegram_result_summary')
+            ->assertJsonPath('contract.version', 1)
+            ->assertJsonPath('attempt.id', $attempt->id)
+            ->assertJsonPath('attempt.variant_id', $variant->id)
+            ->assertJsonPath('attempt.is_custom', false)
+            ->assertJsonPath('summary.correct_count', 1)
+            ->assertJsonPath('telegram.links.variant_results_url', route('teacher.oge.results', ['variantId' => $variant->id]))
+            ->assertJsonPath(
+                'telegram.links.attempt_results_url',
+                route('teacher.oge.results', ['variantId' => $variant->id]) . '?attempt=' . $attempt->id . '#attempt-' . $attempt->id
+            );
+
+        $task6 = collect($response->json('telegram.task_statuses'))->firstWhere('task_number', 6);
+        $this->assertSame('correct', $task6['status'] ?? null);
+        $this->assertSame('+', $task6['code'] ?? null);
+
+        $messageText = (string) $response->json('telegram.message_text');
+        $this->assertStringContainsString('Variant tggen001', $messageText);
+        $this->assertStringContainsString('Tasks:', $messageText);
+        $this->assertStringContainsString('6:+', $messageText);
+    }
+
+    public function test_teacher_can_fetch_telegram_summary_payload_for_custom_attempt(): void
+    {
+        $teacher = User::factory()->create(['role' => 'teacher']);
+        $student = User::factory()->create(['role' => 'student', 'name' => 'Petr Student']);
+        $variant = OgeVariant::create([
+            'hash' => 'tgcus001',
+            'owner_teacher_id' => $teacher->id,
+            'title' => 'Custom Variant',
+            'config_json' => [
+                'source' => 'custom_random',
+                'custom_task_numbers' => [1, 6],
+            ],
+        ]);
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $student->id,
+            'status' => 'scored',
+            'started_at' => now()->subMinutes(20),
+            'submitted_at' => now()->subMinutes(5),
+        ]);
+
+        OgeAttemptAnswer::create([
+            'attempt_id' => $attempt->id,
+            'task_number' => 1,
+            'current_answer' => '42',
+            'commits_count' => 1,
+            'is_final' => true,
+        ]);
+        OgeAttemptAnswer::create([
+            'attempt_id' => $attempt->id,
+            'task_number' => 6,
+            'current_answer' => '11',
+            'commits_count' => 1,
+            'is_final' => true,
+        ]);
+        OgeAttemptScoring::create([
+            'attempt_id' => $attempt->id,
+            'task_number' => 1,
+            'is_correct' => true,
+            'correct_answer' => '42',
+            'checked_at' => now()->subMinute(),
+        ]);
+        OgeAttemptScoring::create([
+            'attempt_id' => $attempt->id,
+            'task_number' => 6,
+            'is_correct' => false,
+            'correct_answer' => '99',
+            'checked_at' => now()->subMinute(),
+        ]);
+
+        $response = $this->actingAs($teacher)
+            ->getJson("/api/oge/attempts/{$attempt->id}/telegram-summary")
+            ->assertOk()
+            ->assertJsonPath('attempt.is_custom', true)
+            ->assertJsonPath('summary.tasks_total', 2)
+            ->assertJsonPath('summary.correct_count', 1)
+            ->assertJsonPath('summary.incorrect_count', 1);
+
+        $statuses = collect($response->json('telegram.task_statuses'))
+            ->mapWithKeys(fn (array $row) => [(int) $row['task_number'] => $row['code']])
+            ->all();
+
+        $this->assertSame([1 => '+', 6 => '-'], $statuses);
+        $this->assertStringContainsString('Tasks: 1:+ 6:-', (string) $response->json('telegram.message_text'));
+        $this->assertStringContainsString(
+            '#attempt-' . $attempt->id,
+            (string) $response->json('telegram.links.attempt_results_url')
+        );
+    }
 }

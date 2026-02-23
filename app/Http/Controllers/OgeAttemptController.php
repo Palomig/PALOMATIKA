@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\OgeAttempt;
 use App\Services\OgeAttemptService;
 use App\Services\AuditLogger;
+use App\Services\OgeTelegramResultSummaryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -13,6 +14,7 @@ class OgeAttemptController extends Controller
     public function __construct(
         private readonly OgeAttemptService $attemptService,
         private readonly AuditLogger $auditLogger,
+        private readonly OgeTelegramResultSummaryService $telegramResultSummaryService,
     )
     {
     }
@@ -171,6 +173,16 @@ class OgeAttemptController extends Controller
         return response()->json([
             'success' => true,
             ...$this->attemptService->buildAttemptResultPayload($attempt),
+        ]);
+    }
+
+    public function telegramSummary(Request $request, OgeAttempt $attempt): JsonResponse
+    {
+        $this->authorizeAttemptResult($request, $attempt);
+
+        return response()->json([
+            'success' => true,
+            ...$this->telegramResultSummaryService->buildAttemptSummaryPayload($attempt),
         ]);
     }
 

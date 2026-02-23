@@ -47,7 +47,7 @@
                             $totalMs = (int) $attempt->taskTimings->sum('active_ms');
                             $totalMinutes = round($totalMs / 60000, 1);
                         @endphp
-                        <tr class="hover:bg-white/[0.02] transition-colors align-top">
+                        <tr id="attempt-{{ $attempt->id }}" class="hover:bg-white/[0.02] transition-colors align-top">
                             <td class="px-4 py-3 sticky left-0 bg-dark-light">
                                 <div class="flex items-center gap-2.5">
                                     <div class="w-7 h-7 bg-coral/10 rounded-lg flex items-center justify-center flex-shrink-0">
