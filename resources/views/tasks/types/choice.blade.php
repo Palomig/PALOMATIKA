@@ -109,6 +109,25 @@
                     ])
                 @endif
 
+                @if(!empty($task['image']))
+                    @php
+                        $imageName = (string) $task['image'];
+                    @endphp
+                    <div class="mt-4 mb-2">
+                        @if(\Illuminate\Support\Str::startsWith($imageName, '<svg'))
+                            <div class="bg-white rounded-lg p-2 overflow-hidden">
+                                {!! $imageName !!}
+                            </div>
+                        @else
+                            <img src="{{ asset('images/tasks/' . $topicId . '/' . $imageName) }}"
+                                 alt="Иллюстрация к заданию {{ $taskId }}"
+                                 class="max-w-full h-auto rounded-lg bg-white p-1 border border-slate-600"
+                                 loading="lazy"
+                                 onerror="this.onerror=null; this.src='{{ asset('images/placeholder.svg') }}';">
+                        @endif
+                    </div>
+                @endif
+
                 {{-- Варианты ответа --}}
                 @if(!empty($taskOptions))
                     @php

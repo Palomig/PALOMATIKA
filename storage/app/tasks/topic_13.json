@@ -6,7 +6,7 @@
         "color": "amber",
         "icon": "less-than"
     },
-    "exported_at": "2026-01-13T07:51:15+00:00",
+    "exported_at": "2026-02-23T00:00:00+00:00",
     "blocks": [
         {
             "number": 1,
@@ -14,7 +14,7 @@
             "zadaniya": [
                 {
                     "number": 1,
-                    "instruction": "Линейные неравенства: укажите решение неравенства",
+                    "instruction": "Укажите решение неравенства",
                     "type": "choice",
                     "tasks": [
                         {
@@ -39,7 +39,7 @@
                         },
                         {
                             "id": 3,
-                            "expression": "6 - 7x \\geq 3x - 7",
+                            "expression": "6 - 7x \\leq 3x - 7",
                             "options": [
                                 "[0,1; +∞)",
                                 "(-∞; 1,3]",
@@ -49,7 +49,7 @@
                         },
                         {
                             "id": 4,
-                            "expression": "2x - 8 \\geq 4x + 6",
+                            "expression": "2x - 8 \\leq 4x + 6",
                             "options": [
                                 "[-7; +∞)",
                                 "(-∞; -7]",
@@ -62,8 +62,8 @@
                             "expression": "-9 - 6x > 9x + 9",
                             "options": [
                                 "(-∞; -1,2)",
-                                "(-1,2; +∞)",
                                 "(0; +∞)",
+                                "(-1,2; +∞)",
                                 "(-∞; 0)"
                             ]
                         },
@@ -101,12 +101,12 @@
                 },
                 {
                     "number": 2,
-                    "instruction": "Системы линейных неравенств",
+                    "instruction": "Укажите решение системы неравенств",
                     "type": "choice",
                     "tasks": [
                         {
                             "id": 1,
-                            "expression": "\\begin{cases} x + 3,6 \\geq 0 \\\\ x + 2 \\geq -1 \\end{cases}",
+                            "expression": "\\begin{cases} x + 3,6 \\leq 0 \\\\ x + 2 \\leq -1 \\end{cases}",
                             "options": [
                                 "(-∞; -3,6] ∪ [-3; +∞)",
                                 "(-∞; -3,6]",
@@ -116,7 +116,7 @@
                         },
                         {
                             "id": 2,
-                            "expression": "\\begin{cases} x + 0,6 \\geq 0 \\\\ x - 1 \\geq -4 \\end{cases}",
+                            "expression": "\\begin{cases} x + 0,6 \\leq 0 \\\\ x - 1 \\geq -4 \\end{cases}",
                             "options": [
                                 "(-∞; -3]",
                                 "[-0,6; +∞)",
@@ -129,14 +129,14 @@
                             "expression": "\\begin{cases} x - 6,6 \\geq 0 \\\\ x + 1 \\geq 5 \\end{cases}",
                             "options": [
                                 "[4; +∞)",
-                                "[6,6; +∞)",
                                 "[4; 6,6]",
+                                "[6,6; +∞)",
                                 "(-∞; 4]"
                             ]
                         },
                         {
                             "id": 4,
-                            "expression": "\\begin{cases} x + 4 \\geq -3,4 \\\\ x + 5 \\geq 0 \\end{cases}",
+                            "expression": "\\begin{cases} x + 4 \\geq -3,4 \\\\ x + 5 \\leq 0 \\end{cases}",
                             "options": [
                                 "[-7,4; -5]",
                                 "[-5; +∞)",
@@ -146,21 +146,21 @@
                         },
                         {
                             "id": 5,
-                            "expression": "\\begin{cases} x - 5,2 \\geq 0 \\\\ x + 4 \\geq 10 \\end{cases}",
+                            "expression": "\\begin{cases} x - 5,2 \\geq 0 \\\\ x + 4 \\leq 10 \\end{cases}",
                             "options": [
                                 "(-∞; 5,2] ∪ [6; +∞)",
-                                "[6; +∞)",
                                 "[5,2; +∞)",
+                                "[6; +∞)",
                                 "[5,2; 6]"
                             ]
                         },
                         {
                             "id": 6,
-                            "expression": "\\begin{cases} x - 2,6 \\leq 0 \\\\ x - 1 \\leq 1 \\end{cases}",
+                            "expression": "\\begin{cases} x - 2,6 \\leq 0 \\\\ x - 1 \\geq 1 \\end{cases}",
                             "options": [
                                 "[2; 2,6]",
-                                "(-∞; 2] ∪ [2,6; +∞)",
                                 "(-∞; 2,6]",
+                                "(-∞; 2] ∪ [2,6; +∞)",
                                 "[2; +∞)"
                             ]
                         },
@@ -176,7 +176,7 @@
                         },
                         {
                             "id": 8,
-                            "expression": "\\begin{cases} x - 3 \\leq 0 \\\\ x - 0,2 \\leq 2 \\end{cases}",
+                            "expression": "\\begin{cases} x - 3 \\geq 0 \\\\ x - 0,2 \\geq 2 \\end{cases}",
                             "options": [
                                 "[2,2; +∞)",
                                 "[3; +∞)",
@@ -188,12 +188,203 @@
                 },
                 {
                     "number": 3,
-                    "instruction": "Квадратные неравенства: укажите решение",
+                    "instruction": "Решите систему неравенств. На каком рисунке изображено множество её решений? В ответе укажите номер правильного варианта.",
                     "type": "choice",
                     "tasks": [
                         {
                             "id": 1,
-                            "expression": "(x + 3)(x - 8) \\leq 0",
+                            "expression": "\\begin{cases} x + 3 \\geq -2 \\\\ x + 1,1 \\geq 0 \\end{cases}",
+                            "image": "img-000.png"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\begin{cases} x - 4,3 \\geq 0 \\\\ x + 5 \\leq 10 \\end{cases}",
+                            "image": "img-001.png"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "\\begin{cases} x + 3,2 \\leq 0 \\\\ x + 1 \\leq -1 \\end{cases}",
+                            "image": "img-002.png"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "\\begin{cases} x + 0,7 \\leq 0 \\\\ x - 1 \\geq -5 \\end{cases}",
+                            "image": "img-003.png"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "\\begin{cases} x + 4 \\geq -4,5 \\\\ x + 4 \\leq 0 \\end{cases}",
+                            "image": "img-004.png"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "\\begin{cases} x - 7,4 \\geq 0 \\\\ x + 2 \\geq 3 \\end{cases}",
+                            "image": "img-005.png"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "\\begin{cases} x - 3,7 \\leq 0 \\\\ x - 2 \\geq 1 \\end{cases}",
+                            "image": "img-006.png"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "\\begin{cases} x + 1,8 \\leq 0 \\\\ x + 0,5 \\leq -0,5 \\end{cases}",
+                            "image": "img-007.png"
+                        },
+                        {
+                            "id": 9,
+                            "expression": "\\begin{cases} x + 2,7 \\leq 0 \\\\ x + 4 \\geq 1 \\end{cases}",
+                            "image": "img-008.png"
+                        }
+                    ]
+                },
+                {
+                    "number": 4,
+                    "instruction": "Укажите решение системы неравенств",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "\\begin{cases} -36 + 4x < 0 \\\\ 5 - 4x < -3 \\end{cases}",
+                            "options": [
+                                "(2; +∞)",
+                                "нет решений",
+                                "(-∞; 9)",
+                                "(2; 9)"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\begin{cases} -8 + 4x > 0 \\\\ 4 - 3x > -8 \\end{cases}",
+                            "options": [
+                                "нет решений",
+                                "(-∞; 4)",
+                                "(2; +∞)",
+                                "(2; 4)"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "expression": "\\begin{cases} -48 + 6x > 0 \\\\ 6 - 5x > -4 \\end{cases}",
+                            "options": [
+                                "(2; 8)",
+                                "(-∞; 2)",
+                                "нет решений",
+                                "(8; +∞)"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "expression": "\\begin{cases} -10 + 2x > 0 \\\\ 7 - 6x > -5 \\end{cases}",
+                            "options": [
+                                "нет решений",
+                                "(5; +∞)",
+                                "(2; 5)",
+                                "(-∞; 2)"
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "expression": "\\begin{cases} -35 + 5x < 0 \\\\ 6 - 3x > -18 \\end{cases}",
+                            "options": [
+                                "(7; 8)",
+                                "(-∞; 7)",
+                                "(-∞; 8)",
+                                "(7; +∞)"
+                            ]
+                        },
+                        {
+                            "id": 6,
+                            "expression": "\\begin{cases} -12 + 3x > 0 \\\\ 2 - 7x > -33 \\end{cases}",
+                            "options": [
+                                "(-∞; 4)",
+                                "нет решений",
+                                "(4; 5)",
+                                "(5; +∞)"
+                            ]
+                        },
+                        {
+                            "id": 7,
+                            "expression": "\\begin{cases} -9 + 3x < 0 \\\\ 2 - 3x > -10 \\end{cases}",
+                            "options": [
+                                "(-∞; 3)",
+                                "(-∞; 4)",
+                                "(3; +∞)",
+                                "(3; 4)"
+                            ]
+                        },
+                        {
+                            "id": 8,
+                            "expression": "\\begin{cases} -5 + 5x < 0 \\\\ 4 - 3x < 31 \\end{cases}",
+                            "options": [
+                                "(-9; 1)",
+                                "нет решений",
+                                "(-9; +∞)",
+                                "(-∞; 1)"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 5,
+                    "instruction": "Решите систему неравенств. На каком рисунке изображено множество её решений? В ответе укажите номер правильного варианта.",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "\\begin{cases} -35 + 5x > 0 \\\\ 6 - 3x > -3 \\end{cases}",
+                            "image": "img-009.png"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\begin{cases} -5 + 5x < 0 \\\\ 4 - 3x < 31 \\end{cases}",
+                            "image": "img-010.png"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "\\begin{cases} -9 + 3x < 0 \\\\ 2 - 3x < -10 \\end{cases}",
+                            "image": "img-011.png"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "\\begin{cases} -12 + 3x > 0 \\\\ 9 - 4x > -3 \\end{cases}",
+                            "image": "img-012.png"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "\\begin{cases} -35 + 5x < 0 \\\\ 6 - 3x > -18 \\end{cases}",
+                            "image": "img-013.png"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "\\begin{cases} -27 + 3x > 0 \\\\ 6 - 3x < -6 \\end{cases}",
+                            "image": "img-014.png"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "\\begin{cases} -9 + 3x > 0 \\\\ 2 - 3x > -10 \\end{cases}",
+                            "image": "img-015.png"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "\\begin{cases} -27 + 3x < 0 \\\\ 6 + 4x > 6 \\end{cases}",
+                            "image": "img-016.png"
+                        },
+                        {
+                            "id": 9,
+                            "expression": "\\begin{cases} -35 + 5x < 0 \\\\ 6 - 3x < -3 \\end{cases}",
+                            "image": "img-017.png"
+                        }
+                    ]
+                },
+                {
+                    "number": 6,
+                    "instruction": "Укажите решение неравенства.",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "(x + 3)(x - 8) \\geq 0",
                             "options": [
                                 "[-3; 8]",
                                 "(-∞; -3] ∪ [8; +∞)",
@@ -243,7 +434,7 @@
                         },
                         {
                             "id": 6,
-                            "expression": "(x + 3)(x - 5) \\geq 0",
+                            "expression": "(x + 3)(x - 5) \\leq 0",
                             "options": [
                                 "(-∞; -3]",
                                 "[-3; 5]",
@@ -284,8 +475,60 @@
                     ]
                 },
                 {
-                    "number": 4,
-                    "instruction": "Неравенства вида x² - a = 0",
+                    "number": 7,
+                    "instruction": "Укажите решение неравенства.",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "(x + 4)(x - 9) \\geq 0",
+                            "image": "img-018.png"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "(x + 2)(x - 7) > 0",
+                            "image": "img-019.png"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "(x + 3)(x - 7) \\leq 0",
+                            "image": "img-020.png"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "(x + 1)(x - 6) \\leq 0",
+                            "image": "img-021.png"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "(x + 5)(x - 2) \\leq 0",
+                            "image": "img-022.png"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "(x + 8)(x - 3) < 0",
+                            "image": "img-023.png"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "(x + 2)(x - 8) > 0",
+                            "image": "img-024.png"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "(x + 4)(x - 8) > 0",
+                            "image": "img-025.png"
+                        },
+                        {
+                            "id": 9,
+                            "expression": "(x + 1)(x - 9) > 0",
+                            "image": "img-026.png"
+                        }
+                    ]
+                },
+                {
+                    "number": 8,
+                    "instruction": "Укажите решение неравенства.",
                     "type": "choice",
                     "tasks": [
                         {
@@ -300,7 +543,7 @@
                         },
                         {
                             "id": 2,
-                            "expression": "x^2 - 64 \\leq 0",
+                            "expression": "x^2 - 64 \\geq 0",
                             "options": [
                                 "[-8; 8]",
                                 "(-∞; -8] ∪ [8; +∞)",
@@ -310,7 +553,7 @@
                         },
                         {
                             "id": 3,
-                            "expression": "x^2 - 25 \\geq 0",
+                            "expression": "x^2 - 25 \\leq 0",
                             "options": [
                                 "(-∞; +∞)",
                                 "(-∞; -5] ∪ [5; +∞)",
@@ -340,19 +583,49 @@
                         },
                         {
                             "id": 6,
-                            "expression": "x^2 - 81 \\leq 0",
+                            "expression": "x^2 - 81 \\geq 0",
                             "options": [
                                 "[-9; 9]",
                                 "(-∞; -9] ∪ [9; +∞)",
                                 "(-∞; +∞)",
                                 "нет решений"
                             ]
+                        },
+                        {
+                            "id": 7,
+                            "expression": "x^2 - 49 \\geq 0",
+                            "options": [
+                                "[-7; 7]",
+                                "нет решений",
+                                "(-∞; -7] ∪ [7; +∞)",
+                                "(-∞; +∞)"
+                            ]
+                        },
+                        {
+                            "id": 8,
+                            "expression": "x^2 - 9 > 0",
+                            "options": [
+                                "(-∞; +∞)",
+                                "(-3; 3)",
+                                "(-∞; -3) ∪ (3; +∞)",
+                                "нет решений"
+                            ]
+                        },
+                        {
+                            "id": 9,
+                            "expression": "x^2 - 100 \\leq 0",
+                            "options": [
+                                "нет решений",
+                                "[-10; 10]",
+                                "(-∞; +∞)",
+                                "(-∞; -10] ∪ [10; +∞)"
+                            ]
                         }
                     ]
                 },
                 {
-                    "number": 5,
-                    "instruction": "Неравенства вида ax - x² ≥ 0",
+                    "number": 9,
+                    "instruction": "Укажите решение неравенства.",
                     "type": "choice",
                     "tasks": [
                         {
@@ -377,7 +650,7 @@
                         },
                         {
                             "id": 3,
-                            "expression": "10x - x^2 \\geq 0",
+                            "expression": "10x - x^2 \\leq 0",
                             "options": [
                                 "[0; 10]",
                                 "(-∞; 0] ∪ [10; +∞)",
@@ -407,7 +680,7 @@
                         },
                         {
                             "id": 6,
-                            "expression": "x - x^2 \\leq 0",
+                            "expression": "x - x^2 > 0",
                             "options": [
                                 "(0; 1)",
                                 "(-∞; 0)",
@@ -427,7 +700,7 @@
                         },
                         {
                             "id": 8,
-                            "expression": "5x - x^2 \\leq 0",
+                            "expression": "5x - x^2 < 0",
                             "options": [
                                 "(-∞; 0) ∪ (5; +∞)",
                                 "(0; 5)",
@@ -446,6 +719,279 @@
                             ]
                         }
                     ]
+                },
+                {
+                    "number": 10,
+                    "instruction": "Укажите решение неравенства",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "7x - x^2 < 0",
+                            "image": "img-027.png"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "4x - x^2 \\leq 0",
+                            "image": "img-028.png"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "x - x^2 \\geq 0",
+                            "image": "img-029.png"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "6x - x^2 > 0",
+                            "image": "img-030.png"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "7x - x^2 \\geq 0",
+                            "image": "img-031.png"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "2x - x^2 > 0",
+                            "image": "img-032.png"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "8x - x^2 < 0",
+                            "image": "img-033.png"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "5x - x^2 \\geq 0",
+                            "image": "img-034.png"
+                        },
+                        {
+                            "id": 9,
+                            "expression": "3x - x^2 \\leq 0",
+                            "image": "img-035.png"
+                        }
+                    ]
+                },
+                {
+                    "number": 11,
+                    "instruction": "Укажите неравенство, решение которого изображено на рисунке.",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "options": [
+                                "x² - 49 ≤ 0",
+                                "x² + 49 ≤ 0",
+                                "x² - 49 ≥ 0",
+                                "x² + 49 ≥ 0"
+                            ],
+                            "image": "img-036.png"
+                        },
+                        {
+                            "id": 2,
+                            "options": [
+                                "x² - 36 > 0",
+                                "x² + 36 > 0",
+                                "x² - 36 < 0",
+                                "x² + 36 < 0"
+                            ],
+                            "image": "img-037.png"
+                        },
+                        {
+                            "id": 3,
+                            "options": [
+                                "x² + 64 ≥ 0",
+                                "x² - 64 ≤ 0",
+                                "x² - 64 ≥ 0",
+                                "x² + 64 ≤ 0"
+                            ],
+                            "image": "img-038.png"
+                        },
+                        {
+                            "id": 4,
+                            "options": [
+                                "x² - 9 > 0",
+                                "x² + 9 > 0",
+                                "x² - 9 < 0",
+                                "x² + 9 < 0"
+                            ],
+                            "image": "img-039.png"
+                        },
+                        {
+                            "id": 5,
+                            "options": [
+                                "x² + 16 ≥ 0",
+                                "x² - 16 ≤ 0",
+                                "x² + 16 ≤ 0",
+                                "x² - 16 ≥ 0"
+                            ],
+                            "image": "img-040.png"
+                        },
+                        {
+                            "id": 6,
+                            "options": [
+                                "x² - 25 > 0",
+                                "x² + 25 > 0",
+                                "x² - 25 < 0",
+                                "x² + 25 < 0"
+                            ],
+                            "image": "img-041.png"
+                        },
+                        {
+                            "id": 7,
+                            "options": [
+                                "x² + 81 ≥ 0",
+                                "x² + 81 ≤ 0",
+                                "x² - 81 ≤ 0",
+                                "x² - 81 ≥ 0"
+                            ],
+                            "image": "img-042.png"
+                        },
+                        {
+                            "id": 8,
+                            "options": [
+                                "x² - 4 < 0",
+                                "x² + 4 > 0",
+                                "x² - 4 > 0",
+                                "x² + 4 < 0"
+                            ],
+                            "image": "img-043.png"
+                        }
+                    ]
+                },
+                {
+                    "number": 12,
+                    "instruction": "Укажите неравенство, решение которого изображено на рисунке.",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "options": [
+                                "x² - 5x ≤ 0",
+                                "x² - 25 ≤ 0",
+                                "x² - 5x ≥ 0",
+                                "x² - 25 ≥ 0"
+                            ],
+                            "image": "img-044.png"
+                        },
+                        {
+                            "id": 2,
+                            "options": [
+                                "x² - 36 < 0",
+                                "x² - 6x < 0",
+                                "x² - 6x > 0",
+                                "x² - 36 > 0"
+                            ],
+                            "image": "img-045.png"
+                        },
+                        {
+                            "id": 3,
+                            "options": [
+                                "x² - 1 ≥ 0",
+                                "x² - x ≥ 0",
+                                "x² - 1 ≤ 0",
+                                "x² - x ≤ 0"
+                            ],
+                            "image": "img-046.png"
+                        },
+                        {
+                            "id": 4,
+                            "options": [
+                                "x² - 64 < 0",
+                                "x² - 64 > 0",
+                                "x² - 8x < 0",
+                                "x² - 8x > 0"
+                            ],
+                            "image": "img-047.png"
+                        },
+                        {
+                            "id": 5,
+                            "options": [
+                                "x² - 16 ≤ 0",
+                                "x² - 4x ≤ 0",
+                                "x² - 4x ≥ 0",
+                                "x² - 16 ≥ 0"
+                            ],
+                            "image": "img-048.png"
+                        },
+                        {
+                            "id": 6,
+                            "options": [
+                                "x² - 7x < 0",
+                                "x² - 49 > 0",
+                                "x² - 7x > 0",
+                                "x² - 49 < 0"
+                            ],
+                            "image": "img-049.png"
+                        },
+                        {
+                            "id": 7,
+                            "options": [
+                                "x² - 81 ≥ 0",
+                                "x² - 9x ≤ 0",
+                                "x² - 9x ≥ 0",
+                                "x² - 81 ≤ 0"
+                            ],
+                            "image": "img-050.png"
+                        },
+                        {
+                            "id": 8,
+                            "options": [
+                                "x² - 9 < 0",
+                                "x² - 3x < 0",
+                                "x² - 9 > 0",
+                                "x² - 3x > 0"
+                            ],
+                            "image": "img-051.png"
+                        }
+                    ]
+                },
+                {
+                    "number": 13,
+                    "instruction": "Укажите решение неравенства",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "x^2 < 9",
+                            "image": "img-052.png"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "x^2 \\leq 64",
+                            "image": "img-053.png"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "x^2 > 36",
+                            "image": "img-054.png"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "x^2 \\leq 36",
+                            "image": "img-055.png"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "49x^2 \\geq 36",
+                            "image": "img-056.png"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "25x^2 \\geq 4",
+                            "image": "img-057.png"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "81x^2 \\leq 16",
+                            "image": "img-058.png"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "25x^2 \\geq 49",
+                            "image": "img-059.png"
+                        }
+                    ]
                 }
             ]
         },
@@ -455,59 +1001,59 @@
             "zadaniya": [
                 {
                     "number": 1,
-                    "instruction": "Линейные неравенства (графическое решение)",
-                    "type": "graphic",
+                    "instruction": "Укажите решение неравенства",
+                    "type": "choice",
                     "tasks": [
                         {
                             "id": 1,
                             "expression": "4x + 5 \\geq 6x - 2",
-                            "image": "img-000.png"
+                            "image": "img-060.png"
                         },
                         {
                             "id": 2,
-                            "expression": "-2x + 5 \\geq -3x - 3",
-                            "image": "img-001.png"
+                            "expression": "-2x + 5 \\leq -3x - 3",
+                            "image": "img-061.png"
                         },
                         {
                             "id": 3,
                             "expression": "3 - x \\geq 3x + 5",
-                            "image": "img-002.png"
+                            "image": "img-062.png"
                         },
                         {
                             "id": 4,
                             "expression": "x + 4 \\geq 4x - 5",
-                            "image": "img-003.png"
+                            "image": "img-063.png"
                         },
                         {
                             "id": 5,
-                            "expression": "2 + x \\geq 5x - 8",
-                            "image": "img-004.png"
+                            "expression": "2 + x \\leq 5x - 8",
+                            "image": "img-064.png"
                         },
                         {
                             "id": 6,
                             "expression": "4x - 5 \\geq 2x - 4",
-                            "image": "img-005.png"
+                            "image": "img-065.png"
                         },
                         {
                             "id": 7,
-                            "expression": "x - 1 \\geq 3x + 2",
-                            "image": "img-006.png"
+                            "expression": "x - 1 \\leq 3x + 2",
+                            "image": "img-066.png"
                         },
                         {
                             "id": 8,
-                            "expression": "2x + 4 \\geq -4x + 1",
-                            "image": "img-007.png"
+                            "expression": "2x + 4 \\leq -4x + 1",
+                            "image": "img-067.png"
                         },
                         {
                             "id": 9,
-                            "expression": "x - 2 \\geq 4x + 4",
-                            "image": "img-008.png"
+                            "expression": "x - 2 \\leq 4x + 4",
+                            "image": "img-068.png"
                         }
                     ]
                 },
                 {
                     "number": 2,
-                    "instruction": "Неравенства со скобками",
+                    "instruction": "Укажите решение неравенства.",
                     "type": "choice",
                     "tasks": [
                         {
@@ -552,7 +1098,7 @@
                         },
                         {
                             "id": 5,
-                            "expression": "3x - 2(x - 5) \\geq -6",
+                            "expression": "3x - 2(x - 5) \\leq -6",
                             "options": [
                                 "(-∞; -16]",
                                 "(-∞; 4]",
@@ -562,7 +1108,7 @@
                         },
                         {
                             "id": 6,
-                            "expression": "2x - 3(x - 7) \\geq 3",
+                            "expression": "2x - 3(x - 7) \\leq 3",
                             "options": [
                                 "(-∞; -24]",
                                 "(-∞; 18]",
@@ -582,7 +1128,7 @@
                         },
                         {
                             "id": 8,
-                            "expression": "8x - 3(3x + 8) \\leq 9",
+                            "expression": "8x - 3(3x + 8) \\geq 9",
                             "options": [
                                 "[15; +∞)",
                                 "(-∞; -33]",
@@ -594,12 +1140,146 @@
                 },
                 {
                     "number": 3,
-                    "instruction": "Неравенство не имеет решений",
+                    "instruction": "На каком рисунке изображено множество решений неравенства? В ответе укажите номер правильного варианта.",
                     "type": "choice",
                     "tasks": [
                         {
                             "id": 1,
-                            "expression": "x^2 + 70",
+                            "expression": "4 - 5(5x - 2) < -8",
+                            "image": "img-069.png"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "-9 + 10(-2x + 9) < -7",
+                            "image": "img-070.png"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "4 - 7(x + 3) \\geq -9",
+                            "image": "img-071.png"
+                        }
+                    ]
+                },
+                {
+                    "number": 4,
+                    "instruction": "Решите систему неравенств. На каком рисунке изображено множество её решений? В ответе укажите номер правильного варианта.",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "\\begin{cases} x > 8 \\\\ 9 - x < 0 \\end{cases}",
+                            "image": "img-072.png"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\begin{cases} x < -1 \\\\ -4 - x < 0 \\end{cases}",
+                            "image": "img-073.png"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "\\begin{cases} x < 9 \\\\ 8 - x > 0 \\end{cases}",
+                            "image": "img-074.png"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "\\begin{cases} x > -1 \\\\ 3 - x > 0 \\end{cases}",
+                            "image": "img-075.png"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "\\begin{cases} x > 9 \\\\ 4 - x < 0 \\end{cases}",
+                            "image": "img-076.png"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "\\begin{cases} x > -1 \\\\ -4 - x > 0 \\end{cases}",
+                            "image": "img-077.png"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "\\begin{cases} x < 3 \\\\ 4 - x > 0 \\end{cases}",
+                            "image": "img-078.png"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "\\begin{cases} x < -3 \\\\ 9 - x < 0 \\end{cases}",
+                            "image": "img-079.png"
+                        },
+                        {
+                            "id": 9,
+                            "expression": "\\begin{cases} x > 8 \\\\ 9 - x > 0 \\end{cases}",
+                            "image": "img-080.png"
+                        }
+                    ]
+                },
+                {
+                    "number": 5,
+                    "instruction": "Укажите неравенство, решением которого является любое число.",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "options": [
+                                "x² + 78 > 0",
+                                "x² - 78 > 0",
+                                "x² + 78 < 0",
+                                "x² - 78 < 0"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "options": [
+                                "x² - 64 ≥ 0",
+                                "x² + 64 ≤ 0",
+                                "x² + 64 ≥ 0",
+                                "x² - 64 ≤ 0"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "options": [
+                                "x² - 56 > 0",
+                                "x² + 56 > 0",
+                                "x² - 56 < 0",
+                                "x² + 56 < 0"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "options": [
+                                "x² + 15 > 0",
+                                "x² - 15 > 0",
+                                "x² - 15 < 0",
+                                "x² + 15 < 0"
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "options": [
+                                "x² + 70 < 0",
+                                "x² + 70 > 0",
+                                "x² - 70 < 0",
+                                "x² - 70 > 0"
+                            ]
+                        },
+                        {
+                            "id": 6,
+                            "options": [
+                                "x² - 29 > 0",
+                                "x² + 29 > 0",
+                                "x² - 29 < 0",
+                                "x² + 29 < 0"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 6,
+                    "instruction": "Укажите неравенство, которое не имеет решений.",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
                             "options": [
                                 "x² + 70 < 0",
                                 "x² + 70 > 0",
@@ -609,17 +1289,15 @@
                         },
                         {
                             "id": 2,
-                            "expression": "x^2 + 15",
                             "options": [
-                                "x² + 15 ≤ 0",
+                                "x² + 15 ≥ 0",
                                 "x² - 15 ≤ 0",
                                 "x² - 15 ≥ 0",
-                                "x² + 15 ≥ 0"
+                                "x² + 15 ≤ 0"
                             ]
                         },
                         {
                             "id": 3,
-                            "expression": "x^2 + 33",
                             "options": [
                                 "x² + 33 < 0",
                                 "x² + 33 > 0",
@@ -629,17 +1307,15 @@
                         },
                         {
                             "id": 4,
-                            "expression": "x^2 + 49",
                             "options": [
-                                "x² + 49 ≤ 0",
+                                "x² + 49 ≥ 0",
                                 "x² - 49 ≤ 0",
                                 "x² - 49 ≥ 0",
-                                "x² + 49 ≥ 0"
+                                "x² + 49 ≤ 0"
                             ]
                         },
                         {
                             "id": 5,
-                            "expression": "x^2 + 64",
                             "options": [
                                 "x² - 64 < 0",
                                 "x² + 64 > 0",
@@ -649,50 +1325,128 @@
                         },
                         {
                             "id": 6,
-                            "expression": "x^2 + 56",
                             "options": [
-                                "x² - 56 ≥ 0",
-                                "x² + 56 ≥ 0",
                                 "x² - 56 ≤ 0",
+                                "x² + 56 ≥ 0",
+                                "x² - 56 ≥ 0",
                                 "x² + 56 ≤ 0"
                             ]
                         }
                     ]
                 },
                 {
-                    "number": 4,
-                    "instruction": "Квадратные неравенства (графическое решение)",
-                    "type": "graphic",
+                    "number": 7,
+                    "instruction": "Укажите неравенство, которое не имеет решений.",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "options": [
+                                "x² + 6x - 51 > 0",
+                                "x² + 6x + 51 > 0",
+                                "x² + 6x - 51 < 0",
+                                "x² + 6x + 51 < 0"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "options": [
+                                "x² - 2x - 65 < 0",
+                                "x² - 2x + 65 < 0",
+                                "x² - 2x - 65 > 0",
+                                "x² - 2x + 65 > 0"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "options": [
+                                "x² + 9x - 79 < 0",
+                                "x² + 9x + 79 > 0",
+                                "x² + 9x + 79 < 0",
+                                "x² + 9x - 79 > 0"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "options": [
+                                "x² - 5x + 53 < 0",
+                                "x² - 5x + 53 > 0",
+                                "x² - 5x - 53 < 0",
+                                "x² - 5x - 53 > 0"
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "options": [
+                                "x² - 3x - 11 < 0",
+                                "x² - 3x + 11 > 0",
+                                "x² - 3x + 11 < 0",
+                                "x² - 3x - 11 > 0"
+                            ]
+                        },
+                        {
+                            "id": 6,
+                            "options": [
+                                "x² - 8x - 83 > 0",
+                                "x² - 8x - 83 < 0",
+                                "x² - 8x + 83 < 0",
+                                "x² - 8x + 83 > 0"
+                            ]
+                        },
+                        {
+                            "id": 7,
+                            "options": [
+                                "x² + x + 36 < 0",
+                                "x² + x + 36 > 0",
+                                "x² + x - 36 < 0",
+                                "x² + x - 36 > 0"
+                            ]
+                        },
+                        {
+                            "id": 8,
+                            "options": [
+                                "x² + 6x + 12 < 0",
+                                "x² + 6x - 12 > 0",
+                                "x² + 6x + 12 > 0",
+                                "x² + 6x - 12 < 0"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 8,
+                    "instruction": "На каком рисунке изображено множество решений неравенства?",
+                    "type": "choice",
                     "tasks": [
                         {
                             "id": 1,
                             "expression": "x^2 - 4x + 3 \\leq 0",
-                            "image": "img-009.png"
+                            "image": "img-081.png"
                         },
                         {
                             "id": 2,
-                            "expression": "x^2 - 7x + 12 \\leq 0",
-                            "image": "img-010.png"
+                            "expression": "x^2 - 7x + 12 > 0",
+                            "image": "img-082.png"
                         },
                         {
                             "id": 3,
-                            "expression": "x^2 + 9x + 20 \\leq 0",
-                            "image": "img-011.png"
+                            "expression": "x^2 + 9x + 20 \\geq 0",
+                            "image": "img-083.png"
                         },
                         {
                             "id": 4,
                             "expression": "x^2 - 5x - 6 \\leq 0",
-                            "image": "img-012.png"
+                            "image": "img-084.png"
                         },
                         {
                             "id": 5,
-                            "expression": "x^2 - 17x + 72 \\leq 0",
-                            "image": "img-013.png"
+                            "expression": "x^2 - 17x + 72 \\geq 0",
+                            "image": "img-085.png"
                         },
                         {
                             "id": 6,
-                            "expression": "x^2 - 6x - 27 \\leq 0",
-                            "image": "img-014.png"
+                            "expression": "x^2 - 6x - 27 < 0",
+                            "image": "img-086.png"
                         }
                     ]
                 }
