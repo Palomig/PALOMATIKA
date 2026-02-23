@@ -539,12 +539,36 @@ class TelegramBotAuthController extends Controller
         $startParam = trim((string) ($authFields['start_param'] ?? ''));
 
         if ($startParam !== '') {
+            // Legacy payload: oge_variant_{id}
             if (preg_match('/^oge_variant_(\d+)$/', $startParam, $matches)) {
                 $variantId = (int) $matches[1];
                 $variant = OgeVariant::find($variantId);
                 if ($variant && !empty($variant->hash)) {
                     return url('/oge/' . $variant->hash);
                 }
+            }
+
+            // New payload: oge_variant_hash_{hash}
+            if (preg_match('/^oge_variant_hash_([a-z0-9]{8,32})$/i', $startParam, $matches)) {
+                $hash = strtolower($matches[1]);
+                $variant = OgeVariant::whereRaw('LOWER(hash) = ?', [$hash])->first();
+                if ($variant && !empty($variant->hash)) {
+                    return url('/oge/' . $variant->hash);
+                }
+
+                // If DB lookup fails, still try direct hash URL.
+                return url('/oge/' . $hash);
+            }
+
+            // Tolerant payload: oge_variant_{hash}
+            if (preg_match('/^oge_variant_([a-z0-9]{8,32})$/i', $startParam, $matches)) {
+                $hash = strtolower($matches[1]);
+                $variant = OgeVariant::whereRaw('LOWER(hash) = ?', [$hash])->first();
+                if ($variant && !empty($variant->hash)) {
+                    return url('/oge/' . $variant->hash);
+                }
+
+                return url('/oge/' . $hash);
             }
         }
 

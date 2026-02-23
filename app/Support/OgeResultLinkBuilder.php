@@ -13,7 +13,14 @@ class OgeResultLinkBuilder
         $variantWebUrl = $this->buildVariantResultsUrl($attempt);
         $attemptWebUrl = $this->buildAttemptResultsUrl($attempt);
 
-        $variantPayload = 'oge_variant_' . (int) $attempt->variant_id;
+        $variantHash = '';
+        if ($attempt->relationLoaded('variant')) {
+            $loadedVariant = $attempt->getRelation('variant');
+            $variantHash = strtolower((string) ($loadedVariant?->hash ?? ''));
+        }
+        $variantPayload = $variantHash !== ''
+            ? ('oge_variant_hash_' . $variantHash)
+            : ('oge_variant_' . (int) $attempt->variant_id);
         $attemptPayload = 'oge_attempt_' . (int) $attempt->id;
 
         $variantMiniAppUrl = $this->buildTelegramMiniAppDeepLink($variantPayload);
