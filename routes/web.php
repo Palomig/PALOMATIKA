@@ -354,10 +354,12 @@ Route::prefix('api/oge')->middleware(['auth', 'role:teacher,admin'])->group(func
     Route::get('/templates', [OgeTemplateController::class, 'index'])->name('api.oge.templates.index');
     Route::post('/templates', [OgeTemplateController::class, 'store'])->name('api.oge.templates.store');
     Route::delete('/templates/{templateId}', [OgeTemplateController::class, 'destroy'])->name('api.oge.templates.destroy');
+    Route::get('/attempts/{attempt}/result', [OgeAttemptController::class, 'result'])->name('api.oge.attempt.result');
 });
 
 Route::prefix('api/oge')->middleware(['auth', 'role:student,admin'])->group(function () {
     Route::post('/variants/{hash}/attempt/start', [OgeAttemptController::class, 'start'])->name('api.oge.attempt.start');
+    Route::get('/attempts/{attempt}/status', [OgeAttemptController::class, 'status'])->name('api.oge.attempt.status');
     Route::post('/attempts/{attempt}/tasks/{taskNumber}/focus', [OgeAttemptController::class, 'focus'])->name('api.oge.attempt.focus');
     Route::post('/attempts/{attempt}/tasks/{taskNumber}/blur', [OgeAttemptController::class, 'blur'])->name('api.oge.attempt.blur');
     Route::post('/attempts/{attempt}/tasks/{taskNumber}/commit', [OgeAttemptController::class, 'commit'])->name('api.oge.attempt.commit');

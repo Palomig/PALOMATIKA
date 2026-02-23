@@ -154,9 +154,54 @@ class OgeAttemptController extends Controller
         ]);
     }
 
+    public function status(Request $request, OgeAttempt $attempt): JsonResponse
+    {
+        $this->authorizeAttemptRead($request, $attempt);
+
+        return response()->json([
+            'success' => true,
+            ...$this->attemptService->buildAttemptStatusPayload($attempt),
+        ]);
+    }
+
+    public function result(Request $request, OgeAttempt $attempt): JsonResponse
+    {
+        $this->authorizeAttemptResult($request, $attempt);
+
+        return response()->json([
+            'success' => true,
+            ...$this->attemptService->buildAttemptResultPayload($attempt),
+        ]);
+    }
+
     private function authorizeAttempt(Request $request, OgeAttempt $attempt): void
     {
         if ((int) $attempt->student_id !== (int) $request->user()->id) {
+            abort(403);
+        }
+    }
+
+    private function authorizeAttemptRead(Request $request, OgeAttempt $attempt): void
+    {
+        $user = $request->user();
+        if ($user->role === 'admin') {
+            return;
+        }
+
+        if ((int) $attempt->student_id !== (int) $user->id) {
+            abort(403);
+        }
+    }
+
+    private function authorizeAttemptResult(Request $request, OgeAttempt $attempt): void
+    {
+        $user = $request->user();
+        if ($user->role === 'admin') {
+            return;
+        }
+
+        $attempt->loadMissing('variant');
+        if ((int) ($attempt->variant?->owner_teacher_id ?? 0) !== (int) $user->id) {
             abort(403);
         }
     }

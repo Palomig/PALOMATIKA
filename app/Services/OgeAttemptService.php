@@ -211,6 +211,16 @@ class OgeAttemptService
         });
     }
 
+    public function buildAttemptStatusPayload(OgeAttempt $attempt): array
+    {
+        return $this->buildAttemptReadPayload($attempt, false);
+    }
+
+    public function buildAttemptResultPayload(OgeAttempt $attempt): array
+    {
+        return $this->buildAttemptReadPayload($attempt, true);
+    }
+
     private function finalizeOpenTimings(OgeAttempt $attempt): void
     {
         $attempt->loadMissing('taskTimings');
@@ -329,5 +339,202 @@ class OgeAttemptService
                 'checked_at' => now(),
             ],
         );
+    }
+
+    private function buildAttemptReadPayload(OgeAttempt $attempt, bool $includeScoring): array
+    {
+        $attempt->loadMissing([
+            'variant',
+            'student:id,name,email',
+            'answers',
+            'taskTimings',
+            'scorings',
+        ]);
+
+        $taskNumbers = $this->resolveAttemptTaskNumbers($attempt);
+
+        $answersByTask = $attempt->answers
+            ->keyBy(fn (OgeAttemptAnswer $answer) => (int) $answer->task_number);
+        $timingsByTask = $attempt->taskTimings
+            ->keyBy(fn (OgeAttemptTaskTiming $timing) => (int) $timing->task_number);
+        $scoringsByTask = $attempt->scorings
+            ->keyBy(fn (OgeAttemptScoring $scoring) => (int) $scoring->task_number);
+
+        $tasks = [];
+        $answeredCount = 0;
+        $correctCount = 0;
+        $incorrectCount = 0;
+        $uncheckedCount = 0;
+        $unansweredCount = 0;
+        $totalActiveMs = 0;
+
+        foreach ($taskNumbers as $taskNumber) {
+            $answer = $answersByTask->get($taskNumber);
+            $timing = $timingsByTask->get($taskNumber);
+            $scoring = $scoringsByTask->get($taskNumber);
+
+            $answerValue = $answer?->current_answer;
+            $hasAnswer = is_string($answerValue) && trim($answerValue) !== '';
+            $hasTiming = $timing && (((int) $timing->focus_count) > 0 || ((int) $timing->active_ms) > 0);
+
+            $activeMs = (int) ($timing?->active_ms ?? 0);
+            $totalActiveMs += $activeMs;
+
+            if ($hasAnswer) {
+                $answeredCount++;
+            } else {
+                $unansweredCount++;
+            }
+
+            if ($includeScoring) {
+                if (!$hasAnswer) {
+                    $taskStatus = 'unanswered';
+                } elseif ($scoring?->is_correct === true) {
+                    $taskStatus = 'correct';
+                    $correctCount++;
+                } elseif ($scoring?->is_correct === false) {
+                    $taskStatus = 'incorrect';
+                    $incorrectCount++;
+                } else {
+                    $taskStatus = 'unchecked';
+                    $uncheckedCount++;
+                }
+            } else {
+                $taskStatus = $hasAnswer ? 'answered' : ($hasTiming ? 'seen' : 'unanswered');
+            }
+
+            $taskRow = [
+                'task_number' => $taskNumber,
+                'status' => $taskStatus,
+                'answer' => $answerValue,
+                'commits_count' => (int) ($answer?->commits_count ?? 0),
+                'is_final' => (bool) ($answer?->is_final ?? false),
+                'first_committed_at' => optional($answer?->first_committed_at)->toIso8601String(),
+                'last_committed_at' => optional($answer?->last_committed_at)->toIso8601String(),
+                'active_ms' => $activeMs,
+                'focus_count' => (int) ($timing?->focus_count ?? 0),
+                'last_focus_at' => optional($timing?->last_focus_at)->toIso8601String(),
+                'last_heartbeat_at' => optional($timing?->last_heartbeat_at)->toIso8601String(),
+            ];
+
+            if ($includeScoring) {
+                $taskRow['is_correct'] = $scoring?->is_correct;
+                $taskRow['correct_answer'] = $scoring?->correct_answer;
+                $taskRow['checked_at'] = optional($scoring?->checked_at)->toIso8601String();
+            }
+
+            $tasks[] = $taskRow;
+        }
+
+        $awayMsTotal = (int) (($attempt->device_meta ?? [])['away_ms_total'] ?? 0);
+        $durationMs = null;
+        if ($attempt->started_at && $attempt->submitted_at) {
+            $durationMs = max(0, $attempt->started_at->diffInMilliseconds($attempt->submitted_at, false));
+        }
+
+        $baseAttempt = [
+            'id' => (int) $attempt->id,
+            'status' => (string) $attempt->status,
+            'locked' => $attempt->status !== 'active',
+            'variant_id' => (int) $attempt->variant_id,
+            'variant_hash' => (string) ($attempt->variant?->hash ?? ''),
+            'is_custom' => (bool) $attempt->variant?->isCustomRandom(),
+            'student_id' => (int) $attempt->student_id,
+            'started_at' => optional($attempt->started_at)->toIso8601String(),
+            'submitted_at' => optional($attempt->submitted_at)->toIso8601String(),
+            'last_seen_at' => optional($attempt->last_seen_at)->toIso8601String(),
+        ];
+
+        if ($includeScoring) {
+            $baseAttempt['student'] = $attempt->student ? [
+                'id' => (int) $attempt->student->id,
+                'name' => $attempt->student->name,
+                'email' => $attempt->student->email,
+            ] : null;
+            $baseAttempt['variant'] = $attempt->variant ? [
+                'id' => (int) $attempt->variant->id,
+                'hash' => (string) $attempt->variant->hash,
+                'title' => $attempt->variant->title,
+                'owner_teacher_id' => $attempt->variant->owner_teacher_id !== null ? (int) $attempt->variant->owner_teacher_id : null,
+            ] : null;
+        }
+
+        $summary = [
+            'tasks_total' => count($taskNumbers),
+            'answered_count' => $answeredCount,
+            'unanswered_count' => $unansweredCount,
+            'total_active_ms' => $totalActiveMs,
+            'away_ms_total' => $awayMsTotal,
+            'duration_ms' => $durationMs,
+        ];
+
+        if ($includeScoring) {
+            $summary['correct_count'] = $correctCount;
+            $summary['incorrect_count'] = $incorrectCount;
+            $summary['unchecked_count'] = $uncheckedCount;
+        }
+
+        return [
+            'attempt' => $baseAttempt,
+            'summary' => $summary,
+            'tasks' => $tasks,
+        ];
+    }
+
+    /**
+     * @return array<int>
+     */
+    private function resolveAttemptTaskNumbers(OgeAttempt $attempt): array
+    {
+        $attempt->loadMissing(['variant', 'answers', 'taskTimings', 'scorings']);
+
+        $numbers = [];
+
+        if ($attempt->variant?->isCustomRandom()) {
+            $config = $attempt->variant->config_json ?? [];
+            $fromConfigNumbers = $config['custom_task_numbers'] ?? [];
+            if (is_array($fromConfigNumbers)) {
+                foreach ($fromConfigNumbers as $number) {
+                    $n = (int) $number;
+                    if ($n >= 1 && $n <= 255) {
+                        $numbers[] = $n;
+                    }
+                }
+            }
+
+            $customTasks = $config['custom_tasks'] ?? [];
+            if (is_array($customTasks)) {
+                foreach ($customTasks as $index => $taskData) {
+                    if (!is_array($taskData)) {
+                        continue;
+                    }
+
+                    $n = (int) ($taskData['attempt_task_number'] ?? $taskData['task_number'] ?? $taskData['test_number'] ?? ($index + 1));
+                    if ($n >= 1 && $n <= 255) {
+                        $numbers[] = $n;
+                    }
+                }
+            }
+        } else {
+            $numbers = range(6, 19);
+        }
+
+        foreach ([$attempt->answers, $attempt->taskTimings, $attempt->scorings] as $collection) {
+            foreach ($collection as $row) {
+                $n = (int) ($row->task_number ?? 0);
+                if ($n >= 1 && $n <= 255) {
+                    $numbers[] = $n;
+                }
+            }
+        }
+
+        $numbers = array_values(array_unique($numbers));
+        sort($numbers);
+
+        if (!empty($numbers)) {
+            return $numbers;
+        }
+
+        return $attempt->variant?->isCustomRandom() ? range(1, 19) : range(6, 19);
     }
 }
