@@ -82,7 +82,13 @@
                     ])
                 @endif
 
-                @if(!empty($task['image']))
+                @if(!empty($task['svg']) && is_string($task['svg']))
+                    <div class="mt-4 mb-2">
+                        <div class="bg-white rounded-lg p-2 overflow-hidden">
+                            {!! $task['svg'] !!}
+                        </div>
+                    </div>
+                @elseif(!empty($task['image']))
                     @php
                         $imageName = (string) $task['image'];
                     @endphp

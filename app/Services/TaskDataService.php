@@ -159,7 +159,13 @@ class TaskDataService
             $content = File::get($filePath);
             $data = json_decode($content, true) ?? [];
 
-            return app(OptionRenderModePolicy::class)->normalizeTopicData($topicId, $data);
+            $data = app(OptionRenderModePolicy::class)->normalizeTopicData($topicId, $data);
+
+            if ($topicId === '13') {
+                $data = app(Topic13RuntimeSvgMigrationService::class)->migrate($data);
+            }
+
+            return $data;
         });
     }
 
