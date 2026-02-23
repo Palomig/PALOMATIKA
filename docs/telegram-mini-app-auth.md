@@ -13,7 +13,9 @@ Palomatika supports direct login inside Telegram Mini App using `Telegram.WebApp
   - `oauth_provider = telegram`
   - `oauth_id = <telegram user id>`
 - Backend creates Laravel web session and returns JSON with `redirect_to`.
-- If Mini App auth is unavailable or fails on the client, the login page falls back to the existing bot `/start` token flow (`/api/telegram/generate-token` + polling).
+- If `Telegram.WebApp` is detected, the client uses only `POST /api/auth/telegram/webapp-login` (strict Mini App auth mode).
+- If Mini App `initData` is missing/invalid, the page shows an inline retryable error and does not open the bot or call `/api/telegram/generate-token`.
+- The existing bot `/start` token fallback (`/api/telegram/generate-token` + polling) is used only in external/non-Mini App browser context.
 
 ## Required config
 
@@ -25,4 +27,4 @@ Palomatika supports direct login inside Telegram Mini App using `Telegram.WebApp
 ## Notes
 
 - The WebApp login endpoint is session-backed and intentionally registered on `web` middleware (`/api/auth/telegram/webapp-login`) so Laravel session auth works immediately.
-- External browsers and non-Mini App usage keep the existing behavior.
+- External browsers and non-Mini App usage keep the existing bot-based fallback behavior.

@@ -123,7 +123,16 @@
             <p x-show="waiting" class="text-center text-gray-400 text-sm mt-2">
                 Откройте Telegram и нажмите "Start" в боте
             </p>
-            <p x-show="error" class="text-center text-danger text-sm mt-2" x-text="error"></p>
+            <div x-show="error" class="text-center mt-2">
+                <p class="text-danger text-sm" x-text="error"></p>
+                <button
+                    type="button"
+                    @click="startAuth"
+                    class="mt-2 text-xs text-gray-300 underline hover:text-white transition"
+                >
+                    Повторить
+                </button>
+            </div>
         </div>
         @else
         <div class="flex items-center justify-center w-full px-4 py-3 bg-dark border border-gray-700 rounded-button text-gray-500">
@@ -142,6 +151,7 @@
     </p>
 </div>
 
+<script src="/js/telegram-auth.js"></script>
 <script>
 function loginForm() {
     return {
@@ -206,42 +216,24 @@ function telegramAuth() {
             this.error = '';
             this.waiting = false;
 
-            const miniAppLoggedIn = await this.tryMiniAppLogin();
-            if (miniAppLoggedIn) {
-                return;
-            }
-
             try {
-                const webApp = this.getTelegramWebApp();
-                const startParam = (webApp && webApp.initDataUnsafe && webApp.initDataUnsafe.start_param)
-                    ? webApp.initDataUnsafe.start_param
-                    : null;
-
-                const response = await fetch('/api/telegram/generate-token', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    },
-                    body: JSON.stringify({
-                        startParam,
-                    })
+                const authHelper = window.PalomatikaTelegramAuth || {};
+                const result = await authHelper.runTelegramAuthStart({
+                    telegramGlobal: window.Telegram,
+                    tryMiniAppLogin: ({ webApp, initData }) => this.tryMiniAppLogin(webApp, initData),
+                    startBotFallback: () => this.startBotFallbackAuth(),
                 });
 
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.message || 'Ошибка генерации токена');
+                if (result && result.mode === 'miniapp_success') {
+                    return;
                 }
 
-                this.token = data.token;
-                this.loading = false;
-                this.waiting = true;
-
-                window.open(data.deep_link, '_blank');
-                this.startPolling();
-
+                if (result && result.mode === 'miniapp_error') {
+                    this.error = result.error || 'Ошибка входа через Telegram Mini App';
+                    this.loading = false;
+                    this.waiting = false;
+                    return;
+                }
             } catch (err) {
                 this.error = err.message;
                 this.loading = false;
@@ -252,18 +244,7 @@ function telegramAuth() {
             return window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
         },
 
-        async tryMiniAppLogin() {
-            const webApp = this.getTelegramWebApp();
-
-            if (!webApp) {
-                return false;
-            }
-
-            const initData = typeof webApp.initData === 'string' ? webApp.initData : '';
-            if (!initData) {
-                return false;
-            }
-
+        async tryMiniAppLogin(webApp, initData) {
             try {
                 if (typeof webApp.ready === 'function') {
                     webApp.ready();
@@ -290,11 +271,50 @@ function telegramAuth() {
                 }
 
                 window.location.href = data.redirect_to || '/dashboard';
-                return true;
+                return { success: true };
             } catch (err) {
-                console.warn('Telegram Mini App auth failed, falling back to bot flow:', err);
-                return false;
+                return {
+                    success: false,
+                    error: err.message || 'Ошибка входа через Telegram Mini App',
+                };
             }
+        },
+
+        async startBotFallbackAuth() {
+            const webApp = this.getTelegramWebApp();
+            const startParam = (webApp && webApp.initDataUnsafe && webApp.initDataUnsafe.start_param)
+                ? webApp.initDataUnsafe.start_param
+                : null;
+
+            const response = await fetch('/api/telegram/generate-token', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({
+                    startParam,
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Ошибка генерации токена');
+            }
+
+            this.token = data.token;
+            this.loading = false;
+            this.waiting = true;
+
+            window.open(data.deep_link, '_blank');
+            this.startPolling();
+
+            return {
+                mode: 'bot_fallback_started',
+                token: data.token,
+            };
         },
 
         startPolling() {
