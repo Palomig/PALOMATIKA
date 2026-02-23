@@ -31,6 +31,7 @@ class OgeTelegramResultSummaryService
         }, $taskRows);
 
         $telegramLinks = $this->linkBuilder->buildTelegramLinks($attempt);
+        $telegramConfig = $this->linkBuilder->validateTelegramWebAppConfig();
         $variantResultsUrl = (string) ($telegramLinks['variant']['web_url'] ?? $this->linkBuilder->buildVariantResultsUrl($attempt));
         $attemptResultsUrl = (string) ($telegramLinks['attempt']['web_url'] ?? $this->linkBuilder->buildAttemptResultsUrl($attempt));
         $variantPreferredUrl = (string) ($telegramLinks['variant']['preferred_url'] ?? $variantResultsUrl);
@@ -64,6 +65,18 @@ class OgeTelegramResultSummaryService
             'telegram' => [
                 'message_text' => $this->buildMessageText($attemptData, $summary, $taskStatuses, $variantPreferredUrl, $attemptPreferredUrl),
                 'task_statuses' => $taskStatuses,
+                'buttons' => [
+                    'variant_results' => [
+                        'type' => $telegramLinks['variant']['button_type'] ?? 'url',
+                        'button' => $telegramLinks['variant']['button_payload'] ?? null,
+                        'reply_markup' => $telegramLinks['variant']['reply_markup'] ?? null,
+                    ],
+                    'attempt_results' => [
+                        'type' => $telegramLinks['attempt']['button_type'] ?? 'url',
+                        'button' => $telegramLinks['attempt']['button_payload'] ?? null,
+                        'reply_markup' => $telegramLinks['attempt']['reply_markup'] ?? null,
+                    ],
+                ],
                 'links' => [
                     'variant_results_url' => $variantResultsUrl,
                     'attempt_results_url' => $attemptResultsUrl,
@@ -76,6 +89,7 @@ class OgeTelegramResultSummaryService
                     'variant_results_startapp_payload' => $telegramLinks['variant']['startapp_payload'] ?? null,
                     'attempt_results_startapp_payload' => $telegramLinks['attempt']['startapp_payload'] ?? null,
                 ],
+                'config_validation' => $telegramConfig,
             ],
         ];
     }

@@ -47,6 +47,9 @@ return [
         'bot_username' => env('TELEGRAM_BOT_USERNAME'),
         'bot_token' => env('TELEGRAM_BOT_TOKEN'),
         'webhook_secret' => env('TELEGRAM_WEBHOOK_SECRET'),
+        // BotFather /setdomain value for Mini App web_app buttons (host/domain only).
+        'webapp_domain' => env('TELEGRAM_WEBAPP_DOMAIN'),
+        // Absolute Mini App URL used inside Telegram web_app buttons, e.g. https://app.example.com/oge.
         'webapp_base_url' => env('TELEGRAM_WEBAPP_BASE_URL'),
         'mini_app_link_scheme' => env('TELEGRAM_MINI_APP_LINK_SCHEME', 'https'),
     ],

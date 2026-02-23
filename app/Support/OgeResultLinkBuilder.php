@@ -6,6 +6,8 @@ use App\Models\OgeAttempt;
 
 class OgeResultLinkBuilder
 {
+    private const TELEGRAM_OPEN_BUTTON_TEXT = 'Открыть в Telegram';
+
     public function buildTelegramLinks(OgeAttempt $attempt): array
     {
         $variantWebUrl = $this->buildVariantResultsUrl($attempt);
@@ -19,6 +21,14 @@ class OgeResultLinkBuilder
 
         $variantButtonUrl = $this->buildTelegramWebAppButtonUrl($variantPayload) ?? $variantWebUrl;
         $attemptButtonUrl = $this->buildTelegramWebAppButtonUrl($attemptPayload) ?? $attemptWebUrl;
+        $variantButton = $this->buildTelegramButtonPayload(
+            $variantButtonUrl,
+            $variantWebUrl,
+        );
+        $attemptButton = $this->buildTelegramButtonPayload(
+            $attemptButtonUrl,
+            $attemptWebUrl,
+        );
 
         return [
             'variant' => [
@@ -27,6 +37,9 @@ class OgeResultLinkBuilder
                 'button_url' => $variantButtonUrl,
                 'preferred_url' => $variantMiniAppUrl ?? $variantWebUrl,
                 'startapp_payload' => $variantPayload,
+                'button_type' => $variantButton['type'],
+                'button_payload' => $variantButton['button'],
+                'reply_markup' => $variantButton['reply_markup'],
             ],
             'attempt' => [
                 'web_url' => $attemptWebUrl,
@@ -34,7 +47,48 @@ class OgeResultLinkBuilder
                 'button_url' => $attemptButtonUrl,
                 'preferred_url' => $attemptMiniAppUrl ?? $attemptWebUrl,
                 'startapp_payload' => $attemptPayload,
+                'button_type' => $attemptButton['type'],
+                'button_payload' => $attemptButton['button'],
+                'reply_markup' => $attemptButton['reply_markup'],
             ],
+        ];
+    }
+
+    public function validateTelegramWebAppConfig(): array
+    {
+        $botUsername = trim((string) config('services.telegram.bot_username', ''));
+        $webAppBaseUrl = trim((string) config('services.telegram.webapp_base_url', ''));
+        $webAppDomain = trim((string) config('services.telegram.webapp_domain', ''));
+        $issues = [];
+        $parsedHost = null;
+
+        if ($webAppBaseUrl !== '') {
+            $parsedHost = parse_url($webAppBaseUrl, PHP_URL_HOST);
+            $parsedScheme = strtolower((string) parse_url($webAppBaseUrl, PHP_URL_SCHEME));
+
+            if (!is_string($parsedHost) || $parsedHost === '' || !in_array($parsedScheme, ['http', 'https'], true)) {
+                $issues[] = 'TELEGRAM_WEBAPP_BASE_URL must be an absolute http(s) URL';
+            }
+
+            if ($botUsername === '') {
+                $issues[] = 'TELEGRAM_BOT_USERNAME is required for Telegram Mini App deep links';
+            }
+
+            if ($webAppDomain === '') {
+                $issues[] = 'TELEGRAM_WEBAPP_DOMAIN (BotFather /setdomain) is required for web_app buttons';
+            } elseif (is_string($parsedHost) && $parsedHost !== '' && !str_contains($parsedHost, $webAppDomain) && !str_contains($webAppDomain, $parsedHost)) {
+                $issues[] = 'TELEGRAM_WEBAPP_DOMAIN must match TELEGRAM_WEBAPP_BASE_URL host';
+            }
+        }
+
+        return [
+            'web_app_button_enabled' => $webAppBaseUrl !== '',
+            'is_valid' => count($issues) === 0,
+            'bot_username_configured' => $botUsername !== '',
+            'webapp_base_url' => $webAppBaseUrl !== '' ? $webAppBaseUrl : null,
+            'webapp_base_host' => is_string($parsedHost) && $parsedHost !== '' ? $parsedHost : null,
+            'webapp_domain' => $webAppDomain !== '' ? $webAppDomain : null,
+            'issues' => $issues,
         ];
     }
 
@@ -83,5 +137,28 @@ class OgeResultLinkBuilder
         $separator = str_contains($url, '?') ? '&' : '?';
 
         return $url . $separator . rawurlencode($key) . '=' . rawurlencode($value);
+    }
+
+    private function buildTelegramButtonPayload(string $buttonUrl, string $fallbackWebUrl): array
+    {
+        $isWebAppButton = $buttonUrl !== $fallbackWebUrl;
+
+        $button = [
+            'text' => self::TELEGRAM_OPEN_BUTTON_TEXT,
+        ];
+
+        if ($isWebAppButton) {
+            $button['web_app'] = ['url' => $buttonUrl];
+        } else {
+            $button['url'] = $fallbackWebUrl;
+        }
+
+        return [
+            'type' => $isWebAppButton ? 'web_app' : 'url',
+            'button' => $button,
+            'reply_markup' => [
+                'inline_keyboard' => [[$button]],
+            ],
+        ];
     }
 }

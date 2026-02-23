@@ -26,6 +26,16 @@ class OgeResultLinkBuilderTest extends TestCase
         $this->assertSame('tg://resolve?domain=palomatika_bot&startapp=oge_attempt_321', $links['attempt']['mini_app_url']);
         $this->assertSame('https://mini.example.com/oge?startapp=oge_variant_99', $links['variant']['button_url']);
         $this->assertSame('https://mini.example.com/oge?startapp=oge_attempt_321', $links['attempt']['button_url']);
+        $this->assertSame('web_app', $links['variant']['button_type']);
+        $this->assertSame('Открыть в Telegram', $links['variant']['button_payload']['text'] ?? null);
+        $this->assertSame(
+            'https://mini.example.com/oge?startapp=oge_variant_99',
+            $links['variant']['button_payload']['web_app']['url'] ?? null
+        );
+        $this->assertSame(
+            'https://mini.example.com/oge?startapp=oge_variant_99',
+            $links['variant']['reply_markup']['inline_keyboard'][0][0]['web_app']['url'] ?? null
+        );
     }
 
     public function test_falls_back_to_web_links_when_telegram_mini_app_config_missing(): void
@@ -45,5 +55,9 @@ class OgeResultLinkBuilderTest extends TestCase
         $this->assertSame($links['attempt']['web_url'], $links['attempt']['button_url']);
         $this->assertSame($links['variant']['web_url'], $links['variant']['preferred_url']);
         $this->assertSame($links['attempt']['web_url'], $links['attempt']['preferred_url']);
+        $this->assertSame('url', $links['variant']['button_type']);
+        $this->assertSame('Открыть в Telegram', $links['variant']['button_payload']['text'] ?? null);
+        $this->assertSame($links['variant']['web_url'], $links['variant']['button_payload']['url'] ?? null);
+        $this->assertSame($links['variant']['web_url'], $links['variant']['reply_markup']['inline_keyboard'][0][0]['url'] ?? null);
     }
 }

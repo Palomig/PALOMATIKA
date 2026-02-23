@@ -401,7 +401,13 @@ class OgeAttemptResultsStatusApiTest extends TestCase
             ->assertJsonPath('telegram.links.variant_results_mini_app_url', "https://t.me/palomatika_bot?startapp=oge_variant_{$variant->id}")
             ->assertJsonPath('telegram.links.attempt_results_mini_app_url', "https://t.me/palomatika_bot?startapp=oge_attempt_{$attempt->id}")
             ->assertJsonPath('telegram.links.variant_results_button_url', "https://mini.example.com/oge?startapp=oge_variant_{$variant->id}")
-            ->assertJsonPath('telegram.links.attempt_results_button_url', "https://mini.example.com/oge?startapp=oge_attempt_{$attempt->id}");
+            ->assertJsonPath('telegram.links.attempt_results_button_url', "https://mini.example.com/oge?startapp=oge_attempt_{$attempt->id}")
+            ->assertJsonPath('telegram.buttons.variant_results.type', 'web_app')
+            ->assertJsonPath('telegram.buttons.variant_results.button.text', 'Открыть в Telegram')
+            ->assertJsonPath('telegram.buttons.variant_results.button.web_app.url', "https://mini.example.com/oge?startapp=oge_variant_{$variant->id}")
+            ->assertJsonPath('telegram.buttons.variant_results.reply_markup.inline_keyboard.0.0.web_app.url', "https://mini.example.com/oge?startapp=oge_variant_{$variant->id}")
+            ->assertJsonPath('telegram.buttons.attempt_results.type', 'web_app')
+            ->assertJsonPath('telegram.buttons.attempt_results.button.web_app.url', "https://mini.example.com/oge?startapp=oge_attempt_{$attempt->id}");
 
         $task6 = collect($response->json('telegram.task_statuses'))->firstWhere('task_number', 6);
         $this->assertSame('correct', $task6['status'] ?? null);
@@ -490,6 +496,16 @@ class OgeAttemptResultsStatusApiTest extends TestCase
         $this->assertSame(
             route('teacher.oge.results', ['variantId' => $variant->id]),
             $response->json('telegram.links.variant_results_button_url')
+        );
+        $this->assertSame('url', $response->json('telegram.buttons.variant_results.type'));
+        $this->assertSame('Открыть в Telegram', $response->json('telegram.buttons.variant_results.button.text'));
+        $this->assertSame(
+            route('teacher.oge.results', ['variantId' => $variant->id]),
+            $response->json('telegram.buttons.variant_results.button.url')
+        );
+        $this->assertSame(
+            route('teacher.oge.results', ['variantId' => $variant->id]),
+            $response->json('telegram.buttons.variant_results.reply_markup.inline_keyboard.0.0.url')
         );
     }
 }
