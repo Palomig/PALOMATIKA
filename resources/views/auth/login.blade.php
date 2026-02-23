@@ -204,6 +204,12 @@ function telegramAuth() {
         async startAuth() {
             this.loading = true;
             this.error = '';
+            this.waiting = false;
+
+            const miniAppLoggedIn = await this.tryMiniAppLogin();
+            if (miniAppLoggedIn) {
+                return;
+            }
 
             try {
                 const response = await fetch('/api/telegram/generate-token', {
@@ -231,6 +237,54 @@ function telegramAuth() {
             } catch (err) {
                 this.error = err.message;
                 this.loading = false;
+            }
+        },
+
+        getTelegramWebApp() {
+            return window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+        },
+
+        async tryMiniAppLogin() {
+            const webApp = this.getTelegramWebApp();
+
+            if (!webApp) {
+                return false;
+            }
+
+            const initData = typeof webApp.initData === 'string' ? webApp.initData : '';
+            if (!initData) {
+                return false;
+            }
+
+            try {
+                if (typeof webApp.ready === 'function') {
+                    webApp.ready();
+                }
+
+                const response = await fetch('/api/auth/telegram/webapp-login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name=\"csrf-token\"]').content
+                    },
+                    body: JSON.stringify({
+                        initData,
+                        initDataUnsafe: webApp.initDataUnsafe || null
+                    })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || 'Ошибка входа через Telegram Mini App');
+                }
+
+                window.location.href = data.redirect_to || '/dashboard';
+                return true;
+            } catch (err) {
+                console.warn('Telegram Mini App auth failed, falling back to bot flow:', err);
+                return false;
             }
         },
 

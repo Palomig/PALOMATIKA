@@ -49,6 +49,11 @@ Route::post('/telegram/webhook', [TelegramBotAuthController::class, 'webhook'])
 Route::get('/auth/telegram/login/{token}', [TelegramBotAuthController::class, 'login'])
     ->name('telegram.login');
 
+// Telegram Mini App instant auth (session-backed JSON endpoint)
+Route::post('/api/auth/telegram/webapp-login', [TelegramBotAuthController::class, 'webAppLogin'])
+    ->middleware('guest')
+    ->name('telegram.webapp-login');
+
 // Auth pages (guest only)
 Route::middleware('guest')->group(function () {
     Route::get('/login', function () {

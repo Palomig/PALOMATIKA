@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Services\AuditLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class TelegramBotAuthController extends Controller
@@ -68,6 +69,114 @@ class TelegramBotAuthController extends Controller
         }
 
         return response()->json(['status' => 'pending']);
+    }
+
+    /**
+     * Perform instant auth from Telegram Mini App WebApp.initData
+     */
+    public function webAppLogin(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'initData' => ['nullable', 'string'],
+            'initDataUnsafe' => ['nullable', 'array'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Некорректные данные Telegram Mini App',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $initData = trim((string) $request->input('initData', ''));
+        $initDataUnsafe = $request->input('initDataUnsafe');
+
+        if ($initData === '' && !is_array($initDataUnsafe)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Отсутствуют данные Telegram Mini App',
+            ], 422);
+        }
+
+        $botToken = (string) config('services.telegram.bot_token', '');
+        if ($botToken === '') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Telegram bot token not configured',
+            ], 503);
+        }
+
+        $authFields = [];
+
+        try {
+            [$authFields, $telegramUser] = $this->extractAndVerifyWebAppAuthData($initData, is_array($initDataUnsafe) ? $initDataUnsafe : []);
+        } catch (\InvalidArgumentException $e) {
+            $this->auditLogger->log([
+                'event_type' => 'telegram_webapp_login_failed',
+                'category' => 'auth',
+                'severity' => 'warning',
+                'subject_type' => 'telegram_webapp',
+                'subject_id' => 'invalid_payload',
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'payload_json' => [
+                    'reason' => $e->getMessage(),
+                ],
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Некорректные данные Telegram Mini App',
+            ], 422);
+        } catch (\RuntimeException $e) {
+            $this->auditLogger->log([
+                'event_type' => 'telegram_webapp_login_failed',
+                'category' => 'auth',
+                'severity' => 'warning',
+                'subject_type' => 'telegram_webapp',
+                'subject_id' => (string) ($authFields['user_id'] ?? 'unknown'),
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'payload_json' => [
+                    'reason' => $e->getMessage(),
+                ],
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Неверная подпись Telegram',
+            ], 401);
+        }
+
+        $user = $this->findOrCreateTelegramUserFromProfile($telegramUser);
+
+        Auth::login($user, true);
+        $request->session()->regenerate();
+        $redirectTo = redirect()->intended('/dashboard')->getTargetUrl();
+
+        $this->auditLogger->log([
+            'event_type' => 'telegram_webapp_login_success',
+            'category' => 'auth',
+            'severity' => 'info',
+            'actor_user_id' => $user->id,
+            'actor_role' => $user->role,
+            'subject_type' => 'telegram_user',
+            'subject_id' => (string) ($telegramUser['id'] ?? ''),
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'payload_json' => [
+                'auth_date' => $authFields['auth_date'] ?? null,
+                'query_id' => $authFields['query_id'] ?? null,
+                'method' => 'telegram_webapp_init_data',
+            ],
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'redirect_to' => $redirectTo,
+            'user_id' => $user->id,
+        ]);
     }
 
     /**
@@ -245,26 +354,120 @@ class TelegramBotAuthController extends Controller
      */
     private function findOrCreateUser(TelegramAuthToken $authToken): User
     {
-        // Check if user exists with this Telegram ID
+        return $this->findOrCreateTelegramUserFromProfile([
+            'id' => $authToken->telegram_id,
+            'first_name' => $authToken->first_name,
+            'last_name' => $authToken->last_name,
+            'username' => $authToken->username,
+            'photo_url' => $authToken->photo_url,
+        ]);
+    }
+
+    /**
+     * @return array{0: array<string, string>, 1: array<string, mixed>}
+     */
+    private function extractAndVerifyWebAppAuthData(string $initData, array $initDataUnsafe = []): array
+    {
+        $fields = $this->parseTelegramWebAppFields($initData, $initDataUnsafe);
+
+        $providedHash = $fields['hash'] ?? null;
+        if (!is_string($providedHash) || $providedHash === '') {
+            throw new \InvalidArgumentException('Missing hash');
+        }
+
+        $signableFields = $fields;
+        unset($signableFields['hash']);
+
+        $normalizedFields = [];
+        foreach ($signableFields as $key => $value) {
+            if ($value === null) {
+                continue;
+            }
+
+            if (is_array($value)) {
+                $normalizedFields[(string) $key] = json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+                continue;
+            }
+
+            $normalizedFields[(string) $key] = (string) $value;
+        }
+
+        ksort($normalizedFields);
+        $dataCheckString = collect($normalizedFields)
+            ->map(fn (string $value, string $key) => "{$key}={$value}")
+            ->implode("\n");
+
+        $secretKey = hash_hmac('sha256', (string) config('services.telegram.bot_token'), 'WebAppData', true);
+        $calculatedHash = hash_hmac('sha256', $dataCheckString, $secretKey);
+
+        if (!hash_equals($calculatedHash, $providedHash)) {
+            throw new \RuntimeException('Invalid signature');
+        }
+
+        $userValue = $fields['user'] ?? null;
+        if (is_string($userValue)) {
+            $decodedUser = json_decode($userValue, true);
+            if (!is_array($decodedUser)) {
+                throw new \InvalidArgumentException('Invalid user payload');
+            }
+            $userValue = $decodedUser;
+        }
+
+        if (!is_array($userValue) || empty($userValue['id'])) {
+            throw new \InvalidArgumentException('Missing user payload');
+        }
+
+        return [$normalizedFields, $userValue];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function parseTelegramWebAppFields(string $initData, array $initDataUnsafe = []): array
+    {
+        if ($initData !== '') {
+            parse_str($initData, $parsed);
+
+            if (is_array($parsed) && !empty($parsed)) {
+                return $parsed;
+            }
+        }
+
+        if ($initDataUnsafe === []) {
+            throw new \InvalidArgumentException('Missing initData');
+        }
+
+        return $initDataUnsafe;
+    }
+
+    /**
+     * @param array<string, mixed> $telegramUser
+     */
+    private function findOrCreateTelegramUserFromProfile(array $telegramUser): User
+    {
+        $telegramId = (string) ($telegramUser['id'] ?? '');
+        if ($telegramId === '') {
+            throw new \InvalidArgumentException('Missing Telegram user id');
+        }
+
         $user = User::where('oauth_provider', 'telegram')
-            ->where('oauth_id', $authToken->telegram_id)
+            ->where('oauth_id', $telegramId)
             ->first();
 
         if ($user) {
             return $user;
         }
 
-        // Create new user
-        $name = trim(($authToken->first_name ?? '') . ' ' . ($authToken->last_name ?? ''));
-        if (empty($name)) {
-            $name = $authToken->username ?? 'User';
+        $name = trim(((string) ($telegramUser['first_name'] ?? '')) . ' ' . ((string) ($telegramUser['last_name'] ?? '')));
+        if ($name === '') {
+            $name = (string) ($telegramUser['username'] ?? 'User');
         }
 
         return User::create([
             'name' => $name,
             'oauth_provider' => 'telegram',
-            'oauth_id' => $authToken->telegram_id,
-            'avatar' => $authToken->photo_url,
+            'oauth_id' => $telegramId,
+            'avatar' => $telegramUser['photo_url'] ?? null,
             'trial_ends_at' => now()->addDays(7),
         ]);
     }
