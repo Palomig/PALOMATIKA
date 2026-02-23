@@ -186,18 +186,28 @@ class TelegramBotAuthController extends Controller
             'telegram_id' => $from['id'],
         ]);
 
-        // Send confirmation message
+        // Send confirmation message + explicit login button fallback for Mini App flows
         $name = $from['first_name'] ?? 'пользователь';
+        $loginUrl = route('telegram.login', ['token' => $token]);
+
         $this->sendTelegramMessage(
             $from['id'],
-            "✅ Вход выполнен успешно!\n\nПривет, {$name}! Теперь вернитесь в браузер — вы будете автоматически перенаправлены на сайт."
+            "✅ Вход выполнен успешно!\n\nПривет, {$name}! Если сайт не вошёл автоматически, нажмите кнопку ниже:",
+            [
+                'inline_keyboard' => [[
+                    [
+                        'text' => 'Открыть сайт после входа',
+                        'url' => $loginUrl,
+                    ],
+                ]],
+            ]
         );
     }
 
     /**
      * Send message via Telegram Bot API
      */
-    private function sendTelegramMessage(string $chatId, string $text): void
+    private function sendTelegramMessage(string $chatId, string $text, ?array $replyMarkup = null): void
     {
         $botToken = config('services.telegram.bot_token');
 
@@ -207,14 +217,20 @@ class TelegramBotAuthController extends Controller
 
         $url = "https://api.telegram.org/bot{$botToken}/sendMessage";
 
+        $payload = [
+            'chat_id' => $chatId,
+            'text' => $text,
+            'parse_mode' => 'HTML',
+        ];
+
+        if ($replyMarkup !== null) {
+            $payload['reply_markup'] = $replyMarkup;
+        }
+
         try {
             $client = new \GuzzleHttp\Client();
             $client->post($url, [
-                'json' => [
-                    'chat_id' => $chatId,
-                    'text' => $text,
-                    'parse_mode' => 'HTML',
-                ],
+                'json' => $payload,
                 'timeout' => 5,
             ]);
         } catch (\Exception $e) {
