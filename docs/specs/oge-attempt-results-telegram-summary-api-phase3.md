@@ -1,6 +1,6 @@
 # OGE Attempt Results Telegram Summary API (Phase 3)
 
-Scope: Telegram/bot-friendly read API that adapts Phase 2 teacher result payloads into a compact summary plus canonical web links.
+Scope: Telegram/bot-friendly read API that adapts Phase 2 teacher result payloads into a compact summary plus canonical web links and Telegram Mini App links.
 
 ## Endpoint
 
@@ -47,7 +47,15 @@ Scope: Telegram/bot-friendly read API that adapts Phase 2 teacher result payload
     ],
     "links": {
       "variant_results_url": "https://app/.../teacher/oge/variants/55/results",
-      "attempt_results_url": "https://app/.../teacher/oge/variants/55/results?attempt=123#attempt-123"
+      "attempt_results_url": "https://app/.../teacher/oge/variants/55/results?attempt=123#attempt-123",
+      "variant_results_mini_app_url": "https://t.me/<bot>?startapp=oge_variant_55",
+      "attempt_results_mini_app_url": "https://t.me/<bot>?startapp=oge_attempt_123",
+      "variant_results_button_url": "https://mini-app.example/oge?startapp=oge_variant_55",
+      "attempt_results_button_url": "https://mini-app.example/oge?startapp=oge_attempt_123",
+      "variant_results_preferred_url": "https://t.me/<bot>?startapp=oge_variant_55",
+      "attempt_results_preferred_url": "https://t.me/<bot>?startapp=oge_attempt_123",
+      "variant_results_startapp_payload": "oge_variant_55",
+      "attempt_results_startapp_payload": "oge_attempt_123"
     }
   }
 }
@@ -65,3 +73,16 @@ Scope: Telegram/bot-friendly read API that adapts Phase 2 teacher result payload
 - Telegram output must stay lightweight (summary + deep links)
 - Full task table/details remain in `teacher.oge.results` web UI
 - `attempt_results_url` uses row anchor `#attempt-{id}` for direct navigation
+- `message_text` should use `*_preferred_url` (Mini App deep link when configured, otherwise web fallback)
+
+## Telegram Mini App link configuration
+
+- `TELEGRAM_BOT_USERNAME` (required for `*_mini_app_url` deep links)
+- `TELEGRAM_WEBAPP_BASE_URL` (optional, enables `*_button_url` for `web_app` buttons; falls back to web URL if missing)
+- `TELEGRAM_MINI_APP_LINK_SCHEME` (optional: `https` default for `https://t.me/...`, `tg` for `tg://resolve?...`)
+
+## StartApp payloads
+
+- Variant results payload: `oge_variant_{variantId}`
+- Attempt results payload: `oge_attempt_{attemptId}`
+- Mini App client should route these payloads to the OGE results view

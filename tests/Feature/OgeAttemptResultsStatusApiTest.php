@@ -348,6 +348,10 @@ class OgeAttemptResultsStatusApiTest extends TestCase
 
     public function test_teacher_can_fetch_telegram_summary_payload_for_generator_attempt(): void
     {
+        config()->set('services.telegram.bot_username', 'palomatika_bot');
+        config()->set('services.telegram.webapp_base_url', 'https://mini.example.com/oge');
+        config()->set('services.telegram.mini_app_link_scheme', 'https');
+
         $teacher = User::factory()->create(['role' => 'teacher']);
         $student = User::factory()->create(['role' => 'student', 'name' => 'Ivan Student']);
         $variant = OgeVariant::create([
@@ -393,7 +397,11 @@ class OgeAttemptResultsStatusApiTest extends TestCase
             ->assertJsonPath(
                 'telegram.links.attempt_results_url',
                 route('teacher.oge.results', ['variantId' => $variant->id]) . '?attempt=' . $attempt->id . '#attempt-' . $attempt->id
-            );
+            )
+            ->assertJsonPath('telegram.links.variant_results_mini_app_url', "https://t.me/palomatika_bot?startapp=oge_variant_{$variant->id}")
+            ->assertJsonPath('telegram.links.attempt_results_mini_app_url', "https://t.me/palomatika_bot?startapp=oge_attempt_{$attempt->id}")
+            ->assertJsonPath('telegram.links.variant_results_button_url', "https://mini.example.com/oge?startapp=oge_variant_{$variant->id}")
+            ->assertJsonPath('telegram.links.attempt_results_button_url', "https://mini.example.com/oge?startapp=oge_attempt_{$attempt->id}");
 
         $task6 = collect($response->json('telegram.task_statuses'))->firstWhere('task_number', 6);
         $this->assertSame('correct', $task6['status'] ?? null);
@@ -403,10 +411,14 @@ class OgeAttemptResultsStatusApiTest extends TestCase
         $this->assertStringContainsString('Variant tggen001', $messageText);
         $this->assertStringContainsString('Tasks:', $messageText);
         $this->assertStringContainsString('6:+', $messageText);
+        $this->assertStringContainsString("https://t.me/palomatika_bot?startapp=oge_variant_{$variant->id}", $messageText);
     }
 
     public function test_teacher_can_fetch_telegram_summary_payload_for_custom_attempt(): void
     {
+        config()->set('services.telegram.bot_username', null);
+        config()->set('services.telegram.webapp_base_url', null);
+
         $teacher = User::factory()->create(['role' => 'teacher']);
         $student = User::factory()->create(['role' => 'student', 'name' => 'Petr Student']);
         $variant = OgeVariant::create([
@@ -472,6 +484,12 @@ class OgeAttemptResultsStatusApiTest extends TestCase
         $this->assertStringContainsString(
             '#attempt-' . $attempt->id,
             (string) $response->json('telegram.links.attempt_results_url')
+        );
+        $this->assertNull($response->json('telegram.links.variant_results_mini_app_url'));
+        $this->assertNull($response->json('telegram.links.attempt_results_mini_app_url'));
+        $this->assertSame(
+            route('teacher.oge.results', ['variantId' => $variant->id]),
+            $response->json('telegram.links.variant_results_button_url')
         );
     }
 }

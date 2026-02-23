@@ -47,6 +47,8 @@ return [
         'bot_username' => env('TELEGRAM_BOT_USERNAME'),
         'bot_token' => env('TELEGRAM_BOT_TOKEN'),
         'webhook_secret' => env('TELEGRAM_WEBHOOK_SECRET'),
+        'webapp_base_url' => env('TELEGRAM_WEBAPP_BASE_URL'),
+        'mini_app_link_scheme' => env('TELEGRAM_MINI_APP_LINK_SCHEME', 'https'),
     ],
 
     /*

@@ -30,8 +30,11 @@ class OgeTelegramResultSummaryService
             ];
         }, $taskRows);
 
-        $variantResultsUrl = $this->linkBuilder->buildVariantResultsUrl($attempt);
-        $attemptResultsUrl = $this->linkBuilder->buildAttemptResultsUrl($attempt);
+        $telegramLinks = $this->linkBuilder->buildTelegramLinks($attempt);
+        $variantResultsUrl = (string) ($telegramLinks['variant']['web_url'] ?? $this->linkBuilder->buildVariantResultsUrl($attempt));
+        $attemptResultsUrl = (string) ($telegramLinks['attempt']['web_url'] ?? $this->linkBuilder->buildAttemptResultsUrl($attempt));
+        $variantPreferredUrl = (string) ($telegramLinks['variant']['preferred_url'] ?? $variantResultsUrl);
+        $attemptPreferredUrl = (string) ($telegramLinks['attempt']['preferred_url'] ?? $attemptResultsUrl);
 
         return [
             'contract' => [
@@ -59,11 +62,19 @@ class OgeTelegramResultSummaryService
                 'duration_ms' => isset($summary['duration_ms']) ? (is_null($summary['duration_ms']) ? null : (int) $summary['duration_ms']) : null,
             ],
             'telegram' => [
-                'message_text' => $this->buildMessageText($attemptData, $summary, $taskStatuses, $variantResultsUrl, $attemptResultsUrl),
+                'message_text' => $this->buildMessageText($attemptData, $summary, $taskStatuses, $variantPreferredUrl, $attemptPreferredUrl),
                 'task_statuses' => $taskStatuses,
                 'links' => [
                     'variant_results_url' => $variantResultsUrl,
                     'attempt_results_url' => $attemptResultsUrl,
+                    'variant_results_mini_app_url' => $telegramLinks['variant']['mini_app_url'] ?? null,
+                    'attempt_results_mini_app_url' => $telegramLinks['attempt']['mini_app_url'] ?? null,
+                    'variant_results_button_url' => $telegramLinks['variant']['button_url'] ?? $variantResultsUrl,
+                    'attempt_results_button_url' => $telegramLinks['attempt']['button_url'] ?? $attemptResultsUrl,
+                    'variant_results_preferred_url' => $variantPreferredUrl,
+                    'attempt_results_preferred_url' => $attemptPreferredUrl,
+                    'variant_results_startapp_payload' => $telegramLinks['variant']['startapp_payload'] ?? null,
+                    'attempt_results_startapp_payload' => $telegramLinks['attempt']['startapp_payload'] ?? null,
                 ],
             ],
         ];
