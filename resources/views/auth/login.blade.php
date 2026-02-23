@@ -270,7 +270,8 @@ function telegramAuth() {
                     },
                     body: JSON.stringify({
                         initData,
-                        initDataUnsafe: webApp.initDataUnsafe || null
+                        initDataUnsafe: webApp.initDataUnsafe || null,
+                        startParam: (webApp.initDataUnsafe && webApp.initDataUnsafe.start_param) ? webApp.initDataUnsafe.start_param : null,
                     })
                 });
 

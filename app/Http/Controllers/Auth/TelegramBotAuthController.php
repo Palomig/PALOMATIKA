@@ -80,6 +80,7 @@ class TelegramBotAuthController extends Controller
         $validator = Validator::make($request->all(), [
             'initData' => ['nullable', 'string'],
             'initDataUnsafe' => ['nullable', 'array'],
+            'startParam' => ['nullable', 'string'],
         ]);
 
         if ($validator->fails()) {
@@ -154,6 +155,12 @@ class TelegramBotAuthController extends Controller
 
         Auth::login($user, true);
         $request->session()->regenerate();
+
+        $fallbackStartParam = trim((string) $request->input('startParam', ''));
+        if ($fallbackStartParam !== '' && empty($authFields['start_param'])) {
+            $authFields['start_param'] = $fallbackStartParam;
+        }
+
         $redirectTo = $this->resolvePostLoginRedirect($authFields);
 
         $this->auditLogger->log([
