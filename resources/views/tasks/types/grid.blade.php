@@ -56,6 +56,11 @@
                         <span class="text-slate-400 text-sm truncate">{{ $task['question'] }}</span>
                     @endif
                 </div>
+            @elseif($hasQuestion)
+                {{-- В режиме варианта тоже обязательно показываем формулировку вопроса --}}
+                <div class="bg-slate-700/30 px-3 py-2 text-slate-200 text-sm leading-relaxed">
+                    {{ $task['question'] }}
+                </div>
             @endif
 
             {{-- Изображение --}}
