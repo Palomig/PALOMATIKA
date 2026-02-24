@@ -96,7 +96,7 @@ class TeacherStudentsPageTest extends TestCase
         });
     }
 
-    public function test_only_linked_students_are_visible_for_current_teacher(): void
+    public function test_all_students_are_visible_by_default_and_link_state_is_preserved(): void
     {
         $teacher = User::factory()->create(['role' => 'teacher']);
         $otherTeacher = User::factory()->create(['role' => 'teacher']);
@@ -167,6 +167,66 @@ class TeacherStudentsPageTest extends TestCase
         $response->assertSee('Visible Student');
         $response->assertSee('visible-student@example.com');
         $response->assertSee('50%');
+        $response->assertSee('Other Teacher Student');
+        $response->assertSee('Unlinked Student');
+        $response->assertSee('привязан');
+        $response->assertSee('не привязан');
+
+        $content = $response->getContent();
+
+        $this->assertMatchesRegularExpression(
+            sprintf('/data-roster-student-id="%d"[^>]*data-linked-state="linked"/', $visibleStudent->id),
+            $content
+        );
+        $this->assertMatchesRegularExpression(
+            sprintf('/data-roster-student-id="%d"[^>]*data-linked-state="unlinked"/', $otherTeacherStudent->id),
+            $content
+        );
+        $this->assertMatchesRegularExpression(
+            sprintf('/data-roster-student-id="%d"[^>]*data-linked-state="unlinked"/', $unlinkedStudent->id),
+            $content
+        );
+    }
+
+    public function test_linked_only_filter_shows_only_students_linked_to_current_teacher(): void
+    {
+        $teacher = User::factory()->create(['role' => 'teacher']);
+        $otherTeacher = User::factory()->create(['role' => 'teacher']);
+
+        $linkedStudent = User::factory()->create([
+            'role' => 'student',
+            'name' => 'Linked Student',
+            'email' => 'linked@example.com',
+        ]);
+
+        $otherTeacherStudent = User::factory()->create([
+            'role' => 'student',
+            'name' => 'Other Teacher Student',
+            'email' => 'other-teacher@example.com',
+        ]);
+
+        $unlinkedStudent = User::factory()->create([
+            'role' => 'student',
+            'name' => 'Unlinked Student',
+            'email' => 'unlinked@example.com',
+        ]);
+
+        TeacherStudent::create([
+            'teacher_id' => $teacher->id,
+            'student_id' => $linkedStudent->id,
+            'source' => 'manual',
+        ]);
+
+        TeacherStudent::create([
+            'teacher_id' => $otherTeacher->id,
+            'student_id' => $otherTeacherStudent->id,
+            'source' => 'manual',
+        ]);
+
+        $response = $this->actingAs($teacher)->get('/teacher/students?scope=linked');
+
+        $response->assertOk();
+        $response->assertSee('Linked Student');
         $response->assertDontSee('Other Teacher Student');
         $response->assertDontSee('Unlinked Student');
     }

@@ -7,6 +7,7 @@
 <div>
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-5">
         <form method="GET" action="{{ route('teacher.students') }}" class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto flex-1">
+            <input type="hidden" name="scope" value="{{ $scope ?? 'all' }}">
             <div class="relative w-full sm:w-80">
                 <svg class="w-4 h-4 text-gray-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -26,17 +27,32 @@
             @endif
         </form>
 
-        <div class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-coral/10 text-coral px-4 py-2.5 rounded-xl text-sm font-medium border border-coral/20">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-            </svg>
-            <span>{{ $students->total() }} в списке</span>
+        <div class="w-full sm:w-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+            <div class="inline-flex p-1 rounded-xl bg-dark-light border border-white/[0.06]">
+                <a href="{{ route('teacher.students', array_filter(['search' => $search !== '' ? $search : null, 'scope' => 'all'])) }}"
+                   class="px-3 py-1.5 rounded-lg text-xs font-medium transition {{ ($scope ?? 'all') === 'all' ? 'bg-coral text-white' : 'text-gray-400 hover:text-white hover:bg-white/[0.04]' }}">
+                    Все
+                </a>
+                <a href="{{ route('teacher.students', array_filter(['search' => $search !== '' ? $search : null, 'scope' => 'linked'])) }}"
+                   class="px-3 py-1.5 rounded-lg text-xs font-medium transition {{ ($scope ?? 'all') === 'linked' ? 'bg-coral text-white' : 'text-gray-400 hover:text-white hover:bg-white/[0.04]' }}">
+                    Привязанные
+                </a>
+            </div>
+
+            <div class="inline-flex items-center justify-center gap-2 bg-coral/10 text-coral px-4 py-2.5 rounded-xl text-sm font-medium border border-coral/20">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+                <span>{{ $students->total() }} в списке</span>
+            </div>
         </div>
     </div>
 
     <div class="sm:hidden space-y-3">
         @forelse($students as $student)
-            <div class="bg-dark-light rounded-2xl border border-white/[0.06] p-4">
+            <div class="bg-dark-light rounded-2xl border border-white/[0.06] p-4"
+                 data-roster-student-id="{{ $student->id }}"
+                 data-linked-state="{{ ($student->is_linked ?? false) ? 'linked' : 'unlinked' }}">
                 <div class="flex items-center gap-3 mb-3">
                     <div class="w-10 h-10 bg-coral/10 rounded-xl flex items-center justify-center flex-shrink-0">
                         <span class="text-sm font-semibold text-coral">{{ mb_substr($student->name ?? '?', 0, 1) }}</span>
@@ -47,6 +63,12 @@
                     </div>
                     <span class="inline-flex items-center px-2 py-0.5 text-[10px] font-medium rounded-lg {{ ($student->oge_accuracy_percent ?? null) !== null ? 'bg-emerald-500/10 text-emerald-400' : 'bg-white/[0.04] text-gray-500' }}">
                         {{ ($student->oge_accuracy_percent ?? null) !== null ? ($student->oge_accuracy_percent . '%') : 'Нет оценок' }}
+                    </span>
+                </div>
+
+                <div class="mb-3">
+                    <span class="inline-flex items-center px-2.5 py-1 text-[11px] font-medium rounded-lg {{ ($student->is_linked ?? false) ? 'bg-emerald-500/10 text-emerald-400' : 'bg-white/[0.04] text-gray-400' }}">
+                        {{ ($student->is_linked ?? false) ? 'привязан' : 'не привязан' }}
                     </span>
                 </div>
 
@@ -90,7 +112,9 @@
                 </thead>
                 <tbody class="divide-y divide-white/[0.04]">
                     @forelse($students as $student)
-                        <tr class="hover:bg-white/[0.02] transition-colors">
+                        <tr class="hover:bg-white/[0.02] transition-colors"
+                            data-roster-student-id="{{ $student->id }}"
+                            data-linked-state="{{ ($student->is_linked ?? false) ? 'linked' : 'unlinked' }}">
                             <td class="px-5 py-3.5">
                                 <div class="flex items-center gap-3">
                                     <div class="w-9 h-9 bg-coral/10 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -99,6 +123,11 @@
                                     <div class="min-w-0">
                                         <div class="text-sm font-medium text-white truncate">{{ $student->name }}</div>
                                         <div class="text-xs text-gray-500 truncate">{{ $student->email }}</div>
+                                        <div class="mt-1">
+                                            <span class="inline-flex items-center px-2 py-0.5 text-[10px] font-medium rounded-lg {{ ($student->is_linked ?? false) ? 'bg-emerald-500/10 text-emerald-400' : 'bg-white/[0.04] text-gray-400' }}">
+                                                {{ ($student->is_linked ?? false) ? 'привязан' : 'не привязан' }}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </td>

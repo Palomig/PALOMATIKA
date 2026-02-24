@@ -16,6 +16,7 @@ class StudentsController extends Controller
     {
         $actor = $request->user();
         $search = trim((string) $request->query('search', ''));
+        $scope = $request->query('scope') === 'linked' ? 'linked' : 'all';
 
         $attemptMetrics = DB::table('oge_attempts')
             ->selectRaw('student_id, COUNT(*) as oge_attempt_count')
@@ -37,15 +38,26 @@ class StudentsController extends Controller
             ->selectRaw('attempt_metrics.oge_last_activity_at as oge_last_activity_at')
             ->selectRaw('COALESCE(scoring_metrics.oge_correct_count, 0) as oge_correct_count')
             ->selectRaw('COALESCE(scoring_metrics.oge_scored_count, 0) as oge_scored_count')
+            ->selectRaw(
+                'CASE WHEN EXISTS (
+                    SELECT 1
+                    FROM teacher_students
+                    WHERE teacher_students.student_id = users.id'
+                . ($actor->role !== 'admin' ? ' AND teacher_students.teacher_id = ?' : '')
+                . ') THEN 1 ELSE 0 END as is_linked',
+                $actor->role !== 'admin' ? [$actor->id] : []
+            )
             ->where('users.role', 'student')
-            ->whereExists(function (Builder $query) use ($actor) {
-                $query->selectRaw('1')
-                    ->from('teacher_students')
-                    ->whereColumn('teacher_students.student_id', 'users.id');
+            ->when($scope === 'linked', function ($query) use ($actor) {
+                $query->whereExists(function (Builder $subquery) use ($actor) {
+                    $subquery->selectRaw('1')
+                        ->from('teacher_students')
+                        ->whereColumn('teacher_students.student_id', 'users.id');
 
-                if ($actor->role !== 'admin') {
-                    $query->where('teacher_students.teacher_id', $actor->id);
-                }
+                    if ($actor->role !== 'admin') {
+                        $subquery->where('teacher_students.teacher_id', $actor->id);
+                    }
+                });
             })
             ->when($search !== '', function ($query) use ($search) {
                 $query->where(function ($nested) use ($search) {
@@ -64,6 +76,7 @@ class StudentsController extends Controller
         return view('teacher.students', [
             'students' => $students,
             'search' => $search,
+            'scope' => $scope,
         ]);
     }
 
@@ -79,6 +92,7 @@ class StudentsController extends Controller
                 $student->oge_attempt_count = (int) ($student->oge_attempt_count ?? 0);
                 $student->oge_correct_count = (int) ($student->oge_correct_count ?? 0);
                 $student->oge_scored_count = (int) ($student->oge_scored_count ?? 0);
+                $student->is_linked = (bool) ($student->is_linked ?? false);
 
                 $student->oge_accuracy_percent = $student->oge_scored_count > 0
                     ? (int) round(($student->oge_correct_count / $student->oge_scored_count) * 100)
