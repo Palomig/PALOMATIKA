@@ -240,11 +240,18 @@ class OgeCustomVariantAssessmentTest extends TestCase
             ->get("/teacher/oge/variants/{$variant->id}/results")
             ->assertOk()
             ->assertSee('Матрица результатов')
+            ->assertSee('Свайп влево/вправо', false)
             ->assertSee('ИвП')
             ->assertSee('Ан')
             ->assertSee('>+</span>', false)
             ->assertSee('>-</span>', false)
             ->assertSee('>.</span>', false)
+            ->assertSee('data-matrix-scroll-container', false)
+            ->assertSee('data-matrix-scroll-hint', false)
+            ->assertSee('md:hidden', false)
+            ->assertSee('overflow-x-auto', false)
+            ->assertSee('w-max min-w-full', false)
+            ->assertSee('min-w-[58px] whitespace-nowrap', false)
             ->assertSee('ans-task-1')
             ->assertSee('ans-task-6');
     }

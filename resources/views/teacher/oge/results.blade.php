@@ -39,15 +39,19 @@
         </div>
 
         @if(count($resultsMatrix['students']) > 0)
-            <div class="overflow-x-auto">
-                <table class="w-full min-w-max text-xs">
+            <div class="px-3 pb-3 sm:px-5 sm:pb-4" data-matrix-scroll-root>
+                <div data-matrix-scroll-hint class="hidden md:hidden mb-2 text-[11px] text-gray-500">
+                    Свайп влево/вправо, чтобы увидеть столбцы учеников
+                </div>
+                <div data-matrix-scroll-container class="overflow-x-auto overflow-y-visible max-w-full touch-pan-x">
+                    <table class="w-max min-w-full text-xs table-auto">
                     <thead>
                         <tr class="border-b border-white/[0.06]">
-                            <th class="sticky left-0 z-20 bg-dark-light text-left px-4 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">
+                            <th class="sticky left-0 z-20 bg-dark-light text-left px-4 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider min-w-[56px] whitespace-nowrap">
                                 №
                             </th>
                             @foreach($resultsMatrix['students'] as $studentColumn)
-                                <th class="px-3 py-3 text-center text-[11px] font-semibold text-gray-400 uppercase tracking-wider min-w-[58px]">
+                                <th class="px-3 py-3 text-center text-[11px] font-semibold text-gray-400 uppercase tracking-wider min-w-[58px] whitespace-nowrap">
                                     <a href="#attempt-{{ $studentColumn['attempt_id'] }}"
                                        class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-white/[0.03] border border-white/[0.05] hover:border-coral/40 hover:text-white transition"
                                        title="{{ $studentColumn['student_name'] }}">
@@ -60,7 +64,7 @@
                     <tbody class="divide-y divide-white/[0.04]">
                         @foreach($resultsMatrix['rows'] as $row)
                             <tr class="hover:bg-white/[0.01] transition-colors">
-                                <td class="sticky left-0 z-10 bg-dark-light px-4 py-2.5 text-gray-300 font-semibold tabular-nums">
+                                <td class="sticky left-0 z-10 bg-dark-light px-4 py-2.5 text-gray-300 font-semibold tabular-nums min-w-[56px] whitespace-nowrap">
                                     <span data-matrix-row-task-number="{{ $row['task_number'] }}">
                                     {{ $row['task_number'] }}
                                     </span>
@@ -69,7 +73,7 @@
                                     @php
                                         $state = $cell['is_correct'];
                                     @endphp
-                                    <td class="px-3 py-2.5 text-center">
+                                    <td class="px-3 py-2.5 text-center min-w-[58px] whitespace-nowrap">
                                         <span class="inline-flex items-center justify-center w-6 h-6 rounded-md text-xs font-semibold tabular-nums {{ $state === true ? 'bg-emerald-500/10 text-emerald-400' : ($state === false ? 'bg-red-500/10 text-red-400' : 'bg-white/[0.03] text-gray-400') }}">
                                             {{ $cell['mark'] }}
                                         </span>
@@ -78,7 +82,8 @@
                             </tr>
                         @endforeach
                     </tbody>
-                </table>
+                    </table>
+                </div>
             </div>
         @else
             <div class="px-4 py-12 text-center text-gray-600 text-sm">
@@ -86,6 +91,40 @@
             </div>
         @endif
     </div>
+
+    @if(count($resultsMatrix['students']) > 0)
+        <script>
+            (() => {
+                const initMatrixScrollHints = () => {
+                    document.querySelectorAll('[data-matrix-scroll-root]').forEach((root) => {
+                        const container = root.querySelector('[data-matrix-scroll-container]');
+                        const hint = root.querySelector('[data-matrix-scroll-hint]');
+
+                        if (!container || !hint || root.dataset.matrixScrollBound === '1') {
+                            return;
+                        }
+
+                        const updateHintVisibility = () => {
+                            const hasOverflow = container.scrollWidth > container.clientWidth + 1;
+                            hint.classList.toggle('hidden', !hasOverflow || container.scrollLeft > 8);
+                        };
+
+                        container.addEventListener('scroll', updateHintVisibility, { passive: true });
+                        window.addEventListener('resize', updateHintVisibility, { passive: true });
+
+                        root.dataset.matrixScrollBound = '1';
+                        requestAnimationFrame(updateHintVisibility);
+                    });
+                };
+
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', initMatrixScrollHints, { once: true });
+                } else {
+                    initMatrixScrollHints();
+                }
+            })();
+        </script>
+    @endif
 
     {{-- Detailed results table --}}
     <div class="bg-dark-light rounded-2xl border border-white/[0.06] overflow-hidden">
