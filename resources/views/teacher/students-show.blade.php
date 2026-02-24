@@ -2,6 +2,7 @@
 
 @section('title', 'Статистика ученика')
 @section('header', 'Статистика ученика')
+@section('enable_katex', '1')
 
 @section('content')
 <div class="space-y-5">

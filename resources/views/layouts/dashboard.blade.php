@@ -17,7 +17,7 @@
 <head>
     <title>@yield('title', $role === 'teacher' ? 'Панель учителя' : 'PALOMATIKA') - PALOMATIKA</title>
     @include('partials.head-config')
-    @if($role === 'student')
+    @if($role === 'student' || trim($__env->yieldContent('enable_katex')) === '1')
         @include('partials.head-katex')
     @endif
 </head>
