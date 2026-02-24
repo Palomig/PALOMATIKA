@@ -4,303 +4,143 @@
 @section('header', 'Ученики')
 
 @section('content')
-<div x-data="studentsPage()">
-    {{-- Actions bar --}}
+<div>
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-5">
-        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
-            <div class="relative w-full sm:w-64">
+        <form method="GET" action="{{ route('teacher.students') }}" class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto flex-1">
+            <div class="relative w-full sm:w-80">
                 <svg class="w-4 h-4 text-gray-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
-                <input type="text" x-model="search" placeholder="Поиск учеников..."
+                <input type="text" name="search" value="{{ $search }}" placeholder="Поиск учеников..."
                        class="w-full pl-10 pr-4 py-2.5 bg-dark-light border border-white/[0.06] rounded-xl text-sm text-white placeholder-gray-500 focus:ring-2 focus:ring-coral/40 focus:border-coral/30 transition">
             </div>
-            <select x-model="statusFilter" class="w-full sm:w-auto bg-dark-light border border-white/[0.06] rounded-xl px-4 py-2.5 text-sm text-white focus:ring-2 focus:ring-coral/40 focus:border-coral/30 transition">
-                <option value="">Все статусы</option>
-                <option value="active">Активные</option>
-                <option value="inactive">Неактивные</option>
-            </select>
-        </div>
-        <button @click="showInviteModal = true"
-                class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-coral text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-coral-dark transition shadow-lg shadow-coral/10 hover:shadow-coral/20">
+            <button type="submit"
+                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2 border border-white/[0.08] text-gray-300 px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-white/[0.04] hover:text-white transition">
+                Найти
+            </button>
+            @if($search !== '')
+                <a href="{{ route('teacher.students') }}"
+                   class="w-full sm:w-auto inline-flex items-center justify-center gap-2 border border-white/[0.08] text-gray-400 px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-white/[0.04] hover:text-white transition">
+                    Сбросить
+                </a>
+            @endif
+        </form>
+
+        <div class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-coral/10 text-coral px-4 py-2.5 rounded-xl text-sm font-medium border border-coral/20">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
             </svg>
-            Пригласить ученика
-        </button>
+            <span>{{ $students->total() }} в списке</span>
+        </div>
     </div>
 
-    {{-- Students: mobile cards --}}
     <div class="sm:hidden space-y-3">
-        <template x-for="student in filteredStudents" :key="student.id">
-            <div @click="selectStudent(student)"
-                 class="bg-dark-light rounded-2xl border border-white/[0.06] p-4 active:bg-white/[0.02] transition-colors cursor-pointer">
+        @forelse($students as $student)
+            <div class="bg-dark-light rounded-2xl border border-white/[0.06] p-4">
                 <div class="flex items-center gap-3 mb-3">
                     <div class="w-10 h-10 bg-coral/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <span class="text-sm font-semibold text-coral" x-text="student.name?.charAt(0)"></span>
+                        <span class="text-sm font-semibold text-coral">{{ mb_substr($student->name ?? '?', 0, 1) }}</span>
                     </div>
                     <div class="flex-1 min-w-0">
-                        <div class="text-sm font-medium text-white truncate" x-text="student.name"></div>
-                        <div class="text-xs text-gray-500 truncate" x-text="student.last_seen"></div>
+                        <div class="text-sm font-medium text-white truncate">{{ $student->name }}</div>
+                        <div class="text-xs text-gray-500 truncate">{{ $student->email }}</div>
                     </div>
-                    <span class="inline-flex items-center px-2 py-0.5 text-[10px] font-medium rounded-lg"
-                          :class="student.has_subscription ? 'bg-emerald-500/10 text-emerald-400' : 'bg-white/[0.04] text-gray-500'"
-                          x-text="student.has_subscription ? 'Подписка' : 'Free'"></span>
+                    <span class="inline-flex items-center px-2 py-0.5 text-[10px] font-medium rounded-lg {{ ($student->oge_accuracy_percent ?? null) !== null ? 'bg-emerald-500/10 text-emerald-400' : 'bg-white/[0.04] text-gray-500' }}">
+                        {{ ($student->oge_accuracy_percent ?? null) !== null ? ($student->oge_accuracy_percent . '%') : 'Нет оценок' }}
+                    </span>
                 </div>
+
                 <div class="grid grid-cols-3 gap-2">
                     <div class="bg-dark/50 rounded-lg p-2 text-center">
-                        <div class="text-sm font-semibold text-coral tabular-nums" x-text="student.progress + '%'"></div>
-                        <div class="text-[10px] text-gray-500">Прогресс</div>
+                        <div class="text-sm font-semibold text-coral tabular-nums">{{ $student->oge_attempt_count }}</div>
+                        <div class="text-[10px] text-gray-500">ОГЭ попытки</div>
                     </div>
                     <div class="bg-dark/50 rounded-lg p-2 text-center">
-                        <div class="text-sm font-semibold tabular-nums"
-                             :class="student.accuracy >= 70 ? 'text-emerald-400' : student.accuracy >= 50 ? 'text-amber-400' : 'text-red-400'"
-                             x-text="student.accuracy + '%'"></div>
+                        <div class="text-sm font-semibold tabular-nums {{ ($student->oge_accuracy_percent ?? 0) >= 70 ? 'text-emerald-400' : (($student->oge_accuracy_percent ?? 0) >= 50 ? 'text-amber-400' : 'text-red-400') }}">
+                            {{ ($student->oge_accuracy_percent ?? null) !== null ? ($student->oge_accuracy_percent . '%') : '—' }}
+                        </div>
                         <div class="text-[10px] text-gray-500">Точность</div>
                     </div>
                     <div class="bg-dark/50 rounded-lg p-2 text-center">
-                        <div class="flex items-center justify-center gap-1">
-                            <svg class="w-3 h-3 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z"/>
-                            </svg>
-                            <span class="text-sm font-semibold text-gray-300 tabular-nums" x-text="student.streak"></span>
+                        <div class="text-xs font-medium text-gray-300 leading-tight">
+                            {{ $student->roster_last_activity_at ? $student->roster_last_activity_at->diffForHumans() : 'Нет' }}
                         </div>
-                        <div class="text-[10px] text-gray-500">Стрик</div>
+                        <div class="text-[10px] text-gray-500">Активность</div>
                     </div>
                 </div>
             </div>
-        </template>
-        <div x-show="filteredStudents.length === 0" class="bg-dark-light rounded-2xl border border-white/[0.06] p-8 text-center text-sm text-gray-500">
-            Ученики не найдены
-        </div>
+        @empty
+            <div class="bg-dark-light rounded-2xl border border-white/[0.06] p-8 text-center text-sm text-gray-500">
+                Ученики не найдены
+            </div>
+        @endforelse
     </div>
 
-    {{-- Students: desktop table --}}
     <div class="hidden sm:block bg-dark-light rounded-2xl border border-white/[0.06] overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full">
                 <thead>
                     <tr class="border-b border-white/[0.06]">
                         <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Ученик</th>
-                        <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Прогресс</th>
+                        <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">ОГЭ попытки</th>
                         <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Точность</th>
-                        <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Стрик</th>
-                        <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider hidden lg:table-cell">Подписка</th>
-                        <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider hidden lg:table-cell">Последний визит</th>
-                        <th class="px-5 py-3"></th>
+                        <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider hidden lg:table-cell">Последняя активность</th>
+                        <th class="px-5 py-3 text-left text-[11px] font-semibold text-gray-500 uppercase tracking-wider hidden xl:table-cell">Подписка</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-white/[0.04]">
-                    <template x-for="student in filteredStudents" :key="student.id">
+                    @forelse($students as $student)
                         <tr class="hover:bg-white/[0.02] transition-colors">
                             <td class="px-5 py-3.5">
                                 <div class="flex items-center gap-3">
                                     <div class="w-9 h-9 bg-coral/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                                        <span class="text-sm font-semibold text-coral" x-text="student.name?.charAt(0)"></span>
+                                        <span class="text-sm font-semibold text-coral">{{ mb_substr($student->name ?? '?', 0, 1) }}</span>
                                     </div>
                                     <div class="min-w-0">
-                                        <div class="text-sm font-medium text-white truncate" x-text="student.name"></div>
-                                        <div class="text-xs text-gray-500 truncate" x-text="student.email"></div>
+                                        <div class="text-sm font-medium text-white truncate">{{ $student->name }}</div>
+                                        <div class="text-xs text-gray-500 truncate">{{ $student->email }}</div>
                                     </div>
                                 </div>
                             </td>
                             <td class="px-5 py-3.5">
-                                <div class="flex items-center gap-2.5">
-                                    <div class="w-20 bg-white/[0.06] rounded-full h-1.5">
-                                        <div class="bg-coral rounded-full h-1.5"
-                                             :style="'width: ' + student.progress + '%'"></div>
-                                    </div>
-                                    <span class="text-xs text-gray-500 tabular-nums" x-text="student.progress + '%'"></span>
-                                </div>
+                                <span class="text-sm font-medium text-coral tabular-nums">{{ $student->oge_attempt_count }}</span>
                             </td>
                             <td class="px-5 py-3.5">
-                                <span class="text-sm font-medium tabular-nums"
-                                      :class="student.accuracy >= 70 ? 'text-emerald-400' : student.accuracy >= 50 ? 'text-amber-400' : 'text-red-400'"
-                                      x-text="student.accuracy + '%'"></span>
+                                @if(($student->oge_accuracy_percent ?? null) !== null)
+                                    <span class="text-sm font-medium tabular-nums {{ $student->oge_accuracy_percent >= 70 ? 'text-emerald-400' : ($student->oge_accuracy_percent >= 50 ? 'text-amber-400' : 'text-red-400') }}">{{ $student->oge_accuracy_percent }}%</span>
+                                @else
+                                    <span class="text-sm text-gray-500">—</span>
+                                @endif
                             </td>
-                            <td class="px-5 py-3.5">
-                                <div class="flex items-center gap-1.5">
-                                    <svg class="w-3.5 h-3.5 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z"/>
-                                    </svg>
-                                    <span class="text-sm text-gray-300 tabular-nums" x-text="student.streak"></span>
-                                </div>
+                            <td class="px-5 py-3.5 text-sm text-gray-500 hidden lg:table-cell">
+                                {{ $student->roster_last_activity_at ? $student->roster_last_activity_at->diffForHumans() : 'Нет активности' }}
                             </td>
-                            <td class="px-5 py-3.5 hidden lg:table-cell">
-                                <span class="inline-flex items-center px-2.5 py-1 text-[11px] font-medium rounded-lg"
-                                      :class="student.has_subscription ? 'bg-emerald-500/10 text-emerald-400' : 'bg-white/[0.04] text-gray-500'"
-                                      x-text="student.has_subscription ? 'Активна' : 'Нет'"></span>
-                            </td>
-                            <td class="px-5 py-3.5 text-sm text-gray-500 hidden lg:table-cell" x-text="student.last_seen"></td>
-                            <td class="px-5 py-3.5">
-                                <button @click="selectStudent(student)"
-                                        class="text-xs font-medium text-coral hover:text-coral-light transition">
-                                    Подробнее
-                                </button>
+                            <td class="px-5 py-3.5 hidden xl:table-cell">
+                                @php($hasSubscription = method_exists($student, 'hasActiveSubscription') ? $student->hasActiveSubscription() : false)
+                                <span class="inline-flex items-center px-2.5 py-1 text-[11px] font-medium rounded-lg {{ $hasSubscription ? 'bg-emerald-500/10 text-emerald-400' : 'bg-white/[0.04] text-gray-500' }}">
+                                    {{ $hasSubscription ? 'Активна' : 'Нет' }}
+                                </span>
                             </td>
                         </tr>
-                    </template>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="px-5 py-8 text-center text-sm text-gray-500">Ученики не найдены</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
     </div>
 
-    {{-- Student detail modal --}}
-    <div x-show="selectedStudent" x-cloak
-         class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-         x-transition:enter="transition ease-out duration-200"
-         x-transition:enter-start="opacity-0"
-         x-transition:enter-end="opacity-100"
-         x-transition:leave="transition ease-in duration-150"
-         x-transition:leave-start="opacity-100"
-         x-transition:leave-end="opacity-0"
-         @click.self="selectedStudent = null">
-        <div class="bg-dark-light rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-white/[0.08] shadow-2xl"
-             x-transition:enter="transition ease-out duration-200"
-             x-transition:enter-start="opacity-0 scale-95"
-             x-transition:enter-end="opacity-100 scale-100">
-            <div class="p-4 sm:p-6 border-b border-white/[0.06]">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-3 sm:gap-4 min-w-0">
-                        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-coral/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                            <span class="text-coral font-bold text-base sm:text-lg" x-text="selectedStudent?.name?.charAt(0)"></span>
-                        </div>
-                        <div class="min-w-0">
-                            <h2 class="text-base sm:text-lg font-semibold text-white truncate" x-text="selectedStudent?.name"></h2>
-                            <p class="text-sm text-gray-500 truncate" x-text="selectedStudent?.email"></p>
-                        </div>
-                    </div>
-                    <button @click="selectedStudent = null" class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/[0.06] transition flex-shrink-0">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                        </svg>
-                    </button>
-                </div>
+    @if($students->hasPages())
+        <div class="mt-4 bg-dark-light rounded-2xl border border-white/[0.06] px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div class="text-xs text-gray-500">
+                Показаны {{ $students->firstItem() }}-{{ $students->lastItem() }} из {{ $students->total() }}
             </div>
-
-            <div class="p-4 sm:p-6">
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mb-6">
-                    <div class="bg-dark rounded-xl p-3 text-center">
-                        <div class="text-lg sm:text-xl font-bold text-coral" x-text="selectedStudent?.progress + '%'"></div>
-                        <div class="text-[11px] text-gray-500 mt-0.5">Прогресс</div>
-                    </div>
-                    <div class="bg-dark rounded-xl p-3 text-center">
-                        <div class="text-lg sm:text-xl font-bold text-emerald-400" x-text="selectedStudent?.accuracy + '%'"></div>
-                        <div class="text-[11px] text-gray-500 mt-0.5">Точность</div>
-                    </div>
-                    <div class="bg-dark rounded-xl p-3 text-center">
-                        <div class="text-lg sm:text-xl font-bold text-amber-400" x-text="selectedStudent?.streak"></div>
-                        <div class="text-[11px] text-gray-500 mt-0.5">Стрик</div>
-                    </div>
-                    <div class="bg-dark rounded-xl p-3 text-center">
-                        <div class="text-lg sm:text-xl font-bold text-blue-400" x-text="selectedStudent?.tasks_solved || 0"></div>
-                        <div class="text-[11px] text-gray-500 mt-0.5">Задач</div>
-                    </div>
-                </div>
-
-                <div class="mb-6" x-show="(selectedStudent?.weak_topics || []).length > 0">
-                    <h3 class="text-sm font-medium text-gray-400 mb-2.5">Слабые темы</h3>
-                    <div class="space-y-2">
-                        <template x-for="topic in (selectedStudent?.weak_topics || [])" :key="topic.id">
-                            <div class="flex items-center justify-between p-3 bg-red-500/[0.06] rounded-xl border border-red-500/10">
-                                <span class="text-sm text-white" x-text="topic.name"></span>
-                                <span class="text-sm font-medium text-red-400 tabular-nums" x-text="topic.accuracy + '%'"></span>
-                            </div>
-                        </template>
-                    </div>
-                </div>
-
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <button @click="assignHomework(selectedStudent)"
-                            class="flex-1 bg-coral text-white py-2.5 rounded-xl text-sm font-medium hover:bg-coral-dark transition shadow-lg shadow-coral/10">
-                        Назначить ДЗ
-                    </button>
-                    <button @click="sendMessage(selectedStudent)"
-                            class="flex-1 border border-white/[0.08] text-gray-300 py-2.5 rounded-xl text-sm font-medium hover:bg-white/[0.04] hover:text-white transition">
-                        Написать сообщение
-                    </button>
-                </div>
+            <div class="text-sm [&_nav>div:first-child]:hidden [&_svg]:w-4 [&_svg]:h-4 [&_span]:rounded-lg [&_a]:rounded-lg [&_a]:bg-dark [&_a]:border-white/10 [&_a]:text-gray-300 [&_span[aria-current='page']]:bg-coral [&_span[aria-current='page']]:text-white">
+                {{ $students->onEachSide(1)->links() }}
             </div>
         </div>
-    </div>
-
-    {{-- Invite modal --}}
-    <div x-show="showInviteModal" x-cloak
-         class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-         x-transition:enter="transition ease-out duration-200"
-         x-transition:enter-start="opacity-0"
-         x-transition:enter-end="opacity-100"
-         @click.self="showInviteModal = false">
-        <div class="bg-dark-light rounded-2xl max-w-md w-full p-5 sm:p-6 border border-white/[0.08] shadow-2xl">
-            <h2 class="text-lg font-semibold text-white mb-1">Пригласить ученика</h2>
-            <p class="text-sm text-gray-500 mb-5">Поделитесь этой ссылкой с учеником:</p>
-            <div class="flex items-center gap-0 mb-4">
-                <input type="text" readonly :value="$root.referralLink"
-                       class="flex-1 min-w-0 px-4 py-2.5 bg-dark border border-white/[0.08] rounded-l-xl text-sm text-white">
-                <button @click="$root.copyReferralLink()"
-                        class="px-4 sm:px-5 py-2.5 bg-coral text-white text-sm font-medium rounded-r-xl hover:bg-coral-dark transition flex-shrink-0">
-                    Копировать
-                </button>
-            </div>
-            <p class="text-xs text-gray-500 mb-5">
-                Когда ученик зарегистрируется по этой ссылке, он автоматически будет добавлен к вам.
-            </p>
-            <button @click="showInviteModal = false"
-                    class="w-full py-2.5 border border-white/[0.08] rounded-xl text-sm text-gray-400 hover:text-white hover:bg-white/[0.04] transition">
-                Закрыть
-            </button>
-        </div>
-    </div>
+    @endif
 </div>
-
-@push('scripts')
-<script>
-function studentsPage() {
-    return {
-        students: [],
-        search: '',
-        statusFilter: '',
-        selectedStudent: null,
-        showInviteModal: false,
-
-        async init() {
-            await this.loadStudents();
-        },
-
-        async loadStudents() {
-            this.students = [
-                { id: 1, name: 'Александр Иванов', email: 'alex@example.com', progress: 75, accuracy: 82, streak: 12, has_subscription: true, last_seen: '5 мин назад', tasks_solved: 150, weak_topics: [{ id: 1, name: 'Системы уравнений', accuracy: 45 }] },
-                { id: 2, name: 'Мария Петрова', email: 'maria@example.com', progress: 60, accuracy: 68, streak: 5, has_subscription: true, last_seen: '1 час назад', tasks_solved: 89, weak_topics: [{ id: 2, name: 'Теорема Пифагора', accuracy: 52 }] },
-                { id: 3, name: 'Дмитрий Сидоров', email: 'dmitry@example.com', progress: 45, accuracy: 55, streak: 0, has_subscription: false, last_seen: '3 дня назад', tasks_solved: 45, weak_topics: [] },
-                { id: 4, name: 'Елена Козлова', email: 'elena@example.com', progress: 90, accuracy: 91, streak: 25, has_subscription: true, last_seen: 'Сейчас', tasks_solved: 230, weak_topics: [] }
-            ];
-        },
-
-        get filteredStudents() {
-            return this.students.filter(s => {
-                const matchesSearch = !this.search ||
-                    s.name.toLowerCase().includes(this.search.toLowerCase()) ||
-                    s.email.toLowerCase().includes(this.search.toLowerCase());
-                const matchesStatus = !this.statusFilter ||
-                    (this.statusFilter === 'active' && s.streak > 0) ||
-                    (this.statusFilter === 'inactive' && s.streak === 0);
-                return matchesSearch && matchesStatus;
-            });
-        },
-
-        selectStudent(student) {
-            this.selectedStudent = student;
-        },
-
-        assignHomework(student) {
-            window.location.href = '/teacher/homework/create?student_id=' + student.id;
-        },
-
-        sendMessage(student) {
-            alert('Функция сообщений будет добавлена позже');
-        }
-    }
-}
-</script>
-@endpush
 @endsection

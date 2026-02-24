@@ -10,6 +10,7 @@ use App\Http\Controllers\OgeAttemptController;
 use App\Http\Controllers\OgeTemplateController;
 use App\Http\Controllers\RepetitorController;
 use App\Http\Controllers\Teacher\AuditController as TeacherAuditController;
+use App\Http\Controllers\Teacher\StudentsController;
 use App\Http\Controllers\TestPdfController;
 use App\Http\Controllers\Teacher\StudentGroupController;
 use App\Http\Controllers\Teacher\OgeReviewController;
@@ -240,13 +241,10 @@ Route::middleware(['auth'])->group(function () {
             return view('teacher.dashboard');
         })->name('dashboard');
 
-        Route::get('/students', function () {
-            return view('teacher.students');
-        })->name('students');
-
-        Route::get('/students/{id}', function ($id) {
-            return view('teacher.students', ['studentId' => $id]);
-        })->name('students.show');
+        Route::middleware('role:teacher,admin')->group(function () {
+            Route::get('/students', [StudentsController::class, 'index'])->name('students');
+            Route::get('/students/{id}', [StudentsController::class, 'show'])->name('students.show');
+        });
 
         Route::middleware('role:teacher,admin')->prefix('groups')->name('groups.')->group(function () {
             Route::get('/', [StudentGroupController::class, 'index'])->name('index');
