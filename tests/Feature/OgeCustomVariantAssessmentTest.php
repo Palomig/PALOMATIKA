@@ -12,6 +12,7 @@ use App\Services\TaskAnswerResolver;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class OgeCustomVariantAssessmentTest extends TestCase
@@ -379,6 +380,61 @@ class OgeCustomVariantAssessmentTest extends TestCase
         $this->assertDatabaseHas('oge_attempts', [
             'id' => $attempt->id,
             'status' => 'scored',
+        ]);
+    }
+
+    public function test_submit_custom_random_attempt_scores_using_stored_payload_when_config_missing_custom_tasks(): void
+    {
+        Storage::fake('local');
+
+        $student = User::factory()->create(['role' => 'student']);
+        $hash = 'scorcache';
+
+        $variant = OgeVariant::create([
+            'hash' => $hash,
+            'config_json' => [
+                'source' => 'custom_random',
+                'topics' => ['06'],
+                'tasks_per_topic' => 1,
+                // Legacy/trimmed payload: task list is not in DB config_json.
+            ],
+        ]);
+
+        Storage::disk('local')->put(
+            "custom_random_tests/{$hash}.json",
+            json_encode([
+                [
+                    'attempt_task_number' => 1,
+                    'task_number' => 1,
+                    'type' => 'word_problem',
+                    'task' => ['answer' => '42'],
+                ],
+            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
+        );
+
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $student->id,
+            'status' => 'active',
+            'started_at' => now(),
+        ]);
+
+        $this->actingAs($student)
+            ->postJson("/api/oge/attempts/{$attempt->id}/tasks/1/commit", [
+                'answer' => '42',
+            ])
+            ->assertOk();
+
+        $this->actingAs($student)
+            ->postJson("/api/oge/attempts/{$attempt->id}/submit")
+            ->assertOk()
+            ->assertJsonPath('status', 'scored');
+
+        $this->assertDatabaseHas('oge_attempt_scorings', [
+            'attempt_id' => $attempt->id,
+            'task_number' => 1,
+            'is_correct' => 1,
+            'correct_answer' => '42',
         ]);
     }
 

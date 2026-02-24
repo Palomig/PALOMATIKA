@@ -10,7 +10,9 @@ use App\Models\OgeAttemptTaskTiming;
 use App\Models\OgeVariant;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class OgeAttemptService
 {
@@ -294,6 +296,10 @@ class OgeAttemptService
 
         if ($attempt->variant?->isCustomRandom()) {
             $customTasks = $attempt->variant?->config_json['custom_tasks'] ?? [];
+            if ((!is_array($customTasks) || empty($customTasks)) && is_string($hash) && $hash !== '') {
+                $customTasks = $this->loadCustomRandomTasksByHash($hash);
+            }
+
             if (!is_array($customTasks) || empty($customTasks)) {
                 return $cache[$cacheKey] = [];
             }
@@ -325,6 +331,44 @@ class OgeAttemptService
         }
 
         return $cache[$cacheKey] = $map;
+    }
+
+    /**
+     * Legacy compatibility: some custom variants keep task payload outside config_json.
+     *
+     * @return array<int, mixed>
+     */
+    private function loadCustomRandomTasksByHash(string $hash): array
+    {
+        $cacheKey = "custom_random_test_{$hash}";
+        $cached = Cache::get($cacheKey);
+        if (is_array($cached) && !empty($cached)) {
+            return $cached;
+        }
+
+        $path = "custom_random_tests/{$hash}.json";
+        if (!Storage::disk('local')->exists($path)) {
+            return [];
+        }
+
+        try {
+            $decoded = json_decode((string) Storage::disk('local')->get($path), true, 512, JSON_THROW_ON_ERROR);
+        } catch (\Throwable $e) {
+            Log::warning('Failed to read custom random task payload for scoring', [
+                'variant_hash' => $hash,
+                'error' => $e->getMessage(),
+            ]);
+
+            return [];
+        }
+
+        if (!is_array($decoded) || empty($decoded)) {
+            return [];
+        }
+
+        Cache::put($cacheKey, $decoded, now()->addDays(7));
+
+        return $decoded;
     }
 
     private function persistScoringRow(int $attemptId, int $taskNumber, ?string $userAnswer, ?string $correctAnswer): void
