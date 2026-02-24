@@ -24,8 +24,72 @@
         </div>
     </div>
 
-    {{-- Results table --}}
+    {{-- Results matrix --}}
     <div class="bg-dark-light rounded-2xl border border-white/[0.06] overflow-hidden">
+        <div class="px-5 py-4 border-b border-white/[0.06] flex items-center justify-between gap-3">
+            <div>
+                <h3 class="text-sm font-semibold text-white">Матрица результатов</h3>
+                <p class="text-xs text-gray-500 mt-0.5">Строки: задания, столбцы: ученики, значения: проверка (+ / - / .)</p>
+            </div>
+            <div class="text-xs text-gray-500">
+                <span class="text-emerald-400">+</span> верно ·
+                <span class="text-red-400">-</span> неверно ·
+                <span class="text-gray-400">.</span> нет проверки
+            </div>
+        </div>
+
+        @if(count($resultsMatrix['students']) > 0)
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-max text-xs">
+                    <thead>
+                        <tr class="border-b border-white/[0.06]">
+                            <th class="sticky left-0 z-20 bg-dark-light text-left px-4 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">
+                                №
+                            </th>
+                            @foreach($resultsMatrix['students'] as $studentColumn)
+                                <th class="px-3 py-3 text-center text-[11px] font-semibold text-gray-400 uppercase tracking-wider min-w-[58px]">
+                                    <a href="#attempt-{{ $studentColumn['attempt_id'] }}"
+                                       class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-white/[0.03] border border-white/[0.05] hover:border-coral/40 hover:text-white transition"
+                                       title="{{ $studentColumn['student_name'] }}">
+                                        {{ $studentColumn['student_short_name'] }}
+                                    </a>
+                                </th>
+                            @endforeach
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/[0.04]">
+                        @foreach($resultsMatrix['rows'] as $row)
+                            <tr class="hover:bg-white/[0.01] transition-colors">
+                                <td class="sticky left-0 z-10 bg-dark-light px-4 py-2.5 text-gray-300 font-semibold tabular-nums">
+                                    {{ $row['task_number'] }}
+                                </td>
+                                @foreach($row['cells'] as $cell)
+                                    @php
+                                        $state = $cell['is_correct'];
+                                    @endphp
+                                    <td class="px-3 py-2.5 text-center">
+                                        <span class="inline-flex items-center justify-center w-6 h-6 rounded-md text-xs font-semibold tabular-nums {{ $state === true ? 'bg-emerald-500/10 text-emerald-400' : ($state === false ? 'bg-red-500/10 text-red-400' : 'bg-white/[0.03] text-gray-400') }}">
+                                            {{ $cell['mark'] }}
+                                        </span>
+                                    </td>
+                                @endforeach
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <div class="px-4 py-12 text-center text-gray-600 text-sm">
+                Пока нет попыток по этому варианту.
+            </div>
+        @endif
+    </div>
+
+    {{-- Detailed results table --}}
+    <div class="bg-dark-light rounded-2xl border border-white/[0.06] overflow-hidden">
+        <div class="px-5 py-4 border-b border-white/[0.06]">
+            <h3 class="text-sm font-semibold text-white">Подробные ответы</h3>
+        </div>
         <div class="overflow-x-auto">
             <table class="min-w-[1200px] w-full text-xs">
                 <thead>

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\OgeAttempt;
 use App\Models\OgeAttemptAnswer;
+use App\Models\OgeAttemptScoring;
 use App\Models\OgeAttemptTaskTiming;
 use App\Models\OgeVariant;
 use App\Models\User;
@@ -149,7 +150,8 @@ class OgeCustomVariantAssessmentTest extends TestCase
     public function test_teacher_results_page_renders_custom_task_answers(): void
     {
         $teacher = User::factory()->create(['role' => 'teacher']);
-        $student = User::factory()->create(['role' => 'student']);
+        $student = User::factory()->create(['role' => 'student', 'name' => 'Иван Петров']);
+        $student2 = User::factory()->create(['role' => 'student', 'name' => 'Анна']);
 
         $variant = OgeVariant::create([
             'hash' => 'custm002',
@@ -197,6 +199,38 @@ class OgeCustomVariantAssessmentTest extends TestCase
             'focus_count' => 1,
         ]);
 
+        OgeAttemptScoring::create([
+            'attempt_id' => $attempt->id,
+            'task_number' => 1,
+            'is_correct' => true,
+            'correct_answer' => '42',
+            'checked_at' => now(),
+        ]);
+
+        OgeAttemptScoring::create([
+            'attempt_id' => $attempt->id,
+            'task_number' => 6,
+            'is_correct' => null,
+            'correct_answer' => '10',
+            'checked_at' => now(),
+        ]);
+
+        $attempt2 = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $student2->id,
+            'status' => 'submitted',
+            'started_at' => now()->subMinutes(7),
+            'submitted_at' => now()->subMinutes(1),
+        ]);
+
+        OgeAttemptScoring::create([
+            'attempt_id' => $attempt2->id,
+            'task_number' => 1,
+            'is_correct' => false,
+            'correct_answer' => '42',
+            'checked_at' => now(),
+        ]);
+
         $this->actingAs($teacher)
             ->get("/teacher/oge/teachers/{$teacher->id}/variants")
             ->assertOk()
@@ -205,6 +239,12 @@ class OgeCustomVariantAssessmentTest extends TestCase
         $this->actingAs($teacher)
             ->get("/teacher/oge/variants/{$variant->id}/results")
             ->assertOk()
+            ->assertSee('Матрица результатов')
+            ->assertSee('ИвП')
+            ->assertSee('Ан')
+            ->assertSee('>+</span>', false)
+            ->assertSee('>-</span>', false)
+            ->assertSee('>.</span>', false)
             ->assertSee('ans-task-1')
             ->assertSee('ans-task-6');
     }

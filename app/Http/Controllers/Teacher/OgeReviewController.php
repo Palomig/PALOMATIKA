@@ -45,8 +45,9 @@ class OgeReviewController extends Controller
             ->get();
 
         $taskNumbers = $this->resolveTaskNumbers($variant, $attempts);
+        $resultsMatrix = $this->buildResultsMatrix($attempts, $taskNumbers);
 
-        return view('teacher.oge.results', compact('variant', 'attempts', 'taskNumbers'));
+        return view('teacher.oge.results', compact('variant', 'attempts', 'taskNumbers', 'resultsMatrix'));
     }
 
     private function resolveTaskNumbers(OgeVariant $variant, $attempts): array
@@ -71,5 +72,106 @@ class OgeReviewController extends Controller
         sort($resolved);
 
         return !empty($resolved) ? $resolved : range(1, 19);
+    }
+
+    private function buildResultsMatrix($attempts, array $taskNumbers): array
+    {
+        $studentColumns = [];
+        $marksByAttemptAndTask = [];
+
+        foreach ($attempts as $attempt) {
+            $attemptId = (int) $attempt->id;
+            $scoringsByTask = $attempt->scorings->keyBy(fn ($scoring) => (int) $scoring->task_number);
+
+            $studentColumns[] = [
+                'attempt_id' => $attemptId,
+                'student_name' => $attempt->student->name ?? '—',
+                'student_short_name' => $this->formatStudentShortName($attempt->student->name ?? null),
+                'status' => (string) ($attempt->status ?? ''),
+            ];
+
+            foreach ($taskNumbers as $taskNumber) {
+                $scoring = $scoringsByTask->get((int) $taskNumber);
+                $isCorrect = $scoring?->is_correct;
+
+                $marksByAttemptAndTask[$attemptId][(int) $taskNumber] = [
+                    'is_correct' => is_null($isCorrect) ? null : (bool) $isCorrect,
+                    'mark' => $this->resolveCorrectnessMark($isCorrect),
+                ];
+            }
+        }
+
+        $rows = [];
+        foreach ($taskNumbers as $taskNumber) {
+            $cells = [];
+
+            foreach ($studentColumns as $studentColumn) {
+                $attemptId = $studentColumn['attempt_id'];
+                $cells[] = $marksByAttemptAndTask[$attemptId][(int) $taskNumber] ?? [
+                    'is_correct' => null,
+                    'mark' => '.',
+                ];
+            }
+
+            $rows[] = [
+                'task_number' => (int) $taskNumber,
+                'cells' => $cells,
+            ];
+        }
+
+        return [
+            'students' => $studentColumns,
+            'rows' => $rows,
+        ];
+    }
+
+    private function resolveCorrectnessMark(mixed $isCorrect): string
+    {
+        if ($isCorrect === true) {
+            return '+';
+        }
+
+        if ($isCorrect === false) {
+            return '-';
+        }
+
+        return '.';
+    }
+
+    private function formatStudentShortName(?string $name): string
+    {
+        $parts = preg_split('/\s+/u', trim((string) $name), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+
+        if ($parts === []) {
+            return '—';
+        }
+
+        $first = $parts[0] ?? '';
+        $second = $parts[1] ?? '';
+
+        $short = $this->sliceText($first, 2);
+
+        if ($second !== '') {
+            $short .= $this->sliceText($second, 1);
+        }
+
+        if ($short === '') {
+            return $this->sliceText($first, 1) ?: '—';
+        }
+
+        return $short;
+    }
+
+    private function sliceText(string $value, int $length): string
+    {
+        if ($value === '' || $length <= 0) {
+            return '';
+        }
+
+        if (function_exists('mb_substr')) {
+            return mb_substr($value, 0, $length);
+        }
+
+        return substr($value, 0, $length);
     }
 }
