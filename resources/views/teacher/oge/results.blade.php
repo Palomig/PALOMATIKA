@@ -181,8 +181,60 @@
         </script>
     @endif
 
-    {{-- Detailed results table --}}
-    <div class="bg-dark-light rounded-2xl border border-white/[0.06] overflow-hidden">
+    {{-- Detailed results: mobile cards --}}
+    <div class="sm:hidden space-y-3">
+        <h3 class="text-sm font-semibold text-white px-1">Подробные ответы</h3>
+        @forelse($attempts as $attempt)
+            @php
+                $answersMap = $attempt->answers->keyBy('task_number');
+                $timingsMap = $attempt->taskTimings->keyBy('task_number');
+                $scoringMap = $attempt->scorings->keyBy('task_number');
+                $totalMs = (int) $attempt->taskTimings->sum('active_ms');
+                $totalMinutes = round($totalMs / 60000, 1);
+            @endphp
+            <article id="attempt-{{ $attempt->id }}-mobile" class="bg-dark-light rounded-2xl border border-white/[0.06] p-4">
+                <div class="flex items-center justify-between gap-3 mb-3">
+                    <div class="flex items-center gap-2.5 min-w-0">
+                        <div class="w-9 h-9 bg-coral/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <span class="text-sm font-semibold text-coral">{{ substr($attempt->student->name ?? '?', 0, 1) }}</span>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="text-sm font-medium text-white truncate">{{ $attempt->student->name ?? '—' }}</div>
+                            <div class="text-[11px] text-gray-500">{{ $totalMinutes }} мин</div>
+                        </div>
+                    </div>
+                    <span class="inline-flex items-center px-2 py-0.5 text-[10px] font-medium rounded-md flex-shrink-0 {{ $attempt->status === 'submitted' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400' }}">
+                        {{ $attempt->status === 'submitted' ? 'Сдано' : $attempt->status }}
+                    </span>
+                </div>
+                <div class="flex flex-wrap gap-1.5">
+                    @foreach($taskColumns as $taskColumn)
+                        @php
+                            $attemptTaskNumber = (int) ($taskColumn['attempt_task_number'] ?? 0);
+                            $answer = $answersMap->get($attemptTaskNumber);
+                            $scoring = $scoringMap->get($attemptTaskNumber);
+                            $state = $scoring?->is_correct;
+                        @endphp
+                        <div class="inline-flex items-center gap-1 rounded-lg border px-2 py-1.5 text-xs {{ $state === true ? 'border-emerald-500/20 bg-emerald-500/5' : ($state === false ? 'border-red-500/20 bg-red-500/5' : 'border-white/[0.06] bg-white/[0.02]') }}">
+                            <span class="text-gray-400 tabular-nums">{{ $taskColumn['display_task_number'] }}</span>
+                            @if($answer?->current_answer)
+                                <span class="font-medium {{ $state === true ? 'text-emerald-400' : ($state === false ? 'text-red-400' : 'text-gray-300') }}">{{ $answer->current_answer }}</span>
+                            @else
+                                <span class="text-gray-600">—</span>
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+            </article>
+        @empty
+            <div class="bg-dark-light rounded-2xl border border-white/[0.06] p-8 text-center text-sm text-gray-600">
+                Пока нет попыток по этому варианту.
+            </div>
+        @endforelse
+    </div>
+
+    {{-- Detailed results: desktop table --}}
+    <div class="hidden sm:block bg-dark-light rounded-2xl border border-white/[0.06] overflow-hidden">
         <div class="px-5 py-4 border-b border-white/[0.06]">
             <h3 class="text-sm font-semibold text-white">Подробные ответы</h3>
         </div>

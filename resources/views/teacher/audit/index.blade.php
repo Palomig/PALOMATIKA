@@ -6,11 +6,11 @@
 @section('content')
 <div x-data="auditPage()" x-init="init()" class="space-y-4">
     <div class="bg-dark-light rounded-2xl border border-white/[0.06] p-4 space-y-3">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
             <input x-model="filters.from" type="date" class="bg-dark border border-white/[0.08] rounded-lg px-3 py-2 text-sm text-white">
             <input x-model="filters.to" type="date" class="bg-dark border border-white/[0.08] rounded-lg px-3 py-2 text-sm text-white">
-            <input x-model="filters.actor_query" type="text" placeholder="Поиск по пользователю" class="bg-dark border border-white/[0.08] rounded-lg px-3 py-2 text-sm text-white">
-            <input x-model="filters.subject_query" type="text" placeholder="Поиск по ученику" class="bg-dark border border-white/[0.08] rounded-lg px-3 py-2 text-sm text-white">
+            <input x-model="filters.actor_query" type="text" placeholder="По пользователю" class="bg-dark border border-white/[0.08] rounded-lg px-3 py-2 text-sm text-white col-span-2 md:col-span-1">
+            <input x-model="filters.subject_query" type="text" placeholder="По ученику" class="bg-dark border border-white/[0.08] rounded-lg px-3 py-2 text-sm text-white col-span-2 md:col-span-1">
         </div>
         <div class="flex flex-wrap gap-2">
             <button @click="preset('today')" class="px-3 py-1.5 text-xs rounded-lg bg-dark border border-white/[0.08] text-gray-300">Сегодня</button>
@@ -18,11 +18,29 @@
             <button @click="preset('30d')" class="px-3 py-1.5 text-xs rounded-lg bg-dark border border-white/[0.08] text-gray-300">30 дней</button>
             <button @click="preset('90d')" class="px-3 py-1.5 text-xs rounded-lg bg-dark border border-white/[0.08] text-gray-300">90 дней</button>
             <button @click="load()" class="px-3 py-1.5 text-xs rounded-lg bg-coral/20 border border-coral/40 text-coral">Применить</button>
-            <button @click="exportCsv()" class="px-3 py-1.5 text-xs rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-300">Экспорт CSV</button>
+            <button @click="exportCsv()" class="px-3 py-1.5 text-xs rounded-lg bg-emerald-600/20 border border-emerald-500/40 text-emerald-300">CSV</button>
         </div>
     </div>
 
-    <div class="bg-dark-light rounded-2xl border border-white/[0.06] overflow-hidden">
+    {{-- Mobile cards --}}
+    <div class="sm:hidden space-y-2">
+        <template x-for="row in rows" :key="row.id">
+            <div @click="openDetails(row.id)" class="bg-dark-light rounded-xl border border-white/[0.06] p-3 active:bg-white/[0.02] cursor-pointer">
+                <div class="flex items-center justify-between gap-2 mb-1.5">
+                    <span class="text-xs font-medium text-white truncate" x-text="row.event_type"></span>
+                    <span class="text-[10px] text-gray-500 flex-shrink-0" x-text="row.occurred_at"></span>
+                </div>
+                <div class="flex items-center justify-between gap-2 text-[11px]">
+                    <span class="text-gray-400 truncate" x-text="(row.actor_name || '') + (row.actor_email ? ' (' + row.actor_email + ')' : '')"></span>
+                    <span class="text-gray-500 px-1.5 py-0.5 rounded bg-white/[0.03] flex-shrink-0" x-text="row.category || '—'"></span>
+                </div>
+            </div>
+        </template>
+        <div x-show="rows.length === 0" class="bg-dark-light rounded-xl border border-white/[0.06] p-6 text-center text-gray-600 text-sm">Нет событий по фильтру</div>
+    </div>
+
+    {{-- Desktop table --}}
+    <div class="hidden sm:block bg-dark-light rounded-2xl border border-white/[0.06] overflow-hidden">
         <div class="overflow-x-auto">
             <table class="min-w-[1100px] w-full text-xs">
                 <thead>
@@ -61,7 +79,7 @@
             <h3 class="text-white font-semibold">Детали события</h3>
             <button @click="selected = null" class="text-gray-400">Закрыть</button>
         </div>
-        <pre class="text-xs text-gray-300 overflow-auto" x-text="JSON.stringify(selected, null, 2)"></pre>
+        <pre class="text-xs text-gray-300 overflow-auto max-w-full" x-text="JSON.stringify(selected, null, 2)"></pre>
     </div>
 </div>
 

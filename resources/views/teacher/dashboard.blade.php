@@ -6,8 +6,8 @@
 @section('content')
 <div x-data="teacherDashboard()">
     {{-- Stats row --}}
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div class="relative overflow-hidden bg-dark-light rounded-2xl p-5 border border-white/[0.06] group hover:border-blue-500/20 transition-colors">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
+        <div class="relative overflow-hidden bg-dark-light rounded-2xl p-4 sm:p-5 border border-white/[0.06] group hover:border-blue-500/20 transition-colors">
             <div class="absolute -right-3 -top-3 w-16 h-16 bg-blue-500/[0.07] rounded-full blur-sm group-hover:bg-blue-500/[0.12] transition"></div>
             <div class="flex items-center gap-3 mb-3">
                 <div class="w-10 h-10 bg-blue-500/15 rounded-xl flex items-center justify-center">
@@ -17,10 +17,10 @@
                 </div>
                 <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Ученики</span>
             </div>
-            <div class="text-3xl font-bold text-white" x-text="stats.total_students || 0"></div>
+            <div class="text-2xl sm:text-3xl font-bold text-white" x-text="stats.total_students || 0"></div>
         </div>
 
-        <div class="relative overflow-hidden bg-dark-light rounded-2xl p-5 border border-white/[0.06] group hover:border-emerald-500/20 transition-colors">
+        <div class="relative overflow-hidden bg-dark-light rounded-2xl p-4 sm:p-5 border border-white/[0.06] group hover:border-emerald-500/20 transition-colors">
             <div class="absolute -right-3 -top-3 w-16 h-16 bg-emerald-500/[0.07] rounded-full blur-sm group-hover:bg-emerald-500/[0.12] transition"></div>
             <div class="flex items-center gap-3 mb-3">
                 <div class="w-10 h-10 bg-emerald-500/15 rounded-xl flex items-center justify-center">
@@ -30,10 +30,10 @@
                 </div>
                 <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Подписки</span>
             </div>
-            <div class="text-3xl font-bold text-white" x-text="stats.active_subscriptions || 0"></div>
+            <div class="text-2xl sm:text-3xl font-bold text-white" x-text="stats.active_subscriptions || 0"></div>
         </div>
 
-        <div class="relative overflow-hidden bg-dark-light rounded-2xl p-5 border border-white/[0.06] group hover:border-amber-500/20 transition-colors">
+        <div class="relative overflow-hidden bg-dark-light rounded-2xl p-4 sm:p-5 border border-white/[0.06] group hover:border-amber-500/20 transition-colors">
             <div class="absolute -right-3 -top-3 w-16 h-16 bg-amber-500/[0.07] rounded-full blur-sm group-hover:bg-amber-500/[0.12] transition"></div>
             <div class="flex items-center gap-3 mb-3">
                 <div class="w-10 h-10 bg-amber-500/15 rounded-xl flex items-center justify-center">
@@ -43,10 +43,10 @@
                 </div>
                 <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Ожидают ДЗ</span>
             </div>
-            <div class="text-3xl font-bold text-white" x-text="stats.pending_homework || 0"></div>
+            <div class="text-2xl sm:text-3xl font-bold text-white" x-text="stats.pending_homework || 0"></div>
         </div>
 
-        <div class="relative overflow-hidden bg-dark-light rounded-2xl p-5 border border-white/[0.06] group hover:border-coral/20 transition-colors">
+        <div class="relative overflow-hidden bg-dark-light rounded-2xl p-4 sm:p-5 border border-white/[0.06] group hover:border-coral/20 transition-colors">
             <div class="absolute -right-3 -top-3 w-16 h-16 bg-coral/[0.07] rounded-full blur-sm group-hover:bg-coral/[0.12] transition"></div>
             <div class="flex items-center gap-3 mb-3">
                 <div class="w-10 h-10 bg-coral/15 rounded-xl flex items-center justify-center">
@@ -56,7 +56,7 @@
                 </div>
                 <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Заработок</span>
             </div>
-            <div class="text-3xl font-bold text-white" x-text="formatMoney(stats.monthly_earnings || 0)"></div>
+            <div class="text-2xl sm:text-3xl font-bold text-white" x-text="formatMoney(stats.monthly_earnings || 0)"></div>
         </div>
     </div>
 
@@ -121,11 +121,38 @@
 
     {{-- Homework overview --}}
     <div class="mt-5 bg-dark-light rounded-2xl border border-white/[0.06] overflow-hidden">
-        <div class="px-5 py-4 border-b border-white/[0.06] flex items-center justify-between">
+        <div class="px-4 sm:px-5 py-4 border-b border-white/[0.06] flex items-center justify-between">
             <h3 class="font-semibold text-white text-[15px]">Домашние задания</h3>
             <a href="/teacher/homework" class="text-xs font-medium text-coral hover:text-coral-light transition">Все задания</a>
         </div>
-        <div class="overflow-x-auto">
+
+        {{-- Mobile cards --}}
+        <div class="sm:hidden divide-y divide-white/[0.04]">
+            <template x-for="hw in recentHomework" :key="hw.id">
+                <div class="px-4 py-3.5">
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <span class="text-sm font-medium text-white truncate" x-text="hw.title"></span>
+                        <span class="inline-flex items-center px-2 py-0.5 text-[10px] font-medium rounded-lg flex-shrink-0"
+                              :class="hw.is_overdue ? 'bg-red-500/10 text-red-400' : 'bg-emerald-500/10 text-emerald-400'"
+                              x-text="hw.is_overdue ? 'Просрочено' : 'Активно'"></span>
+                    </div>
+                    <div class="flex items-center gap-3 text-xs text-gray-500 mb-2">
+                        <span x-text="hw.assigned_count + ' уч.'"></span>
+                        <span x-text="'Срок: ' + hw.due_date"></span>
+                    </div>
+                    <div class="flex items-center gap-2.5">
+                        <div class="flex-1 bg-white/[0.06] rounded-full h-1.5">
+                            <div class="bg-coral rounded-full h-1.5 transition-all"
+                                 :style="'width: ' + hw.completion_rate + '%'"></div>
+                        </div>
+                        <span class="text-xs text-gray-500 tabular-nums" x-text="hw.completion_rate + '%'"></span>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        {{-- Desktop table --}}
+        <div class="hidden sm:block overflow-x-auto">
             <table class="w-full">
                 <thead>
                     <tr class="border-b border-white/[0.06]">

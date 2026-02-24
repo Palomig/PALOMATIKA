@@ -6,13 +6,13 @@
 @section('content')
 <div x-data="analyticsPage()">
     {{-- Period selector --}}
-    <div class="flex items-center gap-1.5 mb-6 bg-dark-light rounded-xl p-1 border border-white/[0.06] w-fit">
+    <div class="flex items-center gap-1.5 mb-6 bg-dark-light rounded-xl p-1 border border-white/[0.06] w-full sm:w-fit overflow-x-auto">
         <template x-for="p in [{key:'week',label:'Неделя'},{key:'month',label:'Месяц'},{key:'all',label:'Всё время'}]" :key="p.key">
             <button @click="period = p.key"
                     :class="period === p.key
                         ? 'bg-coral text-white shadow-lg shadow-coral/10'
                         : 'text-gray-400 hover:text-white'"
-                    class="px-4 py-2 rounded-lg text-sm font-medium transition-all"
+                    class="flex-1 sm:flex-none px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap"
                     x-text="p.label"></button>
         </template>
     </div>

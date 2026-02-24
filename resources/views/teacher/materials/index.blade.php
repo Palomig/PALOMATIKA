@@ -7,10 +7,31 @@
 <div class="space-y-6">
     <div class="rounded-2xl bg-dark-light border border-dark-lighter p-5">
         <h2 class="text-white text-xl font-semibold">Управление материалами</h2>
-        <p class="text-gray-300 mt-2">Создавайте и публикуйте материалы через API `/api/materials`.</p>
+        <p class="text-gray-300 mt-2 text-sm">Создавайте и публикуйте материалы через API <code class="text-coral">/api/materials</code>.</p>
     </div>
 
-    <div class="rounded-2xl bg-dark-light border border-dark-lighter overflow-hidden">
+    {{-- Mobile cards --}}
+    <div class="sm:hidden space-y-3">
+        @forelse($materials as $material)
+            <div class="rounded-2xl bg-dark-light border border-dark-lighter p-4">
+                <div class="flex items-center justify-between gap-3 mb-2">
+                    <div class="text-sm font-medium text-white truncate">{{ $material->title }}</div>
+                    <span class="text-xs px-2 py-0.5 rounded-md flex-shrink-0 {{ $material->status === 'published' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-white/[0.04] text-gray-400' }}">{{ $material->status }}</span>
+                </div>
+                <div class="flex items-center justify-between text-xs text-gray-500">
+                    <span class="font-mono truncate">{{ $material->slug }}</span>
+                    <span>{{ optional($material->updated_at)->format('d.m.Y') }}</span>
+                </div>
+            </div>
+        @empty
+            <div class="rounded-2xl bg-dark-light border border-dark-lighter p-8 text-center text-sm text-gray-400">
+                No materials yet.
+            </div>
+        @endforelse
+    </div>
+
+    {{-- Desktop table --}}
+    <div class="hidden sm:block rounded-2xl bg-dark-light border border-dark-lighter overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full">
                 <thead>

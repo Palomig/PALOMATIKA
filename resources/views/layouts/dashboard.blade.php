@@ -39,15 +39,16 @@
                         </div>
                         <span class="text-xl font-bold text-white">PALOMATIKA</span>
                     </a>
-                    @if($role === 'teacher')
-                        <span class="text-xs bg-coral/20 text-coral px-2 py-1 rounded-lg">Учитель</span>
-                    @else
+                    <div class="flex items-center gap-2">
+                        @if($role === 'teacher')
+                            <span class="text-xs bg-coral/20 text-coral px-2 py-1 rounded-lg hidden lg:inline">Учитель</span>
+                        @endif
                         <button @click="sidebarOpen = false" class="lg:hidden text-gray-400 hover:text-white" aria-label="Закрыть меню">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                             </svg>
                         </button>
-                    @endif
+                    </div>
                 </div>
 
                 {{-- User info --}}
@@ -136,6 +137,17 @@
             </div>
         </aside>
 
+        {{-- Sidebar overlay on mobile --}}
+        <div x-show="sidebarOpen" x-cloak
+             @click="sidebarOpen = false"
+             class="fixed inset-0 bg-black/50 z-20 lg:hidden"
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition ease-in duration-150"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"></div>
+
         {{-- Main content --}}
         <div class="flex-1 lg:ml-64">
             {{-- Top bar --}}
@@ -181,7 +193,7 @@
             </header>
 
             {{-- Page content --}}
-            <main class="p-6">
+            <main class="p-4 sm:p-6">
                 @yield('content')
             </main>
         </div>

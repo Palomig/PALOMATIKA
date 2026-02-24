@@ -18,8 +18,37 @@
         <p class="text-sm text-gray-500 mt-0.5">Список вариантов, созданных этим учителем.</p>
     </div>
 
-    {{-- Variants table --}}
-    <div class="bg-dark-light rounded-2xl border border-white/[0.06] overflow-hidden">
+    {{-- Mobile cards --}}
+    <div class="sm:hidden space-y-3">
+        @forelse($variants as $variant)
+            <a href="{{ route('teacher.oge.results', $variant->id) }}"
+               class="block bg-dark-light rounded-2xl border border-white/[0.06] p-4 active:bg-white/[0.02] transition-colors">
+                <div class="flex items-center justify-between gap-3 mb-2">
+                    <span class="font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md text-xs">{{ $variant->hash }}</span>
+                    <div class="flex items-center gap-2">
+                        @if($variant->isCustomRandom())
+                            <span class="inline-flex items-center px-2 py-0.5 text-[10px] font-medium rounded-md bg-sky-500/15 text-sky-300">Кастомный</span>
+                        @endif
+                        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="text-sm font-medium text-white mb-2">{{ $variant->title ?? 'Вариант ' . $variant->hash }}</div>
+                <div class="flex items-center gap-4 text-xs text-gray-500">
+                    <span>Попыток: <span class="text-gray-300 tabular-nums">{{ $variant->attempts_count }}</span></span>
+                    <span>{{ optional($variant->created_at)->format('d.m.Y') }}</span>
+                </div>
+            </a>
+        @empty
+            <div class="bg-dark-light rounded-2xl border border-white/[0.06] p-8 text-center text-sm text-gray-600">
+                У этого учителя пока нет вариантов.
+            </div>
+        @endforelse
+    </div>
+
+    {{-- Desktop table --}}
+    <div class="hidden sm:block bg-dark-light rounded-2xl border border-white/[0.06] overflow-hidden">
         <table class="w-full text-sm">
             <thead>
                 <tr class="border-b border-white/[0.06]">
