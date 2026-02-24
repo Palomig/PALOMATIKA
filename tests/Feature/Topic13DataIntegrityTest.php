@@ -40,7 +40,7 @@ class Topic13DataIntegrityTest extends TestCase
         }
 
         $this->assertSame(166, $totalTasks, 'Unexpected topic 13 total task count');
-        $this->assertSame(87, $imageTasks, 'Unexpected topic 13 image task count');
+        $this->assertSame(78, $imageTasks, 'Unexpected topic 13 image task count (9 moved to graph_options)');
 
         foreach ($blocks as $block) {
             foreach ($block['zadaniya'] ?? [] as $zadanie) {
@@ -106,9 +106,9 @@ class Topic13DataIntegrityTest extends TestCase
         $this->assertSame(11, $z11['number'] ?? null);
         $this->assertSame(12, $z12['number'] ?? null);
 
-        // PDF page boundary: Zadanie 10 item 9 is the final 4-option graph panel (0 and 3), then Zadanie 11 starts.
-        $this->assertSame('img-026.png', $z10['tasks'][0]['image'] ?? null);
-        $this->assertSame('img-034.png', $z10['tasks'][8]['image'] ?? null);
+        // Zadanie 10 now uses graph_options (SVG intervals) instead of PNG images.
+        $this->assertArrayHasKey('graph_options', $z10['tasks'][0]);
+        $this->assertArrayNotHasKey('image', $z10['tasks'][0]);
         $this->assertSame('3x - x^2 \\leq 0', $z10['tasks'][8]['expression'] ?? null);
 
         // Zadanie 11 item 1 options are for x^2 - 49 and must use the closed segment [-7; 7] graph.
