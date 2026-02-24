@@ -91,7 +91,26 @@
                                     <div class="text-sm text-white">
                                         Задание <span class="font-semibold" data-wrong-task-number>{{ $wrongTask['display_task_number'] }}</span>
                                     </div>
-                                    <div class="mt-1 text-sm text-gray-300" data-wrong-task-text>{{ $wrongTask['task_text'] }}</div>
+                                    <div class="mt-1 text-sm text-gray-300 whitespace-pre-line" data-wrong-task-text>{!! nl2br(e($wrongTask['task_text'])) !!}</div>
+
+                                    @if(is_array($wrongTask['task_visual'] ?? null))
+                                        <div class="mt-3 rounded-lg border border-white/[0.06] bg-dark/30 p-2">
+                                            @if(($wrongTask['task_visual']['type'] ?? null) === 'svg' && !empty($wrongTask['task_visual']['content']))
+                                                <div class="bg-white rounded-md p-2 overflow-auto" data-wrong-task-svg>
+                                                    {!! $wrongTask['task_visual']['content'] !!}
+                                                </div>
+                                            @elseif(($wrongTask['task_visual']['type'] ?? null) === 'image' && !empty($wrongTask['task_visual']['url']))
+                                                <img src="{{ $wrongTask['task_visual']['url'] }}"
+                                                     alt="Иллюстрация к заданию {{ $wrongTask['display_task_number'] }}"
+                                                     class="max-h-52 w-auto rounded-md bg-white object-contain"
+                                                     data-wrong-task-image>
+                                            @endif
+
+                                            @if(!empty($wrongTask['task_visual']['ref']))
+                                                <div class="mt-2 text-xs text-gray-500 break-all">{{ $wrongTask['task_visual']['ref'] }}</div>
+                                            @endif
+                                        </div>
+                                    @endif
                                     <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
                                         <div class="rounded-lg bg-red-500/5 border border-red-500/20 px-3 py-2">
                                             <div class="text-xs text-red-300 uppercase tracking-wider">Ответ ученика</div>

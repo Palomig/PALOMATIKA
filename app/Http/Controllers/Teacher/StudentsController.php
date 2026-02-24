@@ -5,13 +5,18 @@ namespace App\Http\Controllers\Teacher;
 use App\Http\Controllers\Controller;
 use App\Models\OgeAttempt;
 use App\Models\User;
+use App\Services\OgeVariantBuilderService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class StudentsController extends Controller
 {
@@ -185,18 +190,26 @@ class StudentsController extends Controller
             ->filter(fn ($scoring) => $scoring->is_correct === false)
             ->sortBy(fn ($scoring) => (int) $scoring->task_number)
             ->values()
-            ->map(function ($scoring) use ($answersByTask, $taskDefinitions): array {
+            ->map(function ($scoring) use ($attempt, $answersByTask, $taskDefinitions): array {
                 $attemptTaskNumber = (int) $scoring->task_number;
                 $definition = $taskDefinitions[$attemptTaskNumber] ?? null;
                 $displayTaskNumber = (int) ($definition['display_task_number'] ?? $attemptTaskNumber);
                 $taskText = $definition['task_text'] ?? null;
+                $debugId = sprintf(
+                    'attempt:%d variant:%s task:%d',
+                    (int) $attempt->id,
+                    (string) ($attempt->variant?->hash ?? ('id-' . (int) ($attempt->variant?->id ?? 0))),
+                    $attemptTaskNumber
+                );
 
                 return [
                     'attempt_task_number' => $attemptTaskNumber,
                     'display_task_number' => $displayTaskNumber,
                     'task_text' => is_string($taskText) && trim($taskText) !== ''
                         ? trim($taskText)
-                        : 'Текст задания недоступен',
+                        : 'Текст задания недоступен (debug: ' . $debugId . ')',
+                    'task_visual' => is_array($definition['task_visual'] ?? null) ? $definition['task_visual'] : null,
+                    'task_debug_id' => $debugId,
                     'student_answer' => (string) (($answersByTask->get($attemptTaskNumber)->current_answer ?? '') ?: '—'),
                     'correct_answer' => (string) (($scoring->correct_answer ?? '') ?: '—'),
                 ];
@@ -238,7 +251,7 @@ class StudentsController extends Controller
     }
 
     /**
-     * @return array<int, array{display_task_number:int, task_text:?string}>
+     * @return array<int, array{display_task_number:int, task_text:?string, task_visual:?array}>
      */
     private function resolveVariantTaskDefinitions(OgeAttempt $attempt): array
     {
@@ -246,8 +259,12 @@ class StudentsController extends Controller
         $config = is_array($variant?->config_json ?? null) ? $variant->config_json : [];
         $definitions = [];
 
-        if (($variant?->source() ?? null) === 'custom_random') {
+        if ($variant?->isCustomRandom()) {
             $customTasks = $config['custom_tasks'] ?? [];
+            if ((!is_array($customTasks) || empty($customTasks)) && is_string($variant?->hash) && $variant->hash !== '') {
+                $customTasks = $this->loadCustomRandomTasksByHash($variant->hash);
+            }
+
             if (is_array($customTasks)) {
                 foreach ($customTasks as $index => $taskData) {
                     if (!is_array($taskData)) {
@@ -259,9 +276,11 @@ class StudentsController extends Controller
                         continue;
                     }
 
+                    $presentation = $this->resolveTaskPresentation($taskData);
                     $definitions[$attemptTaskNumber] = [
-                        'display_task_number' => (int) ($taskData['zadanie_number'] ?? $attemptTaskNumber),
-                        'task_text' => $this->resolveTaskText($taskData),
+                        'display_task_number' => (int) ($taskData['zadanie_number'] ?? $taskData['real_task_number'] ?? $attemptTaskNumber),
+                        'task_text' => $presentation['task_text'],
+                        'task_visual' => $presentation['task_visual'],
                     ];
                 }
             }
@@ -269,23 +288,40 @@ class StudentsController extends Controller
             return $definitions;
         }
 
-        $zadaniya = $config['zadaniya'] ?? [];
-        if (is_array($zadaniya)) {
-            foreach ($zadaniya as $index => $taskData) {
-                if (!is_array($taskData)) {
-                    continue;
-                }
+        $hash = (string) ($variant?->hash ?? '');
+        if ($hash === '') {
+            return $definitions;
+        }
 
-                $attemptTaskNumber = (int) ($taskData['attempt_task_number'] ?? $taskData['task_number'] ?? (6 + $index));
-                if ($attemptTaskNumber < 1 || $attemptTaskNumber > 255) {
-                    continue;
-                }
+        try {
+            $selected = $config['zadaniya'] ?? null;
+            $payload = app(OgeVariantBuilderService::class)->build($hash, is_array($selected) ? $selected : null);
+        } catch (\Throwable $e) {
+            Log::warning('Failed to resolve generator variant payload for teacher student drilldown', [
+                'variant_id' => (int) ($variant?->id ?? 0),
+                'variant_hash' => $hash,
+                'error' => $e->getMessage(),
+            ]);
 
-                $definitions[$attemptTaskNumber] = [
-                    'display_task_number' => (int) ($taskData['zadanie_number'] ?? $attemptTaskNumber),
-                    'task_text' => $this->resolveTaskText($taskData),
-                ];
+            return $definitions;
+        }
+
+        foreach (($payload['tasks'] ?? []) as $index => $taskData) {
+            if (!is_array($taskData)) {
+                continue;
             }
+
+            $attemptTaskNumber = (int) ($taskData['attempt_task_number'] ?? $taskData['task_number'] ?? (6 + $index));
+            if ($attemptTaskNumber < 1 || $attemptTaskNumber > 255) {
+                continue;
+            }
+
+            $presentation = $this->resolveTaskPresentation($taskData);
+            $definitions[$attemptTaskNumber] = [
+                'display_task_number' => (int) ($taskData['zadanie_number'] ?? $taskData['task_number'] ?? $attemptTaskNumber),
+                'task_text' => $presentation['task_text'],
+                'task_visual' => $presentation['task_visual'],
+            ];
         }
 
         return $definitions;
@@ -294,20 +330,182 @@ class StudentsController extends Controller
     private function resolveTaskText(array $taskData): ?string
     {
         $task = $taskData['task'] ?? null;
-        $candidates = [
-            is_array($task) ? ($task['text'] ?? null) : null,
-            is_array($task) ? ($task['example'] ?? null) : null,
-            $taskData['text'] ?? null,
-            $taskData['example'] ?? null,
-            $taskData['instruction'] ?? null,
-        ];
+        $lines = [];
 
-        foreach ($candidates as $candidate) {
+        foreach ([
+            is_array($task) ? ($task['example'] ?? null) : null,
+            is_array($task) ? ($task['text'] ?? null) : null,
+            is_array($task) ? ($task['question'] ?? null) : null,
+            is_array($task) ? ($task['expression'] ?? null) : null,
+            $taskData['example'] ?? null,
+            $taskData['text'] ?? null,
+            $taskData['question'] ?? null,
+            $taskData['expression'] ?? null,
+            $taskData['instruction'] ?? null,
+        ] as $candidate) {
             if (is_string($candidate) && trim($candidate) !== '') {
-                return trim($candidate);
+                $lines[] = trim($candidate);
+            }
+        }
+
+        foreach ([$taskData['options'] ?? null, is_array($task) ? ($task['options'] ?? null) : null] as $options) {
+            $rendered = $this->renderOptionsText($options);
+            if ($rendered !== null) {
+                $lines[] = $rendered;
+                break;
+            }
+        }
+
+        $lines = array_values(array_unique(array_filter($lines, fn ($line) => is_string($line) && $line !== '')));
+
+        if (!empty($lines)) {
+            return implode("\n", $lines);
+        }
+
+        return null;
+    }
+
+    /**
+     * @return array{task_text:?string, task_visual:?array}
+     */
+    private function resolveTaskPresentation(array $taskData): array
+    {
+        return [
+            'task_text' => $this->resolveTaskText($taskData),
+            'task_visual' => $this->resolveTaskVisual($taskData),
+        ];
+    }
+
+    /**
+     * @return array{type:string, content?:string, url?:string, ref?:string}|null
+     */
+    private function resolveTaskVisual(array $taskData): ?array
+    {
+        $task = is_array($taskData['task'] ?? null) ? $taskData['task'] : [];
+
+        foreach ([$task['svg'] ?? null, $taskData['svg'] ?? null] as $svg) {
+            if (is_string($svg) && trim($svg) !== '') {
+                return ['type' => 'svg', 'content' => trim($svg)];
+            }
+        }
+
+        foreach ([$task['image'] ?? null, $taskData['image'] ?? null] as $image) {
+            if (!is_string($image) || trim($image) === '') {
+                continue;
+            }
+
+            $image = trim($image);
+            if (Str::startsWith($image, '<svg')) {
+                return ['type' => 'svg', 'content' => $image];
+            }
+
+            if (Str::startsWith($image, ['http://', 'https://', '/'])) {
+                return ['type' => 'image', 'url' => $image, 'ref' => $image];
+            }
+
+            $topicId = $this->resolveTaskTopicId($taskData, $task);
+            if ($topicId !== null) {
+                return [
+                    'type' => 'image',
+                    'url' => asset("images/tasks/{$topicId}/{$image}"),
+                    'ref' => "images/tasks/{$topicId}/{$image}",
+                ];
+            }
+
+            return ['type' => 'image_ref', 'ref' => $image];
+        }
+
+        return null;
+    }
+
+    private function resolveTaskTopicId(array $taskData, array $task): ?string
+    {
+        foreach ([
+            $taskData['topic_id'] ?? null,
+            $task['topic_id'] ?? null,
+            $taskData['topicId'] ?? null,
+            $task['topicId'] ?? null,
+        ] as $candidate) {
+            if ($candidate === null) {
+                continue;
+            }
+
+            $topicId = str_pad((string) $candidate, 2, '0', STR_PAD_LEFT);
+            if (preg_match('/^\d{2}$/', $topicId) === 1) {
+                return $topicId;
             }
         }
 
         return null;
+    }
+
+    private function renderOptionsText(mixed $options): ?string
+    {
+        if (!is_array($options) || empty($options)) {
+            return null;
+        }
+
+        $parts = [];
+        foreach ($options as $option) {
+            if (is_string($option) && trim($option) !== '') {
+                $parts[] = trim($option);
+                continue;
+            }
+
+            if (!is_array($option)) {
+                continue;
+            }
+
+            foreach (['text', 'label', 'value', 'option'] as $key) {
+                $value = $option[$key] ?? null;
+                if (is_string($value) && trim($value) !== '') {
+                    $parts[] = trim($value);
+                    break;
+                }
+            }
+        }
+
+        $parts = array_values(array_unique($parts));
+        if (empty($parts)) {
+            return null;
+        }
+
+        return implode(', ', $parts);
+    }
+
+    /**
+     * @return array<int, mixed>
+     */
+    private function loadCustomRandomTasksByHash(string $hash): array
+    {
+        $cacheKey = "custom_random_test_{$hash}";
+        $cached = Cache::get($cacheKey);
+        if (is_array($cached) && !empty($cached)) {
+            return $cached;
+        }
+
+        $path = "custom_random_tests/{$hash}.json";
+        if (!Storage::disk('local')->exists($path)) {
+            return [];
+        }
+
+        try {
+            $decoded = json_decode((string) Storage::disk('local')->get($path), true, 512, JSON_THROW_ON_ERROR);
+        } catch (\Throwable $e) {
+            Log::warning('Failed to read custom random task payload for teacher student drilldown', [
+                'variant_hash' => $hash,
+                'error' => $e->getMessage(),
+            ]);
+
+            return [];
+        }
+
+        if (!is_array($decoded) || empty($decoded)) {
+            return [];
+        }
+
+        Cache::put($cacheKey, $decoded, now()->addDays(7));
+
+        return $decoded;
     }
 }

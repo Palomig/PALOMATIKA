@@ -8,11 +8,13 @@ use App\Models\OgeAttemptScoring;
 use App\Models\OgeVariant;
 use App\Models\TeacherStudent;
 use App\Models\User;
+use App\Services\OgeVariantBuilderService;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use Mockery;
 use Tests\TestCase;
 
 class TeacherStudentsPageTest extends TestCase
@@ -370,6 +372,18 @@ class TeacherStudentsPageTest extends TestCase
                     [
                         'attempt_task_number' => 2,
                         'zadanie_number' => 6,
+                        'task' => [
+                            'question' => 'Выберите правильный рисунок',
+                            'image' => 'task06_preview.png',
+                        ],
+                        'topic_id' => '06',
+                    ],
+                    [
+                        'attempt_task_number' => 3,
+                        'zadanie_number' => 9,
+                        'task' => [
+                            'svg' => '<svg data-test-svg="wrong-task" viewBox="0 0 10 10"><circle cx="5" cy="5" r="4"/></svg>',
+                        ],
                     ],
                 ],
             ],
@@ -432,6 +446,22 @@ class TeacherStudentsPageTest extends TestCase
         ]);
 
         OgeAttemptAnswer::query()->create([
+            'attempt_id' => $visibleAttempt->id,
+            'task_number' => 3,
+            'current_answer' => '1',
+            'commits_count' => 1,
+            'is_final' => true,
+        ]);
+
+        OgeAttemptScoring::query()->create([
+            'attempt_id' => $visibleAttempt->id,
+            'task_number' => 3,
+            'is_correct' => false,
+            'correct_answer' => '2',
+            'checked_at' => now()->subMinutes(47),
+        ]);
+
+        OgeAttemptAnswer::query()->create([
             'attempt_id' => $hiddenAttempt->id,
             'task_number' => 1,
             'current_answer' => 'hidden-answer-zeta',
@@ -453,15 +483,87 @@ class TeacherStudentsPageTest extends TestCase
         $response->assertSee('Drilldown Student');
         $response->assertSee('Visible Variant');
         $response->assertDontSee('Hidden Variant');
-        $response->assertSee('15');
+        $response->assertSee('Задание <span class="font-semibold" data-wrong-task-number>15</span>', false);
         $response->assertSee('2 + 2 = ?');
         $response->assertSee('5');
         $response->assertSee('4');
-        $response->assertSee('6');
-        $response->assertSee('Текст задания недоступен');
+        $response->assertSee('Задание <span class="font-semibold" data-wrong-task-number>6</span>', false);
+        $response->assertSee('Выберите правильный рисунок');
+        $response->assertSee('images/tasks/06/task06_preview.png');
         $response->assertSee('13');
         $response->assertSee('12');
+        $response->assertSee('Задание <span class="font-semibold" data-wrong-task-number>9</span>', false);
+        $response->assertSee('<svg data-test-svg="wrong-task"', false);
+        $response->assertSee('Текст задания недоступен');
+        $response->assertSee('debug:');
         $response->assertDontSee('hidden-answer-zeta');
         $response->assertDontSee('hidden-correct-zeta');
+    }
+
+    public function test_teacher_student_drilldown_resolves_generator_variant_task_payload_via_builder(): void
+    {
+        $teacher = User::factory()->create(['role' => 'teacher']);
+        $student = User::factory()->create(['role' => 'student']);
+
+        $variant = OgeVariant::query()->create([
+            'hash' => 'genhash01abcdefg',
+            'owner_teacher_id' => $teacher->id,
+            'title' => 'Generator Variant',
+            'source' => 'generator',
+            'config_json' => [
+                'source' => 'generator',
+                'zadaniya' => ['06_1_1'],
+            ],
+        ]);
+
+        $attempt = OgeAttempt::query()->create([
+            'variant_id' => $variant->id,
+            'student_id' => $student->id,
+            'status' => 'submitted',
+            'submitted_at' => now()->subMinute(),
+        ]);
+
+        OgeAttemptAnswer::query()->create([
+            'attempt_id' => $attempt->id,
+            'task_number' => 6,
+            'current_answer' => '7',
+            'commits_count' => 1,
+            'is_final' => true,
+        ]);
+
+        OgeAttemptScoring::query()->create([
+            'attempt_id' => $attempt->id,
+            'task_number' => 6,
+            'is_correct' => false,
+            'correct_answer' => '8',
+            'checked_at' => now(),
+        ]);
+
+        $builder = Mockery::mock(OgeVariantBuilderService::class);
+        $builder->shouldReceive('build')
+            ->once()
+            ->with('genhash01abcdefg', ['06_1_1'])
+            ->andReturn([
+                'tasks' => [[
+                    'task_number' => 6,
+                    'topic_id' => '06',
+                    'task' => [
+                        'question' => 'Сколько будет 3 + 5?',
+                        'svg' => '<svg data-test-svg="generator-task" viewBox="0 0 10 10"></svg>',
+                    ],
+                    'options' => ['7', '8', '9'],
+                ]],
+                'variantNumber' => 1,
+                'selectedZadaniya' => ['06_1_1'],
+            ]);
+        $this->app->instance(OgeVariantBuilderService::class, $builder);
+
+        $response = $this->actingAs($teacher)->get("/teacher/students/{$student->id}");
+
+        $response->assertOk();
+        $response->assertSee('Задание <span class="font-semibold" data-wrong-task-number>6</span>', false);
+        $response->assertSee('Сколько будет 3 + 5?');
+        $response->assertSee('7, 8, 9');
+        $response->assertSee('<svg data-test-svg="generator-task"', false);
     }
 }
