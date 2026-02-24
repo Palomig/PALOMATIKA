@@ -76,6 +76,12 @@
         'title' => $taskData['block_title'] ?? '',
     ];
 
+    $sourceTaskId = $taskData['task']['id'] ?? null;
+    $sourceDebugId = 't' . ($topicId !== '' ? $topicId : 'x')
+        . '-b' . ($block['number'] ?? 'x')
+        . '-z' . ($taskData['zadanie_number'] ?? 'x')
+        . '-i' . ($sourceTaskId ?? 'x');
+
     $attemptTaskNumber = isset($attemptTaskNumber) ? (int) $attemptTaskNumber : (int) ($taskData['attempt_task_number'] ?? $taskNumber);
     if ($attemptTaskNumber < 1) {
         $attemptTaskNumber = (int) $taskNumber;
@@ -97,6 +103,7 @@
             </div>
             <div class="flex-1">
                 <div class="text-white font-medium leading-snug">{{ $instruction }}</div>
+                <div class="text-[11px] text-slate-400 mt-1">ID: {{ $sourceDebugId }} · attempt: {{ $attemptTaskNumber }}</div>
             </div>
         </div>
 
@@ -155,6 +162,7 @@
             </div>
             <div class="flex-1">
                 <div class="text-white font-medium leading-snug">{{ $instruction }}</div>
+                <div class="text-[11px] text-slate-400 mt-1">ID: {{ $sourceDebugId }} · attempt: {{ $attemptTaskNumber }}</div>
             </div>
         </div>
 
