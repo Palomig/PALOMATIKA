@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\OgeAttempt;
+use App\Models\OgeAttemptAnswer;
 use App\Models\OgeAttemptScoring;
 use App\Models\OgeVariant;
 use App\Models\TeacherStudent;
@@ -82,6 +83,19 @@ class TeacherStudentsPageTest extends TestCase
             $table->timestamp('submitted_at')->nullable();
             $table->timestamp('last_seen_at')->nullable();
             $table->timestamps();
+        });
+
+        Schema::create('oge_attempt_answers', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('attempt_id')->constrained('oge_attempts')->cascadeOnDelete();
+            $table->unsignedTinyInteger('task_number');
+            $table->string('current_answer')->nullable();
+            $table->unsignedInteger('commits_count')->default(0);
+            $table->timestamp('first_committed_at')->nullable();
+            $table->timestamp('last_committed_at')->nullable();
+            $table->boolean('is_final')->default(false);
+            $table->timestamps();
+            $table->unique(['attempt_id', 'task_number']);
         });
 
         Schema::create('oge_attempt_scorings', function (Blueprint $table) {
@@ -284,5 +298,170 @@ class TeacherStudentsPageTest extends TestCase
         $search->assertOk();
         $search->assertSee('Unique Search Match');
         $search->assertDontSee('Roster Student 01');
+    }
+
+    public function test_roster_rows_include_student_drilldown_links(): void
+    {
+        $teacher = User::factory()->create(['role' => 'teacher']);
+        $student = User::factory()->create([
+            'role' => 'student',
+            'name' => 'Link Target Student',
+            'email' => 'link-target@example.com',
+        ]);
+
+        TeacherStudent::create([
+            'teacher_id' => $teacher->id,
+            'student_id' => $student->id,
+            'source' => 'manual',
+        ]);
+
+        $response = $this->actingAs($teacher)->get('/teacher/students');
+
+        $response->assertOk();
+        $response->assertSee(route('teacher.students.show', ['id' => $student->id]), false);
+    }
+
+    public function test_student_role_is_denied_access_to_teacher_student_drilldown_page(): void
+    {
+        $teacher = User::factory()->create(['role' => 'teacher']);
+        $studentViewer = User::factory()->create(['role' => 'student']);
+        $studentTarget = User::factory()->create(['role' => 'student']);
+
+        $variant = OgeVariant::query()->create([
+            'hash' => Str::random(16),
+            'owner_teacher_id' => $teacher->id,
+        ]);
+
+        OgeAttempt::query()->create([
+            'variant_id' => $variant->id,
+            'student_id' => $studentTarget->id,
+            'status' => 'submitted',
+        ]);
+
+        $this->actingAs($studentViewer)
+            ->get("/teacher/students/{$studentTarget->id}")
+            ->assertStatus(403);
+    }
+
+    public function test_teacher_student_drilldown_shows_wrong_task_details_and_filters_other_teachers_variants(): void
+    {
+        $teacher = User::factory()->create(['role' => 'teacher']);
+        $otherTeacher = User::factory()->create(['role' => 'teacher']);
+        $student = User::factory()->create([
+            'role' => 'student',
+            'name' => 'Drilldown Student',
+            'email' => 'drilldown@example.com',
+        ]);
+
+        $visibleVariant = OgeVariant::query()->create([
+            'hash' => Str::random(16),
+            'owner_teacher_id' => $teacher->id,
+            'title' => 'Visible Variant',
+            'source' => 'custom_random',
+            'config_json' => [
+                'source' => 'custom_random',
+                'custom_tasks' => [
+                    [
+                        'attempt_task_number' => 1,
+                        'zadanie_number' => 15,
+                        'instruction' => 'Найдите значение выражения',
+                        'task' => ['text' => '2 + 2 = ?'],
+                    ],
+                    [
+                        'attempt_task_number' => 2,
+                        'zadanie_number' => 6,
+                    ],
+                ],
+            ],
+        ]);
+
+        $hiddenVariant = OgeVariant::query()->create([
+            'hash' => Str::random(16),
+            'owner_teacher_id' => $otherTeacher->id,
+            'title' => 'Hidden Variant',
+        ]);
+
+        $visibleAttempt = OgeAttempt::query()->create([
+            'variant_id' => $visibleVariant->id,
+            'student_id' => $student->id,
+            'status' => 'submitted',
+            'started_at' => now()->subHours(2),
+            'submitted_at' => now()->subHour(),
+            'last_seen_at' => now()->subMinutes(50),
+        ]);
+
+        $hiddenAttempt = OgeAttempt::query()->create([
+            'variant_id' => $hiddenVariant->id,
+            'student_id' => $student->id,
+            'status' => 'submitted',
+            'started_at' => now()->subHours(3),
+            'submitted_at' => now()->subHours(2),
+            'last_seen_at' => now()->subHours(2),
+        ]);
+
+        OgeAttemptAnswer::query()->create([
+            'attempt_id' => $visibleAttempt->id,
+            'task_number' => 1,
+            'current_answer' => '5',
+            'commits_count' => 1,
+            'is_final' => true,
+        ]);
+
+        OgeAttemptScoring::query()->create([
+            'attempt_id' => $visibleAttempt->id,
+            'task_number' => 1,
+            'is_correct' => false,
+            'correct_answer' => '4',
+            'checked_at' => now()->subMinutes(49),
+        ]);
+
+        OgeAttemptAnswer::query()->create([
+            'attempt_id' => $visibleAttempt->id,
+            'task_number' => 2,
+            'current_answer' => '13',
+            'commits_count' => 1,
+            'is_final' => true,
+        ]);
+
+        OgeAttemptScoring::query()->create([
+            'attempt_id' => $visibleAttempt->id,
+            'task_number' => 2,
+            'is_correct' => false,
+            'correct_answer' => '12',
+            'checked_at' => now()->subMinutes(48),
+        ]);
+
+        OgeAttemptAnswer::query()->create([
+            'attempt_id' => $hiddenAttempt->id,
+            'task_number' => 1,
+            'current_answer' => 'hidden-answer-zeta',
+            'commits_count' => 1,
+            'is_final' => true,
+        ]);
+
+        OgeAttemptScoring::query()->create([
+            'attempt_id' => $hiddenAttempt->id,
+            'task_number' => 1,
+            'is_correct' => false,
+            'correct_answer' => 'hidden-correct-zeta',
+            'checked_at' => now()->subHours(2),
+        ]);
+
+        $response = $this->actingAs($teacher)->get("/teacher/students/{$student->id}");
+
+        $response->assertOk();
+        $response->assertSee('Drilldown Student');
+        $response->assertSee('Visible Variant');
+        $response->assertDontSee('Hidden Variant');
+        $response->assertSee('15');
+        $response->assertSee('2 + 2 = ?');
+        $response->assertSee('5');
+        $response->assertSee('4');
+        $response->assertSee('6');
+        $response->assertSee('Текст задания недоступен');
+        $response->assertSee('13');
+        $response->assertSee('12');
+        $response->assertDontSee('hidden-answer-zeta');
+        $response->assertDontSee('hidden-correct-zeta');
     }
 }

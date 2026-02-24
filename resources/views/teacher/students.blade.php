@@ -50,7 +50,8 @@
 
     <div class="sm:hidden space-y-3">
         @forelse($students as $student)
-            <div class="bg-dark-light rounded-2xl border border-white/[0.06] p-4"
+            <a href="{{ route('teacher.students.show', ['id' => $student->id]) }}"
+               class="block bg-dark-light rounded-2xl border border-white/[0.06] p-4 hover:border-coral/30 transition"
                  data-roster-student-id="{{ $student->id }}"
                  data-linked-state="{{ ($student->is_linked ?? false) ? 'linked' : 'unlinked' }}">
                 <div class="flex items-center gap-3 mb-3">
@@ -90,7 +91,7 @@
                         <div class="text-[10px] text-gray-500">Активность</div>
                     </div>
                 </div>
-            </div>
+            </a>
         @empty
             <div class="bg-dark-light rounded-2xl border border-white/[0.06] p-8 text-center text-sm text-gray-500">
                 Ученики не найдены
@@ -116,7 +117,8 @@
                             data-roster-student-id="{{ $student->id }}"
                             data-linked-state="{{ ($student->is_linked ?? false) ? 'linked' : 'unlinked' }}">
                             <td class="px-5 py-3.5">
-                                <div class="flex items-center gap-3">
+                                <a href="{{ route('teacher.students.show', ['id' => $student->id]) }}"
+                                   class="flex items-center gap-3 rounded-xl -m-1 p-1 hover:bg-white/[0.02] transition">
                                     <div class="w-9 h-9 bg-coral/10 rounded-xl flex items-center justify-center flex-shrink-0">
                                         <span class="text-sm font-semibold text-coral">{{ mb_substr($student->name ?? '?', 0, 1) }}</span>
                                     </div>
@@ -129,7 +131,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                </div>
+                                </a>
                             </td>
                             <td class="px-5 py-3.5">
                                 <span class="text-sm font-medium text-coral tabular-nums">{{ $student->oge_attempt_count }}</span>
