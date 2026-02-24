@@ -249,6 +249,86 @@ class OgeCustomVariantAssessmentTest extends TestCase
             ->assertSee('ans-task-6');
     }
 
+    public function test_teacher_results_matrix_uses_actual_variant_task_numbers_without_extra_rows(): void
+    {
+        $teacher = User::factory()->create(['role' => 'teacher']);
+        $student = User::factory()->create(['role' => 'student', 'name' => 'Петр Иванов']);
+
+        $variant = OgeVariant::create([
+            'hash' => 'custrows1',
+            'owner_teacher_id' => $teacher->id,
+            'config_json' => [
+                'source' => 'custom_random',
+                'custom_tasks' => [
+                    ['attempt_task_number' => 1, 'zadanie_number' => 15, 'task' => ['answer' => 'a']],
+                    ['attempt_task_number' => 2, 'zadanie_number' => 6, 'task' => ['answer' => 'b']],
+                    ['attempt_task_number' => 3, 'zadanie_number' => 17, 'task' => ['answer' => 'c']],
+                    ['attempt_task_number' => 4, 'zadanie_number' => 8, 'task' => ['answer' => 'd']],
+                    ['attempt_task_number' => 5, 'zadanie_number' => 9, 'task' => ['answer' => 'e']],
+                ],
+            ],
+        ]);
+
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $student->id,
+            'status' => 'submitted',
+            'started_at' => now()->subMinutes(10),
+            'submitted_at' => now()->subMinute(),
+        ]);
+
+        foreach ([1 => true, 2 => false, 3 => null, 4 => true, 5 => false] as $attemptTaskNumber => $isCorrect) {
+            OgeAttemptAnswer::create([
+                'attempt_id' => $attempt->id,
+                'task_number' => $attemptTaskNumber,
+                'current_answer' => "ans-{$attemptTaskNumber}",
+                'commits_count' => 1,
+            ]);
+
+            OgeAttemptTaskTiming::create([
+                'attempt_id' => $attempt->id,
+                'task_number' => $attemptTaskNumber,
+                'active_ms' => 1000 * $attemptTaskNumber,
+                'focus_count' => 1,
+            ]);
+
+            OgeAttemptScoring::create([
+                'attempt_id' => $attempt->id,
+                'task_number' => $attemptTaskNumber,
+                'is_correct' => $isCorrect,
+                'correct_answer' => 'x',
+                'checked_at' => now(),
+            ]);
+        }
+
+        $response = $this->actingAs($teacher)->get("/teacher/oge/variants/{$variant->id}/results");
+
+        $response->assertOk();
+
+        preg_match_all('/data-matrix-row-task-number="(\d+)"/', $response->getContent(), $matches);
+        $this->assertSame(['6', '8', '9', '15', '17'], $matches[1]);
+    }
+
+    public function test_teacher_results_page_has_mobile_menu_trigger_wired_to_sidebar_toggle(): void
+    {
+        $teacher = User::factory()->create(['role' => 'teacher']);
+        $variant = OgeVariant::create([
+            'hash' => 'mobmenu1',
+            'owner_teacher_id' => $teacher->id,
+            'config_json' => [
+                'source' => 'custom_random',
+                'custom_task_numbers' => [6],
+            ],
+        ]);
+
+        $response = $this->actingAs($teacher)->get("/teacher/oge/variants/{$variant->id}/results");
+
+        $response->assertOk()
+            ->assertSee("x-data=\"dashboardApp('teacher')\"", false)
+            ->assertSee('aria-label="Открыть меню"', false)
+            ->assertSee('@click.stop="sidebarOpen = !sidebarOpen"', false);
+    }
+
     public function test_opening_custom_hash_persists_variant_for_teacher_review(): void
     {
         $teacher = User::factory()->create(['role' => 'teacher']);

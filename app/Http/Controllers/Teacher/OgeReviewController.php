@@ -44,37 +44,96 @@ class OgeReviewController extends Controller
             ->orderByDesc('created_at')
             ->get();
 
-        $taskNumbers = $this->resolveTaskNumbers($variant, $attempts);
-        $resultsMatrix = $this->buildResultsMatrix($attempts, $taskNumbers);
+        $taskColumns = $this->resolveTaskColumns($variant, $attempts);
+        $resultsMatrix = $this->buildResultsMatrix($attempts, $taskColumns);
 
-        return view('teacher.oge.results', compact('variant', 'attempts', 'taskNumbers', 'resultsMatrix'));
+        return view('teacher.oge.results', compact('variant', 'attempts', 'taskColumns', 'resultsMatrix'));
     }
 
-    private function resolveTaskNumbers(OgeVariant $variant, $attempts): array
+    private function resolveTaskColumns(OgeVariant $variant, $attempts): array
     {
         if (!$variant->isCustomRandom()) {
-            return range(6, 19);
+            return array_map(
+                fn (int $taskNumber): array => [
+                    'display_task_number' => $taskNumber,
+                    'attempt_task_number' => $taskNumber,
+                ],
+                range(6, 19)
+            );
         }
 
-        $configNumbers = $variant->config_json['custom_task_numbers'] ?? [];
-        $fromConfig = is_array($configNumbers)
-            ? array_values(array_filter(array_map('intval', $configNumbers), fn (int $number): bool => $number > 0 && $number <= 255))
-            : [];
-
-        $fromAttempts = $attempts
-            ->flatMap(fn ($attempt) => $attempt->answers->pluck('task_number'))
+        $columnsByDisplayTaskNumber = [];
+        $hasVariantTaskDefinition = false;
+        $config = is_array($variant->config_json ?? null) ? $variant->config_json : [];
+        $observedAttemptTaskNumbers = $attempts
+            ->flatMap(fn ($attempt) => collect([$attempt->answers, $attempt->taskTimings, $attempt->scorings]))
+            ->flatten(1)
+            ->pluck('task_number')
             ->map(fn ($number) => (int) $number)
             ->filter(fn (int $number): bool => $number > 0 && $number <= 255)
+            ->unique()
             ->values()
             ->all();
+        $observedAttemptTaskNumberSet = array_fill_keys($observedAttemptTaskNumbers, true);
 
-        $resolved = array_values(array_unique(array_merge($fromConfig, $fromAttempts)));
-        sort($resolved);
+        $customTasks = $config['custom_tasks'] ?? [];
+        if (is_array($customTasks)) {
+            foreach ($customTasks as $index => $taskData) {
+                if (!is_array($taskData)) {
+                    continue;
+                }
 
-        return !empty($resolved) ? $resolved : range(1, 19);
+                $displayTaskNumber = (int) ($taskData['zadanie_number'] ?? 0);
+                if ($displayTaskNumber < 1 || $displayTaskNumber > 255) {
+                    continue;
+                }
+
+                $attemptTaskNumber = (int) ($taskData['attempt_task_number'] ?? $taskData['task_number'] ?? $taskData['test_number'] ?? ($index + 1));
+                if ($attemptTaskNumber < 1 || $attemptTaskNumber > 255) {
+                    continue;
+                }
+
+                $hasVariantTaskDefinition = true;
+                $columnsByDisplayTaskNumber[$displayTaskNumber] = [
+                    'display_task_number' => $displayTaskNumber,
+                    'attempt_task_number' => $attemptTaskNumber,
+                ];
+            }
+        }
+
+        $configNumbers = $config['custom_task_numbers'] ?? [];
+        if (is_array($configNumbers)) {
+            foreach (array_values($configNumbers) as $index => $number) {
+                $displayTaskNumber = (int) $number;
+                if ($displayTaskNumber < 1 || $displayTaskNumber > 255) {
+                    continue;
+                }
+
+                $hasVariantTaskDefinition = true;
+                $columnsByDisplayTaskNumber[$displayTaskNumber] ??= [
+                    'display_task_number' => $displayTaskNumber,
+                    'attempt_task_number' => isset($observedAttemptTaskNumberSet[$displayTaskNumber])
+                        ? $displayTaskNumber
+                        : ((int) $index + 1),
+                ];
+            }
+        }
+
+        if (!$hasVariantTaskDefinition) {
+            foreach ($observedAttemptTaskNumbers as $taskNumber) {
+                $columnsByDisplayTaskNumber[$taskNumber] = [
+                    'display_task_number' => $taskNumber,
+                    'attempt_task_number' => $taskNumber,
+                ];
+            }
+        }
+
+        ksort($columnsByDisplayTaskNumber, SORT_NUMERIC);
+
+        return array_values($columnsByDisplayTaskNumber);
     }
 
-    private function buildResultsMatrix($attempts, array $taskNumbers): array
+    private function buildResultsMatrix($attempts, array $taskColumns): array
     {
         $studentColumns = [];
         $marksByAttemptAndTask = [];
@@ -90,11 +149,13 @@ class OgeReviewController extends Controller
                 'status' => (string) ($attempt->status ?? ''),
             ];
 
-            foreach ($taskNumbers as $taskNumber) {
-                $scoring = $scoringsByTask->get((int) $taskNumber);
+            foreach ($taskColumns as $taskColumn) {
+                $displayTaskNumber = (int) ($taskColumn['display_task_number'] ?? 0);
+                $attemptTaskNumber = (int) ($taskColumn['attempt_task_number'] ?? 0);
+                $scoring = $scoringsByTask->get($attemptTaskNumber);
                 $isCorrect = $scoring?->is_correct;
 
-                $marksByAttemptAndTask[$attemptId][(int) $taskNumber] = [
+                $marksByAttemptAndTask[$attemptId][$displayTaskNumber] = [
                     'is_correct' => is_null($isCorrect) ? null : (bool) $isCorrect,
                     'mark' => $this->resolveCorrectnessMark($isCorrect),
                 ];
@@ -102,19 +163,20 @@ class OgeReviewController extends Controller
         }
 
         $rows = [];
-        foreach ($taskNumbers as $taskNumber) {
+        foreach ($taskColumns as $taskColumn) {
+            $displayTaskNumber = (int) ($taskColumn['display_task_number'] ?? 0);
             $cells = [];
 
             foreach ($studentColumns as $studentColumn) {
                 $attemptId = $studentColumn['attempt_id'];
-                $cells[] = $marksByAttemptAndTask[$attemptId][(int) $taskNumber] ?? [
+                $cells[] = $marksByAttemptAndTask[$attemptId][$displayTaskNumber] ?? [
                     'is_correct' => null,
                     'mark' => '.',
                 ];
             }
 
             $rows[] = [
-                'task_number' => (int) $taskNumber,
+                'task_number' => $displayTaskNumber,
                 'cells' => $cells,
             ];
         }

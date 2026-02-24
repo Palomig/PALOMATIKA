@@ -140,7 +140,7 @@
         <div class="flex-1 lg:ml-64">
             {{-- Top bar --}}
             <header class="sticky top-0 z-20 bg-dark-light/80 backdrop-blur-lg border-b border-gray-800 h-16 flex items-center px-4">
-                <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden text-gray-400 hover:text-white mr-4" aria-label="Открыть меню">
+                <button @click.stop="sidebarOpen = !sidebarOpen" class="lg:hidden text-gray-400 hover:text-white mr-4" aria-label="Открыть меню">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>

@@ -61,7 +61,9 @@
                         @foreach($resultsMatrix['rows'] as $row)
                             <tr class="hover:bg-white/[0.01] transition-colors">
                                 <td class="sticky left-0 z-10 bg-dark-light px-4 py-2.5 text-gray-300 font-semibold tabular-nums">
+                                    <span data-matrix-row-task-number="{{ $row['task_number'] }}">
                                     {{ $row['task_number'] }}
+                                    </span>
                                 </td>
                                 @foreach($row['cells'] as $cell)
                                     @php
@@ -96,8 +98,8 @@
                     <tr class="border-b border-white/[0.06]">
                         <th class="text-left px-4 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider sticky left-0 bg-dark-light z-10">Ученик</th>
                         <th class="text-left px-3 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Статус</th>
-                        @foreach($taskNumbers as $taskNumber)
-                            <th class="text-center px-2 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $taskNumber }}</th>
+                        @foreach($taskColumns as $taskColumn)
+                            <th class="text-center px-2 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">{{ $taskColumn['display_task_number'] }}</th>
                         @endforeach
                         <th class="text-center px-3 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Время</th>
                     </tr>
@@ -128,11 +130,12 @@
                                     {{ $attempt->status === 'submitted' ? 'Сдано' : $attempt->status }}
                                 </span>
                             </td>
-                            @foreach($taskNumbers as $taskNumber)
+                            @foreach($taskColumns as $taskColumn)
                                 @php
-                                    $answer = $answersMap->get($taskNumber);
-                                    $timing = $timingsMap->get($taskNumber);
-                                    $scoring = $scoringMap->get($taskNumber);
+                                    $attemptTaskNumber = (int) ($taskColumn['attempt_task_number'] ?? 0);
+                                    $answer = $answersMap->get($attemptTaskNumber);
+                                    $timing = $timingsMap->get($attemptTaskNumber);
+                                    $scoring = $scoringMap->get($attemptTaskNumber);
                                 @endphp
                                 <td class="px-2 py-3 text-center">
                                     @if($answer?->current_answer)
