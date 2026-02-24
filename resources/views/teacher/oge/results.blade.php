@@ -39,49 +39,104 @@
         </div>
 
         @if(count($resultsMatrix['students']) > 0)
-            <div class="px-3 pb-3 sm:px-5 sm:pb-4" data-matrix-scroll-root>
-                <div data-matrix-scroll-hint class="hidden md:hidden mb-2 text-[11px] text-gray-500">
+            <div class="sm:hidden px-4 pb-4 space-y-3" data-mobile-results-matrix>
+                <p class="text-[11px] text-gray-500">
+                    Мобильный вид: карточка ученика + все задания варианта (реальные номера заданий).
+                </p>
+                @foreach($resultsMatrix['students'] as $studentIndex => $studentColumn)
+                    @php
+                        $statusValue = (string) ($studentColumn['status'] ?? '');
+                        $statusLabel = $statusValue === 'submitted' ? 'Сдано' : ($statusValue !== '' ? $statusValue : '—');
+                    @endphp
+                    <article
+                        data-mobile-student-card="{{ $studentColumn['attempt_id'] }}"
+                        class="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3"
+                        aria-label="Результаты ученика {{ $studentColumn['student_name'] }}"
+                    >
+                        <div class="flex items-start justify-between gap-3 mb-3">
+                            <a href="#attempt-{{ $studentColumn['attempt_id'] }}" class="min-w-0 flex items-center gap-2.5">
+                                <span class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-white/[0.03] border border-white/[0.06] text-sm font-semibold text-white flex-shrink-0">
+                                    {{ $studentColumn['student_short_name'] }}
+                                </span>
+                                <span class="min-w-0">
+                                    <span class="block text-sm font-medium text-white truncate">{{ $studentColumn['student_name'] }}</span>
+                                    <span class="block text-[11px] text-gray-500">ID попытки: {{ $studentColumn['attempt_id'] }}</span>
+                                </span>
+                            </a>
+                            <span class="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-medium whitespace-nowrap {{ $statusValue === 'submitted' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-white/[0.04] text-gray-400' }}">
+                                {{ $statusLabel }}
+                            </span>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2" role="list" aria-label="Проверка по заданиям">
+                            @foreach($resultsMatrix['rows'] as $row)
+                                @php
+                                    $cell = $row['cells'][$studentIndex] ?? ['is_correct' => null, 'mark' => '.'];
+                                    $state = $cell['is_correct'];
+                                    $stateLabel = $state === true ? 'верно' : ($state === false ? 'неверно' : 'нет проверки');
+                                @endphp
+                                <div
+                                    role="listitem"
+                                    data-mobile-task-chip="{{ $studentColumn['attempt_id'] }}-{{ $row['task_number'] }}"
+                                    data-mobile-task-number="{{ $row['task_number'] }}"
+                                    data-mobile-mark="{{ $cell['mark'] }}"
+                                    class="inline-flex items-center gap-1.5 rounded-lg border px-2 py-1.5 text-xs {{ $state === true ? 'border-emerald-500/20 bg-emerald-500/5' : ($state === false ? 'border-red-500/20 bg-red-500/5' : 'border-white/[0.06] bg-white/[0.02]') }}"
+                                    aria-label="Задание {{ $row['task_number'] }}: {{ $stateLabel }}"
+                                >
+                                    <span class="text-gray-400 tabular-nums">№{{ $row['task_number'] }}</span>
+                                    <span class="inline-flex items-center justify-center w-5 h-5 rounded-md text-[11px] font-semibold tabular-nums {{ $state === true ? 'bg-emerald-500/10 text-emerald-400' : ($state === false ? 'bg-red-500/10 text-red-400' : 'bg-white/[0.03] text-gray-400') }}">
+                                        {{ $cell['mark'] }}
+                                    </span>
+                                </div>
+                            @endforeach
+                        </div>
+                    </article>
+                @endforeach
+            </div>
+
+            <div class="hidden sm:block px-3 pb-3 sm:px-5 sm:pb-4" data-matrix-scroll-root>
+                <div data-matrix-scroll-hint class="hidden sm:block md:hidden mb-2 text-[11px] text-gray-500">
                     Свайп влево/вправо, чтобы увидеть столбцы учеников
                 </div>
                 <div data-matrix-scroll-container class="overflow-x-auto overflow-y-visible max-w-full touch-pan-x">
                     <table class="w-max min-w-full text-xs table-auto">
-                    <thead>
-                        <tr class="border-b border-white/[0.06]">
-                            <th class="sticky left-0 z-20 bg-dark-light text-left px-4 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider min-w-[56px] whitespace-nowrap">
-                                №
-                            </th>
-                            @foreach($resultsMatrix['students'] as $studentColumn)
-                                <th class="px-3 py-3 text-center text-[11px] font-semibold text-gray-400 uppercase tracking-wider min-w-[58px] whitespace-nowrap">
-                                    <a href="#attempt-{{ $studentColumn['attempt_id'] }}"
-                                       class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-white/[0.03] border border-white/[0.05] hover:border-coral/40 hover:text-white transition"
-                                       title="{{ $studentColumn['student_name'] }}">
-                                        {{ $studentColumn['student_short_name'] }}
-                                    </a>
+                        <thead>
+                            <tr class="border-b border-white/[0.06]">
+                                <th class="sticky left-0 z-20 bg-dark-light text-left px-4 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider min-w-[56px] whitespace-nowrap">
+                                    №
                                 </th>
-                            @endforeach
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-white/[0.04]">
-                        @foreach($resultsMatrix['rows'] as $row)
-                            <tr class="hover:bg-white/[0.01] transition-colors">
-                                <td class="sticky left-0 z-10 bg-dark-light px-4 py-2.5 text-gray-300 font-semibold tabular-nums min-w-[56px] whitespace-nowrap">
-                                    <span data-matrix-row-task-number="{{ $row['task_number'] }}">
-                                    {{ $row['task_number'] }}
-                                    </span>
-                                </td>
-                                @foreach($row['cells'] as $cell)
-                                    @php
-                                        $state = $cell['is_correct'];
-                                    @endphp
-                                    <td class="px-3 py-2.5 text-center min-w-[58px] whitespace-nowrap">
-                                        <span class="inline-flex items-center justify-center w-6 h-6 rounded-md text-xs font-semibold tabular-nums {{ $state === true ? 'bg-emerald-500/10 text-emerald-400' : ($state === false ? 'bg-red-500/10 text-red-400' : 'bg-white/[0.03] text-gray-400') }}">
-                                            {{ $cell['mark'] }}
-                                        </span>
-                                    </td>
+                                @foreach($resultsMatrix['students'] as $studentColumn)
+                                    <th class="px-3 py-3 text-center text-[11px] font-semibold text-gray-400 uppercase tracking-wider min-w-[58px] whitespace-nowrap">
+                                        <a href="#attempt-{{ $studentColumn['attempt_id'] }}"
+                                           class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-white/[0.03] border border-white/[0.05] hover:border-coral/40 hover:text-white transition"
+                                           title="{{ $studentColumn['student_name'] }}">
+                                            {{ $studentColumn['student_short_name'] }}
+                                        </a>
+                                    </th>
                                 @endforeach
                             </tr>
-                        @endforeach
-                    </tbody>
+                        </thead>
+                        <tbody class="divide-y divide-white/[0.04]">
+                            @foreach($resultsMatrix['rows'] as $row)
+                                <tr class="hover:bg-white/[0.01] transition-colors">
+                                    <td class="sticky left-0 z-10 bg-dark-light px-4 py-2.5 text-gray-300 font-semibold tabular-nums min-w-[56px] whitespace-nowrap">
+                                        <span data-matrix-row-task-number="{{ $row['task_number'] }}">
+                                        {{ $row['task_number'] }}
+                                        </span>
+                                    </td>
+                                    @foreach($row['cells'] as $cell)
+                                        @php
+                                            $state = $cell['is_correct'];
+                                        @endphp
+                                        <td class="px-3 py-2.5 text-center min-w-[58px] whitespace-nowrap">
+                                            <span class="inline-flex items-center justify-center w-6 h-6 rounded-md text-xs font-semibold tabular-nums {{ $state === true ? 'bg-emerald-500/10 text-emerald-400' : ($state === false ? 'bg-red-500/10 text-red-400' : 'bg-white/[0.03] text-gray-400') }}">
+                                                {{ $cell['mark'] }}
+                                            </span>
+                                        </td>
+                                    @endforeach
+                                </tr>
+                            @endforeach
+                        </tbody>
                     </table>
                 </div>
             </div>
