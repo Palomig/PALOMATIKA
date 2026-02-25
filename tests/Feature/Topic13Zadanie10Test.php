@@ -17,9 +17,9 @@ class Topic13Zadanie10Test extends TestCase
     {
         parent::setUp();
 
-        $path = storage_path('app/tasks/topic_13.json');
-        $data = json_decode((string) file_get_contents($path), true);
-        $this->zadanie = $data['blocks'][0]['zadaniya'][9];
+        Cache::forget('topic_data_13');
+        $blocks = app(TaskDataService::class)->getBlocks('13');
+        $this->zadanie = $blocks[0]['zadaniya'][9];
         $this->tasks = $this->zadanie['tasks'];
     }
 
@@ -62,27 +62,15 @@ class Topic13Zadanie10Test extends TestCase
         }
     }
 
-    public function test_svgs_are_valid_and_have_unique_pattern_ids(): void
+    public function test_svgs_are_valid_and_match_new_number_ray_viewbox(): void
     {
-        $allPatternIds = [];
-
         foreach ($this->tasks as $task) {
             foreach ($task['graph_options'] as $option) {
                 $svg = $option['svg'];
                 $this->assertStringStartsWith('<svg ', $svg, "SVG must start with <svg tag");
                 $this->assertStringContainsString('</svg>', $svg, "SVG must have closing tag");
-                $this->assertStringContainsString('viewBox="0 0 250 44"', $svg);
-
-                // Extract pattern IDs
-                if (preg_match('/pattern id="([^"]+)"/', $svg, $m)) {
-                    $pid = $m[1];
-                    $this->assertNotContains($pid, $allPatternIds, "Duplicate pattern ID: {$pid}");
-                    $allPatternIds[] = $pid;
-
-                    // Verify the same ID is referenced in fill url
-                    $this->assertStringContainsString("url(#{$pid})", $svg,
-                        "Pattern {$pid} defined but not referenced");
-                }
+                $this->assertStringContainsString('viewBox="0 0 420 60"', $svg);
+                $this->assertStringNotContainsString('<pattern ', $svg);
             }
         }
     }
@@ -109,13 +97,13 @@ class Topic13Zadanie10Test extends TestCase
             $type = $expectations[$id];
 
             if ($type === 'strict') {
-                $this->assertStringContainsString('fill="white"', $correctSvg,
-                    "Task {$id}: strict inequality should have hollow (white) endpoints");
-                $this->assertStringNotContainsString('fill="#3b82f6"/>', $correctSvg,
-                    "Task {$id}: strict inequality should not have filled endpoints");
+                $this->assertStringContainsString('fill="#0d1b2a" stroke="#4d9fdc"', $correctSvg,
+                    "Task {$id}: strict inequality should have open endpoints");
             } else {
-                $this->assertStringContainsString('fill="#3b82f6"/>', $correctSvg,
-                    "Task {$id}: non-strict inequality should have filled endpoints");
+                $this->assertStringContainsString('fill="#4d9fdc"', $correctSvg,
+                    "Task {$id}: non-strict inequality should have closed endpoints");
+                $this->assertStringNotContainsString('fill="#0d1b2a" stroke="#4d9fdc"', $correctSvg,
+                    "Task {$id}: non-strict inequality should not have open endpoints");
             }
         }
     }
@@ -143,13 +131,28 @@ class Topic13Zadanie10Test extends TestCase
     public function test_single_ray_options_show_only_one_label(): void
     {
         foreach ($this->tasks as $task) {
-            // Options 3 and 4 are single-ray distractors
-            for ($oi = 2; $oi <= 3; $oi++) {
-                $svg = $task['graph_options'][$oi]['svg'];
-                // Should have exactly one <text> element
+            $singleRayCount = 0;
+            foreach ($task['graph_options'] as $option) {
+                $svg = (string) ($option['svg'] ?? '');
                 $textCount = substr_count($svg, '<text ');
-                $this->assertSame(1, $textCount,
-                    "Task {$task['id']} option " . ($oi + 1) . " should have exactly 1 boundary label, got {$textCount}");
+                if ($textCount === 1) {
+                    $singleRayCount++;
+                }
+            }
+
+            $this->assertSame(2, $singleRayCount,
+                "Task {$task['id']} should include exactly two single-ray distractors");
+        }
+    }
+
+    public function test_axis_contains_only_boundary_labels(): void
+    {
+        foreach ($this->tasks as $task) {
+            foreach ($task['graph_options'] as $option) {
+                $svg = (string) ($option['svg'] ?? '');
+                $textCount = substr_count($svg, '<text ');
+                $this->assertTrue(in_array($textCount, [1, 2], true),
+                    "Task {$task['id']} option {$option['index']} should contain only boundary labels");
             }
         }
     }
@@ -183,9 +186,9 @@ class Topic13Zadanie10Test extends TestCase
 
         // Should render graph_options SVGs (with pattern IDs like z10t*)
         $view->assertSee('data-graph-options="topic13-z10"', false);
-        $view->assertSee('z10t1a', false);
+        $view->assertSee('viewBox="0 0 420 60"', false);
 
         // Should NOT render the interval-line.blade.php partial
-        $view->assertDontSee('hatch_', false);
+        $view->assertDontSee('<pattern ', false);
     }
 }

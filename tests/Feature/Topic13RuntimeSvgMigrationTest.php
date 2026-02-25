@@ -21,7 +21,7 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
 
             foreach ($zadanie['tasks'] ?? [] as $task) {
                 if ($zadanieNumber === 10) {
-                    // Z10 uses pre-baked SVG graph_options (no image field)
+                    // Z10 uses semantic graph_options (no image field)
                     $this->assertArrayHasKey('graph_options', $task);
                     $this->assertCount(4, $task['graph_options']);
                     $this->assertArrayNotHasKey('image', $task);
@@ -86,7 +86,7 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
                 $this->assertSame($index + 1, $option['index'] ?? null);
                 $this->assertIsString($option['svg'] ?? null);
                 $this->assertStringContainsString('<svg', (string) ($option['svg'] ?? ''));
-                $this->assertStringContainsString('viewBox="0 0 250 44"', (string) ($option['svg'] ?? ''));
+                $this->assertStringContainsString('viewBox="0 0 420 60"', (string) ($option['svg'] ?? ''));
             }
         }
     }
@@ -111,8 +111,8 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
         // 9 tasks × 4 options = 36 option panels
         $this->assertSame(36, substr_count($html, 'data-z10-option-panel="'));
         $this->assertStringContainsString('data-graph-options="topic13-z10"', $html);
-        // SVG pattern IDs use z10t* prefix
-        $this->assertStringContainsString('z10t1a', $html);
+        $this->assertStringContainsString('viewBox="0 0 420 60"', $html);
+        $this->assertStringNotContainsString('<pattern ', $html);
     }
 
     public function test_neighboring_topic_13_zadaniya_remain_unmigrated(): void

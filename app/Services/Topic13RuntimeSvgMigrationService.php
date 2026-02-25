@@ -4,6 +4,11 @@ namespace App\Services;
 
 class Topic13RuntimeSvgMigrationService
 {
+    public function __construct(
+        private readonly InequalityNumberRaySvgRenderer $numberRayRenderer
+    ) {
+    }
+
     /**
      * Phase 2 runtime migration: Block 1, Zadaniya 10-13.
      */
@@ -28,18 +33,33 @@ class Topic13RuntimeSvgMigrationService
             }
 
             foreach ($zadanie['tasks'] as $taskIndex => $task) {
-                if (!is_array($task) || empty($task['image']) || !is_string($task['image'])) {
+                if (!is_array($task)) {
                     continue;
                 }
 
                 if ($number === 10) {
-                    $graphOptions = $this->topic13Z10GraphOptionsForImage($task['image']);
+                    $sourceExpr = $this->sourceExpressionForTask($number, $task);
+                    if ($sourceExpr === null) {
+                        continue;
+                    }
+
+                    $solution = $this->solveInequality($sourceExpr);
+                    if ($solution === null) {
+                        continue;
+                    }
+
+                    $graphOptions = $this->topic13Z10GraphOptionsForSolution($solution);
                     if ($graphOptions !== null) {
                         $task['graph_options'] = $graphOptions;
                         $task['graph_options_mode'] = 'compact_number_line';
+                        unset($task['image']);
                         $task['runtime_svg_migration'] = 'topic13_b1_z10_13_phase2';
                         $zadanie['tasks'][$taskIndex] = $task;
                     }
+                    continue;
+                }
+
+                if (empty($task['image']) || !is_string($task['image'])) {
                     continue;
                 }
 
@@ -346,6 +366,19 @@ class Topic13RuntimeSvgMigrationService
         $textOnlyNone = (bool) ($config['text_only_none'] ?? false);
         $runtimeSvgId = (string) ($config['runtime_svg_id'] ?? 'topic13-b1-z10-option');
 
+        $rayConfig = $this->solutionToRayConfig($solution);
+        if ($rayConfig !== null) {
+            $class = $isCompactOption
+                ? 'w-full h-auto number-line semantic-runtime-svg'
+                : 'w-full max-w-[360px] h-auto mx-auto number-line semantic-runtime-svg';
+
+            return $this->numberRayRenderer->render([
+                ...$rayConfig,
+                'class' => $class,
+                'runtimeSvgId' => $runtimeSvgId,
+            ]);
+        }
+
         $width = $isCompactOption ? 300 : 360;
         $height = $isCompactOption ? 42 : 78;
         $lineY = $isCompactOption ? 16 : 34;
@@ -555,6 +588,178 @@ class Topic13RuntimeSvgMigrationService
         }
 
         return rtrim(rtrim(number_format($value, 3, '.', ''), '0'), '.');
+    }
+
+    /**
+     * @param array{kind:string,intervals?:array<int,array{l:?float,r:?float,li:bool,ri:bool}>} $solution
+     * @return list<array{index:int,svg:string,text:string}>|null
+     */
+    private function topic13Z10GraphOptionsForSolution(array $solution): ?array
+    {
+        if (($solution['kind'] ?? null) !== 'intervals') {
+            return null;
+        }
+
+        $bounds = [];
+        foreach (($solution['intervals'] ?? []) as $interval) {
+            foreach (['l', 'r'] as $key) {
+                if ($interval[$key] !== null) {
+                    $bounds[] = (float) $interval[$key];
+                }
+            }
+        }
+
+        $bounds = array_values(array_unique(array_map(static fn (float $v) => round($v, 8), $bounds)));
+        sort($bounds);
+        if (count($bounds) < 2) {
+            return null;
+        }
+
+        $a = (float) $bounds[0];
+        $b = (float) $bounds[1];
+
+        $isInner = count($solution['intervals'] ?? []) === 1
+            && ($solution['intervals'][0]['l'] ?? null) !== null
+            && ($solution['intervals'][0]['r'] ?? null) !== null;
+
+        $closed = false;
+        foreach (($solution['intervals'] ?? []) as $interval) {
+            $closed = $closed || (bool) ($interval['li'] ?? false) || (bool) ($interval['ri'] ?? false);
+        }
+
+        $correct = $solution;
+        $singleLeft = $this->intervals([['l' => $a, 'r' => null, 'li' => $closed, 'ri' => false]]);
+        $singleRight = $this->intervals([['l' => $b, 'r' => null, 'li' => $closed, 'ri' => false]]);
+        $bounded = $this->intervals([['l' => $a, 'r' => $b, 'li' => $closed, 'ri' => $closed]]);
+        $outer = $this->intervals([
+            ['l' => null, 'r' => $a, 'li' => false, 'ri' => $closed],
+            ['l' => $b, 'r' => null, 'li' => $closed, 'ri' => false],
+        ]);
+
+        $candidates = $isInner
+            ? [$correct, $outer, $singleRight, $singleLeft]
+            : [$correct, $singleLeft, $bounded, $singleRight];
+
+        $options = [];
+        foreach ($candidates as $index => $candidate) {
+            $svg = $this->renderSolutionSvg($candidate, [
+                'mode' => 'compact_option',
+                'runtime_svg_id' => 'topic13-b1-z10-option-' . ($index + 1),
+            ]);
+
+            if (!is_string($svg) || $svg === '') {
+                return null;
+            }
+
+            $options[] = [
+                'index' => $index + 1,
+                'svg' => $svg,
+                'text' => $this->solutionToText($candidate),
+            ];
+        }
+
+        return count($options) === 4 ? $options : null;
+    }
+
+    /**
+     * @param array{kind:string,intervals?:array<int,array{l:?float,r:?float,li:bool,ri:bool}>} $solution
+     * @return array{type:string,a?:float,b?:float,axisMin:float,axisMax:float}|null
+     */
+    private function solutionToRayConfig(array $solution): ?array
+    {
+        if (($solution['kind'] ?? null) !== 'intervals') {
+            return null;
+        }
+
+        $intervals = $solution['intervals'] ?? [];
+        if (!is_array($intervals) || $intervals === []) {
+            return null;
+        }
+
+        $finite = [];
+        foreach ($intervals as $interval) {
+            foreach (['l', 'r'] as $key) {
+                if (($interval[$key] ?? null) !== null) {
+                    $finite[] = (float) $interval[$key];
+                }
+            }
+        }
+
+        if ($finite === []) {
+            return null;
+        }
+
+        $min = min(array_merge($finite, [0.0]));
+        $max = max(array_merge($finite, [0.0]));
+        $span = max(1.0, $max - $min);
+        $pad = max(1.0, $span * 0.35);
+        $axisMin = $min - $pad;
+        $axisMax = $max + $pad;
+
+        if (count($intervals) === 1) {
+            $i = $intervals[0];
+            if (($i['l'] ?? null) === null && ($i['r'] ?? null) !== null) {
+                return [
+                    'type' => ($i['ri'] ?? false) ? 'lte' : 'lt',
+                    'b' => (float) $i['r'],
+                    'axisMin' => $axisMin,
+                    'axisMax' => $axisMax,
+                ];
+            }
+
+            if (($i['l'] ?? null) !== null && ($i['r'] ?? null) === null) {
+                return [
+                    'type' => ($i['li'] ?? false) ? 'gte' : 'gt',
+                    'a' => (float) $i['l'],
+                    'axisMin' => $axisMin,
+                    'axisMax' => $axisMax,
+                ];
+            }
+
+            if (($i['l'] ?? null) !== null && ($i['r'] ?? null) !== null) {
+                $li = (bool) ($i['li'] ?? false);
+                $ri = (bool) ($i['ri'] ?? false);
+                $type = match ([$li, $ri]) {
+                    [true, true] => 'closed',
+                    [false, false] => 'open',
+                    [false, true] => 'lopen',
+                    [true, false] => 'ropen',
+                };
+
+                return [
+                    'type' => $type,
+                    'a' => (float) $i['l'],
+                    'b' => (float) $i['r'],
+                    'axisMin' => $axisMin,
+                    'axisMax' => $axisMax,
+                ];
+            }
+
+            return null;
+        }
+
+        if (count($intervals) === 2) {
+            $first = $intervals[0];
+            $second = $intervals[1];
+            if (($first['l'] ?? null) !== null || ($first['r'] ?? null) === null) {
+                return null;
+            }
+            if (($second['l'] ?? null) === null || ($second['r'] ?? null) !== null) {
+                return null;
+            }
+
+            $closed = (bool) ($first['ri'] ?? false) && (bool) ($second['li'] ?? false);
+
+            return [
+                'type' => $closed ? 'outerClosed' : 'outer',
+                'a' => (float) $first['r'],
+                'b' => (float) $second['l'],
+                'axisMin' => $axisMin,
+                'axisMax' => $axisMax,
+            ];
+        }
+
+        return null;
     }
 
     /**
