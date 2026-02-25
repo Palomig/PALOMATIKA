@@ -47,10 +47,14 @@
                 $taskKey = "topic_{$topicId}_block_{$block['number']}_zadanie_{$zadanie['number']}_task_{$taskId}";
                 $taskText = $task['expression'] ?? $task['text'] ?? '';
                 $taskInfo = "Блок {$block['number']}, Задание {$zadanie['number']}, Задача {$taskId}<br><code>" . substr((string) $taskText, 0, 80) . "</code>";
-                $taskPoints = $task['points'] ?? [];
+                    $taskPoints = $task['points'] ?? [];
                     $taskOptions = $task['options'] ?? $options;
                     $taskGraphOptions = is_array($task['graph_options'] ?? null) ? $task['graph_options'] : [];
                     $taskOptionsRenderMode = $task['options_render_mode'] ?? $optionsRenderMode ?? null;
+                    $taskSvg = is_string($task['svg'] ?? null) ? $task['svg'] : '';
+                    $isTopic13Z11PromptSvg = (string) ($topicId ?? '') === '13'
+                        && (int) ($zadanie['number'] ?? 0) === 11
+                        && str_contains($taskSvg, 'data-runtime-svg="topic13-b1-z11-prompt-');
                 @endphp
 
             <div class="bg-slate-800/70 rounded-xl p-5 border border-slate-700 task-review-item relative"
@@ -83,10 +87,10 @@
                     ])
                 @endif
 
-                @if(empty($taskGraphOptions) && !empty($task['svg']) && is_string($task['svg']))
+                @if(empty($taskGraphOptions) && !empty($taskSvg))
                     <div class="mt-4 mb-2">
-                        <div class="bg-white rounded-lg p-2 overflow-hidden">
-                            {!! $task['svg'] !!}
+                        <div class="bg-white rounded-lg p-2 overflow-hidden {{ $isTopic13Z11PromptSvg ? 'topic13-z11-prompt-svg-size mx-auto w-full max-w-[180px] sm:max-w-[220px] md:max-w-[240px] [&>svg]:w-full [&>svg]:h-auto' : '' }}">
+                            {!! $taskSvg !!}
                         </div>
                     </div>
                 @elseif(!empty($task['image']))

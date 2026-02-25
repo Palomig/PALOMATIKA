@@ -65,6 +65,7 @@ class Topic13Zadanie11SemanticSvgTest extends TestCase
         $this->assertSame(0, substr_count($html, 'images/tasks/13/img-0'));
         $this->assertSame(0, substr_count($html, '<img src='));
         $this->assertSame(0, substr_count($html, 'data-z10-option-panel='));
+        $this->assertSame(8, substr_count($html, 'topic13-z11-prompt-svg-size'));
         $this->assertStringContainsString('1) x² - 49 ≤ 0', $html);
         $this->assertStringContainsString('4) x² + 4 &lt; 0', $html);
     }
