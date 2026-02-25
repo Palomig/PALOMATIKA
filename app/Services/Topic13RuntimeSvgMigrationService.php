@@ -55,7 +55,14 @@ class Topic13RuntimeSvgMigrationService
 
                     $graphOptions = $this->topic13Z10GraphOptionsForSolution($solution);
                     if ($graphOptions !== null) {
+                        [$graphOptions, $newAnswer] = $this->reorderGraphOptionsAndAnswer(
+                            $graphOptions,
+                            (int) ($task['answer'] ?? 1),
+                            (int) ($task['id'] ?? ($taskIndex + 1))
+                        );
+
                         $task['graph_options'] = $graphOptions;
+                        $task['answer'] = (string) $newAnswer;
                         $task['graph_options_mode'] = 'compact_number_line';
                         unset($task['image']);
                         $task['runtime_svg_migration'] = 'topic13_b1_z10_13_phase2';
@@ -890,6 +897,39 @@ class Topic13RuntimeSvgMigrationService
                 $this->intervals([['l' => 0.0, 'r' => null, 'li' => false, 'ri' => false]]),
             ],
         ];
+    }
+
+    /**
+     * @param list<array{index:int,svg:string,text:string}> $options
+     * @return array{0:list<array{index:int,svg:string,text:string}>,1:int}
+     */
+    private function reorderGraphOptionsAndAnswer(array $options, int $currentAnswer, int $taskId): array
+    {
+        if (count($options) !== 4) {
+            return [$options, max(1, min(4, $currentAnswer))];
+        }
+
+        $currentAnswer = max(1, min(4, $currentAnswer));
+
+        // Deterministic non-zero rotation so correct option is not constantly #1.
+        $rotation = ($taskId % 3) + 1; // 1..3
+        $rotated = [];
+        for ($i = 0; $i < 4; $i++) {
+            $rotated[] = $options[($i + $rotation) % 4];
+        }
+
+        $newAnswer = 1;
+        $reindexed = [];
+        foreach ($rotated as $i => $option) {
+            $newIndex = $i + 1;
+            if (($option['index'] ?? 0) === $currentAnswer) {
+                $newAnswer = $newIndex;
+            }
+            $option['index'] = $newIndex;
+            $reindexed[] = $option;
+        }
+
+        return [$reindexed, $newAnswer];
     }
 
     /**
