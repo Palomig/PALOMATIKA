@@ -107,6 +107,11 @@ class Topic13RuntimeSvgMigrationService
                 }
 
                 if (!empty($task['svg']) && is_string($task['svg'])) {
+                    if ($number === 12) {
+                        unset($task['image']);
+                        $task['runtime_svg_migration'] = 'topic13_b1_z12_semantic_prompt';
+                        $zadanie['tasks'][$taskIndex] = $task;
+                    }
                     continue;
                 }
 
@@ -120,13 +125,26 @@ class Topic13RuntimeSvgMigrationService
                     continue;
                 }
 
-                $svg = $this->renderSolutionSvg($solution);
+                $svgConfig = [];
+                if ($number === 12) {
+                    $svgConfig = [
+                        'mode' => 'compact_option',
+                        'runtime_svg_id' => 'topic13-b1-z12-prompt-' . ($task['id'] ?? ($taskIndex + 1)),
+                    ];
+                }
+
+                $svg = $this->renderSolutionSvg($solution, $svgConfig);
                 if ($svg === null) {
                     continue;
                 }
 
                 $task['svg'] = $svg;
-                $task['runtime_svg_migration'] = 'topic13_b1_z10_13_phase2';
+                if ($number === 12) {
+                    unset($task['image']);
+                    $task['runtime_svg_migration'] = 'topic13_b1_z12_semantic_prompt';
+                } else {
+                    $task['runtime_svg_migration'] = 'topic13_b1_z10_13_phase2';
+                }
                 $zadanie['tasks'][$taskIndex] = $task;
             }
 

@@ -38,7 +38,15 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
                     continue;
                 }
 
-                // Z12-13 still use PNG images
+                if ($zadanieNumber === 12) {
+                    $this->assertArrayHasKey('svg', $task);
+                    $this->assertIsString($task['svg'] ?? null);
+                    $this->assertStringContainsString('data-runtime-svg="topic13-b1-z12-prompt-', (string) ($task['svg'] ?? ''));
+                    $this->assertArrayNotHasKey('image', $task);
+                    continue;
+                }
+
+                // Z13 still keeps PNG fallback in runtime data for now.
                 $this->assertNotEmpty($task['image'] ?? null, "PNG fallback should remain in data for Z{$zadanieNumber}");
             }
         }
