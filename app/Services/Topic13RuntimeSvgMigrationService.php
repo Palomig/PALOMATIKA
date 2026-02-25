@@ -5,7 +5,8 @@ namespace App\Services;
 class Topic13RuntimeSvgMigrationService
 {
     /**
-     * Phase 2 runtime migration: Block 1, Zadaniya 10-13.
+     * Phase 2 runtime migration: Block 1, Zadaniya 10, 12, 13.
+     * Zadanie 11 keeps source format (single prompt graphic + text options).
      */
     public function migrate(array $data): array
     {
@@ -44,14 +45,8 @@ class Topic13RuntimeSvgMigrationService
                 }
 
                 if ($number === 11) {
-                    $graphOptions = $this->topic13Z11GraphOptionsForTask($task);
-                    if ($graphOptions !== null) {
-                        $task['graph_options'] = $graphOptions;
-                        $task['graph_options_mode'] = 'compact_number_line';
-                        unset($task['image'], $task['svg']);
-                        $task['runtime_svg_migration'] = 'topic13_b1_z10_13_phase2';
-                        $zadanie['tasks'][$taskIndex] = $task;
-                    }
+                    // Keep original format from source data:
+                    // one prompt graphic (image/svg) + four text options.
                     continue;
                 }
 
@@ -568,46 +563,6 @@ class Topic13RuntimeSvgMigrationService
         }
 
         return count($options) === 4 ? $options : null;
-    }
-
-    /**
-     * @return list<array{index:int,svg:string,text:string}>|null
-     */
-    private function topic13Z11GraphOptionsForTask(array $task): ?array
-    {
-        $options = $task['options'] ?? null;
-        if (!is_array($options) || count($options) !== 4) {
-            return null;
-        }
-
-        $graphOptions = [];
-        foreach ($options as $index => $optionExpr) {
-            if (!is_string($optionExpr) || trim($optionExpr) === '') {
-                return null;
-            }
-
-            $solution = $this->solveInequality($optionExpr);
-            if ($solution === null) {
-                return null;
-            }
-
-            $svg = $this->renderSolutionSvg($solution, [
-                'mode' => 'compact_option',
-                'text_only_none' => true,
-                'runtime_svg_id' => 'topic13-b1-z11-option',
-            ]);
-            if (!is_string($svg) || $svg === '') {
-                return null;
-            }
-
-            $graphOptions[] = [
-                'index' => $index + 1,
-                'svg' => $svg,
-                'text' => $this->solutionToText($solution),
-            ];
-        }
-
-        return $graphOptions;
     }
 
     /**

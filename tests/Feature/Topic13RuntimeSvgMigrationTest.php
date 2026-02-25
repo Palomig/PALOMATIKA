@@ -29,9 +29,10 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
                 }
 
                 if ($zadanieNumber === 11) {
-                    $this->assertArrayHasKey('graph_options', $task);
-                    $this->assertCount(4, $task['graph_options']);
-                    $this->assertArrayNotHasKey('image', $task);
+                    $this->assertArrayHasKey('image', $task);
+                    $this->assertArrayNotHasKey('graph_options', $task);
+                    $this->assertArrayNotHasKey('svg', $task);
+                    $this->assertCount(4, $task['options'] ?? []);
                     continue;
                 }
 
@@ -41,7 +42,7 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
         }
     }
 
-    public function test_runtime_choice_view_prefers_svg_for_migrated_topic_13_task_and_keeps_text_options(): void
+    public function test_runtime_choice_view_keeps_single_png_prompt_for_topic_13_z11_and_text_options(): void
     {
         Cache::forget('topic_data_13');
 
@@ -57,8 +58,9 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
             'isVariant' => true,
         ]);
 
-        $view->assertSee('data-runtime-svg="topic13-b1-z11-option"', false);
-        $view->assertDontSee('images/tasks/13/img-035.png');
+        $view->assertSee('images/tasks/13/img-035.png');
+        $view->assertDontSee('data-runtime-svg="topic13-b1-z11-option"', false);
+        $view->assertSee('1) x² - 49 ≤ 0');
     }
 
     public function test_topic_13_z10_tasks_receive_four_graph_options_with_prebaked_svg(): void
