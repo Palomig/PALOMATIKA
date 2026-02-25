@@ -89,7 +89,7 @@
 
                 @if(empty($taskGraphOptions) && !empty($taskSvg))
                     <div class="mt-4 mb-2">
-                        <div class="bg-white rounded-lg p-2 overflow-hidden {{ $isTopic13Z11PromptSvg ? 'topic13-z11-prompt-svg-size mx-auto w-full max-w-[180px] sm:max-w-[220px] md:max-w-[240px] [&>svg]:w-full [&>svg]:h-auto' : '' }}">
+                        <div class="bg-white rounded-lg p-2 overflow-hidden {{ $isTopic13Z11PromptSvg ? 'topic13-z11-prompt-svg-size mx-auto w-full max-w-[270px] sm:max-w-[330px] md:max-w-[360px] [&>svg]:w-full [&>svg]:h-auto' : '' }}">
                             {!! $taskSvg !!}
                         </div>
                     </div>
