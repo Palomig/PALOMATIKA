@@ -28,7 +28,14 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
                     continue;
                 }
 
-                // Z11-13 still use PNG images
+                if ($zadanieNumber === 11) {
+                    $this->assertArrayHasKey('graph_options', $task);
+                    $this->assertCount(4, $task['graph_options']);
+                    $this->assertArrayNotHasKey('image', $task);
+                    continue;
+                }
+
+                // Z12-13 still use PNG images
                 $this->assertNotEmpty($task['image'] ?? null, "PNG fallback should remain in data for Z{$zadanieNumber}");
             }
         }
@@ -50,8 +57,8 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
             'isVariant' => true,
         ]);
 
-        $view->assertSee('x² - 49 ≤ 0');
-        $view->assertDontSee('pattern id="hatch_', false);
+        $view->assertSee('data-runtime-svg="topic13-b1-z11-option"', false);
+        $view->assertDontSee('images/tasks/13/img-035.png');
     }
 
     public function test_topic_13_z10_tasks_receive_four_graph_options_with_prebaked_svg(): void

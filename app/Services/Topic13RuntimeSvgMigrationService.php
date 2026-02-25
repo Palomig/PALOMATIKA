@@ -43,6 +43,18 @@ class Topic13RuntimeSvgMigrationService
                     continue;
                 }
 
+                if ($number === 11) {
+                    $graphOptions = $this->topic13Z11GraphOptionsForTask($task);
+                    if ($graphOptions !== null) {
+                        $task['graph_options'] = $graphOptions;
+                        $task['graph_options_mode'] = 'compact_number_line';
+                        unset($task['image'], $task['svg']);
+                        $task['runtime_svg_migration'] = 'topic13_b1_z10_13_phase2';
+                        $zadanie['tasks'][$taskIndex] = $task;
+                    }
+                    continue;
+                }
+
                 if (!empty($task['svg']) && is_string($task['svg'])) {
                     continue;
                 }
@@ -312,6 +324,8 @@ class Topic13RuntimeSvgMigrationService
     {
         $mode = (string) ($config['mode'] ?? 'solution');
         $isCompactOption = $mode === 'compact_option';
+        $textOnlyNone = (bool) ($config['text_only_none'] ?? false);
+        $runtimeSvgId = (string) ($config['runtime_svg_id'] ?? 'topic13-b1-z10-option');
 
         $width = $isCompactOption ? 300 : 360;
         $height = $isCompactOption ? 42 : 78;
@@ -341,9 +355,19 @@ class Topic13RuntimeSvgMigrationService
 
         $uidSeed = json_encode([$solution, $config], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         $uid = substr(md5((string) $uidSeed), 0, 10);
+
+        if ($isCompactOption && $textOnlyNone && $solution['kind'] === 'none') {
+            return implode("\n", [
+                "<svg viewBox=\"0 0 {$width} {$height}\" class=\"w-full h-auto semantic-runtime-svg\" data-runtime-svg=\"{$runtimeSvgId}\" data-label-mode=\"boundary-only\">",
+                "  <rect width=\"100%\" height=\"100%\" fill=\"transparent\"/>",
+                '  <text x="150" y="22" text-anchor="middle" fill="#111827" font-size="12">нет решений</text>',
+                '</svg>',
+            ]);
+        }
+
         $svg = [];
         if ($isCompactOption) {
-            $svg[] = "<svg viewBox=\"0 0 {$width} {$height}\" class=\"w-full h-auto number-line semantic-runtime-svg\" data-runtime-svg=\"topic13-b1-z10-option\" data-label-mode=\"boundary-only\">";
+            $svg[] = "<svg viewBox=\"0 0 {$width} {$height}\" class=\"w-full h-auto number-line semantic-runtime-svg\" data-runtime-svg=\"{$runtimeSvgId}\" data-label-mode=\"boundary-only\">";
         } else {
             $svg[] = "<svg viewBox=\"0 0 {$width} {$height}\" class=\"w-full max-w-[360px] h-auto mx-auto number-line semantic-runtime-svg\" data-runtime-svg=\"topic13-b1-z10-13\">";
         }
@@ -484,11 +508,7 @@ class Topic13RuntimeSvgMigrationService
                 return "  <circle cx=\"{$x}\" cy=\"{$lineY}\" r=\"3.5\" fill=\"#111827\" stroke=\"#111827\" stroke-width=\"1\"/>";
             }
 
-            $size = 7;
-            $half = $size / 2;
-            $rectX = round($x - $half, 2);
-            $rectY = round($lineY - $half, 2);
-            return "  <rect x=\"{$rectX}\" y=\"{$rectY}\" width=\"{$size}\" height=\"{$size}\" fill=\"#ffffff\" stroke=\"#111827\" stroke-width=\"1.2\"/>";
+            return "  <circle cx=\"{$x}\" cy=\"{$lineY}\" r=\"3.5\" fill=\"#ffffff\" stroke=\"#111827\" stroke-width=\"1.2\"/>";
         }
 
         if ($closed) {
@@ -548,6 +568,46 @@ class Topic13RuntimeSvgMigrationService
         }
 
         return count($options) === 4 ? $options : null;
+    }
+
+    /**
+     * @return list<array{index:int,svg:string,text:string}>|null
+     */
+    private function topic13Z11GraphOptionsForTask(array $task): ?array
+    {
+        $options = $task['options'] ?? null;
+        if (!is_array($options) || count($options) !== 4) {
+            return null;
+        }
+
+        $graphOptions = [];
+        foreach ($options as $index => $optionExpr) {
+            if (!is_string($optionExpr) || trim($optionExpr) === '') {
+                return null;
+            }
+
+            $solution = $this->solveInequality($optionExpr);
+            if ($solution === null) {
+                return null;
+            }
+
+            $svg = $this->renderSolutionSvg($solution, [
+                'mode' => 'compact_option',
+                'text_only_none' => true,
+                'runtime_svg_id' => 'topic13-b1-z11-option',
+            ]);
+            if (!is_string($svg) || $svg === '') {
+                return null;
+            }
+
+            $graphOptions[] = [
+                'index' => $index + 1,
+                'svg' => $svg,
+                'text' => $this->solutionToText($solution),
+            ];
+        }
+
+        return $graphOptions;
     }
 
     /**
