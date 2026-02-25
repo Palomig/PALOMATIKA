@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let pendingAwayMs = 0;
 
     const SCROLL_SETTLE_MS = 400;
-    const FOCUS_DELAY_MS = 5000;
+    const FOCUS_DELAY_MS = 2000;
     const TRACKER_TICK_MS = 250;
     const MIN_VISIBLE_RATIO = 0.15;
 
