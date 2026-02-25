@@ -69,4 +69,30 @@ class Topic13Zadanie11SemanticSvgTest extends TestCase
         $this->assertStringContainsString('1) x² - 49 ≤ 0', $html);
         $this->assertStringContainsString('4) x² + 4 &lt; 0', $html);
     }
+
+    public function test_topic_13_block1_z11_task3_svg_is_visible_non_empty_and_semantically_labeled(): void
+    {
+        Cache::forget('topic_data_13');
+        $blocks = app(TaskDataService::class)->getBlocks('13');
+        $z11 = $blocks[0]['zadaniya'][10] ?? null;
+        $this->assertIsArray($z11);
+
+        $task3 = $z11['tasks'][2] ?? null;
+        $task1 = $z11['tasks'][0] ?? null;
+        $this->assertIsArray($task3);
+        $this->assertIsArray($task1);
+
+        $task3Svg = (string) ($task3['svg'] ?? '');
+        $task1Svg = (string) ($task1['svg'] ?? '');
+
+        // Task 3 is "all real numbers": axis + hatch must be visible on dark card.
+        $this->assertStringContainsString('x1="14" y1="16" x2="286" y2="16"', $task3Svg);
+        $this->assertStringContainsString('stroke="#c8dce8"', $task3Svg);
+        $this->assertStringContainsString('fill="url(#hatch-', $task3Svg);
+
+        // A bounded task must still keep endpoint labels/points.
+        $this->assertStringContainsString('>−7</text>', $task1Svg);
+        $this->assertStringContainsString('>7</text>', $task1Svg);
+        $this->assertSame(2, substr_count($task1Svg, '<circle '));
+    }
 }

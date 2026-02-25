@@ -14,6 +14,7 @@
     $showTaskAnswer = !$isVariant;
     $answerResolver = app(\App\Services\TaskAnswerResolver::class);
     $optionRenderPolicy = app(\App\Services\OptionRenderModePolicy::class);
+    $isTopic13 = (string) ($topicId ?? '') === '13';
 @endphp
 
 {{-- Если есть общие points на уровне задания --}}
@@ -89,7 +90,7 @@
 
                 @if(empty($taskGraphOptions) && !empty($taskSvg))
                     <div class="mt-4 mb-2">
-                        <div class="rounded-lg p-2 overflow-hidden border border-slate-700 {{ $isTopic13Z11PromptSvg ? 'bg-slate-900/80 topic13-z11-prompt-svg-size mx-auto w-full max-w-[270px] sm:max-w-[330px] md:max-w-[360px] [&>svg]:w-full [&>svg]:h-auto' : 'bg-white' }}">
+                        <div class="rounded-lg overflow-hidden border border-slate-700 {{ $isTopic13 ? 'topic13-svg-card bg-slate-900/50 p-3' : 'bg-white p-2' }} {{ $isTopic13Z11PromptSvg ? 'topic13-z11-prompt-svg-size mx-auto w-full max-w-[270px] sm:max-w-[330px] md:max-w-[360px] [&>svg]:w-full [&>svg]:h-auto' : '' }}">
                             {!! $taskSvg !!}
                         </div>
                     </div>
@@ -99,7 +100,7 @@
                     @endphp
                     <div class="mt-4 mb-2">
                         @if(\Illuminate\Support\Str::startsWith($imageName, '<svg'))
-                            <div class="bg-white rounded-lg p-2 overflow-hidden">
+                            <div class="rounded-lg overflow-hidden {{ $isTopic13 ? 'topic13-svg-card bg-slate-900/50 p-3 border border-slate-700' : 'bg-white p-2' }}">
                                 {!! $imageName !!}
                             </div>
                         @else
@@ -127,7 +128,7 @@
                                  @if($graphOptionText !== '') data-option-text="{{ $graphOptionText }}" @endif>
                                 <div class="flex items-start gap-2">
                                     <span class="text-cyan-400 font-bold shrink-0">{{ $graphOptionIndex }})</span>
-                                    <div class="flex-1 bg-white rounded p-1 overflow-hidden">
+                                    <div class="flex-1 rounded overflow-hidden {{ $isTopic13 ? 'topic13-svg-card bg-slate-900/50 p-2 border border-slate-700' : 'bg-white p-1' }}">
                                         {!! $graphOptionSvg !!}
                                     </div>
                                 </div>

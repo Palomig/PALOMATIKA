@@ -115,6 +115,37 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
         $this->assertStringNotContainsString('<pattern ', $html);
     }
 
+    public function test_topic_13_svg_cards_use_dark_wrapper_for_prompt_and_option_svg_blocks(): void
+    {
+        Cache::forget('topic_data_13');
+        $blocks = app(TaskDataService::class)->getBlocks('13');
+
+        $z10 = $blocks[0]['zadaniya'][9] ?? null;
+        $z11 = $blocks[0]['zadaniya'][10] ?? null;
+        $this->assertIsArray($z10);
+        $this->assertIsArray($z11);
+
+        $z10View = $this->view('tasks.types.choice', [
+            'zadanie' => $z10,
+            'block' => ['number' => 1],
+            'topicId' => '13',
+            'isVariant' => true,
+        ]);
+        $z10Html = (string) $z10View;
+        $this->assertSame(36, substr_count($z10Html, 'topic13-svg-card'));
+        $this->assertSame(0, substr_count($z10Html, 'bg-white rounded p-1 overflow-hidden'));
+
+        $z11View = $this->view('tasks.types.choice', [
+            'zadanie' => $z11,
+            'block' => ['number' => 1],
+            'topicId' => '13',
+            'isVariant' => true,
+        ]);
+        $z11Html = (string) $z11View;
+        $this->assertSame(8, substr_count($z11Html, 'topic13-svg-card'));
+        $this->assertStringNotContainsString('bg-white', $z11Html);
+    }
+
     public function test_neighboring_topic_13_zadaniya_remain_unmigrated(): void
     {
         Cache::forget('topic_data_13');

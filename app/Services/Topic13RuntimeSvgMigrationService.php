@@ -4,6 +4,11 @@ namespace App\Services;
 
 class Topic13RuntimeSvgMigrationService
 {
+    private const COMPACT_BG = '#0d1b2a';
+    private const COMPACT_AXIS = '#c8dce8';
+    private const COMPACT_LABEL = '#d4e8f7';
+    private const COMPACT_HATCH = '#e8a838';
+
     public function __construct(
         private readonly InequalityNumberRaySvgRenderer $numberRayRenderer
     ) {
@@ -411,8 +416,8 @@ class Topic13RuntimeSvgMigrationService
         if ($isCompactOption && $textOnlyNone && $solution['kind'] === 'none') {
             return implode("\n", [
                 "<svg viewBox=\"0 0 {$width} {$height}\" class=\"w-full h-auto semantic-runtime-svg\" data-runtime-svg=\"{$runtimeSvgId}\" data-label-mode=\"boundary-only\">",
-                "  <rect width=\"100%\" height=\"100%\" fill=\"transparent\"/>",
-                '  <text x="150" y="22" text-anchor="middle" fill="#111827" font-size="12">нет решений</text>',
+                "  <rect width=\"100%\" height=\"100%\" fill=\"" . self::COMPACT_BG . "\"/>",
+                "  <text x=\"150\" y=\"22\" text-anchor=\"middle\" fill=\"" . self::COMPACT_LABEL . "\" font-size=\"12\">нет решений</text>",
                 '</svg>',
             ]);
         }
@@ -432,12 +437,14 @@ class Topic13RuntimeSvgMigrationService
         $svg[] = '    </marker>';
         if ($isCompactOption) {
             $svg[] = "    <pattern id=\"hatch-{$uid}\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(28)\">";
-            $svg[] = '      <line x1="0" y1="0" x2="0" y2="6" stroke="#111827" stroke-width="1"/>';
+            $svg[] = '      <line x1="0" y1="0" x2="0" y2="6" stroke="' . self::COMPACT_HATCH . '" stroke-width="1.4"/>';
             $svg[] = '    </pattern>';
         }
         $svg[] = '  </defs>';
-        $svg[] = $isCompactOption ? '  <rect width="100%" height="100%" fill="transparent"/>' : '  <rect width="100%" height="100%" fill="#ffffff"/>';
-        $axisStroke = $isCompactOption ? '#111827' : '#334155';
+        $svg[] = $isCompactOption
+            ? '  <rect width="100%" height="100%" fill="' . self::COMPACT_BG . '"/>'
+            : '  <rect width="100%" height="100%" fill="#ffffff"/>';
+        $axisStroke = $isCompactOption ? self::COMPACT_AXIS : '#334155';
         $svg[] = "  <line x1=\"{$leftPad}\" y1=\"{$lineY}\" x2=\"{$rightPad}\" y2=\"{$lineY}\" stroke=\"{$axisStroke}\" stroke-width=\"2\" marker-start=\"url(#arrow-l-{$uid})\" marker-end=\"url(#arrow-r-{$uid})\"/>";
 
         if (!$isCompactOption) {
@@ -479,7 +486,8 @@ class Topic13RuntimeSvgMigrationService
         } else {
             $noX = $isCompactOption ? ($width / 2) : 180;
             $noY = $isCompactOption ? 18 : 28;
-            $svg[] = "  <text x=\"{$noX}\" y=\"{$noY}\" text-anchor=\"middle\" fill=\"#64748b\" font-size=\"12\">нет решений</text>";
+            $fill = $isCompactOption ? self::COMPACT_LABEL : '#64748b';
+            $svg[] = "  <text x=\"{$noX}\" y=\"{$noY}\" text-anchor=\"middle\" fill=\"{$fill}\" font-size=\"12\">нет решений</text>";
         }
 
         $svg[] = '</svg>';
@@ -557,10 +565,10 @@ class Topic13RuntimeSvgMigrationService
         $x = round($toX($value), 2);
         if ($compactOption) {
             if ($closed) {
-                return "  <circle cx=\"{$x}\" cy=\"{$lineY}\" r=\"3.5\" fill=\"#111827\" stroke=\"#111827\" stroke-width=\"1\"/>";
+                return "  <circle cx=\"{$x}\" cy=\"{$lineY}\" r=\"3.5\" fill=\"" . self::COMPACT_AXIS . "\" stroke=\"" . self::COMPACT_AXIS . "\" stroke-width=\"1\"/>";
             }
 
-            return "  <circle cx=\"{$x}\" cy=\"{$lineY}\" r=\"3.5\" fill=\"#ffffff\" stroke=\"#111827\" stroke-width=\"1.2\"/>";
+            return "  <circle cx=\"{$x}\" cy=\"{$lineY}\" r=\"3.5\" fill=\"" . self::COMPACT_BG . "\" stroke=\"" . self::COMPACT_AXIS . "\" stroke-width=\"1.2\"/>";
         }
 
         if ($closed) {
@@ -575,7 +583,7 @@ class Topic13RuntimeSvgMigrationService
         $x = round($toX($value), 2);
         $label = $this->formatTick($value);
         if ($compactOption) {
-            return "  <text x=\"{$x}\" y=\"34\" text-anchor=\"middle\" fill=\"#111827\" font-size=\"9\" data-label-role=\"boundary\" data-label-pos=\"below\">{$label}</text>";
+            return "  <text x=\"{$x}\" y=\"34\" text-anchor=\"middle\" fill=\"" . self::COMPACT_LABEL . "\" font-size=\"9\" data-label-role=\"boundary\" data-label-pos=\"below\">{$label}</text>";
         }
 
         return "  <text x=\"{$x}\" y=\"18\" text-anchor=\"middle\" fill=\"#0f172a\" font-size=\"11\" data-label-role=\"boundary\" data-label-pos=\"above\">{$label}</text>";
