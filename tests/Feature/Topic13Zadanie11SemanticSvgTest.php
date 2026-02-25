@@ -19,10 +19,12 @@ class Topic13Zadanie11SemanticSvgTest extends TestCase
         $this->assertSame(11, (int) ($z11['number'] ?? 0));
 
         foreach ($z11['tasks'] ?? [] as $task) {
-            $this->assertArrayHasKey('image', $task);
-            $this->assertStringContainsString('img-', (string) ($task['image'] ?? ''));
+            $this->assertArrayHasKey('svg', $task);
+            $this->assertIsString($task['svg'] ?? null);
+            $this->assertStringStartsWith('<svg ', (string) ($task['svg'] ?? ''));
+            $this->assertStringContainsString('data-runtime-svg="topic13-b1-z11-prompt-', (string) ($task['svg'] ?? ''));
+            $this->assertArrayNotHasKey('image', $task);
             $this->assertArrayNotHasKey('graph_options', $task);
-            $this->assertArrayNotHasKey('svg', $task);
             $this->assertIsArray($task['options'] ?? null);
             $this->assertCount(4, $task['options']);
             $this->assertIsString($task['options'][0] ?? null);
@@ -59,7 +61,9 @@ class Topic13Zadanie11SemanticSvgTest extends TestCase
 
         $html = (string) $view;
 
-        $this->assertSame(8, substr_count($html, 'images/tasks/13/img-0'));
+        $this->assertSame(8, substr_count($html, 'data-runtime-svg="topic13-b1-z11-prompt-'));
+        $this->assertSame(0, substr_count($html, 'images/tasks/13/img-0'));
+        $this->assertSame(0, substr_count($html, '<img src='));
         $this->assertSame(0, substr_count($html, 'data-z10-option-panel='));
         $this->assertStringContainsString('1) x² - 49 ≤ 0', $html);
         $this->assertStringContainsString('4) x² + 4 &lt; 0', $html);

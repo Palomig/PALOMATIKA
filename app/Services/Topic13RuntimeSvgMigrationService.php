@@ -5,8 +5,7 @@ namespace App\Services;
 class Topic13RuntimeSvgMigrationService
 {
     /**
-     * Phase 2 runtime migration: Block 1, Zadaniya 10, 12, 13.
-     * Zadanie 11 keeps source format (single prompt graphic + text options).
+     * Phase 2 runtime migration: Block 1, Zadaniya 10-13.
      */
     public function migrate(array $data): array
     {
@@ -45,8 +44,33 @@ class Topic13RuntimeSvgMigrationService
                 }
 
                 if ($number === 11) {
-                    // Keep original format from source data:
-                    // one prompt graphic (image/svg) + four text options.
+                    if (!empty($task['svg']) && is_string($task['svg'])) {
+                        continue;
+                    }
+
+                    $sourceExpr = $this->sourceExpressionForTask($number, $task);
+                    if ($sourceExpr === null) {
+                        continue;
+                    }
+
+                    $solution = $this->solveInequality($sourceExpr);
+                    if ($solution === null) {
+                        continue;
+                    }
+
+                    $runtimeSvgId = 'topic13-b1-z11-prompt-' . ($task['id'] ?? ($taskIndex + 1));
+                    $svg = $this->renderSolutionSvg($solution, [
+                        'mode' => 'compact_option',
+                        'runtime_svg_id' => $runtimeSvgId,
+                    ]);
+                    if ($svg === null) {
+                        continue;
+                    }
+
+                    $task['svg'] = $svg;
+                    unset($task['image']);
+                    $task['runtime_svg_migration'] = 'topic13_b1_z11_semantic_prompt';
+                    $zadanie['tasks'][$taskIndex] = $task;
                     continue;
                 }
 

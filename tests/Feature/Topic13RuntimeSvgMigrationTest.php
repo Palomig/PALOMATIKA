@@ -29,9 +29,11 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
                 }
 
                 if ($zadanieNumber === 11) {
-                    $this->assertArrayHasKey('image', $task);
+                    $this->assertArrayHasKey('svg', $task);
+                    $this->assertIsString($task['svg'] ?? null);
+                    $this->assertStringContainsString('data-runtime-svg="topic13-b1-z11-prompt-', (string) ($task['svg'] ?? ''));
+                    $this->assertArrayNotHasKey('image', $task);
                     $this->assertArrayNotHasKey('graph_options', $task);
-                    $this->assertArrayNotHasKey('svg', $task);
                     $this->assertCount(4, $task['options'] ?? []);
                     continue;
                 }
@@ -42,7 +44,7 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
         }
     }
 
-    public function test_runtime_choice_view_keeps_single_png_prompt_for_topic_13_z11_and_text_options(): void
+    public function test_runtime_choice_view_uses_single_semantic_svg_prompt_for_topic_13_z11_and_text_options(): void
     {
         Cache::forget('topic_data_13');
 
@@ -58,7 +60,9 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
             'isVariant' => true,
         ]);
 
-        $view->assertSee('images/tasks/13/img-035.png');
+        $view->assertDontSee('images/tasks/13/img-035.png');
+        $view->assertSee('data-runtime-svg="topic13-b1-z11-prompt-', false);
+        $view->assertDontSee('<img src=', false);
         $view->assertDontSee('data-runtime-svg="topic13-b1-z11-option"', false);
         $view->assertSee('1) x² - 49 ≤ 0');
     }
