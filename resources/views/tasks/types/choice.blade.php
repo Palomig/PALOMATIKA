@@ -59,6 +59,9 @@
                     $isTopic13Z12PromptSvg = (string) ($topicId ?? '') === '13'
                         && (int) ($zadanie['number'] ?? 0) === 12
                         && str_contains($taskSvg, 'data-runtime-svg="topic13-b1-z12-prompt-');
+                    $isTopic13Z357PromptSvg = (string) ($topicId ?? '') === '13'
+                        && in_array((int) ($zadanie['number'] ?? 0), [3, 5, 7], true)
+                        && str_contains($taskSvg, 'data-runtime-svg="topic13-b1-z' . (int) ($zadanie['number'] ?? 0) . '-prompt-');
                 @endphp
 
             <div class="bg-slate-800/70 rounded-xl p-5 border border-slate-700 task-review-item relative"
@@ -91,7 +94,7 @@
                     ])
                 @endif
 
-                @if(empty($taskGraphOptions) && !empty($taskSvg))
+                @if(!empty($taskSvg) && (empty($taskGraphOptions) || $isTopic13Z357PromptSvg))
                     <div class="mt-4 mb-2">
                         <div class="rounded-lg overflow-hidden border border-slate-700 {{ $isTopic13 ? 'topic13-svg-card bg-slate-900/50 p-3' : 'bg-white p-2' }} {{ $isTopic13Z11PromptSvg ? 'topic13-z11-prompt-svg-size mx-auto w-full max-w-[270px] sm:max-w-[330px] md:max-w-[360px] [&>svg]:w-full [&>svg]:h-auto' : '' }} {{ $isTopic13Z12PromptSvg ? 'topic13-z12-prompt-svg-size mx-auto w-full max-w-[270px] sm:max-w-[330px] md:max-w-[360px] [&>svg]:w-full [&>svg]:h-auto' : '' }}">
                             {!! $taskSvg !!}

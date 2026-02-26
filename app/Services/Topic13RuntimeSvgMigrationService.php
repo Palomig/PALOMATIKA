@@ -45,30 +45,36 @@ class Topic13RuntimeSvgMigrationService
 
                 if (in_array($number, [3, 5, 7], true)) {
                     $taskId = (int) ($task['id'] ?? ($taskIndex + 1));
-
-                    if (!empty($task['svg']) && is_string($task['svg'])) {
-                        unset($task['image']);
-                        $task['runtime_svg_migration'] = 'topic13_b1_z357_semantic_prompt';
-                        $zadanie['tasks'][$taskIndex] = $task;
-                        continue;
-                    }
-
                     $solution = $this->solutionFromIntervalAnswer((string) ($task['answer'] ?? ''));
                     if ($solution === null) {
                         continue;
                     }
 
-                    $svg = $this->renderSolutionSvg($solution, [
-                        'mode' => 'compact_option',
-                        'runtime_svg_id' => 'topic13-b1-z' . $number . '-prompt-' . $taskId,
-                        'text_only_none' => true,
-                    ]);
+                    if (empty($task['svg']) || !is_string($task['svg'])) {
+                        $svg = $this->renderSolutionSvg($solution, [
+                            'mode' => 'compact_option',
+                            'runtime_svg_id' => 'topic13-b1-z' . $number . '-prompt-' . $taskId,
+                            'text_only_none' => true,
+                        ]);
 
-                    if (!is_string($svg) || $svg === '') {
+                        if (!is_string($svg) || $svg === '') {
+                            continue;
+                        }
+                        $task['svg'] = $svg;
+                    }
+
+                    $graphOptions = $this->topic13Z357GraphOptionsForSolution(
+                        $solution,
+                        $number,
+                        $taskId,
+                        (string) ($task['answer'] ?? '')
+                    );
+                    if ($graphOptions === null) {
                         continue;
                     }
 
-                    $task['svg'] = $svg;
+                    $task['graph_options'] = $graphOptions;
+                    $task['graph_options_mode'] = 'compact_number_line';
                     unset($task['image']);
                     $task['runtime_svg_migration'] = 'topic13_b1_z357_semantic_prompt';
                     $zadanie['tasks'][$taskIndex] = $task;
@@ -1025,6 +1031,162 @@ class Topic13RuntimeSvgMigrationService
 
     /**
      * @param array{kind:string,intervals?:array<int,array{l:?float,r:?float,li:bool,ri:bool}>} $solution
+     * @return list<array{index:int,svg:string,text:string}>|null
+     */
+    private function topic13Z357GraphOptionsForSolution(
+        array $solution,
+        int $zadanieNumber,
+        int $taskId,
+        string $originalAnswer
+    ): ?array
+    {
+        $candidates = $this->topic13Z357CandidateSolutions($solution);
+        if (count($candidates) < 4) {
+            return null;
+        }
+
+        $options = [];
+        foreach (array_slice($candidates, 0, 4) as $index => $candidate) {
+            $svg = $this->renderSolutionSvg($candidate, [
+                'mode' => 'compact_option',
+                'runtime_svg_id' => "topic13-b1-z{$zadanieNumber}-task{$taskId}-option-" . ($index + 1),
+                'text_only_none' => true,
+            ]);
+            if (!is_string($svg) || $svg === '') {
+                return null;
+            }
+
+            $options[] = [
+                'index' => $index + 1,
+                'svg' => $svg,
+                'text' => $index === 0
+                    ? trim($originalAnswer)
+                    : $this->solutionToText($candidate, true),
+            ];
+        }
+
+        return count($options) === 4 ? $options : null;
+    }
+
+    /**
+     * @param array{kind:string,intervals?:array<int,array{l:?float,r:?float,li:bool,ri:bool}>} $solution
+     * @return list<array{kind:string,intervals?:array<int,array{l:?float,r:?float,li:bool,ri:bool}>}>
+     */
+    private function topic13Z357CandidateSolutions(array $solution): array
+    {
+        $candidates = [$solution];
+
+        $intervals = is_array($solution['intervals'] ?? null) ? $solution['intervals'] : [];
+        $bounds = [];
+        foreach ($intervals as $interval) {
+            foreach (['l', 'r'] as $key) {
+                $bound = $interval[$key] ?? null;
+                if ($bound !== null) {
+                    $bounds[] = (float) $bound;
+                }
+            }
+        }
+        $bounds = array_values(array_unique(array_map(static fn (float $v) => round($v, 8), $bounds)));
+        sort($bounds);
+
+        $a = (float) ($bounds[0] ?? -2.0);
+        $b = (float) ($bounds[1] ?? max(2.0, abs($a) + 2.0));
+        if ($a === $b) {
+            $b = $a + 2.0;
+        }
+        if ($a > $b) {
+            [$a, $b] = [$b, $a];
+        }
+
+        if (($solution['kind'] ?? null) === 'none') {
+            $candidates[] = ['kind' => 'all'];
+            $candidates[] = $this->intervals([['l' => null, 'r' => 0.0, 'li' => false, 'ri' => true]]);
+            $candidates[] = $this->intervals([['l' => 0.0, 'r' => null, 'li' => true, 'ri' => false]]);
+        } elseif (($solution['kind'] ?? null) === 'all') {
+            $candidates[] = ['kind' => 'none'];
+            $candidates[] = $this->intervals([['l' => $a, 'r' => $b, 'li' => true, 'ri' => true]]);
+            $candidates[] = $this->intervals([
+                ['l' => null, 'r' => $a, 'li' => false, 'ri' => true],
+                ['l' => $b, 'r' => null, 'li' => true, 'ri' => false],
+            ]);
+        } elseif (($solution['kind'] ?? null) === 'intervals' && count($intervals) === 1) {
+            $interval = $intervals[0];
+            $l = $interval['l'] ?? null;
+            $r = $interval['r'] ?? null;
+
+            if ($l !== null && $r !== null) {
+                $li = (bool) ($interval['li'] ?? false);
+                $ri = (bool) ($interval['ri'] ?? false);
+                $closed = $li || $ri;
+                $candidates[] = $this->intervals([
+                    ['l' => null, 'r' => $l, 'li' => false, 'ri' => $closed],
+                    ['l' => $r, 'r' => null, 'li' => $closed, 'ri' => false],
+                ]);
+                $candidates[] = $this->intervals([['l' => null, 'r' => $l, 'li' => false, 'ri' => $closed]]);
+                $candidates[] = $this->intervals([['l' => $r, 'r' => null, 'li' => $closed, 'ri' => false]]);
+            } elseif ($l === null && $r !== null) {
+                $ri = (bool) ($interval['ri'] ?? false);
+                $candidates[] = $this->intervals([['l' => $r, 'r' => null, 'li' => $ri, 'ri' => false]]);
+                $candidates[] = ['kind' => 'none'];
+                $candidates[] = ['kind' => 'all'];
+            } elseif ($l !== null && $r === null) {
+                $li = (bool) ($interval['li'] ?? false);
+                $candidates[] = $this->intervals([['l' => null, 'r' => $l, 'li' => false, 'ri' => $li]]);
+                $candidates[] = ['kind' => 'none'];
+                $candidates[] = ['kind' => 'all'];
+            }
+        } elseif (($solution['kind'] ?? null) === 'intervals' && count($intervals) === 2) {
+            $first = $intervals[0];
+            $second = $intervals[1];
+            $a = (float) ($first['r'] ?? $a);
+            $b = (float) ($second['l'] ?? $b);
+            $closed = (bool) ($first['ri'] ?? false) || (bool) ($second['li'] ?? false);
+            $candidates[] = $this->intervals([['l' => $a, 'r' => $b, 'li' => $closed, 'ri' => $closed]]);
+            $candidates[] = $this->intervals([['l' => null, 'r' => $a, 'li' => false, 'ri' => $closed]]);
+            $candidates[] = $this->intervals([['l' => $b, 'r' => null, 'li' => $closed, 'ri' => false]]);
+        }
+
+        $unique = [];
+        $seen = [];
+        foreach ($candidates as $candidate) {
+            $key = $this->solutionToText($candidate);
+            if (isset($seen[$key])) {
+                continue;
+            }
+            $seen[$key] = true;
+            $unique[] = $candidate;
+        }
+
+        $fallback = [
+            ['kind' => 'none'],
+            ['kind' => 'all'],
+            $this->intervals([['l' => null, 'r' => 0.0, 'li' => false, 'ri' => true]]),
+            $this->intervals([['l' => 0.0, 'r' => null, 'li' => true, 'ri' => false]]),
+            $this->intervals([['l' => -2.0, 'r' => 2.0, 'li' => true, 'ri' => true]]),
+            $this->intervals([
+                ['l' => null, 'r' => -2.0, 'li' => false, 'ri' => true],
+                ['l' => 2.0, 'r' => null, 'li' => true, 'ri' => false],
+            ]),
+        ];
+
+        foreach ($fallback as $candidate) {
+            if (count($unique) >= 4) {
+                break;
+            }
+
+            $key = $this->solutionToText($candidate);
+            if (isset($seen[$key])) {
+                continue;
+            }
+            $seen[$key] = true;
+            $unique[] = $candidate;
+        }
+
+        return $unique;
+    }
+
+    /**
+     * @param array{kind:string,intervals?:array<int,array{l:?float,r:?float,li:bool,ri:bool}>} $solution
      * @return array{type:string,a?:float,b?:float,axisMin:float,axisMax:float}|null
      */
     private function solutionToRayConfig(array $solution): ?array
@@ -1282,7 +1444,7 @@ class Topic13RuntimeSvgMigrationService
     /**
      * @param array{kind:string,intervals?:array<int,array{l:?float,r:?float,li:bool,ri:bool}>} $solution
      */
-    private function solutionToText(array $solution): string
+    private function solutionToText(array $solution, bool $useCommaDecimals = false): string
     {
         if (($solution['kind'] ?? null) === 'none') {
             return 'нет решений';
@@ -1298,6 +1460,10 @@ class Topic13RuntimeSvgMigrationService
             $right = ($interval['ri'] ?? false) ? ']' : ')';
             $l = ($interval['l'] ?? null) === null ? '-∞' : $this->formatTick((float) $interval['l']);
             $r = ($interval['r'] ?? null) === null ? '+∞' : $this->formatTick((float) $interval['r']);
+            if ($useCommaDecimals) {
+                $l = str_replace('.', ',', $l);
+                $r = str_replace('.', ',', $r);
+            }
             $parts[] = $left . $l . '; ' . $r . $right;
         }
 

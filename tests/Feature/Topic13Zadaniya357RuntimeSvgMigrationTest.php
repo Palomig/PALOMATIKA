@@ -8,7 +8,7 @@ use Tests\TestCase;
 
 class Topic13Zadaniya357RuntimeSvgMigrationTest extends TestCase
 {
-    public function test_topic_13_zadanie_3_tasks_use_runtime_svg_without_png_runtime_path(): void
+    public function test_topic_13_zadanie_3_tasks_use_runtime_svg_and_keep_four_options_per_task(): void
     {
         Cache::forget('topic_data_13');
 
@@ -22,6 +22,15 @@ class Topic13Zadaniya357RuntimeSvgMigrationTest extends TestCase
             $this->assertArrayHasKey('svg', $task);
             $this->assertIsString($task['svg'] ?? null);
             $this->assertStringContainsString('data-runtime-svg="topic13-b1-z3-prompt-', (string) ($task['svg'] ?? ''));
+            $this->assertArrayHasKey('graph_options', $task);
+            $this->assertIsArray($task['graph_options']);
+            $this->assertCount(4, $task['graph_options']);
+            $texts = array_map(static fn (array $option): string => (string) ($option['text'] ?? ''), $task['graph_options']);
+            $this->assertContains(
+                $this->normalizeAnswer((string) ($task['answer'] ?? '')),
+                array_map(fn (string $v): string => $this->normalizeAnswer($v), $texts),
+                'Answer mapping must point to one of 4 options'
+            );
             $this->assertArrayNotHasKey('image', $task);
         }
 
@@ -34,11 +43,12 @@ class Topic13Zadaniya357RuntimeSvgMigrationTest extends TestCase
 
         $html = (string) $view;
         $this->assertStringContainsString('data-runtime-svg="topic13-b1-z3-prompt-', $html);
+        $this->assertSame(36, substr_count($html, 'data-z10-option-panel="'));
         $this->assertStringNotContainsString('images/tasks/13/img-', $html);
         $this->assertStringNotContainsString('.png', $html);
     }
 
-    public function test_topic_13_zadanie_5_tasks_use_runtime_svg_without_png_runtime_path(): void
+    public function test_topic_13_zadanie_5_tasks_use_runtime_svg_and_keep_four_options_per_task(): void
     {
         Cache::forget('topic_data_13');
 
@@ -52,6 +62,15 @@ class Topic13Zadaniya357RuntimeSvgMigrationTest extends TestCase
             $this->assertArrayHasKey('svg', $task);
             $this->assertIsString($task['svg'] ?? null);
             $this->assertStringContainsString('data-runtime-svg="topic13-b1-z5-prompt-', (string) ($task['svg'] ?? ''));
+            $this->assertArrayHasKey('graph_options', $task);
+            $this->assertIsArray($task['graph_options']);
+            $this->assertCount(4, $task['graph_options']);
+            $texts = array_map(static fn (array $option): string => (string) ($option['text'] ?? ''), $task['graph_options']);
+            $this->assertContains(
+                $this->normalizeAnswer((string) ($task['answer'] ?? '')),
+                array_map(fn (string $v): string => $this->normalizeAnswer($v), $texts),
+                'Answer mapping must point to one of 4 options'
+            );
             $this->assertArrayNotHasKey('image', $task);
         }
 
@@ -64,11 +83,12 @@ class Topic13Zadaniya357RuntimeSvgMigrationTest extends TestCase
 
         $html = (string) $view;
         $this->assertStringContainsString('data-runtime-svg="topic13-b1-z5-prompt-', $html);
+        $this->assertSame(36, substr_count($html, 'data-z10-option-panel="'));
         $this->assertStringNotContainsString('images/tasks/13/img-', $html);
         $this->assertStringNotContainsString('.png', $html);
     }
 
-    public function test_topic_13_zadanie_7_tasks_use_runtime_svg_without_png_runtime_path(): void
+    public function test_topic_13_zadanie_7_tasks_use_runtime_svg_and_keep_four_options_per_task(): void
     {
         Cache::forget('topic_data_13');
 
@@ -82,6 +102,15 @@ class Topic13Zadaniya357RuntimeSvgMigrationTest extends TestCase
             $this->assertArrayHasKey('svg', $task);
             $this->assertIsString($task['svg'] ?? null);
             $this->assertStringContainsString('data-runtime-svg="topic13-b1-z7-prompt-', (string) ($task['svg'] ?? ''));
+            $this->assertArrayHasKey('graph_options', $task);
+            $this->assertIsArray($task['graph_options']);
+            $this->assertCount(4, $task['graph_options']);
+            $texts = array_map(static fn (array $option): string => (string) ($option['text'] ?? ''), $task['graph_options']);
+            $this->assertContains(
+                $this->normalizeAnswer((string) ($task['answer'] ?? '')),
+                array_map(fn (string $v): string => $this->normalizeAnswer($v), $texts),
+                'Answer mapping must point to one of 4 options'
+            );
             $this->assertArrayNotHasKey('image', $task);
         }
 
@@ -94,7 +123,15 @@ class Topic13Zadaniya357RuntimeSvgMigrationTest extends TestCase
 
         $html = (string) $view;
         $this->assertStringContainsString('data-runtime-svg="topic13-b1-z7-prompt-', $html);
+        $this->assertSame(36, substr_count($html, 'data-z10-option-panel="'));
         $this->assertStringNotContainsString('images/tasks/13/img-', $html);
         $this->assertStringNotContainsString('.png', $html);
+    }
+
+    private function normalizeAnswer(string $value): string
+    {
+        $normalized = trim(str_replace(['−', '–'], '-', $value));
+        $normalized = preg_replace('/\s+/u', '', $normalized) ?? $normalized;
+        return str_replace(',', '.', $normalized);
     }
 }
