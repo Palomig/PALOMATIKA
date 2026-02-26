@@ -161,6 +161,23 @@ class Topic13RuntimeSvgMigrationService
             return is_string($expr) && trim($expr) !== '' ? $expr : null;
         }
 
+        if ($zadanieNumber === 11) {
+            $options = $task['options'] ?? null;
+            if (!is_array($options) || $options === []) {
+                return null;
+            }
+
+            $taskId = (int) ($task['id'] ?? 0);
+            $promptOptionByTaskId = [
+                5 => 1, // x² - 16 ≤ 0 => [-4; 4]
+                7 => 2, // x² - 81 ≤ 0 => [-9; 9]
+            ];
+            $promptIndex = $promptOptionByTaskId[$taskId] ?? 0;
+
+            $expr = $options[$promptIndex] ?? $options[0] ?? null;
+            return is_string($expr) && trim($expr) !== '' ? $expr : null;
+        }
+
         $firstOption = $task['options'][0] ?? null;
         return is_string($firstOption) && trim($firstOption) !== '' ? $firstOption : null;
     }

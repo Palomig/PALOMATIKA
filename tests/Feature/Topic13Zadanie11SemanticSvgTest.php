@@ -97,4 +97,34 @@ class Topic13Zadanie11SemanticSvgTest extends TestCase
         $this->assertStringContainsString('>7</text>', $task1Svg);
         $this->assertSame(2, substr_count($task1Svg, '<circle '));
     }
+
+    public function test_topic_13_block1_z11_task5_and_task7_svg_use_closed_bounded_intervals_with_correct_boundaries(): void
+    {
+        Cache::forget('topic_data_13');
+        $blocks = app(TaskDataService::class)->getBlocks('13');
+        $z11 = $blocks[0]['zadaniya'][10] ?? null;
+        $this->assertIsArray($z11);
+
+        $task5 = $z11['tasks'][4] ?? null;
+        $task7 = $z11['tasks'][6] ?? null;
+        $this->assertIsArray($task5);
+        $this->assertIsArray($task7);
+
+        $task5Svg = (string) ($task5['svg'] ?? '');
+        $task7Svg = (string) ($task7['svg'] ?? '');
+
+        // Task 5 must be the closed interval [-4; 4].
+        $this->assertStringContainsString('>−4</text>', $task5Svg);
+        $this->assertStringContainsString('>4</text>', $task5Svg);
+        $this->assertSame(2, substr_count($task5Svg, '<circle '));
+        $this->assertStringNotContainsString('fill="#ffffff"', $task5Svg);
+        $this->assertStringNotContainsString('fill="#0d1b2a"', $task5Svg);
+
+        // Task 7 must be the closed interval [-9; 9].
+        $this->assertStringContainsString('>−9</text>', $task7Svg);
+        $this->assertStringContainsString('>9</text>', $task7Svg);
+        $this->assertSame(2, substr_count($task7Svg, '<circle '));
+        $this->assertStringNotContainsString('fill="#ffffff"', $task7Svg);
+        $this->assertStringNotContainsString('fill="#0d1b2a"', $task7Svg);
+    }
 }
