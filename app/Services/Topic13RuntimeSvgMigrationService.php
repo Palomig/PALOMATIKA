@@ -30,7 +30,7 @@ class Topic13RuntimeSvgMigrationService
             }
 
             $number = (int) ($zadanie['number'] ?? 0);
-            if (!in_array($number, [10, 11, 12, 13], true)) {
+            if (!in_array($number, [3, 5, 7, 10, 11, 12, 13], true)) {
                 continue;
             }
 
@@ -40,6 +40,38 @@ class Topic13RuntimeSvgMigrationService
 
             foreach ($zadanie['tasks'] as $taskIndex => $task) {
                 if (!is_array($task)) {
+                    continue;
+                }
+
+                if (in_array($number, [3, 5, 7], true)) {
+                    $taskId = (int) ($task['id'] ?? ($taskIndex + 1));
+
+                    if (!empty($task['svg']) && is_string($task['svg'])) {
+                        unset($task['image']);
+                        $task['runtime_svg_migration'] = 'topic13_b1_z357_semantic_prompt';
+                        $zadanie['tasks'][$taskIndex] = $task;
+                        continue;
+                    }
+
+                    $solution = $this->solutionFromIntervalAnswer((string) ($task['answer'] ?? ''));
+                    if ($solution === null) {
+                        continue;
+                    }
+
+                    $svg = $this->renderSolutionSvg($solution, [
+                        'mode' => 'compact_option',
+                        'runtime_svg_id' => 'topic13-b1-z' . $number . '-prompt-' . $taskId,
+                        'text_only_none' => true,
+                    ]);
+
+                    if (!is_string($svg) || $svg === '') {
+                        continue;
+                    }
+
+                    $task['svg'] = $svg;
+                    unset($task['image']);
+                    $task['runtime_svg_migration'] = 'topic13_b1_z357_semantic_prompt';
+                    $zadanie['tasks'][$taskIndex] = $task;
                     continue;
                 }
 
@@ -251,6 +283,105 @@ class Topic13RuntimeSvgMigrationService
 
         $expr = $options[$index - 1] ?? null;
         return is_string($expr) && trim($expr) !== '' ? $expr : null;
+    }
+
+    /**
+     * @return array{kind:string,intervals?:array<int,array{l:?float,r:?float,li:bool,ri:bool}>}|null
+     */
+    private function solutionFromIntervalAnswer(string $answer): ?array
+    {
+        $s = trim(str_replace(['−', '–'], '-', $answer));
+        if ($s === '') {
+            return null;
+        }
+
+        $normalized = mb_strtolower(str_replace('ё', 'е', $s), 'UTF-8');
+        if ($normalized === 'нет решений') {
+            return ['kind' => 'none'];
+        }
+
+        $withoutSpaces = str_replace(' ', '', $s);
+        if ($withoutSpaces === '(-∞;+∞)') {
+            return ['kind' => 'all'];
+        }
+
+        $parts = preg_split('/\s*∪\s*/u', $s) ?: [];
+        if ($parts === []) {
+            return null;
+        }
+
+        $intervals = [];
+        foreach ($parts as $part) {
+            $part = trim($part);
+            if ($part === '') {
+                continue;
+            }
+
+            if (!preg_match('/^([\[\(])\s*(.*?)\s*;\s*(.*?)\s*([\]\)])$/u', $part, $m)) {
+                return null;
+            }
+
+            $l = $this->parseFiniteOrInfiniteBound((string) $m[2], true);
+            $r = $this->parseFiniteOrInfiniteBound((string) $m[3], false);
+            if ($l === '__invalid__' || $r === '__invalid__') {
+                return null;
+            }
+
+            $left = $l === '__inf__' ? null : (float) $l;
+            $right = $r === '__inf__' ? null : (float) $r;
+
+            $intervals[] = [
+                'l' => $left,
+                'r' => $right,
+                'li' => $left !== null ? $m[1] === '[' : false,
+                'ri' => $right !== null ? $m[4] === ']' : false,
+            ];
+        }
+
+        if ($intervals === []) {
+            return null;
+        }
+
+        return $this->intervals($intervals);
+    }
+
+    /**
+     * @return float|string '__inf__'|'__invalid__'
+     */
+    private function parseFiniteOrInfiniteBound(string $bound, bool $isLeft): float|string
+    {
+        $v = trim(str_replace(' ', '', str_replace(['−', '–'], '-', $bound)));
+        if ($v === '') {
+            return '__invalid__';
+        }
+
+        if (str_contains($v, '∞')) {
+            if ($isLeft && str_starts_with($v, '-')) {
+                return '__inf__';
+            }
+
+            if (!$isLeft && str_starts_with($v, '+')) {
+                return '__inf__';
+            }
+
+            return '__invalid__';
+        }
+
+        $v = str_replace(',', '.', $v);
+
+        if (preg_match('/^([+-]?\d+)\/(\d+)$/', $v, $m) === 1) {
+            $den = (float) $m[2];
+            if (abs($den) < 1e-12) {
+                return '__invalid__';
+            }
+            return ((float) $m[1]) / $den;
+        }
+
+        if (!is_numeric($v)) {
+            return '__invalid__';
+        }
+
+        return (float) $v;
     }
 
     /**

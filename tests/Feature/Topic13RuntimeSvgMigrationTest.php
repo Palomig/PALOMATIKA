@@ -343,7 +343,7 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
         $this->assertStringNotContainsString('bg-white', $z11Html);
     }
 
-    public function test_neighboring_topic_13_zadaniya_remain_unmigrated(): void
+    public function test_topic_13_z9_remains_unmigrated_while_z7_is_runtime_svg_migrated(): void
     {
         Cache::forget('topic_data_13');
 
@@ -359,6 +359,11 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
             $this->assertArrayNotHasKey('image', $task);
         }
 
+        foreach ($z7['tasks'] ?? [] as $task) {
+            $this->assertArrayHasKey('svg', $task);
+            $this->assertArrayNotHasKey('image', $task);
+        }
+
         $view = $this->view('tasks.types.choice', [
             'zadanie' => $z7,
             'block' => ['number' => 1],
@@ -366,7 +371,7 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
             'isVariant' => true,
         ]);
 
-        $view->assertSee('images/tasks/13/img-018.png');
-        $view->assertDontSee('<svg', false);
+        $view->assertDontSee('images/tasks/13/img-018.png');
+        $view->assertSee('data-runtime-svg="topic13-b1-z7-prompt-', false);
     }
 }
