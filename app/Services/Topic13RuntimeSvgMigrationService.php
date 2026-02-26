@@ -75,6 +75,8 @@ class Topic13RuntimeSvgMigrationService
                     $taskId = (int) ($task['id'] ?? ($taskIndex + 1));
                     if ($taskId === 5) {
                         $graphOptions = $this->topic13Z13Task5GraphOptions();
+                    } elseif ($taskId === 7) {
+                        $graphOptions = $this->topic13Z13Task7GraphOptions();
                     } else {
                         $sourceExpr = $this->sourceExpressionForTask($number, $task);
                         if ($sourceExpr === null) {
@@ -783,6 +785,59 @@ class Topic13RuntimeSvgMigrationService
             $svg = $this->renderSolutionSvg($candidate, [
                 'mode' => 'compact_option',
                 'runtime_svg_id' => 'topic13-b1-z13-task5-option-' . ($index + 1),
+                'fraction_labels' => $fractionLabels,
+            ]);
+
+            if (!is_string($svg) || $svg === '') {
+                return null;
+            }
+
+            $options[] = [
+                'index' => $index + 1,
+                'svg' => $svg,
+                'text' => $customTexts[$index + 1],
+            ];
+        }
+
+        return count($options) === 4 ? $options : null;
+    }
+
+    /**
+     * @return list<array{index:int,svg:string,text:string}>|null
+     */
+    private function topic13Z13Task7GraphOptions(): ?array
+    {
+        $boundary = 4.0 / 9.0;
+        $minusBoundary = -$boundary;
+
+        // Keep option #1 as the correct candidate before deterministic rotation.
+        $candidates = [
+            $this->intervals([['l' => $minusBoundary, 'r' => $boundary, 'li' => true, 'ri' => true]]),
+            $this->intervals([
+                ['l' => null, 'r' => $minusBoundary, 'li' => false, 'ri' => true],
+                ['l' => $boundary, 'r' => null, 'li' => true, 'ri' => false],
+            ]),
+            $this->intervals([['l' => $boundary, 'r' => null, 'li' => true, 'ri' => false]]),
+            $this->intervals([['l' => $minusBoundary, 'r' => null, 'li' => true, 'ri' => false]]),
+        ];
+
+        $customTexts = [
+            1 => '[-4/9; 4/9]',
+            2 => '(-∞; -4/9] ∪ [4/9; +∞)',
+            3 => '[4/9; +∞)',
+            4 => '[-4/9; +∞)',
+        ];
+
+        $fractionLabels = [
+            '-4/9' => ['numerator' => 4, 'denominator' => 9, 'negative' => true],
+            '4/9' => ['numerator' => 4, 'denominator' => 9, 'negative' => false],
+        ];
+
+        $options = [];
+        foreach ($candidates as $index => $candidate) {
+            $svg = $this->renderSolutionSvg($candidate, [
+                'mode' => 'compact_option',
+                'runtime_svg_id' => 'topic13-b1-z13-task7-option-' . ($index + 1),
                 'fraction_labels' => $fractionLabels,
             ]);
 

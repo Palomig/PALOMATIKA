@@ -219,6 +219,44 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
         $this->assertSame('2', (string) ($task5['answer'] ?? ''));
     }
 
+    public function test_topic_13_z13_task7_uses_four_ninths_fraction_labels_and_interval_texts(): void
+    {
+        Cache::forget('topic_data_13');
+
+        $blocks = app(TaskDataService::class)->getBlocks('13');
+        $zadanie = $blocks[0]['zadaniya'][12] ?? null; // Z13
+        $this->assertIsArray($zadanie);
+
+        $task7 = null;
+        foreach (($zadanie['tasks'] ?? []) as $task) {
+            if ((int) ($task['id'] ?? 0) === 7) {
+                $task7 = $task;
+                break;
+            }
+        }
+
+        $this->assertIsArray($task7);
+        $options = $task7['graph_options'] ?? null;
+        $this->assertIsArray($options);
+        $this->assertCount(4, $options);
+
+        $this->assertSame('[4/9; +∞)', (string) ($options[0]['text'] ?? ''));
+        $this->assertSame('[-4/9; +∞)', (string) ($options[1]['text'] ?? ''));
+        $this->assertSame('[-4/9; 4/9]', (string) ($options[2]['text'] ?? ''));
+        $this->assertSame('(-∞; -4/9] ∪ [4/9; +∞)', (string) ($options[3]['text'] ?? ''));
+
+        foreach ($options as $option) {
+            $svg = (string) ($option['svg'] ?? '');
+            $this->assertStringContainsString('data-label-format="stacked-fraction"', $svg);
+            $this->assertStringContainsString('data-fraction="4/9"', $svg);
+            $this->assertStringNotContainsString('0.444', $svg);
+            $this->assertStringNotContainsString('0,444', $svg);
+        }
+
+        // Rotation must preserve correctness mapping for task id=7.
+        $this->assertSame('3', (string) ($task7['answer'] ?? ''));
+    }
+
     public function test_topic_13_svg_cards_use_dark_wrapper_for_prompt_and_option_svg_blocks(): void
     {
         Cache::forget('topic_data_13');
