@@ -360,8 +360,10 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
         }
 
         foreach ($z7['tasks'] ?? [] as $task) {
-            $this->assertArrayHasKey('svg', $task);
+            $this->assertArrayNotHasKey('svg', $task);
             $this->assertArrayNotHasKey('image', $task);
+            $this->assertArrayHasKey('graph_options', $task);
+            $this->assertCount(4, $task['graph_options'] ?? []);
         }
 
         $view = $this->view('tasks.types.choice', [
@@ -372,6 +374,7 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
         ]);
 
         $view->assertDontSee('images/tasks/13/img-018.png');
-        $view->assertSee('data-runtime-svg="topic13-b1-z7-prompt-', false);
+        $view->assertDontSee('data-runtime-svg="topic13-b1-z7-prompt-', false);
+        $view->assertSee('data-z10-option-panel="', false);
     }
 }

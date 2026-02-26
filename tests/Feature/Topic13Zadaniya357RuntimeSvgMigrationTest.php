@@ -8,7 +8,7 @@ use Tests\TestCase;
 
 class Topic13Zadaniya357RuntimeSvgMigrationTest extends TestCase
 {
-    public function test_topic_13_zadanie_3_tasks_use_runtime_svg_and_keep_four_options_per_task(): void
+    public function test_topic_13_zadanie_3_tasks_use_only_four_svg_options_without_prompt_svg(): void
     {
         Cache::forget('topic_data_13');
 
@@ -19,9 +19,7 @@ class Topic13Zadaniya357RuntimeSvgMigrationTest extends TestCase
         $this->assertSame(3, (int) ($zadanie['number'] ?? 0));
 
         foreach ($zadanie['tasks'] ?? [] as $task) {
-            $this->assertArrayHasKey('svg', $task);
-            $this->assertIsString($task['svg'] ?? null);
-            $this->assertStringContainsString('data-runtime-svg="topic13-b1-z3-prompt-', (string) ($task['svg'] ?? ''));
+            $this->assertArrayNotHasKey('svg', $task);
             $this->assertArrayHasKey('graph_options', $task);
             $this->assertIsArray($task['graph_options']);
             $this->assertCount(4, $task['graph_options']);
@@ -42,13 +40,14 @@ class Topic13Zadaniya357RuntimeSvgMigrationTest extends TestCase
         ]);
 
         $html = (string) $view;
-        $this->assertStringContainsString('data-runtime-svg="topic13-b1-z3-prompt-', $html);
+        $this->assertStringNotContainsString('data-runtime-svg="topic13-b1-z3-prompt-', $html);
+        $this->assertStringNotContainsString('topic13-z3-prompt-svg-size', $html);
         $this->assertSame(36, substr_count($html, 'data-z10-option-panel="'));
         $this->assertStringNotContainsString('images/tasks/13/img-', $html);
         $this->assertStringNotContainsString('.png', $html);
     }
 
-    public function test_topic_13_zadanie_5_tasks_use_runtime_svg_and_keep_four_options_per_task(): void
+    public function test_topic_13_zadanie_5_tasks_use_only_four_svg_options_without_prompt_svg(): void
     {
         Cache::forget('topic_data_13');
 
@@ -59,9 +58,7 @@ class Topic13Zadaniya357RuntimeSvgMigrationTest extends TestCase
         $this->assertSame(5, (int) ($zadanie['number'] ?? 0));
 
         foreach ($zadanie['tasks'] ?? [] as $task) {
-            $this->assertArrayHasKey('svg', $task);
-            $this->assertIsString($task['svg'] ?? null);
-            $this->assertStringContainsString('data-runtime-svg="topic13-b1-z5-prompt-', (string) ($task['svg'] ?? ''));
+            $this->assertArrayNotHasKey('svg', $task);
             $this->assertArrayHasKey('graph_options', $task);
             $this->assertIsArray($task['graph_options']);
             $this->assertCount(4, $task['graph_options']);
@@ -82,13 +79,14 @@ class Topic13Zadaniya357RuntimeSvgMigrationTest extends TestCase
         ]);
 
         $html = (string) $view;
-        $this->assertStringContainsString('data-runtime-svg="topic13-b1-z5-prompt-', $html);
+        $this->assertStringNotContainsString('data-runtime-svg="topic13-b1-z5-prompt-', $html);
+        $this->assertStringNotContainsString('topic13-z5-prompt-svg-size', $html);
         $this->assertSame(36, substr_count($html, 'data-z10-option-panel="'));
         $this->assertStringNotContainsString('images/tasks/13/img-', $html);
         $this->assertStringNotContainsString('.png', $html);
     }
 
-    public function test_topic_13_zadanie_7_tasks_use_runtime_svg_and_keep_four_options_per_task(): void
+    public function test_topic_13_zadanie_7_tasks_use_only_four_svg_options_without_prompt_svg(): void
     {
         Cache::forget('topic_data_13');
 
@@ -99,9 +97,7 @@ class Topic13Zadaniya357RuntimeSvgMigrationTest extends TestCase
         $this->assertSame(7, (int) ($zadanie['number'] ?? 0));
 
         foreach ($zadanie['tasks'] ?? [] as $task) {
-            $this->assertArrayHasKey('svg', $task);
-            $this->assertIsString($task['svg'] ?? null);
-            $this->assertStringContainsString('data-runtime-svg="topic13-b1-z7-prompt-', (string) ($task['svg'] ?? ''));
+            $this->assertArrayNotHasKey('svg', $task);
             $this->assertArrayHasKey('graph_options', $task);
             $this->assertIsArray($task['graph_options']);
             $this->assertCount(4, $task['graph_options']);
@@ -122,7 +118,8 @@ class Topic13Zadaniya357RuntimeSvgMigrationTest extends TestCase
         ]);
 
         $html = (string) $view;
-        $this->assertStringContainsString('data-runtime-svg="topic13-b1-z7-prompt-', $html);
+        $this->assertStringNotContainsString('data-runtime-svg="topic13-b1-z7-prompt-', $html);
+        $this->assertStringNotContainsString('topic13-z7-prompt-svg-size', $html);
         $this->assertSame(36, substr_count($html, 'data-z10-option-panel="'));
         $this->assertStringNotContainsString('images/tasks/13/img-', $html);
         $this->assertStringNotContainsString('.png', $html);

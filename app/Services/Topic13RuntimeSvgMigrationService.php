@@ -50,19 +50,6 @@ class Topic13RuntimeSvgMigrationService
                         continue;
                     }
 
-                    if (empty($task['svg']) || !is_string($task['svg'])) {
-                        $svg = $this->renderSolutionSvg($solution, [
-                            'mode' => 'compact_option',
-                            'runtime_svg_id' => 'topic13-b1-z' . $number . '-prompt-' . $taskId,
-                            'text_only_none' => true,
-                        ]);
-
-                        if (!is_string($svg) || $svg === '') {
-                            continue;
-                        }
-                        $task['svg'] = $svg;
-                    }
-
                     $graphOptions = $this->topic13Z357GraphOptionsForSolution(
                         $solution,
                         $number,
@@ -75,8 +62,8 @@ class Topic13RuntimeSvgMigrationService
 
                     $task['graph_options'] = $graphOptions;
                     $task['graph_options_mode'] = 'compact_number_line';
-                    unset($task['image']);
-                    $task['runtime_svg_migration'] = 'topic13_b1_z357_semantic_prompt';
+                    unset($task['image'], $task['svg']);
+                    $task['runtime_svg_migration'] = 'topic13_b1_z357_semantic_options_only';
                     $zadanie['tasks'][$taskIndex] = $task;
                     continue;
                 }
