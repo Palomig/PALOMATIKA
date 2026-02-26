@@ -46,8 +46,12 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
                     continue;
                 }
 
-                // Z13 still keeps PNG fallback in runtime data for now.
-                $this->assertNotEmpty($task['image'] ?? null, "PNG fallback should remain in data for Z{$zadanieNumber}");
+                if ($zadanieNumber === 13) {
+                    $this->assertArrayHasKey('graph_options', $task);
+                    $this->assertCount(4, $task['graph_options']);
+                    $this->assertArrayNotHasKey('image', $task);
+                    continue;
+                }
             }
         }
     }
@@ -121,6 +125,60 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
         $this->assertStringContainsString('data-graph-options="topic13-z10"', $html);
         $this->assertStringContainsString('viewBox="0 0 420 60"', $html);
         $this->assertStringNotContainsString('<pattern ', $html);
+    }
+
+    public function test_topic_13_z13_tasks_receive_four_graph_options_with_svg_and_answer_mapping(): void
+    {
+        Cache::forget('topic_data_13');
+
+        $blocks = app(TaskDataService::class)->getBlocks('13');
+        $zadanie = $blocks[0]['zadaniya'][12] ?? null; // Z13
+
+        $this->assertIsArray($zadanie);
+        $this->assertSame(13, (int) ($zadanie['number'] ?? 0));
+
+        foreach ($zadanie['tasks'] ?? [] as $task) {
+            $this->assertArrayHasKey('graph_options', $task);
+            $this->assertIsArray($task['graph_options']);
+            $this->assertCount(4, $task['graph_options']);
+
+            $answer = (int) ($task['answer'] ?? 0);
+            $this->assertTrue($answer >= 1 && $answer <= 4, 'Answer index must be between 1 and 4');
+            $this->assertArrayHasKey($answer - 1, $task['graph_options']);
+
+            foreach ($task['graph_options'] as $index => $option) {
+                $this->assertSame($index + 1, (int) ($option['index'] ?? 0));
+                $this->assertIsString($option['svg'] ?? null);
+                $this->assertStringContainsString('<svg', (string) ($option['svg'] ?? ''));
+                $this->assertStringContainsString('viewBox="0 0 420 60"', (string) ($option['svg'] ?? ''));
+            }
+
+            $correctOption = $task['graph_options'][$answer - 1] ?? [];
+            $this->assertNotEmpty($correctOption['text'] ?? null, 'Correct option text must not be empty');
+        }
+    }
+
+    public function test_topic_13_z13_view_renders_svg_option_panels_for_every_task(): void
+    {
+        Cache::forget('topic_data_13');
+
+        $blocks = app(TaskDataService::class)->getBlocks('13');
+        $zadanie = $blocks[0]['zadaniya'][12] ?? null; // Z13
+        $this->assertIsArray($zadanie);
+
+        $view = $this->view('tasks.types.choice', [
+            'zadanie' => $zadanie,
+            'block' => ['number' => 1],
+            'topicId' => '13',
+            'isVariant' => true,
+        ]);
+
+        $html = (string) $view;
+
+        // 8 tasks × 4 options = 32 option panels
+        $this->assertSame(32, substr_count($html, 'data-z10-option-panel="'));
+        $this->assertStringContainsString('data-graph-options="topic13-z10"', $html);
+        $this->assertStringContainsString('viewBox="0 0 420 60"', $html);
     }
 
     public function test_topic_13_svg_cards_use_dark_wrapper_for_prompt_and_option_svg_blocks(): void

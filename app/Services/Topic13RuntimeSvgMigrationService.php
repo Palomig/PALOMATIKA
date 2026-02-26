@@ -71,6 +71,37 @@ class Topic13RuntimeSvgMigrationService
                     continue;
                 }
 
+                if ($number === 13) {
+                    $sourceExpr = $this->sourceExpressionForTask($number, $task);
+                    if ($sourceExpr === null) {
+                        continue;
+                    }
+
+                    $solution = $this->solveInequality($sourceExpr);
+                    if ($solution === null) {
+                        continue;
+                    }
+
+                    $graphOptions = $this->topic13Z10GraphOptionsForSolution($solution);
+                    if ($graphOptions === null) {
+                        continue;
+                    }
+
+                    [$graphOptions, $newAnswer] = $this->reorderGraphOptionsAndAnswer(
+                        $graphOptions,
+                        (int) ($task['answer'] ?? 1),
+                        (int) ($task['id'] ?? ($taskIndex + 1))
+                    );
+
+                    $task['graph_options'] = $graphOptions;
+                    $task['answer'] = (string) $newAnswer;
+                    $task['graph_options_mode'] = 'compact_number_line';
+                    unset($task['image'], $task['svg']);
+                    $task['runtime_svg_migration'] = 'topic13_b1_z13_semantic_options';
+                    $zadanie['tasks'][$taskIndex] = $task;
+                    continue;
+                }
+
                 if (empty($task['image']) || !is_string($task['image'])) {
                     continue;
                 }
