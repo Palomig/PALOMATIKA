@@ -211,12 +211,18 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
             $svg = (string) ($option['svg'] ?? '');
             $this->assertStringContainsString('data-label-format="stacked-fraction"', $svg);
             $this->assertStringContainsString('data-fraction="6/7"', $svg);
-            $this->assertStringContainsString('font-size="14"', $svg);
-            $this->assertStringContainsString('y="45"', $svg);
-            $this->assertStringContainsString('y="59"', $svg);
+            $this->assertStringContainsString('font-size="15"', $svg);
+            $this->assertStringContainsString('y="47"', $svg);
+            $this->assertStringContainsString('y="61"', $svg);
+            $this->assertStringNotContainsString('font-size="14"', $svg);
+            $this->assertStringNotContainsString('y="45"', $svg);
+            $this->assertStringNotContainsString('y="59"', $svg);
             $this->assertStringNotContainsString('-0.857', $svg);
             $this->assertStringNotContainsString('−0,857', $svg);
         }
+        $allSvgs = implode("\n", array_map(static fn (array $option): string => (string) ($option['svg'] ?? ''), $options));
+        $this->assertStringContainsString('font-size="18"', $allSvgs);
+        $this->assertStringNotContainsString('font-size="17"', $allSvgs);
 
         // Focused semantic checks for exact task-5 interval set.
         $this->assertSame(1, substr_count((string) $options[0]['svg'], 'data-label-format="stacked-fraction"'));
@@ -270,12 +276,18 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
             $svg = (string) ($option['svg'] ?? '');
             $this->assertStringContainsString('data-label-format="stacked-fraction"', $svg);
             $this->assertStringContainsString('data-fraction="4/9"', $svg);
-            $this->assertStringContainsString('font-size="14"', $svg);
-            $this->assertStringContainsString('y="45"', $svg);
-            $this->assertStringContainsString('y="59"', $svg);
+            $this->assertStringContainsString('font-size="15"', $svg);
+            $this->assertStringContainsString('y="47"', $svg);
+            $this->assertStringContainsString('y="61"', $svg);
+            $this->assertStringNotContainsString('font-size="14"', $svg);
+            $this->assertStringNotContainsString('y="45"', $svg);
+            $this->assertStringNotContainsString('y="59"', $svg);
             $this->assertStringNotContainsString('0.444', $svg);
             $this->assertStringNotContainsString('0,444', $svg);
         }
+        $allSvgs = implode("\n", array_map(static fn (array $option): string => (string) ($option['svg'] ?? ''), $options));
+        $this->assertStringContainsString('font-size="18"', $allSvgs);
+        $this->assertStringNotContainsString('font-size="17"', $allSvgs);
 
         // Focused semantic checks for 4/9 and -4/9 option geometry.
         $this->assertSame(1, substr_count((string) $options[0]['svg'], 'data-label-format="stacked-fraction"'));
