@@ -215,6 +215,24 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
             $this->assertStringNotContainsString('−0,857', $svg);
         }
 
+        // Focused semantic checks for exact task-5 interval set.
+        $this->assertSame(1, substr_count((string) $options[0]['svg'], 'data-label-format="stacked-fraction"'));
+        $this->assertSame(1, substr_count((string) $options[0]['svg'], '>−</text>'));
+        $this->assertSame(0, substr_count((string) $options[0]['svg'], 'fill="#0d1b2a" stroke="#4d9fdc"'));
+
+        $this->assertSame(1, substr_count((string) $options[1]['svg'], 'data-label-format="stacked-fraction"'));
+        $this->assertSame(1, substr_count((string) $options[1]['svg'], '>−</text>'));
+        $this->assertSame(0, substr_count((string) $options[1]['svg'], 'fill="#0d1b2a" stroke="#4d9fdc"'));
+
+        $this->assertSame(1, substr_count((string) $options[2]['svg'], 'data-label-format="stacked-fraction"'));
+        $this->assertSame(0, substr_count((string) $options[2]['svg'], '>−</text>'));
+        $this->assertSame(0, substr_count((string) $options[2]['svg'], 'fill="#0d1b2a" stroke="#4d9fdc"'));
+
+        $this->assertSame(2, substr_count((string) $options[3]['svg'], 'data-label-format="stacked-fraction"'));
+        $this->assertSame(1, substr_count((string) $options[3]['svg'], '>−</text>'));
+        $this->assertSame(1, substr_count((string) $options[3]['svg'], '<clipPath '));
+        $this->assertSame(0, substr_count((string) $options[3]['svg'], 'fill="#0d1b2a" stroke="#4d9fdc"'));
+
         // Rotation must preserve correctness mapping for task id=5.
         $this->assertSame('2', (string) ($task5['answer'] ?? ''));
     }
@@ -252,6 +270,25 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
             $this->assertStringNotContainsString('0.444', $svg);
             $this->assertStringNotContainsString('0,444', $svg);
         }
+
+        // Focused semantic checks for 4/9 and -4/9 option geometry.
+        $this->assertSame(1, substr_count((string) $options[0]['svg'], 'data-label-format="stacked-fraction"'));
+        $this->assertSame(0, substr_count((string) $options[0]['svg'], '>−</text>'));
+        $this->assertSame(0, substr_count((string) $options[0]['svg'], 'fill="#0d1b2a" stroke="#4d9fdc"'));
+
+        $this->assertSame(1, substr_count((string) $options[1]['svg'], 'data-label-format="stacked-fraction"'));
+        $this->assertSame(1, substr_count((string) $options[1]['svg'], '>−</text>'));
+        $this->assertSame(0, substr_count((string) $options[1]['svg'], 'fill="#0d1b2a" stroke="#4d9fdc"'));
+
+        $this->assertSame(2, substr_count((string) $options[2]['svg'], 'data-label-format="stacked-fraction"'));
+        $this->assertSame(1, substr_count((string) $options[2]['svg'], '>−</text>'));
+        $this->assertSame(1, substr_count((string) $options[2]['svg'], '<clipPath '));
+        $this->assertSame(0, substr_count((string) $options[2]['svg'], 'fill="#0d1b2a" stroke="#4d9fdc"'));
+
+        $this->assertSame(2, substr_count((string) $options[3]['svg'], 'data-label-format="stacked-fraction"'));
+        $this->assertSame(1, substr_count((string) $options[3]['svg'], '>−</text>'));
+        $this->assertSame(2, substr_count((string) $options[3]['svg'], '<clipPath '));
+        $this->assertSame(0, substr_count((string) $options[3]['svg'], 'fill="#0d1b2a" stroke="#4d9fdc"'));
 
         // Rotation must preserve correctness mapping for task id=7.
         $this->assertSame('3', (string) ($task7['answer'] ?? ''));
