@@ -51,6 +51,7 @@ class Topic13Zadanie12SemanticSvgTest extends TestCase
         $this->assertSame(8, substr_count($html, 'data-runtime-svg="topic13-b1-z12-prompt-'));
         $this->assertStringNotContainsString('images/tasks/13/img-043.png', $html);
         $this->assertSame(0, substr_count($html, '<img src='));
+        $this->assertSame(8, substr_count($html, 'topic13-z12-prompt-svg-size'));
         $this->assertStringContainsString('1) x² - 5x ≤ 0', $html);
     }
 
