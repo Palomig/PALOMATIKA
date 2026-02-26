@@ -52,10 +52,10 @@ class Topic13Zadanie12SemanticSvgTest extends TestCase
         $this->assertStringNotContainsString('images/tasks/13/img-043.png', $html);
         $this->assertSame(0, substr_count($html, '<img src='));
         $this->assertSame(8, substr_count($html, 'topic13-z12-prompt-svg-size'));
-        $this->assertStringContainsString('1) x² - 5x ≤ 0', $html);
+        $this->assertStringContainsString('x² - 5x ≤ 0', $html);
     }
 
-    public function test_topic_13_block1_z12_answer_mapping_stays_unchanged(): void
+    public function test_topic_13_block1_z12_answer_mapping_uses_explicit_answer_field(): void
     {
         Cache::forget('topic_data_13');
         $blocks = app(TaskDataService::class)->getBlocks('13');
@@ -65,7 +65,11 @@ class Topic13Zadanie12SemanticSvgTest extends TestCase
 
         $resolver = app(TaskAnswerResolver::class);
         foreach ($z12['tasks'] ?? [] as $task) {
-            $this->assertSame('1', $resolver->resolveFromTaskAndZadanie($z12, is_array($task) ? $task : []));
+            $taskData = is_array($task) ? $task : [];
+            $expected = (string) ($taskData['answer'] ?? '');
+            $this->assertNotSame('', $expected);
+            $this->assertContains($expected, ['1', '2', '3', '4']);
+            $this->assertSame($expected, $resolver->resolveFromTaskAndZadanie($z12, $taskData));
         }
     }
 }

@@ -1,1676 +1,1728 @@
 {
-  "topic_id": "13",
-  "meta": {
-    "title": "Неравенства",
-    "description": "Решение неравенств",
-    "color": "amber",
-    "icon": "less-than"
-  },
-  "exported_at": "2026-02-23T00:00:00+00:00",
-  "blocks": [
-    {
-      "number": 1,
-      "title": "ФИПИ",
-      "zadaniya": [
-        {
-          "number": 1,
-          "instruction": "Укажите решение неравенства",
-          "type": "choice",
-          "options_render_mode": "text_options",
-          "tasks": [
-            {
-              "id": 1,
-              "expression": "3 - 2x \\geq 8x - 1",
-              "options": [
-                "[0,4; +∞)",
-                "(-∞; -0,2]",
-                "[-0,2; +∞)",
-                "(-∞; 0,4]"
-              ],
-              "answer": "4"
-            },
-            {
-              "id": 2,
-              "expression": "4x - 4 \\geq 9x + 6",
-              "options": [
-                "(-∞; -0,4]",
-                "[-0,4; +∞)",
-                "(-∞; -2]",
-                "[-2; +∞)"
-              ],
-              "answer": "3"
-            },
-            {
-              "id": 3,
-              "expression": "6 - 7x \\leq 3x - 7",
-              "options": [
-                "(-∞; 1,3]",
-                "[1,3; +∞)",
-                "(-∞; 0,1]",
-                "[0,1; +∞)"
-              ],
-              "answer": "2"
-            },
-            {
-              "id": 4,
-              "expression": "2x - 8 \\leq 4x + 6",
-              "options": [
-                "[1; +∞)",
-                "(-∞; 1]",
-                "[-7; +∞)",
-                "(-∞; -7]"
-              ],
-              "answer": "3"
-            },
-            {
-              "id": 5,
-              "expression": "-9 - 6x > 9x + 9",
-              "options": [
-                "(-∞; 0)",
-                "(-∞; -1,2)",
-                "(0; +∞)",
-                "(-1,2; +∞)"
-              ],
-              "answer": "2"
-            },
-            {
-              "id": 6,
-              "expression": "8x - 8 > 7x + 6",
-              "options": [
-                "(14; +∞)",
-                "(-2; +∞)",
-                "(-∞; -2)",
-                "(-∞; 14)"
-              ],
-              "answer": "1"
-            },
-            {
-              "id": 7,
-              "expression": "5x + 4 < x + 6",
-              "options": [
-                "(-∞; 2,5)",
-                "(0,5; +∞)",
-                "(-∞; 0,5)",
-                "(2,5; +∞)"
-              ],
-              "answer": "3"
-            },
-            {
-              "id": 8,
-              "expression": "-3 - x < 4x + 7",
-              "options": [
-                "(-0,8; +∞)",
-                "(-∞; -0,8)",
-                "(-2; +∞)",
-                "(-∞; -2)"
-              ],
-              "answer": "3"
-            }
-          ]
-        },
-        {
-          "number": 2,
-          "instruction": "Укажите решение системы неравенств",
-          "type": "choice",
-          "options_render_mode": "text_options",
-          "tasks": [
-            {
-              "id": 1,
-              "expression": "\\begin{cases} x + 3,6 \\leq 0 \\\\ x + 2 \\leq -1 \\end{cases}",
-              "options": [
-                "[-3,6; -3]",
-                "[-3,6; +∞)",
-                "(-∞; -3,6] ∪ [-3; +∞)",
-                "(-∞; -3,6]"
-              ],
-              "answer": "4"
-            },
-            {
-              "id": 2,
-              "expression": "\\begin{cases} x + 0,6 \\leq 0 \\\\ x - 1 \\geq -4 \\end{cases}",
-              "options": [
-                "[-3; -0,6]",
-                "(-∞; -3]",
-                "[-0,6; +∞)",
-                "(-∞; -3] ∪ [-0,6; +∞)"
-              ],
-              "answer": "1"
-            },
-            {
-              "id": 3,
-              "expression": "\\begin{cases} x - 6,6 \\geq 0 \\\\ x + 1 \\geq 5 \\end{cases}",
-              "options": [
-                "[4; 6,6]",
-                "[6,6; +∞)",
-                "(-∞; 4]",
-                "[4; +∞)"
-              ],
-              "answer": "2"
-            },
-            {
-              "id": 4,
-              "expression": "\\begin{cases} x + 4 \\geq -3,4 \\\\ x + 5 \\leq 0 \\end{cases}",
-              "options": [
-                "(-∞; -7,4]",
-                "(-∞; -7,4] ∪ [-5; +∞)",
-                "[-7,4; -5]",
-                "[-5; +∞)"
-              ],
-              "answer": "3"
-            },
-            {
-              "id": 5,
-              "expression": "\\begin{cases} x - 5,2 \\geq 0 \\\\ x + 4 \\leq 10 \\end{cases}",
-              "options": [
-                "[5,2; 6]",
-                "(-∞; 5,2] ∪ [6; +∞)",
-                "[5,2; +∞)",
-                "[6; +∞)"
-              ],
-              "answer": "1"
-            },
-            {
-              "id": 6,
-              "expression": "\\begin{cases} x - 2,6 \\leq 0 \\\\ x - 1 \\geq 1 \\end{cases}",
-              "options": [
-                "(-∞; 2,6]",
-                "(-∞; 2] ∪ [2,6; +∞)",
-                "[2; +∞)",
-                "[2; 2,6]"
-              ],
-              "answer": "4"
-            },
-            {
-              "id": 7,
-              "expression": "\\begin{cases} x + 2,8 \\leq 0 \\\\ x + 0,3 \\leq -1,4 \\end{cases}",
-              "options": [
-                "[-2,8; -1,7]",
-                "[-1,7; +∞)",
-                "(-∞; -2,8]",
-                "(-∞; -2,8] ∪ [-1,7; +∞)"
-              ],
-              "answer": "3"
-            },
-            {
-              "id": 8,
-              "expression": "\\begin{cases} x - 3 \\geq 0 \\\\ x - 0,2 \\geq 2 \\end{cases}",
-              "options": [
-                "(-∞; 2,2] ∪ [3; +∞)",
-                "[2,2; +∞)",
-                "[3; +∞)",
-                "[2,2; 3]"
-              ],
-              "answer": "3"
-            }
-          ]
-        },
-        {
-          "number": 3,
-          "instruction": "Решите систему неравенств. На каком рисунке изображено множество её решений? В ответе укажите номер правильного варианта.",
-          "type": "choice",
-          "tasks": [
-            {
-              "id": 1,
-              "expression": "\\begin{cases} x + 3 \\geq -2 \\\\ x + 1,1 \\geq 0 \\end{cases}",
-              "image": "img-000.png"
-            },
-            {
-              "id": 2,
-              "expression": "\\begin{cases} x - 4,3 \\geq 0 \\\\ x + 5 \\leq 10 \\end{cases}",
-              "image": "img-001.png"
-            },
-            {
-              "id": 3,
-              "expression": "\\begin{cases} x + 3,2 \\leq 0 \\\\ x + 1 \\leq -1 \\end{cases}",
-              "image": "img-002.png"
-            },
-            {
-              "id": 4,
-              "expression": "\\begin{cases} x + 0,7 \\leq 0 \\\\ x - 1 \\geq -5 \\end{cases}",
-              "image": "img-003.png"
-            },
-            {
-              "id": 5,
-              "expression": "\\begin{cases} x + 4 \\geq -4,5 \\\\ x + 4 \\leq 0 \\end{cases}",
-              "image": "img-004.png"
-            },
-            {
-              "id": 6,
-              "expression": "\\begin{cases} x - 7,4 \\geq 0 \\\\ x + 2 \\geq 3 \\end{cases}",
-              "image": "img-005.png"
-            },
-            {
-              "id": 7,
-              "expression": "\\begin{cases} x - 3,7 \\leq 0 \\\\ x - 2 \\geq 1 \\end{cases}",
-              "image": "img-006.png"
-            },
-            {
-              "id": 8,
-              "expression": "\\begin{cases} x + 1,8 \\leq 0 \\\\ x + 0,5 \\leq -0,5 \\end{cases}",
-              "image": "img-007.png"
-            },
-            {
-              "id": 9,
-              "expression": "\\begin{cases} x + 2,7 \\leq 0 \\\\ x + 4 \\geq 1 \\end{cases}",
-              "image": "img-008.png"
-            }
-          ]
-        },
-        {
-          "number": 4,
-          "instruction": "Укажите решение системы неравенств",
-          "type": "choice",
-          "options_render_mode": "text_options",
-          "tasks": [
-            {
-              "id": 1,
-              "expression": "\\begin{cases} -36 + 4x < 0 \\\\ 5 - 4x < -3 \\end{cases}",
-              "options": [
-                "(2; +∞)",
-                "нет решений",
-                "(-∞; 9)",
-                "(2; 9)"
-              ]
-            },
-            {
-              "id": 2,
-              "expression": "\\begin{cases} -8 + 4x > 0 \\\\ 4 - 3x > -8 \\end{cases}",
-              "options": [
-                "нет решений",
-                "(-∞; 4)",
-                "(2; +∞)",
-                "(2; 4)"
-              ]
-            },
-            {
-              "id": 3,
-              "expression": "\\begin{cases} -48 + 6x > 0 \\\\ 6 - 5x > -4 \\end{cases}",
-              "options": [
-                "(2; 8)",
-                "(-∞; 2)",
-                "нет решений",
-                "(8; +∞)"
-              ]
-            },
-            {
-              "id": 4,
-              "expression": "\\begin{cases} -10 + 2x > 0 \\\\ 7 - 6x > -5 \\end{cases}",
-              "options": [
-                "нет решений",
-                "(5; +∞)",
-                "(2; 5)",
-                "(-∞; 2)"
-              ]
-            },
-            {
-              "id": 5,
-              "expression": "\\begin{cases} -35 + 5x < 0 \\\\ 6 - 3x > -18 \\end{cases}",
-              "options": [
-                "(7; 8)",
-                "(-∞; 7)",
-                "(-∞; 8)",
-                "(7; +∞)"
-              ]
-            },
-            {
-              "id": 6,
-              "expression": "\\begin{cases} -12 + 3x > 0 \\\\ 2 - 7x > -33 \\end{cases}",
-              "options": [
-                "(-∞; 4)",
-                "нет решений",
-                "(4; 5)",
-                "(5; +∞)"
-              ]
-            },
-            {
-              "id": 7,
-              "expression": "\\begin{cases} -9 + 3x < 0 \\\\ 2 - 3x > -10 \\end{cases}",
-              "options": [
-                "(-∞; 3)",
-                "(-∞; 4)",
-                "(3; +∞)",
-                "(3; 4)"
-              ]
-            },
-            {
-              "id": 8,
-              "expression": "\\begin{cases} -5 + 5x < 0 \\\\ 4 - 3x < 31 \\end{cases}",
-              "options": [
-                "(-9; 1)",
-                "нет решений",
-                "(-9; +∞)",
-                "(-∞; 1)"
-              ]
-            }
-          ]
-        },
-        {
-          "number": 5,
-          "instruction": "Решите систему неравенств. На каком рисунке изображено множество её решений? В ответе укажите номер правильного варианта.",
-          "type": "choice",
-          "tasks": [
-            {
-              "id": 1,
-              "expression": "\\begin{cases} -35 + 5x > 0 \\\\ 6 - 3x > -3 \\end{cases}",
-              "image": "img-009.png"
-            },
-            {
-              "id": 2,
-              "expression": "\\begin{cases} -5 + 5x < 0 \\\\ 4 - 3x < 31 \\end{cases}",
-              "image": "img-010.png"
-            },
-            {
-              "id": 3,
-              "expression": "\\begin{cases} -9 + 3x < 0 \\\\ 2 - 3x < -10 \\end{cases}",
-              "image": "img-011.png"
-            },
-            {
-              "id": 4,
-              "expression": "\\begin{cases} -12 + 3x > 0 \\\\ 9 - 4x > -3 \\end{cases}",
-              "image": "img-012.png"
-            },
-            {
-              "id": 5,
-              "expression": "\\begin{cases} -35 + 5x < 0 \\\\ 6 - 3x > -18 \\end{cases}",
-              "image": "img-013.png"
-            },
-            {
-              "id": 6,
-              "expression": "\\begin{cases} -27 + 3x > 0 \\\\ 6 - 3x < -6 \\end{cases}",
-              "image": "img-014.png"
-            },
-            {
-              "id": 7,
-              "expression": "\\begin{cases} -9 + 3x > 0 \\\\ 2 - 3x > -10 \\end{cases}",
-              "image": "img-015.png"
-            },
-            {
-              "id": 8,
-              "expression": "\\begin{cases} -27 + 3x < 0 \\\\ 6 + 4x > 6 \\end{cases}",
-              "image": "img-016.png"
-            },
-            {
-              "id": 9,
-              "expression": "\\begin{cases} -35 + 5x < 0 \\\\ 6 - 3x < -3 \\end{cases}",
-              "image": "img-017.png"
-            }
-          ]
-        },
-        {
-          "number": 6,
-          "instruction": "Укажите решение неравенства.",
-          "type": "choice",
-          "options_render_mode": "text_options",
-          "tasks": [
-            {
-              "id": 1,
-              "expression": "(x + 3)(x - 8) \\geq 0",
-              "options": [
-                "[-3; 8]",
-                "(-∞; -3] ∪ [8; +∞)",
-                "[8; +∞)",
-                "[-3; +∞)"
-              ]
-            },
-            {
-              "id": 2,
-              "expression": "(x + 2)(x - 7) \\leq 0",
-              "options": [
-                "[-2; 7]",
-                "(-∞; -2] ∪ [7; +∞)",
-                "(-∞; 7]",
-                "(-∞; -2]"
-              ]
-            },
-            {
-              "id": 3,
-              "expression": "(x + 4)(x - 8) \\leq 0",
-              "options": [
-                "(-∞; 8]",
-                "(-∞; -4] ∪ [8; +∞)",
-                "[-4; 8]",
-                "(-∞; -4]"
-              ]
-            },
-            {
-              "id": 4,
-              "expression": "(x + 5)(x - 9) > 0",
-              "options": [
-                "(-5; +∞)",
-                "(-5; 9)",
-                "(9; +∞)",
-                "(-∞; -5) ∪ (9; +∞)"
-              ]
-            },
-            {
-              "id": 5,
-              "expression": "(x + 6)(x - 1) < 0",
-              "options": [
-                "(-∞; 1)",
-                "(-∞; -6)",
-                "(-∞; -6) ∪ (1; +∞)",
-                "(-6; 1)"
-              ]
-            },
-            {
-              "id": 6,
-              "expression": "(x + 3)(x - 5) \\leq 0",
-              "options": [
-                "(-∞; -3]",
-                "[-3; 5]",
-                "(-∞; 5]",
-                "(-∞; -3] ∪ [5; +∞)"
-              ]
-            },
-            {
-              "id": 7,
-              "expression": "(x + 1)(x - 7) \\geq 0",
-              "options": [
-                "(-∞; -1] ∪ [7; +∞)",
-                "[-1; +∞)",
-                "[-1; 7]",
-                "[7; +∞)"
-              ]
-            },
-            {
-              "id": 8,
-              "expression": "(x + 9)(x - 4) < 0",
-              "options": [
-                "(-9; 4)",
-                "(-∞; -9) ∪ (4; +∞)",
-                "(-∞; -9)",
-                "(-∞; 4)"
-              ]
-            },
-            {
-              "id": 9,
-              "expression": "(x + 2)(x - 10) > 0",
-              "options": [
-                "(-2; 10)",
-                "(-∞; -2) ∪ (10; +∞)",
-                "(10; +∞)",
-                "(-2; +∞)"
-              ]
-            }
-          ]
-        },
-        {
-          "number": 7,
-          "instruction": "Укажите решение неравенства.",
-          "type": "choice",
-          "tasks": [
-            {
-              "id": 1,
-              "expression": "(x + 4)(x - 9) \\geq 0",
-              "image": "img-018.png"
-            },
-            {
-              "id": 2,
-              "expression": "(x + 2)(x - 7) > 0",
-              "image": "img-019.png"
-            },
-            {
-              "id": 3,
-              "expression": "(x + 3)(x - 7) \\leq 0",
-              "image": "img-020.png"
-            },
-            {
-              "id": 4,
-              "expression": "(x + 1)(x - 6) \\leq 0",
-              "image": "img-021.png"
-            },
-            {
-              "id": 5,
-              "expression": "(x + 5)(x - 2) \\leq 0",
-              "image": "img-022.png"
-            },
-            {
-              "id": 6,
-              "expression": "(x + 8)(x - 3) < 0",
-              "image": "img-023.png"
-            },
-            {
-              "id": 7,
-              "expression": "(x + 2)(x - 8) > 0",
-              "image": "img-024.png"
-            },
-            {
-              "id": 8,
-              "expression": "(x + 4)(x - 8) > 0",
-              "image": "img-025.png"
-            },
-            {
-              "id": 9,
-              "expression": "(x + 1)(x - 9) > 0",
-              "image": "img-026.png"
-            }
-          ]
-        },
-        {
-          "number": 8,
-          "instruction": "Укажите решение неравенства.",
-          "type": "choice",
-          "options_render_mode": "text_options",
-          "tasks": [
-            {
-              "id": 1,
-              "expression": "x^2 - 49 < 0",
-              "options": [
-                "(-7; 7)",
-                "(-∞; -7) ∪ (7; +∞)",
-                "нет решений",
-                "(-∞; +∞)"
-              ],
-              "answer": "3"
-            },
-            {
-              "id": 2,
-              "expression": "x^2 - 64 \\geq 0",
-              "options": [
-                "(-∞; +∞)",
-                "[-8; 8]",
-                "(-∞; -8] ∪ [8; +∞)",
-                "нет решений"
-              ],
-              "answer": "2"
-            },
-            {
-              "id": 3,
-              "expression": "x^2 - 25 \\leq 0",
-              "options": [
-                "(-∞; -5] ∪ [5; +∞)",
-                "[-5; 5]",
-                "нет решений",
-                "(-∞; +∞)"
-              ],
-              "answer": "4"
-            },
-            {
-              "id": 4,
-              "expression": "x^2 - 36 > 0",
-              "options": [
-                "нет решений",
-                "(-∞; +∞)",
-                "(-∞; -6) ∪ (6; +∞)",
-                "(-6; 6)"
-              ],
-              "answer": "3"
-            },
-            {
-              "id": 5,
-              "expression": "x^2 - 16 < 0",
-              "options": [
-                "(-4; 4)",
-                "(-∞; +∞)",
-                "нет решений",
-                "(-∞; -4) ∪ (4; +∞)"
-              ],
-              "answer": "2"
-            },
-            {
-              "id": 6,
-              "expression": "x^2 - 81 \\geq 0",
-              "options": [
-                "(-∞; -9] ∪ [9; +∞)",
-                "(-∞; +∞)",
-                "нет решений",
-                "[-9; 9]"
-              ],
-              "answer": "4"
-            },
-            {
-              "id": 7,
-              "expression": "x^2 - 49 \\geq 0",
-              "options": [
-                "(-∞; -7] ∪ [7; +∞)",
-                "(-∞; +∞)",
-                "[-7; 7]",
-                "нет решений"
-              ],
-              "answer": "3"
-            },
-            {
-              "id": 8,
-              "expression": "x^2 - 9 > 0",
-              "options": [
-                "нет решений",
-                "(-∞; +∞)",
-                "(-3; 3)",
-                "(-∞; -3) ∪ (3; +∞)"
-              ],
-              "answer": "2"
-            },
-            {
-              "id": 9,
-              "expression": "x^2 - 100 \\leq 0",
-              "options": [
-                "[-10; 10]",
-                "(-∞; +∞)",
-                "(-∞; -10] ∪ [10; +∞)",
-                "нет решений"
-              ],
-              "answer": "4"
-            }
-          ]
-        },
-        {
-          "number": 9,
-          "instruction": "Укажите решение неравенства.",
-          "type": "choice",
-          "options_render_mode": "text_options",
-          "tasks": [
-            {
-              "id": 1,
-              "expression": "7x - x^2 \\geq 0",
-              "options": [
-                "(-∞; 0] ∪ [7; +∞)",
-                "[0; 7]",
-                "[0; +∞)",
-                "[7; +∞)"
-              ],
-              "answer": "3"
-            },
-            {
-              "id": 2,
-              "expression": "4x - x^2 < 0",
-              "options": [
-                "(4; +∞)",
-                "(-∞; 0) ∪ (4; +∞)",
-                "(0; +∞)",
-                "(0; 4)"
-              ],
-              "answer": "2"
-            },
-            {
-              "id": 3,
-              "expression": "10x - x^2 \\leq 0",
-              "options": [
-                "(-∞; 0] ∪ [10; +∞)",
-                "[10; +∞)",
-                "[0; +∞)",
-                "[0; 10]"
-              ],
-              "answer": "4"
-            },
-            {
-              "id": 4,
-              "expression": "3x - x^2 > 0",
-              "options": [
-                "(0; +∞)",
-                "(0; 3)",
-                "(3; +∞)",
-                "(-∞; 0) ∪ (3; +∞)"
-              ],
-              "answer": "3"
-            },
-            {
-              "id": 5,
-              "expression": "8x - x^2 \\leq 0",
-              "options": [
-                "[0; +∞)",
-                "[8; +∞)",
-                "[0; 8]",
-                "(-∞; 0] ∪ [8; +∞)"
-              ],
-              "answer": "2"
-            },
-            {
-              "id": 6,
-              "expression": "x - x^2 > 0",
-              "options": [
-                "(-∞; 0)",
-                "(-∞; 1)",
-                "(-∞; 0) ∪ (1; +∞)",
-                "(0; 1)"
-              ],
-              "answer": "4"
-            },
-            {
-              "id": 7,
-              "expression": "6x - x^2 \\geq 0",
-              "options": [
-                "[0; 6]",
-                "[6; +∞)",
-                "[0; +∞)",
-                "(-∞; 0] ∪ [6; +∞)"
-              ],
-              "answer": "3"
-            },
-            {
-              "id": 8,
-              "expression": "5x - x^2 < 0",
-              "options": [
-                "(0; +∞)",
-                "(-∞; 0) ∪ (5; +∞)",
-                "(0; 5)",
-                "(5; +∞)"
-              ],
-              "answer": "2"
-            },
-            {
-              "id": 9,
-              "expression": "2x - x^2 \\leq 0",
-              "options": [
-                "[0; +∞)",
-                "[2; +∞)",
-                "[0; 2]",
-                "(-∞; 0] ∪ [2; +∞)"
-              ],
-              "answer": "4"
-            }
-          ]
-        },
-        {
-          "number": 10,
-          "instruction": "Укажите решение неравенства",
-          "type": "choice",
-          "tasks": [
-            {
-              "id": 1,
-              "expression": "7x - x^2 < 0",
-              "graph_options": [
-                {
-                  "index": 1,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t1a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t1a)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t1a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">7</text></svg>"
-                },
-                {
-                  "index": 2,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t1b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t1b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">7</text></svg>"
-                },
-                {
-                  "index": 3,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t1c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t1c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">7</text></svg>"
-                },
-                {
-                  "index": 4,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t1d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t1d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
-                }
-              ],
-              "answer": "1"
-            },
-            {
-              "id": 2,
-              "expression": "4x - x^2 \\leq 0",
-              "graph_options": [
-                {
-                  "index": 1,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t2a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t2a)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t2a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">4</text></svg>"
-                },
-                {
-                  "index": 2,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t2b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t2b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">4</text></svg>"
-                },
-                {
-                  "index": 3,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t2c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t2c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">4</text></svg>"
-                },
-                {
-                  "index": 4,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t2d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t2d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
-                }
-              ],
-              "answer": "1"
-            },
-            {
-              "id": 3,
-              "expression": "x - x^2 \\geq 0",
-              "graph_options": [
-                {
-                  "index": 1,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t3a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t3a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">1</text></svg>"
-                },
-                {
-                  "index": 2,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t3b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t3b)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t3b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">1</text></svg>"
-                },
-                {
-                  "index": 3,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t3c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t3c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">1</text></svg>"
-                },
-                {
-                  "index": 4,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t3d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t3d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
-                }
-              ],
-              "answer": "1"
-            },
-            {
-              "id": 4,
-              "expression": "6x - x^2 > 0",
-              "graph_options": [
-                {
-                  "index": 1,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t4a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t4a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">6</text></svg>"
-                },
-                {
-                  "index": 2,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t4b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t4b)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t4b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">6</text></svg>"
-                },
-                {
-                  "index": 3,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t4c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t4c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
-                },
-                {
-                  "index": 4,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t4d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t4d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">6</text></svg>"
-                }
-              ],
-              "answer": "1"
-            },
-            {
-              "id": 5,
-              "expression": "7x - x^2 \\geq 0",
-              "graph_options": [
-                {
-                  "index": 1,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t5a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t5a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">7</text></svg>"
-                },
-                {
-                  "index": 2,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t5b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t5b)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t5b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">7</text></svg>"
-                },
-                {
-                  "index": 3,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t5c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t5c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">7</text></svg>"
-                },
-                {
-                  "index": 4,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t5d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t5d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
-                }
-              ],
-              "answer": "1"
-            },
-            {
-              "id": 6,
-              "expression": "2x - x^2 > 0",
-              "graph_options": [
-                {
-                  "index": 1,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t6a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t6a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">2</text></svg>"
-                },
-                {
-                  "index": 2,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t6b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t6b)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t6b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">2</text></svg>"
-                },
-                {
-                  "index": 3,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t6c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t6c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
-                },
-                {
-                  "index": 4,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t6d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t6d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">2</text></svg>"
-                }
-              ],
-              "answer": "1"
-            },
-            {
-              "id": 7,
-              "expression": "8x - x^2 < 0",
-              "graph_options": [
-                {
-                  "index": 1,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t7a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t7a)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t7a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">8</text></svg>"
-                },
-                {
-                  "index": 2,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t7b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t7b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">8</text></svg>"
-                },
-                {
-                  "index": 3,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t7c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t7c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">8</text></svg>"
-                },
-                {
-                  "index": 4,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t7d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t7d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
-                }
-              ],
-              "answer": "1"
-            },
-            {
-              "id": 8,
-              "expression": "5x - x^2 \\geq 0",
-              "graph_options": [
-                {
-                  "index": 1,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t8a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t8a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">5</text></svg>"
-                },
-                {
-                  "index": 2,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t8b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t8b)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t8b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">5</text></svg>"
-                },
-                {
-                  "index": 3,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t8c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t8c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">5</text></svg>"
-                },
-                {
-                  "index": 4,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t8d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t8d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
-                }
-              ],
-              "answer": "1"
-            },
-            {
-              "id": 9,
-              "expression": "3x - x^2 \\leq 0",
-              "graph_options": [
-                {
-                  "index": 1,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t9a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t9a)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t9a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">3</text></svg>"
-                },
-                {
-                  "index": 2,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t9b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t9b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">3</text></svg>"
-                },
-                {
-                  "index": 3,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t9c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t9c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">3</text></svg>"
-                },
-                {
-                  "index": 4,
-                  "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t9d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t9d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
-                }
-              ],
-              "answer": "1"
-            }
-          ]
-        },
-        {
-          "number": 11,
-          "instruction": "Укажите неравенство, решение которого изображено на рисунке.",
-          "type": "choice",
-          "tasks": [
-            {
-              "id": 1,
-              "options": [
-                "x² - 49 ≤ 0",
-                "x² + 49 ≤ 0",
-                "x² - 49 ≥ 0",
-                "x² + 49 ≥ 0"
-              ],
-              "image": "img-035.png"
-            },
-            {
-              "id": 2,
-              "options": [
-                "x² - 36 > 0",
-                "x² + 36 > 0",
-                "x² - 36 < 0",
-                "x² + 36 < 0"
-              ],
-              "image": "img-036.png"
-            },
-            {
-              "id": 3,
-              "options": [
-                "x² - 64 ≥ 0",
-                "x² - 64 ≤ 0",
-                "x² + 64 ≥ 0",
-                "x² + 64 ≤ 0"
-              ],
-              "image": "img-037.png"
-            },
-            {
-              "id": 4,
-              "options": [
-                "x² - 9 > 0",
-                "x² + 9 > 0",
-                "x² - 9 < 0",
-                "x² + 9 < 0"
-              ],
-              "image": "img-038.png"
-            },
-            {
-              "id": 5,
-              "options": [
-                "x² + 16 ≥ 0",
-                "x² - 16 ≤ 0",
-                "x² + 16 ≤ 0",
-                "x² - 16 ≥ 0"
-              ],
-              "image": "img-039.png"
-            },
-            {
-              "id": 6,
-              "options": [
-                "x² - 25 > 0",
-                "x² + 25 > 0",
-                "x² - 25 < 0",
-                "x² + 25 < 0"
-              ],
-              "image": "img-040.png"
-            },
-            {
-              "id": 7,
-              "options": [
-                "x² + 81 ≥ 0",
-                "x² + 81 ≤ 0",
-                "x² - 81 ≤ 0",
-                "x² - 81 ≥ 0"
-              ],
-              "image": "img-041.png"
-            },
-            {
-              "id": 8,
-              "options": [
-                "x² - 4 < 0",
-                "x² + 4 > 0",
-                "x² - 4 > 0",
-                "x² + 4 < 0"
-              ],
-              "image": "img-042.png"
-            }
-          ]
-        },
-        {
-          "number": 12,
-          "instruction": "Укажите неравенство, решение которого изображено на рисунке.",
-          "type": "choice",
-          "tasks": [
-            {
-              "id": 1,
-              "options": [
-                "x² - 5x ≤ 0",
-                "x² - 25 ≤ 0",
-                "x² - 5x ≥ 0",
-                "x² - 25 ≥ 0"
-              ],
-              "image": "img-043.png"
-            },
-            {
-              "id": 2,
-              "options": [
-                "x² - 36 < 0",
-                "x² - 6x < 0",
-                "x² - 6x > 0",
-                "x² - 36 > 0"
-              ],
-              "image": "img-044.png"
-            },
-            {
-              "id": 3,
-              "options": [
-                "x² - 1 ≥ 0",
-                "x² - x ≥ 0",
-                "x² - 1 ≤ 0",
-                "x² - x ≤ 0"
-              ],
-              "image": "img-045.png"
-            },
-            {
-              "id": 4,
-              "options": [
-                "x² - 64 < 0",
-                "x² - 64 > 0",
-                "x² - 8x < 0",
-                "x² - 8x > 0"
-              ],
-              "image": "img-046.png"
-            },
-            {
-              "id": 5,
-              "options": [
-                "x² - 16 ≤ 0",
-                "x² - 4x ≤ 0",
-                "x² - 4x ≥ 0",
-                "x² - 16 ≥ 0"
-              ],
-              "image": "img-047.png"
-            },
-            {
-              "id": 6,
-              "options": [
-                "x² - 7x < 0",
-                "x² - 49 > 0",
-                "x² - 7x > 0",
-                "x² - 49 < 0"
-              ],
-              "image": "img-048.png"
-            },
-            {
-              "id": 7,
-              "options": [
-                "x² - 81 ≥ 0",
-                "x² - 9x ≤ 0",
-                "x² - 9x ≥ 0",
-                "x² - 81 ≤ 0"
-              ],
-              "image": "img-049.png"
-            },
-            {
-              "id": 8,
-              "options": [
-                "x² - 9 < 0",
-                "x² - 3x < 0",
-                "x² - 9 > 0",
-                "x² - 3x > 0"
-              ],
-              "image": "img-050.png"
-            }
-          ]
-        },
-        {
-          "number": 13,
-          "instruction": "Укажите решение неравенства",
-          "type": "choice",
-          "tasks": [
-            {
-              "id": 1,
-              "expression": "x^2 < 9",
-              "image": "img-052.png"
-            },
-            {
-              "id": 2,
-              "expression": "x^2 \\leq 64",
-              "image": "img-053.png"
-            },
-            {
-              "id": 3,
-              "expression": "x^2 > 36",
-              "image": "img-054.png"
-            },
-            {
-              "id": 4,
-              "expression": "x^2 \\leq 36",
-              "image": "img-055.png"
-            },
-            {
-              "id": 5,
-              "expression": "49x^2 \\geq 36",
-              "image": "img-056.png"
-            },
-            {
-              "id": 6,
-              "expression": "25x^2 \\geq 4",
-              "image": "img-057.png"
-            },
-            {
-              "id": 7,
-              "expression": "81x^2 \\leq 16",
-              "image": "img-058.png"
-            },
-            {
-              "id": 8,
-              "expression": "25x^2 \\geq 49",
-              "image": "img-059.png"
-            }
-          ]
-        }
-      ]
+    "topic_id": "13",
+    "meta": {
+        "title": "Неравенства",
+        "description": "Решение неравенств",
+        "color": "amber",
+        "icon": "less-than"
     },
-    {
-      "number": 2,
-      "title": "ФИПИ. Расширенная версия",
-      "zadaniya": [
+    "exported_at": "2026-02-23T00:00:00+00:00",
+    "blocks": [
         {
-          "number": 1,
-          "instruction": "Укажите решение неравенства",
-          "type": "choice",
-          "tasks": [
-            {
-              "id": 1,
-              "expression": "4x + 5 \\geq 6x - 2",
-              "image": "img-060.png",
-              "answer": "2"
-            },
-            {
-              "id": 2,
-              "expression": "-2x + 5 \\leq -3x - 3",
-              "image": "img-061.png",
-              "answer": "2"
-            },
-            {
-              "id": 3,
-              "expression": "3 - x \\geq 3x + 5",
-              "image": "img-062.png",
-              "answer": "4"
-            },
-            {
-              "id": 4,
-              "expression": "x + 4 \\geq 4x - 5",
-              "image": "img-063.png",
-              "answer": "3"
-            },
-            {
-              "id": 5,
-              "expression": "2 + x \\leq 5x - 8",
-              "image": "img-064.png",
-              "answer": "3"
-            },
-            {
-              "id": 6,
-              "expression": "4x - 5 \\geq 2x - 4",
-              "image": "img-065.png",
-              "answer": "4"
-            },
-            {
-              "id": 7,
-              "expression": "x - 1 \\leq 3x + 2",
-              "image": "img-066.png",
-              "answer": "1"
-            },
-            {
-              "id": 8,
-              "expression": "2x + 4 \\leq -4x + 1",
-              "image": "img-067.png",
-              "answer": "4"
-            },
-            {
-              "id": 9,
-              "expression": "x - 2 \\leq 4x + 4",
-              "image": "img-068.png",
-              "answer": "3"
-            }
-          ]
+            "number": 1,
+            "title": "ФИПИ",
+            "zadaniya": [
+                {
+                    "number": 1,
+                    "instruction": "Укажите решение неравенства",
+                    "type": "choice",
+                    "options_render_mode": "text_options",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "3 - 2x \\geq 8x - 1",
+                            "options": [
+                                "[0,4; +∞)",
+                                "(-∞; -0,2]",
+                                "[-0,2; +∞)",
+                                "(-∞; 0,4]"
+                            ],
+                            "answer": "4"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "4x - 4 \\geq 9x + 6",
+                            "options": [
+                                "(-∞; -0,4]",
+                                "[-0,4; +∞)",
+                                "(-∞; -2]",
+                                "[-2; +∞)"
+                            ],
+                            "answer": "3"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "6 - 7x \\leq 3x - 7",
+                            "options": [
+                                "(-∞; 1,3]",
+                                "[1,3; +∞)",
+                                "(-∞; 0,1]",
+                                "[0,1; +∞)"
+                            ],
+                            "answer": "2"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "2x - 8 \\leq 4x + 6",
+                            "options": [
+                                "[1; +∞)",
+                                "(-∞; 1]",
+                                "[-7; +∞)",
+                                "(-∞; -7]"
+                            ],
+                            "answer": "3"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "-9 - 6x > 9x + 9",
+                            "options": [
+                                "(-∞; 0)",
+                                "(-∞; -1,2)",
+                                "(0; +∞)",
+                                "(-1,2; +∞)"
+                            ],
+                            "answer": "2"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "8x - 8 > 7x + 6",
+                            "options": [
+                                "(14; +∞)",
+                                "(-2; +∞)",
+                                "(-∞; -2)",
+                                "(-∞; 14)"
+                            ],
+                            "answer": "1"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "5x + 4 < x + 6",
+                            "options": [
+                                "(-∞; 2,5)",
+                                "(0,5; +∞)",
+                                "(-∞; 0,5)",
+                                "(2,5; +∞)"
+                            ],
+                            "answer": "3"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "-3 - x < 4x + 7",
+                            "options": [
+                                "(-0,8; +∞)",
+                                "(-∞; -0,8)",
+                                "(-2; +∞)",
+                                "(-∞; -2)"
+                            ],
+                            "answer": "3"
+                        }
+                    ]
+                },
+                {
+                    "number": 2,
+                    "instruction": "Укажите решение системы неравенств",
+                    "type": "choice",
+                    "options_render_mode": "text_options",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "\\begin{cases} x + 3,6 \\leq 0 \\\\ x + 2 \\leq -1 \\end{cases}",
+                            "options": [
+                                "[-3,6; -3]",
+                                "[-3,6; +∞)",
+                                "(-∞; -3,6] ∪ [-3; +∞)",
+                                "(-∞; -3,6]"
+                            ],
+                            "answer": "4"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\begin{cases} x + 0,6 \\leq 0 \\\\ x - 1 \\geq -4 \\end{cases}",
+                            "options": [
+                                "[-3; -0,6]",
+                                "(-∞; -3]",
+                                "[-0,6; +∞)",
+                                "(-∞; -3] ∪ [-0,6; +∞)"
+                            ],
+                            "answer": "1"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "\\begin{cases} x - 6,6 \\geq 0 \\\\ x + 1 \\geq 5 \\end{cases}",
+                            "options": [
+                                "[4; 6,6]",
+                                "[6,6; +∞)",
+                                "(-∞; 4]",
+                                "[4; +∞)"
+                            ],
+                            "answer": "2"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "\\begin{cases} x + 4 \\geq -3,4 \\\\ x + 5 \\leq 0 \\end{cases}",
+                            "options": [
+                                "(-∞; -7,4]",
+                                "(-∞; -7,4] ∪ [-5; +∞)",
+                                "[-7,4; -5]",
+                                "[-5; +∞)"
+                            ],
+                            "answer": "3"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "\\begin{cases} x - 5,2 \\geq 0 \\\\ x + 4 \\leq 10 \\end{cases}",
+                            "options": [
+                                "[5,2; 6]",
+                                "(-∞; 5,2] ∪ [6; +∞)",
+                                "[5,2; +∞)",
+                                "[6; +∞)"
+                            ],
+                            "answer": "1"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "\\begin{cases} x - 2,6 \\leq 0 \\\\ x - 1 \\geq 1 \\end{cases}",
+                            "options": [
+                                "(-∞; 2,6]",
+                                "(-∞; 2] ∪ [2,6; +∞)",
+                                "[2; +∞)",
+                                "[2; 2,6]"
+                            ],
+                            "answer": "4"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "\\begin{cases} x + 2,8 \\leq 0 \\\\ x + 0,3 \\leq -1,4 \\end{cases}",
+                            "options": [
+                                "[-2,8; -1,7]",
+                                "[-1,7; +∞)",
+                                "(-∞; -2,8]",
+                                "(-∞; -2,8] ∪ [-1,7; +∞)"
+                            ],
+                            "answer": "3"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "\\begin{cases} x - 3 \\geq 0 \\\\ x - 0,2 \\geq 2 \\end{cases}",
+                            "options": [
+                                "(-∞; 2,2] ∪ [3; +∞)",
+                                "[2,2; +∞)",
+                                "[3; +∞)",
+                                "[2,2; 3]"
+                            ],
+                            "answer": "3"
+                        }
+                    ]
+                },
+                {
+                    "number": 3,
+                    "instruction": "Решите систему неравенств. На каком рисунке изображено множество её решений? В ответе укажите номер правильного варианта.",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "\\begin{cases} x + 3 \\geq -2 \\\\ x + 1,1 \\geq 0 \\end{cases}",
+                            "image": "img-000.png",
+                            "answer": "[-1,1; +∞)"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\begin{cases} x - 4,3 \\geq 0 \\\\ x + 5 \\leq 10 \\end{cases}",
+                            "image": "img-001.png",
+                            "answer": "[4,3; 5]"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "\\begin{cases} x + 3,2 \\leq 0 \\\\ x + 1 \\leq -1 \\end{cases}",
+                            "image": "img-002.png",
+                            "answer": "(-∞; -3,2]"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "\\begin{cases} x + 0,7 \\leq 0 \\\\ x - 1 \\geq -5 \\end{cases}",
+                            "image": "img-003.png",
+                            "answer": "[-4; -0,7]"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "\\begin{cases} x + 4 \\geq -4,5 \\\\ x + 4 \\leq 0 \\end{cases}",
+                            "image": "img-004.png",
+                            "answer": "[-8,5; -4]"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "\\begin{cases} x - 7,4 \\geq 0 \\\\ x + 2 \\geq 3 \\end{cases}",
+                            "image": "img-005.png",
+                            "answer": "[7,4; +∞)"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "\\begin{cases} x - 3,7 \\leq 0 \\\\ x - 2 \\geq 1 \\end{cases}",
+                            "image": "img-006.png",
+                            "answer": "[3; 3,7]"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "\\begin{cases} x + 1,8 \\leq 0 \\\\ x + 0,5 \\leq -0,5 \\end{cases}",
+                            "image": "img-007.png",
+                            "answer": "(-∞; -1,8]"
+                        },
+                        {
+                            "id": 9,
+                            "expression": "\\begin{cases} x + 2,7 \\leq 0 \\\\ x + 4 \\geq 1 \\end{cases}",
+                            "image": "img-008.png",
+                            "answer": "[-3; -2,7]"
+                        }
+                    ]
+                },
+                {
+                    "number": 4,
+                    "instruction": "Укажите решение системы неравенств",
+                    "type": "choice",
+                    "options_render_mode": "text_options",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "\\begin{cases} -36 + 4x < 0 \\\\ 5 - 4x < -3 \\end{cases}",
+                            "options": [
+                                "(2; +∞)",
+                                "нет решений",
+                                "(-∞; 9)",
+                                "(2; 9)"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\begin{cases} -8 + 4x > 0 \\\\ 4 - 3x > -8 \\end{cases}",
+                            "options": [
+                                "нет решений",
+                                "(-∞; 4)",
+                                "(2; +∞)",
+                                "(2; 4)"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "expression": "\\begin{cases} -48 + 6x > 0 \\\\ 6 - 5x > -4 \\end{cases}",
+                            "options": [
+                                "(2; 8)",
+                                "(-∞; 2)",
+                                "нет решений",
+                                "(8; +∞)"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "expression": "\\begin{cases} -10 + 2x > 0 \\\\ 7 - 6x > -5 \\end{cases}",
+                            "options": [
+                                "нет решений",
+                                "(5; +∞)",
+                                "(2; 5)",
+                                "(-∞; 2)"
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "expression": "\\begin{cases} -35 + 5x < 0 \\\\ 6 - 3x > -18 \\end{cases}",
+                            "options": [
+                                "(7; 8)",
+                                "(-∞; 7)",
+                                "(-∞; 8)",
+                                "(7; +∞)"
+                            ]
+                        },
+                        {
+                            "id": 6,
+                            "expression": "\\begin{cases} -12 + 3x > 0 \\\\ 2 - 7x > -33 \\end{cases}",
+                            "options": [
+                                "(-∞; 4)",
+                                "нет решений",
+                                "(4; 5)",
+                                "(5; +∞)"
+                            ]
+                        },
+                        {
+                            "id": 7,
+                            "expression": "\\begin{cases} -9 + 3x < 0 \\\\ 2 - 3x > -10 \\end{cases}",
+                            "options": [
+                                "(-∞; 3)",
+                                "(-∞; 4)",
+                                "(3; +∞)",
+                                "(3; 4)"
+                            ]
+                        },
+                        {
+                            "id": 8,
+                            "expression": "\\begin{cases} -5 + 5x < 0 \\\\ 4 - 3x < 31 \\end{cases}",
+                            "options": [
+                                "(-9; 1)",
+                                "нет решений",
+                                "(-9; +∞)",
+                                "(-∞; 1)"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 5,
+                    "instruction": "Решите систему неравенств. На каком рисунке изображено множество её решений? В ответе укажите номер правильного варианта.",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "\\begin{cases} -35 + 5x > 0 \\\\ 6 - 3x > -3 \\end{cases}",
+                            "image": "img-009.png",
+                            "answer": "нет решений"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\begin{cases} -5 + 5x < 0 \\\\ 4 - 3x < 31 \\end{cases}",
+                            "image": "img-010.png",
+                            "answer": "(-9; 1)"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "\\begin{cases} -9 + 3x < 0 \\\\ 2 - 3x < -10 \\end{cases}",
+                            "image": "img-011.png",
+                            "answer": "нет решений"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "\\begin{cases} -12 + 3x > 0 \\\\ 9 - 4x > -3 \\end{cases}",
+                            "image": "img-012.png",
+                            "answer": "нет решений"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "\\begin{cases} -35 + 5x < 0 \\\\ 6 - 3x > -18 \\end{cases}",
+                            "image": "img-013.png",
+                            "answer": "(-∞; 7)"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "\\begin{cases} -27 + 3x > 0 \\\\ 6 - 3x < -6 \\end{cases}",
+                            "image": "img-014.png",
+                            "answer": "(9; +∞)"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "\\begin{cases} -9 + 3x > 0 \\\\ 2 - 3x > -10 \\end{cases}",
+                            "image": "img-015.png",
+                            "answer": "(3; 4)"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "\\begin{cases} -27 + 3x < 0 \\\\ 6 + 4x > 6 \\end{cases}",
+                            "image": "img-016.png",
+                            "answer": "(0; 9)"
+                        },
+                        {
+                            "id": 9,
+                            "expression": "\\begin{cases} -35 + 5x < 0 \\\\ 6 - 3x < -3 \\end{cases}",
+                            "image": "img-017.png",
+                            "answer": "(3; 7)"
+                        }
+                    ]
+                },
+                {
+                    "number": 6,
+                    "instruction": "Укажите решение неравенства.",
+                    "type": "choice",
+                    "options_render_mode": "text_options",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "(x + 3)(x - 8) \\geq 0",
+                            "options": [
+                                "[8; +∞)",
+                                "[-3; 8]",
+                                "[-3; +∞)",
+                                "(-∞; -3] ∪ [8; +∞)"
+                            ],
+                            "answer": "4"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "(x + 2)(x - 7) \\leq 0",
+                            "options": [
+                                "(-∞; -2] ∪ [7; +∞)",
+                                "(-∞; 7]",
+                                "[-2; 7]",
+                                "(-∞; -2]"
+                            ],
+                            "answer": "3"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "(x + 4)(x - 8) \\leq 0",
+                            "options": [
+                                "(-∞; -4]",
+                                "(-∞; -4] ∪ [8; +∞)",
+                                "[-4; 8]",
+                                "(-∞; 8]"
+                            ],
+                            "answer": "3"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "(x + 5)(x - 9) > 0",
+                            "options": [
+                                "(-5; +∞)",
+                                "(-∞; -5) ∪ (9; +∞)",
+                                "(-5; 9)",
+                                "(9; +∞)"
+                            ],
+                            "answer": "2"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "(x + 6)(x - 1) < 0",
+                            "options": [
+                                "(-∞; -6)",
+                                "(-6; 1)",
+                                "(-∞; 1)",
+                                "(-∞; -6) ∪ (1; +∞)"
+                            ],
+                            "answer": "2"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "(x + 3)(x - 5) \\leq 0",
+                            "options": [
+                                "(-∞; 5]",
+                                "[-3; 5]",
+                                "(-∞; -3]",
+                                "(-∞; -3] ∪ [5; +∞)"
+                            ],
+                            "answer": "2"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "(x + 1)(x - 7) \\geq 0",
+                            "options": [
+                                "[7; +∞)",
+                                "(-∞; -1] ∪ [7; +∞)",
+                                "[-1; 7]",
+                                "[-1; +∞)"
+                            ],
+                            "answer": "2"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "(x + 9)(x - 4) < 0",
+                            "options": [
+                                "(-∞; -9) ∪ (4; +∞)",
+                                "(-9; 4)",
+                                "(-∞; 4)",
+                                "(-∞; -9)"
+                            ],
+                            "answer": "2"
+                        },
+                        {
+                            "id": 9,
+                            "expression": "(x + 2)(x - 10) > 0",
+                            "options": [
+                                "(-2; 10)",
+                                "(10; +∞)",
+                                "(-∞; -2) ∪ (10; +∞)",
+                                "(-2; +∞)"
+                            ],
+                            "answer": "3"
+                        }
+                    ]
+                },
+                {
+                    "number": 7,
+                    "instruction": "Укажите решение неравенства.",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "(x + 4)(x - 9) \\geq 0",
+                            "image": "img-018.png",
+                            "answer": "(-∞; -4] ∪ [9; +∞)"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "(x + 2)(x - 7) > 0",
+                            "image": "img-019.png",
+                            "answer": "(-∞; -2) ∪ (7; +∞)"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "(x + 3)(x - 7) \\leq 0",
+                            "image": "img-020.png",
+                            "answer": "[-3; 7]"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "(x + 1)(x - 6) \\leq 0",
+                            "image": "img-021.png",
+                            "answer": "[-1; 6]"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "(x + 5)(x - 2) \\leq 0",
+                            "image": "img-022.png",
+                            "answer": "[-5; 2]"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "(x + 8)(x - 3) < 0",
+                            "image": "img-023.png",
+                            "answer": "(-8; 3)"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "(x + 2)(x - 8) > 0",
+                            "image": "img-024.png",
+                            "answer": "(-∞; -2) ∪ (8; +∞)"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "(x + 4)(x - 8) > 0",
+                            "image": "img-025.png",
+                            "answer": "(-∞; -4) ∪ (8; +∞)"
+                        },
+                        {
+                            "id": 9,
+                            "expression": "(x + 1)(x - 9) > 0",
+                            "image": "img-026.png",
+                            "answer": "(-∞; -1) ∪ (9; +∞)"
+                        }
+                    ]
+                },
+                {
+                    "number": 8,
+                    "instruction": "Укажите решение неравенства.",
+                    "type": "choice",
+                    "options_render_mode": "text_options",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "x^2 - 49 < 0",
+                            "options": [
+                                "(-7; 7)",
+                                "(-∞; -7) ∪ (7; +∞)",
+                                "нет решений",
+                                "(-∞; +∞)"
+                            ],
+                            "answer": "3"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "x^2 - 64 \\geq 0",
+                            "options": [
+                                "(-∞; +∞)",
+                                "[-8; 8]",
+                                "(-∞; -8] ∪ [8; +∞)",
+                                "нет решений"
+                            ],
+                            "answer": "2"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "x^2 - 25 \\leq 0",
+                            "options": [
+                                "(-∞; -5] ∪ [5; +∞)",
+                                "[-5; 5]",
+                                "нет решений",
+                                "(-∞; +∞)"
+                            ],
+                            "answer": "4"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "x^2 - 36 > 0",
+                            "options": [
+                                "нет решений",
+                                "(-∞; +∞)",
+                                "(-∞; -6) ∪ (6; +∞)",
+                                "(-6; 6)"
+                            ],
+                            "answer": "3"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "x^2 - 16 < 0",
+                            "options": [
+                                "(-4; 4)",
+                                "(-∞; +∞)",
+                                "нет решений",
+                                "(-∞; -4) ∪ (4; +∞)"
+                            ],
+                            "answer": "2"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "x^2 - 81 \\geq 0",
+                            "options": [
+                                "(-∞; -9] ∪ [9; +∞)",
+                                "(-∞; +∞)",
+                                "нет решений",
+                                "[-9; 9]"
+                            ],
+                            "answer": "4"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "x^2 - 49 \\geq 0",
+                            "options": [
+                                "(-∞; -7] ∪ [7; +∞)",
+                                "(-∞; +∞)",
+                                "[-7; 7]",
+                                "нет решений"
+                            ],
+                            "answer": "3"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "x^2 - 9 > 0",
+                            "options": [
+                                "нет решений",
+                                "(-∞; +∞)",
+                                "(-3; 3)",
+                                "(-∞; -3) ∪ (3; +∞)"
+                            ],
+                            "answer": "2"
+                        },
+                        {
+                            "id": 9,
+                            "expression": "x^2 - 100 \\leq 0",
+                            "options": [
+                                "[-10; 10]",
+                                "(-∞; +∞)",
+                                "(-∞; -10] ∪ [10; +∞)",
+                                "нет решений"
+                            ],
+                            "answer": "4"
+                        }
+                    ]
+                },
+                {
+                    "number": 9,
+                    "instruction": "Укажите решение неравенства.",
+                    "type": "choice",
+                    "options_render_mode": "text_options",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "7x - x^2 \\geq 0",
+                            "options": [
+                                "(-∞; 0] ∪ [7; +∞)",
+                                "[0; 7]",
+                                "[0; +∞)",
+                                "[7; +∞)"
+                            ],
+                            "answer": "3"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "4x - x^2 < 0",
+                            "options": [
+                                "(4; +∞)",
+                                "(-∞; 0) ∪ (4; +∞)",
+                                "(0; +∞)",
+                                "(0; 4)"
+                            ],
+                            "answer": "2"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "10x - x^2 \\leq 0",
+                            "options": [
+                                "(-∞; 0] ∪ [10; +∞)",
+                                "[10; +∞)",
+                                "[0; +∞)",
+                                "[0; 10]"
+                            ],
+                            "answer": "4"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "3x - x^2 > 0",
+                            "options": [
+                                "(0; +∞)",
+                                "(0; 3)",
+                                "(3; +∞)",
+                                "(-∞; 0) ∪ (3; +∞)"
+                            ],
+                            "answer": "3"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "8x - x^2 \\leq 0",
+                            "options": [
+                                "[0; +∞)",
+                                "[8; +∞)",
+                                "[0; 8]",
+                                "(-∞; 0] ∪ [8; +∞)"
+                            ],
+                            "answer": "2"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "x - x^2 > 0",
+                            "options": [
+                                "(-∞; 0)",
+                                "(-∞; 1)",
+                                "(-∞; 0) ∪ (1; +∞)",
+                                "(0; 1)"
+                            ],
+                            "answer": "4"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "6x - x^2 \\geq 0",
+                            "options": [
+                                "[0; 6]",
+                                "[6; +∞)",
+                                "[0; +∞)",
+                                "(-∞; 0] ∪ [6; +∞)"
+                            ],
+                            "answer": "3"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "5x - x^2 < 0",
+                            "options": [
+                                "(0; +∞)",
+                                "(-∞; 0) ∪ (5; +∞)",
+                                "(0; 5)",
+                                "(5; +∞)"
+                            ],
+                            "answer": "2"
+                        },
+                        {
+                            "id": 9,
+                            "expression": "2x - x^2 \\leq 0",
+                            "options": [
+                                "[0; +∞)",
+                                "[2; +∞)",
+                                "[0; 2]",
+                                "(-∞; 0] ∪ [2; +∞)"
+                            ],
+                            "answer": "4"
+                        }
+                    ]
+                },
+                {
+                    "number": 10,
+                    "instruction": "Укажите решение неравенства",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "7x - x^2 < 0",
+                            "graph_options": [
+                                {
+                                    "index": 1,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t1a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t1a)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t1a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">7</text></svg>"
+                                },
+                                {
+                                    "index": 2,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t1b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t1b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">7</text></svg>"
+                                },
+                                {
+                                    "index": 3,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t1c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t1c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">7</text></svg>"
+                                },
+                                {
+                                    "index": 4,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t1d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t1d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
+                                }
+                            ],
+                            "answer": "1"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "4x - x^2 \\leq 0",
+                            "graph_options": [
+                                {
+                                    "index": 1,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t2a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t2a)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t2a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">4</text></svg>"
+                                },
+                                {
+                                    "index": 2,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t2b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t2b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">4</text></svg>"
+                                },
+                                {
+                                    "index": 3,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t2c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t2c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">4</text></svg>"
+                                },
+                                {
+                                    "index": 4,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t2d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t2d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
+                                }
+                            ],
+                            "answer": "1"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "x - x^2 \\geq 0",
+                            "graph_options": [
+                                {
+                                    "index": 1,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t3a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t3a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">1</text></svg>"
+                                },
+                                {
+                                    "index": 2,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t3b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t3b)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t3b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">1</text></svg>"
+                                },
+                                {
+                                    "index": 3,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t3c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t3c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">1</text></svg>"
+                                },
+                                {
+                                    "index": 4,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t3d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t3d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
+                                }
+                            ],
+                            "answer": "1"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "6x - x^2 > 0",
+                            "graph_options": [
+                                {
+                                    "index": 1,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t4a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t4a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">6</text></svg>"
+                                },
+                                {
+                                    "index": 2,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t4b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t4b)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t4b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">6</text></svg>"
+                                },
+                                {
+                                    "index": 3,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t4c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t4c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
+                                },
+                                {
+                                    "index": 4,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t4d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t4d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">6</text></svg>"
+                                }
+                            ],
+                            "answer": "1"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "7x - x^2 \\geq 0",
+                            "graph_options": [
+                                {
+                                    "index": 1,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t5a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t5a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">7</text></svg>"
+                                },
+                                {
+                                    "index": 2,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t5b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t5b)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t5b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">7</text></svg>"
+                                },
+                                {
+                                    "index": 3,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t5c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t5c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">7</text></svg>"
+                                },
+                                {
+                                    "index": 4,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t5d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t5d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
+                                }
+                            ],
+                            "answer": "1"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "2x - x^2 > 0",
+                            "graph_options": [
+                                {
+                                    "index": 1,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t6a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t6a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">2</text></svg>"
+                                },
+                                {
+                                    "index": 2,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t6b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t6b)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t6b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">2</text></svg>"
+                                },
+                                {
+                                    "index": 3,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t6c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t6c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
+                                },
+                                {
+                                    "index": 4,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t6d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t6d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">2</text></svg>"
+                                }
+                            ],
+                            "answer": "1"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "8x - x^2 < 0",
+                            "graph_options": [
+                                {
+                                    "index": 1,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t7a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t7a)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t7a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">8</text></svg>"
+                                },
+                                {
+                                    "index": 2,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t7b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t7b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">8</text></svg>"
+                                },
+                                {
+                                    "index": 3,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t7c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t7c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">8</text></svg>"
+                                },
+                                {
+                                    "index": 4,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t7d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t7d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
+                                }
+                            ],
+                            "answer": "1"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "5x - x^2 \\geq 0",
+                            "graph_options": [
+                                {
+                                    "index": 1,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t8a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t8a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">5</text></svg>"
+                                },
+                                {
+                                    "index": 2,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t8b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t8b)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t8b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">5</text></svg>"
+                                },
+                                {
+                                    "index": 3,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t8c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t8c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">5</text></svg>"
+                                },
+                                {
+                                    "index": 4,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t8d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t8d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
+                                }
+                            ],
+                            "answer": "1"
+                        },
+                        {
+                            "id": 9,
+                            "expression": "3x - x^2 \\leq 0",
+                            "graph_options": [
+                                {
+                                    "index": 1,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t9a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t9a)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t9a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">3</text></svg>"
+                                },
+                                {
+                                    "index": 2,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t9b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t9b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">3</text></svg>"
+                                },
+                                {
+                                    "index": 3,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t9c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t9c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">3</text></svg>"
+                                },
+                                {
+                                    "index": 4,
+                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t9d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t9d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
+                                }
+                            ],
+                            "answer": "1"
+                        }
+                    ]
+                },
+                {
+                    "number": 11,
+                    "instruction": "Укажите неравенство, решение которого изображено на рисунке.",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "options": [
+                                "x² + 49 ≤ 0",
+                                "x² - 49 ≤ 0",
+                                "x² - 49 ≥ 0",
+                                "x² + 49 ≥ 0"
+                            ],
+                            "image": "img-035.png",
+                            "answer": "2"
+                        },
+                        {
+                            "id": 2,
+                            "options": [
+                                "x² - 36 < 0",
+                                "x² + 36 > 0",
+                                "x² - 36 > 0",
+                                "x² + 36 < 0"
+                            ],
+                            "image": "img-036.png",
+                            "answer": "3"
+                        },
+                        {
+                            "id": 3,
+                            "options": [
+                                "x² + 64 ≤ 0",
+                                "x² - 64 ≥ 0",
+                                "x² - 64 ≤ 0",
+                                "x² + 64 ≥ 0"
+                            ],
+                            "image": "img-037.png",
+                            "answer": "2"
+                        },
+                        {
+                            "id": 4,
+                            "options": [
+                                "x² + 9 > 0",
+                                "x² - 9 < 0",
+                                "x² + 9 < 0",
+                                "x² - 9 > 0"
+                            ],
+                            "image": "img-038.png",
+                            "answer": "4"
+                        },
+                        {
+                            "id": 5,
+                            "options": [
+                                "x² + 16 ≥ 0",
+                                "x² + 16 ≤ 0",
+                                "x² - 16 ≤ 0",
+                                "x² - 16 ≥ 0"
+                            ],
+                            "image": "img-039.png",
+                            "answer": "3"
+                        },
+                        {
+                            "id": 6,
+                            "options": [
+                                "x² + 25 < 0",
+                                "x² + 25 > 0",
+                                "x² - 25 > 0",
+                                "x² - 25 < 0"
+                            ],
+                            "image": "img-040.png",
+                            "answer": "3"
+                        },
+                        {
+                            "id": 7,
+                            "options": [
+                                "x² - 81 ≤ 0",
+                                "x² + 81 ≥ 0",
+                                "x² - 81 ≥ 0",
+                                "x² + 81 ≤ 0"
+                            ],
+                            "image": "img-041.png",
+                            "answer": "1"
+                        },
+                        {
+                            "id": 8,
+                            "options": [
+                                "x² + 4 > 0",
+                                "x² + 4 < 0",
+                                "x² - 4 < 0",
+                                "x² - 4 > 0"
+                            ],
+                            "image": "img-042.png",
+                            "answer": "3"
+                        }
+                    ]
+                },
+                {
+                    "number": 12,
+                    "instruction": "Укажите неравенство, решение которого изображено на рисунке.",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "options": [
+                                "x² - 25 ≤ 0",
+                                "x² - 5x ≤ 0",
+                                "x² - 25 ≥ 0",
+                                "x² - 5x ≥ 0"
+                            ],
+                            "image": "img-043.png",
+                            "answer": "2"
+                        },
+                        {
+                            "id": 2,
+                            "options": [
+                                "x² - 6x > 0",
+                                "x² - 36 < 0",
+                                "x² - 6x < 0",
+                                "x² - 36 > 0"
+                            ],
+                            "image": "img-044.png",
+                            "answer": "2"
+                        },
+                        {
+                            "id": 3,
+                            "options": [
+                                "x² - x ≤ 0",
+                                "x² - x ≥ 0",
+                                "x² - 1 ≥ 0",
+                                "x² - 1 ≤ 0"
+                            ],
+                            "image": "img-045.png",
+                            "answer": "3"
+                        },
+                        {
+                            "id": 4,
+                            "options": [
+                                "x² - 64 > 0",
+                                "x² - 8x > 0",
+                                "x² - 8x < 0",
+                                "x² - 64 < 0"
+                            ],
+                            "image": "img-046.png",
+                            "answer": "4"
+                        },
+                        {
+                            "id": 5,
+                            "options": [
+                                "x² - 4x ≥ 0",
+                                "x² - 4x ≤ 0",
+                                "x² - 16 ≥ 0",
+                                "x² - 16 ≤ 0"
+                            ],
+                            "image": "img-047.png",
+                            "answer": "4"
+                        },
+                        {
+                            "id": 6,
+                            "options": [
+                                "x² - 49 < 0",
+                                "x² - 7x < 0",
+                                "x² - 7x > 0",
+                                "x² - 49 > 0"
+                            ],
+                            "image": "img-048.png",
+                            "answer": "2"
+                        },
+                        {
+                            "id": 7,
+                            "options": [
+                                "x² - 9x ≤ 0",
+                                "x² - 9x ≥ 0",
+                                "x² - 81 ≥ 0",
+                                "x² - 81 ≤ 0"
+                            ],
+                            "image": "img-049.png",
+                            "answer": "3"
+                        },
+                        {
+                            "id": 8,
+                            "options": [
+                                "x² - 9 > 0",
+                                "x² - 3x > 0",
+                                "x² - 3x < 0",
+                                "x² - 9 < 0"
+                            ],
+                            "image": "img-050.png",
+                            "answer": "4"
+                        }
+                    ]
+                },
+                {
+                    "number": 13,
+                    "instruction": "Укажите решение неравенства",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "x^2 < 9",
+                            "image": "img-052.png"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "x^2 \\leq 64",
+                            "image": "img-053.png"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "x^2 > 36",
+                            "image": "img-054.png"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "x^2 \\leq 36",
+                            "image": "img-055.png"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "49x^2 \\geq 36",
+                            "image": "img-056.png"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "25x^2 \\geq 4",
+                            "image": "img-057.png"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "81x^2 \\leq 16",
+                            "image": "img-058.png"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "25x^2 \\geq 49",
+                            "image": "img-059.png"
+                        }
+                    ]
+                }
+            ]
         },
         {
-          "number": 2,
-          "instruction": "Укажите решение неравенства.",
-          "type": "choice",
-          "options_render_mode": "text_options",
-          "tasks": [
-            {
-              "id": 1,
-              "expression": "5x - 3(5x - 8) < -7",
-              "options": [
-                "(-∞; -1,7)",
-                "(3,1; +∞)",
-                "(-∞; 3,1)",
-                "(-1,7; +∞)"
-              ],
-              "answer": "2"
-            },
-            {
-              "id": 2,
-              "expression": "6x - 3(4x + 1) > 6",
-              "options": [
-                "(-0,5; +∞)",
-                "(-1,5; +∞)",
-                "(-∞; -1,5)",
-                "(-∞; -1,5)"
-              ],
-              "answer": "3"
-            },
-            {
-              "id": 3,
-              "expression": "3x - 2(x - 2) > -4",
-              "options": [
-                "(-8; +∞)",
-                "(-∞; 0)",
-                "(-∞; -8)",
-                "(0; +∞)"
-              ],
-              "answer": "1"
-            },
-            {
-              "id": 4,
-              "expression": "5x - 2(2x - 8) < -5",
-              "options": [
-                "(-∞; -21)",
-                "(-21; +∞)",
-                "(-∞; 11)",
-                "(11; +∞)"
-              ],
-              "answer": "1"
-            },
-            {
-              "id": 5,
-              "expression": "3x - 2(x - 5) \\leq -6",
-              "options": [
-                "[-16; +∞)",
-                "(-∞; -16]",
-                "(-∞; 4]",
-                "[4; +∞)"
-              ],
-              "answer": "2"
-            },
-            {
-              "id": 6,
-              "expression": "2x - 3(x - 7) \\leq 3",
-              "options": [
-                "(-∞; 18]",
-                "[18; +∞)",
-                "[-24; +∞)",
-                "(-∞; -24]"
-              ],
-              "answer": "2"
-            },
-            {
-              "id": 7,
-              "expression": "9x - 4(x - 7) \\geq -3",
-              "options": [
-                "(-∞; 5]",
-                "[-6,2; +∞)",
-                "[5; +∞)",
-                "(-∞; -6,2]"
-              ],
-              "answer": "2"
-            },
-            {
-              "id": 8,
-              "expression": "8x - 3(3x + 8) \\geq 9",
-              "options": [
-                "[-33; +∞)",
-                "[15; +∞)",
-                "(-∞; -33]",
-                "(-∞; 15]"
-              ],
-              "answer": "3"
-            }
-          ]
-        },
-        {
-          "number": 3,
-          "instruction": "На каком рисунке изображено множество решений неравенства? В ответе укажите номер правильного варианта.",
-          "type": "choice",
-          "tasks": [
-            {
-              "id": 1,
-              "expression": "4 - 5(5x - 2) < -8",
-              "image": "img-069.png"
-            },
-            {
-              "id": 2,
-              "expression": "-9 + 10(-2x + 9) < -7",
-              "image": "img-070.png"
-            },
-            {
-              "id": 3,
-              "expression": "4 - 7(x + 3) \\geq -9",
-              "image": "img-071.png"
-            }
-          ]
-        },
-        {
-          "number": 4,
-          "instruction": "Решите систему неравенств. На каком рисунке изображено множество её решений? В ответе укажите номер правильного варианта.",
-          "type": "choice",
-          "tasks": [
-            {
-              "id": 1,
-              "expression": "\\begin{cases} x > 8 \\\\ 9 - x < 0 \\end{cases}",
-              "image": "img-072.png"
-            },
-            {
-              "id": 2,
-              "expression": "\\begin{cases} x < -1 \\\\ -4 - x < 0 \\end{cases}",
-              "image": "img-073.png"
-            },
-            {
-              "id": 3,
-              "expression": "\\begin{cases} x < 9 \\\\ 8 - x > 0 \\end{cases}",
-              "image": "img-074.png"
-            },
-            {
-              "id": 4,
-              "expression": "\\begin{cases} x > -1 \\\\ 3 - x > 0 \\end{cases}",
-              "image": "img-075.png"
-            },
-            {
-              "id": 5,
-              "expression": "\\begin{cases} x > 9 \\\\ 4 - x < 0 \\end{cases}",
-              "image": "img-076.png"
-            },
-            {
-              "id": 6,
-              "expression": "\\begin{cases} x > -1 \\\\ -4 - x > 0 \\end{cases}",
-              "image": "img-077.png"
-            },
-            {
-              "id": 7,
-              "expression": "\\begin{cases} x < 3 \\\\ 4 - x > 0 \\end{cases}",
-              "image": "img-078.png"
-            },
-            {
-              "id": 8,
-              "expression": "\\begin{cases} x < -3 \\\\ 9 - x < 0 \\end{cases}",
-              "image": "img-079.png"
-            },
-            {
-              "id": 9,
-              "expression": "\\begin{cases} x > 8 \\\\ 9 - x > 0 \\end{cases}",
-              "image": "img-080.png"
-            }
-          ]
-        },
-        {
-          "number": 5,
-          "instruction": "Укажите неравенство, решением которого является любое число.",
-          "type": "choice",
-          "tasks": [
-            {
-              "id": 1,
-              "options": [
-                "x² + 78 > 0",
-                "x² - 78 > 0",
-                "x² + 78 < 0",
-                "x² - 78 < 0"
-              ]
-            },
-            {
-              "id": 2,
-              "options": [
-                "x² - 64 ≥ 0",
-                "x² + 64 ≤ 0",
-                "x² + 64 ≥ 0",
-                "x² - 64 ≤ 0"
-              ]
-            },
-            {
-              "id": 3,
-              "options": [
-                "x² - 56 > 0",
-                "x² + 56 > 0",
-                "x² - 56 < 0",
-                "x² + 56 < 0"
-              ]
-            },
-            {
-              "id": 4,
-              "options": [
-                "x² + 15 > 0",
-                "x² - 15 > 0",
-                "x² - 15 < 0",
-                "x² + 15 < 0"
-              ]
-            },
-            {
-              "id": 5,
-              "options": [
-                "x² + 70 < 0",
-                "x² + 70 > 0",
-                "x² - 70 < 0",
-                "x² - 70 > 0"
-              ]
-            },
-            {
-              "id": 6,
-              "options": [
-                "x² - 29 > 0",
-                "x² + 29 > 0",
-                "x² - 29 < 0",
-                "x² + 29 < 0"
-              ]
-            }
-          ]
-        },
-        {
-          "number": 6,
-          "instruction": "Укажите неравенство, которое не имеет решений.",
-          "type": "choice",
-          "tasks": [
-            {
-              "id": 1,
-              "options": [
-                "x² + 70 < 0",
-                "x² + 70 > 0",
-                "x² - 70 < 0",
-                "x² - 70 > 0"
-              ]
-            },
-            {
-              "id": 2,
-              "options": [
-                "x² + 15 ≥ 0",
-                "x² - 15 ≤ 0",
-                "x² - 15 ≥ 0",
-                "x² + 15 ≤ 0"
-              ]
-            },
-            {
-              "id": 3,
-              "options": [
-                "x² + 33 < 0",
-                "x² + 33 > 0",
-                "x² - 33 < 0",
-                "x² - 33 > 0"
-              ]
-            },
-            {
-              "id": 4,
-              "options": [
-                "x² + 49 ≥ 0",
-                "x² - 49 ≤ 0",
-                "x² - 49 ≥ 0",
-                "x² + 49 ≤ 0"
-              ]
-            },
-            {
-              "id": 5,
-              "options": [
-                "x² - 64 < 0",
-                "x² + 64 > 0",
-                "x² + 64 < 0",
-                "x² - 64 > 0"
-              ]
-            },
-            {
-              "id": 6,
-              "options": [
-                "x² - 56 ≤ 0",
-                "x² + 56 ≥ 0",
-                "x² - 56 ≥ 0",
-                "x² + 56 ≤ 0"
-              ]
-            }
-          ]
-        },
-        {
-          "number": 7,
-          "instruction": "Укажите неравенство, которое не имеет решений.",
-          "type": "choice",
-          "tasks": [
-            {
-              "id": 1,
-              "options": [
-                "x² + 6x - 51 > 0",
-                "x² + 6x + 51 > 0",
-                "x² + 6x - 51 < 0",
-                "x² + 6x + 51 < 0"
-              ]
-            },
-            {
-              "id": 2,
-              "options": [
-                "x² - 2x - 65 < 0",
-                "x² - 2x + 65 < 0",
-                "x² - 2x - 65 > 0",
-                "x² - 2x + 65 > 0"
-              ]
-            },
-            {
-              "id": 3,
-              "options": [
-                "x² + 9x - 79 < 0",
-                "x² + 9x + 79 > 0",
-                "x² + 9x + 79 < 0",
-                "x² + 9x - 79 > 0"
-              ]
-            },
-            {
-              "id": 4,
-              "options": [
-                "x² - 5x + 53 < 0",
-                "x² - 5x + 53 > 0",
-                "x² - 5x - 53 < 0",
-                "x² - 5x - 53 > 0"
-              ]
-            },
-            {
-              "id": 5,
-              "options": [
-                "x² - 3x - 11 < 0",
-                "x² - 3x + 11 > 0",
-                "x² - 3x + 11 < 0",
-                "x² - 3x - 11 > 0"
-              ]
-            },
-            {
-              "id": 6,
-              "options": [
-                "x² - 8x - 83 > 0",
-                "x² - 8x - 83 < 0",
-                "x² - 8x + 83 < 0",
-                "x² - 8x + 83 > 0"
-              ]
-            },
-            {
-              "id": 7,
-              "options": [
-                "x² + x + 36 < 0",
-                "x² + x + 36 > 0",
-                "x² + x - 36 < 0",
-                "x² + x - 36 > 0"
-              ]
-            },
-            {
-              "id": 8,
-              "options": [
-                "x² + 6x + 12 < 0",
-                "x² + 6x - 12 > 0",
-                "x² + 6x + 12 > 0",
-                "x² + 6x - 12 < 0"
-              ]
-            }
-          ]
-        },
-        {
-          "number": 8,
-          "instruction": "На каком рисунке изображено множество решений неравенства?",
-          "type": "choice",
-          "tasks": [
-            {
-              "id": 1,
-              "expression": "x^2 - 4x + 3 \\leq 0",
-              "image": "img-081.png"
-            },
-            {
-              "id": 2,
-              "expression": "x^2 - 7x + 12 > 0",
-              "image": "img-082.png"
-            },
-            {
-              "id": 3,
-              "expression": "x^2 + 9x + 20 \\geq 0",
-              "image": "img-083.png"
-            },
-            {
-              "id": 4,
-              "expression": "x^2 - 5x - 6 \\leq 0",
-              "image": "img-084.png"
-            },
-            {
-              "id": 5,
-              "expression": "x^2 - 17x + 72 \\geq 0",
-              "image": "img-085.png"
-            },
-            {
-              "id": 6,
-              "expression": "x^2 - 6x - 27 < 0",
-              "image": "img-086.png"
-            }
-          ]
+            "number": 2,
+            "title": "ФИПИ. Расширенная версия",
+            "zadaniya": [
+                {
+                    "number": 1,
+                    "instruction": "Укажите решение неравенства",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "4x + 5 \\geq 6x - 2",
+                            "image": "img-060.png",
+                            "answer": "2"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "-2x + 5 \\leq -3x - 3",
+                            "image": "img-061.png",
+                            "answer": "2"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "3 - x \\geq 3x + 5",
+                            "image": "img-062.png",
+                            "answer": "4"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "x + 4 \\geq 4x - 5",
+                            "image": "img-063.png",
+                            "answer": "3"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "2 + x \\leq 5x - 8",
+                            "image": "img-064.png",
+                            "answer": "3"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "4x - 5 \\geq 2x - 4",
+                            "image": "img-065.png",
+                            "answer": "4"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "x - 1 \\leq 3x + 2",
+                            "image": "img-066.png",
+                            "answer": "1"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "2x + 4 \\leq -4x + 1",
+                            "image": "img-067.png",
+                            "answer": "4"
+                        },
+                        {
+                            "id": 9,
+                            "expression": "x - 2 \\leq 4x + 4",
+                            "image": "img-068.png",
+                            "answer": "3"
+                        }
+                    ]
+                },
+                {
+                    "number": 2,
+                    "instruction": "Укажите решение неравенства.",
+                    "type": "choice",
+                    "options_render_mode": "text_options",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "5x - 3(5x - 8) < -7",
+                            "options": [
+                                "(-∞; -1,7)",
+                                "(3,1; +∞)",
+                                "(-∞; 3,1)",
+                                "(-1,7; +∞)"
+                            ],
+                            "answer": "2"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "6x - 3(4x + 1) > 6",
+                            "options": [
+                                "(-0,5; +∞)",
+                                "(-1,5; +∞)",
+                                "(-∞; -1,5)",
+                                "(-∞; -1,5)"
+                            ],
+                            "answer": "3"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "3x - 2(x - 2) > -4",
+                            "options": [
+                                "(-8; +∞)",
+                                "(-∞; 0)",
+                                "(-∞; -8)",
+                                "(0; +∞)"
+                            ],
+                            "answer": "1"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "5x - 2(2x - 8) < -5",
+                            "options": [
+                                "(-∞; -21)",
+                                "(-21; +∞)",
+                                "(-∞; 11)",
+                                "(11; +∞)"
+                            ],
+                            "answer": "1"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "3x - 2(x - 5) \\leq -6",
+                            "options": [
+                                "[-16; +∞)",
+                                "(-∞; -16]",
+                                "(-∞; 4]",
+                                "[4; +∞)"
+                            ],
+                            "answer": "2"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "2x - 3(x - 7) \\leq 3",
+                            "options": [
+                                "(-∞; 18]",
+                                "[18; +∞)",
+                                "[-24; +∞)",
+                                "(-∞; -24]"
+                            ],
+                            "answer": "2"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "9x - 4(x - 7) \\geq -3",
+                            "options": [
+                                "(-∞; 5]",
+                                "[-6,2; +∞)",
+                                "[5; +∞)",
+                                "(-∞; -6,2]"
+                            ],
+                            "answer": "2"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "8x - 3(3x + 8) \\geq 9",
+                            "options": [
+                                "[-33; +∞)",
+                                "[15; +∞)",
+                                "(-∞; -33]",
+                                "(-∞; 15]"
+                            ],
+                            "answer": "3"
+                        }
+                    ]
+                },
+                {
+                    "number": 3,
+                    "instruction": "На каком рисунке изображено множество решений неравенства? В ответе укажите номер правильного варианта.",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "4 - 5(5x - 2) < -8",
+                            "image": "img-069.png"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "-9 + 10(-2x + 9) < -7",
+                            "image": "img-070.png"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "4 - 7(x + 3) \\geq -9",
+                            "image": "img-071.png"
+                        }
+                    ]
+                },
+                {
+                    "number": 4,
+                    "instruction": "Решите систему неравенств. На каком рисунке изображено множество её решений? В ответе укажите номер правильного варианта.",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "\\begin{cases} x > 8 \\\\ 9 - x < 0 \\end{cases}",
+                            "image": "img-072.png"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "\\begin{cases} x < -1 \\\\ -4 - x < 0 \\end{cases}",
+                            "image": "img-073.png"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "\\begin{cases} x < 9 \\\\ 8 - x > 0 \\end{cases}",
+                            "image": "img-074.png"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "\\begin{cases} x > -1 \\\\ 3 - x > 0 \\end{cases}",
+                            "image": "img-075.png"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "\\begin{cases} x > 9 \\\\ 4 - x < 0 \\end{cases}",
+                            "image": "img-076.png"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "\\begin{cases} x > -1 \\\\ -4 - x > 0 \\end{cases}",
+                            "image": "img-077.png"
+                        },
+                        {
+                            "id": 7,
+                            "expression": "\\begin{cases} x < 3 \\\\ 4 - x > 0 \\end{cases}",
+                            "image": "img-078.png"
+                        },
+                        {
+                            "id": 8,
+                            "expression": "\\begin{cases} x < -3 \\\\ 9 - x < 0 \\end{cases}",
+                            "image": "img-079.png"
+                        },
+                        {
+                            "id": 9,
+                            "expression": "\\begin{cases} x > 8 \\\\ 9 - x > 0 \\end{cases}",
+                            "image": "img-080.png"
+                        }
+                    ]
+                },
+                {
+                    "number": 5,
+                    "instruction": "Укажите неравенство, решением которого является любое число.",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "options": [
+                                "x² + 78 > 0",
+                                "x² - 78 > 0",
+                                "x² + 78 < 0",
+                                "x² - 78 < 0"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "options": [
+                                "x² - 64 ≥ 0",
+                                "x² + 64 ≤ 0",
+                                "x² + 64 ≥ 0",
+                                "x² - 64 ≤ 0"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "options": [
+                                "x² - 56 > 0",
+                                "x² + 56 > 0",
+                                "x² - 56 < 0",
+                                "x² + 56 < 0"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "options": [
+                                "x² + 15 > 0",
+                                "x² - 15 > 0",
+                                "x² - 15 < 0",
+                                "x² + 15 < 0"
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "options": [
+                                "x² + 70 < 0",
+                                "x² + 70 > 0",
+                                "x² - 70 < 0",
+                                "x² - 70 > 0"
+                            ]
+                        },
+                        {
+                            "id": 6,
+                            "options": [
+                                "x² - 29 > 0",
+                                "x² + 29 > 0",
+                                "x² - 29 < 0",
+                                "x² + 29 < 0"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 6,
+                    "instruction": "Укажите неравенство, которое не имеет решений.",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "options": [
+                                "x² + 70 < 0",
+                                "x² + 70 > 0",
+                                "x² - 70 < 0",
+                                "x² - 70 > 0"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "options": [
+                                "x² + 15 ≥ 0",
+                                "x² - 15 ≤ 0",
+                                "x² - 15 ≥ 0",
+                                "x² + 15 ≤ 0"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "options": [
+                                "x² + 33 < 0",
+                                "x² + 33 > 0",
+                                "x² - 33 < 0",
+                                "x² - 33 > 0"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "options": [
+                                "x² + 49 ≥ 0",
+                                "x² - 49 ≤ 0",
+                                "x² - 49 ≥ 0",
+                                "x² + 49 ≤ 0"
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "options": [
+                                "x² - 64 < 0",
+                                "x² + 64 > 0",
+                                "x² + 64 < 0",
+                                "x² - 64 > 0"
+                            ]
+                        },
+                        {
+                            "id": 6,
+                            "options": [
+                                "x² - 56 ≤ 0",
+                                "x² + 56 ≥ 0",
+                                "x² - 56 ≥ 0",
+                                "x² + 56 ≤ 0"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 7,
+                    "instruction": "Укажите неравенство, которое не имеет решений.",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "options": [
+                                "x² + 6x - 51 > 0",
+                                "x² + 6x + 51 > 0",
+                                "x² + 6x - 51 < 0",
+                                "x² + 6x + 51 < 0"
+                            ]
+                        },
+                        {
+                            "id": 2,
+                            "options": [
+                                "x² - 2x - 65 < 0",
+                                "x² - 2x + 65 < 0",
+                                "x² - 2x - 65 > 0",
+                                "x² - 2x + 65 > 0"
+                            ]
+                        },
+                        {
+                            "id": 3,
+                            "options": [
+                                "x² + 9x - 79 < 0",
+                                "x² + 9x + 79 > 0",
+                                "x² + 9x + 79 < 0",
+                                "x² + 9x - 79 > 0"
+                            ]
+                        },
+                        {
+                            "id": 4,
+                            "options": [
+                                "x² - 5x + 53 < 0",
+                                "x² - 5x + 53 > 0",
+                                "x² - 5x - 53 < 0",
+                                "x² - 5x - 53 > 0"
+                            ]
+                        },
+                        {
+                            "id": 5,
+                            "options": [
+                                "x² - 3x - 11 < 0",
+                                "x² - 3x + 11 > 0",
+                                "x² - 3x + 11 < 0",
+                                "x² - 3x - 11 > 0"
+                            ]
+                        },
+                        {
+                            "id": 6,
+                            "options": [
+                                "x² - 8x - 83 > 0",
+                                "x² - 8x - 83 < 0",
+                                "x² - 8x + 83 < 0",
+                                "x² - 8x + 83 > 0"
+                            ]
+                        },
+                        {
+                            "id": 7,
+                            "options": [
+                                "x² + x + 36 < 0",
+                                "x² + x + 36 > 0",
+                                "x² + x - 36 < 0",
+                                "x² + x - 36 > 0"
+                            ]
+                        },
+                        {
+                            "id": 8,
+                            "options": [
+                                "x² + 6x + 12 < 0",
+                                "x² + 6x - 12 > 0",
+                                "x² + 6x + 12 > 0",
+                                "x² + 6x - 12 < 0"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "number": 8,
+                    "instruction": "На каком рисунке изображено множество решений неравенства?",
+                    "type": "choice",
+                    "tasks": [
+                        {
+                            "id": 1,
+                            "expression": "x^2 - 4x + 3 \\leq 0",
+                            "image": "img-081.png"
+                        },
+                        {
+                            "id": 2,
+                            "expression": "x^2 - 7x + 12 > 0",
+                            "image": "img-082.png"
+                        },
+                        {
+                            "id": 3,
+                            "expression": "x^2 + 9x + 20 \\geq 0",
+                            "image": "img-083.png"
+                        },
+                        {
+                            "id": 4,
+                            "expression": "x^2 - 5x - 6 \\leq 0",
+                            "image": "img-084.png"
+                        },
+                        {
+                            "id": 5,
+                            "expression": "x^2 - 17x + 72 \\geq 0",
+                            "image": "img-085.png"
+                        },
+                        {
+                            "id": 6,
+                            "expression": "x^2 - 6x - 27 < 0",
+                            "image": "img-086.png"
+                        }
+                    ]
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ]
 }

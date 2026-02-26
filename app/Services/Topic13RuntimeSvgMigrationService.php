@@ -207,6 +207,11 @@ class Topic13RuntimeSvgMigrationService
                 return null;
             }
 
+            $fromAnswer = $this->optionByAnswer($task, $options);
+            if ($fromAnswer !== null) {
+                return $fromAnswer;
+            }
+
             $taskId = (int) ($task['id'] ?? 0);
             $promptOptionByTaskId = [
                 5 => 1, // x² - 16 ≤ 0 => [-4; 4]
@@ -218,8 +223,34 @@ class Topic13RuntimeSvgMigrationService
             return is_string($expr) && trim($expr) !== '' ? $expr : null;
         }
 
+        if ($zadanieNumber === 12) {
+            $options = $task['options'] ?? null;
+            if (is_array($options) && $options !== []) {
+                $fromAnswer = $this->optionByAnswer($task, $options);
+                if ($fromAnswer !== null) {
+                    return $fromAnswer;
+                }
+            }
+        }
+
         $firstOption = $task['options'][0] ?? null;
         return is_string($firstOption) && trim($firstOption) !== '' ? $firstOption : null;
+    }
+
+    private function optionByAnswer(array $task, array $options): ?string
+    {
+        $answer = $task['answer'] ?? null;
+        if (!is_scalar($answer)) {
+            return null;
+        }
+
+        $index = (int) $answer;
+        if ($index < 1 || $index > count($options)) {
+            return null;
+        }
+
+        $expr = $options[$index - 1] ?? null;
+        return is_string($expr) && trim($expr) !== '' ? $expr : null;
     }
 
     /**

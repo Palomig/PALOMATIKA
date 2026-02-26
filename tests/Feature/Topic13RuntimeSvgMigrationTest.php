@@ -76,7 +76,7 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
         $view->assertSee('data-runtime-svg="topic13-b1-z11-prompt-', false);
         $view->assertDontSee('<img src=', false);
         $view->assertDontSee('data-runtime-svg="topic13-b1-z11-option"', false);
-        $view->assertSee('1) x² - 49 ≤ 0');
+        $view->assertSee('x² - 49 ≤ 0');
     }
 
     public function test_topic_13_z10_tasks_receive_four_graph_options_with_prebaked_svg(): void

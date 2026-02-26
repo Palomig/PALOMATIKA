@@ -32,7 +32,7 @@ class Topic13Zadanie11SemanticSvgTest extends TestCase
         }
     }
 
-    public function test_topic_13_block1_z11_answer_key_mapping_stays_unchanged(): void
+    public function test_topic_13_block1_z11_answer_key_mapping_uses_explicit_answer_field(): void
     {
         Cache::forget('topic_data_13');
         $blocks = app(TaskDataService::class)->getBlocks('13');
@@ -41,7 +41,11 @@ class Topic13Zadanie11SemanticSvgTest extends TestCase
 
         $resolver = app(TaskAnswerResolver::class);
         foreach ($z11['tasks'] ?? [] as $task) {
-            $this->assertSame('1', $resolver->resolveFromTaskAndZadanie($z11, is_array($task) ? $task : []));
+            $taskData = is_array($task) ? $task : [];
+            $expected = (string) ($taskData['answer'] ?? '');
+            $this->assertNotSame('', $expected);
+            $this->assertContains($expected, ['1', '2', '3', '4']);
+            $this->assertSame($expected, $resolver->resolveFromTaskAndZadanie($z11, $taskData));
         }
     }
 
@@ -66,8 +70,8 @@ class Topic13Zadanie11SemanticSvgTest extends TestCase
         $this->assertSame(0, substr_count($html, '<img src='));
         $this->assertSame(0, substr_count($html, 'data-z10-option-panel='));
         $this->assertSame(8, substr_count($html, 'topic13-z11-prompt-svg-size'));
-        $this->assertStringContainsString('1) x² - 49 ≤ 0', $html);
-        $this->assertStringContainsString('4) x² + 4 &lt; 0', $html);
+        $this->assertStringContainsString('x² - 49 ≤ 0', $html);
+        $this->assertStringContainsString('x² + 4 &lt; 0', $html);
     }
 
     public function test_topic_13_block1_z11_task3_svg_matches_outer_closed_union_with_boundaries_minus8_and_8(): void

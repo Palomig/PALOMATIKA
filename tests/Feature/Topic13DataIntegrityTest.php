@@ -87,7 +87,7 @@ class Topic13DataIntegrityTest extends TestCase
             'isVariant' => true,
         ]);
 
-        $view->assertSee('1) [-0,2; +∞)');
+        $view->assertSee('[-0,2; +∞)');
         $view->assertDontSee('pattern id="hatch_', false);
     }
 

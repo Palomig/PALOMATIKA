@@ -47,7 +47,8 @@ class Topic13Zadanie10Test extends TestCase
     public function test_each_task_has_answer_field(): void
     {
         foreach ($this->tasks as $task) {
-            $this->assertSame('1', $task['answer'], "Task {$task['id']} answer should be '1'");
+            $answer = (string) ($task['answer'] ?? '');
+            $this->assertContains($answer, ['1', '2', '3', '4'], "Task {$task['id']} answer should be a valid option index");
         }
     }
 
@@ -93,7 +94,9 @@ class Topic13Zadanie10Test extends TestCase
 
         foreach ($this->tasks as $task) {
             $id = $task['id'];
-            $correctSvg = $task['graph_options'][0]['svg'];
+            $answerIndex = (int) ($task['answer'] ?? 0);
+            $this->assertTrue($answerIndex >= 1 && $answerIndex <= 4, "Task {$id}: invalid answer index");
+            $correctSvg = $task['graph_options'][$answerIndex - 1]['svg'];
             $type = $expectations[$id];
 
             if ($type === 'strict') {
@@ -118,7 +121,9 @@ class Topic13Zadanie10Test extends TestCase
 
         foreach ($this->tasks as $task) {
             $id = $task['id'];
-            $svg = $task['graph_options'][0]['svg'];
+            $answerIndex = (int) ($task['answer'] ?? 0);
+            $this->assertTrue($answerIndex >= 1 && $answerIndex <= 4, "Task {$id}: invalid answer index");
+            $svg = $task['graph_options'][$answerIndex - 1]['svg'];
             $a = $roots[$id];
 
             $this->assertStringContainsString('>0</text>', $svg,
@@ -157,14 +162,16 @@ class Topic13Zadanie10Test extends TestCase
         }
     }
 
-    public function test_answer_resolver_returns_1_for_all_tasks(): void
+    public function test_answer_resolver_returns_explicit_task_answer_for_all_tasks(): void
     {
         $resolver = app(TaskAnswerResolver::class);
 
         foreach ($this->tasks as $task) {
+            $expected = (string) ($task['answer'] ?? '');
+            $this->assertContains($expected, ['1', '2', '3', '4']);
             $answer = $resolver->resolveFromTaskAndZadanie($this->zadanie, $task);
-            $this->assertSame('1', $answer,
-                "TaskAnswerResolver should return '1' for task {$task['id']}");
+            $this->assertSame($expected, $answer,
+                "TaskAnswerResolver should return explicit answer for task {$task['id']}");
         }
     }
 
