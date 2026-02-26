@@ -181,6 +181,44 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
         $this->assertStringContainsString('viewBox="0 0 420 60"', $html);
     }
 
+    public function test_topic_13_z13_task5_uses_minus_six_sevenths_semantics_and_stacked_fraction_labels(): void
+    {
+        Cache::forget('topic_data_13');
+
+        $blocks = app(TaskDataService::class)->getBlocks('13');
+        $zadanie = $blocks[0]['zadaniya'][12] ?? null; // Z13
+        $this->assertIsArray($zadanie);
+
+        $task5 = null;
+        foreach (($zadanie['tasks'] ?? []) as $task) {
+            if ((int) ($task['id'] ?? 0) === 5) {
+                $task5 = $task;
+                break;
+            }
+        }
+
+        $this->assertIsArray($task5);
+        $options = $task5['graph_options'] ?? null;
+        $this->assertIsArray($options);
+        $this->assertCount(4, $options);
+
+        $this->assertSame('[-6/7; +∞)', (string) ($options[0]['text'] ?? ''));
+        $this->assertSame('(-∞; -6/7]', (string) ($options[1]['text'] ?? ''));
+        $this->assertSame('[6/7; +∞)', (string) ($options[2]['text'] ?? ''));
+        $this->assertSame('[-6/7; 6/7]', (string) ($options[3]['text'] ?? ''));
+
+        foreach ($options as $option) {
+            $svg = (string) ($option['svg'] ?? '');
+            $this->assertStringContainsString('data-label-format="stacked-fraction"', $svg);
+            $this->assertStringContainsString('data-fraction="6/7"', $svg);
+            $this->assertStringNotContainsString('-0.857', $svg);
+            $this->assertStringNotContainsString('−0,857', $svg);
+        }
+
+        // Rotation must preserve correctness mapping for task id=5.
+        $this->assertSame('2', (string) ($task5['answer'] ?? ''));
+    }
+
     public function test_topic_13_svg_cards_use_dark_wrapper_for_prompt_and_option_svg_blocks(): void
     {
         Cache::forget('topic_data_13');

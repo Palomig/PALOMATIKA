@@ -72,17 +72,23 @@ class Topic13RuntimeSvgMigrationService
                 }
 
                 if ($number === 13) {
-                    $sourceExpr = $this->sourceExpressionForTask($number, $task);
-                    if ($sourceExpr === null) {
-                        continue;
+                    $taskId = (int) ($task['id'] ?? ($taskIndex + 1));
+                    if ($taskId === 5) {
+                        $graphOptions = $this->topic13Z13Task5GraphOptions();
+                    } else {
+                        $sourceExpr = $this->sourceExpressionForTask($number, $task);
+                        if ($sourceExpr === null) {
+                            continue;
+                        }
+
+                        $solution = $this->solveInequality($sourceExpr);
+                        if ($solution === null) {
+                            continue;
+                        }
+
+                        $graphOptions = $this->topic13Z10GraphOptionsForSolution($solution);
                     }
 
-                    $solution = $this->solveInequality($sourceExpr);
-                    if ($solution === null) {
-                        continue;
-                    }
-
-                    $graphOptions = $this->topic13Z10GraphOptionsForSolution($solution);
                     if ($graphOptions === null) {
                         continue;
                     }
@@ -90,7 +96,7 @@ class Topic13RuntimeSvgMigrationService
                     [$graphOptions, $newAnswer] = $this->reorderGraphOptionsAndAnswer(
                         $graphOptions,
                         (int) ($task['answer'] ?? 1),
-                        (int) ($task['id'] ?? ($taskIndex + 1))
+                        $taskId
                     );
 
                     $task['graph_options'] = $graphOptions;
@@ -443,6 +449,7 @@ class Topic13RuntimeSvgMigrationService
         $isCompactOption = $mode === 'compact_option';
         $textOnlyNone = (bool) ($config['text_only_none'] ?? false);
         $runtimeSvgId = (string) ($config['runtime_svg_id'] ?? 'topic13-b1-z10-option');
+        $fractionLabels = is_array($config['fraction_labels'] ?? null) ? $config['fraction_labels'] : [];
 
         $rayConfig = $this->solutionToRayConfig($solution);
         if ($rayConfig !== null) {
@@ -454,6 +461,7 @@ class Topic13RuntimeSvgMigrationService
                 ...$rayConfig,
                 'class' => $class,
                 'runtimeSvgId' => $runtimeSvgId,
+                'fractionLabels' => $fractionLabels,
             ]);
         }
 
@@ -736,6 +744,56 @@ class Topic13RuntimeSvgMigrationService
                 'index' => $index + 1,
                 'svg' => $svg,
                 'text' => $this->solutionToText($candidate),
+            ];
+        }
+
+        return count($options) === 4 ? $options : null;
+    }
+
+    /**
+     * @return list<array{index:int,svg:string,text:string}>|null
+     */
+    private function topic13Z13Task5GraphOptions(): ?array
+    {
+        $boundary = 6.0 / 7.0;
+        $minusBoundary = -$boundary;
+
+        // Keep option #1 as the correct candidate before deterministic rotation.
+        $candidates = [
+            $this->intervals([['l' => null, 'r' => $minusBoundary, 'li' => false, 'ri' => true]]),
+            $this->intervals([['l' => $boundary, 'r' => null, 'li' => true, 'ri' => false]]),
+            $this->intervals([['l' => $minusBoundary, 'r' => $boundary, 'li' => true, 'ri' => true]]),
+            $this->intervals([['l' => $minusBoundary, 'r' => null, 'li' => true, 'ri' => false]]),
+        ];
+
+        $customTexts = [
+            1 => '(-∞; -6/7]',
+            2 => '[6/7; +∞)',
+            3 => '[-6/7; 6/7]',
+            4 => '[-6/7; +∞)',
+        ];
+
+        $fractionLabels = [
+            '-6/7' => ['numerator' => 6, 'denominator' => 7, 'negative' => true],
+            '6/7' => ['numerator' => 6, 'denominator' => 7, 'negative' => false],
+        ];
+
+        $options = [];
+        foreach ($candidates as $index => $candidate) {
+            $svg = $this->renderSolutionSvg($candidate, [
+                'mode' => 'compact_option',
+                'runtime_svg_id' => 'topic13-b1-z13-task5-option-' . ($index + 1),
+                'fraction_labels' => $fractionLabels,
+            ]);
+
+            if (!is_string($svg) || $svg === '') {
+                return null;
+            }
+
+            $options[] = [
+                'index' => $index + 1,
+                'svg' => $svg,
+                'text' => $customTexts[$index + 1],
             ];
         }
 

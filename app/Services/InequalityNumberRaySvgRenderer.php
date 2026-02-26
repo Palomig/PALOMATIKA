@@ -20,7 +20,16 @@ class InequalityNumberRaySvgRenderer
     private const FONT = 'JetBrains Mono, monospace';
 
     /**
-     * @param array{type:string,a?:float|int,b?:float|int,axisMin?:float|int,axisMax?:float|int,class?:string,runtimeSvgId?:string} $config
+     * @param array{
+     *   type:string,
+     *   a?:float|int,
+     *   b?:float|int,
+     *   axisMin?:float|int,
+     *   axisMax?:float|int,
+     *   class?:string,
+     *   runtimeSvgId?:string,
+     *   fractionLabels?:array<string,array{numerator:int,denominator:int,negative?:bool}>
+     * } $config
      */
     public function render(array $config): string
     {
@@ -36,6 +45,7 @@ class InequalityNumberRaySvgRenderer
         $b = array_key_exists('b', $config) ? (float) $config['b'] : null;
         $class = trim((string) ($config['class'] ?? 'w-full h-auto'));
         $runtimeSvgId = trim((string) ($config['runtimeSvgId'] ?? ''));
+        $fractionLabels = is_array($config['fractionLabels'] ?? null) ? $config['fractionLabels'] : [];
 
         $ray = $this->buildRay($type, $a, $b, $axisMin, $axisMax);
         $uid = substr(md5(json_encode([$type, $a, $b, $axisMin, $axisMax], JSON_UNESCAPED_UNICODE)), 0, 10);
@@ -101,7 +111,7 @@ class InequalityNumberRaySvgRenderer
             } else {
                 $svg[] = "  <circle cx=\"{$x}\" cy=\"" . self::AXIS_Y . "\" r=\"5\" fill=\"#0d1b2a\" stroke=\"#4d9fdc\" stroke-width=\"2\"/>";
             }
-            $svg[] = "  <text x=\"{$x}\" y=\"" . self::LABEL_Y . "\" text-anchor=\"middle\" fill=\"#d4e8f7\" font-family=\"" . self::FONT . "\" font-size=\"16\">" . $this->formatLabel($value) . '</text>';
+            $svg[] = $this->renderBoundaryLabel($x, $value, $fractionLabels);
         }
 
         $svg[] = '</svg>';
@@ -208,5 +218,68 @@ class InequalityNumberRaySvgRenderer
         $label = str_replace('-', '−', $label);
         return str_replace('.', ',', $label);
     }
-}
 
+    /**
+     * @param array<string,array{numerator:int,denominator:int,negative?:bool}> $fractionLabels
+     */
+    private function renderBoundaryLabel(float $x, float $value, array $fractionLabels): string
+    {
+        $fraction = $this->resolveFractionLabel($value, $fractionLabels);
+        if ($fraction === null) {
+            return "  <text x=\"{$x}\" y=\"" . self::LABEL_Y . "\" text-anchor=\"middle\" fill=\"#d4e8f7\" font-family=\"" . self::FONT . "\" font-size=\"16\">" . $this->formatLabel($value) . '</text>';
+        }
+
+        $numerator = (int) $fraction['numerator'];
+        $denominator = (int) $fraction['denominator'];
+        $negative = (bool) ($fraction['negative'] ?? false);
+        $minus = $negative ? '−' : '';
+        $minusX = round($x - 12, 2);
+
+        return implode("\n", [
+            "  <g data-label-format=\"stacked-fraction\" data-fraction=\"{$numerator}/{$denominator}\">",
+            $negative
+                ? "    <text x=\"{$minusX}\" y=\"49\" text-anchor=\"middle\" fill=\"#d4e8f7\" font-family=\"" . self::FONT . "\" font-size=\"16\">{$minus}</text>"
+                : '',
+            "    <text x=\"{$x}\" y=\"42\" text-anchor=\"middle\" fill=\"#d4e8f7\" font-family=\"" . self::FONT . "\" font-size=\"13\">{$numerator}</text>",
+            '    <line x1="' . round($x - 6, 2) . '" y1="44" x2="' . round($x + 6, 2) . '" y2="44" stroke="#d4e8f7" stroke-width="1.4"/>',
+            "    <text x=\"{$x}\" y=\"56\" text-anchor=\"middle\" fill=\"#d4e8f7\" font-family=\"" . self::FONT . "\" font-size=\"13\">{$denominator}</text>",
+            '  </g>',
+        ]);
+    }
+
+    /**
+     * @param array<string,array{numerator:int,denominator:int,negative?:bool}> $fractionLabels
+     * @return array{numerator:int,denominator:int,negative?:bool}|null
+     */
+    private function resolveFractionLabel(float $value, array $fractionLabels): ?array
+    {
+        if ($fractionLabels === []) {
+            return null;
+        }
+
+        foreach ($fractionLabels as $key => $spec) {
+            if (!is_array($spec)) {
+                continue;
+            }
+
+            if (str_contains($key, '/')) {
+                [$rawNum, $rawDen] = explode('/', $key, 2);
+                $num = (float) $rawNum;
+                $den = (float) $rawDen;
+                if (abs($den) < 1e-9) {
+                    continue;
+                }
+                if (abs($value - ($num / $den)) < 1e-6) {
+                    return $spec;
+                }
+                continue;
+            }
+
+            if (is_numeric($key) && abs($value - (float) $key) < 1e-6) {
+                return $spec;
+            }
+        }
+
+        return null;
+    }
+}
