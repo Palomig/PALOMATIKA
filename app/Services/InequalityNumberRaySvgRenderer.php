@@ -18,6 +18,8 @@ class InequalityNumberRaySvgRenderer
     private const HATCH_STEP = 10;
     private const HATCH_SHIFT = 6;
     private const FONT = 'JetBrains Mono, monospace';
+    private const DEFAULT_LABEL_FONT_SIZE = 17;
+    private const DEFAULT_FRACTION_FONT_SIZE = 14;
 
     /**
      * @param array{
@@ -28,7 +30,9 @@ class InequalityNumberRaySvgRenderer
      *   axisMax?:float|int,
      *   class?:string,
      *   runtimeSvgId?:string,
-     *   fractionLabels?:array<string,array{numerator:int,denominator:int,negative?:bool}>
+     *   fractionLabels?:array<string,array{numerator:int,denominator:int,negative?:bool}>,
+     *   labelFontSize?:int,
+     *   fractionLabelYOffset?:int
      * } $config
      */
     public function render(array $config): string
@@ -46,6 +50,9 @@ class InequalityNumberRaySvgRenderer
         $class = trim((string) ($config['class'] ?? 'w-full h-auto'));
         $runtimeSvgId = trim((string) ($config['runtimeSvgId'] ?? ''));
         $fractionLabels = is_array($config['fractionLabels'] ?? null) ? $config['fractionLabels'] : [];
+        $labelFontSize = max(10, (int) ($config['labelFontSize'] ?? self::DEFAULT_LABEL_FONT_SIZE));
+        $fractionFontSize = max(10, (int) max(self::DEFAULT_FRACTION_FONT_SIZE, $labelFontSize - 3));
+        $fractionLabelYOffset = (int) ($config['fractionLabelYOffset'] ?? 0);
 
         $ray = $this->buildRay($type, $a, $b, $axisMin, $axisMax);
         $uid = substr(md5(json_encode([$type, $a, $b, $axisMin, $axisMax], JSON_UNESCAPED_UNICODE)), 0, 10);
@@ -111,7 +118,14 @@ class InequalityNumberRaySvgRenderer
             } else {
                 $svg[] = "  <circle cx=\"{$x}\" cy=\"" . self::AXIS_Y . "\" r=\"5\" fill=\"#0d1b2a\" stroke=\"#4d9fdc\" stroke-width=\"2\"/>";
             }
-            $svg[] = $this->renderBoundaryLabel($x, $value, $fractionLabels);
+            $svg[] = $this->renderBoundaryLabel(
+                $x,
+                $value,
+                $fractionLabels,
+                $labelFontSize,
+                $fractionFontSize,
+                $fractionLabelYOffset
+            );
         }
 
         $svg[] = '</svg>';
@@ -222,11 +236,18 @@ class InequalityNumberRaySvgRenderer
     /**
      * @param array<string,array{numerator:int,denominator:int,negative?:bool}> $fractionLabels
      */
-    private function renderBoundaryLabel(float $x, float $value, array $fractionLabels): string
+    private function renderBoundaryLabel(
+        float $x,
+        float $value,
+        array $fractionLabels,
+        int $labelFontSize,
+        int $fractionFontSize,
+        int $fractionLabelYOffset
+    ): string
     {
         $fraction = $this->resolveFractionLabel($value, $fractionLabels);
         if ($fraction === null) {
-            return "  <text x=\"{$x}\" y=\"" . self::LABEL_Y . "\" text-anchor=\"middle\" fill=\"#d4e8f7\" font-family=\"" . self::FONT . "\" font-size=\"16\">" . $this->formatLabel($value) . '</text>';
+            return "  <text x=\"{$x}\" y=\"" . self::LABEL_Y . "\" text-anchor=\"middle\" fill=\"#d4e8f7\" font-family=\"" . self::FONT . "\" font-size=\"{$labelFontSize}\">" . $this->formatLabel($value) . '</text>';
         }
 
         $numerator = (int) $fraction['numerator'];
@@ -234,15 +255,19 @@ class InequalityNumberRaySvgRenderer
         $negative = (bool) ($fraction['negative'] ?? false);
         $minus = $negative ? '−' : '';
         $minusX = round($x - 12, 2);
+        $minusY = 49 + $fractionLabelYOffset;
+        $numeratorY = 42 + $fractionLabelYOffset;
+        $fractionLineY = 44 + $fractionLabelYOffset;
+        $denominatorY = 56 + $fractionLabelYOffset;
 
         return implode("\n", [
             "  <g data-label-format=\"stacked-fraction\" data-fraction=\"{$numerator}/{$denominator}\">",
             $negative
-                ? "    <text x=\"{$minusX}\" y=\"49\" text-anchor=\"middle\" fill=\"#d4e8f7\" font-family=\"" . self::FONT . "\" font-size=\"16\">{$minus}</text>"
+                ? "    <text x=\"{$minusX}\" y=\"{$minusY}\" text-anchor=\"middle\" fill=\"#d4e8f7\" font-family=\"" . self::FONT . "\" font-size=\"{$labelFontSize}\">{$minus}</text>"
                 : '',
-            "    <text x=\"{$x}\" y=\"42\" text-anchor=\"middle\" fill=\"#d4e8f7\" font-family=\"" . self::FONT . "\" font-size=\"13\">{$numerator}</text>",
-            '    <line x1="' . round($x - 6, 2) . '" y1="44" x2="' . round($x + 6, 2) . '" y2="44" stroke="#d4e8f7" stroke-width="1.4"/>',
-            "    <text x=\"{$x}\" y=\"56\" text-anchor=\"middle\" fill=\"#d4e8f7\" font-family=\"" . self::FONT . "\" font-size=\"13\">{$denominator}</text>",
+            "    <text x=\"{$x}\" y=\"{$numeratorY}\" text-anchor=\"middle\" fill=\"#d4e8f7\" font-family=\"" . self::FONT . "\" font-size=\"{$fractionFontSize}\">{$numerator}</text>",
+            '    <line x1="' . round($x - 6, 2) . '" y1="' . $fractionLineY . '" x2="' . round($x + 6, 2) . '" y2="' . $fractionLineY . '" stroke="#d4e8f7" stroke-width="1.4"/>',
+            "    <text x=\"{$x}\" y=\"{$denominatorY}\" text-anchor=\"middle\" fill=\"#d4e8f7\" font-family=\"" . self::FONT . "\" font-size=\"{$fractionFontSize}\">{$denominator}</text>",
             '  </g>',
         ]);
     }

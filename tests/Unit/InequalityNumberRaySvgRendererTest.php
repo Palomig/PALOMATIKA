@@ -84,4 +84,19 @@ class InequalityNumberRaySvgRendererTest extends TestCase
 
         $this->assertSame(2, substr_count($svg, '<text '));
     }
+
+    public function test_boundary_labels_use_increased_global_font_size(): void
+    {
+        $renderer = app(InequalityNumberRaySvgRenderer::class);
+
+        $svg = $renderer->render([
+            'type' => 'open',
+            'a' => -2,
+            'b' => 6,
+            'axisMin' => -10,
+            'axisMax' => 10,
+        ]);
+
+        $this->assertSame(2, substr_count($svg, 'font-size="17"'));
+    }
 }

@@ -8,6 +8,7 @@ class Topic13RuntimeSvgMigrationService
     private const COMPACT_AXIS = '#c8dce8';
     private const COMPACT_LABEL = '#d4e8f7';
     private const COMPACT_HATCH = '#e8a838';
+    private const TOPIC13_LABEL_FONT_SIZE = 17;
 
     public function __construct(
         private readonly InequalityNumberRaySvgRenderer $numberRayRenderer
@@ -452,6 +453,7 @@ class Topic13RuntimeSvgMigrationService
         $textOnlyNone = (bool) ($config['text_only_none'] ?? false);
         $runtimeSvgId = (string) ($config['runtime_svg_id'] ?? 'topic13-b1-z10-option');
         $fractionLabels = is_array($config['fraction_labels'] ?? null) ? $config['fraction_labels'] : [];
+        $fractionLabelYOffset = (int) ($config['fraction_label_y_offset'] ?? 0);
 
         $rayConfig = $this->solutionToRayConfig($solution);
         if ($rayConfig !== null) {
@@ -464,6 +466,8 @@ class Topic13RuntimeSvgMigrationService
                 'class' => $class,
                 'runtimeSvgId' => $runtimeSvgId,
                 'fractionLabels' => $fractionLabels,
+                'labelFontSize' => self::TOPIC13_LABEL_FONT_SIZE,
+                'fractionLabelYOffset' => $fractionLabelYOffset,
             ]);
         }
 
@@ -786,6 +790,7 @@ class Topic13RuntimeSvgMigrationService
                 'mode' => 'compact_option',
                 'runtime_svg_id' => 'topic13-b1-z13-task5-option-' . ($index + 1),
                 'fraction_labels' => $fractionLabels,
+                'fraction_label_y_offset' => 3,
             ]);
 
             if (!is_string($svg) || $svg === '') {
@@ -839,6 +844,7 @@ class Topic13RuntimeSvgMigrationService
                 'mode' => 'compact_option',
                 'runtime_svg_id' => 'topic13-b1-z13-task7-option-' . ($index + 1),
                 'fraction_labels' => $fractionLabels,
+                'fraction_label_y_offset' => 3,
             ]);
 
             if (!is_string($svg) || $svg === '') {

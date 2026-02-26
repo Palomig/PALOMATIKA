@@ -211,6 +211,9 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
             $svg = (string) ($option['svg'] ?? '');
             $this->assertStringContainsString('data-label-format="stacked-fraction"', $svg);
             $this->assertStringContainsString('data-fraction="6/7"', $svg);
+            $this->assertStringContainsString('font-size="14"', $svg);
+            $this->assertStringContainsString('y="45"', $svg);
+            $this->assertStringContainsString('y="59"', $svg);
             $this->assertStringNotContainsString('-0.857', $svg);
             $this->assertStringNotContainsString('−0,857', $svg);
         }
@@ -267,6 +270,9 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
             $svg = (string) ($option['svg'] ?? '');
             $this->assertStringContainsString('data-label-format="stacked-fraction"', $svg);
             $this->assertStringContainsString('data-fraction="4/9"', $svg);
+            $this->assertStringContainsString('font-size="14"', $svg);
+            $this->assertStringContainsString('y="45"', $svg);
+            $this->assertStringContainsString('y="59"', $svg);
             $this->assertStringNotContainsString('0.444', $svg);
             $this->assertStringNotContainsString('0,444', $svg);
         }
