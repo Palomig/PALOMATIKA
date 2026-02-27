@@ -41,7 +41,15 @@ class MiniAppController extends Controller
     {
         $initData = trim((string) $request->input('initData', ''));
 
+        \Log::info('[MiniApp Auth] POST /tg/auth', [
+            'initData_length' => strlen($initData),
+            'initData_preview' => substr($initData, 0, 100),
+            'ip' => $request->ip(),
+            'ua' => substr((string) $request->userAgent(), 0, 120),
+        ]);
+
         if ($initData === '') {
+            \Log::warning('[MiniApp Auth] Empty initData');
             return redirect('/tg/')->with('error', 'Нет данных Telegram для входа');
         }
 
@@ -80,6 +88,10 @@ class MiniAppController extends Controller
         $calculatedHash = hash_hmac('sha256', $dataCheckString, $secretKey);
 
         if (!hash_equals($calculatedHash, $providedHash)) {
+            \Log::warning('[MiniApp Auth] HMAC mismatch', [
+                'calculated' => substr($calculatedHash, 0, 16),
+                'provided' => substr($providedHash, 0, 16),
+            ]);
             return redirect('/tg/')->with('error', 'Неверная подпись Telegram');
         }
 
@@ -119,12 +131,16 @@ class MiniAppController extends Controller
         Auth::login($user, true);
         $request->session()->regenerate();
 
-        // Redirect based on onboarding status
-        if (!$user->onboarding_completed_at) {
-            return redirect('/tg/onboarding');
-        }
+        $redirectTo = !$user->onboarding_completed_at ? '/tg/onboarding' : '/tg/dashboard';
 
-        return redirect('/tg/dashboard');
+        \Log::info('[MiniApp Auth] Success', [
+            'user_id' => $user->id,
+            'telegram_id' => $telegramId,
+            'redirect' => $redirectTo,
+            'session_id' => $request->session()->getId(),
+        ]);
+
+        return redirect($redirectTo);
     }
 
     /**
