@@ -329,15 +329,21 @@ function homePage() {
     handleInvite() {
       const tg = window.Telegram?.WebApp;
       const botUsername = '{{ config("services.telegram.bot_username", "palomatika_auth_bot") }}';
-      const link = `https://t.me/${botUsername}/app`;
-      const text = 'Готовься к ОГЭ по математике бесплатно! ' + link;
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(text).then(() => {
-          if (tg && tg.showAlert) { tg.showAlert('Ссылка скопирована! Отправь другу в чат'); }
-          else { alert('Ссылка скопирована!'); }
-        });
-      } else if (navigator.share) {
-        navigator.share({ title: 'palomatika — ОГЭ', text: text });
+      const appLink = `https://t.me/${botUsername}/app`;
+      const text = 'Решай реальные задания ОГЭ по математике — бесплатно! Проверь свой уровень 🎯';
+
+      if (tg && tg.openTelegramLink) {
+        // Native Telegram share dialog — user picks a chat, message is sent with the link
+        const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(appLink)}&text=${encodeURIComponent(text)}`;
+        tg.openTelegramLink(shareUrl);
+      } else {
+        // Fallback outside Telegram
+        const fullText = text + '\n' + appLink;
+        if (navigator.share) {
+          navigator.share({ title: 'palomatika — ОГЭ', text: fullText });
+        } else if (navigator.clipboard) {
+          navigator.clipboard.writeText(fullText).then(() => alert('Ссылка скопирована!'));
+        }
       }
     },
   };
