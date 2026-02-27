@@ -310,14 +310,14 @@ function homePage() {
       const tg = window.Telegram?.WebApp;
       const botUsername = '{{ config("services.telegram.bot_username", "palomatika_auth_bot") }}';
       const link = `https://t.me/${botUsername}/app`;
-      const text = 'Готовься к ОГЭ по математике бесплатно!';
-      if (tg && tg.switchInlineQuery) {
-        // Share via inline query — stays in Mini App
-        tg.switchInlineQuery(text + ' ' + link, ['users']);
+      const text = 'Готовься к ОГЭ по математике бесплатно! ' + link;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+          if (tg && tg.showAlert) { tg.showAlert('Ссылка скопирована! Отправь другу в чат'); }
+          else { alert('Ссылка скопирована!'); }
+        });
       } else if (navigator.share) {
-        navigator.share({ title: 'palomatika — ОГЭ', text: text, url: link });
-      } else if (navigator.clipboard) {
-        navigator.clipboard.writeText(link).then(() => alert('Ссылка скопирована!'));
+        navigator.share({ title: 'palomatika — ОГЭ', text: text });
       }
     },
   };
