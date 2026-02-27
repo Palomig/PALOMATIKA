@@ -29,32 +29,9 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-// Landing
+// Landing (browser only — Telegram Mini App uses /tg/)
 Route::get('/', function () {
-    $lastAttempt = null;
-    $nextVariantHash = null;
-
-    if (Auth::check()) {
-        $userId = Auth::id();
-
-        $lastAttempt = \App\Models\OgeAttempt::where('student_id', $userId)
-            ->where('status', 'scored')
-            ->latest('submitted_at')
-            ->with(['variant', 'scorings'])
-            ->first();
-
-        $solvedVariantIds = \App\Models\OgeAttempt::where('student_id', $userId)
-            ->whereIn('status', ['scored', 'submitted'])
-            ->pluck('variant_id');
-
-        $nextVariant = \App\Models\OgeVariant::whereNotIn('id', $solvedVariantIds)
-            ->orderBy('id')
-            ->first();
-
-        $nextVariantHash = $nextVariant?->hash;
-    }
-
-    return view('welcome', compact('lastAttempt', 'nextVariantHash'));
+    return view('welcome');
 })->name('landing');
 
 Route::get('/materials', [JarvisMaterialPageController::class, 'index'])->name('materials.index');

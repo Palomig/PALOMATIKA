@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script>if(window.Telegram&&window.Telegram.WebApp&&window.Telegram.WebApp.initData){window.location.replace('/tg/')}</script>
     <title>PALOMATIKA - Подготовка к ОГЭ по математике</title>
     <meta name="description" content="PALOMATIKA помогает сдать ОГЭ по математике через пазловый формат задач, диагностику пробелов и адаптивный трек обучения.">
     @include('partials.head-config')
@@ -54,119 +52,11 @@
             }
         }
 
-        /* Mini App countdown animation */
-        @keyframes countdownPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-        }
-        .countdown-tick {
-            animation: countdownPulse 1s ease-in-out;
-        }
     </style>
 </head>
 <body x-data="landingPage()" class="landing-bg min-h-screen text-white">
 
-    {{-- ==================== TELEGRAM MINI APP LANDING ==================== --}}
-    <template x-if="isMiniApp">
-        <div class="min-h-screen flex flex-col items-center justify-center px-5 py-8 relative">
-            <div class="absolute inset-0 pointer-events-none grid-pattern"></div>
-
-            <div class="relative z-10 w-full max-w-sm text-center space-y-8">
-
-                {{-- Loading state --}}
-                <div x-show="miniAppLoading" class="space-y-4">
-                    <svg class="animate-spin h-8 w-8 text-coral mx-auto" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    <p class="text-gray-400">Входим...</p>
-                </div>
-
-                {{-- Main content (shown after login) --}}
-                <div x-show="!miniAppLoading" x-cloak class="space-y-8">
-
-                    {{-- Title --}}
-                    <div>
-                        <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-coral/20 mb-4">
-                            <svg class="w-7 h-7 text-coral" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                            </svg>
-                        </div>
-                        <h1 class="text-xl font-bold text-white">ОГЭ по математике</h1>
-                        <p class="text-gray-400 text-sm mt-1">2 июня 2026</p>
-                    </div>
-
-                    {{-- Countdown --}}
-                    <div class="grid grid-cols-4 gap-3">
-                        <div class="bg-dark-light/80 border border-white/10 rounded-2xl py-4 px-2">
-                            <div class="text-3xl font-bold text-white tabular-nums" x-text="countdownDays">--</div>
-                            <div class="text-xs text-gray-400 mt-1 uppercase tracking-wide">дней</div>
-                        </div>
-                        <div class="bg-dark-light/80 border border-white/10 rounded-2xl py-4 px-2">
-                            <div class="text-3xl font-bold text-white tabular-nums" x-text="countdownHours">--</div>
-                            <div class="text-xs text-gray-400 mt-1 uppercase tracking-wide">часов</div>
-                        </div>
-                        <div class="bg-dark-light/80 border border-white/10 rounded-2xl py-4 px-2">
-                            <div class="text-3xl font-bold text-coral tabular-nums" x-text="countdownMinutes">--</div>
-                            <div class="text-xs text-gray-400 mt-1 uppercase tracking-wide">минут</div>
-                        </div>
-                        <div class="bg-dark-light/80 border border-white/10 rounded-2xl py-4 px-2">
-                            <div class="text-3xl font-bold text-coral tabular-nums" x-text="countdownSeconds">--</div>
-                            <div class="text-xs text-gray-400 mt-1 uppercase tracking-wide">секунд</div>
-                        </div>
-                    </div>
-
-                    {{-- CTA Button --}}
-                    @if(!empty($nextVariantHash))
-                        <a href="/oge/{{ $nextVariantHash }}"
-                           class="block w-full bg-coral hover:bg-coral-dark text-white font-bold text-lg py-4 rounded-xl shadow-glow-coral transition-all active:scale-[0.98]">
-                            Решить вариант
-                            <svg class="inline-block w-5 h-5 ml-1 -mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                            </svg>
-                        </a>
-                    @else
-                        <div class="w-full bg-dark-lighter border border-white/10 text-gray-400 font-medium text-base py-4 rounded-xl text-center">
-                            Все варианты решены
-                        </div>
-                    @endif
-
-                    {{-- Last result --}}
-                    @if(isset($lastAttempt) && $lastAttempt)
-                        @php
-                            $correct = $lastAttempt->scorings->where('is_correct', true)->count();
-                            $total = $lastAttempt->scorings->count();
-                            $date = $lastAttempt->submitted_at?->translatedFormat('j F') ?? '';
-                            $hash = $lastAttempt->variant?->hash ?? '';
-                            $pct = $total > 0 ? round($correct / $total * 100) : 0;
-                        @endphp
-                        <a href="/oge/{{ $hash }}" class="block bg-dark-light/60 border border-white/10 rounded-xl p-4 hover:bg-dark-light/80 transition">
-                            <div class="flex items-center justify-between">
-                                <div class="text-left">
-                                    <p class="text-xs text-gray-400 uppercase tracking-wide">Последний результат</p>
-                                    <p class="text-lg font-bold text-white mt-1">{{ $correct }}/{{ $total }} правильных</p>
-                                </div>
-                                <div class="flex-shrink-0 ml-4">
-                                    <div class="w-14 h-14 rounded-full border-4 flex items-center justify-center text-sm font-bold
-                                        {{ $pct >= 70 ? 'border-success text-success' : ($pct >= 40 ? 'border-warning text-warning' : 'border-danger text-danger') }}">
-                                        {{ $pct }}%
-                                    </div>
-                                </div>
-                            </div>
-                            @if($date)
-                                <p class="text-xs text-gray-500 mt-2 text-left">{{ $date }}</p>
-                            @endif
-                        </a>
-                    @endif
-
-                </div>
-            </div>
-        </div>
-    </template>
-
-    {{-- ==================== STANDARD LANDING PAGE ==================== --}}
-    <template x-if="!isMiniApp">
-        <div>
+    <div>
             <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 bg-coral text-white px-4 py-2 rounded-lg">
                 Перейти к содержимому
             </a>
@@ -493,21 +383,10 @@
                 </div>
             </footer>
         </div>
-    </template>
 
     <script>
         function landingPage() {
             return {
-                // Mini App state
-                isMiniApp: false,
-                miniAppLoading: true,
-                countdownDays: '--',
-                countdownHours: '--',
-                countdownMinutes: '--',
-                countdownSeconds: '--',
-                _countdownInterval: null,
-
-                // Standard landing state
                 scrolled: false,
                 scrollTicking: false,
                 mobileMenuOpen: false,
@@ -517,88 +396,13 @@
                 messageClass: 'text-gray-300',
 
                 init() {
-                    const webApp = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
-                    const initData = webApp && typeof webApp.initData === 'string' ? webApp.initData.trim() : '';
-
-                    if (webApp && webApp.platform && webApp.platform !== 'unknown') {
-                        this.isMiniApp = true;
-
-                        if (typeof webApp.ready === 'function') webApp.ready();
-                        if (typeof webApp.expand === 'function') webApp.expand();
-
-                        this.startCountdown();
-
-                        // If user is already authenticated (server set data), skip login
-                        @auth
-                            this.miniAppLoading = false;
-                        @else
-                            if (initData) {
-                                this.performMiniAppLogin(webApp, initData);
-                            } else {
-                                this.miniAppLoading = false;
-                            }
-                        @endauth
-                    } else {
-                        // Standard landing page
-                        this.handleScroll();
-                        window.addEventListener('scroll', () => this.handleScroll(), { passive: true });
-                        window.addEventListener('resize', () => {
-                            if (window.innerWidth >= 640) this.mobileMenuOpen = false;
-                        });
-                    }
+                    this.handleScroll();
+                    window.addEventListener('scroll', () => this.handleScroll(), { passive: true });
+                    window.addEventListener('resize', () => {
+                        if (window.innerWidth >= 640) this.mobileMenuOpen = false;
+                    });
                 },
 
-                async performMiniAppLogin(webApp, initData) {
-                    try {
-                        const response = await fetch('/api/auth/telegram/webapp-login', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/json',
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                            },
-                            body: JSON.stringify({
-                                initData,
-                                initDataUnsafe: webApp.initDataUnsafe || null,
-                                startParam: (webApp.initDataUnsafe && webApp.initDataUnsafe.start_param)
-                                    ? webApp.initDataUnsafe.start_param : null,
-                            })
-                        });
-
-                        const data = await response.json();
-
-                        if (response.ok && data.success) {
-                            // Reload to get server-side data (lastAttempt, nextVariantHash)
-                            window.location.reload();
-                            return;
-                        }
-
-                        // Login failed — show content anyway without result data
-                        this.miniAppLoading = false;
-                    } catch (err) {
-                        this.miniAppLoading = false;
-                    }
-                },
-
-                startCountdown() {
-                    // OGE Math exam: June 2, 2026, 08:00 Moscow time (UTC+3)
-                    const target = new Date('2026-06-02T05:00:00Z').getTime();
-
-                    const update = () => {
-                        const now = Date.now();
-                        const diff = Math.max(0, target - now);
-
-                        this.countdownDays = String(Math.floor(diff / 86400000)).padStart(2, '0');
-                        this.countdownHours = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
-                        this.countdownMinutes = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
-                        this.countdownSeconds = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
-                    };
-
-                    update();
-                    this._countdownInterval = setInterval(update, 1000);
-                },
-
-                // Standard landing page methods
                 onScroll() {
                     this.scrolled = window.scrollY > 10;
                 },
