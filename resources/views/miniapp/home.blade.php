@@ -181,7 +181,7 @@
 
   <div class="hero">
     <div class="hero-eyebrow">математика · 9 класс</div>
-    <h1 class="hero-title">Готов к<br><em>экзамену?</em></h1>
+    <h1 class="hero-title">Готов к<br><em>ОГЭ?</em></h1>
     <p class="hero-sub">Проверь себя на реальных заданиях ОГЭ — бесплатно</p>
 
     <div class="countdown-wrap">
@@ -206,7 +206,7 @@
           <span class="cd-label">секунд</span>
         </div>
       </div>
-      <div class="countdown-date">Экзамен: <strong>2 июня 2026, 08:00 МСК</strong></div>
+      <div class="countdown-date">Экзамен: <strong>2 июня 2026, 10:00 МСК</strong></div>
     </div>
   </div>
 
@@ -256,7 +256,7 @@
 @push('scripts')
 <script>
 function homePage() {
-  const examDate = new Date('2026-06-02T08:00:00+03:00');
+  const examDate = new Date('2026-06-02T10:00:00+03:00');
   return {
     days: 0, hours: 0, mins: 0, secs: 0,
     loading: false,
@@ -296,9 +296,10 @@ function homePage() {
         } else if (data.success || res.ok) {
           window.location.href = '/tg/dashboard';
         } else {
-          alert(data.error || 'Ошибка авторизации');
+          alert(data.message || data.error || 'Ошибка авторизации');
         }
       } catch (e) {
+        console.error('Login error:', e);
         alert('Ошибка соединения. Попробуйте ещё раз.');
       } finally {
         this.loading = false;
@@ -307,13 +308,16 @@ function homePage() {
 
     handleInvite() {
       const tg = window.Telegram?.WebApp;
-      const refCode = '{{ auth()->user()?->referral_code ?? "" }}';
       const botUsername = '{{ config("services.telegram.bot_username", "palomatika_auth_bot") }}';
-      const link = `https://t.me/${botUsername}?start=ref_${refCode}`;
-      if (tg) {
-        tg.openTelegramLink(link);
-      } else {
-        window.open(link, '_blank');
+      const link = `https://t.me/${botUsername}/app`;
+      const text = 'Готовься к ОГЭ по математике бесплатно!';
+      if (tg && tg.switchInlineQuery) {
+        // Share via inline query — stays in Mini App
+        tg.switchInlineQuery(text + ' ' + link, ['users']);
+      } else if (navigator.share) {
+        navigator.share({ title: 'palomatika — ОГЭ', text: text, url: link });
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(link).then(() => alert('Ссылка скопирована!'));
       }
     },
   };

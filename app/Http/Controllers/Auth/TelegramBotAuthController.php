@@ -292,18 +292,51 @@ class TelegramBotAuthController extends Controller
             return response()->json(['ok' => false]);
         }
 
-        // Handle /start command with token
+        // Handle /start command
         if (isset($update['message']['text'])) {
             $text = $update['message']['text'];
             $from = $update['message']['from'] ?? null;
 
             if (preg_match('/^\/start\s+(.+)$/', $text, $matches)) {
-                $token = $matches[1];
-                $this->handleStartCommand($token, $from);
+                $param = $matches[1];
+                // Skip referral links — don't treat them as auth tokens
+                if (str_starts_with($param, 'ref_')) {
+                    $this->sendWelcomeMessage($from);
+                } else {
+                    $this->handleStartCommand($param, $from);
+                }
+            } elseif (trim($text) === '/start') {
+                $this->sendWelcomeMessage($from);
             }
         }
 
         return response()->json(['ok' => true]);
+    }
+
+    /**
+     * Send welcome message for plain /start or referral links.
+     */
+    private function sendWelcomeMessage(?array $from): void
+    {
+        if (!$from) {
+            return;
+        }
+
+        $name = $from['first_name'] ?? 'друг';
+        $botUsername = config('services.telegram.bot_username', 'palomatika_auth_bot');
+
+        $this->sendTelegramMessage(
+            $from['id'],
+            "Привет, {$name}! 👋\n\nЯ бот palomatika — помогаю готовиться к ОГЭ по математике.\n\nОткрой мини-приложение, чтобы начать тренировку!",
+            [
+                'inline_keyboard' => [[
+                    [
+                        'text' => '🚀 Открыть palomatika',
+                        'web_app' => ['url' => url('/tg/')],
+                    ],
+                ]],
+            ]
+        );
     }
 
     /**

@@ -213,7 +213,7 @@
 @push('scripts')
 <script>
 function dashboardPage() {
-  const examDate = new Date('2026-06-02T08:00:00+03:00');
+  const examDate = new Date('2026-06-02T10:00:00+03:00');
   return {
     daysLeft: Math.max(0, Math.floor((examDate - new Date()) / 86400000)),
 
@@ -234,10 +234,15 @@ function dashboardPage() {
     handleInvite() {
       const tg = window.Telegram?.WebApp;
       const botUsername = '{{ config("services.telegram.bot_username", "palomatika_auth_bot") }}';
-      const refCode = '{{ $user->referral_code ?? "" }}';
-      const link = `https://t.me/${botUsername}?start=ref_${refCode}`;
-      if (tg) { tg.openTelegramLink(link); }
-      else { window.open(link, '_blank'); }
+      const link = `https://t.me/${botUsername}/app`;
+      const text = 'Готовься к ОГЭ по математике бесплатно!';
+      if (tg && tg.switchInlineQuery) {
+        tg.switchInlineQuery(text + ' ' + link, ['users']);
+      } else if (navigator.share) {
+        navigator.share({ title: 'palomatika — ОГЭ', text: text, url: link });
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(link).then(() => alert('Ссылка скопирована!'));
+      }
     },
   };
 }
