@@ -251,8 +251,6 @@
     <strong>Бесплатно</strong> · задания из банка ФИПИ · результат сразу
   </div>
 
-  {{-- TEMPORARY DEBUG — remove after fixing auth --}}
-  <div id="tg-debug" style="margin-top:20px;padding:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;font-size:11px;color:#94a3b8;word-break:break-all;"></div>
 
 </div>
 @endsection
@@ -271,29 +269,11 @@ function homePage() {
       this.updateCountdown();
       setInterval(() => this.updateCountdown(), 1000);
 
-      // Debug info
-      const dbg = document.getElementById('tg-debug');
-      if (dbg) {
-        const tg = window.Telegram?.WebApp;
-        const lines = [];
-        lines.push('auth: {{ auth()->check() ? "YES (id=" . auth()->id() . ")" : "NO" }}');
-        lines.push('session_err: {{ session("error", "none") }}');
-        lines.push('tg.WebApp: ' + (tg ? 'YES' : 'NO'));
-        lines.push('tg.initData: ' + (tg?.initData ? tg.initData.substring(0, 80) + '...' : 'EMPTY'));
-        lines.push('tg.initData.length: ' + (tg?.initData?.length || 0));
-        lines.push('tg.platform: ' + (tg?.platform || '?'));
-        lines.push('tg.version: ' + (tg?.version || '?'));
-        lines.push('cookies: ' + document.cookie.substring(0, 100));
-        lines.push('url: ' + location.href);
-        dbg.innerHTML = lines.join('<br>');
-      }
-
-      // Show flash error from server (e.g. failed HMAC)
       @if(session('error'))
       {
-        const tg2 = window.Telegram?.WebApp;
+        const tg = window.Telegram?.WebApp;
         const errMsg = @json(session('error'));
-        if (tg2 && tg2.showAlert) { tg2.showAlert(errMsg); }
+        if (tg && tg.showAlert) { tg.showAlert(errMsg); }
         else { alert(errMsg); }
       }
       @endif
