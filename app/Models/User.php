@@ -36,6 +36,11 @@ class User extends Authenticatable
         'trial_ends_at',
         'last_active_at',
         'timezone',
+        'grade_num',
+        'grade_letter',
+        'school_number',
+        'city',
+        'onboarding_completed_at',
     ];
 
     protected $hidden = [
@@ -51,6 +56,7 @@ class User extends Authenticatable
         'trial_ends_at' => 'datetime',
         'last_active_at' => 'datetime',
         'has_ai_addon' => 'boolean',
+        'onboarding_completed_at' => 'datetime',
     ];
 
     // Relationships

@@ -1,0 +1,907 @@
+@extends('layouts.miniapp')
+@section('title', $title . ' — palomatika')
+
+@push('head')
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Size2-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+@endpush
+
+@push('styles')
+  /* ───── TEST PAGE LAYOUT ───── */
+  .test-page {
+    min-height: 100dvh;
+    max-width: 480px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    padding-top: calc(var(--safe-top));
+  }
+
+  /* ───── TOP BAR ───── */
+  .test-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px 14px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    flex-shrink: 0;
+  }
+  .test-back-btn {
+    width: 36px; height: 36px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: background 0.15s;
+    flex-shrink: 0;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .test-back-btn:active { background: var(--surface2, var(--border)); }
+
+  .test-topbar-center { text-align: center; flex: 1; min-width: 0; }
+  .test-variant-title {
+    font-family: var(--display);
+    font-size: 14px;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .test-variant-sub {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 600;
+    margin-top: 1px;
+  }
+
+  .test-timer {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 6px 12px;
+    font-family: var(--display);
+    font-size: 14px;
+    color: var(--text);
+    min-width: 70px;
+    text-align: center;
+    flex-shrink: 0;
+    transition: color 0.3s, border-color 0.3s;
+  }
+  .test-timer.warn { color: var(--red); border-color: var(--red-bd, rgba(240,90,90,0.4)); }
+
+  /* ───── PROGRESS ───── */
+  .test-progress {
+    padding: 12px 16px 0;
+    background: var(--bg);
+    flex-shrink: 0;
+  }
+  .test-progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 7px;
+  }
+  .test-progress-track {
+    height: 4px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .test-progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 99px;
+    transition: width 0.35s ease;
+  }
+
+  /* ───── NAV DOTS ───── */
+  .test-nav {
+    padding: 12px 16px;
+    overflow-x: auto;
+    display: flex;
+    gap: 6px;
+    scrollbar-width: none;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .test-nav::-webkit-scrollbar { display: none; }
+
+  .test-dot {
+    width: 32px; height: 32px;
+    border-radius: 9px;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--muted);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.15s;
+    user-select: none;
+    -webkit-user-select: none;
+    position: relative;
+  }
+  .test-dot.answered {
+    background: var(--accent-bg, rgba(79,142,247,0.1));
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .test-dot.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .test-dot .dot-check {
+    position: absolute;
+    top: -4px; right: -4px;
+    width: 14px; height: 14px;
+    background: var(--green);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8px;
+    color: #fff;
+    line-height: 1;
+  }
+
+  /* ───── QUESTION AREA ───── */
+  .test-question {
+    flex: 1;
+    padding: 20px 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .q-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .q-num {
+    font-family: var(--display);
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .q-topic-badge {
+    background: var(--accent-bg, rgba(79,142,247,0.08));
+    color: var(--accent);
+    font-size: 10px;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.04em;
+  }
+
+  .q-text {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* KaTeX expression block */
+  .q-expression {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 20px 16px;
+    text-align: center;
+    font-size: 20px;
+    color: var(--text);
+    overflow-x: auto;
+  }
+
+  /* SVG image */
+  .q-svg-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .q-svg-wrap svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* ───── ANSWER SECTION ───── */
+  .answer-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 16px;
+  }
+  .answer-label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  /* Choice options */
+  .test-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .test-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 14px;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .test-option:active { transform: scale(0.98); }
+  .test-option.selected {
+    background: var(--accent-bg, rgba(79,142,247,0.08));
+    border-color: var(--accent);
+  }
+  .test-option-letter {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: var(--surface);
+    border: 1.5px solid var(--muted2, var(--border));
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--display);
+    font-size: 12px;
+    color: var(--muted);
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+  .test-option.selected .test-option-letter {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .test-option-text {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  /* Text input */
+  .answer-input {
+    width: 100%;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-family: var(--body);
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text);
+    text-align: center;
+    letter-spacing: 0.1em;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    transition: border-color 0.2s;
+  }
+  .answer-input:focus { border-color: var(--accent); }
+  .answer-input::placeholder {
+    color: var(--muted2, var(--muted));
+    font-size: 14px;
+    letter-spacing: 0;
+    font-weight: 600;
+  }
+  .answer-hint {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 600;
+    text-align: center;
+    margin-top: 8px;
+  }
+
+  /* ───── BOTTOM BAR ───── */
+  .test-bottom {
+    padding: 12px 16px calc(12px + var(--safe-bottom));
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .test-btn-prev {
+    flex: 0 0 52px;
+    height: 52px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--r);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: background 0.15s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .test-btn-prev:active { background: var(--surface2, var(--border)); }
+  .test-btn-prev:disabled { opacity: 0.35; cursor: default; }
+
+  .test-btn-next {
+    flex: 1;
+    height: 52px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--r);
+    font-family: var(--body);
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.12s;
+    -webkit-appearance: none;
+    appearance: none;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .test-btn-next:active { transform: scale(0.98); }
+  .test-btn-next.finish { background: var(--green); }
+
+  /* ───── CONFIRM MODAL ───── */
+  .test-modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 100;
+    display: flex; align-items: flex-end;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+  }
+  .test-modal-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .test-modal {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    background: var(--surface);
+    border-radius: 20px 20px 0 0;
+    padding: 24px 20px calc(24px + var(--safe-bottom));
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+  .test-modal-overlay.open .test-modal { transform: translateY(0); }
+
+  .test-modal-handle {
+    width: 36px; height: 4px;
+    background: var(--border);
+    border-radius: 99px;
+    margin: 0 auto 20px;
+  }
+  .test-modal-title {
+    font-family: var(--display);
+    font-size: 20px;
+    color: var(--text);
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  .test-modal-sub {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+  .test-modal-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .test-modal-stat {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+  }
+  .test-modal-stat-val {
+    font-family: var(--display);
+    font-size: 22px;
+    color: var(--text);
+  }
+  .test-modal-stat-lbl {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 2px;
+  }
+  .test-modal-confirm {
+    width: 100%;
+    background: var(--green);
+    color: #fff;
+    border: none;
+    border-radius: var(--r);
+    padding: 16px;
+    font-family: var(--body);
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    margin-bottom: 10px;
+    -webkit-appearance: none;
+  }
+  .test-modal-confirm:active { opacity: 0.85; }
+  .test-modal-confirm:disabled { opacity: 0.6; cursor: default; }
+
+  .test-modal-cancel {
+    width: 100%;
+    background: transparent;
+    color: var(--muted);
+    border: 1.5px solid var(--border);
+    border-radius: var(--r);
+    padding: 14px;
+    font-family: var(--body);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    -webkit-appearance: none;
+  }
+  .test-modal-cancel:active { background: var(--surface2, var(--border)); }
+
+  /* transition helper */
+  .q-anim {
+    opacity: 0;
+    animation: fadeUp 0.3s ease forwards;
+  }
+@endpush
+
+@section('body')
+<div class="test-page"
+     x-data="testApp()"
+     x-init="init()"
+     x-cloak>
+
+  {{-- ───── TOP BAR ───── --}}
+  <div class="test-topbar">
+    <button class="test-back-btn" @click="confirmExit()">&#8249;</button>
+    <div class="test-topbar-center">
+      <div class="test-variant-title">{{ $title }}</div>
+      <div class="test-variant-sub">{{ $mode === 'full' ? 'ОГЭ' : 'Мини-тест' }} &middot; Математика &middot; 2026</div>
+    </div>
+    <div class="test-timer" :class="{ warn: elapsed >= 3600 }" x-text="timerText"></div>
+  </div>
+
+  {{-- ───── PROGRESS ───── --}}
+  <div class="test-progress">
+    <div class="test-progress-info">
+      <span x-text="'Задание ' + (current + 1) + ' из ' + total"></span>
+      <span x-text="'отвечено: ' + answeredCount"></span>
+    </div>
+    <div class="test-progress-track">
+      <div class="test-progress-fill" :style="'width:' + progressPct + '%'"></div>
+    </div>
+  </div>
+
+  {{-- ───── NAV DOTS ───── --}}
+  <div class="test-nav" x-ref="navScroll">
+    <template x-for="(task, idx) in tasks" :key="idx">
+      <div class="test-dot"
+           :class="{
+             'active': idx === current,
+             'answered': idx !== current && answers[task.task_number] !== undefined && answers[task.task_number] !== ''
+           }"
+           @click="goTo(idx)">
+        <span x-text="task.task_number"></span>
+        <template x-if="answers[task.task_number] !== undefined && answers[task.task_number] !== '' && idx !== current">
+          <div class="dot-check">&#10003;</div>
+        </template>
+      </div>
+    </template>
+  </div>
+
+  {{-- ───── QUESTION AREA ───── --}}
+  <div class="test-question" x-ref="questionArea">
+    <template x-if="currentTask">
+
+      <div :key="current">
+        {{-- Meta --}}
+        <div class="q-meta q-anim" :style="'animation-delay: 0s'">
+          <div class="q-num" x-text="'Задание ' + currentTask.task_number"></div>
+          <div class="q-topic-badge" x-text="topicName(currentTask.topic_id)"></div>
+        </div>
+
+        {{-- Instruction text --}}
+        <div class="q-text q-anim" :style="'animation-delay: 0.05s; margin-top: 16px'"
+             x-html="currentTask.instruction || currentTask.text || ''"></div>
+
+        {{-- Expression (KaTeX) --}}
+        <template x-if="currentTask.type === 'expression' && currentTask.expression">
+          <div class="q-expression q-anim" :style="'animation-delay: 0.08s; margin-top: 16px'"
+               x-ref="katexExpr"
+               :data-expr="currentTask.expression"
+               x-effect="$nextTick(() => renderTaskMath())">
+            <span x-text="'$' + currentTask.expression + '$'"></span>
+          </div>
+        </template>
+
+        {{-- SVG image --}}
+        <template x-if="currentTask.svg">
+          <div class="q-svg-wrap q-anim" :style="'animation-delay: 0.08s; margin-top: 16px'"
+               x-html="currentTask.svg"></div>
+        </template>
+
+        {{-- Answer section --}}
+        <div class="answer-section q-anim" :style="'animation-delay: 0.1s; margin-top: 16px'">
+
+          {{-- Choice type --}}
+          <template x-if="currentTask.type === 'choice' || currentTask.type === 'simple_choice' || currentTask.type === 'fraction_choice' || currentTask.type === 'interval_choice'">
+            <div>
+              <div class="answer-label">Выбери ответ</div>
+              <div class="test-options">
+                <template x-for="(opt, oi) in (currentTask.options || [])" :key="oi">
+                  <div class="test-option"
+                       :class="{ 'selected': answers[currentTask.task_number] === String(oi) }"
+                       @click="selectOption(oi)">
+                    <div class="test-option-letter" x-text="['А','Б','В','Г','Д','Е'][oi] || (oi+1)"></div>
+                    <div class="test-option-text" x-html="opt.label || opt.text || opt"></div>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </template>
+
+          {{-- Matching type (simplified as choice) --}}
+          <template x-if="currentTask.type === 'matching' || currentTask.type === 'matching_signs'">
+            <div>
+              <div class="answer-label">Введи ответ</div>
+              <input class="answer-input"
+                     type="text"
+                     inputmode="text"
+                     placeholder="Например: АБВ"
+                     autocomplete="off"
+                     :value="answers[currentTask.task_number] || ''"
+                     @input.debounce.300ms="saveInput($event.target.value)"
+                     x-ref="answerInput">
+              <div class="answer-hint">Введи буквы по порядку</div>
+            </div>
+          </template>
+
+          {{-- Input type (expression, geometry, word_problem, etc.) --}}
+          <template x-if="currentTask.type !== 'choice' && currentTask.type !== 'simple_choice' && currentTask.type !== 'fraction_choice' && currentTask.type !== 'interval_choice' && currentTask.type !== 'matching' && currentTask.type !== 'matching_signs'">
+            <div>
+              <div class="answer-label">Введи ответ</div>
+              <input class="answer-input"
+                     type="text"
+                     inputmode="decimal"
+                     placeholder="Ответ"
+                     autocomplete="off"
+                     :value="answers[currentTask.task_number] || ''"
+                     @input.debounce.300ms="saveInput($event.target.value)"
+                     x-ref="answerInput">
+              <div class="answer-hint">Введи число и переходи дальше</div>
+            </div>
+          </template>
+
+        </div>
+      </div>
+
+    </template>
+  </div>
+
+  {{-- ───── BOTTOM BAR ───── --}}
+  <div class="test-bottom">
+    <button class="test-btn-prev" :disabled="current === 0" @click="prev()">&#8249;</button>
+    <button class="test-btn-next"
+            :class="{ 'finish': current === total - 1 }"
+            @click="next()">
+      <span x-text="current === total - 1 ? 'Завершить тест' : 'Следующее'"></span>
+      <span>&#8250;</span>
+    </button>
+  </div>
+
+  {{-- ───── FINISH MODAL ───── --}}
+  <div class="test-modal-overlay" :class="{ 'open': showModal }" @click.self="showModal = false">
+    <div class="test-modal">
+      <div class="test-modal-handle"></div>
+      <div class="test-modal-title">Завершить тест?</div>
+      <div class="test-modal-sub">
+        <template x-if="answeredCount < total">
+          <span>
+            Ты ответил на <b x-text="answeredCount"></b> из <span x-text="total"></span> заданий.<br>
+            Пропущенные будут засчитаны как без ответа.
+          </span>
+        </template>
+        <template x-if="answeredCount >= total">
+          <span>Все задания отвечены. Отправить на проверку?</span>
+        </template>
+      </div>
+      <div class="test-modal-stats">
+        <div class="test-modal-stat">
+          <div class="test-modal-stat-val" x-text="answeredCount"></div>
+          <div class="test-modal-stat-lbl">отвечено</div>
+        </div>
+        <div class="test-modal-stat">
+          <div class="test-modal-stat-val" x-text="total - answeredCount"></div>
+          <div class="test-modal-stat-lbl">пропущено</div>
+        </div>
+      </div>
+      <button class="test-modal-confirm" @click="submitTest()" :disabled="submitting">
+        <span x-text="submitting ? 'Отправка...' : 'Завершить и посмотреть результат'"></span>
+      </button>
+      <button class="test-modal-cancel" @click="showModal = false">Продолжить тест</button>
+    </div>
+  </div>
+
+</div>
+@endsection
+
+@push('scripts')
+<script>
+  // Topic name mapping
+  const TOPIC_NAMES = {
+    '06': 'Дроби и степени',
+    '07': 'Числа',
+    '08': 'Корни и степени',
+    '09': 'Уравнения',
+    '10': 'Вероятность',
+    '11': 'Графики',
+    '12': 'Формулы',
+    '13': 'Неравенства',
+    '14': 'Прогрессии',
+    '15': 'Треугольники',
+    '16': 'Окружность',
+    '17': 'Четырёхугольники',
+    '18': 'Клетчатая бумага',
+    '19': 'Высказывания',
+  };
+
+  function testApp() {
+    return {
+      // Data from server
+      tasks: @json(
+        collect($tasks)->map(function($t) {
+          // Strip answer from client-side data for security
+          $safe = $t;
+          unset($safe['answer']);
+          return $safe;
+        })->values()
+      ),
+      attemptId: @json($attempt->id),
+
+      // State
+      current: 0,
+      answers: @json($answers ?? (object)[]),
+      _lastCommitted: @json($answers ?? (object)[]),
+      showModal: false,
+      submitting: false,
+      elapsed: 0,
+      _timerInterval: null,
+      _commitTimeout: null,
+
+      // Computed
+      get total() { return this.tasks.length; },
+      get currentTask() { return this.tasks[this.current] || null; },
+      get answeredCount() {
+        return Object.values(this.answers).filter(v => v !== undefined && v !== '' && v !== null).length;
+      },
+      get progressPct() {
+        return this.total > 0 ? Math.round((this.answeredCount / this.total) * 100) : 0;
+      },
+      get timerText() {
+        const m = Math.floor(this.elapsed / 60);
+        const s = this.elapsed % 60;
+        return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+      },
+
+      // Init
+      init() {
+        // Start stopwatch
+        this._timerInterval = setInterval(() => { this.elapsed++; }, 1000);
+
+        // Scroll active dot into view on init
+        this.$nextTick(() => this.scrollActiveDot());
+
+        // Render initial KaTeX
+        this.$nextTick(() => {
+          document.fonts.ready.then(() => this.renderTaskMath());
+          // Fallback re-render after 1 second
+          setTimeout(() => this.renderTaskMath(), 1000);
+        });
+      },
+
+      // Topic name helper
+      topicName(topicId) {
+        const id = String(topicId).padStart(2, '0');
+        return TOPIC_NAMES[id] || ('Тема ' + id);
+      },
+
+      // Navigation
+      goTo(idx) {
+        this.current = idx;
+        this.scrollActiveDot();
+        this.$nextTick(() => {
+          this.renderTaskMath();
+          this.focusInput();
+          this.$refs.questionArea?.scrollTo({ top: 0 });
+        });
+      },
+
+      prev() {
+        if (this.current > 0) this.goTo(this.current - 1);
+      },
+
+      next() {
+        if (this.current === this.total - 1) {
+          this.showModal = true;
+          return;
+        }
+        this.goTo(this.current + 1);
+      },
+
+      scrollActiveDot() {
+        this.$nextTick(() => {
+          const nav = this.$refs.navScroll;
+          if (!nav) return;
+          const dots = nav.querySelectorAll('.test-dot');
+          const active = dots[this.current];
+          if (active) {
+            active.scrollIntoView({ inline: 'center', behavior: 'smooth', block: 'nearest' });
+          }
+        });
+      },
+
+      focusInput() {
+        this.$nextTick(() => {
+          const task = this.currentTask;
+          if (!task) return;
+          const isChoiceType = ['choice', 'simple_choice', 'fraction_choice', 'interval_choice'].includes(task.type);
+          if (!isChoiceType) {
+            setTimeout(() => {
+              // Find the visible input in the question area
+              const inp = this.$refs.questionArea?.querySelector('.answer-input');
+              if (inp) inp.focus();
+            }, 200);
+          }
+        });
+      },
+
+      // Answer handling
+      selectOption(idx) {
+        const tn = this.currentTask.task_number;
+        this.answers[tn] = String(idx);
+        this.scheduleCommit();
+      },
+
+      saveInput(val) {
+        const tn = this.currentTask.task_number;
+        if (val.trim()) {
+          this.answers[tn] = val.trim();
+        } else {
+          delete this.answers[tn];
+        }
+        this.scheduleCommit();
+      },
+
+      // Debounced commit to server
+      scheduleCommit() {
+        if (this._commitTimeout) clearTimeout(this._commitTimeout);
+        this._commitTimeout = setTimeout(() => this.commitAnswers(), 500);
+      },
+
+      async commitAnswers() {
+        // Commit each changed answer individually via existing API
+        const promises = [];
+        for (const [taskNum, answer] of Object.entries(this.answers)) {
+          if (answer !== null && answer !== '' && answer !== this._lastCommitted?.[taskNum]) {
+            promises.push(
+              window.fetchPost(`/api/oge/attempts/${this.attemptId}/tasks/${taskNum}/commit`, {
+                answer: String(answer),
+              }).catch(e => console.warn(`Failed to commit task ${taskNum}:`, e))
+            );
+          }
+        }
+        if (promises.length > 0) {
+          await Promise.all(promises);
+          this._lastCommitted = { ...this.answers };
+        }
+      },
+
+      // Submit test
+      async submitTest() {
+        if (this.submitting) return;
+        this.submitting = true;
+
+        // Commit final answers first
+        try {
+          await this.commitAnswers();
+        } catch (e) {
+          // Continue even if commit fails
+        }
+
+        try {
+          const res = await window.fetchPost(`/api/oge/attempts/${this.attemptId}/submit`, {
+            elapsed: this.elapsed,
+          });
+          const data = await res.json();
+          if (res.ok) {
+            window.location.href = `/tg/results/${this.attemptId}`;
+          } else {
+            alert(data.message || 'Ошибка при отправке');
+            this.submitting = false;
+          }
+        } catch (e) {
+          alert('Ошибка сети. Попробуй ещё раз.');
+          this.submitting = false;
+        }
+      },
+
+      // Exit confirmation
+      confirmExit() {
+        if (this.answeredCount > 0) {
+          if (confirm('Выйти из теста? Прогресс сохранён, можно продолжить позже.')) {
+            this.commitAnswers();
+            if (window.Telegram?.WebApp) {
+              window.Telegram.WebApp.close();
+            } else {
+              window.location.href = '/tg';
+            }
+          }
+        } else {
+          if (window.Telegram?.WebApp) {
+            window.Telegram.WebApp.close();
+          } else {
+            window.location.href = '/tg';
+          }
+        }
+      },
+
+      // KaTeX rendering
+      renderTaskMath() {
+        if (typeof renderMathInElement !== 'function') return;
+        const area = this.$refs.questionArea;
+        if (!area) return;
+        try {
+          renderMathInElement(area, {
+            delimiters: [
+              { left: '$$', right: '$$', display: true },
+              { left: '$', right: '$', display: false },
+              { left: '\\(', right: '\\)', display: false },
+              { left: '\\[', right: '\\]', display: true },
+            ],
+            throwOnError: false,
+            trust: true,
+          });
+        } catch (e) {
+          console.warn('KaTeX render error:', e);
+        }
+      },
+
+      // Cleanup
+      destroy() {
+        if (this._timerInterval) clearInterval(this._timerInterval);
+        if (this._commitTimeout) clearTimeout(this._commitTimeout);
+      },
+    };
+  }
+</script>
+@endpush

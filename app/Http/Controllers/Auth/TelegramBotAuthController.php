@@ -572,6 +572,19 @@ class TelegramBotAuthController extends Controller
             }
         }
 
+        // Mini App: check if user needs onboarding, redirect to /tg/ flow
+        $user = auth()->user();
+        if ($user) {
+            // Check if request came from Mini App context (has query_id or start_param)
+            $isWebApp = !empty($authFields['query_id']) || request()->is('api/auth/telegram/*');
+            if ($isWebApp) {
+                if (!$user->onboarding_completed_at) {
+                    return url('/tg/onboarding');
+                }
+                return url('/tg/dashboard');
+            }
+        }
+
         return redirect()->intended('/dashboard')->getTargetUrl();
     }
 

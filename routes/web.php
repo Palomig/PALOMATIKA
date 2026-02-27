@@ -6,6 +6,7 @@ use App\Http\Controllers\BoardController;
 use App\Http\Controllers\EgeController;
 use App\Http\Controllers\JarvisMaterialPageController;
 use App\Http\Controllers\AdminTaskAnswerController;
+use App\Http\Controllers\MiniAppController;
 use App\Http\Controllers\OgeAttemptController;
 use App\Http\Controllers\OgeTemplateController;
 use App\Http\Controllers\RepetitorController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\Teacher\StudentsController;
 use App\Http\Controllers\TestPdfController;
 use App\Http\Controllers\Teacher\StudentGroupController;
 use App\Http\Controllers\Teacher\OgeReviewController;
+use App\Http\Middleware\EnsureOnboardingComplete;
 use App\Services\AuditLogger;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
@@ -74,8 +76,8 @@ Route::get('/auth/telegram/login/{token}', [TelegramBotAuthController::class, 'l
     ->name('telegram.login');
 
 // Telegram Mini App instant auth (session-backed JSON endpoint)
+// No 'guest' middleware — Mini App may re-auth even if session exists
 Route::post('/api/auth/telegram/webapp-login', [TelegramBotAuthController::class, 'webAppLogin'])
-    ->middleware('guest')
     ->name('telegram.webapp-login');
 
 // Auth pages (guest only)
@@ -412,6 +414,38 @@ Route::prefix('api/board')->group(function () {
 Route::get('/kanban', [BoardController::class, 'kanban'])->name('board.kanban');
 Route::get('/roadmap', [BoardController::class, 'roadmap'])->name('board.roadmap');
 Route::get('/forstas', [BoardController::class, 'architecture'])->name('board.architecture');
+
+// ========================================================================
+// Telegram Mini App Routes (/tg/*)
+// ========================================================================
+Route::prefix('tg')->group(function () {
+    // Public: home/landing (no auth required)
+    Route::get('/', [MiniAppController::class, 'home'])->name('miniapp.home');
+
+    // Authenticated Mini App routes
+    Route::middleware(['auth'])->group(function () {
+        // Onboarding
+        Route::get('/onboarding', [MiniAppController::class, 'onboarding'])->name('miniapp.onboarding');
+        Route::post('/onboarding', [MiniAppController::class, 'saveOnboarding'])->name('miniapp.onboarding.save');
+
+        // Routes that require completed onboarding
+        Route::middleware([EnsureOnboardingComplete::class])->group(function () {
+            Route::get('/dashboard', [MiniAppController::class, 'dashboard'])->name('miniapp.dashboard');
+            Route::get('/mini', [MiniAppController::class, 'mini'])->name('miniapp.mini');
+            Route::post('/mini/start', [MiniAppController::class, 'startMini'])->name('miniapp.mini.start');
+            Route::post('/full/start', [MiniAppController::class, 'startFull'])->name('miniapp.full.start');
+            Route::get('/test/{attemptId}', [MiniAppController::class, 'test'])->name('miniapp.test');
+            Route::get('/results/{attemptId}', [MiniAppController::class, 'results'])->name('miniapp.results');
+            Route::get('/tutor', [MiniAppController::class, 'tutor'])->name('miniapp.tutor');
+        });
+
+        // Admin routes for curated variants
+        Route::middleware(['role:teacher,admin'])->prefix('admin')->group(function () {
+            Route::get('/variants', [MiniAppController::class, 'adminVariants'])->name('miniapp.admin.variants');
+            Route::post('/variants/create', [MiniAppController::class, 'createCuratedVariant'])->name('miniapp.admin.variants.create');
+        });
+    });
+});
 
 // Test pages for PDF parsing (legacy, public for development)
 Route::prefix('test')->group(function () {
