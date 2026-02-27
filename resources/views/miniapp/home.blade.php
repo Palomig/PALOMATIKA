@@ -234,7 +234,7 @@
   </div>
 
   @auth
-    <a href="/tg/dashboard" class="btn-primary" style="text-decoration:none;">
+    <a href="/tg/dashboard" class="btn-primary" id="go-btn" style="text-decoration:none;">
       <span style="display:flex;align-items:center;gap:8px;">🚀 Начать подготовку</span>
     </a>
   @else
@@ -267,6 +267,14 @@ function homePage() {
     init() {
       this.updateCountdown();
       setInterval(() => this.updateCountdown(), 1000);
+
+      // After login reload: auto-redirect to dashboard/onboarding
+      const pendingRedirect = sessionStorage.getItem('_tg_redirect');
+      if (pendingRedirect) {
+        sessionStorage.removeItem('_tg_redirect');
+        // Small delay to ensure cookie is fully committed
+        setTimeout(() => { window.location.href = pendingRedirect; }, 50);
+      }
     },
 
     updateCountdown() {
@@ -324,9 +332,10 @@ function homePage() {
         const data = await response.json();
 
         if (response.ok && data.success) {
-          // Session cookie is set — navigate with ?after_login=1
-          // Server will auto-redirect to dashboard/onboarding
-          window.location.href = '/tg/?after_login=1';
+          // Save redirect target, then reload same page (mobile WebView
+          // loses cookies on href navigation, but reload() preserves them)
+          sessionStorage.setItem('_tg_redirect', data.redirect_to || '/tg/dashboard');
+          window.location.reload();
           return;
         }
 

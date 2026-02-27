@@ -26,20 +26,9 @@ class MiniAppController extends Controller
 
     /**
      * Home page — the landing with countdown and CTA.
-     * If user just logged in (via fetch + reload), auto-redirect to dashboard.
      */
-    public function home(Request $request)
+    public function home()
     {
-        // If already authenticated and came back via reload after login,
-        // redirect to the appropriate page automatically
-        if (Auth::check() && $request->query('after_login')) {
-            $user = Auth::user();
-            if (!$user->onboarding_completed_at) {
-                return redirect('/tg/onboarding');
-            }
-            return redirect('/tg/dashboard');
-        }
-
         return view('miniapp.home');
     }
 
