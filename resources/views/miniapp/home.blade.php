@@ -233,14 +233,15 @@
     </div>
   </div>
 
-  <button class="btn-primary" :class="{ 'btn-loading': loading }" @click="handleLogin()" :disabled="loading">
-    <template x-if="!loading">
+  @auth
+    <a href="/tg/dashboard" class="btn-primary" style="text-decoration:none;">
       <span style="display:flex;align-items:center;gap:8px;">🚀 Начать подготовку</span>
-    </template>
-    <template x-if="loading">
-      <span style="display:flex;align-items:center;gap:8px;"><span class="spinner"></span> Авторизация...</span>
-    </template>
-  </button>
+    </a>
+  @else
+    <div class="btn-primary btn-loading" style="pointer-events:none;">
+      <span style="display:flex;align-items:center;gap:8px;"><span class="spinner"></span> Входим...</span>
+    </div>
+  @endauth
 
   <button class="btn-secondary" @click="handleInvite()">
     👥 Пригласить одноклассника
@@ -259,7 +260,6 @@ function homePage() {
   const examDate = new Date('2026-06-02T10:00:00+03:00');
   return {
     days: 0, hours: 0, mins: 0, secs: 0,
-    loading: false,
 
     pad(n) { return String(n).padStart(2, '0'); },
 
@@ -275,35 +275,6 @@ function homePage() {
       this.hours = Math.floor((diff % 86400000) / 3600000);
       this.mins  = Math.floor((diff % 3600000) / 60000);
       this.secs  = Math.floor((diff % 60000) / 1000);
-    },
-
-    async handleLogin() {
-      const tg = window.Telegram?.WebApp;
-      if (!tg || !tg.initData) {
-        alert('Откройте приложение через Telegram');
-        return;
-      }
-      this.loading = true;
-      try {
-        const res = await fetch('/api/auth/telegram/webapp-login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': window._csrf, 'Accept': 'application/json' },
-          body: JSON.stringify({ initData: tg.initData }),
-        });
-        const data = await res.json();
-        if (data.redirect_to || data.redirect) {
-          window.location.href = data.redirect_to || data.redirect;
-        } else if (data.success || res.ok) {
-          window.location.href = '/tg/dashboard';
-        } else {
-          alert(data.message || data.error || 'Ошибка авторизации');
-        }
-      } catch (e) {
-        console.error('Login error:', e);
-        alert('Ошибка соединения. Попробуйте ещё раз.');
-      } finally {
-        this.loading = false;
-      }
     },
 
     handleInvite() {
