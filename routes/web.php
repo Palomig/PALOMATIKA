@@ -399,6 +399,10 @@ Route::prefix('tg')->group(function () {
     // Public: home/landing (no auth required)
     Route::get('/', [MiniAppController::class, 'home'])->name('miniapp.home');
 
+    // Server-side auth: form POST with initData → verify HMAC → login → 302 redirect
+    // CSRF exempted (uses Telegram HMAC instead), see VerifyCsrfToken
+    Route::post('/auth', [MiniAppController::class, 'authenticate'])->name('miniapp.auth');
+
     // Authenticated Mini App routes
     Route::middleware(['auth'])->group(function () {
         // Onboarding

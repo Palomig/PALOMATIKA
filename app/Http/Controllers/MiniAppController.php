@@ -9,6 +9,7 @@ use App\Services\MiniVariantService;
 use App\Services\OgeAttemptService;
 use App\Services\OgeVariantBuilderService;
 use App\Services\TaskDataService;
+use App\Http\Controllers\Auth\TelegramBotAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -29,6 +30,101 @@ class MiniAppController extends Controller
     public function home()
     {
         return view('miniapp.home');
+    }
+
+    /**
+     * Server-side Telegram WebApp authentication via form POST.
+     * Verifies initData HMAC, logs in user, and redirects (302).
+     * This avoids the session cookie loss issue with client-side fetch + JS redirect.
+     */
+    public function authenticate(Request $request)
+    {
+        $initData = trim((string) $request->input('initData', ''));
+
+        if ($initData === '') {
+            return redirect('/tg/')->with('error', 'Нет данных Telegram для входа');
+        }
+
+        $botToken = (string) config('services.telegram.bot_token', '');
+        if ($botToken === '') {
+            return redirect('/tg/')->with('error', 'Telegram не настроен');
+        }
+
+        // Parse and verify HMAC signature
+        parse_str($initData, $fields);
+        if (empty($fields) || empty($fields['hash'])) {
+            return redirect('/tg/')->with('error', 'Некорректные данные Telegram');
+        }
+
+        $providedHash = $fields['hash'];
+        $signableFields = $fields;
+        unset($signableFields['hash']);
+
+        // Normalize fields for signature check
+        $normalizedFields = [];
+        foreach ($signableFields as $key => $value) {
+            if ($value === null) {
+                continue;
+            }
+            $normalizedFields[(string) $key] = is_array($value)
+                ? json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
+                : (string) $value;
+        }
+
+        ksort($normalizedFields);
+        $dataCheckString = collect($normalizedFields)
+            ->map(fn(string $value, string $key) => "{$key}={$value}")
+            ->implode("\n");
+
+        $secretKey = hash_hmac('sha256', $botToken, 'WebAppData', true);
+        $calculatedHash = hash_hmac('sha256', $dataCheckString, $secretKey);
+
+        if (!hash_equals($calculatedHash, $providedHash)) {
+            return redirect('/tg/')->with('error', 'Неверная подпись Telegram');
+        }
+
+        // Extract user from initData
+        $userJson = $fields['user'] ?? null;
+        if (is_string($userJson)) {
+            $telegramUser = json_decode($userJson, true);
+        } else {
+            $telegramUser = null;
+        }
+
+        if (!is_array($telegramUser) || empty($telegramUser['id'])) {
+            return redirect('/tg/')->with('error', 'Нет данных пользователя');
+        }
+
+        // Find or create user
+        $telegramId = (string) $telegramUser['id'];
+        $user = \App\Models\User::where('oauth_provider', 'telegram')
+            ->where('oauth_id', $telegramId)
+            ->first();
+
+        if (!$user) {
+            $name = trim(($telegramUser['first_name'] ?? '') . ' ' . ($telegramUser['last_name'] ?? ''));
+            if ($name === '') {
+                $name = $telegramUser['username'] ?? 'User';
+            }
+            $user = \App\Models\User::create([
+                'name' => $name,
+                'oauth_provider' => 'telegram',
+                'oauth_id' => $telegramId,
+                'avatar' => $telegramUser['photo_url'] ?? null,
+                'trial_ends_at' => now()->addDays(7),
+            ]);
+        }
+
+        // Login with remember + regenerate session
+        Auth::login($user, true);
+        $request->session()->regenerate();
+
+        // Redirect based on onboarding status
+        if (!$user->onboarding_completed_at) {
+            return redirect('/tg/onboarding');
+        }
+
+        return redirect('/tg/dashboard');
     }
 
     /**

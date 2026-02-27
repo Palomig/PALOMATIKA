@@ -230,30 +230,8 @@
     body: JSON.stringify(data),
   });
 
-  // Auto-auth: if not logged in and Telegram initData is available, auto-login
-  @guest
-  (function() {
-    const tg = window.Telegram?.WebApp;
-    if (!tg || !tg.initData) return;
-    // Prevent double-login loop
-    if (sessionStorage.getItem('_tg_auth_tried')) return;
-    sessionStorage.setItem('_tg_auth_tried', '1');
-
-    fetch('/api/auth/telegram/webapp-login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ initData: tg.initData }),
-    })
-    .then(r => r.json())
-    .then(data => {
-      if (data.success) {
-        sessionStorage.removeItem('_tg_auth_tried');
-        window.location.href = data.redirect_to || '/tg/dashboard';
-      }
-    })
-    .catch(() => {});
-  })();
-  @endguest
+  // Telegram initData available for auth forms
+  window._tgInitData = (window.Telegram?.WebApp?.initData) || '';
 </script>
 
 @stack('scripts')

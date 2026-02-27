@@ -238,9 +238,12 @@
       <span style="display:flex;align-items:center;gap:8px;">🚀 Начать подготовку</span>
     </a>
   @else
-    <div class="btn-primary btn-loading" style="pointer-events:none;">
-      <span style="display:flex;align-items:center;gap:8px;"><span class="spinner"></span> Входим...</span>
-    </div>
+    <form id="tg-auth-form" method="POST" action="/tg/auth" style="width:100%;">
+      <input type="hidden" name="initData" id="tg-init-data" value="">
+      <button type="submit" class="btn-primary" id="start-btn">
+        <span style="display:flex;align-items:center;gap:8px;">🚀 Начать подготовку</span>
+      </button>
+    </form>
   @endauth
 
   <button class="btn-secondary" @click="handleInvite()">
@@ -256,6 +259,25 @@
 
 @push('scripts')
 <script>
+// Fill initData into the hidden auth form
+(function() {
+  const initInput = document.getElementById('tg-init-data');
+  if (initInput && window._tgInitData) {
+    initInput.value = window._tgInitData;
+  }
+  // Show loading state on form submit
+  const form = document.getElementById('tg-auth-form');
+  if (form) {
+    form.addEventListener('submit', function() {
+      const btn = document.getElementById('start-btn');
+      if (btn) {
+        btn.classList.add('btn-loading');
+        btn.innerHTML = '<span style="display:flex;align-items:center;gap:8px;"><span class="spinner"></span> Входим...</span>';
+      }
+    });
+  }
+})();
+
 function homePage() {
   const examDate = new Date('2026-06-02T10:00:00+03:00');
   return {
