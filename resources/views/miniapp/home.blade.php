@@ -238,12 +238,9 @@
       <span style="display:flex;align-items:center;gap:8px;">🚀 Начать подготовку</span>
     </a>
   @else
-    <form id="tg-auth-form" method="POST" action="/tg/auth" style="width:100%;">
-      <input type="hidden" name="initData" id="tg-init-data" value="">
-      <button type="submit" class="btn-primary" id="start-btn">
-        <span style="display:flex;align-items:center;gap:8px;">🚀 Начать подготовку</span>
-      </button>
-    </form>
+    <button class="btn-primary" id="start-btn" @click="handleLogin()">
+      <span id="start-btn-text" style="display:flex;align-items:center;gap:8px;">🚀 Начать подготовку</span>
+    </button>
   @endauth
 
   <button class="btn-secondary" @click="handleInvite()">
@@ -259,29 +256,11 @@
 
 @push('scripts')
 <script>
-// Fill initData into the hidden auth form
-(function() {
-  const initInput = document.getElementById('tg-init-data');
-  if (initInput && window._tgInitData) {
-    initInput.value = window._tgInitData;
-  }
-  // Show loading state on form submit
-  const form = document.getElementById('tg-auth-form');
-  if (form) {
-    form.addEventListener('submit', function() {
-      const btn = document.getElementById('start-btn');
-      if (btn) {
-        btn.classList.add('btn-loading');
-        btn.innerHTML = '<span style="display:flex;align-items:center;gap:8px;"><span class="spinner"></span> Входим...</span>';
-      }
-    });
-  }
-})();
-
 function homePage() {
   const examDate = new Date('2026-06-02T10:00:00+03:00');
   return {
     days: 0, hours: 0, mins: 0, secs: 0,
+    loginInProgress: false,
 
     pad(n) { return String(n).padStart(2, '0'); },
 
@@ -297,6 +276,76 @@ function homePage() {
       this.hours = Math.floor((diff % 86400000) / 3600000);
       this.mins  = Math.floor((diff % 3600000) / 60000);
       this.secs  = Math.floor((diff % 60000) / 1000);
+    },
+
+    async handleLogin() {
+      if (this.loginInProgress) return;
+      this.loginInProgress = true;
+
+      // Show loading state
+      const btn = document.getElementById('start-btn');
+      const btnText = document.getElementById('start-btn-text');
+      if (btn) btn.classList.add('btn-loading');
+      if (btnText) btnText.innerHTML = '<span class="spinner"></span> Входим...';
+
+      const tg = window.Telegram?.WebApp;
+      const initData = tg && typeof tg.initData === 'string' ? tg.initData.trim() : '';
+
+      if (!initData) {
+        // No Telegram data — try form POST fallback
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/tg/auth';
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'initData';
+        input.value = '';
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+        return;
+      }
+
+      try {
+        const response = await fetch('/api/auth/telegram/webapp-login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+          },
+          body: JSON.stringify({
+            initData: initData,
+            initDataUnsafe: tg.initDataUnsafe || null,
+            startParam: tg.initDataUnsafe?.start_param || null,
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          // Session cookie is set — navigate with ?after_login=1
+          // Server will auto-redirect to dashboard/onboarding
+          window.location.href = '/tg/?after_login=1';
+          return;
+        }
+
+        // Login failed
+        if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
+        if (btn) btn.classList.remove('btn-loading');
+        this.loginInProgress = false;
+
+        const msg = data.message || data.error || 'Ошибка входа';
+        if (tg && tg.showAlert) { tg.showAlert(msg); }
+        else { alert(msg); }
+      } catch (err) {
+        if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
+        if (btn) btn.classList.remove('btn-loading');
+        this.loginInProgress = false;
+
+        if (tg && tg.showAlert) { tg.showAlert('Ошибка соединения'); }
+        else { alert('Ошибка соединения'); }
+      }
     },
 
     handleInvite() {
