@@ -268,13 +268,13 @@ function homePage() {
       this.updateCountdown();
       setInterval(() => this.updateCountdown(), 1000);
 
-      // After login reload: auto-redirect to dashboard/onboarding
-      const pendingRedirect = sessionStorage.getItem('_tg_redirect');
-      if (pendingRedirect) {
-        sessionStorage.removeItem('_tg_redirect');
-        // Small delay to ensure cookie is fully committed
-        setTimeout(() => { window.location.href = pendingRedirect; }, 50);
-      }
+      // Show flash error from server (e.g. failed HMAC)
+      @if(session('error'))
+      const tg = window.Telegram?.WebApp;
+      const errMsg = @json(session('error'));
+      if (tg && tg.showAlert) { tg.showAlert(errMsg); }
+      else { alert(errMsg); }
+      @endif
     },
 
     updateCountdown() {
@@ -286,7 +286,7 @@ function homePage() {
       this.secs  = Math.floor((diff % 60000) / 1000);
     },
 
-    async handleLogin() {
+    handleLogin() {
       if (this.loginInProgress) return;
       this.loginInProgress = true;
 
@@ -300,61 +300,28 @@ function homePage() {
       const initData = tg && typeof tg.initData === 'string' ? tg.initData.trim() : '';
 
       if (!initData) {
-        // No Telegram data — try form POST fallback
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '/tg/auth';
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = 'initData';
-        input.value = '';
-        form.appendChild(input);
-        document.body.appendChild(form);
-        form.submit();
+        if (tg && tg.showAlert) { tg.showAlert('Не удалось получить данные Telegram. Попробуйте перезапустить мини-приложение.'); }
+        else { alert('Откройте приложение через Telegram'); }
+        if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
+        if (btn) btn.classList.remove('btn-loading');
+        this.loginInProgress = false;
         return;
       }
 
-      try {
-        const response = await fetch('/api/auth/telegram/webapp-login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
-          },
-          body: JSON.stringify({
-            initData: initData,
-            initDataUnsafe: tg.initDataUnsafe || null,
-            startParam: tg.initDataUnsafe?.start_param || null,
-          })
-        });
+      // Full-page form POST — the only reliable way to set session cookies
+      // in mobile Telegram WebView (fetch/XHR cookies are silently dropped)
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = '/tg/auth';
 
-        const data = await response.json();
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'initData';
+      input.value = initData;
+      form.appendChild(input);
 
-        if (response.ok && data.success) {
-          // Save redirect target, then reload same page (mobile WebView
-          // loses cookies on href navigation, but reload() preserves them)
-          sessionStorage.setItem('_tg_redirect', data.redirect_to || '/tg/dashboard');
-          window.location.reload();
-          return;
-        }
-
-        // Login failed
-        if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
-        if (btn) btn.classList.remove('btn-loading');
-        this.loginInProgress = false;
-
-        const msg = data.message || data.error || 'Ошибка входа';
-        if (tg && tg.showAlert) { tg.showAlert(msg); }
-        else { alert(msg); }
-      } catch (err) {
-        if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
-        if (btn) btn.classList.remove('btn-loading');
-        this.loginInProgress = false;
-
-        if (tg && tg.showAlert) { tg.showAlert('Ошибка соединения'); }
-        else { alert('Ошибка соединения'); }
-      }
+      document.body.appendChild(form);
+      form.submit();
     },
 
     handleInvite() {
