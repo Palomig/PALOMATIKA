@@ -1,6 +1,12 @@
 @extends('layouts.miniapp')
 @section('title', 'Управление вариантами — palomatika')
 
+@push('head')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+@endpush
+
 @push('styles')
   .admin-page { padding-top: 20px; padding-bottom: 40px; }
 
@@ -122,7 +128,7 @@
 @endpush
 
 @section('body')
-<div class="page admin-page" x-data="adminVariants()">
+<div class="page admin-page" x-data="adminVariants()" x-init="$nextTick(() => renderMath())">
 
   <div class="topbar">
     <a href="/tg/dashboard" class="back-btn">‹</a>
@@ -257,10 +263,21 @@ function adminVariants() {
       return this.selectedZadaniya.length >= 1 && this.title.trim().length >= 2;
     },
 
+    renderMath() {
+      if (typeof renderMathInElement === 'function') {
+        renderMathInElement(this.$el, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '$', right: '$', display: false}
+          ]
+        });
+      }
+    },
+
     toggleTopic(topicId) {
       const idx = this.expandedTopics.indexOf(topicId);
       if (idx > -1) this.expandedTopics.splice(idx, 1);
-      else this.expandedTopics.push(topicId);
+      else { this.expandedTopics.push(topicId); this.$nextTick(() => this.renderMath()); }
     },
 
     toggleZadanie(zadanieId) {
