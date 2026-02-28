@@ -8,6 +8,7 @@ use App\Models\OgeVariant;
 use App\Services\MiniVariantService;
 use App\Services\OgeAttemptService;
 use App\Services\OgeVariantBuilderService;
+use App\Services\OgeVariantPoolService;
 use App\Services\TaskDataService;
 use App\Http\Controllers\Auth\TelegramBotAuthController;
 use Illuminate\Http\Request;
@@ -20,6 +21,7 @@ class MiniAppController extends Controller
         private readonly MiniVariantService $miniVariant,
         private readonly OgeAttemptService $attemptService,
         private readonly OgeVariantBuilderService $variantBuilder,
+        private readonly OgeVariantPoolService $poolService,
         private readonly TaskDataService $taskData,
     ) {
     }
@@ -210,31 +212,16 @@ class MiniAppController extends Controller
         $mode = $request->input('mode');
         $user = $request->user();
 
-        $tasks = match ($mode) {
-            'geometry' => $this->miniVariant->generateGeometry(),
-            'algebra' => $this->miniVariant->generateAlgebra(),
-            'mixed' => $this->miniVariant->generateMixed(),
-        };
-
-        $modeMap = [
-            'geometry' => OgeVariant::MODE_MINI_GEOMETRY,
-            'algebra' => OgeVariant::MODE_MINI_ALGEBRA,
-            'mixed' => OgeVariant::MODE_MINI_MIXED,
-        ];
-
-        $hash = $this->miniVariant->generateHash();
-
-        // Create variant with task selection stored in config_json
-        $variant = OgeVariant::create([
-            'hash' => $hash,
-            'title' => 'Мини-ОГЭ: ' . $this->modeName($mode),
-            'mode' => $modeMap[$mode],
-            'source' => OgeVariant::SOURCE_MINIAPP,
-            'config_json' => ['tasks' => $tasks, 'mode' => $mode],
-        ]);
+        try {
+            $variant = $this->poolService->getOrCreateVariant($user, $mode);
+        } catch (\RuntimeException $e) {
+            return response()->json([
+                'error' => 'Нет доступных заданий для этого режима. Попробуйте позже.',
+            ], 422);
+        }
 
         // Start attempt
-        [$variant, $attempt] = $this->attemptService->startAttempt($user, $hash);
+        [$variant, $attempt] = $this->attemptService->startAttempt($user, $variant->hash);
 
         return response()->json([
             'redirect' => '/tg/test/' . $attempt->id,
@@ -247,18 +234,16 @@ class MiniAppController extends Controller
     public function startFull(Request $request)
     {
         $user = $request->user();
-        $tasks = $this->miniVariant->generateFull();
-        $hash = $this->miniVariant->generateHash();
 
-        $variant = OgeVariant::create([
-            'hash' => $hash,
-            'title' => 'Полный вариант ОГЭ',
-            'mode' => OgeVariant::MODE_FULL,
-            'source' => OgeVariant::SOURCE_MINIAPP,
-            'config_json' => ['tasks' => $tasks, 'mode' => 'full'],
-        ]);
+        try {
+            $variant = $this->poolService->getOrCreateVariant($user, 'full');
+        } catch (\RuntimeException $e) {
+            return response()->json([
+                'error' => 'Нет доступных заданий. Попробуйте позже.',
+            ], 422);
+        }
 
-        [$variant, $attempt] = $this->attemptService->startAttempt($user, $hash);
+        [$variant, $attempt] = $this->attemptService->startAttempt($user, $variant->hash);
 
         return response()->json([
             'redirect' => '/tg/test/' . $attempt->id,

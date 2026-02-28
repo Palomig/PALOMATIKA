@@ -27,7 +27,8 @@
                                 "[-0,2; +∞)",
                                 "(-∞; 0,4]"
                             ],
-                            "answer": "4"
+                            "answer": "4",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
@@ -38,7 +39,8 @@
                                 "(-∞; -2]",
                                 "[-2; +∞)"
                             ],
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
@@ -49,7 +51,8 @@
                                 "(-∞; 0,1]",
                                 "[0,1; +∞)"
                             ],
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
@@ -60,7 +63,8 @@
                                 "[-7; +∞)",
                                 "(-∞; -7]"
                             ],
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
@@ -71,7 +75,8 @@
                                 "(0; +∞)",
                                 "(-1,2; +∞)"
                             ],
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
@@ -82,7 +87,8 @@
                                 "(-∞; -2)",
                                 "(-∞; 14)"
                             ],
-                            "answer": "1"
+                            "answer": "1",
+                            "status": "draft"
                         },
                         {
                             "id": 7,
@@ -93,7 +99,8 @@
                                 "(-∞; 0,5)",
                                 "(2,5; +∞)"
                             ],
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 8,
@@ -104,7 +111,8 @@
                                 "(-2; +∞)",
                                 "(-∞; -2)"
                             ],
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -123,7 +131,8 @@
                                 "(-∞; -3,6] ∪ [-3; +∞)",
                                 "(-∞; -3,6]"
                             ],
-                            "answer": "4"
+                            "answer": "4",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
@@ -134,7 +143,8 @@
                                 "[-0,6; +∞)",
                                 "(-∞; -3] ∪ [-0,6; +∞)"
                             ],
-                            "answer": "1"
+                            "answer": "1",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
@@ -145,7 +155,8 @@
                                 "(-∞; 4]",
                                 "[4; +∞)"
                             ],
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
@@ -156,7 +167,8 @@
                                 "[-7,4; -5]",
                                 "[-5; +∞)"
                             ],
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
@@ -167,7 +179,8 @@
                                 "[5,2; +∞)",
                                 "[6; +∞)"
                             ],
-                            "answer": "1"
+                            "answer": "1",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
@@ -178,7 +191,8 @@
                                 "[2; +∞)",
                                 "[2; 2,6]"
                             ],
-                            "answer": "4"
+                            "answer": "4",
+                            "status": "draft"
                         },
                         {
                             "id": 7,
@@ -189,7 +203,8 @@
                                 "(-∞; -2,8]",
                                 "(-∞; -2,8] ∪ [-1,7; +∞)"
                             ],
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 8,
@@ -200,7 +215,8 @@
                                 "[3; +∞)",
                                 "[2,2; 3]"
                             ],
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -213,55 +229,64 @@
                             "id": 1,
                             "expression": "\\begin{cases} x + 3 \\geq -2 \\\\ x + 1,1 \\geq 0 \\end{cases}",
                             "image": "img-000.png",
-                            "answer": "[-1,1; +∞)"
+                            "answer": "[-1,1; +∞)",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "\\begin{cases} x - 4,3 \\geq 0 \\\\ x + 5 \\leq 10 \\end{cases}",
                             "image": "img-001.png",
-                            "answer": "[4,3; 5]"
+                            "answer": "[4,3; 5]",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "\\begin{cases} x + 3,2 \\leq 0 \\\\ x + 1 \\leq -1 \\end{cases}",
                             "image": "img-002.png",
-                            "answer": "(-∞; -3,2]"
+                            "answer": "(-∞; -3,2]",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "\\begin{cases} x + 0,7 \\leq 0 \\\\ x - 1 \\geq -5 \\end{cases}",
                             "image": "img-003.png",
-                            "answer": "[-4; -0,7]"
+                            "answer": "[-4; -0,7]",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "\\begin{cases} x + 4 \\geq -4,5 \\\\ x + 4 \\leq 0 \\end{cases}",
                             "image": "img-004.png",
-                            "answer": "[-8,5; -4]"
+                            "answer": "[-8,5; -4]",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
                             "expression": "\\begin{cases} x - 7,4 \\geq 0 \\\\ x + 2 \\geq 3 \\end{cases}",
                             "image": "img-005.png",
-                            "answer": "[7,4; +∞)"
+                            "answer": "[7,4; +∞)",
+                            "status": "draft"
                         },
                         {
                             "id": 7,
                             "expression": "\\begin{cases} x - 3,7 \\leq 0 \\\\ x - 2 \\geq 1 \\end{cases}",
                             "image": "img-006.png",
-                            "answer": "[3; 3,7]"
+                            "answer": "[3; 3,7]",
+                            "status": "draft"
                         },
                         {
                             "id": 8,
                             "expression": "\\begin{cases} x + 1,8 \\leq 0 \\\\ x + 0,5 \\leq -0,5 \\end{cases}",
                             "image": "img-007.png",
-                            "answer": "(-∞; -1,8]"
+                            "answer": "(-∞; -1,8]",
+                            "status": "draft"
                         },
                         {
                             "id": 9,
                             "expression": "\\begin{cases} x + 2,7 \\leq 0 \\\\ x + 4 \\geq 1 \\end{cases}",
                             "image": "img-008.png",
-                            "answer": "[-3; -2,7]"
+                            "answer": "[-3; -2,7]",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -279,7 +304,8 @@
                                 "нет решений",
                                 "(-∞; 9)",
                                 "(2; 9)"
-                            ]
+                            ],
+                            "status": "draft"
                         },
                         {
                             "id": 2,
@@ -289,7 +315,8 @@
                                 "(-∞; 4)",
                                 "(2; +∞)",
                                 "(2; 4)"
-                            ]
+                            ],
+                            "status": "draft"
                         },
                         {
                             "id": 3,
@@ -299,7 +326,8 @@
                                 "(-∞; 2)",
                                 "нет решений",
                                 "(8; +∞)"
-                            ]
+                            ],
+                            "status": "draft"
                         },
                         {
                             "id": 4,
@@ -309,7 +337,8 @@
                                 "(5; +∞)",
                                 "(2; 5)",
                                 "(-∞; 2)"
-                            ]
+                            ],
+                            "status": "draft"
                         },
                         {
                             "id": 5,
@@ -319,7 +348,8 @@
                                 "(-∞; 7)",
                                 "(-∞; 8)",
                                 "(7; +∞)"
-                            ]
+                            ],
+                            "status": "draft"
                         },
                         {
                             "id": 6,
@@ -329,7 +359,8 @@
                                 "нет решений",
                                 "(4; 5)",
                                 "(5; +∞)"
-                            ]
+                            ],
+                            "status": "draft"
                         },
                         {
                             "id": 7,
@@ -339,7 +370,8 @@
                                 "(-∞; 4)",
                                 "(3; +∞)",
                                 "(3; 4)"
-                            ]
+                            ],
+                            "status": "draft"
                         },
                         {
                             "id": 8,
@@ -349,7 +381,8 @@
                                 "нет решений",
                                 "(-9; +∞)",
                                 "(-∞; 1)"
-                            ]
+                            ],
+                            "status": "draft"
                         }
                     ]
                 },
@@ -362,55 +395,64 @@
                             "id": 1,
                             "expression": "\\begin{cases} -35 + 5x > 0 \\\\ 6 - 3x > -3 \\end{cases}",
                             "image": "img-009.png",
-                            "answer": "нет решений"
+                            "answer": "нет решений",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "\\begin{cases} -5 + 5x < 0 \\\\ 4 - 3x < 31 \\end{cases}",
                             "image": "img-010.png",
-                            "answer": "(-9; 1)"
+                            "answer": "(-9; 1)",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "\\begin{cases} -9 + 3x < 0 \\\\ 2 - 3x < -10 \\end{cases}",
                             "image": "img-011.png",
-                            "answer": "нет решений"
+                            "answer": "нет решений",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "\\begin{cases} -12 + 3x > 0 \\\\ 9 - 4x > -3 \\end{cases}",
                             "image": "img-012.png",
-                            "answer": "нет решений"
+                            "answer": "нет решений",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "\\begin{cases} -35 + 5x < 0 \\\\ 6 - 3x > -18 \\end{cases}",
                             "image": "img-013.png",
-                            "answer": "(-∞; 7)"
+                            "answer": "(-∞; 7)",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
                             "expression": "\\begin{cases} -27 + 3x > 0 \\\\ 6 - 3x < -6 \\end{cases}",
                             "image": "img-014.png",
-                            "answer": "(9; +∞)"
+                            "answer": "(9; +∞)",
+                            "status": "draft"
                         },
                         {
                             "id": 7,
                             "expression": "\\begin{cases} -9 + 3x > 0 \\\\ 2 - 3x > -10 \\end{cases}",
                             "image": "img-015.png",
-                            "answer": "(3; 4)"
+                            "answer": "(3; 4)",
+                            "status": "draft"
                         },
                         {
                             "id": 8,
                             "expression": "\\begin{cases} -27 + 3x < 0 \\\\ 6 + 4x > 6 \\end{cases}",
                             "image": "img-016.png",
-                            "answer": "(0; 9)"
+                            "answer": "(0; 9)",
+                            "status": "draft"
                         },
                         {
                             "id": 9,
                             "expression": "\\begin{cases} -35 + 5x < 0 \\\\ 6 - 3x < -3 \\end{cases}",
                             "image": "img-017.png",
-                            "answer": "(3; 7)"
+                            "answer": "(3; 7)",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -429,7 +471,8 @@
                                 "[-3; +∞)",
                                 "(-∞; -3] ∪ [8; +∞)"
                             ],
-                            "answer": "4"
+                            "answer": "4",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
@@ -440,7 +483,8 @@
                                 "[-2; 7]",
                                 "(-∞; -2]"
                             ],
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
@@ -451,7 +495,8 @@
                                 "[-4; 8]",
                                 "(-∞; 8]"
                             ],
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
@@ -462,7 +507,8 @@
                                 "(-5; 9)",
                                 "(9; +∞)"
                             ],
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
@@ -473,7 +519,8 @@
                                 "(-∞; 1)",
                                 "(-∞; -6) ∪ (1; +∞)"
                             ],
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
@@ -484,7 +531,8 @@
                                 "(-∞; -3]",
                                 "(-∞; -3] ∪ [5; +∞)"
                             ],
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 7,
@@ -495,7 +543,8 @@
                                 "[-1; 7]",
                                 "[-1; +∞)"
                             ],
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 8,
@@ -506,7 +555,8 @@
                                 "(-∞; 4)",
                                 "(-∞; -9)"
                             ],
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 9,
@@ -517,7 +567,8 @@
                                 "(-∞; -2) ∪ (10; +∞)",
                                 "(-2; +∞)"
                             ],
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -530,55 +581,64 @@
                             "id": 1,
                             "expression": "(x + 4)(x - 9) \\geq 0",
                             "image": "img-018.png",
-                            "answer": "(-∞; -4] ∪ [9; +∞)"
+                            "answer": "(-∞; -4] ∪ [9; +∞)",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "(x + 2)(x - 7) > 0",
                             "image": "img-019.png",
-                            "answer": "(-∞; -2) ∪ (7; +∞)"
+                            "answer": "(-∞; -2) ∪ (7; +∞)",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "(x + 3)(x - 7) \\leq 0",
                             "image": "img-020.png",
-                            "answer": "[-3; 7]"
+                            "answer": "[-3; 7]",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "(x + 1)(x - 6) \\leq 0",
                             "image": "img-021.png",
-                            "answer": "[-1; 6]"
+                            "answer": "[-1; 6]",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "(x + 5)(x - 2) \\leq 0",
                             "image": "img-022.png",
-                            "answer": "[-5; 2]"
+                            "answer": "[-5; 2]",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
                             "expression": "(x + 8)(x - 3) < 0",
                             "image": "img-023.png",
-                            "answer": "(-8; 3)"
+                            "answer": "(-8; 3)",
+                            "status": "draft"
                         },
                         {
                             "id": 7,
                             "expression": "(x + 2)(x - 8) > 0",
                             "image": "img-024.png",
-                            "answer": "(-∞; -2) ∪ (8; +∞)"
+                            "answer": "(-∞; -2) ∪ (8; +∞)",
+                            "status": "draft"
                         },
                         {
                             "id": 8,
                             "expression": "(x + 4)(x - 8) > 0",
                             "image": "img-025.png",
-                            "answer": "(-∞; -4) ∪ (8; +∞)"
+                            "answer": "(-∞; -4) ∪ (8; +∞)",
+                            "status": "draft"
                         },
                         {
                             "id": 9,
                             "expression": "(x + 1)(x - 9) > 0",
                             "image": "img-026.png",
-                            "answer": "(-∞; -1) ∪ (9; +∞)"
+                            "answer": "(-∞; -1) ∪ (9; +∞)",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -597,7 +657,8 @@
                                 "нет решений",
                                 "(-∞; +∞)"
                             ],
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
@@ -608,7 +669,8 @@
                                 "(-∞; -8] ∪ [8; +∞)",
                                 "нет решений"
                             ],
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
@@ -619,7 +681,8 @@
                                 "нет решений",
                                 "(-∞; +∞)"
                             ],
-                            "answer": "4"
+                            "answer": "4",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
@@ -630,7 +693,8 @@
                                 "(-∞; -6) ∪ (6; +∞)",
                                 "(-6; 6)"
                             ],
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
@@ -641,7 +705,8 @@
                                 "нет решений",
                                 "(-∞; -4) ∪ (4; +∞)"
                             ],
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
@@ -652,7 +717,8 @@
                                 "нет решений",
                                 "[-9; 9]"
                             ],
-                            "answer": "4"
+                            "answer": "4",
+                            "status": "draft"
                         },
                         {
                             "id": 7,
@@ -663,7 +729,8 @@
                                 "[-7; 7]",
                                 "нет решений"
                             ],
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 8,
@@ -674,7 +741,8 @@
                                 "(-3; 3)",
                                 "(-∞; -3) ∪ (3; +∞)"
                             ],
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 9,
@@ -685,7 +753,8 @@
                                 "(-∞; -10] ∪ [10; +∞)",
                                 "нет решений"
                             ],
-                            "answer": "4"
+                            "answer": "4",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -704,7 +773,8 @@
                                 "[0; +∞)",
                                 "[7; +∞)"
                             ],
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
@@ -715,7 +785,8 @@
                                 "(0; +∞)",
                                 "(0; 4)"
                             ],
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
@@ -726,7 +797,8 @@
                                 "[0; +∞)",
                                 "[0; 10]"
                             ],
-                            "answer": "4"
+                            "answer": "4",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
@@ -737,7 +809,8 @@
                                 "(3; +∞)",
                                 "(-∞; 0) ∪ (3; +∞)"
                             ],
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
@@ -748,7 +821,8 @@
                                 "[0; 8]",
                                 "(-∞; 0] ∪ [8; +∞)"
                             ],
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
@@ -759,7 +833,8 @@
                                 "(-∞; 0) ∪ (1; +∞)",
                                 "(0; 1)"
                             ],
-                            "answer": "4"
+                            "answer": "4",
+                            "status": "draft"
                         },
                         {
                             "id": 7,
@@ -770,7 +845,8 @@
                                 "[0; +∞)",
                                 "(-∞; 0] ∪ [6; +∞)"
                             ],
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 8,
@@ -781,7 +857,8 @@
                                 "(0; 5)",
                                 "(5; +∞)"
                             ],
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 9,
@@ -792,7 +869,8 @@
                                 "[0; 2]",
                                 "(-∞; 0] ∪ [2; +∞)"
                             ],
-                            "answer": "4"
+                            "answer": "4",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -807,22 +885,23 @@
                             "graph_options": [
                                 {
                                     "index": 1,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t1a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t1a)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t1a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">7</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t1a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t1a)\" opacity=\"0.6\"\/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t1a)\" opacity=\"0.6\"\/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"\/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"\/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">7<\/text><\/svg>"
                                 },
                                 {
                                     "index": 2,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t1b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t1b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">7</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t1b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t1b)\" opacity=\"0.6\"\/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"\/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"\/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">7<\/text><\/svg>"
                                 },
                                 {
                                     "index": 3,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t1c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t1c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">7</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t1c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t1c)\" opacity=\"0.6\"\/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"\/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">7<\/text><\/svg>"
                                 },
                                 {
                                     "index": 4,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t1d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t1d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t1d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t1d)\" opacity=\"0.6\"\/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"\/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><\/svg>"
                                 }
                             ],
-                            "answer": "1"
+                            "answer": "1",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
@@ -830,22 +909,23 @@
                             "graph_options": [
                                 {
                                     "index": 1,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t2a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t2a)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t2a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">4</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t2a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t2a)\" opacity=\"0.6\"\/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t2a)\" opacity=\"0.6\"\/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">4<\/text><\/svg>"
                                 },
                                 {
                                     "index": 2,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t2b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t2b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">4</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t2b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t2b)\" opacity=\"0.6\"\/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">4<\/text><\/svg>"
                                 },
                                 {
                                     "index": 3,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t2c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t2c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">4</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t2c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t2c)\" opacity=\"0.6\"\/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">4<\/text><\/svg>"
                                 },
                                 {
                                     "index": 4,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t2d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t2d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t2d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t2d)\" opacity=\"0.6\"\/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><\/svg>"
                                 }
                             ],
-                            "answer": "1"
+                            "answer": "1",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
@@ -853,22 +933,23 @@
                             "graph_options": [
                                 {
                                     "index": 1,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t3a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t3a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">1</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t3a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t3a)\" opacity=\"0.6\"\/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">1<\/text><\/svg>"
                                 },
                                 {
                                     "index": 2,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t3b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t3b)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t3b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">1</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t3b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t3b)\" opacity=\"0.6\"\/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t3b)\" opacity=\"0.6\"\/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">1<\/text><\/svg>"
                                 },
                                 {
                                     "index": 3,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t3c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t3c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">1</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t3c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t3c)\" opacity=\"0.6\"\/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">1<\/text><\/svg>"
                                 },
                                 {
                                     "index": 4,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t3d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t3d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t3d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t3d)\" opacity=\"0.6\"\/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><\/svg>"
                                 }
                             ],
-                            "answer": "1"
+                            "answer": "1",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
@@ -876,22 +957,23 @@
                             "graph_options": [
                                 {
                                     "index": 1,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t4a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t4a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">6</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t4a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t4a)\" opacity=\"0.6\"\/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"\/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"\/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">6<\/text><\/svg>"
                                 },
                                 {
                                     "index": 2,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t4b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t4b)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t4b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">6</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t4b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t4b)\" opacity=\"0.6\"\/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t4b)\" opacity=\"0.6\"\/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"\/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"\/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">6<\/text><\/svg>"
                                 },
                                 {
                                     "index": 3,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t4c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t4c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t4c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t4c)\" opacity=\"0.6\"\/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"\/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><\/svg>"
                                 },
                                 {
                                     "index": 4,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t4d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t4d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">6</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t4d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t4d)\" opacity=\"0.6\"\/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"\/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">6<\/text><\/svg>"
                                 }
                             ],
-                            "answer": "1"
+                            "answer": "1",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
@@ -899,22 +981,23 @@
                             "graph_options": [
                                 {
                                     "index": 1,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t5a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t5a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">7</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t5a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t5a)\" opacity=\"0.6\"\/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">7<\/text><\/svg>"
                                 },
                                 {
                                     "index": 2,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t5b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t5b)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t5b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">7</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t5b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t5b)\" opacity=\"0.6\"\/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t5b)\" opacity=\"0.6\"\/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">7<\/text><\/svg>"
                                 },
                                 {
                                     "index": 3,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t5c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t5c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">7</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t5c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t5c)\" opacity=\"0.6\"\/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">7<\/text><\/svg>"
                                 },
                                 {
                                     "index": 4,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t5d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t5d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t5d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t5d)\" opacity=\"0.6\"\/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><\/svg>"
                                 }
                             ],
-                            "answer": "1"
+                            "answer": "1",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
@@ -922,22 +1005,23 @@
                             "graph_options": [
                                 {
                                     "index": 1,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t6a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t6a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">2</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t6a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t6a)\" opacity=\"0.6\"\/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"\/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"\/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">2<\/text><\/svg>"
                                 },
                                 {
                                     "index": 2,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t6b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t6b)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t6b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">2</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t6b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t6b)\" opacity=\"0.6\"\/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t6b)\" opacity=\"0.6\"\/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"\/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"\/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">2<\/text><\/svg>"
                                 },
                                 {
                                     "index": 3,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t6c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t6c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t6c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t6c)\" opacity=\"0.6\"\/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"\/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><\/svg>"
                                 },
                                 {
                                     "index": 4,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t6d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t6d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">2</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t6d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t6d)\" opacity=\"0.6\"\/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"\/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">2<\/text><\/svg>"
                                 }
                             ],
-                            "answer": "1"
+                            "answer": "1",
+                            "status": "draft"
                         },
                         {
                             "id": 7,
@@ -945,22 +1029,23 @@
                             "graph_options": [
                                 {
                                     "index": 1,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t7a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t7a)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t7a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">8</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t7a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t7a)\" opacity=\"0.6\"\/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t7a)\" opacity=\"0.6\"\/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"\/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"\/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">8<\/text><\/svg>"
                                 },
                                 {
                                     "index": 2,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t7b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t7b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">8</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t7b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t7b)\" opacity=\"0.6\"\/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"\/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"\/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">8<\/text><\/svg>"
                                 },
                                 {
                                     "index": 3,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t7c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t7c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">8</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t7c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t7c)\" opacity=\"0.6\"\/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"\/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">8<\/text><\/svg>"
                                 },
                                 {
                                     "index": 4,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t7d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t7d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t7d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t7d)\" opacity=\"0.6\"\/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"white\" stroke=\"#3b82f6\" stroke-width=\"2\"\/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><\/svg>"
                                 }
                             ],
-                            "answer": "1"
+                            "answer": "1",
+                            "status": "draft"
                         },
                         {
                             "id": 8,
@@ -968,22 +1053,23 @@
                             "graph_options": [
                                 {
                                     "index": 1,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t8a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t8a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">5</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t8a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t8a)\" opacity=\"0.6\"\/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">5<\/text><\/svg>"
                                 },
                                 {
                                     "index": 2,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t8b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t8b)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t8b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">5</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t8b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t8b)\" opacity=\"0.6\"\/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t8b)\" opacity=\"0.6\"\/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">5<\/text><\/svg>"
                                 },
                                 {
                                     "index": 3,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t8c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t8c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">5</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t8c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t8c)\" opacity=\"0.6\"\/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">5<\/text><\/svg>"
                                 },
                                 {
                                     "index": 4,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t8d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t8d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t8d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t8d)\" opacity=\"0.6\"\/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><\/svg>"
                                 }
                             ],
-                            "answer": "1"
+                            "answer": "1",
+                            "status": "draft"
                         },
                         {
                             "id": 9,
@@ -991,22 +1077,23 @@
                             "graph_options": [
                                 {
                                     "index": 1,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t9a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t9a)\" opacity=\"0.6\"/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t9a)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">3</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t9a\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"15\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t9a)\" opacity=\"0.6\"\/><rect x=\"175\" y=\"12\" width=\"60\" height=\"16\" fill=\"url(#z10t9a)\" opacity=\"0.6\"\/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">3<\/text><\/svg>"
                                 },
                                 {
                                     "index": 2,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t9b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t9b)\" opacity=\"0.6\"/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">3</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t9b\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"75\" y=\"12\" width=\"100\" height=\"16\" fill=\"url(#z10t9b)\" opacity=\"0.6\"\/><circle cx=\"75\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><circle cx=\"175\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><text x=\"75\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><text x=\"175\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">3<\/text><\/svg>"
                                 },
                                 {
                                     "index": 3,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t9c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t9c)\" opacity=\"0.6\"/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">3</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t9c\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"90\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t9c)\" opacity=\"0.6\"\/><circle cx=\"90\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><text x=\"90\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">3<\/text><\/svg>"
                                 },
                                 {
                                     "index": 4,
-                                    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t9d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"/></pattern></defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t9d)\" opacity=\"0.6\"/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0</text></svg>"
+                                    "svg": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewBox=\"0 0 250 44\" class=\"w-full h-auto\"><defs><pattern id=\"z10t9d\" patternUnits=\"userSpaceOnUse\" width=\"6\" height=\"6\" patternTransform=\"rotate(45)\"><line x1=\"0\" y1=\"0\" x2=\"0\" y2=\"6\" stroke=\"#3b82f6\" stroke-width=\"1.5\"\/><\/pattern><\/defs><line x1=\"15\" y1=\"20\" x2=\"235\" y2=\"20\" stroke=\"#6b7280\" stroke-width=\"1.5\"\/><polygon points=\"243,20 235,16.5 235,23.5\" fill=\"#6b7280\"\/><rect x=\"15\" y=\"12\" width=\"145\" height=\"16\" fill=\"url(#z10t9d)\" opacity=\"0.6\"\/><circle cx=\"160\" cy=\"20\" r=\"4.5\" fill=\"#3b82f6\"\/><text x=\"160\" y=\"36\" fill=\"#374151\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">0<\/text><\/svg>"
                                 }
                             ],
-                            "answer": "1"
+                            "answer": "1",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -1024,7 +1111,8 @@
                                 "x² + 49 ≥ 0"
                             ],
                             "image": "img-035.png",
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
@@ -1035,7 +1123,8 @@
                                 "x² + 36 < 0"
                             ],
                             "image": "img-036.png",
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
@@ -1046,7 +1135,8 @@
                                 "x² + 64 ≥ 0"
                             ],
                             "image": "img-037.png",
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
@@ -1057,7 +1147,8 @@
                                 "x² - 9 > 0"
                             ],
                             "image": "img-038.png",
-                            "answer": "4"
+                            "answer": "4",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
@@ -1068,7 +1159,8 @@
                                 "x² - 16 ≥ 0"
                             ],
                             "image": "img-039.png",
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
@@ -1079,7 +1171,8 @@
                                 "x² - 25 < 0"
                             ],
                             "image": "img-040.png",
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 7,
@@ -1090,7 +1183,8 @@
                                 "x² + 81 ≤ 0"
                             ],
                             "image": "img-041.png",
-                            "answer": "1"
+                            "answer": "1",
+                            "status": "draft"
                         },
                         {
                             "id": 8,
@@ -1101,7 +1195,8 @@
                                 "x² - 4 > 0"
                             ],
                             "image": "img-042.png",
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -1119,7 +1214,8 @@
                                 "x² - 5x ≥ 0"
                             ],
                             "image": "img-043.png",
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
@@ -1130,7 +1226,8 @@
                                 "x² - 36 > 0"
                             ],
                             "image": "img-044.png",
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
@@ -1141,7 +1238,8 @@
                                 "x² - 1 ≤ 0"
                             ],
                             "image": "img-045.png",
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
@@ -1152,7 +1250,8 @@
                                 "x² - 64 < 0"
                             ],
                             "image": "img-046.png",
-                            "answer": "4"
+                            "answer": "4",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
@@ -1163,7 +1262,8 @@
                                 "x² - 16 ≤ 0"
                             ],
                             "image": "img-047.png",
-                            "answer": "4"
+                            "answer": "4",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
@@ -1174,7 +1274,8 @@
                                 "x² - 49 > 0"
                             ],
                             "image": "img-048.png",
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 7,
@@ -1185,7 +1286,8 @@
                                 "x² - 81 ≤ 0"
                             ],
                             "image": "img-049.png",
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 8,
@@ -1196,7 +1298,8 @@
                                 "x² - 9 < 0"
                             ],
                             "image": "img-050.png",
-                            "answer": "4"
+                            "answer": "4",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -1208,42 +1311,50 @@
                         {
                             "id": 1,
                             "expression": "x^2 < 9",
-                            "image": "img-052.png"
+                            "image": "img-052.png",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "x^2 \\leq 64",
-                            "image": "img-053.png"
+                            "image": "img-053.png",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "x^2 > 36",
-                            "image": "img-054.png"
+                            "image": "img-054.png",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "x^2 \\leq 36",
-                            "image": "img-055.png"
+                            "image": "img-055.png",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "49x^2 \\geq 36",
-                            "image": "img-056.png"
+                            "image": "img-056.png",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
                             "expression": "25x^2 \\geq 4",
-                            "image": "img-057.png"
+                            "image": "img-057.png",
+                            "status": "draft"
                         },
                         {
                             "id": 7,
                             "expression": "81x^2 \\leq 16",
-                            "image": "img-058.png"
+                            "image": "img-058.png",
+                            "status": "draft"
                         },
                         {
                             "id": 8,
                             "expression": "25x^2 \\geq 49",
-                            "image": "img-059.png"
+                            "image": "img-059.png",
+                            "status": "draft"
                         }
                     ]
                 }
@@ -1262,55 +1373,64 @@
                             "id": 1,
                             "expression": "4x + 5 \\geq 6x - 2",
                             "image": "img-060.png",
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "-2x + 5 \\leq -3x - 3",
                             "image": "img-061.png",
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "3 - x \\geq 3x + 5",
                             "image": "img-062.png",
-                            "answer": "4"
+                            "answer": "4",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "x + 4 \\geq 4x - 5",
                             "image": "img-063.png",
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "2 + x \\leq 5x - 8",
                             "image": "img-064.png",
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
                             "expression": "4x - 5 \\geq 2x - 4",
                             "image": "img-065.png",
-                            "answer": "4"
+                            "answer": "4",
+                            "status": "draft"
                         },
                         {
                             "id": 7,
                             "expression": "x - 1 \\leq 3x + 2",
                             "image": "img-066.png",
-                            "answer": "1"
+                            "answer": "1",
+                            "status": "draft"
                         },
                         {
                             "id": 8,
                             "expression": "2x + 4 \\leq -4x + 1",
                             "image": "img-067.png",
-                            "answer": "4"
+                            "answer": "4",
+                            "status": "draft"
                         },
                         {
                             "id": 9,
                             "expression": "x - 2 \\leq 4x + 4",
                             "image": "img-068.png",
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -1329,7 +1449,8 @@
                                 "(-∞; 3,1)",
                                 "(-1,7; +∞)"
                             ],
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
@@ -1340,7 +1461,8 @@
                                 "(-∞; -1,5)",
                                 "(-∞; -1,5)"
                             ],
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
@@ -1351,7 +1473,8 @@
                                 "(-∞; -8)",
                                 "(0; +∞)"
                             ],
-                            "answer": "1"
+                            "answer": "1",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
@@ -1362,7 +1485,8 @@
                                 "(-∞; 11)",
                                 "(11; +∞)"
                             ],
-                            "answer": "1"
+                            "answer": "1",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
@@ -1373,7 +1497,8 @@
                                 "(-∞; 4]",
                                 "[4; +∞)"
                             ],
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
@@ -1384,7 +1509,8 @@
                                 "[-24; +∞)",
                                 "(-∞; -24]"
                             ],
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 7,
@@ -1395,7 +1521,8 @@
                                 "[5; +∞)",
                                 "(-∞; -6,2]"
                             ],
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 8,
@@ -1406,7 +1533,8 @@
                                 "(-∞; -33]",
                                 "(-∞; 15]"
                             ],
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -1418,17 +1546,20 @@
                         {
                             "id": 1,
                             "expression": "4 - 5(5x - 2) < -8",
-                            "image": "img-069.png"
+                            "image": "img-069.png",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "-9 + 10(-2x + 9) < -7",
-                            "image": "img-070.png"
+                            "image": "img-070.png",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "4 - 7(x + 3) \\geq -9",
-                            "image": "img-071.png"
+                            "image": "img-071.png",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -1440,47 +1571,56 @@
                         {
                             "id": 1,
                             "expression": "\\begin{cases} x > 8 \\\\ 9 - x < 0 \\end{cases}",
-                            "image": "img-072.png"
+                            "image": "img-072.png",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "\\begin{cases} x < -1 \\\\ -4 - x < 0 \\end{cases}",
-                            "image": "img-073.png"
+                            "image": "img-073.png",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "\\begin{cases} x < 9 \\\\ 8 - x > 0 \\end{cases}",
-                            "image": "img-074.png"
+                            "image": "img-074.png",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "\\begin{cases} x > -1 \\\\ 3 - x > 0 \\end{cases}",
-                            "image": "img-075.png"
+                            "image": "img-075.png",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "\\begin{cases} x > 9 \\\\ 4 - x < 0 \\end{cases}",
-                            "image": "img-076.png"
+                            "image": "img-076.png",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
                             "expression": "\\begin{cases} x > -1 \\\\ -4 - x > 0 \\end{cases}",
-                            "image": "img-077.png"
+                            "image": "img-077.png",
+                            "status": "draft"
                         },
                         {
                             "id": 7,
                             "expression": "\\begin{cases} x < 3 \\\\ 4 - x > 0 \\end{cases}",
-                            "image": "img-078.png"
+                            "image": "img-078.png",
+                            "status": "draft"
                         },
                         {
                             "id": 8,
                             "expression": "\\begin{cases} x < -3 \\\\ 9 - x < 0 \\end{cases}",
-                            "image": "img-079.png"
+                            "image": "img-079.png",
+                            "status": "draft"
                         },
                         {
                             "id": 9,
                             "expression": "\\begin{cases} x > 8 \\\\ 9 - x > 0 \\end{cases}",
-                            "image": "img-080.png"
+                            "image": "img-080.png",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -1496,7 +1636,8 @@
                                 "x² - 78 > 0",
                                 "x² + 78 < 0",
                                 "x² - 78 < 0"
-                            ]
+                            ],
+                            "status": "draft"
                         },
                         {
                             "id": 2,
@@ -1505,7 +1646,8 @@
                                 "x² + 64 ≤ 0",
                                 "x² + 64 ≥ 0",
                                 "x² - 64 ≤ 0"
-                            ]
+                            ],
+                            "status": "draft"
                         },
                         {
                             "id": 3,
@@ -1514,7 +1656,8 @@
                                 "x² + 56 > 0",
                                 "x² - 56 < 0",
                                 "x² + 56 < 0"
-                            ]
+                            ],
+                            "status": "draft"
                         },
                         {
                             "id": 4,
@@ -1523,7 +1666,8 @@
                                 "x² - 15 > 0",
                                 "x² - 15 < 0",
                                 "x² + 15 < 0"
-                            ]
+                            ],
+                            "status": "draft"
                         },
                         {
                             "id": 5,
@@ -1532,7 +1676,8 @@
                                 "x² + 70 > 0",
                                 "x² - 70 < 0",
                                 "x² - 70 > 0"
-                            ]
+                            ],
+                            "status": "draft"
                         },
                         {
                             "id": 6,
@@ -1541,7 +1686,8 @@
                                 "x² + 29 > 0",
                                 "x² - 29 < 0",
                                 "x² + 29 < 0"
-                            ]
+                            ],
+                            "status": "draft"
                         }
                     ]
                 },
@@ -1557,7 +1703,8 @@
                                 "x² + 70 > 0",
                                 "x² - 70 < 0",
                                 "x² - 70 > 0"
-                            ]
+                            ],
+                            "status": "draft"
                         },
                         {
                             "id": 2,
@@ -1566,7 +1713,8 @@
                                 "x² - 15 ≤ 0",
                                 "x² - 15 ≥ 0",
                                 "x² + 15 ≤ 0"
-                            ]
+                            ],
+                            "status": "draft"
                         },
                         {
                             "id": 3,
@@ -1575,7 +1723,8 @@
                                 "x² + 33 > 0",
                                 "x² - 33 < 0",
                                 "x² - 33 > 0"
-                            ]
+                            ],
+                            "status": "draft"
                         },
                         {
                             "id": 4,
@@ -1584,7 +1733,8 @@
                                 "x² - 49 ≤ 0",
                                 "x² - 49 ≥ 0",
                                 "x² + 49 ≤ 0"
-                            ]
+                            ],
+                            "status": "draft"
                         },
                         {
                             "id": 5,
@@ -1593,7 +1743,8 @@
                                 "x² + 64 > 0",
                                 "x² + 64 < 0",
                                 "x² - 64 > 0"
-                            ]
+                            ],
+                            "status": "draft"
                         },
                         {
                             "id": 6,
@@ -1602,7 +1753,8 @@
                                 "x² + 56 ≥ 0",
                                 "x² - 56 ≥ 0",
                                 "x² + 56 ≤ 0"
-                            ]
+                            ],
+                            "status": "draft"
                         }
                     ]
                 },
@@ -1618,7 +1770,8 @@
                                 "x² + 6x + 51 > 0",
                                 "x² + 6x - 51 < 0",
                                 "x² + 6x + 51 < 0"
-                            ]
+                            ],
+                            "status": "draft"
                         },
                         {
                             "id": 2,
@@ -1627,7 +1780,8 @@
                                 "x² - 2x + 65 < 0",
                                 "x² - 2x - 65 > 0",
                                 "x² - 2x + 65 > 0"
-                            ]
+                            ],
+                            "status": "draft"
                         },
                         {
                             "id": 3,
@@ -1636,7 +1790,8 @@
                                 "x² + 9x + 79 > 0",
                                 "x² + 9x + 79 < 0",
                                 "x² + 9x - 79 > 0"
-                            ]
+                            ],
+                            "status": "draft"
                         },
                         {
                             "id": 4,
@@ -1645,7 +1800,8 @@
                                 "x² - 5x + 53 > 0",
                                 "x² - 5x - 53 < 0",
                                 "x² - 5x - 53 > 0"
-                            ]
+                            ],
+                            "status": "draft"
                         },
                         {
                             "id": 5,
@@ -1654,7 +1810,8 @@
                                 "x² - 3x + 11 > 0",
                                 "x² - 3x + 11 < 0",
                                 "x² - 3x - 11 > 0"
-                            ]
+                            ],
+                            "status": "draft"
                         },
                         {
                             "id": 6,
@@ -1663,7 +1820,8 @@
                                 "x² - 8x - 83 < 0",
                                 "x² - 8x + 83 < 0",
                                 "x² - 8x + 83 > 0"
-                            ]
+                            ],
+                            "status": "draft"
                         },
                         {
                             "id": 7,
@@ -1672,7 +1830,8 @@
                                 "x² + x + 36 > 0",
                                 "x² + x - 36 < 0",
                                 "x² + x - 36 > 0"
-                            ]
+                            ],
+                            "status": "draft"
                         },
                         {
                             "id": 8,
@@ -1681,7 +1840,8 @@
                                 "x² + 6x - 12 > 0",
                                 "x² + 6x + 12 > 0",
                                 "x² + 6x - 12 < 0"
-                            ]
+                            ],
+                            "status": "draft"
                         }
                     ]
                 },
@@ -1693,32 +1853,38 @@
                         {
                             "id": 1,
                             "expression": "x^2 - 4x + 3 \\leq 0",
-                            "image": "img-081.png"
+                            "image": "img-081.png",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "x^2 - 7x + 12 > 0",
-                            "image": "img-082.png"
+                            "image": "img-082.png",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "x^2 + 9x + 20 \\geq 0",
-                            "image": "img-083.png"
+                            "image": "img-083.png",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "x^2 - 5x - 6 \\leq 0",
-                            "image": "img-084.png"
+                            "image": "img-084.png",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "x^2 - 17x + 72 \\geq 0",
-                            "image": "img-085.png"
+                            "image": "img-085.png",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
                             "expression": "x^2 - 6x - 27 < 0",
-                            "image": "img-086.png"
+                            "image": "img-086.png",
+                            "status": "draft"
                         }
                     ]
                 }

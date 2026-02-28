@@ -20,92 +20,110 @@
                         {
                             "id": 1,
                             "expression": "x + 3 = -9x",
-                            "answer": "-0.3"
+                            "answer": "-0.3",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "-3x - 9 = 2x",
-                            "answer": "-1.8"
+                            "answer": "-1.8",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "6x + 1 = -4x",
-                            "answer": "-0.1"
+                            "answer": "-0.1",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "-2x - 4 = 3x",
-                            "answer": "-0.8"
+                            "answer": "-0.8",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "3x + 3 = 5x",
-                            "answer": "1.5"
+                            "answer": "1.5",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
                             "expression": "-8x - 3 = -6x",
-                            "answer": "-1.5"
+                            "answer": "-1.5",
+                            "status": "draft"
                         },
                         {
                             "id": 7,
                             "expression": "7 + 8x = -2x - 5",
-                            "answer": "-1.2"
+                            "answer": "-1.2",
+                            "status": "draft"
                         },
                         {
                             "id": 8,
                             "expression": "-5 + 9x = 10x + 4",
-                            "answer": "-9"
+                            "answer": "-9",
+                            "status": "draft"
                         },
                         {
                             "id": 9,
                             "expression": "1 - 10x = -5x + 10",
-                            "answer": "-1.8"
+                            "answer": "-1.8",
+                            "status": "draft"
                         },
                         {
                             "id": 10,
                             "expression": "-4 - 6x = 4x - 3",
-                            "answer": "-0.1"
+                            "answer": "-0.1",
+                            "status": "draft"
                         },
                         {
                             "id": 11,
                             "expression": "2 + 3x = -7x - 5",
-                            "answer": "-0.7"
+                            "answer": "-0.7",
+                            "status": "draft"
                         },
                         {
                             "id": 12,
                             "expression": "-1 - 3x = 2x + 1",
-                            "answer": "-0.4"
+                            "answer": "-0.4",
+                            "status": "draft"
                         },
                         {
                             "id": 13,
                             "expression": "4(x - 8) = -5",
-                            "answer": "6.75"
+                            "answer": "6.75",
+                            "status": "draft"
                         },
                         {
                             "id": 14,
                             "expression": "10(x - 9) = 7",
-                            "answer": "9.7"
+                            "answer": "9.7",
+                            "status": "draft"
                         },
                         {
                             "id": 15,
                             "expression": "5(x + 9) = -8",
-                            "answer": "-10.6"
+                            "answer": "-10.6",
+                            "status": "draft"
                         },
                         {
                             "id": 16,
                             "expression": "4(x + 1) = 9",
-                            "answer": "1.25"
+                            "answer": "1.25",
+                            "status": "draft"
                         },
                         {
                             "id": 17,
                             "expression": "10(x + 2) = -7",
-                            "answer": "-2.7"
+                            "answer": "-2.7",
+                            "status": "draft"
                         },
                         {
                             "id": 18,
                             "expression": "5(x - 6) = 2",
-                            "answer": "6.4"
+                            "answer": "6.4",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -117,52 +135,62 @@
                         {
                             "id": 1,
                             "expression": "x^2 - 9 = 0",
-                            "answer": "-3"
+                            "answer": "-3",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "x^2 - 64 = 0",
-                            "answer": "-8"
+                            "answer": "-8",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "x^2 - 144 = 0",
-                            "answer": "-12"
+                            "answer": "-12",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "x^2 - 81 = 0",
-                            "answer": "-9"
+                            "answer": "-9",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "x^2 - 169 = 0",
-                            "answer": "-13"
+                            "answer": "-13",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
                             "expression": "x^2 - 16 = 0",
-                            "answer": "-4"
+                            "answer": "-4",
+                            "status": "draft"
                         },
                         {
                             "id": 7,
                             "expression": "4x^2 = 8x",
-                            "answer": "0"
+                            "answer": "0",
+                            "status": "draft"
                         },
                         {
                             "id": 8,
                             "expression": "7x^2 = 42x",
-                            "answer": "0"
+                            "answer": "0",
+                            "status": "draft"
                         },
                         {
                             "id": 9,
                             "expression": "10x^2 = 80x",
-                            "answer": "0"
+                            "answer": "0",
+                            "status": "draft"
                         },
                         {
                             "id": 10,
                             "expression": "5x^2 = 35x",
-                            "answer": "0"
+                            "answer": "0",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -174,32 +202,38 @@
                         {
                             "id": 1,
                             "expression": "x^2 - 36 = 0",
-                            "answer": "6"
+                            "answer": "6",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "x^2 - 25 = 0",
-                            "answer": "5"
+                            "answer": "5",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "x^2 - 49 = 0",
-                            "answer": "7"
+                            "answer": "7",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "x^2 - 121 = 0",
-                            "answer": "11"
+                            "answer": "11",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "x^2 - 4 = 0",
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
                             "expression": "x^2 - 100 = 0",
-                            "answer": "10"
+                            "answer": "10",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -211,32 +245,38 @@
                         {
                             "id": 1,
                             "expression": "x^2 - 6x + 5 = 0",
-                            "answer": "1"
+                            "answer": "1",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "x^2 - 9x + 18 = 0",
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "x^2 - 10x + 24 = 0",
-                            "answer": "4"
+                            "answer": "4",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "x^2 + x - 12 = 0",
-                            "answer": "-4"
+                            "answer": "-4",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "x^2 - 11x + 30 = 0",
-                            "answer": "5"
+                            "answer": "5",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
                             "expression": "x^2 - 7x + 10 = 0",
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -248,32 +288,38 @@
                         {
                             "id": 1,
                             "expression": "x^2 - 8x + 12 = 0",
-                            "answer": "6"
+                            "answer": "6",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "x^2 - 10x + 21 = 0",
-                            "answer": "7"
+                            "answer": "7",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "x^2 - 11x + 18 = 0",
-                            "answer": "9"
+                            "answer": "9",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "x^2 - 12x + 20 = 0",
-                            "answer": "10"
+                            "answer": "10",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "x^2 - 9x + 8 = 0",
-                            "answer": "8"
+                            "answer": "8",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
                             "expression": "x^2 - 13x + 22 = 0",
-                            "answer": "11"
+                            "answer": "11",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -285,32 +331,38 @@
                         {
                             "id": 1,
                             "expression": "2x^2 - 3x + 1 = 0",
-                            "answer": "0.5"
+                            "answer": "0.5",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "5x^2 - 9x + 4 = 0",
-                            "answer": "0.8"
+                            "answer": "0.8",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "8x^2 - 10x + 2 = 0",
-                            "answer": "0.25"
+                            "answer": "0.25",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "6x^2 - 9x + 3 = 0",
-                            "answer": "0.5"
+                            "answer": "0.5",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "8x^2 - 12x + 4 = 0",
-                            "answer": "0.5"
+                            "answer": "0.5",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
                             "expression": "2x^2 + 5x - 7 = 0",
-                            "answer": "-3.5"
+                            "answer": "-3.5",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -322,32 +374,38 @@
                         {
                             "id": 1,
                             "expression": "5x^2 + 9x + 4 = 0",
-                            "answer": "-0.8"
+                            "answer": "-0.8",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "5x^2 + 4x - 1 = 0",
-                            "answer": "0.2"
+                            "answer": "0.2",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "5x^2 - 12x + 7 = 0",
-                            "answer": "1.4"
+                            "answer": "1.4",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "5x^2 + 8x + 3 = 0",
-                            "answer": "-0.6"
+                            "answer": "-0.6",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "5x^2 - 11x + 6 = 0",
-                            "answer": "1.2"
+                            "answer": "1.2",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
                             "expression": "5x^2 + 7x - 12 = 0",
-                            "answer": "1"
+                            "answer": "1",
+                            "status": "draft"
                         }
                     ]
                 }
@@ -365,32 +423,38 @@
                         {
                             "id": 1,
                             "expression": "2 + 3x = -7x - 5",
-                            "answer": "-0.7"
+                            "answer": "-0.7",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "7 + 8x = -2x - 5",
-                            "answer": "-1.2"
+                            "answer": "-1.2",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "-7 - 2x = -6x + 10",
-                            "answer": "4.25"
+                            "answer": "4.25",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "-1 - 3x = 2x + 1",
-                            "answer": "-0.4"
+                            "answer": "-0.4",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "8 - 5(2x - 3) = 13 - 6x",
-                            "answer": "2.5"
+                            "answer": "2.5",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
                             "expression": "1 - 7(4 + 2x) = -9 - 4x",
-                            "answer": "-1.8"
+                            "answer": "-1.8",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -402,42 +466,50 @@
                         {
                             "id": 1,
                             "expression": "3x + 5 + (x + 5) = (1 - x) + 4",
-                            "answer": "-1"
+                            "answer": "-1",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "x - 3 - 4(x + 1) = 5(4 - x) - 1",
-                            "answer": "13"
+                            "answer": "13",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "4x + 4 - 3(x + 1) = 5(-2 - x) + 5",
-                            "answer": "-1"
+                            "answer": "-1",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "2x + 2 + 3(x + 4) = -4(1 - x) + 3",
-                            "answer": "-15"
+                            "answer": "-15",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "-3x + 1 + (x - 5) = 5(3 - x) + 5",
-                            "answer": "8"
+                            "answer": "8",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
                             "expression": "-x - 4 + 5(x + 3) = 5(-1 - x) - 2",
-                            "answer": "-2"
+                            "answer": "-2",
+                            "status": "draft"
                         },
                         {
                             "id": 7,
                             "expression": "-3x + 1 - 3(x + 3) = -2(1 - x) + 2",
-                            "answer": "-1"
+                            "answer": "-1",
+                            "status": "draft"
                         },
                         {
                             "id": 8,
                             "expression": "-5x - 2 + 4(x + 1) = 4(-3 - x) - 1",
-                            "answer": "-5"
+                            "answer": "-5",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -449,32 +521,38 @@
                         {
                             "id": 1,
                             "expression": "(x - 5)^2 = (x - 8)^2",
-                            "answer": "6.5"
+                            "answer": "6.5",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "(x + 9)^2 = (x + 6)^2",
-                            "answer": "-7.5"
+                            "answer": "-7.5",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "(x + 10)^2 = (5 - x)^2",
-                            "answer": "-2.5"
+                            "answer": "-2.5",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "(x - 3)^2 = (x + 10)^2",
-                            "answer": "-3.5"
+                            "answer": "-3.5",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "(x + 6)^2 = (15 - x)^2",
-                            "answer": "4.5"
+                            "answer": "4.5",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
                             "expression": "(x - 2)^2 = (x - 9)^2",
-                            "answer": "5.5"
+                            "answer": "5.5",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -486,22 +564,26 @@
                         {
                             "id": 1,
                             "expression": "(x + 1)^2 + (x - 6)^2 = 2x^2",
-                            "answer": "3.7"
+                            "answer": "3.7",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "(x - 2)^2 + (x - 8)^2 = 2x^2",
-                            "answer": "3.4"
+                            "answer": "3.4",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "(x - 6)^2 + (x + 8)^2 = 2x^2",
-                            "answer": "-25"
+                            "answer": "-25",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "(x - 2)^2 + (x - 3)^2 = 2x^2",
-                            "answer": "1.3"
+                            "answer": "1.3",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -513,22 +595,26 @@
                         {
                             "id": 1,
                             "expression": "x^2 + x + 6 = -x^2 - 3x + (-2 + 2x^2)",
-                            "answer": "-2"
+                            "answer": "-2",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "-3x^2 + 5x - 3 = -x^2 + 3x + (2 - 2x^2)",
-                            "answer": "2.5"
+                            "answer": "2.5",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "3x^2 - 4x + 7 = x^2 - 5x + (-1 + 2x^2)",
-                            "answer": "-8"
+                            "answer": "-8",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "-4x^2 + 2x + 6 = -2x^2 + 3x - (-3 + 2x^2)",
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -540,47 +626,56 @@
                         {
                             "id": 1,
                             "expression": "x + \\frac{x}{9} = -\\frac{10}{3}",
-                            "answer": "-3"
+                            "answer": "-3",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "x - \\frac{x}{7} = 6",
-                            "answer": "7"
+                            "answer": "7",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "x + \\frac{x}{5} = -\\frac{12}{5}",
-                            "answer": "-2"
+                            "answer": "-2",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "x - \\frac{x}{12} = \\frac{11}{3}",
-                            "answer": "4"
+                            "answer": "4",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "x + \\frac{x}{2} = -9",
-                            "answer": "-6"
+                            "answer": "-6",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
                             "expression": "x - \\frac{x}{11} = \\frac{50}{11}",
-                            "answer": "5"
+                            "answer": "5",
+                            "status": "draft"
                         },
                         {
                             "id": 7,
                             "expression": "6 + \\frac{x}{2} = \\frac{x + 3}{5}",
-                            "answer": "-18"
+                            "answer": "-18",
+                            "status": "draft"
                         },
                         {
                             "id": 8,
                             "expression": "-4 + \\frac{x}{5} = \\frac{x + 4}{2}",
-                            "answer": "-20"
+                            "answer": "-20",
+                            "status": "draft"
                         },
                         {
                             "id": 9,
                             "expression": "1 + \\frac{x}{5} = \\frac{x + 9}{7}",
-                            "answer": "5"
+                            "answer": "5",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -592,17 +687,20 @@
                         {
                             "id": 1,
                             "expression": "\\frac{4x + 7}{3} + 2 = \\frac{7x}{2}",
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "\\frac{6x + 8}{2} + 5 = \\frac{5x}{3}",
-                            "answer": "-6.75"
+                            "answer": "-6.75",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "\\frac{9x + 6}{7} + 3 = \\frac{7x}{6}",
-                            "answer": "-32.4"
+                            "answer": "-32.4",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -614,77 +712,92 @@
                         {
                             "id": 1,
                             "expression": "\\frac{12}{x + 5} = -\\frac{12}{5}",
-                            "answer": "-10"
+                            "answer": "-10",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "\\frac{6}{x + 8} = -\\frac{3}{4}",
-                            "answer": "-16"
+                            "answer": "-16",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "\\frac{1}{x + 2} = -\\frac{1}{2}",
-                            "answer": "-4"
+                            "answer": "-4",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "\\frac{10}{x + 7} = -\\frac{5}{8}",
-                            "answer": "-23"
+                            "answer": "-23",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "\\frac{11}{x + 4} = -\\frac{11}{7}",
-                            "answer": "-11"
+                            "answer": "-11",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
                             "expression": "\\frac{8}{x + 9} = -\\frac{2}{9}",
-                            "answer": "-45"
+                            "answer": "-45",
+                            "status": "draft"
                         },
                         {
                             "id": 7,
                             "expression": "\\frac{7}{x - 5} = 2",
-                            "answer": "8.5"
+                            "answer": "8.5",
+                            "status": "draft"
                         },
                         {
                             "id": 8,
                             "expression": "\\frac{4}{x - 4} = -5",
-                            "answer": "3.2"
+                            "answer": "3.2",
+                            "status": "draft"
                         },
                         {
                             "id": 9,
                             "expression": "\\frac{11}{x - 9} = -10",
-                            "answer": "7.9"
+                            "answer": "7.9",
+                            "status": "draft"
                         },
                         {
                             "id": 10,
                             "expression": "\\frac{7}{x + 8} = -1",
-                            "answer": "-15"
+                            "answer": "-15",
+                            "status": "draft"
                         },
                         {
                             "id": 11,
                             "expression": "\\frac{6}{x + 5} = -5",
-                            "answer": "-6.2"
+                            "answer": "-6.2",
+                            "status": "draft"
                         },
                         {
                             "id": 12,
                             "expression": "\\frac{11}{x + 3} = 10",
-                            "answer": "-1.9"
+                            "answer": "-1.9",
+                            "status": "draft"
                         },
                         {
                             "id": 13,
                             "expression": "\\frac{3}{x - 19} = \\frac{19}{x - 3}",
-                            "answer": "22"
+                            "answer": "22",
+                            "status": "draft"
                         },
                         {
                             "id": 14,
                             "expression": "\\frac{13}{x - 5} = \\frac{5}{x - 13}",
-                            "answer": "18"
+                            "answer": "18",
+                            "status": "draft"
                         },
                         {
                             "id": 15,
                             "expression": "\\frac{6}{x - 8} = \\frac{8}{x - 6}",
-                            "answer": "14"
+                            "answer": "14",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -696,32 +809,38 @@
                         {
                             "id": 1,
                             "expression": "(5x - 2)(-x + 3) = 0",
-                            "answer": "0.4"
+                            "answer": "0.4",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "(x - 6)(4x - 6) = 0",
-                            "answer": "1.5"
+                            "answer": "1.5",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "(-2x + 1)(-2x - 7) = 0",
-                            "answer": "-3.5"
+                            "answer": "-3.5",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "(x - 7)(-5x - 9) = 0",
-                            "answer": "-1.8"
+                            "answer": "-1.8",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "(-5x + 3)(-x + 6) = 0",
-                            "answer": "0.6"
+                            "answer": "0.6",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
                             "expression": "(x - 2)(-2x - 3) = 0",
-                            "answer": "-1.5"
+                            "answer": "-1.5",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -733,32 +852,38 @@
                         {
                             "id": 1,
                             "expression": "3x^2 + 12x = 0",
-                            "answer": "-4"
+                            "answer": "-4",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "7x^2 + 21x = 0",
-                            "answer": "-3"
+                            "answer": "-3",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "3x^2 + 18x = 0",
-                            "answer": "-6"
+                            "answer": "-6",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "5x^2 + 25x = 0",
-                            "answer": "-5"
+                            "answer": "-5",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "6x^2 + 24x = 0",
-                            "answer": "-4"
+                            "answer": "-4",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
                             "expression": "5x^2 + 10x = 0",
-                            "answer": "-2"
+                            "answer": "-2",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -770,82 +895,98 @@
                         {
                             "id": 1,
                             "expression": "(-x - 5)(2x + 4) = 0",
-                            "answer": "-2"
+                            "answer": "-2",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "(6x - 3)(-x + 3) = 0",
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "(-x - 4)(3x + 3) = 0",
-                            "answer": "-1"
+                            "answer": "-1",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "(5x + 2)(-x - 6) = 0",
-                            "answer": "-0.4"
+                            "answer": "-0.4",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "(-x + 7)(x - 2) = 0",
-                            "answer": "7"
+                            "answer": "7",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
                             "expression": "(x + 10)(-x - 8) = 0",
-                            "answer": "-8"
+                            "answer": "-8",
+                            "status": "draft"
                         },
                         {
                             "id": 7,
                             "expression": "3x^2 - 9x = 0",
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 8,
                             "expression": "5x^2 - 10x = 0",
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 9,
                             "expression": "4x^2 - 16x = 0",
-                            "answer": "4"
+                            "answer": "4",
+                            "status": "draft"
                         },
                         {
                             "id": 10,
                             "expression": "7x^2 - 14x = 0",
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 11,
                             "expression": "4x^2 - 20x = 0",
-                            "answer": "5"
+                            "answer": "5",
+                            "status": "draft"
                         },
                         {
                             "id": 12,
                             "expression": "2x^2 - 12x = 0",
-                            "answer": "6"
+                            "answer": "6",
+                            "status": "draft"
                         },
                         {
                             "id": 13,
                             "expression": "9x^2 = 54x",
-                            "answer": "6"
+                            "answer": "6",
+                            "status": "draft"
                         },
                         {
                             "id": 14,
                             "expression": "2x^2 = 8x",
-                            "answer": "4"
+                            "answer": "4",
+                            "status": "draft"
                         },
                         {
                             "id": 15,
                             "expression": "3x^2 = 27x",
-                            "answer": "9"
+                            "answer": "9",
+                            "status": "draft"
                         },
                         {
                             "id": 16,
                             "expression": "4x^2 = 20x",
-                            "answer": "5"
+                            "answer": "5",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -857,62 +998,74 @@
                         {
                             "id": 1,
                             "expression": "x^2 - 15 = 2x",
-                            "answer": "-3"
+                            "answer": "-3",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "x^2 + 7 = 8x",
-                            "answer": "1"
+                            "answer": "1",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "x^2 - 16 = 6x",
-                            "answer": "-2"
+                            "answer": "-2",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "x^2 + 18 = 9x",
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "x^2 - 35 = 2x",
-                            "answer": "-5"
+                            "answer": "-5",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
                             "expression": "x^2 + 6 = 5x",
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 7,
                             "expression": "x^2 + 4x = 5",
-                            "answer": "-5"
+                            "answer": "-5",
+                            "status": "draft"
                         },
                         {
                             "id": 8,
                             "expression": "x^2 - 6x = 16",
-                            "answer": "-2"
+                            "answer": "-2",
+                            "status": "draft"
                         },
                         {
                             "id": 9,
                             "expression": "x^2 + 2x = 15",
-                            "answer": "-5"
+                            "answer": "-5",
+                            "status": "draft"
                         },
                         {
                             "id": 10,
                             "expression": "x^2 - 7x = 8",
-                            "answer": "-1"
+                            "answer": "-1",
+                            "status": "draft"
                         },
                         {
                             "id": 11,
                             "expression": "x^2 + 4x = 21",
-                            "answer": "-7"
+                            "answer": "-7",
+                            "status": "draft"
                         },
                         {
                             "id": 12,
                             "expression": "x^2 - 5x = 14",
-                            "answer": "-2"
+                            "answer": "-2",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -924,62 +1077,74 @@
                         {
                             "id": 1,
                             "expression": "x^2 - 18 = 7x",
-                            "answer": "9"
+                            "answer": "9",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "x^2 + 6 = 5x",
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "x^2 - 21 = 4x",
-                            "answer": "7"
+                            "answer": "7",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "x^2 + 10 = 7x",
-                            "answer": "5"
+                            "answer": "5",
+                            "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "x^2 - 20 = x",
-                            "answer": "5"
+                            "answer": "5",
+                            "status": "draft"
                         },
                         {
                             "id": 6,
                             "expression": "x^2 + 4 = 5x",
-                            "answer": "4"
+                            "answer": "4",
+                            "status": "draft"
                         },
                         {
                             "id": 7,
                             "expression": "x^2 + 7x = 18",
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 8,
                             "expression": "x^2 - x = 12",
-                            "answer": "4"
+                            "answer": "4",
+                            "status": "draft"
                         },
                         {
                             "id": 9,
                             "expression": "x^2 + 3x = 10",
-                            "answer": "2"
+                            "answer": "2",
+                            "status": "draft"
                         },
                         {
                             "id": 10,
                             "expression": "x^2 - 5x = 14",
-                            "answer": "7"
+                            "answer": "7",
+                            "status": "draft"
                         },
                         {
                             "id": 11,
                             "expression": "x^2 + 7x = 8",
-                            "answer": "1"
+                            "answer": "1",
+                            "status": "draft"
                         },
                         {
                             "id": 12,
                             "expression": "x^2 - 3x = 18",
-                            "answer": "6"
+                            "answer": "6",
+                            "status": "draft"
                         }
                     ]
                 }
@@ -997,22 +1162,26 @@
                         {
                             "id": 1,
                             "expression": "(x - 9)^2 - x^2 = 0",
-                            "answer": "4.5"
+                            "answer": "4.5",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "(x - 7)^2 - x^2 = 0",
-                            "answer": "3.5"
+                            "answer": "3.5",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "(2x - 3)^2 - 4x^2 = 0",
-                            "answer": "0.75"
+                            "answer": "0.75",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "(2x - 5)^2 - 4x^2 = 0",
-                            "answer": "1.25"
+                            "answer": "1.25",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -1024,22 +1193,26 @@
                         {
                             "id": 1,
                             "expression": "\\frac{1}{5}x^2 - 5 = 0",
-                            "answer": "-5"
+                            "answer": "-5",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "\\frac{1}{8}x^2 - 8 = 0",
-                            "answer": "-8"
+                            "answer": "-8",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "\\frac{1}{6}x^2 - 24 = 0",
-                            "answer": "-12"
+                            "answer": "-12",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "\\frac{1}{7}x^2 - 28 = 0",
-                            "answer": "-14"
+                            "answer": "-14",
+                            "status": "draft"
                         }
                     ]
                 },
@@ -1051,22 +1224,26 @@
                         {
                             "id": 1,
                             "expression": "-\\frac{2}{3}x^2 + 6 = 0",
-                            "answer": "3"
+                            "answer": "3",
+                            "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "-\\frac{3}{4}x^2 + 12 = 0",
-                            "answer": "4"
+                            "answer": "4",
+                            "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "-\\frac{5}{7}x^2 + 35 = 0",
-                            "answer": "7"
+                            "answer": "7",
+                            "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "-\\frac{4}{9}x^2 + 36 = 0",
-                            "answer": "9"
+                            "answer": "9",
+                            "status": "draft"
                         }
                     ]
                 }

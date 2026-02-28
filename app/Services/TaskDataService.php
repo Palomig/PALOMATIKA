@@ -212,11 +212,65 @@ class TaskDataService
 
     /**
      * Получить блоки темы
+     *
+     * @param string|null $status Filter tasks by status ('production', 'draft', or null for all)
      */
-    public function getBlocks(string $topicId): array
+    public function getBlocks(string $topicId, ?string $status = null): array
     {
         $data = $this->getTopicData($topicId);
-        return $data['blocks'] ?? [];
+        $blocks = $data['blocks'] ?? [];
+
+        if ($status !== null) {
+            $blocks = $this->filterBlocksByStatus($blocks, $status);
+        }
+
+        return $blocks;
+    }
+
+    /**
+     * Filter blocks to only include tasks with the given status.
+     * Removes empty zadaniya and empty blocks after filtering.
+     */
+    protected function filterBlocksByStatus(array $blocks, string $status): array
+    {
+        $filtered = [];
+
+        foreach ($blocks as $block) {
+            $filteredZadaniya = [];
+
+            foreach ($block['zadaniya'] ?? [] as $zadanie) {
+                if (($zadanie['type'] ?? '') === 'statements' && isset($zadanie['statements'])) {
+                    // Filter individual statements by status
+                    $filteredStatements = array_values(array_filter(
+                        $zadanie['statements'],
+                        fn ($s) => ($s['status'] ?? 'draft') === $status
+                    ));
+
+                    if (!empty($filteredStatements)) {
+                        $zadanie['statements'] = $filteredStatements;
+                        $filteredZadaniya[] = $zadanie;
+                    }
+                } else {
+                    // Filter tasks by status
+                    $filteredTasks = array_values(array_filter(
+                        $zadanie['tasks'] ?? [],
+                        fn ($t) => ($t['status'] ?? 'draft') === $status
+                    ));
+
+                    if (!empty($filteredTasks)) {
+                        $zadanie['tasks'] = $filteredTasks;
+                        $filteredZadaniya[] = $zadanie;
+                    }
+                }
+            }
+
+            if (!empty($filteredZadaniya)) {
+                $block['zadaniya'] = $filteredZadaniya;
+                $filtered[] = $block;
+            }
+        }
+
+        return $filtered;
     }
 
     /**
@@ -252,9 +306,9 @@ class TaskDataService
     /**
      * Получить случайные задания из темы
      */
-    public function getRandomTasks(string $topicId, int $count = 1): array
+    public function getRandomTasks(string $topicId, int $count = 1, ?string $status = null): array
     {
-        $blocks = $this->getBlocks($topicId);
+        $blocks = $this->getBlocks($topicId, $status);
         $allTasks = [];
         $meta = $this->getTopicMeta($topicId);
 
@@ -426,9 +480,9 @@ class TaskDataService
      * Получить набор из 3 задач для matching типов (для варианта ОГЭ)
      * Формат: 3 графика (А, Б, В) и 3 формулы (1, 2, 3)
      */
-    public function getRandomMatchingSet(string $topicId): ?array
+    public function getRandomMatchingSet(string $topicId, ?string $status = null): ?array
     {
-        $blocks = $this->getBlocks($topicId);
+        $blocks = $this->getBlocks($topicId, $status);
         $meta = $this->getTopicMeta($topicId);
 
         // Собираем все zadaniya с типом matching
@@ -495,10 +549,59 @@ class TaskDataService
     }
 
     /**
+     * Get all task references with production status for a topic.
+     *
+     * @return array<int, array{topic_id: string, block_number: int, zadanie_number: int, task_id: int}>
+     */
+    public function getProductionTaskRefs(string $topicId): array
+    {
+        $blocks = $this->getBlocks($topicId, 'production');
+        $refs = [];
+
+        foreach ($blocks as $block) {
+            foreach ($block['zadaniya'] ?? [] as $zadanie) {
+                foreach ($zadanie['tasks'] ?? [] as $task) {
+                    $refs[] = [
+                        'topic_id' => $topicId,
+                        'block_number' => (int) $block['number'],
+                        'zadanie_number' => (int) $zadanie['number'],
+                        'task_id' => (int) ($task['id'] ?? 0),
+                    ];
+                }
+            }
+        }
+
+        return $refs;
+    }
+
+    /**
+     * Check if a specific task has production status.
+     */
+    public function isTaskProduction(string $topicId, int $taskId): bool
+    {
+        $blocks = $this->getBlocks($topicId);
+
+        foreach ($blocks as $block) {
+            foreach ($block['zadaniya'] ?? [] as $zadanie) {
+                foreach ($zadanie['tasks'] ?? [] as $task) {
+                    if ((int) ($task['id'] ?? 0) === $taskId) {
+                        return ($task['status'] ?? 'draft') === 'production';
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Сохранить данные темы в JSON
      */
     public function saveTopicData(string $topicId, array $data): bool
     {
+        // Capture old statuses before saving
+        $oldStatuses = $this->getTaskStatusMap($topicId);
+
         $filePath = "{$this->basePath}/topic_{$topicId}.json";
 
         $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
@@ -508,7 +611,91 @@ class TaskDataService
         // Очистить кэш
         Cache::forget("topic_data_{$topicId}");
 
+        // Auto-sync variant pool if statuses changed
+        if ($result !== false) {
+            $newStatuses = $this->extractTaskStatusMapFromData($data);
+            $this->syncVariantPoolOnStatusChange($topicId, $oldStatuses, $newStatuses);
+        }
+
         return $result !== false;
+    }
+
+    /**
+     * Get a map of task_id => status for current topic data.
+     */
+    protected function getTaskStatusMap(string $topicId): array
+    {
+        $data = $this->getTopicData($topicId);
+        return $this->extractTaskStatusMapFromData($data);
+    }
+
+    /**
+     * Extract task_id => status map from topic data array.
+     */
+    protected function extractTaskStatusMapFromData(array $data): array
+    {
+        $map = [];
+
+        foreach ($data['blocks'] ?? [] as $block) {
+            foreach ($block['zadaniya'] ?? [] as $zadanie) {
+                foreach ($zadanie['tasks'] ?? [] as $task) {
+                    $id = (int) ($task['id'] ?? 0);
+                    if ($id > 0) {
+                        $map[$id] = $task['status'] ?? 'draft';
+                    }
+                }
+            }
+        }
+
+        return $map;
+    }
+
+    /**
+     * Sync variant pool when task statuses change.
+     */
+    protected function syncVariantPoolOnStatusChange(string $topicId, array $oldStatuses, array $newStatuses): void
+    {
+        $changedToProduction = [];
+        $changedToDraft = [];
+
+        foreach ($newStatuses as $taskId => $newStatus) {
+            $oldStatus = $oldStatuses[$taskId] ?? 'draft';
+            if ($oldStatus !== $newStatus) {
+                if ($newStatus === 'draft') {
+                    $changedToDraft[] = $taskId;
+                } elseif ($newStatus === 'production') {
+                    $changedToProduction[] = $taskId;
+                }
+            }
+        }
+
+        // Also check tasks that were removed entirely
+        foreach ($oldStatuses as $taskId => $oldStatus) {
+            if (!isset($newStatuses[$taskId]) && $oldStatus === 'production') {
+                $changedToDraft[] = $taskId;
+            }
+        }
+
+        if (empty($changedToDraft) && empty($changedToProduction)) {
+            return;
+        }
+
+        try {
+            $poolService = app(OgeVariantPoolService::class);
+
+            foreach ($changedToDraft as $taskId) {
+                $poolService->deactivateVariantsWithTask($topicId, $taskId);
+            }
+
+            if (!empty($changedToProduction)) {
+                $poolService->reactivateEligibleVariants();
+            }
+        } catch (\Throwable $e) {
+            \Log::warning('Failed to sync variant pool after status change', [
+                'topic_id' => $topicId,
+                'error' => $e->getMessage(),
+            ]);
+        }
     }
 
     /**

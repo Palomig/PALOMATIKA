@@ -71,14 +71,16 @@ class MiniVariantService
 
     /**
      * Pick one random task from each of the given topic IDs.
+     *
+     * @param string|null $status Filter tasks by status ('production', 'draft', or null for all)
      */
-    protected function pickOnePerTopic(array $topicIds): array
+    protected function pickOnePerTopic(array $topicIds, ?string $status = null): array
     {
         $result = [];
         $taskNumber = 1;
 
         foreach ($topicIds as $topicId) {
-            $tasks = $this->taskData->getRandomTasks($topicId, 1);
+            $tasks = $this->taskData->getRandomTasks($topicId, 1, $status);
             if (!empty($tasks)) {
                 $task = $tasks[0];
                 $task['task_number'] = (int) ltrim($topicId, '0');
