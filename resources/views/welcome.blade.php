@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <script>if(window.Telegram&&window.Telegram.WebApp){window.location.replace('/tg/')}</script>
     <title>PALOMATIKA - Подготовка к ОГЭ по математике</title>
     <meta name="description" content="PALOMATIKA помогает сдать ОГЭ по математике через пазловый формат задач, диагностику пробелов и адаптивный трек обучения.">
     @include('partials.head-config')
