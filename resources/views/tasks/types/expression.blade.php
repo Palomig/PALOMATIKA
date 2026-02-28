@@ -33,6 +33,7 @@
             'showTaskAnswer' => $showTaskAnswer,
             'taskAnswer' => $answerResolver->resolveFromTaskAndZadanie($zadanie, $task),
         ])
+        @include('tasks.partials.task-status-badge')
     </div>
 @elseif($hasDenominator)
     {{-- Задание со знаменателем - формат параграфа --}}
@@ -56,6 +57,7 @@
                     'showTaskAnswer' => $showTaskAnswer,
                     'taskAnswer' => $answerResolver->resolveFromTaskAndZadanie($zadanie, $task),
                 ])
+                @include('tasks.partials.task-status-badge')
             </div>
         @endforeach
     </div>
@@ -80,6 +82,7 @@
                     'showTaskAnswer' => $showTaskAnswer,
                     'taskAnswer' => $answerResolver->resolveFromTaskAndZadanie($zadanie, $task),
                 ])
+                @include('tasks.partials.task-status-badge')
             </div>
         @endforeach
     </div>
@@ -102,6 +105,7 @@
                     'showTaskAnswer' => $showTaskAnswer,
                     'taskAnswer' => $answerResolver->resolveFromTaskAndZadanie($zadanie, $task),
                 ])
+                @include('tasks.partials.task-status-badge')
             </div>
         @endforeach
     </div>

@@ -6,6 +6,7 @@ use App\Http\Controllers\BoardController;
 use App\Http\Controllers\EgeController;
 use App\Http\Controllers\JarvisMaterialPageController;
 use App\Http\Controllers\AdminTaskAnswerController;
+use App\Http\Controllers\AdminTaskStatusController;
 use App\Http\Controllers\MiniAppController;
 use App\Http\Controllers\OgeAttemptController;
 use App\Http\Controllers\OgeTemplateController;
@@ -352,6 +353,8 @@ Route::prefix('api/topics')->middleware(['auth', 'role:teacher,admin'])->group(f
 
 Route::prefix('api/topics')->middleware(['auth', 'role:admin'])->group(function () {
     Route::patch('/{topicId}/answers', [AdminTaskAnswerController::class, 'update']);
+    Route::patch('/{topicId}/status', [AdminTaskStatusController::class, 'update']);
+    Route::patch('/{topicId}/status/bulk', [AdminTaskStatusController::class, 'bulkUpdate']);
 });
 
 // API for OGE attempts (student solving flow)

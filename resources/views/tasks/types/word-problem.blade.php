@@ -31,6 +31,7 @@
                 'showTaskAnswer' => $showTaskAnswer,
                 'taskAnswer' => $answerResolver->resolveFromTaskAndZadanie($zadanie, $task),
             ])
+            @include('tasks.partials.task-status-badge')
         </div>
     @endforeach
 </div>
