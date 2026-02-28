@@ -430,7 +430,63 @@ class MiniAppController extends Controller
                 'created' => $v->created_at?->format('d.m.Y'),
             ]);
 
-        return view('miniapp.admin-variants', ['variants' => $variants]);
+        // Load topics with zadaniya for the create form (same as OGE generator)
+        $topicIds = ['06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19'];
+        $topicsWithZadaniya = [];
+
+        foreach ($topicIds as $topicId) {
+            try {
+                $topicMeta = $this->taskData->getTopicMeta($topicId);
+                $blocks = $this->taskData->getBlocks($topicId);
+                if (empty($blocks)) continue;
+
+                $zadaniyaData = [];
+                foreach ($blocks as $block) {
+                    foreach ($block['zadaniya'] ?? [] as $zadanie) {
+                        $example = null;
+                        if (($zadanie['type'] ?? '') === 'statements' && isset($zadanie['statements'][0])) {
+                            $example = ['type' => 'statements', 'text' => $zadanie['statements'][0]['text'] ?? ''];
+                        } elseif (isset($zadanie['tasks'][0])) {
+                            $firstTask = $zadanie['tasks'][0];
+                            $example = [
+                                'type' => $zadanie['type'] ?? 'expression',
+                                'expression' => $firstTask['expression'] ?? '',
+                                'text' => $firstTask['text'] ?? '',
+                            ];
+                        }
+
+                        $taskCount = ($zadanie['type'] ?? '') === 'statements'
+                            ? count($zadanie['statements'] ?? [])
+                            : count($zadanie['tasks'] ?? []);
+
+                        $zadaniyaData[] = [
+                            'zadanie_id' => "{$topicId}_{$block['number']}_{$zadanie['number']}",
+                            'block_number' => $block['number'],
+                            'zadanie_number' => $zadanie['number'],
+                            'instruction' => $zadanie['instruction'] ?? '',
+                            'task_count' => $taskCount,
+                            'example' => $example,
+                        ];
+                    }
+                }
+
+                if (!empty($zadaniyaData)) {
+                    $topicsWithZadaniya[] = [
+                        'topic_id' => $topicId,
+                        'topic_number' => ltrim($topicId, '0'),
+                        'title' => $topicMeta['title'],
+                        'zadaniya' => $zadaniyaData,
+                    ];
+                }
+            } catch (\Exception $e) {
+                continue;
+            }
+        }
+
+        return view('miniapp.admin-variants', [
+            'variants' => $variants,
+            'topicsWithZadaniya' => $topicsWithZadaniya,
+        ]);
     }
 
     /**
@@ -440,33 +496,38 @@ class MiniAppController extends Controller
     {
         $data = $request->validate([
             'title' => 'required|string|min:2|max:200',
-            'tasks' => 'required|array|min:1|max:14',
-            'tasks.*.topic_id' => 'required|string|size:2',
-            'tasks.*.block_number' => 'required|integer',
-            'tasks.*.zadanie_number' => 'required|integer',
-            'tasks.*.task_index' => 'required|integer|min:0',
+            'zadaniya' => 'required|array|min:1|max:100',
+            'zadaniya.*' => 'required|string|regex:/^\d{2}_\d+_\d+$/',
         ]);
 
         $user = $request->user();
         $hash = $this->miniVariant->generateHash();
 
-        // Build tasks from selection
+        // Build tasks: for each zadanie_id, pick one random task
         $selectedTasks = [];
         $sortOrder = 1;
-        foreach ($data['tasks'] as $topicId => $sel) {
+
+        foreach ($data['zadaniya'] as $zadanieId) {
+            [$topicId, $blockNumber, $zadanieNumber] = explode('_', $zadanieId);
             $taskNumber = (int) ltrim($topicId, '0');
+
             $task = $this->taskData->getRandomTasksFromZadanie(
                 $topicId,
-                $sel['block_number'],
-                $sel['zadanie_number'],
+                (int) $blockNumber,
+                (int) $zadanieNumber,
                 1
             );
+
             if (!empty($task)) {
                 $t = $task[0];
                 $t['task_number'] = $taskNumber;
                 $selectedTasks[] = $t;
             }
             $sortOrder++;
+        }
+
+        if (empty($selectedTasks)) {
+            return response()->json(['success' => false, 'message' => 'Не удалось найти задания'], 422);
         }
 
         $variant = OgeVariant::create([
@@ -481,13 +542,14 @@ class MiniAppController extends Controller
 
         // Save curated task references
         $sortOrder = 1;
-        foreach ($data['tasks'] as $topicId => $sel) {
+        foreach ($data['zadaniya'] as $zadanieId) {
+            [$topicId, $blockNumber, $zadanieNumber] = explode('_', $zadanieId);
             $variant->curatedTasks()->create([
                 'task_number' => (int) ltrim($topicId, '0'),
                 'topic_id' => $topicId,
-                'block_number' => $sel['block_number'],
-                'zadanie_number' => $sel['zadanie_number'],
-                'task_index' => $sel['task_index'],
+                'block_number' => (int) $blockNumber,
+                'zadanie_number' => (int) $zadanieNumber,
+                'task_index' => 0,
                 'sort_order' => $sortOrder++,
             ]);
         }
@@ -498,6 +560,7 @@ class MiniAppController extends Controller
                 'id' => $variant->id,
                 'hash' => $variant->hash,
                 'title' => $variant->title,
+                'task_count' => count($selectedTasks),
             ],
         ]);
     }

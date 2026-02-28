@@ -36,7 +36,7 @@
   .vc-btn:active { background: var(--surface2); }
 
   /* CREATE FORM */
-  .create-section { display: flex; flex-direction: column; gap: 14px; }
+  .create-section { display: flex; flex-direction: column; gap: 14px; padding-bottom: 80px; }
   .field-label { font-size: 12px; font-weight: 800; color: var(--text); letter-spacing: 0.03em; margin-bottom: 6px; }
   .field-input {
     width: 100%; background: var(--surface); border: 1.5px solid var(--border);
@@ -47,47 +47,72 @@
   .field-input::placeholder { color: var(--muted2); font-weight: 600; }
   .field-input:focus { border-color: var(--accent); }
 
-  /* TOPIC PICKER */
-  .topic-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 12px; }
-  .topic-btn {
-    aspect-ratio: 1; background: var(--surface); border: 1.5px solid var(--border);
-    border-radius: 10px; font-family: var(--display); font-size: 14px;
-    color: var(--muted); cursor: pointer; display: flex; align-items: center; justify-content: center;
-    transition: all 0.15s; user-select: none;
+  /* QUICK ACTIONS */
+  .quick-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 4px; }
+  .qa-btn {
+    padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--muted); font-size: 11px; font-weight: 700;
+    cursor: pointer; transition: all 0.15s; font-family: var(--body);
   }
-  .topic-btn.selected { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
-  .topic-btn:active { background: var(--surface2); }
+  .qa-btn:active { background: var(--surface2); border-color: var(--accent); color: var(--accent); }
 
-  /* TASK SELECTOR FOR SELECTED TOPIC */
-  .task-selector { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 8px; }
-  .ts-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-  .ts-title { font-size: 13px; font-weight: 800; color: var(--text); }
-  .ts-subtitle { font-size: 11px; font-weight: 600; color: var(--muted); }
+  /* TOPIC ACCORDION */
+  .topic-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; overflow: hidden; margin-bottom: 8px;
+  }
+  .topic-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px; cursor: pointer; user-select: none;
+    transition: background 0.15s;
+  }
+  .topic-header:active { background: var(--surface2); }
+  .topic-num {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--accent-bg); border: 1px solid var(--accent-bd);
+    color: var(--accent); font-family: var(--display); font-size: 14px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .topic-num.has-selected { background: var(--accent); color: #fff; }
+  .topic-title-wrap { flex: 1; min-width: 0; }
+  .topic-title { font-size: 13px; font-weight: 700; color: var(--text); }
+  .topic-sub { font-size: 10px; font-weight: 600; color: var(--muted); margin-top: 1px; }
+  .topic-chevron {
+    color: var(--muted); font-size: 16px; transition: transform 0.2s; flex-shrink: 0;
+  }
+  .topic-chevron.open { transform: rotate(180deg); }
 
-  .task-list { display: flex; flex-direction: column; gap: 4px; max-height: 200px; overflow-y: auto; }
-  .task-row {
-    display: flex; align-items: center; gap: 10px; padding: 8px 10px;
-    border-radius: 8px; cursor: pointer; transition: background 0.1s;
+  /* ZADANIE LIST */
+  .zadanie-list { padding: 0 10px 10px; }
+  .zadanie-row {
+    display: flex; align-items: flex-start; gap: 10px; padding: 10px 6px;
+    border-top: 1px solid var(--border); cursor: pointer;
   }
-  .task-row:active { background: var(--surface2); }
-  .task-radio {
-    width: 18px; height: 18px; border: 2px solid var(--border);
-    border-radius: 50%; flex-shrink: 0; transition: all 0.15s;
-    display: flex; align-items: center; justify-content: center;
+  .zadanie-row:first-child { border-top: none; }
+  .zadanie-check {
+    width: 20px; height: 20px; border: 2px solid var(--border);
+    border-radius: 6px; flex-shrink: 0; margin-top: 1px;
+    transition: all 0.15s; display: flex; align-items: center; justify-content: center;
   }
-  .task-radio.selected { border-color: var(--accent); background: var(--accent); }
-  .task-radio.selected::after { content: ''; width: 6px; height: 6px; background: #fff; border-radius: 50%; }
-  .task-preview { font-size: 12px; font-weight: 600; color: var(--text); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .zadanie-check.checked { border-color: var(--accent); background: var(--accent); }
+  .zadanie-check.checked::after { content: '✓'; color: #fff; font-size: 12px; font-weight: 800; }
+  .zadanie-info { flex: 1; min-width: 0; }
+  .zadanie-instruction { font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.4; }
+  .zadanie-meta { font-size: 10px; font-weight: 600; color: var(--muted); margin-top: 3px; }
+  .zadanie-example {
+    margin-top: 4px; padding: 4px 8px; border-radius: 6px;
+    background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+    font-size: 11px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
 
-  /* SELECTED TASKS SUMMARY */
-  .selected-tasks { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
-  .selected-chip {
-    background: var(--accent-bg); border: 1px solid var(--accent-bd); border-radius: 8px;
-    padding: 5px 10px; font-size: 11px; font-weight: 700; color: var(--accent);
-    display: flex; align-items: center; gap: 6px;
+  /* STICKY CREATE BUTTON */
+  .sticky-create {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    padding: 12px 20px calc(12px + var(--safe-bottom));
+    background: var(--bg); border-top: 1px solid var(--border);
+    z-index: 10;
   }
-  .chip-remove { cursor: pointer; font-size: 14px; opacity: 0.7; }
-  .chip-remove:hover { opacity: 1; }
+  .sticky-create .btn { width: 100%; }
 
   .empty-state {
     text-align: center; padding: 40px 20px;
@@ -130,8 +155,8 @@
               </div>
             </div>
             <div class="vc-actions">
-              <a :href="'/tg/test-preview/' + v.hash" class="vc-btn" title="Просмотр">👁</a>
-              <button class="vc-btn" @click="copyLink(v.hash)" title="Скопировать ссылку">🔗</button>
+              <button class="vc-btn" @click="shareLink(v.hash)" title="Поделиться">📤</button>
+              <button class="vc-btn" @click="copyLink(v.hash)" title="Скопировать">🔗</button>
             </div>
           </div>
         </template>
@@ -149,56 +174,64 @@
       </div>
 
       <div>
-        <div class="field-label">Выберите задания по темам</div>
-        <div class="sec-label" style="margin-bottom:8px;">Нажмите на номер задания, затем выберите конкретную задачу</div>
-
-        <div class="topic-grid">
-          <template x-for="t in topics" :key="t.id">
-            <button class="topic-btn" :class="{ selected: activeTopic === t.id }" @click="selectTopic(t.id)" x-text="t.num"></button>
-          </template>
+        <div class="field-label">Выберите типы заданий</div>
+        <div class="quick-actions">
+          <button class="qa-btn" @click="selectAll()">Выбрать все</button>
+          <button class="qa-btn" @click="selectAlgebra()">Алгебра</button>
+          <button class="qa-btn" @click="selectGeometry()">Геометрия</button>
+          <button class="qa-btn" @click="clearAll()">Очистить</button>
         </div>
       </div>
 
-      {{-- TASK SELECTOR --}}
-      <template x-if="activeTopic && topicTasks.length > 0">
-        <div class="task-selector">
-          <div class="ts-header">
-            <div class="ts-title" x-text="'Задание ' + activeTopicNum"></div>
-            <div class="ts-subtitle" x-text="topicTasks.length + ' задач'"></div>
-          </div>
-          <div class="task-list">
-            <template x-for="(task, idx) in topicTasks" :key="idx">
-              <div class="task-row" @click="toggleTask(activeTopic, idx, task)">
-                <div class="task-radio" :class="{ selected: isTaskSelected(activeTopic, idx) }"></div>
-                <div class="task-preview" x-text="task.preview"></div>
+      {{-- TOPIC ACCORDION --}}
+      @foreach($topicsWithZadaniya as $topic)
+        <div class="topic-card">
+          <div class="topic-header" @click="toggleTopic('{{ $topic['topic_id'] }}')">
+            <div class="topic-num" :class="{ 'has-selected': hasSelectedInTopic('{{ $topic['topic_id'] }}') }">
+              {{ $topic['topic_number'] }}
+            </div>
+            <div class="topic-title-wrap">
+              <div class="topic-title">{{ $topic['title'] }}</div>
+              <div class="topic-sub">
+                {{ count($topic['zadaniya']) }} {{ trans_choice('тип|типа|типов', count($topic['zadaniya'])) }}
+                · <span x-text="countSelectedInTopic('{{ $topic['topic_id'] }}')">0</span> выбрано
               </div>
-            </template>
+            </div>
+            <span class="topic-chevron" :class="{ open: expandedTopics.includes('{{ $topic['topic_id'] }}') }">⌄</span>
+          </div>
+
+          <div class="zadanie-list" x-show="expandedTopics.includes('{{ $topic['topic_id'] }}')" x-transition>
+            @foreach($topic['zadaniya'] as $zadanie)
+              <div class="zadanie-row" @click="toggleZadanie('{{ $zadanie['zadanie_id'] }}')">
+                <div class="zadanie-check" :class="{ checked: selectedZadaniya.includes('{{ $zadanie['zadanie_id'] }}') }"></div>
+                <div class="zadanie-info">
+                  <div class="zadanie-instruction">{{ $zadanie['instruction'] }}</div>
+                  <div class="zadanie-meta">{{ $zadanie['task_count'] }} {{ trans_choice('задача|задачи|задач', $zadanie['task_count']) }}</div>
+                  @if($zadanie['example'])
+                    <div class="zadanie-example">
+                      @if($zadanie['example']['type'] === 'statements')
+                        {{ Str::limit($zadanie['example']['text'], 60) }}
+                      @elseif(!empty($zadanie['example']['expression']))
+                        ${{ $zadanie['example']['expression'] }}$
+                      @elseif(!empty($zadanie['example']['text']))
+                        {{ Str::limit($zadanie['example']['text'], 60) }}
+                      @endif
+                    </div>
+                  @endif
+                </div>
+              </div>
+            @endforeach
           </div>
         </div>
-      </template>
+      @endforeach
 
-      {{-- SELECTED TASKS SUMMARY --}}
-      <template x-if="Object.keys(selectedTasks).length > 0">
-        <div>
-          <div class="sec-label" style="margin-bottom:8px;">Выбрано заданий: <span x-text="Object.keys(selectedTasks).length"></span></div>
-          <div class="selected-tasks">
-            <template x-for="(sel, topicId) in selectedTasks" :key="topicId">
-              <div class="selected-chip">
-                <span x-text="'Зад. ' + topicId.replace(/^0/, '') + ': #' + (sel.index + 1)"></span>
-                <span class="chip-remove" @click="removeTask(topicId)">×</span>
-              </div>
-            </template>
-          </div>
-        </div>
-      </template>
-
-      <button class="btn btn-accent" :disabled="!canCreate || creating" @click="createVariant()"
-        x-text="creating ? 'Создаю...' : 'Создать вариант (' + Object.keys(selectedTasks).length + ' заданий)'">
-      </button>
-
-      <div class="note">
-        💡 Выберите по одному заданию для каждого номера. Минимум 1 задание для создания варианта.
+      {{-- STICKY CREATE BUTTON --}}
+      <div class="sticky-create">
+        <button class="btn btn-accent" :disabled="!canCreate || creating" @click="createVariant()"
+          x-text="creating ? 'Создаю...' : 'Создать вариант (' + selectedZadaniya.length + ' типов)'">
+        </button>
       </div>
+
     </div>
   </template>
 
@@ -207,80 +240,62 @@
 
 @push('scripts')
 <script>
+const topicsData = @json($topicsWithZadaniya);
+const algebraTopics = ['06', '07', '08', '09', '10', '11', '12', '13', '14'];
+const geometryTopics = ['15', '16', '17', '18', '19'];
+
 function adminVariants() {
   return {
-    tab: 'list',
+    tab: '{{ ($variants ?? collect())->isEmpty() ? "create" : "list" }}',
     variants: @json($variants ?? []),
     title: '',
-    activeTopic: null,
-    activeTopicNum: '',
-    topicTasks: [],
-    selectedTasks: {},
+    selectedZadaniya: [],
+    expandedTopics: [],
     creating: false,
 
-    topics: [
-      { id: '06', num: 6 }, { id: '07', num: 7 }, { id: '08', num: 8 },
-      { id: '09', num: 9 }, { id: '10', num: 10 }, { id: '11', num: 11 },
-      { id: '12', num: 12 }, { id: '13', num: 13 }, { id: '14', num: 14 },
-      { id: '15', num: 15 }, { id: '16', num: 16 }, { id: '17', num: 17 },
-      { id: '18', num: 18 }, { id: '19', num: 19 },
-    ],
-
     get canCreate() {
-      return Object.keys(this.selectedTasks).length >= 1 && this.title.trim().length >= 2;
+      return this.selectedZadaniya.length >= 1 && this.title.trim().length >= 2;
     },
 
-    async selectTopic(topicId) {
-      this.activeTopic = topicId;
-      this.activeTopicNum = parseInt(topicId, 10);
-      this.topicTasks = [];
-
-      try {
-        const res = await fetch(`/api/topics/${topicId}?preview=1`, {
-          headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': window._csrf },
-        });
-        const data = await res.json();
-        const tasks = [];
-        const blocks = data.blocks || [];
-        for (const block of blocks) {
-          for (const zad of block.zadaniya || []) {
-            for (const [idx, task] of (zad.tasks || []).entries()) {
-              const preview = (task.expression || task.text || zad.instruction || '').substring(0, 60);
-              tasks.push({
-                block_number: block.number,
-                zadanie_number: zad.number,
-                task_index: idx,
-                preview: `[${block.number}.${zad.number}.${idx+1}] ${preview}`,
-              });
-            }
-          }
-        }
-        this.topicTasks = tasks;
-      } catch (e) {
-        console.warn('Failed to load topic:', e);
-      }
+    toggleTopic(topicId) {
+      const idx = this.expandedTopics.indexOf(topicId);
+      if (idx > -1) this.expandedTopics.splice(idx, 1);
+      else this.expandedTopics.push(topicId);
     },
 
-    toggleTask(topicId, idx, task) {
-      if (this.isTaskSelected(topicId, idx)) {
-        delete this.selectedTasks[topicId];
-      } else {
-        this.selectedTasks[topicId] = {
-          topic_id: topicId,
-          index: idx,
-          block_number: task.block_number,
-          zadanie_number: task.zadanie_number,
-          task_index: task.task_index,
-        };
-      }
+    toggleZadanie(zadanieId) {
+      const idx = this.selectedZadaniya.indexOf(zadanieId);
+      if (idx > -1) this.selectedZadaniya.splice(idx, 1);
+      else this.selectedZadaniya.push(zadanieId);
     },
 
-    isTaskSelected(topicId, idx) {
-      return this.selectedTasks[topicId]?.index === idx;
+    hasSelectedInTopic(topicId) {
+      return this.selectedZadaniya.some(z => z.startsWith(topicId + '_'));
     },
 
-    removeTask(topicId) {
-      delete this.selectedTasks[topicId];
+    countSelectedInTopic(topicId) {
+      return this.selectedZadaniya.filter(z => z.startsWith(topicId + '_')).length;
+    },
+
+    selectAll() {
+      this.selectedZadaniya = [];
+      topicsData.forEach(t => t.zadaniya.forEach(z => this.selectedZadaniya.push(z.zadanie_id)));
+    },
+
+    selectAlgebra() {
+      this.selectedZadaniya = [];
+      topicsData.filter(t => algebraTopics.includes(t.topic_id))
+        .forEach(t => t.zadaniya.forEach(z => this.selectedZadaniya.push(z.zadanie_id)));
+    },
+
+    selectGeometry() {
+      this.selectedZadaniya = [];
+      topicsData.filter(t => geometryTopics.includes(t.topic_id))
+        .forEach(t => t.zadaniya.forEach(z => this.selectedZadaniya.push(z.zadanie_id)));
+    },
+
+    clearAll() {
+      this.selectedZadaniya = [];
     },
 
     async createVariant() {
@@ -290,36 +305,59 @@ function adminVariants() {
       try {
         const res = await window.fetchPost('/tg/admin/variants/create', {
           title: this.title.trim(),
-          tasks: this.selectedTasks,
+          zadaniya: this.selectedZadaniya,
         });
         const data = await res.json();
-        if (res.ok) {
+        if (res.ok && data.success) {
           this.variants.unshift({
             id: data.variant.id,
             hash: data.variant.hash,
             title: data.variant.title,
-            task_count: Object.keys(this.selectedTasks).length,
+            task_count: data.variant.task_count || this.selectedZadaniya.length,
             created: new Date().toLocaleDateString('ru-RU'),
           });
           this.title = '';
-          this.selectedTasks = {};
-          this.activeTopic = null;
+          this.selectedZadaniya = [];
           this.tab = 'list';
+
+          const tg = window.Telegram?.WebApp;
+          if (tg && tg.showAlert) tg.showAlert('Вариант создан!');
         } else {
-          alert(data.message || 'Ошибка создания');
+          const tg = window.Telegram?.WebApp;
+          const msg = data.message || 'Ошибка создания';
+          if (tg && tg.showAlert) tg.showAlert(msg);
+          else alert(msg);
         }
       } catch (e) {
-        alert('Ошибка сети');
+        const tg = window.Telegram?.WebApp;
+        if (tg && tg.showAlert) tg.showAlert('Ошибка сети');
+        else alert('Ошибка сети');
       } finally {
         this.creating = false;
       }
     },
 
+    shareLink(hash) {
+      const tg = window.Telegram?.WebApp;
+      const botUsername = '{{ config("services.telegram.bot_username", "palomatika_auth_bot") }}';
+      const link = `https://t.me/${botUsername}/palomatika?startapp=oge_variant_hash_${hash}`;
+      const text = 'Реши этот вариант ОГЭ по математике!';
+
+      if (tg && tg.openTelegramLink) {
+        const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`;
+        tg.openTelegramLink(shareUrl);
+      } else if (navigator.share) {
+        navigator.share({ title: 'Вариант ОГЭ', text: text + '\n' + link });
+      }
+    },
+
     copyLink(hash) {
       const botUsername = '{{ config("services.telegram.bot_username", "palomatika_auth_bot") }}';
-      const link = `https://t.me/${botUsername}?startapp=oge_variant_hash_${hash}`;
+      const link = `https://t.me/${botUsername}/palomatika?startapp=oge_variant_hash_${hash}`;
       navigator.clipboard.writeText(link).then(() => {
-        alert('Ссылка скопирована!');
+        const tg = window.Telegram?.WebApp;
+        if (tg && tg.showAlert) tg.showAlert('Ссылка скопирована!');
+        else alert('Ссылка скопирована!');
       });
     },
   };
