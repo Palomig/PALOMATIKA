@@ -118,15 +118,30 @@ class AdminTaskStatusController extends Controller
             if ((int) ($block['number'] ?? 0) !== $parsed['block_number']) {
                 continue;
             }
+
             foreach ($block['zadaniya'] ?? [] as $zi => $zadanie) {
                 if ((int) ($zadanie['number'] ?? 0) !== $parsed['zadanie_number']) {
                     continue;
                 }
+
+                $updated = false;
+
                 foreach ($zadanie[$arrayKey] ?? [] as $ti => $item) {
-                    if ((int) ($item['id'] ?? 0) === $parsed['item_id']) {
-                        $data['blocks'][$bi]['zadaniya'][$zi][$arrayKey][$ti]['status'] = $status;
+                    if ((int) ($item['id'] ?? 0) !== $parsed['item_id']) {
+                        continue;
+                    }
+
+                    $data['blocks'][$bi]['zadaniya'][$zi][$arrayKey][$ti]['status'] = $status;
+                    $updated = true;
+
+                    // tasks normally have unique ids: stop after first update.
+                    if ($parsed['item_type'] !== 'statement') {
                         return true;
                     }
+                }
+
+                if ($updated) {
+                    return true;
                 }
             }
         }
