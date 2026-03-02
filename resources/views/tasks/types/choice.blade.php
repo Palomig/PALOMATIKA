@@ -9,6 +9,14 @@
     $points = $zadanie['points'] ?? [];
     $options = $zadanie['options'] ?? [];
     $tasks = $zadanie['tasks'] ?? [];
+    $hasAnyTaskSvg = false;
+    foreach ($tasks as $rawTask) {
+        $candidateSvg = is_string($rawTask['svg'] ?? null) ? trim($rawTask['svg']) : '';
+        if ($candidateSvg !== '') {
+            $hasAnyTaskSvg = true;
+            break;
+        }
+    }
     $optionsRenderMode = $zadanie['options_render_mode'] ?? null;
     $isVariant = $isVariant ?? false;
     $showTaskAnswer = !$isVariant;
@@ -18,7 +26,7 @@
 @endphp
 
 {{-- Если есть общие points на уровне задания --}}
-@if($svgType && !empty($points))
+@if($svgType && !empty($points) && !$hasAnyTaskSvg)
     <div class="bg-slate-800/70 rounded-xl p-5 border border-slate-700 mb-4">
         @include('tasks.partials.number-line', [
             'points' => $points,
@@ -52,7 +60,7 @@
                     $taskOptions = $task['options'] ?? $options;
                     $taskGraphOptions = is_array($task['graph_options'] ?? null) ? $task['graph_options'] : [];
                     $taskOptionsRenderMode = $task['options_render_mode'] ?? $optionsRenderMode ?? null;
-                    $taskSvg = is_string($task['svg'] ?? null) ? $task['svg'] : '';
+                    $taskSvg = is_string($task['svg'] ?? null) ? trim($task['svg']) : '';
                     $hasTaskImage = !empty($task['image']);
                     $hasExplicitTaskVisual = !empty($taskSvg) || $hasTaskImage;
                     $isTopic13Z11PromptSvg = (string) ($topicId ?? '') === '13'
