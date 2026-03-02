@@ -10,6 +10,12 @@ namespace App\Services;
  */
 class NumberLineSvgRenderer
 {
+    private const POINT_POSITION_OFFSETS = [
+        'L' => 0.3,
+        'C' => 0.5,
+        'R' => 0.7,
+    ];
+
     // Blueprint цветовая схема (синхронизировано с GeometrySvgRenderer)
     private const COLORS = [
         'bg' => '#0a1628',
@@ -59,7 +65,7 @@ class NumberLineSvgRenderer
      */
     private function renderSinglePoint(array $task): string
     {
-        $pointValue = $task['point_value'] ?? 5;
+        $pointValue = $this->resolveSinglePointValue($task);
         $pointLabel = $task['point_label'] ?? 'a';
 
         // Определяем диапазон
@@ -339,6 +345,25 @@ class NumberLineSvgRenderer
         }
 
         return $positions;
+    }
+
+    private function resolveSinglePointValue(array $task): float
+    {
+        $position = strtoupper((string) ($task['point_pos'] ?? $task['point_position'] ?? ''));
+
+        if ($position !== '' && isset(self::POINT_POSITION_OFFSETS[$position])) {
+            if (isset($task['point_anchor']) && is_numeric($task['point_anchor'])) {
+                return (float) $task['point_anchor'] + self::POINT_POSITION_OFFSETS[$position];
+            }
+
+            if (isset($task['point_slot']) && is_string($task['point_slot'])) {
+                if (preg_match('/^\s*(-?\d+)\s*[:|]\s*([LCR])\s*$/i', $task['point_slot'], $m)) {
+                    return (float) $m[1] + self::POINT_POSITION_OFFSETS[strtoupper($m[2])];
+                }
+            }
+        }
+
+        return (float) ($task['point_value'] ?? 5);
     }
 
     /**
