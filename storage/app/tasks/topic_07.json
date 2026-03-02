@@ -6,7 +6,7 @@
         "color": "cyan",
         "icon": "ruler"
     },
-    "exported_at": "2026-03-02T22:54:26+00:00",
+    "exported_at": "2026-03-02T23:02:18+00:00",
     "blocks": [
         {
             "number": 1,
@@ -626,7 +626,7 @@
                                 "12 и 13",
                                 "13 и 14"
                             ],
-                            "answer": "1",
+                            "answer": 2,
                             "status": "draft"
                         },
                         {
@@ -638,7 +638,7 @@
                                 "10 и 11",
                                 "11 и 12"
                             ],
-                            "answer": "1",
+                            "answer": 1,
                             "status": "draft"
                         },
                         {
@@ -650,7 +650,7 @@
                                 "13 и 14",
                                 "14 и 15"
                             ],
-                            "answer": "1",
+                            "answer": 2,
                             "status": "draft"
                         },
                         {
@@ -662,7 +662,7 @@
                                 "7 и 8",
                                 "8 и 9"
                             ],
-                            "answer": "1",
+                            "answer": 4,
                             "status": "draft"
                         },
                         {
@@ -674,7 +674,7 @@
                                 "10 и 11",
                                 "11 и 12"
                             ],
-                            "answer": "1",
+                            "answer": 1,
                             "status": "draft"
                         },
                         {
@@ -686,7 +686,7 @@
                                 "12 и 13",
                                 "13 и 14"
                             ],
-                            "answer": "1",
+                            "answer": 1,
                             "status": "draft"
                         }
                     ]
@@ -705,7 +705,7 @@
                                 "[0,3; 0,4]",
                                 "[0,4; 0,5]"
                             ],
-                            "answer": "1",
+                            "answer": 2,
                             "status": "draft"
                         },
                         {
@@ -717,7 +717,7 @@
                                 "[0,6; 0,7]",
                                 "[0,7; 0,8]"
                             ],
-                            "answer": "1",
+                            "answer": 3,
                             "status": "draft"
                         },
                         {
@@ -729,7 +729,7 @@
                                 "[0,4; 0,5]",
                                 "[0,5; 0,6]"
                             ],
-                            "answer": "1",
+                            "answer": 2,
                             "status": "draft"
                         },
                         {
@@ -741,7 +741,7 @@
                                 "[0,3; 0,4]",
                                 "[0,4; 0,5]"
                             ],
-                            "answer": "1",
+                            "answer": 4,
                             "status": "draft"
                         },
                         {
@@ -753,7 +753,7 @@
                                 "[0,4; 0,5]",
                                 "[0,5; 0,6]"
                             ],
-                            "answer": "1",
+                            "answer": 3,
                             "status": "draft"
                         },
                         {
@@ -765,7 +765,7 @@
                                 "[0,7; 0,8]",
                                 "[0,8; 0,9]"
                             ],
-                            "answer": "1",
+                            "answer": 2,
                             "status": "draft"
                         }
                     ]
@@ -785,7 +785,7 @@
                                 "2,9",
                                 "3"
                             ],
-                            "answer": "1",
+                            "answer": 1,
                             "status": "draft"
                         },
                         {
@@ -798,7 +798,7 @@
                                 "0,8",
                                 "0,9"
                             ],
-                            "answer": "1",
+                            "answer": 2,
                             "status": "draft"
                         },
                         {
@@ -811,7 +811,7 @@
                                 "1,6",
                                 "1,7"
                             ],
-                            "answer": "1",
+                            "answer": 1,
                             "status": "draft"
                         },
                         {
@@ -824,7 +824,7 @@
                                 "1,4",
                                 "1,5"
                             ],
-                            "answer": "1",
+                            "answer": 1,
                             "status": "draft"
                         },
                         {
@@ -837,7 +837,7 @@
                                 "2,5",
                                 "2,6"
                             ],
-                            "answer": "1",
+                            "answer": 2,
                             "status": "draft"
                         },
                         {
@@ -850,7 +850,7 @@
                                 "1,2",
                                 "1,3"
                             ],
-                            "answer": "1",
+                            "answer": 2,
                             "status": "draft"
                         }
                     ]
@@ -869,7 +869,7 @@
                                 "\\frac{61}{14}",
                                 "\\frac{65}{14}"
                             ],
-                            "answer": "1",
+                            "answer": 1,
                             "status": "draft"
                         },
                         {
@@ -881,7 +881,7 @@
                                 "\\frac{87}{17}",
                                 "\\frac{91}{17}"
                             ],
-                            "answer": "1",
+                            "answer": 2,
                             "status": "draft"
                         },
                         {
@@ -893,7 +893,7 @@
                                 "\\frac{70}{9}",
                                 "\\frac{79}{9}"
                             ],
-                            "answer": "1",
+                            "answer": 3,
                             "status": "draft"
                         },
                         {
@@ -905,7 +905,7 @@
                                 "\\frac{83}{12}",
                                 "\\frac{91}{12}"
                             ],
-                            "answer": "1",
+                            "answer": 3,
                             "status": "draft"
                         },
                         {
@@ -917,7 +917,7 @@
                                 "\\frac{82}{13}",
                                 "\\frac{89}{13}"
                             ],
-                            "answer": "1",
+                            "answer": 1,
                             "status": "draft"
                         },
                         {
@@ -929,7 +929,7 @@
                                 "\\frac{58}{15}",
                                 "\\frac{71}{15}"
                             ],
-                            "answer": "1",
+                            "answer": 4,
                             "status": "draft"
                         }
                     ]
@@ -942,7 +942,7 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "point_value": 0.7272727272727273,
+                            "point_value": 0.27,
                             "point_label": "A",
                             "options": [
                                 "\\frac{3}{11}",
@@ -950,13 +950,15 @@
                                 "\\frac{8}{11}",
                                 "\\frac{13}{11}"
                             ],
-                            "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-ed20ecd58adf89f214c8b8ebd3ca2937\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-ed20ecd58adf89f214c8b8ebd3ca2937)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"47\" y1=\"28\" x2=\"47\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"47\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.1<\/text>\n  <line x1=\"74\" y1=\"28\" x2=\"74\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"74\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.2<\/text>\n  <line x1=\"101\" y1=\"28\" x2=\"101\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"101\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.3<\/text>\n  <line x1=\"128\" y1=\"28\" x2=\"128\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"128\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.4<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.5<\/text>\n  <line x1=\"182\" y1=\"28\" x2=\"182\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"182\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.6<\/text>\n  <line x1=\"209\" y1=\"28\" x2=\"209\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"209\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.7<\/text>\n  <line x1=\"236\" y1=\"28\" x2=\"236\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"236\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.8<\/text>\n  <line x1=\"263\" y1=\"28\" x2=\"263\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"263\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.9<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <circle cx=\"216.36363636364\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"216.36363636364\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
+                            "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-cfee2a6035745b891ecd1098c222ac67\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-cfee2a6035745b891ecd1098c222ac67)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"47\" y1=\"28\" x2=\"47\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"47\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.1<\/text>\n  <line x1=\"74\" y1=\"28\" x2=\"74\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"74\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.2<\/text>\n  <line x1=\"101\" y1=\"28\" x2=\"101\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"101\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.3<\/text>\n  <line x1=\"128\" y1=\"28\" x2=\"128\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"128\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.4<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.5<\/text>\n  <line x1=\"182\" y1=\"28\" x2=\"182\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"182\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.6<\/text>\n  <line x1=\"209\" y1=\"28\" x2=\"209\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"209\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.7<\/text>\n  <line x1=\"236\" y1=\"28\" x2=\"236\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"236\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.8<\/text>\n  <line x1=\"263\" y1=\"28\" x2=\"263\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"263\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.9<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <circle cx=\"92.9\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"92.9\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
                             "answer": "1",
-                            "status": "draft"
+                            "status": "draft",
+                            "axis_min": 0,
+                            "axis_max": 1
                         },
                         {
                             "id": 2,
-                            "point_value": 0.6470588235294118,
+                            "point_value": 0.77,
                             "point_label": "A",
                             "options": [
                                 "\\frac{10}{17}",
@@ -964,13 +966,15 @@
                                 "\\frac{13}{17}",
                                 "\\frac{14}{17}"
                             ],
-                            "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-23c7c5aceb95242daed20ea941bcab9d\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-23c7c5aceb95242daed20ea941bcab9d)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"47\" y1=\"28\" x2=\"47\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"47\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.1<\/text>\n  <line x1=\"74\" y1=\"28\" x2=\"74\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"74\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.2<\/text>\n  <line x1=\"101\" y1=\"28\" x2=\"101\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"101\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.3<\/text>\n  <line x1=\"128\" y1=\"28\" x2=\"128\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"128\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.4<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.5<\/text>\n  <line x1=\"182\" y1=\"28\" x2=\"182\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"182\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.6<\/text>\n  <line x1=\"209\" y1=\"28\" x2=\"209\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"209\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.7<\/text>\n  <line x1=\"236\" y1=\"28\" x2=\"236\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"236\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.8<\/text>\n  <line x1=\"263\" y1=\"28\" x2=\"263\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"263\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.9<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <circle cx=\"194.70588235294\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"194.70588235294\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
+                            "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-277c50da3e2b51bb607a1640abab1214\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-277c50da3e2b51bb607a1640abab1214)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"47\" y1=\"28\" x2=\"47\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"47\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.1<\/text>\n  <line x1=\"74\" y1=\"28\" x2=\"74\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"74\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.2<\/text>\n  <line x1=\"101\" y1=\"28\" x2=\"101\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"101\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.3<\/text>\n  <line x1=\"128\" y1=\"28\" x2=\"128\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"128\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.4<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.5<\/text>\n  <line x1=\"182\" y1=\"28\" x2=\"182\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"182\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.6<\/text>\n  <line x1=\"209\" y1=\"28\" x2=\"209\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"209\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.7<\/text>\n  <line x1=\"236\" y1=\"28\" x2=\"236\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"236\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.8<\/text>\n  <line x1=\"263\" y1=\"28\" x2=\"263\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"263\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.9<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <circle cx=\"227.9\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"227.9\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
                             "answer": "1",
-                            "status": "draft"
+                            "status": "draft",
+                            "axis_min": 0,
+                            "axis_max": 1
                         },
                         {
                             "id": 3,
-                            "point_value": 0.7692307692307693,
+                            "point_value": 0.93,
                             "point_label": "A",
                             "options": [
                                 "\\frac{3}{13}",
@@ -978,13 +982,15 @@
                                 "\\frac{10}{13}",
                                 "\\frac{12}{13}"
                             ],
-                            "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-5681a915dc7c439c4094217c368d6733\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-5681a915dc7c439c4094217c368d6733)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"47\" y1=\"28\" x2=\"47\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"47\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.1<\/text>\n  <line x1=\"74\" y1=\"28\" x2=\"74\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"74\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.2<\/text>\n  <line x1=\"101\" y1=\"28\" x2=\"101\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"101\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.3<\/text>\n  <line x1=\"128\" y1=\"28\" x2=\"128\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"128\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.4<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.5<\/text>\n  <line x1=\"182\" y1=\"28\" x2=\"182\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"182\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.6<\/text>\n  <line x1=\"209\" y1=\"28\" x2=\"209\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"209\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.7<\/text>\n  <line x1=\"236\" y1=\"28\" x2=\"236\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"236\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.8<\/text>\n  <line x1=\"263\" y1=\"28\" x2=\"263\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"263\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.9<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <circle cx=\"227.69230769231\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"227.69230769231\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
+                            "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-3cb8e1b84dc8b34ae7b4b3e7c016b7c5\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-3cb8e1b84dc8b34ae7b4b3e7c016b7c5)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"47\" y1=\"28\" x2=\"47\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"47\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.1<\/text>\n  <line x1=\"74\" y1=\"28\" x2=\"74\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"74\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.2<\/text>\n  <line x1=\"101\" y1=\"28\" x2=\"101\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"101\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.3<\/text>\n  <line x1=\"128\" y1=\"28\" x2=\"128\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"128\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.4<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.5<\/text>\n  <line x1=\"182\" y1=\"28\" x2=\"182\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"182\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.6<\/text>\n  <line x1=\"209\" y1=\"28\" x2=\"209\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"209\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.7<\/text>\n  <line x1=\"236\" y1=\"28\" x2=\"236\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"236\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.8<\/text>\n  <line x1=\"263\" y1=\"28\" x2=\"263\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"263\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.9<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <circle cx=\"271.1\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"271.1\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
                             "answer": "1",
-                            "status": "draft"
+                            "status": "draft",
+                            "axis_min": 0,
+                            "axis_max": 1
                         },
                         {
                             "id": 4,
-                            "point_value": 0.4782608695652174,
+                            "point_value": 0.57,
                             "point_label": "A",
                             "options": [
                                 "\\frac{10}{23}",
@@ -992,13 +998,15 @@
                                 "\\frac{13}{23}",
                                 "\\frac{14}{23}"
                             ],
-                            "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-b1b43ef48c65d007e7e88f748db39b41\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-b1b43ef48c65d007e7e88f748db39b41)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"47\" y1=\"28\" x2=\"47\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"47\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.1<\/text>\n  <line x1=\"74\" y1=\"28\" x2=\"74\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"74\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.2<\/text>\n  <line x1=\"101\" y1=\"28\" x2=\"101\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"101\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.3<\/text>\n  <line x1=\"128\" y1=\"28\" x2=\"128\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"128\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.4<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.5<\/text>\n  <line x1=\"182\" y1=\"28\" x2=\"182\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"182\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.6<\/text>\n  <line x1=\"209\" y1=\"28\" x2=\"209\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"209\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.7<\/text>\n  <line x1=\"236\" y1=\"28\" x2=\"236\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"236\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.8<\/text>\n  <line x1=\"263\" y1=\"28\" x2=\"263\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"263\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.9<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <circle cx=\"149.13043478261\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"149.13043478261\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
+                            "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-04345ee6a2d0d69318787ffaabc3e179\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-04345ee6a2d0d69318787ffaabc3e179)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"47\" y1=\"28\" x2=\"47\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"47\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.1<\/text>\n  <line x1=\"74\" y1=\"28\" x2=\"74\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"74\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.2<\/text>\n  <line x1=\"101\" y1=\"28\" x2=\"101\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"101\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.3<\/text>\n  <line x1=\"128\" y1=\"28\" x2=\"128\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"128\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.4<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.5<\/text>\n  <line x1=\"182\" y1=\"28\" x2=\"182\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"182\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.6<\/text>\n  <line x1=\"209\" y1=\"28\" x2=\"209\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"209\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.7<\/text>\n  <line x1=\"236\" y1=\"28\" x2=\"236\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"236\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.8<\/text>\n  <line x1=\"263\" y1=\"28\" x2=\"263\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"263\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.9<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <circle cx=\"173.9\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"173.9\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
                             "answer": "1",
-                            "status": "draft"
+                            "status": "draft",
+                            "axis_min": 0,
+                            "axis_max": 1
                         },
                         {
                             "id": 5,
-                            "point_value": 1.4285714285714286,
+                            "point_value": 0.27,
                             "point_label": "A",
                             "options": [
                                 "\\frac{2}{7}",
@@ -1006,13 +1014,15 @@
                                 "\\frac{10}{7}",
                                 "\\frac{11}{7}"
                             ],
-                            "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-a85e7c427626343daf8c9f7538a54382\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-a85e7c427626343daf8c9f7538a54382)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"87.5\" y1=\"28\" x2=\"87.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"87.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.5<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <line x1=\"222.5\" y1=\"28\" x2=\"222.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"222.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1.5<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">2<\/text>\n  <circle cx=\"212.85714285714\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"212.85714285714\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
+                            "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-cfee2a6035745b891ecd1098c222ac67\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-cfee2a6035745b891ecd1098c222ac67)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"47\" y1=\"28\" x2=\"47\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"47\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.1<\/text>\n  <line x1=\"74\" y1=\"28\" x2=\"74\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"74\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.2<\/text>\n  <line x1=\"101\" y1=\"28\" x2=\"101\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"101\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.3<\/text>\n  <line x1=\"128\" y1=\"28\" x2=\"128\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"128\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.4<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.5<\/text>\n  <line x1=\"182\" y1=\"28\" x2=\"182\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"182\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.6<\/text>\n  <line x1=\"209\" y1=\"28\" x2=\"209\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"209\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.7<\/text>\n  <line x1=\"236\" y1=\"28\" x2=\"236\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"236\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.8<\/text>\n  <line x1=\"263\" y1=\"28\" x2=\"263\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"263\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.9<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <circle cx=\"92.9\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"92.9\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
                             "answer": "1",
-                            "status": "draft"
+                            "status": "draft",
+                            "axis_min": 0,
+                            "axis_max": 1
                         },
                         {
                             "id": 6,
-                            "point_value": 0.4782608695652174,
+                            "point_value": 0.47,
                             "point_label": "A",
                             "options": [
                                 "\\frac{6}{23}",
@@ -1020,9 +1030,11 @@
                                 "\\frac{11}{23}",
                                 "\\frac{12}{23}"
                             ],
-                            "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-b1b43ef48c65d007e7e88f748db39b41\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-b1b43ef48c65d007e7e88f748db39b41)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"47\" y1=\"28\" x2=\"47\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"47\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.1<\/text>\n  <line x1=\"74\" y1=\"28\" x2=\"74\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"74\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.2<\/text>\n  <line x1=\"101\" y1=\"28\" x2=\"101\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"101\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.3<\/text>\n  <line x1=\"128\" y1=\"28\" x2=\"128\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"128\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.4<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.5<\/text>\n  <line x1=\"182\" y1=\"28\" x2=\"182\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"182\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.6<\/text>\n  <line x1=\"209\" y1=\"28\" x2=\"209\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"209\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.7<\/text>\n  <line x1=\"236\" y1=\"28\" x2=\"236\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"236\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.8<\/text>\n  <line x1=\"263\" y1=\"28\" x2=\"263\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"263\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.9<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <circle cx=\"149.13043478261\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"149.13043478261\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
+                            "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-3cdc68c113035b7fce27afce85ec959e\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-3cdc68c113035b7fce27afce85ec959e)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"47\" y1=\"28\" x2=\"47\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"47\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.1<\/text>\n  <line x1=\"74\" y1=\"28\" x2=\"74\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"74\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.2<\/text>\n  <line x1=\"101\" y1=\"28\" x2=\"101\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"101\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.3<\/text>\n  <line x1=\"128\" y1=\"28\" x2=\"128\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"128\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.4<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.5<\/text>\n  <line x1=\"182\" y1=\"28\" x2=\"182\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"182\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.6<\/text>\n  <line x1=\"209\" y1=\"28\" x2=\"209\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"209\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.7<\/text>\n  <line x1=\"236\" y1=\"28\" x2=\"236\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"236\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.8<\/text>\n  <line x1=\"263\" y1=\"28\" x2=\"263\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"263\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.9<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <circle cx=\"146.9\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"146.9\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
                             "answer": "1",
-                            "status": "draft"
+                            "status": "draft",
+                            "axis_min": 0,
+                            "axis_max": 1
                         }
                     ]
                 },
@@ -1034,7 +1046,7 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "point_value": 3.3684210526315788,
+                            "point_value": 3.3,
                             "point_label": "A",
                             "options": [
                                 "\\frac{55}{19}",
@@ -1042,13 +1054,18 @@
                                 "\\frac{72}{19}",
                                 "\\frac{79}{19}"
                             ],
-                            "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-ed211c999b24d02e395d30e744f404ef\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-ed211c999b24d02e395d30e744f404ef)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">-1<\/text>\n  <line x1=\"65\" y1=\"28\" x2=\"65\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"65\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"110\" y1=\"28\" x2=\"110\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"110\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">2<\/text>\n  <line x1=\"200\" y1=\"28\" x2=\"200\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"200\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">3<\/text>\n  <line x1=\"245\" y1=\"28\" x2=\"245\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"245\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">4<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">5<\/text>\n  <circle cx=\"216.57894736842\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"216.57894736842\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
+                            "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-7b62bb020f7bb3ea97377eaf66bcacbb\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-7b62bb020f7bb3ea97377eaf66bcacbb)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"50\" y1=\"28\" x2=\"50\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"50\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <line x1=\"80\" y1=\"28\" x2=\"80\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"110\" y1=\"28\" x2=\"110\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"140\" y1=\"28\" x2=\"140\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"170\" y1=\"28\" x2=\"170\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"200\" y1=\"28\" x2=\"200\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"230\" y1=\"28\" x2=\"230\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"260\" y1=\"28\" x2=\"260\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <circle cx=\"119\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"119\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
                             "answer": "1",
-                            "status": "draft"
+                            "status": "draft",
+                            "point_anchor": 3,
+                            "point_pos": "L",
+                            "axis_min": 0,
+                            "axis_max": 9,
+                            "show_zero_and_one_labels_only": true
                         },
                         {
                             "id": 2,
-                            "point_value": 5.266666666666667,
+                            "point_value": 6.3,
                             "point_label": "A",
                             "options": [
                                 "\\frac{71}{15}",
@@ -1056,13 +1073,18 @@
                                 "\\frac{86}{15}",
                                 "\\frac{92}{15}"
                             ],
-                            "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-d2799ff27227b22c15bcb56e9aca5a30\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-d2799ff27227b22c15bcb56e9aca5a30)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">-1<\/text>\n  <line x1=\"53.75\" y1=\"28\" x2=\"53.75\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"53.75\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"87.5\" y1=\"28\" x2=\"87.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"87.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <line x1=\"121.25\" y1=\"28\" x2=\"121.25\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"121.25\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">2<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">3<\/text>\n  <line x1=\"188.75\" y1=\"28\" x2=\"188.75\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"188.75\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">4<\/text>\n  <line x1=\"222.5\" y1=\"28\" x2=\"222.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"222.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">5<\/text>\n  <line x1=\"256.25\" y1=\"28\" x2=\"256.25\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"256.25\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">6<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">7<\/text>\n  <circle cx=\"231.5\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"231.5\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
+                            "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-243d60bd140193bf17f7bf5b9f7b9799\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-243d60bd140193bf17f7bf5b9f7b9799)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"50\" y1=\"28\" x2=\"50\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"50\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <line x1=\"80\" y1=\"28\" x2=\"80\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"110\" y1=\"28\" x2=\"110\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"140\" y1=\"28\" x2=\"140\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"170\" y1=\"28\" x2=\"170\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"200\" y1=\"28\" x2=\"200\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"230\" y1=\"28\" x2=\"230\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"260\" y1=\"28\" x2=\"260\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <circle cx=\"209\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"209\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
                             "answer": "1",
-                            "status": "draft"
+                            "status": "draft",
+                            "point_anchor": 6,
+                            "point_pos": "L",
+                            "axis_min": 0,
+                            "axis_max": 9,
+                            "show_zero_and_one_labels_only": true
                         },
                         {
                             "id": 3,
-                            "point_value": 3.772727272727273,
+                            "point_value": 3.7,
                             "point_label": "A",
                             "options": [
                                 "\\frac{73}{22}",
@@ -1070,13 +1092,18 @@
                                 "\\frac{93}{22}",
                                 "\\frac{113}{22}"
                             ],
-                            "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-cae1225b574a3ea87591a8407ca7a436\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-cae1225b574a3ea87591a8407ca7a436)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">-1<\/text>\n  <line x1=\"65\" y1=\"28\" x2=\"65\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"65\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"110\" y1=\"28\" x2=\"110\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"110\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">2<\/text>\n  <line x1=\"200\" y1=\"28\" x2=\"200\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"200\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">3<\/text>\n  <line x1=\"245\" y1=\"28\" x2=\"245\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"245\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">4<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">5<\/text>\n  <circle cx=\"234.77272727273\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"234.77272727273\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
+                            "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-bf62212da8456a71b799281c9bfe4c04\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-bf62212da8456a71b799281c9bfe4c04)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"50\" y1=\"28\" x2=\"50\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"50\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <line x1=\"80\" y1=\"28\" x2=\"80\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"110\" y1=\"28\" x2=\"110\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"140\" y1=\"28\" x2=\"140\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"170\" y1=\"28\" x2=\"170\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"200\" y1=\"28\" x2=\"200\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"230\" y1=\"28\" x2=\"230\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"260\" y1=\"28\" x2=\"260\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <circle cx=\"131\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"131\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
                             "answer": "1",
-                            "status": "draft"
+                            "status": "draft",
+                            "point_anchor": 3,
+                            "point_pos": "R",
+                            "axis_min": 0,
+                            "axis_max": 9,
+                            "show_zero_and_one_labels_only": true
                         },
                         {
                             "id": 4,
-                            "point_value": 5.3076923076923075,
+                            "point_value": 5.7,
                             "point_label": "A",
                             "options": [
                                 "\\frac{58}{13}",
@@ -1084,13 +1111,18 @@
                                 "\\frac{76}{13}",
                                 "\\frac{83}{13}"
                             ],
-                            "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-83718368fb909d5345933e07d9f73223\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-83718368fb909d5345933e07d9f73223)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">-1<\/text>\n  <line x1=\"53.75\" y1=\"28\" x2=\"53.75\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"53.75\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"87.5\" y1=\"28\" x2=\"87.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"87.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <line x1=\"121.25\" y1=\"28\" x2=\"121.25\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"121.25\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">2<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">3<\/text>\n  <line x1=\"188.75\" y1=\"28\" x2=\"188.75\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"188.75\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">4<\/text>\n  <line x1=\"222.5\" y1=\"28\" x2=\"222.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"222.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">5<\/text>\n  <line x1=\"256.25\" y1=\"28\" x2=\"256.25\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"256.25\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">6<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">7<\/text>\n  <circle cx=\"232.88461538462\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"232.88461538462\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
+                            "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-421dcd0339d58f3a14415a9b83c3617e\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-421dcd0339d58f3a14415a9b83c3617e)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"50\" y1=\"28\" x2=\"50\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"50\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <line x1=\"80\" y1=\"28\" x2=\"80\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"110\" y1=\"28\" x2=\"110\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"140\" y1=\"28\" x2=\"140\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"170\" y1=\"28\" x2=\"170\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"200\" y1=\"28\" x2=\"200\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"230\" y1=\"28\" x2=\"230\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"260\" y1=\"28\" x2=\"260\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <circle cx=\"191\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"191\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
                             "answer": "1",
-                            "status": "draft"
+                            "status": "draft",
+                            "point_anchor": 5,
+                            "point_pos": "R",
+                            "axis_min": 0,
+                            "axis_max": 9,
+                            "show_zero_and_one_labels_only": true
                         },
                         {
                             "id": 5,
-                            "point_value": 3.6956521739130435,
+                            "point_value": 4.3,
                             "point_label": "A",
                             "options": [
                                 "\\frac{75}{23}",
@@ -1098,13 +1130,18 @@
                                 "\\frac{97}{23}",
                                 "\\frac{110}{23}"
                             ],
-                            "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-54a4d463d90ea7f3d2a9853182765bec\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-54a4d463d90ea7f3d2a9853182765bec)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">-1<\/text>\n  <line x1=\"65\" y1=\"28\" x2=\"65\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"65\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"110\" y1=\"28\" x2=\"110\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"110\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">2<\/text>\n  <line x1=\"200\" y1=\"28\" x2=\"200\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"200\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">3<\/text>\n  <line x1=\"245\" y1=\"28\" x2=\"245\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"245\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">4<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">5<\/text>\n  <circle cx=\"231.30434782609\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"231.30434782609\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
+                            "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-9e73a4fc635282c5e01df423e3d4935f\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-9e73a4fc635282c5e01df423e3d4935f)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"50\" y1=\"28\" x2=\"50\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"50\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <line x1=\"80\" y1=\"28\" x2=\"80\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"110\" y1=\"28\" x2=\"110\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"140\" y1=\"28\" x2=\"140\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"170\" y1=\"28\" x2=\"170\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"200\" y1=\"28\" x2=\"200\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"230\" y1=\"28\" x2=\"230\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"260\" y1=\"28\" x2=\"260\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <circle cx=\"149\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"149\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
                             "answer": "1",
-                            "status": "draft"
+                            "status": "draft",
+                            "point_anchor": 4,
+                            "point_pos": "L",
+                            "axis_min": 0,
+                            "axis_max": 9,
+                            "show_zero_and_one_labels_only": true
                         },
                         {
                             "id": 6,
-                            "point_value": 3.3636363636363638,
+                            "point_value": 2.7,
                             "point_label": "A",
                             "options": [
                                 "\\frac{31}{11}",
@@ -1112,9 +1149,14 @@
                                 "\\frac{41}{11}",
                                 "\\frac{47}{11}"
                             ],
-                            "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-876d57ea09b44435191e061effc531cb\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-876d57ea09b44435191e061effc531cb)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">-1<\/text>\n  <line x1=\"65\" y1=\"28\" x2=\"65\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"65\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"110\" y1=\"28\" x2=\"110\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"110\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">2<\/text>\n  <line x1=\"200\" y1=\"28\" x2=\"200\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"200\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">3<\/text>\n  <line x1=\"245\" y1=\"28\" x2=\"245\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"245\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">4<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">5<\/text>\n  <circle cx=\"216.36363636364\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"216.36363636364\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
+                            "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-0e0d4a51e962b439af4a8362f882e92e\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-0e0d4a51e962b439af4a8362f882e92e)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"50\" y1=\"28\" x2=\"50\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"50\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <line x1=\"80\" y1=\"28\" x2=\"80\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"110\" y1=\"28\" x2=\"110\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"140\" y1=\"28\" x2=\"140\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"170\" y1=\"28\" x2=\"170\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"200\" y1=\"28\" x2=\"200\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"230\" y1=\"28\" x2=\"230\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"260\" y1=\"28\" x2=\"260\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <circle cx=\"101\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"101\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
                             "answer": "1",
-                            "status": "draft"
+                            "status": "draft",
+                            "point_anchor": 2,
+                            "point_pos": "R",
+                            "axis_min": 0,
+                            "axis_max": 9,
+                            "show_zero_and_one_labels_only": true
                         }
                     ]
                 },

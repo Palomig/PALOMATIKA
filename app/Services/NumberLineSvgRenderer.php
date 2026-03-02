@@ -85,9 +85,13 @@ class NumberLineSvgRenderer
             $maxVal = 2;
         }
 
+        $options = [
+            'show_zero_and_one_labels_only' => (bool) ($task['show_zero_and_one_labels_only'] ?? false),
+        ];
+
         return $this->generateNumberLine([
             ['value' => $pointValue, 'label' => $pointLabel]
-        ], $minVal, $maxVal);
+        ], $minVal, $maxVal, false, $options);
     }
 
     /**
@@ -240,6 +244,7 @@ class NumberLineSvgRenderer
         };
 
         $showZeroOnly = (bool) ($options['show_zero_only'] ?? false);
+        $showZeroAndOneLabelsOnly = (bool) ($options['show_zero_and_one_labels_only'] ?? false);
         $showZeroTickOnly = (bool) ($options['show_zero_tick_only'] ?? false);
         $showIntegerLabelsOnly = (bool) ($options['show_integer_labels_only'] ?? false);
         $showIntegerTicksOnly = (bool) ($options['show_integer_ticks_only'] ?? false);
@@ -284,7 +289,12 @@ class NumberLineSvgRenderer
             }
 
             // Подпись числа (всегда снизу)
-            if (!$hideAllNumericLabels && (!$showZeroOnly || $isZeroTick) && (!$showIntegerLabelsOnly || $isIntegerTick)) {
+            $isOneTick = abs($v - 1) < 0.0001;
+            if (!$hideAllNumericLabels
+                && (!$showZeroOnly || $isZeroTick)
+                && (!$showZeroAndOneLabelsOnly || $isZeroTick || $isOneTick)
+                && (!$showIntegerLabelsOnly || $isIntegerTick)
+            ) {
                 $color = ($v == 0) ? self::COLORS['zero'] : self::COLORS['number'];
                 $label = $this->formatNumber($v);
                 $svg .= "  <text x=\"{$x}\" y=\"" . ($lineY + 22) . "\" text-anchor=\"middle\" ";
