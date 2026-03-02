@@ -106,6 +106,7 @@ class NumberLineSvgRenderer
 
         $options = [
             'show_zero_only' => (bool) ($task['show_zero_only'] ?? false),
+            'show_zero_tick_only' => (bool) ($task['show_zero_tick_only'] ?? false),
             'show_integer_labels_only' => (bool) ($task['show_integer_labels_only'] ?? false),
             'label_position' => (string) ($task['label_position'] ?? 'auto'),
         ];
@@ -232,6 +233,7 @@ class NumberLineSvgRenderer
         };
 
         $showZeroOnly = (bool) ($options['show_zero_only'] ?? false);
+        $showZeroTickOnly = (bool) ($options['show_zero_tick_only'] ?? false);
         $showIntegerLabelsOnly = (bool) ($options['show_integer_labels_only'] ?? false);
         $labelPosition = strtolower((string) ($options['label_position'] ?? 'auto'));
 
@@ -263,13 +265,16 @@ class NumberLineSvgRenderer
         for ($v = $firstTick; $v <= $maxVal; $v += $step) {
             $x = $getX($v);
 
+            $isZeroTick = abs($v) < 0.0001;
             // Риска
-            $svg .= "  <line x1=\"{$x}\" y1=\"" . ($lineY - 7) . "\" x2=\"{$x}\" y2=\"" . ($lineY + 7) . "\" ";
-            $svg .= "stroke=\"" . self::COLORS['tick'] . "\" stroke-width=\"1.5\"/>\n";
+            if (!$showZeroTickOnly || $isZeroTick) {
+                $svg .= "  <line x1=\"{$x}\" y1=\"" . ($lineY - 7) . "\" x2=\"{$x}\" y2=\"" . ($lineY + 7) . "\" ";
+                $svg .= "stroke=\"" . self::COLORS['tick'] . "\" stroke-width=\"1.5\"/>\n";
+            }
 
             // Подпись числа (всегда снизу)
             $isIntegerTick = abs($v - round($v)) < 0.0001;
-            if ((!$showZeroOnly || abs($v) < 0.0001) && (!$showIntegerLabelsOnly || $isIntegerTick)) {
+            if ((!$showZeroOnly || $isZeroTick) && (!$showIntegerLabelsOnly || $isIntegerTick)) {
                 $color = ($v == 0) ? self::COLORS['zero'] : self::COLORS['number'];
                 $label = $this->formatNumber($v);
                 $svg .= "  <text x=\"{$x}\" y=\"" . ($lineY + 22) . "\" text-anchor=\"middle\" ";
