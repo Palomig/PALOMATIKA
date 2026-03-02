@@ -92,6 +92,10 @@
                     @endif
                     @if(isset($task['expression']))
                         <span class="text-slate-200 math-serif text-lg">${{ $task['expression'] }}$</span>
+                    @elseif(($zadanie['type'] ?? null) === 'decimal_choice' && isset($task['numbers']) && isset($task['target']))
+                        <span class="text-slate-200">
+                            {{ $task['numbers'] }}. Какой точке соответствует число {{ $task['target'] }}?
+                        </span>
                     @elseif(isset($task['left']) && isset($task['right']))
                         <span class="text-slate-200">
                             Какое число заключено между ${{ $task['left'] }}$ и ${{ $task['right'] }}$?
