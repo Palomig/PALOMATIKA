@@ -130,7 +130,13 @@ class NumberLineSvgRenderer
         $minVal = floor(min(min($values), 0)) - 1;
         $maxVal = ceil(max($values)) + 1;
 
-        return $this->generateNumberLine($points, $minVal, $maxVal);
+        $options = [
+            'hide_all_numeric_labels' => true,
+            'hide_all_ticks' => true,
+            'label_position' => 'below',
+        ];
+
+        return $this->generateNumberLine($points, $minVal, $maxVal, false, $options);
     }
 
     /**
@@ -237,6 +243,8 @@ class NumberLineSvgRenderer
         $showZeroTickOnly = (bool) ($options['show_zero_tick_only'] ?? false);
         $showIntegerLabelsOnly = (bool) ($options['show_integer_labels_only'] ?? false);
         $showIntegerTicksOnly = (bool) ($options['show_integer_ticks_only'] ?? false);
+        $hideAllNumericLabels = (bool) ($options['hide_all_numeric_labels'] ?? false);
+        $hideAllTicks = (bool) ($options['hide_all_ticks'] ?? false);
         $labelPosition = strtolower((string) ($options['label_position'] ?? 'auto'));
 
         // Определяем, нужно ли чередовать позиции подписей
@@ -270,13 +278,13 @@ class NumberLineSvgRenderer
             $isZeroTick = abs($v) < 0.0001;
             $isIntegerTick = abs($v - round($v)) < 0.0001;
             // Риска
-            if ((!$showZeroTickOnly || $isZeroTick) && (!$showIntegerTicksOnly || $isIntegerTick)) {
+            if (!$hideAllTicks && (!$showZeroTickOnly || $isZeroTick) && (!$showIntegerTicksOnly || $isIntegerTick)) {
                 $svg .= "  <line x1=\"{$x}\" y1=\"" . ($lineY - 7) . "\" x2=\"{$x}\" y2=\"" . ($lineY + 7) . "\" ";
                 $svg .= "stroke=\"" . self::COLORS['tick'] . "\" stroke-width=\"1.5\"/>\n";
             }
 
             // Подпись числа (всегда снизу)
-            if ((!$showZeroOnly || $isZeroTick) && (!$showIntegerLabelsOnly || $isIntegerTick)) {
+            if (!$hideAllNumericLabels && (!$showZeroOnly || $isZeroTick) && (!$showIntegerLabelsOnly || $isIntegerTick)) {
                 $color = ($v == 0) ? self::COLORS['zero'] : self::COLORS['number'];
                 $label = $this->formatNumber($v);
                 $svg .= "  <text x=\"{$x}\" y=\"" . ($lineY + 22) . "\" text-anchor=\"middle\" ";
@@ -285,7 +293,7 @@ class NumberLineSvgRenderer
         }
 
         // Ноль отдельно, если его нет на шкале
-        if ($minVal <= 0 && $maxVal >= 0 && ($firstTick > 0 || $firstTick + $step <= 0)) {
+        if (!$hideAllTicks && !$hideAllNumericLabels && $minVal <= 0 && $maxVal >= 0 && ($firstTick > 0 || $firstTick + $step <= 0)) {
             $zeroInTicks = false;
             for ($v = $firstTick; $v <= $maxVal; $v += $step) {
                 if (abs($v) < 0.0001) {
