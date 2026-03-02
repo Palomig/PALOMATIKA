@@ -106,6 +106,7 @@ class NumberLineSvgRenderer
 
         $options = [
             'show_zero_only' => (bool) ($task['show_zero_only'] ?? false),
+            'show_integer_labels_only' => (bool) ($task['show_integer_labels_only'] ?? false),
             'label_position' => (string) ($task['label_position'] ?? 'auto'),
         ];
 
@@ -183,7 +184,12 @@ class NumberLineSvgRenderer
             $maxVal = ceil($maxVal / $step) * $step;
         }
 
-        return $this->generateNumberLine($points, $minVal, $maxVal, true);
+        $options = [
+            'show_integer_labels_only' => (bool) ($task['show_integer_labels_only'] ?? false),
+            'label_position' => (string) ($task['label_position'] ?? 'auto'),
+        ];
+
+        return $this->generateNumberLine($points, $minVal, $maxVal, true, $options);
     }
 
     /**
@@ -226,6 +232,7 @@ class NumberLineSvgRenderer
         };
 
         $showZeroOnly = (bool) ($options['show_zero_only'] ?? false);
+        $showIntegerLabelsOnly = (bool) ($options['show_integer_labels_only'] ?? false);
         $labelPosition = strtolower((string) ($options['label_position'] ?? 'auto'));
 
         // Определяем, нужно ли чередовать позиции подписей
@@ -261,7 +268,8 @@ class NumberLineSvgRenderer
             $svg .= "stroke=\"" . self::COLORS['tick'] . "\" stroke-width=\"1.5\"/>\n";
 
             // Подпись числа (всегда снизу)
-            if (!$showZeroOnly || abs($v) < 0.0001) {
+            $isIntegerTick = abs($v - round($v)) < 0.0001;
+            if ((!$showZeroOnly || abs($v) < 0.0001) && (!$showIntegerLabelsOnly || $isIntegerTick)) {
                 $color = ($v == 0) ? self::COLORS['zero'] : self::COLORS['number'];
                 $label = $this->formatNumber($v);
                 $svg .= "  <text x=\"{$x}\" y=\"" . ($lineY + 22) . "\" text-anchor=\"middle\" ";
