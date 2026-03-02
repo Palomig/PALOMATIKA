@@ -100,6 +100,10 @@
                         <span class="text-slate-200">
                             Какое число заключено между ${{ $task['left'] }}$ и ${{ $task['right'] }}$?
                         </span>
+                    @elseif(isset($task['segment']) && in_array(($zadanie['type'] ?? ''), ['segment_choice', 'sqrt_segment', 'negative_segment'], true))
+                        <span class="text-slate-200">
+                            Какое из данных чисел принадлежит промежутку {{ $task['segment'] }}?
+                        </span>
                     @endif
                 </div>
 
