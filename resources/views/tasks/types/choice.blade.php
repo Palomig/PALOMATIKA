@@ -53,6 +53,8 @@
                     $taskGraphOptions = is_array($task['graph_options'] ?? null) ? $task['graph_options'] : [];
                     $taskOptionsRenderMode = $task['options_render_mode'] ?? $optionsRenderMode ?? null;
                     $taskSvg = is_string($task['svg'] ?? null) ? $task['svg'] : '';
+                    $hasTaskImage = !empty($task['image']);
+                    $hasExplicitTaskVisual = !empty($taskSvg) || $hasTaskImage;
                     $isTopic13Z11PromptSvg = (string) ($topicId ?? '') === '13'
                         && (int) ($zadanie['number'] ?? 0) === 11
                         && str_contains($taskSvg, 'data-runtime-svg="topic13-b1-z11-prompt-');
@@ -85,7 +87,7 @@
                     // НЕ ставим дефолт, чтобы не показывать number-line когда он не нужен
                     $taskSvgType = $task['svg_type'] ?? $svgType ?? null;
                 @endphp
-                @if(!empty($taskPoints) || ($taskSvgType !== null) || isset($task['point_value']))
+                @if(!$hasExplicitTaskVisual && (!empty($taskPoints) || ($taskSvgType !== null) || isset($task['point_value'])))
                     @include('tasks.partials.number-line', [
                         'points' => $taskPoints,
                         'svgType' => $taskSvgType,
@@ -95,7 +97,7 @@
 
                 @if(!empty($taskSvg) && empty($taskGraphOptions) && !$hidePromptSvgForTopic13Z357)
                     <div class="mt-4 mb-2">
-                        <div class="rounded-lg overflow-hidden border border-slate-700 {{ $isTopic13 ? 'topic13-svg-card bg-slate-900/50 p-3' : 'bg-white p-2' }} {{ $isTopic13Z11PromptSvg ? 'topic13-z11-prompt-svg-size mx-auto w-full max-w-[270px] sm:max-w-[330px] md:max-w-[360px] [&>svg]:w-full [&>svg]:h-auto' : '' }} {{ $isTopic13Z12PromptSvg ? 'topic13-z12-prompt-svg-size mx-auto w-full max-w-[270px] sm:max-w-[330px] md:max-w-[360px] [&>svg]:w-full [&>svg]:h-auto' : '' }}">
+                        <div class="rounded-lg overflow-hidden border border-slate-700 {{ $isTopic13 ? 'topic13-svg-card bg-slate-900/50 p-3' : ((string) ($topicId ?? '') === '07' ? 'bg-transparent p-0 border-0' : 'bg-white p-2') }} {{ $isTopic13Z11PromptSvg ? 'topic13-z11-prompt-svg-size mx-auto w-full max-w-[270px] sm:max-w-[330px] md:max-w-[360px] [&>svg]:w-full [&>svg]:h-auto' : '' }} {{ $isTopic13Z12PromptSvg ? 'topic13-z12-prompt-svg-size mx-auto w-full max-w-[270px] sm:max-w-[330px] md:max-w-[360px] [&>svg]:w-full [&>svg]:h-auto' : '' }}">
                             {!! $taskSvg !!}
                         </div>
                     </div>
