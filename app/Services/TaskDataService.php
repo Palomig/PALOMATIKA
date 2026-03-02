@@ -738,7 +738,7 @@ class TaskDataService
     public function isValidTaskKey(string $taskKey, ?string $topicId = null): bool
     {
         $matches = [];
-        if (!preg_match('/^topic_(\d{2})_block_(\d+)_zadanie_(\d+)_task_(\d+)$/', $taskKey, $matches)) {
+        if (!preg_match('/^topic_(\d{2})_block_(\d+)_zadanie_(\d+)_(task|statement)_(\d+)$/', $taskKey, $matches)) {
             return false;
         }
 
@@ -749,19 +749,39 @@ class TaskDataService
         return $matches[1] === str_pad($topicId, 2, '0', STR_PAD_LEFT);
     }
 
+    /**
+     * Parse a task_key into its components.
+     * Returns null if invalid.
+     */
+    public function parseTaskKey(string $taskKey): ?array
+    {
+        if (!preg_match('/^topic_(\d{2})_block_(\d+)_zadanie_(\d+)_(task|statement)_(\d+)$/', $taskKey, $m)) {
+            return null;
+        }
+
+        return [
+            'topic_id' => $m[1],
+            'block_number' => (int) $m[2],
+            'zadanie_number' => (int) $m[3],
+            'item_type' => $m[4], // 'task' or 'statement'
+            'item_id' => (int) $m[5],
+        ];
+    }
+
     public function taskExistsByKey(string $topicId, string $taskKey): bool
     {
         $topicId = str_pad($topicId, 2, '0', STR_PAD_LEFT);
-        if (!$this->isValidTaskKey($taskKey, $topicId)) {
+        $parsed = $this->parseTaskKey($taskKey);
+        if (!$parsed || $parsed['topic_id'] !== $topicId) {
             return false;
         }
 
-        preg_match('/^topic_\d{2}_block_(\d+)_zadanie_(\d+)_task_(\d+)$/', $taskKey, $matches);
-        $blockNumber = (int) ($matches[1] ?? 0);
-        $zadanieNumber = (int) ($matches[2] ?? 0);
-        $taskId = (int) ($matches[3] ?? 0);
+        $blockNumber = $parsed['block_number'];
+        $zadanieNumber = $parsed['zadanie_number'];
+        $itemId = $parsed['item_id'];
+        $itemType = $parsed['item_type'];
 
-        if ($blockNumber < 1 || $zadanieNumber < 1 || $taskId < 1) {
+        if ($blockNumber < 1 || $zadanieNumber < 1 || $itemId < 1) {
             return false;
         }
 
@@ -776,8 +796,9 @@ class TaskDataService
                     continue;
                 }
 
-                foreach ($zadanie['tasks'] ?? [] as $task) {
-                    if ((int) ($task['id'] ?? 0) === $taskId) {
+                $items = $itemType === 'statement' ? ($zadanie['statements'] ?? []) : ($zadanie['tasks'] ?? []);
+                foreach ($items as $item) {
+                    if ((int) ($item['id'] ?? 0) === $itemId) {
                         return true;
                     }
                 }

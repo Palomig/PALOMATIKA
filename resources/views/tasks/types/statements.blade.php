@@ -109,6 +109,8 @@
                         @endif
                     </div>
                 </div>
+                @php $task = $rawStatement; @endphp
+                @include('tasks.partials.task-status-badge')
             </div>
         @endforeach
     </div>

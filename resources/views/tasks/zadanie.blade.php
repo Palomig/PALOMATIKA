@@ -15,15 +15,17 @@
     {{-- Zadanie Header --}}
     @php
         $isAdminForZadanie = auth()->check() && auth()->user()?->isAdmin();
-        $zadanieTasks = $zadanie['tasks'] ?? $zadanie['statements'] ?? [];
+        $hasStatements = !empty($zadanie['statements']) && empty($zadanie['tasks']);
+        $zadanieItems = $hasStatements ? ($zadanie['statements'] ?? []) : ($zadanie['tasks'] ?? []);
+        $itemKeyType = $hasStatements ? 'statement' : 'task';
         $zadanieTaskKeys = [];
-        foreach ($zadanieTasks as $zt) {
+        foreach ($zadanieItems as $zt) {
             $ztId = $zt['id'] ?? null;
             if ($ztId !== null) {
-                $zadanieTaskKeys[] = "topic_{$topicId}_block_{$block['number']}_zadanie_{$zadanie['number']}_task_{$ztId}";
+                $zadanieTaskKeys[] = "topic_{$topicId}_block_{$block['number']}_zadanie_{$zadanie['number']}_{$itemKeyType}_{$ztId}";
             }
         }
-        $allProduction = !empty($zadanieTasks) && collect($zadanieTasks)->every(fn($t) => ($t['status'] ?? 'draft') === 'production');
+        $allProduction = !empty($zadanieItems) && collect($zadanieItems)->every(fn($t) => ($t['status'] ?? 'draft') === 'production');
     @endphp
     <div class="bg-slate-800 rounded-xl p-4 mb-6 border-l-4 border-{{ $color }}-500">
         <div class="flex items-start justify-between gap-3">

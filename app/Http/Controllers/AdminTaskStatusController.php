@@ -38,36 +38,13 @@ class AdminTaskStatusController extends Controller
             return response()->json(['message' => 'Тема пуста.'], 404);
         }
 
-        // Extract block/zadanie/task from task_key
-        preg_match('/^topic_\d{2}_block_(\d+)_zadanie_(\d+)_task_(\d+)$/', $taskKey, $matches);
-        $blockNumber = (int) $matches[1];
-        $zadanieNumber = (int) $matches[2];
-        $taskId = (int) $matches[3];
-
-        $updated = false;
-        foreach ($data['blocks'] as $bi => $block) {
-            if ((int) ($block['number'] ?? 0) !== $blockNumber) {
-                continue;
-            }
-            foreach ($block['zadaniya'] ?? [] as $zi => $zadanie) {
-                if ((int) ($zadanie['number'] ?? 0) !== $zadanieNumber) {
-                    continue;
-                }
-                foreach ($zadanie['tasks'] ?? [] as $ti => $task) {
-                    if ((int) ($task['id'] ?? 0) === $taskId) {
-                        $data['blocks'][$bi]['zadaniya'][$zi]['tasks'][$ti]['status'] = $status;
-                        $updated = true;
-                        break 3;
-                    }
-                }
-            }
-        }
+        $parsed = $this->taskDataService->parseTaskKey($taskKey);
+        $updated = $this->applyStatusToItem($data, $parsed, $status);
 
         if (!$updated) {
             return response()->json(['message' => 'Задача не найдена.'], 404);
         }
 
-        // saveTopicData will trigger auto-sync of variant pool
         if (!$this->taskDataService->saveTopicData($topicId, $data)) {
             return response()->json(['message' => 'Не удалось сохранить.'], 500);
         }
@@ -79,7 +56,7 @@ class AdminTaskStatusController extends Controller
     }
 
     /**
-     * Bulk update status for multiple tasks.
+     * Bulk update status for multiple tasks/statements.
      */
     public function bulkUpdate(Request $request, string $topicId): JsonResponse
     {
@@ -102,35 +79,13 @@ class AdminTaskStatusController extends Controller
         $updatedCount = 0;
 
         foreach ($taskKeys as $taskKey) {
-            if (!$this->taskDataService->isValidTaskKey($taskKey, $topicId)) {
+            $parsed = $this->taskDataService->parseTaskKey($taskKey);
+            if (!$parsed || $parsed['topic_id'] !== $topicId) {
                 continue;
             }
 
-            preg_match('/^topic_\d{2}_block_(\d+)_zadanie_(\d+)_task_(\d+)$/', $taskKey, $matches);
-            if (empty($matches)) {
-                continue;
-            }
-
-            $blockNumber = (int) $matches[1];
-            $zadanieNumber = (int) $matches[2];
-            $taskId = (int) $matches[3];
-
-            foreach ($data['blocks'] as $bi => $block) {
-                if ((int) ($block['number'] ?? 0) !== $blockNumber) {
-                    continue;
-                }
-                foreach ($block['zadaniya'] ?? [] as $zi => $zadanie) {
-                    if ((int) ($zadanie['number'] ?? 0) !== $zadanieNumber) {
-                        continue;
-                    }
-                    foreach ($zadanie['tasks'] ?? [] as $ti => $task) {
-                        if ((int) ($task['id'] ?? 0) === $taskId) {
-                            $data['blocks'][$bi]['zadaniya'][$zi]['tasks'][$ti]['status'] = $status;
-                            $updatedCount++;
-                            break 3;
-                        }
-                    }
-                }
+            if ($this->applyStatusToItem($data, $parsed, $status)) {
+                $updatedCount++;
             }
         }
 
@@ -146,5 +101,36 @@ class AdminTaskStatusController extends Controller
             'updated' => $updatedCount,
             'status' => $status,
         ]);
+    }
+
+    /**
+     * Apply status to a task or statement in the data array.
+     */
+    private function applyStatusToItem(array &$data, ?array $parsed, string $status): bool
+    {
+        if (!$parsed) {
+            return false;
+        }
+
+        $arrayKey = $parsed['item_type'] === 'statement' ? 'statements' : 'tasks';
+
+        foreach ($data['blocks'] as $bi => $block) {
+            if ((int) ($block['number'] ?? 0) !== $parsed['block_number']) {
+                continue;
+            }
+            foreach ($block['zadaniya'] ?? [] as $zi => $zadanie) {
+                if ((int) ($zadanie['number'] ?? 0) !== $parsed['zadanie_number']) {
+                    continue;
+                }
+                foreach ($zadanie[$arrayKey] ?? [] as $ti => $item) {
+                    if ((int) ($item['id'] ?? 0) === $parsed['item_id']) {
+                        $data['blocks'][$bi]['zadaniya'][$zi][$arrayKey][$ti]['status'] = $status;
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 }
