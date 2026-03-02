@@ -1350,7 +1350,7 @@
                 "9 и 10",
                 "88 и 90"
               ],
-              "answer": "1",
+              "answer": 3,
               "status": "draft"
             },
             {
@@ -1362,7 +1362,7 @@
                 "12 и 14",
                 "26 и 28"
               ],
-              "answer": "1",
+              "answer": 2,
               "status": "draft"
             },
             {
@@ -1374,7 +1374,7 @@
                 "3 и 4",
                 "7 и 8"
               ],
-              "answer": "1",
+              "answer": 4,
               "status": "draft"
             },
             {
@@ -1386,7 +1386,7 @@
                 "24 и 26",
                 "4 и 5"
               ],
-              "answer": "1",
+              "answer": 1,
               "status": "draft"
             },
             {
@@ -1398,7 +1398,7 @@
                 "2 и 3",
                 "29 и 31"
               ],
-              "answer": "1",
+              "answer": 2,
               "status": "draft"
             },
             {
@@ -1410,7 +1410,7 @@
                 "19 и 21",
                 "7 и 8"
               ],
-              "answer": "1",
+              "answer": 4,
               "status": "draft"
             }
           ]
@@ -1429,7 +1429,7 @@
                 "\\sqrt{24}",
                 "\\sqrt{32}"
               ],
-              "answer": "1",
+              "answer": 4,
               "status": "draft"
             },
             {
@@ -1441,7 +1441,7 @@
                 "\\sqrt{38}",
                 "\\sqrt{50}"
               ],
-              "answer": "1",
+              "answer": 3,
               "status": "draft"
             },
             {
@@ -1453,7 +1453,7 @@
                 "\\sqrt{62}",
                 "\\sqrt{72}"
               ],
-              "answer": "1",
+              "answer": 3,
               "status": "draft"
             },
             {
@@ -1465,7 +1465,7 @@
                 "\\sqrt{40}",
                 "\\sqrt{51}"
               ],
-              "answer": "1",
+              "answer": 3,
               "status": "draft"
             },
             {
@@ -1477,7 +1477,7 @@
                 "\\sqrt{28}",
                 "\\sqrt{41}"
               ],
-              "answer": "1",
+              "answer": 3,
               "status": "draft"
             }
           ]
