@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Deterministic inventory for Topic 07 tasks."""
+"""Deterministic inventory for Topic 07 tasks.
+
+Row order is always normalized to (block, zadanie, task_id as text).
+"""
 
 from __future__ import annotations
 

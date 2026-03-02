@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Consistency checks for Topic 07 inequality tasks."""
+"""Consistency checks for Topic 07 inequality tasks.
+
+Mismatch rows are sorted deterministically by block/zadanie/task/severity/code.
+"""
 
 from __future__ import annotations
 
