@@ -69,8 +69,12 @@ class NumberLineSvgRenderer
         $pointLabel = $task['point_label'] ?? 'a';
 
         // Определяем диапазон
-        $minVal = floor(min($pointValue, 0)) - 1;
-        $maxVal = ceil(max($pointValue, 1)) + 1;
+        $minVal = isset($task['axis_min']) && is_numeric($task['axis_min'])
+            ? (float) $task['axis_min']
+            : floor(min($pointValue, 0)) - 1;
+        $maxVal = isset($task['axis_max']) && is_numeric($task['axis_max'])
+            ? (float) $task['axis_max']
+            : ceil(max($pointValue, 1)) + 1;
 
         // Для дробных значений от 0 до 1
         if ($pointValue > 0 && $pointValue < 1) {
@@ -100,7 +104,12 @@ class NumberLineSvgRenderer
         $minVal = floor(min(min($values), 0)) - 1;
         $maxVal = ceil(max($values)) + 1;
 
-        return $this->generateNumberLine($points, $minVal, $maxVal);
+        $options = [
+            'show_zero_only' => (bool) ($task['show_zero_only'] ?? false),
+            'label_position' => (string) ($task['label_position'] ?? 'auto'),
+        ];
+
+        return $this->generateNumberLine($points, $minVal, $maxVal, false, $options);
     }
 
     /**
@@ -199,7 +208,7 @@ class NumberLineSvgRenderer
     /**
      * Генерирует SVG координатной прямой
      */
-    private function generateNumberLine(array $points, float $minVal, float $maxVal, bool $showRangeTicks = false): string
+    private function generateNumberLine(array $points, float $minVal, float $maxVal, bool $showRangeTicks = false, array $options = []): string
     {
         $width = 320;
         $height = 70; // Увеличиваем высоту для размещения подписей сверху и снизу
@@ -215,6 +224,9 @@ class NumberLineSvgRenderer
         $getX = function($value) use ($minVal, $range, $marginLeft, $lineWidth) {
             return $marginLeft + (($value - $minVal) / $range) * $lineWidth;
         };
+
+        $showZeroOnly = (bool) ($options['show_zero_only'] ?? false);
+        $labelPosition = strtolower((string) ($options['label_position'] ?? 'auto'));
 
         // Определяем, нужно ли чередовать позиции подписей
         $needAlternate = $this->needAlternateLabels($points, $getX);
@@ -249,10 +261,12 @@ class NumberLineSvgRenderer
             $svg .= "stroke=\"" . self::COLORS['tick'] . "\" stroke-width=\"1.5\"/>\n";
 
             // Подпись числа (всегда снизу)
-            $color = ($v == 0) ? self::COLORS['zero'] : self::COLORS['number'];
-            $label = $this->formatNumber($v);
-            $svg .= "  <text x=\"{$x}\" y=\"" . ($lineY + 22) . "\" text-anchor=\"middle\" ";
-            $svg .= "fill=\"{$color}\" font-size=\"11\" font-weight=\"500\">{$label}</text>\n";
+            if (!$showZeroOnly || abs($v) < 0.0001) {
+                $color = ($v == 0) ? self::COLORS['zero'] : self::COLORS['number'];
+                $label = $this->formatNumber($v);
+                $svg .= "  <text x=\"{$x}\" y=\"" . ($lineY + 22) . "\" text-anchor=\"middle\" ";
+                $svg .= "fill=\"{$color}\" font-size=\"11\" font-weight=\"500\">{$label}</text>\n";
+            }
         }
 
         // Ноль отдельно, если его нет на шкале
@@ -274,7 +288,7 @@ class NumberLineSvgRenderer
         }
 
         // Точки с умным позиционированием подписей
-        $labelPositions = $this->calculateLabelPositions($points, $getX, $lineY, $needAlternate);
+        $labelPositions = $this->calculateLabelPositions($points, $getX, $lineY, $needAlternate, $labelPosition);
 
         foreach ($points as $i => $pt) {
             $x = $getX($pt['value']);
@@ -324,11 +338,25 @@ class NumberLineSvgRenderer
     /**
      * Вычисляет позиции подписей с учётом коллизий
      */
-    private function calculateLabelPositions(array $points, callable $getX, float $lineY, bool $needAlternate): array
+    private function calculateLabelPositions(array $points, callable $getX, float $lineY, bool $needAlternate, string $labelPosition = 'auto'): array
     {
         $positions = [];
         $labelAbove = $lineY - 12;  // Позиция выше линии
         $labelBelow = $lineY + 28;  // Позиция ниже линии (под числами)
+
+        if ($labelPosition === 'below') {
+            foreach ($points as $i => $pt) {
+                $positions[$i] = ['y' => $labelBelow];
+            }
+            return $positions;
+        }
+
+        if ($labelPosition === 'above') {
+            foreach ($points as $i => $pt) {
+                $positions[$i] = ['y' => $labelAbove];
+            }
+            return $positions;
+        }
 
         if (!$needAlternate) {
             // Все подписи сверху
