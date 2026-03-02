@@ -187,6 +187,7 @@ class NumberLineSvgRenderer
 
         $options = [
             'show_integer_labels_only' => (bool) ($task['show_integer_labels_only'] ?? false),
+            'show_integer_ticks_only' => (bool) ($task['show_integer_ticks_only'] ?? false),
             'label_position' => (string) ($task['label_position'] ?? 'auto'),
         ];
 
@@ -235,6 +236,7 @@ class NumberLineSvgRenderer
         $showZeroOnly = (bool) ($options['show_zero_only'] ?? false);
         $showZeroTickOnly = (bool) ($options['show_zero_tick_only'] ?? false);
         $showIntegerLabelsOnly = (bool) ($options['show_integer_labels_only'] ?? false);
+        $showIntegerTicksOnly = (bool) ($options['show_integer_ticks_only'] ?? false);
         $labelPosition = strtolower((string) ($options['label_position'] ?? 'auto'));
 
         // Определяем, нужно ли чередовать позиции подписей
@@ -266,14 +268,14 @@ class NumberLineSvgRenderer
             $x = $getX($v);
 
             $isZeroTick = abs($v) < 0.0001;
+            $isIntegerTick = abs($v - round($v)) < 0.0001;
             // Риска
-            if (!$showZeroTickOnly || $isZeroTick) {
+            if ((!$showZeroTickOnly || $isZeroTick) && (!$showIntegerTicksOnly || $isIntegerTick)) {
                 $svg .= "  <line x1=\"{$x}\" y1=\"" . ($lineY - 7) . "\" x2=\"{$x}\" y2=\"" . ($lineY + 7) . "\" ";
                 $svg .= "stroke=\"" . self::COLORS['tick'] . "\" stroke-width=\"1.5\"/>\n";
             }
 
             // Подпись числа (всегда снизу)
-            $isIntegerTick = abs($v - round($v)) < 0.0001;
             if ((!$showZeroOnly || $isZeroTick) && (!$showIntegerLabelsOnly || $isIntegerTick)) {
                 $color = ($v == 0) ? self::COLORS['zero'] : self::COLORS['number'];
                 $label = $this->formatNumber($v);
