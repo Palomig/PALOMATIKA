@@ -9,6 +9,8 @@
     $points = $zadanie['points'] ?? [];
     $options = $zadanie['options'] ?? [];
     $tasks = $zadanie['tasks'] ?? [];
+    $zadanieSvg = is_string($zadanie['svg'] ?? null) ? trim($zadanie['svg']) : '';
+    $hasExplicitZadanieVisual = $zadanieSvg !== '' || !empty($zadanie['image']);
     $hasAnyTaskSvg = false;
     foreach ($tasks as $rawTask) {
         $candidateSvg = is_string($rawTask['svg'] ?? null) ? trim($rawTask['svg']) : '';
@@ -28,11 +30,19 @@
 {{-- Если есть общие points на уровне задания --}}
 @if($svgType && !empty($points) && !$hasAnyTaskSvg)
     <div class="bg-slate-800/70 rounded-xl p-5 border border-slate-700 mb-4">
-        @include('tasks.partials.number-line', [
-            'points' => $points,
-            'svgType' => $svgType,
-            'task' => $zadanie,
-        ])
+        @if($hasExplicitZadanieVisual && !empty($zadanieSvg))
+            <div class="mt-1 mb-2">
+                <div class="rounded-lg overflow-hidden border border-slate-700 {{ (string) ($topicId ?? '') === '07' ? 'bg-transparent p-0 border-0' : 'bg-white p-2' }}">
+                    {!! $zadanieSvg !!}
+                </div>
+            </div>
+        @else
+            @include('tasks.partials.number-line', [
+                'points' => $points,
+                'svgType' => $svgType,
+                'task' => $zadanie,
+            ])
+        @endif
 
         @if(!empty($options))
             <div class="flex flex-wrap gap-4 mt-4">
