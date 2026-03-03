@@ -17,11 +17,39 @@ class OgeReviewController extends Controller
             ->orderBy('name')
             ->get();
 
+        // Virtual bucket for mini-app generated variants (owner_teacher_id = null, source = miniapp)
+        $miniappCount = OgeVariant::query()
+            ->where('source', OgeVariant::SOURCE_MINIAPP)
+            ->count();
+
+        $teachers->push((object) [
+            'id' => 0,
+            'name' => 'MiniApp (автогенерация)',
+            'email' => 'system@palomatika',
+            'owned_oge_variants_count' => $miniappCount,
+        ]);
+
         return view('teacher.oge.teachers', compact('teachers'));
     }
 
     public function variants(int $teacherId): View
     {
+        if ($teacherId === 0) {
+            $teacher = (object) [
+                'id' => 0,
+                'name' => 'MiniApp (автогенерация)',
+                'email' => 'system@palomatika',
+            ];
+
+            $variants = OgeVariant::query()
+                ->where('source', OgeVariant::SOURCE_MINIAPP)
+                ->withCount('attempts')
+                ->orderByDesc('created_at')
+                ->get();
+
+            return view('teacher.oge.variants', compact('teacher', 'variants'));
+        }
+
         $teacher = User::findOrFail($teacherId);
 
         $variants = OgeVariant::query()
