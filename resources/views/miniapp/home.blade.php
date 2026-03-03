@@ -329,6 +329,7 @@ function homePage() {
     async waitTelegramReady() {
       const tg = window.Telegram?.WebApp;
       if (!tg) {
+        // Outside Telegram — no initData will ever appear, but allow page interaction.
         await new Promise(r => setTimeout(r, 350));
         return;
       }
@@ -336,11 +337,17 @@ function homePage() {
       try { tg.ready?.(); } catch (_) {}
 
       const started = Date.now();
-      while (Date.now() - started < 2500) {
+      const timeout = 4000; // 4s — enough for slow VPN/proxy connections
+      while (Date.now() - started < timeout) {
         const initData = typeof tg.initData === 'string' ? tg.initData.trim() : '';
-        if (initData.length > 20) return;
-        await new Promise(r => setTimeout(r, 120));
+        if (initData.length > 20) return; // initData is ready
+        await new Promise(r => setTimeout(r, 100));
       }
+
+      // Timeout reached — initData never arrived.
+      // appReady will still be set to true so the UI is interactive,
+      // but handleLogin() will show an error if initData is empty.
+      console.warn('[palomatika] Telegram initData not available after ' + timeout + 'ms');
     },
 
     updateCountdown() {
@@ -356,7 +363,6 @@ function homePage() {
       if (this.loginInProgress) return;
       this.loginInProgress = true;
 
-      // Show loading state
       const btn = document.getElementById('start-btn');
       const btnText = document.getElementById('start-btn-text');
       if (btn) btn.classList.add('btn-loading');
@@ -375,47 +381,30 @@ function homePage() {
         return;
       }
 
-      // Auth v2 (token-based) — single source of truth
-      fetch('/api/v2/auth/tma', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ initData })
-      })
-      .then(async (res) => {
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({}));
-          throw new Error(err.message || 'auth_v2_failed');
-        }
-        return res.json();
-      })
-      .then((json) => {
-        window._tmaV2?.setTokens?.(json.access_token, json.refresh_token);
+      // Server-side auth via form POST — creates a proper Laravel session.
+      // The /tg/auth endpoint verifies initData HMAC, logs the user in,
+      // and redirects through the auth bridge to dashboard/onboarding.
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = '/tg/auth';
+      form.style.display = 'none';
 
-        const needsOnboarding = !!json.needs_onboarding;
-        const target = needsOnboarding ? '/tg/onboarding' : ('/tg/dashboard' + (startParam ? ('?startapp=' + encodeURIComponent(startParam)) : ''));
-        window.location.replace(target);
-      })
-      .catch((e) => {
-        if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
-        if (btn) btn.classList.remove('btn-loading');
-        this.loginInProgress = false;
-        const msg = (e && e.message) ? e.message : 'Не удалось войти';
-        if (tg && tg.showAlert) tg.showAlert(msg);
-        else alert(msg);
-      });
+      const inputInitData = document.createElement('input');
+      inputInitData.type = 'hidden';
+      inputInitData.name = 'initData';
+      inputInitData.value = initData;
+      form.appendChild(inputInitData);
 
-      // Safety fallback: if navigation/login stalls, release loading state
-      setTimeout(() => {
-        if (this.loginInProgress) {
-          this.loginInProgress = false;
-          if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
-          if (btn) btn.classList.remove('btn-loading');
-          if (tg && tg.showAlert) {
-            tg.showAlert('Не удалось войти. Попробуйте отключить VPN или перезапустить мини-приложение.');
-          }
-        }
-      }, 10000);
+      if (startParam) {
+        const inputStart = document.createElement('input');
+        inputStart.type = 'hidden';
+        inputStart.name = 'startParam';
+        inputStart.value = startParam;
+        form.appendChild(inputStart);
+      }
+
+      document.body.appendChild(form);
+      form.submit();
     },
 
     handleInvite() {
