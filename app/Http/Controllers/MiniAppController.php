@@ -14,6 +14,7 @@ use App\Http\Controllers\Auth\TelegramBotAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class MiniAppController extends Controller
 {
@@ -55,6 +56,12 @@ class MiniAppController extends Controller
         // Parse and verify HMAC signature
         parse_str($initData, $fields);
         if (empty($fields) || empty($fields['hash'])) {
+            Log::warning('tg_auth_invalid_payload', [
+                'ip' => $request->ip(),
+                'ua' => $request->userAgent(),
+                'initData_len' => strlen($initData),
+                'x_forwarded_proto' => $request->header('X-Forwarded-Proto'),
+            ]);
             return redirect('/tg/')->with('error', 'Некорректные данные Telegram');
         }
 
@@ -82,6 +89,13 @@ class MiniAppController extends Controller
         $calculatedHash = hash_hmac('sha256', $dataCheckString, $secretKey);
 
         if (!hash_equals($calculatedHash, $providedHash)) {
+            Log::warning('tg_auth_bad_hmac', [
+                'ip' => $request->ip(),
+                'ua' => $request->userAgent(),
+                'auth_date' => $fields['auth_date'] ?? null,
+                'initData_len' => strlen($initData),
+                'x_forwarded_proto' => $request->header('X-Forwarded-Proto'),
+            ]);
             return redirect('/tg/')->with('error', 'Неверная подпись Telegram');
         }
 
@@ -117,6 +131,15 @@ class MiniAppController extends Controller
             ]);
         }
 
+        Log::info('tg_auth_attempt_ok', [
+            'tg_user_id' => $telegramUser['id'] ?? null,
+            'ip' => $request->ip(),
+            'ua' => $request->userAgent(),
+            'session_id_before' => $request->session()->getId(),
+            'x_forwarded_proto' => $request->header('X-Forwarded-Proto'),
+            'auth_date' => $fields['auth_date'] ?? null,
+        ]);
+
         // Login with remember + regenerate session
         Auth::login($user, true);
         $request->session()->regenerate();
@@ -133,6 +156,13 @@ class MiniAppController extends Controller
         } elseif ($startParam !== '' && $user->onboarding_completed_at) {
             $redirectTo .= '?startapp=' . rawurlencode($startParam);
         }
+
+        Log::info('tg_auth_success', [
+            'user_id' => $user->id,
+            'tg_user_id' => $telegramUser['id'] ?? null,
+            'session_id_after' => $request->session()->getId(),
+            'redirect_to' => $redirectTo,
+        ]);
 
         return redirect($redirectTo);
     }

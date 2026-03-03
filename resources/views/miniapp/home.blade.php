@@ -349,6 +349,19 @@ function homePage() {
         form.appendChild(sp);
       }
 
+      // Safety fallback: if navigation/login stalls (common in unstable VPN/webview),
+      // release loading state so user can retry.
+      setTimeout(() => {
+        if (this.loginInProgress) {
+          this.loginInProgress = false;
+          if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
+          if (btn) btn.classList.remove('btn-loading');
+          if (tg && tg.showAlert) {
+            tg.showAlert('Не удалось войти. Попробуйте отключить VPN или перезапустить мини-приложение.');
+          }
+        }
+      }, 8000);
+
       document.body.appendChild(form);
       form.submit();
     },
