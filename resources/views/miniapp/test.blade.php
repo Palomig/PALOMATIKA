@@ -560,7 +560,7 @@
         <div class="answer-section q-anim" :style="'animation-delay: 0.1s; margin-top: 16px'">
 
           {{-- Choice type --}}
-          <template x-if="currentTask.type === 'choice' || currentTask.type === 'simple_choice' || currentTask.type === 'fraction_choice' || currentTask.type === 'interval_choice'">
+          <template x-if="(currentTask.type === 'choice' || currentTask.type === 'simple_choice' || currentTask.type === 'fraction_choice' || currentTask.type === 'interval_choice') && String(currentTask.task_number) !== '13'">
             <div>
               <div class="answer-label">Выбери ответ</div>
               <div class="test-options">

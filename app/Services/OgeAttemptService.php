@@ -70,8 +70,33 @@ class OgeAttemptService
 
     public function appendEvent(OgeAttempt $attempt, string $eventType, ?int $taskNumber = null, array $payload = [], $clientTs = null): OgeAttemptEvent
     {
-        $nextSeq = (int) OgeAttemptEvent::where('attempt_id', $attempt->id)->max('seq') + 1;
+        // Protect against concurrent requests producing the same seq
+        // (unique key: attempt_id + seq). Retry a few times on duplicate-key race.
+        for ($i = 0; $i < 5; $i++) {
+            $nextSeq = (int) OgeAttemptEvent::where('attempt_id', $attempt->id)->max('seq') + 1;
 
+            try {
+                return OgeAttemptEvent::create([
+                    'attempt_id' => $attempt->id,
+                    'seq' => $nextSeq,
+                    'event_type' => $eventType,
+                    'task_number' => $taskNumber,
+                    'payload_json' => $payload ?: null,
+                    'client_ts' => $clientTs,
+                    'server_ts' => now(),
+                ]);
+            } catch (\Illuminate\Database\QueryException $e) {
+                $message = (string) $e->getMessage();
+                if (str_contains($message, 'oge_attempt_events_attempt_id_seq_unique') || str_contains($message, '1062 Duplicate entry')) {
+                    usleep(15000); // 15ms backoff and retry
+                    continue;
+                }
+                throw $e;
+            }
+        }
+
+        // Final fallback: force-gap seq and try once more
+        $nextSeq = (int) OgeAttemptEvent::where('attempt_id', $attempt->id)->max('seq') + 2;
         return OgeAttemptEvent::create([
             'attempt_id' => $attempt->id,
             'seq' => $nextSeq,

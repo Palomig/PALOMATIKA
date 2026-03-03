@@ -343,7 +343,7 @@ class MiniAppController extends Controller
             ->where('student_id', $user->id)
             ->firstOrFail();
 
-        if ($attempt->status !== 'submitted') {
+        if (!in_array($attempt->status, ['submitted', 'scored'], true)) {
             return redirect('/tg/test/' . $attempt->id);
         }
 
