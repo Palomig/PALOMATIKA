@@ -657,7 +657,7 @@
         <div class="answer-section q-anim" :style="'animation-delay: 0.1s; margin-top: 16px'">
 
           {{-- Choice type --}}
-          <template x-if="(currentTask.type === 'choice' || currentTask.type === 'simple_choice' || currentTask.type === 'fraction_choice' || currentTask.type === 'interval_choice') && String(currentTask.task_number) !== '13'">
+          <template x-if="(currentTask.type === 'choice' || currentTask.type === 'simple_choice' || currentTask.type === 'fraction_choice' || currentTask.type === 'interval_choice') && Array.isArray(currentTask.options) && currentTask.options.length > 0">
             <div>
               <div class="answer-label">Выбери ответ</div>
               <div class="test-options">
@@ -690,7 +690,7 @@
           </template>
 
           {{-- Input type (expression, geometry, word_problem, etc.) --}}
-          <template x-if="currentTask.type !== 'choice' && currentTask.type !== 'simple_choice' && currentTask.type !== 'fraction_choice' && currentTask.type !== 'interval_choice' && currentTask.type !== 'matching' && currentTask.type !== 'matching_signs'">
+          <template x-if="((currentTask.type !== 'choice' && currentTask.type !== 'simple_choice' && currentTask.type !== 'fraction_choice' && currentTask.type !== 'interval_choice') || !Array.isArray(currentTask.options) || currentTask.options.length === 0) && currentTask.type !== 'matching' && currentTask.type !== 'matching_signs'">
             <div>
               <div class="answer-label">Введи ответ</div>
               <input class="answer-input"
