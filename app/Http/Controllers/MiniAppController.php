@@ -15,6 +15,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class MiniAppController extends Controller
 {
@@ -189,10 +191,17 @@ class MiniAppController extends Controller
             'redirect_to' => $redirectTo,
         ]);
 
-        // Telegram WebView/VPN compatibility: use client-side bridge redirect
-        // so Set-Cookie is committed before next app route request.
+        // Telegram WebView/VPN compatibility: do not rely on cookie continuity
+        // between auth and next hop. Pass a short-lived one-time handoff token.
+        $handoffToken = Str::random(40);
+        Cache::put('tg_auth_handoff:' . $handoffToken, [
+            'user_id' => $user->id,
+            'redirect_to' => $redirectTo,
+        ], now()->addMinutes(2));
+
         return response()->view('miniapp.auth-bridge', [
             'redirectTo' => $redirectTo,
+            'handoffToken' => $handoffToken,
         ]);
     }
 
@@ -213,6 +222,30 @@ class MiniAppController extends Controller
 
     public function authContinue(Request $request)
     {
+        $token = trim((string) $request->query('token', ''));
+        $handoff = $token !== '' ? Cache::pull('tg_auth_handoff:' . $token) : null;
+
+        if (is_array($handoff) && !empty($handoff['user_id'])) {
+            $user = \App\Models\User::find((int) $handoff['user_id']);
+            if ($user) {
+                Auth::login($user, true);
+                $request->session()->regenerate();
+
+                @file_put_contents(storage_path('app/tg_auth_trace.log'), json_encode([
+                    'ts' => now()->toIso8601String(),
+                    'event' => 'auth_continue_handoff_ok',
+                    'ctx' => [
+                        'user_id' => $user->id,
+                        'session_id' => $request->session()->getId(),
+                        'ip' => $request->ip(),
+                        'ua' => $request->userAgent(),
+                    ],
+                ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL, FILE_APPEND);
+
+                return redirect((string) ($handoff['redirect_to'] ?? (!$user->onboarding_completed_at ? '/tg/onboarding' : '/tg/dashboard')));
+            }
+        }
+
         $user = Auth::user();
         @file_put_contents(storage_path('app/tg_auth_trace.log'), json_encode([
             'ts' => now()->toIso8601String(),
@@ -223,6 +256,7 @@ class MiniAppController extends Controller
                 'session_id' => $request->session()->getId(),
                 'ip' => $request->ip(),
                 'ua' => $request->userAgent(),
+                'has_token' => $token !== '',
             ],
         ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL, FILE_APPEND);
 

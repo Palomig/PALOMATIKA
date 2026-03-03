@@ -20,7 +20,8 @@
   </div>
   <script>
     const finalUrl = @json($redirectTo);
-    const continueUrl = '/tg/auth/continue?next=' + encodeURIComponent(finalUrl);
+    const handoffToken = @json($handoffToken ?? '');
+    const continueUrl = '/tg/auth/continue?next=' + encodeURIComponent(finalUrl) + (handoffToken ? '&token=' + encodeURIComponent(handoffToken) : '');
 
     // Emit bridge ping to confirm this page actually executes in client WebView.
     fetch('/tg/auth/bridge-ping', {
