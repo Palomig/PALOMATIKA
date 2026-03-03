@@ -242,7 +242,11 @@ class MiniAppController extends Controller
                     ],
                 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL, FILE_APPEND);
 
-                return redirect((string) ($handoff['redirect_to'] ?? (!$user->onboarding_completed_at ? '/tg/onboarding' : '/tg/dashboard')));
+                $target = (string) ($handoff['redirect_to'] ?? (!$user->onboarding_completed_at ? '/tg/onboarding' : '/tg/dashboard'));
+                // Final redirect bridge as well: avoids losing state on WebView hop.
+                return response()->view('miniapp.auth-bridge-final', [
+                    'target' => $target,
+                ]);
             }
         }
 
@@ -264,7 +268,9 @@ class MiniAppController extends Controller
             return redirect('/tg/')->with('error', 'Сессия входа не сохранилась. Попробуйте ещё раз.');
         }
 
-        return redirect(!$user->onboarding_completed_at ? '/tg/onboarding' : '/tg/dashboard');
+        return response()->view('miniapp.auth-bridge-final', [
+            'target' => (!$user->onboarding_completed_at ? '/tg/onboarding' : '/tg/dashboard'),
+        ]);
     }
 
     /**
