@@ -196,6 +196,21 @@ class MiniAppController extends Controller
         ]);
     }
 
+    public function authBridgePing(Request $request)
+    {
+        @file_put_contents(storage_path('app/tg_auth_trace.log'), json_encode([
+            'ts' => now()->toIso8601String(),
+            'event' => 'bridge_ping',
+            'ctx' => [
+                'session_id' => $request->session()->getId(),
+                'ip' => $request->ip(),
+                'ua' => $request->userAgent(),
+            ],
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL, FILE_APPEND);
+
+        return response()->json(['ok' => true]);
+    }
+
     /**
      * Onboarding form (GET).
      */

@@ -20,7 +20,16 @@
   </div>
   <script>
     const url = @json($redirectTo);
-    setTimeout(() => { window.location.replace(url); }, 120);
+
+    // Emit bridge ping to confirm this page actually executes in client WebView.
+    fetch('/tg/auth/bridge-ping', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ ts: Date.now() })
+    }).catch(() => {});
+
+    setTimeout(() => { window.location.replace(url); }, 220);
   </script>
 </body>
 </html>
