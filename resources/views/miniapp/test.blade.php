@@ -534,6 +534,12 @@
         <div class="q-text q-anim" :style="'animation-delay: 0.05s; margin-top: 16px'"
              x-html="currentTask.instruction || currentTask.text || ''"></div>
 
+        {{-- Task text (when instruction is a generic heading and task body is separate) --}}
+        <template x-if="currentTask.instruction && currentTask.text && currentTask.text !== currentTask.instruction">
+          <div class="q-text q-anim" :style="'animation-delay: 0.07s; margin-top: 10px; font-size: 15px; font-weight: 600'"
+               x-html="currentTask.text"></div>
+        </template>
+
         {{-- Expression (KaTeX) --}}
         <template x-if="currentTask.type === 'expression' && currentTask.expression">
           <div class="q-expression q-anim" :style="'animation-delay: 0.08s; margin-top: 16px'"
