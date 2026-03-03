@@ -152,15 +152,46 @@ function onboardingPage() {
       if (!this.isValid || this.submitting) return;
       this.submitting = true;
       try {
-        const res = await window.fetchPost('/tg/onboarding', {
+        let res = await window.fetchPost('/api/v2/onboarding', {
           name: this.name.trim(),
           grade_num: 9,
           grade_letter: this.letter,
           school_number: this.school.trim(),
           city: this.city.trim() || 'Чехов',
-          onboarding_token: this.onboardingToken,
         });
-        const data = await res.json();
+
+        if (res.status === 401 && window._tmaV2?.refresh) {
+          const rr = await fetch('/api/v2/auth/refresh', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({ refresh_token: window._tmaV2.refresh })
+          });
+          if (rr.ok) {
+            const rj = await rr.json();
+            window._tmaV2.setTokens(rj.access_token, null);
+            res = await window.fetchPost('/api/v2/onboarding', {
+              name: this.name.trim(),
+              grade_num: 9,
+              grade_letter: this.letter,
+              school_number: this.school.trim(),
+              city: this.city.trim() || 'Чехов',
+            });
+          }
+        }
+
+        if (!res.ok) {
+          // rollback-safe fallback
+          res = await window.fetchPost('/tg/onboarding', {
+            name: this.name.trim(),
+            grade_num: 9,
+            grade_letter: this.letter,
+            school_number: this.school.trim(),
+            city: this.city.trim() || 'Чехов',
+            onboarding_token: this.onboardingToken,
+          });
+        }
+
+        const data = await res.json().catch(() => ({}));
         if (res.ok) {
           window.location.href = '/tg/dashboard';
         } else {

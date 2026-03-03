@@ -329,28 +329,49 @@ function homePage() {
         return;
       }
 
-      // Full-page form POST — the only reliable way to set session cookies
-      // in mobile Telegram WebView (fetch/XHR cookies are silently dropped)
-      const form = document.createElement('form');
-      form.method = 'POST';
-      form.action = '/tg/auth';
+      // Prefer Auth v2 (token-based) — robust for unstable WebView cookies.
+      fetch('/api/v2/auth/tma', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ initData })
+      })
+      .then(async (res) => {
+        if (!res.ok) throw new Error('auth_v2_failed');
+        return res.json();
+      })
+      .then((json) => {
+        window._tmaV2?.setTokens?.(json.access_token, json.refresh_token);
 
-      const input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = 'initData';
-      input.value = initData;
-      form.appendChild(input);
+        const needsOnboarding = !!json.needs_onboarding;
+        const target = needsOnboarding ? '/tg/onboarding' : ('/tg/dashboard' + (startParam ? ('?startapp=' + encodeURIComponent(startParam)) : ''));
+        window.location.replace(target);
+      })
+      .catch(() => {
+        // Fallback to legacy server-side flow while v2 rollout is in progress
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = '/tg/auth';
 
-      if (startParam) {
-        const sp = document.createElement('input');
-        sp.type = 'hidden';
-        sp.name = 'startParam';
-        sp.value = startParam;
-        form.appendChild(sp);
-      }
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'initData';
+        input.value = initData;
+        form.appendChild(input);
 
-      // Safety fallback: if navigation/login stalls (common in unstable VPN/webview),
-      // release loading state so user can retry.
+        if (startParam) {
+          const sp = document.createElement('input');
+          sp.type = 'hidden';
+          sp.name = 'startParam';
+          sp.value = startParam;
+          form.appendChild(sp);
+        }
+
+        document.body.appendChild(form);
+        form.submit();
+      });
+
+      // Safety fallback: if navigation/login stalls, release loading state
       setTimeout(() => {
         if (this.loginInProgress) {
           this.loginInProgress = false;
@@ -360,10 +381,7 @@ function homePage() {
             tg.showAlert('Не удалось войти. Попробуйте отключить VPN или перезапустить мини-приложение.');
           }
         }
-      }, 8000);
-
-      document.body.appendChild(form);
-      form.submit();
+      }, 10000);
     },
 
     handleInvite() {
