@@ -14,8 +14,8 @@
       "zadaniya": [
         {
           "number": 1,
-          "instruction": "Касательная к окружности (квадрат)",
-          "type": "geometry",
+          "instruction": "Новые задания из банка ФИПИ",
+          "type": "expression",
           "svg_type": "square_circle_vertex",
           "geometry": {
             "viewBox": [
@@ -27,6 +27,78 @@
             "description": "Square ABCD, O is midpoint of CD, circle with center O passes through A"
           },
           "tasks": [
+            {
+              "src_key": "24.1",
+              "text": "Новое задание 24.1. См. изображение из PDF.",
+              "answer": "24",
+              "image": "fipi_new/p-23.jpg",
+              "status": "draft",
+              "id": 127
+            },
+            {
+              "src_key": "24.2",
+              "text": "Новое задание 24.2. См. изображение из PDF.",
+              "answer": "30",
+              "image": "fipi_new/p-23.jpg",
+              "status": "draft",
+              "id": 128
+            },
+            {
+              "src_key": "24.3",
+              "text": "Новое задание 24.3. См. изображение из PDF.",
+              "answer": "2",
+              "image": "fipi_new/p-23.jpg",
+              "status": "draft",
+              "id": 129
+            },
+            {
+              "src_key": "24.4",
+              "text": "Новое задание 24.4. См. изображение из PDF.",
+              "answer": "6",
+              "image": "fipi_new/p-23.jpg",
+              "status": "draft",
+              "id": 130
+            },
+            {
+              "src_key": "24.5",
+              "text": "Новое задание 24.5. См. изображение из PDF.",
+              "answer": "12",
+              "image": "fipi_new/p-23.jpg",
+              "status": "draft",
+              "id": 131
+            },
+            {
+              "src_key": "24.6",
+              "text": "Новое задание 24.6. См. изображение из PDF.",
+              "answer": "4",
+              "image": "fipi_new/p-23.jpg",
+              "status": "draft",
+              "id": 132
+            },
+            {
+              "src_key": "24.7",
+              "text": "Новое задание 24.7. См. изображение из PDF.",
+              "answer": "9",
+              "image": "fipi_new/p-23.jpg",
+              "status": "draft",
+              "id": 133
+            },
+            {
+              "src_key": "24.8",
+              "text": "Новое задание 24.8. См. изображение из PDF.",
+              "answer": "8",
+              "image": "fipi_new/p-23.jpg",
+              "status": "draft",
+              "id": 134
+            },
+            {
+              "src_key": "24.9",
+              "text": "Новое задание 24.9. См. изображение из PDF.",
+              "answer": "1",
+              "image": "fipi_new/p-23.jpg",
+              "status": "draft",
+              "id": 135
+            },
             {
               "id": 1,
               "text": "Точка O является серединой стороны CD квадрата ABCD. Радиус окружности с центром в точке O, проходящей через вершину A, равен 2√5. Найдите площадь квадрата ABCD.",

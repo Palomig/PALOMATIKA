@@ -15,9 +15,81 @@
         {
           "number": 0,
           "label": "Новые задания",
-          "instruction": "Биссектриса треугольника",
-          "type": "geometry",
+          "instruction": "Новые задания из банка ФИПИ",
+          "type": "expression",
           "tasks": [
+            {
+              "src_key": "23.1",
+              "text": "Новое задание 23.1. См. изображение из PDF.",
+              "answer": "114",
+              "image": "fipi_new/p-22.jpg",
+              "status": "draft",
+              "id": 97
+            },
+            {
+              "src_key": "23.2",
+              "text": "Новое задание 23.2. См. изображение из PDF.",
+              "answer": "144",
+              "image": "fipi_new/p-22.jpg",
+              "status": "draft",
+              "id": 98
+            },
+            {
+              "src_key": "23.3",
+              "text": "Новое задание 23.3. См. изображение из PDF.",
+              "answer": "111",
+              "image": "fipi_new/p-22.jpg",
+              "status": "draft",
+              "id": 99
+            },
+            {
+              "src_key": "23.4",
+              "text": "Новое задание 23.4. См. изображение из PDF.",
+              "answer": "147",
+              "image": "fipi_new/p-22.jpg",
+              "status": "draft",
+              "id": 100
+            },
+            {
+              "src_key": "23.5",
+              "text": "Новое задание 23.5. См. изображение из PDF.",
+              "answer": "117",
+              "image": "fipi_new/p-22.jpg",
+              "status": "draft",
+              "id": 101
+            },
+            {
+              "src_key": "23.6",
+              "text": "Новое задание 23.6. См. изображение из PDF.",
+              "answer": "132",
+              "image": "fipi_new/p-22.jpg",
+              "status": "draft",
+              "id": 102
+            },
+            {
+              "src_key": "23.7",
+              "text": "Новое задание 23.7. См. изображение из PDF.",
+              "answer": "141",
+              "image": "fipi_new/p-22.jpg",
+              "status": "draft",
+              "id": 103
+            },
+            {
+              "src_key": "23.8",
+              "text": "Новое задание 23.8. См. изображение из PDF.",
+              "answer": "135",
+              "image": "fipi_new/p-22.jpg",
+              "status": "draft",
+              "id": 104
+            },
+            {
+              "src_key": "23.9",
+              "text": "Новое задание 23.9. См. изображение из PDF.",
+              "answer": "105",
+              "image": "fipi_new/p-22.jpg",
+              "status": "draft",
+              "id": 105
+            },
             {
               "id": 95,
               "text": "В треугольнике ABC проведена биссектриса AK. Найдите градусную меру угла B, если ∠C = 23° и AK = CK.",

@@ -15,9 +15,241 @@
         {
           "number": 0,
           "label": "Новые задания",
-          "instruction": "Найдите корень уравнения",
+          "instruction": "Новые задания из банка ФИПИ",
           "type": "expression",
           "tasks": [
+            {
+              "src_key": "25.1",
+              "text": "Решите уравнение: 2(x - 1) = x + 1",
+              "answer": "3",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 31
+            },
+            {
+              "src_key": "25.2",
+              "text": "Решите уравнение: 2(x - 3) = x + 3",
+              "answer": "9",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 32
+            },
+            {
+              "src_key": "25.3",
+              "text": "Решите уравнение: 2(x - 9) - x = 9",
+              "answer": "27",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 33
+            },
+            {
+              "src_key": "25.4",
+              "text": "Решите уравнение: 2(x - 6) = x + 6",
+              "answer": "18",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 34
+            },
+            {
+              "src_key": "25.5",
+              "text": "Решите уравнение: 2(x - 7) = x + 7",
+              "answer": "21",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 35
+            },
+            {
+              "src_key": "25.6",
+              "text": "Решите уравнение: 2(x - 9) = x + 9",
+              "answer": "27",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 36
+            },
+            {
+              "src_key": "25.7",
+              "text": "Решите уравнение: 2(x - 8) - x = 8",
+              "answer": "24",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 37
+            },
+            {
+              "src_key": "25.8",
+              "text": "Решите уравнение: 2(x - 10) = x + 10",
+              "answer": "30",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 38
+            },
+            {
+              "src_key": "25.9",
+              "text": "Решите уравнение: 2(x - 4) = x + 4",
+              "answer": "12",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 39
+            },
+            {
+              "src_key": "25.10",
+              "text": "Решите уравнение: 2(x - 5) - x = 5",
+              "answer": "15",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 40
+            },
+            {
+              "src_key": "25.11",
+              "text": "Решите уравнение: 2(x - 5) = x + 5",
+              "answer": "15",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 41
+            },
+            {
+              "src_key": "25.12",
+              "text": "Решите уравнение: 2(x - 3) - x = 3",
+              "answer": "9",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 42
+            },
+            {
+              "src_key": "25.13",
+              "text": "Решите уравнение: 2(x - 10) - x = 10",
+              "answer": "30",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 43
+            },
+            {
+              "src_key": "25.14",
+              "text": "Решите уравнение: 2(x - 2) = x + 2",
+              "answer": "6",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 44
+            },
+            {
+              "src_key": "25.15",
+              "text": "Решите уравнение: 2(x - 2) - x = 2",
+              "answer": "6",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 45
+            },
+            {
+              "src_key": "25.16",
+              "text": "Решите уравнение: 2(x - 7) - x = 7",
+              "answer": "21",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 46
+            },
+            {
+              "src_key": "25.17",
+              "text": "Решите уравнение: 2(x - 6) - x = 6",
+              "answer": "18",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 47
+            },
+            {
+              "src_key": "25.18",
+              "text": "Решите уравнение: 2(x - 1) - x = 1",
+              "answer": "3",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 48
+            },
+            {
+              "src_key": "25.19",
+              "text": "Решите уравнение: 2(x - 8) = x + 8",
+              "answer": "24",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 49
+            },
+            {
+              "src_key": "26.1",
+              "text": "Решите уравнение: 3(x + 11) - 2(x - 11) = 11",
+              "answer": "-44",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 50
+            },
+            {
+              "src_key": "26.2",
+              "text": "Решите уравнение: 3(x + 2) - 2(x - 2) = 2",
+              "answer": "-8",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 51
+            },
+            {
+              "src_key": "26.3",
+              "text": "Решите уравнение: 3(x + 6) - 2(x - 6) = 6",
+              "answer": "-24",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 52
+            },
+            {
+              "src_key": "26.4",
+              "text": "Решите уравнение: 3(x + 5) - 2(x - 5) = 5",
+              "answer": "-20",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 53
+            },
+            {
+              "src_key": "26.5",
+              "text": "Решите уравнение: 3(x + 3) - 2(x - 3) = 3",
+              "answer": "-12",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 54
+            },
+            {
+              "src_key": "26.6",
+              "text": "Решите уравнение: 3(x + 10) - 2(x - 10) = 10",
+              "answer": "-40",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 55
+            },
+            {
+              "src_key": "26.7",
+              "text": "Решите уравнение: 3(x + 9) - 2(x - 9) = 9",
+              "answer": "-36",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 56
+            },
+            {
+              "src_key": "26.8",
+              "text": "Решите уравнение: 3(x + 4) - 2(x - 4) = 4",
+              "answer": "-16",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 57
+            },
+            {
+              "src_key": "26.9",
+              "text": "Решите уравнение: 3(x + 8) - 2(x - 8) = 8",
+              "answer": "-32",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 58
+            },
+            {
+              "src_key": "26.10",
+              "text": "Решите уравнение: 3(x + 7) - 2(x - 7) = 7",
+              "answer": "-28",
+              "image": "fipi_new/p-30.jpg",
+              "status": "draft",
+              "id": 59
+            },
             {
               "id": 19,
               "expression": "3(x + 11) - 2(x - 11) = 11",
