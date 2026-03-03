@@ -308,8 +308,11 @@ class TelegramBotAuthController extends Controller
 
             if (preg_match('/^\/start\s+(.+)$/', $text, $matches)) {
                 $param = $matches[1];
+                // Variant/battle deep links should open mini-app, not auth-token flow
+                if (preg_match('/^oge_variant_hash_[a-z0-9]{8,32}$/i', $param) || preg_match('/^oge_variant_[a-z0-9]{8,32}$/i', $param)) {
+                    $this->sendMiniAppOpenMessage($from, $param);
                 // Skip referral links — don't treat them as auth tokens
-                if (str_starts_with($param, 'ref_')) {
+                } elseif (str_starts_with($param, 'ref_')) {
                     $this->sendWelcomeMessage($from);
                 } else {
                     $this->handleStartCommand($param, $from);
@@ -362,6 +365,27 @@ class TelegramBotAuthController extends Controller
         $fromId = (string) ($from['id'] ?? '');
 
         return $fromId !== '' && $fromId === $allowedTelegramId;
+    }
+
+    private function sendMiniAppOpenMessage(?array $from, string $startParam): void
+    {
+        if (!$from || empty($from['id'])) {
+            return;
+        }
+
+        $openUrl = url('/tg/?startapp=' . rawurlencode($startParam));
+        $this->sendTelegramMessage(
+            (string) $from['id'],
+            "Открой вариант в мини-приложении:",
+            [
+                'inline_keyboard' => [[
+                    [
+                        'text' => '🚀 Открыть вариант',
+                        'web_app' => ['url' => $openUrl],
+                    ],
+                ]],
+            ]
+        );
     }
 
     private function sendBattleModeButtons(?array $from): void
@@ -424,7 +448,7 @@ class TelegramBotAuthController extends Controller
 
             $botUsername = (string) config('services.telegram.bot_username', 'palomatika_auth_bot');
             $startParam = 'oge_variant_hash_' . $variant->hash;
-            $shareLink = "https://t.me/{$botUsername}?start={$startParam}";
+            $shareLink = "https://t.me/{$botUsername}?startapp={$startParam}";
 
             $title = $mode === 'full' ? 'Полный вариант' : 'Смешанный мини-вариант';
 
