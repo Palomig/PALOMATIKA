@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class TmaAuthV2Controller extends Controller
@@ -48,12 +49,26 @@ class TmaAuthV2Controller extends Controller
         $calculatedHash = hash_hmac('sha256', $dataCheckString, $secretKey);
 
         if (!hash_equals($calculatedHash, $providedHash)) {
+            Log::warning('tma_v2_bad_hmac', [
+                'ip' => $request->ip(),
+                'ua' => $request->userAgent(),
+                'auth_date' => $fields['auth_date'] ?? null,
+            ]);
             return response()->json(['message' => 'Bad Telegram signature'], 401);
         }
 
         $authDate = (int) ($fields['auth_date'] ?? 0);
-        if ($authDate <= 0 || abs(time() - $authDate) > 300) {
-            return response()->json(['message' => 'auth_date expired'], 401);
+        // Telegram WebView sessions (especially with VPN/proxy) may delay handshakes;
+        // 5-minute strict window causes false negatives in production.
+        // Use 24h tolerance for TMA initData freshness.
+        if ($authDate <= 0 || abs(time() - $authDate) > 86400) {
+            Log::warning('tma_v2_auth_date_expired', [
+                'ip' => $request->ip(),
+                'ua' => $request->userAgent(),
+                'auth_date' => $authDate,
+                'now' => time(),
+            ]);
+            return response()->json(['message' => 'auth_date expired, reopen mini app'], 401);
         }
 
         $telegramUser = null;
