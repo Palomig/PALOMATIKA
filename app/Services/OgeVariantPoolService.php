@@ -261,12 +261,103 @@ class OgeVariantPoolService
         // For matching/choice tasks options are often inside task-level options.
         $normalized['options'] = $inner['options'] ?? ($task['options'] ?? null);
 
+        // Topic 19 statements in mini-OGE: always present exactly 3 statements.
+        // If instruction starts with "Какое" => 1 true; "Какие" => 2 true.
+        if (($normalized['type'] ?? '') === 'statements' && is_array($normalized['statements'] ?? null)) {
+            $picked = $this->pickStatementsForMini($normalized['statements'], (string) ($normalized['instruction'] ?? ''));
+            $normalized['selected_statements'] = $picked;
+
+            $digits = [];
+            foreach ($picked as $s) {
+                if (!empty($s['is_true'])) {
+                    $digits[] = (string) ($s['display_number'] ?? '');
+                }
+            }
+            $normalized['correct_answer'] = implode('', array_filter($digits, fn ($v) => $v !== ''));
+        }
+
         // Explicit answer for any future server-side consumers.
         if (!isset($normalized['correct_answer']) && array_key_exists('answer', $inner)) {
             $normalized['correct_answer'] = $inner['answer'];
         }
 
         return $normalized;
+    }
+
+    /**
+     * For statements-type mini tasks (task 19 style), pick exactly 3 statements.
+     *
+     * Rule:
+     * - "Какое ..." => exactly 1 true statement among the 3
+     * - "Какие ..." => exactly 2 true statements among the 3
+     * - fallback: any random 3
+     *
+     * @param array<int,array<string,mixed>> $statements
+     * @return array<int,array<string,mixed>>
+     */
+    protected function pickStatementsForMini(array $statements, string $instruction): array
+    {
+        if (count($statements) <= 3) {
+            return array_map(function ($s, $idx) {
+                if (!is_array($s)) {
+                    return ['text' => (string) $s, 'is_true' => false, 'display_number' => $idx + 1];
+                }
+                $s['display_number'] = $idx + 1;
+                return $s;
+            }, array_values($statements), array_keys(array_values($statements)));
+        }
+
+        $lower = mb_strtolower(trim($instruction));
+        $desiredTrueCount = null;
+        if (str_starts_with($lower, 'какое')) {
+            $desiredTrueCount = 1;
+        } elseif (str_starts_with($lower, 'какие')) {
+            $desiredTrueCount = 2;
+        }
+
+        $idx = range(0, count($statements) - 1);
+        shuffle($idx);
+
+        $best = null;
+        for ($i = 0; $i < min(300, count($idx) * 12); $i++) {
+            shuffle($idx);
+            $pick = array_slice($idx, 0, 3);
+            sort($pick);
+
+            $set = [];
+            $trueCount = 0;
+            foreach ($pick as $k => $original) {
+                $s = $statements[$original] ?? [];
+                if (!is_array($s)) {
+                    $s = ['text' => (string) $s, 'is_true' => false];
+                }
+                $s['display_number'] = $k + 1;
+                if (!empty($s['is_true'])) {
+                    $trueCount++;
+                }
+                $set[] = $s;
+            }
+
+            if ($desiredTrueCount === null) {
+                return $set;
+            }
+
+            if ($trueCount === $desiredTrueCount) {
+                return $set;
+            }
+
+            if ($best === null) {
+                $best = $set;
+            }
+        }
+
+        return $best ?? array_map(function ($s, $idx) {
+            if (!is_array($s)) {
+                return ['text' => (string) $s, 'is_true' => false, 'display_number' => $idx + 1];
+            }
+            $s['display_number'] = $idx + 1;
+            return $s;
+        }, array_slice(array_values($statements), 0, 3), [0, 1, 2]);
     }
 
     /**
