@@ -42,14 +42,31 @@ class MiniAppController extends Controller
      */
     public function authenticate(Request $request)
     {
+        $trace = function (string $event, array $ctx = []) {
+            $line = json_encode([
+                'ts' => now()->toIso8601String(),
+                'event' => $event,
+                'ctx' => $ctx,
+            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            @file_put_contents(storage_path('app/tg_auth_trace.log'), $line . PHP_EOL, FILE_APPEND);
+        };
+
         $initData = trim((string) $request->input('initData', ''));
+        $trace('request_received', [
+            'ip' => $request->ip(),
+            'ua' => $request->userAgent(),
+            'initData_len' => strlen($initData),
+            'x_forwarded_proto' => $request->header('X-Forwarded-Proto'),
+        ]);
 
         if ($initData === '') {
+            $trace('fail_empty_initData');
             return redirect('/tg/')->with('error', 'Нет данных Telegram для входа');
         }
 
         $botToken = (string) config('services.telegram.bot_token', '');
         if ($botToken === '') {
+            $trace('fail_no_bot_token');
             return redirect('/tg/')->with('error', 'Telegram не настроен');
         }
 
@@ -62,6 +79,7 @@ class MiniAppController extends Controller
                 'initData_len' => strlen($initData),
                 'x_forwarded_proto' => $request->header('X-Forwarded-Proto'),
             ]);
+            $trace('fail_invalid_payload');
             return redirect('/tg/')->with('error', 'Некорректные данные Telegram');
         }
 
@@ -96,6 +114,7 @@ class MiniAppController extends Controller
                 'initData_len' => strlen($initData),
                 'x_forwarded_proto' => $request->header('X-Forwarded-Proto'),
             ]);
+            $trace('fail_bad_hmac', ['auth_date' => $fields['auth_date'] ?? null]);
             return redirect('/tg/')->with('error', 'Неверная подпись Telegram');
         }
 
@@ -108,6 +127,7 @@ class MiniAppController extends Controller
         }
 
         if (!is_array($telegramUser) || empty($telegramUser['id'])) {
+            $trace('fail_no_user');
             return redirect('/tg/')->with('error', 'Нет данных пользователя');
         }
 
@@ -161,6 +181,11 @@ class MiniAppController extends Controller
             'user_id' => $user->id,
             'tg_user_id' => $telegramUser['id'] ?? null,
             'session_id_after' => $request->session()->getId(),
+            'redirect_to' => $redirectTo,
+        ]);
+        $trace('success', [
+            'user_id' => $user->id,
+            'tg_user_id' => $telegramUser['id'] ?? null,
             'redirect_to' => $redirectTo,
         ]);
 
