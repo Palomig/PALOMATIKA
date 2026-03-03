@@ -17,11 +17,11 @@
     $showTaskAnswer = !($isVariant ?? false);
     $answerResolver = app(\App\Services\TaskAnswerResolver::class);
 
-    $firstSvg = (string) (($tasks[0]['svg'] ?? '') ?: '');
-    $isThreePanelPerTaskMode = str_contains($firstSvg, 'data-topic11-z1-three-panels');
+    // Для темы 11 рендерим каждый task как отдельный пример: внутри task.svg уже 3 графика (А/Б/В)
+    $isTopic11PerTaskMode = (string) ($topicId ?? '') === '11';
 
-    // Стандарт: группа по 3 графика. Для topic11-z1 три панели уже внутри одной задачи -> 1 задача = 1 группа.
-    $taskGroups = $isThreePanelPerTaskMode
+    // Стандарт: группа по 3 графика. Для темы 11: 1 задача = 1 группа.
+    $taskGroups = $isTopic11PerTaskMode
         ? array_map(static fn ($t) => [$t], $tasks)
         : array_chunk($tasks, 3);
 @endphp
@@ -36,7 +36,7 @@
             // - обычный режим: берём первую формулу из каждой задачи (А,Б,В)
             // - three-panel режим: берём все формулы из текущей задачи
             $groupFormulas = [];
-            if ($isThreePanelPerTaskMode) {
+            if ($isTopic11PerTaskMode) {
                 $task0 = $group[0] ?? null;
                 $groupFormulas = is_array($task0['options'] ?? null) ? $task0['options'] : [];
             } else {
@@ -62,55 +62,72 @@
             {{-- ГРАФИКИ секция --}}
             <div class="mb-6">
                 <h4 class="text-slate-400 text-sm font-medium mb-4 uppercase tracking-wide">Графики</h4>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    @foreach($group as $taskIndex => $task)
-                        @php
-                            $hasSvg = !empty($task['svg']);
-                            $hasImage = !empty($task['image']);
-                            $imageName = $task['image'] ?? '';
-                            $imageUrl = $imageName ? asset("images/tasks/{$topicId}/{$imageName}") : null;
-                            $label = $graphLabels[$taskIndex] ?? ($taskIndex + 1);
-                            $taskId = $task['id'] ?? ($taskIndex + 1);
-                            $taskKey = "topic_{$topicId}_block_{$block['number']}_zadanie_{$zadanie['number']}_task_{$taskId}";
-                        @endphp
 
-                        <div class="bg-slate-900/60 rounded-xl border border-slate-700 overflow-hidden">
-                            {{-- Метка графика --}}
-                            <div class="bg-slate-700/50 px-4 py-2">
-                                <span class="text-cyan-400 font-bold text-lg">{{ $label }})</span>
-                            </div>
+                @if($isTopic11PerTaskMode)
+                    @php
+                        $task = $group[0] ?? [];
+                        $hasSvg = !empty($task['svg']);
+                        $hasImage = !empty($task['image']);
+                        $imageName = $task['image'] ?? '';
+                        $imageUrl = $imageName ? asset("images/tasks/{$topicId}/{$imageName}") : null;
+                    @endphp
 
-                            {{-- Изображение графика --}}
-                            <div class="p-3 min-h-[180px] flex items-center justify-center">
-                                @if($hasSvg)
-                                    {{-- Предзаготовленный SVG (Static SVG System) --}}
-                                    {!! $task['svg'] !!}
-                                @elseif($hasImage && \Illuminate\Support\Str::startsWith($imageName, '<svg'))
-                                    {{-- Inline SVG --}}
-                                    {!! $imageName !!}
-                                @elseif($hasImage)
-                                    {{-- PNG/JPEG изображение --}}
-                                    <div class="bg-white rounded-lg p-2 w-full flex justify-center">
-                                        <img src="{{ $imageUrl }}"
-                                             alt="График {{ $label }}"
-                                             class="max-w-full max-h-40 object-contain"
-                                             onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-slate-500 text-sm\'>Изображение не загружено</span>';">
-                                    </div>
-                                @else
-                                    <span class="text-slate-500 text-sm">Нет изображения</span>
-                                @endif
+                    <div class="p-2 min-h-[180px] flex items-center justify-center">
+                        @if($hasSvg)
+                            {!! $task['svg'] !!}
+                        @elseif($hasImage && \Illuminate\Support\Str::startsWith($imageName, '<svg'))
+                            {!! $imageName !!}
+                        @elseif($hasImage)
+                            <div class="bg-white rounded-lg p-2 w-full flex justify-center">
+                                <img src="{{ $imageUrl }}"
+                                     alt="График"
+                                     class="max-w-full max-h-56 object-contain"
+                                     onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-slate-500 text-sm\'>Изображение не загружено</span>';">
                             </div>
+                        @else
+                            <span class="text-slate-500 text-sm">Нет изображения</span>
+                        @endif
+                    </div>
 
-                            <div class="px-3 pb-3">
-                                @include('tasks.partials.task-answer', [
-                                    'showTaskAnswer' => $showTaskAnswer,
-                                    'taskAnswer' => $answerResolver->resolveFromTaskAndZadanie($zadanie, $task),
-                                ])
-                                @include('tasks.partials.task-status-badge')
+                    <div class="px-1 pt-1">
+                        @include('tasks.partials.task-answer', [
+                            'showTaskAnswer' => $showTaskAnswer,
+                            'taskAnswer' => $answerResolver->resolveFromTaskAndZadanie($zadanie, $task),
+                        ])
+                        @include('tasks.partials.task-status-badge')
+                    </div>
+                @else
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        @foreach($group as $taskIndex => $task)
+                            @php
+                                $hasSvg = !empty($task['svg']);
+                                $hasImage = !empty($task['image']);
+                                $imageName = $task['image'] ?? '';
+                                $imageUrl = $imageName ? asset("images/tasks/{$topicId}/{$imageName}") : null;
+                                $label = $graphLabels[$taskIndex] ?? ($taskIndex + 1);
+                            @endphp
+
+                            <div class="bg-slate-900/60 rounded-xl border border-slate-700 overflow-hidden">
+                                <div class="bg-slate-700/50 px-4 py-2">
+                                    <span class="text-cyan-400 font-bold text-lg">{{ $label }})</span>
+                                </div>
+                                <div class="p-3 min-h-[180px] flex items-center justify-center">
+                                    @if($hasSvg)
+                                        {!! $task['svg'] !!}
+                                    @elseif($hasImage && \Illuminate\Support\Str::startsWith($imageName, '<svg'))
+                                        {!! $imageName !!}
+                                    @elseif($hasImage)
+                                        <div class="bg-white rounded-lg p-2 w-full flex justify-center">
+                                            <img src="{{ $imageUrl }}" alt="График {{ $label }}" class="max-w-full max-h-40 object-contain">
+                                        </div>
+                                    @else
+                                        <span class="text-slate-500 text-sm">Нет изображения</span>
+                                    @endif
+                                </div>
                             </div>
-                        </div>
-                    @endforeach
-                </div>
+                        @endforeach
+                    </div>
+                @endif
             </div>
 
             {{-- ФОРМУЛЫ секция --}}
@@ -130,7 +147,7 @@
 
             {{-- Таблица ответов --}}
             @php
-                $tableLabels = $isThreePanelPerTaskMode ? ['А', 'Б', 'В'] : collect($group)->keys()->map(fn($i) => $graphLabels[$i] ?? ($i + 1))->values()->all();
+                $tableLabels = $isTopic11PerTaskMode ? ['А', 'Б', 'В'] : collect($group)->keys()->map(fn($i) => $graphLabels[$i] ?? ($i + 1))->values()->all();
             @endphp
             <div class="flex flex-col items-center gap-3">
                 <span class="text-slate-400 text-sm">В таблице укажите соответствующий номер формулы для каждого графика:</span>
