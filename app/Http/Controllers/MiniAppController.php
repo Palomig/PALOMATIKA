@@ -121,7 +121,18 @@ class MiniAppController extends Controller
         Auth::login($user, true);
         $request->session()->regenerate();
 
+        // Preserve Telegram startapp deep-link context (e.g., oge_variant_hash_*).
+        $startParam = trim((string) ($fields['start_param'] ?? $request->input('startParam', '')));
+        if ($startParam !== '') {
+            $request->session()->put('telegram_start_param', $startParam);
+        }
+
         $redirectTo = !$user->onboarding_completed_at ? '/tg/onboarding' : '/tg/dashboard';
+        if ($startParam !== '' && !$user->onboarding_completed_at) {
+            $redirectTo .= '?startapp=' . rawurlencode($startParam);
+        } elseif ($startParam !== '' && $user->onboarding_completed_at) {
+            $redirectTo .= '?startapp=' . rawurlencode($startParam);
+        }
 
         return redirect($redirectTo);
     }

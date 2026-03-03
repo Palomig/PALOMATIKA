@@ -269,6 +269,19 @@ function homePage() {
       this.updateCountdown();
       setInterval(() => this.updateCountdown(), 1000);
 
+      // If mini-app was opened with startapp=oge_variant_hash_..., forward into dashboard flow.
+      const tg = window.Telegram?.WebApp;
+      const startParamFromTg = tg?.initDataUnsafe?.start_param || '';
+      const urlParams = new URLSearchParams(window.location.search);
+      const startParamFromUrl = urlParams.get('startapp') || urlParams.get('tgWebAppStartParam') || '';
+      const startParam = (startParamFromTg || startParamFromUrl || '').trim();
+      if (startParam && /^oge_variant_hash_[a-z0-9]{8,32}$/i.test(startParam)) {
+        @auth
+          window.location.replace('/tg/dashboard?startapp=' + encodeURIComponent(startParam));
+          return;
+        @endauth
+      }
+
       @if(session('error'))
       {
         const tg = window.Telegram?.WebApp;
@@ -300,6 +313,7 @@ function homePage() {
 
       const tg = window.Telegram?.WebApp;
       const initData = tg && typeof tg.initData === 'string' ? tg.initData.trim() : '';
+      const startParam = (tg?.initDataUnsafe?.start_param || new URLSearchParams(window.location.search).get('startapp') || '').trim();
 
       if (!initData) {
         if (tg && tg.showAlert) { tg.showAlert('Не удалось получить данные Telegram. Попробуйте перезапустить мини-приложение.'); }
@@ -321,6 +335,14 @@ function homePage() {
       input.name = 'initData';
       input.value = initData;
       form.appendChild(input);
+
+      if (startParam) {
+        const sp = document.createElement('input');
+        sp.type = 'hidden';
+        sp.name = 'startParam';
+        sp.value = startParam;
+        form.appendChild(sp);
+      }
 
       document.body.appendChild(form);
       form.submit();
