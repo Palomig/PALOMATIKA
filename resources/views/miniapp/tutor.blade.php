@@ -107,11 +107,11 @@
     <div style="display:flex;flex-direction:column;gap:14px;">
       <div class="tutor-hero">
         <div class="tutor-avatar">👨‍🏫</div>
-        <div class="tutor-name">Павел</div>
-        <div class="tutor-role">Репетитор по математике · г. Чехов</div>
+        <div class="tutor-name">Станислав Олегович · Руслан Романович</div>
+        <div class="tutor-role">Репетиторы по математике · г. Чехов</div>
         <div class="tutor-text">
-          Готовлю к ОГЭ и ЕГЭ уже <strong>10+ лет</strong>. Средний результат учеников — <strong>4.5 балла</strong>.
-          Знаю все ловушки экзамена и помогу закрыть пробелы.
+          Готовим к ОГЭ уже <strong>более 5 лет</strong>.
+          Дадим чёткий план, разберём типовые ловушки и доведём до уверенного результата.
           @if(isset($weakTopics) && count($weakTopics) > 0)
           <br><br>По твоим результатам, стоит подтянуть:
           <strong>{{ collect($weakTopics)->pluck('name')->take(3)->join(', ') }}</strong>
@@ -124,7 +124,7 @@
           <div class="info-icon">📍</div>
           <div>
             <div class="info-label">Адрес</div>
-            <div class="info-value">г. Чехов, ул. Чехова, 12</div>
+            <div class="info-value">г. Чехов, ул. Московская, 87/1</div>
           </div>
         </div>
         <div class="info-row">
@@ -156,7 +156,7 @@
       <div class="cta-group">
         <a href="https://t.me/Palomig" class="cta-btn cta-tg" @click.prevent="openTg()">✈️ Написать в Telegram</a>
         <a href="tel:+79103017110" class="cta-btn cta-phone">📞 Позвонить</a>
-        <a href="https://yandex.ru/maps/?text=г.Чехов,+ул.+Чехова,+12" class="cta-btn cta-map" target="_blank">📍 На карте</a>
+        <a href="https://yandex.ru/maps/?text=г.Чехов,+ул.+Московская,+87/1" class="cta-btn cta-map" target="_blank">📍 На карте</a>
       </div>
     </div>
   </template>
@@ -180,11 +180,10 @@
 
       <div class="tutor-hero">
         <div class="tutor-avatar">👨‍🏫</div>
-        <div class="tutor-name">Павел</div>
-        <div class="tutor-role">Репетитор по математике · г. Чехов</div>
+        <div class="tutor-name">Станислав Олегович · Руслан Романович</div>
+        <div class="tutor-role">Репетиторы по математике · г. Чехов</div>
         <div class="tutor-text">
-          <strong>10+ лет</strong> опыта подготовки к ОГЭ и ЕГЭ. Средний балл учеников — <strong>4.5</strong>.
-          Занятия очно в Чехове, индивидуально или в мини-группах до 4 человек.
+          <strong>Более 5 лет</strong> опыта подготовки к ОГЭ. Занятия очно в Чехове, индивидуально и в мини-группах.
         </div>
       </div>
 
@@ -199,7 +198,7 @@
           <div class="info-icon">📍</div>
           <div>
             <div class="info-label">Адрес</div>
-            <div class="info-value">г. Чехов, ул. Чехова, 12</div>
+            <div class="info-value">г. Чехов, ул. Московская, 87/1</div>
           </div>
         </div>
       </div>
@@ -207,7 +206,7 @@
       <div class="cta-group">
         <a href="https://t.me/Palomig" class="cta-btn cta-tg" @click.prevent="openTg()">✈️ Написать в Telegram</a>
         <a href="tel:+79103017110" class="cta-btn cta-phone">📞 Позвонить</a>
-        <a href="https://yandex.ru/maps/?text=г.Чехов,+ул.+Чехова,+12" class="cta-btn cta-map" target="_blank">📍 На карте</a>
+        <a href="https://yandex.ru/maps/?text=г.Чехов,+ул.+Московская,+87/1" class="cta-btn cta-map" target="_blank">📍 На карте</a>
       </div>
     </div>
   </template>

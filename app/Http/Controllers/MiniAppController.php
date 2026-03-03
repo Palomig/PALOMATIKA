@@ -220,8 +220,10 @@ class MiniAppController extends Controller
         // Weak topics (from all submitted attempts)
         $weakTopics = $this->computeWeakTopics($user->id);
 
+        $newFipiCount = $this->countNewFipiTasks();
+
         return view('miniapp.dashboard', compact(
-            'user', 'lastAttempt', 'lastCorrect', 'lastTotal', 'lastTime', 'weakTopics'
+            'user', 'lastAttempt', 'lastCorrect', 'lastTotal', 'lastTime', 'weakTopics', 'newFipiCount'
         ));
     }
 
@@ -480,6 +482,28 @@ class MiniAppController extends Controller
         $weakTopics = $this->computeWeakTopics($user->id);
 
         return view('miniapp.tutor', compact('lastCorrect', 'lastTotal', 'weakTopics'));
+    }
+
+    protected function countNewFipiTasks(): int
+    {
+        $topicIds = ['09', '10', '15', '16', '17'];
+        $count = 0;
+
+        foreach ($topicIds as $topicId) {
+            $blocks = $this->taskData->getBlocks($topicId);
+            foreach ($blocks as $block) {
+                foreach (($block['zadaniya'] ?? []) as $zadanie) {
+                    $zadanieIsNew = (bool) ($zadanie['is_new'] ?? false);
+                    foreach (($zadanie['tasks'] ?? []) as $task) {
+                        if ($zadanieIsNew || (bool) ($task['is_new'] ?? false)) {
+                            $count++;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $count;
     }
 
     /**

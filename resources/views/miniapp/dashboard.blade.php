@@ -143,6 +143,22 @@
   </div>
   @endif
 
+  @if(($newFipiCount ?? 0) > 0)
+  <div class="last-result" style="border-color: rgba(124, 58, 237, 0.35); background: linear-gradient(180deg, rgba(124,58,237,.16), rgba(124,58,237,.07));">
+    <div class="lr-header">
+      <div class="lr-title" style="color:#d8c1ff">Новые задания</div>
+      <div class="lr-date" style="color:#c9a7ff">ФИПИ</div>
+    </div>
+    <div class="lr-body">
+      <div class="lr-score" style="color:#fff">{{ $newFipiCount }}</div>
+      <div class="lr-details">
+        <div class="lr-label">новых заданий в банке ФИПИ</div>
+        <div class="lr-time" style="color:#c9a7ff">темы: 9, 10, 15, 16, 17</div>
+      </div>
+    </div>
+  </div>
+  @endif
+
   {{-- ACTION TILES --}}
   <div class="tile-row">
     <a href="/tg/mini" class="tile-big tile-purple">

@@ -471,11 +471,11 @@
       <div class="tutor-facts">
         <div class="tutor-fact">
           <span class="fact-icon">📍</span>
-          <div>г. Чехов, ул. Чехова, 12<br><span class="fact-muted">занятия в кабинете</span></div>
+          <div>г. Чехов, ул. Московская, 87/1<br><span class="fact-muted">занятия в кабинете</span></div>
         </div>
         <div class="tutor-fact">
           <span class="fact-icon">🎓</span>
-          <div>Педагог с 10-летним опытом<br><span class="fact-muted">100% учеников сдают ОГЭ на 4 и 5</span></div>
+          <div>Репетиторы с опытом 5+ лет<br><span class="fact-muted">Станислав Олегович и Руслан Романович</span></div>
         </div>
         <div class="tutor-fact">
           <span class="fact-icon">⏱️</span>
