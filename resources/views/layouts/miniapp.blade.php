@@ -226,6 +226,7 @@
   window._csrf = document.querySelector('meta[name="csrf-token"]')?.content;
   window.fetchPost = (url, data = {}) => fetch(url, {
     method: 'POST',
+    credentials: 'include',
     headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': window._csrf, 'Accept': 'application/json' },
     body: JSON.stringify(data),
   });
