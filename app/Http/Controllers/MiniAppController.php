@@ -242,8 +242,22 @@ class MiniAppController extends Controller
                     ],
                 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL, FILE_APPEND);
 
-                $target = (string) ($handoff['redirect_to'] ?? (!$user->onboarding_completed_at ? '/tg/onboarding' : '/tg/dashboard'));
-                // Final redirect bridge as well: avoids losing state on WebView hop.
+                // Hard bypass for fragile WebView hops: render onboarding directly
+                // in this authenticated request instead of one more redirect.
+                if (!$user->onboarding_completed_at) {
+                    @file_put_contents(storage_path('app/tg_auth_trace.log'), json_encode([
+                        'ts' => now()->toIso8601String(),
+                        'event' => 'onboarding_inline_render',
+                        'ctx' => [
+                            'user_id' => $user->id,
+                            'session_id' => $request->session()->getId(),
+                        ],
+                    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL, FILE_APPEND);
+
+                    return view('miniapp.onboarding');
+                }
+
+                $target = (string) ($handoff['redirect_to'] ?? '/tg/dashboard');
                 return response()->view('miniapp.auth-bridge-final', [
                     'target' => $target,
                 ]);
