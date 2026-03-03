@@ -276,6 +276,46 @@ class MiniAppController extends Controller
             $tasks = $builtVariant['tasks'] ?? [];
         }
 
+        // Normalize task payload for mini-app UI (works for both old and new variants)
+        $tasks = array_map(function ($task) {
+            if (!is_array($task)) {
+                return $task;
+            }
+
+            $inner = is_array($task['task'] ?? null) ? $task['task'] : [];
+
+            $task['text'] = $task['text'] ?? ($inner['text'] ?? null);
+            $task['expression'] = $task['expression'] ?? ($inner['expression'] ?? null);
+            $task['svg'] = $task['svg'] ?? ($inner['svg'] ?? null);
+            $task['options'] = $task['options'] ?? ($inner['options'] ?? null);
+
+            // statements-mode fallback for old payloads
+            if (($task['type'] ?? '') === 'statements') {
+                $statements = $task['selected_statements'] ?? $task['statements'] ?? [];
+                if (is_array($statements) && !empty($statements)) {
+                    // Ensure UI has visible content even when expression/svg are absent.
+                    $lines = [];
+                    foreach ($statements as $idx => $s) {
+                        if (is_array($s)) {
+                            $text = (string) ($s['text'] ?? '');
+                            $num = (int) ($s['display_number'] ?? ($idx + 1));
+                        } else {
+                            $text = (string) $s;
+                            $num = $idx + 1;
+                        }
+                        if ($text !== '') {
+                            $lines[] = $num . ') ' . e($text);
+                        }
+                    }
+                    if (!empty($lines) && empty($task['text'])) {
+                        $task['text'] = implode('<br>', $lines);
+                    }
+                }
+            }
+
+            return $task;
+        }, $tasks);
+
         // Get existing answers for this attempt
         $existingAnswers = $attempt->answers()
             ->pluck('current_answer', 'task_number')
