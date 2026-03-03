@@ -179,18 +179,6 @@ function onboardingPage() {
           }
         }
 
-        if (!res.ok) {
-          // rollback-safe fallback
-          res = await window.fetchPost('/tg/onboarding', {
-            name: this.name.trim(),
-            grade_num: 9,
-            grade_letter: this.letter,
-            school_number: this.school.trim(),
-            city: this.city.trim() || 'Чехов',
-            onboarding_token: this.onboardingToken,
-          });
-        }
-
         const data = await res.json().catch(() => ({}));
         if (res.ok) {
           window.location.href = '/tg/dashboard';

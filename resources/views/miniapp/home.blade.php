@@ -329,7 +329,7 @@ function homePage() {
         return;
       }
 
-      // Prefer Auth v2 (token-based) — robust for unstable WebView cookies.
+      // Auth v2 (token-based) — single source of truth
       fetch('/api/v2/auth/tma', {
         method: 'POST',
         credentials: 'include',
@@ -337,7 +337,10 @@ function homePage() {
         body: JSON.stringify({ initData })
       })
       .then(async (res) => {
-        if (!res.ok) throw new Error('auth_v2_failed');
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.message || 'auth_v2_failed');
+        }
         return res.json();
       })
       .then((json) => {
@@ -347,28 +350,13 @@ function homePage() {
         const target = needsOnboarding ? '/tg/onboarding' : ('/tg/dashboard' + (startParam ? ('?startapp=' + encodeURIComponent(startParam)) : ''));
         window.location.replace(target);
       })
-      .catch(() => {
-        // Fallback to legacy server-side flow while v2 rollout is in progress
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = '/tg/auth';
-
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = 'initData';
-        input.value = initData;
-        form.appendChild(input);
-
-        if (startParam) {
-          const sp = document.createElement('input');
-          sp.type = 'hidden';
-          sp.name = 'startParam';
-          sp.value = startParam;
-          form.appendChild(sp);
-        }
-
-        document.body.appendChild(form);
-        form.submit();
+      .catch((e) => {
+        if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
+        if (btn) btn.classList.remove('btn-loading');
+        this.loginInProgress = false;
+        const msg = (e && e.message) ? e.message : 'Не удалось войти';
+        if (tg && tg.showAlert) tg.showAlert(msg);
+        else alert(msg);
       });
 
       // Safety fallback: if navigation/login stalls, release loading state
