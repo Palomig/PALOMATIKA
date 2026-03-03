@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class MiniAppController extends Controller
@@ -43,7 +44,22 @@ class MiniAppController extends Controller
      */
     public function authenticate(Request $request)
     {
+        $trace = function (string $event, array $ctx = []) {
+            $line = json_encode([
+                'ts' => now()->toIso8601String(),
+                'event' => $event,
+                'ctx' => $ctx,
+            ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            @file_put_contents(storage_path('app/tg_auth_trace.log'), $line . PHP_EOL, FILE_APPEND);
+        };
+
         $initData = trim((string) $request->input('initData', ''));
+        $trace('request_received', [
+            'ip' => $request->ip(),
+            'ua' => $request->userAgent(),
+            'initData_len' => strlen($initData),
+            'x_forwarded_proto' => $request->header('X-Forwarded-Proto'),
+        ]);
         $trace('request_received', [
             'ip' => $request->ip(),
             'ua' => $request->userAgent(),
@@ -52,17 +68,20 @@ class MiniAppController extends Controller
         ]);
 
         if ($initData === '') {
+            $trace('fail_empty_initData');
             return redirect('/tg/')->with('error', 'Нет данных Telegram для входа');
         }
 
         $botToken = (string) config('services.telegram.bot_token', '');
         if ($botToken === '') {
+            $trace('fail_no_bot_token');
             return redirect('/tg/')->with('error', 'Telegram не настроен');
         }
 
         // Parse and verify HMAC signature
         parse_str($initData, $fields);
         if (empty($fields) || empty($fields['hash'])) {
+            $trace('fail_invalid_payload');
             return redirect('/tg/')->with('error', 'Некорректные данные Telegram');
         }
 
@@ -90,6 +109,7 @@ class MiniAppController extends Controller
         $calculatedHash = hash_hmac('sha256', $dataCheckString, $secretKey);
 
         if (!hash_equals($calculatedHash, $providedHash)) {
+            $trace('fail_bad_hmac', ['auth_date' => $fields['auth_date'] ?? null]);
             return redirect('/tg/')->with('error', 'Неверная подпись Telegram');
         }
 
@@ -102,6 +122,7 @@ class MiniAppController extends Controller
         }
 
         if (!is_array($telegramUser) || empty($telegramUser['id'])) {
+            $trace('fail_no_user');
             return redirect('/tg/')->with('error', 'Нет данных пользователя');
         }
 
@@ -128,6 +149,11 @@ class MiniAppController extends Controller
         // Login with remember + regenerate session
         Auth::login($user, true);
         $request->session()->regenerate();
+        $trace('success', [
+            'user_id' => $user->id,
+            'tg_user_id' => $telegramUser['id'] ?? null,
+            'session_id' => $request->session()->getId(),
+        ]);
 
         // Preserve Telegram startapp deep-link context (e.g., oge_variant_hash_*).
         $startParam = trim((string) ($fields['start_param'] ?? $request->input('startParam', '')));
@@ -155,6 +181,21 @@ class MiniAppController extends Controller
             'handoffToken' => $handoffToken,
         ]);
     }
+    public function authBridgePing(Request $request)
+    {
+        @file_put_contents(storage_path('app/tg_auth_trace.log'), json_encode([
+            'ts' => now()->toIso8601String(),
+            'event' => 'bridge_ping',
+            'ctx' => [
+                'session_id' => $request->session()->getId(),
+                'ip' => $request->ip(),
+                'ua' => $request->userAgent(),
+            ],
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL, FILE_APPEND);
+
+        return response()->json(['ok' => true]);
+    }
+
     public function authContinue(Request $request)
     {
         $token = trim((string) $request->query('token', ''));
@@ -165,10 +206,28 @@ class MiniAppController extends Controller
             if ($user) {
                 Auth::login($user, true);
                 $request->session()->regenerate();
+                @file_put_contents(storage_path('app/tg_auth_trace.log'), json_encode([
+                    'ts' => now()->toIso8601String(),
+                    'event' => 'auth_continue_handoff_ok',
+                    'ctx' => [
+                        'user_id' => $user->id,
+                        'session_id' => $request->session()->getId(),
+                        'ip' => $request->ip(),
+                        'ua' => $request->userAgent(),
+                    ],
+                ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL, FILE_APPEND);
 
                 // Hard bypass for fragile WebView hops: render onboarding directly
                 // in this authenticated request instead of one more redirect.
                 if (!$user->onboarding_completed_at) {
+                    @file_put_contents(storage_path('app/tg_auth_trace.log'), json_encode([
+                        'ts' => now()->toIso8601String(),
+                        'event' => 'onboarding_inline_render',
+                        'ctx' => [
+                            'user_id' => $user->id,
+                            'session_id' => $request->session()->getId(),
+                        ],
+                    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL, FILE_APPEND);
 
                     return view('miniapp.onboarding');
                 }
@@ -181,6 +240,18 @@ class MiniAppController extends Controller
         }
 
         $user = Auth::user();
+        @file_put_contents(storage_path('app/tg_auth_trace.log'), json_encode([
+            'ts' => now()->toIso8601String(),
+            'event' => 'auth_continue',
+            'ctx' => [
+                'auth_check' => Auth::check(),
+                'user_id' => optional($user)->id,
+                'session_id' => $request->session()->getId(),
+                'ip' => $request->ip(),
+                'ua' => $request->userAgent(),
+                'has_token' => $token !== '',
+            ],
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL, FILE_APPEND);
 
         if (!$user) {
             return redirect('/tg/')->with('error', 'Сессия входа не сохранилась. Попробуйте ещё раз.');
@@ -196,6 +267,15 @@ class MiniAppController extends Controller
      */
     public function onboarding(Request $request)
     {
+        @file_put_contents(storage_path('app/tg_auth_trace.log'), json_encode([
+            'ts' => now()->toIso8601String(),
+            'event' => 'onboarding_open',
+            'ctx' => [
+                'user_id' => optional($request->user())->id,
+                'session_id' => $request->session()->getId(),
+                'ip' => $request->ip(),
+            ],
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL, FILE_APPEND);
 
         return view('miniapp.onboarding');
     }
@@ -233,6 +313,16 @@ class MiniAppController extends Controller
     public function dashboard(Request $request)
     {
         $user = Auth::user();
+        @file_put_contents(storage_path('app/tg_auth_trace.log'), json_encode([
+            'ts' => now()->toIso8601String(),
+            'event' => 'dashboard_open',
+            'ctx' => [
+                'user_id' => optional($user)->id,
+                'session_id' => $request->session()->getId(),
+                'ip' => $request->ip(),
+                'startapp_q' => (string) $request->query('startapp', ''),
+            ],
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL, FILE_APPEND);
 
         // If Mini App was opened via startapp=oge_variant_hash_..., jump directly to test.
         $startParam = trim((string) $request->query('startapp', ''));
