@@ -141,6 +141,7 @@ function onboardingPage() {
     letter: null,
     school: '',
     city: '',
+    onboardingToken: @json($onboardingToken ?? null),
     submitting: false,
 
     get isValid() {
@@ -157,6 +158,7 @@ function onboardingPage() {
           grade_letter: this.letter,
           school_number: this.school.trim(),
           city: this.city.trim() || 'Чехов',
+          onboarding_token: this.onboardingToken,
         });
         const data = await res.json();
         if (res.ok) {

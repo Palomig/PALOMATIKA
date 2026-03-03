@@ -408,11 +408,14 @@ Route::prefix('tg')->group(function () {
     Route::post('/auth/bridge-ping', [MiniAppController::class, 'authBridgePing'])->name('miniapp.auth.bridge_ping');
     Route::get('/auth/continue', [MiniAppController::class, 'authContinue'])->name('miniapp.auth.continue');
 
+    // Onboarding submit is public endpoint with one-time onboarding token fallback
+    // (needed for unstable WebView session continuity on some VPN/mobile paths).
+    Route::post('/onboarding', [MiniAppController::class, 'saveOnboarding'])->name('miniapp.onboarding.save');
+
     // Authenticated Mini App routes
     Route::middleware(['auth'])->group(function () {
-        // Onboarding
+        // Onboarding page
         Route::get('/onboarding', [MiniAppController::class, 'onboarding'])->name('miniapp.onboarding');
-        Route::post('/onboarding', [MiniAppController::class, 'saveOnboarding'])->name('miniapp.onboarding.save');
 
         // Routes that require completed onboarding
         Route::middleware([EnsureOnboardingComplete::class])->group(function () {

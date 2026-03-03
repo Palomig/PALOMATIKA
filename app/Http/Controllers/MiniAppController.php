@@ -20,6 +20,13 @@ use Illuminate\Support\Str;
 
 class MiniAppController extends Controller
 {
+    protected function issueOnboardingToken(int $userId): string
+    {
+        $token = Str::random(48);
+        Cache::put('tg_onb_token:' . $token, ['user_id' => $userId], now()->addMinutes(20));
+        return $token;
+    }
+
     public function __construct(
         private readonly MiniVariantService $miniVariant,
         private readonly OgeAttemptService $attemptService,
@@ -229,7 +236,9 @@ class MiniAppController extends Controller
                         ],
                     ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL, FILE_APPEND);
 
-                    return view('miniapp.onboarding');
+                    return view('miniapp.onboarding', [
+                        'onboardingToken' => $this->issueOnboardingToken($user->id),
+                    ]);
                 }
 
                 $target = (string) ($handoff['redirect_to'] ?? '/tg/dashboard');
@@ -277,7 +286,10 @@ class MiniAppController extends Controller
             ],
         ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL, FILE_APPEND);
 
-        return view('miniapp.onboarding');
+        $user = $request->user();
+        return view('miniapp.onboarding', [
+            'onboardingToken' => $user ? $this->issueOnboardingToken($user->id) : null,
+        ]);
     }
 
     /**
@@ -285,16 +297,41 @@ class MiniAppController extends Controller
      */
     public function saveOnboarding(Request $request)
     {
-
         $data = $request->validate([
             'name' => 'required|string|min:2|max:100',
             'grade_num' => 'required|integer|in:9',
             'grade_letter' => 'required|string|in:А,Б,В,Г,Д',
             'school_number' => 'required|string|max:20',
             'city' => 'nullable|string|max:80',
+            'onboarding_token' => 'nullable|string|max:128',
         ]);
 
         $user = $request->user();
+
+        if (!$user && !empty($data['onboarding_token'])) {
+            $payload = Cache::pull('tg_onb_token:' . $data['onboarding_token']);
+            if (is_array($payload) && !empty($payload['user_id'])) {
+                $user = \App\Models\User::find((int) $payload['user_id']);
+                if ($user) {
+                    Auth::login($user, true);
+                    $request->session()->regenerate();
+                    @file_put_contents(storage_path('app/tg_auth_trace.log'), json_encode([
+                        'ts' => now()->toIso8601String(),
+                        'event' => 'onboarding_token_auth_ok',
+                        'ctx' => [
+                            'user_id' => $user->id,
+                            'session_id' => $request->session()->getId(),
+                            'ip' => $request->ip(),
+                        ],
+                    ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL, FILE_APPEND);
+                }
+            }
+        }
+
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated.'], 401);
+        }
+
         $user->update([
             'name' => $data['name'],
             'grade_num' => $data['grade_num'],
