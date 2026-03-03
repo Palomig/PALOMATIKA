@@ -657,11 +657,11 @@
         <div class="answer-section q-anim" :style="'animation-delay: 0.1s; margin-top: 16px'">
 
           {{-- Choice type --}}
-          <template x-if="(currentTask.type === 'choice' || currentTask.type === 'simple_choice' || currentTask.type === 'fraction_choice' || currentTask.type === 'interval_choice') && Array.isArray(currentTask.options) && currentTask.options.length > 0">
+          <template x-if="(currentTask.type === 'choice' || currentTask.type === 'simple_choice' || currentTask.type === 'fraction_choice' || currentTask.type === 'interval_choice') && normalizedOptions(currentTask).length > 0">
             <div>
               <div class="answer-label">Выбери ответ</div>
               <div class="test-options">
-                <template x-for="(opt, oi) in (currentTask.options || [])" :key="oi">
+                <template x-for="(opt, oi) in normalizedOptions(currentTask)" :key="oi">
                   <div class="test-option"
                        :class="{ 'selected': answers[currentTask.task_number] === String(oi) }"
                        @click="selectOption(oi)">
@@ -690,7 +690,7 @@
           </template>
 
           {{-- Input type (expression, geometry, word_problem, etc.) --}}
-          <template x-if="((currentTask.type !== 'choice' && currentTask.type !== 'simple_choice' && currentTask.type !== 'fraction_choice' && currentTask.type !== 'interval_choice') || !Array.isArray(currentTask.options) || currentTask.options.length === 0) && currentTask.type !== 'matching' && currentTask.type !== 'matching_signs'">
+          <template x-if="((currentTask.type !== 'choice' && currentTask.type !== 'simple_choice' && currentTask.type !== 'fraction_choice' && currentTask.type !== 'interval_choice') || normalizedOptions(currentTask).length === 0) && currentTask.type !== 'matching' && currentTask.type !== 'matching_signs'">
             <div>
               <div class="answer-label">Введи ответ</div>
               <input class="answer-input"
@@ -850,6 +850,13 @@
       startBattle() {
         this.battleStarted = true;
         this.startTimer();
+      },
+
+      normalizedOptions(task) {
+        const opts = task?.options;
+        if (Array.isArray(opts)) return opts;
+        if (opts && typeof opts === 'object') return Object.values(opts);
+        return [];
       },
 
       // Topic name helper
