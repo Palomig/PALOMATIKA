@@ -165,14 +165,39 @@
   .btn-loading { pointer-events: none; opacity: 0.7; }
   .spinner { width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; }
 
+  .preloader {
+    position: fixed; inset: 0; z-index: 9999;
+    background:
+      radial-gradient(900px 420px at 10% -10%, rgba(108,182,238,.22), transparent 55%),
+      radial-gradient(800px 420px at 110% 110%, rgba(79,142,247,.18), transparent 50%),
+      #0b1626;
+    display:flex; align-items:center; justify-content:center;
+    transition: opacity .25s ease;
+  }
+  .preloader-card { width:min(320px,calc(100vw - 32px)); background:rgba(18,31,51,.92); border:1px solid #263a56; border-radius:16px; padding:18px; text-align:center; }
+  .preloader-logo { font-size:28px; margin-bottom:8px; }
+  .preloader-title { color:#fff; font-weight:800; margin-bottom:8px; }
+  .preloader-sub { color:#9fb3cf; font-size:12px; }
+  .preloader-bar { height:6px; border-radius:999px; background:#1f3048; margin-top:12px; overflow:hidden; }
+  .preloader-bar > span { display:block; width:40%; height:100%; background:linear-gradient(90deg,#4f8ef7,#6cb6ee); animation:pload 1.15s ease-in-out infinite; }
+
   @keyframes tickAnim { 0% { transform: translateY(-4px); opacity: 0.5; } 100% { transform: translateY(0); opacity: 1; } }
   @keyframes shimmer { 0% { left: -100%; } 100% { left: 200%; } }
   @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.7); } }
   @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes pload { 0% { transform: translateX(-110%); } 100% { transform: translateX(280%); } }
 @endpush
 
 @section('body')
 <div class="home-container" x-data="homePage()">
+  <div class="preloader" x-show="!appReady" x-transition.opacity>
+    <div class="preloader-card">
+      <div class="preloader-logo">🤖</div>
+      <div class="preloader-title">Загружаем mini app</div>
+      <div class="preloader-sub">Подготавливаем безопасный вход через Telegram…</div>
+      <div class="preloader-bar"><span></span></div>
+    </div>
+  </div>
 
   <div class="home-topbar">
     <div class="home-logo">palomatika</div>
@@ -234,12 +259,12 @@
   </div>
 
   @auth
-    <a href="/tg/dashboard" class="btn-primary" id="go-btn" style="text-decoration:none;">
+    <a href="/tg/dashboard" class="btn-primary" id="go-btn" style="text-decoration:none;" :style="!appReady ? 'pointer-events:none;opacity:.6' : ''">
       <span style="display:flex;align-items:center;gap:8px;">🚀 Начать подготовку</span>
     </a>
   @else
-    <button class="btn-primary" id="start-btn" @click="handleLogin()">
-      <span id="start-btn-text" style="display:flex;align-items:center;gap:8px;">🚀 Начать подготовку</span>
+    <button class="btn-primary" id="start-btn" @click="handleLogin()" :disabled="!appReady">
+      <span id="start-btn-text" style="display:flex;align-items:center;gap:8px;" x-text="appReady ? '🚀 Начать подготовку' : '⏳ Инициализация…'"></span>
     </button>
   @endauth
 
@@ -262,12 +287,16 @@ function homePage() {
   return {
     days: 0, hours: 0, mins: 0, secs: 0,
     loginInProgress: false,
+    appReady: false,
 
     pad(n) { return String(n).padStart(2, '0'); },
 
-    init() {
+    async init() {
       this.updateCountdown();
       setInterval(() => this.updateCountdown(), 1000);
+
+      await this.waitTelegramReady();
+      this.appReady = true;
 
       // If mini-app was opened with startapp=oge_variant_hash_..., forward into dashboard flow.
       const tg = window.Telegram?.WebApp;
@@ -295,6 +324,23 @@ function homePage() {
         else { alert(errMsg); }
       }
       @endif
+    },
+
+    async waitTelegramReady() {
+      const tg = window.Telegram?.WebApp;
+      if (!tg) {
+        await new Promise(r => setTimeout(r, 350));
+        return;
+      }
+
+      try { tg.ready?.(); } catch (_) {}
+
+      const started = Date.now();
+      while (Date.now() - started < 2500) {
+        const initData = typeof tg.initData === 'string' ? tg.initData.trim() : '';
+        if (initData.length > 20) return;
+        await new Promise(r => setTimeout(r, 120));
+      }
     },
 
     updateCountdown() {
