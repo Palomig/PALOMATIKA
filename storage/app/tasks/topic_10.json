@@ -425,7 +425,8 @@
               "answer": "0.5",
               "status": "draft"
             }
-          ]
+          ],
+          "label": "Новые задания"
         },
         {
           "number": 2,

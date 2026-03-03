@@ -30,7 +30,11 @@
     <div class="bg-slate-800 rounded-xl p-4 mb-6 border-l-4 border-{{ $color }}-500">
         <div class="flex items-start justify-between gap-3">
             <h3 class="text-lg font-semibold text-white">
-                Задание {{ $zadanie['number'] }}. {{ $zadanie['instruction'] }}
+                @if(!empty($zadanie['label']))
+                    {{ $zadanie['label'] }}. {{ $zadanie['instruction'] }}
+                @else
+                    Задание {{ $zadanie['number'] }}. {{ $zadanie['instruction'] }}
+                @endif
             </h3>
             <div class="flex items-center gap-2 shrink-0">
                 @if($isAdminForZadanie && !empty($zadanieTaskKeys))
