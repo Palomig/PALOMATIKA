@@ -473,7 +473,11 @@
     position: fixed;
     inset: 0;
     z-index: 120;
-    background: rgba(10, 22, 40, 0.9);
+    background:
+      radial-gradient(1100px 520px at 15% -10%, rgba(108,182,238,0.18), transparent 55%),
+      radial-gradient(900px 460px at 110% 110%, rgba(79,142,247,0.14), transparent 50%),
+      rgba(10, 22, 40, 0.86);
+    backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -481,15 +485,60 @@
   }
   .battle-card {
     width: 100%;
-    max-width: 360px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 20px;
+    max-width: 380px;
+    background: linear-gradient(180deg, rgba(19,35,56,0.96), rgba(14,27,44,0.96));
+    border: 1px solid rgba(108, 182, 238, 0.28);
+    border-radius: 20px;
+    padding: 22px 18px 18px;
     text-align: center;
+    box-shadow: 0 22px 46px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
   }
-  .battle-card h3 { margin: 0 0 8px; color: var(--text); }
-  .battle-card p { margin: 0 0 14px; color: var(--muted); font-size: 13px; }
+  .battle-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: #9ec8ff;
+    background: rgba(79,142,247,0.14);
+    border: 1px solid rgba(79,142,247,0.35);
+    border-radius: 999px;
+    padding: 6px 10px;
+    margin-bottom: 10px;
+  }
+  .battle-card h3 {
+    margin: 0 0 8px;
+    color: #fff;
+    font-family: var(--display);
+    font-size: 22px;
+    line-height: 1.2;
+  }
+  .battle-card p {
+    margin: 0 0 16px;
+    color: #b4c2d8;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .battle-cta {
+    width: 100%;
+    height: 50px;
+    border: 0;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #4f8ef7, #5ca8ff);
+    color: #fff;
+    font-weight: 800;
+    font-size: 15px;
+    letter-spacing: .01em;
+    box-shadow: 0 10px 24px rgba(79,142,247,0.4);
+  }
+  .battle-cta:active { transform: translateY(1px) scale(.995); }
+  .battle-meta {
+    margin-top: 10px;
+    font-size: 11px;
+    color: #7f95b3;
+  }
 
   /* transition helper */
   .q-anim {
@@ -507,9 +556,11 @@
   <template x-if="battleMode && !battleStarted">
     <div class="battle-overlay">
       <div class="battle-card">
-        <h3>⚔️ Батл-вариант</h3>
-        <p>Нажми «Начать», и только после этого запустится таймер.</p>
-        <button class="test-btn-next" @click="startBattle()">Начать</button>
+        <div class="battle-chip">⚔️ Battle mode</div>
+        <h3>Батл-вариант</h3>
+        <p>После нажатия «Начать» включится таймер и начнётся попытка. Удачи, покажи лучший результат!</p>
+        <button class="battle-cta" @click="startBattle()">Начать</button>
+        <div class="battle-meta">Время и точность влияют на место в таблице</div>
       </div>
     </div>
   </template>
