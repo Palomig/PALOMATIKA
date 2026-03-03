@@ -182,7 +182,7 @@ class MiniAppController extends Controller
             if ($variant) {
                 [$variant, $attempt] = $this->attemptService->startAttempt($user, $variant->hash);
                 $request->session()->forget('telegram_start_param');
-                return redirect('/tg/test/' . $attempt->id);
+                return redirect('/tg/test/' . $attempt->id . '?battle=1');
             }
         }
 
@@ -272,7 +272,7 @@ class MiniAppController extends Controller
     /**
      * Test screen — active attempt.
      */
-    public function test(int $attemptId)
+    public function test(Request $request, int $attemptId)
     {
         $user = Auth::user();
         $attempt = OgeAttempt::where('id', $attemptId)
@@ -349,6 +349,7 @@ class MiniAppController extends Controller
             'answers' => $existingAnswers,
             'mode' => $mode,
             'title' => $title,
+            'battleMode' => $request->boolean('battle'),
         ]);
     }
 

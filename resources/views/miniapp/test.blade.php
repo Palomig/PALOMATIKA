@@ -468,6 +468,29 @@
   }
   .test-modal-cancel:active { background: var(--surface2, var(--border)); }
 
+  /* Battle start overlay */
+  .battle-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 120;
+    background: rgba(10, 22, 40, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .battle-card {
+    width: 100%;
+    max-width: 360px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+  }
+  .battle-card h3 { margin: 0 0 8px; color: var(--text); }
+  .battle-card p { margin: 0 0 14px; color: var(--muted); font-size: 13px; }
+
   /* transition helper */
   .q-anim {
     opacity: 0;
@@ -480,6 +503,16 @@
      x-data="testApp()"
      x-init="init()"
      x-cloak>
+
+  <template x-if="battleMode && !battleStarted">
+    <div class="battle-overlay">
+      <div class="battle-card">
+        <h3>⚔️ Батл-вариант</h3>
+        <p>Нажми «Начать», и только после этого запустится таймер.</p>
+        <button class="test-btn-next" @click="startBattle()">Начать</button>
+      </div>
+    </div>
+  </template>
 
   {{-- ───── TOP BAR ───── --}}
   <div class="test-topbar">
@@ -693,6 +726,7 @@
         })->values()
       ),
       attemptId: @json($attempt->id),
+      battleMode: @json($battleMode ?? false),
 
       // State
       current: 0,
@@ -703,6 +737,8 @@
       elapsed: 0,
       _timerInterval: null,
       _commitTimeout: null,
+      _initialized: false,
+      battleStarted: false,
 
       // Computed
       get total() { return this.tasks.length; },
@@ -721,8 +757,13 @@
 
       // Init
       init() {
-        // Start stopwatch
-        this._timerInterval = setInterval(() => { this.elapsed++; }, 1000);
+        if (this._initialized) return;
+        this._initialized = true;
+
+        // Start stopwatch only when allowed (battle mode waits for explicit start)
+        if (!this.battleMode) {
+          this.startTimer();
+        }
 
         // Scroll active dot into view on init
         this.$nextTick(() => this.scrollActiveDot());
@@ -733,6 +774,18 @@
           // Fallback re-render after 1 second
           setTimeout(() => this.renderTaskMath(), 1000);
         });
+      },
+
+      startTimer() {
+        if (this._timerInterval) {
+          clearInterval(this._timerInterval);
+        }
+        this._timerInterval = setInterval(() => { this.elapsed++; }, 1000);
+      },
+
+      startBattle() {
+        this.battleStarted = true;
+        this.startTimer();
       },
 
       // Topic name helper
