@@ -16,5 +16,6 @@ class VerifyCsrfToken extends Middleware
         'api/auth/telegram/webapp-login',
         'tg/auth',
         'tg/auth/bridge-ping',
+        'tg/onboarding',
     ];
 }
