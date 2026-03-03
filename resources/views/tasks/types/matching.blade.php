@@ -18,7 +18,8 @@
     $answerResolver = app(\App\Services\TaskAnswerResolver::class);
 
     // Для темы 11 рендерим каждый task как отдельный пример: внутри task.svg уже 3 графика (А/Б/В)
-    $isTopic11PerTaskMode = (string) ($topicId ?? '') === '11';
+    $topicIdStr = (string) ($topicId ?? '');
+    $isTopic11PerTaskMode = $topicIdStr === '11' || str_starts_with($zadanie['instruction'] ?? '', 'Установите соответствие между графиками');
 
     // Стандарт: группа по 3 графика. Для темы 11: 1 задача = 1 группа.
     $taskGroups = $isTopic11PerTaskMode
@@ -72,9 +73,13 @@
                         $imageUrl = $imageName ? asset("images/tasks/{$topicId}/{$imageName}") : null;
                     @endphp
 
-                    <div class="p-2 min-h-[180px] flex items-center justify-center">
+                    <div class="p-2 min-h-[240px] flex items-center justify-center w-full [&>svg]:w-full [&>svg]:max-w-[1200px]">
                         @if($hasSvg)
-                            {!! $task['svg'] !!}
+                            @php
+                                $svgHtml = (string) $task['svg'];
+                                $svgHtml = str_replace('max-w-[830px]', 'max-w-[1200px]', $svgHtml);
+                            @endphp
+                            {!! $svgHtml !!}
                         @elseif($hasImage && \Illuminate\Support\Str::startsWith($imageName, '<svg'))
                             {!! $imageName !!}
                         @elseif($hasImage)
