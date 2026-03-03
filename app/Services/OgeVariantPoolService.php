@@ -329,6 +329,12 @@ class OgeVariantPoolService
 
     /**
      * Compute a unique fingerprint for a set of task references.
+     *
+     * Business rule (mini-app uniqueness):
+     * - A variant is considered NEW if at least one selected example differs.
+     * - In practice: if any tuple (topic_id, block_number, zadanie_number, task_id)
+     *   changes, fingerprint changes, therefore the variant is unique.
+     * - Two variants are considered the SAME only when all tuples are identical.
      */
     public function computeFingerprint(array $taskRefs): string
     {
