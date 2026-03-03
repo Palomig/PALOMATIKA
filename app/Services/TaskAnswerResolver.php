@@ -45,6 +45,9 @@ class TaskAnswerResolver
         }
 
         if (in_array($type, ['matching', 'matching_signs', 'matching_4'], true)) {
+            if (isset($task['answer']) && $task['answer'] !== '') {
+                return (string) $task['answer'];
+            }
             $opt = $task['options'][0] ?? null;
             return $opt !== null && $opt !== '' ? (string) $opt : null;
         }
