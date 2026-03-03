@@ -189,7 +189,11 @@ class MiniAppController extends Controller
             'redirect_to' => $redirectTo,
         ]);
 
-        return redirect($redirectTo);
+        // Telegram WebView/VPN compatibility: use client-side bridge redirect
+        // so Set-Cookie is committed before next app route request.
+        return response()->view('miniapp.auth-bridge', [
+            'redirectTo' => $redirectTo,
+        ]);
     }
 
     /**
