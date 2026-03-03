@@ -215,9 +215,20 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
   .q-svg-wrap svg {
     max-width: 100%;
+    height: auto;
+  }
+  .q-svg-wrap.q-svg-wide {
+    justify-content: flex-start;
+  }
+  .q-svg-wrap.q-svg-wide svg {
+    width: 880px;
+    min-width: 880px;
+    max-width: none;
     height: auto;
   }
 
@@ -649,7 +660,7 @@
 
         {{-- SVG image --}}
         <template x-if="currentTask.svg">
-          <div class="q-svg-wrap q-anim" :style="'animation-delay: 0.08s; margin-top: 16px'"
+          <div class="q-svg-wrap q-anim" :class="{ 'q-svg-wide': String(currentTask.task_number) === '11' }" :style="'animation-delay: 0.08s; margin-top: 16px'"
                x-html="currentTask.svg"></div>
         </template>
 
@@ -676,6 +687,20 @@
           {{-- Matching type (simplified as choice) --}}
           <template x-if="currentTask.type === 'matching' || currentTask.type === 'matching_signs'">
             <div>
+              <template x-if="normalizedOptions(currentTask).length > 0">
+                <div style="margin-bottom:12px">
+                  <div class="answer-label">Варианты</div>
+                  <div class="test-options">
+                    <template x-for="(opt, oi) in normalizedOptions(currentTask)" :key="oi">
+                      <div class="test-option" style="cursor:default">
+                        <div class="test-option-letter" x-text="oi + 1"></div>
+                        <div class="test-option-text" x-html="opt.label || opt.text || opt"></div>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+              </template>
+
               <div class="answer-label">Введи ответ</div>
               <input class="answer-input"
                      type="text"
