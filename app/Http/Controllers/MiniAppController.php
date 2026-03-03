@@ -163,9 +163,28 @@ class MiniAppController extends Controller
     /**
      * Dashboard — main hub after login.
      */
-    public function dashboard()
+    public function dashboard(Request $request)
     {
         $user = Auth::user();
+
+        // If Mini App was opened via startapp=oge_variant_hash_..., jump directly to test.
+        $startParam = trim((string) $request->query('startapp', ''));
+        if ($startParam === '') {
+            $startParam = trim((string) $request->query('tgWebAppStartParam', ''));
+        }
+        if ($startParam === '') {
+            $startParam = trim((string) $request->session()->get('telegram_start_param', ''));
+        }
+
+        if ($startParam !== '' && preg_match('/^oge_variant_hash_([a-z0-9]{8,32})$/i', $startParam, $m)) {
+            $hash = strtolower($m[1]);
+            $variant = OgeVariant::whereRaw('LOWER(hash) = ?', [$hash])->first();
+            if ($variant) {
+                [$variant, $attempt] = $this->attemptService->startAttempt($user, $variant->hash);
+                $request->session()->forget('telegram_start_param');
+                return redirect('/tg/test/' . $attempt->id);
+            }
+        }
 
         // Last submitted attempt
         $lastAttempt = OgeAttempt::where('student_id', $user->id)
