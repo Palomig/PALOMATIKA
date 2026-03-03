@@ -381,33 +381,30 @@ function homePage() {
         return;
       }
 
-      // Auth v2: token-based login without intermediate bridge pages.
-      fetch('/api/v2/auth/tma', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ initData })
-      })
-      .then(async (res) => {
-        const json = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(json.message || 'Не удалось авторизоваться');
-        return json;
-      })
-      .then((json) => {
-        window._tmaV2?.setTokens?.(json.access_token, json.refresh_token);
-        const target = json.needs_onboarding
-          ? '/tg/onboarding'
-          : '/tg/dashboard' + (startParam ? ('?startapp=' + encodeURIComponent(startParam)) : '');
-        window.location.replace(target);
-      })
-      .catch((e) => {
-        if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
-        if (btn) btn.classList.remove('btn-loading');
-        this.loginInProgress = false;
-        const msg = (e && e.message) ? e.message : 'Ошибка авторизации';
-        if (tg && tg.showAlert) tg.showAlert(msg);
-        else alert(msg);
-      });
+      // Server-side auth via form POST — creates a proper Laravel session.
+      // The /tg/auth endpoint verifies initData HMAC, logs the user in,
+      // and redirects through the auth bridge to dashboard/onboarding.
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = '/tg/auth';
+      form.style.display = 'none';
+
+      const inputInitData = document.createElement('input');
+      inputInitData.type = 'hidden';
+      inputInitData.name = 'initData';
+      inputInitData.value = initData;
+      form.appendChild(inputInitData);
+
+      if (startParam) {
+        const inputStart = document.createElement('input');
+        inputStart.type = 'hidden';
+        inputStart.name = 'startParam';
+        inputStart.value = startParam;
+        form.appendChild(inputStart);
+      }
+
+      document.body.appendChild(form);
+      form.submit();
     },
 
     handleInvite() {

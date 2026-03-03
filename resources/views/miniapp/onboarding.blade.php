@@ -152,6 +152,7 @@ function onboardingPage() {
       if (!this.isValid || this.submitting) return;
       this.submitting = true;
       try {
+        // Use session-based web endpoint (onboarding token as fallback for WebView cookie loss)
         const payload = {
           name: this.name.trim(),
           grade_num: 9,
@@ -159,21 +160,19 @@ function onboardingPage() {
           school_number: this.school.trim(),
           city: this.city.trim() || 'Чехов',
         };
-
-        let res = await window.fetchPost('/api/v2/onboarding', payload);
-
-        if (res.status === 401 && window._tmaV2?.refresh) {
-          const rr = await fetch('/api/v2/auth/refresh', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-            body: JSON.stringify({ refresh_token: window._tmaV2.refresh })
-          });
-          if (rr.ok) {
-            const rj = await rr.json();
-            window._tmaV2.setTokens(rj.access_token, null);
-            res = await window.fetchPost('/api/v2/onboarding', payload);
-          }
+        if (this.onboardingToken) {
+          payload.onboarding_token = this.onboardingToken;
         }
+
+        const res = await fetch('/tg/onboarding', {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        });
 
         const data = await res.json().catch(() => ({}));
         if (res.ok) {
