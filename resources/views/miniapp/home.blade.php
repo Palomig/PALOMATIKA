@@ -381,30 +381,32 @@ function homePage() {
         return;
       }
 
-      // Server-side auth via form POST — creates a proper Laravel session.
-      // The /tg/auth endpoint verifies initData HMAC, logs the user in,
-      // and redirects through the auth bridge to dashboard/onboarding.
-      const form = document.createElement('form');
-      form.method = 'POST';
-      form.action = '/tg/auth';
-      form.style.display = 'none';
-
-      const inputInitData = document.createElement('input');
-      inputInitData.type = 'hidden';
-      inputInitData.name = 'initData';
-      inputInitData.value = initData;
-      form.appendChild(inputInitData);
-
-      if (startParam) {
-        const inputStart = document.createElement('input');
-        inputStart.type = 'hidden';
-        inputStart.name = 'startParam';
-        inputStart.value = startParam;
-        form.appendChild(inputStart);
-      }
-
-      document.body.appendChild(form);
-      form.submit();
+      fetch('/api/auth/telegram/webapp-login', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-CSRF-TOKEN': window._csrf,
+        },
+        body: JSON.stringify({ initData, startParam }),
+      })
+      .then(async (res) => {
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || !data.success) {
+          throw new Error(data.message || 'Ошибка авторизации');
+        }
+        const target = data.redirect_to || data.redirect || '/tg/dashboard';
+        window.location.replace(target);
+      })
+      .catch((e) => {
+        if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
+        if (btn) btn.classList.remove('btn-loading');
+        this.loginInProgress = false;
+        const msg = (e && e.message) ? e.message : 'Ошибка авторизации';
+        if (tg && tg.showAlert) tg.showAlert(msg);
+        else alert(msg);
+      });
     },
 
     handleInvite() {
