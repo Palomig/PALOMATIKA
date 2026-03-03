@@ -13,6 +13,62 @@
       "title": "ФИПИ",
       "zadaniya": [
         {
+          "number": 0,
+          "label": "Новые задания",
+          "instruction": "Биссектриса треугольника",
+          "type": "geometry",
+          "tasks": [
+            {
+              "id": 95,
+              "text": "В треугольнике ABC проведена биссектриса AK. Найдите градусную меру угла B, если ∠C = 23° и AK = CK.",
+              "answer": "111",
+              "params": {
+                "angle_C": 23,
+                "AK_equals_CK": true
+              },
+              "svg": "<svg viewBox=\"0 0 200 160\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <polygon points=\"20,130 180,130 80,25\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <line x1=\"20\" y1=\"130\" x2=\"123.04709426803\" y2=\"70.199448981434\" stroke=\"#5a9fcf\" stroke-width=\"1\" stroke-dasharray=\"8,4\"/>\n  <path d=\"M 29.922778767137 112.63513715751 A 20 20 0 0 1 37.298201862372 119.96146363614\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.2\"/>\n  <path d=\"M 41.622752327965 117.45182954517 A 25 25 0 0 1 45 130\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.2\"/>\n  <g transform=\"translate(20, 130)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(180, 130)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(80, 25)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(123.04709426803, 70.199448981434)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <text x=\"6.4627844332448\" y=\"136.46094379322\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">A</text>\n  <text x=\"193.90862755662\" y=\"135.61694574402\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">B</text>\n  <text x=\"77.19331838165\" y=\"10.264921503663\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">C</text>\n  <text x=\"123.04709426803\" y=\"85.199448981434\" fill=\"#5a9fcf\" font-size=\"12\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">D</text>\n</svg>",
+              "status": "draft"
+            },
+            {
+              "id": 96,
+              "text": "В треугольнике ABC проведена медиана BM. Найдите градусную меру угла A, если ∠C = 65° и BM = AM = MC.",
+              "answer": "25",
+              "params": {
+                "angle_C": 65,
+                "BM_equals_AM_equals_MC": true
+              },
+              "svg": "<svg viewBox=\"0 0 200 160\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <polygon points=\"20,130 180,130 80,25\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <line x1=\"20\" y1=\"130\" x2=\"123.04709426803\" y2=\"70.199448981434\" stroke=\"#5a9fcf\" stroke-width=\"1\" stroke-dasharray=\"8,4\"/>\n  <path d=\"M 29.922778767137 112.63513715751 A 20 20 0 0 1 37.298201862372 119.96146363614\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.2\"/>\n  <path d=\"M 41.622752327965 117.45182954517 A 25 25 0 0 1 45 130\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.2\"/>\n  <g transform=\"translate(20, 130)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(180, 130)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(80, 25)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(123.04709426803, 70.199448981434)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <text x=\"6.4627844332448\" y=\"136.46094379322\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">A</text>\n  <text x=\"193.90862755662\" y=\"135.61694574402\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">B</text>\n  <text x=\"77.19331838165\" y=\"10.264921503663\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">C</text>\n  <text x=\"123.04709426803\" y=\"85.199448981434\" fill=\"#5a9fcf\" font-size=\"12\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">D</text>\n</svg>",
+              "status": "draft"
+            }
+          ],
+          "svg_type": "bisector",
+          "geometry": {
+            "viewBox": [
+              0,
+              0,
+              200,
+              160
+            ],
+            "points": {
+              "A": [
+                20,
+                130
+              ],
+              "B": [
+                180,
+                130
+              ],
+              "C": [
+                80,
+                25
+              ]
+            },
+            "derived": {
+              "D": "bisector(A,B,C)"
+            }
+          }
+        },
+        {
           "number": 1,
           "instruction": "Биссектриса треугольника",
           "type": "geometry",
@@ -43,28 +99,6 @@
             }
           },
           "tasks": [
-            {
-              "id": 95,
-              "text": "В треугольнике ABC проведена биссектриса AK. Найдите градусную меру угла B, если ∠C = 23° и AK = CK.",
-              "answer": "111",
-              "params": {
-                "angle_C": 23,
-                "AK_equals_CK": true
-              },
-              "svg": "<svg viewBox=\"0 0 200 160\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <polygon points=\"20,130 180,130 80,25\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <line x1=\"20\" y1=\"130\" x2=\"123.04709426803\" y2=\"70.199448981434\" stroke=\"#5a9fcf\" stroke-width=\"1\" stroke-dasharray=\"8,4\"/>\n  <path d=\"M 29.922778767137 112.63513715751 A 20 20 0 0 1 37.298201862372 119.96146363614\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.2\"/>\n  <path d=\"M 41.622752327965 117.45182954517 A 25 25 0 0 1 45 130\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.2\"/>\n  <g transform=\"translate(20, 130)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(180, 130)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(80, 25)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(123.04709426803, 70.199448981434)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <text x=\"6.4627844332448\" y=\"136.46094379322\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">A</text>\n  <text x=\"193.90862755662\" y=\"135.61694574402\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">B</text>\n  <text x=\"77.19331838165\" y=\"10.264921503663\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">C</text>\n  <text x=\"123.04709426803\" y=\"85.199448981434\" fill=\"#5a9fcf\" font-size=\"12\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">D</text>\n</svg>",
-              "status": "draft"
-            },
-            {
-              "id": 96,
-              "text": "В треугольнике ABC проведена медиана BM. Найдите градусную меру угла A, если ∠C = 65° и BM = AM = MC.",
-              "answer": "25",
-              "params": {
-                "angle_C": 65,
-                "BM_equals_AM_equals_MC": true
-              },
-              "svg": "<svg viewBox=\"0 0 200 160\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <polygon points=\"20,130 180,130 80,25\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <line x1=\"20\" y1=\"130\" x2=\"123.04709426803\" y2=\"70.199448981434\" stroke=\"#5a9fcf\" stroke-width=\"1\" stroke-dasharray=\"8,4\"/>\n  <path d=\"M 29.922778767137 112.63513715751 A 20 20 0 0 1 37.298201862372 119.96146363614\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.2\"/>\n  <path d=\"M 41.622752327965 117.45182954517 A 25 25 0 0 1 45 130\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.2\"/>\n  <g transform=\"translate(20, 130)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(180, 130)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(80, 25)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(123.04709426803, 70.199448981434)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <text x=\"6.4627844332448\" y=\"136.46094379322\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">A</text>\n  <text x=\"193.90862755662\" y=\"135.61694574402\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">B</text>\n  <text x=\"77.19331838165\" y=\"10.264921503663\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">C</text>\n  <text x=\"123.04709426803\" y=\"85.199448981434\" fill=\"#5a9fcf\" font-size=\"12\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">D</text>\n</svg>",
-              "status": "draft"
-            },
             {
               "id": 1,
               "text": "В треугольнике ABC известно, что ∠BAC = 68°, AD – биссектриса. Найдите угол BAD.",
@@ -105,8 +139,7 @@
               "svg": "<svg viewBox=\"0 0 200 160\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <polygon points=\"20,130 180,130 80,25\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <line x1=\"20\" y1=\"130\" x2=\"123.04709426803\" y2=\"70.199448981434\" stroke=\"#5a9fcf\" stroke-width=\"1\" stroke-dasharray=\"8,4\"/>\n  <path d=\"M 29.922778767137 112.63513715751 A 20 20 0 0 1 37.298201862372 119.96146363614\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.2\"/>\n  <path d=\"M 41.622752327965 117.45182954517 A 25 25 0 0 1 45 130\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.2\"/>\n  <g transform=\"translate(20, 130)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(180, 130)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(80, 25)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(123.04709426803, 70.199448981434)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <text x=\"6.4627844332448\" y=\"136.46094379322\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">A</text>\n  <text x=\"193.90862755662\" y=\"135.61694574402\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">B</text>\n  <text x=\"77.19331838165\" y=\"10.264921503663\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">C</text>\n  <text x=\"123.04709426803\" y=\"85.199448981434\" fill=\"#5a9fcf\" font-size=\"12\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">D</text>\n</svg>",
               "status": "draft"
             }
-          ],
-          "label": "Новые задания"
+          ]
         },
         {
           "number": 2,

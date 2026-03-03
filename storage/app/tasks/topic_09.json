@@ -13,7 +13,8 @@
       "title": "ФИПИ",
       "zadaniya": [
         {
-          "number": 1,
+          "number": 0,
+          "label": "Новые задания",
           "instruction": "Найдите корень уравнения",
           "type": "expression",
           "tasks": [
@@ -88,7 +89,14 @@
               "expression": "2(x - 2) = x + 2",
               "answer": "6",
               "status": "draft"
-            },
+            }
+          ]
+        },
+        {
+          "number": 1,
+          "instruction": "Найдите корень уравнения",
+          "type": "expression",
+          "tasks": [
             {
               "id": 1,
               "expression": "x + 3 = -9x",
@@ -197,8 +205,7 @@
               "answer": "6.4",
               "status": "draft"
             }
-          ],
-          "label": "Новые задания"
+          ]
         },
         {
           "number": 2,
