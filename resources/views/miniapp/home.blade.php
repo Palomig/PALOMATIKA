@@ -279,6 +279,11 @@ function homePage() {
         @auth
           window.location.replace('/tg/dashboard?startapp=' + encodeURIComponent(startParam));
           return;
+        @else
+          // For unauthenticated users opened via battle deep link,
+          // auto-run Telegram auth without requiring manual "Начать подготовку" click.
+          this.handleLogin();
+          return;
         @endauth
       }
 
