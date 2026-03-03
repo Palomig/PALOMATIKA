@@ -41,6 +41,14 @@ class OgeVariantPoolService
     }
 
     /**
+     * Force-create a new variant (used for battle links from Telegram buttons).
+     */
+    public function createBattleVariant(string $type): OgeVariant
+    {
+        return $this->generateNewPoolVariant($type);
+    }
+
+    /**
      * Find an active pool variant the user hasn't attempted yet.
      */
     protected function findUnsolvedVariant(User $user, string $type): ?OgeVariantPoolEntry

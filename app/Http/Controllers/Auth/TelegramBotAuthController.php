@@ -7,6 +7,7 @@ use App\Models\OgeVariant;
 use App\Models\TelegramAuthToken;
 use App\Models\User;
 use App\Services\AuditLogger;
+use App\Services\OgeVariantPoolService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -15,8 +16,10 @@ use Illuminate\Support\Str;
 
 class TelegramBotAuthController extends Controller
 {
-    public function __construct(private readonly AuditLogger $auditLogger)
-    {
+    public function __construct(
+        private readonly AuditLogger $auditLogger,
+        private readonly OgeVariantPoolService $variantPool,
+    ) {
     }
 
     /**
@@ -292,9 +295,15 @@ class TelegramBotAuthController extends Controller
             return response()->json(['ok' => false]);
         }
 
-        // Handle /start command
+        // Handle callback buttons (battle creation)
+        if (isset($update['callback_query'])) {
+            $this->handleCallbackQuery($update['callback_query']);
+            return response()->json(['ok' => true]);
+        }
+
+        // Handle text commands
         if (isset($update['message']['text'])) {
-            $text = $update['message']['text'];
+            $text = trim((string) $update['message']['text']);
             $from = $update['message']['from'] ?? null;
 
             if (preg_match('/^\/start\s+(.+)$/', $text, $matches)) {
@@ -305,8 +314,10 @@ class TelegramBotAuthController extends Controller
                 } else {
                     $this->handleStartCommand($param, $from);
                 }
-            } elseif (trim($text) === '/start') {
+            } elseif ($text === '/start') {
                 $this->sendWelcomeMessage($from);
+            } elseif ($text === '/battle' || $text === '/battle_create') {
+                $this->sendBattleModeButtons($from);
             }
         }
 
@@ -323,20 +334,147 @@ class TelegramBotAuthController extends Controller
         }
 
         $name = $from['first_name'] ?? 'друг';
-        $botUsername = config('services.telegram.bot_username', 'palomatika_auth_bot');
+
+        $keyboard = [[
+            [
+                'text' => '🚀 Открыть palomatika',
+                'web_app' => ['url' => url('/tg/')],
+            ],
+        ]];
+
+        if ($this->isBattleAdmin($from)) {
+            $keyboard[] = [[
+                'text' => '⚔️ Создать батл-вариант',
+                'callback_data' => 'battle_menu',
+            ]];
+        }
 
         $this->sendTelegramMessage(
             $from['id'],
             "Привет, {$name}! 👋\n\nЯ бот palomatika — помогаю готовиться к ОГЭ по математике.\n\nОткрой мини-приложение, чтобы начать тренировку!",
+            ['inline_keyboard' => $keyboard]
+        );
+    }
+
+    private function isBattleAdmin(?array $from): bool
+    {
+        $allowedTelegramId = (string) env('BATTLE_ADMIN_TELEGRAM_ID', '245710727');
+        $fromId = (string) ($from['id'] ?? '');
+
+        return $fromId !== '' && $fromId === $allowedTelegramId;
+    }
+
+    private function sendBattleModeButtons(?array $from): void
+    {
+        if (!$from) {
+            return;
+        }
+
+        if (!$this->isBattleAdmin($from)) {
+            $this->sendTelegramMessage((string) $from['id'], '⛔️ Эта команда доступна только администратору.');
+            return;
+        }
+
+        $this->sendTelegramMessage(
+            (string) $from['id'],
+            "Выбери тип варианта для батла:",
             [
-                'inline_keyboard' => [[
-                    [
-                        'text' => '🚀 Открыть palomatika',
-                        'web_app' => ['url' => url('/tg/')],
-                    ],
-                ]],
+                'inline_keyboard' => [
+                    [[ 'text' => '🎯 Смешанный мини-вариант', 'callback_data' => 'battle_create_mixed' ]],
+                    [[ 'text' => '📘 Полный вариант', 'callback_data' => 'battle_create_full' ]],
+                ],
             ]
         );
+    }
+
+    private function handleCallbackQuery(array $callbackQuery): void
+    {
+        $data = (string) ($callbackQuery['data'] ?? '');
+        $from = $callbackQuery['from'] ?? null;
+        $chatId = (string) ($callbackQuery['message']['chat']['id'] ?? '');
+        $callbackId = (string) ($callbackQuery['id'] ?? '');
+
+        if ($data === '') {
+            return;
+        }
+
+        if ($data === 'battle_menu') {
+            $this->answerCallbackQuery($callbackId);
+            $this->sendBattleModeButtons($from);
+            return;
+        }
+
+        if (!in_array($data, ['battle_create_mixed', 'battle_create_full'], true)) {
+            return;
+        }
+
+        if (!$this->isBattleAdmin($from)) {
+            $this->answerCallbackQuery($callbackId, 'Недостаточно прав', true);
+            if ($chatId !== '') {
+                $this->sendTelegramMessage($chatId, '⛔️ Создавать батл-варианты может только Стас.');
+            }
+            return;
+        }
+
+        $mode = $data === 'battle_create_full' ? 'full' : 'mixed';
+
+        try {
+            $this->findOrCreateTelegramUserFromProfile($from ?? []); // ensure actor exists in DB/audit context
+            $variant = $this->variantPool->createBattleVariant($mode);
+
+            $botUsername = (string) config('services.telegram.bot_username', 'palomatika_auth_bot');
+            $startParam = 'oge_variant_hash_' . $variant->hash;
+            $shareLink = "https://t.me/{$botUsername}?start={$startParam}";
+
+            $title = $mode === 'full' ? 'Полный вариант' : 'Смешанный мини-вариант';
+
+            $this->answerCallbackQuery($callbackId, 'Вариант создан ✅');
+            if ($chatId !== '') {
+                $this->sendTelegramMessage(
+                    $chatId,
+                    "✅ Батл-вариант создан\n\nТип: {$title}\nHash: <code>{$variant->hash}</code>\n\nСсылка для учеников:\n{$shareLink}"
+                );
+            }
+        } catch (\Throwable $e) {
+            \Log::error('Failed to create battle variant via Telegram callback', [
+                'error' => $e->getMessage(),
+                'data' => $data,
+            ]);
+
+            $this->answerCallbackQuery($callbackId, 'Ошибка создания', true);
+            if ($chatId !== '') {
+                $this->sendTelegramMessage($chatId, '❌ Не удалось создать батл-вариант. Попробуй ещё раз.');
+            }
+        }
+    }
+
+    private function answerCallbackQuery(string $callbackId, string $text = '', bool $showAlert = false): void
+    {
+        if ($callbackId === '') {
+            return;
+        }
+
+        $botToken = config('services.telegram.bot_token');
+        if (!$botToken) {
+            return;
+        }
+
+        $url = "https://api.telegram.org/bot{$botToken}/answerCallbackQuery";
+        $payload = [
+            'callback_query_id' => $callbackId,
+            'text' => $text,
+            'show_alert' => $showAlert,
+        ];
+
+        try {
+            $client = new \GuzzleHttp\Client();
+            $client->post($url, [
+                'json' => $payload,
+                'timeout' => 5,
+            ]);
+        } catch (\Exception $e) {
+            \Log::warning('Failed to answer callback query', ['error' => $e->getMessage()]);
+        }
     }
 
     /**
