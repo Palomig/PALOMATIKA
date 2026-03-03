@@ -224,12 +224,29 @@
 
   // CSRF for fetch requests
   window._csrf = document.querySelector('meta[name="csrf-token"]')?.content;
+  window._tmaV2 = {
+    get access() { return sessionStorage.getItem('tma_v2_access') || ''; },
+    get refresh() { return sessionStorage.getItem('tma_v2_refresh') || ''; },
+    setTokens(access, refresh) {
+      if (access) sessionStorage.setItem('tma_v2_access', access);
+      if (refresh) sessionStorage.setItem('tma_v2_refresh', refresh);
+    },
+    clear() {
+      sessionStorage.removeItem('tma_v2_access');
+      sessionStorage.removeItem('tma_v2_refresh');
+    }
+  };
 
   window.fetchPost = (url, data = {}) => {
+    const headers = { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': window._csrf, 'Accept': 'application/json' };
+    const token = window._tmaV2.access;
+    if (token && url.startsWith('/api/v2/')) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
     return fetch(url, {
       method: 'POST',
       credentials: 'include',
-      headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': window._csrf, 'Accept': 'application/json' },
+      headers,
       body: JSON.stringify(data),
     });
   };
