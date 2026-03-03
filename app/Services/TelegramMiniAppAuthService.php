@@ -49,8 +49,12 @@ class TelegramMiniAppAuthService
             throw new \RuntimeException('Invalid signature');
         }
 
-        // strict in prod, tolerant in non-prod
-        $maxAge = app()->isProduction() ? 300 : 86400;
+        // WebView/VPN can delay payload delivery in real world.
+        // Keep this configurable; default to tolerant window until nonce/replay-store is introduced.
+        $maxAge = (int) env('TELEGRAM_WEBAPP_AUTH_MAX_AGE', 86400);
+        if ($maxAge <= 0) {
+            $maxAge = 86400;
+        }
         $authDate = (int) ($normalizedFields['auth_date'] ?? 0);
         if ($authDate <= 0 || abs(time() - $authDate) > $maxAge) {
             throw new \RuntimeException('auth_date expired');
