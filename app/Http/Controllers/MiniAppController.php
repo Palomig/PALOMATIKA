@@ -401,8 +401,56 @@ class MiniAppController extends Controller
             $totalTime = $attempt->submitted_at->diffInSeconds($attempt->started_at);
         }
 
+        // Battle leaderboard: for shared miniapp variants show other participants too.
+        $leaderboard = [];
+        $isBattleVariant = ($attempt->variant?->source() ?? '') === OgeVariant::SOURCE_MINIAPP;
+        if ($isBattleVariant && $attempt->variant_id) {
+            $battleAttempts = OgeAttempt::where('variant_id', $attempt->variant_id)
+                ->whereIn('status', ['submitted', 'scored'])
+                ->with(['student:id,name', 'scorings'])
+                ->get();
+
+            foreach ($battleAttempts as $a) {
+                $aTotal = $a->scorings->count();
+                $aCorrect = $a->scorings->where('is_correct', true)->count();
+                $aTime = 0;
+                if ($a->started_at && $a->submitted_at) {
+                    $aTime = $a->submitted_at->diffInSeconds($a->started_at);
+                }
+
+                $leaderboard[] = [
+                    'attempt_id' => (int) $a->id,
+                    'student_name' => (string) ($a->student->name ?? 'Участник'),
+                    'correct' => $aCorrect,
+                    'total' => $aTotal,
+                    'time_sec' => $aTime,
+                    'is_me' => (int) $a->student_id === (int) $user->id,
+                ];
+            }
+
+            usort($leaderboard, function ($x, $y) {
+                // 1) more correct is better
+                if ($x['correct'] !== $y['correct']) {
+                    return $y['correct'] <=> $x['correct'];
+                }
+                // 2) less time is better (non-zero preferred over zero)
+                if ($x['time_sec'] !== $y['time_sec']) {
+                    if ($x['time_sec'] === 0) return 1;
+                    if ($y['time_sec'] === 0) return -1;
+                    return $x['time_sec'] <=> $y['time_sec'];
+                }
+                // 3) stable fallback
+                return $x['attempt_id'] <=> $y['attempt_id'];
+            });
+
+            foreach ($leaderboard as $idx => &$row) {
+                $row['rank'] = $idx + 1;
+            }
+            unset($row);
+        }
+
         return view('miniapp.results', compact(
-            'attempt', 'scorings', 'answers', 'totalTasks', 'correctCount', 'totalTime'
+            'attempt', 'scorings', 'answers', 'totalTasks', 'correctCount', 'totalTime', 'leaderboard', 'isBattleVariant'
         ));
     }
 

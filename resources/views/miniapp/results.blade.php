@@ -126,6 +126,40 @@
   /* ── DIVIDER ── */
   .res-divider { height: 1px; background: var(--border); }
 
+  /* ── BATTLE LEADERBOARD ── */
+  .battle-board {
+    margin-top: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 12px;
+  }
+  .battle-title {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin-bottom: 8px;
+  }
+  .battle-row {
+    display: grid;
+    grid-template-columns: 32px 1fr auto auto;
+    gap: 8px;
+    align-items: center;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 9px 10px;
+    margin-bottom: 8px;
+  }
+  .battle-row:last-child { margin-bottom: 0; }
+  .battle-rank { text-align:center; font-weight: 900; color: var(--accent); }
+  .battle-name { color: var(--text); font-size: 13px; font-weight: 700; }
+  .battle-score { color: var(--green); font-size: 12px; font-weight: 800; }
+  .battle-time { color: var(--muted); font-size: 12px; font-weight: 700; }
+  .battle-me { border-color: rgba(79,142,247,.55); box-shadow: inset 0 0 0 1px rgba(79,142,247,.16); }
+
   /* ── TUTOR CTA ── */
   .tutor-cta {
     background: var(--surface);
@@ -352,6 +386,24 @@
       <span class="stat-lbl">время</span>
     </div>
   </div>
+
+  @if(($isBattleVariant ?? false) && !empty($leaderboard ?? []))
+    <div class="battle-board anim-up" style="animation-delay:0.13s">
+      <div class="battle-title">Таблица участников</div>
+      @foreach(($leaderboard ?? []) as $item)
+        @php
+          $sec = max(0, (int) ($item['time_sec'] ?? 0));
+          $t = sprintf('%02d:%02d', intdiv($sec, 60), $sec % 60);
+        @endphp
+        <div class="battle-row {{ !empty($item['is_me']) ? 'battle-me' : '' }}">
+          <div class="battle-rank">{{ $item['rank'] ?? '—' }}</div>
+          <div class="battle-name">{{ $item['student_name'] ?? 'Участник' }}</div>
+          <div class="battle-score">{{ (int)($item['correct'] ?? 0) }}/{{ (int)($item['total'] ?? 0) }}</div>
+          <div class="battle-time">{{ $t }}</div>
+        </div>
+      @endforeach
+    </div>
+  @endif
 
   {{-- TABS --}}
   <div class="tabs anim-up" style="animation-delay:0.15s">
