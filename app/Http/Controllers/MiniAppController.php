@@ -346,6 +346,15 @@ class MiniAppController extends Controller
             return $task;
         }, $tasks);
 
+        // Keep mini-test tasks ordered by exam number (6, 8, 9, 10, ...)
+        if (is_array($tasks)) {
+            usort($tasks, function ($a, $b) {
+                $an = (int) (($a['task_number'] ?? 0));
+                $bn = (int) (($b['task_number'] ?? 0));
+                return $an <=> $bn;
+            });
+        }
+
         // Get existing answers for this attempt
         $existingAnswers = $attempt->answers()
             ->pluck('current_answer', 'task_number')
