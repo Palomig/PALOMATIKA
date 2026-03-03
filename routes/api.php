@@ -37,8 +37,10 @@ Route::get('/oauth/{provider}/redirect', [OAuthController::class, 'redirect']);
 Route::post('/oauth/{provider}/callback', [OAuthController::class, 'callback']);
 Route::post('/referral/track', [OAuthController::class, 'trackReferral']);
 
-// Deploy webhook (called by GitHub Actions after FTP deploy)
+// Deploy webhooks (called by GitHub Actions / OpenClaw bot)
 Route::post('/deploy/refresh', [DeployController::class, 'refresh']);
+Route::post('/deploy/artisan', [DeployController::class, 'artisan']);
+Route::get('/deploy/commands', [DeployController::class, 'commands']);
 
 // Geometry Editor API
 Route::prefix('geometry')->group(function () {
