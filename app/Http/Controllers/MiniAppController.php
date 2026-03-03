@@ -195,8 +195,19 @@ class MiniAppController extends Controller
     /**
      * Onboarding form (GET).
      */
-    public function onboarding()
+    public function onboarding(Request $request)
     {
+        @file_put_contents(storage_path('app/tg_auth_trace.log'), json_encode([
+            'ts' => now()->toIso8601String(),
+            'event' => 'onboarding_open',
+            'ctx' => [
+                'user_id' => optional($request->user())->id,
+                'session_id' => $request->session()->getId(),
+                'ip' => $request->ip(),
+                'ua' => $request->userAgent(),
+            ],
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL, FILE_APPEND);
+
         return view('miniapp.onboarding');
     }
 
@@ -205,6 +216,17 @@ class MiniAppController extends Controller
      */
     public function saveOnboarding(Request $request)
     {
+        @file_put_contents(storage_path('app/tg_auth_trace.log'), json_encode([
+            'ts' => now()->toIso8601String(),
+            'event' => 'onboarding_submit',
+            'ctx' => [
+                'user_id' => optional($request->user())->id,
+                'session_id' => $request->session()->getId(),
+                'ip' => $request->ip(),
+                'ua' => $request->userAgent(),
+            ],
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL, FILE_APPEND);
+
         $data = $request->validate([
             'name' => 'required|string|min:2|max:100',
             'grade_num' => 'required|integer|in:9',
@@ -232,6 +254,18 @@ class MiniAppController extends Controller
     public function dashboard(Request $request)
     {
         $user = Auth::user();
+
+        @file_put_contents(storage_path('app/tg_auth_trace.log'), json_encode([
+            'ts' => now()->toIso8601String(),
+            'event' => 'dashboard_open',
+            'ctx' => [
+                'user_id' => optional($user)->id,
+                'session_id' => $request->session()->getId(),
+                'ip' => $request->ip(),
+                'ua' => $request->userAgent(),
+                'startapp_q' => (string) $request->query('startapp', ''),
+            ],
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL, FILE_APPEND);
 
         // If Mini App was opened via startapp=oge_variant_hash_..., jump directly to test.
         $startParam = trim((string) $request->query('startapp', ''));
