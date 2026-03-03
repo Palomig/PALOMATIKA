@@ -321,6 +321,26 @@ class OgeAttemptService
             return $cache[$cacheKey] = $map;
         }
 
+        // Mini-app / curated variants may already contain fully materialized tasks in config_json.
+        $configuredTasks = $attempt->variant?->config_json['tasks'] ?? null;
+        if (is_array($configuredTasks) && !empty($configuredTasks)) {
+            $map = [];
+            foreach ($configuredTasks as $index => $taskData) {
+                if (!is_array($taskData)) {
+                    continue;
+                }
+
+                $tn = (int) ($taskData['attempt_task_number'] ?? $taskData['task_number'] ?? $taskData['test_number'] ?? (6 + $index));
+                if ($tn < 1 || $tn > 255) {
+                    continue;
+                }
+
+                $map[$tn] = $this->answerResolver->resolveFromVariantTask($taskData);
+            }
+
+            return $cache[$cacheKey] = $map;
+        }
+
         $selected = $attempt->variant?->config_json['zadaniya'] ?? null;
         $variantPayload = $this->variantBuilder->build($hash, is_array($selected) ? $selected : null);
 

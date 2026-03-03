@@ -58,7 +58,7 @@ class OgeVariantPoolService
     /**
      * Generate a new variant, add it to the pool, and return the OgeVariant.
      */
-    protected function generateNewPoolVariant(string $type, int $maxRetries = 5): OgeVariant
+    protected function generateNewPoolVariant(string $type, int $maxRetries = 8): OgeVariant
     {
         for ($attempt = 0; $attempt < $maxRetries; $attempt++) {
             $tasks = $this->generateVariantTasks($type);
@@ -71,7 +71,7 @@ class OgeVariantPoolService
             $taskRefs = $this->extractTaskRefs($tasks);
             $fingerprint = $this->computeFingerprint($taskRefs);
 
-            // Check uniqueness
+            // Check uniqueness of full variant composition
             if (OgeVariantPoolEntry::where('task_fingerprint', $fingerprint)->exists()) {
                 continue; // Duplicate — retry with different random selection
             }
@@ -132,6 +132,10 @@ class OgeVariantPoolService
 
     /**
      * Generate tasks for a variant type using only production tasks.
+     *
+     * Rule: if a variant repeats the same topic/task-number slot,
+     * it should avoid reusing the exact same example (task_id) already present
+     * in existing variants in the DB pool when alternatives exist.
      */
     protected function generateVariantTasks(string $type): array
     {
@@ -146,18 +150,146 @@ class OgeVariantPoolService
             default => throw new \InvalidArgumentException("Unknown variant type: {$type}"),
         };
 
+        $usedByTopic = $this->getUsedTaskIdsByTopic();
         $result = [];
 
         foreach ($topicIds as $topicId) {
-            $tasks = $this->taskData->getRandomTasks($topicId, 1, 'production');
-            if (!empty($tasks)) {
-                $task = $tasks[0];
-                $task['task_number'] = (int) ltrim($topicId, '0');
-                $result[] = $task;
+            // 1) Prefer task examples not used in existing pool variants
+            $picked = $this->pickTaskForTopic($topicId, 'production', $usedByTopic[$topicId] ?? []);
+
+            // 2) Fallback: any production task
+            if ($picked === null) {
+                $picked = $this->pickTaskForTopic($topicId, 'production', []);
             }
+
+            if ($picked === null) {
+                continue;
+            }
+
+            $picked['task_number'] = (int) ltrim($topicId, '0');
+            $result[] = $this->normalizeTaskForMiniApp($picked);
         }
 
         return $result;
+    }
+
+    /**
+     * Pick one random task for a topic, excluding task_ids if possible.
+     */
+    protected function pickTaskForTopic(string $topicId, ?string $status, array $excludeTaskIds): ?array
+    {
+        $blocks = $this->taskData->getBlocks($topicId, $status);
+        $meta = $this->taskData->getTopicMeta($topicId);
+        $all = [];
+
+        foreach ($blocks as $block) {
+            foreach ($block['zadaniya'] ?? [] as $zadanie) {
+                if (($zadanie['type'] ?? '') === 'statements' && isset($zadanie['statements'])) {
+                    // Statements mode stored as a single pseudo-task.
+                    $all[] = [
+                        'topic_id' => $topicId,
+                        'topic_title' => $meta['title'],
+                        'block_number' => $block['number'],
+                        'block_title' => $block['title'],
+                        'zadanie_number' => $zadanie['number'],
+                        'instruction' => $zadanie['instruction'] ?? '',
+                        'type' => 'statements',
+                        'section' => $zadanie['section'] ?? null,
+                        'statements' => $zadanie['statements'],
+                    ];
+                    continue;
+                }
+
+                foreach ($zadanie['tasks'] ?? [] as $task) {
+                    $taskId = (int) ($task['id'] ?? 0);
+                    if ($taskId > 0 && !empty($excludeTaskIds) && in_array($taskId, $excludeTaskIds, true)) {
+                        continue;
+                    }
+
+                    $all[] = [
+                        'topic_id' => $topicId,
+                        'topic_title' => $meta['title'],
+                        'block_number' => $block['number'],
+                        'block_title' => $block['title'],
+                        'zadanie_number' => $zadanie['number'],
+                        'instruction' => $zadanie['instruction'] ?? '',
+                        'type' => $zadanie['type'] ?? 'expression',
+                        'svg_type' => $zadanie['svg_type'] ?? null,
+                        'options_render_mode' => $zadanie['options_render_mode'] ?? null,
+                        'points' => $zadanie['points'] ?? null,
+                        'options' => $task['options'] ?? $zadanie['options'] ?? null,
+                        'task' => $task,
+                    ];
+                }
+            }
+        }
+
+        if (empty($all)) {
+            return null;
+        }
+
+        shuffle($all);
+        return $all[0];
+    }
+
+    /**
+     * Normalize task payload for mini-app UI.
+     *
+     * Mini-app template expects top-level keys like text/expression/svg/options,
+     * while TaskDataService returns those under nested `task` for many task types.
+     */
+    protected function normalizeTaskForMiniApp(array $task): array
+    {
+        $inner = is_array($task['task'] ?? null) ? $task['task'] : [];
+
+        // Keep original nested object for compatibility (answer resolver etc.)
+        $normalized = $task;
+
+        $normalized['task_id'] = (int) ($inner['id'] ?? 0);
+        $normalized['text'] = $inner['text'] ?? ($task['text'] ?? null);
+        $normalized['expression'] = $inner['expression'] ?? ($task['expression'] ?? null);
+        $normalized['svg'] = $inner['svg'] ?? ($task['svg'] ?? null);
+
+        // For matching/choice tasks options are often inside task-level options.
+        $normalized['options'] = $inner['options'] ?? ($task['options'] ?? null);
+
+        // Explicit answer for any future server-side consumers.
+        if (!isset($normalized['correct_answer']) && array_key_exists('answer', $inner)) {
+            $normalized['correct_answer'] = $inner['answer'];
+        }
+
+        return $normalized;
+    }
+
+    /**
+     * Gather already used task_ids by topic from pool DB.
+     *
+     * @return array<string, array<int,int>>
+     */
+    protected function getUsedTaskIdsByTopic(): array
+    {
+        $rows = OgeVariantPoolTask::query()
+            ->select('topic_id', 'task_id')
+            ->where('task_id', '>', 0)
+            ->get();
+
+        $map = [];
+        foreach ($rows as $row) {
+            $topic = str_pad((string) $row->topic_id, 2, '0', STR_PAD_LEFT);
+            $taskId = (int) $row->task_id;
+            if ($taskId <= 0) {
+                continue;
+            }
+            $map[$topic] ??= [];
+            $map[$topic][$taskId] = $taskId;
+        }
+
+        // Convert set maps to plain arrays
+        foreach ($map as $topic => $set) {
+            $map[$topic] = array_values($set);
+        }
+
+        return $map;
     }
 
     /**
@@ -180,7 +312,7 @@ class OgeVariantPoolService
             $topicId = $task['topic_id'] ?? '';
             $blockNumber = (int) ($task['block_number'] ?? 0);
             $zadanieNumber = (int) ($task['zadanie_number'] ?? 0);
-            $taskId = (int) ($task['task']['id'] ?? 0);
+            $taskId = (int) ($task['task']['id'] ?? $task['task_id'] ?? 0);
 
             if ($topicId && $blockNumber > 0 && $zadanieNumber > 0 && $taskId > 0) {
                 $refs[] = [
