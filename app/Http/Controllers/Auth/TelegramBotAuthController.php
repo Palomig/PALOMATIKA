@@ -8,6 +8,7 @@ use App\Models\TelegramAuthToken;
 use App\Models\User;
 use App\Services\AuditLogger;
 use App\Services\OgeVariantPoolService;
+use App\Services\TelegramMiniAppAuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -19,6 +20,7 @@ class TelegramBotAuthController extends Controller
     public function __construct(
         private readonly AuditLogger $auditLogger,
         private readonly OgeVariantPoolService $variantPool,
+        private readonly TelegramMiniAppAuthService $tgMiniAuth,
     ) {
     }
 
@@ -623,56 +625,7 @@ class TelegramBotAuthController extends Controller
      */
     private function extractAndVerifyWebAppAuthData(string $initData, array $initDataUnsafe = []): array
     {
-        $fields = $this->parseTelegramWebAppFields($initData, $initDataUnsafe);
-
-        $providedHash = $fields['hash'] ?? null;
-        if (!is_string($providedHash) || $providedHash === '') {
-            throw new \InvalidArgumentException('Missing hash');
-        }
-
-        $signableFields = $fields;
-        unset($signableFields['hash']);
-
-        $normalizedFields = [];
-        foreach ($signableFields as $key => $value) {
-            if ($value === null) {
-                continue;
-            }
-
-            if (is_array($value)) {
-                $normalizedFields[(string) $key] = json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-                continue;
-            }
-
-            $normalizedFields[(string) $key] = (string) $value;
-        }
-
-        ksort($normalizedFields);
-        $dataCheckString = collect($normalizedFields)
-            ->map(fn (string $value, string $key) => "{$key}={$value}")
-            ->implode("\n");
-
-        $secretKey = hash_hmac('sha256', (string) config('services.telegram.bot_token'), 'WebAppData', true);
-        $calculatedHash = hash_hmac('sha256', $dataCheckString, $secretKey);
-
-        if (!hash_equals($calculatedHash, $providedHash)) {
-            throw new \RuntimeException('Invalid signature');
-        }
-
-        $userValue = $fields['user'] ?? null;
-        if (is_string($userValue)) {
-            $decodedUser = json_decode($userValue, true);
-            if (!is_array($decodedUser)) {
-                throw new \InvalidArgumentException('Invalid user payload');
-            }
-            $userValue = $decodedUser;
-        }
-
-        if (!is_array($userValue) || empty($userValue['id'])) {
-            throw new \InvalidArgumentException('Missing user payload');
-        }
-
-        return [$normalizedFields, $userValue];
+        return $this->tgMiniAuth->extractAndVerify($initData, $initDataUnsafe);
     }
 
     /**

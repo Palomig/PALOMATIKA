@@ -11,6 +11,7 @@ use App\Services\OgeAttemptService;
 use App\Services\OgeVariantBuilderService;
 use App\Services\OgeVariantPoolService;
 use App\Services\TaskDataService;
+use App\Services\TelegramMiniAppAuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -33,6 +34,7 @@ class MiniAppController extends Controller
         private readonly OgeVariantBuilderService $variantBuilder,
         private readonly OgeVariantPoolService $poolService,
         private readonly TaskDataService $taskData,
+        private readonly TelegramMiniAppAuthService $tgMiniAuth,
     ) {
     }
 
@@ -57,82 +59,24 @@ class MiniAppController extends Controller
             return redirect('/tg/')->with('error', 'Нет данных Telegram для входа');
         }
 
-        $botToken = (string) config('services.telegram.bot_token', '');
-        if ($botToken === '') {
-            Log::error('tg_auth: bot_token not configured');
-            return redirect('/tg/')->with('error', 'Telegram не настроен');
-        }
-
-        // Parse and verify HMAC signature
-        parse_str($initData, $fields);
-        if (empty($fields) || empty($fields['hash'])) {
-            return redirect('/tg/')->with('error', 'Некорректные данные Telegram');
-        }
-
-        $providedHash = $fields['hash'];
-        $signableFields = $fields;
-        unset($signableFields['hash']);
-
-        $normalizedFields = [];
-        foreach ($signableFields as $key => $value) {
-            if ($value === null) continue;
-            $normalizedFields[(string) $key] = is_array($value)
-                ? json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
-                : (string) $value;
-        }
-
-        ksort($normalizedFields);
-        $dataCheckString = collect($normalizedFields)
-            ->map(fn(string $value, string $key) => "{$key}={$value}")
-            ->implode("\n");
-
-        $secretKey = hash_hmac('sha256', $botToken, 'WebAppData', true);
-        $calculatedHash = hash_hmac('sha256', $dataCheckString, $secretKey);
-
-        if (!hash_equals($calculatedHash, $providedHash)) {
-            Log::warning('tg_auth: bad HMAC', ['ip' => $request->ip()]);
-            return redirect('/tg/')->with('error', 'Неверная подпись Telegram');
-        }
-
-        // Validate auth_date freshness (24h window for VPN/proxy delays)
-        $authDate = (int) ($fields['auth_date'] ?? 0);
-        if ($authDate <= 0 || abs(time() - $authDate) > 86400) {
-            Log::warning('tg_auth: auth_date expired', ['auth_date' => $authDate, 'now' => time()]);
-            return redirect('/tg/')->with('error', 'Данные устарели, перезапустите мини-приложение');
-        }
-
-        // Extract Telegram user
-        $telegramUser = is_string($fields['user'] ?? null) ? json_decode($fields['user'], true) : null;
-        if (!is_array($telegramUser) || empty($telegramUser['id'])) {
-            return redirect('/tg/')->with('error', 'Нет данных пользователя');
-        }
-
-        // Find or create user
-        $telegramId = (string) $telegramUser['id'];
-        $user = User::where('oauth_provider', 'telegram')
-            ->where('oauth_id', $telegramId)
-            ->first();
-
-        if (!$user) {
-            $name = trim(($telegramUser['first_name'] ?? '') . ' ' . ($telegramUser['last_name'] ?? ''));
-            if ($name === '') {
-                $name = $telegramUser['username'] ?? 'User';
-            }
-            $user = User::create([
-                'name' => $name,
-                'oauth_provider' => 'telegram',
-                'oauth_id' => $telegramId,
-                'avatar' => $telegramUser['photo_url'] ?? null,
-                'trial_ends_at' => now()->addDays(7),
+        try {
+            [$authFields, $telegramUser] = $this->tgMiniAuth->extractAndVerify($initData);
+        } catch (\Throwable $e) {
+            Log::warning('tg_auth_verify_failed', [
+                'reason' => $e->getMessage(),
+                'ip' => $request->ip(),
             ]);
+            return redirect('/tg/')->with('error', 'Данные Telegram недействительны. Перезапустите mini app.');
         }
+
+        $user = $this->tgMiniAuth->findOrCreateUser($telegramUser);
 
         // Login with remember token + regenerate session for security
         Auth::login($user, true);
         $request->session()->regenerate();
 
         // Build redirect target
-        $startParam = trim((string) ($fields['start_param'] ?? $request->input('startParam', '')));
+        $startParam = trim((string) ($authFields['start_param'] ?? $request->input('startParam', '')));
         if ($startParam !== '') {
             $request->session()->put('telegram_start_param', $startParam);
         }
