@@ -19,7 +19,8 @@
     <a id="go" class="btn" href="{{ $redirectTo }}">Продолжить</a>
   </div>
   <script>
-    const url = @json($redirectTo);
+    const finalUrl = @json($redirectTo);
+    const continueUrl = '/tg/auth/continue?next=' + encodeURIComponent(finalUrl);
 
     // Emit bridge ping to confirm this page actually executes in client WebView.
     fetch('/tg/auth/bridge-ping', {
@@ -29,7 +30,7 @@
       body: JSON.stringify({ ts: Date.now() })
     }).catch(() => {});
 
-    setTimeout(() => { window.location.replace(url); }, 220);
+    setTimeout(() => { window.location.replace(continueUrl); }, 220);
   </script>
 </body>
 </html>

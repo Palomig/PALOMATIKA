@@ -406,6 +406,7 @@ Route::prefix('tg')->group(function () {
     // CSRF exempted (uses Telegram HMAC instead), see VerifyCsrfToken
     Route::post('/auth', [MiniAppController::class, 'authenticate'])->name('miniapp.auth');
     Route::post('/auth/bridge-ping', [MiniAppController::class, 'authBridgePing'])->name('miniapp.auth.bridge_ping');
+    Route::get('/auth/continue', [MiniAppController::class, 'authContinue'])->name('miniapp.auth.continue');
 
     // Authenticated Mini App routes
     Route::middleware(['auth'])->group(function () {

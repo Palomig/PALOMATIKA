@@ -211,6 +211,28 @@ class MiniAppController extends Controller
         return response()->json(['ok' => true]);
     }
 
+    public function authContinue(Request $request)
+    {
+        $user = Auth::user();
+        @file_put_contents(storage_path('app/tg_auth_trace.log'), json_encode([
+            'ts' => now()->toIso8601String(),
+            'event' => 'auth_continue',
+            'ctx' => [
+                'auth_check' => Auth::check(),
+                'user_id' => optional($user)->id,
+                'session_id' => $request->session()->getId(),
+                'ip' => $request->ip(),
+                'ua' => $request->userAgent(),
+            ],
+        ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . PHP_EOL, FILE_APPEND);
+
+        if (!$user) {
+            return redirect('/tg/')->with('error', 'Сессия входа не сохранилась. Попробуйте ещё раз.');
+        }
+
+        return redirect(!$user->onboarding_completed_at ? '/tg/onboarding' : '/tg/dashboard');
+    }
+
     /**
      * Onboarding form (GET).
      */
