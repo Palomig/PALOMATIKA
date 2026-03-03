@@ -17,8 +17,13 @@
     $showTaskAnswer = !($isVariant ?? false);
     $answerResolver = app(\App\Services\TaskAnswerResolver::class);
 
-    // Группируем tasks по 3 для формата ОГЭ
-    $taskGroups = array_chunk($tasks, 3);
+    $firstSvg = (string) (($tasks[0]['svg'] ?? '') ?: '');
+    $isThreePanelPerTaskMode = str_contains($firstSvg, 'data-topic11-z1-three-panels');
+
+    // Стандарт: группа по 3 графика. Для topic11-z1 три панели уже внутри одной задачи -> 1 задача = 1 группа.
+    $taskGroups = $isThreePanelPerTaskMode
+        ? array_map(static fn ($t) => [$t], $tasks)
+        : array_chunk($tasks, 3);
 @endphp
 
 <div class="space-y-10">
@@ -27,14 +32,20 @@
             $groupNumber = $groupIndex + 1;
             $taskKeys = [];
 
-            // Собираем все формулы группы (первая формула каждой задачи - правильный ответ)
+            // Формулы для отображения:
+            // - обычный режим: берём первую формулу из каждой задачи (А,Б,В)
+            // - three-panel режим: берём все формулы из текущей задачи
             $groupFormulas = [];
-            foreach ($group as $task) {
-                if (!empty($task['options'])) {
-                    $groupFormulas[] = $task['options'][0]; // Первая формула - правильный ответ
+            if ($isThreePanelPerTaskMode) {
+                $task0 = $group[0] ?? null;
+                $groupFormulas = is_array($task0['options'] ?? null) ? $task0['options'] : [];
+            } else {
+                foreach ($group as $task) {
+                    if (!empty($task['options'])) {
+                        $groupFormulas[] = $task['options'][0];
+                    }
                 }
             }
-            // Перемешиваем для отображения (но сохраняем оригинальный порядок)
             $displayFormulas = $groupFormulas;
         @endphp
 
@@ -118,21 +129,24 @@
             @endif
 
             {{-- Таблица ответов --}}
+            @php
+                $tableLabels = $isThreePanelPerTaskMode ? ['А', 'Б', 'В'] : collect($group)->keys()->map(fn($i) => $graphLabels[$i] ?? ($i + 1))->values()->all();
+            @endphp
             <div class="flex flex-col items-center gap-3">
                 <span class="text-slate-400 text-sm">В таблице укажите соответствующий номер формулы для каждого графика:</span>
                 <table class="border-collapse">
                     <thead>
                         <tr>
-                            @foreach($group as $taskIndex => $task)
+                            @foreach($tableLabels as $lbl)
                                 <th class="w-14 h-10 border border-slate-600 text-center text-cyan-400 font-medium bg-slate-800/50">
-                                    {{ $graphLabels[$taskIndex] ?? ($taskIndex + 1) }}
+                                    {{ $lbl }}
                                 </th>
                             @endforeach
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            @foreach($group as $taskIndex => $task)
+                            @foreach($tableLabels as $lbl)
                                 <td class="w-14 h-10 border border-slate-600 text-center bg-slate-700/30">
                                     <input type="text"
                                            maxlength="1"
