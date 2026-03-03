@@ -23,14 +23,6 @@
     const handoffToken = @json($handoffToken ?? '');
     const continueUrl = '/tg/auth/continue?next=' + encodeURIComponent(finalUrl) + (handoffToken ? '&token=' + encodeURIComponent(handoffToken) : '');
 
-    // Emit bridge ping to confirm this page actually executes in client WebView.
-    fetch('/tg/auth/bridge-ping', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({ ts: Date.now() })
-    }).catch(() => {});
-
     setTimeout(() => { window.location.replace(continueUrl); }, 220);
   </script>
 </body>
