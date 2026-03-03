@@ -13,6 +13,8 @@ use App\Http\Controllers\Api\SkillController;
 use App\Http\Controllers\Api\SmartCartProxyController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\TopicController;
+use App\Http\Controllers\Api\TmaAuthV2Controller;
+use App\Http\Controllers\Api\TmaOnboardingV2Controller;
 use App\Http\Controllers\Auth\TelegramBotAuthController;
 use App\Http\Controllers\GeometryEditorController;
 use App\Http\Controllers\TestPdfController;
@@ -23,6 +25,17 @@ use Illuminate\Support\Facades\Route;
 | API Routes
 |--------------------------------------------------------------------------
 */
+
+// MiniApp Auth v2 (token-based, independent from WebView cookie stability)
+Route::prefix('v2')->group(function () {
+    Route::post('/auth/tma', [TmaAuthV2Controller::class, 'auth']);
+    Route::post('/auth/refresh', [TmaAuthV2Controller::class, 'refresh']);
+
+    Route::middleware('auth.v2')->group(function () {
+        Route::get('/auth/me', [TmaAuthV2Controller::class, 'me']);
+        Route::post('/onboarding', [TmaOnboardingV2Controller::class, 'save']);
+    });
+});
 
 // Public routes
 Route::post('/auth/login', [AuthController::class, 'login']);
