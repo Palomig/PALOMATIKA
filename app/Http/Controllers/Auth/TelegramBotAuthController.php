@@ -448,7 +448,8 @@ class TelegramBotAuthController extends Controller
 
             $botUsername = (string) config('services.telegram.bot_username', 'palomatika_auth_bot');
             $startParam = 'oge_variant_hash_' . $variant->hash;
-            $shareLink = "https://t.me/{$botUsername}?startapp={$startParam}";
+            // Mini App deep-link format requires app path segment for proper "Запустить" card in Telegram.
+            $shareLink = "https://t.me/{$botUsername}/palomatika?startapp={$startParam}";
 
             $title = $mode === 'full' ? 'Полный вариант' : 'Смешанный мини-вариант';
 
