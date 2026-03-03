@@ -209,6 +209,6 @@ return [
     |
     */
 
-    'partitioned' => env('SESSION_PARTITIONED', true),
+    'partitioned' => env('SESSION_PARTITIONED', false),
 
 ];
