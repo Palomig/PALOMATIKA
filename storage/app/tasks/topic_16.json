@@ -13,7 +13,7 @@
       "title": "ФИПИ",
       "zadaniya": [
         {
-          "number": 1,
+          "number": 0,
           "instruction": "из банка ФИПИ",
           "type": "geometry",
           "svg_type": "square_circle_vertex",
@@ -31,92 +31,110 @@
               "src_key": "24.1",
               "text": "В окружность с центром O в точке вписан равносторонний треугольник. Расстояние от точки O до сторон треугольника равно 4√3. Найдите сторону треугольника.",
               "answer": "24",
-              "image": "p-28.svg",
+              "image": "p-28-v2.svg",
               "status": "draft",
               "id": 127,
-              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 220 220\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#ffffff\"/>\n\n  <!-- Circumcircle -->\n  <circle cx=\"110\" cy=\"110\" r=\"92\" fill=\"none\" stroke=\"#111\" stroke-width=\"2.2\"/>\n\n  <!-- Equilateral triangle inscribed in circle -->\n  <polygon points=\"110,18 30.33,156 189.67,156\" fill=\"none\" stroke=\"#111\" stroke-width=\"2.2\" stroke-linejoin=\"round\"/>\n\n  <!-- Segment from center to base -->\n  <line x1=\"110\" y1=\"110\" x2=\"110\" y2=\"156\" stroke=\"#111\" stroke-width=\"2.2\"/>\n\n  <!-- Right-angle marker at foot on base -->\n  <path d=\"M110 156 L118 156 L118 148 L110 148\" fill=\"none\" stroke=\"#111\" stroke-width=\"2\"/>\n\n  <!-- Center label -->\n  <text x=\"98\" y=\"101\" font-family=\"Times New Roman, serif\" font-style=\"italic\" font-size=\"28\" fill=\"#111\">O</text>\n</svg>",
+              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 220 220\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"110\" cy=\"110\" r=\"92\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <polygon points=\"110,18 30.33,156 189.67,156\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\" stroke-linejoin=\"round\"/>\n  <line x1=\"110\" y1=\"110\" x2=\"110\" y2=\"156\" stroke=\"#5a9fcf\" stroke-width=\"1.6\"/>\n  <path d=\"M110 156 L118 156 L118 148 L110 148\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <g transform=\"translate(110,110)\">\n    <line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"1.8\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <text x=\"99\" y=\"98\" fill=\"#e6f3ff\" font-size=\"22\" font-style=\"italic\" font-family=\"Times New Roman, serif\">O</text>\n</svg>",
               "svg_type": "geometry"
             },
             {
               "src_key": "24.2",
               "text": "В окружность с центром O в точке вписан равносторонний треугольник. Расстояние от точки O до сторон треугольника равно 5√3. Найдите сторону треугольника.",
               "answer": "30",
-              "image": "p-28.svg",
+              "image": "p-28-v2.svg",
               "status": "draft",
               "id": 128,
-              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 220 220\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#ffffff\"/>\n\n  <!-- Circumcircle -->\n  <circle cx=\"110\" cy=\"110\" r=\"92\" fill=\"none\" stroke=\"#111\" stroke-width=\"2.2\"/>\n\n  <!-- Equilateral triangle inscribed in circle -->\n  <polygon points=\"110,18 30.33,156 189.67,156\" fill=\"none\" stroke=\"#111\" stroke-width=\"2.2\" stroke-linejoin=\"round\"/>\n\n  <!-- Segment from center to base -->\n  <line x1=\"110\" y1=\"110\" x2=\"110\" y2=\"156\" stroke=\"#111\" stroke-width=\"2.2\"/>\n\n  <!-- Right-angle marker at foot on base -->\n  <path d=\"M110 156 L118 156 L118 148 L110 148\" fill=\"none\" stroke=\"#111\" stroke-width=\"2\"/>\n\n  <!-- Center label -->\n  <text x=\"98\" y=\"101\" font-family=\"Times New Roman, serif\" font-style=\"italic\" font-size=\"28\" fill=\"#111\">O</text>\n</svg>",
+              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 220 220\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"110\" cy=\"110\" r=\"92\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <polygon points=\"110,18 30.33,156 189.67,156\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\" stroke-linejoin=\"round\"/>\n  <line x1=\"110\" y1=\"110\" x2=\"110\" y2=\"156\" stroke=\"#5a9fcf\" stroke-width=\"1.6\"/>\n  <path d=\"M110 156 L118 156 L118 148 L110 148\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <g transform=\"translate(110,110)\">\n    <line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"1.8\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <text x=\"99\" y=\"98\" fill=\"#e6f3ff\" font-size=\"22\" font-style=\"italic\" font-family=\"Times New Roman, serif\">O</text>\n</svg>",
               "svg_type": "geometry"
             },
             {
               "src_key": "24.3",
               "text": "В окружность с центром O в точке вписан равносторонний треугольник. Расстояние от точки O до сторон треугольника равно √3/3. Найдите сторону треугольника.",
               "answer": "2",
-              "image": "p-28.svg",
+              "image": "p-28-v2.svg",
               "status": "draft",
               "id": 129,
-              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 220 220\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#ffffff\"/>\n\n  <!-- Circumcircle -->\n  <circle cx=\"110\" cy=\"110\" r=\"92\" fill=\"none\" stroke=\"#111\" stroke-width=\"2.2\"/>\n\n  <!-- Equilateral triangle inscribed in circle -->\n  <polygon points=\"110,18 30.33,156 189.67,156\" fill=\"none\" stroke=\"#111\" stroke-width=\"2.2\" stroke-linejoin=\"round\"/>\n\n  <!-- Segment from center to base -->\n  <line x1=\"110\" y1=\"110\" x2=\"110\" y2=\"156\" stroke=\"#111\" stroke-width=\"2.2\"/>\n\n  <!-- Right-angle marker at foot on base -->\n  <path d=\"M110 156 L118 156 L118 148 L110 148\" fill=\"none\" stroke=\"#111\" stroke-width=\"2\"/>\n\n  <!-- Center label -->\n  <text x=\"98\" y=\"101\" font-family=\"Times New Roman, serif\" font-style=\"italic\" font-size=\"28\" fill=\"#111\">O</text>\n</svg>",
+              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 220 220\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"110\" cy=\"110\" r=\"92\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <polygon points=\"110,18 30.33,156 189.67,156\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\" stroke-linejoin=\"round\"/>\n  <line x1=\"110\" y1=\"110\" x2=\"110\" y2=\"156\" stroke=\"#5a9fcf\" stroke-width=\"1.6\"/>\n  <path d=\"M110 156 L118 156 L118 148 L110 148\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <g transform=\"translate(110,110)\">\n    <line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"1.8\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <text x=\"99\" y=\"98\" fill=\"#e6f3ff\" font-size=\"22\" font-style=\"italic\" font-family=\"Times New Roman, serif\">O</text>\n</svg>",
               "svg_type": "geometry"
             },
             {
               "src_key": "24.4",
               "text": "В окружность с центром O в точке вписан равносторонний треугольник. Расстояние от точки O до сторон треугольника равно √3. Найдите сторону треугольника.",
               "answer": "6",
-              "image": "p-28.svg",
+              "image": "p-28-v2.svg",
               "status": "draft",
               "id": 130,
-              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 220 220\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#ffffff\"/>\n\n  <!-- Circumcircle -->\n  <circle cx=\"110\" cy=\"110\" r=\"92\" fill=\"none\" stroke=\"#111\" stroke-width=\"2.2\"/>\n\n  <!-- Equilateral triangle inscribed in circle -->\n  <polygon points=\"110,18 30.33,156 189.67,156\" fill=\"none\" stroke=\"#111\" stroke-width=\"2.2\" stroke-linejoin=\"round\"/>\n\n  <!-- Segment from center to base -->\n  <line x1=\"110\" y1=\"110\" x2=\"110\" y2=\"156\" stroke=\"#111\" stroke-width=\"2.2\"/>\n\n  <!-- Right-angle marker at foot on base -->\n  <path d=\"M110 156 L118 156 L118 148 L110 148\" fill=\"none\" stroke=\"#111\" stroke-width=\"2\"/>\n\n  <!-- Center label -->\n  <text x=\"98\" y=\"101\" font-family=\"Times New Roman, serif\" font-style=\"italic\" font-size=\"28\" fill=\"#111\">O</text>\n</svg>",
+              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 220 220\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"110\" cy=\"110\" r=\"92\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <polygon points=\"110,18 30.33,156 189.67,156\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\" stroke-linejoin=\"round\"/>\n  <line x1=\"110\" y1=\"110\" x2=\"110\" y2=\"156\" stroke=\"#5a9fcf\" stroke-width=\"1.6\"/>\n  <path d=\"M110 156 L118 156 L118 148 L110 148\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <g transform=\"translate(110,110)\">\n    <line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"1.8\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <text x=\"99\" y=\"98\" fill=\"#e6f3ff\" font-size=\"22\" font-style=\"italic\" font-family=\"Times New Roman, serif\">O</text>\n</svg>",
               "svg_type": "geometry"
             },
             {
               "src_key": "24.5",
               "text": "В окружность с центром O в точке вписан равносторонний треугольник. Расстояние от точки O до сторон треугольника равно 2√3. Найдите сторону треугольника.",
               "answer": "12",
-              "image": "p-28.svg",
+              "image": "p-28-v2.svg",
               "status": "draft",
               "id": 131,
-              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 220 220\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#ffffff\"/>\n\n  <!-- Circumcircle -->\n  <circle cx=\"110\" cy=\"110\" r=\"92\" fill=\"none\" stroke=\"#111\" stroke-width=\"2.2\"/>\n\n  <!-- Equilateral triangle inscribed in circle -->\n  <polygon points=\"110,18 30.33,156 189.67,156\" fill=\"none\" stroke=\"#111\" stroke-width=\"2.2\" stroke-linejoin=\"round\"/>\n\n  <!-- Segment from center to base -->\n  <line x1=\"110\" y1=\"110\" x2=\"110\" y2=\"156\" stroke=\"#111\" stroke-width=\"2.2\"/>\n\n  <!-- Right-angle marker at foot on base -->\n  <path d=\"M110 156 L118 156 L118 148 L110 148\" fill=\"none\" stroke=\"#111\" stroke-width=\"2\"/>\n\n  <!-- Center label -->\n  <text x=\"98\" y=\"101\" font-family=\"Times New Roman, serif\" font-style=\"italic\" font-size=\"28\" fill=\"#111\">O</text>\n</svg>",
+              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 220 220\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"110\" cy=\"110\" r=\"92\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <polygon points=\"110,18 30.33,156 189.67,156\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\" stroke-linejoin=\"round\"/>\n  <line x1=\"110\" y1=\"110\" x2=\"110\" y2=\"156\" stroke=\"#5a9fcf\" stroke-width=\"1.6\"/>\n  <path d=\"M110 156 L118 156 L118 148 L110 148\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <g transform=\"translate(110,110)\">\n    <line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"1.8\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <text x=\"99\" y=\"98\" fill=\"#e6f3ff\" font-size=\"22\" font-style=\"italic\" font-family=\"Times New Roman, serif\">O</text>\n</svg>",
               "svg_type": "geometry"
             },
             {
               "src_key": "24.6",
               "text": "В окружность с центром O в точке вписан равносторонний треугольник. Расстояние от точки O до сторон треугольника равно 2√3/3. Найдите сторону треугольника.",
               "answer": "4",
-              "image": "p-28.svg",
+              "image": "p-28-v2.svg",
               "status": "draft",
               "id": 132,
-              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 220 220\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#ffffff\"/>\n\n  <!-- Circumcircle -->\n  <circle cx=\"110\" cy=\"110\" r=\"92\" fill=\"none\" stroke=\"#111\" stroke-width=\"2.2\"/>\n\n  <!-- Equilateral triangle inscribed in circle -->\n  <polygon points=\"110,18 30.33,156 189.67,156\" fill=\"none\" stroke=\"#111\" stroke-width=\"2.2\" stroke-linejoin=\"round\"/>\n\n  <!-- Segment from center to base -->\n  <line x1=\"110\" y1=\"110\" x2=\"110\" y2=\"156\" stroke=\"#111\" stroke-width=\"2.2\"/>\n\n  <!-- Right-angle marker at foot on base -->\n  <path d=\"M110 156 L118 156 L118 148 L110 148\" fill=\"none\" stroke=\"#111\" stroke-width=\"2\"/>\n\n  <!-- Center label -->\n  <text x=\"98\" y=\"101\" font-family=\"Times New Roman, serif\" font-style=\"italic\" font-size=\"28\" fill=\"#111\">O</text>\n</svg>",
+              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 220 220\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"110\" cy=\"110\" r=\"92\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <polygon points=\"110,18 30.33,156 189.67,156\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\" stroke-linejoin=\"round\"/>\n  <line x1=\"110\" y1=\"110\" x2=\"110\" y2=\"156\" stroke=\"#5a9fcf\" stroke-width=\"1.6\"/>\n  <path d=\"M110 156 L118 156 L118 148 L110 148\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <g transform=\"translate(110,110)\">\n    <line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"1.8\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <text x=\"99\" y=\"98\" fill=\"#e6f3ff\" font-size=\"22\" font-style=\"italic\" font-family=\"Times New Roman, serif\">O</text>\n</svg>",
               "svg_type": "geometry"
             },
             {
               "src_key": "24.7",
               "text": "В окружность с центром O в точке вписан равносторонний треугольник. Расстояние от точки O до сторон треугольника равно 3√3/2. Найдите сторону треугольника.",
               "answer": "9",
-              "image": "p-28.svg",
+              "image": "p-28-v2.svg",
               "status": "draft",
               "id": 133,
-              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 220 220\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#ffffff\"/>\n\n  <!-- Circumcircle -->\n  <circle cx=\"110\" cy=\"110\" r=\"92\" fill=\"none\" stroke=\"#111\" stroke-width=\"2.2\"/>\n\n  <!-- Equilateral triangle inscribed in circle -->\n  <polygon points=\"110,18 30.33,156 189.67,156\" fill=\"none\" stroke=\"#111\" stroke-width=\"2.2\" stroke-linejoin=\"round\"/>\n\n  <!-- Segment from center to base -->\n  <line x1=\"110\" y1=\"110\" x2=\"110\" y2=\"156\" stroke=\"#111\" stroke-width=\"2.2\"/>\n\n  <!-- Right-angle marker at foot on base -->\n  <path d=\"M110 156 L118 156 L118 148 L110 148\" fill=\"none\" stroke=\"#111\" stroke-width=\"2\"/>\n\n  <!-- Center label -->\n  <text x=\"98\" y=\"101\" font-family=\"Times New Roman, serif\" font-style=\"italic\" font-size=\"28\" fill=\"#111\">O</text>\n</svg>",
+              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 220 220\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"110\" cy=\"110\" r=\"92\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <polygon points=\"110,18 30.33,156 189.67,156\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\" stroke-linejoin=\"round\"/>\n  <line x1=\"110\" y1=\"110\" x2=\"110\" y2=\"156\" stroke=\"#5a9fcf\" stroke-width=\"1.6\"/>\n  <path d=\"M110 156 L118 156 L118 148 L110 148\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <g transform=\"translate(110,110)\">\n    <line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"1.8\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <text x=\"99\" y=\"98\" fill=\"#e6f3ff\" font-size=\"22\" font-style=\"italic\" font-family=\"Times New Roman, serif\">O</text>\n</svg>",
               "svg_type": "geometry"
             },
             {
               "src_key": "24.8",
               "text": "В окружность с центром O в точке вписан равносторонний треугольник. Расстояние от точки O до сторон треугольника равно 4√3/3. Найдите сторону треугольника.",
               "answer": "8",
-              "image": "p-28.svg",
+              "image": "p-28-v2.svg",
               "status": "draft",
               "id": 134,
-              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 220 220\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#ffffff\"/>\n\n  <!-- Circumcircle -->\n  <circle cx=\"110\" cy=\"110\" r=\"92\" fill=\"none\" stroke=\"#111\" stroke-width=\"2.2\"/>\n\n  <!-- Equilateral triangle inscribed in circle -->\n  <polygon points=\"110,18 30.33,156 189.67,156\" fill=\"none\" stroke=\"#111\" stroke-width=\"2.2\" stroke-linejoin=\"round\"/>\n\n  <!-- Segment from center to base -->\n  <line x1=\"110\" y1=\"110\" x2=\"110\" y2=\"156\" stroke=\"#111\" stroke-width=\"2.2\"/>\n\n  <!-- Right-angle marker at foot on base -->\n  <path d=\"M110 156 L118 156 L118 148 L110 148\" fill=\"none\" stroke=\"#111\" stroke-width=\"2\"/>\n\n  <!-- Center label -->\n  <text x=\"98\" y=\"101\" font-family=\"Times New Roman, serif\" font-style=\"italic\" font-size=\"28\" fill=\"#111\">O</text>\n</svg>",
+              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 220 220\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"110\" cy=\"110\" r=\"92\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <polygon points=\"110,18 30.33,156 189.67,156\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\" stroke-linejoin=\"round\"/>\n  <line x1=\"110\" y1=\"110\" x2=\"110\" y2=\"156\" stroke=\"#5a9fcf\" stroke-width=\"1.6\"/>\n  <path d=\"M110 156 L118 156 L118 148 L110 148\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <g transform=\"translate(110,110)\">\n    <line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"1.8\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <text x=\"99\" y=\"98\" fill=\"#e6f3ff\" font-size=\"22\" font-style=\"italic\" font-family=\"Times New Roman, serif\">O</text>\n</svg>",
               "svg_type": "geometry"
             },
             {
               "src_key": "24.9",
               "text": "В окружность с центром O в точке вписан равносторонний треугольник. Расстояние от точки O до сторон треугольника равно √3/6. Найдите сторону треугольника.",
               "answer": "1",
-              "image": "p-28.svg",
+              "image": "p-28-v2.svg",
               "status": "draft",
               "id": 135,
-              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 220 220\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#ffffff\"/>\n\n  <!-- Circumcircle -->\n  <circle cx=\"110\" cy=\"110\" r=\"92\" fill=\"none\" stroke=\"#111\" stroke-width=\"2.2\"/>\n\n  <!-- Equilateral triangle inscribed in circle -->\n  <polygon points=\"110,18 30.33,156 189.67,156\" fill=\"none\" stroke=\"#111\" stroke-width=\"2.2\" stroke-linejoin=\"round\"/>\n\n  <!-- Segment from center to base -->\n  <line x1=\"110\" y1=\"110\" x2=\"110\" y2=\"156\" stroke=\"#111\" stroke-width=\"2.2\"/>\n\n  <!-- Right-angle marker at foot on base -->\n  <path d=\"M110 156 L118 156 L118 148 L110 148\" fill=\"none\" stroke=\"#111\" stroke-width=\"2\"/>\n\n  <!-- Center label -->\n  <text x=\"98\" y=\"101\" font-family=\"Times New Roman, serif\" font-style=\"italic\" font-size=\"28\" fill=\"#111\">O</text>\n</svg>",
+              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 220 220\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"110\" cy=\"110\" r=\"92\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <polygon points=\"110,18 30.33,156 189.67,156\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\" stroke-linejoin=\"round\"/>\n  <line x1=\"110\" y1=\"110\" x2=\"110\" y2=\"156\" stroke=\"#5a9fcf\" stroke-width=\"1.6\"/>\n  <path d=\"M110 156 L118 156 L118 148 L110 148\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <g transform=\"translate(110,110)\">\n    <line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"1.8\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <text x=\"99\" y=\"98\" fill=\"#e6f3ff\" font-size=\"22\" font-style=\"italic\" font-family=\"Times New Roman, serif\">O</text>\n</svg>",
               "svg_type": "geometry"
-            },
+            }
+          ],
+          "label": "Новые задания"
+        },
+        {
+          "number": 1,
+          "instruction": "из банка ФИПИ",
+          "type": "geometry",
+          "svg_type": "square_circle_vertex",
+          "geometry": {
+            "viewBox": [
+              0,
+              0,
+              220,
+              200
+            ],
+            "description": "Square ABCD, O is midpoint of CD, circle with center O passes through A"
+          },
+          "tasks": [
             {
               "id": 1,
               "text": "Точка O является серединой стороны CD квадрата ABCD. Радиус окружности с центром в точке O, проходящей через вершину A, равен 2√5. Найдите площадь квадрата ABCD.",
@@ -206,7 +224,7 @@
               "image": "p-28.jpg"
             }
           ],
-          "label": "Новые задания"
+          "label": "Задание 1"
         },
         {
           "number": 2,
