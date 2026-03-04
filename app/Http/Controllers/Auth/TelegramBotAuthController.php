@@ -545,8 +545,15 @@ class TelegramBotAuthController extends Controller
 
             $botUsername = (string) config('services.telegram.bot_username', 'palomatika_auth_bot');
             $startParam = 'oge_variant_hash_' . $variant->hash;
-            // Use bot deep link without app path; app path may 404 if short name differs.
-            $shareLink = "https://t.me/{$botUsername}?startapp={$startParam}";
+
+            $webAppBaseUrl = trim((string) config('services.telegram.webapp_base_url', ''));
+            if ($webAppBaseUrl !== '') {
+                $separator = str_contains($webAppBaseUrl, '?') ? '&' : '?';
+                $shareLink = $webAppBaseUrl . $separator . 'startapp=' . rawurlencode($startParam);
+            } else {
+                // Fallback Telegram deep-link if web app base URL is not configured.
+                $shareLink = "https://t.me/{$botUsername}?startapp={$startParam}";
+            }
 
             $title = $mode === 'full' ? 'Полный вариант' : 'Смешанный мини-вариант';
 
