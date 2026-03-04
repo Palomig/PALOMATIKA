@@ -31,7 +31,7 @@
               "src_key": "24.1",
               "text": "См. условие на изображении. Введите ответ.",
               "answer": "24",
-              "image": "p-23.jpg",
+              "image": "p-28.jpg",
               "status": "draft",
               "id": 127
             },
@@ -39,7 +39,7 @@
               "src_key": "24.2",
               "text": "См. условие на изображении. Введите ответ.",
               "answer": "30",
-              "image": "p-23.jpg",
+              "image": "p-28.jpg",
               "status": "draft",
               "id": 128
             },
@@ -47,7 +47,7 @@
               "src_key": "24.3",
               "text": "См. условие на изображении. Введите ответ.",
               "answer": "2",
-              "image": "p-23.jpg",
+              "image": "p-28.jpg",
               "status": "draft",
               "id": 129
             },
@@ -55,7 +55,7 @@
               "src_key": "24.4",
               "text": "См. условие на изображении. Введите ответ.",
               "answer": "6",
-              "image": "p-23.jpg",
+              "image": "p-28.jpg",
               "status": "draft",
               "id": 130
             },
@@ -63,7 +63,7 @@
               "src_key": "24.5",
               "text": "См. условие на изображении. Введите ответ.",
               "answer": "12",
-              "image": "p-23.jpg",
+              "image": "p-28.jpg",
               "status": "draft",
               "id": 131
             },
@@ -71,7 +71,7 @@
               "src_key": "24.6",
               "text": "См. условие на изображении. Введите ответ.",
               "answer": "4",
-              "image": "p-23.jpg",
+              "image": "p-28.jpg",
               "status": "draft",
               "id": 132
             },
@@ -79,7 +79,7 @@
               "src_key": "24.7",
               "text": "См. условие на изображении. Введите ответ.",
               "answer": "9",
-              "image": "p-23.jpg",
+              "image": "p-28.jpg",
               "status": "draft",
               "id": 133
             },
@@ -87,7 +87,7 @@
               "src_key": "24.8",
               "text": "См. условие на изображении. Введите ответ.",
               "answer": "8",
-              "image": "p-23.jpg",
+              "image": "p-28.jpg",
               "status": "draft",
               "id": 134
             },
@@ -95,7 +95,7 @@
               "src_key": "24.9",
               "text": "См. условие на изображении. Введите ответ.",
               "answer": "1",
-              "image": "p-23.jpg",
+              "image": "p-28.jpg",
               "status": "draft",
               "id": 135
             },
@@ -107,7 +107,8 @@
                 "radius": "2√5"
               },
               "svg": "<svg viewBox=\"0 0 220 200\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"110\" cy=\"110\" r=\"85\" fill=\"none\" stroke=\"#5a9fcf\" stroke-width=\"1.5\"/>\n  <polygon points=\"72,34 148,34 148,110 72,110\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <line x1=\"110\" y1=\"110\" x2=\"72\" y2=\"34\" stroke=\"#5a9fcf\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n  <g transform=\"translate(110, 110)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(72, 34)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(148, 34)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(148, 110)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(72, 110)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <text x=\"60\" y=\"26\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">A</text>\n  <text x=\"154\" y=\"26\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">B</text>\n  <text x=\"154\" y=\"124\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">C</text>\n  <text x=\"60\" y=\"124\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">D</text>\n  <text x=\"110\" y=\"128\" fill=\"#5a9fcf\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">O</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "image": "p-28.jpg"
             },
             {
               "id": 2,
@@ -117,7 +118,8 @@
                 "radius": "3√5"
               },
               "svg": "<svg viewBox=\"0 0 220 200\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"110\" cy=\"110\" r=\"85\" fill=\"none\" stroke=\"#5a9fcf\" stroke-width=\"1.5\"/>\n  <polygon points=\"72,34 148,34 148,110 72,110\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <line x1=\"110\" y1=\"110\" x2=\"72\" y2=\"34\" stroke=\"#5a9fcf\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n  <g transform=\"translate(110, 110)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(72, 34)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(148, 34)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(148, 110)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(72, 110)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <text x=\"60\" y=\"26\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">A</text>\n  <text x=\"154\" y=\"26\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">B</text>\n  <text x=\"154\" y=\"124\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">C</text>\n  <text x=\"60\" y=\"124\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">D</text>\n  <text x=\"110\" y=\"128\" fill=\"#5a9fcf\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">O</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "image": "p-28.jpg"
             },
             {
               "id": 3,
@@ -127,7 +129,8 @@
                 "radius": "√10"
               },
               "svg": "<svg viewBox=\"0 0 220 200\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"110\" cy=\"110\" r=\"85\" fill=\"none\" stroke=\"#5a9fcf\" stroke-width=\"1.5\"/>\n  <polygon points=\"72,34 148,34 148,110 72,110\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <line x1=\"110\" y1=\"110\" x2=\"72\" y2=\"34\" stroke=\"#5a9fcf\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n  <g transform=\"translate(110, 110)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(72, 34)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(148, 34)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(148, 110)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(72, 110)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <text x=\"60\" y=\"26\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">A</text>\n  <text x=\"154\" y=\"26\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">B</text>\n  <text x=\"154\" y=\"124\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">C</text>\n  <text x=\"60\" y=\"124\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">D</text>\n  <text x=\"110\" y=\"128\" fill=\"#5a9fcf\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">O</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "image": "p-28.jpg"
             },
             {
               "id": 4,
@@ -137,7 +140,8 @@
                 "radius": "√5/2"
               },
               "svg": "<svg viewBox=\"0 0 220 200\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"110\" cy=\"110\" r=\"85\" fill=\"none\" stroke=\"#5a9fcf\" stroke-width=\"1.5\"/>\n  <polygon points=\"72,34 148,34 148,110 72,110\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <line x1=\"110\" y1=\"110\" x2=\"72\" y2=\"34\" stroke=\"#5a9fcf\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n  <g transform=\"translate(110, 110)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(72, 34)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(148, 34)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(148, 110)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(72, 110)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <text x=\"60\" y=\"26\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">A</text>\n  <text x=\"154\" y=\"26\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">B</text>\n  <text x=\"154\" y=\"124\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">C</text>\n  <text x=\"60\" y=\"124\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">D</text>\n  <text x=\"110\" y=\"128\" fill=\"#5a9fcf\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">O</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "image": "p-28.jpg"
             },
             {
               "id": 5,
@@ -147,7 +151,8 @@
                 "radius": "1"
               },
               "svg": "<svg viewBox=\"0 0 220 200\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"110\" cy=\"110\" r=\"85\" fill=\"none\" stroke=\"#5a9fcf\" stroke-width=\"1.5\"/>\n  <polygon points=\"72,34 148,34 148,110 72,110\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <line x1=\"110\" y1=\"110\" x2=\"72\" y2=\"34\" stroke=\"#5a9fcf\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n  <g transform=\"translate(110, 110)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(72, 34)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(148, 34)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(148, 110)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(72, 110)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <text x=\"60\" y=\"26\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">A</text>\n  <text x=\"154\" y=\"26\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">B</text>\n  <text x=\"154\" y=\"124\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">C</text>\n  <text x=\"60\" y=\"124\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">D</text>\n  <text x=\"110\" y=\"128\" fill=\"#5a9fcf\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">O</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "image": "p-28.jpg"
             },
             {
               "id": 6,
@@ -157,7 +162,8 @@
                 "radius": "3"
               },
               "svg": "<svg viewBox=\"0 0 220 200\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"110\" cy=\"110\" r=\"85\" fill=\"none\" stroke=\"#5a9fcf\" stroke-width=\"1.5\"/>\n  <polygon points=\"72,34 148,34 148,110 72,110\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <line x1=\"110\" y1=\"110\" x2=\"72\" y2=\"34\" stroke=\"#5a9fcf\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n  <g transform=\"translate(110, 110)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(72, 34)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(148, 34)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(148, 110)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(72, 110)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <text x=\"60\" y=\"26\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">A</text>\n  <text x=\"154\" y=\"26\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">B</text>\n  <text x=\"154\" y=\"124\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">C</text>\n  <text x=\"60\" y=\"124\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">D</text>\n  <text x=\"110\" y=\"128\" fill=\"#5a9fcf\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">O</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "image": "p-28.jpg"
             },
             {
               "id": 7,
@@ -167,7 +173,8 @@
                 "radius": "0.5"
               },
               "svg": "<svg viewBox=\"0 0 220 200\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"110\" cy=\"110\" r=\"85\" fill=\"none\" stroke=\"#5a9fcf\" stroke-width=\"1.5\"/>\n  <polygon points=\"72,34 148,34 148,110 72,110\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <line x1=\"110\" y1=\"110\" x2=\"72\" y2=\"34\" stroke=\"#5a9fcf\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n  <g transform=\"translate(110, 110)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(72, 34)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(148, 34)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(148, 110)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(72, 110)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <text x=\"60\" y=\"26\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">A</text>\n  <text x=\"154\" y=\"26\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">B</text>\n  <text x=\"154\" y=\"124\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">C</text>\n  <text x=\"60\" y=\"124\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">D</text>\n  <text x=\"110\" y=\"128\" fill=\"#5a9fcf\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">O</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "image": "p-28.jpg"
             },
             {
               "id": 8,
@@ -177,7 +184,8 @@
                 "radius": "1.5"
               },
               "svg": "<svg viewBox=\"0 0 220 200\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"110\" cy=\"110\" r=\"85\" fill=\"none\" stroke=\"#5a9fcf\" stroke-width=\"1.5\"/>\n  <polygon points=\"72,34 148,34 148,110 72,110\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <line x1=\"110\" y1=\"110\" x2=\"72\" y2=\"34\" stroke=\"#5a9fcf\" stroke-width=\"1.5\" stroke-dasharray=\"6,4\"/>\n  <g transform=\"translate(110, 110)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(72, 34)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(148, 34)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(148, 110)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <g transform=\"translate(72, 110)\">\n    <line x1=\"-5\" y1=\"0\" x2=\"5\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <line x1=\"0\" y1=\"-5\" x2=\"0\" y2=\"5\" stroke=\"#7eb8da\" stroke-width=\"1\"/>\n    <circle cx=\"0\" cy=\"0\" r=\"2\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/>\n  </g>\n  <text x=\"60\" y=\"26\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">A</text>\n  <text x=\"154\" y=\"26\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">B</text>\n  <text x=\"154\" y=\"124\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">C</text>\n  <text x=\"60\" y=\"124\" fill=\"#c8dce8\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">D</text>\n  <text x=\"110\" y=\"128\" fill=\"#5a9fcf\" font-size=\"14\" font-family=\"'Times New Roman', serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\" class=\"geo-label\">O</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "image": "p-28.jpg"
             }
           ],
           "label": "Новые задания"
