@@ -179,12 +179,12 @@
 
   {{-- SMALL TILES --}}
   <div class="tiles-grid">
-    <div class="tile-sm" style="opacity:.6; pointer-events:none; cursor:default;">
+    <a href="/tg/new-tasks" class="tile-sm">
       <div class="tile-sm-icon">🆕</div>
       <div class="tile-sm-name">Новые задания</div>
       <div class="tile-sm-desc">из банка ФИПИ</div>
       <div class="tile-badge badge-red tile-badge-top-right">Новое</div>
-    </div>
+    </a>
     @if($lastAttempt)
     <a href="/tg/results/{{ $lastAttempt->id }}" class="tile-sm">
       <div class="tile-sm-icon">🔍</div>

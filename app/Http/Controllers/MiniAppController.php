@@ -277,27 +277,23 @@ class MiniAppController extends Controller
                 }
             }
 
-            // One representative per task type (normalize numbers to avoid duplicates)
-            $seen = [];
-            $uniq = [];
+            $all = [];
             foreach ($tasks as $task) {
                 $text = trim((string) ($task['text'] ?? ''));
                 if ($text === '') {
                     continue;
                 }
-                $normalized = preg_replace('/\d+[\d.,]*/u', '#', $text);
-                if (!isset($seen[$normalized])) {
-                    $seen[$normalized] = true;
-                    $uniq[] = [
-                        'id' => $task['id'] ?? null,
-                        'text' => $text,
-                        'svg' => $task['svg'] ?? null,
-                        'image' => $task['image'] ?? null,
-                    ];
-                }
+
+                $all[] = [
+                    'id' => $task['id'] ?? null,
+                    'src_key' => $task['src_key'] ?? null,
+                    'text' => $text,
+                    'svg' => $task['svg'] ?? null,
+                    'image' => $task['image'] ?? null,
+                ];
             }
 
-            $newByTopic[$topicId] = $uniq;
+            $newByTopic[$topicId] = $all;
         }
 
         return view('miniapp.new-tasks', [
