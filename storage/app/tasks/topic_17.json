@@ -51,7 +51,9 @@
               "answer": "69",
               "image": "p-15.jpg",
               "status": "draft",
-              "id": 129
+              "id": 129,
+              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 420\" width=\"320\" height=\"420\">\n  <g fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <!-- Rhombus -->\n    <polygon points=\"160,24 248,170 160,396 72,170\"/>\n\n    <!-- Main diagonal -->\n    <line x1=\"160\" y1=\"24\" x2=\"160\" y2=\"396\"/>\n\n    <!-- Side from left vertex to side BC -->\n    <line x1=\"72\" y1=\"170\" x2=\"212\" y2=\"228\"/>\n\n    <!-- Right side segment highlight (for angle/perpendicular context) -->\n    <line x1=\"248\" y1=\"170\" x2=\"212\" y2=\"228\"/>\n\n    <!-- Perpendicular mark near intersection with right side -->\n    <path d=\"M214 231 L208 218 L221 212\"/>\n\n    <!-- Angle arc at intersection with diagonal -->\n    <path d=\"M160 206 A28 28 0 0 0 133 221\"/>\n\n    <!-- Double arc at right vertex -->\n    <path d=\"M248 170 A24 24 0 0 1 234 191\"/>\n    <path d=\"M248 170 A31 31 0 0 1 230 197\"/>\n  </g>\n</svg>",
+              "svg_type": "rhombus"
             },
             {
               "src_key": "17.2",
@@ -59,7 +61,9 @@
               "answer": "71",
               "image": "p-15.jpg",
               "status": "draft",
-              "id": 130
+              "id": 130,
+              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 420\" width=\"320\" height=\"420\">\n  <g fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <!-- Rhombus -->\n    <polygon points=\"160,24 248,170 160,396 72,170\"/>\n\n    <!-- Main diagonal -->\n    <line x1=\"160\" y1=\"24\" x2=\"160\" y2=\"396\"/>\n\n    <!-- Side from left vertex to side BC -->\n    <line x1=\"72\" y1=\"170\" x2=\"212\" y2=\"228\"/>\n\n    <!-- Right side segment highlight (for angle/perpendicular context) -->\n    <line x1=\"248\" y1=\"170\" x2=\"212\" y2=\"228\"/>\n\n    <!-- Perpendicular mark near intersection with right side -->\n    <path d=\"M214 231 L208 218 L221 212\"/>\n\n    <!-- Angle arc at intersection with diagonal -->\n    <path d=\"M160 206 A28 28 0 0 0 133 221\"/>\n\n    <!-- Double arc at right vertex -->\n    <path d=\"M248 170 A24 24 0 0 1 234 191\"/>\n    <path d=\"M248 170 A31 31 0 0 1 230 197\"/>\n  </g>\n</svg>",
+              "svg_type": "rhombus"
             },
             {
               "src_key": "17.3",
@@ -67,7 +71,9 @@
               "answer": "55",
               "image": "p-15.jpg",
               "status": "draft",
-              "id": 131
+              "id": 131,
+              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 420\" width=\"320\" height=\"420\">\n  <g fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <!-- Rhombus -->\n    <polygon points=\"160,24 248,170 160,396 72,170\"/>\n\n    <!-- Main diagonal -->\n    <line x1=\"160\" y1=\"24\" x2=\"160\" y2=\"396\"/>\n\n    <!-- Side from left vertex to side BC -->\n    <line x1=\"72\" y1=\"170\" x2=\"212\" y2=\"228\"/>\n\n    <!-- Right side segment highlight (for angle/perpendicular context) -->\n    <line x1=\"248\" y1=\"170\" x2=\"212\" y2=\"228\"/>\n\n    <!-- Perpendicular mark near intersection with right side -->\n    <path d=\"M214 231 L208 218 L221 212\"/>\n\n    <!-- Angle arc at intersection with diagonal -->\n    <path d=\"M160 206 A28 28 0 0 0 133 221\"/>\n\n    <!-- Double arc at right vertex -->\n    <path d=\"M248 170 A24 24 0 0 1 234 191\"/>\n    <path d=\"M248 170 A31 31 0 0 1 230 197\"/>\n  </g>\n</svg>",
+              "svg_type": "rhombus"
             },
             {
               "src_key": "17.4",
@@ -75,7 +81,9 @@
               "answer": "55",
               "image": "p-15.jpg",
               "status": "draft",
-              "id": 132
+              "id": 132,
+              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 420\" width=\"320\" height=\"420\">\n  <g fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <!-- Rhombus -->\n    <polygon points=\"160,24 248,170 160,396 72,170\"/>\n\n    <!-- Main diagonal -->\n    <line x1=\"160\" y1=\"24\" x2=\"160\" y2=\"396\"/>\n\n    <!-- Side from left vertex to side BC -->\n    <line x1=\"72\" y1=\"170\" x2=\"212\" y2=\"228\"/>\n\n    <!-- Right side segment highlight (for angle/perpendicular context) -->\n    <line x1=\"248\" y1=\"170\" x2=\"212\" y2=\"228\"/>\n\n    <!-- Perpendicular mark near intersection with right side -->\n    <path d=\"M214 231 L208 218 L221 212\"/>\n\n    <!-- Angle arc at intersection with diagonal -->\n    <path d=\"M160 206 A28 28 0 0 0 133 221\"/>\n\n    <!-- Double arc at right vertex -->\n    <path d=\"M248 170 A24 24 0 0 1 234 191\"/>\n    <path d=\"M248 170 A31 31 0 0 1 230 197\"/>\n  </g>\n</svg>",
+              "svg_type": "rhombus"
             },
             {
               "src_key": "17.5",
@@ -83,7 +91,9 @@
               "answer": "65",
               "image": "p-15.jpg",
               "status": "draft",
-              "id": 133
+              "id": 133,
+              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 420\" width=\"320\" height=\"420\">\n  <g fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <!-- Rhombus -->\n    <polygon points=\"160,24 248,170 160,396 72,170\"/>\n\n    <!-- Main diagonal -->\n    <line x1=\"160\" y1=\"24\" x2=\"160\" y2=\"396\"/>\n\n    <!-- Side from left vertex to side BC -->\n    <line x1=\"72\" y1=\"170\" x2=\"212\" y2=\"228\"/>\n\n    <!-- Right side segment highlight (for angle/perpendicular context) -->\n    <line x1=\"248\" y1=\"170\" x2=\"212\" y2=\"228\"/>\n\n    <!-- Perpendicular mark near intersection with right side -->\n    <path d=\"M214 231 L208 218 L221 212\"/>\n\n    <!-- Angle arc at intersection with diagonal -->\n    <path d=\"M160 206 A28 28 0 0 0 133 221\"/>\n\n    <!-- Double arc at right vertex -->\n    <path d=\"M248 170 A24 24 0 0 1 234 191\"/>\n    <path d=\"M248 170 A31 31 0 0 1 230 197\"/>\n  </g>\n</svg>",
+              "svg_type": "rhombus"
             },
             {
               "src_key": "17.6",
@@ -91,7 +101,9 @@
               "answer": "63",
               "image": "p-15.jpg",
               "status": "draft",
-              "id": 134
+              "id": 134,
+              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 420\" width=\"320\" height=\"420\">\n  <g fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <!-- Rhombus -->\n    <polygon points=\"160,24 248,170 160,396 72,170\"/>\n\n    <!-- Main diagonal -->\n    <line x1=\"160\" y1=\"24\" x2=\"160\" y2=\"396\"/>\n\n    <!-- Side from left vertex to side BC -->\n    <line x1=\"72\" y1=\"170\" x2=\"212\" y2=\"228\"/>\n\n    <!-- Right side segment highlight (for angle/perpendicular context) -->\n    <line x1=\"248\" y1=\"170\" x2=\"212\" y2=\"228\"/>\n\n    <!-- Perpendicular mark near intersection with right side -->\n    <path d=\"M214 231 L208 218 L221 212\"/>\n\n    <!-- Angle arc at intersection with diagonal -->\n    <path d=\"M160 206 A28 28 0 0 0 133 221\"/>\n\n    <!-- Double arc at right vertex -->\n    <path d=\"M248 170 A24 24 0 0 1 234 191\"/>\n    <path d=\"M248 170 A31 31 0 0 1 230 197\"/>\n  </g>\n</svg>",
+              "svg_type": "rhombus"
             },
             {
               "src_key": "17.7",
@@ -99,7 +111,9 @@
               "answer": "73",
               "image": "p-15.jpg",
               "status": "draft",
-              "id": 135
+              "id": 135,
+              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 420\" width=\"320\" height=\"420\">\n  <g fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <!-- Rhombus -->\n    <polygon points=\"160,24 248,170 160,396 72,170\"/>\n\n    <!-- Main diagonal -->\n    <line x1=\"160\" y1=\"24\" x2=\"160\" y2=\"396\"/>\n\n    <!-- Side from left vertex to side BC -->\n    <line x1=\"72\" y1=\"170\" x2=\"212\" y2=\"228\"/>\n\n    <!-- Right side segment highlight (for angle/perpendicular context) -->\n    <line x1=\"248\" y1=\"170\" x2=\"212\" y2=\"228\"/>\n\n    <!-- Perpendicular mark near intersection with right side -->\n    <path d=\"M214 231 L208 218 L221 212\"/>\n\n    <!-- Angle arc at intersection with diagonal -->\n    <path d=\"M160 206 A28 28 0 0 0 133 221\"/>\n\n    <!-- Double arc at right vertex -->\n    <path d=\"M248 170 A24 24 0 0 1 234 191\"/>\n    <path d=\"M248 170 A31 31 0 0 1 230 197\"/>\n  </g>\n</svg>",
+              "svg_type": "rhombus"
             },
             {
               "src_key": "17.8",
@@ -107,7 +121,9 @@
               "answer": "61",
               "image": "p-15.jpg",
               "status": "draft",
-              "id": 136
+              "id": 136,
+              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 420\" width=\"320\" height=\"420\">\n  <g fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <!-- Rhombus -->\n    <polygon points=\"160,24 248,170 160,396 72,170\"/>\n\n    <!-- Main diagonal -->\n    <line x1=\"160\" y1=\"24\" x2=\"160\" y2=\"396\"/>\n\n    <!-- Side from left vertex to side BC -->\n    <line x1=\"72\" y1=\"170\" x2=\"212\" y2=\"228\"/>\n\n    <!-- Right side segment highlight (for angle/perpendicular context) -->\n    <line x1=\"248\" y1=\"170\" x2=\"212\" y2=\"228\"/>\n\n    <!-- Perpendicular mark near intersection with right side -->\n    <path d=\"M214 231 L208 218 L221 212\"/>\n\n    <!-- Angle arc at intersection with diagonal -->\n    <path d=\"M160 206 A28 28 0 0 0 133 221\"/>\n\n    <!-- Double arc at right vertex -->\n    <path d=\"M248 170 A24 24 0 0 1 234 191\"/>\n    <path d=\"M248 170 A31 31 0 0 1 230 197\"/>\n  </g>\n</svg>",
+              "svg_type": "rhombus"
             },
             {
               "src_key": "17.9",
@@ -115,7 +131,9 @@
               "answer": "75",
               "image": "p-15.jpg",
               "status": "draft",
-              "id": 137
+              "id": 137,
+              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 420\" width=\"320\" height=\"420\">\n  <g fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <!-- Rhombus -->\n    <polygon points=\"160,24 248,170 160,396 72,170\"/>\n\n    <!-- Main diagonal -->\n    <line x1=\"160\" y1=\"24\" x2=\"160\" y2=\"396\"/>\n\n    <!-- Side from left vertex to side BC -->\n    <line x1=\"72\" y1=\"170\" x2=\"212\" y2=\"228\"/>\n\n    <!-- Right side segment highlight (for angle/perpendicular context) -->\n    <line x1=\"248\" y1=\"170\" x2=\"212\" y2=\"228\"/>\n\n    <!-- Perpendicular mark near intersection with right side -->\n    <path d=\"M214 231 L208 218 L221 212\"/>\n\n    <!-- Angle arc at intersection with diagonal -->\n    <path d=\"M160 206 A28 28 0 0 0 133 221\"/>\n\n    <!-- Double arc at right vertex -->\n    <path d=\"M248 170 A24 24 0 0 1 234 191\"/>\n    <path d=\"M248 170 A31 31 0 0 1 230 197\"/>\n  </g>\n</svg>",
+              "svg_type": "rhombus"
             },
             {
               "src_key": "17.10",
@@ -123,7 +141,9 @@
               "answer": "59",
               "image": "p-15.jpg",
               "status": "draft",
-              "id": 138
+              "id": 138,
+              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 420\" width=\"320\" height=\"420\">\n  <g fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <!-- Rhombus -->\n    <polygon points=\"160,24 248,170 160,396 72,170\"/>\n\n    <!-- Main diagonal -->\n    <line x1=\"160\" y1=\"24\" x2=\"160\" y2=\"396\"/>\n\n    <!-- Side from left vertex to side BC -->\n    <line x1=\"72\" y1=\"170\" x2=\"212\" y2=\"228\"/>\n\n    <!-- Right side segment highlight (for angle/perpendicular context) -->\n    <line x1=\"248\" y1=\"170\" x2=\"212\" y2=\"228\"/>\n\n    <!-- Perpendicular mark near intersection with right side -->\n    <path d=\"M214 231 L208 218 L221 212\"/>\n\n    <!-- Angle arc at intersection with diagonal -->\n    <path d=\"M160 206 A28 28 0 0 0 133 221\"/>\n\n    <!-- Double arc at right vertex -->\n    <path d=\"M248 170 A24 24 0 0 1 234 191\"/>\n    <path d=\"M248 170 A31 31 0 0 1 230 197\"/>\n  </g>\n</svg>",
+              "svg_type": "rhombus"
             },
             {
               "src_key": "17.11",
@@ -131,7 +151,9 @@
               "answer": "67",
               "image": "p-15.jpg",
               "status": "draft",
-              "id": 139
+              "id": 139,
+              "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 320 420\" width=\"320\" height=\"420\">\n  <g fill=\"none\" stroke=\"#111\" stroke-width=\"3\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n    <!-- Rhombus -->\n    <polygon points=\"160,24 248,170 160,396 72,170\"/>\n\n    <!-- Main diagonal -->\n    <line x1=\"160\" y1=\"24\" x2=\"160\" y2=\"396\"/>\n\n    <!-- Side from left vertex to side BC -->\n    <line x1=\"72\" y1=\"170\" x2=\"212\" y2=\"228\"/>\n\n    <!-- Right side segment highlight (for angle/perpendicular context) -->\n    <line x1=\"248\" y1=\"170\" x2=\"212\" y2=\"228\"/>\n\n    <!-- Perpendicular mark near intersection with right side -->\n    <path d=\"M214 231 L208 218 L221 212\"/>\n\n    <!-- Angle arc at intersection with diagonal -->\n    <path d=\"M160 206 A28 28 0 0 0 133 221\"/>\n\n    <!-- Double arc at right vertex -->\n    <path d=\"M248 170 A24 24 0 0 1 234 191\"/>\n    <path d=\"M248 170 A31 31 0 0 1 230 197\"/>\n  </g>\n</svg>",
+              "svg_type": "rhombus"
             },
             {
               "src_key": "18.1",
