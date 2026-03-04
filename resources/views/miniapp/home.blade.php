@@ -156,6 +156,19 @@
   }
   .bottom-note strong { color: var(--green); }
 
+  .auth-code {
+    margin-top: 10px;
+    background: rgba(239,68,68,.12);
+    border: 1px solid rgba(239,68,68,.35);
+    color: #ffb4b4;
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-align: center;
+  }
+
   .pulse-dot {
     display: inline-block; width: 7px; height: 7px;
     background: var(--red); border-radius: 50%; margin-right: 6px;
@@ -258,6 +271,10 @@
     👥 Пригласить одноклассника
   </button>
 
+  <div class="auth-code" x-show="authErrorCode" x-cloak>
+    Код ошибки: <span x-text="authErrorCode"></span>
+  </div>
+
   <div class="bottom-note">
     <strong>Бесплатно</strong> · задания из банка ФИПИ · результат сразу
   </div>
@@ -274,6 +291,7 @@ function homePage() {
     days: 0, hours: 0, mins: 0, secs: 0,
     loginInProgress: false,
     appReady: false,
+    authErrorCode: '',
 
     pad(n) { return String(n).padStart(2, '0'); },
 
@@ -348,6 +366,7 @@ function homePage() {
     handleLogin() {
       if (this.loginInProgress) return;
       this.loginInProgress = true;
+      this.authErrorCode = '';
 
       const btn = document.getElementById('start-btn');
       const btnText = document.getElementById('start-btn-text');
@@ -359,6 +378,7 @@ function homePage() {
       const startParam = (tg?.initDataUnsafe?.start_param || new URLSearchParams(window.location.search).get('startapp') || '').trim();
 
       if (!initData) {
+        this.authErrorCode = 'E_INITDATA_EMPTY';
         if (tg && tg.showAlert) { tg.showAlert('Не удалось получить данные Telegram. Попробуйте перезапустить мини-приложение.'); }
         else { alert('Откройте приложение через Telegram'); }
         if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
@@ -367,9 +387,13 @@ function homePage() {
         return;
       }
 
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 12000);
+
       fetch('/api/auth/telegram/webapp-login', {
         method: 'POST',
         credentials: 'include',
+        signal: controller.signal,
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -378,18 +402,26 @@ function homePage() {
         body: JSON.stringify({ initData, startParam }),
       })
       .then(async (res) => {
+        clearTimeout(timeoutId);
         const data = await res.json().catch(() => ({}));
         if (!res.ok || !data.success) {
+          this.authErrorCode = `E_WEBAPP_${res.status || 'FAIL'}`;
           throw new Error(data.message || 'Ошибка авторизации');
         }
+
         const target = data.redirect_to || data.redirect || '/tg/dashboard';
         window.location.replace(target);
       })
       .catch((e) => {
+        clearTimeout(timeoutId);
+        if (!this.authErrorCode) {
+          this.authErrorCode = (e && e.name === 'AbortError') ? 'E_WEBAPP_TIMEOUT' : 'E_WEBAPP_NETWORK';
+        }
+
         if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
         if (btn) btn.classList.remove('btn-loading');
         this.loginInProgress = false;
-        const msg = (e && e.message) ? e.message : 'Ошибка авторизации';
+        const msg = (e && e.message) ? `${e.message} (${this.authErrorCode})` : `Ошибка авторизации (${this.authErrorCode})`;
         if (tg && tg.showAlert) tg.showAlert(msg);
         else alert(msg);
       });
