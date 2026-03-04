@@ -31,7 +31,7 @@ Route::post('/auth/register', [AuthController::class, 'register']);
 // Telegram Bot Auth (deep link flow)
 Route::post('/telegram/generate-token', [TelegramBotAuthController::class, 'generateToken']);
 Route::get('/telegram/check-token/{token}', [TelegramBotAuthController::class, 'checkToken']);
-Route::get('/telegram/session-check', [TelegramBotAuthController::class, 'sessionCheck']);
+Route::get('/telegram/session-check', [TelegramBotAuthController::class, 'sessionCheck'])->middleware('web');
 Route::post('/telegram/diag', [TelegramBotAuthController::class, 'diag']);
 
 // OAuth
