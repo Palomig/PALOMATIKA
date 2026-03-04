@@ -181,6 +181,7 @@
       <div class="tile-sm-icon">🆕</div>
       <div class="tile-sm-name">Новые задания</div>
       <div class="tile-sm-desc">из банка ФИПИ</div>
+      <div class="tile-badge badge-purple">Новое</div>
     </a>
     @if($lastAttempt)
     <a href="/tg/results/{{ $lastAttempt->id }}" class="tile-sm">
