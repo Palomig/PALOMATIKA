@@ -53,6 +53,11 @@ export async function runTelegramAuthStart({ telegramGlobal, tryMiniAppLogin, st
         };
       }
 
+      // If Mini App auth fails, try bot fallback before surfacing error.
+      if (typeof startBotFallback === 'function') {
+        return await startBotFallback();
+      }
+
       return {
         mode: 'miniapp_error',
         inlineError: true,
@@ -60,6 +65,11 @@ export async function runTelegramAuthStart({ telegramGlobal, tryMiniAppLogin, st
         error: normalizeMiniAppError(miniAppResult && miniAppResult.error),
       };
     } catch (error) {
+      // Network/API issues on mini-app login: attempt bot fallback first.
+      if (typeof startBotFallback === 'function') {
+        return await startBotFallback();
+      }
+
       return {
         mode: 'miniapp_error',
         inlineError: true,

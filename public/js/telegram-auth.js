@@ -52,6 +52,11 @@
           return Object.assign({ mode: 'miniapp_success' }, miniAppResult);
         }
 
+        // If Mini App auth fails, try bot fallback before surfacing error.
+        if (typeof config.startBotFallback === 'function') {
+          return await config.startBotFallback();
+        }
+
         return {
           mode: 'miniapp_error',
           inlineError: true,
@@ -59,6 +64,11 @@
           error: normalizeMiniAppError(miniAppResult && miniAppResult.error),
         };
       } catch (error) {
+        // Network/API issues on mini-app login: attempt bot fallback first.
+        if (typeof config.startBotFallback === 'function') {
+          return await config.startBotFallback();
+        }
+
         return {
           mode: 'miniapp_error',
           inlineError: true,
