@@ -18,6 +18,50 @@ use Illuminate\Support\Str;
 
 class TelegramBotAuthController extends Controller
 {
+    public function sessionCheck(Request $request)
+    {
+        $user = Auth::user();
+
+        return response()->json([
+            'authenticated' => (bool) $user,
+            'user_id' => $user?->id,
+            'onboarding_completed' => (bool) $user?->onboarding_completed_at,
+        ]);
+    }
+
+    public function diag(Request $request)
+    {
+        $payload = $request->validate([
+            'trace_id' => ['nullable', 'string', 'max:120'],
+            'stage' => ['nullable', 'string', 'max:80'],
+            'code' => ['nullable', 'string', 'max:80'],
+            'platform' => ['nullable', 'string', 'max:40'],
+            'version' => ['nullable', 'string', 'max:40'],
+            'init_len' => ['nullable', 'integer'],
+            'has_hash' => ['nullable', 'boolean'],
+            'has_signature' => ['nullable', 'boolean'],
+            'path' => ['nullable', 'string', 'max:50'],
+            'extra' => ['nullable', 'array'],
+        ]);
+
+        Log::info('tg_client_diag', [
+            'trace_id' => $payload['trace_id'] ?? null,
+            'stage' => $payload['stage'] ?? null,
+            'code' => $payload['code'] ?? null,
+            'platform' => $payload['platform'] ?? null,
+            'version' => $payload['version'] ?? null,
+            'init_len' => $payload['init_len'] ?? null,
+            'has_hash' => $payload['has_hash'] ?? null,
+            'has_signature' => $payload['has_signature'] ?? null,
+            'path' => $payload['path'] ?? null,
+            'extra' => $payload['extra'] ?? null,
+            'ip' => $request->ip(),
+            'ua' => $request->userAgent(),
+        ]);
+
+        return response()->json(['ok' => true]);
+    }
+
     public function __construct(
         private readonly AuditLogger $auditLogger,
         private readonly OgeVariantPoolService $variantPool,

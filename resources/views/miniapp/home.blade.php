@@ -292,6 +292,7 @@ function homePage() {
     loginInProgress: false,
     appReady: false,
     authErrorCode: '',
+    traceId: '',
 
     pad(n) { return String(n).padStart(2, '0'); },
 
@@ -367,6 +368,8 @@ function homePage() {
       if (this.loginInProgress) return;
       this.loginInProgress = true;
       this.authErrorCode = '';
+      this.traceId = this.generateTraceId();
+      this.sendDiag('auth_start', 'A_START');
 
       const btn = document.getElementById('start-btn');
       const btnText = document.getElementById('start-btn-text');
@@ -379,6 +382,7 @@ function homePage() {
 
       if (!initData) {
         this.authErrorCode = 'E_INITDATA_EMPTY';
+        this.sendDiag('auth_precheck', this.authErrorCode);
         if (tg && tg.showAlert) { tg.showAlert('Не удалось получить данные Telegram. Попробуйте перезапустить мини-приложение.'); }
         else { alert('Откройте приложение через Telegram'); }
         if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
@@ -399,16 +403,27 @@ function homePage() {
           'Accept': 'application/json',
           'X-CSRF-TOKEN': window._csrf,
         },
-        body: JSON.stringify({ initData, startParam }),
+        body: JSON.stringify({ initData, startParam, trace_id: this.traceId }),
       })
       .then(async (res) => {
         clearTimeout(timeoutId);
         const data = await res.json().catch(() => ({}));
         if (!res.ok || !data.success) {
           this.authErrorCode = `E_WEBAPP_${res.status || 'FAIL'}`;
+          this.sendDiag('webapp_login_response', this.authErrorCode, { http_status: res.status || null });
           throw new Error(data.message || 'Ошибка авторизации');
         }
 
+        // Verify session really exists in WebView before redirect.
+        const meRes = await fetch('/api/telegram/session-check', { credentials: 'include' });
+        const me = await meRes.json().catch(() => ({}));
+        if (!meRes.ok || !me.authenticated) {
+          this.authErrorCode = 'E_COOKIE_SESSION';
+          this.sendDiag('auth_post_login_check', this.authErrorCode, { me_status: meRes.status || null });
+          throw new Error('Сессия не сохранилась');
+        }
+
+        this.sendDiag('auth_success', 'A_OK');
         const target = data.redirect_to || data.redirect || '/tg/dashboard';
         window.location.replace(target);
       })
@@ -417,6 +432,7 @@ function homePage() {
         if (!this.authErrorCode) {
           this.authErrorCode = (e && e.name === 'AbortError') ? 'E_WEBAPP_TIMEOUT' : 'E_WEBAPP_NETWORK';
         }
+        this.sendDiag('webapp_login_catch', this.authErrorCode, { err: (e && e.message) ? e.message : null });
 
         if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
         if (btn) btn.classList.remove('btn-loading');
@@ -430,15 +446,13 @@ function homePage() {
     handleInvite() {
       const tg = window.Telegram?.WebApp;
       const botUsername = '{{ config("services.telegram.bot_username", "palomatika_auth_bot") }}';
-      const appLink = `https://t.me/${botUsername}/palomatika`;
+      const appLink = `https://t.me/${botUsername}?start=invite`;
       const text = 'Решай реальные задания ОГЭ по математике — бесплатно! Проверь свой уровень 🎯';
 
       if (tg && tg.openTelegramLink) {
-        // Native Telegram share dialog — user picks a chat, message is sent with the link
         const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(appLink)}&text=${encodeURIComponent(text)}`;
         tg.openTelegramLink(shareUrl);
       } else {
-        // Fallback outside Telegram
         const fullText = text + '\n' + appLink;
         if (navigator.share) {
           navigator.share({ title: 'palomatika — ОГЭ', text: fullText });
@@ -446,6 +460,41 @@ function homePage() {
           navigator.clipboard.writeText(fullText).then(() => alert('Ссылка скопирована!'));
         }
       }
+    },
+
+    generateTraceId() {
+      return `hm-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+    },
+
+    async sendDiag(stage, code, extra = {}) {
+      try {
+        const tg = window.Telegram?.WebApp;
+        const initData = typeof tg?.initData === 'string' ? tg.initData.trim() : '';
+        const hasHash = initData.includes('hash=');
+        const hasSignature = initData.includes('signature=');
+
+        await fetch('/api/telegram/diag', {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': window._csrf,
+          },
+          body: JSON.stringify({
+            trace_id: this.traceId || null,
+            stage,
+            code,
+            platform: tg?.platform || null,
+            version: tg?.version || null,
+            init_len: initData.length,
+            has_hash: hasHash,
+            has_signature: hasSignature,
+            path: 'miniapp_home',
+            extra,
+          }),
+        });
+      } catch (_) {}
     },
   };
 }
