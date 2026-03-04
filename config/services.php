@@ -52,6 +52,8 @@ return [
         // Absolute Mini App URL used inside Telegram web_app buttons, e.g. https://app.example.com/oge.
         'webapp_base_url' => env('TELEGRAM_WEBAPP_BASE_URL'),
         'mini_app_link_scheme' => env('TELEGRAM_MINI_APP_LINK_SCHEME', 'https'),
+        // BotFather Mini App short name (used in https://t.me/<bot>/<short_name>?startapp=...)
+        'mini_app_short_name' => env('TELEGRAM_MINI_APP_SHORT_NAME'),
     ],
 
     /*

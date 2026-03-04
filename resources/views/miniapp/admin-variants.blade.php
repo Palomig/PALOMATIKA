@@ -357,10 +357,10 @@ function adminVariants() {
     shareLink(hash) {
       const tg = window.Telegram?.WebApp;
       const botUsername = '{{ config("services.telegram.bot_username", "palomatika_auth_bot") }}';
-      const webAppBase = '{{ config("services.telegram.webapp_base_url", "") }}';
+      const miniAppShort = '{{ config("services.telegram.mini_app_short_name", "") }}';
       const payload = `oge_variant_hash_${hash}`;
-      const link = webAppBase
-        ? `${webAppBase}${webAppBase.includes('?') ? '&' : '?'}startapp=${encodeURIComponent(payload)}`
+      const link = miniAppShort
+        ? `https://t.me/${botUsername}/${miniAppShort}?startapp=${payload}`
         : `https://t.me/${botUsername}?startapp=${payload}`;
       const text = 'Реши этот вариант ОГЭ по математике!';
 
@@ -374,10 +374,10 @@ function adminVariants() {
 
     copyLink(hash) {
       const botUsername = '{{ config("services.telegram.bot_username", "palomatika_auth_bot") }}';
-      const webAppBase = '{{ config("services.telegram.webapp_base_url", "") }}';
+      const miniAppShort = '{{ config("services.telegram.mini_app_short_name", "") }}';
       const payload = `oge_variant_hash_${hash}`;
-      const link = webAppBase
-        ? `${webAppBase}${webAppBase.includes('?') ? '&' : '?'}startapp=${encodeURIComponent(payload)}`
+      const link = miniAppShort
+        ? `https://t.me/${botUsername}/${miniAppShort}?startapp=${payload}`
         : `https://t.me/${botUsername}?startapp=${payload}`;
       navigator.clipboard.writeText(link).then(() => {  
         const tg = window.Telegram?.WebApp;
