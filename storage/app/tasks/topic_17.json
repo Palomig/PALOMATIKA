@@ -161,7 +161,9 @@
               "answer": "18",
               "image": "p-17.jpg",
               "status": "draft",
-              "id": 140
+              "id": 140,
+              "svg": "<svg viewBox=\"0 0 220 180\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n\n  <!-- Rhombus ABCD with diagonal AC -->\n  <polygon points=\"110,26 188,90 110,154 32,90\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <line x1=\"32\" y1=\"90\" x2=\"188\" y2=\"90\" stroke=\"#5a9fcf\" stroke-width=\"1.8\"/>\n\n  <!-- Point markers -->\n  <g transform=\"translate(32,90)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(110,26)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(188,90)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(110,154)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n\n  <!-- Labels -->\n  <g fill=\"#e6f3ff\" font-size=\"12\" font-family=\"Arial, sans-serif\" font-weight=\"700\">\n    <text x=\"20\" y=\"84\">A</text>\n    <text x=\"108\" y=\"18\">B</text>\n    <text x=\"192\" y=\"84\">C</text>\n    <text x=\"108\" y=\"171\">D</text>\n  </g>\n</svg>",
+              "svg_type": "rhombus"
             },
             {
               "src_key": "18.2",
@@ -169,7 +171,9 @@
               "answer": "120",
               "image": "p-17.jpg",
               "status": "draft",
-              "id": 141
+              "id": 141,
+              "svg": "<svg viewBox=\"0 0 220 180\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n\n  <!-- Rhombus ABCD with diagonal AC -->\n  <polygon points=\"110,26 188,90 110,154 32,90\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <line x1=\"32\" y1=\"90\" x2=\"188\" y2=\"90\" stroke=\"#5a9fcf\" stroke-width=\"1.8\"/>\n\n  <!-- Point markers -->\n  <g transform=\"translate(32,90)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(110,26)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(188,90)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(110,154)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n\n  <!-- Labels -->\n  <g fill=\"#e6f3ff\" font-size=\"12\" font-family=\"Arial, sans-serif\" font-weight=\"700\">\n    <text x=\"20\" y=\"84\">A</text>\n    <text x=\"108\" y=\"18\">B</text>\n    <text x=\"192\" y=\"84\">C</text>\n    <text x=\"108\" y=\"171\">D</text>\n  </g>\n</svg>",
+              "svg_type": "rhombus"
             },
             {
               "src_key": "18.3",
@@ -177,7 +181,9 @@
               "answer": "90",
               "image": "p-17.jpg",
               "status": "draft",
-              "id": 142
+              "id": 142,
+              "svg": "<svg viewBox=\"0 0 220 180\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n\n  <!-- Rhombus ABCD with diagonal AC -->\n  <polygon points=\"110,26 188,90 110,154 32,90\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <line x1=\"32\" y1=\"90\" x2=\"188\" y2=\"90\" stroke=\"#5a9fcf\" stroke-width=\"1.8\"/>\n\n  <!-- Point markers -->\n  <g transform=\"translate(32,90)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(110,26)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(188,90)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(110,154)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n\n  <!-- Labels -->\n  <g fill=\"#e6f3ff\" font-size=\"12\" font-family=\"Arial, sans-serif\" font-weight=\"700\">\n    <text x=\"20\" y=\"84\">A</text>\n    <text x=\"108\" y=\"18\">B</text>\n    <text x=\"192\" y=\"84\">C</text>\n    <text x=\"108\" y=\"171\">D</text>\n  </g>\n</svg>",
+              "svg_type": "rhombus"
             },
             {
               "src_key": "18.4",
@@ -185,7 +191,9 @@
               "answer": "40",
               "image": "p-17.jpg",
               "status": "draft",
-              "id": 143
+              "id": 143,
+              "svg": "<svg viewBox=\"0 0 220 180\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n\n  <!-- Rhombus ABCD with diagonal AC -->\n  <polygon points=\"110,26 188,90 110,154 32,90\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <line x1=\"32\" y1=\"90\" x2=\"188\" y2=\"90\" stroke=\"#5a9fcf\" stroke-width=\"1.8\"/>\n\n  <!-- Point markers -->\n  <g transform=\"translate(32,90)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(110,26)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(188,90)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(110,154)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n\n  <!-- Labels -->\n  <g fill=\"#e6f3ff\" font-size=\"12\" font-family=\"Arial, sans-serif\" font-weight=\"700\">\n    <text x=\"20\" y=\"84\">A</text>\n    <text x=\"108\" y=\"18\">B</text>\n    <text x=\"192\" y=\"84\">C</text>\n    <text x=\"108\" y=\"171\">D</text>\n  </g>\n</svg>",
+              "svg_type": "rhombus"
             },
             {
               "src_key": "18.5",
@@ -193,7 +201,9 @@
               "answer": "240",
               "image": "p-17.jpg",
               "status": "draft",
-              "id": 144
+              "id": 144,
+              "svg": "<svg viewBox=\"0 0 220 180\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n\n  <!-- Rhombus ABCD with diagonal AC -->\n  <polygon points=\"110,26 188,90 110,154 32,90\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <line x1=\"32\" y1=\"90\" x2=\"188\" y2=\"90\" stroke=\"#5a9fcf\" stroke-width=\"1.8\"/>\n\n  <!-- Point markers -->\n  <g transform=\"translate(32,90)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(110,26)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(188,90)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(110,154)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n\n  <!-- Labels -->\n  <g fill=\"#e6f3ff\" font-size=\"12\" font-family=\"Arial, sans-serif\" font-weight=\"700\">\n    <text x=\"20\" y=\"84\">A</text>\n    <text x=\"108\" y=\"18\">B</text>\n    <text x=\"192\" y=\"84\">C</text>\n    <text x=\"108\" y=\"171\">D</text>\n  </g>\n</svg>",
+              "svg_type": "rhombus"
             },
             {
               "src_key": "18.6",
@@ -201,7 +211,9 @@
               "answer": "20",
               "image": "p-17.jpg",
               "status": "draft",
-              "id": 145
+              "id": 145,
+              "svg": "<svg viewBox=\"0 0 220 180\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n\n  <!-- Rhombus ABCD with diagonal AC -->\n  <polygon points=\"110,26 188,90 110,154 32,90\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <line x1=\"32\" y1=\"90\" x2=\"188\" y2=\"90\" stroke=\"#5a9fcf\" stroke-width=\"1.8\"/>\n\n  <!-- Point markers -->\n  <g transform=\"translate(32,90)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(110,26)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(188,90)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(110,154)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n\n  <!-- Labels -->\n  <g fill=\"#e6f3ff\" font-size=\"12\" font-family=\"Arial, sans-serif\" font-weight=\"700\">\n    <text x=\"20\" y=\"84\">A</text>\n    <text x=\"108\" y=\"18\">B</text>\n    <text x=\"192\" y=\"84\">C</text>\n    <text x=\"108\" y=\"171\">D</text>\n  </g>\n</svg>",
+              "svg_type": "rhombus"
             },
             {
               "src_key": "18.7",
@@ -209,7 +221,9 @@
               "answer": "140",
               "image": "p-17.jpg",
               "status": "draft",
-              "id": 146
+              "id": 146,
+              "svg": "<svg viewBox=\"0 0 220 180\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n\n  <!-- Rhombus ABCD with diagonal AC -->\n  <polygon points=\"110,26 188,90 110,154 32,90\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <line x1=\"32\" y1=\"90\" x2=\"188\" y2=\"90\" stroke=\"#5a9fcf\" stroke-width=\"1.8\"/>\n\n  <!-- Point markers -->\n  <g transform=\"translate(32,90)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(110,26)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(188,90)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(110,154)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n\n  <!-- Labels -->\n  <g fill=\"#e6f3ff\" font-size=\"12\" font-family=\"Arial, sans-serif\" font-weight=\"700\">\n    <text x=\"20\" y=\"84\">A</text>\n    <text x=\"108\" y=\"18\">B</text>\n    <text x=\"192\" y=\"84\">C</text>\n    <text x=\"108\" y=\"171\">D</text>\n  </g>\n</svg>",
+              "svg_type": "rhombus"
             },
             {
               "src_key": "18.8",
@@ -217,7 +231,9 @@
               "answer": "24",
               "image": "p-17.jpg",
               "status": "draft",
-              "id": 147
+              "id": 147,
+              "svg": "<svg viewBox=\"0 0 220 180\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n\n  <!-- Rhombus ABCD with diagonal AC -->\n  <polygon points=\"110,26 188,90 110,154 32,90\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <line x1=\"32\" y1=\"90\" x2=\"188\" y2=\"90\" stroke=\"#5a9fcf\" stroke-width=\"1.8\"/>\n\n  <!-- Point markers -->\n  <g transform=\"translate(32,90)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(110,26)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(188,90)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(110,154)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n\n  <!-- Labels -->\n  <g fill=\"#e6f3ff\" font-size=\"12\" font-family=\"Arial, sans-serif\" font-weight=\"700\">\n    <text x=\"20\" y=\"84\">A</text>\n    <text x=\"108\" y=\"18\">B</text>\n    <text x=\"192\" y=\"84\">C</text>\n    <text x=\"108\" y=\"171\">D</text>\n  </g>\n</svg>",
+              "svg_type": "rhombus"
             },
             {
               "src_key": "18.9",
@@ -225,7 +241,9 @@
               "answer": "720",
               "image": "p-17.jpg",
               "status": "draft",
-              "id": 148
+              "id": 148,
+              "svg": "<svg viewBox=\"0 0 220 180\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n\n  <!-- Rhombus ABCD with diagonal AC -->\n  <polygon points=\"110,26 188,90 110,154 32,90\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <line x1=\"32\" y1=\"90\" x2=\"188\" y2=\"90\" stroke=\"#5a9fcf\" stroke-width=\"1.8\"/>\n\n  <!-- Point markers -->\n  <g transform=\"translate(32,90)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(110,26)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(188,90)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(110,154)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n\n  <!-- Labels -->\n  <g fill=\"#e6f3ff\" font-size=\"12\" font-family=\"Arial, sans-serif\" font-weight=\"700\">\n    <text x=\"20\" y=\"84\">A</text>\n    <text x=\"108\" y=\"18\">B</text>\n    <text x=\"192\" y=\"84\">C</text>\n    <text x=\"108\" y=\"171\">D</text>\n  </g>\n</svg>",
+              "svg_type": "rhombus"
             },
             {
               "src_key": "18.10",
@@ -233,7 +251,9 @@
               "answer": "16",
               "image": "p-17.jpg",
               "status": "draft",
-              "id": 149
+              "id": 149,
+              "svg": "<svg viewBox=\"0 0 220 180\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n\n  <!-- Rhombus ABCD with diagonal AC -->\n  <polygon points=\"110,26 188,90 110,154 32,90\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <line x1=\"32\" y1=\"90\" x2=\"188\" y2=\"90\" stroke=\"#5a9fcf\" stroke-width=\"1.8\"/>\n\n  <!-- Point markers -->\n  <g transform=\"translate(32,90)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(110,26)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(188,90)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n  <g transform=\"translate(110,154)\"><line x1=\"-4\" y1=\"0\" x2=\"4\" y2=\"0\" stroke=\"#7eb8da\" stroke-width=\"1\"/><line x1=\"0\" y1=\"-4\" x2=\"0\" y2=\"4\" stroke=\"#7eb8da\" stroke-width=\"1\"/><circle cx=\"0\" cy=\"0\" r=\"1.7\" fill=\"none\" stroke=\"#7eb8da\" stroke-width=\"0.8\"/></g>\n\n  <!-- Labels -->\n  <g fill=\"#e6f3ff\" font-size=\"12\" font-family=\"Arial, sans-serif\" font-weight=\"700\">\n    <text x=\"20\" y=\"84\">A</text>\n    <text x=\"108\" y=\"18\">B</text>\n    <text x=\"192\" y=\"84\">C</text>\n    <text x=\"108\" y=\"171\">D</text>\n  </g>\n</svg>",
+              "svg_type": "rhombus"
             },
             {
               "src_key": "19.1",
