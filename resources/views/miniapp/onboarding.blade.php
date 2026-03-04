@@ -137,10 +137,10 @@
 <script>
 function onboardingPage() {
   return {
-    name: '{{ auth()->user()?->name ?? "" }}',
-    letter: null,
-    school: '',
-    city: '',
+    name: @json(auth()->user()?->name ?? ''),
+    letter: @json(auth()->user()?->grade_letter ?? null),
+    school: @json(auth()->user()?->school_number ?? ''),
+    city: @json(auth()->user()?->city ?? ''),
     onboardingToken: @json($onboardingToken ?? null),
     submitting: false,
 
