@@ -15,8 +15,8 @@
         {
           "number": 0,
           "label": "Новые задания",
-          "instruction": "Новые задания из банка ФИПИ",
-          "type": "expression",
+          "instruction": "из банка ФИПИ",
+          "type": "geometry",
           "tasks": [
             {
               "src_key": "23.1",

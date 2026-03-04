@@ -14,8 +14,8 @@
       "zadaniya": [
         {
           "number": 1,
-          "instruction": "Новые задания из банка ФИПИ",
-          "type": "expression",
+          "instruction": "из банка ФИПИ",
+          "type": "geometry",
           "svg_type": "parallelogram_angles",
           "geometry": {
             "viewBox": [
