@@ -360,11 +360,14 @@ function telegramAuth() {
 
             try {
                 const authHelper = window.PalomatikaTelegramAuth || {};
-                const result = await authHelper.runTelegramAuthStart({
-                    telegramGlobal: window.Telegram,
-                    tryMiniAppLogin: ({ webApp, initData }) => this.tryMiniAppLogin(webApp, initData),
-                    startBotFallback: () => this.startBotFallbackAuth(),
-                });
+                const result = await Promise.race([
+                    authHelper.runTelegramAuthStart({
+                        telegramGlobal: window.Telegram,
+                        tryMiniAppLogin: ({ webApp, initData }) => this.tryMiniAppLogin(webApp, initData),
+                        startBotFallback: () => this.startBotFallbackAuth(),
+                    }),
+                    new Promise(resolve => setTimeout(() => resolve({ mode: 'auth_timeout' }), 8000)),
+                ]);
 
                 if (result && result.mode === 'miniapp_success') {
                     return;
@@ -374,6 +377,11 @@ function telegramAuth() {
                     this.error = result.error || 'Ошибка входа через Telegram Mini App';
                     this.loading = false;
                     this.waiting = false;
+                    return;
+                }
+
+                if (result && result.mode === 'auth_timeout') {
+                    await this.startBotFallbackAuth();
                     return;
                 }
             } catch (err) {
