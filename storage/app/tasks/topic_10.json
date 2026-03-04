@@ -340,83 +340,103 @@
             },
             {
               "src_key": "5.1",
-              "text": "Новое задание 5.1. См. изображение из PDF.",
+              "text": "На рисунке изображена диаграмма Эйлера для случайных событий A и B в некотором случайном опыте. Точками показаны все равновозможные элементарные события опыта. Найдите вероятность события A ∪ B̅.",
               "answer": "0,6",
               "image": "p-05.jpg",
               "status": "draft",
-              "id": 125
+              "id": 125,
+              "svg": "<svg viewBox=\"0 0 220 140\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"92\" cy=\"74\" r=\"46\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <circle cx=\"138\" cy=\"74\" r=\"46\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <text x=\"57\" y=\"38\" fill=\"#e6f3ff\" font-size=\"13\" font-weight=\"700\" font-family=\"Arial, sans-serif\">A</text>\n  <text x=\"158\" y=\"38\" fill=\"#e6f3ff\" font-size=\"13\" font-weight=\"700\" font-family=\"Arial, sans-serif\">B</text>\n  <g fill=\"#d4a855\">\n    <circle cx=\"58\" cy=\"68\" r=\"2.3\"/>\n    <circle cx=\"69\" cy=\"90\" r=\"2.3\"/>\n    <circle cx=\"82\" cy=\"56\" r=\"2.3\"/>\n    <circle cx=\"97\" cy=\"77\" r=\"2.3\"/>\n    <circle cx=\"108\" cy=\"61\" r=\"2.3\"/>\n    <circle cx=\"118\" cy=\"84\" r=\"2.3\"/>\n    <circle cx=\"133\" cy=\"70\" r=\"2.3\"/>\n    <circle cx=\"150\" cy=\"60\" r=\"2.3\"/>\n    <circle cx=\"162\" cy=\"82\" r=\"2.3\"/>\n    <circle cx=\"174\" cy=\"72\" r=\"2.3\"/>\n  </g>\n</svg>",
+              "svg_type": "venn"
             },
             {
               "src_key": "5.2",
-              "text": "Новое задание 5.2. См. изображение из PDF.",
+              "text": "На рисунке изображена диаграмма Эйлера для случайных событий A и B в некотором случайном опыте. Точками показаны все равновозможные элементарные события опыта. Найдите вероятность события B.",
               "answer": "0,6",
               "image": "p-05.jpg",
               "status": "draft",
-              "id": 126
+              "id": 126,
+              "svg": "<svg viewBox=\"0 0 220 140\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"92\" cy=\"74\" r=\"46\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <circle cx=\"138\" cy=\"74\" r=\"46\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <text x=\"57\" y=\"38\" fill=\"#e6f3ff\" font-size=\"13\" font-weight=\"700\" font-family=\"Arial, sans-serif\">A</text>\n  <text x=\"158\" y=\"38\" fill=\"#e6f3ff\" font-size=\"13\" font-weight=\"700\" font-family=\"Arial, sans-serif\">B</text>\n  <g fill=\"#d4a855\">\n    <circle cx=\"58\" cy=\"68\" r=\"2.3\"/>\n    <circle cx=\"69\" cy=\"90\" r=\"2.3\"/>\n    <circle cx=\"82\" cy=\"56\" r=\"2.3\"/>\n    <circle cx=\"97\" cy=\"77\" r=\"2.3\"/>\n    <circle cx=\"108\" cy=\"61\" r=\"2.3\"/>\n    <circle cx=\"118\" cy=\"84\" r=\"2.3\"/>\n    <circle cx=\"133\" cy=\"70\" r=\"2.3\"/>\n    <circle cx=\"150\" cy=\"60\" r=\"2.3\"/>\n    <circle cx=\"162\" cy=\"82\" r=\"2.3\"/>\n    <circle cx=\"174\" cy=\"72\" r=\"2.3\"/>\n  </g>\n</svg>",
+              "svg_type": "venn"
             },
             {
               "src_key": "5.3",
-              "text": "Новое задание 5.3. См. изображение из PDF.",
+              "text": "На рисунке изображена диаграмма Эйлера для случайных событий A и B в некотором случайном опыте. Точками показаны все равновозможные элементарные события опыта. Найдите вероятность события A̅ ∪ B.",
               "answer": "0,7",
               "image": "p-05.jpg",
               "status": "draft",
-              "id": 127
+              "id": 127,
+              "svg": "<svg viewBox=\"0 0 220 140\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"92\" cy=\"74\" r=\"46\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <circle cx=\"138\" cy=\"74\" r=\"46\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <text x=\"57\" y=\"38\" fill=\"#e6f3ff\" font-size=\"13\" font-weight=\"700\" font-family=\"Arial, sans-serif\">A</text>\n  <text x=\"158\" y=\"38\" fill=\"#e6f3ff\" font-size=\"13\" font-weight=\"700\" font-family=\"Arial, sans-serif\">B</text>\n  <g fill=\"#d4a855\">\n    <circle cx=\"58\" cy=\"68\" r=\"2.3\"/>\n    <circle cx=\"69\" cy=\"90\" r=\"2.3\"/>\n    <circle cx=\"82\" cy=\"56\" r=\"2.3\"/>\n    <circle cx=\"97\" cy=\"77\" r=\"2.3\"/>\n    <circle cx=\"108\" cy=\"61\" r=\"2.3\"/>\n    <circle cx=\"118\" cy=\"84\" r=\"2.3\"/>\n    <circle cx=\"133\" cy=\"70\" r=\"2.3\"/>\n    <circle cx=\"150\" cy=\"60\" r=\"2.3\"/>\n    <circle cx=\"162\" cy=\"82\" r=\"2.3\"/>\n    <circle cx=\"174\" cy=\"72\" r=\"2.3\"/>\n  </g>\n</svg>",
+              "svg_type": "venn"
             },
             {
               "src_key": "5.4",
-              "text": "Новое задание 5.4. См. изображение из PDF.",
+              "text": "На рисунке изображена диаграмма Эйлера для случайных событий A и B в некотором случайном опыте. Точками показаны все равновозможные элементарные события опыта. Найдите вероятность события A̅ ∩ B̅.",
               "answer": "0,8",
               "image": "p-05.jpg",
               "status": "draft",
-              "id": 128
+              "id": 128,
+              "svg": "<svg viewBox=\"0 0 220 140\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"92\" cy=\"74\" r=\"46\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <circle cx=\"138\" cy=\"74\" r=\"46\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <text x=\"57\" y=\"38\" fill=\"#e6f3ff\" font-size=\"13\" font-weight=\"700\" font-family=\"Arial, sans-serif\">A</text>\n  <text x=\"158\" y=\"38\" fill=\"#e6f3ff\" font-size=\"13\" font-weight=\"700\" font-family=\"Arial, sans-serif\">B</text>\n  <g fill=\"#d4a855\">\n    <circle cx=\"58\" cy=\"68\" r=\"2.3\"/>\n    <circle cx=\"69\" cy=\"90\" r=\"2.3\"/>\n    <circle cx=\"82\" cy=\"56\" r=\"2.3\"/>\n    <circle cx=\"97\" cy=\"77\" r=\"2.3\"/>\n    <circle cx=\"108\" cy=\"61\" r=\"2.3\"/>\n    <circle cx=\"118\" cy=\"84\" r=\"2.3\"/>\n    <circle cx=\"133\" cy=\"70\" r=\"2.3\"/>\n    <circle cx=\"150\" cy=\"60\" r=\"2.3\"/>\n    <circle cx=\"162\" cy=\"82\" r=\"2.3\"/>\n    <circle cx=\"174\" cy=\"72\" r=\"2.3\"/>\n  </g>\n</svg>",
+              "svg_type": "venn"
             },
             {
               "src_key": "5.5",
-              "text": "Новое задание 5.5. См. изображение из PDF.",
+              "text": "На рисунке изображена диаграмма Эйлера для случайных событий A и B в некотором случайном опыте. Точками показаны все равновозможные элементарные события опыта. Найдите вероятность события A.",
               "answer": "0,5",
               "image": "p-05.jpg",
               "status": "draft",
-              "id": 129
+              "id": 129,
+              "svg": "<svg viewBox=\"0 0 220 140\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"92\" cy=\"74\" r=\"46\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <circle cx=\"138\" cy=\"74\" r=\"46\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <text x=\"57\" y=\"38\" fill=\"#e6f3ff\" font-size=\"13\" font-weight=\"700\" font-family=\"Arial, sans-serif\">A</text>\n  <text x=\"158\" y=\"38\" fill=\"#e6f3ff\" font-size=\"13\" font-weight=\"700\" font-family=\"Arial, sans-serif\">B</text>\n  <g fill=\"#d4a855\">\n    <circle cx=\"58\" cy=\"68\" r=\"2.3\"/>\n    <circle cx=\"69\" cy=\"90\" r=\"2.3\"/>\n    <circle cx=\"82\" cy=\"56\" r=\"2.3\"/>\n    <circle cx=\"97\" cy=\"77\" r=\"2.3\"/>\n    <circle cx=\"108\" cy=\"61\" r=\"2.3\"/>\n    <circle cx=\"118\" cy=\"84\" r=\"2.3\"/>\n    <circle cx=\"133\" cy=\"70\" r=\"2.3\"/>\n    <circle cx=\"150\" cy=\"60\" r=\"2.3\"/>\n    <circle cx=\"162\" cy=\"82\" r=\"2.3\"/>\n    <circle cx=\"174\" cy=\"72\" r=\"2.3\"/>\n  </g>\n</svg>",
+              "svg_type": "venn"
             },
             {
               "src_key": "5.6",
-              "text": "Новое задание 5.6. См. изображение из PDF.",
+              "text": "На рисунке изображена диаграмма Эйлера для случайных событий A и B в некотором случайном опыте. Точками показаны все равновозможные элементарные события опыта. Найдите вероятность события A ∪ B.",
               "answer": "0,1",
               "image": "p-05.jpg",
               "status": "draft",
-              "id": 130
+              "id": 130,
+              "svg": "<svg viewBox=\"0 0 220 140\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"92\" cy=\"74\" r=\"46\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <circle cx=\"138\" cy=\"74\" r=\"46\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <text x=\"57\" y=\"38\" fill=\"#e6f3ff\" font-size=\"13\" font-weight=\"700\" font-family=\"Arial, sans-serif\">A</text>\n  <text x=\"158\" y=\"38\" fill=\"#e6f3ff\" font-size=\"13\" font-weight=\"700\" font-family=\"Arial, sans-serif\">B</text>\n  <g fill=\"#d4a855\">\n    <circle cx=\"58\" cy=\"68\" r=\"2.3\"/>\n    <circle cx=\"69\" cy=\"90\" r=\"2.3\"/>\n    <circle cx=\"82\" cy=\"56\" r=\"2.3\"/>\n    <circle cx=\"97\" cy=\"77\" r=\"2.3\"/>\n    <circle cx=\"108\" cy=\"61\" r=\"2.3\"/>\n    <circle cx=\"118\" cy=\"84\" r=\"2.3\"/>\n    <circle cx=\"133\" cy=\"70\" r=\"2.3\"/>\n    <circle cx=\"150\" cy=\"60\" r=\"2.3\"/>\n    <circle cx=\"162\" cy=\"82\" r=\"2.3\"/>\n    <circle cx=\"174\" cy=\"72\" r=\"2.3\"/>\n  </g>\n</svg>",
+              "svg_type": "venn"
             },
             {
               "src_key": "5.7",
-              "text": "Новое задание 5.7. См. изображение из PDF.",
+              "text": "На рисунке изображена диаграмма Эйлера для случайных событий A и B в некотором случайном опыте. Точками показаны все равновозможные элементарные события опыта. Найдите вероятность события A ∪ B.",
               "answer": "0,9",
               "image": "p-05.jpg",
               "status": "draft",
-              "id": 131
+              "id": 131,
+              "svg": "<svg viewBox=\"0 0 220 140\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"92\" cy=\"74\" r=\"46\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <circle cx=\"138\" cy=\"74\" r=\"46\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <text x=\"57\" y=\"38\" fill=\"#e6f3ff\" font-size=\"13\" font-weight=\"700\" font-family=\"Arial, sans-serif\">A</text>\n  <text x=\"158\" y=\"38\" fill=\"#e6f3ff\" font-size=\"13\" font-weight=\"700\" font-family=\"Arial, sans-serif\">B</text>\n  <g fill=\"#d4a855\">\n    <circle cx=\"58\" cy=\"68\" r=\"2.3\"/>\n    <circle cx=\"69\" cy=\"90\" r=\"2.3\"/>\n    <circle cx=\"82\" cy=\"56\" r=\"2.3\"/>\n    <circle cx=\"97\" cy=\"77\" r=\"2.3\"/>\n    <circle cx=\"108\" cy=\"61\" r=\"2.3\"/>\n    <circle cx=\"118\" cy=\"84\" r=\"2.3\"/>\n    <circle cx=\"133\" cy=\"70\" r=\"2.3\"/>\n    <circle cx=\"150\" cy=\"60\" r=\"2.3\"/>\n    <circle cx=\"162\" cy=\"82\" r=\"2.3\"/>\n    <circle cx=\"174\" cy=\"72\" r=\"2.3\"/>\n  </g>\n</svg>",
+              "svg_type": "venn"
             },
             {
               "src_key": "5.8",
-              "text": "Новое задание 5.8. См. изображение из PDF.",
+              "text": "На рисунке изображена диаграмма Эйлера для случайных событий A и B в некотором случайном опыте. Точками показаны все равновозможные элементарные события опыта. Найдите вероятность события A̅ ∩ B.",
               "answer": "0,4",
               "image": "p-05.jpg",
               "status": "draft",
-              "id": 132
+              "id": 132,
+              "svg": "<svg viewBox=\"0 0 220 140\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"92\" cy=\"74\" r=\"46\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <circle cx=\"138\" cy=\"74\" r=\"46\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <text x=\"57\" y=\"38\" fill=\"#e6f3ff\" font-size=\"13\" font-weight=\"700\" font-family=\"Arial, sans-serif\">A</text>\n  <text x=\"158\" y=\"38\" fill=\"#e6f3ff\" font-size=\"13\" font-weight=\"700\" font-family=\"Arial, sans-serif\">B</text>\n  <g fill=\"#d4a855\">\n    <circle cx=\"58\" cy=\"68\" r=\"2.3\"/>\n    <circle cx=\"69\" cy=\"90\" r=\"2.3\"/>\n    <circle cx=\"82\" cy=\"56\" r=\"2.3\"/>\n    <circle cx=\"97\" cy=\"77\" r=\"2.3\"/>\n    <circle cx=\"108\" cy=\"61\" r=\"2.3\"/>\n    <circle cx=\"118\" cy=\"84\" r=\"2.3\"/>\n    <circle cx=\"133\" cy=\"70\" r=\"2.3\"/>\n    <circle cx=\"150\" cy=\"60\" r=\"2.3\"/>\n    <circle cx=\"162\" cy=\"82\" r=\"2.3\"/>\n    <circle cx=\"174\" cy=\"72\" r=\"2.3\"/>\n  </g>\n</svg>",
+              "svg_type": "venn"
             },
             {
               "src_key": "5.9",
-              "text": "Новое задание 5.9. См. изображение из PDF.",
+              "text": "На рисунке изображена диаграмма Эйлера для случайных событий A и B в некотором случайном опыте. Точками показаны все равновозможные элементарные события опыта. Найдите вероятность события A ∩ B.",
               "answer": "0,2",
               "image": "p-05.jpg",
               "status": "draft",
-              "id": 133
+              "id": 133,
+              "svg": "<svg viewBox=\"0 0 220 140\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"92\" cy=\"74\" r=\"46\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <circle cx=\"138\" cy=\"74\" r=\"46\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <text x=\"57\" y=\"38\" fill=\"#e6f3ff\" font-size=\"13\" font-weight=\"700\" font-family=\"Arial, sans-serif\">A</text>\n  <text x=\"158\" y=\"38\" fill=\"#e6f3ff\" font-size=\"13\" font-weight=\"700\" font-family=\"Arial, sans-serif\">B</text>\n  <g fill=\"#d4a855\">\n    <circle cx=\"58\" cy=\"68\" r=\"2.3\"/>\n    <circle cx=\"69\" cy=\"90\" r=\"2.3\"/>\n    <circle cx=\"82\" cy=\"56\" r=\"2.3\"/>\n    <circle cx=\"97\" cy=\"77\" r=\"2.3\"/>\n    <circle cx=\"108\" cy=\"61\" r=\"2.3\"/>\n    <circle cx=\"118\" cy=\"84\" r=\"2.3\"/>\n    <circle cx=\"133\" cy=\"70\" r=\"2.3\"/>\n    <circle cx=\"150\" cy=\"60\" r=\"2.3\"/>\n    <circle cx=\"162\" cy=\"82\" r=\"2.3\"/>\n    <circle cx=\"174\" cy=\"72\" r=\"2.3\"/>\n  </g>\n</svg>",
+              "svg_type": "venn"
             },
             {
               "src_key": "5.10",
-              "text": "Новое задание 5.10. См. изображение из PDF.",
+              "text": "На рисунке изображена диаграмма Эйлера для случайных событий A и B в некотором случайном опыте. Точками показаны все равновозможные элементарные события опыта. Найдите вероятность события A ∩ B̅.",
               "answer": "0,3",
               "image": "p-05.jpg",
               "status": "draft",
-              "id": 134
+              "id": 134,
+              "svg": "<svg viewBox=\"0 0 220 140\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n  <circle cx=\"92\" cy=\"74\" r=\"46\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <circle cx=\"138\" cy=\"74\" r=\"46\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n  <text x=\"57\" y=\"38\" fill=\"#e6f3ff\" font-size=\"13\" font-weight=\"700\" font-family=\"Arial, sans-serif\">A</text>\n  <text x=\"158\" y=\"38\" fill=\"#e6f3ff\" font-size=\"13\" font-weight=\"700\" font-family=\"Arial, sans-serif\">B</text>\n  <g fill=\"#d4a855\">\n    <circle cx=\"58\" cy=\"68\" r=\"2.3\"/>\n    <circle cx=\"69\" cy=\"90\" r=\"2.3\"/>\n    <circle cx=\"82\" cy=\"56\" r=\"2.3\"/>\n    <circle cx=\"97\" cy=\"77\" r=\"2.3\"/>\n    <circle cx=\"108\" cy=\"61\" r=\"2.3\"/>\n    <circle cx=\"118\" cy=\"84\" r=\"2.3\"/>\n    <circle cx=\"133\" cy=\"70\" r=\"2.3\"/>\n    <circle cx=\"150\" cy=\"60\" r=\"2.3\"/>\n    <circle cx=\"162\" cy=\"82\" r=\"2.3\"/>\n    <circle cx=\"174\" cy=\"72\" r=\"2.3\"/>\n  </g>\n</svg>",
+              "svg_type": "venn"
             },
             {
               "src_key": "6.1",
