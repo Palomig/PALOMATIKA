@@ -27,6 +27,12 @@ export async function runTelegramAuthStart({ telegramGlobal, tryMiniAppLogin, st
     const initData = typeof webApp.initData === 'string' ? webApp.initData.trim() : '';
 
     if (!initData) {
+      // Outside Telegram Mini App, Telegram.WebApp object may exist but initData is empty.
+      // In that case, prefer bot fallback auth flow instead of hard error.
+      if (typeof startBotFallback === 'function') {
+        return await startBotFallback();
+      }
+
       return {
         mode: 'miniapp_error',
         inlineError: true,

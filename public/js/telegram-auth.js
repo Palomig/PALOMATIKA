@@ -29,6 +29,12 @@
       const initData = typeof webApp.initData === 'string' ? webApp.initData.trim() : '';
 
       if (!initData) {
+        // Outside Telegram Mini App, Telegram.WebApp object may exist but initData is empty.
+        // In that case, prefer bot fallback auth flow instead of hard error.
+        if (typeof config.startBotFallback === 'function') {
+          return await config.startBotFallback();
+        }
+
         return {
           mode: 'miniapp_error',
           inlineError: true,
