@@ -424,7 +424,13 @@ function telegramAuth() {
             this.loading = false;
             this.waiting = true;
 
-            window.open(data.deep_link, '_blank');
+            const ua = navigator.userAgent || '';
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(ua);
+            if (isMobile) {
+                window.location.href = data.deep_link;
+            } else {
+                window.open(data.deep_link, '_blank');
+            }
             this.startPolling();
 
             return {
