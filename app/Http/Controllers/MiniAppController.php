@@ -291,6 +291,8 @@ class MiniAppController extends Controller
                     $uniq[] = [
                         'id' => $task['id'] ?? null,
                         'text' => $text,
+                        'svg' => $task['svg'] ?? null,
+                        'image' => $task['image'] ?? null,
                     ];
                 }
             }

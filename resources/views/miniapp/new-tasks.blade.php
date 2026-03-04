@@ -57,6 +57,28 @@
   <div class="task-list">
     @forelse(($newByTopic[$selectedTopic] ?? []) as $task)
       <div class="task-item">
+        @php
+          $svg = is_string($task['svg'] ?? null) ? $task['svg'] : '';
+          $image = is_string($task['image'] ?? null) ? $task['image'] : '';
+        @endphp
+
+        @if($svg !== '')
+          <div style="margin-bottom:10px; border:1px solid var(--border); border-radius:10px; overflow:hidden; background:#0a1628; padding:8px;">
+            {!! $svg !!}
+          </div>
+        @elseif($image !== '')
+          @if(\Illuminate\Support\Str::startsWith($image, '<svg'))
+            <div style="margin-bottom:10px; border:1px solid var(--border); border-radius:10px; overflow:hidden; background:#0a1628; padding:8px;">
+              {!! $image !!}
+            </div>
+          @else
+            <img src="{{ asset('images/tasks/' . (int)$selectedTopic . '/' . ltrim($image, '/')) }}"
+                 alt="Иллюстрация"
+                 style="display:block;max-width:100%;height:auto;margin-bottom:10px;border:1px solid var(--border);border-radius:10px;background:#fff;padding:4px;"
+                 loading="lazy">
+          @endif
+        @endif
+
         <div class="task-item-text">{{ $task['text'] }}</div>
         @if(!empty($task['id']))
           <div class="task-item-meta">ID {{ $task['id'] }}</div>
