@@ -415,11 +415,25 @@ function homePage() {
         }
 
         // Verify session really exists in WebView before redirect.
-        const meRes = await fetch('/api/telegram/session-check', { credentials: 'include' });
-        const me = await meRes.json().catch(() => ({}));
-        if (!meRes.ok || !me.authenticated) {
+        // Some mobile WebViews apply Set-Cookie with slight delay, so retry briefly.
+        let meRes = null;
+        let me = {};
+        let authenticated = false;
+        for (let i = 0; i < 4; i++) {
+          meRes = await fetch('/api/telegram/session-check', {
+            credentials: 'include',
+            cache: 'no-store',
+            headers: { 'Accept': 'application/json' }
+          });
+          me = await meRes.json().catch(() => ({}));
+          authenticated = !!(meRes.ok && me && me.authenticated);
+          if (authenticated) break;
+          await new Promise(r => setTimeout(r, 250));
+        }
+
+        if (!authenticated) {
           this.authErrorCode = 'E_COOKIE_SESSION';
-          this.sendDiag('auth_post_login_check', this.authErrorCode, { me_status: meRes.status || null });
+          this.sendDiag('auth_post_login_check', this.authErrorCode, { me_status: meRes?.status || null });
           throw new Error('Сессия не сохранилась');
         }
 
