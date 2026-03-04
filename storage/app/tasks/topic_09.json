@@ -165,68 +165,90 @@
             {
               "id": 20,
               "expression": "3(x + 6) - 2(x - 6) = 6",
-              "answer": "-24",
-              "status": "draft"
+              "answer": "-44",
+              "status": "draft",
+              "src_key": "26.1",
+              "text": "Решите уравнение: 3(x + 11) - 2(x - 11) = 11"
             },
             {
               "id": 21,
               "expression": "3(x + 5) - 2(x - 5) = 5",
-              "answer": "-20",
-              "status": "draft"
+              "answer": "-8",
+              "status": "draft",
+              "src_key": "26.2",
+              "text": "Решите уравнение: 3(x + 2) - 2(x - 2) = 2"
             },
             {
               "id": 22,
               "expression": "3(x + 2) - 2(x - 2) = 2",
-              "answer": "-8",
-              "status": "draft"
+              "answer": "-24",
+              "status": "draft",
+              "src_key": "26.3",
+              "text": "Решите уравнение: 3(x + 6) - 2(x - 6) = 6"
             },
             {
               "id": 23,
               "expression": "2(x - 8) - x = 8",
-              "answer": "16",
-              "status": "draft"
+              "answer": "-20",
+              "status": "draft",
+              "src_key": "26.4",
+              "text": "Решите уравнение: 3(x + 5) - 2(x - 5) = 5"
             },
             {
               "id": 24,
               "expression": "2(x - 3) - x = 3",
-              "answer": "9",
-              "status": "draft"
+              "answer": "-12",
+              "status": "draft",
+              "src_key": "26.5",
+              "text": "Решите уравнение: 3(x + 3) - 2(x - 3) = 3"
             },
             {
               "id": 25,
               "expression": "2(x - 10) - x = 10",
-              "answer": "20",
-              "status": "draft"
+              "answer": "-40",
+              "status": "draft",
+              "src_key": "26.6",
+              "text": "Решите уравнение: 3(x + 10) - 2(x - 10) = 10"
             },
             {
               "id": 26,
               "expression": "2(x - 9) - x = 9",
-              "answer": "18",
-              "status": "draft"
+              "answer": "-36",
+              "status": "draft",
+              "src_key": "26.7",
+              "text": "Решите уравнение: 3(x + 9) - 2(x - 9) = 9"
             },
             {
               "id": 27,
               "expression": "2(x - 6) = x + 6",
-              "answer": "18",
-              "status": "draft"
+              "answer": "-16",
+              "status": "draft",
+              "src_key": "26.8",
+              "text": "Решите уравнение: 3(x + 4) - 2(x - 4) = 4"
             },
             {
               "id": 28,
               "expression": "2(x - 7) = x + 7",
-              "answer": "21",
-              "status": "draft"
+              "answer": "-32",
+              "status": "draft",
+              "src_key": "26.9",
+              "text": "Решите уравнение: 3(x + 8) - 2(x - 8) = 8"
             },
             {
               "id": 29,
               "expression": "2(x - 9) = x + 9",
-              "answer": "27",
-              "status": "draft"
+              "answer": "-28",
+              "status": "draft",
+              "src_key": "26.10",
+              "text": "Решите уравнение: 3(x + 7) - 2(x - 7) = 7"
             },
             {
               "id": 30,
               "expression": "2(x - 2) = x + 2",
-              "answer": "6",
-              "status": "draft"
+              "answer": "-4",
+              "status": "draft",
+              "src_key": "26.11",
+              "text": "Решите уравнение: 3(x + 1) - 2(x - 1) = 1"
             }
           ]
         },
