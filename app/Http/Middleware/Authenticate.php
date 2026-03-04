@@ -22,7 +22,7 @@ class Authenticate extends Middleware
 
         // Mini App routes: redirect to /tg/ home (not /login which hangs in WebView)
         if ($request->is('tg/*') || $request->is('tg')) {
-            return url('/tg/');
+            return url('/tg');
         }
 
         return route('login');

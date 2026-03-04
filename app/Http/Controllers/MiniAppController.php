@@ -56,7 +56,7 @@ class MiniAppController extends Controller
         $initData = trim((string) $request->input('initData', ''));
 
         if ($initData === '') {
-            return redirect('/tg/')->with('error', 'Нет данных Telegram для входа');
+            return redirect('/tg')->with('error', 'Нет данных Telegram для входа');
         }
 
         try {
@@ -66,7 +66,7 @@ class MiniAppController extends Controller
                 'reason' => $e->getMessage(),
                 'ip' => $request->ip(),
             ]);
-            return redirect('/tg/')->with('error', 'Данные Telegram недействительны. Перезапустите mini app.');
+            return redirect('/tg')->with('error', 'Данные Telegram недействительны. Перезапустите mini app.');
         }
 
         $user = $this->tgMiniAuth->findOrCreateUser($telegramUser);
@@ -132,7 +132,7 @@ class MiniAppController extends Controller
         // Fallback: session cookie survived the redirect — use existing auth
         $user = Auth::user();
         if (!$user) {
-            return redirect('/tg/')->with('error', 'Сессия входа не сохранилась. Попробуйте ещё раз.');
+            return redirect('/tg')->with('error', 'Сессия входа не сохранилась. Попробуйте ещё раз.');
         }
 
         $target = !$user->onboarding_completed_at ? '/tg/onboarding' : '/tg/dashboard';

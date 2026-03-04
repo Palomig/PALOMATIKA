@@ -438,7 +438,7 @@ class TelegramBotAuthController extends Controller
         $keyboard = [[
             [
                 'text' => '🚀 Открыть palomatika',
-                'web_app' => ['url' => url('/tg/')],
+                'web_app' => ['url' => url('/tg')],
             ],
         ]];
 
