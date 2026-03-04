@@ -32,15 +32,17 @@
                     @if($imageName !== '')
                         <div class="mb-3">
                             @if(\Illuminate\Support\Str::startsWith($imageName, '<svg'))
-                                <div class="rounded-lg overflow-hidden border border-slate-700 bg-slate-900/40 p-2">
+                                <div class="rounded-lg overflow-hidden border border-slate-700 bg-slate-900/40 p-2 w-full max-w-[360px] h-[220px] flex items-center justify-center [&>svg]:w-full [&>svg]:h-full [&>svg]:object-contain">
                                     {!! $imageName !!}
                                 </div>
                             @else
-                                <img src="{{ asset('images/tasks/' . $topicId . '/' . ltrim($imageName, '/')) }}"
-                                     alt="Иллюстрация к задаче {{ $task['id'] }}"
-                                     class="max-w-full h-auto rounded-lg bg-white p-1 border border-slate-600"
-                                     loading="lazy"
-                                     onerror="this.onerror=null; this.src='{{ asset('images/placeholder.svg') }}';">
+                                <div class="w-full max-w-[360px] h-[220px] rounded-lg bg-white p-1 border border-slate-600 flex items-center justify-center overflow-hidden">
+                                    <img src="{{ asset('images/tasks/' . $topicId . '/' . ltrim($imageName, '/')) }}"
+                                         alt="Иллюстрация к задаче {{ $task['id'] }}"
+                                         class="max-w-full max-h-full object-contain"
+                                         loading="lazy"
+                                         onerror="this.onerror=null; this.src='{{ asset('images/placeholder.svg') }}';">
+                                </div>
                             @endif
                         </div>
                     @endif
