@@ -781,7 +781,7 @@ class TaskDataService
         $itemId = $parsed['item_id'];
         $itemType = $parsed['item_type'];
 
-        if ($blockNumber < 1 || $zadanieNumber < 1 || $itemId < 1) {
+        if ($blockNumber < 1 || $zadanieNumber < 0 || $itemId < 1) {
             return false;
         }
 
@@ -824,7 +824,7 @@ class TaskDataService
         $zadanieNumber = (int) ($matches[2] ?? 0);
         $taskId = (int) ($matches[3] ?? 0);
 
-        if ($blockNumber < 1 || $zadanieNumber < 1 || $taskId < 1) {
+        if ($blockNumber < 1 || $zadanieNumber < 0 || $taskId < 1) {
             return false;
         }
 
