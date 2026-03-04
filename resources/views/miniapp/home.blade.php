@@ -238,25 +238,11 @@
   <div class="urgency">
     <span class="urgency-icon">⚡</span>
     <div class="urgency-text">
-      Каждый день без практики — это пропущенные баллы.<br>
-      <span>Узнай свой реальный уровень прямо сейчас.</span>
+      Попробуй новый формат — Мини-ОГЭ ~10 минут.<br>
+      <span>Для тех у кого мало времени.</span>
     </div>
   </div>
 
-  <div class="stats-row">
-    <div class="stat-card">
-      <span class="stat-num">14</span>
-      <span class="stat-text">заданий</span>
-    </div>
-    <div class="stat-card">
-      <span class="stat-num">~45</span>
-      <span class="stat-text">минут</span>
-    </div>
-    <div class="stat-card">
-      <span class="stat-num">0₽</span>
-      <span class="stat-text">бесплатно</span>
-    </div>
-  </div>
 
   @auth
     <a href="/tg/dashboard" class="btn-primary" id="go-btn" style="text-decoration:none;" :style="!appReady ? 'pointer-events:none;opacity:.6' : ''">
