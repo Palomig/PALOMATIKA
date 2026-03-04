@@ -177,6 +177,11 @@
 
   {{-- SMALL TILES --}}
   <div class="tiles-grid">
+    <a href="/tg/mini" class="tile-sm">
+      <div class="tile-sm-icon">🆕</div>
+      <div class="tile-sm-name">Новые задания</div>
+      <div class="tile-sm-desc">из банка ФИПИ</div>
+    </a>
     @if($lastAttempt)
     <a href="/tg/results/{{ $lastAttempt->id }}" class="tile-sm">
       <div class="tile-sm-icon">🔍</div>
