@@ -12,6 +12,7 @@ use App\Services\TelegramMiniAppAuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -99,6 +100,14 @@ class TelegramBotAuthController extends Controller
      */
     public function webAppLogin(Request $request)
     {
+        Log::info('tg_webapp_login_attempt', [
+            'ip' => $request->ip(),
+            'ua' => $request->userAgent(),
+            'has_initData' => trim((string) $request->input('initData', '')) !== '',
+            'has_initDataUnsafe' => is_array($request->input('initDataUnsafe')),
+            'has_startParam' => trim((string) $request->input('startParam', '')) !== '',
+        ]);
+
         $validator = Validator::make($request->all(), [
             'initData' => ['nullable', 'string'],
             'initDataUnsafe' => ['nullable', 'array'],
@@ -149,6 +158,12 @@ class TelegramBotAuthController extends Controller
                 ],
             ]);
 
+            Log::warning('tg_webapp_login_invalid_payload', [
+                'ip' => $request->ip(),
+                'ua' => $request->userAgent(),
+                'reason' => $e->getMessage(),
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Некорректные данные Telegram Mini App',
@@ -165,6 +180,13 @@ class TelegramBotAuthController extends Controller
                 'payload_json' => [
                     'reason' => $e->getMessage(),
                 ],
+            ]);
+
+            Log::warning('tg_webapp_login_signature_failed', [
+                'ip' => $request->ip(),
+                'ua' => $request->userAgent(),
+                'reason' => $e->getMessage(),
+                'user_id_hint' => (string) ($authFields['user_id'] ?? 'unknown'),
             ]);
 
             return response()->json([
@@ -204,6 +226,13 @@ class TelegramBotAuthController extends Controller
                 'query_id' => $authFields['query_id'] ?? null,
                 'method' => 'telegram_webapp_init_data',
             ],
+        ]);
+
+        Log::info('tg_webapp_login_success', [
+            'user_id' => $user->id,
+            'ip' => $request->ip(),
+            'ua' => $request->userAgent(),
+            'redirect_to' => $redirectTo,
         ]);
 
         return response()->json([
