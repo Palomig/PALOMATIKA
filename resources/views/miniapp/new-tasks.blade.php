@@ -35,7 +35,7 @@
   .task-item-meta { margin-top: 6px; font-size: 10px; color: var(--muted); font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
 @endpush
 
-@section('content')
+@section('body')
 <div class="page">
   <a href="/tg/dashboard" class="back-btn">‹</a>
 
