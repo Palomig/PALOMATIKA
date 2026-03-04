@@ -251,6 +251,61 @@ class MiniAppController extends Controller
     }
 
     /**
+     * New FIPI tasks showcase by topic.
+     */
+    public function newTasks(Request $request)
+    {
+        $topics = ['09', '10', '15', '16', '17'];
+        $selected = str_pad((string) $request->query('topic', '09'), 2, '0', STR_PAD_LEFT);
+        if (!in_array($selected, $topics, true)) {
+            $selected = '09';
+        }
+
+        $newByTopic = [];
+
+        foreach ($topics as $topicId) {
+            $data = $this->taskData->getTopicData($topicId);
+            $tasks = [];
+
+            foreach (($data['blocks'] ?? []) as $block) {
+                foreach (($block['zadaniya'] ?? []) as $zadanie) {
+                    if (($zadanie['label'] ?? null) !== 'Новые задания') {
+                        continue;
+                    }
+                    $tasks = $zadanie['tasks'] ?? [];
+                    break 2;
+                }
+            }
+
+            // One representative per task type (normalize numbers to avoid duplicates)
+            $seen = [];
+            $uniq = [];
+            foreach ($tasks as $task) {
+                $text = trim((string) ($task['text'] ?? ''));
+                if ($text === '') {
+                    continue;
+                }
+                $normalized = preg_replace('/\d+[\d.,]*/u', '#', $text);
+                if (!isset($seen[$normalized])) {
+                    $seen[$normalized] = true;
+                    $uniq[] = [
+                        'id' => $task['id'] ?? null,
+                        'text' => $text,
+                    ];
+                }
+            }
+
+            $newByTopic[$topicId] = $uniq;
+        }
+
+        return view('miniapp.new-tasks', [
+            'topics' => $topics,
+            'selectedTopic' => $selected,
+            'newByTopic' => $newByTopic,
+        ]);
+    }
+
+    /**
      * Mini-OGE mode selection page.
      */
     public function mini()

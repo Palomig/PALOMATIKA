@@ -177,7 +177,7 @@
 
   {{-- SMALL TILES --}}
   <div class="tiles-grid">
-    <a href="/tg/mini" class="tile-sm">
+    <a href="/tg/new-tasks" class="tile-sm">
       <div class="tile-sm-icon">🆕</div>
       <div class="tile-sm-name">Новые задания</div>
       <div class="tile-sm-desc">из банка ФИПИ</div>
