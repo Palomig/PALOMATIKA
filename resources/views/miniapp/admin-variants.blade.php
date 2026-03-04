@@ -357,7 +357,7 @@ function adminVariants() {
     shareLink(hash) {
       const tg = window.Telegram?.WebApp;
       const botUsername = '{{ config("services.telegram.bot_username", "palomatika_auth_bot") }}';
-      const link = `https://t.me/${botUsername}/palomatika?startapp=oge_variant_hash_${hash}`;
+      const link = `https://t.me/${botUsername}?startapp=oge_variant_hash_${hash}`;
       const text = 'Реши этот вариант ОГЭ по математике!';
 
       if (tg && tg.openTelegramLink) {
@@ -370,7 +370,7 @@ function adminVariants() {
 
     copyLink(hash) {
       const botUsername = '{{ config("services.telegram.bot_username", "palomatika_auth_bot") }}';
-      const link = `https://t.me/${botUsername}/palomatika?startapp=oge_variant_hash_${hash}`;
+      const link = `https://t.me/${botUsername}?startapp=oge_variant_hash_${hash}`;
       navigator.clipboard.writeText(link).then(() => {
         const tg = window.Telegram?.WebApp;
         if (tg && tg.showAlert) tg.showAlert('Ссылка скопирована!');
