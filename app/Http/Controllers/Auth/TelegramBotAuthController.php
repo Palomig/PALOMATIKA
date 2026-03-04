@@ -470,7 +470,7 @@ class TelegramBotAuthController extends Controller
             return;
         }
 
-        $openUrl = url('/tg/?startapp=' . rawurlencode($startParam));
+        $openUrl = url('/tg?startapp=' . rawurlencode($startParam));
         $this->sendTelegramMessage(
             (string) $from['id'],
             "Открой вариант в мини-приложении:",
