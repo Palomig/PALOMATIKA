@@ -325,12 +325,14 @@ function telegramAuth() {
         waiting: false,
         error: '',
         token: null,
+        traceId: null,
         pollInterval: null,
 
         async startAuth() {
             this.loading = true;
             this.error = '';
             this.waiting = false;
+            this.traceId = this.generateTraceId();
 
             try {
                 const authHelper = window.PalomatikaTelegramAuth || {};
@@ -377,6 +379,7 @@ function telegramAuth() {
                         initData,
                         initDataUnsafe: webApp.initDataUnsafe || null,
                         startParam: (webApp.initDataUnsafe && webApp.initDataUnsafe.start_param) ? webApp.initDataUnsafe.start_param : null,
+                        trace_id: this.traceId,
                     })
                 });
 
@@ -411,6 +414,7 @@ function telegramAuth() {
                 },
                 body: JSON.stringify({
                     startParam,
+                    trace_id: this.traceId,
                 })
             });
 
@@ -454,7 +458,7 @@ function telegramAuth() {
                 }
 
                 try {
-                    const response = await fetch(`/api/telegram/check-token/${this.token}`);
+                    const response = await fetch(`/api/telegram/check-token/${this.token}?trace_id=${encodeURIComponent(this.traceId || '')}`);
                     const data = await response.json();
 
                     if (data.status === 'authenticated') {
@@ -476,6 +480,10 @@ function telegramAuth() {
                 clearInterval(this.pollInterval);
                 this.pollInterval = null;
             }
+        },
+
+        generateTraceId() {
+            return `tg-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
         }
     }
 }

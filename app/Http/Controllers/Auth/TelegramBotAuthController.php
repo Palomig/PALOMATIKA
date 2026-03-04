@@ -30,6 +30,11 @@ class TelegramBotAuthController extends Controller
      */
     public function generateToken(Request $request)
     {
+        $traceId = trim((string) $request->input('trace_id', ''));
+        if ($traceId === '') {
+            $traceId = trim((string) $request->query('trace_id', ''));
+        }
+
         $startParam = trim((string) $request->input('startParam', ''));
         if ($startParam === '' && $request->hasSession()) {
             $startParam = trim((string) $request->session()->get('telegram_start_param', ''));
@@ -54,10 +59,19 @@ class TelegramBotAuthController extends Controller
         $botUsername = config('services.telegram.bot_username');
         $deepLink = "https://t.me/{$botUsername}?start={$token}";
 
+        Log::info('tg_auth_fallback_token_created', [
+            'trace_id' => $traceId !== '' ? $traceId : null,
+            'token' => $token,
+            'ip' => $request->ip(),
+            'ua' => $request->userAgent(),
+            'has_startParam' => $startParam !== '',
+        ]);
+
         return response()->json([
             'token' => $token,
             'deep_link' => $deepLink,
             'expires_in' => 300, // 5 minutes
+            'trace_id' => $traceId !== '' ? $traceId : null,
         ]);
     }
 
@@ -66,13 +80,25 @@ class TelegramBotAuthController extends Controller
      */
     public function checkToken(Request $request, string $token)
     {
+        $traceId = trim((string) $request->query('trace_id', ''));
+
         $authToken = TelegramAuthToken::where('token', $token)->first();
 
         if (!$authToken) {
-            return response()->json(['status' => 'not_found'], 404);
+            Log::warning('tg_auth_check_not_found', [
+                'trace_id' => $traceId !== '' ? $traceId : null,
+                'token' => $token,
+                'ip' => $request->ip(),
+            ]);
+            return response()->json(['status' => 'not_found']);
         }
 
         if ($authToken->isExpired()) {
+            Log::warning('tg_auth_check_expired', [
+                'trace_id' => $traceId !== '' ? $traceId : null,
+                'token' => $token,
+                'ip' => $request->ip(),
+            ]);
             return response()->json(['status' => 'expired']);
         }
 
@@ -85,6 +111,16 @@ class TelegramBotAuthController extends Controller
                 $separator = str_contains($loginUrl, '?') ? '&' : '?';
                 $loginUrl .= $separator . 'startapp=' . rawurlencode($startParam);
             }
+            if ($traceId !== '') {
+                $separator = str_contains($loginUrl, '?') ? '&' : '?';
+                $loginUrl .= $separator . 'trace_id=' . rawurlencode($traceId);
+            }
+
+            Log::info('tg_auth_check_authenticated', [
+                'trace_id' => $traceId !== '' ? $traceId : null,
+                'token' => $token,
+                'ip' => $request->ip(),
+            ]);
 
             return response()->json([
                 'status' => 'authenticated',
@@ -100,7 +136,10 @@ class TelegramBotAuthController extends Controller
      */
     public function webAppLogin(Request $request)
     {
+        $traceId = trim((string) $request->input('trace_id', ''));
+
         Log::info('tg_webapp_login_attempt', [
+            'trace_id' => $traceId !== '' ? $traceId : null,
             'ip' => $request->ip(),
             'ua' => $request->userAgent(),
             'has_initData' => trim((string) $request->input('initData', '')) !== '',
@@ -112,6 +151,7 @@ class TelegramBotAuthController extends Controller
             'initData' => ['nullable', 'string'],
             'initDataUnsafe' => ['nullable', 'array'],
             'startParam' => ['nullable', 'string'],
+            'trace_id' => ['nullable', 'string'],
         ]);
 
         if ($validator->fails()) {
@@ -159,6 +199,7 @@ class TelegramBotAuthController extends Controller
             ]);
 
             Log::warning('tg_webapp_login_invalid_payload', [
+                'trace_id' => $traceId !== '' ? $traceId : null,
                 'ip' => $request->ip(),
                 'ua' => $request->userAgent(),
                 'reason' => $e->getMessage(),
@@ -183,6 +224,7 @@ class TelegramBotAuthController extends Controller
             ]);
 
             Log::warning('tg_webapp_login_signature_failed', [
+                'trace_id' => $traceId !== '' ? $traceId : null,
                 'ip' => $request->ip(),
                 'ua' => $request->userAgent(),
                 'reason' => $e->getMessage(),
@@ -229,6 +271,7 @@ class TelegramBotAuthController extends Controller
         ]);
 
         Log::info('tg_webapp_login_success', [
+            'trace_id' => $traceId !== '' ? $traceId : null,
             'user_id' => $user->id,
             'ip' => $request->ip(),
             'ua' => $request->userAgent(),
@@ -239,19 +282,29 @@ class TelegramBotAuthController extends Controller
             'success' => true,
             'redirect_to' => $redirectTo,
             'user_id' => $user->id,
+            'trace_id' => $traceId !== '' ? $traceId : null,
         ]);
     }
 
     /**
      * Perform actual login (Web route with session)
      */
-    public function login(string $token)
+    public function login(Request $request, string $token)
     {
+        $traceId = trim((string) $request->query('trace_id', ''));
+
         $authToken = TelegramAuthToken::where('token', $token)
             ->where('status', 'authenticated')
             ->first();
 
         if (!$authToken || $authToken->isExpired()) {
+            Log::warning('tg_token_login_failed', [
+                'trace_id' => $traceId !== '' ? $traceId : null,
+                'token' => $token,
+                'ip' => $request->ip(),
+                'ua' => $request->userAgent(),
+            ]);
+
             $this->auditLogger->log([
                 'event_type' => 'telegram_token_login_failed',
                 'category' => 'auth',
@@ -302,8 +355,21 @@ class TelegramBotAuthController extends Controller
 
         if ($startParam !== '') {
             $redirectTo = $this->resolvePostLoginRedirect(['start_param' => $startParam]);
+            Log::info('tg_token_login_success', [
+                'trace_id' => $traceId !== '' ? $traceId : null,
+                'token' => $token,
+                'user_id' => $user->id,
+                'redirect_to' => $redirectTo,
+            ]);
             return redirect()->to($redirectTo);
         }
+
+        Log::info('tg_token_login_success', [
+            'trace_id' => $traceId !== '' ? $traceId : null,
+            'token' => $token,
+            'user_id' => $user->id,
+            'redirect_to' => '/dashboard',
+        ]);
 
         return redirect()->intended('/dashboard');
     }
