@@ -193,7 +193,7 @@
     </template>
 </div>
 
-<script src="/js/telegram-auth.js"></script>
+<script src="/js/telegram-auth.js?v={{ @filemtime(public_path('js/telegram-auth.js')) }}"></script>
 <script>
 function telegramAutoLogin() {
     return {
