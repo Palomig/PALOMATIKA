@@ -62,6 +62,7 @@
   }
   .badge-purple { background: var(--purple-bg); color: var(--purple); }
   .badge-blue { background: var(--accent-bg); color: var(--accent); }
+  .badge-red { background: rgba(239, 68, 68, .2); color: #ff8a8a; }
 
   /* SMALL TILES 2x2 */
   .tiles-grid {
@@ -73,11 +74,13 @@
     border-radius: var(--r); padding: 14px;
     cursor: pointer; transition: background 0.15s;
     user-select: none; text-decoration: none; color: inherit;
+    position: relative;
   }
   .tile-sm:active { background: var(--surface2); }
   .tile-sm-icon { font-size: 22px; margin-bottom: 6px; }
   .tile-sm-name { font-size: 13px; font-weight: 800; color: var(--text); margin-bottom: 2px; }
   .tile-sm-desc { font-size: 10px; font-weight: 600; color: var(--muted); line-height: 1.3; }
+  .tile-badge-top-right { position: absolute; top: 8px; right: 8px; margin-top: 0; }
 
   /* WEAK TOPICS */
   .weak-section {
@@ -111,14 +114,13 @@
   {{-- GREETING --}}
   <div class="greeting">
     <div class="greeting-name">Привет, {{ $user->name ?? 'ученик' }}!</div>
-    <div class="greeting-sub">Математика · ОГЭ 2026</div>
   </div>
 
   {{-- COUNTDOWN STRIP --}}
   <div class="cd-strip">
     <div class="cd-strip-left">
       <span class="pulse-dot-sm"></span>
-      <span class="cd-strip-label">До ОГЭ</span>
+      <span class="cd-strip-label">До ОГЭ по математике</span>
       <span class="cd-strip-val" x-text="daysLeft + ' дн'">— дн</span>
     </div>
     <div class="cd-strip-date">2 июня 2026</div>
@@ -165,7 +167,7 @@
       <div class="tile-icon">⚡</div>
       <div class="tile-name">Мини-ОГЭ</div>
       <div class="tile-desc">Короткая тренировка по одной теме</div>
-      <div class="tile-badge badge-purple">Новое</div>
+      <div class="tile-badge badge-purple">~10 мин</div>
     </a>
     <a href="#" class="tile-big tile-blue" @click.prevent="startFull()">
       <div class="tile-icon">📝</div>
@@ -181,7 +183,7 @@
       <div class="tile-sm-icon">🆕</div>
       <div class="tile-sm-name">Новые задания</div>
       <div class="tile-sm-desc">из банка ФИПИ</div>
-      <div class="tile-badge badge-purple">Новое</div>
+      <div class="tile-badge badge-red tile-badge-top-right">Новое</div>
     </a>
     @if($lastAttempt)
     <a href="/tg/results/{{ $lastAttempt->id }}" class="tile-sm">
