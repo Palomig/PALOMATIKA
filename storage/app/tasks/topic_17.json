@@ -461,7 +461,9 @@
               "answer": "61",
               "image": "p-25.jpg",
               "status": "draft",
-              "id": 170
+              "id": 170,
+              "svg": "<svg viewBox=\"0 0 220 160\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n\n  <!-- Isosceles trapezoid -->\n  <polygon points=\"26,138 194,138 166,30 54,30\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n\n  <!-- Diagonal -->\n  <line x1=\"26\" y1=\"138\" x2=\"166\" y2=\"30\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n\n  <!-- Equal side ticks -->\n  <line x1=\"48\" y1=\"95\" x2=\"58\" y2=\"99\" stroke=\"#d4a855\" stroke-width=\"1.6\"/>\n  <line x1=\"172\" y1=\"95\" x2=\"162\" y2=\"99\" stroke=\"#d4a855\" stroke-width=\"1.6\"/>\n\n  <!-- Angle arcs -->\n  <path d=\"M 41 132 A 15 15 0 0 1 33 119\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 153 36 A 15 15 0 0 1 164 48\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 178 130 A 16 16 0 0 1 190 120\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 175 126 A 21 21 0 0 1 190 113\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n</svg>",
+              "svg_type": "trapezoid"
             },
             {
               "src_key": "22.2",
@@ -469,7 +471,9 @@
               "answer": "69",
               "image": "p-25.jpg",
               "status": "draft",
-              "id": 171
+              "id": 171,
+              "svg": "<svg viewBox=\"0 0 220 160\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n\n  <!-- Isosceles trapezoid -->\n  <polygon points=\"26,138 194,138 166,30 54,30\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n\n  <!-- Diagonal -->\n  <line x1=\"26\" y1=\"138\" x2=\"166\" y2=\"30\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n\n  <!-- Equal side ticks -->\n  <line x1=\"48\" y1=\"95\" x2=\"58\" y2=\"99\" stroke=\"#d4a855\" stroke-width=\"1.6\"/>\n  <line x1=\"172\" y1=\"95\" x2=\"162\" y2=\"99\" stroke=\"#d4a855\" stroke-width=\"1.6\"/>\n\n  <!-- Angle arcs -->\n  <path d=\"M 41 132 A 15 15 0 0 1 33 119\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 153 36 A 15 15 0 0 1 164 48\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 178 130 A 16 16 0 0 1 190 120\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 175 126 A 21 21 0 0 1 190 113\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n</svg>",
+              "svg_type": "trapezoid"
             },
             {
               "src_key": "22.3",
@@ -477,7 +481,9 @@
               "answer": "63",
               "image": "p-25.jpg",
               "status": "draft",
-              "id": 172
+              "id": 172,
+              "svg": "<svg viewBox=\"0 0 220 160\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n\n  <!-- Isosceles trapezoid -->\n  <polygon points=\"26,138 194,138 166,30 54,30\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n\n  <!-- Diagonal -->\n  <line x1=\"26\" y1=\"138\" x2=\"166\" y2=\"30\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n\n  <!-- Equal side ticks -->\n  <line x1=\"48\" y1=\"95\" x2=\"58\" y2=\"99\" stroke=\"#d4a855\" stroke-width=\"1.6\"/>\n  <line x1=\"172\" y1=\"95\" x2=\"162\" y2=\"99\" stroke=\"#d4a855\" stroke-width=\"1.6\"/>\n\n  <!-- Angle arcs -->\n  <path d=\"M 41 132 A 15 15 0 0 1 33 119\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 153 36 A 15 15 0 0 1 164 48\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 178 130 A 16 16 0 0 1 190 120\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 175 126 A 21 21 0 0 1 190 113\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n</svg>",
+              "svg_type": "trapezoid"
             },
             {
               "src_key": "22.4",
@@ -485,7 +491,9 @@
               "answer": "67",
               "image": "p-25.jpg",
               "status": "draft",
-              "id": 173
+              "id": 173,
+              "svg": "<svg viewBox=\"0 0 220 160\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n\n  <!-- Isosceles trapezoid -->\n  <polygon points=\"26,138 194,138 166,30 54,30\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n\n  <!-- Diagonal -->\n  <line x1=\"26\" y1=\"138\" x2=\"166\" y2=\"30\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n\n  <!-- Equal side ticks -->\n  <line x1=\"48\" y1=\"95\" x2=\"58\" y2=\"99\" stroke=\"#d4a855\" stroke-width=\"1.6\"/>\n  <line x1=\"172\" y1=\"95\" x2=\"162\" y2=\"99\" stroke=\"#d4a855\" stroke-width=\"1.6\"/>\n\n  <!-- Angle arcs -->\n  <path d=\"M 41 132 A 15 15 0 0 1 33 119\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 153 36 A 15 15 0 0 1 164 48\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 178 130 A 16 16 0 0 1 190 120\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 175 126 A 21 21 0 0 1 190 113\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n</svg>",
+              "svg_type": "trapezoid"
             },
             {
               "src_key": "22.5",
@@ -493,7 +501,9 @@
               "answer": "66",
               "image": "p-25.jpg",
               "status": "draft",
-              "id": 174
+              "id": 174,
+              "svg": "<svg viewBox=\"0 0 220 160\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n\n  <!-- Isosceles trapezoid -->\n  <polygon points=\"26,138 194,138 166,30 54,30\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n\n  <!-- Diagonal -->\n  <line x1=\"26\" y1=\"138\" x2=\"166\" y2=\"30\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n\n  <!-- Equal side ticks -->\n  <line x1=\"48\" y1=\"95\" x2=\"58\" y2=\"99\" stroke=\"#d4a855\" stroke-width=\"1.6\"/>\n  <line x1=\"172\" y1=\"95\" x2=\"162\" y2=\"99\" stroke=\"#d4a855\" stroke-width=\"1.6\"/>\n\n  <!-- Angle arcs -->\n  <path d=\"M 41 132 A 15 15 0 0 1 33 119\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 153 36 A 15 15 0 0 1 164 48\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 178 130 A 16 16 0 0 1 190 120\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 175 126 A 21 21 0 0 1 190 113\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n</svg>",
+              "svg_type": "trapezoid"
             },
             {
               "src_key": "22.6",
@@ -501,7 +511,9 @@
               "answer": "70",
               "image": "p-25.jpg",
               "status": "draft",
-              "id": 175
+              "id": 175,
+              "svg": "<svg viewBox=\"0 0 220 160\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n\n  <!-- Isosceles trapezoid -->\n  <polygon points=\"26,138 194,138 166,30 54,30\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n\n  <!-- Diagonal -->\n  <line x1=\"26\" y1=\"138\" x2=\"166\" y2=\"30\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n\n  <!-- Equal side ticks -->\n  <line x1=\"48\" y1=\"95\" x2=\"58\" y2=\"99\" stroke=\"#d4a855\" stroke-width=\"1.6\"/>\n  <line x1=\"172\" y1=\"95\" x2=\"162\" y2=\"99\" stroke=\"#d4a855\" stroke-width=\"1.6\"/>\n\n  <!-- Angle arcs -->\n  <path d=\"M 41 132 A 15 15 0 0 1 33 119\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 153 36 A 15 15 0 0 1 164 48\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 178 130 A 16 16 0 0 1 190 120\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 175 126 A 21 21 0 0 1 190 113\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n</svg>",
+              "svg_type": "trapezoid"
             },
             {
               "src_key": "22.7",
@@ -509,7 +521,9 @@
               "answer": "66",
               "image": "p-25.jpg",
               "status": "draft",
-              "id": 176
+              "id": 176,
+              "svg": "<svg viewBox=\"0 0 220 160\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n\n  <!-- Isosceles trapezoid -->\n  <polygon points=\"26,138 194,138 166,30 54,30\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n\n  <!-- Diagonal -->\n  <line x1=\"26\" y1=\"138\" x2=\"166\" y2=\"30\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n\n  <!-- Equal side ticks -->\n  <line x1=\"48\" y1=\"95\" x2=\"58\" y2=\"99\" stroke=\"#d4a855\" stroke-width=\"1.6\"/>\n  <line x1=\"172\" y1=\"95\" x2=\"162\" y2=\"99\" stroke=\"#d4a855\" stroke-width=\"1.6\"/>\n\n  <!-- Angle arcs -->\n  <path d=\"M 41 132 A 15 15 0 0 1 33 119\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 153 36 A 15 15 0 0 1 164 48\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 178 130 A 16 16 0 0 1 190 120\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 175 126 A 21 21 0 0 1 190 113\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n</svg>",
+              "svg_type": "trapezoid"
             },
             {
               "src_key": "22.8",
@@ -517,7 +531,9 @@
               "answer": "65",
               "image": "p-25.jpg",
               "status": "draft",
-              "id": 177
+              "id": 177,
+              "svg": "<svg viewBox=\"0 0 220 160\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n\n  <!-- Isosceles trapezoid -->\n  <polygon points=\"26,138 194,138 166,30 54,30\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n\n  <!-- Diagonal -->\n  <line x1=\"26\" y1=\"138\" x2=\"166\" y2=\"30\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n\n  <!-- Equal side ticks -->\n  <line x1=\"48\" y1=\"95\" x2=\"58\" y2=\"99\" stroke=\"#d4a855\" stroke-width=\"1.6\"/>\n  <line x1=\"172\" y1=\"95\" x2=\"162\" y2=\"99\" stroke=\"#d4a855\" stroke-width=\"1.6\"/>\n\n  <!-- Angle arcs -->\n  <path d=\"M 41 132 A 15 15 0 0 1 33 119\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 153 36 A 15 15 0 0 1 164 48\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 178 130 A 16 16 0 0 1 190 120\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 175 126 A 21 21 0 0 1 190 113\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n</svg>",
+              "svg_type": "trapezoid"
             },
             {
               "src_key": "22.9",
@@ -525,7 +541,9 @@
               "answer": "64",
               "image": "p-25.jpg",
               "status": "draft",
-              "id": 178
+              "id": 178,
+              "svg": "<svg viewBox=\"0 0 220 160\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n\n  <!-- Isosceles trapezoid -->\n  <polygon points=\"26,138 194,138 166,30 54,30\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n\n  <!-- Diagonal -->\n  <line x1=\"26\" y1=\"138\" x2=\"166\" y2=\"30\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n\n  <!-- Equal side ticks -->\n  <line x1=\"48\" y1=\"95\" x2=\"58\" y2=\"99\" stroke=\"#d4a855\" stroke-width=\"1.6\"/>\n  <line x1=\"172\" y1=\"95\" x2=\"162\" y2=\"99\" stroke=\"#d4a855\" stroke-width=\"1.6\"/>\n\n  <!-- Angle arcs -->\n  <path d=\"M 41 132 A 15 15 0 0 1 33 119\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 153 36 A 15 15 0 0 1 164 48\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 178 130 A 16 16 0 0 1 190 120\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 175 126 A 21 21 0 0 1 190 113\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n</svg>",
+              "svg_type": "trapezoid"
             },
             {
               "src_key": "22.10",
@@ -533,7 +551,9 @@
               "answer": "63",
               "image": "p-25.jpg",
               "status": "draft",
-              "id": 179
+              "id": 179,
+              "svg": "<svg viewBox=\"0 0 220 160\" class=\"w-full max-w-[350px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"/>\n\n  <!-- Isosceles trapezoid -->\n  <polygon points=\"26,138 194,138 166,30 54,30\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n\n  <!-- Diagonal -->\n  <line x1=\"26\" y1=\"138\" x2=\"166\" y2=\"30\" stroke=\"#c8dce8\" stroke-width=\"2\"/>\n\n  <!-- Equal side ticks -->\n  <line x1=\"48\" y1=\"95\" x2=\"58\" y2=\"99\" stroke=\"#d4a855\" stroke-width=\"1.6\"/>\n  <line x1=\"172\" y1=\"95\" x2=\"162\" y2=\"99\" stroke=\"#d4a855\" stroke-width=\"1.6\"/>\n\n  <!-- Angle arcs -->\n  <path d=\"M 41 132 A 15 15 0 0 1 33 119\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 153 36 A 15 15 0 0 1 164 48\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 178 130 A 16 16 0 0 1 190 120\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n  <path d=\"M 175 126 A 21 21 0 0 1 190 113\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/>\n</svg>",
+              "svg_type": "trapezoid"
             },
             {
               "id": 1,
