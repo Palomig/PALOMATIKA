@@ -705,7 +705,7 @@
               <input class="answer-input"
                      type="text"
                      inputmode="text"
-                     placeholder="Например: АБВ"
+                     placeholder="Например: 123"
                      autocomplete="off"
                      :value="answers[currentTask.task_number] || ''"
                      @input.debounce.300ms="saveInput($event.target.value)"
