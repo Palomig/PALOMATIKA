@@ -685,34 +685,12 @@ class TelegramBotAuthController extends Controller
             'telegram_id' => $from['id'],
         ]);
 
-        // Send confirmation message + explicit login button fallback for Mini App flows
+        // Send confirmation without opening a second Mini App window.
+        // Primary Mini App flow keeps polling and proceeds in the original window.
         $name = $from['first_name'] ?? 'пользователь';
-        $loginUrl = route('telegram.login', ['token' => $token]);
-        $startParam = Cache::get($this->startParamCacheKey($token));
-        $startParam = is_string($startParam) ? trim($startParam) : '';
-        if ($startParam === '') {
-            $startParam = 'miniapp_home';
-        }
-        $separator = str_contains($loginUrl, '?') ? '&' : '?';
-        $loginUrl .= $separator . 'startapp=' . rawurlencode($startParam);
-
-        $webAppBaseUrl = trim((string) config('services.telegram.webapp_base_url', ''));
-        $button = [
-            'text' => '🚀 Открыть приложение',
-        ];
-
-        if ($webAppBaseUrl !== '') {
-            $button['web_app'] = ['url' => $loginUrl];
-        } else {
-            $button['url'] = $loginUrl;
-        }
-
         $this->sendTelegramMessage(
             $from['id'],
-            "✅ Вы успешно авторизовались!\n\nПривет, {$name}! Чтобы вернуться обратно в приложение, нажмите на кнопку ниже:\n⬇️⬇️⬇️",
-            [
-                'inline_keyboard' => [[$button]],
-            ]
+            "✅ Вы успешно авторизовались!\n\nПривет, {$name}! Вернитесь в предыдущее окно мини-приложения — вход уже подтверждён, страница обновится автоматически."
         );
     }
 
