@@ -39,10 +39,28 @@ class MiniAppController extends Controller
     }
 
     /**
-     * Home page — the landing with countdown and CTA.
+     * Home page — session-first entrypoint for Mini App.
+     * If user already has a valid session, skip landing and open target screen immediately.
      */
-    public function home()
+    public function home(Request $request)
     {
+        if (Auth::check()) {
+            /** @var User $user */
+            $user = Auth::user();
+            $startapp = trim((string) ($request->query('startapp', $request->query('tgWebAppStartParam', ''))));
+
+            if (!$user->onboarding_completed_at) {
+                return redirect('/tg/onboarding');
+            }
+
+            $target = '/tg/dashboard';
+            if ($startapp !== '') {
+                $target .= '?startapp=' . rawurlencode($startapp);
+            }
+
+            return redirect($target);
+        }
+
         return view('miniapp.home');
     }
 
