@@ -441,7 +441,10 @@ function homePage() {
         if (!authenticated) {
           this.authErrorCode = 'E_COOKIE_SESSION';
           this.sendDiag('auth_post_login_check', this.authErrorCode, { me_status: meRes?.status || null });
-          throw new Error('Сессия не сохранилась');
+
+          // Do not hard-fail here: auto-switch to bot fallback flow.
+          await this.startBotFallbackAuth(btn, btnText);
+          return;
         }
 
         this.sendDiag('auth_success', 'A_OK');
