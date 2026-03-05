@@ -357,11 +357,8 @@ function adminVariants() {
     shareLink(hash) {
       const tg = window.Telegram?.WebApp;
       const botUsername = '{{ config("services.telegram.bot_username", "palomatika_auth_bot") }}';
-      const miniAppShort = '{{ config("services.telegram.mini_app_short_name", "") }}';
       const payload = `oge_variant_hash_${hash}`;
-      const link = miniAppShort
-        ? `https://t.me/${botUsername}/${miniAppShort}?startapp=${payload}`
-        : `https://t.me/${botUsername}?start=${payload}`;
+      const link = `https://t.me/${botUsername}?start=${payload}`;
       const text = 'Реши этот вариант ОГЭ по математике!';
 
       if (tg && tg.openTelegramLink) {
@@ -374,11 +371,8 @@ function adminVariants() {
 
     copyLink(hash) {
       const botUsername = '{{ config("services.telegram.bot_username", "palomatika_auth_bot") }}';
-      const miniAppShort = '{{ config("services.telegram.mini_app_short_name", "") }}';
       const payload = `oge_variant_hash_${hash}`;
-      const link = miniAppShort
-        ? `https://t.me/${botUsername}/${miniAppShort}?startapp=${payload}`
-        : `https://t.me/${botUsername}?start=${payload}`;
+      const link = `https://t.me/${botUsername}?start=${payload}`;
       navigator.clipboard.writeText(link).then(() => {  
         const tg = window.Telegram?.WebApp;
         if (tg && tg.showAlert) tg.showAlert('Ссылка скопирована!');

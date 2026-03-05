@@ -591,16 +591,8 @@ class TelegramBotAuthController extends Controller
             $variant = $this->variantPool->createBattleVariant($mode);
 
             $botUsername = (string) config('services.telegram.bot_username', 'palomatika_auth_bot');
-            $miniAppShort = trim((string) config('services.telegram.mini_app_short_name', ''));
             $startParam = 'oge_variant_hash_' . $variant->hash;
-
-            // Use direct mini-app deep-link only when short name is explicitly configured.
-            // Otherwise fallback to /start flow (no 404 risk).
-            if ($miniAppShort !== '') {
-                $shareLink = "https://t.me/{$botUsername}/{$miniAppShort}?startapp={$startParam}";
-            } else {
-                $shareLink = "https://t.me/{$botUsername}?start={$startParam}";
-            }
+            $shareLink = "https://t.me/{$botUsername}?start={$startParam}";
 
             $title = $mode === 'full' ? 'Полный вариант' : 'Смешанный мини-вариант';
 
