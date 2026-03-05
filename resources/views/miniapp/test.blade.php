@@ -688,7 +688,7 @@
                        :class="{ 'selected': answers[currentTask.task_number] === String(oi) }"
                        @click="selectOption(oi)">
                     <div class="test-option-letter" x-text="['А','Б','В','Г','Д','Е'][oi] || (oi+1)"></div>
-                    <div class="test-option-text" x-html="opt.label || opt.text || opt"></div>
+                    <div class="test-option-text" x-html="optionHtml(opt)"></div>
                   </div>
                 </template>
               </div>
@@ -705,7 +705,7 @@
                     <template x-for="(opt, oi) in normalizedOptions(currentTask)" :key="oi">
                       <div class="test-option" style="cursor:default">
                         <div class="test-option-letter" x-text="oi + 1"></div>
-                        <div class="test-option-text" x-html="opt.label || opt.text || opt"></div>
+                        <div class="test-option-text" x-html="optionHtml(opt)"></div>
                       </div>
                     </template>
                   </div>
@@ -893,6 +893,17 @@
         if (Array.isArray(opts)) return opts;
         if (opts && typeof opts === 'object') return Object.values(opts);
         return [];
+      },
+
+      optionHtml(opt) {
+        const raw = String(opt?.label ?? opt?.text ?? opt ?? '').trim();
+        if (!raw) return '';
+        const hasMathDelimiters = /\$[^$]+\$|\\\([^)]*\\\)|\\\[[\s\S]*?\\\]/.test(raw);
+        const looksLikeLatex = /\\[a-zA-Z]+|\^|_/.test(raw);
+        if (!hasMathDelimiters && looksLikeLatex) {
+          return `$${raw}$`;
+        }
+        return raw;
       },
 
       // Topic name helper
