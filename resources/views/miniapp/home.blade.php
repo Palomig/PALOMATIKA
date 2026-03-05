@@ -293,6 +293,9 @@ function homePage() {
     appReady: false,
     authErrorCode: '',
     traceId: '',
+    token: '',
+    waiting: false,
+    pollInterval: null,
 
     pad(n) { return String(n).padStart(2, '0'); },
 
@@ -383,11 +386,15 @@ function homePage() {
       if (!initData) {
         this.authErrorCode = 'E_INITDATA_EMPTY';
         this.sendDiag('auth_precheck', this.authErrorCode);
-        if (tg && tg.showAlert) { tg.showAlert('Не удалось получить данные Telegram. Попробуйте перезапустить мини-приложение.'); }
-        else { alert('Откройте приложение через Telegram'); }
-        if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
-        if (btn) btn.classList.remove('btn-loading');
-        this.loginInProgress = false;
+
+        this.startBotFallbackAuth(btn, btnText).catch((e) => {
+          this.sendDiag('auth_fallback_failed', 'E_FALLBACK_START', { err: e?.message || null });
+          if (tg && tg.showAlert) { tg.showAlert('Не удалось войти. Попробуйте перезапустить мини-приложение.'); }
+          else { alert('Не удалось войти. Попробуйте перезапустить мини-приложение.'); }
+          if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
+          if (btn) btn.classList.remove('btn-loading');
+          this.loginInProgress = false;
+        });
         return;
       }
 
@@ -455,6 +462,90 @@ function homePage() {
         if (tg && tg.showAlert) tg.showAlert(msg);
         else alert(msg);
       });
+    },
+
+    async startBotFallbackAuth(btn = null, btnText = null) {
+      const tg = window.Telegram?.WebApp;
+      const startParam = (tg?.initDataUnsafe?.start_param || new URLSearchParams(window.location.search).get('startapp') || '').trim();
+
+      const response = await fetch('/api/telegram/generate-token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-CSRF-TOKEN': window._csrf,
+        },
+        body: JSON.stringify({ startParam: startParam || null, trace_id: this.traceId }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data.token || !data.deep_link) {
+        throw new Error(data.message || 'Ошибка генерации токена');
+      }
+
+      this.token = data.token;
+      this.waiting = true;
+      this.sendDiag('auth_fallback_started', 'A_FALLBACK', { has_start_param: !!startParam });
+
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent || '');
+      if (isMobile) window.location.href = data.deep_link;
+      else window.open(data.deep_link, '_blank');
+
+      if (btnText) btnText.innerHTML = '<span class="spinner"></span> Ожидаем подтверждение...';
+      this.startPolling(btn, btnText);
+    },
+
+    startPolling(btn = null, btnText = null) {
+      this.stopPolling();
+      let attempts = 0;
+      const maxAttempts = 150;
+
+      this.pollInterval = setInterval(async () => {
+        attempts++;
+        if (attempts > maxAttempts) {
+          this.stopPolling();
+          this.waiting = false;
+          this.loginInProgress = false;
+          this.authErrorCode = 'E_FALLBACK_TIMEOUT';
+          this.sendDiag('auth_fallback_timeout', this.authErrorCode);
+          if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
+          if (btn) btn.classList.remove('btn-loading');
+          const tg = window.Telegram?.WebApp;
+          if (tg?.showAlert) tg.showAlert('Время ожидания истекло. Попробуйте снова.');
+          return;
+        }
+
+        try {
+          const response = await fetch(`/api/telegram/check-token/${this.token}?trace_id=${encodeURIComponent(this.traceId || '')}`);
+          const data = await response.json().catch(() => ({}));
+
+          if (data.status === 'authenticated' && data.login_url) {
+            this.stopPolling();
+            this.sendDiag('auth_fallback_authenticated', 'A_FALLBACK_OK');
+            window.location.href = data.login_url;
+          } else if (data.status === 'expired' || data.status === 'not_found') {
+            this.stopPolling();
+            this.waiting = false;
+            this.loginInProgress = false;
+            this.authErrorCode = 'E_FALLBACK_EXPIRED';
+            this.sendDiag('auth_fallback_failed', this.authErrorCode, { status: data.status || null });
+            if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
+            if (btn) btn.classList.remove('btn-loading');
+            const tg = window.Telegram?.WebApp;
+            if (tg?.showAlert) tg.showAlert('Сессия истекла. Попробуйте снова.');
+          }
+        } catch (err) {
+          this.authErrorCode = 'E_FALLBACK_POLL_NETWORK';
+          this.sendDiag('auth_fallback_poll_error', this.authErrorCode, { err: err?.message || null });
+        }
+      }, 2000);
+    },
+
+    stopPolling() {
+      if (this.pollInterval) {
+        clearInterval(this.pollInterval);
+        this.pollInterval = null;
+      }
     },
 
     handleInvite() {
