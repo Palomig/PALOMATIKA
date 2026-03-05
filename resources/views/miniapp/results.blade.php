@@ -488,22 +488,6 @@
   </div>
   @endif
 
-  {{-- PARENT BLOCK --}}
-  <div class="parent-block anim-up" style="animation-delay:0.35s">
-    <div class="parent-label">Для родителей</div>
-    <div class="parent-text">
-      Ваш ребёнок набрал {{ $correctCount }} из {{ $totalTasks }} баллов.
-      @if($errorCount > 0 && count($wrongTopics) > 0)
-        Пробелы в темах: {{ implode(', ', array_map('mb_strtolower', $wrongTopics)) }}.
-        Разбор ошибок с репетитором поможет улучшить результат на реальном экзамене.
-      @else
-        Отличная подготовка!
-      @endif
-      Первый пробный урок бесплатно.
-    </div>
-    <a href="{{ url('/tg/tutor') }}" class="btn-parent">Узнать о занятиях для ребёнка →</a>
-  </div>
-
   {{-- RETRY --}}
   <a href="{{ url('/tg/dashboard') }}" class="btn-retry anim-up" style="animation-delay:0.4s">
     Пройти следующий вариант
