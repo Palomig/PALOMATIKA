@@ -75,8 +75,13 @@ class TelegramWebAppAuthTest extends TestCase
 
         $response
             ->assertOk()
-            ->assertJsonPath('success', true)
-            ->assertJsonPath('redirect_to', url('/dashboard'));
+            ->assertJsonPath('success', true);
+
+        $redirectTo = (string) $response->json('redirect_to');
+        $this->assertTrue(
+            str_starts_with($redirectTo, url('/tg/')),
+            'Telegram mini app login must stay inside /tg routes'
+        );
 
         $this->assertAuthenticatedAs($user);
         $this->assertSame(1, User::where('oauth_provider', 'telegram')->where('oauth_id', '987654321')->count());

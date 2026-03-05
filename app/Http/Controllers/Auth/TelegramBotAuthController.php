@@ -857,7 +857,7 @@ class TelegramBotAuthController extends Controller
             }
         }
 
-        // In Telegram auth flow we should stay inside Mini App routes only.
+        // Mini App is isolated from the browser site: Telegram auth never redirects outside /tg.
         return url('/tg/dashboard');
     }
 

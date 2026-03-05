@@ -11,7 +11,7 @@ test('Mini App context does not invoke bot fallback generate-token flow', async 
     telegramGlobal: { WebApp: { initData: 'auth_date=1&hash=abc' } },
     tryMiniAppLogin: async () => {
       miniAppCalls += 1;
-      return { success: true, redirectTo: '/dashboard' };
+      return { success: true, redirectTo: '/tg/dashboard' };
     },
     startBotFallback: async () => {
       botFallbackCalls += 1;
@@ -24,7 +24,7 @@ test('Mini App context does not invoke bot fallback generate-token flow', async 
   assert.equal(result.mode, 'miniapp_success');
 });
 
-test('Mini App invalid initData returns inline error path and never falls back to bot flow', async () => {
+test('Mini App invalid initData falls back to bot flow before showing inline error', async () => {
   let botFallbackCalls = 0;
 
   const result = await runTelegramAuthStart({
@@ -36,13 +36,11 @@ test('Mini App invalid initData returns inline error path and never falls back t
     },
   });
 
-  assert.equal(botFallbackCalls, 0);
-  assert.equal(result.mode, 'miniapp_error');
-  assert.equal(result.inlineError, true);
-  assert.match(result.error, /Неверные данные Telegram Mini App/);
+  assert.equal(botFallbackCalls, 1);
+  assert.equal(result.mode, 'bot_fallback_started');
 });
 
-test('Mini App missing initData returns retryable inline error path', async () => {
+test('Mini App missing initData falls back to bot flow', async () => {
   let tryMiniAppLoginCalls = 0;
   let botFallbackCalls = 0;
 
@@ -59,10 +57,9 @@ test('Mini App missing initData returns retryable inline error path', async () =
   });
 
   assert.equal(tryMiniAppLoginCalls, 0);
-  assert.equal(botFallbackCalls, 0);
-  assert.equal(result.mode, 'miniapp_error');
-  assert.equal(result.retryable, true);
-  assert.equal(result.error, TELEGRAM_AUTH_ERRORS.MINI_APP_INIT_DATA_MISSING);
+  assert.equal(botFallbackCalls, 1);
+  assert.equal(result.mode, 'bot_fallback_started');
+  assert.notEqual(result.error, TELEGRAM_AUTH_ERRORS.MINI_APP_INIT_DATA_MISSING);
 });
 
 test('External browser context still uses bot fallback', async () => {
@@ -79,4 +76,26 @@ test('External browser context still uses bot fallback', async () => {
 
   assert.equal(botFallbackCalls, 1);
   assert.equal(result.mode, 'bot_fallback_started');
+});
+
+test('Browser context with Telegram WebApp object but no initData still uses bot fallback', async () => {
+  let tryMiniAppLoginCalls = 0;
+  let botFallbackCalls = 0;
+
+  const result = await runTelegramAuthStart({
+    telegramGlobal: { WebApp: { initData: '', initDataUnsafe: null } },
+    tryMiniAppLogin: async () => {
+      tryMiniAppLoginCalls += 1;
+      return { success: true };
+    },
+    startBotFallback: async () => {
+      botFallbackCalls += 1;
+      return { mode: 'bot_fallback_started', token: 'fallback-token' };
+    },
+  });
+
+  assert.equal(tryMiniAppLoginCalls, 0);
+  assert.equal(botFallbackCalls, 1);
+  assert.equal(result.mode, 'bot_fallback_started');
+  assert.notEqual(result.error, TELEGRAM_AUTH_ERRORS.MINI_APP_INIT_DATA_MISSING);
 });
