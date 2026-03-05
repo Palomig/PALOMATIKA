@@ -424,63 +424,72 @@
               "image": "oge18_p4_img7.png",
               "source_png": "task18_b1_z7_1.png",
               "svg": "<svg viewBox=\"0 0 220 160\" class=\"w-full max-w-[220px] h-auto mx-auto\">\n  <defs><pattern id=\"g7a0b44\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"220\" height=\"160\" fill=\"#0a1628\"/>\n  <rect width=\"220\" height=\"160\" fill=\"url(#g7a0b44)\"/>\n  <polygon points=\"20,120 20,60 60,20 120,20 160,80 120,120\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "28"
             },
             {
               "id": 2,
               "image": "oge18_p4_img8.png",
               "source_png": "task18_b1_z7_2.png",
               "svg": "<svg viewBox=\"0 0 200 140\" class=\"w-full max-w-[200px] h-auto mx-auto\">\n  <defs><pattern id=\"gcf0c0e\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"200\" height=\"140\" fill=\"#0a1628\"/>\n  <rect width=\"200\" height=\"140\" fill=\"url(#gcf0c0e)\"/>\n  <polygon points=\"40,100 40,40 80,20 140,40 140,100\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "17.5"
             },
             {
               "id": 3,
               "image": "oge18_p4_img9.png",
               "source_png": "task18_b1_z7_3.png",
               "svg": "<svg viewBox=\"0 0 180 160\" class=\"w-full max-w-[180px] h-auto mx-auto\">\n  <defs><pattern id=\"g2ede91\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"180\" height=\"160\" fill=\"#0a1628\"/>\n  <rect width=\"180\" height=\"160\" fill=\"url(#g2ede91)\"/>\n  <polygon points=\"20,120 20,40 80,40 120,80 120,120\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "18"
             },
             {
               "id": 4,
               "image": "oge18_p4_img10.png",
               "source_png": "task18_b1_z7_4.png",
               "svg": "<svg viewBox=\"0 0 200 160\" class=\"w-full max-w-[200px] h-auto mx-auto\">\n  <defs><pattern id=\"gd0630b\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"200\" height=\"160\" fill=\"#0a1628\"/>\n  <rect width=\"200\" height=\"160\" fill=\"url(#gd0630b)\"/>\n  <polygon points=\"40,120 20,60 80,20 140,60 120,120\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "21"
             },
             {
               "id": 5,
               "image": "oge18_p4_img11.png",
               "source_png": "task18_b1_z7_5.png",
               "svg": "<svg viewBox=\"0 0 220 140\" class=\"w-full max-w-[220px] h-auto mx-auto\">\n  <defs><pattern id=\"g6c0b01\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"220\" height=\"140\" fill=\"#0a1628\"/>\n  <rect width=\"220\" height=\"140\" fill=\"url(#g6c0b01)\"/>\n  <polygon points=\"20,100 60,40 120,40 160,100 100,100\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "15"
             },
             {
               "id": 6,
               "image": "oge18_p4_img12.png",
               "source_png": "task18_b1_z7_6.png",
               "svg": "<svg viewBox=\"0 0 220 160\" class=\"w-full max-w-[220px] h-auto mx-auto\">\n  <defs><pattern id=\"g7fd945\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"220\" height=\"160\" fill=\"#0a1628\"/>\n  <rect width=\"220\" height=\"160\" fill=\"url(#g7fd945)\"/>\n  <polygon points=\"40,120 40,60 100,20 160,60 160,120\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "24"
             },
             {
               "id": 7,
               "image": "oge18_p4_img13.png",
               "source_png": "task18_b1_z7_7.png",
               "svg": "<svg viewBox=\"0 0 180 140\" class=\"w-full max-w-[180px] h-auto mx-auto\">\n  <defs><pattern id=\"g5cea45\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"180\" height=\"140\" fill=\"#0a1628\"/>\n  <rect width=\"180\" height=\"140\" fill=\"url(#g5cea45)\"/>\n  <polygon points=\"20,100 20,40 60,20 120,40 120,100\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "17.5"
             },
             {
               "id": 8,
               "image": "oge18_p4_img14.png",
               "source_png": "task18_b1_z7_8.png",
               "svg": "<svg viewBox=\"0 0 220 160\" class=\"w-full max-w-[220px] h-auto mx-auto\">\n  <defs><pattern id=\"ga6a88f\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"220\" height=\"160\" fill=\"#0a1628\"/>\n  <rect width=\"220\" height=\"160\" fill=\"url(#ga6a88f)\"/>\n  <polygon points=\"40,120 20,80 60,20 140,20 160,80 120,120\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "27.5"
             },
             {
               "id": 9,
               "image": "oge18_p4_img15.png",
               "source_png": "task18_b1_z7_9.png",
               "svg": "<svg viewBox=\"0 0 180 140\" class=\"w-full max-w-[180px] h-auto mx-auto\">\n  <defs><pattern id=\"ga94dff\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"180\" height=\"140\" fill=\"#0a1628\"/>\n  <rect width=\"180\" height=\"140\" fill=\"url(#ga94dff)\"/>\n  <polygon points=\"60,100 20,60 60,20 120,60 100,100\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "12"
             }
           ]
         },
@@ -494,42 +503,48 @@
               "image": "oge18_p5_img1.png",
               "source_png": "task18_b1_z8_1.png",
               "svg": "<svg viewBox=\"0 0 160 140\" class=\"w-full max-w-[160px] h-auto mx-auto\">\n  <defs><pattern id=\"g684325\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"160\" height=\"140\" fill=\"#0a1628\"/>\n  <rect width=\"160\" height=\"140\" fill=\"url(#g684325)\"/>\n  <line x1=\"40\" y1=\"100\" x2=\"100\" y2=\"40\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <text x=\"32.2\" y=\"107.8\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">A</text>\n  <text x=\"107.8\" y=\"32.2\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">B</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "4.24"
             },
             {
               "id": 2,
               "image": "oge18_p5_img2.png",
               "source_png": "task18_b1_z8_2.png",
               "svg": "<svg viewBox=\"0 0 180 120\" class=\"w-full max-w-[180px] h-auto mx-auto\">\n  <defs><pattern id=\"gd6cc54\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"180\" height=\"120\" fill=\"#0a1628\"/>\n  <rect width=\"180\" height=\"120\" fill=\"url(#gd6cc54)\"/>\n  <line x1=\"20\" y1=\"80\" x2=\"120\" y2=\"40\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <text x=\"9.8\" y=\"84.1\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">A</text>\n  <text x=\"130.2\" y=\"35.9\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">B</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "5.39"
             },
             {
               "id": 3,
               "image": "oge18_p5_img3.png",
               "source_png": "task18_b1_z8_3.png",
               "svg": "<svg viewBox=\"0 0 200 160\" class=\"w-full max-w-[200px] h-auto mx-auto\">\n  <defs><pattern id=\"gb0be1c\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"200\" height=\"160\" fill=\"#0a1628\"/>\n  <rect width=\"200\" height=\"160\" fill=\"url(#gb0be1c)\"/>\n  <line x1=\"40\" y1=\"120\" x2=\"140\" y2=\"60\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <text x=\"30.6\" y=\"125.7\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">A</text>\n  <text x=\"149.4\" y=\"54.3\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">B</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "5.83"
             },
             {
               "id": 4,
               "image": "oge18_p5_img4.png",
               "source_png": "task18_b1_z8_4.png",
               "svg": "<svg viewBox=\"0 0 180 140\" class=\"w-full max-w-[180px] h-auto mx-auto\">\n  <defs><pattern id=\"gad8a35\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"180\" height=\"140\" fill=\"#0a1628\"/>\n  <rect width=\"180\" height=\"140\" fill=\"url(#gad8a35)\"/>\n  <line x1=\"60\" y1=\"100\" x2=\"120\" y2=\"20\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <text x=\"53.4\" y=\"108.8\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">A</text>\n  <text x=\"126.6\" y=\"11.2\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">B</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "5"
             },
             {
               "id": 5,
               "image": "oge18_p5_img5.png",
               "source_png": "task18_b1_z8_5.png",
               "svg": "<svg viewBox=\"0 0 140 140\" class=\"w-full max-w-[140px] h-auto mx-auto\">\n  <defs><pattern id=\"gd37e9c\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"140\" height=\"140\" fill=\"#0a1628\"/>\n  <rect width=\"140\" height=\"140\" fill=\"url(#gd37e9c)\"/>\n  <line x1=\"20\" y1=\"100\" x2=\"80\" y2=\"20\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <text x=\"13.4\" y=\"108.8\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">A</text>\n  <text x=\"86.6\" y=\"11.2\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">B</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "5"
             },
             {
               "id": 6,
               "image": "oge18_p5_img6.png",
               "source_png": "task18_b1_z8_6.png",
               "svg": "<svg viewBox=\"0 0 180 160\" class=\"w-full max-w-[180px] h-auto mx-auto\">\n  <defs><pattern id=\"g1a6105\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"180\" height=\"160\" fill=\"#0a1628\"/>\n  <rect width=\"180\" height=\"160\" fill=\"url(#g1a6105)\"/>\n  <line x1=\"40\" y1=\"120\" x2=\"120\" y2=\"40\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <text x=\"32.2\" y=\"127.8\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">A</text>\n  <text x=\"127.8\" y=\"32.2\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">B</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "5.66"
             }
           ]
         },
