@@ -4271,8 +4271,8 @@ class TestPdfController extends Controller
      */
     public function showOgeVariant(string $hash, Request $request)
     {
-        // Validate hash format (alphanumeric, 5-8 chars for short beautiful hashes)
-        if (!preg_match('/^[a-zA-Z0-9]{5,8}$/', $hash)) {
+        // Validate hash format (alphanumeric, supports classic short and newer longer battle hashes)
+        if (!preg_match('/^[a-zA-Z0-9]{5,32}$/', $hash)) {
             abort(404);
         }
 
