@@ -358,7 +358,7 @@ class TelegramBotAuthController extends Controller
                 'ip' => request()->ip(),
                 'user_agent' => request()->userAgent(),
             ]);
-            return redirect()->route('login')
+            return redirect()->to('/tg')
                 ->with('error', 'Сессия авторизации истекла. Попробуйте снова.');
         }
 
@@ -826,7 +826,7 @@ class TelegramBotAuthController extends Controller
                 $variantId = (int) $matches[1];
                 $variant = OgeVariant::find($variantId);
                 if ($variant && !empty($variant->hash)) {
-                    return url('/oge/' . $variant->hash);
+                    return url('/tg/dashboard?startapp=oge_variant_hash_' . $variant->hash);
                 }
             }
 
@@ -857,7 +857,8 @@ class TelegramBotAuthController extends Controller
             }
         }
 
-        return redirect()->intended('/dashboard')->getTargetUrl();
+        // In Telegram auth flow we should stay inside Mini App routes only.
+        return url('/tg/dashboard');
     }
 
     private function startParamCacheKey(string $token): string
