@@ -695,7 +695,7 @@ class TelegramBotAuthController extends Controller
 
         $this->sendTelegramMessage(
             $from['id'],
-            "✅ Готово, {$name}! Авторизация подтверждена.\n\n↩️ Вернитесь в предыдущее окно мини-приложения — вход уже подхватится автоматически."
+            "✅ Готово, {$name}! Авторизация подтверждена.\n\n⬇️ Вернитесь в приложение нажав на PALOMATIKA ⬇️"
         );
     }
 
