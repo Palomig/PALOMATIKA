@@ -262,18 +262,26 @@ class MiniAppController extends Controller
         }
 
         $newByTopic = [];
+        $groupedByTopic = [];
 
         foreach ($topics as $topicId) {
             $data = $this->taskData->getTopicData($topicId);
             $tasks = [];
+            $allTasksIndexed = [];
 
             foreach (($data['blocks'] ?? []) as $block) {
                 foreach (($block['zadaniya'] ?? []) as $zadanie) {
+                    foreach (($zadanie['tasks'] ?? []) as $t) {
+                        $tid = $t['id'] ?? null;
+                        if (is_int($tid)) {
+                            $allTasksIndexed[$tid] = $t;
+                        }
+                    }
+
                     if (($zadanie['label'] ?? null) !== 'Новые задания') {
                         continue;
                     }
                     $tasks = $zadanie['tasks'] ?? [];
-                    break 2;
                 }
             }
 
@@ -292,14 +300,59 @@ class MiniAppController extends Controller
                     'image' => $task['image'] ?? null,
                 ];
             }
-
             $newByTopic[$topicId] = $all;
+
+            // Topic 10: grouped spoiler view with explicit task id mapping
+            if ($topicId === '10') {
+                $spec = [
+                    ['title' => 'Орёл или решка', 'ids' => array_merge(range(85, 94), range(77, 80))],
+                    ['title' => 'Ящик с карандашами', 'ids' => array_merge(range(95, 104), range(65, 68))],
+                    ['title' => 'Маркеры для доски', 'ids' => array_merge(range(105, 114), range(61, 64))],
+                    ['title' => 'Вероятность события в опыте', 'ids' => array_merge(range(115, 124), range(73, 76))],
+                    ['title' => 'Диаграмма Эйлера', 'ids' => range(125, 164)],
+                    ['title' => 'Дерево случайного опыта', 'ids' => range(165, 174)],
+                ];
+
+                $groups = [];
+                foreach ($spec as $groupSpec) {
+                    $groupTasks = [];
+                    foreach ($groupSpec['ids'] as $id) {
+                        $task = $allTasksIndexed[$id] ?? null;
+                        if (!$task) {
+                            continue;
+                        }
+                        $text = trim((string) ($task['text'] ?? ''));
+                        if ($text === '') {
+                            continue;
+                        }
+
+                        $groupTasks[] = [
+                            'id' => $task['id'] ?? null,
+                            'src_key' => $task['src_key'] ?? null,
+                            'text' => $text,
+                            'svg' => $task['svg'] ?? null,
+                            'image' => $task['image'] ?? null,
+                        ];
+                    }
+
+                    if (!empty($groupTasks)) {
+                        $groups[] = [
+                            'title' => $groupSpec['title'],
+                            'tasks' => $groupTasks,
+                        ];
+                    }
+                }
+                $groupedByTopic[$topicId] = $groups;
+            } else {
+                $groupedByTopic[$topicId] = [];
+            }
         }
 
         return view('miniapp.new-tasks', [
             'topics' => $topics,
             'selectedTopic' => $selected,
             'newByTopic' => $newByTopic,
+            'groupedByTopic' => $groupedByTopic,
         ]);
     }
 
