@@ -147,21 +147,40 @@ class OgeVariantPoolService
      */
     protected function generateVariantTasks(string $type): array
     {
-        $topicIds = match ($type) {
-            'geometry' => $this->geometryTopics,
-            'algebra' => $this->pickRandomTopics($this->algebraTopics, 5),
-            'mixed' => array_merge(
-                $this->pickRandomTopics($this->algebraTopics, 4),
-                $this->pickRandomTopics($this->geometryTopics, 3),
-            ),
-            'full' => array_merge($this->algebraTopics, $this->geometryTopics),
-            default => throw new \InvalidArgumentException("Unknown variant type: {$type}"),
-        };
+        $topicIds = [];
+        $fallbackTopicIds = [];
+        $targetCount = null;
+
+        switch ($type) {
+            case 'geometry':
+                $topicIds = $this->geometryTopics;
+                $fallbackTopicIds = $this->geometryTopics;
+                $targetCount = 5;
+                break;
+            case 'algebra':
+                $topicIds = $this->pickRandomTopics($this->algebraTopics, 5);
+                $fallbackTopicIds = array_values(array_diff($this->algebraTopics, $topicIds));
+                $targetCount = 5;
+                break;
+            case 'mixed':
+                // Product rule for mini mixed battle: 5 tasks total (3 algebra + 2 geometry)
+                $alg = $this->pickRandomTopics($this->algebraTopics, 3);
+                $geo = $this->pickRandomTopics($this->geometryTopics, 2);
+                $topicIds = array_merge($alg, $geo);
+                $fallbackTopicIds = array_values(array_diff(array_merge($this->algebraTopics, $this->geometryTopics), $topicIds));
+                $targetCount = 5;
+                break;
+            case 'full':
+                $topicIds = array_merge($this->algebraTopics, $this->geometryTopics);
+                break;
+            default:
+                throw new \InvalidArgumentException("Unknown variant type: {$type}");
+        }
 
         $usedByTopic = $this->getUsedTaskIdsByTopic();
         $result = [];
 
-        foreach ($topicIds as $topicId) {
+        $tryPickForTopic = function (string $topicId) use (&$usedByTopic): ?array {
             // 1) Prefer task examples not used in existing pool variants
             $picked = $this->pickTaskForTopic($topicId, 'production', $usedByTopic[$topicId] ?? []);
 
@@ -170,12 +189,35 @@ class OgeVariantPoolService
                 $picked = $this->pickTaskForTopic($topicId, 'production', []);
             }
 
+            return $picked;
+        };
+
+        foreach ($topicIds as $topicId) {
+            $picked = $tryPickForTopic($topicId);
             if ($picked === null) {
                 continue;
             }
 
             $picked['task_number'] = (int) ltrim($topicId, '0');
             $result[] = $this->normalizeTaskForMiniApp($picked);
+        }
+
+        // Backfill to target size for mini modes if some chosen topics had no production tasks.
+        if ($targetCount !== null && count($result) < $targetCount) {
+            shuffle($fallbackTopicIds);
+            foreach ($fallbackTopicIds as $topicId) {
+                if (count($result) >= $targetCount) {
+                    break;
+                }
+
+                $picked = $tryPickForTopic($topicId);
+                if ($picked === null) {
+                    continue;
+                }
+
+                $picked['task_number'] = (int) ltrim($topicId, '0');
+                $result[] = $this->normalizeTaskForMiniApp($picked);
+            }
         }
 
         return $result;
