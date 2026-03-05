@@ -33,25 +33,12 @@ class AdminTaskStatusController extends Controller
             return response()->json(['message' => 'Задача не найдена.'], 404);
         }
 
-        $data = $this->taskDataService->getTopicData($topicId);
-        if (empty($data['blocks'])) {
-            return response()->json(['message' => 'Тема пуста.'], 404);
-        }
-
-        $parsed = $this->taskDataService->parseTaskKey($taskKey);
-        $updated = $this->applyStatusToItem($data, $parsed, $status);
-
-        if (!$updated) {
-            return response()->json(['message' => 'Задача не найдена.'], 404);
-        }
-
-        if (!$this->taskDataService->saveTopicData($topicId, $data)) {
-            return response()->json(['message' => 'Не удалось сохранить.'], 500);
-        }
+        $this->taskDataService->upsertStatusByTaskKey($topicId, $taskKey, $status);
 
         return response()->json([
             'task_key' => $taskKey,
             'status' => $status,
+            'storage' => 'db',
         ]);
     }
 
@@ -71,81 +58,29 @@ class AdminTaskStatusController extends Controller
         $status = $validated['status'];
         $taskKeys = $validated['task_keys'];
 
-        $data = $this->taskDataService->getTopicData($topicId);
-        if (empty($data['blocks'])) {
-            return response()->json(['message' => 'Тема пуста.'], 404);
-        }
-
-        $updatedCount = 0;
+        $validTaskKeys = [];
 
         foreach ($taskKeys as $taskKey) {
-            $parsed = $this->taskDataService->parseTaskKey($taskKey);
-            if (!$parsed || $parsed['topic_id'] !== $topicId) {
+            if (!$this->taskDataService->isValidTaskKey($taskKey, $topicId)) {
                 continue;
             }
-
-            if ($this->applyStatusToItem($data, $parsed, $status)) {
-                $updatedCount++;
+            if (!$this->taskDataService->taskExistsByKey($topicId, $taskKey)) {
+                continue;
             }
+            $validTaskKeys[] = $taskKey;
         }
 
-        if ($updatedCount === 0) {
+        if (empty($validTaskKeys)) {
             return response()->json(['message' => 'Ни одна задача не обновлена.'], 422);
         }
 
-        if (!$this->taskDataService->saveTopicData($topicId, $data)) {
-            return response()->json(['message' => 'Не удалось сохранить.'], 500);
-        }
+        $updatedCount = $this->taskDataService->bulkUpsertStatusByTaskKeys($topicId, $validTaskKeys, $status);
 
         return response()->json([
             'updated' => $updatedCount,
             'status' => $status,
+            'storage' => 'db',
         ]);
     }
 
-    /**
-     * Apply status to a task or statement in the data array.
-     */
-    private function applyStatusToItem(array &$data, ?array $parsed, string $status): bool
-    {
-        if (!$parsed) {
-            return false;
-        }
-
-        $arrayKey = $parsed['item_type'] === 'statement' ? 'statements' : 'tasks';
-
-        foreach ($data['blocks'] as $bi => $block) {
-            if ((int) ($block['number'] ?? 0) !== $parsed['block_number']) {
-                continue;
-            }
-
-            foreach ($block['zadaniya'] ?? [] as $zi => $zadanie) {
-                if ((int) ($zadanie['number'] ?? 0) !== $parsed['zadanie_number']) {
-                    continue;
-                }
-
-                $updated = false;
-
-                foreach ($zadanie[$arrayKey] ?? [] as $ti => $item) {
-                    if ((int) ($item['id'] ?? 0) !== $parsed['item_id']) {
-                        continue;
-                    }
-
-                    $data['blocks'][$bi]['zadaniya'][$zi][$arrayKey][$ti]['status'] = $status;
-                    $updated = true;
-
-                    // tasks normally have unique ids: stop after first update.
-                    if ($parsed['item_type'] !== 'statement') {
-                        return true;
-                    }
-                }
-
-                if ($updated) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
 }

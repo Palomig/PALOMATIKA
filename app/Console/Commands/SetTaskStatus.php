@@ -36,45 +36,35 @@ class SetTaskStatus extends Command
             return 1;
         }
 
-        $updated = 0;
-        $notFound = [];
-
-        foreach ($data['blocks'] as $bi => $block) {
-            foreach ($block['zadaniya'] ?? [] as $zi => $zadanie) {
-                foreach ($zadanie['tasks'] ?? [] as $ti => $task) {
-                    if (in_array((int) ($task['id'] ?? 0), $taskIds, true)) {
-                        $data['blocks'][$bi]['zadaniya'][$zi]['tasks'][$ti]['status'] = $status;
-                        $updated++;
-                    }
-                }
-            }
-        }
-
-        // Find which IDs were not found
+        $keys = [];
         $foundIds = [];
+
         foreach ($data['blocks'] as $block) {
+            $blockNumber = (int) ($block['number'] ?? 0);
             foreach ($block['zadaniya'] ?? [] as $zadanie) {
+                $zadanieNumber = (int) ($zadanie['number'] ?? 0);
                 foreach ($zadanie['tasks'] ?? [] as $task) {
-                    if (in_array((int) ($task['id'] ?? 0), $taskIds, true)) {
-                        $foundIds[] = (int) $task['id'];
+                    $id = (int) ($task['id'] ?? 0);
+                    if (in_array($id, $taskIds, true)) {
+                        $keys[] = sprintf('topic_%s_block_%d_zadanie_%d_task_%d', $topicId, $blockNumber, $zadanieNumber, $id);
+                        $foundIds[] = $id;
                     }
                 }
             }
         }
-        $notFound = array_diff($taskIds, $foundIds);
 
-        if ($updated > 0) {
-            $taskDataService->saveTopicData($topicId, $data);
-            $this->info("Updated {$updated} tasks to '{$status}' in topic {$topicId}");
+        $notFound = array_values(array_diff($taskIds, array_values(array_unique($foundIds))));
+
+        if (empty($keys)) {
+            $this->error('No tasks were updated');
+            return 1;
         }
+
+        $updated = $taskDataService->bulkUpsertStatusByTaskKeys($topicId, $keys, $status);
+        $this->info("Updated {$updated} task records to '{$status}' in topic {$topicId} (DB storage)");
 
         if (!empty($notFound)) {
             $this->warn('Task IDs not found: ' . implode(', ', $notFound));
-        }
-
-        if ($updated === 0) {
-            $this->error('No tasks were updated');
-            return 1;
         }
 
         return 0;

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\TaskStatus;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
@@ -221,7 +222,7 @@ class TaskDataService
         $blocks = $data['blocks'] ?? [];
 
         if ($status !== null) {
-            $blocks = $this->filterBlocksByStatus($blocks, $status);
+            $blocks = $this->filterBlocksByStatus($topicId, $blocks, $status);
         }
 
         return $blocks;
@@ -231,19 +232,29 @@ class TaskDataService
      * Filter blocks to only include tasks with the given status.
      * Removes empty zadaniya and empty blocks after filtering.
      */
-    protected function filterBlocksByStatus(array $blocks, string $status): array
+    protected function filterBlocksByStatus(string $topicId, array $blocks, string $status): array
     {
         $filtered = [];
 
         foreach ($blocks as $block) {
             $filteredZadaniya = [];
+            $blockNumber = (int) ($block['number'] ?? 0);
 
             foreach ($block['zadaniya'] ?? [] as $zadanie) {
+                $zadanieNumber = (int) ($zadanie['number'] ?? 0);
+
                 if (($zadanie['type'] ?? '') === 'statements' && isset($zadanie['statements'])) {
                     // Filter individual statements by status
                     $filteredStatements = array_values(array_filter(
                         $zadanie['statements'],
-                        fn ($s) => ($s['status'] ?? 'draft') === $status
+                        fn ($s) => $this->resolveItemStatus(
+                            $topicId,
+                            $blockNumber,
+                            $zadanieNumber,
+                            'statement',
+                            (int) ($s['id'] ?? 0),
+                            (string) ($s['status'] ?? 'draft')
+                        ) === $status
                     ));
 
                     if (!empty($filteredStatements)) {
@@ -254,7 +265,14 @@ class TaskDataService
                     // Filter tasks by status
                     $filteredTasks = array_values(array_filter(
                         $zadanie['tasks'] ?? [],
-                        fn ($t) => ($t['status'] ?? 'draft') === $status
+                        fn ($t) => $this->resolveItemStatus(
+                            $topicId,
+                            $blockNumber,
+                            $zadanieNumber,
+                            'task',
+                            (int) ($t['id'] ?? 0),
+                            (string) ($t['status'] ?? 'draft')
+                        ) === $status
                     ));
 
                     if (!empty($filteredTasks)) {
@@ -271,6 +289,81 @@ class TaskDataService
         }
 
         return $filtered;
+    }
+
+    protected function resolveItemStatus(
+        string $topicId,
+        int $blockNumber,
+        int $zadanieNumber,
+        string $itemType,
+        int $itemId,
+        string $fallback = 'draft'
+    ): string {
+        if ($itemId < 1 || $blockNumber < 1 || $zadanieNumber < 0) {
+            return $fallback;
+        }
+
+        $taskKey = sprintf(
+            'topic_%s_block_%d_zadanie_%d_%s_%d',
+            str_pad($topicId, 2, '0', STR_PAD_LEFT),
+            $blockNumber,
+            $zadanieNumber,
+            $itemType,
+            $itemId
+        );
+
+        $map = $this->getTopicStatusMapFromDb($topicId);
+
+        return $map[$taskKey] ?? $fallback;
+    }
+
+    protected function getTopicStatusMapFromDb(string $topicId): array
+    {
+        $topicId = str_pad($topicId, 2, '0', STR_PAD_LEFT);
+        $cacheKey = "task_status_map_{$topicId}";
+
+        return Cache::remember($cacheKey, 300, function () use ($topicId) {
+            return TaskStatus::query()
+                ->where('topic_id', $topicId)
+                ->pluck('status', 'task_key')
+                ->toArray();
+        });
+    }
+
+    public function upsertStatusByTaskKey(string $topicId, string $taskKey, string $status): void
+    {
+        $topicId = str_pad($topicId, 2, '0', STR_PAD_LEFT);
+
+        TaskStatus::query()->updateOrCreate(
+            ['topic_id' => $topicId, 'task_key' => $taskKey],
+            ['status' => $status]
+        );
+
+        Cache::forget("task_status_map_{$topicId}");
+    }
+
+    public function bulkUpsertStatusByTaskKeys(string $topicId, array $taskKeys, string $status): int
+    {
+        $topicId = str_pad($topicId, 2, '0', STR_PAD_LEFT);
+        $now = now();
+        $rows = [];
+
+        foreach ($taskKeys as $taskKey) {
+            $rows[] = [
+                'topic_id' => $topicId,
+                'task_key' => $taskKey,
+                'status' => $status,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+        }
+
+        if (!empty($rows)) {
+            TaskStatus::query()->upsert($rows, ['topic_id', 'task_key'], ['status', 'updated_at']);
+            Cache::forget("task_status_map_{$topicId}");
+        }
+
+        return count($rows);
     }
 
     /**
@@ -582,10 +675,20 @@ class TaskDataService
         $blocks = $this->getBlocks($topicId);
 
         foreach ($blocks as $block) {
+            $blockNumber = (int) ($block['number'] ?? 0);
             foreach ($block['zadaniya'] ?? [] as $zadanie) {
+                $zadanieNumber = (int) ($zadanie['number'] ?? 0);
                 foreach ($zadanie['tasks'] ?? [] as $task) {
                     if ((int) ($task['id'] ?? 0) === $taskId) {
-                        return ($task['status'] ?? 'draft') === 'production';
+                        $resolved = $this->resolveItemStatus(
+                            $topicId,
+                            $blockNumber,
+                            $zadanieNumber,
+                            'task',
+                            $taskId,
+                            (string) ($task['status'] ?? 'draft')
+                        );
+                        return $resolved === 'production';
                     }
                 }
             }

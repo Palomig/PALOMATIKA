@@ -36,6 +36,7 @@ class DeployController extends Controller
         'oge:backfill-answers',
         'tasks:add-status',
         'tasks:set-status',
+        'task-statuses:import',
         'audit:prune',
         'assets:audit-semantic-svg',
     ];
