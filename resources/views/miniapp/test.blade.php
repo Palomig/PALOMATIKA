@@ -649,7 +649,7 @@
         </template>
 
         {{-- Expression (KaTeX) --}}
-        <template x-if="currentTask.type === 'expression' && currentTask.expression">
+        <template x-if="currentTask.expression">
           <div class="q-expression q-anim" :style="'animation-delay: 0.08s; margin-top: 16px'"
                x-ref="katexExpr"
                :data-expr="currentTask.expression"
