@@ -271,9 +271,6 @@
     👥 Пригласить одноклассника
   </button>
 
-  <div class="auth-code" x-show="authErrorCode" x-cloak>
-    Код ошибки: <span x-text="authErrorCode"></span>
-  </div>
 
   <div class="bottom-note">
     <strong>Бесплатно</strong> · задания из банка ФИПИ · результат сразу
