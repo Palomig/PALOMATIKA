@@ -892,10 +892,30 @@
       },
 
       normalizedOptions(task) {
-        const opts = task?.options;
-        if (Array.isArray(opts)) return opts;
-        if (opts && typeof opts === 'object') return Object.values(opts);
-        return [];
+        const primary = task?.options;
+        const nested = task?.task?.options;
+
+        const normalize = (opts) => {
+          if (Array.isArray(opts)) return opts;
+          if (opts && typeof opts === 'object') return Object.values(opts);
+          if (typeof opts === 'string') {
+            const s = opts.trim();
+            if (!s) return [];
+            // Support serialized options like "1) ...\n2) ..." as a fallback.
+            const parts = s
+              .split(/\n+/)
+              .map(x => x.trim())
+              .filter(Boolean)
+              .map(x => x.replace(/^\d+\)\s*/, ''));
+            return parts.length ? parts : [s];
+          }
+          return [];
+        };
+
+        const a = normalize(primary);
+        if (a.length > 0) return a;
+
+        return normalize(nested);
       },
 
       optionHtml(opt) {
