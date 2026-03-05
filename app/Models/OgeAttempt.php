@@ -56,5 +56,10 @@ class OgeAttempt extends Model
     {
         return $this->hasMany(OgeAttemptScoring::class, 'attempt_id');
     }
+
+    public function taskDetails(): HasMany
+    {
+        return $this->hasMany(OgeAttemptTaskDetail::class, 'attempt_id');
+    }
 }
 

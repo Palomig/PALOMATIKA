@@ -6,8 +6,10 @@ use App\Models\OgeAttempt;
 use App\Models\OgeAttemptAnswer;
 use App\Models\OgeAttemptEvent;
 use App\Models\OgeAttemptScoring;
+use App\Models\OgeAttemptTaskDetail;
 use App\Models\OgeAttemptTaskTiming;
 use App\Models\OgeVariant;
+use App\Models\StudentTopicMastery;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
@@ -16,6 +18,12 @@ use Illuminate\Support\Facades\Storage;
 
 class OgeAttemptService
 {
+    /** @var array<string, array<int, string|null>> Per-request answer map cache */
+    private array $answerMapCache = [];
+
+    /** @var array<string, array<int, array>> Per-request task detail map cache */
+    private array $detailMapCache = [];
+
     public function __construct(
         private readonly OgeVariantBuilderService $variantBuilder,
         private readonly TaskAnswerResolver $answerResolver,
@@ -208,9 +216,21 @@ class OgeAttemptService
         });
 
         try {
-            $this->scoreAttempt($attempt->fresh(['variant', 'answers']));
+            $freshAttempt = $attempt->fresh(['variant', 'answers']);
+            $this->scoreAttempt($freshAttempt);
+            $this->persistTaskDetails($freshAttempt);
             $attempt->update(['status' => 'scored']);
             $this->appendEvent($attempt, 'attempt_scored');
+
+            // Update mastery aggregates (non-critical — failures are logged, not re-thrown)
+            try {
+                $this->updateStudentMastery($freshAttempt);
+            } catch (\Throwable $e) {
+                Log::warning('Failed to update student mastery after scoring', [
+                    'attempt_id' => $attempt->id,
+                    'error' => $e->getMessage(),
+                ]);
+            }
         } catch (\Throwable $e) {
             $attempt->update(['status' => 'error']);
             $this->appendEvent($attempt, 'attempt_scoring_failed', null, [
@@ -234,7 +254,9 @@ class OgeAttemptService
     public function rebuildScoring(OgeAttempt $attempt): void
     {
         DB::transaction(function () use ($attempt) {
-            $this->scoreAttempt($attempt->fresh(['variant', 'answers']));
+            $freshAttempt = $attempt->fresh(['variant', 'answers']);
+            $this->scoreAttempt($freshAttempt);
+            $this->persistTaskDetails($freshAttempt);
         });
     }
 
@@ -247,6 +269,123 @@ class OgeAttemptService
     {
         return $this->buildAttemptReadPayload($attempt, true);
     }
+
+    // -----------------------------------------------------------------------
+    // Task detail persistence
+    // -----------------------------------------------------------------------
+
+    /**
+     * Persist task fingerprints (topic_id, type, svg_type, section, etc.)
+     * for each task in the attempt. Called once at scoring time.
+     */
+    private function persistTaskDetails(OgeAttempt $attempt): void
+    {
+        $detailMap = $this->getTaskDetailMap($attempt);
+        if (empty($detailMap)) {
+            return;
+        }
+
+        foreach ($detailMap as $taskNumber => $meta) {
+            $topicId = (string) ($meta['topic_id'] ?? str_pad((string) $taskNumber, 2, '0', STR_PAD_LEFT));
+            $blockNumber = (int) ($meta['block_number'] ?? 0);
+            $zadanieNumber = (int) ($meta['zadanie_number'] ?? 0);
+            $taskIndex = isset($meta['task_index']) ? (int) $meta['task_index'] : null;
+            $taskType = (string) ($meta['task_type'] ?? 'unknown');
+            $svgType = $meta['svg_type'] ?? null;
+            $section = $meta['section'] ?? null;
+
+            $taskKey = OgeAttemptTaskDetail::buildTaskKey($topicId, $blockNumber, $zadanieNumber, $taskIndex);
+
+            OgeAttemptTaskDetail::updateOrCreate(
+                ['attempt_id' => $attempt->id, 'task_number' => $taskNumber],
+                [
+                    'topic_id' => $topicId,
+                    'block_number' => $blockNumber,
+                    'zadanie_number' => $zadanieNumber,
+                    'task_index' => $taskIndex,
+                    'task_type' => $taskType,
+                    'svg_type' => $svgType,
+                    'section' => $section,
+                    'task_key' => $taskKey,
+                ],
+            );
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // Student mastery aggregation
+    // -----------------------------------------------------------------------
+
+    /**
+     * After scoring, update per-student per-topic-type mastery stats.
+     * Uses exponentially weighted average (EWA) for mastery_score.
+     */
+    private function updateStudentMastery(OgeAttempt $attempt): void
+    {
+        $studentId = (int) $attempt->student_id;
+        if ($studentId <= 0) {
+            return;
+        }
+
+        $attempt->loadMissing(['scorings', 'taskTimings', 'taskDetails']);
+
+        $scoringsByTask = $attempt->scorings->keyBy(fn ($s) => (int) $s->task_number);
+        $timingsByTask = $attempt->taskTimings->keyBy(fn ($t) => (int) $t->task_number);
+        $detailsByTask = $attempt->taskDetails->keyBy(fn ($d) => (int) $d->task_number);
+
+        foreach ($detailsByTask as $taskNumber => $detail) {
+            $scoring = $scoringsByTask->get($taskNumber);
+            if ($scoring === null || $scoring->is_correct === null) {
+                continue; // skip unchecked tasks
+            }
+
+            $timing = $timingsByTask->get($taskNumber);
+            $activeMs = (int) ($timing?->active_ms ?? 0);
+            $isCorrect = (bool) $scoring->is_correct;
+
+            // Composite key for mastery: topic_id + task_type + svg_type + section
+            $compositeKey = [
+                'student_id' => $studentId,
+                'topic_id' => $detail->topic_id,
+                'task_type' => $detail->task_type,
+                'svg_type' => $detail->svg_type,
+                'section' => $detail->section,
+            ];
+
+            $mastery = StudentTopicMastery::firstOrCreate($compositeKey, [
+                'attempts_count' => 0,
+                'correct_count' => 0,
+                'total_active_ms' => 0,
+                'avg_active_ms' => 0,
+                'accuracy' => 0,
+                'mastery_score' => 0.5, // neutral starting point
+            ]);
+
+            $mastery->attempts_count += 1;
+            if ($isCorrect) {
+                $mastery->correct_count += 1;
+            }
+            $mastery->total_active_ms += $activeMs;
+            $mastery->avg_active_ms = $mastery->attempts_count > 0
+                ? (int) ($mastery->total_active_ms / $mastery->attempts_count)
+                : 0;
+            $mastery->accuracy = $mastery->attempts_count > 0
+                ? round($mastery->correct_count / $mastery->attempts_count, 4)
+                : 0;
+
+            // EWA mastery: new = alpha * observation + (1-alpha) * old
+            // alpha = 0.3 gives reasonable weight to recent performance
+            $alpha = 0.3;
+            $observation = $isCorrect ? 1.0 : 0.0;
+            $mastery->mastery_score = round($alpha * $observation + (1 - $alpha) * $mastery->mastery_score, 4);
+            $mastery->last_attempted_at = now();
+            $mastery->save();
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // Internal scoring
+    // -----------------------------------------------------------------------
 
     private function finalizeOpenTimings(OgeAttempt $attempt): void
     {
@@ -302,7 +441,34 @@ class OgeAttemptService
      */
     private function getCorrectAnswerMap(OgeAttempt $attempt): array
     {
-        static $cache = [];
+        $cacheKey = implode(':', [
+            (string) $attempt->id,
+            (string) ($attempt->variant_id ?? 0),
+            (string) ($attempt->variant?->hash ?? ''),
+        ]);
+
+        if (isset($this->answerMapCache[$cacheKey])) {
+            return $this->answerMapCache[$cacheKey];
+        }
+
+        // Populate both answer map and detail map together to avoid double work
+        [$answerMap, $detailMap] = $this->buildVariantMaps($attempt);
+
+        $this->answerMapCache[$cacheKey] = $answerMap;
+        $this->detailMapCache[$cacheKey] = $detailMap;
+
+        return $answerMap;
+    }
+
+    /**
+     * Build a task_number => metadata map for task fingerprinting.
+     *
+     * @return array<int, array{topic_id: string, block_number: int, zadanie_number: int, task_index: int|null, task_type: string, svg_type: string|null, section: string|null}>
+     */
+    private function getTaskDetailMap(OgeAttempt $attempt): array
+    {
+        // Ensure the answer map (and thus the detail map) is built
+        $this->getCorrectAnswerMap($attempt);
 
         $cacheKey = implode(':', [
             (string) $attempt->id,
@@ -310,72 +476,113 @@ class OgeAttemptService
             (string) ($attempt->variant?->hash ?? ''),
         ]);
 
-        if (isset($cache[$cacheKey])) {
-            return $cache[$cacheKey];
-        }
+        return $this->detailMapCache[$cacheKey] ?? [];
+    }
 
+    /**
+     * Build both the correct-answer map and the task-detail map from the variant
+     * in a single pass, avoiding double variant reconstruction.
+     *
+     * @return array{0: array<int, string|null>, 1: array<int, array>}
+     */
+    private function buildVariantMaps(OgeAttempt $attempt): array
+    {
         $hash = $attempt->variant?->hash;
         if (!$hash) {
-            return $cache[$cacheKey] = [];
+            return [[], []];
         }
 
         if ($attempt->variant?->isCustomRandom()) {
-            $customTasks = $attempt->variant?->config_json['custom_tasks'] ?? [];
-            if ((!is_array($customTasks) || empty($customTasks)) && is_string($hash) && $hash !== '') {
-                $customTasks = $this->loadCustomRandomTasksByHash($hash);
-            }
-
-            if (!is_array($customTasks) || empty($customTasks)) {
-                return $cache[$cacheKey] = [];
-            }
-
-            $map = [];
-            foreach ($customTasks as $index => $taskData) {
-                if (!is_array($taskData)) {
-                    continue;
-                }
-
-                $tn = (int) ($taskData['attempt_task_number'] ?? $taskData['task_number'] ?? $taskData['test_number'] ?? ($index + 1));
-                if ($tn < 1 || $tn > 255) {
-                    continue;
-                }
-
-                $map[$tn] = $this->answerResolver->resolveFromVariantTask($taskData);
-            }
-
-            return $cache[$cacheKey] = $map;
+            return $this->buildMapsFromCustomRandom($attempt, $hash);
         }
 
-        // Mini-app / curated variants may already contain fully materialized tasks in config_json.
         $configuredTasks = $attempt->variant?->config_json['tasks'] ?? null;
         if (is_array($configuredTasks) && !empty($configuredTasks)) {
-            $map = [];
-            foreach ($configuredTasks as $index => $taskData) {
-                if (!is_array($taskData)) {
-                    continue;
-                }
-
-                $tn = (int) ($taskData['attempt_task_number'] ?? $taskData['task_number'] ?? $taskData['test_number'] ?? (6 + $index));
-                if ($tn < 1 || $tn > 255) {
-                    continue;
-                }
-
-                $map[$tn] = $this->answerResolver->resolveFromVariantTask($taskData);
-            }
-
-            return $cache[$cacheKey] = $map;
+            return $this->buildMapsFromTaskArray($configuredTasks, 6);
         }
 
         $selected = $attempt->variant?->config_json['zadaniya'] ?? null;
         $variantPayload = $this->variantBuilder->build($hash, is_array($selected) ? $selected : null);
 
-        $map = [];
-        foreach ($variantPayload['tasks'] ?? [] as $index => $taskData) {
-            $tn = (int) ($taskData['task_number'] ?? (6 + $index));
-            $map[$tn] = $this->answerResolver->resolveFromVariantTask($taskData);
+        return $this->buildMapsFromTaskArray($variantPayload['tasks'] ?? [], 6);
+    }
+
+    /**
+     * @return array{0: array<int, string|null>, 1: array<int, array>}
+     */
+    private function buildMapsFromCustomRandom(OgeAttempt $attempt, string $hash): array
+    {
+        $customTasks = $attempt->variant?->config_json['custom_tasks'] ?? [];
+        if ((!is_array($customTasks) || empty($customTasks)) && is_string($hash) && $hash !== '') {
+            $customTasks = $this->loadCustomRandomTasksByHash($hash);
         }
 
-        return $cache[$cacheKey] = $map;
+        if (!is_array($customTasks) || empty($customTasks)) {
+            return [[], []];
+        }
+
+        $answerMap = [];
+        $detailMap = [];
+
+        foreach ($customTasks as $index => $taskData) {
+            if (!is_array($taskData)) {
+                continue;
+            }
+
+            $tn = (int) ($taskData['attempt_task_number'] ?? $taskData['task_number'] ?? $taskData['test_number'] ?? ($index + 1));
+            if ($tn < 1 || $tn > 255) {
+                continue;
+            }
+
+            $answerMap[$tn] = $this->answerResolver->resolveFromVariantTask($taskData);
+            $detailMap[$tn] = self::extractTaskMeta($taskData, $tn);
+        }
+
+        return [$answerMap, $detailMap];
+    }
+
+    /**
+     * @return array{0: array<int, string|null>, 1: array<int, array>}
+     */
+    private function buildMapsFromTaskArray(array $tasks, int $defaultStartTn): array
+    {
+        $answerMap = [];
+        $detailMap = [];
+
+        foreach ($tasks as $index => $taskData) {
+            if (!is_array($taskData)) {
+                continue;
+            }
+
+            $tn = (int) ($taskData['attempt_task_number'] ?? $taskData['task_number'] ?? $taskData['test_number'] ?? ($defaultStartTn + $index));
+            if ($tn < 1 || $tn > 255) {
+                continue;
+            }
+
+            $answerMap[$tn] = $this->answerResolver->resolveFromVariantTask($taskData);
+            $detailMap[$tn] = self::extractTaskMeta($taskData, $tn);
+        }
+
+        return [$answerMap, $detailMap];
+    }
+
+    /**
+     * Extract task fingerprint metadata from a variant task payload.
+     */
+    private static function extractTaskMeta(array $taskData, int $taskNumber): array
+    {
+        $topicId = $taskData['topic_id']
+            ?? str_pad((string) $taskNumber, 2, '0', STR_PAD_LEFT);
+
+        return [
+            'topic_id' => (string) $topicId,
+            'block_number' => (int) ($taskData['block_number'] ?? 0),
+            'zadanie_number' => (int) ($taskData['zadanie_number'] ?? 0),
+            'task_index' => isset($taskData['task']['id']) ? (int) $taskData['task']['id'] : null,
+            'task_type' => (string) ($taskData['type'] ?? 'unknown'),
+            'svg_type' => $taskData['svg_type'] ?? null,
+            'section' => $taskData['section'] ?? null,
+        ];
     }
 
     /**
