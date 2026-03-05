@@ -266,63 +266,72 @@
               "image": "oge18_p3_img4.png",
               "source_png": "task18_b1_z5_1.png",
               "svg": "<svg viewBox=\"0 0 200 140\" class=\"w-full max-w-[200px] h-auto mx-auto\">\n  <defs><pattern id=\"gd67361\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"200\" height=\"140\" fill=\"#0a1628\"/>\n  <rect width=\"200\" height=\"140\" fill=\"url(#gd67361)\"/>\n  <polygon points=\"40,100 40,40 100,40 140,80 100,100\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "12"
             },
             {
               "id": 2,
               "image": "oge18_p3_img5.png",
               "source_png": "task18_b1_z5_2.png",
               "svg": "<svg viewBox=\"0 0 180 120\" class=\"w-full max-w-[180px] h-auto mx-auto\">\n  <defs><pattern id=\"g7878ad\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"180\" height=\"120\" fill=\"#0a1628\"/>\n  <rect width=\"180\" height=\"120\" fill=\"url(#g7878ad)\"/>\n  <polygon points=\"20,80 60,20 120,20 120,80\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "12"
             },
             {
               "id": 3,
               "image": "oge18_p3_img6.png",
               "source_png": "task18_b1_z5_3.png",
               "svg": "<svg viewBox=\"0 0 200 160\" class=\"w-full max-w-[200px] h-auto mx-auto\">\n  <defs><pattern id=\"g0687a1\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"200\" height=\"160\" fill=\"#0a1628\"/>\n  <rect width=\"200\" height=\"160\" fill=\"url(#g0687a1)\"/>\n  <polygon points=\"40,120 40,60 80,20 140,60 140,120\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "20"
             },
             {
               "id": 4,
               "image": "oge18_p3_img7.png",
               "source_png": "task18_b1_z5_4.png",
               "svg": "<svg viewBox=\"0 0 220 140\" class=\"w-full max-w-[220px] h-auto mx-auto\">\n  <defs><pattern id=\"gb43aa4\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"220\" height=\"140\" fill=\"#0a1628\"/>\n  <rect width=\"220\" height=\"140\" fill=\"url(#gb43aa4)\"/>\n  <polygon points=\"20,100 60,40 120,40 160,100\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "15"
             },
             {
               "id": 5,
               "image": "oge18_p3_img8.png",
               "source_png": "task18_b1_z5_5.png",
               "svg": "<svg viewBox=\"0 0 180 140\" class=\"w-full max-w-[180px] h-auto mx-auto\">\n  <defs><pattern id=\"gb44dbd\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"180\" height=\"140\" fill=\"#0a1628\"/>\n  <rect width=\"180\" height=\"140\" fill=\"url(#gb44dbd)\"/>\n  <polygon points=\"40,100 40,40 80,40 120,80 80,100\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "9"
             },
             {
               "id": 6,
               "image": "oge18_p3_img9.png",
               "source_png": "task18_b1_z5_6.png",
               "svg": "<svg viewBox=\"0 0 200 160\" class=\"w-full max-w-[200px] h-auto mx-auto\">\n  <defs><pattern id=\"g731ea9\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"200\" height=\"160\" fill=\"#0a1628\"/>\n  <rect width=\"200\" height=\"160\" fill=\"url(#g731ea9)\"/>\n  <polygon points=\"20,120 20,60 80,20 140,60 140,120\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "24"
             },
             {
               "id": 7,
               "image": "oge18_p3_img10.png",
               "source_png": "task18_b1_z5_7.png",
               "svg": "<svg viewBox=\"0 0 200 160\" class=\"w-full max-w-[200px] h-auto mx-auto\">\n  <defs><pattern id=\"g6784d0\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"200\" height=\"160\" fill=\"#0a1628\"/>\n  <rect width=\"200\" height=\"160\" fill=\"url(#g6784d0)\"/>\n  <polygon points=\"40,80 80,20 140,80 100,120\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "12.5"
             },
             {
               "id": 8,
               "image": "oge18_p3_img11.png",
               "source_png": "task18_b1_z5_8.png",
               "svg": "<svg viewBox=\"0 0 180 140\" class=\"w-full max-w-[180px] h-auto mx-auto\">\n  <defs><pattern id=\"gd8dd23\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"180\" height=\"140\" fill=\"#0a1628\"/>\n  <rect width=\"180\" height=\"140\" fill=\"url(#gd8dd23)\"/>\n  <polygon points=\"20,100 40,40 100,40 120,100\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "12"
             },
             {
               "id": 9,
               "image": "oge18_p3_img12.png",
               "source_png": "task18_b1_z5_9.png",
               "svg": "<svg viewBox=\"0 0 200 160\" class=\"w-full max-w-[200px] h-auto mx-auto\">\n  <defs><pattern id=\"g6d4798\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"200\" height=\"160\" fill=\"#0a1628\"/>\n  <rect width=\"200\" height=\"160\" fill=\"url(#g6d4798)\"/>\n  <polygon points=\"40,120 60,40 120,40 140,120\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "16"
             }
           ]
         },
@@ -336,63 +345,72 @@
               "image": "oge18_p3_img13.png",
               "source_png": "task18_b1_z6_1.png",
               "svg": "<svg viewBox=\"0 0 220 160\" class=\"w-full max-w-[220px] h-auto mx-auto\">\n  <defs><pattern id=\"g533cf1\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"220\" height=\"160\" fill=\"#0a1628\"/>\n  <rect width=\"220\" height=\"160\" fill=\"url(#g533cf1)\"/>\n  <polygon points=\"60,120 20,80 60,20 120,20 160,80 120,120\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "25"
             },
             {
               "id": 2,
               "image": "oge18_p3_img14.png",
               "source_png": "task18_b1_z6_2.png",
               "svg": "<svg viewBox=\"0 0 200 140\" class=\"w-full max-w-[200px] h-auto mx-auto\">\n  <defs><pattern id=\"g655673\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"200\" height=\"140\" fill=\"#0a1628\"/>\n  <rect width=\"200\" height=\"140\" fill=\"url(#g655673)\"/>\n  <polygon points=\"40,100 20,60 60,20 120,20 140,60 100,100\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "18"
             },
             {
               "id": 3,
               "image": "oge18_p3_img15.png",
               "source_png": "task18_b1_z6_3.png",
               "svg": "<svg viewBox=\"0 0 200 140\" class=\"w-full max-w-[200px] h-auto mx-auto\">\n  <defs><pattern id=\"g53ab6a\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"200\" height=\"140\" fill=\"#0a1628\"/>\n  <rect width=\"200\" height=\"140\" fill=\"url(#g53ab6a)\"/>\n  <polygon points=\"60,100 20,60 60,20 100,20 140,60 100,100\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "16"
             },
             {
               "id": 4,
               "image": "oge18_p4_img1.png",
               "source_png": "task18_b1_z6_4.png",
               "svg": "<svg viewBox=\"0 0 180 160\" class=\"w-full max-w-[180px] h-auto mx-auto\">\n  <defs><pattern id=\"gb98ada\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"180\" height=\"160\" fill=\"#0a1628\"/>\n  <rect width=\"180\" height=\"160\" fill=\"url(#gb98ada)\"/>\n  <polygon points=\"40,120 20,80 40,40 100,40 120,80 100,120\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "16"
             },
             {
               "id": 5,
               "image": "oge18_p4_img2.png",
               "source_png": "task18_b1_z6_5.png",
               "svg": "<svg viewBox=\"0 0 200 140\" class=\"w-full max-w-[200px] h-auto mx-auto\">\n  <defs><pattern id=\"g84f40e\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"200\" height=\"140\" fill=\"#0a1628\"/>\n  <rect width=\"200\" height=\"140\" fill=\"url(#g84f40e)\"/>\n  <polygon points=\"60,100 40,60 60,20 120,20 140,60 120,100\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "16"
             },
             {
               "id": 6,
               "image": "oge18_p4_img3.png",
               "source_png": "task18_b1_z6_6.png",
               "svg": "<svg viewBox=\"0 0 220 160\" class=\"w-full max-w-[220px] h-auto mx-auto\">\n  <defs><pattern id=\"g1c3064\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"220\" height=\"160\" fill=\"#0a1628\"/>\n  <rect width=\"220\" height=\"160\" fill=\"url(#g1c3064)\"/>\n  <polygon points=\"40,120 20,60 60,20 120,20 160,60 140,120\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "28"
             },
             {
               "id": 7,
               "image": "oge18_p4_img4.png",
               "source_png": "task18_b1_z6_7.png",
               "svg": "<svg viewBox=\"0 0 240 160\" class=\"w-full max-w-[240px] h-auto mx-auto\">\n  <defs><pattern id=\"g531da7\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"240\" height=\"160\" fill=\"#0a1628\"/>\n  <rect width=\"240\" height=\"160\" fill=\"url(#g531da7)\"/>\n  <polygon points=\"60,120 20,60 60,20 140,20 180,60 140,120\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "30"
             },
             {
               "id": 8,
               "image": "oge18_p4_img5.png",
               "source_png": "task18_b1_z6_8.png",
               "svg": "<svg viewBox=\"0 0 200 140\" class=\"w-full max-w-[200px] h-auto mx-auto\">\n  <defs><pattern id=\"g2025b8\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"200\" height=\"140\" fill=\"#0a1628\"/>\n  <rect width=\"200\" height=\"140\" fill=\"url(#g2025b8)\"/>\n  <polygon points=\"40,100 20,60 40,20 120,20 140,60 120,100\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "20"
             },
             {
               "id": 9,
               "image": "oge18_p4_img6.png",
               "source_png": "task18_b1_z6_9.png",
               "svg": "<svg viewBox=\"0 0 200 160\" class=\"w-full max-w-[200px] h-auto mx-auto\">\n  <defs><pattern id=\"g29ec9d\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"200\" height=\"160\" fill=\"#0a1628\"/>\n  <rect width=\"200\" height=\"160\" fill=\"url(#g29ec9d)\"/>\n  <polygon points=\"60,120 40,80 60,40 120,40 140,80 120,120\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "16"
             }
           ]
         },
@@ -972,47 +990,56 @@
             {
               "id": 1,
               "image": "oge18_p10_img11.png",
-              "status": "draft"
+              "status": "draft",
+              "answer": "12"
             },
             {
               "id": 2,
               "image": "oge18_p10_img12.png",
-              "status": "draft"
+              "status": "draft",
+              "answer": "12"
             },
             {
               "id": 3,
               "image": "oge18_p11_img1.png",
-              "status": "draft"
+              "status": "draft",
+              "answer": "20"
             },
             {
               "id": 4,
               "image": "oge18_p11_img2.png",
-              "status": "draft"
+              "status": "draft",
+              "answer": "15"
             },
             {
               "id": 5,
               "image": "oge18_p11_img3.png",
-              "status": "draft"
+              "status": "draft",
+              "answer": "9"
             },
             {
               "id": 6,
               "image": "oge18_p11_img4.png",
-              "status": "draft"
+              "status": "draft",
+              "answer": "24"
             },
             {
               "id": 7,
               "image": "oge18_p11_img5.png",
-              "status": "draft"
+              "status": "draft",
+              "answer": "12.5"
             },
             {
               "id": 8,
               "image": "oge18_p11_img6.png",
-              "status": "draft"
+              "status": "draft",
+              "answer": "12"
             },
             {
               "id": 9,
               "image": "oge18_p11_img7.png",
-              "status": "draft"
+              "status": "draft",
+              "answer": "16"
             }
           ]
         },
