@@ -852,24 +852,14 @@ class TelegramBotAuthController extends Controller
             // New payload: oge_variant_hash_{hash}
             if (preg_match('/^oge_variant_hash_([a-z0-9]{8,32})$/i', $startParam, $matches)) {
                 $hash = strtolower($matches[1]);
-                $variant = OgeVariant::whereRaw('LOWER(hash) = ?', [$hash])->first();
-                if ($variant && !empty($variant->hash)) {
-                    return url('/oge/' . $variant->hash);
-                }
-
-                // If DB lookup fails, still try direct hash URL.
-                return url('/oge/' . $hash);
+                // Keep battle flow inside Mini App context (dashboard handles startapp payload).
+                return url('/tg/dashboard?startapp=oge_variant_hash_' . $hash);
             }
 
             // Tolerant payload: oge_variant_{hash}
             if (preg_match('/^oge_variant_([a-z0-9]{8,32})$/i', $startParam, $matches)) {
                 $hash = strtolower($matches[1]);
-                $variant = OgeVariant::whereRaw('LOWER(hash) = ?', [$hash])->first();
-                if ($variant && !empty($variant->hash)) {
-                    return url('/oge/' . $variant->hash);
-                }
-
-                return url('/oge/' . $hash);
+                return url('/tg/dashboard?startapp=oge_variant_hash_' . $hash);
             }
         }
 
