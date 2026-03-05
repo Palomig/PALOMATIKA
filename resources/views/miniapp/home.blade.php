@@ -371,97 +371,63 @@ function homePage() {
       this.traceId = this.generateTraceId();
       this.sendDiag('auth_start', 'A_START');
 
-      const btn = document.getElementById('start-btn');
-      const btnText = document.getElementById('start-btn-text');
-      if (btn) btn.classList.add('btn-loading');
+      const btn = this.$refs.startBtn;
+      const btnText = this.$refs.startBtnText;
       if (btnText) btnText.innerHTML = '<span class="spinner"></span> Входим...';
+      if (btn) btn.classList.add('btn-loading');
 
       const tg = window.Telegram?.WebApp;
       const initData = tg && typeof tg.initData === 'string' ? tg.initData.trim() : '';
-      const startParam = (tg?.initDataUnsafe?.start_param || new URLSearchParams(window.location.search).get('startapp') || '').trim();
+      const startParam = (tg?.initDataUnsafe?.start_param || new URLSearchParams(window.location.search).get('startapp') || 'miniapp_home').trim();
 
       if (!initData) {
         this.authErrorCode = 'E_INITDATA_EMPTY';
         this.sendDiag('auth_precheck', this.authErrorCode);
-
-        this.startBotFallbackAuth(btn, btnText).catch((e) => {
-          this.sendDiag('auth_fallback_failed', 'E_FALLBACK_START', { err: e?.message || null });
-          if (tg && tg.showAlert) { tg.showAlert('Не удалось войти. Попробуйте перезапустить мини-приложение.'); }
-          else { alert('Не удалось войти. Попробуйте перезапустить мини-приложение.'); }
-          if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
-          if (btn) btn.classList.remove('btn-loading');
-          this.loginInProgress = false;
-        });
-        return;
-      }
-
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 12000);
-
-      fetch('/api/auth/telegram/webapp-login', {
-        method: 'POST',
-        credentials: 'include',
-        signal: controller.signal,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'X-CSRF-TOKEN': window._csrf,
-        },
-        body: JSON.stringify({ initData, startParam, trace_id: this.traceId }),
-      })
-      .then(async (res) => {
-        clearTimeout(timeoutId);
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok || !data.success) {
-          this.authErrorCode = `E_WEBAPP_${res.status || 'FAIL'}`;
-          this.sendDiag('webapp_login_response', this.authErrorCode, { http_status: res.status || null });
-          throw new Error(data.message || 'Ошибка авторизации');
-        }
-
-        // Verify session really exists in WebView before redirect.
-        // Some mobile WebViews apply Set-Cookie with slight delay, so retry briefly.
-        let meRes = null;
-        let me = {};
-        let authenticated = false;
-        for (let i = 0; i < 4; i++) {
-          meRes = await fetch('/api/telegram/session-check', {
-            credentials: 'include',
-            cache: 'no-store',
-            headers: { 'Accept': 'application/json' }
-          });
-          me = await meRes.json().catch(() => ({}));
-          authenticated = !!(meRes.ok && me && me.authenticated);
-          if (authenticated) break;
-          await new Promise(r => setTimeout(r, 250));
-        }
-
-        if (!authenticated) {
-          this.authErrorCode = 'E_COOKIE_SESSION';
-          this.sendDiag('auth_post_login_check', this.authErrorCode, { me_status: meRes?.status || null });
-
-          // Do not hard-fail here: auto-switch to bot fallback flow.
-          await this.startBotFallbackAuth(btn, btnText);
-          return;
-        }
-
-        this.sendDiag('auth_success', 'A_OK');
-        const target = data.redirect_to || data.redirect || '/tg/dashboard';
-        window.location.replace(target);
-      })
-      .catch((e) => {
-        clearTimeout(timeoutId);
-        if (!this.authErrorCode) {
-          this.authErrorCode = (e && e.name === 'AbortError') ? 'E_WEBAPP_TIMEOUT' : 'E_WEBAPP_NETWORK';
-        }
-        this.sendDiag('webapp_login_catch', this.authErrorCode, { err: (e && e.message) ? e.message : null });
-
+        if (tg && tg.showAlert) tg.showAlert('Не удалось получить данные Telegram. Перезапустите mini app из бота.');
+        else alert('Не удалось получить данные Telegram.');
         if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
         if (btn) btn.classList.remove('btn-loading');
         this.loginInProgress = false;
-        const msg = (e && e.message) ? `${e.message} (${this.authErrorCode})` : `Ошибка авторизации (${this.authErrorCode})`;
-        if (tg && tg.showAlert) tg.showAlert(msg);
-        else alert(msg);
-      });
+        return;
+      }
+
+      // Use server-side form POST auth flow (no fetch-cookie race in WebView).
+      this.sendDiag('auth_server_post', 'A_POST_FORM');
+      this.submitServerAuth(initData, startParam);
+    },
+
+    submitServerAuth(initData, startParam) {
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = '/tg/auth';
+      form.style.display = 'none';
+
+      const csrf = document.createElement('input');
+      csrf.type = 'hidden';
+      csrf.name = '_token';
+      csrf.value = window._csrf || '';
+      form.appendChild(csrf);
+
+      const init = document.createElement('input');
+      init.type = 'hidden';
+      init.name = 'initData';
+      init.value = initData;
+      form.appendChild(init);
+
+      const sp = document.createElement('input');
+      sp.type = 'hidden';
+      sp.name = 'startParam';
+      sp.value = startParam || '';
+      form.appendChild(sp);
+
+      const tr = document.createElement('input');
+      tr.type = 'hidden';
+      tr.name = 'trace_id';
+      tr.value = this.traceId || '';
+      form.appendChild(tr);
+
+      document.body.appendChild(form);
+      form.submit();
     },
 
     async startBotFallbackAuth(btn = null, btnText = null) {
