@@ -693,19 +693,9 @@ class TelegramBotAuthController extends Controller
             $startParam = 'miniapp_home';
         }
 
-        $openUrl = url('/tg/dashboard?startapp=' . rawurlencode($startParam));
-
         $this->sendTelegramMessage(
             $from['id'],
-            "✅ Вы успешно авторизовались!\n\nПривет, {$name}! Нажмите кнопку ниже, чтобы вернуться в мини-приложение.",
-            [
-                'inline_keyboard' => [[
-                    [
-                        'text' => '↩️ Вернуться в приложение',
-                        'web_app' => ['url' => $openUrl],
-                    ],
-                ]],
-            ]
+            "✅ Готово, {$name}! Авторизация подтверждена.\n\n↩️ Вернитесь в предыдущее окно мини-приложения — вход уже подхватится автоматически."
         );
     }
 

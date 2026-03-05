@@ -491,7 +491,7 @@ function homePage() {
       if (isMobile) window.location.href = data.deep_link;
       else window.open(data.deep_link, '_blank');
 
-      if (btnText) btnText.innerHTML = '<span class="spinner"></span> Ожидаем подтверждение...';
+      if (btnText) btnText.innerHTML = '<span class="spinner"></span> Подтвердите вход в боте...';
       this.startPolling(btn, btnText);
     },
 
