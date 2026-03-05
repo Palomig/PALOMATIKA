@@ -695,7 +695,7 @@ class TelegramBotAuthController extends Controller
 
         $webAppBaseUrl = trim((string) config('services.telegram.webapp_base_url', ''));
         $button = [
-            'text' => 'Открыть сайт после входа',
+            'text' => '🚀 Открыть приложение',
         ];
 
         if ($webAppBaseUrl !== '') {
@@ -706,7 +706,7 @@ class TelegramBotAuthController extends Controller
 
         $this->sendTelegramMessage(
             $from['id'],
-            "✅ Вход выполнен успешно!\n\nПривет, {$name}! Если сайт не вошёл автоматически, нажмите кнопку ниже:",
+            "✅ Вы успешно авторизовались!\n\nПривет, {$name}! Чтобы вернуться обратно в приложение, нажмите на кнопку ниже:\n⬇️⬇️⬇️",
             [
                 'inline_keyboard' => [[$button]],
             ]
