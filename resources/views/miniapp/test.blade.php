@@ -678,8 +678,8 @@
         {{-- Answer section --}}
         <div class="answer-section q-anim" :style="'animation-delay: 0.1s; margin-top: 16px'">
 
-          {{-- Choice type --}}
-          <template x-if="(currentTask.type === 'choice' || currentTask.type === 'simple_choice' || currentTask.type === 'fraction_choice' || currentTask.type === 'interval_choice') && normalizedOptions(currentTask).length > 0">
+          {{-- Choice/options type (for any task that carries options) --}}
+          <template x-if="currentTask.type !== 'matching' && currentTask.type !== 'matching_signs' && normalizedOptions(currentTask).length > 0">
             <div>
               <div class="answer-label">Выбери ответ</div>
               <div class="test-options">
@@ -726,7 +726,7 @@
           </template>
 
           {{-- Input type (expression, geometry, word_problem, etc.) --}}
-          <template x-if="((currentTask.type !== 'choice' && currentTask.type !== 'simple_choice' && currentTask.type !== 'fraction_choice' && currentTask.type !== 'interval_choice') || normalizedOptions(currentTask).length === 0) && currentTask.type !== 'matching' && currentTask.type !== 'matching_signs'">
+          <template x-if="normalizedOptions(currentTask).length === 0 && currentTask.type !== 'matching' && currentTask.type !== 'matching_signs'">
             <div>
               <div class="answer-label">Введи ответ</div>
               <input class="answer-input"
