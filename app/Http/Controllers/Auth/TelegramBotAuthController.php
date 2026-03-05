@@ -408,14 +408,15 @@ class TelegramBotAuthController extends Controller
             return redirect()->to($redirectTo);
         }
 
+        $fallbackRedirect = $user->onboarding_completed_at ? '/tg/dashboard' : '/tg/onboarding';
         Log::info('tg_token_login_success', [
             'trace_id' => $traceId !== '' ? $traceId : null,
             'token' => $token,
             'user_id' => $user->id,
-            'redirect_to' => '/dashboard',
+            'redirect_to' => $fallbackRedirect,
         ]);
 
-        return redirect()->intended('/dashboard');
+        return redirect()->to($fallbackRedirect);
     }
 
     /**
@@ -688,10 +689,12 @@ class TelegramBotAuthController extends Controller
         $name = $from['first_name'] ?? 'пользователь';
         $loginUrl = route('telegram.login', ['token' => $token]);
         $startParam = Cache::get($this->startParamCacheKey($token));
-        if (is_string($startParam) && trim($startParam) !== '') {
-            $separator = str_contains($loginUrl, '?') ? '&' : '?';
-            $loginUrl .= $separator . 'startapp=' . rawurlencode(trim($startParam));
+        $startParam = is_string($startParam) ? trim($startParam) : '';
+        if ($startParam === '') {
+            $startParam = 'miniapp_home';
         }
+        $separator = str_contains($loginUrl, '?') ? '&' : '?';
+        $loginUrl .= $separator . 'startapp=' . rawurlencode($startParam);
 
         $webAppBaseUrl = trim((string) config('services.telegram.webapp_base_url', ''));
         $button = [
