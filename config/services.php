@@ -44,7 +44,7 @@ return [
     ],
 
     'telegram' => [
-        'bot_username' => env('TELEGRAM_BOT_USERNAME'),
+        'bot_username' => env('TELEGRAM_BOT_USERNAME', 'palomatika_auth_bot'),
         'bot_token' => env('TELEGRAM_BOT_TOKEN'),
         'webhook_secret' => env('TELEGRAM_WEBHOOK_SECRET'),
         // BotFather /setdomain value for Mini App web_app buttons (host/domain only).
@@ -53,7 +53,7 @@ return [
         'webapp_base_url' => env('TELEGRAM_WEBAPP_BASE_URL'),
         'mini_app_link_scheme' => env('TELEGRAM_MINI_APP_LINK_SCHEME', 'https'),
         // BotFather Mini App short name (used in https://t.me/<bot>/<short_name>?startapp=...)
-        'mini_app_short_name' => env('TELEGRAM_MINI_APP_SHORT_NAME'),
+        'mini_app_short_name' => env('TELEGRAM_MINI_APP_SHORT_NAME', 'palomatika'),
     ],
 
     /*

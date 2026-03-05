@@ -590,11 +590,11 @@ class TelegramBotAuthController extends Controller
             $variant = $this->variantPool->createBattleVariant($mode);
 
             $botUsername = (string) config('services.telegram.bot_username', 'palomatika_auth_bot');
+            $miniAppShort = (string) config('services.telegram.mini_app_short_name', 'palomatika');
             $startParam = 'oge_variant_hash_' . $variant->hash;
 
-            // Reliable cross-device share flow: open bot via /start payload.
-            // Bot then sends a WebApp button that opens Mini App inside Telegram.
-            $shareLink = "https://t.me/{$botUsername}?start={$startParam}";
+            // Direct Mini App deep-link (opens app screen immediately with payload).
+            $shareLink = "https://t.me/{$botUsername}/{$miniAppShort}?startapp={$startParam}";
 
             $title = $mode === 'full' ? 'Полный вариант' : 'Смешанный мини-вариант';
 
