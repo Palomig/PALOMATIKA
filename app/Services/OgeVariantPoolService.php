@@ -299,6 +299,7 @@ class OgeVariantPoolService
         $normalized['text'] = $inner['text'] ?? ($task['text'] ?? null);
         $normalized['expression'] = $inner['expression'] ?? ($task['expression'] ?? null);
         $normalized['svg'] = $inner['svg'] ?? ($task['svg'] ?? null);
+        $normalized['image'] = $inner['image'] ?? ($task['image'] ?? null);
 
         // For matching/choice tasks options are often inside task-level options.
         $normalized['options'] = $inner['options'] ?? ($task['options'] ?? null);

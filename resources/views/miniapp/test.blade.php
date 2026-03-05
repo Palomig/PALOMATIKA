@@ -664,6 +664,17 @@
                x-html="currentTask.svg"></div>
         </template>
 
+        {{-- Image fallback (PNG/JPG/SVG file path or inline SVG string) --}}
+        <template x-if="!currentTask.svg && currentTask.image && String(currentTask.image).trim().startsWith('<svg')">
+          <div class="q-svg-wrap q-anim" :class="{ 'q-svg-wide': String(currentTask.task_number) === '11' }" :style="'animation-delay: 0.08s; margin-top: 16px'"
+               x-html="currentTask.image"></div>
+        </template>
+        <template x-if="!currentTask.svg && currentTask.image && !String(currentTask.image).trim().startsWith('<svg')">
+          <div class="q-svg-wrap q-anim" :class="{ 'q-svg-wide': String(currentTask.task_number) === '11' }" :style="'animation-delay: 0.08s; margin-top: 16px'">
+            <img :src="resolveTaskImageSrc(currentTask)" alt="task image" style="max-width:100%; height:auto; display:block; margin:0 auto; border-radius:12px;">
+          </div>
+        </template>
+
         {{-- Answer section --}}
         <div class="answer-section q-anim" :style="'animation-delay: 0.1s; margin-top: 16px'">
 
@@ -888,6 +899,14 @@
       topicName(topicId) {
         const id = String(topicId).padStart(2, '0');
         return TOPIC_NAMES[id] || ('Тема ' + id);
+      },
+
+      resolveTaskImageSrc(task) {
+        const raw = String(task?.image || '').trim();
+        if (!raw) return '';
+        if (/^https?:\/\//i.test(raw) || raw.startsWith('/')) return raw;
+        const topicId = String(task?.topic_id ?? '').padStart(2, '0');
+        return `/images/tasks/${topicId}/${raw}`;
       },
 
       // Navigation

@@ -448,6 +448,7 @@ class MiniAppController extends Controller
             $task['text'] = $task['text'] ?? ($inner['text'] ?? null);
             $task['expression'] = $task['expression'] ?? ($inner['expression'] ?? null);
             $task['svg'] = $task['svg'] ?? ($inner['svg'] ?? null);
+            $task['image'] = $task['image'] ?? ($inner['image'] ?? null);
             $task['options'] = $task['options'] ?? ($inner['options'] ?? null);
 
             // statements-mode fallback for old payloads
