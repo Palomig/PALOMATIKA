@@ -163,11 +163,15 @@ class OgeVariantPoolService
                 $targetCount = 5;
                 break;
             case 'mixed':
-                // Product rule for mini mixed battle: 5 tasks total (3 algebra + 2 geometry)
+                // Product rule for mini mixed battle: 5 tasks total (strict split 3 algebra + 2 geometry)
                 $alg = $this->pickRandomTopics($this->algebraTopics, 3);
                 $geo = $this->pickRandomTopics($this->geometryTopics, 2);
                 $topicIds = array_merge($alg, $geo);
-                $fallbackTopicIds = array_values(array_diff(array_merge($this->algebraTopics, $this->geometryTopics), $topicIds));
+                // Keep per-bucket fallback to preserve 3+2 composition.
+                $fallbackTopicIds = [
+                    'alg' => array_values(array_diff($this->algebraTopics, $alg)),
+                    'geo' => array_values(array_diff($this->geometryTopics, $geo)),
+                ];
                 $targetCount = 5;
                 break;
             case 'full':
@@ -204,19 +208,58 @@ class OgeVariantPoolService
 
         // Backfill to target size for mini modes if some chosen topics had no production tasks.
         if ($targetCount !== null && count($result) < $targetCount) {
-            shuffle($fallbackTopicIds);
-            foreach ($fallbackTopicIds as $topicId) {
-                if (count($result) >= $targetCount) {
-                    break;
+            if ($type === 'mixed' && is_array($fallbackTopicIds)) {
+                $currentAlg = 0;
+                $currentGeo = 0;
+                foreach ($result as $row) {
+                    $tid = str_pad((string) ($row['topic_id'] ?? ''), 2, '0', STR_PAD_LEFT);
+                    if (in_array($tid, $this->algebraTopics, true)) {
+                        $currentAlg++;
+                    } elseif (in_array($tid, $this->geometryTopics, true)) {
+                        $currentGeo++;
+                    }
                 }
 
-                $picked = $tryPickForTopic($topicId);
-                if ($picked === null) {
-                    continue;
+                $needAlg = max(0, 3 - $currentAlg);
+                $needGeo = max(0, 2 - $currentGeo);
+
+                $algFallback = $fallbackTopicIds['alg'] ?? [];
+                $geoFallback = $fallbackTopicIds['geo'] ?? [];
+                shuffle($algFallback);
+                shuffle($geoFallback);
+
+                foreach ($algFallback as $topicId) {
+                    if ($needAlg <= 0 || count($result) >= $targetCount) break;
+                    $picked = $tryPickForTopic($topicId);
+                    if ($picked === null) continue;
+                    $picked['task_number'] = (int) ltrim($topicId, '0');
+                    $result[] = $this->normalizeTaskForMiniApp($picked);
+                    $needAlg--;
                 }
 
-                $picked['task_number'] = (int) ltrim($topicId, '0');
-                $result[] = $this->normalizeTaskForMiniApp($picked);
+                foreach ($geoFallback as $topicId) {
+                    if ($needGeo <= 0 || count($result) >= $targetCount) break;
+                    $picked = $tryPickForTopic($topicId);
+                    if ($picked === null) continue;
+                    $picked['task_number'] = (int) ltrim($topicId, '0');
+                    $result[] = $this->normalizeTaskForMiniApp($picked);
+                    $needGeo--;
+                }
+            } else {
+                shuffle($fallbackTopicIds);
+                foreach ($fallbackTopicIds as $topicId) {
+                    if (count($result) >= $targetCount) {
+                        break;
+                    }
+
+                    $picked = $tryPickForTopic($topicId);
+                    if ($picked === null) {
+                        continue;
+                    }
+
+                    $picked['task_number'] = (int) ltrim($topicId, '0');
+                    $result[] = $this->normalizeTaskForMiniApp($picked);
+                }
             }
         }
 
