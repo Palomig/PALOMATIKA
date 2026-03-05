@@ -257,8 +257,8 @@
   .test-option {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 13px 14px;
+    gap: 14px;
+    padding: 15px 16px;
     background: var(--bg);
     border: 1.5px solid var(--border);
     border-radius: 12px;
@@ -290,10 +290,13 @@
     color: #fff;
   }
   .test-option-text {
-    font-size: 14px;
+    font-size: 17px;
     font-weight: 700;
     color: var(--text);
-    line-height: 1.4;
+    line-height: 1.45;
+  }
+  .test-option-text .katex {
+    font-size: 1.28em;
   }
 
   /* Text input */
