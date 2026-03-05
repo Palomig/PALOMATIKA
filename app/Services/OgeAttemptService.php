@@ -159,6 +159,9 @@ class OgeAttemptService
                 [
                     'active_ms' => 0,
                     'focus_count' => 0,
+                    'heartbeat_count' => 0,
+                    'blur_count' => 0,
+                    'first_focused_at' => null,
                     'last_focus_at' => null,
                     'last_heartbeat_at' => null,
                 ]
@@ -168,11 +171,13 @@ class OgeAttemptService
 
             if ($eventType === 'task_focused') {
                 $timing->focus_count += 1;
+                $timing->first_focused_at = $timing->first_focused_at ?? $now;
                 $timing->last_focus_at = $now;
                 $timing->last_heartbeat_at = $now;
             }
 
             if ($eventType === 'heartbeat') {
+                $timing->heartbeat_count += 1;
                 if ($timing->last_focus_at) {
                     $anchor = $timing->last_heartbeat_at ?? $timing->last_focus_at;
                     $delta = $anchor ? $anchor->diffInMilliseconds($now) : 0;
@@ -183,6 +188,7 @@ class OgeAttemptService
             }
 
             if ($eventType === 'task_blurred') {
+                $timing->blur_count += 1;
                 if ($timing->last_focus_at) {
                     $anchor = $timing->last_heartbeat_at ?? $timing->last_focus_at;
                     $delta = $anchor ? $anchor->diffInMilliseconds($now) : 0;
@@ -292,9 +298,22 @@ class OgeAttemptService
             $taskIndex = isset($meta['task_index']) ? (int) $meta['task_index'] : null;
             $taskType = (string) ($meta['task_type'] ?? 'unknown');
             $svgType = $meta['svg_type'] ?? null;
+            $subtype = $meta['subtype'] ?? null;
             $section = $meta['section'] ?? null;
+            $source = $meta['source'] ?? null;
 
             $taskKey = OgeAttemptTaskDetail::buildTaskKey($topicId, $blockNumber, $zadanieNumber, $taskIndex);
+            $taskFingerprint = self::buildTaskFingerprint([
+                'topic_id' => $topicId,
+                'block_number' => $blockNumber,
+                'zadanie_number' => $zadanieNumber,
+                'task_index' => $taskIndex,
+                'task_type' => $taskType,
+                'svg_type' => $svgType,
+                'subtype' => $subtype,
+                'section' => $section,
+                'source' => $source,
+            ]);
 
             OgeAttemptTaskDetail::updateOrCreate(
                 ['attempt_id' => $attempt->id, 'task_number' => $taskNumber],
@@ -305,8 +324,11 @@ class OgeAttemptService
                     'task_index' => $taskIndex,
                     'task_type' => $taskType,
                     'svg_type' => $svgType,
+                    'subtype' => $subtype,
                     'section' => $section,
+                    'source' => $source,
                     'task_key' => $taskKey,
+                    'task_fingerprint' => $taskFingerprint,
                 ],
             );
         }
@@ -349,6 +371,7 @@ class OgeAttemptService
                 'topic_id' => $detail->topic_id,
                 'task_type' => $detail->task_type,
                 'svg_type' => $detail->svg_type,
+                'subtype' => $detail->subtype,
                 'section' => $detail->section,
             ];
 
@@ -359,6 +382,10 @@ class OgeAttemptService
                 'avg_active_ms' => 0,
                 'accuracy' => 0,
                 'mastery_score' => 0.5, // neutral starting point
+                'recent_outcomes' => [],
+                'current_correct_streak' => 0,
+                'current_incorrect_streak' => 0,
+                'last_outcome' => null,
             ]);
 
             $mastery->attempts_count += 1;
@@ -378,6 +405,15 @@ class OgeAttemptService
             $alpha = 0.3;
             $observation = $isCorrect ? 1.0 : 0.0;
             $mastery->mastery_score = round($alpha * $observation + (1 - $alpha) * $mastery->mastery_score, 4);
+            $mastery->recent_outcomes = self::appendRecentOutcome($mastery->recent_outcomes, $isCorrect);
+            if ($isCorrect) {
+                $mastery->current_correct_streak += 1;
+                $mastery->current_incorrect_streak = 0;
+            } else {
+                $mastery->current_incorrect_streak += 1;
+                $mastery->current_correct_streak = 0;
+            }
+            $mastery->last_outcome = $isCorrect;
             $mastery->last_attempted_at = now();
             $mastery->save();
         }
@@ -581,8 +617,42 @@ class OgeAttemptService
             'task_index' => isset($taskData['task']['id']) ? (int) $taskData['task']['id'] : null,
             'task_type' => (string) ($taskData['type'] ?? 'unknown'),
             'svg_type' => $taskData['svg_type'] ?? null,
+            'subtype' => $taskData['subtype'] ?? $taskData['task']['subtype'] ?? $taskData['svg_type'] ?? null,
             'section' => $taskData['section'] ?? null,
+            'source' => $taskData['source'] ?? null,
         ];
+    }
+
+    /**
+     * @param array<string, mixed> $meta
+     */
+    private static function buildTaskFingerprint(array $meta): string
+    {
+        $parts = [
+            (string) ($meta['topic_id'] ?? ''),
+            (string) ($meta['block_number'] ?? 0),
+            (string) ($meta['zadanie_number'] ?? 0),
+            (string) ($meta['task_index'] ?? ''),
+            (string) ($meta['task_type'] ?? ''),
+            (string) ($meta['svg_type'] ?? ''),
+            (string) ($meta['subtype'] ?? ''),
+            (string) ($meta['section'] ?? ''),
+            (string) ($meta['source'] ?? ''),
+        ];
+
+        return hash('sha256', implode('|', $parts));
+    }
+
+    /**
+     * @param mixed $existing
+     * @return array<int, bool>
+     */
+    private static function appendRecentOutcome($existing, bool $isCorrect): array
+    {
+        $history = is_array($existing) ? $existing : [];
+        $history[] = $isCorrect;
+
+        return array_slice(array_values($history), -10);
     }
 
     /**
@@ -709,6 +779,9 @@ class OgeAttemptService
                 'last_committed_at' => optional($answer?->last_committed_at)->toIso8601String(),
                 'active_ms' => $activeMs,
                 'focus_count' => (int) ($timing?->focus_count ?? 0),
+                'heartbeat_count' => (int) ($timing?->heartbeat_count ?? 0),
+                'blur_count' => (int) ($timing?->blur_count ?? 0),
+                'first_focused_at' => optional($timing?->first_focused_at)->toIso8601String(),
                 'last_focus_at' => optional($timing?->last_focus_at)->toIso8601String(),
                 'last_heartbeat_at' => optional($timing?->last_heartbeat_at)->toIso8601String(),
             ];

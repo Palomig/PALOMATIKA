@@ -99,6 +99,7 @@ class StudentAnalyticsService
                 'subtypes' => $rows->map(fn ($r) => [
                     'task_type' => $r->task_type,
                     'svg_type' => $r->svg_type,
+                    'subtype' => $r->subtype,
                     'section' => $r->section,
                     'accuracy' => $r->accuracy,
                     'mastery' => $r->mastery_score,
@@ -140,28 +141,50 @@ class StudentAnalyticsService
      */
     public function getTopicWeights(int $studentId): array
     {
-        $allMastery = StudentTopicMastery::where('student_id', $studentId)->get();
-
-        if ($allMastery->isEmpty()) {
+        $snapshot = $this->getTopicMasterySnapshot($studentId);
+        if (empty($snapshot)) {
             return [];
         }
 
         $weights = [];
 
-        foreach ($allMastery->groupBy('topic_id') as $topicId => $rows) {
-            // Average mastery for the topic; invert so low mastery = high weight
-            $avgMastery = $rows->avg('mastery_score');
+        foreach ($snapshot as $topicId => $row) {
+            $avgMastery = (float) $row['avg_mastery'];
+            $weakestSubtypeMastery = (float) $row['min_mastery'];
+            $daysSince = (int) $row['days_since'];
 
-            // Recency factor: topics not practiced recently get a boost
-            $lastAttempted = $rows->max('last_attempted_at');
-            $daysSince = $lastAttempted ? now()->diffInDays($lastAttempted) : 30;
-            $recencyBoost = min($daysSince / 14, 1.0); // max boost after 14 days
+            // Subtype-aware pressure: if one subtype lags, keep the whole topic heavier.
+            $subtypePressure = max(0.0, 0.65 - $weakestSubtypeMastery) * 0.8;
+            $recencyBoost = min($daysSince / 14, 1.0) * 0.5;
 
-            // Weight = (1 - mastery) + recency boost
-            // Range: 0.0 (mastered, just practiced) to 2.0 (failing, not practiced)
-            $weights[$topicId] = round((1.0 - $avgMastery) + $recencyBoost * 0.5, 4);
+            // Base signal from average mastery + subtype pressure + recency.
+            $weights[$topicId] = round((1.0 - $avgMastery) + $subtypePressure + $recencyBoost, 4);
         }
 
         return $weights;
+    }
+
+    /**
+     * @return array<string, array{avg_mastery: float, min_mastery: float, attempts: int, days_since: int}>
+     */
+    public function getTopicMasterySnapshot(int $studentId): array
+    {
+        $allMastery = StudentTopicMastery::where('student_id', $studentId)->get();
+        if ($allMastery->isEmpty()) {
+            return [];
+        }
+
+        $snapshot = [];
+        foreach ($allMastery->groupBy('topic_id') as $topicId => $rows) {
+            $lastAttempted = $rows->max('last_attempted_at');
+            $snapshot[$topicId] = [
+                'avg_mastery' => round((float) $rows->avg('mastery_score'), 4),
+                'min_mastery' => round((float) $rows->min('mastery_score'), 4),
+                'attempts' => (int) $rows->sum('attempts_count'),
+                'days_since' => $lastAttempted ? now()->diffInDays($lastAttempted) : 30,
+            ];
+        }
+
+        return $snapshot;
     }
 }

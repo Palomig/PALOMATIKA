@@ -119,6 +119,9 @@ class StudentAnalyticsTelemetryTest extends TestCase
             $table->unsignedTinyInteger('task_number');
             $table->unsignedBigInteger('active_ms')->default(0);
             $table->unsignedInteger('focus_count')->default(0);
+            $table->unsignedInteger('heartbeat_count')->default(0);
+            $table->unsignedInteger('blur_count')->default(0);
+            $table->timestamp('first_focused_at')->nullable();
             $table->timestamp('last_focus_at')->nullable();
             $table->timestamp('last_heartbeat_at')->nullable();
             $table->timestamp('created_at')->nullable();
@@ -148,8 +151,11 @@ class StudentAnalyticsTelemetryTest extends TestCase
             $table->unsignedInteger('task_index')->nullable();
             $table->string('task_type', 64);
             $table->string('svg_type', 64)->nullable();
+            $table->string('subtype', 96)->nullable();
             $table->string('section', 128)->nullable();
+            $table->string('source', 64)->nullable();
             $table->string('task_key', 160)->nullable();
+            $table->string('task_fingerprint', 64)->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->unique(['attempt_id', 'task_number']);
         });
@@ -160,6 +166,7 @@ class StudentAnalyticsTelemetryTest extends TestCase
             $table->string('topic_id', 4);
             $table->string('task_type', 64);
             $table->string('svg_type', 64)->nullable();
+            $table->string('subtype', 96)->nullable();
             $table->string('section', 128)->nullable();
             $table->unsignedInteger('attempts_count')->default(0);
             $table->unsignedInteger('correct_count')->default(0);
@@ -167,9 +174,13 @@ class StudentAnalyticsTelemetryTest extends TestCase
             $table->unsignedBigInteger('avg_active_ms')->default(0);
             $table->decimal('accuracy', 5, 4)->default(0);
             $table->decimal('mastery_score', 5, 4)->default(0.5);
+            $table->json('recent_outcomes')->nullable();
+            $table->unsignedInteger('current_correct_streak')->default(0);
+            $table->unsignedInteger('current_incorrect_streak')->default(0);
+            $table->boolean('last_outcome')->nullable();
             $table->timestamp('last_attempted_at')->nullable();
             $table->timestamps();
-            $table->unique(['student_id', 'topic_id', 'task_type', 'svg_type', 'section'], 'stm_unique');
+            $table->unique(['student_id', 'topic_id', 'task_type', 'svg_type', 'subtype', 'section'], 'stm_unique');
         });
     }
 
@@ -204,7 +215,9 @@ class StudentAnalyticsTelemetryTest extends TestCase
                         'zadanie_number' => 3,
                         'type' => 'geometry',
                         'svg_type' => 'bisector',
+                        'subtype' => 'bisector_angle',
                         'section' => 'Биссектриса',
+                        'source' => 'miniapp_pool',
                         'task' => ['id' => 10, 'text' => 'Найдите угол', 'answer' => '45'],
                     ],
                     [
@@ -278,7 +291,10 @@ class StudentAnalyticsTelemetryTest extends TestCase
         $this->assertEquals('15', $detail15->topic_id);
         $this->assertEquals('geometry', $detail15->task_type);
         $this->assertEquals('bisector', $detail15->svg_type);
+        $this->assertEquals('bisector_angle', $detail15->subtype);
         $this->assertEquals('Биссектриса', $detail15->section);
+        $this->assertEquals('miniapp_pool', $detail15->source);
+        $this->assertSame(64, strlen((string) $detail15->task_fingerprint));
     }
 
     public function test_mastery_is_updated_on_submit(): void
@@ -366,6 +382,72 @@ class StudentAnalyticsTelemetryTest extends TestCase
         $this->assertEquals(2, $mastery2->attempts_count);
         $this->assertEquals(2, $mastery2->correct_count);
         $this->assertGreaterThan($score1, $mastery2->mastery_score); // Mastery should increase
+    }
+
+    public function test_timing_enrichment_tracks_focus_heartbeat_and_blur_counters(): void
+    {
+        $service = $this->makeService();
+
+        $service->touchTiming($this->attempt, 6, 'task_focused');
+        $service->touchTiming($this->attempt, 6, 'heartbeat');
+        $service->touchTiming($this->attempt, 6, 'heartbeat');
+        $service->touchTiming($this->attempt, 6, 'task_blurred');
+
+        $timing = OgeAttemptTaskTiming::where('attempt_id', $this->attempt->id)
+            ->where('task_number', 6)
+            ->firstOrFail();
+
+        $this->assertEquals(1, $timing->focus_count);
+        $this->assertEquals(2, $timing->heartbeat_count);
+        $this->assertEquals(1, $timing->blur_count);
+        $this->assertNotNull($timing->first_focused_at);
+    }
+
+    public function test_mastery_tracks_recent_correctness_history_and_streaks(): void
+    {
+        $service = $this->makeService();
+
+        $service->commitAnswer($this->attempt, 6, '5');
+        $service->submitAttempt($this->attempt->fresh());
+
+        $variant2 = OgeVariant::create([
+            'hash' => 'test03',
+            'title' => 'Test Variant 3',
+            'source' => 'miniapp',
+            'config_json' => [
+                'source' => 'miniapp',
+                'tasks' => [[
+                    'task_number' => 6,
+                    'topic_id' => '06',
+                    'block_number' => 1,
+                    'zadanie_number' => 2,
+                    'type' => 'expression',
+                    'task' => ['id' => 5, 'expression' => '2+3', 'answer' => '5'],
+                ]],
+            ],
+        ]);
+
+        $attempt2 = OgeAttempt::create([
+            'variant_id' => $variant2->id,
+            'student_id' => $this->student->id,
+            'status' => 'active',
+            'started_at' => now()->subMinutes(4),
+            'last_seen_at' => now(),
+        ]);
+
+        $service2 = $this->makeService();
+        $service2->commitAnswer($attempt2, 6, '0');
+        $service2->submitAttempt($attempt2->fresh());
+
+        $mastery = StudentTopicMastery::where('student_id', $this->student->id)
+            ->where('topic_id', '06')
+            ->where('task_type', 'expression')
+            ->firstOrFail();
+
+        $this->assertEquals([true, false], $mastery->recent_outcomes);
+        $this->assertEquals(0, $mastery->current_correct_streak);
+        $this->assertEquals(1, $mastery->current_incorrect_streak);
+        $this->assertFalse((bool) $mastery->last_outcome);
     }
 
     public function test_task_key_format(): void
@@ -478,6 +560,50 @@ class StudentAnalyticsTelemetryTest extends TestCase
         $this->assertArrayHasKey('06', $weights);
         $this->assertArrayHasKey('15', $weights);
         $this->assertGreaterThan($weights['06'], $weights['15']); // Weak topic has higher weight
+    }
+
+    public function test_topic_weights_account_for_weak_subtypes_within_topic(): void
+    {
+        StudentTopicMastery::create([
+            'student_id' => $this->student->id,
+            'topic_id' => '16',
+            'task_type' => 'geometry',
+            'svg_type' => 'circle',
+            'subtype' => 'inscribed_angle',
+            'attempts_count' => 10,
+            'correct_count' => 9,
+            'mastery_score' => 0.95,
+            'last_attempted_at' => now(),
+        ]);
+        StudentTopicMastery::create([
+            'student_id' => $this->student->id,
+            'topic_id' => '16',
+            'task_type' => 'geometry',
+            'svg_type' => 'circle',
+            'subtype' => 'tangent_length',
+            'attempts_count' => 10,
+            'correct_count' => 4,
+            'mastery_score' => 0.55,
+            'last_attempted_at' => now(),
+        ]);
+        StudentTopicMastery::create([
+            'student_id' => $this->student->id,
+            'topic_id' => '17',
+            'task_type' => 'geometry',
+            'svg_type' => 'quadrilateral',
+            'subtype' => 'parallel_lines',
+            'attempts_count' => 20,
+            'correct_count' => 15,
+            'mastery_score' => 0.75,
+            'last_attempted_at' => now(),
+        ]);
+
+        $service = app(StudentAnalyticsService::class);
+        $weights = $service->getTopicWeights($this->student->id);
+
+        $this->assertArrayHasKey('16', $weights);
+        $this->assertArrayHasKey('17', $weights);
+        $this->assertGreaterThan($weights['17'], $weights['16']);
     }
 
     // ----- Backward Compatibility -----

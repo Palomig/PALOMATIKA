@@ -3,8 +3,6 @@
 namespace App\Services;
 
 use App\Models\OgeVariant;
-use App\Models\StudentTopicMastery;
-
 /**
  * Builds personalized OGE variants that adapt to student performance.
  *
@@ -18,6 +16,9 @@ class AdaptiveVariantService
 {
     /** Fraction of tasks reserved for reinforcement of strong topics */
     private const REINFORCEMENT_RATIO = 0.2;
+    private const STRONG_THRESHOLD = 0.8;
+    private const WEAK_THRESHOLD = 0.6;
+    private const WEAK_SUBTYPE_THRESHOLD = 0.65;
 
     public function __construct(
         private readonly TaskDataService $taskDataService,
@@ -98,28 +99,33 @@ class AdaptiveVariantService
         $strongTopics = [];
         $neutralTopics = [];
 
-        $masteryByTopic = StudentTopicMastery::where('student_id', $studentId)
-            ->get()
-            ->groupBy('topic_id');
+        $masterySnapshot = $this->analyticsService->getTopicMasterySnapshot($studentId);
 
         foreach ($weightedTopics as $topicId => $weight) {
-            $topicRows = $masteryByTopic->get($topicId);
-            if (!$topicRows || $topicRows->sum('attempts_count') < 2) {
+            $topicSnapshot = $masterySnapshot[$topicId] ?? null;
+            if (!$topicSnapshot || ((int) ($topicSnapshot['attempts'] ?? 0)) < 2) {
                 $neutralTopics[] = $topicId;
                 continue;
             }
 
-            $avgMastery = $topicRows->avg('mastery_score');
-            if ($avgMastery >= 0.75) {
+            $avgMastery = (float) ($topicSnapshot['avg_mastery'] ?? 0.5);
+            $weakestSubtype = (float) ($topicSnapshot['min_mastery'] ?? $avgMastery);
+
+            $isWeak = $avgMastery < self::WEAK_THRESHOLD || $weakestSubtype < self::WEAK_SUBTYPE_THRESHOLD;
+            $isStrong = $avgMastery >= self::STRONG_THRESHOLD && $weakestSubtype >= self::WEAK_SUBTYPE_THRESHOLD;
+
+            if ($isStrong) {
                 $strongTopics[] = $topicId;
-            } else {
+            } elseif ($isWeak) {
                 $weakTopics[] = $topicId;
+            } else {
+                $neutralTopics[] = $topicId;
             }
         }
 
         // Determine how many topics go to weak practice vs reinforcement
         $totalTopicSlots = count($weightedTopics);
-        $reinforcementSlots = max(1, (int) round($totalTopicSlots * self::REINFORCEMENT_RATIO));
+        $reinforcementSlots = min(count($strongTopics), max(1, (int) round($totalTopicSlots * self::REINFORCEMENT_RATIO)));
 
         // Pick topics: weak/neutral first, then reinforcement from strong
         $selected = [];
@@ -155,7 +161,7 @@ class AdaptiveVariantService
         }
 
         // If we didn't fill all slots (e.g., no strong topics), fill from remaining weak
-        $remainingTopics = array_diff(array_keys($weightedTopics), $pickedWeak, $strongTopics);
+        $remainingTopics = array_diff(array_keys($weightedTopics), $pickedWeak, $pickedStrong ?? []);
         while (count($selected) < $totalTopicSlots && !empty($remainingTopics)) {
             $topicId = array_shift($remainingTopics);
             $pool = $zadaniyaPool[$topicId] ?? [];

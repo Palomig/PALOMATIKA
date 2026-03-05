@@ -18,8 +18,11 @@ class OgeAttemptTaskDetail extends Model
         'task_index',
         'task_type',
         'svg_type',
+        'subtype',
         'section',
+        'source',
         'task_key',
+        'task_fingerprint',
     ];
 
     protected $casts = [
