@@ -77,42 +77,48 @@
               "image": "oge18_p1_img7.png",
               "source_png": "task18_b1_z2_1.png",
               "svg": "<svg viewBox=\"0 0 200 180\" class=\"w-full max-w-[200px] h-auto mx-auto\">\n  <defs><pattern id=\"g98ffa9\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"200\" height=\"180\" fill=\"#0a1628\"/>\n  <rect width=\"200\" height=\"180\" fill=\"url(#g98ffa9)\"/>\n  <polygon points=\"20,80 80,20 140,80 80,140\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <line x1=\"20\" y1=\"80\" x2=\"140\" y2=\"80\" stroke=\"#5a9fcf\" stroke-width=\"1.5\" stroke-dasharray=\"5,3\"/>\n  <line x1=\"80\" y1=\"20\" x2=\"80\" y2=\"140\" stroke=\"#5a9fcf\" stroke-width=\"1.5\" stroke-dasharray=\"5,3\"/>\n  <text x=\"9.0\" y=\"80.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">A</text>\n  <text x=\"80.0\" y=\"9.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">B</text>\n  <text x=\"151.0\" y=\"80.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">C</text>\n  <text x=\"80.0\" y=\"151.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">D</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "6"
             },
             {
               "id": 2,
               "image": "oge18_p1_img8.png",
               "source_png": "task18_b1_z2_2.png",
               "svg": "<svg viewBox=\"0 0 240 140\" class=\"w-full max-w-[240px] h-auto mx-auto\">\n  <defs><pattern id=\"g57f270\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"240\" height=\"140\" fill=\"#0a1628\"/>\n  <rect width=\"240\" height=\"140\" fill=\"url(#g57f270)\"/>\n  <polygon points=\"20,60 100,20 180,60 100,100\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <line x1=\"20\" y1=\"60\" x2=\"180\" y2=\"60\" stroke=\"#5a9fcf\" stroke-width=\"1.5\" stroke-dasharray=\"5,3\"/>\n  <line x1=\"100\" y1=\"20\" x2=\"100\" y2=\"100\" stroke=\"#5a9fcf\" stroke-width=\"1.5\" stroke-dasharray=\"5,3\"/>\n  <text x=\"9.0\" y=\"60.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">A</text>\n  <text x=\"100.0\" y=\"9.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">B</text>\n  <text x=\"191.0\" y=\"60.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">C</text>\n  <text x=\"100.0\" y=\"111.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">D</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "8"
             },
             {
               "id": 3,
               "image": "oge18_p1_img9.png",
               "source_png": "task18_b1_z2_3.png",
               "svg": "<svg viewBox=\"0 0 220 180\" class=\"w-full max-w-[220px] h-auto mx-auto\">\n  <defs><pattern id=\"g95a157\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"220\" height=\"180\" fill=\"#0a1628\"/>\n  <rect width=\"220\" height=\"180\" fill=\"url(#g95a157)\"/>\n  <polygon points=\"40,80 100,20 160,80 100,140\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <line x1=\"40\" y1=\"80\" x2=\"160\" y2=\"80\" stroke=\"#5a9fcf\" stroke-width=\"1.5\" stroke-dasharray=\"5,3\"/>\n  <line x1=\"100\" y1=\"20\" x2=\"100\" y2=\"140\" stroke=\"#5a9fcf\" stroke-width=\"1.5\" stroke-dasharray=\"5,3\"/>\n  <text x=\"29.0\" y=\"80.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">A</text>\n  <text x=\"100.0\" y=\"9.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">B</text>\n  <text x=\"171.0\" y=\"80.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">C</text>\n  <text x=\"100.0\" y=\"151.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">D</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "6"
             },
             {
               "id": 4,
               "image": "oge18_p1_img10.png",
               "source_png": "task18_b1_z2_4.png",
               "svg": "<svg viewBox=\"0 0 200 140\" class=\"w-full max-w-[200px] h-auto mx-auto\">\n  <defs><pattern id=\"g6a217e\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"200\" height=\"140\" fill=\"#0a1628\"/>\n  <rect width=\"200\" height=\"140\" fill=\"url(#g6a217e)\"/>\n  <polygon points=\"20,60 80,20 140,60 80,100\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <line x1=\"20\" y1=\"60\" x2=\"140\" y2=\"60\" stroke=\"#5a9fcf\" stroke-width=\"1.5\" stroke-dasharray=\"5,3\"/>\n  <line x1=\"80\" y1=\"20\" x2=\"80\" y2=\"100\" stroke=\"#5a9fcf\" stroke-width=\"1.5\" stroke-dasharray=\"5,3\"/>\n  <text x=\"9.0\" y=\"60.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">A</text>\n  <text x=\"80.0\" y=\"9.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">B</text>\n  <text x=\"151.0\" y=\"60.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">C</text>\n  <text x=\"80.0\" y=\"111.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">D</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "6"
             },
             {
               "id": 5,
               "image": "oge18_p1_img11.png",
               "source_png": "task18_b1_z2_5.png",
               "svg": "<svg viewBox=\"0 0 160 180\" class=\"w-full max-w-[160px] h-auto mx-auto\">\n  <defs><pattern id=\"g88850c\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"160\" height=\"180\" fill=\"#0a1628\"/>\n  <rect width=\"160\" height=\"180\" fill=\"url(#g88850c)\"/>\n  <polygon points=\"20,80 60,20 100,80 60,140\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <line x1=\"20\" y1=\"80\" x2=\"100\" y2=\"80\" stroke=\"#5a9fcf\" stroke-width=\"1.5\" stroke-dasharray=\"5,3\"/>\n  <line x1=\"60\" y1=\"20\" x2=\"60\" y2=\"140\" stroke=\"#5a9fcf\" stroke-width=\"1.5\" stroke-dasharray=\"5,3\"/>\n  <text x=\"9.0\" y=\"80.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">A</text>\n  <text x=\"60.0\" y=\"9.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">B</text>\n  <text x=\"111.0\" y=\"80.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">C</text>\n  <text x=\"60.0\" y=\"151.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">D</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "6"
             },
             {
               "id": 6,
               "image": "oge18_p1_img12.png",
               "source_png": "task18_b1_z2_6.png",
               "svg": "<svg viewBox=\"0 0 260 140\" class=\"w-full max-w-[260px] h-auto mx-auto\">\n  <defs><pattern id=\"g951faf\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"260\" height=\"140\" fill=\"#0a1628\"/>\n  <rect width=\"260\" height=\"140\" fill=\"url(#g951faf)\"/>\n  <polygon points=\"40,60 120,20 200,60 120,100\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <line x1=\"40\" y1=\"60\" x2=\"200\" y2=\"60\" stroke=\"#5a9fcf\" stroke-width=\"1.5\" stroke-dasharray=\"5,3\"/>\n  <line x1=\"120\" y1=\"20\" x2=\"120\" y2=\"100\" stroke=\"#5a9fcf\" stroke-width=\"1.5\" stroke-dasharray=\"5,3\"/>\n  <text x=\"29.0\" y=\"60.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">A</text>\n  <text x=\"120.0\" y=\"9.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">B</text>\n  <text x=\"211.0\" y=\"60.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">C</text>\n  <text x=\"120.0\" y=\"111.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">D</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "8"
             }
           ]
         },
@@ -823,37 +829,43 @@
               "id": 1,
               "image": "oge18_p9_img5.png",
               "svg": "<svg viewBox=\"0 0 260 180\" class=\"w-full max-w-[260px] h-auto mx-auto\">\n  <defs><pattern id=\"ge39afb\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"260\" height=\"180\" fill=\"#0a1628\"/>\n  <rect width=\"260\" height=\"180\" fill=\"url(#ge39afb)\"/>\n  <line x1=\"40\" y1=\"60\" x2=\"180\" y2=\"60\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"140\" cy=\"100\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"40\" cy=\"60\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"180\" cy=\"60\" r=\"3\" fill=\"#7eb8da\"/>\n  <text x=\"146.6\" y=\"108.8\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">A</text>\n  <text x=\"29.1\" y=\"58.2\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">B</text>\n  <text x=\"190.7\" y=\"57.6\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">C</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "6"
             },
             {
               "id": 2,
               "image": "oge18_p9_img6.png",
               "svg": "<svg viewBox=\"0 0 240 200\" class=\"w-full max-w-[240px] h-auto mx-auto\">\n  <defs><pattern id=\"gd707af\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"240\" height=\"200\" fill=\"#0a1628\"/>\n  <rect width=\"240\" height=\"200\" fill=\"url(#gd707af)\"/>\n  <line x1=\"160\" y1=\"80\" x2=\"160\" y2=\"140\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"40\" cy=\"100\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"160\" cy=\"80\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"160\" cy=\"140\" r=\"3\" fill=\"#7eb8da\"/>\n  <text x=\"29.0\" y=\"99.1\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">A</text>\n  <text x=\"169.2\" y=\"73.9\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">B</text>\n  <text x=\"168.5\" y=\"147.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">C</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "8"
             },
             {
               "id": 3,
               "image": "oge18_p9_img7.png",
               "svg": "<svg viewBox=\"0 0 220 180\" class=\"w-full max-w-[220px] h-auto mx-auto\">\n  <defs><pattern id=\"gb522b4\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"220\" height=\"180\" fill=\"#0a1628\"/>\n  <rect width=\"220\" height=\"180\" fill=\"url(#gb522b4)\"/>\n  <line x1=\"40\" y1=\"40\" x2=\"160\" y2=\"40\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"80\" cy=\"120\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"40\" cy=\"40\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"160\" cy=\"40\" r=\"3\" fill=\"#7eb8da\"/>\n  <text x=\"77.3\" y=\"130.7\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">A</text>\n  <text x=\"30.2\" y=\"35.1\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">B</text>\n  <text x=\"170.2\" y=\"35.9\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">C</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "6"
             },
             {
               "id": 4,
               "image": "oge18_p9_img8.png",
               "svg": "<svg viewBox=\"0 0 240 200\" class=\"w-full max-w-[240px] h-auto mx-auto\">\n  <defs><pattern id=\"g20a200\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"240\" height=\"200\" fill=\"#0a1628\"/>\n  <rect width=\"240\" height=\"200\" fill=\"url(#g20a200)\"/>\n  <line x1=\"160\" y1=\"40\" x2=\"160\" y2=\"120\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"40\" cy=\"100\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"160\" cy=\"40\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"160\" cy=\"120\" r=\"3\" fill=\"#7eb8da\"/>\n  <text x=\"29.1\" y=\"101.8\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">A</text>\n  <text x=\"167.2\" y=\"31.6\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">B</text>\n  <text x=\"168.5\" y=\"127.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">C</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "6"
             },
             {
               "id": 5,
               "image": "oge18_p9_img9.png",
               "svg": "<svg viewBox=\"0 0 220 200\" class=\"w-full max-w-[220px] h-auto mx-auto\">\n  <defs><pattern id=\"g48e982\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"220\" height=\"200\" fill=\"#0a1628\"/>\n  <rect width=\"220\" height=\"200\" fill=\"url(#g48e982)\"/>\n  <line x1=\"40\" y1=\"40\" x2=\"140\" y2=\"40\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"120\" cy=\"120\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"40\" cy=\"40\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"140\" cy=\"40\" r=\"3\" fill=\"#7eb8da\"/>\n  <text x=\"123.9\" y=\"130.3\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">A</text>\n  <text x=\"29.9\" y=\"35.5\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">B</text>\n  <text x=\"149.2\" y=\"33.9\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">C</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "6"
             },
             {
               "id": 6,
               "image": "oge18_p9_img10.png",
               "svg": "<svg viewBox=\"0 0 180 200\" class=\"w-full max-w-[180px] h-auto mx-auto\">\n  <defs><pattern id=\"g5c738e\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"180\" height=\"200\" fill=\"#0a1628\"/>\n  <rect width=\"180\" height=\"200\" fill=\"url(#g5c738e)\"/>\n  <line x1=\"100\" y1=\"20\" x2=\"100\" y2=\"140\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/>\n  <circle cx=\"60\" cy=\"60\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"100\" cy=\"20\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"100\" cy=\"140\" r=\"3\" fill=\"#7eb8da\"/>\n  <text x=\"50.2\" y=\"55.1\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">A</text>\n  <text x=\"102.7\" y=\"9.3\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">B</text>\n  <text x=\"102.2\" y=\"150.8\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">C</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "8"
             }
           ]
         },
