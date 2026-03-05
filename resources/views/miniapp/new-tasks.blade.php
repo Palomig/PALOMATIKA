@@ -87,7 +87,7 @@
 
     @if($selectedTopic === '10' && !empty($groups))
       @foreach($groups as $group)
-        <details class="spoiler" {{ $loop->first ? 'open' : '' }}>
+        <details class="spoiler">
           <summary>{{ $group['title'] }}</summary>
           <div class="spoiler-body">
             @foreach($group['tasks'] as $task)
