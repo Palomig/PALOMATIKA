@@ -469,7 +469,7 @@ function homePage() {
 
     async startBotFallbackAuth(btn = null, btnText = null) {
       const tg = window.Telegram?.WebApp;
-      const startParam = (tg?.initDataUnsafe?.start_param || new URLSearchParams(window.location.search).get('startapp') || '').trim();
+      const startParam = (tg?.initDataUnsafe?.start_param || new URLSearchParams(window.location.search).get('startapp') || 'miniapp_home').trim();
 
       const response = await fetch('/api/telegram/generate-token', {
         method: 'POST',

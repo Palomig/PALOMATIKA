@@ -829,6 +829,15 @@ class TelegramBotAuthController extends Controller
         $startParam = trim((string) ($authFields['start_param'] ?? ''));
 
         if ($startParam !== '') {
+            // Explicit mini app marker from fallback login flow
+            if (str_starts_with($startParam, 'miniapp_')) {
+                $user = auth()->user();
+                if ($user && !$user->onboarding_completed_at) {
+                    return url('/tg/onboarding');
+                }
+                return url('/tg/dashboard');
+            }
+
             // Legacy payload: oge_variant_{id}
             if (preg_match('/^oge_variant_(\d+)$/', $startParam, $matches)) {
                 $variantId = (int) $matches[1];
