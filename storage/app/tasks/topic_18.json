@@ -187,63 +187,72 @@
               "image": "oge18_p2_img7.png",
               "source_png": "task18_b1_z4_1.png",
               "svg": "<svg viewBox=\"0 0 200 160\" class=\"w-full max-w-[200px] h-auto mx-auto\">\n  <defs><pattern id=\"g7ef9b0\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"200\" height=\"160\" fill=\"#0a1628\"/>\n  <rect width=\"200\" height=\"160\" fill=\"url(#g7ef9b0)\"/>\n  <polygon points=\"40,120 40,40 140,120\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "10"
             },
             {
               "id": 2,
               "image": "oge18_p2_img8.png",
               "source_png": "task18_b1_z4_2.png",
               "svg": "<svg viewBox=\"0 0 200 140\" class=\"w-full max-w-[200px] h-auto mx-auto\">\n  <defs><pattern id=\"gc66370\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"200\" height=\"140\" fill=\"#0a1628\"/>\n  <rect width=\"200\" height=\"140\" fill=\"url(#gc66370)\"/>\n  <polygon points=\"20,100 80,20 140,100\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "12"
             },
             {
               "id": 3,
               "image": "oge18_p2_img9.png",
               "source_png": "task18_b1_z4_3.png",
               "svg": "<svg viewBox=\"0 0 180 140\" class=\"w-full max-w-[180px] h-auto mx-auto\">\n  <defs><pattern id=\"g264222\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"180\" height=\"140\" fill=\"#0a1628\"/>\n  <rect width=\"180\" height=\"140\" fill=\"url(#g264222)\"/>\n  <polygon points=\"40,100 40,40 120,40 120,100\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "12"
             },
             {
               "id": 4,
               "image": "oge18_p2_img10.png",
               "source_png": "task18_b1_z4_4.png",
               "svg": "<svg viewBox=\"0 0 180 120\" class=\"w-full max-w-[180px] h-auto mx-auto\">\n  <defs><pattern id=\"gc136d0\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"180\" height=\"120\" fill=\"#0a1628\"/>\n  <rect width=\"180\" height=\"120\" fill=\"url(#gc136d0)\"/>\n  <polygon points=\"20,80 60,20 120,80\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "7.5"
             },
             {
               "id": 5,
               "image": "oge18_p2_img11.png",
               "source_png": "task18_b1_z4_5.png",
               "svg": "<svg viewBox=\"0 0 220 160\" class=\"w-full max-w-[220px] h-auto mx-auto\">\n  <defs><pattern id=\"gac8d48\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"220\" height=\"160\" fill=\"#0a1628\"/>\n  <rect width=\"220\" height=\"160\" fill=\"url(#gac8d48)\"/>\n  <polygon points=\"40,120 80,40 160,120\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "12"
             },
             {
               "id": 6,
               "image": "oge18_p2_img12.png",
               "source_png": "task18_b1_z4_6.png",
               "svg": "<svg viewBox=\"0 0 160 140\" class=\"w-full max-w-[160px] h-auto mx-auto\">\n  <defs><pattern id=\"gd404dc\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"160\" height=\"140\" fill=\"#0a1628\"/>\n  <rect width=\"160\" height=\"140\" fill=\"url(#gd404dc)\"/>\n  <polygon points=\"20,100 20,40 100,40 100,100\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "12"
             },
             {
               "id": 7,
               "image": "oge18_p3_img1.png",
               "source_png": "task18_b1_z4_7.png",
               "svg": "<svg viewBox=\"0 0 200 140\" class=\"w-full max-w-[200px] h-auto mx-auto\">\n  <defs><pattern id=\"g690919\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"200\" height=\"140\" fill=\"#0a1628\"/>\n  <rect width=\"200\" height=\"140\" fill=\"url(#g690919)\"/>\n  <polygon points=\"40,100 60,40 140,100\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "7.5"
             },
             {
               "id": 8,
               "image": "oge18_p3_img2.png",
               "source_png": "task18_b1_z4_8.png",
               "svg": "<svg viewBox=\"0 0 200 160\" class=\"w-full max-w-[200px] h-auto mx-auto\">\n  <defs><pattern id=\"g73fe4d\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"200\" height=\"160\" fill=\"#0a1628\"/>\n  <rect width=\"200\" height=\"160\" fill=\"url(#g73fe4d)\"/>\n  <polygon points=\"20,120 60,20 140,120\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "15"
             },
             {
               "id": 9,
               "image": "oge18_p3_img3.png",
               "source_png": "task18_b1_z4_9.png",
               "svg": "<svg viewBox=\"0 0 180 120\" class=\"w-full max-w-[180px] h-auto mx-auto\">\n  <defs><pattern id=\"gffa2ff\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"180\" height=\"120\" fill=\"#0a1628\"/>\n  <rect width=\"180\" height=\"120\" fill=\"url(#gffa2ff)\"/>\n  <polygon points=\"40,80 40,20 120,20 120,80\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "12"
             }
           ]
         },
@@ -915,37 +924,43 @@
               "id": 1,
               "image": "oge18_p10_img5.png",
               "svg": "<svg viewBox=\"0 0 180 200\" class=\"w-full max-w-[180px] h-auto mx-auto\">\n  <defs><pattern id=\"ge429ff\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"180\" height=\"200\" fill=\"#0a1628\"/>\n  <rect width=\"180\" height=\"200\" fill=\"url(#ge429ff)\"/>\n  <polygon points=\"80,40 40,80 100,120\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"80\" cy=\"40\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"40\" cy=\"80\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"100\" cy=\"120\" r=\"3\" fill=\"#7eb8da\"/>\n  <text x=\"81.8\" y=\"29.1\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">A</text>\n  <text x=\"29.0\" y=\"80.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">B</text>\n  <text x=\"106.1\" y=\"129.2\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">C</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "10"
             },
             {
               "id": 2,
               "image": "oge18_p10_img6.png",
               "svg": "<svg viewBox=\"0 0 160 160\" class=\"w-full max-w-[160px] h-auto mx-auto\">\n  <defs><pattern id=\"g97aded\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"160\" height=\"160\" fill=\"#0a1628\"/>\n  <rect width=\"160\" height=\"160\" fill=\"url(#g97aded)\"/>\n  <polygon points=\"80,40 40,60 80,100\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"80\" cy=\"40\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"40\" cy=\"60\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"80\" cy=\"100\" r=\"3\" fill=\"#7eb8da\"/>\n  <text x=\"84.9\" y=\"30.2\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">A</text>\n  <text x=\"29.3\" y=\"57.3\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">B</text>\n  <text x=\"84.1\" y=\"110.2\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">C</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "12"
             },
             {
               "id": 3,
               "image": "oge18_p10_img7.png",
               "svg": "<svg viewBox=\"0 0 200 180\" class=\"w-full max-w-[200px] h-auto mx-auto\">\n  <defs><pattern id=\"g021724\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"200\" height=\"180\" fill=\"#0a1628\"/>\n  <rect width=\"200\" height=\"180\" fill=\"url(#g021724)\"/>\n  <polygon points=\"80,20 40,120 120,60\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"80\" cy=\"20\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"40\" cy=\"120\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"120\" cy=\"60\" r=\"3\" fill=\"#7eb8da\"/>\n  <text x=\"80.0\" y=\"9.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">A</text>\n  <text x=\"33.4\" y=\"128.8\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">B</text>\n  <text x=\"130.9\" y=\"58.2\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">C</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "12"
             },
             {
               "id": 4,
               "image": "oge18_p10_img8.png",
               "svg": "<svg viewBox=\"0 0 200 160\" class=\"w-full max-w-[200px] h-auto mx-auto\">\n  <defs><pattern id=\"ge91637\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"200\" height=\"160\" fill=\"#0a1628\"/>\n  <rect width=\"200\" height=\"160\" fill=\"url(#ge91637)\"/>\n  <polygon points=\"80,40 40,60 140,100\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"80\" cy=\"40\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"40\" cy=\"60\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"140\" cy=\"100\" r=\"3\" fill=\"#7eb8da\"/>\n  <text x=\"77.3\" y=\"29.3\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">A</text>\n  <text x=\"29.1\" y=\"58.4\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">B</text>\n  <text x=\"149.3\" y=\"105.8\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">C</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "7.5"
             },
             {
               "id": 5,
               "image": "oge18_p10_img9.png",
               "svg": "<svg viewBox=\"0 0 180 140\" class=\"w-full max-w-[180px] h-auto mx-auto\">\n  <defs><pattern id=\"g25410a\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"180\" height=\"140\" fill=\"#0a1628\"/>\n  <rect width=\"180\" height=\"140\" fill=\"url(#g25410a)\"/>\n  <polygon points=\"80,40 40,80 120,80\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"80\" cy=\"40\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"40\" cy=\"80\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"120\" cy=\"80\" r=\"3\" fill=\"#7eb8da\"/>\n  <text x=\"80.0\" y=\"29.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">A</text>\n  <text x=\"29.6\" y=\"83.5\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">B</text>\n  <text x=\"130.4\" y=\"83.5\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">C</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "12"
             },
             {
               "id": 6,
               "image": "oge18_p10_img10.png",
               "svg": "<svg viewBox=\"0 0 220 180\" class=\"w-full max-w-[220px] h-auto mx-auto\">\n  <defs><pattern id=\"g0bfe02\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"><path d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"#1e4a6e\" stroke-width=\"0.6\"/></pattern></defs>\n  <rect width=\"220\" height=\"180\" fill=\"#0a1628\"/>\n  <rect width=\"220\" height=\"180\" fill=\"url(#g0bfe02)\"/>\n  <polygon points=\"100,40 40,60 160,120\" fill=\"rgba(90, 159, 207, 0.06)\" stroke=\"#c8dce8\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/>\n  <circle cx=\"100\" cy=\"40\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"40\" cy=\"60\" r=\"3\" fill=\"#7eb8da\"/>\n  <circle cx=\"160\" cy=\"120\" r=\"3\" fill=\"#7eb8da\"/>\n  <text x=\"100.0\" y=\"29.0\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">A</text>\n  <text x=\"29.3\" y=\"57.6\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">B</text>\n  <text x=\"168.7\" y=\"126.8\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"'Times New Roman',serif\" font-style=\"italic\" font-weight=\"500\" text-anchor=\"middle\" dominant-baseline=\"middle\">C</text>\n</svg>",
-              "status": "draft"
+              "status": "draft",
+              "answer": "12"
             }
           ]
         },
