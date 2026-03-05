@@ -514,7 +514,9 @@ class TelegramBotAuthController extends Controller
             return;
         }
 
-        $openUrl = url('/tg?startapp=' . rawurlencode($startParam));
+        // Open dashboard directly so startapp payload is handled immediately (battle jump),
+        // instead of landing on generic miniapp home.
+        $openUrl = url('/tg/dashboard?startapp=' . rawurlencode($startParam));
         $this->sendTelegramMessage(
             (string) $from['id'],
             "Открой вариант в мини-приложении:",
