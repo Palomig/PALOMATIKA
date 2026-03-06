@@ -472,6 +472,12 @@ class MiniAppController extends Controller
 
             $task['text'] = $task['text'] ?? ($inner['text'] ?? null);
             $task['expression'] = $task['expression'] ?? ($inner['expression'] ?? null);
+            if (($task['expression'] === null || $task['expression'] === '') && isset($inner['point_value'])) {
+                $task['expression'] = (string) $inner['point_value'];
+            }
+            if (($task['expression'] === null || $task['expression'] === '') && isset($inner['target'])) {
+                $task['expression'] = (string) $inner['target'];
+            }
             $task['svg'] = $task['svg'] ?? ($inner['svg'] ?? null);
             $task['image'] = $task['image'] ?? ($inner['image'] ?? null);
             $task['options'] = $task['options'] ?? ($inner['options'] ?? null);

@@ -341,6 +341,16 @@ class OgeVariantPoolService
         $normalized['task_id'] = (int) ($inner['id'] ?? 0);
         $normalized['text'] = $inner['text'] ?? ($task['text'] ?? null);
         $normalized['expression'] = $inner['expression'] ?? ($task['expression'] ?? null);
+
+        // Fallback for topic-7 coordinate tasks where explicit expression may be missing,
+        // but scalar target value exists in structured fields.
+        if (($normalized['expression'] === null || $normalized['expression'] === '') && isset($inner['point_value'])) {
+            $normalized['expression'] = (string) $inner['point_value'];
+        }
+        if (($normalized['expression'] === null || $normalized['expression'] === '') && isset($inner['target'])) {
+            $normalized['expression'] = (string) $inner['target'];
+        }
+
         $normalized['svg'] = $inner['svg'] ?? ($task['svg'] ?? null);
         $normalized['image'] = $inner['image'] ?? ($task['image'] ?? null);
 
