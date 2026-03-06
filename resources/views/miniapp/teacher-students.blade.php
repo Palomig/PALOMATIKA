@@ -10,6 +10,8 @@
   .student-email { font-size: 11px; color: var(--muted); margin-top: 2px; }
   .alias-row { display: flex; gap: 8px; margin-top: 10px; }
   .alias-row input { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 10px; color: var(--text); font-size: 12px; }
+  .ownership { margin-top: 8px; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .ownership-badge { font-size: 11px; color: var(--muted); }
   .pager { display: flex; justify-content: center; }
 @endpush
 
@@ -30,9 +32,13 @@
       <div class="student" data-student-id="{{ $student->id }}">
         <div class="student-name">{{ $student->name }}</div>
         <div class="student-email">{{ $student->email }}</div>
+        <div class="ownership">
+          <div class="ownership-badge" x-text="isMine[{{ $student->id }}] ? 'Помечен как мой ученик' : 'Не помечен как мой' "></div>
+          <button class="btn btn-surface" type="button" @click="toggleOwnership({{ $student->id }})" x-text="isMine[{{ $student->id }}] ? 'Не мой' : 'Мой'"></button>
+        </div>
         <div class="alias-row">
-          <input type="text" x-model="aliases[{{ $student->id }}]" placeholder="Алиас для этого ученика">
-          <button class="btn btn-accent" type="button" @click="saveAlias({{ $student->id }})">Сохранить</button>
+          <input type="text" x-model="aliases[{{ $student->id }}]" :disabled="!isMine[{{ $student->id }}]" placeholder="Алиас для этого ученика">
+          <button class="btn btn-accent" type="button" :disabled="!isMine[{{ $student->id }}]" @click="saveAlias({{ $student->id }})">Сохранить</button>
         </div>
       </div>
     @empty
@@ -51,7 +57,33 @@
 function studentsPage() {
   return {
     aliases: @json($students->getCollection()->mapWithKeys(fn($s) => [$s->id => $s->student_alias])->all()),
+    isMine: @json($students->getCollection()->mapWithKeys(fn($s) => [$s->id => (bool)($s->is_mine ?? false)])->all()),
+
+    async toggleOwnership(studentId) {
+      const res = await fetch(`/tg/teacher/students/${studentId}/ownership`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Accept': 'application/json',
+          'X-CSRF-TOKEN': window._csrf,
+        },
+      });
+
+      if (!res.ok) {
+        const tg = window.Telegram?.WebApp;
+        if (tg?.showAlert) tg.showAlert('Не удалось изменить статус ученика');
+        return;
+      }
+
+      const data = await res.json();
+      this.isMine[studentId] = !!data.is_mine;
+      if (!this.isMine[studentId]) {
+        this.aliases[studentId] = '';
+      }
+    },
+
     async saveAlias(studentId) {
+      if (!this.isMine[studentId]) return;
       const alias = (this.aliases[studentId] || '').trim();
       const res = await fetch(`/tg/teacher/students/${studentId}/alias`, {
         method: 'PATCH',

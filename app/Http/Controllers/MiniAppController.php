@@ -689,25 +689,41 @@ class MiniAppController extends Controller
         $teacherId = (int) $user->id;
         $search = trim((string) $request->query('search', ''));
 
-        $students = TeacherStudent::query()
-            ->where('teacher_id', $teacherId)
-            ->join('users', 'users.id', '=', 'teacher_students.student_id')
+        // Show all active students who use app/solve variants, with teacher-specific ownership marker.
+        $students = User::query()
+            ->where('users.role', 'student')
+            ->where(function ($q) {
+                $q->whereExists(function ($sub) {
+                    $sub->selectRaw('1')
+                        ->from('oge_attempts')
+                        ->whereColumn('oge_attempts.student_id', 'users.id');
+                })->orWhereExists(function ($sub) {
+                    $sub->selectRaw('1')
+                        ->from('teacher_students')
+                        ->whereColumn('teacher_students.student_id', 'users.id');
+                });
+            })
+            ->leftJoin('teacher_students as ts', function ($join) use ($teacherId) {
+                $join->on('ts.student_id', '=', 'users.id')
+                    ->where('ts.teacher_id', '=', $teacherId);
+            })
             ->select([
                 'users.id',
                 'users.name',
                 'users.email',
                 'users.last_active_at',
-                'teacher_students.student_alias',
-                'teacher_students.created_at as linked_at',
+                'ts.student_alias',
+                'ts.created_at as linked_at',
+                DB::raw('CASE WHEN ts.id IS NULL THEN 0 ELSE 1 END as is_mine'),
             ])
             ->when($search !== '', function ($query) use ($search) {
                 $query->where(function ($nested) use ($search) {
                     $nested->where('users.name', 'like', '%' . $search . '%')
                         ->orWhere('users.email', 'like', '%' . $search . '%')
-                        ->orWhere('teacher_students.student_alias', 'like', '%' . $search . '%');
+                        ->orWhere('ts.student_alias', 'like', '%' . $search . '%');
                 });
             })
-            ->orderByRaw('COALESCE(users.last_active_at, teacher_students.created_at) DESC')
+            ->orderByRaw('COALESCE(users.last_active_at, ts.created_at, users.created_at) DESC')
             ->orderBy('users.name')
             ->paginate(20)
             ->withQueryString();
@@ -737,6 +753,54 @@ class MiniAppController extends Controller
             'variants' => $variants,
             'canSwitchMode' => $user->role === 'admin',
             'effectiveRole' => $this->resolveMiniAppRole($request, $user),
+        ]);
+    }
+
+    public function toggleTeacherStudentOwnership(Request $request, int $studentId, AuditLogger $audit): \Illuminate\Http\JsonResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+
+        $student = User::query()->where('id', $studentId)->where('role', 'student')->firstOrFail();
+
+        $relation = TeacherStudent::query()
+            ->where('teacher_id', $user->id)
+            ->where('student_id', $student->id)
+            ->first();
+
+        if ($relation) {
+            $relation->delete();
+            $isMine = false;
+            $event = 'teacher_student_unlinked';
+        } else {
+            TeacherStudent::query()->create([
+                'teacher_id' => $user->id,
+                'student_id' => $student->id,
+                'source' => 'miniapp',
+            ]);
+            $isMine = true;
+            $event = 'teacher_student_linked';
+        }
+
+        $audit->log([
+            'event_type' => $event,
+            'category' => 'teacher',
+            'severity' => 'info',
+            'actor_user_id' => $user->id,
+            'actor_role' => $this->resolveMiniAppRole($request, $user),
+            'subject_type' => 'teacher_student',
+            'subject_id' => $user->id . ':' . $student->id,
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'payload_json' => [
+                'is_mine' => $isMine,
+                'source' => 'miniapp',
+            ],
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'is_mine' => $isMine,
         ]);
     }
 

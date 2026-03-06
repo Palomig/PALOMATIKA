@@ -436,6 +436,7 @@ Route::prefix('tg')->group(function () {
                 Route::get('/', fn () => redirect('/tg/teacher/dashboard'))->name('home');
                 Route::get('/dashboard', [MiniAppController::class, 'teacherDashboard'])->name('dashboard');
                 Route::get('/students', [MiniAppController::class, 'teacherStudents'])->name('students');
+                Route::post('/students/{studentId}/ownership', [MiniAppController::class, 'toggleTeacherStudentOwnership'])->name('students.ownership');
                 Route::patch('/students/{studentId}/alias', [MiniAppController::class, 'updateTeacherStudentAlias'])->name('students.alias');
                 Route::get('/variants', [MiniAppController::class, 'teacherVariants'])->name('variants');
             });
