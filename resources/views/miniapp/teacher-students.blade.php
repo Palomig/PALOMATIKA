@@ -6,6 +6,9 @@
   .search input { flex: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px; color: var(--text); }
   .student-list { display: flex; flex-direction: column; gap: 10px; }
   .student { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 12px; }
+  .student-head { display:flex; align-items:center; gap:10px; }
+  .avatar { width:32px; height:32px; border-radius:999px; object-fit:cover; background:#1f2937; flex-shrink:0; border:1px solid var(--border); }
+  .avatar-fallback { width:32px; height:32px; border-radius:999px; display:flex; align-items:center; justify-content:center; background:#1f2937; color:#cbd5e1; font-size:11px; font-weight:800; flex-shrink:0; border:1px solid var(--border); text-transform:uppercase; }
   .student-name { font-size: 14px; font-weight: 800; color: var(--text); }
   .student-email { font-size: 11px; color: var(--muted); margin-top: 2px; }
   .alias-row { display: flex; gap: 8px; margin-top: 10px; }
@@ -30,8 +33,17 @@
   <div class="student-list">
     @forelse($students as $student)
       <div class="student" data-student-id="{{ $student->id }}">
-        <div class="student-name">{{ $student->name }}</div>
-        <div class="student-email">{{ $student->email }}</div>
+        <div class="student-head">
+          @if(!empty($student->avatar))
+            <img class="avatar" src="{{ $student->avatar }}" alt="avatar">
+          @else
+            <div class="avatar-fallback">{{ mb_substr($student->name, 0, 1) }}</div>
+          @endif
+          <div>
+            <div class="student-name">{{ $student->name }}</div>
+            <div class="student-email">{{ $student->email }}</div>
+          </div>
+        </div>
         <div class="ownership">
           <div class="ownership-badge" x-text="isMine[{{ $student->id }}] ? 'Помечен как мой ученик' : 'Не помечен как мой' "></div>
           <button class="btn btn-surface" type="button" @click="toggleOwnership({{ $student->id }})" x-text="isMine[{{ $student->id }}] ? 'Не мой' : 'Мой'"></button>

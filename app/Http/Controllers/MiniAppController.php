@@ -723,6 +723,7 @@ class MiniAppController extends Controller
                 'users.id',
                 'users.name',
                 'users.email',
+                'users.avatar',
                 'users.last_active_at',
                 'ts.student_alias',
                 'ts.created_at as linked_at',
@@ -788,7 +789,8 @@ class MiniAppController extends Controller
             TeacherStudent::query()->create([
                 'teacher_id' => $user->id,
                 'student_id' => $student->id,
-                'source' => 'miniapp',
+                // `teacher_students.source` enum: referral|manual|homework_invite
+                'source' => 'manual',
             ]);
             $isMine = true;
             $event = 'teacher_student_linked';
