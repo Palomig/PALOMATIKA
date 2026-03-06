@@ -769,6 +769,12 @@ class MiniAppController extends Controller
         ]);
     }
 
+    public function teacherStudentProfile(Request $request, int $studentId)
+    {
+        // Reuse existing teacher web drill-down page with full per-topic/per-task analytics.
+        return redirect()->to('/teacher/students/' . $studentId);
+    }
+
     public function toggleTeacherStudentOwnership(Request $request, int $studentId, AuditLogger $audit): \Illuminate\Http\JsonResponse
     {
         /** @var User $user */

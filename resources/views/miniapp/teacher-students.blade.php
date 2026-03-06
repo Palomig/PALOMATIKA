@@ -46,7 +46,10 @@
         </div>
         <div class="ownership">
           <div class="ownership-badge" x-text="isMine[{{ $student->id }}] ? 'Помечен как мой ученик' : 'Не помечен как мой' "></div>
-          <button class="btn btn-surface" type="button" @click="toggleOwnership({{ $student->id }})" x-text="isMine[{{ $student->id }}] ? 'Не мой' : 'Мой'"></button>
+          <div style="display:flex; gap:8px;">
+            <a class="btn btn-surface" href="/tg/teacher/students/{{ $student->id }}">Профиль</a>
+            <button class="btn btn-surface" type="button" @click="toggleOwnership({{ $student->id }})" x-text="isMine[{{ $student->id }}] ? 'Не мой' : 'Мой'"></button>
+          </div>
         </div>
         <div class="alias-row">
           <input type="text" x-model="aliases[{{ $student->id }}]" :disabled="!isMine[{{ $student->id }}]" placeholder="Алиас для этого ученика">
