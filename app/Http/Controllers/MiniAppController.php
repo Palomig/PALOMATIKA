@@ -794,14 +794,10 @@ class MiniAppController extends Controller
                 'answers:id,attempt_id,task_number,current_answer',
                 'scorings:id,attempt_id,task_number,is_correct,correct_answer,checked_at',
             ])
-            ->when($teacher->role !== 'admin', function ($query) use ($teacher) {
-                $query->whereHas('variant', function ($variantQuery) use ($teacher) {
-                    $variantQuery->where('owner_teacher_id', $teacher->id);
-                });
-            })
+            // Show full student history in miniapp teacher profile (not only variants created by current teacher).
             ->orderByRaw('COALESCE(last_seen_at, submitted_at, started_at, updated_at, created_at) DESC')
             ->orderByDesc('id')
-            ->limit(30)
+            ->limit(80)
             ->get();
 
         $topicStats = [];
