@@ -702,6 +702,7 @@ class MiniAppController extends Controller
         $search = trim((string) $request->query('search', ''));
 
         // Show all active students who use app/solve variants, with teacher-specific ownership marker.
+        // Use scalar subqueries to avoid duplicates when multiple teacher_students rows exist.
         $students = User::query()
             ->where('users.role', 'student')
             ->where(function ($q) {
@@ -715,28 +716,36 @@ class MiniAppController extends Controller
                         ->whereColumn('teacher_students.student_id', 'users.id');
                 });
             })
-            ->leftJoin('teacher_students as ts', function ($join) use ($teacherId) {
-                $join->on('ts.student_id', '=', 'users.id')
-                    ->where('ts.teacher_id', '=', $teacherId);
-            })
             ->select([
                 'users.id',
                 'users.name',
                 'users.email',
                 'users.avatar',
                 'users.last_active_at',
-                'ts.student_alias',
-                'ts.created_at as linked_at',
-                DB::raw('CASE WHEN ts.id IS NULL THEN 0 ELSE 1 END as is_mine'),
             ])
-            ->when($search !== '', function ($query) use ($search) {
-                $query->where(function ($nested) use ($search) {
+            ->selectRaw(
+                '(SELECT ts.student_alias FROM teacher_students ts WHERE ts.teacher_id = ? AND ts.student_id = users.id ORDER BY ts.id DESC LIMIT 1) as student_alias',
+                [$teacherId]
+            )
+            ->selectRaw(
+                '(SELECT ts.created_at FROM teacher_students ts WHERE ts.teacher_id = ? AND ts.student_id = users.id ORDER BY ts.id DESC LIMIT 1) as linked_at',
+                [$teacherId]
+            )
+            ->selectRaw(
+                'CASE WHEN EXISTS (SELECT 1 FROM teacher_students ts WHERE ts.teacher_id = ? AND ts.student_id = users.id) THEN 1 ELSE 0 END as is_mine',
+                [$teacherId]
+            )
+            ->when($search !== '', function ($query) use ($search, $teacherId) {
+                $query->where(function ($nested) use ($search, $teacherId) {
                     $nested->where('users.name', 'like', '%' . $search . '%')
                         ->orWhere('users.email', 'like', '%' . $search . '%')
-                        ->orWhere('ts.student_alias', 'like', '%' . $search . '%');
+                        ->orWhereRaw(
+                            'EXISTS (SELECT 1 FROM teacher_students ts WHERE ts.teacher_id = ? AND ts.student_id = users.id AND ts.student_alias like ?)',
+                            [$teacherId, '%' . $search . '%']
+                        );
                 });
             })
-            ->orderByRaw('COALESCE(users.last_active_at, ts.created_at, users.created_at) DESC')
+            ->orderByRaw('COALESCE(users.last_active_at, users.created_at) DESC')
             ->orderBy('users.name')
             ->paginate(20)
             ->withQueryString();
@@ -771,8 +780,76 @@ class MiniAppController extends Controller
 
     public function teacherStudentProfile(Request $request, int $studentId)
     {
-        // Reuse existing teacher web drill-down page with full per-topic/per-task analytics.
-        return redirect()->to('/teacher/students/' . $studentId);
+        /** @var User $teacher */
+        $teacher = $request->user();
+
+        $student = User::query()
+            ->where('role', 'student')
+            ->findOrFail($studentId);
+
+        $attempts = OgeAttempt::query()
+            ->where('student_id', $student->id)
+            ->with([
+                'variant:id,hash,owner_teacher_id,title,mode,source,config_json',
+                'answers:id,attempt_id,task_number,current_answer',
+                'scorings:id,attempt_id,task_number,is_correct,correct_answer,checked_at',
+            ])
+            ->when($teacher->role !== 'admin', function ($query) use ($teacher) {
+                $query->whereHas('variant', function ($variantQuery) use ($teacher) {
+                    $variantQuery->where('owner_teacher_id', $teacher->id);
+                });
+            })
+            ->orderByRaw('COALESCE(last_seen_at, submitted_at, started_at, updated_at, created_at) DESC')
+            ->orderByDesc('id')
+            ->limit(30)
+            ->get();
+
+        $topicStats = [];
+        $wrongTasks = [];
+        $correctTotal = 0;
+        $scoredTotal = 0;
+
+        foreach ($attempts as $attempt) {
+            foreach ($attempt->scorings as $scoring) {
+                if ($scoring->is_correct === null) {
+                    continue;
+                }
+                $taskNum = (int) $scoring->task_number;
+                if (!isset($topicStats[$taskNum])) {
+                    $topicStats[$taskNum] = ['task_number' => $taskNum, 'correct' => 0, 'total' => 0];
+                }
+                $topicStats[$taskNum]['total']++;
+                $scoredTotal++;
+                if ((bool) $scoring->is_correct) {
+                    $topicStats[$taskNum]['correct']++;
+                    $correctTotal++;
+                } else {
+                    $studentAnswer = $attempt->answers->firstWhere('task_number', $taskNum);
+                    $wrongTasks[] = [
+                        'attempt_id' => (int) $attempt->id,
+                        'variant_hash' => (string) ($attempt->variant->hash ?? ''),
+                        'task_number' => $taskNum,
+                        'student_answer' => (string) (($studentAnswer->current_answer ?? '') ?: '—'),
+                        'correct_answer' => (string) (($scoring->correct_answer ?? '') ?: '—'),
+                    ];
+                }
+            }
+        }
+
+        usort($topicStats, fn($a, $b) => $a['task_number'] <=> $b['task_number']);
+        usort($wrongTasks, fn($a, $b) => $b['attempt_id'] <=> $a['attempt_id']);
+
+        return view('miniapp.teacher-student-profile', [
+            'student' => $student,
+            'attempts' => $attempts,
+            'topicStats' => $topicStats,
+            'wrongTasks' => array_slice($wrongTasks, 0, 60),
+            'correctTotal' => $correctTotal,
+            'scoredTotal' => $scoredTotal,
+            'accuracy' => $scoredTotal > 0 ? (int) round(($correctTotal / $scoredTotal) * 100) : null,
+            'canSwitchMode' => $teacher->role === 'admin',
+            'effectiveRole' => $this->resolveMiniAppRole($request, $teacher),
+        ]);
     }
 
     public function toggleTeacherStudentOwnership(Request $request, int $studentId, AuditLogger $audit): \Illuminate\Http\JsonResponse
