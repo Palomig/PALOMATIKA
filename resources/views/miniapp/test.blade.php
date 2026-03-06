@@ -639,6 +639,7 @@
         <div class="q-meta q-anim" :style="'animation-delay: 0s'">
           <div class="q-num" x-text="'Задание ' + currentTask.task_number"></div>
           <div class="q-topic-badge" x-text="topicName(currentTask.topic_id)"></div>
+          <div class="q-topic-badge" style="opacity:.8" x-text="'ID: ' + (currentTask.task_id || currentTask.id || currentTask.task?.id || '—')"></div>
         </div>
 
         {{-- Instruction text --}}
@@ -734,7 +735,7 @@
               <div class="answer-label">Введи ответ</div>
               <input class="answer-input"
                      type="text"
-                     inputmode="decimal"
+                     inputmode="text"
                      placeholder="Ответ"
                      autocomplete="off"
                      :value="answers[currentTask.task_number] || ''"
@@ -892,8 +893,16 @@
       },
 
       normalizedOptions(task) {
-        const primary = task?.options;
-        const nested = task?.task?.options;
+        const candidates = [
+          task?.options,
+          task?.task?.options,
+          task?.variants,
+          task?.task?.variants,
+          task?.answers,
+          task?.task?.answers,
+          task?.choices,
+          task?.task?.choices,
+        ];
 
         const normalize = (opts) => {
           if (Array.isArray(opts)) return opts;
@@ -912,10 +921,12 @@
           return [];
         };
 
-        const a = normalize(primary);
-        if (a.length > 0) return a;
+        for (const source of candidates) {
+          const arr = normalize(source);
+          if (arr.length > 0) return arr;
+        }
 
-        return normalize(nested);
+        return [];
       },
 
       optionHtml(opt) {
