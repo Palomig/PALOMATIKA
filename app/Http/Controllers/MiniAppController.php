@@ -833,13 +833,25 @@ class MiniAppController extends Controller
                 } else {
                     $studentAnswer = $attempt->answers->firstWhere('task_number', $taskNum);
                     $def = $taskMap[$taskNum] ?? [];
+                    $inner = is_array($def['task'] ?? null) ? $def['task'] : [];
+
+                    $rawOptions = $def['options'] ?? $inner['options'] ?? $def['variants'] ?? $inner['variants'] ?? null;
+                    $taskOptions = [];
+                    if (is_array($rawOptions)) {
+                        $taskOptions = array_values($rawOptions);
+                    } elseif (is_string($rawOptions) && trim($rawOptions) !== '') {
+                        $taskOptions = array_values(array_filter(array_map('trim', preg_split('/\R+/', $rawOptions))));
+                    }
+
                     $wrongTasks[] = [
                         'attempt_id' => (int) $attempt->id,
                         'variant_hash' => (string) ($attempt->variant->hash ?? ''),
                         'task_number' => $taskNum,
-                        'task_text' => (string) (($def['instruction'] ?? $def['text'] ?? '') ?: ''),
-                        'task_expression' => (string) (($def['expression'] ?? '') ?: ''),
-                        'task_svg' => (string) (($def['svg'] ?? '') ?: ''),
+                        'task_text' => (string) (($def['instruction'] ?? $inner['instruction'] ?? $def['text'] ?? $inner['text'] ?? '') ?: ''),
+                        'task_expression' => (string) (($def['expression'] ?? $inner['expression'] ?? '') ?: ''),
+                        'task_svg' => (string) (($def['svg'] ?? $inner['svg'] ?? '') ?: ''),
+                        'task_image' => (string) (($def['image'] ?? $inner['image'] ?? '') ?: ''),
+                        'task_options' => $taskOptions,
                         'student_answer' => (string) (($studentAnswer->current_answer ?? '') ?: '—'),
                         'correct_answer' => (string) (($scoring->correct_answer ?? '') ?: '—'),
                     ];
