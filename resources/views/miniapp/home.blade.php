@@ -395,73 +395,27 @@ function homePage() {
         return;
       }
 
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 12000);
+      // Use robust server-side bridge flow (/tg/auth -> /tg/auth/continue) instead of legacy AJAX/session-check flow.
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = '/tg/auth';
+      form.style.display = 'none';
 
-      fetch('/api/auth/telegram/webapp-login', {
-        method: 'POST',
-        credentials: 'include',
-        signal: controller.signal,
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'X-CSRF-TOKEN': window._csrf,
-        },
-        body: JSON.stringify({ initData, startParam, trace_id: this.traceId }),
-      })
-      .then(async (res) => {
-        clearTimeout(timeoutId);
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok || !data.success) {
-          this.authErrorCode = `E_WEBAPP_${res.status || 'FAIL'}`;
-          this.sendDiag('webapp_login_response', this.authErrorCode, { http_status: res.status || null });
-          throw new Error(data.message || 'Ошибка авторизации');
-        }
+      const addInput = (name, value) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value ?? '';
+        form.appendChild(input);
+      };
 
-        // Verify session really exists in WebView before redirect.
-        // Some mobile WebViews apply Set-Cookie with slight delay, so retry briefly.
-        let meRes = null;
-        let me = {};
-        let authenticated = false;
-        for (let i = 0; i < 4; i++) {
-          meRes = await fetch('/api/telegram/session-check', {
-            credentials: 'include',
-            cache: 'no-store',
-            headers: { 'Accept': 'application/json' }
-          });
-          me = await meRes.json().catch(() => ({}));
-          authenticated = !!(meRes.ok && me && me.authenticated);
-          if (authenticated) break;
-          await new Promise(r => setTimeout(r, 250));
-        }
+      addInput('_token', window._csrf || '');
+      addInput('initData', initData);
+      addInput('startParam', startParam);
+      addInput('trace_id', this.traceId || '');
 
-        if (!authenticated) {
-          this.authErrorCode = 'E_COOKIE_SESSION';
-          this.sendDiag('auth_post_login_check', this.authErrorCode, { me_status: meRes?.status || null });
-
-          // Do not hard-fail here: auto-switch to bot fallback flow.
-          await this.startBotFallbackAuth(btn, btnText);
-          return;
-        }
-
-        this.sendDiag('auth_success', 'A_OK');
-        const target = data.redirect_to || data.redirect || '/tg/dashboard';
-        window.location.replace(target);
-      })
-      .catch((e) => {
-        clearTimeout(timeoutId);
-        if (!this.authErrorCode) {
-          this.authErrorCode = (e && e.name === 'AbortError') ? 'E_WEBAPP_TIMEOUT' : 'E_WEBAPP_NETWORK';
-        }
-        this.sendDiag('webapp_login_catch', this.authErrorCode, { err: (e && e.message) ? e.message : null });
-
-        if (btnText) btnText.innerHTML = 'Войти';
-        if (btn) btn.classList.remove('btn-loading');
-        this.loginInProgress = false;
-        const msg = (e && e.message) ? `${e.message} (${this.authErrorCode})` : `Ошибка авторизации (${this.authErrorCode})`;
-        if (tg && tg.showAlert) tg.showAlert(msg);
-        else alert(msg);
-      });
+      document.body.appendChild(form);
+      form.submit();
     },
 
     async startBotFallbackAuth(btn = null, btnText = null) {
