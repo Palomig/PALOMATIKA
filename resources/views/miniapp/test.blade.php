@@ -193,6 +193,27 @@
     color: var(--text);
     line-height: 1.6;
   }
+  .inline-frac {
+    display:inline-flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    line-height:1;
+    vertical-align:middle;
+    margin: 0 2px;
+    transform: translateY(-1px);
+  }
+  .inline-frac .top,
+  .inline-frac .bottom {
+    display:block;
+    padding: 0 3px;
+    font-size: .92em;
+  }
+  .inline-frac .bottom {
+    border-top: 1.5px solid currentColor;
+    margin-top: 2px;
+    padding-top: 2px;
+  }
 
   /* KaTeX expression block */
   .q-expression {
@@ -644,12 +665,12 @@
 
         {{-- Instruction text --}}
         <div class="q-text q-anim" :style="'animation-delay: 0.05s; margin-top: 16px'"
-             x-html="currentTask.instruction || currentTask.text || ''"></div>
+             x-html="formatRichText(currentTask.instruction || currentTask.text || '')"></div>
 
         {{-- Task text (when instruction is a generic heading and task body is separate) --}}
         <template x-if="currentTask.instruction && currentTask.text && currentTask.text !== currentTask.instruction">
           <div class="q-text q-anim" :style="'animation-delay: 0.07s; margin-top: 10px; font-size: 15px; font-weight: 600'"
-               x-html="currentTask.text"></div>
+               x-html="formatRichText(currentTask.text)"></div>
         </template>
 
         {{-- Expression (KaTeX) --}}
@@ -938,6 +959,15 @@
           return `$${raw}$`;
         }
         return raw;
+      },
+
+      formatRichText(value) {
+        const raw = String(value || '');
+        if (!raw) return '';
+        // Render simple inline fractions like 7/12 with a horizontal bar.
+        return raw.replace(/(^|[^\d])([+-]?\d{1,3})\s*\/\s*(\d{1,3})(?!\d)/g, (m, lead, a, b) => {
+          return `${lead}<span class="inline-frac"><span class="top">${a}</span><span class="bottom">${b}</span></span>`;
+        });
       },
 
       // Topic name helper
