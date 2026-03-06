@@ -95,7 +95,7 @@
 
   /* URGENCY */
   .urgency {
-    margin: 12px 0 18px;
+    margin: 12px 0 28px;
     background: var(--red-bg); border: 1px solid var(--red-bd);
     border-radius: 12px; padding: 12px 16px;
     display: flex; align-items: center; gap: 10px;
@@ -351,7 +351,7 @@ function homePage() {
       try { tg.ready?.(); } catch (_) {}
 
       const started = Date.now();
-      const timeout = 4000; // 4s — enough for slow VPN/proxy connections
+      const timeout = 5500; // Slightly longer for unstable mobile VPN/proxy paths
       while (Date.now() - started < timeout) {
         const initData = typeof tg.initData === 'string' ? tg.initData.trim() : '';
         if (initData.length > 20) return; // initData is ready
@@ -360,8 +360,20 @@ function homePage() {
 
       // Timeout reached — initData never arrived.
       // appReady will still be set to true so the UI is interactive,
-      // but handleLogin() will show an error if initData is empty.
+      // but handleLogin() will do one more short wait before fallback.
       console.warn('[palomatika] Telegram initData not available after ' + timeout + 'ms');
+    },
+
+    async waitForInitData(timeout = 2200) {
+      const tg = window.Telegram?.WebApp;
+      if (!tg) return '';
+      const started = Date.now();
+      while (Date.now() - started < timeout) {
+        const initData = typeof tg.initData === 'string' ? tg.initData.trim() : '';
+        if (initData.length > 20) return initData;
+        await new Promise(r => setTimeout(r, 120));
+      }
+      return '';
     },
 
     updateCountdown() {
@@ -373,7 +385,7 @@ function homePage() {
       this.secs  = Math.floor((diff % 60000) / 1000);
     },
 
-    handleLogin() {
+    async handleLogin() {
       if (this.loginInProgress) return;
       this.loginInProgress = true;
       this.authErrorCode = '';
@@ -386,8 +398,13 @@ function homePage() {
       if (btnText) btnText.innerHTML = '<span class="spinner"></span> Входим...';
 
       const tg = window.Telegram?.WebApp;
-      const initData = tg && typeof tg.initData === 'string' ? tg.initData.trim() : '';
+      let initData = tg && typeof tg.initData === 'string' ? tg.initData.trim() : '';
       const startParam = (tg?.initDataUnsafe?.start_param || new URLSearchParams(window.location.search).get('startapp') || '').trim();
+
+      // Give Telegram a short extra window before falling back to bot.
+      if (!initData) {
+        initData = await this.waitForInitData(2200);
+      }
 
       if (!initData) {
         this.authErrorCode = 'E_INITDATA_EMPTY';
