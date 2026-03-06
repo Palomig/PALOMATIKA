@@ -51,16 +51,16 @@ class MiniAppController extends Controller
             $user = Auth::user();
             $startapp = trim((string) ($request->query('startapp', $request->query('tgWebAppStartParam', ''))));
 
-            // Keep landing visible for new users without completed onboarding.
-            // Session-first shortcut applies only after onboarding is completed.
-            if ($user->onboarding_completed_at) {
-                $target = '/tg/dashboard';
-                if ($startapp !== '') {
-                    $target .= '?startapp=' . rawurlencode($startapp);
-                }
-
-                return redirect($target);
+            if (!$user->onboarding_completed_at) {
+                return redirect('/tg/onboarding');
             }
+
+            $target = '/tg/dashboard';
+            if ($startapp !== '') {
+                $target .= '?startapp=' . rawurlencode($startapp);
+            }
+
+            return redirect($target);
         }
 
         return view('miniapp.home');
