@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Системы уравнений (7 класс): метод сложения</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body,{delimiters:[{left:'\\(',right:'\\)',display:false},{left:'$$',right:'$$',display:true}]});"></script>
+  <style>
+    body{font-family:Arial,sans-serif;background:#0b1220;color:#e5e7eb;line-height:1.65;margin:0}
+    .wrap{max-width:920px;margin:0 auto;padding:24px}
+    h1,h2{color:#fff;margin:0 0 10px}
+    .lead{opacity:.9;margin:0 0 16px}
+    .card{background:#111a2b;border:1px solid #24324a;border-radius:12px;padding:16px;margin:14px 0}
+    .rule{background:#0f172a;border-left:4px solid #60a5fa;padding:10px 12px;border-radius:8px;margin:10px 0}
+    .tip{background:#13243a;border-left:4px solid #34d399;padding:10px 12px;border-radius:8px;margin:10px 0}
+    .warn{background:#2a1a22;border-left:4px solid #fb7185;padding:10px 12px;border-radius:8px;margin:10px 0}
+    .ex{background:#0d1829;border:1px solid #2a3b58;border-radius:10px;padding:10px 12px;margin:10px 0}
+    ol{padding-left:20px;margin:8px 0}
+    li{margin:6px 0}
+    .katex-display{overflow-x:auto;overflow-y:hidden;padding-bottom:4px}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Системы уравнений (7 класс): метод сложения</h1>
+  <p class="lead">Простой и понятный разбор: почему можно домножать уравнения, как «сокращать» переменные и как решить систему шаг за шагом.</p>
+
+  <div class="card">
+    <h2>1) Что такое система уравнений</h2>
+    <p>Система — это <b>несколько уравнений с одними и теми же неизвестными</b>, которые должны выполняться одновременно.</p>
+    <div class="ex">Пример системы: \(\begin{cases}x+y=11\\x-y=1\end{cases}\)</div>
+    <p>Нужно найти такие \(x\) и \(y\), чтобы подошли сразу к двум уравнениям.</p>
+  </div>
+
+  <div class="card">
+    <h2>2) Идея метода сложения</h2>
+    <div class="rule">
+      Мы приводим систему к виду, где коэффициенты при одной переменной одинаковые по модулю и противоположные по знаку,<br>
+      чтобы при сложении эта переменная исчезла.
+    </div>
+    <p>Например, если получить \(+3y\) и \(-3y\), то:</p>
+    <div class="ex">\(3y + (-3y)=0\)</div>
+    <p>Останется уравнение с одной переменной — его легко решить.</p>
+  </div>
+
+  <div class="card">
+    <h2>3) Почему можно домножать уравнение</h2>
+    <p>Если умножить <b>обе части уравнения</b> на одно и то же число, равенство не меняется.</p>
+    <div class="ex">Если \(a=b\), то для любого числа \(k\): \(ka=kb\).</div>
+    <p>Поэтому из \(2x+y=7\) можно сделать \(4x+2y=14\) (умножили всё на 2) — это то же самое уравнение в эквивалентной форме.</p>
+    <div class="tip">Лайфхак: смотри только на коэффициенты при той переменной, которую хочешь сократить.</div>
+  </div>
+
+  <div class="card">
+    <h2>4) Алгоритм метода сложения (по шагам)</h2>
+    <ol>
+      <li>Выбери переменную, которую удобнее убрать (\(x\) или \(y\)).</li>
+      <li>Если коэффициенты не подходят — домножь одно или оба уравнения так, чтобы коэффициенты стали противоположными.</li>
+      <li>Сложи уравнения построчно (левую с левой, правую с правой).</li>
+      <li>Реши полученное уравнение с одной переменной.</li>
+      <li>Подставь найденное значение во 2-е уравнение и найди вторую переменную.</li>
+      <li>Сделай быструю проверку в обоих уравнениях системы.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>5) Полностью решённый пример</h2>
+    <div class="ex">
+      Решить систему:
+      $$\begin{cases}
+      2x+y=7\\
+      x-y=2
+      \end{cases}$$
+
+      <b>Шаг 1.</b> Хотим убрать \(y\). Уже удобно: в первом уравнении \(+y\), во втором \(-y\).<br>
+      <b>Шаг 2.</b> Складываем уравнения:
+      $$ (2x+y)+(x-y)=7+2 $$
+      $$ 3x=9 $$
+      $$ x=3 $$
+
+      <b>Шаг 3.</b> Подставляем \(x=3\) во второе уравнение \(x-y=2\):
+      $$ 3-y=2 \Rightarrow y=1 $$
+
+      <b>Ответ:</b> \((x,y)=(3,1)\).
+
+      <b>Проверка:</b><br>
+      \(2\cdot3+1=7\) ✓<br>
+      \(3-1=2\) ✓
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>6) Тренировка от простого к сложному</h2>
+    <h3>Блок A (без домножения)</h3>
+    <ol>
+      <li>\(\begin{cases}x+y=10\\x-y=4\end{cases}\)</li>
+      <li>\(\begin{cases}2x+y=9\\2x-y=1\end{cases}\)</li>
+      <li>\(\begin{cases}3x-y=11\\3x+y=13\end{cases}\)</li>
+      <li>\(\begin{cases}x+2y=7\\x-2y=-1\end{cases}\)</li>
+    </ol>
+
+    <h3>Блок B (с домножением одного уравнения)</h3>
+    <ol>
+      <li>\(\begin{cases}x+y=7\\2x-y=5\end{cases}\)</li>
+      <li>\(\begin{cases}2x+3y=12\\x-3y=0\end{cases}\)</li>
+      <li>\(\begin{cases}3x+2y=16\\x-2y=0\end{cases}\)</li>
+      <li>\(\begin{cases}x+4y=1\\3x-4y=19\end{cases}\)</li>
+    </ol>
+
+    <h3>Блок C (с домножением двух уравнений)</h3>
+    <ol>
+      <li>\(\begin{cases}2x+3y=13\\3x-2y=4\end{cases}\)</li>
+      <li>\(\begin{cases}4x-5y=3\\3x+2y=16\end{cases}\)</li>
+      <li>\(\begin{cases}5x+3y=24\\2x-4y=-6\end{cases}\)</li>
+      <li>\(\begin{cases}3x+7y=29\\5x-2y=4\end{cases}\)</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>7) Типичные ошибки и быстрые проверки</h2>
+    <div class="warn">
+      Ошибка 1: домножили только левую часть уравнения.<br>
+      <b>Нужно домножать обе части.</b>
+    </div>
+    <div class="warn">
+      Ошибка 2: при сложении забыли знак «минус».<br>
+      <b>Следи за скобками:</b> \(+(-3y)=-3y\).
+    </div>
+    <div class="tip">
+      Быстрая самопроверка: подставь ответ в оба уравнения. Если хотя бы одно не сходится — где-то арифметическая ошибка.
+    </div>
+  </div>
+</div>
+</body>
+</html>
