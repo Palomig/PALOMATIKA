@@ -350,6 +350,12 @@ class OgeVariantPoolService
         if (($normalized['expression'] === null || $normalized['expression'] === '') && isset($inner['target'])) {
             $normalized['expression'] = (string) $inner['target'];
         }
+        if (($normalized['expression'] === null || $normalized['expression'] === '') && isset($task['point_value'])) {
+            $normalized['expression'] = (string) $task['point_value'];
+        }
+        if (($normalized['expression'] === null || $normalized['expression'] === '') && isset($task['target'])) {
+            $normalized['expression'] = (string) $task['target'];
+        }
 
         $normalized['svg'] = $inner['svg'] ?? ($task['svg'] ?? null);
         $normalized['image'] = $inner['image'] ?? ($task['image'] ?? null);
