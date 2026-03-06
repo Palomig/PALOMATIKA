@@ -95,7 +95,7 @@
 
   /* URGENCY */
   .urgency {
-    margin: 12px 0 18px;
+    margin: 24px 0;
     background: var(--red-bg); border: 1px solid var(--red-bd);
     border-radius: 12px; padding: 12px 16px;
     display: flex; align-items: center; gap: 10px;
@@ -259,11 +259,11 @@
 
   @auth
     <a href="/tg/dashboard" class="btn-primary" id="go-btn" style="text-decoration:none;" :style="!appReady ? 'pointer-events:none;opacity:.6' : ''">
-      <span style="display:flex;align-items:center;gap:8px;">Войти</span>
+      <span style="display:flex;align-items:center;gap:8px;">🚀 Начать подготовку</span>
     </a>
   @else
     <button class="btn-primary" id="start-btn" @click="handleLogin()" :disabled="!appReady">
-      <span id="start-btn-text" style="display:flex;align-items:center;gap:8px;" x-text="appReady ? 'Войти' : '⏳ Инициализация…'"></span>
+      <span id="start-btn-text" style="display:flex;align-items:center;gap:8px;" x-text="appReady ? '🚀 Начать подготовку' : '⏳ Инициализация…'"></span>
     </button>
 
     <div x-show="waiting" x-transition style="margin-top:10px;padding:10px 12px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:rgba(255,255,255,.03);font-size:12px;color:#d1d5db;line-height:1.45;">
@@ -397,7 +397,7 @@ function homePage() {
           this.sendDiag('auth_fallback_failed', 'E_FALLBACK_START', { err: e?.message || null });
           if (tg && tg.showAlert) { tg.showAlert('Не удалось войти. Попробуйте перезапустить мини-приложение.'); }
           else { alert('Не удалось войти. Попробуйте перезапустить мини-приложение.'); }
-          if (btnText) btnText.innerHTML = 'Войти';
+          if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
           if (btn) btn.classList.remove('btn-loading');
           this.loginInProgress = false;
         });
@@ -464,7 +464,7 @@ function homePage() {
         }
         this.sendDiag('webapp_login_catch', this.authErrorCode, { err: (e && e.message) ? e.message : null });
 
-        if (btnText) btnText.innerHTML = 'Войти';
+        if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
         if (btn) btn.classList.remove('btn-loading');
         this.loginInProgress = false;
         const msg = (e && e.message) ? `${e.message} (${this.authErrorCode})` : `Ошибка авторизации (${this.authErrorCode})`;
@@ -521,7 +521,7 @@ function homePage() {
           this.loginInProgress = false;
           this.authErrorCode = 'E_FALLBACK_TIMEOUT';
           this.sendDiag('auth_fallback_timeout', this.authErrorCode);
-          if (btnText) btnText.innerHTML = 'Войти';
+          if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
           if (btn) btn.classList.remove('btn-loading');
           const tg = window.Telegram?.WebApp;
           if (tg?.showAlert) tg.showAlert('Время ожидания истекло. Попробуйте снова.');
@@ -545,7 +545,7 @@ function homePage() {
             this.pollElapsedSec = 0;
             this.authErrorCode = 'E_FALLBACK_EXPIRED';
             this.sendDiag('auth_fallback_failed', this.authErrorCode, { status: data.status || null });
-            if (btnText) btnText.innerHTML = 'Войти';
+            if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
             if (btn) btn.classList.remove('btn-loading');
             const tg = window.Telegram?.WebApp;
             if (tg?.showAlert) tg.showAlert('Сессия истекла. Попробуйте снова.');
