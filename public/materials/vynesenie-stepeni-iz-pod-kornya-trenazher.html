@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Вынесение числа и степени из-под корня — тренажёр</title>
+  <style>
+    body{font-family:Arial,sans-serif;background:#0b1220;color:#e5e7eb;line-height:1.6;margin:0}
+    .wrap{max-width:860px;margin:0 auto;padding:24px}
+    h1,h2{color:#fff} .card{background:#111a2b;border:1px solid #24324a;border-radius:12px;padding:16px;margin:14px 0}
+    .rule{background:#0f172a;border-left:4px solid #60a5fa;padding:10px 12px;border-radius:8px}
+    code{background:#0b1323;padding:2px 6px;border-radius:6px}
+    ol{padding-left:20px}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Вынесение числа и степени из-под арифметического корня</h1>
+  <p>Короткий разбор + отработка точечных действий.</p>
+
+  <div class="card rule">
+    <b>Главная идея:</b> корень <code>√</code> делит степень пополам.<br>
+    <code>√(a²)=a</code>, <code>√(a⁴)=a²</code>, <code>√(x⁶)=x³</code>.<br>
+    Если выносим число из-под корня, это число должно во второй степени дать подкоренное: <code>√49=7</code>, потому что <code>7²=49</code>.
+  </div>
+
+  <div class="card">
+    <h2>1) База (вынеси число)</h2>
+    <ol>
+      <li>√4</li><li>√9</li><li>√16</li><li>√25</li><li>√36</li><li>√49</li><li>√64</li><li>√81</li><li>√100</li><li>√121</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>2) Вынеси множитель</h2>
+    <ol>
+      <li>√12</li><li>√18</li><li>√20</li><li>√27</li><li>√45</li><li>√50</li><li>√72</li><li>√75</li><li>√98</li><li>√147</li>
+    </ol>
+    <p><b>Подсказка:</b> ищем полный квадрат внутри: <code>√72=√(36·2)=6√2</code>.</p>
+  </div>
+
+  <div class="card">
+    <h2>3) Степени под корнем (делим показатель пополам)</h2>
+    <ol>
+      <li>√(x²)</li><li>√(x⁴)</li><li>√(x⁶)</li><li>√(a⁸)</li><li>√(m¹⁰)</li>
+      <li>√(16x⁶)</li><li>√(25a⁴)</li><li>√(49m⁸)</li><li>√(81y¹²)</li><li>√(100b⁶)</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>4) Смешанные упражнения</h2>
+    <ol>
+      <li>√(32x⁴)</li><li>√(72a⁶)</li><li>√(200m²)</li><li>√(108y⁸)</li><li>√(242b⁴)</li>
+      <li>√(18x¹⁰)</li><li>√(50a¹²)</li><li>√(12m⁶)</li><li>√(98y¹⁴)</li><li>√(27b⁸)</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>5) Типичная ошибка (важно)</h2>
+    <p>Ученик путает: «умножить на 1/2» и «поделить пополам». Это одно и то же:</p>
+    <p><code>8 · 1/2 = 4</code>, <code>6 · 1/2 = 3</code>, <code>10 · 1/2 = 5</code>.</p>
+    <p>Поэтому при корне: показатель степени <b>умножается на 1/2</b>, то есть <b>делится пополам</b>.</p>
+  </div>
+
+  <div class="card">
+    <h2>Ответы (кратко)</h2>
+    <p>1) 2,3,4,5,6,7,8,9,10,11</p>
+    <p>2) 2√3,3√2,2√5,3√3,3√5,5√2,6√2,5√3,7√2,7√3</p>
+    <p>3) x,x²,x³,a⁴,m⁵,4x³,5a²,7m⁴,9y⁶,10b³</p>
+  </div>
+</div>
+</body>
+</html>
