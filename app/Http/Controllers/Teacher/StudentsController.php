@@ -47,6 +47,15 @@ class StudentsController extends Controller
             ->selectRaw('COALESCE(scoring_metrics.oge_correct_count, 0) as oge_correct_count')
             ->selectRaw('COALESCE(scoring_metrics.oge_scored_count, 0) as oge_scored_count')
             ->selectRaw(
+                '(SELECT ts.student_alias
+                  FROM teacher_students ts
+                  WHERE ts.student_id = users.id'
+                . ($actor->role !== 'admin' ? ' AND ts.teacher_id = ?' : '')
+                . ' ORDER BY ts.id DESC
+                  LIMIT 1) as student_alias',
+                $actor->role !== 'admin' ? [$actor->id] : []
+            )
+            ->selectRaw(
                 'CASE WHEN EXISTS (
                     SELECT 1
                     FROM teacher_students
@@ -67,11 +76,21 @@ class StudentsController extends Controller
                     }
                 });
             })
-            ->when($search !== '', function ($query) use ($search) {
-                $query->where(function ($nested) use ($search) {
+            ->when($search !== '', function ($query) use ($search, $actor) {
+                $query->where(function ($nested) use ($search, $actor) {
                     $nested
                         ->where('users.name', 'like', "%{$search}%")
-                        ->orWhere('users.email', 'like', "%{$search}%");
+                        ->orWhere('users.email', 'like', "%{$search}%")
+                        ->orWhereExists(function (Builder $aliasQuery) use ($search, $actor) {
+                            $aliasQuery->selectRaw('1')
+                                ->from('teacher_students')
+                                ->whereColumn('teacher_students.student_id', 'users.id')
+                                ->where('teacher_students.student_alias', 'like', "%{$search}%");
+
+                            if ($actor->role !== 'admin') {
+                                $aliasQuery->where('teacher_students.teacher_id', $actor->id);
+                            }
+                        });
                 });
             })
             ->orderByRaw('COALESCE(attempt_metrics.oge_last_activity_at, users.last_active_at, users.created_at) DESC')
@@ -130,6 +149,7 @@ class StudentsController extends Controller
                 $student->oge_correct_count = (int) ($student->oge_correct_count ?? 0);
                 $student->oge_scored_count = (int) ($student->oge_scored_count ?? 0);
                 $student->is_linked = (bool) ($student->is_linked ?? false);
+                $student->student_alias = is_string($student->student_alias ?? null) ? trim($student->student_alias) : null;
 
                 $student->oge_accuracy_percent = $student->oge_scored_count > 0
                     ? (int) round(($student->oge_correct_count / $student->oge_scored_count) * 100)

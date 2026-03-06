@@ -61,6 +61,9 @@
                     <div class="flex-1 min-w-0">
                         <div class="text-sm font-medium text-white truncate">{{ $student->name }}</div>
                         <div class="text-xs text-gray-500 truncate">{{ $student->email }}</div>
+                        @if(!empty($student->student_alias))
+                            <div class="text-xs text-coral/90 truncate mt-0.5">Алиас: {{ $student->student_alias }}</div>
+                        @endif
                     </div>
                     <span class="inline-flex items-center px-2 py-0.5 text-[10px] font-medium rounded-lg {{ ($student->oge_accuracy_percent ?? null) !== null ? 'bg-emerald-500/10 text-emerald-400' : 'bg-white/[0.04] text-gray-500' }}">
                         {{ ($student->oge_accuracy_percent ?? null) !== null ? ($student->oge_accuracy_percent . '%') : 'Нет оценок' }}
@@ -125,6 +128,9 @@
                                     <div class="min-w-0">
                                         <div class="text-sm font-medium text-white truncate">{{ $student->name }}</div>
                                         <div class="text-xs text-gray-500 truncate">{{ $student->email }}</div>
+                                        @if(!empty($student->student_alias))
+                                            <div class="mt-1 text-xs text-coral/90 truncate">Алиас: {{ $student->student_alias }}</div>
+                                        @endif
                                         <div class="mt-1">
                                             <span class="inline-flex items-center px-2 py-0.5 text-[10px] font-medium rounded-lg {{ ($student->is_linked ?? false) ? 'bg-emerald-500/10 text-emerald-400' : 'bg-white/[0.04] text-gray-400' }}">
                                                 {{ ($student->is_linked ?? false) ? 'привязан' : 'не привязан' }}

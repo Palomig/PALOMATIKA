@@ -414,6 +414,10 @@ Route::prefix('tg')->group(function () {
 
     // Authenticated Mini App routes
     Route::middleware(['auth'])->group(function () {
+        Route::post('/mode/{role}', [MiniAppController::class, 'switchMode'])
+            ->where('role', 'student|teacher')
+            ->name('miniapp.mode.switch');
+
         // Onboarding page
         Route::get('/onboarding', [MiniAppController::class, 'onboarding'])->name('miniapp.onboarding');
 
@@ -427,6 +431,14 @@ Route::prefix('tg')->group(function () {
             Route::get('/test/{attemptId}', [MiniAppController::class, 'test'])->name('miniapp.test');
             Route::get('/results/{attemptId}', [MiniAppController::class, 'results'])->name('miniapp.results');
             Route::get('/tutor', [MiniAppController::class, 'tutor'])->name('miniapp.tutor');
+
+            Route::middleware(['role:teacher,admin'])->prefix('teacher')->name('miniapp.teacher.')->group(function () {
+                Route::get('/', fn () => redirect('/tg/teacher/dashboard'))->name('home');
+                Route::get('/dashboard', [MiniAppController::class, 'teacherDashboard'])->name('dashboard');
+                Route::get('/students', [MiniAppController::class, 'teacherStudents'])->name('students');
+                Route::patch('/students/{studentId}/alias', [MiniAppController::class, 'updateTeacherStudentAlias'])->name('students.alias');
+                Route::get('/variants', [MiniAppController::class, 'teacherVariants'])->name('variants');
+            });
         });
 
         // Admin routes for curated variants

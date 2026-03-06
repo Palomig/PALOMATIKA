@@ -59,6 +59,7 @@ class TeacherStudentsPageTest extends TestCase
             $table->foreignId('teacher_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('student_id')->constrained('users')->cascadeOnDelete();
             $table->string('source', 32)->default('manual');
+            $table->string('student_alias', 80)->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->unique(['teacher_id', 'student_id']);
         });
@@ -300,6 +301,15 @@ class TeacherStudentsPageTest extends TestCase
         $search->assertOk();
         $search->assertSee('Unique Search Match');
         $search->assertDontSee('Roster Student 01');
+
+        TeacherStudent::where('teacher_id', $teacher->id)
+            ->where('student_id', $searchMatch->id)
+            ->update(['student_alias' => 'Саша']);
+
+        $searchByAlias = $this->actingAs($teacher)->get('/teacher/students?search=Саша');
+        $searchByAlias->assertOk();
+        $searchByAlias->assertSee('Unique Search Match');
+        $searchByAlias->assertDontSee('Roster Student 01');
     }
 
     public function test_roster_rows_include_student_drilldown_links(): void

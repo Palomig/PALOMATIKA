@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\OgeAttempt;
 use App\Models\OgeAttemptScoring;
 use App\Models\OgeVariant;
+use App\Models\TeacherStudent;
 use App\Models\User;
+use App\Services\AuditLogger;
 use App\Services\MiniVariantService;
 use App\Services\OgeAttemptService;
 use App\Services\OgeVariantBuilderService;
@@ -218,6 +220,11 @@ class MiniAppController extends Controller
     public function dashboard(Request $request)
     {
         $user = Auth::user();
+        $effectiveRole = $this->resolveMiniAppRole($request, $user);
+
+        if ($effectiveRole === 'teacher') {
+            return redirect('/tg/teacher/dashboard');
+        }
 
         // If Mini App was opened via startapp=oge_variant_hash_..., jump directly to test.
         $startParam = trim((string) $request->query('startapp', ''));
@@ -630,6 +637,193 @@ class MiniAppController extends Controller
         $weakTopics = $this->computeWeakTopics($user->id);
 
         return view('miniapp.tutor', compact('lastCorrect', 'lastTotal', 'weakTopics'));
+    }
+
+    public function teacherDashboard(Request $request)
+    {
+        /** @var User $user */
+        $user = $request->user();
+        $teacherId = (int) $user->id;
+
+        $studentCount = TeacherStudent::query()
+            ->where('teacher_id', $teacherId)
+            ->count();
+
+        $aliasedCount = TeacherStudent::query()
+            ->where('teacher_id', $teacherId)
+            ->whereNotNull('student_alias')
+            ->where('student_alias', '!=', '')
+            ->count();
+
+        $variantsCount = OgeVariant::query()
+            ->where('owner_teacher_id', $teacherId)
+            ->count();
+
+        $curatedCount = OgeVariant::query()
+            ->where('owner_teacher_id', $teacherId)
+            ->where('is_curated', true)
+            ->count();
+
+        $recentVariants = OgeVariant::query()
+            ->where('owner_teacher_id', $teacherId)
+            ->orderByDesc('created_at')
+            ->limit(8)
+            ->get(['id', 'hash', 'title', 'mode', 'is_curated', 'created_at']);
+
+        return view('miniapp.teacher-dashboard', [
+            'user' => $user,
+            'studentCount' => $studentCount,
+            'aliasedCount' => $aliasedCount,
+            'variantsCount' => $variantsCount,
+            'curatedCount' => $curatedCount,
+            'recentVariants' => $recentVariants,
+            'effectiveRole' => $this->resolveMiniAppRole($request, $user),
+            'canSwitchMode' => $user->role === 'admin',
+        ]);
+    }
+
+    public function teacherStudents(Request $request)
+    {
+        /** @var User $user */
+        $user = $request->user();
+        $teacherId = (int) $user->id;
+        $search = trim((string) $request->query('search', ''));
+
+        $students = TeacherStudent::query()
+            ->where('teacher_id', $teacherId)
+            ->join('users', 'users.id', '=', 'teacher_students.student_id')
+            ->select([
+                'users.id',
+                'users.name',
+                'users.email',
+                'users.last_active_at',
+                'teacher_students.student_alias',
+                'teacher_students.created_at as linked_at',
+            ])
+            ->when($search !== '', function ($query) use ($search) {
+                $query->where(function ($nested) use ($search) {
+                    $nested->where('users.name', 'like', '%' . $search . '%')
+                        ->orWhere('users.email', 'like', '%' . $search . '%')
+                        ->orWhere('teacher_students.student_alias', 'like', '%' . $search . '%');
+                });
+            })
+            ->orderByRaw('COALESCE(users.last_active_at, teacher_students.created_at) DESC')
+            ->orderBy('users.name')
+            ->paginate(20)
+            ->withQueryString();
+
+        return view('miniapp.teacher-students', [
+            'students' => $students,
+            'search' => $search,
+            'canSwitchMode' => $user->role === 'admin',
+            'effectiveRole' => $this->resolveMiniAppRole($request, $user),
+        ]);
+    }
+
+    public function teacherVariants(Request $request)
+    {
+        /** @var User $user */
+        $user = $request->user();
+        $teacherId = (int) $user->id;
+
+        $variants = OgeVariant::query()
+            ->where('owner_teacher_id', $teacherId)
+            ->withCount('attempts')
+            ->orderByDesc('created_at')
+            ->paginate(20)
+            ->withQueryString();
+
+        return view('miniapp.teacher-variants', [
+            'variants' => $variants,
+            'canSwitchMode' => $user->role === 'admin',
+            'effectiveRole' => $this->resolveMiniAppRole($request, $user),
+        ]);
+    }
+
+    public function updateTeacherStudentAlias(Request $request, int $studentId, AuditLogger $audit): \Illuminate\Http\JsonResponse
+    {
+        /** @var User $user */
+        $user = $request->user();
+
+        $payload = $request->validate([
+            'alias' => 'nullable|string|max:80',
+        ]);
+
+        $alias = trim((string) ($payload['alias'] ?? ''));
+        $alias = $alias === '' ? null : $alias;
+
+        $relation = TeacherStudent::query()
+            ->where('teacher_id', $user->id)
+            ->where('student_id', $studentId)
+            ->firstOrFail();
+
+        $previousAlias = $relation->student_alias;
+        $relation->student_alias = $alias;
+        $relation->save();
+
+        $audit->log([
+            'event_type' => 'teacher_student_alias_updated',
+            'category' => 'teacher',
+            'severity' => 'info',
+            'actor_user_id' => $user->id,
+            'actor_role' => $this->resolveMiniAppRole($request, $user),
+            'subject_type' => 'teacher_student',
+            'subject_id' => $user->id . ':' . $studentId,
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'payload_json' => [
+                'previous_alias' => $previousAlias,
+                'new_alias' => $alias,
+            ],
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'alias' => $alias,
+        ]);
+    }
+
+    public function switchMode(Request $request, string $role, AuditLogger $audit)
+    {
+        abort_unless($request->user()?->role === 'admin', 403);
+        abort_unless(in_array($role, ['student', 'teacher'], true), 404);
+
+        $request->session()->put('view_as_role', $role);
+
+        $audit->log([
+            'event_type' => 'view_as_set',
+            'category' => 'admin',
+            'severity' => 'info',
+            'actor_user_id' => $request->user()->id,
+            'actor_role' => 'admin',
+            'subject_type' => 'view_as_role',
+            'subject_id' => $role,
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'payload_json' => ['source' => 'miniapp'],
+        ]);
+
+        return redirect($role === 'teacher' ? '/tg/teacher/dashboard' : '/tg/dashboard');
+    }
+
+    private function resolveMiniAppRole(Request $request, ?User $user): string
+    {
+        if (!$user) {
+            return 'student';
+        }
+
+        if ($user->role === 'teacher') {
+            return 'teacher';
+        }
+
+        if ($user->role === 'admin') {
+            $viewAsRole = $request->hasSession() ? $request->session()->get('view_as_role') : null;
+            if (in_array($viewAsRole, ['student', 'teacher'], true)) {
+                return $viewAsRole;
+            }
+        }
+
+        return 'student';
     }
 
     protected function countNewFipiTasks(): int

@@ -13,6 +13,7 @@ class TeacherStudent extends Model
         'teacher_id',
         'student_id',
         'source',
+        'student_alias',
     ];
 
     protected $casts = [
