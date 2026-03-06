@@ -810,6 +810,17 @@ class MiniAppController extends Controller
         $scoredTotal = 0;
 
         foreach ($attempts as $attempt) {
+            $taskMap = [];
+            $cfg = $attempt->variant?->config_json;
+            if (is_array($cfg) && isset($cfg['tasks']) && is_array($cfg['tasks'])) {
+                foreach ($cfg['tasks'] as $taskDef) {
+                    $num = (int) ($taskDef['task_number'] ?? 0);
+                    if ($num > 0) {
+                        $taskMap[$num] = $taskDef;
+                    }
+                }
+            }
+
             foreach ($attempt->scorings as $scoring) {
                 if ($scoring->is_correct === null) {
                     continue;
@@ -825,10 +836,14 @@ class MiniAppController extends Controller
                     $correctTotal++;
                 } else {
                     $studentAnswer = $attempt->answers->firstWhere('task_number', $taskNum);
+                    $def = $taskMap[$taskNum] ?? [];
                     $wrongTasks[] = [
                         'attempt_id' => (int) $attempt->id,
                         'variant_hash' => (string) ($attempt->variant->hash ?? ''),
                         'task_number' => $taskNum,
+                        'task_text' => (string) (($def['instruction'] ?? $def['text'] ?? '') ?: ''),
+                        'task_expression' => (string) (($def['expression'] ?? '') ?: ''),
+                        'task_svg' => (string) (($def['svg'] ?? '') ?: ''),
                         'student_answer' => (string) (($studentAnswer->current_answer ?? '') ?: '—'),
                         'correct_answer' => (string) (($scoring->correct_answer ?? '') ?: '—'),
                     ];
