@@ -4,69 +4,135 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Вынесение числа и степени из-под корня — тренажёр</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body,{delimiters:[{left:'\\(',right:'\\)',display:false},{left:'$$',right:'$$',display:true}]});"></script>
   <style>
-    body{font-family:Arial,sans-serif;background:#0b1220;color:#e5e7eb;line-height:1.6;margin:0}
-    .wrap{max-width:860px;margin:0 auto;padding:24px}
-    h1,h2{color:#fff} .card{background:#111a2b;border:1px solid #24324a;border-radius:12px;padding:16px;margin:14px 0}
-    .rule{background:#0f172a;border-left:4px solid #60a5fa;padding:10px 12px;border-radius:8px}
+    body{font-family:Arial,sans-serif;background:#0b1220;color:#e5e7eb;line-height:1.65;margin:0}
+    .wrap{max-width:920px;margin:0 auto;padding:24px}
+    h1,h2,h3{color:#fff;margin:0 0 10px}
+    .lead{opacity:.9;margin:0 0 16px}
+    .card{background:#111a2b;border:1px solid #24324a;border-radius:12px;padding:16px;margin:14px 0}
+    .rule{background:#0f172a;border-left:4px solid #60a5fa;padding:10px 12px;border-radius:8px;margin:10px 0}
+    .tip{background:#13243a;border-left:4px solid #34d399;padding:10px 12px;border-radius:8px;margin:10px 0}
+    .warn{background:#2a1a22;border-left:4px solid #fb7185;padding:10px 12px;border-radius:8px;margin:10px 0}
+    ol{padding-left:20px;margin:8px 0}
+    li{margin:6px 0}
+    .ex{background:#0d1829;border:1px solid #2a3b58;border-radius:10px;padding:10px 12px;margin:8px 0}
     code{background:#0b1323;padding:2px 6px;border-radius:6px}
-    ol{padding-left:20px}
   </style>
 </head>
 <body>
 <div class="wrap">
   <h1>Вынесение числа и степени из-под арифметического корня</h1>
-  <p>Короткий разбор + отработка точечных действий.</p>
+  <p class="lead">Точечная отработка: как «корень делит степень пополам», как выносить число и не путаться со степенью \(\tfrac12\).</p>
 
-  <div class="card rule">
-    <b>Главная идея:</b> корень <code>√</code> делит степень пополам.<br>
-    <code>√(a²)=a</code>, <code>√(a⁴)=a²</code>, <code>√(x⁶)=x³</code>.<br>
-    Если выносим число из-под корня, это число должно во второй степени дать подкоренное: <code>√49=7</code>, потому что <code>7²=49</code>.
+  <div class="card">
+    <h2>0) База идеи (обязательно)</h2>
+    <div class="rule">
+      \(\sqrt{a^2}=a\), \(\sqrt{a^4}=a^2\), \(\sqrt{x^6}=x^3\).<br>
+      То есть при извлечении квадратного корня показатель степени умножается на \(\tfrac12\),
+      а это то же самое, что <b>делится пополам</b>.
+    </div>
+    <div class="tip">
+      Лайфхак №1: «Что вынести из-под корня?» — это число, квадрат которого даёт подкоренное.<br>
+      Пример: \(\sqrt{49}=7\), потому что \(7^2=49\).
+    </div>
   </div>
 
   <div class="card">
-    <h2>1) База (вынеси число)</h2>
+    <h2>1) Базовый разогрев: извлеки корень из полного квадрата</h2>
+    <div class="ex"><b>Пример (решён):</b> \(\sqrt{4}=2\), потому что \(2^2=4\).</div>
     <ol>
-      <li>√4</li><li>√9</li><li>√16</li><li>√25</li><li>√36</li><li>√49</li><li>√64</li><li>√81</li><li>√100</li><li>√121</li>
+      <li>\(\sqrt{9}\)</li>
+      <li>\(\sqrt{16}\)</li>
+      <li>\(\sqrt{25}\)</li>
+      <li>\(\sqrt{36}\)</li>
+      <li>\(\sqrt{49}\)</li>
+      <li>\(\sqrt{64}\)</li>
+      <li>\(\sqrt{81}\)</li>
+      <li>\(\sqrt{100}\)</li>
+      <li>\(\sqrt{121}\)</li>
+      <li>\(\sqrt{144}\)</li>
     </ol>
+    <div class="tip">Лайфхак №2: держи в голове квадраты чисел от 1 до 15 — это ускоряет решения в 3–4 раза.</div>
   </div>
 
   <div class="card">
-    <h2>2) Вынеси множитель</h2>
+    <h2>2) Вынеси множитель из-под корня</h2>
+    <div class="ex"><b>Пример (решён):</b> \(\sqrt{72}=\sqrt{36\cdot2}=6\sqrt2\).</div>
     <ol>
-      <li>√12</li><li>√18</li><li>√20</li><li>√27</li><li>√45</li><li>√50</li><li>√72</li><li>√75</li><li>√98</li><li>√147</li>
+      <li>\(\sqrt{12}\)</li>
+      <li>\(\sqrt{18}\)</li>
+      <li>\(\sqrt{20}\)</li>
+      <li>\(\sqrt{27}\)</li>
+      <li>\(\sqrt{45}\)</li>
+      <li>\(\sqrt{50}\)</li>
+      <li>\(\sqrt{75}\)</li>
+      <li>\(\sqrt{98}\)</li>
+      <li>\(\sqrt{147}\)</li>
+      <li>\(\sqrt{242}\)</li>
     </ol>
-    <p><b>Подсказка:</b> ищем полный квадрат внутри: <code>√72=√(36·2)=6√2</code>.</p>
+    <div class="tip">Лайфхак №3: всегда ищи самый большой полный квадрат внутри подкоренного числа.</div>
   </div>
 
   <div class="card">
-    <h2>3) Степени под корнем (делим показатель пополам)</h2>
+    <h2>3) Степени под корнем: делим показатель пополам</h2>
+    <div class="ex"><b>Пример (решён):</b> \(\sqrt{x^8}=x^4\), потому что \(8\cdot\tfrac12=4\).</div>
     <ol>
-      <li>√(x²)</li><li>√(x⁴)</li><li>√(x⁶)</li><li>√(a⁸)</li><li>√(m¹⁰)</li>
-      <li>√(16x⁶)</li><li>√(25a⁴)</li><li>√(49m⁸)</li><li>√(81y¹²)</li><li>√(100b⁶)</li>
+      <li>\(\sqrt{x^2}\)</li>
+      <li>\(\sqrt{x^4}\)</li>
+      <li>\(\sqrt{x^6}\)</li>
+      <li>\(\sqrt{a^{10}}\)</li>
+      <li>\(\sqrt{m^{12}}\)</li>
+      <li>\(\sqrt{16x^6}\)</li>
+      <li>\(\sqrt{25a^8}\)</li>
+      <li>\(\sqrt{49m^{10}}\)</li>
+      <li>\(\sqrt{81y^{12}}\)</li>
+      <li>\(\sqrt{100b^{14}}\)</li>
     </ol>
+    <div class="warn">Частая ошибка: ученик видит \(\tfrac12\) как «что-то странное». На самом деле это просто «пополам».</div>
   </div>
 
   <div class="card">
-    <h2>4) Смешанные упражнения</h2>
+    <h2>4) Смешанные задания (число + степень)</h2>
+    <div class="ex"><b>Пример (решён):</b> \(\sqrt{32x^4}=\sqrt{16\cdot2\cdot x^4}=4x^2\sqrt2\).</div>
     <ol>
-      <li>√(32x⁴)</li><li>√(72a⁶)</li><li>√(200m²)</li><li>√(108y⁸)</li><li>√(242b⁴)</li>
-      <li>√(18x¹⁰)</li><li>√(50a¹²)</li><li>√(12m⁶)</li><li>√(98y¹⁴)</li><li>√(27b⁸)</li>
+      <li>\(\sqrt{18x^{10}}\)</li>
+      <li>\(\sqrt{50a^{12}}\)</li>
+      <li>\(\sqrt{12m^6}\)</li>
+      <li>\(\sqrt{98y^{14}}\)</li>
+      <li>\(\sqrt{27b^8}\)</li>
+      <li>\(\sqrt{72k^4}\)</li>
+      <li>\(\sqrt{200n^2}\)</li>
+      <li>\(\sqrt{108t^8}\)</li>
+      <li>\(\sqrt{242p^4}\)</li>
+      <li>\(\sqrt{288q^6}\)</li>
     </ol>
+    <div class="tip">Лайфхак №4: решай в 2 шага: (1) вынеси число, (2) вынеси степень. Не смешивай шаги.</div>
   </div>
 
   <div class="card">
-    <h2>5) Типичная ошибка (важно)</h2>
-    <p>Ученик путает: «умножить на 1/2» и «поделить пополам». Это одно и то же:</p>
-    <p><code>8 · 1/2 = 4</code>, <code>6 · 1/2 = 3</code>, <code>10 · 1/2 = 5</code>.</p>
-    <p>Поэтому при корне: показатель степени <b>умножается на 1/2</b>, то есть <b>делится пополам</b>.</p>
+    <h2>5) Мини-блок «умножить на \(\tfrac12\)»</h2>
+    <div class="ex"><b>Пример (решён):</b> \(10\cdot\tfrac12=5\).</div>
+    <ol>
+      <li>\(8\cdot\tfrac12\)</li>
+      <li>\(6\cdot\tfrac12\)</li>
+      <li>\(14\cdot\tfrac12\)</li>
+      <li>\(12\cdot\tfrac12\)</li>
+      <li>\(18\cdot\tfrac12\)</li>
+      <li>\(16\cdot\tfrac12\)</li>
+      <li>\(20\cdot\tfrac12\)</li>
+      <li>\(22\cdot\tfrac12\)</li>
+    </ol>
+    <div class="rule">Это же действие в степенях: \(x^8 \to x^{8\cdot\tfrac12}=x^4\).</div>
   </div>
 
   <div class="card">
-    <h2>Ответы (кратко)</h2>
-    <p>1) 2,3,4,5,6,7,8,9,10,11</p>
-    <p>2) 2√3,3√2,2√5,3√3,3√5,5√2,6√2,5√3,7√2,7√3</p>
-    <p>3) x,x²,x³,a⁴,m⁵,4x³,5a²,7m⁴,9y⁶,10b³</p>
+    <h2>Короткие ответы (самопроверка)</h2>
+    <p><b>Блок 1:</b> 3, 4, 5, 6, 7, 8, 9, 10, 11, 12</p>
+    <p><b>Блок 2 (по порядку):</b> \(2\sqrt3, 3\sqrt2, 2\sqrt5, 3\sqrt3, 3\sqrt5, 5\sqrt2, 5\sqrt3, 7\sqrt2, 7\sqrt3, 11\sqrt2\)</p>
   </div>
 </div>
 </body>
