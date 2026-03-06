@@ -184,69 +184,28 @@
     display:flex; align-items:center; justify-content:center;
     transition: opacity .25s ease;
   }
-  .preloader-card { width:min(320px,calc(100vw - 32px)); text-align:center; }
-  .preloader-title { color:#fff; font-weight:800; margin-bottom:18px; font-size:16px; }
-  .preloader-sub { color:#9fb3cf; font-size:12px; margin-top:18px; }
-
-  /* Codepen-style cube loader */
-  .boxes {
-    height: 32px;
-    width: 32px;
-    position: relative;
-    transform-style: preserve-3d;
-    transform-origin: 50% 50%;
-    margin: 0 auto;
-    transform: rotateX(60deg) rotateZ(45deg) rotateY(0deg) translateZ(0px);
-  }
-  .boxes .box {
-    width: 32px;
-    height: 32px;
-    top: 0;
-    left: 0;
-    position: absolute;
-    transform-style: preserve-3d;
-  }
-  .boxes .box:nth-child(1) { transform: translate(100%, 0); animation: box1 1s linear infinite; }
-  .boxes .box:nth-child(2) { transform: translate(0, 100%); animation: box2 1s linear infinite; }
-  .boxes .box:nth-child(3) { transform: translate(100%, 100%); animation: box3 1s linear infinite; }
-  .boxes .box:nth-child(4) { transform: translate(200%, 0); animation: box4 1s linear infinite; }
-  .boxes .box > div {
-    --translateZ: 15.5px;
-    --rotateY: 0deg;
-    --rotateX: 0deg;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: auto; right: auto; bottom: auto; left: auto;
-    transform: rotateY(var(--rotateY)) rotateX(var(--rotateX)) translateZ(var(--translateZ));
-  }
-  .boxes .box > div:nth-child(1) { top: 0; left: 0; background: #5C8DF6; }
-  .boxes .box > div:nth-child(2) { right: 0; background: #145af2; --rotateY: 90deg; }
-  .boxes .box > div:nth-child(3) { background: #447cf5; --rotateX: -90deg; }
-  .boxes .box > div:nth-child(4) { top: 0; left: 0; background: #DBE3F4; --translateZ: -90px; }
+  .preloader-card { width:min(320px,calc(100vw - 32px)); background:rgba(18,31,51,.92); border:1px solid #263a56; border-radius:16px; padding:18px; text-align:center; }
+  .preloader-logo { font-size:28px; margin-bottom:8px; }
+  .preloader-title { color:#fff; font-weight:800; margin-bottom:8px; }
+  .preloader-sub { color:#9fb3cf; font-size:12px; }
+  .preloader-bar { height:6px; border-radius:999px; background:#1f3048; margin-top:12px; overflow:hidden; }
+  .preloader-bar > span { display:block; width:40%; height:100%; background:linear-gradient(90deg,#4f8ef7,#6cb6ee); animation:pload 1.15s ease-in-out infinite; }
 
   @keyframes tickAnim { 0% { transform: translateY(-4px); opacity: 0.5; } 100% { transform: translateY(0); opacity: 1; } }
   @keyframes shimmer { 0% { left: -100%; } 100% { left: 200%; } }
   @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.7); } }
   @keyframes spin { to { transform: rotate(360deg); } }
-  @keyframes box1 { 0%,50% { transform: translate(100%, 0); } 100% { transform: translate(200%, 0); } }
-  @keyframes box2 { 0% { transform: translate(0, 100%); } 50% { transform: translate(0, 0); } 100% { transform: translate(100%, 0); } }
-  @keyframes box3 { 0%,50% { transform: translate(100%, 100%); } 100% { transform: translate(0, 100%); } }
-  @keyframes box4 { 0% { transform: translate(200%, 0); } 50% { transform: translate(200%, 100%); } 100% { transform: translate(100%, 100%); } }
+  @keyframes pload { 0% { transform: translateX(-110%); } 100% { transform: translateX(280%); } }
 @endpush
 
 @section('body')
 <div class="home-container" x-data="homePage()">
   <div class="preloader" x-show="showSplash" x-transition.opacity>
     <div class="preloader-card">
+      <div class="preloader-logo">🤖</div>
       <div class="preloader-title">Открываем приложение</div>
-      <div class="boxes" aria-hidden="true">
-        <div class="box"><div></div><div></div><div></div><div></div></div>
-        <div class="box"><div></div><div></div><div></div><div></div></div>
-        <div class="box"><div></div><div></div><div></div><div></div></div>
-        <div class="box"><div></div><div></div><div></div><div></div></div>
-      </div>
       <div class="preloader-sub">Подготавливаем безопасный вход через Telegram…</div>
+      <div class="preloader-bar"><span></span></div>
     </div>
   </div>
 
@@ -343,7 +302,6 @@ function homePage() {
     pollElapsedSec: 0,
     pollStatusTitle: '',
     pollStatusHint: '',
-    initDataMisses: 0,
 
     pad(n) { return String(n).padStart(2, '0'); },
 
@@ -455,16 +413,6 @@ function homePage() {
       if (!initData) {
         this.authErrorCode = 'E_INITDATA_EMPTY';
         this.sendDiag('auth_precheck', this.authErrorCode);
-        this.initDataMisses += 1;
-
-        if (this.initDataMisses < 2) {
-          // Do not jump to bot on first miss — Telegram often fills initData on the next tap.
-          if (btnText) btnText.innerHTML = 'Войти';
-          if (btn) btn.classList.remove('btn-loading');
-          this.loginInProgress = false;
-          if (tg && tg.showAlert) tg.showAlert('Секунду… приложение ещё инициализируется. Нажмите «Войти» ещё раз.');
-          return;
-        }
 
         this.startBotFallbackAuth(btn, btnText).catch((e) => {
           this.sendDiag('auth_fallback_failed', 'E_FALLBACK_START', { err: e?.message || null });
@@ -521,22 +469,12 @@ function homePage() {
           this.authErrorCode = 'E_COOKIE_SESSION';
           this.sendDiag('auth_post_login_check', this.authErrorCode, { me_status: meRes?.status || null });
 
-          // First time: ask for one more tap instead of immediate bot fallback.
-          if (this.initDataMisses < 2) {
-            if (btnText) btnText.innerHTML = 'Войти';
-            if (btn) btn.classList.remove('btn-loading');
-            this.loginInProgress = false;
-            this.initDataMisses += 1;
-            if (tg?.showAlert) tg.showAlert('Сессия ещё инициализируется. Нажмите «Войти» ещё раз.');
-            return;
-          }
-
+          // Do not hard-fail here: auto-switch to bot fallback flow.
           await this.startBotFallbackAuth(btn, btnText);
           return;
         }
 
         this.sendDiag('auth_success', 'A_OK');
-        this.initDataMisses = 0;
         const target = data.redirect_to || data.redirect || '/tg/dashboard';
         window.location.replace(target);
       })
