@@ -51,7 +51,7 @@ class TelegramMiniAppAuthService
 
         // WebView/VPN can delay payload delivery in real world.
         // Keep this configurable; default to tolerant window until nonce/replay-store is introduced.
-        $maxAge = (int) env('TELEGRAM_WEBAPP_AUTH_MAX_AGE', 86400);
+        $maxAge = (int) config('services.telegram.webapp_auth_max_age', 86400);
         if ($maxAge <= 0) {
             $maxAge = 86400;
         }

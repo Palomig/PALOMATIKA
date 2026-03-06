@@ -54,6 +54,8 @@ return [
         'mini_app_link_scheme' => env('TELEGRAM_MINI_APP_LINK_SCHEME', 'https'),
         // BotFather Mini App short name (used in https://t.me/<bot>/<short_name>?startapp=...)
         'mini_app_short_name' => env('TELEGRAM_MINI_APP_SHORT_NAME'),
+        // Max age for Telegram WebApp auth_date validation.
+        'webapp_auth_max_age' => (int) env('TELEGRAM_WEBAPP_AUTH_MAX_AGE', 86400),
     ],
 
     /*

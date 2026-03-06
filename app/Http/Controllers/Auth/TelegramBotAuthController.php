@@ -758,26 +758,6 @@ class TelegramBotAuthController extends Controller
     }
 
     /**
-     * @return array<string, mixed>
-     */
-    private function parseTelegramWebAppFields(string $initData, array $initDataUnsafe = []): array
-    {
-        if ($initData !== '') {
-            parse_str($initData, $parsed);
-
-            if (is_array($parsed) && !empty($parsed)) {
-                return $parsed;
-            }
-        }
-
-        if ($initDataUnsafe === []) {
-            throw new \InvalidArgumentException('Missing initData');
-        }
-
-        return $initDataUnsafe;
-    }
-
-    /**
      * @param array<string, mixed> $telegramUser
      */
     private function findOrCreateTelegramUserFromProfile(array $telegramUser): User
