@@ -265,12 +265,6 @@
     <button class="btn-primary" id="start-btn" @click="handleLogin()" :disabled="!appReady">
       <span id="start-btn-text" style="display:flex;align-items:center;gap:8px;" x-text="appReady ? '🚀 Начать подготовку' : '⏳ Инициализация…'"></span>
     </button>
-
-    <div x-show="waiting" x-transition style="margin-top:10px;padding:10px 12px;border:1px solid rgba(255,255,255,.12);border-radius:12px;background:rgba(255,255,255,.03);font-size:12px;color:#d1d5db;line-height:1.45;">
-      <div style="font-weight:700;color:#fff;" x-text="pollStatusTitle || 'Ожидаем подтверждение в боте…'"></div>
-      <div x-text="pollStatusHint || 'После подтверждения просто вернитесь в окно PALOMATIKA — вход подтянется автоматически.'"></div>
-      <div style="opacity:.75;margin-top:4px;" x-text="pollElapsedSec ? ('В ожидании: ' + pollElapsedSec + 'с') : ''"></div>
-    </div>
   @endauth
 
   <button class="btn-secondary" @click="handleInvite()">
@@ -299,9 +293,6 @@ function homePage() {
     token: '',
     waiting: false,
     pollInterval: null,
-    pollElapsedSec: 0,
-    pollStatusTitle: '',
-    pollStatusHint: '',
 
     pad(n) { return String(n).padStart(2, '0'); },
 
@@ -494,9 +485,6 @@ function homePage() {
 
       this.token = data.token;
       this.waiting = true;
-      this.pollElapsedSec = 0;
-      this.pollStatusTitle = 'Ожидаем подтверждение в боте…';
-      this.pollStatusHint = 'После подтверждения вернитесь в окно PALOMATIKA — вход завершится автоматически.';
       this.sendDiag('auth_fallback_started', 'A_FALLBACK', { has_start_param: !!startParam });
 
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent || '');
@@ -514,7 +502,6 @@ function homePage() {
 
       this.pollInterval = setInterval(async () => {
         attempts++;
-        this.pollElapsedSec = attempts * 2;
         if (attempts > maxAttempts) {
           this.stopPolling();
           this.waiting = false;
@@ -533,8 +520,6 @@ function homePage() {
           const data = await response.json().catch(() => ({}));
 
           if (data.status === 'authenticated' && data.login_url) {
-            this.pollStatusTitle = 'Подтверждение получено ✅';
-            this.pollStatusHint = 'Возвращаем в приложение…';
             this.stopPolling();
             this.sendDiag('auth_fallback_authenticated', 'A_FALLBACK_OK');
             window.location.href = data.login_url;
@@ -542,7 +527,6 @@ function homePage() {
             this.stopPolling();
             this.waiting = false;
             this.loginInProgress = false;
-            this.pollElapsedSec = 0;
             this.authErrorCode = 'E_FALLBACK_EXPIRED';
             this.sendDiag('auth_fallback_failed', this.authErrorCode, { status: data.status || null });
             if (btnText) btnText.innerHTML = '🚀 Начать подготовку';
@@ -562,7 +546,6 @@ function homePage() {
         clearInterval(this.pollInterval);
         this.pollInterval = null;
       }
-      this.pollElapsedSec = 0;
     },
 
     handleInvite() {
