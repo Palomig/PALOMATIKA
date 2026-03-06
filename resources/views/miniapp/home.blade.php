@@ -180,7 +180,10 @@
 
   .preloader {
     position: fixed; inset: 0; z-index: 9999;
-    background: #070b12;
+    background:
+      radial-gradient(900px 420px at 10% -10%, rgba(108,182,238,.22), transparent 55%),
+      radial-gradient(800px 420px at 110% 110%, rgba(79,142,247,.18), transparent 50%),
+      #0b1626;
     display:flex; align-items:center; justify-content:center;
     transition: opacity .25s ease;
   }
@@ -200,16 +203,15 @@
 
 @section('body')
 <div class="home-container" x-data="homePage()">
-  <div class="preloader" x-show="showSplash" x-transition.opacity>
+  <div class="preloader" x-show="!appReady" x-transition.opacity>
     <div class="preloader-card">
       <div class="preloader-logo">🤖</div>
-      <div class="preloader-title">Открываем приложение</div>
+      <div class="preloader-title">Загружаем mini app</div>
       <div class="preloader-sub">Подготавливаем безопасный вход через Telegram…</div>
       <div class="preloader-bar"><span></span></div>
     </div>
   </div>
 
-  <div x-show="!showSplash" x-cloak>
   <div class="home-topbar">
     <div class="home-logo">palomatika</div>
     <div class="exam-badge">ОГЭ 2026</div>
@@ -282,7 +284,6 @@
 
 
 </div>
-</div>
 @endsection
 
 @push('scripts')
@@ -293,7 +294,6 @@ function homePage() {
     days: 0, hours: 0, mins: 0, secs: 0,
     loginInProgress: false,
     appReady: false,
-    showSplash: true,
     authErrorCode: '',
     traceId: '',
     token: '',
@@ -309,11 +309,7 @@ function homePage() {
       this.updateCountdown();
       setInterval(() => this.updateCountdown(), 1000);
 
-      await Promise.all([
-        this.waitTelegramReady(),
-        new Promise(r => setTimeout(r, 5000)),
-      ]);
-      this.showSplash = false;
+      await this.waitTelegramReady();
       this.appReady = true;
 
       // If mini-app was opened with startapp=oge_variant_hash_..., forward into dashboard flow.
