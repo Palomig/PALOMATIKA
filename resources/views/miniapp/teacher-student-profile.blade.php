@@ -1,4 +1,4 @@
-@extends('miniapp.layout')
+@extends('layouts.miniapp')
 
 @section('title', 'Профиль ученика')
 
@@ -20,7 +20,7 @@
 </style>
 @endpush
 
-@section('content')
+@section('body')
 <div class="page">
   <div class="topbar">
     <a href="/tg/teacher/students" class="back">←</a>
