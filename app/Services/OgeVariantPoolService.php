@@ -363,6 +363,13 @@ class OgeVariantPoolService
         // For matching/choice tasks options are often inside task-level options.
         $normalized['options'] = $inner['options'] ?? ($task['options'] ?? null);
 
+        if (($normalized['type'] ?? '') === 'matching' && array_key_exists('answer', $inner)) {
+            $normalized['correct_answer'] = $this->normalizeMatchingAnswer(
+                (string) $inner['answer'],
+                is_array($normalized['options'] ?? null) ? $normalized['options'] : []
+            );
+        }
+
         // Topic 19 statements in mini-OGE: always present exactly 3 statements.
         // If instruction starts with "Какое" => 1 true; "Какие" => 2 true.
         if (($normalized['type'] ?? '') === 'statements' && is_array($normalized['statements'] ?? null)) {
@@ -384,6 +391,48 @@ class OgeVariantPoolService
         }
 
         return $normalized;
+    }
+
+    protected function normalizeMatchingAnswer(string $rawAnswer, array $options): string
+    {
+        $answer = trim($rawAnswer);
+        if ($answer === '') {
+            return '';
+        }
+
+        // Already numeric order like 312.
+        if (preg_match('/^[1-9]+$/', $answer)) {
+            return $answer;
+        }
+
+        if (empty($options)) {
+            return $answer;
+        }
+
+        // Try to map tokenized equation answers to option indexes.
+        $parts = preg_split('/\s*[,;|]\s*|\s{2,}/u', $answer) ?: [];
+        $parts = array_values(array_filter(array_map('trim', $parts), fn ($v) => $v !== ''));
+        if (empty($parts)) {
+            return $answer;
+        }
+
+        $digits = [];
+        foreach ($parts as $part) {
+            $found = null;
+            foreach ($options as $idx => $opt) {
+                $optText = is_string($opt) ? trim($opt) : trim((string) ($opt['label'] ?? $opt['text'] ?? ''));
+                if ($optText !== '' && mb_strtolower($optText) === mb_strtolower($part)) {
+                    $found = (string) ($idx + 1);
+                    break;
+                }
+            }
+            if ($found === null) {
+                return $answer;
+            }
+            $digits[] = $found;
+        }
+
+        return implode('', $digits);
     }
 
     /**
