@@ -8,6 +8,7 @@ use App\Models\OgeVariant;
 use App\Models\TeacherStudent;
 use App\Models\User;
 use App\Services\AuditLogger;
+use App\Services\MiniAppTaskSanitizer;
 use App\Services\MiniVariantService;
 use App\Services\OgeAttemptService;
 use App\Services\OgeVariantBuilderService;
@@ -37,6 +38,7 @@ class MiniAppController extends Controller
         private readonly OgeVariantPoolService $poolService,
         private readonly TaskDataService $taskData,
         private readonly TelegramMiniAppAuthService $tgMiniAuth,
+        private readonly MiniAppTaskSanitizer $taskSanitizer,
     ) {
     }
 
@@ -514,6 +516,9 @@ class MiniAppController extends Controller
 
             return $task;
         }, $tasks);
+
+        // Sanitize tasks once on server before rendering client payload.
+        $tasks = array_map(fn ($t) => is_array($t) ? $this->taskSanitizer->sanitize($t) : $t, $tasks);
 
         // Keep mini-test tasks ordered by exam number (6, 8, 9, 10, ...)
         if (is_array($tasks)) {

@@ -73,6 +73,14 @@ return [
             'replace_placeholders' => true,
         ],
 
+        'answer_resolver' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/answer-resolver.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 14,
+            'replace_placeholders' => true,
+        ],
+
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),

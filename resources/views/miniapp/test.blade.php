@@ -842,14 +842,7 @@
   function testApp() {
     return {
       // Data from server
-      tasks: @json(
-        collect($tasks)->map(function($t) {
-          // Strip answer from client-side data for security
-          $safe = $t;
-          unset($safe['answer']);
-          return $safe;
-        })->values()
-      ),
+      tasks: @json(collect($tasks)->values()),
       attemptId: @json($attempt->id),
       battleMode: @json($battleMode ?? false),
 

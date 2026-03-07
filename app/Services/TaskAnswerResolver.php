@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Log;
+
 class TaskAnswerResolver
 {
     public const UNKNOWN_ANSWER = 'нет в базе';
@@ -49,16 +51,22 @@ class TaskAnswerResolver
                 return (string) $task['answer'];
             }
             $opt = $task['options'][0] ?? null;
-            return $opt !== null && $opt !== '' ? (string) $opt : null;
+            if ($opt !== null && $opt !== '') {
+                $this->logFallback('matching_options_first', $zadanie, $task);
+                return (string) $opt;
+            }
+            return null;
         }
 
         if ($type === 'graph_statements' && !empty($task['formula'])) {
+            $this->logFallback('graph_formula', $zadanie, $task);
             return (string) $task['formula'];
         }
 
         if ($type === 'count_integers' && !empty($task['left']) && !empty($task['right'])) {
             $betweenCount = $this->countIntegersBetween((string) $task['left'], (string) $task['right']);
             if ($betweenCount !== null) {
+                $this->logFallback('count_integers_derived', $zadanie, $task);
                 return (string) $betweenCount;
             }
         }
@@ -70,6 +78,7 @@ class TaskAnswerResolver
 
             if (!empty($task['options']) || !empty($zadanie['options'])) {
                 // В JSON выборных задач первый вариант хранится как корректный.
+                $this->logFallback('choice_default_first', $zadanie, $task);
                 return '1';
             }
         }
@@ -77,14 +86,17 @@ class TaskAnswerResolver
         if (isset($task['correct']) && is_numeric($task['correct'])) {
             $idx = (int) $task['correct'];
             if (isset($task['options'][$idx])) {
+                $this->logFallback('correct_index_to_option', $zadanie, $task);
                 return (string) $task['options'][$idx];
             }
+            $this->logFallback('correct_index_to_position', $zadanie, $task);
             return (string) ($idx + 1);
         }
 
         if (!empty($task['options']) && is_array($task['options'])) {
             $first = $task['options'][0] ?? null;
             if ($first !== null && $first !== '') {
+                $this->logFallback('task_options_first', $zadanie, $task);
                 return (string) $first;
             }
         }
@@ -92,11 +104,13 @@ class TaskAnswerResolver
         if (!empty($zadanie['options']) && is_array($zadanie['options'])) {
             $first = $zadanie['options'][0] ?? null;
             if ($first !== null && $first !== '') {
+                $this->logFallback('zadanie_options_first', $zadanie, $task);
                 return (string) $first;
             }
         }
 
         if (!empty($task['expression'])) {
+            $this->logFallback('expression_eval', $zadanie, $task);
             return $this->evaluateMathExpression((string) $task['expression']);
         }
 
@@ -146,6 +160,16 @@ class TaskAnswerResolver
         }
 
         return $value;
+    }
+
+    private function logFallback(string $method, array $zadanie, array $task): void
+    {
+        Log::channel('answer_resolver')->info('TaskAnswerResolver fallback used', [
+            'method' => $method,
+            'topic_id' => $task['topic_id'] ?? $zadanie['topic_id'] ?? null,
+            'task_id' => $task['id'] ?? null,
+            'type' => $task['type'] ?? $zadanie['type'] ?? null,
+        ]);
     }
 
     private function resolveStatementsAnswer(array $statements): ?string
