@@ -6,6 +6,7 @@ class MiniAppTaskSanitizer
 {
     private const FIELDS_TO_STRIP = [
         'correct_answer',
+        'canonical_answer',
         'answer',
         'is_true',
     ];

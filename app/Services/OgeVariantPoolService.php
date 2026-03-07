@@ -21,6 +21,7 @@ class OgeVariantPoolService
 
     public function __construct(
         private readonly TaskDataService $taskData,
+        private readonly MiniAppTaskCanonicalizer $taskCanonicalizer,
     ) {
     }
 
@@ -390,7 +391,7 @@ class OgeVariantPoolService
             $normalized['correct_answer'] = $inner['answer'];
         }
 
-        return $normalized;
+        return $this->taskCanonicalizer->normalizeForUi($normalized);
     }
 
     protected function normalizeMatchingAnswer(string $rawAnswer, array $options): string

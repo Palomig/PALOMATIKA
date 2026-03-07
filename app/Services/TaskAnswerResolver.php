@@ -10,6 +10,10 @@ class TaskAnswerResolver
 
     public function resolveFromVariantTask(array $taskData): ?string
     {
+        if (isset($taskData['canonical_answer']) && $taskData['canonical_answer'] !== null && $taskData['canonical_answer'] !== '') {
+            return (string) $taskData['canonical_answer'];
+        }
+
         if (isset($taskData['correct_answer']) && $taskData['correct_answer'] !== null && $taskData['correct_answer'] !== '') {
             return (string) $taskData['correct_answer'];
         }

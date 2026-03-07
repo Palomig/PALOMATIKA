@@ -8,6 +8,7 @@ use App\Models\OgeVariant;
 use App\Models\TeacherStudent;
 use App\Models\User;
 use App\Services\AuditLogger;
+use App\Services\MiniAppTaskCanonicalizer;
 use App\Services\MiniAppTaskSanitizer;
 use App\Services\MiniVariantService;
 use App\Services\OgeAttemptService;
@@ -38,6 +39,7 @@ class MiniAppController extends Controller
         private readonly OgeVariantPoolService $poolService,
         private readonly TaskDataService $taskData,
         private readonly TelegramMiniAppAuthService $tgMiniAuth,
+        private readonly MiniAppTaskCanonicalizer $taskCanonicalizer,
         private readonly MiniAppTaskSanitizer $taskSanitizer,
     ) {
     }
@@ -470,51 +472,7 @@ class MiniAppController extends Controller
                 return $task;
             }
 
-            $inner = is_array($task['task'] ?? null) ? $task['task'] : [];
-
-            $task['text'] = $task['text'] ?? ($inner['text'] ?? null);
-            $task['expression'] = $task['expression'] ?? ($inner['expression'] ?? null);
-            if (($task['expression'] === null || $task['expression'] === '') && isset($inner['point_value'])) {
-                $task['expression'] = (string) $inner['point_value'];
-            }
-            if (($task['expression'] === null || $task['expression'] === '') && isset($inner['target'])) {
-                $task['expression'] = (string) $inner['target'];
-            }
-            if (($task['expression'] === null || $task['expression'] === '') && isset($task['point_value'])) {
-                $task['expression'] = (string) $task['point_value'];
-            }
-            if (($task['expression'] === null || $task['expression'] === '') && isset($task['target'])) {
-                $task['expression'] = (string) $task['target'];
-            }
-            $task['svg'] = $task['svg'] ?? ($inner['svg'] ?? null);
-            $task['image'] = $task['image'] ?? ($inner['image'] ?? null);
-            $task['options'] = $task['options'] ?? ($inner['options'] ?? null);
-
-            // statements-mode fallback for old payloads
-            if (($task['type'] ?? '') === 'statements') {
-                $statements = $task['selected_statements'] ?? $task['statements'] ?? [];
-                if (is_array($statements) && !empty($statements)) {
-                    // Ensure UI has visible content even when expression/svg are absent.
-                    $lines = [];
-                    foreach ($statements as $idx => $s) {
-                        if (is_array($s)) {
-                            $text = (string) ($s['text'] ?? '');
-                            $num = (int) ($s['display_number'] ?? ($idx + 1));
-                        } else {
-                            $text = (string) $s;
-                            $num = $idx + 1;
-                        }
-                        if ($text !== '') {
-                            $lines[] = $num . ') ' . e($text);
-                        }
-                    }
-                    if (!empty($lines) && empty($task['text'])) {
-                        $task['text'] = implode('<br>', $lines);
-                    }
-                }
-            }
-
-            return $task;
+            return $this->taskCanonicalizer->normalizeForUi($task);
         }, $tasks);
 
         // Sanitize tasks once on server before rendering client payload.
