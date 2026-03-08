@@ -51,22 +51,25 @@ class OgeAttemptService
         return DB::transaction(function () use ($student, $hash, $deviceMeta) {
             $variant = $this->resolveVariant($hash);
 
-            $attempt = OgeAttempt::firstOrCreate(
-                [
+            $attempt = OgeAttempt::query()
+                ->where('variant_id', $variant->id)
+                ->where('student_id', $student->id)
+                ->where('status', 'active')
+                ->lockForUpdate()
+                ->first();
+
+            if ($attempt) {
+                $attempt->update(['last_seen_at' => now()]);
+            } else {
+                $attempt = OgeAttempt::create([
                     'variant_id' => $variant->id,
                     'student_id' => $student->id,
-                ],
-                [
                     'status' => 'active',
                     'device_meta' => $deviceMeta,
                     'started_at' => now(),
                     'last_seen_at' => now(),
-                ]
-            );
+                ]);
 
-            if (!$attempt->wasRecentlyCreated) {
-                $attempt->update(['last_seen_at' => now()]);
-            } else {
                 $this->appendEvent($attempt, 'attempt_started', null, [
                     'variant_hash' => $hash,
                 ]);
