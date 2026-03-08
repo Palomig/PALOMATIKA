@@ -907,40 +907,7 @@
       },
 
       normalizedOptions(task) {
-        const candidates = [
-          task?.options,
-          task?.task?.options,
-          task?.variants,
-          task?.task?.variants,
-          task?.answers,
-          task?.task?.answers,
-          task?.choices,
-          task?.task?.choices,
-        ];
-
-        const normalize = (opts) => {
-          if (Array.isArray(opts)) return opts;
-          if (opts && typeof opts === 'object') return Object.values(opts);
-          if (typeof opts === 'string') {
-            const s = opts.trim();
-            if (!s) return [];
-            // Support serialized options like "1) ...\n2) ..." as a fallback.
-            const parts = s
-              .split(/\n+/)
-              .map(x => x.trim())
-              .filter(Boolean)
-              .map(x => x.replace(/^\d+\)\s*/, ''));
-            return parts.length ? parts : [s];
-          }
-          return [];
-        };
-
-        for (const source of candidates) {
-          const arr = normalize(source);
-          if (arr.length > 0) return arr;
-        }
-
-        return [];
+        return Array.isArray(task?.options) ? task.options : [];
       },
 
       optionAnswerValue(opt, idx) {
