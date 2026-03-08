@@ -584,7 +584,9 @@ class TaskDataService
         foreach ($blocks as $block) {
             foreach ($block['zadaniya'] ?? [] as $zadanie) {
                 $type = $zadanie['type'] ?? '';
-                if (in_array($type, ['matching', 'matching_signs', 'matching_4'])) {
+                // Only use canonical matching pools for random matching sets.
+                // Exclude block 2 legacy graph-derived pools to avoid unstable answer formats.
+                if (in_array($type, ['matching', 'matching_signs', 'matching_4'], true) && (int) ($block['number'] ?? 0) === 1) {
                     $tasks = $zadanie['tasks'] ?? [];
                     // Нужно минимум 3 задачи
                     if (count($tasks) >= 3) {

@@ -79,9 +79,26 @@ class ValidateProductionTasks extends Command
                             }
 
                             if (in_array($type, ['matching', 'matching_signs', 'matching_4'], true)) {
-                                if (!preg_match('/^[1-9]+$/', (string) $answer)) {
-                                    $topicErrors++;
-                                    $this->line("[ERR] topic {$topicId} task {$task['id']} matching_answer format");
+                                $answerStr = (string) $answer;
+                                if (!preg_match('/^[1-9]+$/', $answerStr)) {
+                                    $optionValues = [];
+                                    if (is_array($options)) {
+                                        foreach ($options as $opt) {
+                                            if (is_array($opt)) {
+                                                $val = $opt['value'] ?? $opt['label'] ?? $opt['text'] ?? null;
+                                                if (is_string($val) && $val !== '') {
+                                                    $optionValues[] = $val;
+                                                }
+                                            } elseif (is_string($opt) && $opt !== '') {
+                                                $optionValues[] = $opt;
+                                            }
+                                        }
+                                    }
+
+                                    if (!in_array($answerStr, $optionValues, true)) {
+                                        $topicErrors++;
+                                        $this->line("[ERR] topic {$topicId} task {$task['id']} matching_answer format");
+                                    }
                                 }
                             } else {
                                 if (preg_match('/^[1-9][0-9]*$/', (string) $answer) && is_array($options)) {
