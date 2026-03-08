@@ -46,5 +46,48 @@ class OgeVariantBuilderServiceTest extends TestCase
         $this->assertCount(3, $task['tasks'] ?? []);
         $this->assertCount(3, $task['formulas'] ?? []);
     }
+
+    public function test_statements_selection_is_deterministic_for_same_hash(): void
+    {
+        $taskDataService = $this->getMockBuilder(TaskDataService::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getRandomMatchingSet', 'getRandomTasksFromZadanie'])
+            ->getMock();
+
+        $taskDataService
+            ->expects($this->never())
+            ->method('getRandomMatchingSet');
+
+        $taskDataService
+            ->expects($this->exactly(2))
+            ->method('getRandomTasksFromZadanie')
+            ->with('06', 1, 1, 1)
+            ->willReturn([
+                [
+                    'type' => 'statements',
+                    'task' => [
+                        'answer' => null,
+                    ],
+                    'statements' => [
+                        ['text' => 'S1', 'is_true' => true],
+                        ['text' => 'S2', 'is_true' => false],
+                        ['text' => 'S3', 'is_true' => true],
+                        ['text' => 'S4', 'is_true' => false],
+                        ['text' => 'S5', 'is_true' => true],
+                    ],
+                ],
+            ]);
+
+        $service = new OgeVariantBuilderService($taskDataService);
+
+        $first = $service->build('same-hash', ['06_1_1']);
+        $second = $service->build('same-hash', ['06_1_1']);
+
+        $firstTask = $first['tasks'][0] ?? [];
+        $secondTask = $second['tasks'][0] ?? [];
+
+        $this->assertSame($firstTask['selected_statements'] ?? null, $secondTask['selected_statements'] ?? null);
+        $this->assertSame($firstTask['correct_answer'] ?? null, $secondTask['correct_answer'] ?? null);
+    }
 }
 

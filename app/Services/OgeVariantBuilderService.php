@@ -81,7 +81,12 @@ class OgeVariantBuilderService
                 continue;
             }
 
-            $randomZadanie = $zadaniyaList[array_rand($zadaniyaList)];
+            $randomIndex = $this->pickRandomIndex(count($zadaniyaList));
+            if ($randomIndex === null) {
+                continue;
+            }
+
+            $randomZadanie = $zadaniyaList[$randomIndex];
 
             $tasksFromZadanie = $this->taskDataService->getRandomTasksFromZadanie(
                 $topicId,
@@ -158,10 +163,7 @@ class OgeVariantBuilderService
             $selected = [];
 
             if (count($allStatements) > 3) {
-                $keys = array_rand($allStatements, 3);
-                if (!is_array($keys)) {
-                    $keys = [$keys];
-                }
+                $keys = $this->pickDistinctRandomIndexes(count($allStatements), 3);
                 sort($keys);
                 foreach ($keys as $key) {
                     $selected[] = $allStatements[$key];
@@ -188,6 +190,42 @@ class OgeVariantBuilderService
 
         $task['correct_answer'] = $task['task']['answer'] ?? null;
         return $task;
+    }
+
+    /**
+     * Deterministic random index based on mt_rand() seed configured in build().
+     */
+    private function pickRandomIndex(int $count): ?int
+    {
+        if ($count <= 0) {
+            return null;
+        }
+
+        return mt_rand(0, $count - 1);
+    }
+
+    /**
+     * Deterministically pick distinct indexes without relying on array_rand().
+     *
+     * @return array<int, int>
+     */
+    private function pickDistinctRandomIndexes(int $poolSize, int $take): array
+    {
+        if ($poolSize <= 0 || $take <= 0) {
+            return [];
+        }
+
+        $available = range(0, $poolSize - 1);
+        $picked = [];
+
+        $limit = min($take, $poolSize);
+        for ($i = 0; $i < $limit; $i++) {
+            $idx = mt_rand(0, count($available) - 1);
+            $picked[] = $available[$idx];
+            array_splice($available, $idx, 1);
+        }
+
+        return $picked;
     }
 
     private function buildMatchingCorrectAnswer(array $matchingSet): ?string
