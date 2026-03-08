@@ -19,7 +19,7 @@ class MiniAppTaskCanonicalizerTest extends TestCase
 
         $this->assertSame('choice_index', $norm['answer_kind']);
         $this->assertSame('2', $norm['canonical_answer']);
-        $this->assertSame('2', $norm['correct_answer']);
+        $this->assertSame('b', $norm['correct_answer']);
     }
 
     public function test_matching_task_keeps_matching_order_kind(): void

@@ -15,6 +15,39 @@ class ValidateProductionTasksCommandTest extends TestCase
         parent::tearDown();
     }
 
+    public function test_matching_signs_answer_is_not_validated_as_choice_index_range(): void
+    {
+        $data = [
+            'blocks' => [[
+                'zadaniya' => [[
+                    'number' => 1,
+                    'type' => 'matching_signs',
+                    'tasks' => [[
+                        'id' => 1,
+                        'status' => 'production',
+                        'answer' => '213',
+                        'options' => ['A', 'B', 'C'],
+                    ]],
+                ]],
+            ]],
+        ];
+
+        $mock = Mockery::mock(TaskDataService::class);
+        $mock->shouldReceive('getAllTopicsMeta')->andReturn(['11' => ['id' => '11']]);
+        $mock->shouldReceive('topicDataExists')->with('11')->andReturnTrue();
+        $mock->shouldReceive('getTopicData')->with('11')->andReturn($data);
+        $mock->shouldReceive('saveTopicData')->never();
+
+        $this->app->instance(TaskDataService::class, $mock);
+
+        $code = Artisan::call('tasks:validate', [
+            '--topic' => '11',
+            '--production-only' => true,
+        ]);
+
+        $this->assertSame(0, $code);
+    }
+
     public function test_fix_types_converts_int_answer_to_string_for_choice_task(): void
     {
         $data = [

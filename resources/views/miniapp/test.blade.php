@@ -710,8 +710,8 @@
               <div class="test-options">
                 <template x-for="(opt, oi) in normalizedOptions(currentTask)" :key="oi">
                   <div class="test-option"
-                       :class="{ 'selected': answers[currentTask.task_number] === String(oi + 1) }"
-                       @click="selectOption(oi)">
+                       :class="{ 'selected': answers[currentTask.task_number] === optionAnswerValue(opt, oi) }"
+                       @click="selectOption(opt, oi)">
                     <div class="test-option-letter" x-text="['А','Б','В','Г','Д','Е'][oi] || (oi+1)"></div>
                     <div class="test-option-text" x-html="optionHtml(opt)"></div>
                   </div>
@@ -943,6 +943,11 @@
         return [];
       },
 
+      optionAnswerValue(opt, idx) {
+        const id = String(opt?.id ?? '').trim();
+        return id || String(idx + 1);
+      },
+
       optionHtml(opt) {
         const raw = String(opt?.label ?? opt?.text ?? opt ?? '').trim();
         if (!raw) return '';
@@ -1028,10 +1033,9 @@
       },
 
       // Answer handling
-      selectOption(idx) {
+      selectOption(opt, idx) {
         const tn = this.currentTask.task_number;
-        // Store answers in 1-based format (1..N) to match resolver/scoring expectations.
-        this.answers[tn] = String(idx + 1);
+        this.answers[tn] = this.optionAnswerValue(opt, idx);
         this.scheduleCommit();
       },
 

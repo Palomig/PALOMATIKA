@@ -58,11 +58,15 @@ class MiniAppTaskCanonicalizer
         }
         if ($canonical !== null && $canonical !== '') {
             $task['canonical_answer'] = (string) $canonical;
-            // Backward compatible alias for existing scorer.
+            // Default alias; may be overridden to stable option id for choice tasks.
             $task['correct_answer'] = (string) $canonical;
         }
 
         $task = $this->attachCanonicalOptionId($task);
+
+        if (($task['answer_kind'] ?? null) === 'choice_index' && !empty($task['canonical_option_id'])) {
+            $task['correct_answer'] = (string) $task['canonical_option_id'];
+        }
 
         return $task;
     }

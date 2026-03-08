@@ -78,7 +78,7 @@ class ValidateProductionTasks extends Command
                                 }
                             }
 
-                            if ($type === 'matching') {
+                            if (in_array($type, ['matching', 'matching_signs', 'matching_4'], true)) {
                                 if (!preg_match('/^[1-9]+$/', (string) $answer)) {
                                     $topicErrors++;
                                     $this->line("[ERR] topic {$topicId} task {$task['id']} matching_answer format");
