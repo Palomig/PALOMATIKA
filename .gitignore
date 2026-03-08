@@ -28,3 +28,11 @@ yarn-error.log
 
 # Source archives (already extracted)
 *.zip
+
+# Local tooling and scratch artifacts
+/.codex/
+/.venv/
+/tmp/
+/tmp_exports/
+/public/debug-*.php
+/scripts/__pycache__/
