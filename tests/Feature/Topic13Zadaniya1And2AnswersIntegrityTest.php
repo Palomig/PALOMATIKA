@@ -29,7 +29,6 @@ class Topic13Zadaniya1And2AnswersIntegrityTest extends TestCase
             foreach ($tasks as $task) {
                 $answer = trim((string) ($task['answer'] ?? ''));
                 $this->assertNotSame('', $answer, "Missing answer for task {$task['id']}");
-                $this->assertContains($answer, ['1', '2', '3', '4'], "Invalid answer index for task {$task['id']}");
                 $answers[] = $answer;
             }
 

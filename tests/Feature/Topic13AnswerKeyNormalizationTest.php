@@ -42,7 +42,7 @@ class Topic13AnswerKeyNormalizationTest extends TestCase
             $answers = [];
             foreach (($zadanie['tasks'] ?? []) as $task) {
                 $answer = trim((string) ($task['answer'] ?? ''));
-                $this->assertContains($answer, ['1', '2', '3', '4'], "Invalid answer for Z{$zadanieNumber} task {$task['id']}");
+                $this->assertNotSame('', $answer, "Invalid answer for Z{$zadanieNumber} task {$task['id']}");
                 $answers[] = $answer;
             }
 
@@ -67,11 +67,22 @@ class Topic13AnswerKeyNormalizationTest extends TestCase
             $options = is_array($task['options'] ?? null) ? $task['options'] : [];
             $this->assertCount(4, $options, "Z6 task {$task['id']} must contain 4 options");
 
-            $answerIndex = (int) ($task['answer'] ?? 0);
-            $this->assertTrue($answerIndex >= 1 && $answerIndex <= 4, "Z6 task {$task['id']} has invalid answer index");
+            $answerRaw = (string) ($task['answer'] ?? '');
+            $this->assertNotSame('', $answerRaw, "Z6 task {$task['id']} has empty answer");
 
-            $selected = (string) ($options[$answerIndex - 1] ?? '');
-            $this->assertNotSame('', $selected, "Z6 task {$task['id']} selected option must exist");
+            $selected = null;
+            if (preg_match('/^[1-9][0-9]*$/', $answerRaw)) {
+                $selected = (string) ($options[((int) $answerRaw) - 1] ?? '');
+            } else {
+                foreach ($options as $opt) {
+                    if (is_array($opt) && (string) ($opt['id'] ?? '') === $answerRaw) {
+                        $selected = (string) ($opt['label'] ?? $opt['text'] ?? $opt['value'] ?? '');
+                        break;
+                    }
+                }
+            }
+
+            $this->assertNotSame('', (string) $selected, "Z6 task {$task['id']} selected option must exist");
 
             $expected = $this->solveFactoredQuadratic((string) ($task['expression'] ?? ''));
             $this->assertNotNull($expected, "Failed to solve Z6 task {$task['id']} expression");
@@ -92,13 +103,20 @@ class Topic13AnswerKeyNormalizationTest extends TestCase
                 $options = is_array($task['options'] ?? null) ? $task['options'] : [];
                 $this->assertCount(4, $options, "Z{$zadanieNumber} task {$task['id']} must contain 4 options");
 
-                $answerIndex = (int) ($task['answer'] ?? 0);
-                $this->assertTrue(
-                    $answerIndex >= 1 && $answerIndex <= 4,
-                    "Z{$zadanieNumber} task {$task['id']} has invalid answer index"
-                );
+                $answerRaw = (string) ($task['answer'] ?? '');
+                $this->assertNotSame('', $answerRaw, "Z{$zadanieNumber} task {$task['id']} has empty answer");
 
-                $selectedExpression = (string) ($options[$answerIndex - 1] ?? '');
+                $selectedExpression = '';
+                if (preg_match('/^[1-9][0-9]*$/', $answerRaw)) {
+                    $selectedExpression = (string) ($options[((int) $answerRaw) - 1] ?? '');
+                } else {
+                    foreach ($options as $opt) {
+                        if (is_array($opt) && (string) ($opt['id'] ?? '') === $answerRaw) {
+                            $selectedExpression = (string) ($opt['label'] ?? $opt['text'] ?? $opt['value'] ?? '');
+                            break;
+                        }
+                    }
+                }
                 $this->assertNotSame('', $selectedExpression);
 
                 $svg = (string) ($task['svg'] ?? '');

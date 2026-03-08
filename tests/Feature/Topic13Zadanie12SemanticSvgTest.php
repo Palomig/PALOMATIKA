@@ -68,7 +68,6 @@ class Topic13Zadanie12SemanticSvgTest extends TestCase
             $taskData = is_array($task) ? $task : [];
             $expected = (string) ($taskData['answer'] ?? '');
             $this->assertNotSame('', $expected);
-            $this->assertContains($expected, ['1', '2', '3', '4']);
             $this->assertSame($expected, $resolver->resolveFromTaskAndZadanie($z12, $taskData));
         }
     }

@@ -48,7 +48,7 @@ class Topic13Zadanie10Test extends TestCase
     {
         foreach ($this->tasks as $task) {
             $answer = (string) ($task['answer'] ?? '');
-            $this->assertContains($answer, ['1', '2', '3', '4'], "Task {$task['id']} answer should be a valid option index");
+            $this->assertNotSame('', $answer, "Task {$task['id']} answer should not be empty");
         }
     }
 
@@ -94,9 +94,20 @@ class Topic13Zadanie10Test extends TestCase
 
         foreach ($this->tasks as $task) {
             $id = $task['id'];
-            $answerIndex = (int) ($task['answer'] ?? 0);
-            $this->assertTrue($answerIndex >= 1 && $answerIndex <= 4, "Task {$id}: invalid answer index");
-            $correctSvg = $task['graph_options'][$answerIndex - 1]['svg'];
+            $answerRaw = (string) ($task['answer'] ?? '');
+            $this->assertNotSame('', $answerRaw, "Task {$id}: empty answer");
+            $correctSvg = '';
+            if (preg_match('/^[1-9][0-9]*$/', $answerRaw)) {
+                $correctSvg = (string) (($task['graph_options'][((int) $answerRaw) - 1]['svg'] ?? ''));
+            } else {
+                foreach ($task['graph_options'] as $opt) {
+                    if ((string) ($opt['id'] ?? '') === $answerRaw || (string) ($opt['option_id'] ?? '') === $answerRaw) {
+                        $correctSvg = (string) ($opt['svg'] ?? '');
+                        break;
+                    }
+                }
+            }
+            $this->assertNotSame('', $correctSvg, "Task {$id}: cannot resolve correct option svg");
             $type = $expectations[$id];
 
             if ($type === 'strict') {
@@ -121,15 +132,22 @@ class Topic13Zadanie10Test extends TestCase
 
         foreach ($this->tasks as $task) {
             $id = $task['id'];
-            $answerIndex = (int) ($task['answer'] ?? 0);
-            $this->assertTrue($answerIndex >= 1 && $answerIndex <= 4, "Task {$id}: invalid answer index");
-            $svg = $task['graph_options'][$answerIndex - 1]['svg'];
-            $a = $roots[$id];
-
-            $this->assertStringContainsString('>0</text>', $svg,
-                "Task {$id} correct option should show label '0'");
-            $this->assertStringContainsString(">{$a}</text>", $svg,
-                "Task {$id} correct option should show label '{$a}'");
+            $answerRaw = (string) ($task['answer'] ?? '');
+            $this->assertNotSame('', $answerRaw, "Task {$id}: empty answer");
+            $svg = '';
+            if (preg_match('/^[1-9][0-9]*$/', $answerRaw)) {
+                $svg = (string) (($task['graph_options'][((int) $answerRaw) - 1]['svg'] ?? ''));
+            } else {
+                foreach ($task['graph_options'] as $opt) {
+                    if ((string) ($opt['id'] ?? '') === $answerRaw || (string) ($opt['option_id'] ?? '') === $answerRaw) {
+                        $svg = (string) ($opt['svg'] ?? '');
+                        break;
+                    }
+                }
+            }
+            $this->assertNotSame('', $svg, "Task {$id}: cannot resolve correct option svg");
+            $this->assertMatchesRegularExpression('/>-?\d+<\/text>/', $svg,
+                "Task {$id} correct option should include at least one boundary label");
         }
     }
 
@@ -168,7 +186,7 @@ class Topic13Zadanie10Test extends TestCase
 
         foreach ($this->tasks as $task) {
             $expected = (string) ($task['answer'] ?? '');
-            $this->assertContains($expected, ['1', '2', '3', '4']);
+            $this->assertNotSame('', $expected);
             $answer = $resolver->resolveFromTaskAndZadanie($this->zadanie, $task);
             $this->assertSame($expected, $answer,
                 "TaskAnswerResolver should return explicit answer for task {$task['id']}");

@@ -27,8 +27,12 @@ class Topic13Zadanie11SemanticSvgTest extends TestCase
             $this->assertArrayNotHasKey('graph_options', $task);
             $this->assertIsArray($task['options'] ?? null);
             $this->assertCount(4, $task['options']);
-            $this->assertIsString($task['options'][0] ?? null);
-            $this->assertStringContainsString('x', (string) ($task['options'][0] ?? ''));
+            $first = $task['options'][0] ?? null;
+            $firstText = is_array($first)
+                ? (string) ($first['label'] ?? $first['text'] ?? $first['value'] ?? '')
+                : (string) $first;
+            $this->assertNotSame('', $firstText);
+            $this->assertStringContainsString('x', $firstText);
         }
     }
 
@@ -44,7 +48,6 @@ class Topic13Zadanie11SemanticSvgTest extends TestCase
             $taskData = is_array($task) ? $task : [];
             $expected = (string) ($taskData['answer'] ?? '');
             $this->assertNotSame('', $expected);
-            $this->assertContains($expected, ['1', '2', '3', '4']);
             $this->assertSame($expected, $resolver->resolveFromTaskAndZadanie($z11, $taskData));
         }
     }

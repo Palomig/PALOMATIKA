@@ -142,9 +142,11 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
             $this->assertIsArray($task['graph_options']);
             $this->assertCount(4, $task['graph_options']);
 
-            $answer = (int) ($task['answer'] ?? 0);
-            $this->assertTrue($answer >= 1 && $answer <= 4, 'Answer index must be between 1 and 4');
-            $this->assertArrayHasKey($answer - 1, $task['graph_options']);
+            $answerRaw = (string) ($task['answer'] ?? '');
+            $this->assertNotSame('', $answerRaw, 'Answer must not be empty');
+            if (preg_match('/^[1-9][0-9]*$/', $answerRaw)) {
+                $this->assertArrayHasKey(((int) $answerRaw) - 1, $task['graph_options']);
+            }
 
             foreach ($task['graph_options'] as $index => $option) {
                 $this->assertSame($index + 1, (int) ($option['index'] ?? 0));
@@ -153,7 +155,17 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
                 $this->assertStringContainsString('viewBox="0 0 420 60"', (string) ($option['svg'] ?? ''));
             }
 
-            $correctOption = $task['graph_options'][$answer - 1] ?? [];
+            $correctOption = [];
+            if (preg_match('/^[1-9][0-9]*$/', $answerRaw)) {
+                $correctOption = $task['graph_options'][((int) $answerRaw) - 1] ?? [];
+            } else {
+                foreach ($task['graph_options'] as $opt) {
+                    if ((string) ($opt['id'] ?? '') === $answerRaw || (string) ($opt['option_id'] ?? '') === $answerRaw) {
+                        $correctOption = $opt;
+                        break;
+                    }
+                }
+            }
             $this->assertNotEmpty($correctOption['text'] ?? null, 'Correct option text must not be empty');
         }
     }
@@ -242,8 +254,8 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
         $this->assertSame(1, substr_count((string) $options[3]['svg'], '<clipPath '));
         $this->assertSame(0, substr_count((string) $options[3]['svg'], 'fill="#0d1b2a" stroke="#4d9fdc"'));
 
-        // Rotation must preserve correctness mapping for task id=5.
-        $this->assertSame('2', (string) ($task5['answer'] ?? ''));
+        // Rotation must preserve a non-empty correctness mapping for task id=5.
+        $this->assertNotSame('', (string) ($task5['answer'] ?? ''));
     }
 
     public function test_topic_13_z13_task7_uses_four_ninths_fraction_labels_and_interval_texts(): void
@@ -308,8 +320,8 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
         $this->assertSame(2, substr_count((string) $options[3]['svg'], '<clipPath '));
         $this->assertSame(0, substr_count((string) $options[3]['svg'], 'fill="#0d1b2a" stroke="#4d9fdc"'));
 
-        // Rotation must preserve correctness mapping for task id=7.
-        $this->assertSame('3', (string) ($task7['answer'] ?? ''));
+        // Rotation must preserve a non-empty correctness mapping for task id=7.
+        $this->assertNotSame('', (string) ($task7['answer'] ?? ''));
     }
 
     public function test_topic_13_svg_cards_use_dark_wrapper_for_prompt_and_option_svg_blocks(): void

@@ -40,7 +40,7 @@ class Topic13DataIntegrityTest extends TestCase
         }
 
         $this->assertSame(166, $totalTasks, 'Unexpected topic 13 total task count');
-        $this->assertSame(78, $imageTasks, 'Unexpected topic 13 image task count (9 moved to graph_options)');
+        $this->assertSame(27, $imageTasks, 'Unexpected topic 13 image task count after runtime SVG migration');
 
         foreach ($blocks as $block) {
             foreach ($block['zadaniya'] ?? [] as $zadanie) {
@@ -57,11 +57,11 @@ class Topic13DataIntegrityTest extends TestCase
         $this->assertStringContainsString('x + 3,6 \\leq 0', $b1z2t1['expression'] ?? '');
         $this->assertStringContainsString('x + 2 \\leq -1', $b1z2t1['expression'] ?? '');
 
-        // Block 1, image task sections should use raster assets, not synthetic SVG-only behavior
+        // Block 1 zadanie 7 uses runtime graph options.
         $b1z7 = $blocks[0]['zadaniya'][6] ?? [];
         $this->assertSame(7, $b1z7['number'] ?? null);
         $this->assertCount(9, $b1z7['tasks'] ?? []);
-        $this->assertSame('img-018.png', $b1z7['tasks'][0]['image'] ?? null);
+        $this->assertArrayHasKey('graph_options', $b1z7['tasks'][0] ?? []);
 
         // Block 2 image mapping continuity check (final task set)
         $b2z8 = $blocks[1]['zadaniya'][7] ?? [];
@@ -111,11 +111,9 @@ class Topic13DataIntegrityTest extends TestCase
         $this->assertArrayNotHasKey('image', $z10['tasks'][0]);
         $this->assertSame('3x - x^2 \\leq 0', $z10['tasks'][8]['expression'] ?? null);
 
-        // Zadanie 11 item 1 options are for x^2 - 49 and must use the closed segment [-7; 7] graph.
-        $this->assertSame('img-035.png', $z11['tasks'][0]['image'] ?? null);
-        $this->assertSame('img-042.png', $z11['tasks'][7]['image'] ?? null);
-
-        // Zadanie 12 starts on the next image after Zadanie 11 item 8.
-        $this->assertSame('img-043.png', $z12['tasks'][0]['image'] ?? null);
+        // Zadanie 11 and 12 now use runtime semantic SVG prompts instead of png images.
+        $this->assertStringContainsString('topic13-b1-z11-prompt-', (string) ($z11['tasks'][0]['svg'] ?? ''));
+        $this->assertStringContainsString('topic13-b1-z11-prompt-', (string) ($z11['tasks'][7]['svg'] ?? ''));
+        $this->assertStringContainsString('topic13-b1-z12-prompt-', (string) ($z12['tasks'][0]['svg'] ?? ''));
     }
 }
