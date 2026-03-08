@@ -776,8 +776,23 @@ class MiniAppController extends Controller
             $taskMap = [];
             $cfg = $attempt->variant?->config_json;
             if (is_array($cfg) && isset($cfg['tasks']) && is_array($cfg['tasks'])) {
-                foreach ($cfg['tasks'] as $taskDef) {
-                    $num = (int) ($taskDef['task_number'] ?? 0);
+                foreach (array_values($cfg['tasks']) as $idx => $taskDef) {
+                    if (!is_array($taskDef)) {
+                        continue;
+                    }
+
+                    $num = (int) ($taskDef['task_number']
+                        ?? $taskDef['attempt_task_number']
+                        ?? $taskDef['test_number']
+                        ?? 0);
+
+                    // Fallback for legacy payloads without explicit task_number fields.
+                    if ($num <= 0) {
+                        $num = ($attempt->variant && $attempt->variant->isCustomRandom())
+                            ? ($idx + 1)
+                            : (6 + $idx);
+                    }
+
                     if ($num > 0) {
                         $taskMap[$num] = $taskDef;
                     }
