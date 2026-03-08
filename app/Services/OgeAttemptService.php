@@ -72,6 +72,7 @@ class OgeAttemptService
                 ]);
             }
 
+            $this->ensureVariantTaskSnapshot($variant);
             $this->ensureFrozenAnswerSnapshot($attempt);
 
             return [$variant, $attempt];
@@ -515,6 +516,33 @@ class OgeAttemptService
         $this->detailMapCache[$cacheKey] = $detailMap;
 
         return $answerMap;
+    }
+
+    private function ensureVariantTaskSnapshot(OgeVariant $variant): void
+    {
+        if ($variant->isCustomRandom()) {
+            return;
+        }
+
+        $config = is_array($variant->config_json ?? null) ? $variant->config_json : [];
+        if (is_array($config['tasks'] ?? null) && !empty($config['tasks'])) {
+            return;
+        }
+
+        $selected = is_array($config['zadaniya'] ?? null) ? $config['zadaniya'] : null;
+        $variantPayload = $this->variantBuilder->build($variant->hash, $selected);
+        $tasks = is_array($variantPayload['tasks'] ?? null) ? $variantPayload['tasks'] : [];
+        if (empty($tasks)) {
+            return;
+        }
+
+        $config['tasks'] = $tasks;
+
+        $variant->forceFill([
+            'config_json' => $config,
+        ])->save();
+
+        $variant->refresh();
     }
 
     private function ensureFrozenAnswerSnapshot(OgeAttempt $attempt): void
