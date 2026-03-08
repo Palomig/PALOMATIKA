@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Log;
+
 class MiniAppTaskCanonicalizer
 {
     public function normalizeForUi(array $task): array
@@ -76,7 +78,19 @@ class MiniAppTaskCanonicalizer
         $type = (string) ($task['type'] ?? $inner['type'] ?? '');
 
         if ($type === 'statements') {
-            $stmts = $task['selected_statements'] ?? $task['statements'] ?? [];
+            $stmts = $task['selected_statements'] ?? null;
+            if ($stmts === null) {
+                $raw = $task['statements'] ?? [];
+                if (is_array($raw) && count($raw) <= 3) {
+                    $stmts = $raw;
+                } elseif (is_array($raw) && count($raw) > 3) {
+                    Log::warning('Statements task without selected_statements', [
+                        'task_number' => $task['task_number'] ?? null,
+                    ]);
+                    return ['statements_mask', null];
+                }
+            }
+
             if (is_array($stmts) && !empty($stmts)) {
                 $digits = [];
                 foreach ($stmts as $idx => $s) {

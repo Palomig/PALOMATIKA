@@ -81,4 +81,16 @@ class TaskAnswerResolverTest extends TestCase
 
         $this->assertSame('220', $answer);
     }
+
+    public function test_returns_null_without_explicit_answer_for_choice_task(): void
+    {
+        $resolver = new TaskAnswerResolver();
+
+        $answer = $resolver->resolveFromTaskAndZadanie(
+            ['type' => 'choice', 'options' => ['A', 'B', 'C']],
+            ['options' => ['A', 'B', 'C']]
+        );
+
+        $this->assertNull($answer);
+    }
 }

@@ -128,20 +128,20 @@ class OgeFrozenSnapshotScoringTest extends TestCase
         [, $attempt] = $service->startAttempt($student, $variant->hash);
 
         $attempt = OgeAttempt::findOrFail($attempt->id);
-        $this->assertSame('1', (string) ($attempt->frozen_answers_json[6] ?? null));
+        $this->assertSame('a', (string) ($attempt->frozen_answers_json[6] ?? null));
 
         // Emulate data drift after attempt start: JSON changed to another answer.
         $config = $variant->config_json;
         $config['tasks'][0]['correct_answer'] = '2';
         $variant->update(['config_json' => $config]);
 
-        $service->commitAnswer($attempt, 6, '1');
+        $service->commitAnswer($attempt, 6, 'a');
 
         $scoring = OgeAttemptScoring::where('attempt_id', $attempt->id)
             ->where('task_number', 6)
             ->firstOrFail();
 
-        $this->assertSame('1', $scoring->correct_answer);
+        $this->assertSame('a', $scoring->correct_answer);
         $this->assertTrue((bool) $scoring->is_correct);
     }
 }

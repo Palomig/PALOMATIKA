@@ -81,36 +81,15 @@ class TaskAnswerResolver
             }
 
             if (!empty($task['options']) || !empty($zadanie['options'])) {
-                // В JSON выборных задач первый вариант хранится как корректный.
                 $this->logFallback('choice_default_first', $zadanie, $task);
-                return '1';
+                return null;
             }
         }
 
         if (isset($task['correct']) && is_numeric($task['correct'])) {
             $idx = (int) $task['correct'];
-            if (isset($task['options'][$idx])) {
-                $this->logFallback('correct_index_to_option', $zadanie, $task);
-                return (string) $task['options'][$idx];
-            }
             $this->logFallback('correct_index_to_position', $zadanie, $task);
             return (string) ($idx + 1);
-        }
-
-        if (!empty($task['options']) && is_array($task['options'])) {
-            $first = $task['options'][0] ?? null;
-            if ($first !== null && $first !== '') {
-                $this->logFallback('task_options_first', $zadanie, $task);
-                return (string) $first;
-            }
-        }
-
-        if (!empty($zadanie['options']) && is_array($zadanie['options'])) {
-            $first = $zadanie['options'][0] ?? null;
-            if ($first !== null && $first !== '') {
-                $this->logFallback('zadanie_options_first', $zadanie, $task);
-                return (string) $first;
-            }
         }
 
         if (!empty($task['expression'])) {
@@ -169,7 +148,7 @@ class TaskAnswerResolver
     private function logFallback(string $method, array $zadanie, array $task): void
     {
         try {
-            Log::channel('answer_resolver')->info('TaskAnswerResolver fallback used', [
+            Log::channel('answer_resolver')->warning('TaskAnswerResolver fallback used', [
                 'method' => $method,
                 'topic_id' => $task['topic_id'] ?? $zadanie['topic_id'] ?? null,
                 'task_id' => $task['id'] ?? null,

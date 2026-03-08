@@ -27,6 +27,7 @@ class OgeAttemptService
     public function __construct(
         private readonly OgeVariantBuilderService $variantBuilder,
         private readonly TaskAnswerResolver $answerResolver,
+        private readonly ?MiniAppTaskCanonicalizer $taskCanonicalizer = null,
     ) {
     }
 
@@ -559,6 +560,31 @@ class OgeAttemptService
             return;
         }
 
+        $canonicalizer = $this->taskCanonicalizer ?? app(MiniAppTaskCanonicalizer::class);
+        $variantTasksByNumber = $this->resolveVariantTasksByTaskNumber($attempt);
+
+        foreach ($correctMap as $taskNumber => $answer) {
+            if ($answer === null || $answer === '') {
+                continue;
+            }
+
+            $task = $variantTasksByNumber[(int) $taskNumber] ?? null;
+            if (!is_array($task)) {
+                continue;
+            }
+
+            $normalizedTask = $canonicalizer->normalizeForUi($task);
+            $kind = (string) ($normalizedTask['answer_kind'] ?? '');
+            if ($kind !== 'choice_index') {
+                continue;
+            }
+
+            $canonicalOptionId = $normalizedTask['canonical_option_id'] ?? null;
+            if (is_string($canonicalOptionId) && $canonicalOptionId !== '') {
+                $correctMap[(int) $taskNumber] = $canonicalOptionId;
+            }
+        }
+
         $attempt->forceFill([
             'frozen_answers_json' => $correctMap,
         ])->save();
@@ -583,6 +609,54 @@ class OgeAttemptService
         ]);
 
         return $this->detailMapCache[$cacheKey] ?? [];
+    }
+
+    /**
+     * @return array<int, array>
+     */
+    private function resolveVariantTasksByTaskNumber(OgeAttempt $attempt): array
+    {
+        $hash = $attempt->variant?->hash;
+        if (!$hash) {
+            return [];
+        }
+
+        $tasks = [];
+
+        if ($attempt->variant?->isCustomRandom()) {
+            $customTasks = $attempt->variant?->config_json['custom_tasks'] ?? [];
+            if ((!is_array($customTasks) || empty($customTasks)) && is_string($hash) && $hash !== '') {
+                $customTasks = $this->loadCustomRandomTasksByHash($hash);
+            }
+            if (is_array($customTasks)) {
+                $tasks = $customTasks;
+            }
+        } else {
+            $configuredTasks = $attempt->variant?->config_json['tasks'] ?? null;
+            if (is_array($configuredTasks) && !empty($configuredTasks)) {
+                $tasks = $configuredTasks;
+            } else {
+                $selected = $attempt->variant?->config_json['zadaniya'] ?? null;
+                $variantPayload = $this->variantBuilder->build($hash, is_array($selected) ? $selected : null);
+                $tasks = is_array($variantPayload['tasks'] ?? null) ? $variantPayload['tasks'] : [];
+            }
+        }
+
+        $indexed = [];
+        foreach ($tasks as $index => $taskData) {
+            if (!is_array($taskData)) {
+                continue;
+            }
+
+            $tn = (int) ($taskData['attempt_task_number'] ?? $taskData['task_number'] ?? $taskData['test_number'] ?? ($attempt->variant?->isCustomRandom() ? ($index + 1) : (6 + $index)));
+            if ($tn < 1 || $tn > 255) {
+                continue;
+            }
+
+            $indexed[$tn] = $taskData;
+        }
+
+        return $indexed;
     }
 
     /**

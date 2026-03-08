@@ -249,9 +249,9 @@ class MiniAppController extends Controller
             }
         }
 
-        // Last submitted attempt
+        // Last submitted/scored attempt
         $lastAttempt = OgeAttempt::where('student_id', $user->id)
-            ->where('status', 'submitted')
+            ->whereIn('status', ['submitted', 'scored'])
             ->orderByDesc('submitted_at')
             ->first();
 
@@ -269,7 +269,7 @@ class MiniAppController extends Controller
             }
         }
 
-        // Weak topics (from all submitted attempts)
+        // Weak topics (from all submitted/scored attempts)
         $weakTopics = $this->computeWeakTopics($user->id);
 
         $newFipiCount = $this->countNewFipiTasks();
@@ -450,8 +450,8 @@ class MiniAppController extends Controller
             ->where('student_id', $user->id)
             ->firstOrFail();
 
-        // If already submitted, redirect to results
-        if ($attempt->status === 'submitted') {
+        // If attempt is already finalized, redirect to results
+        if (in_array($attempt->status, ['submitted', 'scored', 'error'], true)) {
             return redirect('/tg/results/' . $attempt->id);
         }
 
@@ -519,7 +519,7 @@ class MiniAppController extends Controller
             ->where('student_id', $user->id)
             ->firstOrFail();
 
-        if (!in_array($attempt->status, ['submitted', 'scored'], true)) {
+        if (!in_array($attempt->status, ['submitted', 'scored', 'error'], true)) {
             return redirect('/tg/test/' . $attempt->id);
         }
 
@@ -599,7 +599,7 @@ class MiniAppController extends Controller
 
         // Get last result for context
         $lastAttempt = OgeAttempt::where('student_id', $user->id)
-            ->where('status', 'submitted')
+            ->whereIn('status', ['submitted', 'scored'])
             ->orderByDesc('submitted_at')
             ->first();
 
@@ -1023,7 +1023,7 @@ class MiniAppController extends Controller
     }
 
     /**
-     * Compute weak topics from all submitted attempts.
+     * Compute weak topics from all submitted/scored attempts.
      */
     protected function computeWeakTopics(int $userId): array
     {
@@ -1037,7 +1037,7 @@ class MiniAppController extends Controller
         $stats = DB::table('oge_attempt_scorings as s')
             ->join('oge_attempts as a', 'a.id', '=', 's.attempt_id')
             ->where('a.student_id', $userId)
-            ->where('a.status', 'submitted')
+            ->whereIn('a.status', ['submitted', 'scored'])
             ->select(
                 's.task_number',
                 DB::raw('COUNT(*) as total'),
