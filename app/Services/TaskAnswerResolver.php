@@ -168,12 +168,16 @@ class TaskAnswerResolver
 
     private function logFallback(string $method, array $zadanie, array $task): void
     {
-        Log::channel('answer_resolver')->info('TaskAnswerResolver fallback used', [
-            'method' => $method,
-            'topic_id' => $task['topic_id'] ?? $zadanie['topic_id'] ?? null,
-            'task_id' => $task['id'] ?? null,
-            'type' => $task['type'] ?? $zadanie['type'] ?? null,
-        ]);
+        try {
+            Log::channel('answer_resolver')->info('TaskAnswerResolver fallback used', [
+                'method' => $method,
+                'topic_id' => $task['topic_id'] ?? $zadanie['topic_id'] ?? null,
+                'task_id' => $task['id'] ?? null,
+                'type' => $task['type'] ?? $zadanie['type'] ?? null,
+            ]);
+        } catch (\Throwable) {
+            // Non-Laravel unit tests may run without facade container; ignore telemetry.
+        }
     }
 
     private function resolveStatementsAnswer(array $statements): ?string
@@ -247,14 +251,8 @@ class TaskAnswerResolver
             return null;
         }
 
-        try {
-            /** @var mixed $value */
-            $value = eval('return ' . $converted . ';');
-        } catch (\Throwable) {
-            return null;
-        }
-
-        if (!is_numeric($value)) {
+        $value = $this->evaluateSanitizedMath($converted);
+        if ($value === null) {
             return null;
         }
 
@@ -427,6 +425,263 @@ class TaskAnswerResolver
         }
 
         return null;
+    }
+
+    private function evaluateSanitizedMath(string $expr): ?float
+    {
+        $tokens = $this->tokenizeMathExpression($expr);
+        if ($tokens === null || empty($tokens)) {
+            return null;
+        }
+
+        $index = 0;
+        $value = $this->parseMathExpression($tokens, $index);
+        if ($value === null || $index !== count($tokens)) {
+            return null;
+        }
+
+        if (is_infinite($value) || is_nan($value)) {
+            return null;
+        }
+
+        return $value;
+    }
+
+    /**
+     * @return array<int, string>|null
+     */
+    private function tokenizeMathExpression(string $expr): ?array
+    {
+        if ($expr === '') {
+            return null;
+        }
+
+        $tokens = [];
+        $len = strlen($expr);
+        for ($i = 0; $i < $len;) {
+            $ch = $expr[$i];
+
+            if (ctype_space($ch)) {
+                $i++;
+                continue;
+            }
+
+            if ($ch === '*' && ($i + 1 < $len) && $expr[$i + 1] === '*') {
+                $tokens[] = '**';
+                $i += 2;
+                continue;
+            }
+
+            if (str_contains('+-*/(),', $ch)) {
+                $tokens[] = $ch;
+                $i++;
+                continue;
+            }
+
+            if (ctype_digit($ch) || $ch === '.') {
+                $start = $i;
+                $dotCount = 0;
+                while ($i < $len && (ctype_digit($expr[$i]) || $expr[$i] === '.')) {
+                    if ($expr[$i] === '.') {
+                        $dotCount++;
+                        if ($dotCount > 1) {
+                            return null;
+                        }
+                    }
+                    $i++;
+                }
+                $tokens[] = substr($expr, $start, $i - $start);
+                continue;
+            }
+
+            if (ctype_alpha($ch) || $ch === '_') {
+                $start = $i;
+                while ($i < $len && (ctype_alnum($expr[$i]) || $expr[$i] === '_')) {
+                    $i++;
+                }
+                $tokens[] = substr($expr, $start, $i - $start);
+                continue;
+            }
+
+            return null;
+        }
+
+        return $tokens;
+    }
+
+    /**
+     * expression := term (('+' | '-') term)*
+     */
+    private function parseMathExpression(array $tokens, int &$index): ?float
+    {
+        $value = $this->parseMathTerm($tokens, $index);
+        if ($value === null) {
+            return null;
+        }
+
+        while ($index < count($tokens)) {
+            $op = $tokens[$index];
+            if ($op !== '+' && $op !== '-') {
+                break;
+            }
+            $index++;
+            $rhs = $this->parseMathTerm($tokens, $index);
+            if ($rhs === null) {
+                return null;
+            }
+            $value = $op === '+' ? ($value + $rhs) : ($value - $rhs);
+        }
+
+        return $value;
+    }
+
+    /**
+     * term := power (('*' | '/') power)*
+     */
+    private function parseMathTerm(array $tokens, int &$index): ?float
+    {
+        $value = $this->parseMathPower($tokens, $index);
+        if ($value === null) {
+            return null;
+        }
+
+        while ($index < count($tokens)) {
+            $op = $tokens[$index];
+            if ($op !== '*' && $op !== '/') {
+                break;
+            }
+            $index++;
+            $rhs = $this->parseMathPower($tokens, $index);
+            if ($rhs === null) {
+                return null;
+            }
+
+            if ($op === '*') {
+                $value *= $rhs;
+            } else {
+                if (abs($rhs) < 1e-12) {
+                    return null;
+                }
+                $value /= $rhs;
+            }
+        }
+
+        return $value;
+    }
+
+    /**
+     * power := unary ('**' power)?
+     */
+    private function parseMathPower(array $tokens, int &$index): ?float
+    {
+        $value = $this->parseMathUnary($tokens, $index);
+        if ($value === null) {
+            return null;
+        }
+
+        if ($index < count($tokens) && $tokens[$index] === '**') {
+            $index++;
+            $rhs = $this->parseMathPower($tokens, $index);
+            if ($rhs === null) {
+                return null;
+            }
+            $value = pow($value, $rhs);
+        }
+
+        return $value;
+    }
+
+    /**
+     * unary := ('+' | '-') unary | primary
+     */
+    private function parseMathUnary(array $tokens, int &$index): ?float
+    {
+        if ($index < count($tokens) && ($tokens[$index] === '+' || $tokens[$index] === '-')) {
+            $op = $tokens[$index++];
+            $value = $this->parseMathUnary($tokens, $index);
+            if ($value === null) {
+                return null;
+            }
+            return $op === '-' ? -$value : $value;
+        }
+
+        return $this->parseMathPrimary($tokens, $index);
+    }
+
+    /**
+     * primary := number | '(' expression ')' | functionCall
+     */
+    private function parseMathPrimary(array $tokens, int &$index): ?float
+    {
+        if ($index >= count($tokens)) {
+            return null;
+        }
+
+        $token = $tokens[$index];
+
+        if ($token === '(') {
+            $index++;
+            $value = $this->parseMathExpression($tokens, $index);
+            if ($value === null || $index >= count($tokens) || $tokens[$index] !== ')') {
+                return null;
+            }
+            $index++;
+            return $value;
+        }
+
+        if (preg_match('/^\d+(?:\.\d+)?$|^\.\d+$/', $token)) {
+            $index++;
+            return (float) $token;
+        }
+
+        if (preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*$/', $token)) {
+            $name = $token;
+            $index++;
+            return $this->parseMathFunctionCall($name, $tokens, $index);
+        }
+
+        return null;
+    }
+
+    private function parseMathFunctionCall(string $name, array $tokens, int &$index): ?float
+    {
+        if ($index >= count($tokens) || $tokens[$index] !== '(') {
+            return null;
+        }
+        $index++; // skip '('
+
+        $args = [];
+        if ($index < count($tokens) && $tokens[$index] === ')') {
+            $index++;
+        } else {
+            while (true) {
+                $arg = $this->parseMathExpression($tokens, $index);
+                if ($arg === null) {
+                    return null;
+                }
+                $args[] = $arg;
+
+                if ($index >= count($tokens)) {
+                    return null;
+                }
+
+                if ($tokens[$index] === ')') {
+                    $index++;
+                    break;
+                }
+
+                if ($tokens[$index] !== ',') {
+                    return null;
+                }
+                $index++;
+            }
+        }
+
+        return match (strtolower($name)) {
+            'sqrt' => count($args) === 1 && $args[0] >= 0 ? sqrt($args[0]) : null,
+            'pow' => count($args) === 2 ? pow($args[0], $args[1]) : null,
+            default => null,
+        };
     }
 
     private function countIntegersBetween(string $leftExpr, string $rightExpr): ?int
