@@ -4,10 +4,12 @@ namespace Tests\Feature;
 
 use App\Services\TaskDataService;
 use Illuminate\Support\Facades\Cache;
+use Tests\Feature\Support\ResolvesTopicOptionAnswer;
 use Tests\TestCase;
 
 class Topic13RuntimeSvgMigrationTest extends TestCase
 {
+    use ResolvesTopicOptionAnswer;
     public function test_topic_13_block1_zadaniya_10_to_13_have_correct_visual_format(): void
     {
         Cache::forget('topic_data_13');
@@ -142,11 +144,8 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
             $this->assertIsArray($task['graph_options']);
             $this->assertCount(4, $task['graph_options']);
 
-            $answerRaw = (string) ($task['answer'] ?? '');
-            $this->assertNotSame('', $answerRaw, 'Answer must not be empty');
-            if (preg_match('/^[1-9][0-9]*$/', $answerRaw)) {
-                $this->assertArrayHasKey(((int) $answerRaw) - 1, $task['graph_options']);
-            }
+            $selected = $this->resolveSelectedOption($task, $task['graph_options']);
+            $this->assertNotNull($selected, 'Answer must resolve to one graph option');
 
             foreach ($task['graph_options'] as $index => $option) {
                 $this->assertSame($index + 1, (int) ($option['index'] ?? 0));
@@ -155,17 +154,8 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
                 $this->assertStringContainsString('viewBox="0 0 420 60"', (string) ($option['svg'] ?? ''));
             }
 
-            $correctOption = [];
-            if (preg_match('/^[1-9][0-9]*$/', $answerRaw)) {
-                $correctOption = $task['graph_options'][((int) $answerRaw) - 1] ?? [];
-            } else {
-                foreach ($task['graph_options'] as $opt) {
-                    if ((string) ($opt['id'] ?? '') === $answerRaw || (string) ($opt['option_id'] ?? '') === $answerRaw) {
-                        $correctOption = $opt;
-                        break;
-                    }
-                }
-            }
+            $correctOption = $this->resolveSelectedOption($task, $task['graph_options']);
+            $this->assertNotNull($correctOption, 'Correct option must resolve');
             $this->assertNotEmpty($correctOption['text'] ?? null, 'Correct option text must not be empty');
         }
     }

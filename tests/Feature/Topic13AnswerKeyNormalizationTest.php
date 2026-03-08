@@ -4,10 +4,12 @@ namespace Tests\Feature;
 
 use App\Services\TaskDataService;
 use Illuminate\Support\Facades\Cache;
+use Tests\Feature\Support\ResolvesTopicOptionAnswer;
 use Tests\TestCase;
 
 class Topic13AnswerKeyNormalizationTest extends TestCase
 {
+    use ResolvesTopicOptionAnswer;
     public function test_topic_13_required_zadaniya_have_populated_answers(): void
     {
         $path = storage_path('app/tasks/topic_13.json');
@@ -67,26 +69,12 @@ class Topic13AnswerKeyNormalizationTest extends TestCase
             $options = is_array($task['options'] ?? null) ? $task['options'] : [];
             $this->assertCount(4, $options, "Z6 task {$task['id']} must contain 4 options");
 
-            $answerRaw = (string) ($task['answer'] ?? '');
-            $this->assertNotSame('', $answerRaw, "Z6 task {$task['id']} has empty answer");
-
-            $selected = null;
-            if (preg_match('/^[1-9][0-9]*$/', $answerRaw)) {
-                $selected = (string) ($options[((int) $answerRaw) - 1] ?? '');
-            } else {
-                foreach ($options as $opt) {
-                    if (is_array($opt) && (string) ($opt['id'] ?? '') === $answerRaw) {
-                        $selected = (string) ($opt['label'] ?? $opt['text'] ?? $opt['value'] ?? '');
-                        break;
-                    }
-                }
-            }
-
-            $this->assertNotSame('', (string) $selected, "Z6 task {$task['id']} selected option must exist");
+            $selected = $this->resolveSelectedOption($task, $options);
+            $this->assertNotNull($selected, "Z6 task {$task['id']} selected option must resolve");
 
             $expected = $this->solveFactoredQuadratic((string) ($task['expression'] ?? ''));
             $this->assertNotNull($expected, "Failed to solve Z6 task {$task['id']} expression");
-            $this->assertSame($expected, $selected, "Z6 task {$task['id']} answer is not mapped to the true option");
+            $this->assertSame($expected, (string) ($selected['text'] ?? ''), "Z6 task {$task['id']} answer is not mapped to the true option");
         }
     }
 
@@ -103,21 +91,9 @@ class Topic13AnswerKeyNormalizationTest extends TestCase
                 $options = is_array($task['options'] ?? null) ? $task['options'] : [];
                 $this->assertCount(4, $options, "Z{$zadanieNumber} task {$task['id']} must contain 4 options");
 
-                $answerRaw = (string) ($task['answer'] ?? '');
-                $this->assertNotSame('', $answerRaw, "Z{$zadanieNumber} task {$task['id']} has empty answer");
-
-                $selectedExpression = '';
-                if (preg_match('/^[1-9][0-9]*$/', $answerRaw)) {
-                    $selectedExpression = (string) ($options[((int) $answerRaw) - 1] ?? '');
-                } else {
-                    foreach ($options as $opt) {
-                        if (is_array($opt) && (string) ($opt['id'] ?? '') === $answerRaw) {
-                            $selectedExpression = (string) ($opt['label'] ?? $opt['text'] ?? $opt['value'] ?? '');
-                            break;
-                        }
-                    }
-                }
-                $this->assertNotSame('', $selectedExpression);
+                $selected = $this->resolveSelectedOption($task, $options);
+                $this->assertNotNull($selected, "Z{$zadanieNumber} task {$task['id']} selected option must resolve");
+                $selectedExpression = (string) ($selected['text'] ?? '');
 
                 $svg = (string) ($task['svg'] ?? '');
                 $this->assertStringStartsWith('<svg ', $svg);

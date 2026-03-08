@@ -2,14 +2,15 @@
 
 namespace Tests\Feature;
 
-use App\Services\OptionRenderModePolicy;
 use App\Services\TaskAnswerResolver;
 use App\Services\TaskDataService;
 use Illuminate\Support\Facades\Cache;
+use Tests\Feature\Support\ResolvesTopicOptionAnswer;
 use Tests\TestCase;
 
 class Topic13Zadanie10Test extends TestCase
 {
+    use ResolvesTopicOptionAnswer;
     private array $zadanie;
     private array $tasks;
 
@@ -49,6 +50,10 @@ class Topic13Zadanie10Test extends TestCase
         foreach ($this->tasks as $task) {
             $answer = (string) ($task['answer'] ?? '');
             $this->assertNotSame('', $answer, "Task {$task['id']} answer should not be empty");
+            $this->assertNotNull(
+                $this->resolveSelectedOption($task, $task['graph_options'] ?? []),
+                "Task {$task['id']} answer should resolve to one graph option"
+            );
         }
     }
 
@@ -94,20 +99,9 @@ class Topic13Zadanie10Test extends TestCase
 
         foreach ($this->tasks as $task) {
             $id = $task['id'];
-            $answerRaw = (string) ($task['answer'] ?? '');
-            $this->assertNotSame('', $answerRaw, "Task {$id}: empty answer");
-            $correctSvg = '';
-            if (preg_match('/^[1-9][0-9]*$/', $answerRaw)) {
-                $correctSvg = (string) (($task['graph_options'][((int) $answerRaw) - 1]['svg'] ?? ''));
-            } else {
-                foreach ($task['graph_options'] as $opt) {
-                    if ((string) ($opt['id'] ?? '') === $answerRaw || (string) ($opt['option_id'] ?? '') === $answerRaw) {
-                        $correctSvg = (string) ($opt['svg'] ?? '');
-                        break;
-                    }
-                }
-            }
-            $this->assertNotSame('', $correctSvg, "Task {$id}: cannot resolve correct option svg");
+            $correctOption = $this->resolveSelectedOption($task, $task['graph_options']);
+            $this->assertNotNull($correctOption, "Task {$id}: cannot resolve correct option svg");
+            $correctSvg = (string) (($correctOption['raw']['svg'] ?? ''));
             $type = $expectations[$id];
 
             if ($type === 'strict') {
@@ -132,20 +126,9 @@ class Topic13Zadanie10Test extends TestCase
 
         foreach ($this->tasks as $task) {
             $id = $task['id'];
-            $answerRaw = (string) ($task['answer'] ?? '');
-            $this->assertNotSame('', $answerRaw, "Task {$id}: empty answer");
-            $svg = '';
-            if (preg_match('/^[1-9][0-9]*$/', $answerRaw)) {
-                $svg = (string) (($task['graph_options'][((int) $answerRaw) - 1]['svg'] ?? ''));
-            } else {
-                foreach ($task['graph_options'] as $opt) {
-                    if ((string) ($opt['id'] ?? '') === $answerRaw || (string) ($opt['option_id'] ?? '') === $answerRaw) {
-                        $svg = (string) ($opt['svg'] ?? '');
-                        break;
-                    }
-                }
-            }
-            $this->assertNotSame('', $svg, "Task {$id}: cannot resolve correct option svg");
+            $selected = $this->resolveSelectedOption($task, $task['graph_options']);
+            $this->assertNotNull($selected, "Task {$id}: cannot resolve correct option svg");
+            $svg = (string) (($selected['raw']['svg'] ?? ''));
             $this->assertMatchesRegularExpression('/>-?\d+<\/text>/', $svg,
                 "Task {$id} correct option should include at least one boundary label");
         }
