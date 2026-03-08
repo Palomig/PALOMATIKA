@@ -40,8 +40,10 @@
       document.querySelectorAll('.task-render-scope').forEach(function (el) {
         renderMathInElement(el, {
           delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '\\[', right: '\\]', display: true },
             { left: '\\(', right: '\\)', display: false },
-            { left: '$$', right: '$$', display: true }
+            { left: '$', right: '$', display: false }
           ],
           throwOnError: false
         });
@@ -90,7 +92,7 @@
         <summary>
           Вариант {{ $w['variant_hash'] ?: ('#'.$w['attempt_id']) }} · Задание {{ $w['task_number'] }}
         </summary>
-        <div class="err-meta">Ответ ученика: <b>{{ $w['student_answer'] }}</b> · Верный: <b>{{ $w['correct_answer'] }}</b></div>
+        <div class="err-meta task-render-scope">Ответ ученика: <b>{{ $w['student_answer'] }}</b> · Верный: <b>{{ $w['correct_answer'] }}</b></div>
         <div class="task-box task-render-scope">
           @if(!empty($w['task_text']))
             <div>{!! nl2br(e($w['task_text'])) !!}</div>
