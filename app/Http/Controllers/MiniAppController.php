@@ -475,6 +475,10 @@ class MiniAppController extends Controller
             return $this->taskCanonicalizer->normalizeForUi($task);
         }, $tasks);
 
+        if (config('features.shuffle_options', false)) {
+            $tasks = array_map(fn ($t) => is_array($t) ? $this->shuffleTaskOptionsForAttempt($t, (int) $attempt->id) : $t, $tasks);
+        }
+
         // Sanitize tasks once on server before rendering client payload.
         $tasks = array_map(fn ($t) => is_array($t) ? $this->taskSanitizer->sanitize($t) : $t, $tasks);
 
@@ -1189,6 +1193,38 @@ class MiniAppController extends Controller
                 'task_count' => count($selectedTasks),
             ],
         ]);
+    }
+
+    private function shuffleTaskOptionsForAttempt(array $task, int $attemptId): array
+    {
+        $options = $task['options'] ?? null;
+        if (!is_array($options) || count($options) < 2) {
+            return $task;
+        }
+
+        $type = (string) ($task['type'] ?? '');
+        if (in_array($type, ['matching', 'matching_signs', 'matching_4', 'statements'], true)) {
+            return $task;
+        }
+
+        // Deterministic shuffle per attempt/task, so UI remains stable on refresh.
+        $seed = crc32($attemptId . ':' . (string) ($task['task_number'] ?? 0));
+        mt_srand($seed);
+        $indexes = range(0, count($options) - 1);
+        for ($i = count($indexes) - 1; $i > 0; $i--) {
+            $j = mt_rand(0, $i);
+            [$indexes[$i], $indexes[$j]] = [$indexes[$j], $indexes[$i]];
+        }
+        mt_srand();
+
+        $shuffled = [];
+        foreach ($indexes as $idx) {
+            $shuffled[] = $options[$idx];
+        }
+
+        $task['options'] = $shuffled;
+
+        return $task;
     }
 
     protected function modeName(string $mode): string
