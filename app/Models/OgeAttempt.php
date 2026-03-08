@@ -13,6 +13,7 @@ class OgeAttempt extends Model
         'student_id',
         'status',
         'device_meta',
+        'frozen_answers_json',
         'started_at',
         'submitted_at',
         'last_seen_at',
@@ -20,6 +21,7 @@ class OgeAttempt extends Model
 
     protected $casts = [
         'device_meta' => 'array',
+        'frozen_answers_json' => 'array',
         'started_at' => 'datetime',
         'submitted_at' => 'datetime',
         'last_seen_at' => 'datetime',

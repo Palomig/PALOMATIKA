@@ -72,6 +72,8 @@ class OgeAttemptService
                 ]);
             }
 
+            $this->ensureFrozenAnswerSnapshot($attempt);
+
             return [$variant, $attempt];
         });
     }
@@ -444,7 +446,19 @@ class OgeAttemptService
 
     private function scoreAttempt(OgeAttempt $attempt): void
     {
-        $correctByTaskNumber = $this->getCorrectAnswerMap($attempt);
+        $correctByTaskNumber = is_array($attempt->frozen_answers_json)
+            ? $attempt->frozen_answers_json
+            : [];
+
+        if (empty($correctByTaskNumber)) {
+            Log::warning('Scoring from live data (no frozen answers)', [
+                'attempt_id' => $attempt->id,
+                'variant_id' => $attempt->variant_id,
+            ]);
+
+            $correctByTaskNumber = $this->getCorrectAnswerMap($attempt);
+        }
+
         if (empty($correctByTaskNumber)) {
             return;
         }
@@ -464,7 +478,14 @@ class OgeAttemptService
             return;
         }
 
-        $correctMap = $this->getCorrectAnswerMap($attempt);
+        $correctMap = is_array($attempt->frozen_answers_json)
+            ? $attempt->frozen_answers_json
+            : [];
+
+        if (empty($correctMap)) {
+            $correctMap = $this->getCorrectAnswerMap($attempt);
+        }
+
         $correct = $correctMap[$taskNumber] ?? null;
 
         $this->persistScoringRow($attempt->id, $taskNumber, $userAnswer, $correct);
@@ -494,6 +515,24 @@ class OgeAttemptService
         $this->detailMapCache[$cacheKey] = $detailMap;
 
         return $answerMap;
+    }
+
+    private function ensureFrozenAnswerSnapshot(OgeAttempt $attempt): void
+    {
+        if (is_array($attempt->frozen_answers_json) && !empty($attempt->frozen_answers_json)) {
+            return;
+        }
+
+        $correctMap = $this->getCorrectAnswerMap($attempt);
+        if (empty($correctMap)) {
+            return;
+        }
+
+        $attempt->forceFill([
+            'frozen_answers_json' => $correctMap,
+        ])->save();
+
+        $attempt->refresh();
     }
 
     /**
