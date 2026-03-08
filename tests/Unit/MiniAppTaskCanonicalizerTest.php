@@ -67,4 +67,46 @@ class MiniAppTaskCanonicalizerTest extends TestCase
         $this->assertSame('numeric_or_text', $norm['answer_kind']);
         $this->assertSame('0.03', $norm['canonical_answer']);
     }
+
+    public function test_options_get_stable_ids_from_legacy_string_list(): void
+    {
+        $svc = new MiniAppTaskCanonicalizer();
+        $task = [
+            'type' => 'choice',
+            'task' => [
+                'answer' => '2',
+                'options' => ['A', 'B', 'C'],
+            ],
+        ];
+
+        $norm = $svc->normalizeForUi($task);
+
+        $this->assertSame('a', $norm['options'][0]['id']);
+        $this->assertSame('b', $norm['options'][1]['id']);
+        $this->assertSame('B', $norm['options'][1]['label']);
+        $this->assertSame('2', $norm['canonical_answer']); // backward compatible
+        $this->assertSame('b', $norm['canonical_option_id']); // forward compatible
+    }
+
+    public function test_options_keep_existing_ids_in_object_format(): void
+    {
+        $svc = new MiniAppTaskCanonicalizer();
+        $task = [
+            'type' => 'choice',
+            'task' => [
+                'answer' => '1',
+                'options' => [
+                    ['id' => 'opt-x', 'value' => 'X'],
+                    ['id' => 'opt-y', 'text' => 'Y'],
+                ],
+            ],
+        ];
+
+        $norm = $svc->normalizeForUi($task);
+
+        $this->assertSame('opt-x', $norm['options'][0]['id']);
+        $this->assertSame('opt-y', $norm['options'][1]['id']);
+        $this->assertSame('X', $norm['options'][0]['label']);
+        $this->assertSame('Y', $norm['options'][1]['label']);
+    }
 }

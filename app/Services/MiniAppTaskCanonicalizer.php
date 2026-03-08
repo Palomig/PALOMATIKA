@@ -27,6 +27,7 @@ class MiniAppTaskCanonicalizer
         $task['svg'] = $task['svg'] ?? ($inner['svg'] ?? null);
         $task['image'] = $task['image'] ?? ($inner['image'] ?? null);
         $task['options'] = $task['options'] ?? ($inner['options'] ?? null);
+        $task = $this->normalizeStableOptions($task);
 
         // statements-mode fallback for old payloads
         if (($task['type'] ?? '') === 'statements') {
@@ -60,6 +61,8 @@ class MiniAppTaskCanonicalizer
             // Backward compatible alias for existing scorer.
             $task['correct_answer'] = (string) $canonical;
         }
+
+        $task = $this->attachCanonicalOptionId($task);
 
         return $task;
     }
@@ -106,5 +109,70 @@ class MiniAppTaskCanonicalizer
         }
 
         return ['numeric_or_text', $raw];
+    }
+
+    private function normalizeStableOptions(array $task): array
+    {
+        $options = $task['options'] ?? null;
+        if (!is_array($options) || empty($options)) {
+            return $task;
+        }
+
+        $normalized = [];
+        foreach (array_values($options) as $index => $option) {
+            $defaultId = $this->optionIdByIndex($index);
+
+            if (is_array($option)) {
+                $id = isset($option['id']) && $option['id'] !== '' ? (string) $option['id'] : $defaultId;
+                $label = (string) ($option['label'] ?? $option['text'] ?? $option['value'] ?? '');
+
+                $normalized[] = array_merge($option, [
+                    'id' => $id,
+                    'label' => $label,
+                    'text' => (string) ($option['text'] ?? $label),
+                    'value' => (string) ($option['value'] ?? $label),
+                ]);
+                continue;
+            }
+
+            $label = (string) $option;
+            $normalized[] = [
+                'id' => $defaultId,
+                'label' => $label,
+                'text' => $label,
+                'value' => $label,
+            ];
+        }
+
+        $task['options'] = $normalized;
+
+        return $task;
+    }
+
+    private function attachCanonicalOptionId(array $task): array
+    {
+        $kind = (string) ($task['answer_kind'] ?? '');
+        $canonical = (string) ($task['canonical_answer'] ?? '');
+        $options = $task['options'] ?? null;
+
+        if ($kind !== 'choice_index' || !is_array($options) || !preg_match('/^[1-9][0-9]*$/', $canonical)) {
+            return $task;
+        }
+
+        $index = (int) $canonical - 1;
+        if (isset($options[$index]['id'])) {
+            $task['canonical_option_id'] = (string) $options[$index]['id'];
+        }
+
+        return $task;
+    }
+
+    private function optionIdByIndex(int $index): string
+    {
+        if ($index < 26) {
+            return chr(ord('a') + $index);
+        }
+
+        return 'o' . ($index + 1);
     }
 }
