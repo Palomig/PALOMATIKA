@@ -213,11 +213,16 @@
                         {{-- Обычные текстовые варианты --}}
                         <div class="flex flex-wrap gap-3 mt-3">
                             @foreach($taskOptions as $i => $option)
+                                @php
+                                    $optionText = is_array($option)
+                                        ? (string) ($option['label'] ?? $option['text'] ?? $option['value'] ?? '')
+                                        : (string) $option;
+                                @endphp
                                 <span class="bg-slate-700/70 text-slate-300 px-4 py-2 rounded-lg hover:bg-slate-600 cursor-pointer transition">
-                                    @if(str_contains((string) $option, '\\'))
-                                        {{ $i + 1 }}) ${{ $option }}$
+                                    @if(str_contains($optionText, '\\'))
+                                        {{ $i + 1 }}) ${{ $optionText }}$
                                     @else
-                                        {{ $i + 1 }}) {{ $option }}
+                                        {{ $i + 1 }}) {{ $optionText }}
                                     @endif
                                 </span>
                             @endforeach
