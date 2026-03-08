@@ -810,12 +810,35 @@ class MiniAppController extends Controller
                         $taskOptions = array_values(array_filter(array_map('trim', preg_split('/\R+/', $rawOptions))));
                     }
 
+                    $taskText = (string) (($def['instruction'] ?? $inner['instruction'] ?? $def['text'] ?? $inner['text'] ?? $inner['prompt'] ?? $inner['question'] ?? $inner['condition'] ?? $inner['body'] ?? $inner['content'] ?? '') ?: '');
+                    $taskExpression = (string) (($def['expression'] ?? $inner['expression'] ?? $inner['formula'] ?? $inner['latex'] ?? '') ?: '');
+
+                    // Topic 07 point-value tasks: ensure "indicated number" is visible in profile cards.
+                    $targetValue = $def['target'] ?? $inner['target'] ?? $def['point_value'] ?? $inner['point_value'] ?? null;
+                    if (($taskExpression === '' || $taskExpression === null) && $targetValue !== null && $targetValue !== '') {
+                        $taskExpression = (string) $targetValue;
+                    }
+
+                    // Topic 14 progression tasks: fallback to sequence fields if expression is absent.
+                    if ($taskExpression === '' && (($def['task_number'] ?? $taskNum) === 14 || ($def['topic_id'] ?? null) === '14')) {
+                        $a1 = $inner['a1'] ?? $def['a1'] ?? null;
+                        $d = $inner['d'] ?? $def['d'] ?? null;
+                        $n = $inner['n'] ?? $def['n'] ?? null;
+                        if ($a1 !== null || $d !== null || $n !== null) {
+                            $parts = [];
+                            if ($a1 !== null) $parts[] = 'a_1=' . $a1;
+                            if ($d !== null) $parts[] = 'd=' . $d;
+                            if ($n !== null) $parts[] = 'n=' . $n;
+                            $taskExpression = implode(',\; ', $parts);
+                        }
+                    }
+
                     $wrongTasks[] = [
                         'attempt_id' => (int) $attempt->id,
                         'variant_hash' => (string) ($attempt->variant->hash ?? ''),
                         'task_number' => $taskNum,
-                        'task_text' => (string) (($def['instruction'] ?? $inner['instruction'] ?? $def['text'] ?? $inner['text'] ?? '') ?: ''),
-                        'task_expression' => (string) (($def['expression'] ?? $inner['expression'] ?? '') ?: ''),
+                        'task_text' => $taskText,
+                        'task_expression' => $taskExpression,
                         'task_svg' => (string) (($def['svg'] ?? $inner['svg'] ?? '') ?: ''),
                         'task_image' => (string) (($def['image'] ?? $inner['image'] ?? '') ?: ''),
                         'task_options' => $taskOptions,
