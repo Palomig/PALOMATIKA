@@ -810,6 +810,44 @@ class MiniAppController extends Controller
                         $taskOptions = array_values(array_filter(array_map('trim', preg_split('/\R+/', $rawOptions))));
                     }
 
+                    // Fallbacks for task types where options are stored differently.
+                    if (empty($taskOptions)) {
+                        $statementRows = $def['selected_statements'] ?? $inner['selected_statements'] ?? $def['statements'] ?? $inner['statements'] ?? null;
+                        if (is_array($statementRows) && !empty($statementRows)) {
+                            foreach (array_values($statementRows) as $idx => $row) {
+                                if (is_array($row)) {
+                                    $txt = trim((string) ($row['text'] ?? ''));
+                                    if ($txt !== '') {
+                                        $taskOptions[] = [
+                                            'label' => (($row['display_number'] ?? ($idx + 1)) . ') ' . $txt),
+                                        ];
+                                    }
+                                } elseif (is_string($row) && trim($row) !== '') {
+                                    $taskOptions[] = [
+                                        'label' => (($idx + 1) . ') ' . trim($row)),
+                                    ];
+                                }
+                            }
+                        }
+                    }
+
+                    if (empty($taskOptions)) {
+                        $matchingTasks = $def['tasks'] ?? $inner['tasks'] ?? null;
+                        if (is_array($matchingTasks) && !empty($matchingTasks)) {
+                            foreach (array_values($matchingTasks) as $idx => $row) {
+                                if (!is_array($row)) {
+                                    continue;
+                                }
+                                $left = trim((string) ($row['text'] ?? $row['label'] ?? $row['left'] ?? ''));
+                                if ($left !== '') {
+                                    $taskOptions[] = [
+                                        'label' => (($idx + 1) . ') ' . $left),
+                                    ];
+                                }
+                            }
+                        }
+                    }
+
                     $taskText = (string) (($def['instruction'] ?? $inner['instruction'] ?? $def['text'] ?? $inner['text'] ?? $inner['prompt'] ?? $inner['question'] ?? $inner['condition'] ?? $inner['body'] ?? $inner['content'] ?? '') ?: '');
                     $taskExpression = (string) (($def['expression'] ?? $inner['expression'] ?? $inner['formula'] ?? $inner['latex'] ?? '') ?: '');
 
