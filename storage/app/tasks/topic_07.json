@@ -3149,13 +3149,33 @@
                                 }
                             ],
                             "options": [
-                                "$x < y$ и $|x| < |y|$",
-                                "$x < y$ и $|x| > |y|$",
-                                "$x > y$ и $|x| > |y|$",
-                                "$x > y$ и $|x| < |y|$"
+                                {
+                                    "id": "a",
+                                    "label": "$x < y$ и $|x| < |y|$",
+                                    "text": "$x < y$ и $|x| < |y|$",
+                                    "value": "$x < y$ и $|x| < |y|$"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "$x < y$ и $|x| > |y|$",
+                                    "text": "$x < y$ и $|x| > |y|$",
+                                    "value": "$x < y$ и $|x| > |y|$"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "$x > y$ и $|x| > |y|$",
+                                    "text": "$x > y$ и $|x| > |y|$",
+                                    "value": "$x > y$ и $|x| > |y|$"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "$x > y$ и $|x| < |y|$",
+                                    "text": "$x > y$ и $|x| < |y|$",
+                                    "value": "$x > y$ и $|x| < |y|$"
+                                }
                             ],
                             "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-21b70e774896c37761a0ad16ee26ba17\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-21b70e774896c37761a0ad16ee26ba17)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">-5<\/text>\n  <line x1=\"53.75\" y1=\"28\" x2=\"53.75\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"53.75\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">-4<\/text>\n  <line x1=\"87.5\" y1=\"28\" x2=\"87.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"87.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">-3<\/text>\n  <line x1=\"121.25\" y1=\"28\" x2=\"121.25\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"121.25\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">-2<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">-1<\/text>\n  <line x1=\"188.75\" y1=\"28\" x2=\"188.75\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"188.75\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"222.5\" y1=\"28\" x2=\"222.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"222.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <line x1=\"256.25\" y1=\"28\" x2=\"256.25\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"256.25\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">2<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">3<\/text>\n  <circle cx=\"53.75\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"53.75\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">x<\/text>\n  <circle cx=\"256.25\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"256.25\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">y<\/text>\n<\/svg>",
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3172,13 +3192,33 @@
                                 }
                             ],
                             "options": [
-                                "$a < b$ и $|a| < |b|$",
-                                "$a < b$ и $|a| > |b|$",
-                                "$a > b$ и $|a| > |b|$",
-                                "$a > b$ и $|a| < |b|$"
+                                {
+                                    "id": "a",
+                                    "label": "$a < b$ и $|a| < |b|$",
+                                    "text": "$a < b$ и $|a| < |b|$",
+                                    "value": "$a < b$ и $|a| < |b|$"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "$a < b$ и $|a| > |b|$",
+                                    "text": "$a < b$ и $|a| > |b|$",
+                                    "value": "$a < b$ и $|a| > |b|$"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "$a > b$ и $|a| > |b|$",
+                                    "text": "$a > b$ и $|a| > |b|$",
+                                    "value": "$a > b$ и $|a| > |b|$"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "$a > b$ и $|a| < |b|$",
+                                    "text": "$a > b$ и $|a| < |b|$",
+                                    "value": "$a > b$ и $|a| < |b|$"
+                                }
                             ],
                             "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-45f1982ab8459a6112ccbde8bf1a3934\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-45f1982ab8459a6112ccbde8bf1a3934)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">-3<\/text>\n  <line x1=\"53.75\" y1=\"28\" x2=\"53.75\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"53.75\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">-2<\/text>\n  <line x1=\"87.5\" y1=\"28\" x2=\"87.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"87.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">-1<\/text>\n  <line x1=\"121.25\" y1=\"28\" x2=\"121.25\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"121.25\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <line x1=\"188.75\" y1=\"28\" x2=\"188.75\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"188.75\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">2<\/text>\n  <line x1=\"222.5\" y1=\"28\" x2=\"222.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"222.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">3<\/text>\n  <line x1=\"256.25\" y1=\"28\" x2=\"256.25\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"256.25\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">4<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">5<\/text>\n  <circle cx=\"53.75\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"53.75\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">a<\/text>\n  <circle cx=\"256.25\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"256.25\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">b<\/text>\n<\/svg>",
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         }
@@ -3196,13 +3236,33 @@
                             "point_value": -0.5,
                             "point_label": "a",
                             "options": [
-                                "$a$",
-                                "$a^2$",
-                                "$a^3$",
-                                "нет данных"
+                                {
+                                    "id": "a",
+                                    "label": "$a$",
+                                    "text": "$a$",
+                                    "value": "$a$"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "$a^2$",
+                                    "text": "$a^2$",
+                                    "value": "$a^2$"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "$a^3$",
+                                    "text": "$a^3$",
+                                    "value": "$a^3$"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "нет данных",
+                                    "text": "нет данных",
+                                    "value": "нет данных"
+                                }
                             ],
                             "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-e75da1f6d31cc4a2bedf391d5beceace\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-e75da1f6d31cc4a2bedf391d5beceace)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">-2<\/text>\n  <line x1=\"87.5\" y1=\"28\" x2=\"87.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"87.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">-1<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"222.5\" y1=\"28\" x2=\"222.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"222.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">2<\/text>\n  <circle cx=\"121.25\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"121.25\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">a<\/text>\n<\/svg>",
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3211,13 +3271,33 @@
                             "point_value": 0.5,
                             "point_label": "a",
                             "options": [
-                                "$a^2$",
-                                "$a^3$",
-                                "$a^4$",
-                                "нет данных"
+                                {
+                                    "id": "a",
+                                    "label": "$a^2$",
+                                    "text": "$a^2$",
+                                    "value": "$a^2$"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "$a^3$",
+                                    "text": "$a^3$",
+                                    "value": "$a^3$"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "$a^4$",
+                                    "text": "$a^4$",
+                                    "value": "$a^4$"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "нет данных",
+                                    "text": "нет данных",
+                                    "value": "нет данных"
+                                }
                             ],
                             "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-37019c337d88a4c7714097f15197ddcb\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-37019c337d88a4c7714097f15197ddcb)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"47\" y1=\"28\" x2=\"47\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"47\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.1<\/text>\n  <line x1=\"74\" y1=\"28\" x2=\"74\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"74\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.2<\/text>\n  <line x1=\"101\" y1=\"28\" x2=\"101\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"101\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.3<\/text>\n  <line x1=\"128\" y1=\"28\" x2=\"128\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"128\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.4<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.5<\/text>\n  <line x1=\"182\" y1=\"28\" x2=\"182\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"182\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.6<\/text>\n  <line x1=\"209\" y1=\"28\" x2=\"209\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"209\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.7<\/text>\n  <line x1=\"236\" y1=\"28\" x2=\"236\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"236\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.8<\/text>\n  <line x1=\"263\" y1=\"28\" x2=\"263\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"263\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.9<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <circle cx=\"155\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"155\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">a<\/text>\n<\/svg>",
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3226,13 +3306,33 @@
                             "point_value": -0.7,
                             "point_label": "a",
                             "options": [
-                                "$a^2$",
-                                "$a^3$",
-                                "$a^4$",
-                                "нет данных"
+                                {
+                                    "id": "a",
+                                    "label": "$a^2$",
+                                    "text": "$a^2$",
+                                    "value": "$a^2$"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "$a^3$",
+                                    "text": "$a^3$",
+                                    "value": "$a^3$"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "$a^4$",
+                                    "text": "$a^4$",
+                                    "value": "$a^4$"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "нет данных",
+                                    "text": "нет данных",
+                                    "value": "нет данных"
+                                }
                             ],
                             "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-ce57ef14a180a49788ea4192a60035ae\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-ce57ef14a180a49788ea4192a60035ae)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">-2<\/text>\n  <line x1=\"87.5\" y1=\"28\" x2=\"87.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"87.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">-1<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"222.5\" y1=\"28\" x2=\"222.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"222.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">2<\/text>\n  <circle cx=\"107.75\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"107.75\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">a<\/text>\n<\/svg>",
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3241,13 +3341,33 @@
                             "point_value": 1.5,
                             "point_label": "a",
                             "options": [
-                                "$a$",
-                                "$a^2$",
-                                "$a^3$",
-                                "нет данных"
+                                {
+                                    "id": "a",
+                                    "label": "$a$",
+                                    "text": "$a$",
+                                    "value": "$a$"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "$a^2$",
+                                    "text": "$a^2$",
+                                    "value": "$a^2$"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "$a^3$",
+                                    "text": "$a^3$",
+                                    "value": "$a^3$"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "нет данных",
+                                    "text": "нет данных",
+                                    "value": "нет данных"
+                                }
                             ],
                             "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-e13bccbc953335af6a87bd3a1cd857af\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-e13bccbc953335af6a87bd3a1cd857af)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"87.5\" y1=\"28\" x2=\"87.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"87.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.5<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <line x1=\"222.5\" y1=\"28\" x2=\"222.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"222.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1.5<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">2<\/text>\n  <circle cx=\"222.5\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"222.5\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">a<\/text>\n<\/svg>",
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         }
@@ -3264,12 +3384,32 @@
                             "condition": "$a < b$",
                             "question": "\\frac{2}{a} \\text{ и } \\frac{2}{b}",
                             "options": [
-                                "$\\frac{2}{a} > \\frac{2}{b}$",
-                                "$\\frac{2}{a} < \\frac{2}{b}$",
-                                "$\\frac{2}{a} = \\frac{2}{b}$",
-                                "невозможно"
+                                {
+                                    "id": "a",
+                                    "label": "$\\frac{2}{a} > \\frac{2}{b}$",
+                                    "text": "$\\frac{2}{a} > \\frac{2}{b}$",
+                                    "value": "$\\frac{2}{a} > \\frac{2}{b}$"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "$\\frac{2}{a} < \\frac{2}{b}$",
+                                    "text": "$\\frac{2}{a} < \\frac{2}{b}$",
+                                    "value": "$\\frac{2}{a} < \\frac{2}{b}$"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "$\\frac{2}{a} = \\frac{2}{b}$",
+                                    "text": "$\\frac{2}{a} = \\frac{2}{b}$",
+                                    "value": "$\\frac{2}{a} = \\frac{2}{b}$"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "невозможно",
+                                    "text": "невозможно",
+                                    "value": "невозможно"
+                                }
                             ],
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3278,12 +3418,32 @@
                             "condition": "$a > b$",
                             "question": "\\frac{1}{a} \\text{ и } \\frac{1}{b}",
                             "options": [
-                                "$\\frac{1}{a} > \\frac{1}{b}$",
-                                "$\\frac{1}{a} < \\frac{1}{b}$",
-                                "$\\frac{1}{a} = \\frac{1}{b}$",
-                                "невозможно"
+                                {
+                                    "id": "a",
+                                    "label": "$\\frac{1}{a} > \\frac{1}{b}$",
+                                    "text": "$\\frac{1}{a} > \\frac{1}{b}$",
+                                    "value": "$\\frac{1}{a} > \\frac{1}{b}$"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "$\\frac{1}{a} < \\frac{1}{b}$",
+                                    "text": "$\\frac{1}{a} < \\frac{1}{b}$",
+                                    "value": "$\\frac{1}{a} < \\frac{1}{b}$"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "$\\frac{1}{a} = \\frac{1}{b}$",
+                                    "text": "$\\frac{1}{a} = \\frac{1}{b}$",
+                                    "value": "$\\frac{1}{a} = \\frac{1}{b}$"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "невозможно",
+                                    "text": "невозможно",
+                                    "value": "невозможно"
+                                }
                             ],
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         }
@@ -3298,24 +3458,64 @@
                         {
                             "id": 1,
                             "options": [
-                                "$a - 49 < c - 49$",
-                                "$a + 23 < c + 23$",
-                                "$-\\frac{a}{26} < -\\frac{c}{26}$",
-                                "$\\frac{a}{5} < \\frac{c}{5}$"
+                                {
+                                    "id": "a",
+                                    "label": "$a - 49 < c - 49$",
+                                    "text": "$a - 49 < c - 49$",
+                                    "value": "$a - 49 < c - 49$"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "$a + 23 < c + 23$",
+                                    "text": "$a + 23 < c + 23$",
+                                    "value": "$a + 23 < c + 23$"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "$-\\frac{a}{26} < -\\frac{c}{26}$",
+                                    "text": "$-\\frac{a}{26} < -\\frac{c}{26}$",
+                                    "value": "$-\\frac{a}{26} < -\\frac{c}{26}$"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "$\\frac{a}{5} < \\frac{c}{5}$",
+                                    "text": "$\\frac{a}{5} < \\frac{c}{5}$",
+                                    "value": "$\\frac{a}{5} < \\frac{c}{5}$"
+                                }
                             ],
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
                         {
                             "id": 2,
                             "options": [
-                                "$a - 24 < c - 24$",
-                                "$a + 33 < c + 33$",
-                                "$-\\frac{a}{5} < -\\frac{c}{5}$",
-                                "$\\frac{a}{17} < \\frac{c}{17}$"
+                                {
+                                    "id": "a",
+                                    "label": "$a - 24 < c - 24$",
+                                    "text": "$a - 24 < c - 24$",
+                                    "value": "$a - 24 < c - 24$"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "$a + 33 < c + 33$",
+                                    "text": "$a + 33 < c + 33$",
+                                    "value": "$a + 33 < c + 33$"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "$-\\frac{a}{5} < -\\frac{c}{5}$",
+                                    "text": "$-\\frac{a}{5} < -\\frac{c}{5}$",
+                                    "value": "$-\\frac{a}{5} < -\\frac{c}{5}$"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "$\\frac{a}{17} < \\frac{c}{17}$",
+                                    "text": "$\\frac{a}{17} < \\frac{c}{17}$",
+                                    "value": "$\\frac{a}{17} < \\frac{c}{17}$"
+                                }
                             ],
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         }
@@ -3341,13 +3541,33 @@
                                 }
                             ],
                             "options": [
-                                "$\\frac{1}{a}, 1, \\frac{1}{b}$",
-                                "$1, \\frac{1}{b}, \\frac{1}{a}$",
-                                "$\\frac{1}{a}, \\frac{1}{b}, 1$",
-                                "$\\frac{1}{b}, \\frac{1}{a}, 1$"
+                                {
+                                    "id": "a",
+                                    "label": "$\\frac{1}{a}, 1, \\frac{1}{b}$",
+                                    "text": "$\\frac{1}{a}, 1, \\frac{1}{b}$",
+                                    "value": "$\\frac{1}{a}, 1, \\frac{1}{b}$"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "$1, \\frac{1}{b}, \\frac{1}{a}$",
+                                    "text": "$1, \\frac{1}{b}, \\frac{1}{a}$",
+                                    "value": "$1, \\frac{1}{b}, \\frac{1}{a}$"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "$\\frac{1}{a}, \\frac{1}{b}, 1$",
+                                    "text": "$\\frac{1}{a}, \\frac{1}{b}, 1$",
+                                    "value": "$\\frac{1}{a}, \\frac{1}{b}, 1$"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "$\\frac{1}{b}, \\frac{1}{a}, 1$",
+                                    "text": "$\\frac{1}{b}, \\frac{1}{a}, 1$",
+                                    "value": "$\\frac{1}{b}, \\frac{1}{a}, 1$"
+                                }
                             ],
                             "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-9d91172019d1885b8262d3021571141b\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-9d91172019d1885b8262d3021571141b)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">-1<\/text>\n  <line x1=\"110\" y1=\"28\" x2=\"110\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"110\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"200\" y1=\"28\" x2=\"200\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"200\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">2<\/text>\n  <circle cx=\"137\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"137\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">a<\/text>\n  <circle cx=\"173\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"173\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">b<\/text>\n<\/svg>",
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3364,13 +3584,33 @@
                                 }
                             ],
                             "options": [
-                                "$\\frac{1}{b}, 1, \\frac{1}{a}$",
-                                "$\\frac{1}{a}, 1, \\frac{1}{b}$",
-                                "$\\frac{1}{a}, \\frac{1}{b}, 1$",
-                                "$\\frac{1}{b}, \\frac{1}{a}, 1$"
+                                {
+                                    "id": "a",
+                                    "label": "$\\frac{1}{b}, 1, \\frac{1}{a}$",
+                                    "text": "$\\frac{1}{b}, 1, \\frac{1}{a}$",
+                                    "value": "$\\frac{1}{b}, 1, \\frac{1}{a}$"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "$\\frac{1}{a}, 1, \\frac{1}{b}$",
+                                    "text": "$\\frac{1}{a}, 1, \\frac{1}{b}$",
+                                    "value": "$\\frac{1}{a}, 1, \\frac{1}{b}$"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "$\\frac{1}{a}, \\frac{1}{b}, 1$",
+                                    "text": "$\\frac{1}{a}, \\frac{1}{b}, 1$",
+                                    "value": "$\\frac{1}{a}, \\frac{1}{b}, 1$"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "$\\frac{1}{b}, \\frac{1}{a}, 1$",
+                                    "text": "$\\frac{1}{b}, \\frac{1}{a}, 1$",
+                                    "value": "$\\frac{1}{b}, \\frac{1}{a}, 1$"
+                                }
                             ],
                             "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-ea52718b92f65cacdd81fa24df097273\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-ea52718b92f65cacdd81fa24df097273)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">-1<\/text>\n  <line x1=\"74\" y1=\"28\" x2=\"74\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"74\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"128\" y1=\"28\" x2=\"128\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"128\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <line x1=\"182\" y1=\"28\" x2=\"182\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"182\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">2<\/text>\n  <line x1=\"236\" y1=\"28\" x2=\"236\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"236\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">3<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">4<\/text>\n  <circle cx=\"155\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"155\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">a<\/text>\n  <circle cx=\"209\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"209\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">b<\/text>\n<\/svg>",
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3387,13 +3627,33 @@
                                 }
                             ],
                             "options": [
-                                "$1, \\frac{1}{a}, \\frac{1}{c}$",
-                                "$\\frac{1}{c}, \\frac{1}{a}, 1$",
-                                "$\\frac{1}{a}, \\frac{1}{c}, 1$",
-                                "$1, \\frac{1}{c}, \\frac{1}{a}$"
+                                {
+                                    "id": "a",
+                                    "label": "$1, \\frac{1}{a}, \\frac{1}{c}$",
+                                    "text": "$1, \\frac{1}{a}, \\frac{1}{c}$",
+                                    "value": "$1, \\frac{1}{a}, \\frac{1}{c}$"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "$\\frac{1}{c}, \\frac{1}{a}, 1$",
+                                    "text": "$\\frac{1}{c}, \\frac{1}{a}, 1$",
+                                    "value": "$\\frac{1}{c}, \\frac{1}{a}, 1$"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "$\\frac{1}{a}, \\frac{1}{c}, 1$",
+                                    "text": "$\\frac{1}{a}, \\frac{1}{c}, 1$",
+                                    "value": "$\\frac{1}{a}, \\frac{1}{c}, 1$"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "$1, \\frac{1}{c}, \\frac{1}{a}$",
+                                    "text": "$1, \\frac{1}{c}, \\frac{1}{a}$",
+                                    "value": "$1, \\frac{1}{c}, \\frac{1}{a}$"
+                                }
                             ],
                             "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-d46293f7d5ad75a8e0161ebb406b9042\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-d46293f7d5ad75a8e0161ebb406b9042)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">-1<\/text>\n  <line x1=\"87.5\" y1=\"28\" x2=\"87.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"87.5\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <line x1=\"222.5\" y1=\"28\" x2=\"222.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"222.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">2<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">3<\/text>\n  <circle cx=\"121.25\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"121.25\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">a<\/text>\n  <circle cx=\"188.75\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"188.75\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">c<\/text>\n<\/svg>",
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3410,13 +3670,33 @@
                                 }
                             ],
                             "options": [
-                                "$\\frac{1}{x}, 1, \\frac{1}{y}$",
-                                "$\\frac{1}{y}, 1, \\frac{1}{x}$",
-                                "$\\frac{1}{x}, \\frac{1}{y}, 1$",
-                                "$1, \\frac{1}{x}, \\frac{1}{y}$"
+                                {
+                                    "id": "a",
+                                    "label": "$\\frac{1}{x}, 1, \\frac{1}{y}$",
+                                    "text": "$\\frac{1}{x}, 1, \\frac{1}{y}$",
+                                    "value": "$\\frac{1}{x}, 1, \\frac{1}{y}$"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "$\\frac{1}{y}, 1, \\frac{1}{x}$",
+                                    "text": "$\\frac{1}{y}, 1, \\frac{1}{x}$",
+                                    "value": "$\\frac{1}{y}, 1, \\frac{1}{x}$"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "$\\frac{1}{x}, \\frac{1}{y}, 1$",
+                                    "text": "$\\frac{1}{x}, \\frac{1}{y}, 1$",
+                                    "value": "$\\frac{1}{x}, \\frac{1}{y}, 1$"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "$1, \\frac{1}{x}, \\frac{1}{y}$",
+                                    "text": "$1, \\frac{1}{x}, \\frac{1}{y}$",
+                                    "value": "$1, \\frac{1}{x}, \\frac{1}{y}$"
+                                }
                             ],
                             "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-282557f23f7d815e3c62a240c7248d8d\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-282557f23f7d815e3c62a240c7248d8d)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">-1<\/text>\n  <line x1=\"110\" y1=\"28\" x2=\"110\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"110\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"200\" y1=\"28\" x2=\"200\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"200\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">2<\/text>\n  <circle cx=\"146\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"146\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">x<\/text>\n  <circle cx=\"182\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"182\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">y<\/text>\n<\/svg>",
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         }
@@ -3443,13 +3723,33 @@
                                 3
                             ],
                             "options": [
-                                "\\frac{4}{7}",
-                                "\\frac{11}{5}",
-                                "2,6",
-                                "0,3"
+                                {
+                                    "id": "a",
+                                    "label": "\\frac{4}{7}",
+                                    "text": "\\frac{4}{7}",
+                                    "value": "\\frac{4}{7}"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "\\frac{11}{5}",
+                                    "text": "\\frac{11}{5}",
+                                    "value": "\\frac{11}{5}"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "2,6",
+                                    "text": "2,6",
+                                    "value": "2,6"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "0,3",
+                                    "text": "0,3",
+                                    "value": "0,3"
+                                }
                             ],
                             "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-22f0efb107731418be1a9357382dcb9d\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-22f0efb107731418be1a9357382dcb9d)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"110\" y1=\"28\" x2=\"110\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"110\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <line x1=\"200\" y1=\"28\" x2=\"200\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"200\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">2<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">3<\/text>\n  <circle cx=\"47\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"47\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n  <circle cx=\"71.3\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"71.3\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">B<\/text>\n  <circle cx=\"218\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"218\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">C<\/text>\n  <circle cx=\"254\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"254\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">D<\/text>\n<\/svg>",
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3467,13 +3767,33 @@
                                 2
                             ],
                             "options": [
-                                "\\frac{11}{7}",
-                                "\\frac{3}{2}",
-                                "1,55",
-                                "1,7"
+                                {
+                                    "id": "a",
+                                    "label": "\\frac{11}{7}",
+                                    "text": "\\frac{11}{7}",
+                                    "value": "\\frac{11}{7}"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "\\frac{3}{2}",
+                                    "text": "\\frac{3}{2}",
+                                    "value": "\\frac{3}{2}"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "1,55",
+                                    "text": "1,55",
+                                    "value": "1,55"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "1,7",
+                                    "text": "1,7",
+                                    "value": "1,7"
+                                }
                             ],
                             "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-4e9c35c45074f3fec136c08d48863f00\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-4e9c35c45074f3fec136c08d48863f00)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1.4<\/text>\n  <line x1=\"87.5\" y1=\"28\" x2=\"87.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"87.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1.5<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1.6<\/text>\n  <line x1=\"222.5\" y1=\"28\" x2=\"222.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"222.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1.7<\/text>\n  <circle cx=\"87.5\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"87.5\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n  <circle cx=\"121.25\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"121.25\" y=\"63\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">B<\/text>\n  <circle cx=\"134.75\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"134.75\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">C<\/text>\n  <circle cx=\"222.5\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"222.5\" y=\"63\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">D<\/text>\n<\/svg>",
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3491,13 +3811,33 @@
                                 3
                             ],
                             "options": [
-                                "\\frac{8}{3}",
-                                "\\frac{9}{4}",
-                                "2,55",
-                                "2,4"
+                                {
+                                    "id": "a",
+                                    "label": "\\frac{8}{3}",
+                                    "text": "\\frac{8}{3}",
+                                    "value": "\\frac{8}{3}"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "\\frac{9}{4}",
+                                    "text": "\\frac{9}{4}",
+                                    "value": "\\frac{9}{4}"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "2,55",
+                                    "text": "2,55",
+                                    "value": "2,55"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "2,4",
+                                    "text": "2,4",
+                                    "value": "2,4"
+                                }
                             ],
                             "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-9fa400ea513879d9fa0bca4c16131d2a\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-9fa400ea513879d9fa0bca4c16131d2a)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">2.1<\/text>\n  <line x1=\"53.75\" y1=\"28\" x2=\"53.75\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"53.75\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">2.2<\/text>\n  <line x1=\"87.5\" y1=\"28\" x2=\"87.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"87.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">2.3<\/text>\n  <line x1=\"121.25\" y1=\"28\" x2=\"121.25\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"121.25\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">2.4<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">2.5<\/text>\n  <line x1=\"188.75\" y1=\"28\" x2=\"188.75\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"188.75\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">2.6<\/text>\n  <line x1=\"222.5\" y1=\"28\" x2=\"222.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"222.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">2.7<\/text>\n  <line x1=\"256.25\" y1=\"28\" x2=\"256.25\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"256.25\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">2.8<\/text>\n  <circle cx=\"70.625\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"70.625\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n  <circle cx=\"121.25\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"121.25\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">B<\/text>\n  <circle cx=\"171.875\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"171.875\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">C<\/text>\n  <circle cx=\"212.375\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"212.375\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">D<\/text>\n<\/svg>",
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3515,13 +3855,33 @@
                                 0.5
                             ],
                             "options": [
-                                "\\frac{4}{13}",
-                                "\\frac{5}{14}",
-                                "0,29",
-                                "0,3"
+                                {
+                                    "id": "a",
+                                    "label": "\\frac{4}{13}",
+                                    "text": "\\frac{4}{13}",
+                                    "value": "\\frac{4}{13}"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "\\frac{5}{14}",
+                                    "text": "\\frac{5}{14}",
+                                    "value": "\\frac{5}{14}"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "0,29",
+                                    "text": "0,29",
+                                    "value": "0,29"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "0,3",
+                                    "text": "0,3",
+                                    "value": "0,3"
+                                }
                             ],
                             "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-2ee56e0901dfffbc68ece35db59576b4\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-2ee56e0901dfffbc68ece35db59576b4)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.2<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.3<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.4<\/text>\n  <circle cx=\"141.5\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"141.5\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n  <circle cx=\"155\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"155\" y=\"63\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">B<\/text>\n  <circle cx=\"168.5\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"168.5\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">C<\/text>\n  <circle cx=\"236\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"236\" y=\"63\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">D<\/text>\n<\/svg>",
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         }
@@ -3548,13 +3908,33 @@
                                 0.5
                             ],
                             "options": [
-                                "A",
-                                "B",
-                                "C",
-                                "D"
+                                {
+                                    "id": "a",
+                                    "label": "A",
+                                    "text": "A",
+                                    "value": "A"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "B",
+                                    "text": "B",
+                                    "value": "B"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "C",
+                                    "text": "C",
+                                    "value": "C"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "D",
+                                    "text": "D",
+                                    "value": "D"
+                                }
                             ],
                             "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-02f70ba022bf0b553e24c95ce7c9b382\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-02f70ba022bf0b553e24c95ce7c9b382)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"74\" y1=\"28\" x2=\"74\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"74\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.1<\/text>\n  <line x1=\"128\" y1=\"28\" x2=\"128\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"128\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.2<\/text>\n  <line x1=\"182\" y1=\"28\" x2=\"182\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"182\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.3<\/text>\n  <line x1=\"236\" y1=\"28\" x2=\"236\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"236\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.4<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.5<\/text>\n  <circle cx=\"74\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"74\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n  <circle cx=\"95.6\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"95.6\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">B<\/text>\n  <circle cx=\"138.8\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"138.8\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">C<\/text>\n  <circle cx=\"209\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"209\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">D<\/text>\n<\/svg>",
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3572,13 +3952,33 @@
                                 1
                             ],
                             "options": [
-                                "A",
-                                "B",
-                                "C",
-                                "D"
+                                {
+                                    "id": "a",
+                                    "label": "A",
+                                    "text": "A",
+                                    "value": "A"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "B",
+                                    "text": "B",
+                                    "value": "B"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "C",
+                                    "text": "C",
+                                    "value": "C"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "D",
+                                    "text": "D",
+                                    "value": "D"
+                                }
                             ],
                             "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-bcaf3b0aa404fe6d698927769999cd21\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-bcaf3b0aa404fe6d698927769999cd21)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.5<\/text>\n  <line x1=\"87.5\" y1=\"28\" x2=\"87.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"87.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.6<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.7<\/text>\n  <line x1=\"222.5\" y1=\"28\" x2=\"222.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"222.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.8<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.9<\/text>\n  <circle cx=\"87.5\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"87.5\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n  <circle cx=\"141.5\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"141.5\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">B<\/text>\n  <circle cx=\"175.25\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"175.25\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">C<\/text>\n  <circle cx=\"236\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"236\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">D<\/text>\n<\/svg>",
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3596,13 +3996,33 @@
                                 0.5
                             ],
                             "options": [
-                                "A",
-                                "B",
-                                "C",
-                                "D"
+                                {
+                                    "id": "a",
+                                    "label": "A",
+                                    "text": "A",
+                                    "value": "A"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "B",
+                                    "text": "B",
+                                    "value": "B"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "C",
+                                    "text": "C",
+                                    "value": "C"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "D",
+                                    "text": "D",
+                                    "value": "D"
+                                }
                             ],
                             "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-e091187d983c52ed8a11071f94406e99\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-e091187d983c52ed8a11071f94406e99)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#d4a855\" font-size=\"11\" font-weight=\"500\">0<\/text>\n  <line x1=\"74\" y1=\"28\" x2=\"74\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"74\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.1<\/text>\n  <line x1=\"128\" y1=\"28\" x2=\"128\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"128\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.2<\/text>\n  <line x1=\"182\" y1=\"28\" x2=\"182\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"182\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.3<\/text>\n  <line x1=\"236\" y1=\"28\" x2=\"236\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"236\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.4<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.5<\/text>\n  <circle cx=\"101\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"101\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n  <circle cx=\"138.8\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"138.8\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">B<\/text>\n  <circle cx=\"182\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"182\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">C<\/text>\n  <circle cx=\"236\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"236\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">D<\/text>\n<\/svg>",
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3620,13 +4040,33 @@
                                 1
                             ],
                             "options": [
-                                "A",
-                                "B",
-                                "C",
-                                "D"
+                                {
+                                    "id": "a",
+                                    "label": "A",
+                                    "text": "A",
+                                    "value": "A"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "B",
+                                    "text": "B",
+                                    "value": "B"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "C",
+                                    "text": "C",
+                                    "value": "C"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "D",
+                                    "text": "D",
+                                    "value": "D"
+                                }
                             ],
                             "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-f4e2ab9a9fc9f32ee2da7e11069ca5fd\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-f4e2ab9a9fc9f32ee2da7e11069ca5fd)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.5<\/text>\n  <line x1=\"74\" y1=\"28\" x2=\"74\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"74\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.6<\/text>\n  <line x1=\"128\" y1=\"28\" x2=\"128\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"128\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.7<\/text>\n  <line x1=\"182\" y1=\"28\" x2=\"182\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"182\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.8<\/text>\n  <line x1=\"236\" y1=\"28\" x2=\"236\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"236\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">0.9<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">1<\/text>\n  <circle cx=\"101\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"101\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n  <circle cx=\"138.8\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"138.8\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">B<\/text>\n  <circle cx=\"165.8\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"165.8\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">C<\/text>\n  <circle cx=\"209\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"209\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">D<\/text>\n<\/svg>",
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         }
@@ -3642,12 +4082,32 @@
                             "id": 1,
                             "expression": "\\sqrt{58}",
                             "options": [
-                                "[4; 5]",
-                                "[5; 6]",
-                                "[6; 7]",
-                                "[7; 8]"
+                                {
+                                    "id": "a",
+                                    "label": "[4; 5]",
+                                    "text": "[4; 5]",
+                                    "value": "[4; 5]"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "[5; 6]",
+                                    "text": "[5; 6]",
+                                    "value": "[5; 6]"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "[6; 7]",
+                                    "text": "[6; 7]",
+                                    "value": "[6; 7]"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "[7; 8]",
+                                    "text": "[7; 8]",
+                                    "value": "[7; 8]"
+                                }
                             ],
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3655,12 +4115,32 @@
                             "id": 2,
                             "expression": "\\sqrt{27}",
                             "options": [
-                                "[4; 5]",
-                                "[5; 6]",
-                                "[6; 7]",
-                                "[7; 8]"
+                                {
+                                    "id": "a",
+                                    "label": "[4; 5]",
+                                    "text": "[4; 5]",
+                                    "value": "[4; 5]"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "[5; 6]",
+                                    "text": "[5; 6]",
+                                    "value": "[5; 6]"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "[6; 7]",
+                                    "text": "[6; 7]",
+                                    "value": "[6; 7]"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "[7; 8]",
+                                    "text": "[7; 8]",
+                                    "value": "[7; 8]"
+                                }
                             ],
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3668,12 +4148,32 @@
                             "id": 3,
                             "expression": "\\sqrt{19}",
                             "options": [
-                                "[4; 5]",
-                                "[5; 6]",
-                                "[6; 7]",
-                                "[7; 8]"
+                                {
+                                    "id": "a",
+                                    "label": "[4; 5]",
+                                    "text": "[4; 5]",
+                                    "value": "[4; 5]"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "[5; 6]",
+                                    "text": "[5; 6]",
+                                    "value": "[5; 6]"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "[6; 7]",
+                                    "text": "[6; 7]",
+                                    "value": "[6; 7]"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "[7; 8]",
+                                    "text": "[7; 8]",
+                                    "value": "[7; 8]"
+                                }
                             ],
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3681,12 +4181,32 @@
                             "id": 4,
                             "expression": "\\sqrt{63}",
                             "options": [
-                                "[4; 5]",
-                                "[5; 6]",
-                                "[6; 7]",
-                                "[7; 8]"
+                                {
+                                    "id": "a",
+                                    "label": "[4; 5]",
+                                    "text": "[4; 5]",
+                                    "value": "[4; 5]"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "[5; 6]",
+                                    "text": "[5; 6]",
+                                    "value": "[5; 6]"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "[6; 7]",
+                                    "text": "[6; 7]",
+                                    "value": "[6; 7]"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "[7; 8]",
+                                    "text": "[7; 8]",
+                                    "value": "[7; 8]"
+                                }
                             ],
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3694,12 +4214,32 @@
                             "id": 5,
                             "expression": "\\sqrt{42}",
                             "options": [
-                                "[4; 5]",
-                                "[5; 6]",
-                                "[6; 7]",
-                                "[7; 8]"
+                                {
+                                    "id": "a",
+                                    "label": "[4; 5]",
+                                    "text": "[4; 5]",
+                                    "value": "[4; 5]"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "[5; 6]",
+                                    "text": "[5; 6]",
+                                    "value": "[5; 6]"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "[6; 7]",
+                                    "text": "[6; 7]",
+                                    "value": "[6; 7]"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "[7; 8]",
+                                    "text": "[7; 8]",
+                                    "value": "[7; 8]"
+                                }
                             ],
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3707,12 +4247,32 @@
                             "id": 6,
                             "expression": "\\sqrt{31}",
                             "options": [
-                                "[4; 5]",
-                                "[5; 6]",
-                                "[6; 7]",
-                                "[7; 8]"
+                                {
+                                    "id": "a",
+                                    "label": "[4; 5]",
+                                    "text": "[4; 5]",
+                                    "value": "[4; 5]"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "[5; 6]",
+                                    "text": "[5; 6]",
+                                    "value": "[5; 6]"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "[6; 7]",
+                                    "text": "[6; 7]",
+                                    "value": "[6; 7]"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "[7; 8]",
+                                    "text": "[7; 8]",
+                                    "value": "[7; 8]"
+                                }
                             ],
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         }
@@ -3733,13 +4293,33 @@
                                 8
                             ],
                             "options": [
-                                "\\sqrt{41}",
-                                "\\sqrt{48}",
-                                "\\sqrt{53}",
-                                "\\sqrt{63}"
+                                {
+                                    "id": "a",
+                                    "label": "\\sqrt{41}",
+                                    "text": "\\sqrt{41}",
+                                    "value": "\\sqrt{41}"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "\\sqrt{48}",
+                                    "text": "\\sqrt{48}",
+                                    "value": "\\sqrt{48}"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "\\sqrt{53}",
+                                    "text": "\\sqrt{53}",
+                                    "value": "\\sqrt{53}"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "\\sqrt{63}",
+                                    "text": "\\sqrt{63}",
+                                    "value": "\\sqrt{63}"
+                                }
                             ],
                             "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-ae3477c7c98fd479c9e0676eed6ea1ce\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-ae3477c7c98fd479c9e0676eed6ea1ce)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">6<\/text>\n  <line x1=\"87.5\" y1=\"28\" x2=\"87.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"87.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">6.5<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">7<\/text>\n  <line x1=\"222.5\" y1=\"28\" x2=\"222.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"222.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">7.5<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">8<\/text>\n  <circle cx=\"145.55\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"145.55\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3751,13 +4331,33 @@
                                 7
                             ],
                             "options": [
-                                "\\sqrt{28}",
-                                "\\sqrt{33}",
-                                "\\sqrt{38}",
-                                "\\sqrt{47}"
+                                {
+                                    "id": "a",
+                                    "label": "\\sqrt{28}",
+                                    "text": "\\sqrt{28}",
+                                    "value": "\\sqrt{28}"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "\\sqrt{33}",
+                                    "text": "\\sqrt{33}",
+                                    "value": "\\sqrt{33}"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "\\sqrt{38}",
+                                    "text": "\\sqrt{38}",
+                                    "value": "\\sqrt{38}"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "\\sqrt{47}",
+                                    "text": "\\sqrt{47}",
+                                    "value": "\\sqrt{47}"
+                                }
                             ],
                             "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-5098344445462f22c935979d797ec810\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-5098344445462f22c935979d797ec810)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">5<\/text>\n  <line x1=\"87.5\" y1=\"28\" x2=\"87.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"87.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">5.5<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">6<\/text>\n  <line x1=\"222.5\" y1=\"28\" x2=\"222.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"222.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">6.5<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">7<\/text>\n  <circle cx=\"119.9\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"119.9\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3769,13 +4369,33 @@
                                 6
                             ],
                             "options": [
-                                "\\sqrt{17}",
-                                "\\sqrt{22}",
-                                "\\sqrt{28}",
-                                "\\sqrt{32}"
+                                {
+                                    "id": "a",
+                                    "label": "\\sqrt{17}",
+                                    "text": "\\sqrt{17}",
+                                    "value": "\\sqrt{17}"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "\\sqrt{22}",
+                                    "text": "\\sqrt{22}",
+                                    "value": "\\sqrt{22}"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "\\sqrt{28}",
+                                    "text": "\\sqrt{28}",
+                                    "value": "\\sqrt{28}"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "\\sqrt{32}",
+                                    "text": "\\sqrt{32}",
+                                    "value": "\\sqrt{32}"
+                                }
                             ],
                             "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-6a98e4c2e82c27720cc4eb8eafc0c7d9\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-6a98e4c2e82c27720cc4eb8eafc0c7d9)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">4<\/text>\n  <line x1=\"87.5\" y1=\"28\" x2=\"87.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"87.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">4.5<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">5<\/text>\n  <line x1=\"222.5\" y1=\"28\" x2=\"222.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"222.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">5.5<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">6<\/text>\n  <circle cx=\"113.15\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"113.15\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3787,13 +4407,33 @@
                                 7
                             ],
                             "options": [
-                                "\\sqrt{29}",
-                                "\\sqrt{33}",
-                                "\\sqrt{39}",
-                                "\\sqrt{44}"
+                                {
+                                    "id": "a",
+                                    "label": "\\sqrt{29}",
+                                    "text": "\\sqrt{29}",
+                                    "value": "\\sqrt{29}"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "\\sqrt{33}",
+                                    "text": "\\sqrt{33}",
+                                    "value": "\\sqrt{33}"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "\\sqrt{39}",
+                                    "text": "\\sqrt{39}",
+                                    "value": "\\sqrt{39}"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "\\sqrt{44}",
+                                    "text": "\\sqrt{44}",
+                                    "value": "\\sqrt{44}"
+                                }
                             ],
                             "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-5098344445462f22c935979d797ec810\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-5098344445462f22c935979d797ec810)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">5<\/text>\n  <line x1=\"87.5\" y1=\"28\" x2=\"87.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"87.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">5.5<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">6<\/text>\n  <line x1=\"222.5\" y1=\"28\" x2=\"222.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"222.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">6.5<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">7<\/text>\n  <circle cx=\"119.9\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"119.9\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3805,13 +4445,33 @@
                                 6
                             ],
                             "options": [
-                                "\\sqrt{18}",
-                                "\\sqrt{24}",
-                                "\\sqrt{26}",
-                                "\\sqrt{32}"
+                                {
+                                    "id": "a",
+                                    "label": "\\sqrt{18}",
+                                    "text": "\\sqrt{18}",
+                                    "value": "\\sqrt{18}"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "\\sqrt{24}",
+                                    "text": "\\sqrt{24}",
+                                    "value": "\\sqrt{24}"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "\\sqrt{26}",
+                                    "text": "\\sqrt{26}",
+                                    "value": "\\sqrt{26}"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "\\sqrt{32}",
+                                    "text": "\\sqrt{32}",
+                                    "value": "\\sqrt{32}"
+                                }
                             ],
                             "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-099c5543969ef361bf2eededded59214\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-099c5543969ef361bf2eededded59214)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">4<\/text>\n  <line x1=\"87.5\" y1=\"28\" x2=\"87.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"87.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">4.5<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">5<\/text>\n  <line x1=\"222.5\" y1=\"28\" x2=\"222.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"222.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">5.5<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">6<\/text>\n  <circle cx=\"141.5\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"141.5\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3823,13 +4483,33 @@
                                 8
                             ],
                             "options": [
-                                "\\sqrt{40}",
-                                "\\sqrt{46}",
-                                "\\sqrt{53}",
-                                "\\sqrt{58}"
+                                {
+                                    "id": "a",
+                                    "label": "\\sqrt{40}",
+                                    "text": "\\sqrt{40}",
+                                    "value": "\\sqrt{40}"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "\\sqrt{46}",
+                                    "text": "\\sqrt{46}",
+                                    "value": "\\sqrt{46}"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "\\sqrt{53}",
+                                    "text": "\\sqrt{53}",
+                                    "value": "\\sqrt{53}"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "\\sqrt{58}",
+                                    "text": "\\sqrt{58}",
+                                    "value": "\\sqrt{58}"
+                                }
                             ],
                             "svg": "<svg viewBox=\"0 0 320 70\" class=\"w-full max-w-[320px] h-auto mx-auto\">\n  <rect width=\"100%\" height=\"100%\" fill=\"#0a1628\"\/>\n  <defs>\n    <marker id=\"arrow-59bbadf58cd75cd28ed3999403efe8ea\" markerWidth=\"10\" markerHeight=\"10\" refX=\"0\" refY=\"3\" orient=\"auto\">\n      <path d=\"M0,0 L0,6 L9,3 z\" fill=\"#c8dce8\"\/>\n    <\/marker>\n  <\/defs>\n  <line x1=\"20\" y1=\"35\" x2=\"305\" y2=\"35\" stroke=\"#c8dce8\" stroke-width=\"2\" marker-end=\"url(#arrow-59bbadf58cd75cd28ed3999403efe8ea)\"\/>\n  <line x1=\"20\" y1=\"28\" x2=\"20\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"20\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">6<\/text>\n  <line x1=\"87.5\" y1=\"28\" x2=\"87.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"87.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">6.5<\/text>\n  <line x1=\"155\" y1=\"28\" x2=\"155\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"155\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">7<\/text>\n  <line x1=\"222.5\" y1=\"28\" x2=\"222.5\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"222.5\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">7.5<\/text>\n  <line x1=\"290\" y1=\"28\" x2=\"290\" y2=\"42\" stroke=\"#7eb8da\" stroke-width=\"1.5\"\/>\n  <text x=\"290\" y=\"57\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"11\" font-weight=\"500\">8<\/text>\n  <circle cx=\"125.3\" cy=\"35\" r=\"5\" fill=\"#d4a855\"\/>\n  <text x=\"125.3\" y=\"23\" text-anchor=\"middle\" fill=\"#c8dce8\" font-size=\"14\" font-weight=\"600\" font-style=\"italic\">A<\/text>\n<\/svg>",
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         }
@@ -3914,12 +4594,32 @@
                             "id": 1,
                             "segment": "[−4; −3]",
                             "options": [
-                                "-\\frac{45}{19}",
-                                "-\\frac{52}{19}",
-                                "-\\frac{68}{19}",
-                                "-\\frac{77}{19}"
+                                {
+                                    "id": "a",
+                                    "label": "-\\frac{45}{19}",
+                                    "text": "-\\frac{45}{19}",
+                                    "value": "-\\frac{45}{19}"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "-\\frac{52}{19}",
+                                    "text": "-\\frac{52}{19}",
+                                    "value": "-\\frac{52}{19}"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "-\\frac{68}{19}",
+                                    "text": "-\\frac{68}{19}",
+                                    "value": "-\\frac{68}{19}"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "-\\frac{77}{19}",
+                                    "text": "-\\frac{77}{19}",
+                                    "value": "-\\frac{77}{19}"
+                                }
                             ],
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3927,12 +4627,32 @@
                             "id": 2,
                             "segment": "[−7; −6]",
                             "options": [
-                                "-\\frac{68}{13}",
-                                "-\\frac{82}{13}",
-                                "-\\frac{92}{13}",
-                                "-\\frac{101}{13}"
+                                {
+                                    "id": "a",
+                                    "label": "-\\frac{68}{13}",
+                                    "text": "-\\frac{68}{13}",
+                                    "value": "-\\frac{68}{13}"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "-\\frac{82}{13}",
+                                    "text": "-\\frac{82}{13}",
+                                    "value": "-\\frac{82}{13}"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "-\\frac{92}{13}",
+                                    "text": "-\\frac{92}{13}",
+                                    "value": "-\\frac{92}{13}"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "-\\frac{101}{13}",
+                                    "text": "-\\frac{101}{13}",
+                                    "value": "-\\frac{101}{13}"
+                                }
                             ],
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3940,12 +4660,32 @@
                             "id": 3,
                             "segment": "[−8; −7]",
                             "options": [
-                                "-\\frac{69}{11}",
-                                "-\\frac{80}{11}",
-                                "-\\frac{90}{11}",
-                                "-\\frac{92}{11}"
+                                {
+                                    "id": "a",
+                                    "label": "-\\frac{69}{11}",
+                                    "text": "-\\frac{69}{11}",
+                                    "value": "-\\frac{69}{11}"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "-\\frac{80}{11}",
+                                    "text": "-\\frac{80}{11}",
+                                    "value": "-\\frac{80}{11}"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "-\\frac{90}{11}",
+                                    "text": "-\\frac{90}{11}",
+                                    "value": "-\\frac{90}{11}"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "-\\frac{92}{11}",
+                                    "text": "-\\frac{92}{11}",
+                                    "value": "-\\frac{92}{11}"
+                                }
                             ],
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -3953,12 +4693,32 @@
                             "id": 4,
                             "segment": "[−9; −8]",
                             "options": [
-                                "-\\frac{46}{7}",
-                                "-\\frac{53}{7}",
-                                "-\\frac{55}{7}",
-                                "-\\frac{61}{7}"
+                                {
+                                    "id": "a",
+                                    "label": "-\\frac{46}{7}",
+                                    "text": "-\\frac{46}{7}",
+                                    "value": "-\\frac{46}{7}"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "-\\frac{53}{7}",
+                                    "text": "-\\frac{53}{7}",
+                                    "value": "-\\frac{53}{7}"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "-\\frac{55}{7}",
+                                    "text": "-\\frac{55}{7}",
+                                    "value": "-\\frac{55}{7}"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "-\\frac{61}{7}",
+                                    "text": "-\\frac{61}{7}",
+                                    "value": "-\\frac{61}{7}"
+                                }
                             ],
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         }
@@ -4022,12 +4782,32 @@
                             "id": 1,
                             "expression": "-\\frac{134}{11}",
                             "options": [
-                                "–11 и –10",
-                                "–12 и –11",
-                                "–13 и –12",
-                                "–14 и –13"
+                                {
+                                    "id": "a",
+                                    "label": "–11 и –10",
+                                    "text": "–11 и –10",
+                                    "value": "–11 и –10"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "–12 и –11",
+                                    "text": "–12 и –11",
+                                    "value": "–12 и –11"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "–13 и –12",
+                                    "text": "–13 и –12",
+                                    "value": "–13 и –12"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "–14 и –13",
+                                    "text": "–14 и –13",
+                                    "value": "–14 и –13"
+                                }
                             ],
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -4035,12 +4815,32 @@
                             "id": 2,
                             "expression": "-\\frac{104}{9}",
                             "options": [
-                                "–12 и –11",
-                                "–13 и –12",
-                                "–14 и –13",
-                                "–15 и –14"
+                                {
+                                    "id": "a",
+                                    "label": "–12 и –11",
+                                    "text": "–12 и –11",
+                                    "value": "–12 и –11"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "–13 и –12",
+                                    "text": "–13 и –12",
+                                    "value": "–13 и –12"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "–14 и –13",
+                                    "text": "–14 и –13",
+                                    "value": "–14 и –13"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "–15 и –14",
+                                    "text": "–15 и –14",
+                                    "value": "–15 и –14"
+                                }
                             ],
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -4048,12 +4848,32 @@
                             "id": 3,
                             "expression": "-\\frac{111}{17}",
                             "options": [
-                                "–6 и –5",
-                                "–7 и –6",
-                                "–8 и –7",
-                                "–9 и –8"
+                                {
+                                    "id": "a",
+                                    "label": "–6 и –5",
+                                    "text": "–6 и –5",
+                                    "value": "–6 и –5"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "–7 и –6",
+                                    "text": "–7 и –6",
+                                    "value": "–7 и –6"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "–8 и –7",
+                                    "text": "–8 и –7",
+                                    "value": "–8 и –7"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "–9 и –8",
+                                    "text": "–9 и –8",
+                                    "value": "–9 и –8"
+                                }
                             ],
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         },
@@ -4061,12 +4881,32 @@
                             "id": 4,
                             "expression": "-\\frac{152}{15}",
                             "options": [
-                                "–8 и –7",
-                                "–9 и –8",
-                                "–10 и –9",
-                                "–11 и –10"
+                                {
+                                    "id": "a",
+                                    "label": "–8 и –7",
+                                    "text": "–8 и –7",
+                                    "value": "–8 и –7"
+                                },
+                                {
+                                    "id": "b",
+                                    "label": "–9 и –8",
+                                    "text": "–9 и –8",
+                                    "value": "–9 и –8"
+                                },
+                                {
+                                    "id": "c",
+                                    "label": "–10 и –9",
+                                    "text": "–10 и –9",
+                                    "value": "–10 и –9"
+                                },
+                                {
+                                    "id": "d",
+                                    "label": "–11 и –10",
+                                    "text": "–11 и –10",
+                                    "value": "–11 и –10"
+                                }
                             ],
-                            "answer": "1",
+                            "answer": "a",
                             "status": "draft",
                             "options_render_mode": "text_options"
                         }
