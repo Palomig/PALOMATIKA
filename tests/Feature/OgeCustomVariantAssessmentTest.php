@@ -60,6 +60,7 @@ class OgeCustomVariantAssessmentTest extends TestCase
             $table->foreignId('student_id');
             $table->string('status')->default('active');
             $table->json('device_meta')->nullable();
+            $table->json('frozen_answers_json')->nullable();
             $table->timestamp('started_at')->nullable();
             $table->timestamp('submitted_at')->nullable();
             $table->timestamp('last_seen_at')->nullable();
@@ -112,6 +113,46 @@ class OgeCustomVariantAssessmentTest extends TestCase
             $table->timestamp('checked_at')->nullable();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
+        });
+
+        Schema::create('oge_attempt_task_details', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('attempt_id');
+            $table->unsignedTinyInteger('task_number');
+            $table->string('topic_id', 8)->nullable();
+            $table->unsignedInteger('block_number')->default(0);
+            $table->unsignedInteger('zadanie_number')->default(0);
+            $table->unsignedInteger('task_index')->nullable();
+            $table->string('task_type', 64)->default('unknown');
+            $table->string('svg_type', 64)->nullable();
+            $table->string('subtype', 64)->nullable();
+            $table->string('section', 64)->nullable();
+            $table->string('source', 64)->nullable();
+            $table->string('task_key', 255)->nullable();
+            $table->string('task_fingerprint', 255)->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('student_topic_masteries', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('student_id');
+            $table->string('topic_id', 8)->nullable();
+            $table->string('task_type', 64)->nullable();
+            $table->string('svg_type', 64)->nullable();
+            $table->string('subtype', 64)->nullable();
+            $table->string('section', 64)->nullable();
+            $table->unsignedInteger('attempts_count')->default(0);
+            $table->unsignedInteger('correct_count')->default(0);
+            $table->unsignedBigInteger('total_active_ms')->default(0);
+            $table->unsignedBigInteger('avg_active_ms')->default(0);
+            $table->decimal('accuracy', 8, 4)->default(0);
+            $table->decimal('mastery_score', 8, 4)->default(0.5);
+            $table->text('recent_outcomes')->nullable();
+            $table->unsignedInteger('current_correct_streak')->default(0);
+            $table->unsignedInteger('current_incorrect_streak')->default(0);
+            $table->boolean('last_outcome')->nullable();
+            $table->timestamp('last_attempted_at')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -609,7 +650,8 @@ class OgeCustomVariantAssessmentTest extends TestCase
 
         $this->actingAs($student)
             ->postJson("/api/oge/attempts/{$attempt->id}/submit")
-            ->assertStatus(500);
+            ->assertOk()
+            ->assertJsonPath('status', 'error');
 
         $this->assertDatabaseHas('oge_attempts', [
             'id' => $attempt->id,

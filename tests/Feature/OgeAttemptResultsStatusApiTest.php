@@ -398,14 +398,14 @@ class OgeAttemptResultsStatusApiTest extends TestCase
                 'telegram.links.attempt_results_url',
                 route('teacher.oge.results', ['variantId' => $variant->id]) . '?attempt=' . $attempt->id . '#attempt-' . $attempt->id
             )
-            ->assertJsonPath('telegram.links.variant_results_mini_app_url', "https://t.me/palomatika_bot?startapp=oge_variant_{$variant->id}")
+            ->assertJsonPath('telegram.links.variant_results_mini_app_url', "https://t.me/palomatika_bot?startapp=oge_variant_hash_{$variant->hash}")
             ->assertJsonPath('telegram.links.attempt_results_mini_app_url', "https://t.me/palomatika_bot?startapp=oge_attempt_{$attempt->id}")
-            ->assertJsonPath('telegram.links.variant_results_button_url', "https://mini.example.com/oge?startapp=oge_variant_{$variant->id}")
+            ->assertJsonPath('telegram.links.variant_results_button_url', "https://mini.example.com/oge?startapp=oge_variant_hash_{$variant->hash}")
             ->assertJsonPath('telegram.links.attempt_results_button_url', "https://mini.example.com/oge?startapp=oge_attempt_{$attempt->id}")
             ->assertJsonPath('telegram.buttons.variant_results.type', 'web_app')
             ->assertJsonPath('telegram.buttons.variant_results.button.text', 'Открыть в Telegram')
-            ->assertJsonPath('telegram.buttons.variant_results.button.web_app.url', "https://mini.example.com/oge?startapp=oge_variant_{$variant->id}")
-            ->assertJsonPath('telegram.buttons.variant_results.reply_markup.inline_keyboard.0.0.web_app.url', "https://mini.example.com/oge?startapp=oge_variant_{$variant->id}")
+            ->assertJsonPath('telegram.buttons.variant_results.button.web_app.url', "https://mini.example.com/oge?startapp=oge_variant_hash_{$variant->hash}")
+            ->assertJsonPath('telegram.buttons.variant_results.reply_markup.inline_keyboard.0.0.web_app.url', "https://mini.example.com/oge?startapp=oge_variant_hash_{$variant->hash}")
             ->assertJsonPath('telegram.buttons.attempt_results.type', 'web_app')
             ->assertJsonPath('telegram.buttons.attempt_results.button.web_app.url', "https://mini.example.com/oge?startapp=oge_attempt_{$attempt->id}");
 
@@ -417,7 +417,7 @@ class OgeAttemptResultsStatusApiTest extends TestCase
         $this->assertStringContainsString('Variant tggen001', $messageText);
         $this->assertStringContainsString('Tasks:', $messageText);
         $this->assertStringContainsString('6:+', $messageText);
-        $this->assertStringContainsString("https://t.me/palomatika_bot?startapp=oge_variant_{$variant->id}", $messageText);
+        $this->assertStringContainsString("https://t.me/palomatika_bot?startapp=oge_variant_hash_{$variant->hash}", $messageText);
     }
 
     public function test_teacher_can_fetch_telegram_summary_payload_for_custom_attempt(): void

@@ -141,9 +141,14 @@
                     <h4 class="text-slate-400 text-sm font-medium mb-4 uppercase tracking-wide">Формулы</h4>
                     <div class="flex flex-wrap gap-4 justify-center">
                         @foreach($displayFormulas as $i => $formula)
+                            @php
+                                $formulaText = is_array($formula)
+                                    ? ($formula['label'] ?? $formula['text'] ?? $formula['value'] ?? '')
+                                    : (string) $formula;
+                            @endphp
                             <div class="bg-slate-700/50 rounded-lg px-5 py-3">
                                 <span class="text-amber-400 font-bold">{{ $i + 1 }})</span>
-                                <span class="text-slate-200 math-serif ml-2">${{ $formula }}$</span>
+                                <span class="text-slate-200 math-serif ml-2">${{ $formulaText }}$</span>
                             </div>
                         @endforeach
                     </div>

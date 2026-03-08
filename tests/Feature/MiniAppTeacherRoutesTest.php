@@ -74,6 +74,17 @@ class MiniAppTeacherRoutesTest extends TestCase
             $table->timestamps();
         });
 
+        Schema::create('oge_attempts', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('variant_id')->nullable();
+            $table->foreignId('student_id')->nullable();
+            $table->string('status', 32)->default('active');
+            $table->timestamp('started_at')->nullable();
+            $table->timestamp('submitted_at')->nullable();
+            $table->timestamp('last_seen_at')->nullable();
+            $table->timestamps();
+        });
+
         Schema::create('audit_events', function (Blueprint $table) {
             $table->id();
             $table->timestamp('occurred_at')->useCurrent();

@@ -8,6 +8,12 @@ return new class extends Migration
 {
     public function up(): void
     {
+        $driver = Schema::getConnection()->getDriverName();
+        if ($driver === 'sqlite') {
+            // SQLite tests use simplified schemas where these columns are already nullable.
+            return;
+        }
+
         Schema::table('users', function (Blueprint $table) {
             // Make email nullable for OAuth users (Telegram doesn't provide email)
             $table->string('email')->nullable()->change();
@@ -25,6 +31,11 @@ return new class extends Migration
 
     public function down(): void
     {
+        $driver = Schema::getConnection()->getDriverName();
+        if ($driver === 'sqlite') {
+            return;
+        }
+
         Schema::table('users', function (Blueprint $table) {
             $table->string('email')->nullable(false)->change();
             $table->string('password')->nullable(false)->change();

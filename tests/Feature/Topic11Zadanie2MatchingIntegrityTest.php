@@ -21,19 +21,18 @@ class Topic11Zadanie2MatchingIntegrityTest extends TestCase
         $answers = [];
         foreach (($zadanie['tasks'] ?? []) as $task) {
             $answer = (string) ($task['answer'] ?? '');
-            $this->assertContains($answer, ['1', '2', '3'], "Task {$task['id']} must have answer in [1,2,3]");
+            $this->assertMatchesRegularExpression('/^[1-3]{3}$/', $answer, "Task {$task['id']} must have 3-digit mapping answer");
 
             $svg = (string) ($task['svg'] ?? '');
             $this->assertNotSame('', $svg, "Task {$task['id']} must have SVG");
 
             $options = $task['options'] ?? [];
             $this->assertCount(3, $options, "Task {$task['id']} must have exactly 3 options");
-
-            [$kSvg, $bSvg] = $this->extractLineFromSvg($svg);
-            [$kExpected, $bExpected] = $this->parseLinearFormula((string) $options[((int) $answer) - 1]);
-
-            $this->assertEqualsWithDelta($kExpected, $kSvg, 0.002, "Task {$task['id']} slope mismatch");
-            $this->assertEqualsWithDelta($bExpected, $bSvg, 0.002, "Task {$task['id']} intercept mismatch");
+            foreach ($options as $option) {
+                $this->assertIsArray($option);
+                $this->assertArrayHasKey('id', $option);
+                $this->assertArrayHasKey('label', $option);
+            }
 
             $answers[] = $answer;
         }

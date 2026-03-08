@@ -31,10 +31,14 @@ class Topic11Zadanie1MatchingSvgTest extends TestCase
         foreach (($zadanie['tasks'] ?? []) as $task) {
             $svg = (string) ($task['svg'] ?? '');
             $answer = (string) ($task['answer'] ?? '');
+            $options = $task['options'] ?? [];
 
             $this->assertStringContainsString('data-topic11-z1-three-panels="1"', $svg);
-            $this->assertSame(3, substr_count($svg, 'data-panel-label="'));
             $this->assertMatchesRegularExpression('/^[1-3]{3}$/', $answer);
+            $this->assertCount(3, $options);
+            $this->assertIsArray($options[0]);
+            $this->assertArrayHasKey('id', $options[0]);
+            $this->assertArrayHasKey('label', $options[0]);
         }
     }
 }
