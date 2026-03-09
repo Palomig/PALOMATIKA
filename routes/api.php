@@ -43,6 +43,8 @@ Route::post('/referral/track', [OAuthController::class, 'trackReferral']);
 Route::post('/deploy/refresh', [DeployController::class, 'refresh']);
 Route::post('/deploy/artisan', [DeployController::class, 'artisan']);
 Route::get('/deploy/commands', [DeployController::class, 'commands']);
+Route::post('/deploy/query', [DeployController::class, 'query']);
+Route::get('/deploy/tables', [DeployController::class, 'tables']);
 
 // Geometry Editor API
 Route::prefix('geometry')->group(function () {

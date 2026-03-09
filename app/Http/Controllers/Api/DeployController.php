@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -169,5 +170,110 @@ class DeployController extends Controller
         return response()->json([
             'commands' => self::ALLOWED_COMMANDS,
         ]);
+    }
+
+    /**
+     * Execute a read-only SQL query against the database.
+     *
+     * POST /api/deploy/query
+     * Header: X-Deploy-Secret: <secret>
+     * Body: { "sql": "SELECT ...", "limit": 100 }
+     *
+     * Only SELECT statements are allowed. Mutations are rejected.
+     */
+    public function query(Request $request): JsonResponse
+    {
+        if ($error = $this->verifySecret($request)) {
+            return $error;
+        }
+
+        $sql = trim($request->input('sql', ''));
+        $limit = min((int) $request->input('limit', 100), 1000);
+
+        if ($sql === '') {
+            return response()->json(['error' => 'SQL query is required'], 400);
+        }
+
+        // Only allow SELECT / SHOW / DESCRIBE / EXPLAIN
+        $firstWord = strtoupper(strtok($sql, " \t\n\r"));
+        $allowed = ['SELECT', 'SHOW', 'DESCRIBE', 'DESC', 'EXPLAIN'];
+        if (!in_array($firstWord, $allowed, true)) {
+            return response()->json([
+                'error' => 'Only read-only queries are allowed (SELECT, SHOW, DESCRIBE, EXPLAIN)',
+            ], 403);
+        }
+
+        // Reject dangerous patterns
+        $upper = strtoupper($sql);
+        $dangerous = ['INSERT', 'UPDATE', 'DELETE', 'DROP', 'ALTER', 'TRUNCATE', 'CREATE', 'GRANT', 'REVOKE'];
+        foreach ($dangerous as $keyword) {
+            if (preg_match('/\b' . $keyword . '\b/', $upper)) {
+                return response()->json(['error' => "Forbidden keyword: {$keyword}"], 403);
+            }
+        }
+
+        try {
+            $startTime = microtime(true);
+
+            // Add LIMIT if not present in SELECT queries
+            if ($firstWord === 'SELECT' && !preg_match('/\bLIMIT\b/i', $sql)) {
+                $sql = rtrim($sql, '; ') . " LIMIT {$limit}";
+            }
+
+            $rows = DB::select($sql);
+            $elapsed = round(microtime(true) - $startTime, 3);
+
+            Log::info('Deploy query executed', [
+                'ip' => $request->ip(),
+                'sql' => mb_substr($sql, 0, 200),
+                'rows' => count($rows),
+                'elapsed' => "{$elapsed}s",
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'rows' => $rows,
+                'count' => count($rows),
+                'elapsed' => "{$elapsed}s",
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * List database tables.
+     *
+     * GET /api/deploy/tables
+     * Header: X-Deploy-Secret: <secret>
+     */
+    public function tables(Request $request): JsonResponse
+    {
+        if ($error = $this->verifySecret($request)) {
+            return $error;
+        }
+
+        try {
+            $tables = DB::select('SHOW TABLES');
+            $dbName = config('database.connections.mysql.database');
+            $key = "Tables_in_{$dbName}";
+
+            $result = [];
+            foreach ($tables as $table) {
+                $name = $table->$key ?? array_values((array) $table)[0];
+                $count = DB::selectOne("SELECT COUNT(*) as cnt FROM `{$name}`");
+                $result[] = [
+                    'table' => $name,
+                    'rows' => $count->cnt ?? 0,
+                ];
+            }
+
+            return response()->json(['tables' => $result]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 }

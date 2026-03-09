@@ -6,6 +6,14 @@
       "env": {
         "SMARTCART_API_URL": "https://cw95865.tmweb.ru/smartcart"
       }
+    },
+    "palomatika-db": {
+      "command": "node",
+      "args": ["/home/dev/palomatika/mcp-servers/palomatika-db/index.js"],
+      "env": {
+        "PALOMATIKA_API_URL": "https://palomatika.ru",
+        "DEPLOY_WEBHOOK_SECRET": "470acf86be8700c1d132043fd5fcb37ae357b3041ca9c0a24999fa2c54b53500"
+      }
     }
   }
 }
