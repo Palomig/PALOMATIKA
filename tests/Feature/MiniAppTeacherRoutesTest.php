@@ -68,6 +68,7 @@ class MiniAppTeacherRoutesTest extends TestCase
             $table->string('hash', 16)->unique();
             $table->foreignId('owner_teacher_id')->nullable()->constrained('users')->nullOnDelete();
             $table->string('title')->nullable();
+            $table->string('mode', 32)->nullable();
             $table->string('source', 32)->nullable();
             $table->boolean('is_curated')->default(false);
             $table->text('config_json')->nullable();
@@ -82,6 +83,28 @@ class MiniAppTeacherRoutesTest extends TestCase
             $table->timestamp('started_at')->nullable();
             $table->timestamp('submitted_at')->nullable();
             $table->timestamp('last_seen_at')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('oge_attempt_answers', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('attempt_id')->constrained('oge_attempts')->cascadeOnDelete();
+            $table->unsignedInteger('task_number');
+            $table->text('current_answer')->nullable();
+            $table->unsignedInteger('commits_count')->default(0);
+            $table->timestamp('first_committed_at')->nullable();
+            $table->timestamp('last_committed_at')->nullable();
+            $table->boolean('is_final')->default(false);
+            $table->timestamps();
+        });
+
+        Schema::create('oge_attempt_scorings', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('attempt_id')->constrained('oge_attempts')->cascadeOnDelete();
+            $table->unsignedInteger('task_number');
+            $table->boolean('is_correct')->nullable();
+            $table->text('correct_answer')->nullable();
+            $table->timestamp('checked_at')->nullable();
             $table->timestamps();
         });
 
@@ -223,5 +246,89 @@ class MiniAppTeacherRoutesTest extends TestCase
         $this->actingAs($teacher)
             ->patchJson("/tg/teacher/students/{$student->id}/alias", ['alias' => str_repeat('a', 81)])
             ->assertStatus(422);
+    }
+
+    public function test_teacher_student_profile_shows_instruction_condition_and_task_locator_for_wrong_task(): void
+    {
+        $teacher = User::factory()->create([
+            'role' => 'teacher',
+            'onboarding_completed_at' => now(),
+        ]);
+        $student = User::factory()->create([
+            'role' => 'student',
+            'onboarding_completed_at' => now(),
+        ]);
+
+        TeacherStudent::create([
+            'teacher_id' => $teacher->id,
+            'student_id' => $student->id,
+            'source' => 'manual',
+        ]);
+
+        $variantId = DB::table('oge_variants')->insertGetId([
+            'hash' => 'nnzzuijfqo',
+            'owner_teacher_id' => $teacher->id,
+            'title' => 'Word Problems',
+            'mode' => 'full',
+            'source' => 'miniapp',
+            'is_curated' => false,
+            'config_json' => json_encode([
+                'tasks' => [[
+                    'task_number' => 12,
+                    'topic_id' => '12',
+                    'block_number' => 1,
+                    'zadanie_number' => 3,
+                    'instruction' => 'Физика: мощность тока',
+                    'task' => [
+                        'id' => 5,
+                        'text' => 'В фирме «Родник» стоимость оборудования составляет 47000 рублей.',
+                        'answer' => '47000',
+                    ],
+                ]],
+            ], JSON_UNESCAPED_UNICODE),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $attemptId = DB::table('oge_attempts')->insertGetId([
+            'variant_id' => $variantId,
+            'student_id' => $student->id,
+            'status' => 'submitted',
+            'submitted_at' => now(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('oge_attempt_answers')->insert([
+            'attempt_id' => $attemptId,
+            'task_number' => 12,
+            'current_answer' => '45000',
+            'commits_count' => 1,
+            'is_final' => true,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        DB::table('oge_attempt_scorings')->insert([
+            'attempt_id' => $attemptId,
+            'task_number' => 12,
+            'is_correct' => false,
+            'correct_answer' => '47000',
+            'checked_at' => now(),
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $response = $this->actingAs($teacher)->get("/tg/teacher/students/{$student->id}");
+
+        $response->assertOk();
+        $response->assertSee('Вариант nnzzuijfqo · Задание 12');
+        $response->assertSee('Физика: мощность тока');
+        $response->assertSee('В фирме «Родник» стоимость оборудования составляет 47000 рублей.');
+        $response->assertSee('#5');
+        $response->assertSee('12_1_3#5');
+        $response->assertSee('Ответ ученика:');
+        $response->assertSee('45000');
+        $response->assertSee('47000');
     }
 }

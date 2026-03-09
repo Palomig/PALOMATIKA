@@ -863,7 +863,19 @@ class MiniAppController extends Controller
                         }
                     }
 
-                    $taskText = (string) (($def['instruction'] ?? $inner['instruction'] ?? $def['text'] ?? $inner['text'] ?? $inner['prompt'] ?? $inner['question'] ?? $inner['condition'] ?? $inner['body'] ?? $inner['content'] ?? '') ?: '');
+                    $instructionText = trim((string) (($def['instruction'] ?? $inner['instruction'] ?? '') ?: ''));
+                    $conditionText = trim((string) (($inner['text'] ?? $def['text'] ?? $inner['prompt'] ?? $inner['question'] ?? $inner['condition'] ?? $inner['body'] ?? $inner['content'] ?? '') ?: ''));
+
+                    // If instruction and condition are the same, show only one text block.
+                    if ($instructionText !== '' && $conditionText !== '') {
+                        $normInstruction = preg_replace('/\s+/u', ' ', mb_strtolower($instructionText));
+                        $normCondition = preg_replace('/\s+/u', ' ', mb_strtolower($conditionText));
+                        if ($normInstruction === $normCondition) {
+                            $instructionText = '';
+                        }
+                    }
+
+                    $taskText = $conditionText !== '' ? $conditionText : $instructionText;
                     $taskExpression = (string) (($def['expression'] ?? $inner['expression'] ?? $inner['formula'] ?? $inner['latex'] ?? '') ?: '');
 
                     // Topic 07 point-value tasks: ensure "indicated number" is visible in profile cards.
@@ -886,15 +898,26 @@ class MiniAppController extends Controller
                         }
                     }
 
+                    $taskId = $inner['id'] ?? $def['id'] ?? null;
+                    $topicId = (string) (($def['topic_id'] ?? $inner['topic_id'] ?? '') ?: '');
+                    $blockNumber = (string) (($def['block_number'] ?? $inner['block_number'] ?? '') ?: '');
+                    $zadanieNumber = (string) (($def['zadanie_number'] ?? $inner['zadanie_number'] ?? '') ?: '');
+                    $taskLocator = ($topicId !== '' && $blockNumber !== '' && $zadanieNumber !== '' && $taskId !== null && $taskId !== '')
+                        ? ($topicId . '_' . $blockNumber . '_' . $zadanieNumber . '#' . $taskId)
+                        : null;
+
                     $wrongTasks[] = [
                         'attempt_id' => (int) $attempt->id,
                         'variant_hash' => (string) ($attempt->variant->hash ?? ''),
                         'task_number' => $taskNum,
+                        'task_instruction' => $instructionText,
                         'task_text' => $taskText,
                         'task_expression' => $taskExpression,
                         'task_svg' => (string) (($def['svg'] ?? $inner['svg'] ?? '') ?: ''),
                         'task_image' => (string) (($def['image'] ?? $inner['image'] ?? '') ?: ''),
                         'task_options' => $taskOptions,
+                        'task_id' => $taskId,
+                        'task_locator' => $taskLocator,
                         'student_answer' => (string) (($studentAnswer->current_answer ?? '') ?: '—'),
                         'correct_answer' => (string) (($scoring->correct_answer ?? '') ?: '—'),
                     ];

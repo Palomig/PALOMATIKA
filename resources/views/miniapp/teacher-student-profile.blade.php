@@ -90,10 +90,16 @@
     @forelse($wrongTasks as $w)
       <details class="err">
         <summary>
-          Вариант {{ $w['variant_hash'] ?: ('#'.$w['attempt_id']) }} · Задание {{ $w['task_number'] }}
+          Вариант {{ $w['variant_hash'] ?: ('#'.$w['attempt_id']) }} · Задание {{ $w['task_number'] }}@if(!empty($w['task_id'])) · #{{ $w['task_id'] }}@endif
         </summary>
-        <div class="err-meta task-render-scope">Ответ ученика: <b>{{ $w['student_answer'] }}</b> · Верный: <b>{{ $w['correct_answer'] }}</b></div>
+        <div class="err-meta task-render-scope">
+          Ответ ученика: <b>{{ $w['student_answer'] }}</b> · Верный: <b>{{ $w['correct_answer'] }}</b>
+          @if(!empty($w['task_locator'])) · ID: <b>{{ $w['task_locator'] }}</b>@endif
+        </div>
         <div class="task-box task-render-scope">
+          @if(!empty($w['task_instruction']))
+            <div class="muted" style="font-weight:600;margin-bottom:4px;">{{ $w['task_instruction'] }}</div>
+          @endif
           @if(!empty($w['task_text']))
             <div>{!! nl2br(e($w['task_text'])) !!}</div>
           @endif
