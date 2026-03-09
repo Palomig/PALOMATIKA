@@ -253,14 +253,11 @@ function dashboardPage() {
       const botUsername = '{{ config("services.telegram.bot_username", "palomatika_auth_bot") }}';
       const link = `https://t.me/${botUsername}/app`;
       const text = 'Готовься к ОГЭ по математике бесплатно!';
+      const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`;
 
-      if (tg && tg.switchInlineQuery) {
-        tg.switchInlineQuery(text + ' ' + link, ['users', 'groups', 'channels']);
-      } else if (tg && tg.openTelegramLink) {
-        const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`;
+      if (tg && tg.openTelegramLink) {
         tg.openTelegramLink(shareUrl);
       } else {
-        const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`;
         window.open(shareUrl, '_blank');
       }
     },
