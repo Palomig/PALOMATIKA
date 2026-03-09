@@ -237,14 +237,19 @@ function dashboardPage() {
     async startFull() {
       try {
         const res = await window.fetchPost('/tg/full/start');
+        if (!res.ok && res.status === 419) {
+          alert('Сессия истекла. Перезайдите в приложение.');
+          return;
+        }
         const data = await res.json();
         if (data.redirect) {
           window.location.href = data.redirect;
         } else {
-          alert(data.error || 'Ошибка запуска');
+          alert(data.error || data.message || 'Ошибка запуска');
         }
       } catch (e) {
-        alert('Ошибка соединения');
+        console.error('startFull error:', e);
+        alert('Ошибка соединения: ' + e.message);
       }
     },
 

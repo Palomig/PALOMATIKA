@@ -161,14 +161,19 @@ function miniPage() {
     async startMode(mode) {
       try {
         const res = await window.fetchPost('/tg/mini/start', { mode });
+        if (!res.ok && res.status === 419) {
+          alert('Сессия истекла. Перезайдите в приложение.');
+          return;
+        }
         const data = await res.json();
         if (data.redirect) {
           window.location.href = data.redirect;
         } else {
-          alert(data.error || 'Ошибка запуска');
+          alert(data.error || data.message || 'Ошибка запуска');
         }
       } catch (e) {
-        alert('Ошибка соединения');
+        console.error('startMode error:', e);
+        alert('Ошибка соединения: ' + e.message);
       }
     },
   };

@@ -402,16 +402,27 @@ class MiniAppController extends Controller
         $mode = $request->input('mode');
         $user = $request->user();
 
+        if (!$user) {
+            return response()->json(['error' => 'Сессия истекла. Перезайдите в приложение.'], 401);
+        }
+
         try {
             $variant = $this->poolService->getOrCreateVariant($user, $mode);
         } catch (\RuntimeException $e) {
+            \Log::warning('Mini start pool error', ['user' => $user->id, 'mode' => $mode, 'error' => $e->getMessage()]);
             return response()->json([
                 'error' => 'Нет доступных заданий для этого режима. Попробуйте позже.',
             ], 422);
         }
 
-        // Start attempt
-        [$variant, $attempt] = $this->attemptService->startAttempt($user, $variant->hash);
+        try {
+            [$variant, $attempt] = $this->attemptService->startAttempt($user, $variant->hash);
+        } catch (\Throwable $e) {
+            \Log::error('Mini start attempt error', ['user' => $user->id, 'mode' => $mode, 'hash' => $variant->hash, 'error' => $e->getMessage()]);
+            return response()->json([
+                'error' => 'Ошибка создания попытки: ' . mb_substr($e->getMessage(), 0, 100),
+            ], 500);
+        }
 
         return response()->json([
             'redirect' => '/tg/test/' . $attempt->id,
@@ -425,15 +436,27 @@ class MiniAppController extends Controller
     {
         $user = $request->user();
 
+        if (!$user) {
+            return response()->json(['error' => 'Сессия истекла. Перезайдите в приложение.'], 401);
+        }
+
         try {
             $variant = $this->poolService->getOrCreateVariant($user, 'full');
         } catch (\RuntimeException $e) {
+            \Log::warning('Full start pool error', ['user' => $user->id, 'error' => $e->getMessage()]);
             return response()->json([
                 'error' => 'Нет доступных заданий. Попробуйте позже.',
             ], 422);
         }
 
-        [$variant, $attempt] = $this->attemptService->startAttempt($user, $variant->hash);
+        try {
+            [$variant, $attempt] = $this->attemptService->startAttempt($user, $variant->hash);
+        } catch (\Throwable $e) {
+            \Log::error('Full start attempt error', ['user' => $user->id, 'hash' => $variant->hash, 'error' => $e->getMessage()]);
+            return response()->json([
+                'error' => 'Ошибка создания попытки: ' . mb_substr($e->getMessage(), 0, 100),
+            ], 500);
+        }
 
         return response()->json([
             'redirect' => '/tg/test/' . $attempt->id,
