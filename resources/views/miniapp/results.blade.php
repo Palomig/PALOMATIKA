@@ -359,18 +359,6 @@
     <div style="width:36px;"></div>
   </div>
 
-  {{-- SCORE HERO --}}
-  <div class="score-hero anim-up" style="animation-delay:0.05s">
-    <div>
-      <div class="score-label">Твой результат</div>
-      <div class="score-nums">
-        <span class="score-big">{{ $correctCount }}</span>
-        <span class="score-of">/{{ $totalTasks }}</span>
-      </div>
-      <div class="score-message">{{ $message }}</div>
-    </div>
-  </div>
-
   {{-- STAT ROW --}}
   <div class="stat-row anim-up" style="animation-delay:0.1s">
     <div class="stat-card">
