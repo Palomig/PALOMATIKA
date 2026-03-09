@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('oge_attempts', function (Blueprint $table) {
-            $table->json('frozen_answers_json')->nullable()->after('attempt_fingerprint');
+            $table->json('frozen_answers_json')->nullable()->after('device_meta');
         });
     }
 
