@@ -460,7 +460,7 @@ class OgeVariantPoolService
         }
 
         $lower = mb_strtolower(trim($instruction));
-        $desiredTrueCount = null;
+        $desiredTrueCount = 2; // Default: 2 true + 1 false (standard OGE task 19)
         if (str_starts_with($lower, 'какое')) {
             $desiredTrueCount = 1;
         } elseif (str_starts_with($lower, 'какие')) {

@@ -37,20 +37,32 @@
         } else {
             $allStatements = $taskData['statements'];
 
-            // Выбираем 3 случайных утверждения из набора (как в официальном ОГЭ)
+            // Выбираем 3 утверждения: 2 верных + 1 неверное (стандарт ОГЭ задание 19)
             if (count($allStatements) > 3) {
-                $keys = array_rand($allStatements, 3);
-                if (!is_array($keys)) $keys = [$keys];
-                sort($keys); // Сохраняем порядок для детерминированности
+                $trueOnes = array_values(array_filter($allStatements, fn($s) => !empty($s['is_true'])));
+                $falseOnes = array_values(array_filter($allStatements, fn($s) => empty($s['is_true'])));
+                shuffle($trueOnes);
+                shuffle($falseOnes);
 
                 $selectedStatements = [];
-                $newNumber = 1;
-                foreach ($keys as $key) {
-                    $statement = $allStatements[$key];
-                    // Перенумеровываем для варианта (1, 2, 3)
-                    $statement['display_number'] = $newNumber++;
-                    $selectedStatements[] = $statement;
+                if (count($trueOnes) >= 2 && count($falseOnes) >= 1) {
+                    $selectedStatements = [array_shift($trueOnes), array_shift($trueOnes), array_shift($falseOnes)];
+                    shuffle($selectedStatements);
+                } else {
+                    // Fallback: random 3
+                    $keys = array_rand($allStatements, 3);
+                    if (!is_array($keys)) $keys = [$keys];
+                    sort($keys);
+                    foreach ($keys as $key) {
+                        $selectedStatements[] = $allStatements[$key];
+                    }
                 }
+
+                $newNumber = 1;
+                foreach ($selectedStatements as &$statement) {
+                    $statement['display_number'] = $newNumber++;
+                }
+                unset($statement);
                 $zadanie['statements'] = $selectedStatements;
             } else {
                 // Если утверждений 3 или меньше - берём все
