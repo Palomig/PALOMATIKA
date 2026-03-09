@@ -660,7 +660,7 @@
         <div class="q-meta q-anim" :style="'animation-delay: 0s'">
           <div class="q-num" x-text="'Задание ' + currentTask.task_number"></div>
           <div class="q-topic-badge" x-text="topicName(currentTask.topic_id)"></div>
-          <div class="q-topic-badge" style="opacity:.8" x-text="'ID: ' + (currentTask.task_id || currentTask.id || currentTask.task?.id || '—')"></div>
+          <div class="q-topic-badge" style="opacity:.8" x-text="'ID: ' + taskLocator(currentTask)"></div>
         </div>
 
         {{-- Instruction text --}}
@@ -936,6 +936,14 @@
       },
 
       // Topic name helper
+      taskLocator(t) {
+        const tid = String(t?.topic_id ?? 'x').padStart(2, '0');
+        const b = t?.block_number ?? 'x';
+        const z = t?.zadanie_number ?? 'x';
+        const i = t?.task_id ?? t?.id ?? t?.task?.id ?? 'x';
+        return `t${tid}-b${b}-z${z}-i${i}`;
+      },
+
       topicName(topicId) {
         const id = String(topicId).padStart(2, '0');
         return TOPIC_NAMES[id] || ('Тема ' + id);
