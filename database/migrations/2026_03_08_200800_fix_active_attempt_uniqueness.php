@@ -13,8 +13,14 @@ return new class extends Migration
             return;
         }
 
+        // Drop foreign key that depends on the index first.
+        DB::statement('ALTER TABLE oge_attempts DROP FOREIGN KEY oge_attempts_variant_id_foreign');
+
         // Drop legacy strict uniqueness (blocked re-attempts forever).
         DB::statement('ALTER TABLE oge_attempts DROP INDEX oge_unique_variant_student');
+
+        // Re-add the foreign key (MySQL will create its own index automatically).
+        DB::statement('ALTER TABLE oge_attempts ADD CONSTRAINT oge_attempts_variant_id_foreign FOREIGN KEY (variant_id) REFERENCES oge_variants(id) ON DELETE CASCADE');
 
         // Enforce uniqueness only for active attempts:
         // active_unique_key = 1 when status=active, else NULL.
@@ -32,6 +38,8 @@ return new class extends Migration
 
         DB::statement('ALTER TABLE oge_attempts DROP INDEX oge_unique_active_attempt');
         DB::statement('ALTER TABLE oge_attempts DROP COLUMN active_unique_key');
+        DB::statement('ALTER TABLE oge_attempts DROP FOREIGN KEY oge_attempts_variant_id_foreign');
         DB::statement('ALTER TABLE oge_attempts ADD UNIQUE INDEX oge_unique_variant_student (variant_id, student_id)');
+        DB::statement('ALTER TABLE oge_attempts ADD CONSTRAINT oge_attempts_variant_id_foreign FOREIGN KEY (variant_id) REFERENCES oge_variants(id) ON DELETE CASCADE');
     }
 };
