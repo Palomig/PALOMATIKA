@@ -46,7 +46,15 @@ class OgeVariantPoolService
      */
     public function createBattleVariant(string $type): OgeVariant
     {
-        return $this->generateNewPoolVariant($type);
+        $variant = $this->generateNewPoolVariant($type);
+
+        // Mark as battle variant so leaderboard is shown on results page
+        $config = $variant->config_json ?? [];
+        $config['is_battle'] = true;
+        $variant->config_json = $config;
+        $variant->save();
+
+        return $variant;
     }
 
     /**

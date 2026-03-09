@@ -560,9 +560,9 @@ class MiniAppController extends Controller
             $totalTime = $attempt->submitted_at->diffInSeconds($attempt->started_at);
         }
 
-        // Battle leaderboard: for shared miniapp variants show other participants too.
+        // Battle leaderboard: only for variants created via bot /battle command.
         $leaderboard = [];
-        $isBattleVariant = ($attempt->variant?->source() ?? '') === OgeVariant::SOURCE_MINIAPP;
+        $isBattleVariant = !empty($attempt->variant?->config_json['is_battle']);
         if ($isBattleVariant && $attempt->variant_id) {
             $battleAttempts = OgeAttempt::where('variant_id', $attempt->variant_id)
                 ->whereIn('status', ['submitted', 'scored'])
