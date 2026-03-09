@@ -323,6 +323,21 @@
         '19' => 'Высказывания',
     ];
 
+    // Build task_number => locator map from variant config
+    $variantTasks = is_array($attempt->variant?->config_json['tasks'] ?? null)
+        ? $attempt->variant->config_json['tasks'] : [];
+    $locatorMap = [];
+    foreach ($variantTasks as $vt) {
+        $taskNum = (int) ($vt['task_number'] ?? 0);
+        if ($taskNum > 0) {
+            $tid = str_pad((string) ($vt['topic_id'] ?? 'x'), 2, '0', STR_PAD_LEFT);
+            $b = $vt['block_number'] ?? 'x';
+            $z = $vt['zadanie_number'] ?? 'x';
+            $i = $vt['task_id'] ?? $vt['task']['id'] ?? 'x';
+            $locatorMap[$taskNum] = "t{$tid}-b{$b}-z{$z}-i{$i}";
+        }
+    }
+
     // Build rows data for Alpine
     $rows = [];
     foreach ($scorings as $scoring) {
@@ -334,6 +349,7 @@
             'num' => (int) $scoring->task_number,
             'topicKey' => $tn,
             'topicName' => $topicNames[$tn] ?? "Задание {$scoring->task_number}",
+            'locator' => $locatorMap[(int) $scoring->task_number] ?? '',
             'yourAnswer' => $answerText ?? '',
             'correctAnswer' => $scoring->correct_answer ?? '',
             'isCorrect' => (bool) $scoring->is_correct,
@@ -411,7 +427,12 @@
 
           {{-- Body --}}
           <div class="ans-body">
-            <div class="ans-topic" x-text="row.topicName"></div>
+            <div class="ans-topic">
+              <span x-text="row.topicName"></span>
+              <template x-if="row.locator">
+                <span style="font-size:10px;color:var(--muted);margin-left:6px;font-weight:600;opacity:.7" x-text="row.locator"></span>
+              </template>
+            </div>
             <div class="ans-answers">
               <template x-if="row.yourAnswer === '' && !row.isCorrect">
                 <span class="skip-ans">без ответа</span>
