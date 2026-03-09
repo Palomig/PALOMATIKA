@@ -18,7 +18,7 @@ class FlushVariantPool extends Command
             $query->where('type', $type);
         }
 
-        $count = $query->update(['status' => 'expired']);
+        $count = $query->update(['status' => 'deactivated']);
 
         $this->info("Expired {$count} pool entries. New variants will be generated on next request.");
 
