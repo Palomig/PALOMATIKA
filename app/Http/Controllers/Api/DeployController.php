@@ -33,6 +33,7 @@ class DeployController extends Controller
         'svg:bake',
         'svg:bake-ege',
         'pool:sync',
+        'pool:flush',
         'oge:rescore-attempts',
         'oge:backfill-answers',
         'tasks:add-status',
