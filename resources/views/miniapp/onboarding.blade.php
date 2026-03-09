@@ -93,12 +93,14 @@
       <div class="class-row">
         <div>
           <div class="chips">
-            <div class="chip selected">9</div>
+            <template x-for="g in [8, 9]" :key="g">
+              <div class="chip" :class="{ 'selected': grade === g }" @click="grade = g" x-text="g"></div>
+            </template>
           </div>
         </div>
         <div>
           <div class="chips">
-            <template x-for="l in ['А','Б','В','Г','Д']" :key="l">
+            <template x-for="l in ['А','Б','В','Г','Д','К','М']" :key="l">
               <div class="chip" :class="{ 'selected': letter === l }" @click="letter = l" x-text="l"></div>
             </template>
           </div>
@@ -138,6 +140,7 @@
 function onboardingPage() {
   return {
     name: @json(auth()->user()?->name ?? ''),
+    grade: @json(auth()->user()?->grade_num ?? 9),
     letter: @json(auth()->user()?->grade_letter ?? null),
     school: @json(auth()->user()?->school_number ?? ''),
     city: @json(auth()->user()?->city ?? ''),
@@ -155,7 +158,7 @@ function onboardingPage() {
         // Use session-based web endpoint (onboarding token as fallback for WebView cookie loss)
         const payload = {
           name: this.name.trim(),
-          grade_num: 9,
+          grade_num: this.grade,
           grade_letter: this.letter,
           school_number: this.school.trim(),
           city: this.city.trim() || 'Чехов',
