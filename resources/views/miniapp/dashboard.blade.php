@@ -185,19 +185,12 @@
       <div class="tile-sm-desc">из банка ФИПИ</div>
       <div class="tile-badge badge-red tile-badge-top-right">Новое</div>
     </a>
-    @if($lastAttempt)
-    <a href="/tg/results/{{ $lastAttempt->id }}" class="tile-sm">
+    <div class="tile-sm" style="opacity:0.5;cursor:default;">
       <div class="tile-sm-icon">🔍</div>
       <div class="tile-sm-name">Разбор ошибок</div>
-      <div class="tile-sm-desc">Посмотри, где ошибся</div>
-    </a>
-    @else
-    <div class="tile-sm" style="opacity:0.5;">
-      <div class="tile-sm-icon">🔍</div>
-      <div class="tile-sm-name">Разбор ошибок</div>
-      <div class="tile-sm-desc">Пройди тест</div>
+      <div class="tile-sm-desc">Скоро</div>
+      <div class="tile-badge badge-blue tile-badge-top-right" style="font-size:8px;">Soon</div>
     </div>
-    @endif
     <div class="tile-sm" style="opacity:0.5;">
       <div class="tile-sm-icon">📊</div>
       <div class="tile-sm-name">История</div>
@@ -259,14 +252,16 @@ function dashboardPage() {
       const tg = window.Telegram?.WebApp;
       const botUsername = '{{ config("services.telegram.bot_username", "palomatika_auth_bot") }}';
       const link = `https://t.me/${botUsername}/app`;
-      const text = 'Готовься к ОГЭ по математике бесплатно! ' + link;
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(text).then(() => {
-          if (tg && tg.showAlert) { tg.showAlert('Ссылка скопирована! Отправь другу в чат'); }
-          else { alert('Ссылка скопирована!'); }
-        });
-      } else if (navigator.share) {
-        navigator.share({ title: 'palomatika — ОГЭ', text: text });
+      const text = 'Готовься к ОГЭ по математике бесплатно!';
+
+      if (tg && tg.switchInlineQuery) {
+        tg.switchInlineQuery(text + ' ' + link, ['users', 'groups', 'channels']);
+      } else if (tg && tg.openTelegramLink) {
+        const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`;
+        tg.openTelegramLink(shareUrl);
+      } else {
+        const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`;
+        window.open(shareUrl, '_blank');
       }
     },
   };
