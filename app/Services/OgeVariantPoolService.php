@@ -372,6 +372,10 @@ class OgeVariantPoolService
         // For matching/choice tasks options are often inside task-level options.
         $normalized['options'] = $inner['options'] ?? ($task['options'] ?? null);
 
+        // Graph options (topic 13 number-line choice tasks)
+        $normalized['graph_options'] = $inner['graph_options'] ?? ($task['graph_options'] ?? null);
+        $normalized['graph_options_mode'] = $inner['graph_options_mode'] ?? ($task['graph_options_mode'] ?? null);
+
         if (($normalized['type'] ?? '') === 'matching' && array_key_exists('answer', $inner)) {
             $normalized['correct_answer'] = $this->normalizeMatchingAnswer(
                 (string) $inner['answer'],

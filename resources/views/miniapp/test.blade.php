@@ -319,6 +319,9 @@
   .test-option-text .katex {
     font-size: 1.28em;
   }
+  .test-option-text svg {
+    width: 100%; max-width: 320px; height: auto;
+  }
 
   /* Text input */
   .answer-input {
@@ -907,15 +910,34 @@
       },
 
       normalizedOptions(task) {
-        return Array.isArray(task?.options) ? task.options : [];
+        if (Array.isArray(task?.options) && task.options.length > 0) return task.options;
+        // Topic 13: graph_options with SVG number lines as choices
+        if (Array.isArray(task?.graph_options) && task.graph_options.length > 0) {
+          return task.graph_options.map(go => ({
+            id: String(go.index ?? ''),
+            label: go.svg || go.text || '',
+            text: go.text || '',
+            _isSvg: !!go.svg,
+            _isGraphOption: true,
+          }));
+        }
+        return [];
       },
 
       optionAnswerValue(opt, idx) {
+        // Graph options (topic 13): answer is the text value for scoring
+        if (opt?._isGraphOption) {
+          return opt.text || String(opt?.id ?? (idx + 1));
+        }
         const id = String(opt?.id ?? '').trim();
         return id || String(idx + 1);
       },
 
       optionHtml(opt) {
+        // SVG option (graph_options from topic 13)
+        if (opt?._isSvg && opt?.label?.startsWith('<svg')) {
+          return opt.label;
+        }
         const raw = String(opt?.label ?? opt?.text ?? opt ?? '').trim();
         if (!raw) return '';
         const hasMathDelimiters = /\$[^$]+\$|\\\([^)]*\\\)|\\\[[\s\S]*?\\\]/.test(raw);
