@@ -106,6 +106,69 @@
     animation: pulse 1.5s ease infinite;
   }
   @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.7); } }
+
+  /* RESUME BANNER */
+  .resume-banner {
+    display: flex; align-items: center; justify-content: space-between;
+    background: linear-gradient(135deg, rgba(124,58,237,.18), rgba(59,130,246,.12));
+    border: 1.5px solid rgba(124,58,237,.4);
+    border-radius: var(--r); padding: 14px 16px;
+    text-decoration: none; color: inherit;
+    opacity: 0; animation: fadeUp 0.3s ease 0.07s forwards;
+  }
+  .resume-banner:active { opacity: 0.85; }
+  .resume-left { display: flex; align-items: center; gap: 12px; }
+  .resume-pulse {
+    width: 10px; height: 10px; background: var(--green);
+    border-radius: 50%; flex-shrink: 0;
+    animation: pulse 1.5s ease infinite;
+  }
+  .resume-title { font-family: var(--display); font-size: 14px; color: var(--text); }
+  .resume-sub { font-size: 11px; font-weight: 600; color: var(--muted); margin-top: 2px; }
+  .resume-btn {
+    font-size: 12px; font-weight: 800; color: var(--purple);
+    white-space: nowrap;
+  }
+
+  /* FULL VARIANT CHOICE MODAL */
+  .fv-overlay {
+    position: fixed; inset: 0; z-index: 100;
+    background: rgba(0,0,0,.55); backdrop-filter: blur(4px);
+    display: flex; align-items: flex-end; justify-content: center;
+  }
+  .fv-sheet {
+    background: var(--bg); border-radius: 20px 20px 0 0;
+    width: 100%; max-width: 420px; padding: 20px 20px 32px;
+  }
+  .fv-handle {
+    width: 36px; height: 4px; background: var(--border);
+    border-radius: 2px; margin: 0 auto 16px;
+  }
+  .fv-title {
+    font-family: var(--display); font-size: 18px; color: var(--text);
+    text-align: center; margin-bottom: 16px;
+  }
+  .fv-option {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: var(--r); padding: 16px;
+    margin-bottom: 10px; cursor: pointer; transition: border-color 0.15s;
+    text-decoration: none; color: inherit;
+  }
+  .fv-option:active { background: var(--surface2); }
+  .fv-opt-icon { font-size: 28px; flex-shrink: 0; }
+  .fv-opt-name { font-family: var(--display); font-size: 15px; color: var(--text); }
+  .fv-opt-desc { font-size: 11px; font-weight: 600; color: var(--muted); margin-top: 2px; line-height: 1.3; }
+  .fv-opt-badge {
+    display: inline-block; margin-top: 6px;
+    font-size: 9px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.08em; padding: 3px 8px; border-radius: 6px;
+  }
+  .fv-cancel {
+    display: block; width: 100%; padding: 14px;
+    background: none; border: none; color: var(--muted);
+    font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 4px;
+  }
 @endpush
 
 @section('body')
@@ -115,6 +178,23 @@
   <div class="greeting">
     <div class="greeting-name">Привет, {{ $user->name ?? 'ученик' }}!</div>
   </div>
+
+  {{-- RESUME BANNER --}}
+  @if($activeAttemptInfo)
+  <a href="/tg/test/{{ $activeAttemptInfo['id'] }}" class="resume-banner">
+    <div class="resume-left">
+      <div class="resume-pulse"></div>
+      <div class="resume-info">
+        <div class="resume-title">{{ $activeAttemptInfo['title'] }}</div>
+        <div class="resume-sub">
+          Отвечено {{ $activeAttemptInfo['answeredCount'] }} из {{ $activeAttemptInfo['totalCount'] }}
+          · начат {{ $activeAttemptInfo['startedAt']?->diffForHumans() }}
+        </div>
+      </div>
+    </div>
+    <div class="resume-btn">Продолжить →</div>
+  </a>
+  @endif
 
   {{-- COUNTDOWN STRIP --}}
   <div class="cd-strip">
@@ -169,10 +249,10 @@
       <div class="tile-desc">Короткая тренировка по одной теме</div>
       <div class="tile-badge badge-purple">~10 мин</div>
     </a>
-    <a href="#" class="tile-big tile-blue" @click.prevent="startFull()">
+    <a href="#" class="tile-big tile-blue" @click.prevent="showFullChoice = true">
       <div class="tile-icon">📝</div>
       <div class="tile-name">Полный вариант</div>
-      <div class="tile-desc">14 заданий, как на экзамене</div>
+      <div class="tile-desc">Как на экзамене</div>
       <div class="tile-badge badge-blue">~45 мин</div>
     </a>
   </div>
@@ -214,6 +294,36 @@
     </a>
   </div>
 
+  {{-- FULL VARIANT CHOICE MODAL --}}
+  <template x-if="showFullChoice">
+    <div class="fv-overlay" @click.self="showFullChoice = false">
+      <div class="fv-sheet">
+        <div class="fv-handle"></div>
+        <div class="fv-title">Выбери формат</div>
+
+        <div class="fv-option" @click="startFull(false)">
+          <div class="fv-opt-icon">📝</div>
+          <div>
+            <div class="fv-opt-name">Только 1 часть</div>
+            <div class="fv-opt-desc">14 заданий · задачи с кратким ответом</div>
+            <div class="fv-opt-badge badge-blue">~45 мин</div>
+          </div>
+        </div>
+
+        <div class="fv-option" @click="startFull(true)">
+          <div class="fv-opt-icon">📝✍️</div>
+          <div>
+            <div class="fv-opt-name">1 + 2 часть</div>
+            <div class="fv-opt-desc">16 заданий · включая уравнения и текстовые задачи</div>
+            <div class="fv-opt-badge badge-purple">~60 мин</div>
+          </div>
+        </div>
+
+        <button class="fv-cancel" @click="showFullChoice = false">Отмена</button>
+      </div>
+    </div>
+  </template>
+
   {{-- WEAK TOPICS --}}
   @if(count($weakTopics) > 0)
   <div class="weak-section">
@@ -239,12 +349,20 @@ function dashboardPage() {
   const examDate = new Date('2026-06-02T10:00:00+03:00');
   return {
     daysLeft: Math.max(0, Math.floor((examDate - new Date()) / 86400000)),
+    showFullChoice: false,
+    startingFull: false,
 
-    async startFull() {
+    async startFull(withPart2 = false) {
+      if (this.startingFull) return;
+      this.startingFull = true;
+      this.showFullChoice = false;
+
       try {
-        const res = await window.fetchPost('/tg/full/start');
+        const body = withPart2 ? { part2: true } : {};
+        const res = await window.fetchPost('/tg/full/start', body);
         if (!res.ok && res.status === 419) {
           alert('Сессия истекла. Перезайдите в приложение.');
+          this.startingFull = false;
           return;
         }
         const data = await res.json();
@@ -252,10 +370,12 @@ function dashboardPage() {
           window.location.href = data.redirect;
         } else {
           alert(data.error || data.message || 'Ошибка запуска');
+          this.startingFull = false;
         }
       } catch (e) {
         console.error('startFull error:', e);
         alert('Ошибка соединения: ' + e.message);
+        this.startingFull = false;
       }
     },
 

@@ -138,6 +138,23 @@ class OgeAttemptController extends Controller
         ]);
     }
 
+    public function uploadPhoto(Request $request, OgeAttempt $attempt, int $taskNumber): JsonResponse
+    {
+        $this->authorizeAttempt($request, $attempt);
+        $this->guardActiveAttempt($attempt);
+        $this->validateTaskNumber($taskNumber);
+
+        $request->validate([
+            'photo' => 'required|image|max:5120', // 5MB max
+        ]);
+
+        $dir = "solution_photos/{$attempt->id}";
+        $filename = "task_{$taskNumber}_" . time() . '.' . $request->file('photo')->extension();
+        $request->file('photo')->storeAs($dir, $filename);
+
+        return response()->json(['success' => true]);
+    }
+
     public function submit(Request $request, OgeAttempt $attempt): JsonResponse
     {
         $this->authorizeAttempt($request, $attempt);

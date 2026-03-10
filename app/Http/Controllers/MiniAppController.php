@@ -274,8 +274,28 @@ class MiniAppController extends Controller
 
         $newFipiCount = $this->countNewFipiTasks();
 
+        // Find unfinished attempt for resume banner
+        $activeAttempt = OgeAttempt::where('student_id', $user->id)
+            ->where('status', 'active')
+            ->orderByDesc('last_seen_at')
+            ->first();
+
+        $activeAttemptInfo = null;
+        if ($activeAttempt) {
+            $variant = $activeAttempt->variant;
+            $answeredCount = $activeAttempt->answers()->count();
+            $totalCount = count($variant->config_json['tasks'] ?? []);
+            $activeAttemptInfo = [
+                'id' => $activeAttempt->id,
+                'title' => $variant->title ?? 'Вариант ОГЭ',
+                'answeredCount' => $answeredCount,
+                'totalCount' => $totalCount,
+                'startedAt' => $activeAttempt->started_at,
+            ];
+        }
+
         return view('miniapp.dashboard', compact(
-            'user', 'lastAttempt', 'lastCorrect', 'lastTotal', 'lastTime', 'weakTopics', 'newFipiCount'
+            'user', 'lastAttempt', 'lastCorrect', 'lastTotal', 'lastTime', 'weakTopics', 'newFipiCount', 'activeAttemptInfo'
         ));
     }
 
@@ -497,8 +517,10 @@ class MiniAppController extends Controller
             return response()->json(['error' => 'Сессия истекла. Перезайдите в приложение.'], 401);
         }
 
+        $type = $request->boolean('part2') ? 'full_with_part2' : 'full';
+
         try {
-            $variant = $this->poolService->getOrCreateVariant($user, 'full');
+            $variant = $this->poolService->getOrCreateVariant($user, $type);
         } catch (\RuntimeException $e) {
             \Log::warning('Full start pool error', ['user' => $user->id, 'error' => $e->getMessage()]);
             return response()->json([

@@ -356,6 +356,24 @@
     margin-top: 8px;
   }
 
+  /* ───── PHOTO UPLOAD ───── */
+  .photo-upload-area { margin-top: 12px; }
+  .photo-btn {
+    width: 100%; padding: 12px; border-radius: var(--r);
+    border: 1.5px dashed var(--border); background: var(--surface);
+    color: var(--muted); font-size: 13px; font-weight: 700;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .photo-btn:active { background: var(--surface2); }
+  .photo-btn.has-photo {
+    border-color: var(--green); border-style: solid;
+    color: var(--green); background: rgba(34, 197, 94, 0.08);
+  }
+  .photo-hint {
+    font-size: 10px; font-weight: 600; color: var(--muted);
+    text-align: center; margin-top: 4px; opacity: 0.7;
+  }
+
   /* ───── BOTTOM BAR ───── */
   .test-bottom {
     padding: 12px 16px calc(12px + var(--safe-bottom));
@@ -769,6 +787,20 @@
             </div>
           </template>
 
+          {{-- Photo upload for Part 2 tasks --}}
+          <template x-if="currentTask && currentTask.task_number >= 20">
+            <div class="photo-upload-area">
+              <input type="file" accept="image/*" capture="environment"
+                     x-ref="photoInput" style="display:none"
+                     @change="uploadPhoto($event)">
+              <button type="button" class="photo-btn" @click="$refs.photoInput.click()"
+                      :class="{ 'has-photo': photos[currentTask.task_number] }">
+                <span x-text="photos[currentTask.task_number] ? '📷 Фото прикреплено' : '📷 Сфотографировать решение'"></span>
+              </button>
+              <div class="photo-hint">Необязательно, но поможет при проверке</div>
+            </div>
+          </template>
+
         </div>
       </div>
 
@@ -853,6 +885,7 @@
       current: 0,
       answers: @json($answers ?? (object)[]),
       _lastCommitted: @json($answers ?? (object)[]),
+      photos: {},
       showModal: false,
       submitting: false,
       elapsed: 0,
@@ -1097,6 +1130,32 @@
           alert('Ошибка сети. Попробуй ещё раз.');
           this.submitting = false;
         }
+      },
+
+      // Photo upload for Part 2
+      async uploadPhoto(event) {
+        const file = event.target.files?.[0];
+        if (!file) return;
+        const tn = this.currentTask.task_number;
+        const formData = new FormData();
+        formData.append('photo', file);
+        try {
+          const res = await fetch(`/api/oge/attempts/${this.attemptId}/tasks/${tn}/photo`, {
+            method: 'POST',
+            headers: {
+              'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
+            },
+            body: formData,
+          });
+          if (res.ok) {
+            this.photos[tn] = true;
+          } else {
+            alert('Ошибка загрузки фото');
+          }
+        } catch (e) {
+          alert('Ошибка сети при загрузке фото');
+        }
+        event.target.value = '';
       },
 
       // Exit confirmation
