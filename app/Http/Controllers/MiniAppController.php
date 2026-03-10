@@ -386,6 +386,59 @@ class MiniAppController extends Controller
     }
 
     /**
+     * OGE Part 2 tasks (topics 20-25).
+     */
+    public function part2(Request $request)
+    {
+        $topicsMeta = [
+            '20' => ['title' => 'Уравнения', 'icon' => '🔢'],
+            '21' => ['title' => 'Текстовые задачи', 'icon' => '🚗'],
+            // '22' => ['title' => 'Графики', 'icon' => '📈'],
+            // '23' => ['title' => 'Геометрия (вычисление)', 'icon' => '📐'],
+            // '24' => ['title' => 'Геометрия (доказательство)', 'icon' => '✏️'],
+            // '25' => ['title' => 'Геометрия (повышенная)', 'icon' => '🔺'],
+        ];
+
+        $topics = array_keys($topicsMeta);
+        $selected = (string) $request->query('topic', '20');
+        if (!in_array($selected, $topics, true)) {
+            $selected = '20';
+        }
+
+        $data = $this->taskData->getTopicData($selected);
+        $zadaniya = [];
+
+        foreach (($data['blocks'] ?? []) as $block) {
+            foreach (($block['zadaniya'] ?? []) as $zadanie) {
+                $tasks = [];
+                foreach (($zadanie['tasks'] ?? []) as $t) {
+                    $text = trim((string) ($t['text'] ?? ''));
+                    if ($text === '') continue;
+                    $tasks[] = [
+                        'id'    => $t['id'] ?? null,
+                        'text'  => $text,
+                        'image' => $t['image'] ?? null,
+                    ];
+                }
+                if (!empty($tasks)) {
+                    $zadaniya[] = [
+                        'title' => $zadanie['section'] ?? ($zadanie['instruction'] ?? 'Задание ' . ($zadanie['number'] ?? '')),
+                        'hint'  => $zadanie['answer_hint'] ?? null,
+                        'tasks' => $tasks,
+                    ];
+                }
+            }
+        }
+
+        return view('miniapp.part2', [
+            'topicsMeta'    => $topicsMeta,
+            'topics'        => $topics,
+            'selectedTopic' => $selected,
+            'zadaniya'      => $zadaniya,
+        ]);
+    }
+
+    /**
      * Mini-OGE mode selection page.
      */
     public function mini()

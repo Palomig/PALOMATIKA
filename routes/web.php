@@ -426,6 +426,7 @@ Route::prefix('tg')->group(function () {
             Route::get('/dashboard', [MiniAppController::class, 'dashboard'])->name('miniapp.dashboard');
             Route::get('/mini', [MiniAppController::class, 'mini'])->name('miniapp.mini');
             Route::get('/new-tasks', [MiniAppController::class, 'newTasks'])->name('miniapp.new_tasks');
+            Route::get('/part2', [MiniAppController::class, 'part2'])->name('miniapp.part2');
             Route::post('/mini/start', [MiniAppController::class, 'startMini'])->name('miniapp.mini.start');
             Route::post('/full/start', [MiniAppController::class, 'startFull'])->name('miniapp.full.start');
             Route::get('/test/{attemptId}', [MiniAppController::class, 'test'])->name('miniapp.test');

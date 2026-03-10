@@ -185,6 +185,12 @@
       <div class="tile-sm-desc">из банка ФИПИ</div>
       <div class="tile-badge badge-red tile-badge-top-right">Новое</div>
     </a>
+    <a href="/tg/part2" class="tile-sm">
+      <div class="tile-sm-icon">📝</div>
+      <div class="tile-sm-name">2я часть ОГЭ</div>
+      <div class="tile-sm-desc">задания 20–25</div>
+      <div class="tile-badge badge-red tile-badge-top-right">Новое</div>
+    </a>
     <div class="tile-sm" style="opacity:0.5;cursor:default;">
       <div class="tile-sm-icon">🔍</div>
       <div class="tile-sm-name">Разбор ошибок</div>
