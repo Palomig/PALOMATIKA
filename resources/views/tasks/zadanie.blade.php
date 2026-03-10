@@ -59,6 +59,9 @@
         @if(isset($zadanie['section']))
             <p class="text-slate-400 text-sm mt-1">{{ $zadanie['section'] }}</p>
         @endif
+        @if(isset($zadanie['answer_hint']))
+            <p class="text-slate-400 text-sm mt-2 italic">💡 {{ $zadanie['answer_hint'] }}</p>
+        @endif
     </div>
 
     {{-- Задачи по типу --}}
