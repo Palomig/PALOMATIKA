@@ -475,7 +475,7 @@ class MiniAppController extends Controller
      */
     public function startMini(Request $request)
     {
-        $request->validate(['mode' => 'required|string|in:geometry,algebra,mixed']);
+        $request->validate(['mode' => 'required|string|in:geometry,algebra,mixed,part2']);
         $mode = $request->input('mode');
         $user = $request->user();
 

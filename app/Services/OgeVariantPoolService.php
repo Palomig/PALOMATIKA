@@ -105,6 +105,7 @@ class OgeVariantPoolService
                     'mixed' => OgeVariant::MODE_MINI_MIXED,
                     'full' => OgeVariant::MODE_FULL,
                     'full_with_part2' => OgeVariant::MODE_FULL_WITH_PART2,
+                    'part2' => OgeVariant::MODE_MINI_PART2,
                 ];
 
                 $titleMap = [
@@ -113,6 +114,7 @@ class OgeVariantPoolService
                     'mixed' => 'Мини-ОГЭ: Смешанное',
                     'full' => 'Полный вариант ОГЭ',
                     'full_with_part2' => 'Полный вариант ОГЭ (1+2 часть)',
+                    'part2' => 'Мини-ОГЭ: 2-я часть',
                 ];
 
                 // Create the OgeVariant
@@ -193,6 +195,10 @@ class OgeVariantPoolService
                 break;
             case 'full_with_part2':
                 $topicIds = array_merge($this->algebraTopics, $this->geometryTopics, $this->part2Topics);
+                break;
+            case 'part2':
+                $topicIds = $this->part2Topics;
+                $targetCount = 2;
                 break;
             default:
                 throw new \InvalidArgumentException("Unknown variant type: {$type}");
