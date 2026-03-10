@@ -8,7 +8,7 @@ use Illuminate\Console\Command;
 
 class ImportTaskStatuses extends Command
 {
-    protected $signature = 'task-statuses:import {--topic=}';
+    protected $signature = 'task-statuses:import {--topic=} {--force : Overwrite even if DB has production status}';
 
     protected $description = 'Import task statuses from topic JSON files into DB task_statuses table';
 
@@ -64,7 +64,36 @@ class ImportTaskStatuses extends Command
             }
 
             if (!empty($rows)) {
-                TaskStatus::query()->upsert($rows, ['topic_id', 'task_key'], ['status', 'updated_at']);
+                if ($this->option('force')) {
+                    // Force mode: overwrite all statuses from JSON
+                    TaskStatus::query()->upsert($rows, ['topic_id', 'task_key'], ['status', 'updated_at']);
+                } else {
+                    // Safe mode: only insert new records or upgrade draft→production.
+                    // Never downgrade production→draft.
+                    $existingProduction = TaskStatus::query()
+                        ->where('topic_id', $topicId)
+                        ->where('status', 'production')
+                        ->pluck('task_key')
+                        ->flip()
+                        ->toArray();
+
+                    $safeRows = array_filter($rows, function ($row) use ($existingProduction) {
+                        // Skip if DB has production but JSON says draft
+                        if (isset($existingProduction[$row['task_key']]) && $row['status'] !== 'production') {
+                            return false;
+                        }
+                        return true;
+                    });
+
+                    if (!empty($safeRows)) {
+                        TaskStatus::query()->upsert(array_values($safeRows), ['topic_id', 'task_key'], ['status', 'updated_at']);
+                    }
+
+                    $skipped = count($rows) - count($safeRows);
+                    if ($skipped > 0) {
+                        $this->comment("   {$skipped} production statuses preserved (use --force to overwrite)");
+                    }
+                }
             }
 
             $count = count($rows);
