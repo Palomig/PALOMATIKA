@@ -372,6 +372,7 @@ Route::prefix('api/oge')->middleware(['auth', 'role:student,admin'])->group(func
     Route::post('/attempts/{attempt}/tasks/{taskNumber}/focus', [OgeAttemptController::class, 'focus'])->name('api.oge.attempt.focus');
     Route::post('/attempts/{attempt}/tasks/{taskNumber}/blur', [OgeAttemptController::class, 'blur'])->name('api.oge.attempt.blur');
     Route::post('/attempts/{attempt}/tasks/{taskNumber}/commit', [OgeAttemptController::class, 'commit'])->name('api.oge.attempt.commit');
+    Route::post('/attempts/{attempt}/tasks/{taskNumber}/photo', [OgeAttemptController::class, 'uploadPhoto'])->name('api.oge.attempt.photo');
     Route::post('/attempts/{attempt}/heartbeat', [OgeAttemptController::class, 'heartbeat'])->name('api.oge.attempt.heartbeat');
     Route::post('/attempts/{attempt}/submit', [OgeAttemptController::class, 'submit'])->name('api.oge.attempt.submit');
 });

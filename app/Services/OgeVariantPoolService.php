@@ -19,6 +19,9 @@ class OgeVariantPoolService
     // Geometry topics: 15-19
     protected array $geometryTopics = ['15', '16', '17', '18', '19'];
 
+    // Part 2 topics: 20-21
+    protected array $part2Topics = ['20', '21'];
+
     public function __construct(
         private readonly TaskDataService $taskData,
         private readonly MiniAppTaskCanonicalizer $taskCanonicalizer,
@@ -101,6 +104,7 @@ class OgeVariantPoolService
                     'algebra' => OgeVariant::MODE_MINI_ALGEBRA,
                     'mixed' => OgeVariant::MODE_MINI_MIXED,
                     'full' => OgeVariant::MODE_FULL,
+                    'full_with_part2' => OgeVariant::MODE_FULL_WITH_PART2,
                 ];
 
                 $titleMap = [
@@ -108,6 +112,7 @@ class OgeVariantPoolService
                     'algebra' => 'Мини-ОГЭ: Алгебра',
                     'mixed' => 'Мини-ОГЭ: Смешанное',
                     'full' => 'Полный вариант ОГЭ',
+                    'full_with_part2' => 'Полный вариант ОГЭ (1+2 часть)',
                 ];
 
                 // Create the OgeVariant
@@ -185,6 +190,9 @@ class OgeVariantPoolService
                 break;
             case 'full':
                 $topicIds = array_merge($this->algebraTopics, $this->geometryTopics);
+                break;
+            case 'full_with_part2':
+                $topicIds = array_merge($this->algebraTopics, $this->geometryTopics, $this->part2Topics);
                 break;
             default:
                 throw new \InvalidArgumentException("Unknown variant type: {$type}");
