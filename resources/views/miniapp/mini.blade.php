@@ -46,6 +46,11 @@
   .icon-mix  { background: var(--yellow-bg); }
   .tag-mix   { background: var(--yellow-bg); color: var(--yellow); }
 
+  .card-p2   { border-color: rgba(239,68,68,.35); }
+  .card-p2:active { background: rgba(239,68,68,.06); }
+  .icon-p2   { background: rgba(239,68,68,.1); }
+  .tag-p2    { background: rgba(239,68,68,.1); color: #ef4444; }
+
   .hero-mini {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: var(--r); padding: 20px;
@@ -142,6 +147,25 @@
       <div class="mode-tags">
         <span class="tag tag-mix">~15 мин</span>
         <span class="tag tag-mix">4 алгебра + 3 геометрия</span>
+      </div>
+    </div>
+
+    {{-- 2-Я ЧАСТЬ --}}
+    <div class="mode-card card-p2" @click="startMode('part2')">
+      <div class="mode-card-inner">
+        <div class="mode-icon-wrap icon-p2">✍️</div>
+        <div class="mode-body">
+          <div class="mode-name">2-я часть</div>
+          <div class="mode-desc">Уравнения и задачи повышенной сложности</div>
+        </div>
+        <div class="mode-right">
+          <div class="mode-count">2</div>
+          <div class="mode-count-label">задания</div>
+        </div>
+      </div>
+      <div class="mode-tags">
+        <span class="tag tag-p2">~20 мин</span>
+        <span class="tag tag-p2">Задания 20, 21</span>
       </div>
     </div>
 

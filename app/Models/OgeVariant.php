@@ -18,6 +18,7 @@ class OgeVariant extends Model
     public const MODE_MINI_GEOMETRY = 'mini_geometry';
     public const MODE_MINI_MIXED = 'mini_mixed';
     public const MODE_FULL_WITH_PART2 = 'full_with_part2';
+    public const MODE_MINI_PART2 = 'mini_part2';
 
     protected $fillable = [
         'hash',
