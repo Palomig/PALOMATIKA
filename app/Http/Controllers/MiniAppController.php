@@ -401,7 +401,7 @@ class MiniAppController extends Controller
 
         $topics = array_keys($topicsMeta);
         $selected = (string) $request->query('topic', '20');
-        if (!in_array($selected, $topics, true)) {
+        if (!in_array($selected, $topics)) {
             $selected = '20';
         }
 
