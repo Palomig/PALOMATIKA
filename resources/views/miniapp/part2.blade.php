@@ -54,8 +54,6 @@
   }
   .spoiler[open] summary::after { transform: rotate(180deg); }
   .spoiler-body { padding: 0 10px 10px; display: flex; flex-direction: column; gap: 8px; }
-  .spoiler-count { font-size: 10px; color: var(--muted); font-weight: 700; }
-
   .task-list {
     margin-top: 12px;
     display: flex; flex-direction: column; gap: 8px;
@@ -118,10 +116,7 @@
   <div class="task-list">
     @forelse($zadaniya as $group)
       <details class="spoiler" {{ $loop->first ? 'open' : '' }}>
-        <summary>
-          <span>{{ $group['title'] }}</span>
-          <span class="spoiler-count">{{ count($group['tasks']) }}</span>
-        </summary>
+        <summary>{{ $group['title'] }}</summary>
         <div class="spoiler-body">
           @if($group['hint'])
             <div class="hint-box">{{ $group['hint'] }}</div>

@@ -421,8 +421,12 @@ class MiniAppController extends Controller
                     ];
                 }
                 if (!empty($tasks)) {
+                    $section = trim((string) ($zadanie['section'] ?? ''));
+                    $instruction = trim((string) ($zadanie['instruction'] ?? ''));
+                    $num = $zadanie['number'] ?? '';
+                    $title = $section !== '' ? $section : ($instruction !== '' ? "Задание {$num}. {$instruction}" : "Задание {$num}");
                     $zadaniya[] = [
-                        'title' => $zadanie['section'] ?? ($zadanie['instruction'] ?? 'Задание ' . ($zadanie['number'] ?? '')),
+                        'title' => $title,
                         'hint'  => $zadanie['answer_hint'] ?? null,
                         'tasks' => $tasks,
                     ];
