@@ -747,7 +747,7 @@
                      placeholder="Например: 123"
                      autocomplete="off"
                      :value="answers[currentTask.task_number] || ''"
-                     @input.debounce.300ms="saveInput($event.target.value)"
+                     @input="saveInput($event.target.value)"
                      x-ref="answerInput">
               <div class="answer-hint" x-text="normalizedOptions(currentTask).length > 0 ? 'Введи цифры по порядку' : 'Введи буквы по порядку'"></div>
             </div>
@@ -763,7 +763,7 @@
                      placeholder="Ответ"
                      autocomplete="off"
                      :value="answers[currentTask.task_number] || ''"
-                     @input.debounce.300ms="saveInput($event.target.value)"
+                     @input="saveInput($event.target.value)"
                      x-ref="answerInput">
               <div class="answer-hint">Введи число и переходи дальше</div>
             </div>
