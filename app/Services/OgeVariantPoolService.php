@@ -308,6 +308,12 @@ class OgeVariantPoolService
                         continue;
                     }
 
+                    // Skip tasks with missing/placeholder answers
+                    $answer = trim((string) ($task['answer'] ?? ''));
+                    if ($answer === '' || mb_stripos($answer, 'нет в базе') !== false) {
+                        continue;
+                    }
+
                     $all[] = [
                         'topic_id' => $topicId,
                         'topic_title' => $meta['title'],
