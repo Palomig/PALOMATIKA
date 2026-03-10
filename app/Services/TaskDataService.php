@@ -105,6 +105,24 @@ class TaskDataService
             'color' => 'purple',
             'icon' => 'check-circle',
         ],
+        '20' => [
+            'title' => 'Графики и уравнения',
+            'description' => 'Графики функций и уравнения',
+            'color' => 'violet',
+            'icon' => 'chart-line',
+        ],
+        '21' => [
+            'title' => 'Текстовые задачи',
+            'description' => 'Текстовые задачи на движение, работу и др.',
+            'color' => 'indigo',
+            'icon' => 'file-text',
+        ],
+        '23' => [
+            'title' => 'Геометрическая задача на вычисление',
+            'description' => 'Геометрические задачи на вычисление',
+            'color' => 'sky',
+            'icon' => 'compass',
+        ],
     ];
 
     public function __construct()
