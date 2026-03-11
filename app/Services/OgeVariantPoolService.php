@@ -296,16 +296,6 @@ class OgeVariantPoolService
     {
         $blocks = $this->taskData->getBlocks($topicId, $status);
         $meta = $this->taskData->getTopicMeta($topicId);
-
-        if (in_array($topicId, ['20', '21'], true)) {
-            \Log::info('pickTaskForTopic debug', [
-                'topicId' => $topicId,
-                'status' => $status,
-                'blocksCount' => count($blocks),
-                'metaTitle' => $meta['title'] ?? 'NO_META',
-                'excludeCount' => count($excludeTaskIds),
-            ]);
-        }
         $all = [];
 
         foreach ($blocks as $block) {
