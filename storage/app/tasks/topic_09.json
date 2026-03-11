@@ -146,7 +146,6 @@
             },
             {
               "id": 20,
-              "expression": "3(x + 6) - 2(x - 6) = 6",
               "answer": "-44",
               "status": "draft",
               "src_key": "26.1",
@@ -154,7 +153,6 @@
             },
             {
               "id": 21,
-              "expression": "3(x + 5) - 2(x - 5) = 5",
               "answer": "-8",
               "status": "draft",
               "src_key": "26.2",
@@ -162,7 +160,6 @@
             },
             {
               "id": 22,
-              "expression": "3(x + 2) - 2(x - 2) = 2",
               "answer": "-24",
               "status": "draft",
               "src_key": "26.3",
@@ -170,7 +167,6 @@
             },
             {
               "id": 23,
-              "expression": "2(x - 8) - x = 8",
               "answer": "-20",
               "status": "draft",
               "src_key": "26.4",
@@ -178,7 +174,6 @@
             },
             {
               "id": 24,
-              "expression": "2(x - 3) - x = 3",
               "answer": "-12",
               "status": "draft",
               "src_key": "26.5",
@@ -186,7 +181,6 @@
             },
             {
               "id": 25,
-              "expression": "2(x - 10) - x = 10",
               "answer": "-40",
               "status": "draft",
               "src_key": "26.6",
@@ -194,7 +188,6 @@
             },
             {
               "id": 26,
-              "expression": "2(x - 9) - x = 9",
               "answer": "-36",
               "status": "draft",
               "src_key": "26.7",
@@ -202,7 +195,6 @@
             },
             {
               "id": 27,
-              "expression": "2(x - 6) = x + 6",
               "answer": "-16",
               "status": "draft",
               "src_key": "26.8",
@@ -210,7 +202,6 @@
             },
             {
               "id": 28,
-              "expression": "2(x - 7) = x + 7",
               "answer": "-32",
               "status": "draft",
               "src_key": "26.9",
@@ -218,7 +209,6 @@
             },
             {
               "id": 29,
-              "expression": "2(x - 9) = x + 9",
               "answer": "-28",
               "status": "draft",
               "src_key": "26.10",
@@ -226,7 +216,6 @@
             },
             {
               "id": 30,
-              "expression": "2(x - 2) = x + 2",
               "answer": "-4",
               "status": "draft",
               "src_key": "26.11",

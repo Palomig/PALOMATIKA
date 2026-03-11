@@ -499,49 +499,70 @@ class OgeVariantPoolService
             $desiredTrueCount = 2;
         }
 
-        $idx = range(0, count($statements) - 1);
-        shuffle($idx);
-
-        $best = null;
-        for ($i = 0; $i < min(300, count($idx) * 12); $i++) {
-            shuffle($idx);
-            $pick = array_slice($idx, 0, 3);
-            sort($pick);
-
-            $set = [];
-            $trueCount = 0;
-            foreach ($pick as $k => $original) {
-                $s = $statements[$original] ?? [];
-                if (!is_array($s)) {
-                    $s = ['text' => (string) $s, 'is_true' => false];
-                }
-                $s['display_number'] = $k + 1;
-                if (!empty($s['is_true'])) {
-                    $trueCount++;
-                }
-                $set[] = $s;
+        // Split statements into true/false buckets for deterministic selection.
+        $trueStatements = [];
+        $falseStatements = [];
+        foreach ($statements as $idx => $s) {
+            if (!is_array($s)) {
+                $s = ['text' => (string) $s, 'is_true' => false];
             }
-
-            if ($desiredTrueCount === null) {
-                return $set;
-            }
-
-            if ($trueCount === $desiredTrueCount) {
-                return $set;
-            }
-
-            if ($best === null) {
-                $best = $set;
+            $s['_original_index'] = $idx;
+            if (!empty($s['is_true'])) {
+                $trueStatements[] = $s;
+            } else {
+                $falseStatements[] = $s;
             }
         }
 
-        return $best ?? array_map(function ($s, $idx) {
-            if (!is_array($s)) {
-                return ['text' => (string) $s, 'is_true' => false, 'display_number' => $idx + 1];
+        $desiredFalseCount = 3 - $desiredTrueCount;
+
+        // If not enough true or false statements, adjust desired counts.
+        if (count($trueStatements) < $desiredTrueCount || count($falseStatements) < $desiredFalseCount) {
+            // Try the other standard OGE ratio (1 true + 2 false).
+            if ($desiredTrueCount === 2 && count($trueStatements) >= 1 && count($falseStatements) >= 2) {
+                $desiredTrueCount = 1;
+                $desiredFalseCount = 2;
+            } elseif ($desiredTrueCount === 1 && count($trueStatements) >= 2 && count($falseStatements) >= 1) {
+                $desiredTrueCount = 2;
+                $desiredFalseCount = 1;
+            } else {
+                // Last resort: pick whatever is available (at least 1 of each if possible).
+                $desiredTrueCount = min(count($trueStatements), 2);
+                $desiredFalseCount = 3 - $desiredTrueCount;
+                $desiredFalseCount = min($desiredFalseCount, count($falseStatements));
+                // If still can't fill 3, just grab any 3.
+                if ($desiredTrueCount + $desiredFalseCount < 3) {
+                    shuffle($statements);
+                    return array_map(function ($s, $idx) {
+                        if (!is_array($s)) {
+                            return ['text' => (string) $s, 'is_true' => false, 'display_number' => $idx + 1];
+                        }
+                        $s['display_number'] = $idx + 1;
+                        unset($s['_original_index']);
+                        return $s;
+                    }, array_slice(array_values($statements), 0, 3), [0, 1, 2]);
+                }
             }
+        }
+
+        // Pick the required number of true and false statements randomly.
+        shuffle($trueStatements);
+        shuffle($falseStatements);
+
+        $picked = array_merge(
+            array_slice($trueStatements, 0, $desiredTrueCount),
+            array_slice($falseStatements, 0, $desiredFalseCount)
+        );
+
+        // Sort by original index to maintain natural ordering.
+        usort($picked, fn ($a, $b) => ($a['_original_index'] ?? 0) <=> ($b['_original_index'] ?? 0));
+
+        // Assign display numbers and clean up.
+        return array_values(array_map(function ($s, $idx) {
             $s['display_number'] = $idx + 1;
+            unset($s['_original_index']);
             return $s;
-        }, array_slice(array_values($statements), 0, 3), [0, 1, 2]);
+        }, $picked, array_keys($picked)));
     }
 
     /**

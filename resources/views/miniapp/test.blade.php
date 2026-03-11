@@ -764,8 +764,8 @@
                      inputmode="text"
                      placeholder="Например: 123"
                      autocomplete="off"
-                     :value="answers[currentTask.task_number] || ''"
-                     @input="saveInput($event.target.value)"
+                     x-model="answers[currentTask.task_number]"
+                     @input="scheduleCommit()"
                      x-ref="answerInput">
               <div class="answer-hint" x-text="normalizedOptions(currentTask).length > 0 ? 'Введи цифры по порядку' : 'Введи буквы по порядку'"></div>
             </div>
@@ -780,8 +780,8 @@
                      inputmode="text"
                      placeholder="Ответ"
                      autocomplete="off"
-                     :value="answers[currentTask.task_number] || ''"
-                     @input="saveInput($event.target.value)"
+                     x-model="answers[currentTask.task_number]"
+                     @input="scheduleCommit()"
                      x-ref="answerInput">
               <div class="answer-hint">Введи число и переходи дальше</div>
             </div>
@@ -1089,10 +1089,11 @@
         // Commit each changed answer individually via existing API
         const promises = [];
         for (const [taskNum, answer] of Object.entries(this.answers)) {
-          if (answer !== null && answer !== '' && answer !== this._lastCommitted?.[taskNum]) {
+          const trimmed = String(answer ?? '').trim();
+          if (trimmed !== '' && trimmed !== (this._lastCommitted?.[taskNum] ?? '').trim()) {
             promises.push(
               window.fetchPost(`/api/oge/attempts/${this.attemptId}/tasks/${taskNum}/commit`, {
-                answer: String(answer),
+                answer: trimmed,
               }).catch(e => console.warn(`Failed to commit task ${taskNum}:`, e))
             );
           }
