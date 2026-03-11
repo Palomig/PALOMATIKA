@@ -1,0 +1,7 @@
+[duo] start 2026-03-04T17:47:46Z
+[duo] outdir: /home/dev/palomatika/duo-dialog-smoke3
+[duo] preflight ok: binaries found
+LOG: /home/dev/palomatika/duo-dialog-smoke3/shared_log.md
+REPORT: /home/dev/palomatika/duo-dialog-smoke3/report.md
+STATE: /home/dev/palomatika/duo-dialog-smoke3/state.json
+RUNLOG: /home/dev/palomatika/duo-dialog-smoke3/run.log
