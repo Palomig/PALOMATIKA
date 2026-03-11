@@ -49,6 +49,9 @@
   <a class="btn btn-accent" href="/tg/teacher/students">Ученики и алиасы</a>
   <a class="btn btn-surface" href="/tg/teacher/variants">Мои варианты</a>
   <a class="btn btn-surface" href="/tg/admin/variants">Создать вариант</a>
+  @if($user->isAdmin())
+    <a class="btn btn-surface" href="/tg/teacher/referrals">📊 Рефералы</a>
+  @endif
 
   <div class="sec-label">Последние варианты</div>
   <div class="list">

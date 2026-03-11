@@ -382,7 +382,7 @@ function dashboardPage() {
     handleInvite() {
       const tg = window.Telegram?.WebApp;
       const botUsername = '{{ config("services.telegram.bot_username", "palomatika_auth_bot") }}';
-      const link = `https://t.me/${botUsername}/app`;
+      const link = `https://t.me/${botUsername}?startapp=ref_{{ $user->id }}`;
       const text = 'Готовься к ОГЭ по математике бесплатно!';
       const shareUrl = `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`;
 

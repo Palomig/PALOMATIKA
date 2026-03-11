@@ -105,6 +105,14 @@ class MiniAppController extends Controller
             $request->session()->put('telegram_start_param', $startParam);
         }
 
+        // Track referral for newly created users
+        if ($user->wasRecentlyCreated && preg_match('/^ref_(\d+)$/', $startParam, $refMatch)) {
+            $referrerId = (int) $refMatch[1];
+            if ($referrerId !== $user->id && User::where('id', $referrerId)->exists()) {
+                $user->update(['referred_by_user_id' => $referrerId]);
+            }
+        }
+
         $redirectTo = !$user->onboarding_completed_at ? '/tg/onboarding' : '/tg/dashboard';
         if ($startParam !== '') {
             $redirectTo .= '?startapp=' . rawurlencode($startParam);
@@ -851,6 +859,36 @@ class MiniAppController extends Controller
             'variants' => $variants,
             'canSwitchMode' => $user->role === 'admin',
             'effectiveRole' => $this->resolveMiniAppRole($request, $user),
+        ]);
+    }
+
+    public function teacherReferrals(Request $request)
+    {
+        // Top referrers: users who invited the most people
+        $referrers = User::query()
+            ->whereHas('referrals')
+            ->withCount('referrals')
+            ->orderByDesc('referrals_count')
+            ->limit(100)
+            ->get(['id', 'name', 'role', 'created_at']);
+
+        $totalUsers = User::count();
+        $totalReferred = User::whereNotNull('referred_by_user_id')->count();
+
+        // Recent referrals with who invited whom
+        $recentReferrals = User::query()
+            ->whereNotNull('referred_by_user_id')
+            ->with('referrer:id,name,role')
+            ->orderByDesc('created_at')
+            ->limit(50)
+            ->get(['id', 'name', 'role', 'referred_by_user_id', 'created_at']);
+
+        return view('miniapp.teacher-referrals', [
+            'referrers' => $referrers,
+            'totalUsers' => $totalUsers,
+            'totalReferred' => $totalReferred,
+            'recentReferrals' => $recentReferrals,
+            'canSwitchMode' => $request->user()->role === 'admin',
         ]);
     }
 

@@ -385,6 +385,14 @@ class TelegramBotAuthController extends Controller
         Cache::forget($this->startParamCacheKey($token));
         request()->session()->forget('telegram_start_param');
 
+        // Track referral for newly created users
+        if ($user->wasRecentlyCreated && preg_match('/^ref_(\d+)$/', $startParam, $refMatch)) {
+            $referrerId = (int) $refMatch[1];
+            if ($referrerId !== $user->id && User::where('id', $referrerId)->exists()) {
+                $user->update(['referred_by_user_id' => $referrerId]);
+            }
+        }
+
         $this->auditLogger->log([
             'event_type' => 'telegram_token_login_success',
             'category' => 'auth',
