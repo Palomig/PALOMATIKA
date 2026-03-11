@@ -442,7 +442,7 @@ Route::prefix('tg')->group(function () {
                 Route::post('/students/{studentId}/ownership', [MiniAppController::class, 'toggleTeacherStudentOwnership'])->name('students.ownership');
                 Route::patch('/students/{studentId}/alias', [MiniAppController::class, 'updateTeacherStudentAlias'])->name('students.alias');
                 Route::get('/variants', [MiniAppController::class, 'teacherVariants'])->name('variants');
-                Route::get('/referrals', [MiniAppController::class, 'teacherReferrals'])->name('referrals')->middleware('role:admin');
+                Route::get('/referrals', [MiniAppController::class, 'teacherReferrals'])->name('referrals');
             });
         });
 
