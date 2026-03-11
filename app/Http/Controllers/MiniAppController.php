@@ -1047,7 +1047,7 @@ class MiniAppController extends Controller
                         }
                     }
 
-                    $taskId = $inner['id'] ?? $def['id'] ?? null;
+                    $taskId = $inner['id'] ?? $def['task_id'] ?? $def['id'] ?? null;
                     $topicId = (string) (($def['topic_id'] ?? $inner['topic_id'] ?? '') ?: '');
                     $blockNumber = (string) (($def['block_number'] ?? $inner['block_number'] ?? '') ?: '');
                     $zadanieNumber = (string) (($def['zadanie_number'] ?? $inner['zadanie_number'] ?? '') ?: '');
