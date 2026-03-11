@@ -1163,18 +1163,10 @@
         if (this.answeredCount > 0) {
           if (confirm('Выйти из теста? Прогресс сохранён, можно продолжить позже.')) {
             this.commitAnswers();
-            if (window.Telegram?.WebApp) {
-              window.Telegram.WebApp.close();
-            } else {
-              window.location.href = '/tg';
-            }
+            window.location.href = '/tg/dashboard';
           }
         } else {
-          if (window.Telegram?.WebApp) {
-            window.Telegram.WebApp.close();
-          } else {
-            window.location.href = '/tg';
-          }
+          window.location.href = '/tg/dashboard';
         }
       },
 
