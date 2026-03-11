@@ -505,7 +505,8 @@ function homePage() {
     handleInvite() {
       const tg = window.Telegram?.WebApp;
       const botUsername = '{{ config("services.telegram.bot_username", "palomatika_auth_bot") }}';
-      const appLink = `https://t.me/${botUsername}?startapp=invite`;
+      const startParam = '{{ auth()->id() ? "ref_" . auth()->id() : "invite" }}';
+      const appLink = `https://t.me/${botUsername}?startapp=${startParam}`;
       const text = 'Решай реальные задания ОГЭ по математике — бесплатно! Проверь свой уровень 🎯';
 
       if (tg && tg.openTelegramLink) {
