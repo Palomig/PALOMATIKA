@@ -41,6 +41,7 @@ class DeployController extends Controller
         'task-statuses:import',
         'audit:prune',
         'assets:audit-semantic-svg',
+        'topics:diagnose',
     ];
 
     /**
