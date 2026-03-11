@@ -864,6 +864,8 @@ class MiniAppController extends Controller
 
     public function teacherReferrals(Request $request)
     {
+        abort_unless($request->user()->role === 'admin', 403);
+
         // Top referrers: users who invited the most people
         $referrers = User::query()
             ->whereHas('referrals')
