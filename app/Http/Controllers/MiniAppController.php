@@ -485,8 +485,15 @@ class MiniAppController extends Controller
 
         try {
             $variant = $this->poolService->getOrCreateVariant($user, $mode);
-        } catch (\RuntimeException $e) {
-            \Log::warning('Mini start pool error', ['user' => $user->id, 'mode' => $mode, 'error' => $e->getMessage()]);
+        } catch (\Throwable $e) {
+            \Log::error('Mini start pool error', [
+                'user' => $user->id,
+                'mode' => $mode,
+                'error' => $e->getMessage(),
+                'class' => get_class($e),
+                'file' => $e->getFile() . ':' . $e->getLine(),
+                'trace' => array_slice(explode("\n", $e->getTraceAsString()), 0, 5),
+            ]);
             return response()->json([
                 'error' => 'Нет доступных заданий для этого режима. Попробуйте позже.',
             ], 422);
