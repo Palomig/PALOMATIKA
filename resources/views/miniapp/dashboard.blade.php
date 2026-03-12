@@ -245,7 +245,7 @@
     <a href="#" class="tile-sm" @click.prevent="showTaskBase = true">
       <div class="tile-sm-icon">📚</div>
       <div class="tile-sm-name">База заданий</div>
-      <div class="tile-sm-desc">ФИПИ и 2 часть</div>
+      <div class="tile-sm-desc">ФИПИ 1 и 2 части</div>
       @if(($newFipiCount ?? 0) > 0)
       <div class="tile-badge badge-red tile-badge-top-right">Новое</div>
       @endif
