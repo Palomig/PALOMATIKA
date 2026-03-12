@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\DuelController;
 use App\Http\Controllers\Api\HomeworkController;
 use App\Http\Controllers\Api\JarvisMaterialController;
 use App\Http\Controllers\Api\LeaderboardController;
+use App\Http\Controllers\Api\ScheduleController;
 use App\Http\Controllers\Api\ProgressController;
 use App\Http\Controllers\Api\SkillController;
 use App\Http\Controllers\Api\SmartCartProxyController;
@@ -45,6 +46,14 @@ Route::post('/deploy/artisan', [DeployController::class, 'artisan']);
 Route::get('/deploy/commands', [DeployController::class, 'commands']);
 Route::post('/deploy/query', [DeployController::class, 'query']);
 Route::get('/deploy/tables', [DeployController::class, 'tables']);
+
+// Schedule API (protected by X-Deploy-Secret)
+Route::get('/schedule', [ScheduleController::class, 'index']);
+Route::get('/schedule/today', [ScheduleController::class, 'today']);
+Route::post('/schedule', [ScheduleController::class, 'store']);
+Route::put('/schedule/{id}', [ScheduleController::class, 'update']);
+Route::delete('/schedule/{id}', [ScheduleController::class, 'destroy']);
+Route::get('/students/search', [ScheduleController::class, 'searchStudents']);
 
 // Geometry Editor API
 Route::prefix('geometry')->group(function () {
