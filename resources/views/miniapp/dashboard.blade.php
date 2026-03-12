@@ -14,7 +14,7 @@
   }
   .greeting-countdown-val { font-family: var(--display); font-size: 13px; color: var(--text); }
 
-  /* LAST RESULT */
+  /* INFO CARD (used by FIPI banner) */
   .last-result {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: var(--r); padding: 16px;
@@ -208,26 +208,7 @@
   </div>
   @endif
 
-  {{-- LAST RESULT --}}
-  @if($lastAttempt)
-  <div class="last-result">
-    <div class="lr-header">
-      <div class="lr-title">Последний результат</div>
-      <div class="lr-date">{{ $lastAttempt->submitted_at?->format('d.m.Y') ?? '' }}</div>
-    </div>
-    <div class="lr-body">
-      <div class="lr-score">{{ $lastCorrect }}<small>/{{ $lastTotal }}</small></div>
-      <div class="lr-details">
-        <div class="lr-label">правильных ответов</div>
-        @if($lastTime)
-        <div class="lr-time">⏱ {{ floor($lastTime / 60) }}:{{ str_pad($lastTime % 60, 2, '0', STR_PAD_LEFT) }}</div>
-        @endif
-      </div>
-    </div>
-  </div>
-  @endif
-
-  @if(($newFipiCount ?? 0) > 0)
+@if(($newFipiCount ?? 0) > 0)
   <div class="last-result" style="border-color: rgba(124, 58, 237, 0.35); background: linear-gradient(180deg, rgba(124,58,237,.16), rgba(124,58,237,.07));">
     <div class="lr-header">
       <div class="lr-title" style="color:#d8c1ff">Новые задания</div>
