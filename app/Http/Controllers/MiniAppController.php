@@ -257,26 +257,6 @@ class MiniAppController extends Controller
             }
         }
 
-        // Last submitted/scored attempt
-        $lastAttempt = OgeAttempt::where('student_id', $user->id)
-            ->whereIn('status', ['submitted', 'scored'])
-            ->orderByDesc('submitted_at')
-            ->first();
-
-        $lastCorrect = 0;
-        $lastTotal = 0;
-        $lastTime = null;
-
-        if ($lastAttempt) {
-            $scorings = OgeAttemptScoring::where('attempt_id', $lastAttempt->id)->get();
-            $lastTotal = $scorings->count();
-            $lastCorrect = $scorings->where('is_correct', true)->count();
-
-            if ($lastAttempt->started_at && $lastAttempt->submitted_at) {
-                $lastTime = $lastAttempt->submitted_at->diffInSeconds($lastAttempt->started_at);
-            }
-        }
-
         // Weak topics (from all submitted/scored attempts)
         $weakTopics = $this->computeWeakTopics($user->id);
 
@@ -308,7 +288,7 @@ class MiniAppController extends Controller
         }
 
         return view('miniapp.dashboard', compact(
-            'user', 'lastAttempt', 'lastCorrect', 'lastTotal', 'lastTime', 'weakTopics', 'newFipiCount', 'activeAttemptsList'
+            'user', 'weakTopics', 'newFipiCount', 'activeAttemptsList'
         ));
     }
 
