@@ -287,8 +287,10 @@ class MiniAppController extends Controller
             ];
         }
 
+        $hasTeacher = TeacherStudent::where('student_id', $user->id)->exists();
+
         return view('miniapp.dashboard', compact(
-            'user', 'weakTopics', 'newFipiCount', 'activeAttemptsList'
+            'user', 'weakTopics', 'newFipiCount', 'activeAttemptsList', 'hasTeacher'
         ));
     }
 
@@ -1651,6 +1653,129 @@ class MiniAppController extends Controller
         $task['options'] = $shuffled;
 
         return $task;
+    }
+
+    /**
+     * Teacher homework page — list today's students and assigned homework.
+     */
+    public function teacherHomework(Request $request)
+    {
+        $user = $request->user();
+
+        // Today's students from lesson_schedule
+        $dow = (int) now()->format('N');
+        $todaySlots = \App\Models\LessonSchedule::where('teacher_id', $user->id)
+            ->where('day_of_week', $dow)
+            ->where('is_active', true)
+            ->with('student:id,name')
+            ->orderBy('start_time')
+            ->get();
+
+        // All teacher's students (fallback if no schedule)
+        $allStudentIds = TeacherStudent::where('teacher_id', $user->id)
+            ->pluck('student_id');
+        $allStudents = User::whereIn('id', $allStudentIds)->select('id', 'name')->orderBy('name')->get();
+
+        // Recent homework assigned by this teacher
+        $recentHomework = \App\Models\Homework::where('teacher_id', $user->id)
+            ->whereIn('homework_type', ['full_variant', 'topic_practice'])
+            ->orderByDesc('assigned_at')
+            ->limit(30)
+            ->get();
+
+        $recentHomework->load('assignments.student:id,name');
+
+        return view('miniapp.teacher-homework', compact(
+            'user', 'todaySlots', 'allStudents', 'recentHomework'
+        ));
+    }
+
+    /**
+     * Assign homework to a student (POST).
+     */
+    public function assignHomework(Request $request)
+    {
+        $user = $request->user();
+
+        $data = $request->validate([
+            'student_id' => 'required|exists:users,id',
+            'type' => 'required|in:full_variant,topic_practice',
+            'topic_number' => 'required_if:type,topic_practice|nullable|integer',
+        ]);
+
+        $studentId = (int) $data['student_id'];
+
+        $isTeacher = TeacherStudent::where('teacher_id', $user->id)
+            ->where('student_id', $studentId)
+            ->exists();
+
+        if (!$isTeacher) {
+            return back()->with('error', 'Ученик не найден.');
+        }
+
+        $homework = new \App\Models\Homework();
+        $homework->teacher_id = $user->id;
+        $homework->homework_type = $data['type'];
+
+        if ($data['type'] === 'full_variant') {
+            $student = User::findOrFail($studentId);
+            try {
+                $variant = $this->poolService->getOrCreateVariant($student, 'full');
+            } catch (\RuntimeException $e) {
+                return back()->with('error', 'Не удалось создать вариант: ' . $e->getMessage());
+            }
+            $homework->variant_hash = $variant->hash;
+            $homework->title = 'Полный вариант ОГЭ';
+        } else {
+            $topicNumber = (int) $data['topic_number'];
+            $homework->topic_number = $topicNumber;
+            $homework->title = 'Тема ' . $topicNumber;
+        }
+
+        $homework->assigned_at = now();
+        $homework->save();
+
+        \App\Models\HomeworkAssignment::create([
+            'homework_id' => $homework->id,
+            'student_id' => $studentId,
+            'status' => 'assigned',
+        ]);
+
+        return back()->with('success', 'ДЗ выдано!');
+    }
+
+    /**
+     * Student homework page — list assigned homework.
+     */
+    public function studentHomework(Request $request)
+    {
+        $user = $request->user();
+
+        $assignments = \App\Models\HomeworkAssignment::where('student_id', $user->id)
+            ->with('homework')
+            ->orderByDesc('created_at')
+            ->limit(50)
+            ->get();
+
+        $list = [];
+        foreach ($assignments as $a) {
+            $hw = $a->homework;
+            if (!$hw) continue;
+
+            $list[] = [
+                'id' => $a->id,
+                'homework_id' => $hw->id,
+                'type' => $hw->homework_type,
+                'title' => $hw->title,
+                'topic_number' => $hw->topic_number,
+                'variant_hash' => $hw->variant_hash,
+                'status' => $a->status,
+                'assigned_at' => $hw->assigned_at,
+                'completed_at' => $a->completed_at,
+            ];
+        }
+
+        return view('miniapp.student-homework', compact('user', 'list'));
     }
 
     protected function modeName(string $mode): string

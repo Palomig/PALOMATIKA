@@ -436,6 +436,7 @@ Route::prefix('tg')->group(function () {
             Route::get('/history', [MiniAppController::class, 'history'])->name('miniapp.history');
             Route::get('/history/{attemptId}', [MiniAppController::class, 'historyDetail'])->name('miniapp.history.detail');
             Route::get('/tutor', [MiniAppController::class, 'tutor'])->name('miniapp.tutor');
+            Route::get('/homework', [MiniAppController::class, 'studentHomework'])->name('miniapp.homework');
 
             Route::middleware(['role:teacher,admin'])->prefix('teacher')->name('miniapp.teacher.')->group(function () {
                 Route::get('/', fn () => redirect('/tg/teacher/dashboard'))->name('home');
@@ -445,6 +446,8 @@ Route::prefix('tg')->group(function () {
                 Route::post('/students/{studentId}/ownership', [MiniAppController::class, 'toggleTeacherStudentOwnership'])->name('students.ownership');
                 Route::patch('/students/{studentId}/alias', [MiniAppController::class, 'updateTeacherStudentAlias'])->name('students.alias');
                 Route::get('/variants', [MiniAppController::class, 'teacherVariants'])->name('variants');
+                Route::get('/homework', [MiniAppController::class, 'teacherHomework'])->name('homework');
+                Route::post('/homework/assign', [MiniAppController::class, 'assignHomework'])->name('homework.assign');
                 Route::get('/referrals', [MiniAppController::class, 'teacherReferrals'])->name('referrals');
             });
         });

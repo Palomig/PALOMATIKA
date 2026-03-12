@@ -17,6 +17,8 @@ class Homework extends Model
         'homework_type',
         'topic_id',
         'tasks_count',
+        'variant_hash',
+        'topic_number',
         'assigned_at',
         'deadline_at',
     ];
