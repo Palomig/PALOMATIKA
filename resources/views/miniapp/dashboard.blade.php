@@ -181,20 +181,31 @@
   </div>
 
   {{-- RESUME BANNER --}}
-  @if($activeAttemptInfo)
-  <a href="/tg/test/{{ $activeAttemptInfo['id'] }}" class="resume-banner">
+  @if(count($activeAttemptsList) === 1)
+  <a href="/tg/test/{{ $activeAttemptsList[0]['id'] }}" class="resume-banner">
     <div class="resume-left">
       <div class="resume-pulse"></div>
       <div class="resume-info">
-        <div class="resume-title">{{ $activeAttemptInfo['title'] }}</div>
+        <div class="resume-title">{{ $activeAttemptsList[0]['type'] }}</div>
         <div class="resume-sub">
-          Отвечено {{ $activeAttemptInfo['answeredCount'] }} из {{ $activeAttemptInfo['totalCount'] }}
-          · начат {{ $activeAttemptInfo['startedAt']?->diffForHumans() }}
+          Отвечено {{ $activeAttemptsList[0]['answeredCount'] }} из {{ $activeAttemptsList[0]['totalCount'] }}
+          · начат {{ $activeAttemptsList[0]['startedAt']?->diffForHumans() }}
         </div>
       </div>
     </div>
     <div class="resume-btn">Продолжить →</div>
   </a>
+  @elseif(count($activeAttemptsList) > 1)
+  <div class="resume-banner" style="cursor:pointer" @click="showUnfinished = true">
+    <div class="resume-left">
+      <div class="resume-pulse"></div>
+      <div class="resume-info">
+        <div class="resume-title">У вас {{ count($activeAttemptsList) }} нерешённых {{ count($activeAttemptsList) <= 4 ? 'варианта' : 'вариантов' }}</div>
+        <div class="resume-sub">Нажмите, чтобы выбрать</div>
+      </div>
+    </div>
+    <div class="resume-btn">Продолжить →</div>
+  </div>
   @endif
 
   {{-- LAST RESULT --}}
@@ -311,6 +322,33 @@
     </div>
   </template>
 
+  {{-- UNFINISHED ATTEMPTS MODAL --}}
+  @if(count($activeAttemptsList) > 1)
+  <template x-if="showUnfinished">
+    <div class="fv-overlay" @click.self="showUnfinished = false">
+      <div class="fv-sheet">
+        <div class="fv-handle"></div>
+        <div class="fv-title">Нерешённые варианты</div>
+
+        @foreach($activeAttemptsList as $att)
+        <a href="/tg/test/{{ $att['id'] }}" class="fv-option">
+          <div class="fv-opt-icon">{{ $att['type'] === 'Мини-ОГЭ' ? '⚡' : '📝' }}</div>
+          <div>
+            <div class="fv-opt-name">{{ $att['type'] }}</div>
+            <div class="fv-opt-desc">
+              Отвечено {{ $att['answeredCount'] }} из {{ $att['totalCount'] }}
+              · начат {{ $att['startedAt']?->diffForHumans() }}
+            </div>
+          </div>
+        </a>
+        @endforeach
+
+        <button class="fv-cancel" @click="showUnfinished = false">Отмена</button>
+      </div>
+    </div>
+  </template>
+  @endif
+
   {{-- TASK BASE CHOICE MODAL --}}
   <template x-if="showTaskBase">
     <div class="fv-overlay" @click.self="showTaskBase = false">
@@ -369,6 +407,7 @@ function dashboardPage() {
     daysLeft: Math.max(0, Math.floor((examDate - new Date()) / 86400000)),
     showFullChoice: false,
     showTaskBase: false,
+    showUnfinished: false,
     startingFull: false,
 
     async startFull(withPart2 = false) {
