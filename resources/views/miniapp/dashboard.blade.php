@@ -256,11 +256,11 @@
       <div class="tile-sm-desc">Скоро</div>
       <div class="tile-badge badge-blue tile-badge-top-right" style="font-size:8px;">Soon</div>
     </div>
-    <div class="tile-sm" style="opacity:0.5;">
+    <a href="/tg/history" class="tile-sm">
       <div class="tile-sm-icon">📊</div>
       <div class="tile-sm-name">История</div>
       <div class="tile-sm-desc">Все попытки</div>
-    </div>
+    </a>
     <a href="#" class="tile-sm" @click.prevent="handleInvite()">
       <div class="tile-sm-icon">👥</div>
       <div class="tile-sm-name">Позвать друга</div>

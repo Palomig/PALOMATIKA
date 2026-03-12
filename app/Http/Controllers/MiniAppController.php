@@ -693,6 +693,148 @@ class MiniAppController extends Controller
     }
 
     /**
+     * Student attempt history — list of all completed attempts.
+     */
+    public function history()
+    {
+        $user = Auth::user();
+
+        $attempts = OgeAttempt::where('student_id', $user->id)
+            ->whereIn('status', ['submitted', 'scored'])
+            ->with(['variant:id,hash,title,mode,config_json', 'scorings:id,attempt_id,is_correct'])
+            ->orderByDesc('submitted_at')
+            ->limit(50)
+            ->get();
+
+        $list = [];
+        foreach ($attempts as $att) {
+            $correct = $att->scorings->where('is_correct', true)->count();
+            $total = $att->scorings->count();
+            $time = null;
+            if ($att->started_at && $att->submitted_at) {
+                $time = $att->submitted_at->diffInSeconds($att->started_at);
+            }
+
+            $list[] = [
+                'id' => $att->id,
+                'label' => $this->variantModeLabel($att->variant),
+                'correct' => $correct,
+                'total' => $total,
+                'time' => $time,
+                'date' => $att->submitted_at,
+            ];
+        }
+
+        return view('miniapp.history', compact('user', 'list'));
+    }
+
+    /**
+     * Student attempt history — detail view showing errors for a specific attempt.
+     */
+    public function historyDetail(Request $request, int $attemptId)
+    {
+        $user = Auth::user();
+
+        $attempt = OgeAttempt::where('id', $attemptId)
+            ->where('student_id', $user->id)
+            ->whereIn('status', ['submitted', 'scored'])
+            ->with([
+                'variant:id,hash,title,mode,config_json',
+                'answers:id,attempt_id,task_number,current_answer',
+                'scorings:id,attempt_id,task_number,is_correct,correct_answer',
+            ])
+            ->firstOrFail();
+
+        $correct = $attempt->scorings->where('is_correct', true)->count();
+        $total = $attempt->scorings->count();
+        $time = null;
+        if ($attempt->started_at && $attempt->submitted_at) {
+            $time = $attempt->submitted_at->diffInSeconds($attempt->started_at);
+        }
+
+        // Build task map from variant config
+        $taskMap = [];
+        $cfg = $attempt->variant?->config_json;
+        if (is_array($cfg) && isset($cfg['tasks']) && is_array($cfg['tasks'])) {
+            foreach (array_values($cfg['tasks']) as $idx => $taskDef) {
+                if (!is_array($taskDef)) continue;
+                $num = (int) ($taskDef['task_number'] ?? $taskDef['attempt_task_number'] ?? $taskDef['test_number'] ?? 0);
+                if ($num <= 0) {
+                    $num = ($attempt->variant && $attempt->variant->isCustomRandom()) ? ($idx + 1) : (6 + $idx);
+                }
+                if ($num > 0) $taskMap[$num] = $taskDef;
+            }
+        }
+
+        // Build wrong tasks list (reusing teacher profile logic)
+        $wrongTasks = [];
+        foreach ($attempt->scorings as $scoring) {
+            if ($scoring->is_correct !== false && (int) $scoring->is_correct !== 0) continue;
+
+            $taskNum = (int) $scoring->task_number;
+            $studentAnswer = $attempt->answers->firstWhere('task_number', $taskNum);
+            $def = $taskMap[$taskNum] ?? [];
+            $inner = is_array($def['task'] ?? null) ? $def['task'] : [];
+
+            $instructionText = trim((string) (($def['instruction'] ?? $inner['instruction'] ?? '') ?: ''));
+            $conditionText = trim((string) (($inner['text'] ?? $def['text'] ?? $inner['prompt'] ?? $inner['question'] ?? $inner['condition'] ?? $inner['body'] ?? $inner['content'] ?? '') ?: ''));
+
+            if ($instructionText !== '' && $conditionText !== '') {
+                $normI = preg_replace('/\s+/u', ' ', mb_strtolower($instructionText));
+                $normC = preg_replace('/\s+/u', ' ', mb_strtolower($conditionText));
+                if ($normI === $normC) $instructionText = '';
+            }
+
+            $taskText = $conditionText !== '' ? $conditionText : $instructionText;
+            $taskExpression = (string) (($def['expression'] ?? $inner['expression'] ?? $inner['formula'] ?? $inner['latex'] ?? '') ?: '');
+
+            $rawOptions = $def['options'] ?? $inner['options'] ?? $def['variants'] ?? $inner['variants'] ?? null;
+            $taskOptions = [];
+            if (is_array($rawOptions)) {
+                $taskOptions = array_values($rawOptions);
+            } elseif (is_string($rawOptions) && trim($rawOptions) !== '') {
+                $taskOptions = array_values(array_filter(array_map('trim', preg_split('/\R+/', $rawOptions))));
+            }
+
+            $wrongTasks[] = [
+                'task_number' => $taskNum,
+                'task_instruction' => $instructionText,
+                'task_text' => $taskText,
+                'task_expression' => $taskExpression,
+                'task_svg' => (string) (($def['svg'] ?? $inner['svg'] ?? '') ?: ''),
+                'task_image' => (string) (($def['image'] ?? $inner['image'] ?? '') ?: ''),
+                'task_options' => $taskOptions,
+                'student_answer' => (string) (($studentAnswer->current_answer ?? '') ?: '—'),
+                'correct_answer' => (string) (($scoring->correct_answer ?? '') ?: '—'),
+            ];
+        }
+
+        usort($wrongTasks, fn($a, $b) => $a['task_number'] <=> $b['task_number']);
+
+        $label = $this->variantModeLabel($attempt->variant);
+
+        return view('miniapp.history-detail', compact('user', 'attempt', 'label', 'correct', 'total', 'time', 'wrongTasks'));
+    }
+
+    /**
+     * Human-readable label for variant mode.
+     */
+    private function variantModeLabel(?OgeVariant $variant): string
+    {
+        if (!$variant) return 'Вариант ОГЭ';
+
+        return match ($variant->mode) {
+            OgeVariant::MODE_MINI_ALGEBRA => 'Мини-ОГЭ — алгебра',
+            OgeVariant::MODE_MINI_GEOMETRY => 'Мини-ОГЭ — геометрия',
+            OgeVariant::MODE_MINI_MIXED => 'Мини-ОГЭ — смешанный',
+            OgeVariant::MODE_MINI_PART2 => 'Мини-ОГЭ — 2 часть',
+            OgeVariant::MODE_FULL_WITH_PART2 => 'Полный вариант (1+2 часть)',
+            OgeVariant::MODE_FULL => 'Полный вариант',
+            default => $variant->title ?: 'Вариант ОГЭ',
+        };
+    }
+
+    /**
      * Tutor page.
      */
     public function tutor()
