@@ -473,15 +473,55 @@ class MiniAppController extends Controller
         $zadaniya = [];
         foreach ($blocks as $block) {
             foreach (($block['zadaniya'] ?? []) as $zadanie) {
+                $zadanieType = $zadanie['type'] ?? '';
+
+                // Handle statement-type zadaniya (topic 19)
+                if ($zadanieType === 'statements' && !empty($zadanie['statements'])) {
+                    $tasks = [];
+                    foreach ($zadanie['statements'] as $s) {
+                        $text = trim((string) ($s['text'] ?? ''));
+                        if ($text === '') continue;
+                        $tasks[] = [
+                            'id'         => $s['id'] ?? null,
+                            'text'       => $text,
+                            'expression' => null,
+                            'svg'        => $s['svg'] ?? null,
+                            'image'      => $s['image'] ?? null,
+                            'options'    => null,
+                            'question'   => null,
+                        ];
+                    }
+                    if (!empty($tasks)) {
+                        $section = trim((string) ($zadanie['section'] ?? ''));
+                        $instruction = trim((string) ($zadanie['instruction'] ?? ''));
+                        $label = trim((string) ($zadanie['label'] ?? ''));
+                        $num = $zadanie['number'] ?? '';
+                        $title = $label !== '' ? $label : ($section !== '' ? $section : ($instruction !== '' ? "Задание {$num}. {$instruction}" : "Задание {$num}"));
+                        $zadaniya[] = ['title' => $title, 'tasks' => $tasks];
+                    }
+                    continue;
+                }
+
+                // Handle regular tasks
                 $tasks = [];
                 foreach (($zadanie['tasks'] ?? []) as $t) {
                     $text = trim((string) ($t['text'] ?? ''));
-                    if ($text === '') continue;
+                    $expression = trim((string) ($t['expression'] ?? ''));
+                    $question = trim((string) ($t['question'] ?? ''));
+
+                    // Skip tasks that have no displayable content at all
+                    if ($text === '' && $expression === '' && empty($t['svg']) && empty($t['image']) && $question === '') {
+                        continue;
+                    }
+
                     $tasks[] = [
-                        'id'    => $t['id'] ?? null,
-                        'text'  => $text,
-                        'svg'   => $t['svg'] ?? null,
-                        'image' => $t['image'] ?? null,
+                        'id'         => $t['id'] ?? null,
+                        'text'       => $text,
+                        'expression' => $expression !== '' ? $expression : null,
+                        'svg'        => $t['svg'] ?? null,
+                        'image'      => $t['image'] ?? null,
+                        'options'    => $t['options'] ?? null,
+                        'question'   => $question !== '' ? $question : null,
                     ];
                 }
                 if (!empty($tasks)) {
