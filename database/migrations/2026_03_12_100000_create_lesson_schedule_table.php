@@ -18,7 +18,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->timestamps();
 
-            $table->unique(['teacher_id', 'student_id', 'day_of_week', 'start_time']);
+            $table->unique(['teacher_id', 'student_id', 'day_of_week', 'start_time'], 'lesson_sched_unique');
             $table->index(['teacher_id', 'day_of_week']);
         });
     }
