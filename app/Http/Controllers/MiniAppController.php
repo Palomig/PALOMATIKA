@@ -282,28 +282,33 @@ class MiniAppController extends Controller
 
         $newFipiCount = $this->countNewFipiTasks();
 
-        // Find unfinished attempt for resume banner
-        $activeAttempt = OgeAttempt::where('student_id', $user->id)
+        // Find all unfinished attempts for resume banner
+        $activeAttempts = OgeAttempt::where('student_id', $user->id)
             ->where('status', 'active')
+            ->with('variant')
             ->orderByDesc('last_seen_at')
-            ->first();
+            ->get();
 
-        $activeAttemptInfo = null;
-        if ($activeAttempt) {
-            $variant = $activeAttempt->variant;
-            $answeredCount = $activeAttempt->answers()->count();
+        $activeAttemptsList = [];
+        foreach ($activeAttempts as $att) {
+            $variant = $att->variant;
+            if (!$variant) continue;
+            $answeredCount = $att->answers()->count();
             $totalCount = count($variant->config_json['tasks'] ?? []);
-            $activeAttemptInfo = [
-                'id' => $activeAttempt->id,
+            $mode = $variant->mode ?? 'full';
+            $isMini = str_starts_with($mode, 'mini_');
+            $activeAttemptsList[] = [
+                'id' => $att->id,
                 'title' => $variant->title ?? 'Вариант ОГЭ',
                 'answeredCount' => $answeredCount,
                 'totalCount' => $totalCount,
-                'startedAt' => $activeAttempt->started_at,
+                'startedAt' => $att->started_at,
+                'type' => $isMini ? 'Мини-ОГЭ' : 'Полный вариант',
             ];
         }
 
         return view('miniapp.dashboard', compact(
-            'user', 'lastAttempt', 'lastCorrect', 'lastTotal', 'lastTime', 'weakTopics', 'newFipiCount', 'activeAttemptInfo'
+            'user', 'lastAttempt', 'lastCorrect', 'lastTotal', 'lastTime', 'weakTopics', 'newFipiCount', 'activeAttemptsList'
         ));
     }
 
