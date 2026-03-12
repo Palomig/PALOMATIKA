@@ -348,6 +348,14 @@
           </div>
         </a>
 
+        <a href="/tg/tasks-part1" class="fv-option">
+          <div class="fv-opt-icon">📝</div>
+          <div>
+            <div class="fv-opt-name">1я часть</div>
+            <div class="fv-opt-desc">Задания 6–19 · краткий ответ</div>
+          </div>
+        </a>
+
         <a href="/tg/part2" class="fv-option">
           <div class="fv-opt-icon">✍️</div>
           <div>

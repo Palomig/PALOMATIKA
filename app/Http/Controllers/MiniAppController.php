@@ -456,6 +456,57 @@ class MiniAppController extends Controller
     }
 
     /**
+     * OGE Part 1 tasks (topics 06-19, production status only).
+     */
+    public function tasksPart1(Request $request)
+    {
+        $topicIds = ['06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19'];
+        $selected = str_pad((string) $request->query('topic', '6'), 2, '0', STR_PAD_LEFT);
+        if (!in_array($selected, $topicIds, true)) {
+            $selected = '06';
+        }
+
+        $blocks = $this->taskData->getBlocks($selected, 'production');
+
+        $zadaniya = [];
+        foreach ($blocks as $block) {
+            foreach (($block['zadaniya'] ?? []) as $zadanie) {
+                $tasks = [];
+                foreach (($zadanie['tasks'] ?? []) as $t) {
+                    $text = trim((string) ($t['text'] ?? ''));
+                    if ($text === '') continue;
+                    $tasks[] = [
+                        'id'    => $t['id'] ?? null,
+                        'text'  => $text,
+                        'svg'   => $t['svg'] ?? null,
+                        'image' => $t['image'] ?? null,
+                    ];
+                }
+                if (!empty($tasks)) {
+                    $section = trim((string) ($zadanie['section'] ?? ''));
+                    $instruction = trim((string) ($zadanie['instruction'] ?? ''));
+                    $label = trim((string) ($zadanie['label'] ?? ''));
+                    $num = $zadanie['number'] ?? '';
+                    $title = $label !== '' ? $label : ($section !== '' ? $section : ($instruction !== '' ? "Задание {$num}. {$instruction}" : "Задание {$num}"));
+                    $zadaniya[] = [
+                        'title' => $title,
+                        'tasks' => $tasks,
+                    ];
+                }
+            }
+        }
+
+        $taskCount = array_sum(array_map(fn($z) => count($z['tasks']), $zadaniya));
+
+        return view('miniapp.tasks-part1', [
+            'topicIds'      => $topicIds,
+            'selectedTopic' => $selected,
+            'zadaniya'      => $zadaniya,
+            'taskCount'     => $taskCount,
+        ]);
+    }
+
+    /**
      * Mini-OGE mode selection page.
      */
     public function mini()
