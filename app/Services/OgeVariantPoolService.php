@@ -618,7 +618,7 @@ class OgeVariantPoolService
             $zadanieNumber = (int) ($task['zadanie_number'] ?? 0);
             $taskId = (int) ($task['task']['id'] ?? $task['task_id'] ?? 0);
 
-            if ($topicId && $blockNumber > 0 && $zadanieNumber > 0 && $taskId > 0) {
+            if ($topicId && $blockNumber > 0 && $zadanieNumber >= 0 && $taskId > 0) {
                 $refs[] = [
                     'topic_id' => $topicId,
                     'block_number' => $blockNumber,
