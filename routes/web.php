@@ -432,6 +432,8 @@ Route::prefix('tg')->group(function () {
             Route::post('/full/start', [MiniAppController::class, 'startFull'])->name('miniapp.full.start');
             Route::get('/test/{attemptId}', [MiniAppController::class, 'test'])->name('miniapp.test');
             Route::get('/results/{attemptId}', [MiniAppController::class, 'results'])->name('miniapp.results');
+            Route::get('/history', [MiniAppController::class, 'history'])->name('miniapp.history');
+            Route::get('/history/{attemptId}', [MiniAppController::class, 'historyDetail'])->name('miniapp.history.detail');
             Route::get('/tutor', [MiniAppController::class, 'tutor'])->name('miniapp.tutor');
 
             Route::middleware(['role:teacher,admin'])->prefix('teacher')->name('miniapp.teacher.')->group(function () {
