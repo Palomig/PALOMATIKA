@@ -250,12 +250,20 @@
       <div class="tile-badge badge-red tile-badge-top-right">Новое</div>
       @endif
     </a>
+    @if($hasTeacher ?? false)
+    <a href="/tg/homework" class="tile-sm">
+      <div class="tile-sm-icon">📖</div>
+      <div class="tile-sm-name">Домашка</div>
+      <div class="tile-sm-desc">Задания от учителя</div>
+    </a>
+    @else
     <div class="tile-sm" style="opacity:0.5;cursor:default;">
       <div class="tile-sm-icon">🔍</div>
       <div class="tile-sm-name">Разбор ошибок</div>
       <div class="tile-sm-desc">Скоро</div>
       <div class="tile-badge badge-blue tile-badge-top-right" style="font-size:8px;">Soon</div>
     </div>
+    @endif
     <a href="/tg/history" class="tile-sm">
       <div class="tile-sm-icon">📊</div>
       <div class="tile-sm-name">История</div>
