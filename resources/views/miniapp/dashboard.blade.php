@@ -2,21 +2,17 @@
 @section('title', 'Дашборд — palomatika')
 
 @push('styles')
-  .greeting { opacity: 0; animation: fadeDown 0.3s ease 0s forwards; }
-  .greeting-name { font-family: var(--display); font-size: 20px; color: var(--text); }
-  .greeting-sub { font-size: 12px; font-weight: 600; color: var(--muted); margin-top: 2px; }
-
-  /* COUNTDOWN STRIP */
-  .cd-strip {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--r); padding: 12px 16px;
+  .greeting {
+    opacity: 0; animation: fadeDown 0.3s ease 0s forwards;
     display: flex; align-items: center; justify-content: space-between;
-    opacity: 0; animation: fadeUp 0.3s ease 0.06s forwards;
   }
-  .cd-strip-left { display: flex; align-items: center; gap: 8px; }
-  .cd-strip-label { font-size: 11px; font-weight: 700; color: var(--muted); }
-  .cd-strip-val { font-family: var(--display); font-size: 14px; color: var(--text); }
-  .cd-strip-date { font-size: 10px; font-weight: 700; color: var(--muted); }
+  .greeting-name { font-family: var(--display); font-size: 20px; color: var(--text); }
+  .greeting-countdown {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 12px; font-weight: 700; color: var(--muted);
+    white-space: nowrap;
+  }
+  .greeting-countdown-val { font-family: var(--display); font-size: 13px; color: var(--text); }
 
   /* LAST RESULT */
   .last-result {
@@ -174,9 +170,14 @@
 @section('body')
 <div class="page" x-data="dashboardPage()">
 
-  {{-- GREETING --}}
+  {{-- GREETING + COUNTDOWN --}}
   <div class="greeting">
     <div class="greeting-name">Привет, {{ $user->name ?? 'ученик' }}!</div>
+    <div class="greeting-countdown">
+      <span class="pulse-dot-sm"></span>
+      <span>До ОГЭ</span>
+      <span class="greeting-countdown-val" x-text="daysLeft + ' дн'">— дн</span>
+    </div>
   </div>
 
   {{-- RESUME BANNER --}}
@@ -195,16 +196,6 @@
     <div class="resume-btn">Продолжить →</div>
   </a>
   @endif
-
-  {{-- COUNTDOWN STRIP --}}
-  <div class="cd-strip">
-    <div class="cd-strip-left">
-      <span class="pulse-dot-sm"></span>
-      <span class="cd-strip-label">До ОГЭ по математике</span>
-      <span class="cd-strip-val" x-text="daysLeft + ' дн'">— дн</span>
-    </div>
-    <div class="cd-strip-date">2 июня 2026</div>
-  </div>
 
   {{-- LAST RESULT --}}
   @if($lastAttempt)
@@ -259,17 +250,13 @@
 
   {{-- SMALL TILES --}}
   <div class="tiles-grid">
-    <a href="/tg/new-tasks" class="tile-sm">
-      <div class="tile-sm-icon">🆕</div>
-      <div class="tile-sm-name">Новые задания</div>
-      <div class="tile-sm-desc">из банка ФИПИ</div>
+    <a href="#" class="tile-sm" @click.prevent="showTaskBase = true">
+      <div class="tile-sm-icon">📚</div>
+      <div class="tile-sm-name">База заданий</div>
+      <div class="tile-sm-desc">ФИПИ и 2 часть</div>
+      @if(($newFipiCount ?? 0) > 0)
       <div class="tile-badge badge-red tile-badge-top-right">Новое</div>
-    </a>
-    <a href="/tg/part2" class="tile-sm">
-      <div class="tile-sm-icon">📝</div>
-      <div class="tile-sm-name">2я часть ОГЭ</div>
-      <div class="tile-sm-desc">задания 20–25</div>
-      <div class="tile-badge badge-red tile-badge-top-right">Новое</div>
+      @endif
     </a>
     <div class="tile-sm" style="opacity:0.5;cursor:default;">
       <div class="tile-sm-icon">🔍</div>
@@ -324,6 +311,37 @@
     </div>
   </template>
 
+  {{-- TASK BASE CHOICE MODAL --}}
+  <template x-if="showTaskBase">
+    <div class="fv-overlay" @click.self="showTaskBase = false">
+      <div class="fv-sheet">
+        <div class="fv-handle"></div>
+        <div class="fv-title">База заданий</div>
+
+        <a href="/tg/new-tasks" class="fv-option">
+          <div class="fv-opt-icon">🆕</div>
+          <div>
+            <div class="fv-opt-name">Новые задания</div>
+            <div class="fv-opt-desc">Задания из банка ФИПИ</div>
+            @if(($newFipiCount ?? 0) > 0)
+            <div class="fv-opt-badge badge-red">{{ $newFipiCount }} новых</div>
+            @endif
+          </div>
+        </a>
+
+        <a href="/tg/part2" class="fv-option">
+          <div class="fv-opt-icon">✍️</div>
+          <div>
+            <div class="fv-opt-name">2я часть ОГЭ</div>
+            <div class="fv-opt-desc">Задания 20–25 с развёрнутым ответом</div>
+          </div>
+        </a>
+
+        <button class="fv-cancel" @click="showTaskBase = false">Отмена</button>
+      </div>
+    </div>
+  </template>
+
   {{-- WEAK TOPICS --}}
   @if(count($weakTopics) > 0)
   <div class="weak-section">
@@ -350,6 +368,7 @@ function dashboardPage() {
   return {
     daysLeft: Math.max(0, Math.floor((examDate - new Date()) / 86400000)),
     showFullChoice: false,
+    showTaskBase: false,
     startingFull: false,
 
     async startFull(withPart2 = false) {
