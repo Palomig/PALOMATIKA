@@ -128,7 +128,24 @@
                 @endif
               @endif
 
-              <div class="task-item-text">{!! nl2br(e($task['text'])) !!}</div>
+              @if(!empty($task['question']))
+                <div class="task-item-text" style="margin-bottom:6px; color:var(--muted); font-size:12px;">{{ $task['question'] }}</div>
+              @endif
+
+              @if($task['text'] !== '')
+                <div class="task-item-text">{!! nl2br(e($task['text'])) !!}</div>
+              @elseif(!empty($task['expression']))
+                <div class="task-item-text" style="font-size:15px;">$${{ $task['expression'] }}$$</div>
+              @endif
+
+              @if(!empty($task['options']) && is_array($task['options']))
+                <div style="margin-top:8px; display:flex; flex-wrap:wrap; gap:6px;">
+                  @foreach($task['options'] as $opt)
+                    <span style="padding:4px 10px; border:1px solid var(--border); border-radius:8px; font-size:12px; color:var(--muted);">{{ $opt }}</span>
+                  @endforeach
+                </div>
+              @endif
+
               @if(!empty($task['id']))
                 <div class="task-item-meta">#{{ $task['id'] }}</div>
               @endif
