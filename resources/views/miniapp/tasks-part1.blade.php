@@ -141,7 +141,7 @@
               @if(!empty($task['options']) && is_array($task['options']))
                 <div style="margin-top:8px; display:flex; flex-wrap:wrap; gap:6px;">
                   @foreach($task['options'] as $opt)
-                    <span style="padding:4px 10px; border:1px solid var(--border); border-radius:8px; font-size:12px; color:var(--muted);">{{ $opt }}</span>
+                    <span style="padding:4px 10px; border:1px solid var(--border); border-radius:8px; font-size:12px; color:var(--muted);">{{ is_array($opt) ? ($opt['label'] ?? $opt['text'] ?? json_encode($opt)) : $opt }}</span>
                   @endforeach
                 </div>
               @endif
