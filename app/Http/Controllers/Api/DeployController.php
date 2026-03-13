@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 /**
  * Deploy webhook controller
@@ -245,6 +246,101 @@ class DeployController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    /**
+     * Upload a static material HTML page directly to public/materials/.
+     *
+     * POST /api/deploy/material
+     * Header: X-Deploy-Secret: <secret>
+     * Body: { "slug": "geometricheskaia-progressiia", "html": "<!doctype html>..." }
+     *
+     * Returns the public URL of the created page.
+     */
+    public function uploadMaterial(Request $request): JsonResponse
+    {
+        if ($error = $this->verifySecret($request)) {
+            return $error;
+        }
+
+        $slug = trim($request->input('slug', ''));
+        $html = $request->input('html', '');
+
+        if ($slug === '' || $html === '') {
+            return response()->json(['error' => 'Both "slug" and "html" are required'], 400);
+        }
+
+        // Sanitize slug: only allow lowercase letters, digits, hyphens
+        $slug = Str::slug($slug);
+        if ($slug === '') {
+            return response()->json(['error' => 'Invalid slug'], 400);
+        }
+
+        // Prevent directory traversal
+        if (str_contains($slug, '/') || str_contains($slug, '..')) {
+            return response()->json(['error' => 'Invalid slug'], 400);
+        }
+
+        $dir = public_path('materials');
+        if (!is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+
+        $path = $dir . '/' . $slug . '.html';
+        $isNew = !file_exists($path);
+
+        file_put_contents($path, $html);
+
+        $url = url('/materials/' . $slug . '.html');
+
+        Log::info('Material uploaded via deploy API', [
+            'slug' => $slug,
+            'ip' => $request->ip(),
+            'size' => strlen($html),
+            'new' => $isNew,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'slug' => $slug,
+            'url' => $url,
+            'new' => $isNew,
+            'size' => strlen($html),
+        ], $isNew ? 201 : 200);
+    }
+
+    /**
+     * List static material HTML files in public/materials/.
+     *
+     * GET /api/deploy/materials
+     * Header: X-Deploy-Secret: <secret>
+     */
+    public function listMaterials(Request $request): JsonResponse
+    {
+        if ($error = $this->verifySecret($request)) {
+            return $error;
+        }
+
+        $dir = public_path('materials');
+        $files = [];
+
+        if (is_dir($dir)) {
+            foreach (glob($dir . '/*.html') as $file) {
+                $name = basename($file, '.html');
+                $files[] = [
+                    'slug' => $name,
+                    'url' => url('/materials/' . $name . '.html'),
+                    'size' => filesize($file),
+                    'modified' => date('Y-m-d H:i:s', filemtime($file)),
+                ];
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'count' => count($files),
+            'materials' => $files,
+        ]);
     }
 
     /**
