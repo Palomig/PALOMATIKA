@@ -1014,6 +1014,7 @@
 
       // Navigation
       goTo(idx) {
+        this.flushBeforeNav();
         this.current = idx;
         this.scrollActiveDot();
         this.$nextTick(() => {
@@ -1069,28 +1070,28 @@
         this.scheduleCommit();
       },
 
-      saveInput(val) {
-        const tn = this.currentTask.task_number;
-        if (val.trim()) {
-          this.answers[tn] = val.trim();
-        } else {
-          delete this.answers[tn];
-        }
-        this.scheduleCommit();
-      },
-
       // Debounced commit to server
       scheduleCommit() {
         if (this._commitTimeout) clearTimeout(this._commitTimeout);
         this._commitTimeout = setTimeout(() => this.commitAnswers(), 500);
       },
 
+      flushBeforeNav() {
+        if (this._commitTimeout) {
+          clearTimeout(this._commitTimeout);
+          this._commitTimeout = null;
+        }
+        this.commitAnswers();
+      },
+
       async commitAnswers() {
-        // Commit each changed answer individually via existing API
+        // Snapshot what we're about to send BEFORE the await
+        const snapshot = {};
         const promises = [];
         for (const [taskNum, answer] of Object.entries(this.answers)) {
           const trimmed = String(answer ?? '').trim();
           if (trimmed !== '' && trimmed !== (this._lastCommitted?.[taskNum] ?? '').trim()) {
+            snapshot[taskNum] = trimmed;
             promises.push(
               window.fetchPost(`/api/oge/attempts/${this.attemptId}/tasks/${taskNum}/commit`, {
                 answer: trimmed,
@@ -1100,7 +1101,8 @@
         }
         if (promises.length > 0) {
           await Promise.all(promises);
-          this._lastCommitted = { ...this.answers };
+          // Only mark as committed what we actually sent
+          Object.assign(this._lastCommitted, snapshot);
         }
       },
 
@@ -1109,7 +1111,11 @@
         if (this.submitting) return;
         this.submitting = true;
 
-        // Commit final answers first
+        // Flush pending debounce and commit all final answers
+        if (this._commitTimeout) {
+          clearTimeout(this._commitTimeout);
+          this._commitTimeout = null;
+        }
         try {
           await this.commitAnswers();
         } catch (e) {
@@ -1163,7 +1169,7 @@
       confirmExit() {
         if (this.answeredCount > 0) {
           if (confirm('Выйти из теста? Прогресс сохранён, можно продолжить позже.')) {
-            this.commitAnswers();
+            this.flushBeforeNav();
             window.location.href = '/tg/dashboard';
           }
         } else {
