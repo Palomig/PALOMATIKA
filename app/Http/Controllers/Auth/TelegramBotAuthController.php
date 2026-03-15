@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\OgeVariant;
+use App\Models\StarTransaction;
 use App\Models\TelegramAuthToken;
 use App\Models\User;
 use App\Services\AuditLogger;
@@ -445,6 +446,18 @@ class TelegramBotAuthController extends Controller
             return response()->json(['ok' => false]);
         }
 
+        // Handle pre-checkout query (must answer within 10 seconds)
+        if (isset($update['pre_checkout_query'])) {
+            $this->handlePreCheckoutQuery($update['pre_checkout_query']);
+            return response()->json(['ok' => true]);
+        }
+
+        // Handle successful payment
+        if (isset($update['message']['successful_payment'])) {
+            $this->handleSuccessfulPayment($update['message']);
+            return response()->json(['ok' => true]);
+        }
+
         // Handle callback buttons (battle creation)
         if (isset($update['callback_query'])) {
             $this->handleCallbackQuery($update['callback_query']);
@@ -852,6 +865,99 @@ class TelegramBotAuthController extends Controller
 
         // Mini App is isolated from the browser site: Telegram auth never redirects outside /tg.
         return url('/tg/dashboard');
+    }
+
+    /**
+     * Answer pre-checkout query — must respond within 10s or payment fails.
+     */
+    private function handlePreCheckoutQuery(array $query): void
+    {
+        $botToken = config('services.telegram.bot_token');
+        if (!$botToken) return;
+
+        $payload = json_decode($query['invoice_payload'] ?? '{}', true);
+        $userId = $payload['user_id'] ?? null;
+
+        $ok = $userId && User::where('id', $userId)->exists();
+
+        $url = "https://api.telegram.org/bot{$botToken}/answerPreCheckoutQuery";
+        $body = ['pre_checkout_query_id' => $query['id'], 'ok' => $ok];
+        if (!$ok) {
+            $body['error_message'] = 'Пользователь не найден';
+        }
+
+        try {
+            (new \GuzzleHttp\Client())->post($url, ['json' => $body, 'timeout' => 5]);
+        } catch (\Exception $e) {
+            \Log::error('answerPreCheckoutQuery failed', ['error' => $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Process successful Telegram Stars payment.
+     */
+    private function handleSuccessfulPayment(array $message): void
+    {
+        $payment = $message['successful_payment'] ?? [];
+        $chargeId = $payment['telegram_payment_charge_id'] ?? '';
+        $payload = json_decode($payment['invoice_payload'] ?? '{}', true);
+        $userId = $payload['user_id'] ?? null;
+
+        if (!$userId || ($payload['type'] ?? '') !== 'premium_30d') {
+            \Log::warning('Unknown payment payload', ['payload' => $payload]);
+            return;
+        }
+
+        // Prevent duplicate processing
+        if ($chargeId && StarTransaction::where('telegram_charge_id', $chargeId)->exists()) {
+            \Log::info('Duplicate payment skipped', ['charge_id' => $chargeId]);
+            return;
+        }
+
+        $user = User::find($userId);
+        if (!$user) {
+            \Log::error('Payment for non-existent user', ['user_id' => $userId]);
+            return;
+        }
+
+        // Extend premium (stack on top of existing if still active)
+        $baseDate = $user->hasTgPremium() ? $user->tg_premium_until : now();
+        $user->update(['tg_premium_until' => $baseDate->copy()->addDays(30)]);
+
+        // Log purchase transaction
+        StarTransaction::create([
+            'user_id' => $user->id,
+            'type' => 'purchase',
+            'amount' => -100,
+            'telegram_charge_id' => $chargeId ?: null,
+            'note' => 'Premium 30 дней',
+        ]);
+
+        // Referral bonus
+        if ($user->referred_by_user_id) {
+            $referrer = User::find($user->referred_by_user_id);
+            if ($referrer) {
+                $commissionPercent = $referrer->partner_commission_percent ?? 30;
+                $bonus = (int) round(100 * $commissionPercent / 100);
+                if ($bonus > 0) {
+                    $referrer->increment('star_balance', $bonus);
+
+                    StarTransaction::create([
+                        'user_id' => $referrer->id,
+                        'type' => 'referral_bonus',
+                        'amount' => $bonus,
+                        'related_user_id' => $user->id,
+                        'note' => "Реферальный бонус {$commissionPercent}% от покупки",
+                    ]);
+                }
+            }
+        }
+
+        \Log::info('Premium activated via Stars', [
+            'user_id' => $user->id,
+            'charge_id' => $chargeId,
+            'premium_until' => $user->tg_premium_until,
+        ]);
     }
 
     private function startParamCacheKey(string $token): string
