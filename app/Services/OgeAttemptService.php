@@ -156,6 +156,51 @@ class OgeAttemptService
         });
     }
 
+    /**
+     * Save all answers in a single transaction. Called once at submit time.
+     * Replaces the old per-keystroke commit approach to eliminate race conditions.
+     */
+    public function commitAnswersBatch(OgeAttempt $attempt, array $answers): void
+    {
+        DB::transaction(function () use ($attempt, $answers) {
+            $now = now();
+
+            foreach ($answers as $taskNumber => $answer) {
+                $taskNumber = (int) $taskNumber;
+                $answer = trim($answer);
+                if ($answer === '') {
+                    continue;
+                }
+
+                $this->appendEvent($attempt, 'answer_committed', $taskNumber, [
+                    'answer' => $answer,
+                ]);
+
+                $answerProjection = OgeAttemptAnswer::firstOrCreate(
+                    ['attempt_id' => $attempt->id, 'task_number' => $taskNumber],
+                    [
+                        'current_answer' => null,
+                        'commits_count' => 0,
+                        'first_committed_at' => null,
+                        'last_committed_at' => null,
+                        'is_final' => false,
+                    ]
+                );
+
+                if ($answerProjection->commits_count === 0) {
+                    $answerProjection->first_committed_at = $now;
+                }
+
+                $answerProjection->current_answer = $answer;
+                $answerProjection->commits_count += 1;
+                $answerProjection->last_committed_at = $now;
+                $answerProjection->save();
+
+                $this->upsertScoringForTask($attempt, $taskNumber, $answer);
+            }
+        });
+    }
+
     public function touchTiming(OgeAttempt $attempt, int $taskNumber, string $eventType, $clientTs = null): OgeAttemptTaskTiming
     {
         return DB::transaction(function () use ($attempt, $taskNumber, $eventType, $clientTs) {

@@ -765,7 +765,6 @@
                      placeholder="Например: 123"
                      autocomplete="off"
                      x-model="answers[currentTask.task_number]"
-                     @input="scheduleCommit()"
                      x-ref="answerInput">
               <div class="answer-hint" x-text="normalizedOptions(currentTask).length > 0 ? 'Введи цифры по порядку' : 'Введи буквы по порядку'"></div>
             </div>
@@ -781,7 +780,6 @@
                      placeholder="Ответ"
                      autocomplete="off"
                      x-model="answers[currentTask.task_number]"
-                     @input="scheduleCommit()"
                      x-ref="answerInput">
               <div class="answer-hint">Введи число и переходи дальше</div>
             </div>
@@ -884,13 +882,11 @@
       // State
       current: 0,
       answers: @json($answers ?? (object)[]),
-      _lastCommitted: @json($answers ?? (object)[]),
       photos: {},
       showModal: false,
       submitting: false,
       elapsed: 0,
       _timerInterval: null,
-      _commitTimeout: null,
       _initialized: false,
       battleStarted: false,
 
@@ -909,10 +905,26 @@
         return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
       },
 
+      // localStorage key for this attempt's draft answers
+      get _draftKey() { return `oge_draft_${this.attemptId}`; },
+
       // Init
       init() {
         if (this._initialized) return;
         this._initialized = true;
+
+        // Restore draft answers from localStorage (survives page refresh)
+        this._restoreDraft();
+
+        // Auto-save draft to localStorage on any answer change
+        this.$watch('answers', () => this._saveDraft(), { deep: true });
+
+        // Warn before leaving with unsaved answers
+        window.addEventListener('beforeunload', (e) => {
+          if (this.answeredCount > 0 && !this.submitting) {
+            e.preventDefault();
+          }
+        });
 
         // Start stopwatch only when allowed (battle mode waits for explicit start)
         if (!this.battleMode) {
@@ -928,6 +940,26 @@
           // Fallback re-render after 1 second
           setTimeout(() => this.renderTaskMath(), 1000);
         });
+      },
+
+      _saveDraft() {
+        try {
+          localStorage.setItem(this._draftKey, JSON.stringify(this.answers));
+        } catch (e) { /* quota exceeded — ignore */ }
+      },
+
+      _restoreDraft() {
+        try {
+          const saved = localStorage.getItem(this._draftKey);
+          if (!saved) return;
+          const draft = JSON.parse(saved);
+          // Merge: draft fills in anything not already loaded from server
+          for (const [k, v] of Object.entries(draft)) {
+            if (!this.answers[k] || String(this.answers[k]).trim() === '') {
+              this.answers[k] = v;
+            }
+          }
+        } catch (e) { /* corrupted — ignore */ }
       },
 
       startTimer() {
@@ -1014,7 +1046,6 @@
 
       // Navigation
       goTo(idx) {
-        this.flushBeforeNav();
         this.current = idx;
         this.scrollActiveDot();
         this.$nextTick(() => {
@@ -1067,67 +1098,30 @@
       selectOption(opt, idx) {
         const tn = this.currentTask.task_number;
         this.answers[tn] = this.optionAnswerValue(opt, idx);
-        this.scheduleCommit();
       },
 
-      // Debounced commit to server
-      scheduleCommit() {
-        if (this._commitTimeout) clearTimeout(this._commitTimeout);
-        this._commitTimeout = setTimeout(() => this.commitAnswers(), 500);
-      },
-
-      flushBeforeNav() {
-        if (this._commitTimeout) {
-          clearTimeout(this._commitTimeout);
-          this._commitTimeout = null;
-        }
-        this.commitAnswers();
-      },
-
-      async commitAnswers() {
-        // Snapshot what we're about to send BEFORE the await
-        const snapshot = {};
-        const promises = [];
-        for (const [taskNum, answer] of Object.entries(this.answers)) {
-          const trimmed = String(answer ?? '').trim();
-          if (trimmed !== '' && trimmed !== (this._lastCommitted?.[taskNum] ?? '').trim()) {
-            snapshot[taskNum] = trimmed;
-            promises.push(
-              window.fetchPost(`/api/oge/attempts/${this.attemptId}/tasks/${taskNum}/commit`, {
-                answer: trimmed,
-              }).catch(e => console.warn(`Failed to commit task ${taskNum}:`, e))
-            );
-          }
-        }
-        if (promises.length > 0) {
-          await Promise.all(promises);
-          // Only mark as committed what we actually sent
-          Object.assign(this._lastCommitted, snapshot);
-        }
-      },
-
-      // Submit test
+      // Submit test — sends all answers in one request, no intermediate commits
       async submitTest() {
         if (this.submitting) return;
         this.submitting = true;
 
-        // Flush pending debounce and commit all final answers
-        if (this._commitTimeout) {
-          clearTimeout(this._commitTimeout);
-          this._commitTimeout = null;
-        }
-        try {
-          await this.commitAnswers();
-        } catch (e) {
-          // Continue even if commit fails
+        // Collect all non-empty answers
+        const finalAnswers = {};
+        for (const [taskNum, answer] of Object.entries(this.answers)) {
+          const trimmed = String(answer ?? '').trim();
+          if (trimmed !== '') {
+            finalAnswers[taskNum] = trimmed;
+          }
         }
 
         try {
           const res = await window.fetchPost(`/api/oge/attempts/${this.attemptId}/submit`, {
+            answers: finalAnswers,
             elapsed: this.elapsed,
           });
           const data = await res.json();
           if (res.ok) {
+            try { localStorage.removeItem(this._draftKey); } catch (e) {}
             window.location.href = `/tg/results/${this.attemptId}`;
           } else {
             alert(data.message || 'Ошибка при отправке');
@@ -1168,8 +1162,7 @@
       // Exit confirmation
       confirmExit() {
         if (this.answeredCount > 0) {
-          if (confirm('Выйти из теста? Прогресс сохранён, можно продолжить позже.')) {
-            this.flushBeforeNav();
+          if (confirm('Выйти из теста? Ответы будут сохранены при завершении теста.')) {
             window.location.href = '/tg/dashboard';
           }
         } else {
@@ -1201,7 +1194,6 @@
       // Cleanup
       destroy() {
         if (this._timerInterval) clearInterval(this._timerInterval);
-        if (this._commitTimeout) clearTimeout(this._commitTimeout);
       },
     };
   }
