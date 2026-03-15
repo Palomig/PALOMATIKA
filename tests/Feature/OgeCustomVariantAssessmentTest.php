@@ -722,4 +722,38 @@ class OgeCustomVariantAssessmentTest extends TestCase
             'correct_answer' => '77',
         ]);
     }
+
+    public function test_submit_rejects_invalid_answer_keys_in_batch_payload(): void
+    {
+        $student = User::factory()->create(['role' => 'student']);
+
+        $variant = OgeVariant::create([
+            'hash' => 'batchkey1',
+            'config_json' => [
+                'source' => 'generator',
+            ],
+        ]);
+
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $student->id,
+            'status' => 'active',
+            'started_at' => now(),
+        ]);
+
+        $this->actingAs($student)
+            ->postJson("/api/oge/attempts/{$attempt->id}/submit", [
+                'answers' => [
+                    '0' => '99',
+                    'foo' => '123',
+                    '6' => '77',
+                ],
+            ])
+            ->assertStatus(422);
+
+        $this->assertDatabaseMissing('oge_attempt_answers', [
+            'attempt_id' => $attempt->id,
+            'task_number' => 0,
+        ]);
+    }
 }

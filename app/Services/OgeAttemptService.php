@@ -167,6 +167,10 @@ class OgeAttemptService
 
             foreach ($answers as $taskNumber => $answer) {
                 $taskNumber = (int) $taskNumber;
+                if ($taskNumber < 1 || $taskNumber > 255) {
+                    continue;
+                }
+
                 $answer = trim($answer);
                 if ($answer === '') {
                     continue;
