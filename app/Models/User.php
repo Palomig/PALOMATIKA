@@ -34,6 +34,9 @@ class User extends Authenticatable
         'subscription_ends_at',
         'has_ai_addon',
         'trial_ends_at',
+        'tg_premium_until',
+        'tg_trial_used',
+        'star_balance',
         'last_active_at',
         'timezone',
         'grade_num',
@@ -57,6 +60,8 @@ class User extends Authenticatable
         'last_active_at' => 'datetime',
         'has_ai_addon' => 'boolean',
         'onboarding_completed_at' => 'datetime',
+        'tg_premium_until' => 'datetime',
+        'tg_trial_used' => 'boolean',
     ];
 
     // Relationships
@@ -205,5 +210,15 @@ class User extends Authenticatable
             'premium' => 'Премиум',
             default => 'Бесплатный',
         };
+    }
+
+    public function starTransactions(): HasMany
+    {
+        return $this->hasMany(StarTransaction::class);
+    }
+
+    public function hasTgPremium(): bool
+    {
+        return $this->tg_premium_until && $this->tg_premium_until->isFuture();
     }
 }
