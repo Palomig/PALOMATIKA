@@ -149,11 +149,27 @@ class MiniAppTeacherRoutesTest extends TestCase
         $this->actingAs($teacher)
             ->get('/tg/teacher/dashboard')
             ->assertOk()
-            ->assertSee('Сегодня')
+            ->assertSee('Панель дня')
+            ->assertSee('уроков сегодня')
             ->assertSee('Текущий урок')
-            ->assertSee('Быстрые действия')
-            ->assertSee('Нуждаются во внимании')
+            ->assertSee('Открыть все уроки')
             ->assertSee('miniapp-bottom-nav');
+    }
+
+    public function test_teacher_lessons_page_renders_slot_statuses(): void
+    {
+        $teacher = User::factory()->create([
+            'role' => 'teacher',
+            'onboarding_completed_at' => now(),
+        ]);
+
+        $this->actingAs($teacher)
+            ->get('/tg/teacher/lessons')
+            ->assertOk()
+            ->assertSee('Уроки сегодня')
+            ->assertSee('прошёл')
+            ->assertSee('идёт')
+            ->assertSee('будет');
     }
 
     public function test_tg_dashboard_redirects_teacher_to_teacher_dashboard(): void
