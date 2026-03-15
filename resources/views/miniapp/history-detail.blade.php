@@ -65,7 +65,7 @@
   .task-svg { margin-top: 8px; }
   .task-svg svg { max-width: 100%; height: auto; display: block; }
   .task-image-wrap { margin-top: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .task-image { min-width: 500px; height: auto; display: block; border-radius: 8px; border: 1px solid var(--border); }
+  .task-image { width: 600px; max-width: none; height: auto; display: block; border-radius: 8px; border: 1px solid var(--border); }
   .task-options { margin-top: 8px; padding-left: 18px; font-size: 12px; }
   .task-options li { margin: 3px 0; color: var(--text); }
 
