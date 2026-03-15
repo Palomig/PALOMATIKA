@@ -36,7 +36,9 @@
     opacity: 0; animation: fadeUp 0.3s ease calc(var(--i, 0) * 0.04s) forwards;
   }
   .student-name { font-size: 14px; font-weight: 700; color: var(--text); }
-  .student-time { font-size: 11px; color: var(--muted); font-weight: 600; }
+  .student-sub { font-size: 11px; color: var(--muted); font-weight: 600; }
+  .student-unlinked { opacity: 0.5; }
+  .student-unlinked .student-name { font-style: italic; }
   .assign-btn {
     font-size: 11px; font-weight: 800; color: var(--purple);
     background: var(--purple-bg); border: 1px solid var(--purple-bd);
@@ -44,6 +46,16 @@
     white-space: nowrap;
   }
   .assign-btn:active { opacity: 0.7; }
+  .link-badge {
+    font-size: 9px; font-weight: 800; color: var(--muted);
+    background: var(--surface2); border-radius: 5px;
+    padding: 2px 6px; margin-left: 6px;
+  }
+
+  .settings-btn {
+    font-size: 14px; padding: 4px 8px; cursor: pointer;
+    background: none; border: none; color: var(--muted);
+  }
 
   .hw-card {
     background: var(--surface); border: 1px solid var(--border);
@@ -69,6 +81,20 @@
   .toast-error { background: var(--red); color: #fff; }
 
   .empty-note { text-align: center; padding: 24px; color: var(--muted); font-size: 13px; font-weight: 600; }
+
+  .link-form { margin-top: 8px; }
+  .link-form label { display: block; font-size: 11px; font-weight: 700; color: var(--muted); margin-bottom: 4px; }
+  .link-form input, .link-form select {
+    width: 100%; padding: 8px 10px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--surface);
+    color: var(--text); font-size: 13px; margin-bottom: 8px;
+  }
+  .link-form .link-save {
+    font-size: 12px; font-weight: 800; color: #fff;
+    background: var(--accent); border: none; border-radius: 8px;
+    padding: 8px 16px; cursor: pointer; width: 100%;
+  }
+  .link-form .link-save:active { opacity: 0.7; }
 @endpush
 
 @section('body')
@@ -104,13 +130,27 @@
 
   {{-- CURRENT LESSON TAB --}}
   <div x-show="tab === 'current'" x-cloak>
-    @forelse($currentSlots as $i => $slot)
-      <div class="student-row" style="--i:{{ $i }}">
+    @forelse($currentStudents as $i => $s)
+      <div class="student-row {{ $s['linked'] ? '' : 'student-unlinked' }}" style="--i:{{ $i }}">
         <div>
-          <div class="student-name">{{ $slot->student?->name ?? 'Ученик #' . $slot->student_id }}</div>
-          <div class="student-time">{{ substr($slot->start_time, 0, 5) }}{{ $slot->end_time ? ' – ' . substr($slot->end_time, 0, 5) : '' }}</div>
+          <div class="student-name">
+            @if($s['linked'])
+              {{ $s['student_alias'] ?? $s['student_name'] }}
+            @else
+              {{ $s['evrium_name'] }}
+            @endif
+          </div>
+          <div class="student-sub">{{ $s['time_start'] }}{{ $s['time_end'] ? ' – ' . $s['time_end'] : '' }}
+            @if($s['linked'])
+              <span class="link-badge">{{ $s['evrium_name'] }}</span>
+            @else
+              <span class="link-badge" style="color:var(--red);">не привязан</span>
+            @endif
+          </div>
         </div>
-        <button class="assign-btn" @click="openAssign({{ $slot->student_id }}, '{{ e($slot->student?->name ?? '') }}')">Дать ДЗ</button>
+        @if($s['linked'])
+          <button class="assign-btn" @click="openAssign({{ $s['student_id'] }}, '{{ e($s['student_alias'] ?? $s['student_name'] ?? '') }}')">Дать ДЗ</button>
+        @endif
       </div>
     @empty
       <div class="empty-note">Нет уроков на сегодня.</div>
@@ -119,13 +159,27 @@
 
   {{-- PREVIOUS LESSON TAB --}}
   <div x-show="tab === 'prev'" x-cloak>
-    @forelse($prevSlots as $i => $slot)
-      <div class="student-row" style="--i:{{ $i }}">
+    @forelse($prevStudents as $i => $s)
+      <div class="student-row {{ $s['linked'] ? '' : 'student-unlinked' }}" style="--i:{{ $i }}">
         <div>
-          <div class="student-name">{{ $slot->student?->name ?? 'Ученик #' . $slot->student_id }}</div>
-          <div class="student-time">{{ substr($slot->start_time, 0, 5) }}{{ $slot->end_time ? ' – ' . substr($slot->end_time, 0, 5) : '' }}</div>
+          <div class="student-name">
+            @if($s['linked'])
+              {{ $s['student_alias'] ?? $s['student_name'] }}
+            @else
+              {{ $s['evrium_name'] }}
+            @endif
+          </div>
+          <div class="student-sub">{{ $s['time_start'] }}{{ $s['time_end'] ? ' – ' . $s['time_end'] : '' }}
+            @if($s['linked'])
+              <span class="link-badge">{{ $s['evrium_name'] }}</span>
+            @else
+              <span class="link-badge" style="color:var(--red);">не привязан</span>
+            @endif
+          </div>
         </div>
-        <button class="assign-btn" @click="openAssign({{ $slot->student_id }}, '{{ e($slot->student?->name ?? '') }}')">Дать ДЗ</button>
+        @if($s['linked'])
+          <button class="assign-btn" @click="openAssign({{ $s['student_id'] }}, '{{ e($s['student_alias'] ?? $s['student_name'] ?? '') }}')">Дать ДЗ</button>
+        @endif
       </div>
     @empty
       <div class="empty-note">Нет данных о прошлом уроке.</div>
@@ -135,9 +189,38 @@
   {{-- ALL STUDENTS TAB --}}
   <div x-show="tab === 'all'" x-cloak>
     @forelse($allStudents as $i => $s)
-      <div class="student-row" style="--i:{{ $i }}">
-        <div class="student-name">{{ $s->name }}</div>
-        <button class="assign-btn" @click="openAssign({{ $s->id }}, '{{ e($s->name) }}')">Дать ДЗ</button>
+      <div class="student-row" style="--i:{{ $i }}" x-data="{ editing: false }">
+        <div style="flex:1;min-width:0;">
+          <div class="student-name">{{ $s->student_alias ?? $s->name }}</div>
+          <div class="student-sub">
+            {{ $s->name }}
+            @if($s->evrium_name)
+              <span class="link-badge">{{ $s->evrium_name }}</span>
+            @else
+              <span class="link-badge" style="color:var(--red);">не привязан</span>
+            @endif
+          </div>
+
+          {{-- Inline edit form --}}
+          <div class="link-form" x-show="editing" x-cloak>
+            <label>Имя (алиас)</label>
+            <input type="text" x-ref="alias{{ $s->id }}" value="{{ $s->student_alias ?? '' }}" placeholder="Отображаемое имя...">
+
+            <label>Привязка к расписанию (Эвриум)</label>
+            <select x-ref="evrium{{ $s->id }}">
+              <option value="">— не привязан —</option>
+              @foreach($allEvriumNames as $en)
+                <option value="{{ $en }}" {{ $s->evrium_name === $en ? 'selected' : '' }}>{{ $en }}</option>
+              @endforeach
+            </select>
+
+            <button class="link-save" @click="saveLink({{ $s->id }}, $refs.alias{{ $s->id }}.value, $refs.evrium{{ $s->id }}.value); editing = false">Сохранить</button>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <button class="settings-btn" @click="editing = !editing" x-text="editing ? '✕' : '⚙'"></button>
+          <button class="assign-btn" @click="openAssign({{ $s->id }}, '{{ e($s->student_alias ?? $s->name) }}')">Дать ДЗ</button>
+        </div>
       </div>
     @empty
       <div class="empty-note">Нет учеников.</div>
@@ -215,7 +298,7 @@
 <script>
 function teacherHw() {
   return {
-    tab: '{{ $currentSlots->count() > 0 ? 'current' : ($prevSlots->count() > 0 ? 'prev' : 'all') }}',
+    tab: '{{ count($currentStudents) > 0 ? 'current' : (count($prevStudents) > 0 ? 'prev' : 'all') }}',
     showAssign: false,
     assignStudentId: null,
     assignName: '',
@@ -226,6 +309,22 @@ function teacherHw() {
       this.assignName = name;
       this.selectedType = 'full_variant';
       this.showAssign = true;
+    },
+
+    async saveLink(studentId, alias, evriumName) {
+      try {
+        const res = await fetch(`/tg/teacher/students/${studentId}/link`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+          },
+          body: JSON.stringify({ alias: alias || null, evrium_name: evriumName || null }),
+        });
+        if (res.ok) {
+          location.reload();
+        }
+      } catch (e) {}
     },
   };
 }

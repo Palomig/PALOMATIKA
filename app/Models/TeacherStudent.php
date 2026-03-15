@@ -14,6 +14,7 @@ class TeacherStudent extends Model
         'student_id',
         'source',
         'student_alias',
+        'evrium_name',
     ];
 
     protected $casts = [

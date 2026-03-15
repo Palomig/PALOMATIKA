@@ -1689,48 +1689,112 @@ class MiniAppController extends Controller
     }
 
     /**
+     * Fetch Evrium schedule for teacher and resolve Palomatika students via evrium_name mapping.
+     */
+    protected function fetchEvriumSchedule(int $teacherId, int $evriumTeacherId = 1): array
+    {
+        $apiUrl = 'https://xn--b1ammoq0d.xn--p1ai/zarplata/api/external.php';
+        $apiKey = '15da8c6b7eed43fd5f3afae70a9f792516fb49957127e2ae';
+
+        try {
+            $response = \Illuminate\Support\Facades\Http::withHeaders(['X-Api-Key' => $apiKey])
+                ->timeout(5)
+                ->get($apiUrl, ['action' => 'schedule', 'teacher_id' => $evriumTeacherId]);
+
+            if (!$response->ok()) return [];
+            return $response->json('data') ?? [];
+        } catch (\Throwable $e) {
+            return [];
+        }
+    }
+
+    /**
+     * Build schedule-based student list from Evrium slots, matched to Palomatika users.
+     */
+    protected function resolveEvriumSlots(array $slots, \Illuminate\Support\Collection $relations): array
+    {
+        // Build evrium_name → palomatika relation map
+        $evriumMap = [];
+        foreach ($relations as $rel) {
+            if ($rel->evrium_name) {
+                $evriumMap[$rel->evrium_name] = $rel;
+            }
+        }
+
+        $result = [];
+        foreach ($slots as $slot) {
+            foreach ($slot['students'] ?? [] as $evriumName) {
+                $rel = $evriumMap[$evriumName] ?? null;
+                $result[] = [
+                    'evrium_name' => $evriumName,
+                    'time_start' => $slot['time_start'] ?? '',
+                    'time_end' => $slot['time_end'] ?? '',
+                    'student_id' => $rel?->student_id,
+                    'student_name' => $rel ? ($rel->student?->name ?? 'Ученик #' . $rel->student_id) : null,
+                    'student_alias' => $rel?->student_alias,
+                    'linked' => $rel !== null,
+                ];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Teacher homework page — list today's students and assigned homework.
      */
     public function teacherHomework(Request $request)
     {
         $user = $request->user();
         $dow = (int) now()->format('N');
-        $nowTime = now()->format('H:i:s');
+        $dayNames = [1 => 'Пн', 2 => 'Вт', 3 => 'Ср', 4 => 'Чт', 5 => 'Пт', 6 => 'Сб', 7 => 'Вс'];
 
-        // Current lesson: today's slots that haven't ended yet (or all today if no end_time)
-        $currentSlots = \App\Models\LessonSchedule::where('teacher_id', $user->id)
-            ->where('day_of_week', $dow)
-            ->where('is_active', true)
+        // All teacher-student relations with evrium_name
+        $relations = TeacherStudent::where('teacher_id', $user->id)
             ->with('student:id,name')
-            ->orderBy('start_time')
             ->get();
 
-        // Previous lesson: find the most recent past day with lessons
-        // Check backwards from yesterday up to 7 days
-        $prevSlots = collect();
+        // Fetch Evrium schedule
+        $evriumSlots = $this->fetchEvriumSchedule($user->id);
+
+        // Today's lessons
+        $todayEvrium = array_filter($evriumSlots, fn($s) => ($s['day'] ?? 0) === $dow);
+        $currentStudents = $this->resolveEvriumSlots($todayEvrium, $relations);
+
+        // Previous lesson day (check backwards up to 7 days)
+        $prevStudents = [];
         $prevDayLabel = '';
-        $dayNames = [1 => 'Пн', 2 => 'Вт', 3 => 'Ср', 4 => 'Чт', 5 => 'Пт', 6 => 'Сб', 7 => 'Вс'];
         for ($offset = 1; $offset <= 7; $offset++) {
             $checkDow = (($dow - 1 - $offset % 7) + 7) % 7 + 1;
-            $slots = \App\Models\LessonSchedule::where('teacher_id', $user->id)
-                ->where('day_of_week', $checkDow)
-                ->where('is_active', true)
-                ->with('student:id,name')
-                ->orderBy('start_time')
-                ->get();
-            if ($slots->isNotEmpty()) {
-                $prevSlots = $slots;
+            $daySlots = array_filter($evriumSlots, fn($s) => ($s['day'] ?? 0) === $checkDow);
+            if (!empty($daySlots)) {
+                $prevStudents = $this->resolveEvriumSlots($daySlots, $relations);
                 $prevDayLabel = $dayNames[$checkDow];
                 break;
             }
         }
 
-        // All teacher's students
-        $allStudentIds = TeacherStudent::where('teacher_id', $user->id)
-            ->pluck('student_id');
+        // All teacher's students (from Palomatika DB)
+        $allStudentIds = $relations->pluck('student_id');
         $allStudents = User::whereIn('id', $allStudentIds)->select('id', 'name')->orderBy('name')->get();
 
-        // Recent homework assigned by this teacher
+        // Attach evrium_name to allStudents for display
+        $relMap = $relations->keyBy('student_id');
+        foreach ($allStudents as $s) {
+            $s->evrium_name = $relMap[$s->id]->evrium_name ?? null;
+            $s->student_alias = $relMap[$s->id]->student_alias ?? null;
+        }
+
+        // All unique Evrium student names for the linking dropdown
+        $allEvriumNames = collect($evriumSlots)
+            ->pluck('students')
+            ->flatten()
+            ->unique()
+            ->sort()
+            ->values()
+            ->all();
+
+        // Recent homework
         $recentHomework = \App\Models\Homework::where('teacher_id', $user->id)
             ->whereIn('homework_type', ['full_variant', 'topic_practice'])
             ->orderByDesc('assigned_at')
@@ -1741,8 +1805,39 @@ class MiniAppController extends Controller
         $todayLabel = $dayNames[$dow];
 
         return view('miniapp.teacher-homework', compact(
-            'user', 'currentSlots', 'prevSlots', 'prevDayLabel', 'todayLabel', 'allStudents', 'recentHomework'
+            'user', 'currentStudents', 'prevStudents', 'prevDayLabel', 'todayLabel',
+            'allStudents', 'allEvriumNames', 'recentHomework'
         ));
+    }
+
+    /**
+     * Update evrium_name and/or alias for a teacher's student (PATCH).
+     */
+    public function updateStudentLink(Request $request, int $studentId): \Illuminate\Http\JsonResponse
+    {
+        $user = $request->user();
+
+        $data = $request->validate([
+            'evrium_name' => 'nullable|string|max:100',
+            'alias' => 'nullable|string|max:80',
+        ]);
+
+        $relation = TeacherStudent::where('teacher_id', $user->id)
+            ->where('student_id', $studentId)
+            ->firstOrFail();
+
+        if (array_key_exists('evrium_name', $data)) {
+            $val = trim((string) ($data['evrium_name'] ?? ''));
+            $relation->evrium_name = $val === '' ? null : $val;
+        }
+        if (array_key_exists('alias', $data)) {
+            $val = trim((string) ($data['alias'] ?? ''));
+            $relation->student_alias = $val === '' ? null : $val;
+        }
+
+        $relation->save();
+
+        return response()->json(['ok' => true]);
     }
 
     /**
