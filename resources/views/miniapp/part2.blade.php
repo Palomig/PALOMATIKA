@@ -180,7 +180,7 @@
         <div class="pm-title">Premium</div>
         <div class="pm-desc">Открой ответы ко всем заданиям в базе.<br>Подписка на 30 дней.</div>
         <div class="pm-price">100 <small>/ мес</small></div>
-        <button class="pm-btn pm-btn-primary" @click="buyPremium()" :disabled="buying" x-text="buying ? 'Загрузка...' : 'Купить за 100'"></button>
+        <button class="pm-btn pm-btn-primary" @click="buyPremium()" :disabled="buying" x-text="buying ? 'Загрузка...' : 'Купить за 100 ⭐ / мес'"></button>
         @if(!$trialUsed)
         <button class="pm-btn pm-btn-trial" @click="activateTrial()" :disabled="buying" x-text="trialActivating ? 'Активация...' : '7 дней бесплатно'"></button>
         @endif
