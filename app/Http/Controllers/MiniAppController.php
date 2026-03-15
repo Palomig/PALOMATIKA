@@ -355,6 +355,7 @@ class MiniAppController extends Controller
                     'text' => $text,
                     'svg' => $task['svg'] ?? null,
                     'image' => $task['image'] ?? null,
+                    'answer' => $task['answer'] ?? null,
                 ];
             }
             $newByTopic[$topicId] = $all;
@@ -389,6 +390,7 @@ class MiniAppController extends Controller
                             'text' => $text,
                             'svg' => $task['svg'] ?? null,
                             'image' => $task['image'] ?? null,
+                            'answer' => $task['answer'] ?? null,
                         ];
                     }
 
@@ -410,6 +412,8 @@ class MiniAppController extends Controller
             'selectedTopic' => $selected,
             'newByTopic' => $newByTopic,
             'groupedByTopic' => $groupedByTopic,
+            'isPremium'     => Auth::user()->hasTgPremium(),
+            'trialUsed'     => (bool) Auth::user()->tg_trial_used,
         ]);
     }
 
@@ -443,9 +447,10 @@ class MiniAppController extends Controller
                     $text = trim((string) ($t['text'] ?? ''));
                     if ($text === '') continue;
                     $tasks[] = [
-                        'id'    => $t['id'] ?? null,
-                        'text'  => $text,
-                        'image' => $t['image'] ?? null,
+                        'id'     => $t['id'] ?? null,
+                        'text'   => $text,
+                        'image'  => $t['image'] ?? null,
+                        'answer' => $t['answer'] ?? null,
                     ];
                 }
                 if (!empty($tasks)) {
@@ -467,6 +472,8 @@ class MiniAppController extends Controller
             'topics'        => $topics,
             'selectedTopic' => $selected,
             'zadaniya'      => $zadaniya,
+            'isPremium'     => Auth::user()->hasTgPremium(),
+            'trialUsed'     => (bool) Auth::user()->tg_trial_used,
         ]);
     }
 
@@ -502,6 +509,7 @@ class MiniAppController extends Controller
                             'image'      => $s['image'] ?? null,
                             'options'    => null,
                             'question'   => null,
+                            'answer'     => $s['answer'] ?? null,
                         ];
                     }
                     if (!empty($tasks)) {
@@ -535,6 +543,7 @@ class MiniAppController extends Controller
                         'image'      => $t['image'] ?? null,
                         'options'    => $t['options'] ?? null,
                         'question'   => $question !== '' ? $question : null,
+                        'answer'     => $t['answer'] ?? null,
                     ];
                 }
                 if (!empty($tasks)) {
@@ -558,6 +567,8 @@ class MiniAppController extends Controller
             'selectedTopic' => $selected,
             'zadaniya'      => $zadaniya,
             'taskCount'     => $taskCount,
+            'isPremium'     => Auth::user()->hasTgPremium(),
+            'trialUsed'     => (bool) Auth::user()->tg_trial_used,
         ]);
     }
 
