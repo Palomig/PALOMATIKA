@@ -1683,17 +1683,38 @@ class MiniAppController extends Controller
     public function teacherHomework(Request $request)
     {
         $user = $request->user();
-
-        // Today's students from lesson_schedule
         $dow = (int) now()->format('N');
-        $todaySlots = \App\Models\LessonSchedule::where('teacher_id', $user->id)
+        $nowTime = now()->format('H:i:s');
+
+        // Current lesson: today's slots that haven't ended yet (or all today if no end_time)
+        $currentSlots = \App\Models\LessonSchedule::where('teacher_id', $user->id)
             ->where('day_of_week', $dow)
             ->where('is_active', true)
             ->with('student:id,name')
             ->orderBy('start_time')
             ->get();
 
-        // All teacher's students (fallback if no schedule)
+        // Previous lesson: find the most recent past day with lessons
+        // Check backwards from yesterday up to 7 days
+        $prevSlots = collect();
+        $prevDayLabel = '';
+        $dayNames = [1 => 'Пн', 2 => 'Вт', 3 => 'Ср', 4 => 'Чт', 5 => 'Пт', 6 => 'Сб', 7 => 'Вс'];
+        for ($offset = 1; $offset <= 7; $offset++) {
+            $checkDow = (($dow - 1 - $offset % 7) + 7) % 7 + 1;
+            $slots = \App\Models\LessonSchedule::where('teacher_id', $user->id)
+                ->where('day_of_week', $checkDow)
+                ->where('is_active', true)
+                ->with('student:id,name')
+                ->orderBy('start_time')
+                ->get();
+            if ($slots->isNotEmpty()) {
+                $prevSlots = $slots;
+                $prevDayLabel = $dayNames[$checkDow];
+                break;
+            }
+        }
+
+        // All teacher's students
         $allStudentIds = TeacherStudent::where('teacher_id', $user->id)
             ->pluck('student_id');
         $allStudents = User::whereIn('id', $allStudentIds)->select('id', 'name')->orderBy('name')->get();
@@ -1704,11 +1725,12 @@ class MiniAppController extends Controller
             ->orderByDesc('assigned_at')
             ->limit(30)
             ->get();
-
         $recentHomework->load('assignments.student:id,name');
 
+        $todayLabel = $dayNames[$dow];
+
         return view('miniapp.teacher-homework', compact(
-            'user', 'todaySlots', 'allStudents', 'recentHomework'
+            'user', 'currentSlots', 'prevSlots', 'prevDayLabel', 'todayLabel', 'allStudents', 'recentHomework'
         ));
     }
 

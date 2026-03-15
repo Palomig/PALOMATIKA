@@ -10,6 +10,24 @@
   .back { color: var(--text); text-decoration: none; font-size: 18px; padding: 6px 8px; border: 1px solid var(--border); border-radius: 10px; }
   .topbar-title { font-family: var(--display); font-size: 18px; color: var(--text); }
 
+  .hw-tabs {
+    display: flex; gap: 6px; margin-bottom: 14px;
+    opacity: 0; animation: fadeDown 0.3s ease 0.05s forwards;
+  }
+  .hw-tab {
+    flex: 1; text-align: center; padding: 9px 6px;
+    font-size: 12px; font-weight: 800; color: var(--muted);
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; cursor: pointer; transition: all 0.2s;
+  }
+  .hw-tab:active { opacity: 0.7; }
+  .hw-tab.active {
+    color: var(--accent); background: var(--accent-bg);
+    border-color: var(--accent-bd);
+  }
+  .hw-tab-sub { font-size: 10px; font-weight: 600; color: var(--muted); margin-top: 2px; }
+  .hw-tab.active .hw-tab-sub { color: var(--accent); opacity: 0.7; }
+
   .student-row {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 12px; padding: 12px 14px;
@@ -68,30 +86,63 @@
     <div class="toast toast-error" x-init="setTimeout(() => $el.remove(), 3000)">{{ session('error') }}</div>
   @endif
 
-  {{-- TODAY'S STUDENTS --}}
-  @if($todaySlots->count() > 0)
-  <div class="sec-label">Сегодня на уроке</div>
-  @foreach($todaySlots as $i => $slot)
-    <div class="student-row" style="--i:{{ $i }}">
-      <div>
-        <div class="student-name">{{ $slot->student?->name ?? 'Ученик #' . $slot->student_id }}</div>
-        <div class="student-time">{{ substr($slot->start_time, 0, 5) }}{{ $slot->end_time ? ' – ' . substr($slot->end_time, 0, 5) : '' }}</div>
-      </div>
-      <button class="assign-btn" @click="openAssign({{ $slot->student_id }}, '{{ e($slot->student?->name ?? '') }}')">Дать ДЗ</button>
+  {{-- TABS --}}
+  <div class="hw-tabs">
+    <div class="hw-tab" :class="tab === 'current' && 'active'" @click="tab = 'current'">
+      <div>Сейчас</div>
+      <div class="hw-tab-sub">{{ $todayLabel }}</div>
     </div>
-  @endforeach
-  @endif
+    <div class="hw-tab" :class="tab === 'prev' && 'active'" @click="tab = 'prev'">
+      <div>Прошлый</div>
+      <div class="hw-tab-sub">{{ $prevDayLabel ?: '—' }}</div>
+    </div>
+    <div class="hw-tab" :class="tab === 'all' && 'active'" @click="tab = 'all'">
+      <div>Все</div>
+      <div class="hw-tab-sub">{{ $allStudents->count() }} уч.</div>
+    </div>
+  </div>
 
-  {{-- ALL STUDENTS --}}
-  <div class="sec-label">Все ученики</div>
-  @forelse($allStudents as $i => $s)
-    <div class="student-row" style="--i:{{ $i }}">
-      <div class="student-name">{{ $s->name }}</div>
-      <button class="assign-btn" @click="openAssign({{ $s->id }}, '{{ e($s->name) }}')">Дать ДЗ</button>
-    </div>
-  @empty
-    <div class="empty-note">Нет учеников.</div>
-  @endforelse
+  {{-- CURRENT LESSON TAB --}}
+  <div x-show="tab === 'current'" x-cloak>
+    @forelse($currentSlots as $i => $slot)
+      <div class="student-row" style="--i:{{ $i }}">
+        <div>
+          <div class="student-name">{{ $slot->student?->name ?? 'Ученик #' . $slot->student_id }}</div>
+          <div class="student-time">{{ substr($slot->start_time, 0, 5) }}{{ $slot->end_time ? ' – ' . substr($slot->end_time, 0, 5) : '' }}</div>
+        </div>
+        <button class="assign-btn" @click="openAssign({{ $slot->student_id }}, '{{ e($slot->student?->name ?? '') }}')">Дать ДЗ</button>
+      </div>
+    @empty
+      <div class="empty-note">Нет уроков на сегодня.</div>
+    @endforelse
+  </div>
+
+  {{-- PREVIOUS LESSON TAB --}}
+  <div x-show="tab === 'prev'" x-cloak>
+    @forelse($prevSlots as $i => $slot)
+      <div class="student-row" style="--i:{{ $i }}">
+        <div>
+          <div class="student-name">{{ $slot->student?->name ?? 'Ученик #' . $slot->student_id }}</div>
+          <div class="student-time">{{ substr($slot->start_time, 0, 5) }}{{ $slot->end_time ? ' – ' . substr($slot->end_time, 0, 5) : '' }}</div>
+        </div>
+        <button class="assign-btn" @click="openAssign({{ $slot->student_id }}, '{{ e($slot->student?->name ?? '') }}')">Дать ДЗ</button>
+      </div>
+    @empty
+      <div class="empty-note">Нет данных о прошлом уроке.</div>
+    @endforelse
+  </div>
+
+  {{-- ALL STUDENTS TAB --}}
+  <div x-show="tab === 'all'" x-cloak>
+    @forelse($allStudents as $i => $s)
+      <div class="student-row" style="--i:{{ $i }}">
+        <div class="student-name">{{ $s->name }}</div>
+        <button class="assign-btn" @click="openAssign({{ $s->id }}, '{{ e($s->name) }}')">Дать ДЗ</button>
+      </div>
+    @empty
+      <div class="empty-note">Нет учеников.</div>
+    @endforelse
+  </div>
 
   {{-- RECENT HOMEWORK --}}
   @if($recentHomework->count() > 0)
@@ -164,6 +215,7 @@
 <script>
 function teacherHw() {
   return {
+    tab: '{{ $currentSlots->count() > 0 ? 'current' : ($prevSlots->count() > 0 ? 'prev' : 'all') }}',
     showAssign: false,
     assignStudentId: null,
     assignName: '',
