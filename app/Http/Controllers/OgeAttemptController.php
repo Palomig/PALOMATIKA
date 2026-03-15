@@ -160,6 +160,19 @@ class OgeAttemptController extends Controller
         $this->authorizeAttempt($request, $attempt);
         $this->guardActiveAttempt($attempt);
 
+        $validated = $request->validate([
+            'answers' => 'nullable|array',
+            'answers.*' => 'string|max:255',
+            'elapsed' => 'nullable|integer',
+            'client_ts' => 'nullable|date',
+        ]);
+
+        // Save all answers atomically before submitting
+        $answers = $validated['answers'] ?? [];
+        if (!empty($answers)) {
+            $this->attemptService->commitAnswersBatch($attempt, $answers);
+        }
+
         try {
             $attempt = $this->attemptService->submitAttempt($attempt, $request->input('client_ts'));
         } catch (\Throwable $e) {
