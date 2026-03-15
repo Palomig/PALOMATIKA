@@ -937,7 +937,7 @@ class TelegramBotAuthController extends Controller
         if ($user->referred_by_user_id) {
             $referrer = User::find($user->referred_by_user_id);
             if ($referrer) {
-                $commissionPercent = $referrer->partner_commission_percent ?? 30;
+                $commissionPercent = $referrer->partner_commission_percent ?? 20;
                 $bonus = (int) round(100 * $commissionPercent / 100);
                 if ($bonus > 0) {
                     $referrer->increment('star_balance', $bonus);
