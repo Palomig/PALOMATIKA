@@ -169,6 +169,12 @@ class OgeAttemptController extends Controller
 
         // Save all answers atomically before submitting
         $answers = $validated['answers'] ?? [];
+        foreach (array_keys($answers) as $taskNumber) {
+            if (!$this->isValidTaskNumber((int) $taskNumber) || !ctype_digit((string) $taskNumber)) {
+                abort(422, 'Invalid task number');
+            }
+        }
+
         if (!empty($answers)) {
             $this->attemptService->commitAnswersBatch($attempt, $answers);
         }
