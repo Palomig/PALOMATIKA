@@ -93,7 +93,7 @@
   {{-- Stats --}}
   <div class="stats-row">
     <div class="stat-card">
-      <div class="stat-num">{{ $user->star_balance }}</div>
+      <div class="stat-num">{{ $user->star_balance }} ⭐</div>
       <div class="stat-label">Баланс</div>
     </div>
     <div class="stat-card">
