@@ -454,6 +454,7 @@ Route::prefix('tg')->group(function () {
                 Route::get('/variants', [MiniAppController::class, 'teacherVariants'])->name('variants');
                 Route::get('/homework', [MiniAppController::class, 'teacherHomework'])->name('homework');
                 Route::post('/homework/assign', [MiniAppController::class, 'assignHomework'])->name('homework.assign');
+                Route::patch('/students/{studentId}/link', [MiniAppController::class, 'updateStudentLink'])->name('students.link');
                 Route::get('/referrals', [MiniAppController::class, 'teacherReferrals'])->name('referrals');
             });
         });
