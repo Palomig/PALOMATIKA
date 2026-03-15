@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Homework extends Model
 {
+    protected $table = 'homeworks';
+
     public $timestamps = false;
 
     protected $fillable = [
