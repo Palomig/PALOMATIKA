@@ -438,6 +438,11 @@ Route::prefix('tg')->group(function () {
             Route::get('/tutor', [MiniAppController::class, 'tutor'])->name('miniapp.tutor');
             Route::get('/homework', [MiniAppController::class, 'studentHomework'])->name('miniapp.homework');
 
+            Route::get('/profile', [MiniAppController::class, 'profile'])->name('miniapp.profile');
+            Route::post('/premium/trial', [MiniAppController::class, 'activateTrial'])->name('miniapp.premium.trial');
+            Route::post('/premium/buy', [MiniAppController::class, 'buyPremium'])->name('miniapp.premium.buy');
+            Route::post('/premium/payout', [MiniAppController::class, 'requestPayout'])->name('miniapp.premium.payout');
+
             Route::middleware(['role:teacher,admin'])->prefix('teacher')->name('miniapp.teacher.')->group(function () {
                 Route::get('/', fn () => redirect('/tg/teacher/dashboard'))->name('home');
                 Route::get('/dashboard', [MiniAppController::class, 'teacherDashboard'])->name('dashboard');
