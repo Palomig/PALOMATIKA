@@ -101,7 +101,7 @@
 @section('body')
 <div class="page">
   <div class="topbar">
-    <a href="/tg/history" class="back">←</a>
+    <a href="{{ $backUrl ?? '/tg/history' }}" class="back">←</a>
     <div class="topbar-title">{{ $label }}</div>
     <div style="width:34px;"></div>
   </div>

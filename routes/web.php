@@ -443,6 +443,7 @@ Route::prefix('tg')->group(function () {
                 Route::get('/dashboard', [MiniAppController::class, 'teacherDashboard'])->name('dashboard');
                 Route::get('/students', [MiniAppController::class, 'teacherStudents'])->name('students');
                 Route::get('/students/{studentId}', [MiniAppController::class, 'teacherStudentProfile'])->name('students.profile');
+                Route::get('/students/{studentId}/attempt/{attemptId}', [MiniAppController::class, 'teacherStudentAttemptDetail'])->name('students.attempt');
                 Route::post('/students/{studentId}/ownership', [MiniAppController::class, 'toggleTeacherStudentOwnership'])->name('students.ownership');
                 Route::patch('/students/{studentId}/alias', [MiniAppController::class, 'updateTeacherStudentAlias'])->name('students.alias');
                 Route::get('/variants', [MiniAppController::class, 'teacherVariants'])->name('variants');

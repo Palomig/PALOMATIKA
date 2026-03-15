@@ -1138,9 +1138,8 @@ class MiniAppController extends Controller
         $attempts = OgeAttempt::query()
             ->where('student_id', $student->id)
             ->with([
-                'variant:id,hash,owner_teacher_id,title,mode,source,config_json',
-                'answers:id,attempt_id,task_number,current_answer',
-                'scorings:id,attempt_id,task_number,is_correct,correct_answer,checked_at',
+                'variant:id,hash,title,mode',
+                'scorings:id,attempt_id,task_number,is_correct',
             ])
             // Show full student history in miniapp teacher profile (not only variants created by current teacher).
             ->orderByRaw('COALESCE(last_seen_at, submitted_at, started_at, updated_at, created_at) DESC')
@@ -1149,37 +1148,10 @@ class MiniAppController extends Controller
             ->get();
 
         $topicStats = [];
-        $wrongTasks = [];
         $correctTotal = 0;
         $scoredTotal = 0;
 
         foreach ($attempts as $attempt) {
-            $taskMap = [];
-            $cfg = $attempt->variant?->config_json;
-            if (is_array($cfg) && isset($cfg['tasks']) && is_array($cfg['tasks'])) {
-                foreach (array_values($cfg['tasks']) as $idx => $taskDef) {
-                    if (!is_array($taskDef)) {
-                        continue;
-                    }
-
-                    $num = (int) ($taskDef['task_number']
-                        ?? $taskDef['attempt_task_number']
-                        ?? $taskDef['test_number']
-                        ?? 0);
-
-                    // Fallback for legacy payloads without explicit task_number fields.
-                    if ($num <= 0) {
-                        $num = ($attempt->variant && $attempt->variant->isCustomRandom())
-                            ? ($idx + 1)
-                            : (6 + $idx);
-                    }
-
-                    if ($num > 0) {
-                        $taskMap[$num] = $taskDef;
-                    }
-                }
-            }
-
             foreach ($attempt->scorings as $scoring) {
                 if ($scoring->is_correct === null) {
                     continue;
@@ -1193,121 +1165,11 @@ class MiniAppController extends Controller
                 if ((bool) $scoring->is_correct) {
                     $topicStats[$taskNum]['correct']++;
                     $correctTotal++;
-                } else {
-                    $studentAnswer = $attempt->answers->firstWhere('task_number', $taskNum);
-                    $def = $taskMap[$taskNum] ?? [];
-                    $inner = is_array($def['task'] ?? null) ? $def['task'] : [];
-
-                    $rawOptions = $def['options'] ?? $inner['options'] ?? $def['variants'] ?? $inner['variants'] ?? null;
-                    $taskOptions = [];
-                    if (is_array($rawOptions)) {
-                        $taskOptions = array_values($rawOptions);
-                    } elseif (is_string($rawOptions) && trim($rawOptions) !== '') {
-                        $taskOptions = array_values(array_filter(array_map('trim', preg_split('/\R+/', $rawOptions))));
-                    }
-
-                    // Fallbacks for task types where options are stored differently.
-                    if (empty($taskOptions)) {
-                        $statementRows = $def['selected_statements'] ?? $inner['selected_statements'] ?? $def['statements'] ?? $inner['statements'] ?? null;
-                        if (is_array($statementRows) && !empty($statementRows)) {
-                            foreach (array_values($statementRows) as $idx => $row) {
-                                if (is_array($row)) {
-                                    $txt = trim((string) ($row['text'] ?? ''));
-                                    if ($txt !== '') {
-                                        $taskOptions[] = [
-                                            'label' => (($row['display_number'] ?? ($idx + 1)) . ') ' . $txt),
-                                        ];
-                                    }
-                                } elseif (is_string($row) && trim($row) !== '') {
-                                    $taskOptions[] = [
-                                        'label' => (($idx + 1) . ') ' . trim($row)),
-                                    ];
-                                }
-                            }
-                        }
-                    }
-
-                    if (empty($taskOptions)) {
-                        $matchingTasks = $def['tasks'] ?? $inner['tasks'] ?? null;
-                        if (is_array($matchingTasks) && !empty($matchingTasks)) {
-                            foreach (array_values($matchingTasks) as $idx => $row) {
-                                if (!is_array($row)) {
-                                    continue;
-                                }
-                                $left = trim((string) ($row['text'] ?? $row['label'] ?? $row['left'] ?? ''));
-                                if ($left !== '') {
-                                    $taskOptions[] = [
-                                        'label' => (($idx + 1) . ') ' . $left),
-                                    ];
-                                }
-                            }
-                        }
-                    }
-
-                    $instructionText = trim((string) (($def['instruction'] ?? $inner['instruction'] ?? '') ?: ''));
-                    $conditionText = trim((string) (($inner['text'] ?? $def['text'] ?? $inner['prompt'] ?? $inner['question'] ?? $inner['condition'] ?? $inner['body'] ?? $inner['content'] ?? '') ?: ''));
-
-                    // If instruction and condition are the same, show only one text block.
-                    if ($instructionText !== '' && $conditionText !== '') {
-                        $normInstruction = preg_replace('/\s+/u', ' ', mb_strtolower($instructionText));
-                        $normCondition = preg_replace('/\s+/u', ' ', mb_strtolower($conditionText));
-                        if ($normInstruction === $normCondition) {
-                            $instructionText = '';
-                        }
-                    }
-
-                    $taskText = $conditionText !== '' ? $conditionText : $instructionText;
-                    $taskExpression = (string) (($def['expression'] ?? $inner['expression'] ?? $inner['formula'] ?? $inner['latex'] ?? '') ?: '');
-
-                    // Topic 07 point-value tasks: ensure "indicated number" is visible in profile cards.
-                    $targetValue = $def['target'] ?? $inner['target'] ?? $def['point_value'] ?? $inner['point_value'] ?? null;
-                    if (($taskExpression === '' || $taskExpression === null) && $targetValue !== null && $targetValue !== '') {
-                        $taskExpression = (string) $targetValue;
-                    }
-
-                    // Topic 14 progression tasks: fallback to sequence fields if expression is absent.
-                    if ($taskExpression === '' && (($def['task_number'] ?? $taskNum) === 14 || ($def['topic_id'] ?? null) === '14')) {
-                        $a1 = $inner['a1'] ?? $def['a1'] ?? null;
-                        $d = $inner['d'] ?? $def['d'] ?? null;
-                        $n = $inner['n'] ?? $def['n'] ?? null;
-                        if ($a1 !== null || $d !== null || $n !== null) {
-                            $parts = [];
-                            if ($a1 !== null) $parts[] = 'a_1=' . $a1;
-                            if ($d !== null) $parts[] = 'd=' . $d;
-                            if ($n !== null) $parts[] = 'n=' . $n;
-                            $taskExpression = implode(',\; ', $parts);
-                        }
-                    }
-
-                    $taskId = $inner['id'] ?? $def['task_id'] ?? $def['id'] ?? null;
-                    $topicId = (string) (($def['topic_id'] ?? $inner['topic_id'] ?? '') ?: '');
-                    $blockNumber = (string) (($def['block_number'] ?? $inner['block_number'] ?? '') ?: '');
-                    $zadanieNumber = (string) (($def['zadanie_number'] ?? $inner['zadanie_number'] ?? '') ?: '');
-                    $taskLocator = ($topicId !== '' && $blockNumber !== '' && $zadanieNumber !== '' && $taskId !== null && $taskId !== '')
-                        ? ($topicId . '_' . $blockNumber . '_' . $zadanieNumber . '#' . $taskId)
-                        : null;
-
-                    $wrongTasks[] = [
-                        'attempt_id' => (int) $attempt->id,
-                        'variant_hash' => (string) ($attempt->variant->hash ?? ''),
-                        'task_number' => $taskNum,
-                        'task_instruction' => $instructionText,
-                        'task_text' => $taskText,
-                        'task_expression' => $taskExpression,
-                        'task_svg' => (string) (($def['svg'] ?? $inner['svg'] ?? '') ?: ''),
-                        'task_image' => (string) (($def['image'] ?? $inner['image'] ?? '') ?: ''),
-                        'task_options' => $taskOptions,
-                        'task_id' => $taskId,
-                        'task_locator' => $taskLocator,
-                        'student_answer' => (string) (($studentAnswer->current_answer ?? '') ?: '—'),
-                        'correct_answer' => (string) (($scoring->correct_answer ?? '') ?: '—'),
-                    ];
                 }
             }
         }
 
         usort($topicStats, fn($a, $b) => $a['task_number'] <=> $b['task_number']);
-        usort($wrongTasks, fn($a, $b) => $b['attempt_id'] <=> $a['attempt_id']);
 
         // Build variant history list (same format as student history page)
         $historyList = [];
@@ -1336,7 +1198,6 @@ class MiniAppController extends Controller
             'student' => $student,
             'attempts' => $attempts,
             'topicStats' => $topicStats,
-            'wrongTasks' => array_slice($wrongTasks, 0, 60),
             'correctTotal' => $correctTotal,
             'scoredTotal' => $scoredTotal,
             'accuracy' => $scoredTotal > 0 ? (int) round(($correctTotal / $scoredTotal) * 100) : null,
@@ -1344,6 +1205,90 @@ class MiniAppController extends Controller
             'canSwitchMode' => $teacher->role === 'admin',
             'effectiveRole' => $this->resolveMiniAppRole($request, $teacher),
         ]);
+    }
+
+    public function teacherStudentAttemptDetail(Request $request, int $studentId, int $attemptId)
+    {
+        $student = User::where('role', 'student')->findOrFail($studentId);
+
+        $attempt = OgeAttempt::where('id', $attemptId)
+            ->where('student_id', $student->id)
+            ->whereIn('status', ['submitted', 'scored'])
+            ->with([
+                'variant:id,hash,title,mode,config_json',
+                'answers:id,attempt_id,task_number,current_answer',
+                'scorings:id,attempt_id,task_number,is_correct,correct_answer',
+            ])
+            ->firstOrFail();
+
+        $correct = $attempt->scorings->where('is_correct', true)->count();
+        $total = $attempt->scorings->count();
+        $time = null;
+        if ($attempt->started_at && $attempt->submitted_at) {
+            $time = $attempt->submitted_at->diffInSeconds($attempt->started_at);
+        }
+
+        $taskMap = [];
+        $cfg = $attempt->variant?->config_json;
+        if (is_array($cfg) && isset($cfg['tasks']) && is_array($cfg['tasks'])) {
+            foreach (array_values($cfg['tasks']) as $idx => $taskDef) {
+                if (!is_array($taskDef)) continue;
+                $num = (int) ($taskDef['task_number'] ?? $taskDef['attempt_task_number'] ?? $taskDef['test_number'] ?? 0);
+                if ($num <= 0) {
+                    $num = ($attempt->variant && $attempt->variant->isCustomRandom()) ? ($idx + 1) : (6 + $idx);
+                }
+                if ($num > 0) $taskMap[$num] = $taskDef;
+            }
+        }
+
+        $wrongTasks = [];
+        foreach ($attempt->scorings as $scoring) {
+            if ($scoring->is_correct !== false && (int) $scoring->is_correct !== 0) continue;
+
+            $taskNum = (int) $scoring->task_number;
+            $studentAnswer = $attempt->answers->firstWhere('task_number', $taskNum);
+            $def = $taskMap[$taskNum] ?? [];
+            $inner = is_array($def['task'] ?? null) ? $def['task'] : [];
+
+            $instructionText = trim((string) (($def['instruction'] ?? $inner['instruction'] ?? '') ?: ''));
+            $conditionText = trim((string) (($inner['text'] ?? $def['text'] ?? $inner['prompt'] ?? $inner['question'] ?? $inner['condition'] ?? $inner['body'] ?? $inner['content'] ?? '') ?: ''));
+
+            if ($instructionText !== '' && $conditionText !== '') {
+                $normI = preg_replace('/\s+/u', ' ', mb_strtolower($instructionText));
+                $normC = preg_replace('/\s+/u', ' ', mb_strtolower($conditionText));
+                if ($normI === $normC) $instructionText = '';
+            }
+
+            $taskText = $conditionText !== '' ? $conditionText : $instructionText;
+            $taskExpression = (string) (($def['expression'] ?? $inner['expression'] ?? $inner['formula'] ?? $inner['latex'] ?? '') ?: '');
+
+            $rawOptions = $def['options'] ?? $inner['options'] ?? $def['variants'] ?? $inner['variants'] ?? null;
+            $taskOptions = [];
+            if (is_array($rawOptions)) {
+                $taskOptions = array_values($rawOptions);
+            } elseif (is_string($rawOptions) && trim($rawOptions) !== '') {
+                $taskOptions = array_values(array_filter(array_map('trim', preg_split('/\R+/', $rawOptions))));
+            }
+
+            $wrongTasks[] = [
+                'task_number' => $taskNum,
+                'task_instruction' => $instructionText,
+                'task_text' => $taskText,
+                'task_expression' => $taskExpression,
+                'task_svg' => (string) (($def['svg'] ?? $inner['svg'] ?? '') ?: ''),
+                'task_image' => (string) (($def['image'] ?? $inner['image'] ?? '') ?: ''),
+                'task_options' => $taskOptions,
+                'student_answer' => (string) (($studentAnswer->current_answer ?? '') ?: '—'),
+                'correct_answer' => (string) (($scoring->correct_answer ?? '') ?: '—'),
+            ];
+        }
+
+        usort($wrongTasks, fn($a, $b) => $a['task_number'] <=> $b['task_number']);
+
+        $label = $this->variantModeLabel($attempt->variant);
+        $backUrl = "/tg/teacher/students/{$studentId}";
+
+        return view('miniapp.history-detail', compact('attempt', 'label', 'correct', 'total', 'time', 'wrongTasks', 'backUrl'));
     }
 
     public function toggleTeacherStudentOwnership(Request $request, int $studentId, AuditLogger $audit): \Illuminate\Http\JsonResponse
