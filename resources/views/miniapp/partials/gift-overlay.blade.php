@@ -5,8 +5,9 @@
     position: fixed; inset: 0; z-index: 200;
     background: rgba(0,0,0,.7); backdrop-filter: blur(8px);
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 24px;
+    padding: 24px; padding-top: 20vh;
     animation: fadeIn 0.4s ease;
+    overflow-y: auto;
   }
 
   /* GIFT BOX */
