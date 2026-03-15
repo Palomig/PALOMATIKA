@@ -1,4 +1,13 @@
 <!DOCTYPE html>
+@php
+  $isTeacherMiniApp = request()->is('tg/teacher*') || request()->is('tg/admin/variants');
+  $teacherNavItems = [
+    ['label' => 'Сегодня', 'href' => '/tg/teacher/dashboard', 'icon' => '◌', 'active' => request()->is('tg/teacher/dashboard')],
+    ['label' => 'Ученики', 'href' => '/tg/teacher/students', 'icon' => '◎', 'active' => request()->is('tg/teacher/students*')],
+    ['label' => 'Домашка', 'href' => '/tg/teacher/homework', 'icon' => '◍', 'active' => request()->is('tg/teacher/homework*')],
+    ['label' => 'Ещё', 'href' => '/tg/teacher/variants', 'icon' => '⋯', 'active' => request()->is('tg/teacher/variants*') || request()->is('tg/teacher/referrals*') || request()->is('tg/admin/variants*')],
+  ];
+@endphp
 <html lang="ru" data-theme="dark">
 <head>
 <meta charset="UTF-8">
@@ -192,12 +201,319 @@
   .text-accent { color: var(--accent); }
   .flex-center { display: flex; align-items: center; justify-content: center; }
 
+  body.teacher-shell {
+    background:
+      radial-gradient(circle at top left, rgba(79, 142, 247, 0.18), transparent 28%),
+      radial-gradient(circle at top right, rgba(52, 208, 126, 0.14), transparent 24%),
+      linear-gradient(180deg, #f8fbff 0%, #eef4fb 46%, #edf2f8 100%);
+    color: #132033;
+  }
+  body.teacher-shell .page {
+    gap: 16px;
+    padding-bottom: calc(112px + var(--safe-bottom));
+  }
+  body.teacher-shell .card,
+  body.teacher-shell .note,
+  body.teacher-shell .btn-surface,
+  body.teacher-shell .back-btn,
+  body.teacher-shell .metric,
+  body.teacher-shell .list-item,
+  body.teacher-shell .student,
+  body.teacher-shell .hw-card,
+  body.teacher-shell .student-row {
+    background: rgba(255,255,255,0.9);
+    border-color: rgba(146, 166, 197, 0.25);
+    box-shadow: 0 12px 34px rgba(45, 75, 125, 0.08);
+  }
+  body.teacher-shell .topbar-title,
+  body.teacher-shell .list-title,
+  body.teacher-shell .student-name,
+  body.teacher-shell .hw-title,
+  body.teacher-shell .metric-value,
+  body.teacher-shell .stat b {
+    color: #132033;
+  }
+  body.teacher-shell .text-muted,
+  body.teacher-shell .student-email,
+  body.teacher-shell .list-meta,
+  body.teacher-shell .metric-label,
+  body.teacher-shell .muted,
+  body.teacher-shell .student-sub,
+  body.teacher-shell .hw-meta,
+  body.teacher-shell .sec-label {
+    color: #627089;
+  }
+  body.teacher-shell .btn-surface {
+    color: #20304a;
+  }
+  body.teacher-shell .btn-accent {
+    background: linear-gradient(135deg, #2563eb 0%, #3f8cff 100%);
+    box-shadow: 0 12px 22px rgba(37, 99, 235, 0.22);
+  }
+  .teacher-shell .mini-hero {
+    position: relative;
+    overflow: hidden;
+    border-radius: 24px;
+    padding: 20px;
+    background:
+      radial-gradient(circle at top left, rgba(255,255,255,0.9), transparent 40%),
+      linear-gradient(135deg, #133d88 0%, #2563eb 48%, #52a0ff 100%);
+    color: #fff;
+    box-shadow: 0 18px 42px rgba(24, 64, 135, 0.28);
+  }
+  .teacher-shell .mini-hero::after {
+    content: "";
+    position: absolute;
+    inset: auto -18px -18px auto;
+    width: 110px;
+    height: 110px;
+    border-radius: 28px;
+    background: rgba(255,255,255,0.12);
+    transform: rotate(18deg);
+  }
+  .teacher-shell .hero-kicker {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.76;
+    font-weight: 800;
+  }
+  .teacher-shell .hero-title {
+    margin-top: 8px;
+    font-family: var(--display);
+    font-size: 28px;
+    line-height: 1.05;
+  }
+  .teacher-shell .hero-subtitle {
+    margin-top: 10px;
+    max-width: 280px;
+    font-size: 13px;
+    line-height: 1.5;
+    opacity: 0.88;
+  }
+  .teacher-shell .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .teacher-shell .hero-stat {
+    border-radius: 18px;
+    padding: 12px;
+    background: rgba(255,255,255,0.14);
+    border: 1px solid rgba(255,255,255,0.18);
+    backdrop-filter: blur(10px);
+  }
+  .teacher-shell .hero-stat-label {
+    font-size: 10px;
+    font-weight: 700;
+    opacity: 0.72;
+  }
+  .teacher-shell .hero-stat-value {
+    margin-top: 6px;
+    font-size: 22px;
+    font-family: var(--display);
+  }
+  .teacher-shell .section-card {
+    background: rgba(255,255,255,0.88);
+    border: 1px solid rgba(146, 166, 197, 0.24);
+    border-radius: 22px;
+    padding: 16px;
+    box-shadow: 0 12px 34px rgba(45, 75, 125, 0.08);
+  }
+  .teacher-shell .section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .teacher-shell .section-title {
+    font-size: 18px;
+    font-weight: 900;
+    color: #132033;
+  }
+  .teacher-shell .section-note {
+    font-size: 12px;
+    color: #627089;
+  }
+  .teacher-shell .chip-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .teacher-shell .chip {
+    padding: 8px 12px;
+    border-radius: 999px;
+    text-decoration: none;
+    border: 1px solid rgba(146, 166, 197, 0.28);
+    background: rgba(255,255,255,0.74);
+    color: #42526d;
+    font-size: 12px;
+    font-weight: 800;
+  }
+  .teacher-shell .chip.active {
+    background: #e7f0ff;
+    color: #1d4ed8;
+    border-color: rgba(37, 99, 235, 0.18);
+  }
+  .teacher-shell .action-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .teacher-shell .mini-btn {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:38px;
+    padding:0 14px;
+    border-radius:999px;
+    text-decoration:none;
+    font-size:12px;
+    font-weight:800;
+    border:1px solid rgba(255,255,255,.18);
+    background:rgba(255,255,255,.14);
+    color:#fff;
+  }
+  .teacher-shell .mini-btn.light {
+    background:rgba(255,255,255,.92);
+    color:#17408b;
+    border-color:transparent;
+  }
+  .teacher-shell .action-tile {
+    display: block;
+    padding: 16px;
+    text-decoration: none;
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(241,246,255,0.9));
+    border: 1px solid rgba(146, 166, 197, 0.24);
+    color: #132033;
+    box-shadow: 0 10px 28px rgba(45, 75, 125, 0.08);
+  }
+  .teacher-shell .action-tile strong {
+    display: block;
+    font-size: 14px;
+    line-height: 1.25;
+  }
+  .teacher-shell .action-tile span {
+    display: block;
+    margin-top: 6px;
+    font-size: 11px;
+    color: #627089;
+    line-height: 1.45;
+  }
+  .teacher-shell .mini-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .teacher-shell .mini-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px;
+    border-radius: 18px;
+    background: rgba(245, 248, 252, 0.9);
+    border: 1px solid rgba(146, 166, 197, 0.2);
+  }
+  .teacher-shell .mini-list-item strong {
+    display: block;
+    color: #132033;
+    font-size: 14px;
+  }
+  .teacher-shell .mini-list-item span {
+    display: block;
+    margin-top: 4px;
+    color: #627089;
+    font-size: 12px;
+  }
+  .teacher-shell .ghost-link {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:36px;
+    padding:0 12px;
+    border-radius:12px;
+    border:1px solid rgba(146,166,197,.24);
+    color:#20304a;
+    background:#fff;
+    text-decoration:none;
+    font-size:12px;
+    font-weight:800;
+  }
+  .teacher-shell .status-tag {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    min-height:28px;
+    padding:0 10px;
+    border-radius:999px;
+    font-size:11px;
+    font-weight:800;
+    white-space:nowrap;
+  }
+  .teacher-shell .status-tag.red { color:#b42318; background:#fff0ef; }
+  .teacher-shell .status-tag.yellow { color:#a15c00; background:#fff7e6; }
+  .teacher-shell .status-tag.green { color:#0f7b45; background:#ebfff4; }
+  .teacher-shell .status-tag.accent { color:#1d4ed8; background:#ebf3ff; }
+  .teacher-shell .miniapp-bottom-nav {
+    position: fixed;
+    left: 50%;
+    bottom: calc(14px + var(--safe-bottom));
+    transform: translateX(-50%);
+    width: min(448px, calc(100vw - 20px));
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    padding: 10px;
+    border-radius: 24px;
+    background: rgba(10, 19, 37, 0.82);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 18px 50px rgba(9, 20, 38, 0.3);
+    backdrop-filter: blur(22px);
+    z-index: 120;
+  }
+  .teacher-shell .miniapp-bottom-nav a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 6px;
+    border-radius: 16px;
+    text-decoration: none;
+    color: rgba(230, 239, 255, 0.72);
+    font-size: 11px;
+    font-weight: 800;
+  }
+  .teacher-shell .miniapp-bottom-nav a.active {
+    color: #fff;
+    background: rgba(82, 160, 255, 0.22);
+  }
+  .teacher-shell .miniapp-bottom-nav .nav-icon {
+    font-size: 16px;
+    line-height: 1;
+  }
+
   @stack('styles')
 </style>
 </head>
-<body>
+<body class="{{ $isTeacherMiniApp ? 'teacher-shell' : '' }}">
 
 @yield('body')
+
+@if($isTeacherMiniApp)
+  <nav class="miniapp-bottom-nav" aria-label="Teacher sections">
+    @foreach($teacherNavItems as $item)
+      <a href="{{ $item['href'] }}" class="{{ $item['active'] ? 'active' : '' }}">
+        <span class="nav-icon">{{ $item['icon'] }}</span>
+        <span>{{ $item['label'] }}</span>
+      </a>
+    @endforeach
+  </nav>
+@endif
 
 <script>
   // Telegram Mini App integration
