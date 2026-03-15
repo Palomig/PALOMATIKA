@@ -45,6 +45,7 @@ class DeployController extends Controller
         'topics:diagnose',
         'pool:test-generate',
         'premium:gift',
+        'user:set-referrer',
     ];
 
     /**
