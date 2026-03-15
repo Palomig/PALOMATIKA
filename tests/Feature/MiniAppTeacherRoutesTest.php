@@ -59,6 +59,7 @@ class MiniAppTeacherRoutesTest extends TestCase
             $table->foreignId('student_id')->constrained('users')->cascadeOnDelete();
             $table->string('source', 32)->default('manual');
             $table->string('student_alias', 80)->nullable();
+            $table->string('evrium_name', 100)->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->unique(['teacher_id', 'student_id']);
         });
@@ -138,6 +139,23 @@ class MiniAppTeacherRoutesTest extends TestCase
             ->assertOk();
     }
 
+    public function test_teacher_dashboard_renders_mobile_today_hub_navigation(): void
+    {
+        $teacher = User::factory()->create([
+            'role' => 'teacher',
+            'onboarding_completed_at' => now(),
+        ]);
+
+        $this->actingAs($teacher)
+            ->get('/tg/teacher/dashboard')
+            ->assertOk()
+            ->assertSee('Сегодня')
+            ->assertSee('Текущий урок')
+            ->assertSee('Быстрые действия')
+            ->assertSee('Нуждаются во внимании')
+            ->assertSee('miniapp-bottom-nav');
+    }
+
     public function test_tg_dashboard_redirects_teacher_to_teacher_dashboard(): void
     {
         $teacher = User::factory()->create([
@@ -192,6 +210,8 @@ class MiniAppTeacherRoutesTest extends TestCase
         $this->actingAs($teacher)
             ->get('/tg/teacher/students?search=Петя')
             ->assertOk()
+            ->assertSee('На уроке')
+            ->assertSee('Есть риск')
             ->assertSee('Иван Петров')
             ->assertSee('Петя');
     }
@@ -323,7 +343,9 @@ class MiniAppTeacherRoutesTest extends TestCase
         $response = $this->actingAs($teacher)->get("/tg/teacher/students/{$student->id}");
 
         $response->assertOk();
-        $response->assertSee('История вариантов');
+        $response->assertSee('Слабые темы');
+        $response->assertSee('Последние попытки');
+        $response->assertSee('История домашних заданий');
         $response->assertSee('Полный вариант');
         $response->assertSee('0/1'); // score
         $response->assertSee('nnzzuijfqo');

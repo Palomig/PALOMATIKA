@@ -7,6 +7,8 @@ use App\Models\OgeAttemptScoring;
 use App\Models\OgeVariant;
 use App\Models\StarTransaction;
 use App\Models\TeacherStudent;
+use App\Models\Homework;
+use App\Models\HomeworkAssignment;
 use App\Models\User;
 use App\Services\AuditLogger;
 use App\Services\MiniAppTaskCanonicalizer;
@@ -984,6 +986,50 @@ class MiniAppController extends Controller
         /** @var User $user */
         $user = $request->user();
         $teacherId = (int) $user->id;
+        $scheduleData = $this->collectTeacherScheduleData($user);
+
+        $attentionStudents = TeacherStudent::query()
+            ->where('teacher_id', $teacherId)
+            ->with('student:id,name,last_active_at')
+            ->get()
+            ->map(function (TeacherStudent $relation) use ($scheduleData) {
+                $student = $relation->student;
+                if (!$student) {
+                    return null;
+                }
+
+                $reason = null;
+                $tone = 'accent';
+
+                if (blank($relation->evrium_name)) {
+                    $reason = 'Нет привязки к расписанию';
+                    $tone = 'red';
+                } elseif (blank($relation->student_alias)) {
+                    $reason = 'Нет алиаса';
+                    $tone = 'yellow';
+                } elseif (!$student->last_active_at || $student->last_active_at->lt(now()->subDays(7))) {
+                    $reason = 'Давно не заходил';
+                    $tone = 'yellow';
+                } elseif (collect($scheduleData['currentStudents'])->contains(fn ($item) => (int) ($item['student_id'] ?? 0) === (int) $student->id)) {
+                    $reason = 'Есть урок сегодня';
+                    $tone = 'green';
+                }
+
+                if (!$reason) {
+                    return null;
+                }
+
+                return [
+                    'id' => $student->id,
+                    'name' => $relation->student_alias ?: ($student->name ?: ('Ученик #' . $student->id)),
+                    'subtitle' => $student->name && $relation->student_alias ? $student->name : ($relation->evrium_name ?: 'Без привязки'),
+                    'reason' => $reason,
+                    'tone' => $tone,
+                ];
+            })
+            ->filter()
+            ->take(4)
+            ->values();
 
         $studentCount = TeacherStudent::query()
             ->where('teacher_id', $teacherId)
@@ -1007,7 +1053,7 @@ class MiniAppController extends Controller
         $recentVariants = OgeVariant::query()
             ->where('owner_teacher_id', $teacherId)
             ->orderByDesc('created_at')
-            ->limit(8)
+            ->limit(4)
             ->get(['id', 'hash', 'title', 'mode', 'is_curated', 'created_at']);
 
         return view('miniapp.teacher-dashboard', [
@@ -1017,6 +1063,10 @@ class MiniAppController extends Controller
             'variantsCount' => $variantsCount,
             'curatedCount' => $curatedCount,
             'recentVariants' => $recentVariants,
+            'todayLabel' => $scheduleData['todayLabel'],
+            'currentStudents' => array_slice($scheduleData['currentStudents'], 0, 3),
+            'attentionStudents' => $attentionStudents,
+            'todayLessonCount' => count($scheduleData['currentStudents']),
             'effectiveRole' => $this->resolveMiniAppRole($request, $user),
             'canSwitchMode' => $user->role === 'admin',
         ]);
@@ -1028,10 +1078,18 @@ class MiniAppController extends Controller
         $user = $request->user();
         $teacherId = (int) $user->id;
         $search = trim((string) $request->query('search', ''));
+        $filter = trim((string) $request->query('filter', 'all'));
+        $scheduleData = $this->collectTeacherScheduleData($user);
+        $scheduledStudentIds = collect($scheduleData['currentStudents'])
+            ->pluck('student_id')
+            ->filter()
+            ->map(fn ($id) => (int) $id)
+            ->unique()
+            ->values();
 
         // Show all active students who use app/solve variants, with teacher-specific ownership marker.
         // Use scalar subqueries to avoid duplicates when multiple teacher_students rows exist.
-        $students = User::query()
+        $studentsQuery = User::query()
             ->where('users.role', 'student')
             ->where(function ($q) {
                 $q->whereExists(function ($sub) {
@@ -1060,6 +1118,10 @@ class MiniAppController extends Controller
                 [$teacherId]
             )
             ->selectRaw(
+                '(SELECT ts.evrium_name FROM teacher_students ts WHERE ts.teacher_id = ? AND ts.student_id = users.id ORDER BY ts.id DESC LIMIT 1) as evrium_name',
+                [$teacherId]
+            )
+            ->selectRaw(
                 'CASE WHEN EXISTS (SELECT 1 FROM teacher_students ts WHERE ts.teacher_id = ? AND ts.student_id = users.id) THEN 1 ELSE 0 END as is_mine',
                 [$teacherId]
             )
@@ -1072,15 +1134,74 @@ class MiniAppController extends Controller
                             [$teacherId, '%' . $search . '%']
                         );
                 });
-            })
+            });
+
+        if ($filter === 'mine') {
+            $studentsQuery->whereExists(function ($sub) use ($teacherId) {
+                $sub->selectRaw('1')
+                    ->from('teacher_students')
+                    ->whereColumn('teacher_students.student_id', 'users.id')
+                    ->where('teacher_students.teacher_id', $teacherId);
+            });
+        } elseif ($filter === 'scheduled') {
+            if ($scheduledStudentIds->isNotEmpty()) {
+                $studentsQuery->whereIn('users.id', $scheduledStudentIds);
+            } else {
+                $studentsQuery->whereRaw('1 = 0');
+            }
+        } elseif ($filter === 'risk') {
+            $studentsQuery->where(function ($query) use ($teacherId) {
+                $query->whereNull('users.last_active_at')
+                    ->orWhere('users.last_active_at', '<', now()->subDays(7))
+                    ->orWhereRaw(
+                        'EXISTS (SELECT 1 FROM teacher_students ts WHERE ts.teacher_id = ? AND ts.student_id = users.id AND (ts.student_alias IS NULL OR ts.student_alias = "" OR ts.evrium_name IS NULL OR ts.evrium_name = ""))',
+                        [$teacherId]
+                    );
+            });
+        } elseif ($filter === 'unlinked') {
+            $studentsQuery->whereRaw(
+                'EXISTS (SELECT 1 FROM teacher_students ts WHERE ts.teacher_id = ? AND ts.student_id = users.id AND (ts.evrium_name IS NULL OR ts.evrium_name = ""))',
+                [$teacherId]
+            );
+        }
+
+        $students = $studentsQuery
             ->orderByRaw('COALESCE(users.last_active_at, users.created_at) DESC')
             ->orderBy('users.name')
             ->paginate(20)
             ->withQueryString();
 
+        $students->setCollection(
+            $students->getCollection()->map(function (User $student) use ($scheduledStudentIds) {
+                $student->is_scheduled_today = $scheduledStudentIds->contains((int) $student->id);
+                $student->risk_label = null;
+                $student->risk_tone = 'accent';
+
+                if (!(bool) ($student->is_mine ?? false)) {
+                    $student->risk_label = 'Не привязан';
+                    $student->risk_tone = 'red';
+                } elseif (blank($student->evrium_name)) {
+                    $student->risk_label = 'Без расписания';
+                    $student->risk_tone = 'red';
+                } elseif (blank($student->student_alias)) {
+                    $student->risk_label = 'Без алиаса';
+                    $student->risk_tone = 'yellow';
+                } elseif (!$student->last_active_at || $student->last_active_at->lt(now()->subDays(7))) {
+                    $student->risk_label = 'Есть риск';
+                    $student->risk_tone = 'yellow';
+                } else {
+                    $student->risk_label = 'В порядке';
+                    $student->risk_tone = 'green';
+                }
+
+                return $student;
+            })
+        );
+
         return view('miniapp.teacher-students', [
             'students' => $students,
             'search' => $search,
+            'filter' => $filter,
             'canSwitchMode' => $user->role === 'admin',
             'effectiveRole' => $this->resolveMiniAppRole($request, $user),
         ]);
@@ -1147,6 +1268,11 @@ class MiniAppController extends Controller
             ->where('role', 'student')
             ->findOrFail($studentId);
 
+        $teacherRelation = TeacherStudent::query()
+            ->where('teacher_id', $teacher->id)
+            ->where('student_id', $student->id)
+            ->first();
+
         $attempts = OgeAttempt::query()
             ->where('student_id', $student->id)
             ->with([
@@ -1206,14 +1332,50 @@ class MiniAppController extends Controller
             ];
         }
 
+        $weakTopics = collect($topicStats)
+            ->map(function (array $topic) {
+                $accuracy = $topic['total'] > 0 ? (int) round(($topic['correct'] / $topic['total']) * 100) : 0;
+                return $topic + [
+                    'accuracy' => $accuracy,
+                    'tone' => $accuracy >= 70 ? 'green' : ($accuracy >= 40 ? 'yellow' : 'red'),
+                ];
+            })
+            ->sortBy([
+                ['accuracy', 'asc'],
+                ['total', 'desc'],
+            ])
+            ->take(5)
+            ->values();
+
+        $homeworkHistory = collect();
+        if (\Illuminate\Support\Facades\Schema::hasTable('homework_assignments') && \Illuminate\Support\Facades\Schema::hasTable('homeworks')) {
+            $homeworkHistory = HomeworkAssignment::query()
+                ->where('student_id', $student->id)
+                ->with('homework:id,title,homework_type,topic_number,assigned_at')
+                ->orderByDesc('created_at')
+                ->limit(8)
+                ->get()
+                ->map(function (HomeworkAssignment $assignment) {
+                    $homework = $assignment->homework;
+                    return [
+                        'title' => $homework?->title ?: 'Домашнее задание',
+                        'subtitle' => $homework?->assigned_at?->format('d.m.Y H:i') ?: 'Без даты',
+                        'status' => $assignment->status ?: 'assigned',
+                    ];
+                });
+        }
+
         return view('miniapp.teacher-student-profile', [
             'student' => $student,
+            'teacherRelation' => $teacherRelation,
             'attempts' => $attempts,
             'topicStats' => $topicStats,
+            'weakTopics' => $weakTopics,
             'correctTotal' => $correctTotal,
             'scoredTotal' => $scoredTotal,
             'accuracy' => $scoredTotal > 0 ? (int) round(($correctTotal / $scoredTotal) * 100) : null,
             'historyList' => $historyList,
+            'homeworkHistory' => $homeworkHistory,
             'canSwitchMode' => $teacher->role === 'admin',
             'effectiveRole' => $this->resolveMiniAppRole($request, $teacher),
         ]);
@@ -1693,6 +1855,10 @@ class MiniAppController extends Controller
      */
     protected function fetchEvriumSchedule(int $teacherId, int $evriumTeacherId = 1): array
     {
+        if (app()->environment('testing')) {
+            return [];
+        }
+
         $apiUrl = 'https://xn--b1ammoq0d.xn--p1ai/zarplata/api/external.php';
         $apiKey = '15da8c6b7eed43fd5f3afae70a9f792516fb49957127e2ae';
 
@@ -1740,28 +1906,19 @@ class MiniAppController extends Controller
         return $result;
     }
 
-    /**
-     * Teacher homework page — list today's students and assigned homework.
-     */
-    public function teacherHomework(Request $request)
+    protected function collectTeacherScheduleData(User $user): array
     {
-        $user = $request->user();
         $dow = (int) now()->format('N');
         $dayNames = [1 => 'Пн', 2 => 'Вт', 3 => 'Ср', 4 => 'Чт', 5 => 'Пт', 6 => 'Сб', 7 => 'Вс'];
 
-        // All teacher-student relations with evrium_name
         $relations = TeacherStudent::where('teacher_id', $user->id)
-            ->with('student:id,name')
+            ->with('student:id,name,last_active_at')
             ->get();
 
-        // Fetch Evrium schedule
         $evriumSlots = $this->fetchEvriumSchedule($user->id);
-
-        // Today's lessons
         $todayEvrium = array_filter($evriumSlots, fn($s) => ($s['day'] ?? 0) === $dow);
         $currentStudents = $this->resolveEvriumSlots($todayEvrium, $relations);
 
-        // Previous lesson day (check backwards up to 7 days)
         $prevStudents = [];
         $prevDayLabel = '';
         for ($offset = 1; $offset <= 7; $offset++) {
@@ -1773,6 +1930,29 @@ class MiniAppController extends Controller
                 break;
             }
         }
+
+        return [
+            'relations' => $relations,
+            'evriumSlots' => $evriumSlots,
+            'currentStudents' => $currentStudents,
+            'prevStudents' => $prevStudents,
+            'prevDayLabel' => $prevDayLabel,
+            'todayLabel' => $dayNames[$dow],
+        ];
+    }
+
+    /**
+     * Teacher homework page — list today's students and assigned homework.
+     */
+    public function teacherHomework(Request $request)
+    {
+        $user = $request->user();
+        $scheduleData = $this->collectTeacherScheduleData($user);
+        $relations = $scheduleData['relations'];
+        $evriumSlots = $scheduleData['evriumSlots'];
+        $currentStudents = $scheduleData['currentStudents'];
+        $prevStudents = $scheduleData['prevStudents'];
+        $prevDayLabel = $scheduleData['prevDayLabel'];
 
         // All teacher's students (from Palomatika DB)
         $allStudentIds = $relations->pluck('student_id');
@@ -1802,12 +1982,10 @@ class MiniAppController extends Controller
             ->get();
         $recentHomework->load('assignments.student:id,name');
 
-        $todayLabel = $dayNames[$dow];
-
         return view('miniapp.teacher-homework', compact(
-            'user', 'currentStudents', 'prevStudents', 'prevDayLabel', 'todayLabel',
+            'user', 'currentStudents', 'prevStudents', 'prevDayLabel',
             'allStudents', 'allEvriumNames', 'recentHomework'
-        ));
+        ) + ['todayLabel' => $scheduleData['todayLabel']]);
     }
 
     /**
