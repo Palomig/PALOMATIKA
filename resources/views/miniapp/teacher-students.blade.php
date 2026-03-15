@@ -5,49 +5,49 @@
   .students-shell { display:flex; flex-direction:column; gap:16px; }
   .students-search {
     display:flex; align-items:center; gap:10px; padding:14px 16px;
-    border-radius:20px; background:rgba(255,255,255,.88); border:1px solid rgba(146,166,197,.24);
-    box-shadow:0 12px 34px rgba(45,75,125,.08);
+    border-radius:20px; background:var(--surface); border:1px solid var(--border);
+    box-shadow:0 12px 34px rgba(0,0,0,.2);
   }
   .students-search input {
-    flex:1; border:none; background:transparent; color:#132033; font-size:14px; font-weight:700; outline:none;
+    flex:1; border:none; background:transparent; color:var(--text); font-size:14px; font-weight:700; outline:none;
   }
   .students-search button {
     border:none; min-height:40px; padding:0 16px; border-radius:14px;
-    background:#2563eb; color:#fff; font-size:12px; font-weight:800;
+    background:var(--accent); color:#fff; font-size:12px; font-weight:800;
   }
   .students-grid { display:flex; flex-direction:column; gap:12px; }
   .student-card {
-    padding:16px; border-radius:22px; background:rgba(255,255,255,.9);
-    border:1px solid rgba(146,166,197,.24); box-shadow:0 12px 34px rgba(45,75,125,.08);
+    padding:16px; border-radius:22px; background:var(--surface);
+    border:1px solid var(--border); box-shadow:0 12px 34px rgba(0,0,0,.2);
   }
   .student-card-head { display:flex; align-items:flex-start; gap:12px; }
   .student-avatar, .student-avatar-fallback {
     width:46px; height:46px; border-radius:16px; object-fit:cover; flex-shrink:0;
-    border:1px solid rgba(146,166,197,.22); background:linear-gradient(135deg,#dce9ff,#eff5ff);
+    border:1px solid var(--accent-bd); background:linear-gradient(135deg, rgba(167,139,250,.2), rgba(79,142,247,.18));
   }
   .student-avatar-fallback {
-    display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:900; color:#2251a8;
+    display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:900; color:var(--accent);
   }
-  .student-card-name { font-size:16px; font-weight:900; color:#132033; }
-  .student-card-subtitle { margin-top:4px; font-size:12px; color:#627089; line-height:1.45; }
+  .student-card-name { font-size:16px; font-weight:900; color:var(--text); }
+  .student-card-subtitle { margin-top:4px; font-size:12px; color:var(--muted); line-height:1.45; }
   .student-card-meta { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
   .student-card-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
   .student-settings {
-    margin-top:14px; padding-top:14px; border-top:1px solid rgba(146,166,197,.18);
+    margin-top:14px; padding-top:14px; border-top:1px solid var(--border);
     display:flex; flex-direction:column; gap:10px;
   }
-  .student-settings label { font-size:11px; font-weight:800; color:#627089; text-transform:uppercase; letter-spacing:.08em; }
+  .student-settings label { font-size:11px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; }
   .student-settings input, .student-settings select {
     width:100%; min-height:42px; padding:0 12px; border-radius:14px;
-    border:1px solid rgba(146,166,197,.24); background:#f8fbff; color:#132033; font-size:13px; font-weight:700;
+    border:1px solid var(--border); background:var(--surface2); color:var(--text); font-size:13px; font-weight:700;
   }
   .student-settings-actions { display:flex; gap:8px; }
   .student-settings-actions button, .student-settings-actions a {
     flex:1; min-height:42px; border-radius:14px; text-decoration:none; font-size:12px; font-weight:800;
     display:flex; align-items:center; justify-content:center;
   }
-  .student-settings-actions .save-btn { border:none; background:#2563eb; color:#fff; }
-  .student-settings-actions .cancel-btn { border:1px solid rgba(146,166,197,.24); background:#fff; color:#20304a; }
+  .student-settings-actions .save-btn { border:none; background:var(--accent); color:#fff; }
+  .student-settings-actions .cancel-btn { border:1px solid var(--border); background:var(--surface2); color:var(--text); }
 @endpush
 
 @section('body')

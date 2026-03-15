@@ -5,71 +5,72 @@
   .homework-layout { display:flex; flex-direction:column; gap:16px; }
   .segment {
     display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px;
-    padding:6px; border-radius:20px; background:rgba(255,255,255,.88); border:1px solid rgba(146,166,197,.24);
-    box-shadow:0 12px 34px rgba(45,75,125,.08);
+    padding:6px; border-radius:20px; background:var(--surface); border:1px solid var(--border);
+    box-shadow:0 12px 34px rgba(0,0,0,.2);
   }
   .segment button {
-    min-height:42px; border:none; border-radius:16px; background:transparent; color:#627089; font-size:13px; font-weight:900;
+    min-height:42px; border:none; border-radius:16px; background:transparent; color:var(--muted); font-size:13px; font-weight:900;
   }
-  .segment button.active { background:#edf4ff; color:#1d4ed8; }
+  .segment button.active { background:var(--accent-bg); color:var(--accent); }
   .assign-grid { display:flex; flex-direction:column; gap:10px; }
   .assign-card {
-    padding:15px; border-radius:20px; background:rgba(255,255,255,.9);
-    border:1px solid rgba(146,166,197,.24); box-shadow:0 12px 34px rgba(45,75,125,.08);
+    padding:15px; border-radius:20px; background:var(--surface);
+    border:1px solid var(--border); box-shadow:0 12px 34px rgba(0,0,0,.2);
   }
   .assign-card-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
-  .assign-card-title { font-size:15px; font-weight:900; color:#132033; }
-  .assign-card-subtitle { margin-top:4px; font-size:12px; color:#627089; }
+  .assign-card-title { font-size:15px; font-weight:900; color:var(--text); }
+  .assign-card-subtitle { margin-top:4px; font-size:12px; color:var(--muted); }
   .assign-card-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
   .icon-btn {
     display:inline-flex; align-items:center; justify-content:center;
     min-height:38px; padding:0 14px; border-radius:14px; border:none; text-decoration:none;
-    background:#2563eb; color:#fff; font-size:12px; font-weight:800;
+    background:var(--accent); color:#fff; font-size:12px; font-weight:800;
   }
   .icon-btn.secondary {
-    background:#fff; color:#20304a; border:1px solid rgba(146,166,197,.24);
+    background:var(--surface2); color:var(--text); border:1px solid var(--border);
   }
   .control-list { display:flex; flex-direction:column; gap:10px; }
   .control-card {
-    padding:16px; border-radius:20px; background:rgba(255,255,255,.9);
-    border:1px solid rgba(146,166,197,.24); box-shadow:0 12px 34px rgba(45,75,125,.08);
+    padding:16px; border-radius:20px; background:var(--surface);
+    border:1px solid var(--border); box-shadow:0 12px 34px rgba(0,0,0,.2);
   }
   .control-card-top { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
   .control-students { display:flex; flex-direction:column; gap:8px; margin-top:12px; }
   .control-student-row {
     display:flex; align-items:center; justify-content:space-between; gap:10px;
-    padding:10px 12px; border-radius:14px; background:#f8fbff;
+    padding:10px 12px; border-radius:14px; background:var(--surface2);
   }
-  .inline-settings { margin-top:12px; padding-top:12px; border-top:1px solid rgba(146,166,197,.18); display:flex; flex-direction:column; gap:10px; }
+  .inline-settings { margin-top:12px; padding-top:12px; border-top:1px solid var(--border); display:flex; flex-direction:column; gap:10px; }
   .inline-settings input, .inline-settings select {
     width:100%; min-height:42px; padding:0 12px; border-radius:14px;
-    border:1px solid rgba(146,166,197,.24); background:#f8fbff; color:#132033; font-size:13px; font-weight:700;
+    border:1px solid var(--border); background:var(--surface2); color:var(--text); font-size:13px; font-weight:700;
   }
   .sheet-backdrop {
     position:fixed; inset:0; background:rgba(9,20,38,.38); z-index:140;
     display:flex; align-items:flex-end; justify-content:center; padding:16px;
   }
   .sheet {
-    width:min(480px,100%); border-radius:28px 28px 18px 18px; background:#fff; color:#132033;
+    width:min(480px,100%); border-radius:28px 28px 18px 18px; background:var(--bg); color:var(--text);
+    border:1px solid var(--border);
     padding:14px 16px calc(22px + var(--safe-bottom)); box-shadow:0 18px 50px rgba(9,20,38,.28);
   }
   .sheet-handle { width:52px; height:5px; border-radius:999px; background:#d7dfeb; margin:0 auto 12px; }
-  .sheet-title { font-size:20px; font-weight:900; color:#132033; }
-  .sheet-subtitle { margin-top:6px; font-size:13px; color:#627089; }
+  .sheet-title { font-size:20px; font-weight:900; color:var(--text); }
+  .sheet-subtitle { margin-top:6px; font-size:13px; color:var(--muted); }
   .sheet-options { display:flex; flex-direction:column; gap:10px; margin-top:16px; }
   .sheet-option {
     display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px;
-    border-radius:18px; border:1px solid rgba(146,166,197,.24); background:#f8fbff;
+    border-radius:18px; border:1px solid var(--border); background:var(--surface);
   }
-  .sheet-option strong { display:block; font-size:14px; color:#132033; }
-  .sheet-option span { display:block; margin-top:4px; font-size:12px; color:#627089; }
+  .sheet-option strong { display:block; font-size:14px; color:var(--text); }
+  .sheet-option span { display:block; margin-top:4px; font-size:12px; color:var(--muted); }
   .sheet-field { margin-top:14px; }
-  .sheet-field label { display:block; margin-bottom:6px; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#627089; }
-  .sheet-field select { width:100%; min-height:44px; border-radius:14px; border:1px solid rgba(146,166,197,.24); background:#f8fbff; color:#132033; padding:0 12px; font-size:13px; font-weight:700; }
+  .sheet-field label { display:block; margin-bottom:6px; font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+  .sheet-field select { width:100%; min-height:44px; border-radius:14px; border:1px solid var(--border); background:var(--surface2); color:var(--text); padding:0 12px; font-size:13px; font-weight:700; }
   .sheet-footer { display:flex; gap:8px; margin-top:16px; }
   .sheet-footer button { flex:1; min-height:44px; border-radius:16px; font-size:13px; font-weight:900; }
-  .sheet-footer .cancel { border:1px solid rgba(146,166,197,.24); background:#fff; color:#20304a; }
-  .sheet-footer .submit { border:none; background:#2563eb; color:#fff; }
+  .sheet-footer .cancel { border:1px solid var(--border); background:var(--surface2); color:var(--text); }
+  .sheet-footer .submit { border:none; background:var(--accent); color:#fff; }
 @endpush
 
 @section('body')
@@ -195,8 +196,8 @@
               @foreach($hw->assignments as $assignment)
                 <div class="control-student-row">
                   <div>
-                    <strong style="display:block;color:#132033;font-size:13px;">{{ $assignment->student?->name ?? 'Ученик' }}</strong>
-                    <span style="display:block;margin-top:4px;font-size:12px;color:#627089;">{{ $assignment->status }}</span>
+                    <strong style="display:block;color:var(--text);font-size:13px;">{{ $assignment->student?->name ?? 'Ученик' }}</strong>
+                    <span style="display:block;margin-top:4px;font-size:12px;color:var(--muted);">{{ $assignment->status }}</span>
                   </div>
                   <span class="status-tag {{ $assignment->status === 'completed' ? 'green' : ($assignment->status === 'started' ? 'yellow' : 'accent') }}">{{ $assignment->status }}</span>
                 </div>

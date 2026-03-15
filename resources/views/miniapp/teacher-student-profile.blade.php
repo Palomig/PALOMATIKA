@@ -9,27 +9,27 @@
   .profile-actions a { text-decoration:none; }
   .kpi-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
   .kpi-card {
-    padding:14px; border-radius:18px; background:linear-gradient(180deg,#fff,#f5f9ff);
-    border:1px solid rgba(146,166,197,.2);
+    padding:14px; border-radius:18px; background:linear-gradient(180deg, var(--surface), var(--surface2));
+    border:1px solid var(--border);
   }
-  .kpi-label { font-size:11px; font-weight:800; color:#627089; text-transform:uppercase; letter-spacing:.08em; }
-  .kpi-value { margin-top:6px; font-size:24px; font-weight:900; color:#132033; }
-  .kpi-meta { margin-top:4px; font-size:12px; color:#627089; }
+  .kpi-label { font-size:11px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; }
+  .kpi-value { margin-top:6px; font-size:24px; font-weight:900; color:var(--text); }
+  .kpi-meta { margin-top:4px; font-size:12px; color:var(--muted); }
   .priority-list { display:flex; flex-direction:column; gap:10px; }
   .priority-card {
     display:flex; align-items:center; justify-content:space-between; gap:12px;
-    padding:14px; border-radius:18px; background:#f8fbff; border:1px solid rgba(146,166,197,.2);
+    padding:14px; border-radius:18px; background:var(--surface2); border:1px solid var(--border);
   }
-  .priority-card strong { display:block; color:#132033; font-size:14px; }
-  .priority-card span { display:block; margin-top:4px; font-size:12px; color:#627089; }
+  .priority-card strong { display:block; color:var(--text); font-size:14px; }
+  .priority-card span { display:block; margin-top:4px; font-size:12px; color:var(--muted); }
   .timeline { display:flex; flex-direction:column; gap:10px; }
   .timeline-item {
     display:flex; align-items:center; justify-content:space-between; gap:12px;
-    padding:14px; border-radius:18px; background:#f8fbff; border:1px solid rgba(146,166,197,.2);
+    padding:14px; border-radius:18px; background:var(--surface2); border:1px solid var(--border);
     text-decoration:none; color:inherit;
   }
-  .timeline-score { font-size:24px; font-weight:900; color:#132033; white-space:nowrap; }
-  .timeline-score small { font-size:12px; color:#627089; }
+  .timeline-score { font-size:24px; font-weight:900; color:var(--text); white-space:nowrap; }
+  .timeline-score small { font-size:12px; color:var(--muted); }
 @endpush
 
 @section('body')
