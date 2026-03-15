@@ -2,10 +2,10 @@
 @php
   $isTeacherMiniApp = request()->is('tg/teacher*') || request()->is('tg/admin/variants');
   $teacherNavItems = [
-    ['label' => 'Сегодня', 'href' => '/tg/teacher/dashboard', 'icon' => '◌', 'active' => request()->is('tg/teacher/dashboard')],
+    ['label' => 'День', 'href' => '/tg/teacher/dashboard', 'icon' => '◌', 'active' => request()->is('tg/teacher/dashboard')],
+    ['label' => 'Уроки', 'href' => '/tg/teacher/lessons', 'icon' => '◉', 'active' => request()->is('tg/teacher/lessons*')],
     ['label' => 'Ученики', 'href' => '/tg/teacher/students', 'icon' => '◎', 'active' => request()->is('tg/teacher/students*')],
     ['label' => 'Домашка', 'href' => '/tg/teacher/homework', 'icon' => '◍', 'active' => request()->is('tg/teacher/homework*')],
-    ['label' => 'Ещё', 'href' => '/tg/teacher/variants', 'icon' => '⋯', 'active' => request()->is('tg/teacher/variants*') || request()->is('tg/teacher/referrals*') || request()->is('tg/admin/variants*')],
   ];
 @endphp
 <html lang="ru" data-theme="dark">

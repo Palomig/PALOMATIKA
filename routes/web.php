@@ -446,6 +446,7 @@ Route::prefix('tg')->group(function () {
             Route::middleware(['role:teacher,admin'])->prefix('teacher')->name('miniapp.teacher.')->group(function () {
                 Route::get('/', fn () => redirect('/tg/teacher/dashboard'))->name('home');
                 Route::get('/dashboard', [MiniAppController::class, 'teacherDashboard'])->name('dashboard');
+                Route::get('/lessons', [MiniAppController::class, 'teacherLessons'])->name('lessons');
                 Route::get('/students', [MiniAppController::class, 'teacherStudents'])->name('students');
                 Route::get('/students/{studentId}', [MiniAppController::class, 'teacherStudentProfile'])->name('students.profile');
                 Route::get('/students/{studentId}/attempt/{attemptId}', [MiniAppController::class, 'teacherStudentAttemptDetail'])->name('students.attempt');

@@ -1,19 +1,9 @@
 @extends('layouts.miniapp')
-@section('title', 'Сегодня — palomatika')
+@section('title', 'Панель дня — palomatika')
 
 @push('styles')
-  .today-topbar { display:flex; align-items:center; justify-content:space-between; gap:12px; }
-  .today-topbar .eyebrow { font-size:11px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
-  .today-topbar .teacher-name { margin-top:4px; font-size:22px; font-weight:900; color:var(--text); }
-  .mode-switch { display:flex; gap:8px; flex-wrap:wrap; }
+  .mode-switch { display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
   .lesson-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
-  .mini-btn {
-    display:inline-flex; align-items:center; justify-content:center;
-    min-height:38px; padding:0 14px; border-radius:999px; text-decoration:none;
-    font-size:12px; font-weight:800; border:1px solid var(--border);
-    background:var(--surface2); color:var(--text);
-  }
-  .mini-btn.light { background:var(--accent); color:#fff; border-color:transparent; }
   .attention-grid { display:grid; gap:10px; }
   .attention-card {
     border-radius:18px; padding:14px;
@@ -22,59 +12,55 @@
   }
   .attention-reason { margin-top:6px; font-size:12px; color:var(--muted); }
   .attention-actions { display:flex; gap:8px; margin-top:12px; }
-  .ghost-link {
-    display:inline-flex; align-items:center; justify-content:center; text-decoration:none;
-    min-height:36px; padding:0 12px; border-radius:12px;
-    border:1px solid var(--border); color:var(--text); font-size:12px; font-weight:800;
-    background:var(--surface2);
+  .lesson-students { display:flex; flex-direction:column; gap:10px; margin-top:14px; }
+  .lesson-student {
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:14px; border-radius:18px; background:rgba(35,39,47,.92); border:1px solid var(--border);
   }
-  .status-tag {
-    display:inline-flex; align-items:center; gap:6px;
-    min-height:28px; padding:0 10px; border-radius:999px;
-    font-size:11px; font-weight:800;
-  }
-  .status-tag.red { color:#b42318; background:#fff0ef; }
-  .status-tag.yellow { color:#a15c00; background:#fff7e6; }
-  .status-tag.green { color:#0f7b45; background:#ebfff4; }
-  .status-tag.accent { color:#1d4ed8; background:#ebf3ff; }
+  .lesson-student strong { display:block; color:var(--text); font-size:14px; }
+  .lesson-student span { display:block; margin-top:4px; color:var(--muted); font-size:12px; }
 @endpush
 
 @section('body')
 <div class="page page--teacher">
-  <div class="today-topbar">
-    <div>
-      <div class="eyebrow">Учительский mini app</div>
-      <div class="teacher-name">Сегодня</div>
+  @if($canSwitchMode)
+    <div class="mode-switch">
+      <form method="POST" action="/tg/mode/student">@csrf<button class="ghost-link" type="submit">Ученик</button></form>
+      <form method="POST" action="/tg/mode/teacher">@csrf<button class="ghost-link" type="submit">Учитель</button></form>
     </div>
-    @if($canSwitchMode)
-      <div class="mode-switch">
-        <form method="POST" action="/tg/mode/student">@csrf<button class="ghost-link" type="submit">Ученик</button></form>
-        <form method="POST" action="/tg/mode/teacher">@csrf<button class="ghost-link" type="submit">Учитель</button></form>
-      </div>
-    @endif
-  </div>
+  @endif
 
   <section class="mini-hero">
     <div class="hero-kicker">Панель дня · {{ $todayLabel }}</div>
-    <div class="hero-title">Урок, ученики и домашка без лишних экранов</div>
-    <div class="hero-subtitle">Сначала видишь ближайшие действия, потом открываешь профиль ученика или выдаёшь практику в один-два тапа.</div>
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <div class="hero-stat-label">Уроков сегодня</div>
-        <div class="hero-stat-value">{{ $todayLessonCount }}</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-label">Мои ученики</div>
-        <div class="hero-stat-value">{{ $studentCount }}</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-label">Варианты</div>
-        <div class="hero-stat-value">{{ $variantsCount }}</div>
-      </div>
+    <div class="hero-title">{{ $todayLessonCount }} урок{{ $todayLessonCount === 1 ? '' : ($todayLessonCount >= 2 && $todayLessonCount <= 4 ? 'а' : 'ов') }} сегодня</div>
+    <div class="hero-subtitle">
+      @if($featuredLesson)
+        Ближайший рабочий слот: {{ $featuredLesson['time_start'] }}{{ $featuredLesson['time_end'] ? ' - ' . $featuredLesson['time_end'] : '' }} · {{ $featuredLesson['status_label'] }}
+      @else
+        На сегодня слотов пока нет. Можно открыть учеников и выдать домашку вручную.
+      @endif
     </div>
+
+    @if($featuredLesson)
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-label">Слот</div>
+          <div class="hero-stat-value">{{ $featuredLesson['time_start'] }}</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-label">Статус</div>
+          <div class="hero-stat-value">{{ $featuredLesson['status_label'] }}</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-label">Ученики</div>
+          <div class="hero-stat-value">{{ count($featuredLesson['students']) }}</div>
+        </div>
+      </div>
+    @endif
+
     <div class="lesson-actions">
-      <a href="/tg/teacher/homework" class="mini-btn light">Выдать ДЗ</a>
-      <a href="/tg/teacher/students" class="mini-btn">Открыть учеников</a>
+      <a href="/tg/teacher/lessons" class="mini-btn light">Открыть все уроки</a>
+      <a href="/tg/teacher/homework" class="mini-btn">Дать ДЗ</a>
     </div>
   </section>
 
@@ -82,41 +68,48 @@
     <div class="section-head">
       <div>
         <div class="section-title">Текущий урок</div>
-        <div class="section-note">Ближайшие ученики из расписания и быстрые действия.</div>
+        <div class="section-note">Ученики выбранного слота и быстрые действия по ним.</div>
       </div>
-      <a href="/tg/teacher/homework" class="ghost-link">К домашке</a>
+      <a href="/tg/teacher/lessons" class="ghost-link">Открыть все уроки</a>
     </div>
 
-    <div class="mini-list">
-      @forelse($currentStudents as $student)
-        <div class="mini-list-item">
-          <div>
-            <strong>{{ $student['student_alias'] ?? $student['student_name'] ?? $student['evrium_name'] }}</strong>
-            <span>
-              {{ $student['time_start'] ?: 'Сегодня' }}{{ $student['time_end'] ? ' - ' . $student['time_end'] : '' }}
-              · {{ $student['linked'] ? ($student['evrium_name'] ?: 'привязан') : 'не привязан' }}
-            </span>
-          </div>
-          <div class="lesson-actions" style="margin-top:0;">
-            @if(!empty($student['student_id']))
-              <a href="/tg/teacher/students/{{ $student['student_id'] }}" class="ghost-link">Профиль</a>
-              <a href="/tg/teacher/homework" class="ghost-link">Дать ДЗ</a>
-            @else
-              <span class="status-tag red">Нужна привязка</span>
-            @endif
-          </div>
+    @if($featuredLesson)
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+        <div>
+          <strong style="display:block;color:var(--text);font-size:16px;">{{ $featuredLesson['time_start'] }}{{ $featuredLesson['time_end'] ? ' - ' . $featuredLesson['time_end'] : '' }}</strong>
+          <span style="display:block;margin-top:4px;color:var(--muted);font-size:12px;">Слот дня · {{ $featuredLesson['status_label'] }}</span>
         </div>
-      @empty
-        <div class="note">Сегодня в расписании пока нет связанных уроков. Открой раздел домашки, чтобы назначить практику вручную или связать учеников с Evrium.</div>
-      @endforelse
-    </div>
+        <span class="status-tag {{ $featuredLesson['status_key'] === 'current' ? 'green' : ($featuredLesson['status_key'] === 'past' ? 'red' : 'accent') }}">{{ $featuredLesson['status_label'] }}</span>
+      </div>
+
+      <div class="lesson-students">
+        @foreach($featuredLesson['students'] as $student)
+          <div class="lesson-student">
+            <div>
+              <strong>{{ $student['student_name'] }}</strong>
+              <span>{{ $student['student_full_name'] ?: $student['evrium_name'] }} · {{ $student['risk_label'] }}</span>
+            </div>
+            <div class="lesson-actions" style="margin-top:0;">
+              @if($student['student_id'])
+                <a href="/tg/teacher/students/{{ $student['student_id'] }}" class="ghost-link">Профиль</a>
+                <a href="/tg/teacher/homework" class="ghost-link">Дать ДЗ</a>
+              @else
+                <span class="status-tag red">Не привязан</span>
+              @endif
+            </div>
+          </div>
+        @endforeach
+      </div>
+    @else
+      <div class="note">Сегодня нет слотов в расписании. Как только появятся уроки из Evrium, они окажутся здесь с разбивкой по времени и статусу.</div>
+    @endif
   </section>
 
   <section class="section-card">
     <div class="section-head">
       <div>
         <div class="section-title">Нуждаются во внимании</div>
-        <div class="section-note">Не отчёт ради отчёта, а список учеников, по которым стоит сделать действие.</div>
+        <div class="section-note">Ученики, по которым стоит сделать действие прямо сейчас.</div>
       </div>
       <a href="/tg/teacher/students?filter=risk" class="ghost-link">Все риски</a>
     </div>
@@ -135,7 +128,7 @@
           </div>
         </div>
       @empty
-        <div class="note">Пока нет явных проблемных учеников. Можно перейти к выдаче домашки или открыть общий список класса.</div>
+        <div class="note">Пока нет явных проблемных учеников. Можно перейти к урокам дня или открыть общий список класса.</div>
       @endforelse
     </div>
   </section>
@@ -144,49 +137,26 @@
     <div class="section-head">
       <div>
         <div class="section-title">Быстрые действия</div>
-        <div class="section-note">Частые сценарии упакованы в крупные мобильные точки входа.</div>
+        <div class="section-note">Только актуальные teacher-сценарии без вариантов и лишних разделов.</div>
       </div>
     </div>
     <div class="action-grid">
-      <a class="action-tile" href="/tg/teacher/homework">
-        <strong>Выдать домашку</strong>
-        <span>Полный вариант или тема с нижней панели контроля.</span>
+      <a class="action-tile" href="/tg/teacher/lessons">
+        <strong>Уроки сегодня</strong>
+        <span>Все слоты, статусы `прошёл / идёт / будет` и ученики внутри.</span>
       </a>
       <a class="action-tile" href="/tg/teacher/students">
         <strong>Открыть учеников</strong>
         <span>Поиск, фильтры риска и быстрый вход в профиль.</span>
       </a>
-      <a class="action-tile" href="/tg/teacher/variants">
-        <strong>Мои варианты</strong>
-        <span>{{ $curatedCount }} кураторских и {{ $variantsCount }} всего.</span>
+      <a class="action-tile" href="/tg/teacher/homework">
+        <strong>Выдать домашку</strong>
+        <span>Перейти к назначению практики и контролю выполнения.</span>
       </a>
-      <a class="action-tile" href="/tg/admin/variants">
-        <strong>Создать вариант</strong>
-        <span>Быстрый вход в генерацию без отдельного дашборда.</span>
+      <a class="action-tile" href="/tg/teacher/students?filter=scheduled">
+        <strong>Ученики на сегодня</strong>
+        <span>Быстрый доступ к тем, кто уже стоит в расписании.</span>
       </a>
-    </div>
-  </section>
-
-  <section class="section-card">
-    <div class="section-head">
-      <div>
-        <div class="section-title">Последние варианты</div>
-        <div class="section-note">Для быстрого возвращения к недавним материалам.</div>
-      </div>
-      <a href="/tg/teacher/variants" class="ghost-link">Все</a>
-    </div>
-    <div class="mini-list">
-      @forelse($recentVariants as $variant)
-        <div class="mini-list-item">
-          <div>
-            <strong>{{ $variant->title ?: ('Вариант ' . $variant->hash) }}</strong>
-            <span>{{ $variant->created_at?->format('d.m.Y H:i') }} · {{ $variant->is_curated ? 'Кураторский' : 'Генератор' }}</span>
-          </div>
-          <span class="status-tag accent">{{ $variant->hash }}</span>
-        </div>
-      @empty
-        <div class="note">Пока нет созданных вариантов.</div>
-      @endforelse
     </div>
   </section>
 </div>

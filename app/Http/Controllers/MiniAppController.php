@@ -1041,32 +1041,30 @@ class MiniAppController extends Controller
             ->where('student_alias', '!=', '')
             ->count();
 
-        $variantsCount = OgeVariant::query()
-            ->where('owner_teacher_id', $teacherId)
-            ->count();
-
-        $curatedCount = OgeVariant::query()
-            ->where('owner_teacher_id', $teacherId)
-            ->where('is_curated', true)
-            ->count();
-
-        $recentVariants = OgeVariant::query()
-            ->where('owner_teacher_id', $teacherId)
-            ->orderByDesc('created_at')
-            ->limit(4)
-            ->get(['id', 'hash', 'title', 'mode', 'is_curated', 'created_at']);
-
         return view('miniapp.teacher-dashboard', [
             'user' => $user,
             'studentCount' => $studentCount,
             'aliasedCount' => $aliasedCount,
-            'variantsCount' => $variantsCount,
-            'curatedCount' => $curatedCount,
-            'recentVariants' => $recentVariants,
             'todayLabel' => $scheduleData['todayLabel'],
+            'todayLessons' => $scheduleData['todayLessons'],
+            'featuredLesson' => $scheduleData['featuredLesson'],
             'currentStudents' => array_slice($scheduleData['currentStudents'], 0, 3),
             'attentionStudents' => $attentionStudents,
-            'todayLessonCount' => count($scheduleData['currentStudents']),
+            'todayLessonCount' => count($scheduleData['todayLessons']),
+            'effectiveRole' => $this->resolveMiniAppRole($request, $user),
+            'canSwitchMode' => $user->role === 'admin',
+        ]);
+    }
+
+    public function teacherLessons(Request $request)
+    {
+        /** @var User $user */
+        $user = $request->user();
+        $scheduleData = $this->collectTeacherScheduleData($user);
+
+        return view('miniapp.teacher-lessons', [
+            'todayLabel' => $scheduleData['todayLabel'],
+            'todayLessons' => $scheduleData['todayLessons'],
             'effectiveRole' => $this->resolveMiniAppRole($request, $user),
             'canSwitchMode' => $user->role === 'admin',
         ]);
@@ -1906,6 +1904,81 @@ class MiniAppController extends Controller
         return $result;
     }
 
+    protected function buildTodayLessonSlots(array $slots, \Illuminate\Support\Collection $relations): array
+    {
+        $evriumMap = [];
+        foreach ($relations as $rel) {
+            if ($rel->evrium_name) {
+                $evriumMap[$rel->evrium_name] = $rel;
+            }
+        }
+
+        $result = [];
+        foreach ($slots as $slot) {
+            $students = [];
+            foreach ($slot['students'] ?? [] as $evriumName) {
+                $rel = $evriumMap[$evriumName] ?? null;
+                $student = $rel?->student;
+                $students[] = [
+                    'evrium_name' => $evriumName,
+                    'student_id' => $rel?->student_id,
+                    'student_name' => $rel ? ($rel->student_alias ?: ($student?->name ?: 'Ученик #' . $rel->student_id)) : $evriumName,
+                    'student_full_name' => $student?->name,
+                    'student_alias' => $rel?->student_alias,
+                    'linked' => $rel !== null,
+                    'evrium_linked' => $rel?->evrium_name,
+                    'risk_label' => $rel === null
+                        ? 'Не привязан'
+                        : (blank($rel->student_alias) ? 'Без алиаса' : ((!$student?->last_active_at || $student->last_active_at->lt(now()->subDays(7))) ? 'Есть риск' : 'В порядке')),
+                    'risk_tone' => $rel === null
+                        ? 'red'
+                        : (blank($rel->student_alias) ? 'yellow' : ((!$student?->last_active_at || $student->last_active_at->lt(now()->subDays(7))) ? 'yellow' : 'green')),
+                ];
+            }
+
+            $status = $this->determineLessonStatus(
+                (string) ($slot['time_start'] ?? ''),
+                (string) ($slot['time_end'] ?? '')
+            );
+
+            $result[] = [
+                'time_start' => (string) ($slot['time_start'] ?? ''),
+                'time_end' => (string) ($slot['time_end'] ?? ''),
+                'status_key' => $status['key'],
+                'status_label' => $status['label'],
+                'students' => $students,
+            ];
+        }
+
+        usort($result, fn ($a, $b) => strcmp($a['time_start'], $b['time_start']));
+
+        return $result;
+    }
+
+    protected function determineLessonStatus(string $timeStart, string $timeEnd): array
+    {
+        if ($timeStart === '') {
+            return ['key' => 'upcoming', 'label' => 'будет'];
+        }
+
+        $now = now();
+        $start = now()->startOfDay();
+        [$hours, $minutes] = array_pad(explode(':', $timeStart), 2, '0');
+        $start = $start->copy()->setTime((int) $hours, (int) $minutes);
+
+        $end = $timeEnd !== '' ? now()->startOfDay()->setTime(...array_map('intval', array_pad(explode(':', $timeEnd), 2, '0'))) : $start->copy()->addMinutes(60);
+
+        if ($now->lt($start)) {
+            return ['key' => 'upcoming', 'label' => 'будет'];
+        }
+
+        if ($now->between($start, $end)) {
+            return ['key' => 'current', 'label' => 'идёт'];
+        }
+
+        return ['key' => 'past', 'label' => 'прошёл'];
+    }
+
     protected function collectTeacherScheduleData(User $user): array
     {
         $dow = (int) now()->format('N');
@@ -1917,7 +1990,12 @@ class MiniAppController extends Controller
 
         $evriumSlots = $this->fetchEvriumSchedule($user->id);
         $todayEvrium = array_filter($evriumSlots, fn($s) => ($s['day'] ?? 0) === $dow);
+        $todayLessons = $this->buildTodayLessonSlots($todayEvrium, $relations);
         $currentStudents = $this->resolveEvriumSlots($todayEvrium, $relations);
+
+        $featuredLesson = collect($todayLessons)->firstWhere('status_key', 'current')
+            ?? collect($todayLessons)->firstWhere('status_key', 'upcoming')
+            ?? ($todayLessons[0] ?? null);
 
         $prevStudents = [];
         $prevDayLabel = '';
@@ -1934,6 +2012,8 @@ class MiniAppController extends Controller
         return [
             'relations' => $relations,
             'evriumSlots' => $evriumSlots,
+            'todayLessons' => $todayLessons,
+            'featuredLesson' => $featuredLesson,
             'currentStudents' => $currentStudents,
             'prevStudents' => $prevStudents,
             'prevDayLabel' => $prevDayLabel,
