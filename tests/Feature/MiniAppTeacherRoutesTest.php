@@ -319,16 +319,23 @@ class MiniAppTeacherRoutesTest extends TestCase
             'updated_at' => now(),
         ]);
 
+        // Profile page shows history list with variant label and score
         $response = $this->actingAs($teacher)->get("/tg/teacher/students/{$student->id}");
 
         $response->assertOk();
-        $response->assertSee('Вариант nnzzuijfqo · Задание 12');
-        $response->assertSee('Физика: мощность тока');
-        $response->assertSee('В фирме «Родник» стоимость оборудования составляет 47000 рублей.');
-        $response->assertSee('#5');
-        $response->assertSee('12_1_3#5');
-        $response->assertSee('Ответ ученика:');
-        $response->assertSee('45000');
-        $response->assertSee('47000');
+        $response->assertSee('История вариантов');
+        $response->assertSee('Полный вариант');
+        $response->assertSee('0/1'); // score
+        $response->assertSee('nnzzuijfqo');
+        $response->assertSee("/tg/teacher/students/{$student->id}/attempt/{$attemptId}");
+
+        // Attempt detail page shows errors with task content
+        $detail = $this->actingAs($teacher)->get("/tg/teacher/students/{$student->id}/attempt/{$attemptId}");
+
+        $detail->assertOk();
+        $detail->assertSee('Физика: мощность тока');
+        $detail->assertSee('В фирме «Родник» стоимость оборудования составляет 47000 рублей.');
+        $detail->assertSee('45000');
+        $detail->assertSee('47000');
     }
 }

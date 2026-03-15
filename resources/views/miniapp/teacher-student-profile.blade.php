@@ -3,7 +3,6 @@
 @section('title', 'Профиль ученика')
 
 @push('styles')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <style>
   .page { min-height: 100vh; background: var(--bg); color: var(--text); padding: 16px; }
   .topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom: 12px; }
@@ -18,17 +17,6 @@
   .row:last-child { border-bottom:none; }
   .bad { color:#fca5a5; font-weight:700; }
   .good { color:#86efac; font-weight:700; }
-  details.err { border:1px solid var(--border); border-radius:10px; padding:8px 10px; margin:8px 0; background:var(--surface2); }
-  details.err summary { cursor:pointer; list-style:none; font-weight:700; }
-  details.err summary::-webkit-details-marker { display:none; }
-  .err-meta { margin-top:6px; font-size:12px; color:var(--muted); }
-  .task-box { margin-top:8px; padding:8px; border:1px dashed var(--border); border-radius:8px; }
-  .task-svg { margin-top:8px; }
-  .task-svg svg { max-width:100%; height:auto; display:block; }
-  .task-image { margin-top:8px; max-width:100%; border-radius:8px; border:1px solid var(--border); }
-  .task-options { margin-top:8px; padding-left:18px; }
-  .task-options li { margin:4px 0; color: var(--text); }
-
   .attempt-card {
     display: flex; align-items: center; justify-content: space-between;
     background: var(--surface2); border: 1px solid var(--border);
@@ -48,28 +36,6 @@
   .score-mid { color: #fde68a; }
   .score-bad { color: #fca5a5; }
 </style>
-@endpush
-
-@push('scripts')
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    if (typeof renderMathInElement === 'function') {
-      document.querySelectorAll('.task-render-scope').forEach(function (el) {
-        renderMathInElement(el, {
-          delimiters: [
-            { left: '$$', right: '$$', display: true },
-            { left: '\\[', right: '\\]', display: true },
-            { left: '\\(', right: '\\)', display: false },
-            { left: '$', right: '$', display: false }
-          ],
-          throwOnError: false
-        });
-      });
-    }
-  });
-</script>
 @endpush
 
 @section('body')
@@ -98,7 +64,7 @@
         $scoreClass = $pct >= 70 ? 'score-good' : ($pct >= 40 ? 'score-mid' : 'score-bad');
         $timeStr = $h['time'] !== null ? (floor($h['time'] / 60) . ':' . str_pad($h['time'] % 60, 2, '0', STR_PAD_LEFT)) : null;
       @endphp
-      <div class="attempt-card">
+      <a href="/tg/teacher/students/{{ $student->id }}/attempt/{{ $h['id'] }}" class="attempt-card">
         <div class="attempt-left">
           <div class="attempt-label">{{ $h['label'] }}</div>
           <div class="attempt-meta">
@@ -110,7 +76,7 @@
         <div class="attempt-score {{ $scoreClass }}">
           {{ $h['correct'] }}<small>/{{ $h['total'] }}</small>
         </div>
-      </div>
+      </a>
     @empty
       <div class="muted">Пока нет завершённых попыток.</div>
     @endforelse
@@ -130,45 +96,5 @@
     @endforelse
   </div>
 
-  <div class="card">
-    <div style="font-weight:700;margin-bottom:8px;">Последние ошибки</div>
-    @forelse($wrongTasks as $w)
-      <details class="err">
-        <summary>
-          Вариант {{ $w['variant_hash'] ?: ('#'.$w['attempt_id']) }} · Задание {{ $w['task_number'] }}@if(!empty($w['task_id'])) · #{{ $w['task_id'] }}@endif
-        </summary>
-        <div class="err-meta task-render-scope">
-          Ответ ученика: <b>{{ $w['student_answer'] }}</b> · Верный: <b>{{ $w['correct_answer'] }}</b>
-          @if(!empty($w['task_locator'])) · ID: <b>{{ $w['task_locator'] }}</b>@endif
-        </div>
-        <div class="task-box task-render-scope">
-          @if(!empty($w['task_instruction']))
-            <div class="muted" style="font-weight:600;margin-bottom:4px;">{{ $w['task_instruction'] }}</div>
-          @endif
-          @if(!empty($w['task_text']))
-            <div>{!! nl2br(e($w['task_text'])) !!}</div>
-          @endif
-          @if(!empty($w['task_expression']))
-            <div style="margin-top:6px;">\({{ $w['task_expression'] }}\)</div>
-          @endif
-          @if(!empty($w['task_svg']))
-            <div class="task-svg">{!! $w['task_svg'] !!}</div>
-          @elseif(!empty($w['task_image']))
-            <img class="task-image" src="{{ str_starts_with($w['task_image'], 'http') || str_starts_with($w['task_image'], '/') ? $w['task_image'] : '/images/tasks/' . str_pad((string)$w['task_number'], 2, '0', STR_PAD_LEFT) . '/' . $w['task_image'] }}" alt="task image">
-          @endif
-
-          @if(!empty($w['task_options']) && is_array($w['task_options']))
-            <ol class="task-options">
-              @foreach($w['task_options'] as $opt)
-                <li>{!! is_string($opt) ? e($opt) : e((string)($opt['label'] ?? $opt['text'] ?? json_encode($opt, JSON_UNESCAPED_UNICODE))) !!}</li>
-              @endforeach
-            </ol>
-          @endif
-        </div>
-      </details>
-    @empty
-      <div class="muted">Ошибок не найдено 🎉</div>
-    @endforelse
-  </div>
 </div>
 @endsection
