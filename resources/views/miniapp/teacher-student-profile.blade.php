@@ -28,6 +28,25 @@
   .task-image { margin-top:8px; max-width:100%; border-radius:8px; border:1px solid var(--border); }
   .task-options { margin-top:8px; padding-left:18px; }
   .task-options li { margin:4px 0; color: var(--text); }
+
+  .attempt-card {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 10px 12px;
+    text-decoration: none; color: inherit;
+    margin-bottom: 6px;
+  }
+  .attempt-left { flex: 1; min-width: 0; }
+  .attempt-label { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .attempt-meta { font-size: 11px; font-weight: 600; color: var(--muted); }
+  .attempt-score {
+    font-weight: 800; font-size: 18px; line-height: 1;
+    margin-left: 12px; white-space: nowrap;
+  }
+  .attempt-score small { font-size: 13px; color: var(--muted); }
+  .score-good { color: #86efac; }
+  .score-mid { color: #fde68a; }
+  .score-bad { color: #fca5a5; }
 </style>
 @endpush
 
@@ -69,6 +88,32 @@
       <div class="stat"><b>{{ $scoredTotal }}</b><span class="muted">проверено</span></div>
       <div class="stat"><b>{{ $accuracy === null ? '—' : ($accuracy.'%') }}</b><span class="muted">точность</span></div>
     </div>
+  </div>
+
+  <div class="card">
+    <div style="font-weight:700;margin-bottom:8px;">История вариантов</div>
+    @forelse($historyList as $h)
+      @php
+        $pct = $h['total'] > 0 ? round(($h['correct'] / $h['total']) * 100) : 0;
+        $scoreClass = $pct >= 70 ? 'score-good' : ($pct >= 40 ? 'score-mid' : 'score-bad');
+        $timeStr = $h['time'] !== null ? (floor($h['time'] / 60) . ':' . str_pad($h['time'] % 60, 2, '0', STR_PAD_LEFT)) : null;
+      @endphp
+      <div class="attempt-card">
+        <div class="attempt-left">
+          <div class="attempt-label">{{ $h['label'] }}</div>
+          <div class="attempt-meta">
+            {{ $h['date']?->format('d.m.Y H:i') }}
+            @if($timeStr) &middot; {{ $timeStr }} @endif
+            @if($h['hash']) &middot; {{ $h['hash'] }} @endif
+          </div>
+        </div>
+        <div class="attempt-score {{ $scoreClass }}">
+          {{ $h['correct'] }}<small>/{{ $h['total'] }}</small>
+        </div>
+      </div>
+    @empty
+      <div class="muted">Пока нет завершённых попыток.</div>
+    @endforelse
   </div>
 
   <div class="card">
