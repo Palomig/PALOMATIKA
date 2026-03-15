@@ -269,10 +269,13 @@
       <div class="tile-sm-name">История</div>
       <div class="tile-sm-desc">Все попытки</div>
     </a>
-    <a href="#" class="tile-sm" @click.prevent="handleInvite()">
-      <div class="tile-sm-icon">👥</div>
-      <div class="tile-sm-name">Позвать друга</div>
-      <div class="tile-sm-desc">Пусть тоже готовится</div>
+    <a href="/tg/profile" class="tile-sm">
+      <div class="tile-sm-icon">👤</div>
+      <div class="tile-sm-name">Профиль</div>
+      <div class="tile-sm-desc">Premium · Рефералы</div>
+      @if(Auth::user()->hasTgPremium())
+        <div class="tile-badge badge-purple tile-badge-top-right" style="font-size:8px;">Premium</div>
+      @endif
     </a>
     <a href="/tg/tutor" class="tile-sm">
       <div class="tile-sm-icon">👨‍🏫</div>
