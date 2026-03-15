@@ -44,6 +44,7 @@ class DeployController extends Controller
         'assets:audit-semantic-svg',
         'topics:diagnose',
         'pool:test-generate',
+        'premium:gift',
     ];
 
     /**
