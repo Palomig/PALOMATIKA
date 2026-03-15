@@ -1682,34 +1682,42 @@ class MiniAppController extends Controller
      */
     public function teacherHomework(Request $request)
     {
-        $user = $request->user();
+        try {
+            $user = $request->user();
 
-        // Today's students from lesson_schedule
-        $dow = (int) now()->format('N');
-        $todaySlots = \App\Models\LessonSchedule::where('teacher_id', $user->id)
-            ->where('day_of_week', $dow)
-            ->where('is_active', true)
-            ->with('student:id,name')
-            ->orderBy('start_time')
-            ->get();
+            // Today's students from lesson_schedule
+            $dow = (int) now()->format('N');
+            $todaySlots = \App\Models\LessonSchedule::where('teacher_id', $user->id)
+                ->where('day_of_week', $dow)
+                ->where('is_active', true)
+                ->with('student:id,name')
+                ->orderBy('start_time')
+                ->get();
 
-        // All teacher's students (fallback if no schedule)
-        $allStudentIds = TeacherStudent::where('teacher_id', $user->id)
-            ->pluck('student_id');
-        $allStudents = User::whereIn('id', $allStudentIds)->select('id', 'name')->orderBy('name')->get();
+            // All teacher's students (fallback if no schedule)
+            $allStudentIds = TeacherStudent::where('teacher_id', $user->id)
+                ->pluck('student_id');
+            $allStudents = User::whereIn('id', $allStudentIds)->select('id', 'name')->orderBy('name')->get();
 
-        // Recent homework assigned by this teacher
-        $recentHomework = \App\Models\Homework::where('teacher_id', $user->id)
-            ->whereIn('homework_type', ['full_variant', 'topic_practice'])
-            ->orderByDesc('assigned_at')
-            ->limit(30)
-            ->get();
+            // Recent homework assigned by this teacher
+            $recentHomework = \App\Models\Homework::where('teacher_id', $user->id)
+                ->whereIn('homework_type', ['full_variant', 'topic_practice'])
+                ->orderByDesc('assigned_at')
+                ->limit(30)
+                ->get();
 
-        $recentHomework->load('assignments.student:id,name');
+            $recentHomework->load('assignments.student:id,name');
 
-        return view('miniapp.teacher-homework', compact(
-            'user', 'todaySlots', 'allStudents', 'recentHomework'
-        ));
+            return view('miniapp.teacher-homework', compact(
+                'user', 'todaySlots', 'allStudents', 'recentHomework'
+            ));
+        } catch (\Throwable $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'file' => $e->getFile() . ':' . $e->getLine(),
+                'trace' => array_slice(array_map(fn($t) => ($t['file'] ?? '?') . ':' . ($t['line'] ?? '?') . ' ' . ($t['class'] ?? '') . ($t['type'] ?? '') . ($t['function'] ?? ''), $e->getTrace()), 0, 10),
+            ], 500);
+        }
     }
 
     /**
