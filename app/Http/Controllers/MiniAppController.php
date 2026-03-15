@@ -106,9 +106,21 @@ class MiniAppController extends Controller
         }
 
         // Track referral for newly created users
-        if ($user->wasRecentlyCreated && preg_match('/^ref_(\d+)$/', $startParam, $refMatch)) {
-            $referrerId = (int) $refMatch[1];
-            if ($referrerId !== $user->id && User::where('id', $referrerId)->exists()) {
+        if ($user->wasRecentlyCreated) {
+            $referrerId = null;
+
+            if (preg_match('/^ref_(\d+)$/', $startParam, $refMatch)) {
+                // ref_{user_id} — direct internal ID
+                $referrerId = (int) $refMatch[1];
+            } elseif (preg_match('/^ref_tg_(\d+)$/', $startParam, $refMatch)) {
+                // ref_tg_{telegram_id} — lookup by Telegram oauth_id
+                $referrer = User::where('oauth_provider', 'telegram')
+                    ->where('oauth_id', $refMatch[1])
+                    ->first();
+                $referrerId = $referrer?->id;
+            }
+
+            if ($referrerId && $referrerId !== $user->id && User::where('id', $referrerId)->exists()) {
                 $user->update(['referred_by_user_id' => $referrerId]);
             }
         }
