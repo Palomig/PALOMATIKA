@@ -113,16 +113,14 @@
                 $image = is_string($task['image'] ?? null) ? $task['image'] : '';
               @endphp
 
-              @if($svg !== '')
-                <div style="margin-bottom:10px; border:1px solid var(--border); border-radius:10px; overflow-x:auto; -webkit-overflow-scrolling:touch; background:#0a1628; padding:8px;">
-                  <div style="min-width:600px;">{!! $svg !!}</div>
+              @php
+                $svgMarkup = $svg !== '' ? $svg : (\Illuminate\Support\Str::startsWith($image, '<svg') ? $image : '');
+                $isWide = (int)$selectedTopic === 11;
+              @endphp
+              @if($svgMarkup !== '')
+                <div style="margin-bottom:10px; border:1px solid var(--border); border-radius:10px; background:#0a1628; padding:8px;{{ $isWide ? ' overflow-x:auto; -webkit-overflow-scrolling:touch;' : '' }}">
+                  <div style="{{ $isWide ? 'min-width:600px;' : '' }}">{!! $svgMarkup !!}</div>
                 </div>
-              @elseif($image !== '')
-                @if(\Illuminate\Support\Str::startsWith($image, '<svg'))
-                  <div style="margin-bottom:10px; border:1px solid var(--border); border-radius:10px; overflow-x:auto; -webkit-overflow-scrolling:touch; background:#0a1628; padding:8px;">
-                    <div style="min-width:600px;">{!! $image !!}</div>
-                  </div>
-                @endif
               @endif
 
               @if(!empty($task['question']))

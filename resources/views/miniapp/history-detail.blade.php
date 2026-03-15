@@ -62,9 +62,11 @@
   .task-instruction { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
   .task-text { font-size: 13px; color: var(--text); line-height: 1.5; }
   .task-expression { font-size: 14px; margin-top: 6px; }
-  .task-svg { margin-top: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; background: #0a1628; padding: 6px; }
-  .task-svg > div { min-width: 600px; }
-  .task-svg svg { width: 100%; height: auto; display: block; }
+  .task-svg { margin-top: 8px; border-radius: 8px; background: #0a1628; padding: 6px; }
+  .task-svg svg { max-width: 100%; height: auto; display: block; }
+  .task-svg-wide { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .task-svg-wide > div { min-width: 600px; }
+  .task-svg-wide svg { width: 100%; max-width: none; }
   .task-options { margin-top: 8px; padding-left: 18px; font-size: 12px; }
   .task-options li { margin: 3px 0; color: var(--text); }
 
@@ -143,10 +145,11 @@
       @if(!empty($w['task_expression']))
         <div class="task-expression">\({{ $w['task_expression'] }}\)</div>
       @endif
-      @if(!empty($w['task_svg']))
-        <div class="task-svg"><div>{!! $w['task_svg'] !!}</div></div>
-      @elseif(!empty($w['task_image']) && str_starts_with(trim($w['task_image']), '<svg'))
-        <div class="task-svg"><div>{!! $w['task_image'] !!}</div></div>
+      @php
+        $svgContent = !empty($w['task_svg']) ? $w['task_svg'] : (!empty($w['task_image']) && str_starts_with(trim($w['task_image']), '<svg') ? $w['task_image'] : '');
+      @endphp
+      @if($svgContent)
+        <div class="task-svg{{ $w['task_number'] == 11 ? ' task-svg-wide' : '' }}"><div>{!! $svgContent !!}</div></div>
       @endif
 
       @if(!empty($w['task_options']) && is_array($w['task_options']))
