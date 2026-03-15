@@ -26,7 +26,7 @@ return new class extends Migration
             // Для учителей (партнёров)
             $table->string('referral_code', 50)->unique()->nullable()->after('school');
             $table->foreignId('referred_by_user_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->tinyInteger('partner_commission_percent')->default(30);
+            $table->tinyInteger('partner_commission_percent')->default(20);
             $table->enum('partner_status', ['pending', 'approved', 'rejected'])->nullable();
             $table->timestamp('partner_approved_at')->nullable();
 

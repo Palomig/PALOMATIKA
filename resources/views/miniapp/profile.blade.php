@@ -117,7 +117,7 @@
 
   {{-- Referral link --}}
   <div class="ref-box">
-    <div class="sec-label">Пригласи друга — получи 30%</div>
+    <div class="sec-label">Пригласи друга — получи 20%</div>
     <div class="ref-link" @click="copyRefLink()">
       <span x-text="copied ? 'Скопировано!' : refLink"></span>
     </div>
