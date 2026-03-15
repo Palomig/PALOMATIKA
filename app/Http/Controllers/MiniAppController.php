@@ -7,6 +7,7 @@ use App\Models\OgeAttemptScoring;
 use App\Models\OgeVariant;
 use App\Models\StarTransaction;
 use App\Models\TeacherStudent;
+use App\Models\UserGift;
 use App\Models\Homework;
 use App\Models\HomeworkAssignment;
 use App\Models\User;
@@ -304,8 +305,14 @@ class MiniAppController extends Controller
 
         $hasTeacher = TeacherStudent::where('student_id', $user->id)->exists();
 
+        // Check for pending gift
+        $pendingGift = UserGift::where('user_id', $user->id)
+            ->whereNull('shown_at')
+            ->orderBy('id')
+            ->first();
+
         return view('miniapp.dashboard', compact(
-            'user', 'weakTopics', 'newFipiCount', 'activeAttemptsList', 'hasTeacher'
+            'user', 'weakTopics', 'newFipiCount', 'activeAttemptsList', 'hasTeacher', 'pendingGift'
         ));
     }
 
@@ -2300,6 +2307,17 @@ class MiniAppController extends Controller
     /**
      * User profile — premium status, star balance, referrals, transactions.
      */
+    public function giftSeen(Request $request)
+    {
+        $giftId = (int) $request->input('gift_id');
+        UserGift::where('id', $giftId)
+            ->where('user_id', Auth::id())
+            ->whereNull('shown_at')
+            ->update(['shown_at' => now()]);
+
+        return response()->json(['ok' => true]);
+    }
+
     public function profile()
     {
         $user = Auth::user();

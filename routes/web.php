@@ -442,6 +442,7 @@ Route::prefix('tg')->group(function () {
             Route::post('/premium/trial', [MiniAppController::class, 'activateTrial'])->name('miniapp.premium.trial');
             Route::post('/premium/buy', [MiniAppController::class, 'buyPremium'])->name('miniapp.premium.buy');
             Route::post('/premium/payout', [MiniAppController::class, 'requestPayout'])->name('miniapp.premium.payout');
+            Route::post('/gift/seen', [MiniAppController::class, 'giftSeen'])->name('miniapp.gift.seen');
 
             Route::middleware(['role:teacher,admin'])->prefix('teacher')->name('miniapp.teacher.')->group(function () {
                 Route::get('/', fn () => redirect('/tg/teacher/dashboard'))->name('home');
