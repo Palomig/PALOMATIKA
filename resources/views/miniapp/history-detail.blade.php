@@ -62,8 +62,8 @@
   .task-instruction { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
   .task-text { font-size: 13px; color: var(--text); line-height: 1.5; }
   .task-expression { font-size: 14px; margin-top: 6px; }
-  .task-svg { margin-top: 8px; }
-  .task-svg svg { max-width: 100%; height: auto; display: block; }
+  .task-svg { margin-top: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .task-svg svg { display: block; height: auto; min-width: 400px; }
   .task-image { margin-top: 8px; max-width: 100%; border-radius: 8px; border: 1px solid var(--border); }
   .task-options { margin-top: 8px; padding-left: 18px; font-size: 12px; }
   .task-options li { margin: 3px 0; color: var(--text); }
@@ -152,7 +152,11 @@
       @if(!empty($w['task_options']) && is_array($w['task_options']))
         <ol class="task-options">
           @foreach($w['task_options'] as $opt)
-            <li>{!! is_string($opt) ? e($opt) : e((string)($opt['label'] ?? $opt['text'] ?? json_encode($opt, JSON_UNESCAPED_UNICODE))) !!}</li>
+            @php
+              $optText = is_string($opt) ? $opt : (string)($opt['label'] ?? $opt['text'] ?? json_encode($opt, JSON_UNESCAPED_UNICODE));
+              $hasLatex = (bool) preg_match('/\\\\[a-zA-Z]/', $optText);
+            @endphp
+            <li>@if($hasLatex)\({{ $optText }}\)@else{{ $optText }}@endif</li>
           @endforeach
         </ol>
       @endif
