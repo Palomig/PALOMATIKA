@@ -203,10 +203,10 @@
 
   body.teacher-shell {
     background:
-      radial-gradient(circle at top left, rgba(79, 142, 247, 0.18), transparent 28%),
-      radial-gradient(circle at top right, rgba(52, 208, 126, 0.14), transparent 24%),
-      linear-gradient(180deg, #f8fbff 0%, #eef4fb 46%, #edf2f8 100%);
-    color: #132033;
+      radial-gradient(circle at top left, rgba(79, 142, 247, 0.18), transparent 30%),
+      radial-gradient(circle at top right, rgba(167, 139, 250, 0.14), transparent 26%),
+      linear-gradient(180deg, #111318 0%, #141821 40%, #161b25 100%);
+    color: var(--text);
   }
   body.teacher-shell .page {
     gap: 16px;
@@ -221,9 +221,9 @@
   body.teacher-shell .student,
   body.teacher-shell .hw-card,
   body.teacher-shell .student-row {
-    background: rgba(255,255,255,0.9);
-    border-color: rgba(146, 166, 197, 0.25);
-    box-shadow: 0 12px 34px rgba(45, 75, 125, 0.08);
+    background: rgba(28, 31, 39, 0.94);
+    border-color: rgba(79, 142, 247, 0.14);
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.24);
   }
   body.teacher-shell .topbar-title,
   body.teacher-shell .list-title,
@@ -231,7 +231,7 @@
   body.teacher-shell .hw-title,
   body.teacher-shell .metric-value,
   body.teacher-shell .stat b {
-    color: #132033;
+    color: var(--text);
   }
   body.teacher-shell .text-muted,
   body.teacher-shell .student-email,
@@ -241,14 +241,14 @@
   body.teacher-shell .student-sub,
   body.teacher-shell .hw-meta,
   body.teacher-shell .sec-label {
-    color: #627089;
+    color: var(--muted);
   }
   body.teacher-shell .btn-surface {
-    color: #20304a;
+    color: var(--text);
   }
   body.teacher-shell .btn-accent {
-    background: linear-gradient(135deg, #2563eb 0%, #3f8cff 100%);
-    box-shadow: 0 12px 22px rgba(37, 99, 235, 0.22);
+    background: linear-gradient(135deg, var(--accent) 0%, #6da7ff 100%);
+    box-shadow: 0 12px 22px rgba(79, 142, 247, 0.28);
   }
   .teacher-shell .mini-hero {
     position: relative;
@@ -256,10 +256,11 @@
     border-radius: 24px;
     padding: 20px;
     background:
-      radial-gradient(circle at top left, rgba(255,255,255,0.9), transparent 40%),
-      linear-gradient(135deg, #133d88 0%, #2563eb 48%, #52a0ff 100%);
+      radial-gradient(circle at top left, rgba(255,255,255,0.08), transparent 40%),
+      linear-gradient(135deg, rgba(167,139,250,.22) 0%, rgba(79,142,247,.24) 44%, rgba(79,142,247,.12) 100%);
+    border: 1px solid rgba(167,139,250,.3);
     color: #fff;
-    box-shadow: 0 18px 42px rgba(24, 64, 135, 0.28);
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
   }
   .teacher-shell .mini-hero::after {
     content: "";
@@ -268,7 +269,7 @@
     width: 110px;
     height: 110px;
     border-radius: 28px;
-    background: rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.06);
     transform: rotate(18deg);
   }
   .teacher-shell .hero-kicker {
@@ -300,8 +301,8 @@
   .teacher-shell .hero-stat {
     border-radius: 18px;
     padding: 12px;
-    background: rgba(255,255,255,0.14);
-    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(17,19,24,.44);
+    border: 1px solid rgba(255,255,255,0.08);
     backdrop-filter: blur(10px);
   }
   .teacher-shell .hero-stat-label {
@@ -315,11 +316,11 @@
     font-family: var(--display);
   }
   .teacher-shell .section-card {
-    background: rgba(255,255,255,0.88);
-    border: 1px solid rgba(146, 166, 197, 0.24);
+    background: rgba(28,31,39,.94);
+    border: 1px solid rgba(79, 142, 247, 0.14);
     border-radius: 22px;
     padding: 16px;
-    box-shadow: 0 12px 34px rgba(45, 75, 125, 0.08);
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.24);
   }
   .teacher-shell .section-head {
     display: flex;
@@ -331,11 +332,11 @@
   .teacher-shell .section-title {
     font-size: 18px;
     font-weight: 900;
-    color: #132033;
+    color: var(--text);
   }
   .teacher-shell .section-note {
     font-size: 12px;
-    color: #627089;
+    color: var(--muted);
   }
   .teacher-shell .chip-row {
     display: flex;
@@ -346,16 +347,16 @@
     padding: 8px 12px;
     border-radius: 999px;
     text-decoration: none;
-    border: 1px solid rgba(146, 166, 197, 0.28);
-    background: rgba(255,255,255,0.74);
-    color: #42526d;
+    border: 1px solid rgba(79, 142, 247, 0.14);
+    background: rgba(28,31,39,.94);
+    color: var(--muted);
     font-size: 12px;
     font-weight: 800;
   }
   .teacher-shell .chip.active {
-    background: #e7f0ff;
-    color: #1d4ed8;
-    border-color: rgba(37, 99, 235, 0.18);
+    background: var(--accent-bg);
+    color: var(--accent);
+    border-color: var(--accent-bd);
   }
   .teacher-shell .action-grid {
     display: grid;
@@ -386,10 +387,10 @@
     padding: 16px;
     text-decoration: none;
     border-radius: 20px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(241,246,255,0.9));
-    border: 1px solid rgba(146, 166, 197, 0.24);
-    color: #132033;
-    box-shadow: 0 10px 28px rgba(45, 75, 125, 0.08);
+    background: linear-gradient(180deg, rgba(28,31,39,.96), rgba(35,39,47,.94));
+    border: 1px solid rgba(79, 142, 247, 0.14);
+    color: var(--text);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
   }
   .teacher-shell .action-tile strong {
     display: block;
@@ -400,7 +401,7 @@
     display: block;
     margin-top: 6px;
     font-size: 11px;
-    color: #627089;
+    color: var(--muted);
     line-height: 1.45;
   }
   .teacher-shell .mini-list {
@@ -415,18 +416,18 @@
     gap: 12px;
     padding: 14px;
     border-radius: 18px;
-    background: rgba(245, 248, 252, 0.9);
-    border: 1px solid rgba(146, 166, 197, 0.2);
+    background: rgba(35,39,47,.92);
+    border: 1px solid rgba(79, 142, 247, 0.12);
   }
   .teacher-shell .mini-list-item strong {
     display: block;
-    color: #132033;
+    color: var(--text);
     font-size: 14px;
   }
   .teacher-shell .mini-list-item span {
     display: block;
     margin-top: 4px;
-    color: #627089;
+    color: var(--muted);
     font-size: 12px;
   }
   .teacher-shell .ghost-link {
@@ -436,9 +437,9 @@
     min-height:36px;
     padding:0 12px;
     border-radius:12px;
-    border:1px solid rgba(146,166,197,.24);
-    color:#20304a;
-    background:#fff;
+    border:1px solid rgba(79,142,247,.14);
+    color:var(--text);
+    background:rgba(35,39,47,.94);
     text-decoration:none;
     font-size:12px;
     font-weight:800;
@@ -490,7 +491,7 @@
   }
   .teacher-shell .miniapp-bottom-nav a.active {
     color: #fff;
-    background: rgba(82, 160, 255, 0.22);
+    background: rgba(79, 142, 247, 0.22);
   }
   .teacher-shell .miniapp-bottom-nav .nav-icon {
     font-size: 16px;

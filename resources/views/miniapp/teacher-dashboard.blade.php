@@ -3,30 +3,30 @@
 
 @push('styles')
   .today-topbar { display:flex; align-items:center; justify-content:space-between; gap:12px; }
-  .today-topbar .eyebrow { font-size:11px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:#627089; }
-  .today-topbar .teacher-name { margin-top:4px; font-size:22px; font-weight:900; color:#132033; }
+  .today-topbar .eyebrow { font-size:11px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+  .today-topbar .teacher-name { margin-top:4px; font-size:22px; font-weight:900; color:var(--text); }
   .mode-switch { display:flex; gap:8px; flex-wrap:wrap; }
   .lesson-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
   .mini-btn {
     display:inline-flex; align-items:center; justify-content:center;
     min-height:38px; padding:0 14px; border-radius:999px; text-decoration:none;
-    font-size:12px; font-weight:800; border:1px solid rgba(255,255,255,.18);
-    background:rgba(255,255,255,.14); color:#fff;
+    font-size:12px; font-weight:800; border:1px solid var(--border);
+    background:var(--surface2); color:var(--text);
   }
-  .mini-btn.light { background:rgba(255,255,255,.92); color:#17408b; border-color:transparent; }
+  .mini-btn.light { background:var(--accent); color:#fff; border-color:transparent; }
   .attention-grid { display:grid; gap:10px; }
   .attention-card {
     border-radius:18px; padding:14px;
-    background:linear-gradient(180deg, rgba(255,255,255,.94), rgba(243,247,253,.94));
-    border:1px solid rgba(146,166,197,.2);
+    background:linear-gradient(180deg, rgba(35,39,47,.94), rgba(28,31,39,.94));
+    border:1px solid var(--border);
   }
-  .attention-reason { margin-top:6px; font-size:12px; color:#627089; }
+  .attention-reason { margin-top:6px; font-size:12px; color:var(--muted); }
   .attention-actions { display:flex; gap:8px; margin-top:12px; }
   .ghost-link {
     display:inline-flex; align-items:center; justify-content:center; text-decoration:none;
     min-height:36px; padding:0 12px; border-radius:12px;
-    border:1px solid rgba(146,166,197,.24); color:#20304a; font-size:12px; font-weight:800;
-    background:#fff;
+    border:1px solid var(--border); color:var(--text); font-size:12px; font-weight:800;
+    background:var(--surface2);
   }
   .status-tag {
     display:inline-flex; align-items:center; gap:6px;
