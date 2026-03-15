@@ -62,10 +62,9 @@
   .task-instruction { font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
   .task-text { font-size: 13px; color: var(--text); line-height: 1.5; }
   .task-expression { font-size: 14px; margin-top: 6px; }
-  .task-svg { margin-top: 8px; }
-  .task-svg svg { max-width: 100%; height: auto; display: block; }
-  .task-image-wrap { margin-top: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .task-image { width: 600px; max-width: none; height: auto; display: block; border-radius: 8px; border: 1px solid var(--border); }
+  .task-svg { margin-top: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; background: #0a1628; padding: 6px; }
+  .task-svg > div { min-width: 600px; }
+  .task-svg svg { width: 100%; height: auto; display: block; }
   .task-options { margin-top: 8px; padding-left: 18px; font-size: 12px; }
   .task-options li { margin: 3px 0; color: var(--text); }
 
@@ -145,11 +144,9 @@
         <div class="task-expression">\({{ $w['task_expression'] }}\)</div>
       @endif
       @if(!empty($w['task_svg']))
-        <div class="task-svg">{!! $w['task_svg'] !!}</div>
-      @elseif(!empty($w['task_image']))
-        <div class="task-image-wrap">
-          <img class="task-image" src="{{ str_starts_with($w['task_image'], 'http') || str_starts_with($w['task_image'], '/') ? $w['task_image'] : '/images/tasks/' . str_pad((string)$w['task_number'], 2, '0', STR_PAD_LEFT) . '/' . $w['task_image'] }}" alt="">
-        </div>
+        <div class="task-svg"><div>{!! $w['task_svg'] !!}</div></div>
+      @elseif(!empty($w['task_image']) && str_starts_with(trim($w['task_image']), '<svg'))
+        <div class="task-svg"><div>{!! $w['task_image'] !!}</div></div>
       @endif
 
       @if(!empty($w['task_options']) && is_array($w['task_options']))

@@ -114,17 +114,14 @@
               @endphp
 
               @if($svg !== '')
-                <div style="margin-bottom:10px; border:1px solid var(--border); border-radius:10px; overflow:hidden; background:#0a1628; padding:8px;">
-                  {!! $svg !!}
+                <div style="margin-bottom:10px; border:1px solid var(--border); border-radius:10px; overflow-x:auto; -webkit-overflow-scrolling:touch; background:#0a1628; padding:8px;">
+                  <div style="min-width:600px;">{!! $svg !!}</div>
                 </div>
               @elseif($image !== '')
                 @if(\Illuminate\Support\Str::startsWith($image, '<svg'))
-                  <div style="margin-bottom:10px; border:1px solid var(--border); border-radius:10px; overflow:hidden; background:#0a1628; padding:8px;">
-                    {!! $image !!}
+                  <div style="margin-bottom:10px; border:1px solid var(--border); border-radius:10px; overflow-x:auto; -webkit-overflow-scrolling:touch; background:#0a1628; padding:8px;">
+                    <div style="min-width:600px;">{!! $image !!}</div>
                   </div>
-                @else
-                  <img src="{{ str_starts_with($image, 'http') || str_starts_with($image, '/') ? $image : asset('images/tasks/' . $selectedTopic . '/' . ltrim($image, '/')) }}"
-                       alt="" style="display:block;max-width:100%;height:auto;margin-bottom:10px;border:1px solid var(--border);border-radius:10px;background:#fff;padding:4px;" loading="lazy">
                 @endif
               @endif
 
