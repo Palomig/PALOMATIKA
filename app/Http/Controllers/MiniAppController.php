@@ -1309,6 +1309,29 @@ class MiniAppController extends Controller
         usort($topicStats, fn($a, $b) => $a['task_number'] <=> $b['task_number']);
         usort($wrongTasks, fn($a, $b) => $b['attempt_id'] <=> $a['attempt_id']);
 
+        // Build variant history list (same format as student history page)
+        $historyList = [];
+        foreach ($attempts as $att) {
+            if (!in_array($att->status, ['submitted', 'scored'])) {
+                continue;
+            }
+            $correct = $att->scorings->where('is_correct', true)->count();
+            $total = $att->scorings->count();
+            $time = null;
+            if ($att->started_at && $att->submitted_at) {
+                $time = $att->submitted_at->diffInSeconds($att->started_at);
+            }
+            $historyList[] = [
+                'id' => $att->id,
+                'label' => $this->variantModeLabel($att->variant),
+                'hash' => $att->variant->hash ?? null,
+                'correct' => $correct,
+                'total' => $total,
+                'time' => $time,
+                'date' => $att->submitted_at,
+            ];
+        }
+
         return view('miniapp.teacher-student-profile', [
             'student' => $student,
             'attempts' => $attempts,
@@ -1317,6 +1340,7 @@ class MiniAppController extends Controller
             'correctTotal' => $correctTotal,
             'scoredTotal' => $scoredTotal,
             'accuracy' => $scoredTotal > 0 ? (int) round(($correctTotal / $scoredTotal) * 100) : null,
+            'historyList' => $historyList,
             'canSwitchMode' => $teacher->role === 'admin',
             'effectiveRole' => $this->resolveMiniAppRole($request, $teacher),
         ]);
