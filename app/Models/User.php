@@ -21,6 +21,7 @@ class User extends Authenticatable
         'password',
         'oauth_provider',
         'oauth_id',
+        'tg_username',
         'avatar',
         'role',
         'grade',

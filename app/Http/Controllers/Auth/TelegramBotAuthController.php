@@ -792,7 +792,15 @@ class TelegramBotAuthController extends Controller
             ->where('oauth_id', $telegramId)
             ->first();
 
+        $tgUsername = isset($telegramUser['username']) && $telegramUser['username'] !== ''
+            ? (string) $telegramUser['username']
+            : null;
+
         if ($user) {
+            // Update username on every login (users can change it)
+            if ($tgUsername !== null && $user->tg_username !== $tgUsername) {
+                $user->update(['tg_username' => $tgUsername]);
+            }
             return $user;
         }
 
@@ -805,6 +813,7 @@ class TelegramBotAuthController extends Controller
             'name' => $name,
             'oauth_provider' => 'telegram',
             'oauth_id' => $telegramId,
+            'tg_username' => $tgUsername,
             'avatar' => $telegramUser['photo_url'] ?? null,
             'trial_ends_at' => now()->addDays(7),
         ]);
