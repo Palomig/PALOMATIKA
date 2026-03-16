@@ -83,6 +83,12 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.answer-value, .answer-blur').forEach(function (el) {
+      var t = el.textContent.trim();
+      if (!t || /^\$/.test(t)) return;
+      t = t.replace(/sqrt\(([^)]+)\)/g, '\\sqrt{$1}');
+      el.textContent = '$' + t + '$';
+    });
     if (typeof renderMathInElement === 'function') {
       document.querySelectorAll('.task-render-scope').forEach(function (el) {
         renderMathInElement(el, {

@@ -2,6 +2,7 @@
 @section('title', '2я часть ОГЭ — palomatika')
 
 @push('styles')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   .topics-row {
     display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px;
     opacity: 0; animation: fadeUp 0.3s ease 0.08s forwards;
@@ -95,7 +96,7 @@
 @endpush
 
 @section('body')
-<div class="page" x-data="taskBrowser()">
+<div class="page task-render-scope" x-data="taskBrowser()">
   <a href="/tg/dashboard" class="back-btn">‹</a>
 
   <div class="hero" style="opacity:0; animation: fadeUp 0.3s ease 0.04s forwards;">
@@ -192,7 +193,31 @@
 @endsection
 
 @push('scripts')
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.answer-value, .answer-blur').forEach(function (el) {
+      var t = el.textContent.trim();
+      if (!t || /^\$/.test(t)) return;
+      t = t.replace(/sqrt\(([^)]+)\)/g, '\\sqrt{$1}');
+      el.textContent = '$' + t + '$';
+    });
+    if (typeof renderMathInElement === 'function') {
+      document.querySelectorAll('.task-render-scope').forEach(function (el) {
+        renderMathInElement(el, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '\\[', right: '\\]', display: true },
+            { left: '\\(', right: '\\)', display: false },
+            { left: '$', right: '$', display: false }
+          ],
+          throwOnError: false
+        });
+      });
+    }
+  });
+
   function taskBrowser() {
     return {
       showPremium: false,
