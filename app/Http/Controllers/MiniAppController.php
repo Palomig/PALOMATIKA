@@ -993,50 +993,6 @@ class MiniAppController extends Controller
         /** @var User $user */
         $user = $request->user();
         $teacherId = (int) $user->id;
-        $scheduleData = $this->collectTeacherScheduleData($user);
-
-        $attentionStudents = TeacherStudent::query()
-            ->where('teacher_id', $teacherId)
-            ->with('student:id,name,last_active_at')
-            ->get()
-            ->map(function (TeacherStudent $relation) use ($scheduleData) {
-                $student = $relation->student;
-                if (!$student) {
-                    return null;
-                }
-
-                $reason = null;
-                $tone = 'accent';
-
-                if (blank($relation->evrium_name)) {
-                    $reason = 'Нет привязки к расписанию';
-                    $tone = 'red';
-                } elseif (blank($relation->student_alias)) {
-                    $reason = 'Нет алиаса';
-                    $tone = 'yellow';
-                } elseif (!$student->last_active_at || $student->last_active_at->lt(now()->subDays(7))) {
-                    $reason = 'Давно не заходил';
-                    $tone = 'yellow';
-                } elseif (collect($scheduleData['currentStudents'])->contains(fn ($item) => (int) ($item['student_id'] ?? 0) === (int) $student->id)) {
-                    $reason = 'Есть урок сегодня';
-                    $tone = 'green';
-                }
-
-                if (!$reason) {
-                    return null;
-                }
-
-                return [
-                    'id' => $student->id,
-                    'name' => $relation->student_alias ?: ($student->name ?: ('Ученик #' . $student->id)),
-                    'subtitle' => $student->name && $relation->student_alias ? $student->name : ($relation->evrium_name ?: 'Без привязки'),
-                    'reason' => $reason,
-                    'tone' => $tone,
-                ];
-            })
-            ->filter()
-            ->take(4)
-            ->values();
 
         $studentCount = TeacherStudent::query()
             ->where('teacher_id', $teacherId)
@@ -1048,16 +1004,28 @@ class MiniAppController extends Controller
             ->where('student_alias', '!=', '')
             ->count();
 
+        $variantsCount = OgeVariant::query()
+            ->where('owner_teacher_id', $teacherId)
+            ->count();
+
+        $curatedCount = OgeVariant::query()
+            ->where('owner_teacher_id', $teacherId)
+            ->where('is_curated', true)
+            ->count();
+
+        $recentVariants = OgeVariant::query()
+            ->where('owner_teacher_id', $teacherId)
+            ->orderByDesc('created_at')
+            ->limit(8)
+            ->get(['id', 'hash', 'title', 'mode', 'is_curated', 'created_at']);
+
         return view('miniapp.teacher-dashboard', [
             'user' => $user,
             'studentCount' => $studentCount,
             'aliasedCount' => $aliasedCount,
-            'todayLabel' => $scheduleData['todayLabel'],
-            'todayLessons' => $scheduleData['todayLessons'],
-            'featuredLesson' => $scheduleData['featuredLesson'],
-            'currentStudents' => array_slice($scheduleData['currentStudents'], 0, 3),
-            'attentionStudents' => $attentionStudents,
-            'todayLessonCount' => count($scheduleData['todayLessons']),
+            'variantsCount' => $variantsCount,
+            'curatedCount' => $curatedCount,
+            'recentVariants' => $recentVariants,
             'effectiveRole' => $this->resolveMiniAppRole($request, $user),
             'canSwitchMode' => $user->role === 'admin',
         ]);
