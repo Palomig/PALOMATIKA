@@ -5,6 +5,13 @@
         onload="renderMathWithDisplayStyle()"></script>
 <script>
     function renderMathWithDisplayStyle() {
+        // Preprocess answer elements: convert sqrt() notation to LaTeX and wrap in $...$
+        document.querySelectorAll('.answer-value, .answer-blur').forEach(el => {
+            let t = el.textContent.trim();
+            if (!t || t.startsWith('$')) return;
+            t = t.replace(/sqrt\(([^)]+)\)/g, '\\sqrt{$1}');
+            el.textContent = '$' + t + '$';
+        });
         document.querySelectorAll('body *').forEach(el => {
             if (el.childNodes.length === 1 && el.childNodes[0].nodeType === 3) {
                 let text = el.childNodes[0].textContent;
