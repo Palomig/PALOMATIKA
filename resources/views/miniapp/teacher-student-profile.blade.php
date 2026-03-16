@@ -3,163 +3,96 @@
 @section('title', 'Профиль ученика')
 
 @push('styles')
-  .profile-stack { display:flex; flex-direction:column; gap:16px; }
-  .profile-head-meta { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
-  .profile-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:14px; }
-  .profile-actions a { text-decoration:none; }
-  .kpi-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
-  .kpi-card {
-    padding:14px; border-radius:18px; background:linear-gradient(180deg, var(--surface), var(--surface2));
-    border:1px solid var(--border);
+  .page { min-height: 100vh; background: var(--bg); color: var(--text); padding: 16px; }
+  .topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom: 12px; }
+  .back { color: var(--text); text-decoration:none; font-size: 18px; padding:6px 8px; border:1px solid var(--border); border-radius:10px; }
+  .card { background: var(--surface); border:1px solid var(--border); border-radius:14px; padding:12px; margin-bottom:12px; }
+  .name { font-size:18px; font-weight:800; }
+  .muted { color: var(--muted); font-size:12px; }
+  .stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:10px; }
+  .stat { background: var(--surface2); border:1px solid var(--border); border-radius:10px; padding:10px; text-align:center; }
+  .stat b { font-size:18px; display:block; color:#fff; }
+  .row { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:8px 0; border-bottom:1px dashed var(--border); }
+  .row:last-child { border-bottom:none; }
+  .bad { color:#fca5a5; font-weight:700; }
+  .good { color:#86efac; font-weight:700; }
+  .attempt-card {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 10px 12px;
+    text-decoration: none; color: inherit;
+    margin-bottom: 6px;
   }
-  .kpi-label { font-size:11px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; }
-  .kpi-value { margin-top:6px; font-size:24px; font-weight:900; color:var(--text); }
-  .kpi-meta { margin-top:4px; font-size:12px; color:var(--muted); }
-  .priority-list { display:flex; flex-direction:column; gap:10px; }
-  .priority-card {
-    display:flex; align-items:center; justify-content:space-between; gap:12px;
-    padding:14px; border-radius:18px; background:var(--surface2); border:1px solid var(--border);
+  .attempt-left { flex: 1; min-width: 0; }
+  .attempt-label { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .attempt-meta { font-size: 11px; font-weight: 600; color: var(--muted); }
+  .attempt-score {
+    font-weight: 800; font-size: 18px; line-height: 1;
+    margin-left: 12px; white-space: nowrap;
   }
-  .priority-card strong { display:block; color:var(--text); font-size:14px; }
-  .priority-card span { display:block; margin-top:4px; font-size:12px; color:var(--muted); }
-  .timeline { display:flex; flex-direction:column; gap:10px; }
-  .timeline-item {
-    display:flex; align-items:center; justify-content:space-between; gap:12px;
-    padding:14px; border-radius:18px; background:var(--surface2); border:1px solid var(--border);
-    text-decoration:none; color:inherit;
-  }
-  .timeline-score { font-size:24px; font-weight:900; color:var(--text); white-space:nowrap; }
-  .timeline-score small { font-size:12px; color:var(--muted); }
+  .attempt-score small { font-size: 13px; color: var(--muted); }
+  .score-good { color: #86efac; }
+  .score-mid { color: #fde68a; }
+  .score-bad { color: #fca5a5; }
 @endpush
 
 @section('body')
-<div class="page page--teacher">
-  <div class="profile-stack">
-    <a href="/tg/teacher/students" class="ghost-link" style="width:max-content;">← К ученикам</a>
-
-    <section class="mini-hero">
-      <div class="hero-kicker">Профиль ученика</div>
-      <div class="hero-title">{{ $teacherRelation?->student_alias ?: $student->name }}</div>
-      <div class="hero-subtitle">
-        {{ $student->name ?: 'Без имени' }}
-        @if($student->email)
-          · {{ $student->email }}
-        @endif
-      </div>
-      <div class="profile-head-meta">
-        @if($teacherRelation?->evrium_name)
-          <span class="status-tag green">{{ $teacherRelation->evrium_name }}</span>
-        @else
-          <span class="status-tag red">Нет привязки к расписанию</span>
-        @endif
-        <span class="status-tag accent">ID {{ $student->id }}</span>
-      </div>
-      <div class="profile-actions">
-        <a href="/tg/teacher/homework" class="mini-btn light">Дать ДЗ</a>
-        <a href="/tg/teacher/students" class="mini-btn">К списку</a>
-      </div>
-    </section>
-
-    <section class="section-card">
-      <div class="section-head">
-        <div>
-          <div class="section-title">Ключевые сигналы</div>
-          <div class="section-note">Не вся аналитика сразу, а то, что помогает решить следующий шаг.</div>
-        </div>
-      </div>
-      <div class="kpi-grid">
-        <div class="kpi-card">
-          <div class="kpi-label">Точность</div>
-          <div class="kpi-value">{{ $accuracy === null ? '—' : $accuracy . '%' }}</div>
-          <div class="kpi-meta">{{ $correctTotal }}/{{ $scoredTotal }} проверенных ответов</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Попытки</div>
-          <div class="kpi-value">{{ $attempts->count() }}</div>
-          <div class="kpi-meta">Завершённые и активные решения</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Последний результат</div>
-          <div class="kpi-value">{{ count($historyList) ? ($historyList[0]['correct'] . '/' . $historyList[0]['total']) : '—' }}</div>
-          <div class="kpi-meta">{{ count($historyList) && $historyList[0]['date'] ? $historyList[0]['date']->format('d.m.Y H:i') : 'Пока нет завершённых попыток' }}</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-label">Домашка</div>
-          <div class="kpi-value">{{ $homeworkHistory->count() }}</div>
-          <div class="kpi-meta">Последних назначений в истории</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section-card">
-      <div class="section-head">
-        <div>
-          <div class="section-title">Слабые темы</div>
-          <div class="section-note">Главный блок для решения, что назначить дальше.</div>
-        </div>
-      </div>
-      <div class="priority-list">
-        @forelse($weakTopics as $topic)
-          <div class="priority-card">
-            <div>
-              <strong>Задание {{ $topic['task_number'] }}</strong>
-              <span>{{ $topic['correct'] }}/{{ $topic['total'] }} верно · прицельная практика по теме</span>
-            </div>
-            <span class="status-tag {{ $topic['tone'] }}">{{ $topic['accuracy'] }}%</span>
-          </div>
-        @empty
-          <div class="note">Пока нет данных по слабым темам. Как только ученик решит и будет проверка, здесь появятся приоритеты.</div>
-        @endforelse
-      </div>
-    </section>
-
-    <section class="section-card">
-      <div class="section-head">
-        <div>
-          <div class="section-title">Последние попытки</div>
-          <div class="section-note">История решений в виде мобильной ленты.</div>
-        </div>
-      </div>
-      <div class="timeline">
-        @forelse($historyList as $h)
-          <a href="/tg/teacher/students/{{ $student->id }}/attempt/{{ $h['id'] }}" class="timeline-item">
-            <div>
-              <strong>{{ $h['label'] }}</strong>
-              <span>
-                {{ $h['date']?->format('d.m.Y H:i') ?: 'Без даты' }}
-                @if($h['hash']) · {{ $h['hash'] }} @endif
-              </span>
-            </div>
-            <div class="timeline-score">{{ $h['correct'] }}<small>/{{ $h['total'] }}</small></div>
-          </a>
-        @empty
-          <div class="note">Пока нет завершённых попыток.</div>
-        @endforelse
-      </div>
-    </section>
-
-    <section class="section-card">
-      <div class="section-head">
-        <div>
-          <div class="section-title">История домашних заданий</div>
-          <div class="section-note">Назначено, начато или завершено.</div>
-        </div>
-        <a href="/tg/teacher/homework" class="ghost-link">Выдать ДЗ</a>
-      </div>
-      <div class="priority-list">
-        @forelse($homeworkHistory as $hw)
-          <div class="priority-card">
-            <div>
-              <strong>{{ $hw['title'] }}</strong>
-              <span>{{ $hw['subtitle'] }}</span>
-            </div>
-            <span class="status-tag {{ $hw['status'] === 'completed' ? 'green' : ($hw['status'] === 'started' ? 'yellow' : 'accent') }}">{{ $hw['status'] }}</span>
-          </div>
-        @empty
-          <div class="note">История домашних заданий пока пустая.</div>
-        @endforelse
-      </div>
-    </section>
+<div class="page">
+  <div class="topbar">
+    <a href="/tg/teacher/students" class="back">←</a>
+    <div style="font-weight:800;">Профиль ученика</div>
+    <div style="width:34px;"></div>
   </div>
+
+  <div class="card">
+    <div class="name">{{ $student->name }}</div>
+    <div class="muted">ID: {{ $student->id }} · {{ $student->email ?: 'без email' }}</div>
+    <div class="stats">
+      <div class="stat"><b>{{ $attempts->count() }}</b><span class="muted">попыток</span></div>
+      <div class="stat"><b>{{ $scoredTotal }}</b><span class="muted">проверено</span></div>
+      <div class="stat"><b>{{ $accuracy === null ? '—' : ($accuracy.'%') }}</b><span class="muted">точность</span></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="font-weight:700;margin-bottom:8px;">История вариантов</div>
+    @forelse($historyList as $h)
+      @php
+        $pct = $h['total'] > 0 ? round(($h['correct'] / $h['total']) * 100) : 0;
+        $scoreClass = $pct >= 70 ? 'score-good' : ($pct >= 40 ? 'score-mid' : 'score-bad');
+        $timeStr = $h['time'] !== null ? (floor($h['time'] / 60) . ':' . str_pad($h['time'] % 60, 2, '0', STR_PAD_LEFT)) : null;
+      @endphp
+      <a href="/tg/teacher/students/{{ $student->id }}/attempt/{{ $h['id'] }}" class="attempt-card">
+        <div class="attempt-left">
+          <div class="attempt-label">{{ $h['label'] }}</div>
+          <div class="attempt-meta">
+            {{ $h['date']?->format('d.m.Y H:i') }}
+            @if($timeStr) &middot; {{ $timeStr }} @endif
+            @if($h['hash']) &middot; {{ $h['hash'] }} @endif
+          </div>
+        </div>
+        <div class="attempt-score {{ $scoreClass }}">
+          {{ $h['correct'] }}<small>/{{ $h['total'] }}</small>
+        </div>
+      </a>
+    @empty
+      <div class="muted">Пока нет завершённых попыток.</div>
+    @endforelse
+  </div>
+
+  <div class="card">
+    <div style="font-weight:700;margin-bottom:4px;">Темы/задания: точность</div>
+    <div class="muted" style="margin-bottom:8px;">Формат X/Y: верно из числа попыток, где это задание реально встречалось у ученика.</div>
+    @forelse($topicStats as $ts)
+      @php $p = $ts['total'] > 0 ? (int) round(($ts['correct']/$ts['total'])*100) : 0; @endphp
+      <div class="row">
+        <div>Задание {{ $ts['task_number'] }}</div>
+        <div class="{{ $p < 60 ? 'bad' : 'good' }}">{{ $p }}% ({{ $ts['correct'] }}/{{ $ts['total'] }})</div>
+      </div>
+    @empty
+      <div class="muted">Пока нет данных по оценке.</div>
+    @endforelse
+  </div>
+
 </div>
 @endsection

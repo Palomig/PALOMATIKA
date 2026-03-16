@@ -2,39 +2,46 @@
 @section('title', 'Уроки сегодня — palomatika')
 
 @push('styles')
-  .lessons-stack { display:flex; flex-direction:column; gap:16px; }
-  .status-legend { display:flex; gap:8px; flex-wrap:wrap; }
-  .lesson-slot {
-    padding:16px; border-radius:22px; background:var(--surface); border:1px solid var(--border);
-    box-shadow:0 12px 34px rgba(0,0,0,.2);
-  }
+  .lessons-stack { display: flex; flex-direction: column; gap: 12px; }
+  .legend { display:flex; gap:8px; flex-wrap:wrap; }
+  .lesson-slot { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 12px; }
   .lesson-slot-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
-  .lesson-slot-title { font-size:18px; font-weight:900; color:var(--text); }
-  .lesson-slot-subtitle { margin-top:4px; font-size:12px; color:var(--muted); }
-  .lesson-slot-students { display:flex; flex-direction:column; gap:10px; margin-top:14px; }
+  .lesson-slot-title { font-size: 16px; font-weight: 800; color: var(--text); }
+  .lesson-slot-subtitle { margin-top: 4px; font-size: 12px; color: var(--muted); }
+  .lesson-slot-students { display:flex; flex-direction:column; gap:8px; margin-top:12px; }
   .lesson-slot-student {
     display:flex; align-items:center; justify-content:space-between; gap:12px;
-    padding:14px; border-radius:18px; background:var(--surface2); border:1px solid var(--border);
+    padding:10px 12px; border-radius:12px; background: var(--surface2); border:1px solid var(--border);
   }
   .lesson-slot-student strong { display:block; font-size:14px; color:var(--text); }
-  .lesson-slot-student span { display:block; margin-top:4px; font-size:12px; color:var(--muted); }
+  .lesson-slot-student span { display:block; margin-top:4px; font-size:11px; color:var(--muted); }
   .lesson-slot-actions { display:flex; gap:8px; flex-wrap:wrap; }
+  .status-tag {
+    display:inline-flex; align-items:center; justify-content:center;
+    min-height:24px; padding:0 10px; border-radius:999px; font-size:11px; font-weight:800;
+  }
+  .status-tag.red { color: var(--red); background: var(--red-bg); border: 1px solid var(--red-bd); }
+  .status-tag.green { color: var(--green); background: var(--green-bg); border: 1px solid var(--green-bd); }
+  .status-tag.accent { color: var(--accent); background: var(--accent-bg); border: 1px solid var(--accent-bd); }
 @endpush
 
 @section('body')
-<div class="page page--teacher">
-  <div class="lessons-stack">
-    <section class="mini-hero">
-      <div class="hero-kicker">Уроки сегодня · {{ $todayLabel }}</div>
-      <div class="hero-title">Слоты дня и ученики внутри</div>
-      <div class="hero-subtitle">Каждый урок показывает статус `прошёл`, `идёт` или `будет`, а внутри можно перейти в профиль ученика или сразу выдать домашку.</div>
-      <div class="status-legend" style="margin-top:14px;">
-        <span class="status-tag red">прошёл</span>
-        <span class="status-tag green">идёт</span>
-        <span class="status-tag accent">будет</span>
-      </div>
-    </section>
+<div class="page">
+  <div class="topbar">
+    <a href="/tg/teacher/dashboard" class="back-btn">‹</a>
+    <div class="topbar-title">Уроки сегодня</div>
+  </div>
 
+  <div class="note">
+    Слоты на {{ $todayLabel }}. Статусы:
+    <div class="legend" style="margin-top:8px;">
+      <span class="status-tag red">прошёл</span>
+      <span class="status-tag green">идёт</span>
+      <span class="status-tag accent">будет</span>
+    </div>
+  </div>
+
+  <div class="lessons-stack">
     @forelse($todayLessons as $lesson)
       <section class="lesson-slot">
         <div class="lesson-slot-head">
@@ -54,8 +61,8 @@
               </div>
               <div class="lesson-slot-actions">
                 @if($student['student_id'])
-                  <a href="/tg/teacher/students/{{ $student['student_id'] }}" class="ghost-link">Профиль</a>
-                  <a href="/tg/teacher/homework" class="ghost-link">Дать ДЗ</a>
+                  <a href="/tg/teacher/students/{{ $student['student_id'] }}" class="btn btn-surface">Профиль</a>
+                  <a href="/tg/teacher/homework" class="btn btn-surface">Дать ДЗ</a>
                 @else
                   <span class="status-tag red">Не привязан</span>
                 @endif

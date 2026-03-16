@@ -139,7 +139,7 @@ class MiniAppTeacherRoutesTest extends TestCase
             ->assertOk();
     }
 
-    public function test_teacher_dashboard_renders_mobile_today_hub_navigation(): void
+    public function test_teacher_dashboard_renders_classic_teacher_navigation(): void
     {
         $teacher = User::factory()->create([
             'role' => 'teacher',
@@ -149,11 +149,10 @@ class MiniAppTeacherRoutesTest extends TestCase
         $this->actingAs($teacher)
             ->get('/tg/teacher/dashboard')
             ->assertOk()
-            ->assertSee('Панель дня')
-            ->assertSee('уроков сегодня')
-            ->assertSee('Текущий урок')
-            ->assertSee('Открыть все уроки')
-            ->assertSee('miniapp-bottom-nav');
+            ->assertSee('Кабинет учителя')
+            ->assertSee('Ученики и алиасы')
+            ->assertSee('Домашка')
+            ->assertSee('Последние варианты');
     }
 
     public function test_teacher_lessons_page_renders_slot_statuses(): void
@@ -226,10 +225,8 @@ class MiniAppTeacherRoutesTest extends TestCase
         $this->actingAs($teacher)
             ->get('/tg/teacher/students?search=Петя')
             ->assertOk()
-            ->assertSee('На уроке')
-            ->assertSee('Есть риск')
             ->assertSee('Иван Петров')
-            ->assertSee('Петя');
+            ->assertSee('value="Петя"', false);
     }
 
     public function test_teacher_can_update_alias_with_audit_log(): void
@@ -359,11 +356,10 @@ class MiniAppTeacherRoutesTest extends TestCase
         $response = $this->actingAs($teacher)->get("/tg/teacher/students/{$student->id}");
 
         $response->assertOk();
-        $response->assertSee('Слабые темы');
-        $response->assertSee('Последние попытки');
-        $response->assertSee('История домашних заданий');
+        $response->assertSee('История вариантов');
+        $response->assertSee('Темы/задания: точность');
         $response->assertSee('Полный вариант');
-        $response->assertSee('0/1'); // score
+        $response->assertSee('Задание 12');
         $response->assertSee('nnzzuijfqo');
         $response->assertSee("/tg/teacher/students/{$student->id}/attempt/{$attemptId}");
 
