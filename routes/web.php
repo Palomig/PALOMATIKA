@@ -7,6 +7,7 @@ use App\Http\Controllers\EgeController;
 use App\Http\Controllers\JarvisMaterialPageController;
 use App\Http\Controllers\AdminTaskAnswerController;
 use App\Http\Controllers\AdminTaskStatusController;
+use App\Http\Controllers\MiniAppAdminController;
 use App\Http\Controllers\MiniAppBillingController;
 use App\Http\Controllers\MiniAppController;
 use App\Http\Controllers\MiniAppTeacherController;
@@ -465,8 +466,8 @@ Route::prefix('tg')->group(function () {
 
         // Admin routes for curated variants
         Route::middleware(['role:teacher,admin'])->prefix('admin')->group(function () {
-            Route::get('/variants', [MiniAppController::class, 'adminVariants'])->name('miniapp.admin.variants');
-            Route::post('/variants/create', [MiniAppController::class, 'createCuratedVariant'])->name('miniapp.admin.variants.create');
+            Route::get('/variants', [MiniAppAdminController::class, 'adminVariants'])->name('miniapp.admin.variants');
+            Route::post('/variants/create', [MiniAppAdminController::class, 'createCuratedVariant'])->name('miniapp.admin.variants.create');
         });
     });
 });
