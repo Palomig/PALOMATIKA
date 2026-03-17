@@ -263,7 +263,7 @@ function telegramAutoLogin() {
                     throw new Error(data.message || 'Ошибка входа через Telegram Mini App');
                 }
 
-                window.location.href = data.redirect_to || '/dashboard';
+                window.location.href = data.redirect_to || '/tg/dashboard';
             } catch (err) {
                 this.autoLoginLoading = false;
                 this.autoLoginError = err.message || 'Не удалось войти автоматически';
@@ -421,7 +421,7 @@ function telegramAuth() {
                     throw new Error(data.message || 'Ошибка входа через Telegram Mini App');
                 }
 
-                window.location.href = data.redirect_to || '/dashboard';
+                window.location.href = data.redirect_to || '/tg/dashboard';
                 return { success: true };
             } catch (err) {
                 return {
