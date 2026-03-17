@@ -179,16 +179,16 @@ class OgeVariantPoolService
                 $targetCount = 5;
                 break;
             case 'mixed':
-                // Product rule for mini mixed battle: 5 tasks total (strict split 3 algebra + 2 geometry)
-                $alg = $this->pickRandomTopics($this->algebraTopics, 3);
-                $geo = $this->pickRandomTopics($this->geometryTopics, 2);
+                // Mini mixed: 7 tasks total (4 algebra + 3 geometry)
+                $alg = $this->pickRandomTopics($this->algebraTopics, 4);
+                $geo = $this->pickRandomTopics($this->geometryTopics, 3);
                 $topicIds = array_merge($alg, $geo);
-                // Keep per-bucket fallback to preserve 3+2 composition.
+                // Keep per-bucket fallback to preserve 4+3 composition.
                 $fallbackTopicIds = [
                     'alg' => array_values(array_diff($this->algebraTopics, $alg)),
                     'geo' => array_values(array_diff($this->geometryTopics, $geo)),
                 ];
-                $targetCount = 5;
+                $targetCount = 7;
                 break;
             case 'full':
                 $topicIds = array_merge($this->algebraTopics, $this->geometryTopics);
