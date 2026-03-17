@@ -29,9 +29,20 @@ class TelegramWebAppAuthTest extends TestCase
             $table->string('remember_token', 100)->nullable();
             $table->string('oauth_provider')->nullable();
             $table->string('oauth_id')->nullable();
+            $table->string('tg_username', 100)->nullable();
             $table->string('avatar')->nullable();
             $table->string('role')->default('student');
+            $table->unsignedTinyInteger('grade_num')->nullable();
+            $table->string('grade_letter', 5)->nullable();
+            $table->string('school_number', 20)->nullable();
+            $table->string('city', 80)->nullable();
+            $table->timestamp('last_active_at')->nullable();
+            $table->timestamp('onboarding_completed_at')->nullable();
+            $table->unsignedBigInteger('referred_by_user_id')->nullable();
             $table->timestamp('trial_ends_at')->nullable();
+            $table->boolean('tg_trial_used')->default(false);
+            $table->timestamp('tg_premium_until')->nullable();
+            $table->integer('star_balance')->default(0);
             $table->timestamps();
         });
 
