@@ -7,7 +7,11 @@ use App\Http\Controllers\EgeController;
 use App\Http\Controllers\JarvisMaterialPageController;
 use App\Http\Controllers\AdminTaskAnswerController;
 use App\Http\Controllers\AdminTaskStatusController;
-use App\Http\Controllers\MiniAppController;
+use App\Http\Controllers\MiniAppAdminController;
+use App\Http\Controllers\MiniAppAuthController;
+use App\Http\Controllers\MiniAppBillingController;
+use App\Http\Controllers\MiniAppStudentController;
+use App\Http\Controllers\MiniAppTeacherController;
 use App\Http\Controllers\OgeAttemptController;
 use App\Http\Controllers\OgeTemplateController;
 use App\Http\Controllers\RepetitorController;
@@ -401,70 +405,70 @@ Route::get('/forstas', [BoardController::class, 'architecture'])->name('board.ar
 // ========================================================================
 Route::prefix('tg')->group(function () {
     // Public: home/landing (no auth required)
-    Route::get('/', [MiniAppController::class, 'home'])->name('miniapp.home');
+    Route::get('/', [MiniAppAuthController::class, 'home'])->name('miniapp.home');
 
     // Server-side auth: form POST with initData → verify HMAC → login → bridge redirect
     // CSRF exempted (uses Telegram HMAC instead), see VerifyCsrfToken
-    Route::post('/auth', [MiniAppController::class, 'authenticate'])->name('miniapp.auth');
-    Route::post('/auth/bridge-ping', [MiniAppController::class, 'authBridgePing'])->name('miniapp.auth.bridge_ping');
-    Route::get('/auth/continue', [MiniAppController::class, 'authContinue'])->name('miniapp.auth.continue');
+    Route::post('/auth', [MiniAppAuthController::class, 'authenticate'])->name('miniapp.auth');
+    Route::post('/auth/bridge-ping', [MiniAppAuthController::class, 'authBridgePing'])->name('miniapp.auth.bridge_ping');
+    Route::get('/auth/continue', [MiniAppAuthController::class, 'authContinue'])->name('miniapp.auth.continue');
 
     // Onboarding submit is public endpoint with one-time onboarding token fallback
     // (needed for unstable WebView session continuity on some VPN/mobile paths).
-    Route::post('/onboarding', [MiniAppController::class, 'saveOnboarding'])->name('miniapp.onboarding.save');
+    Route::post('/onboarding', [MiniAppAuthController::class, 'saveOnboarding'])->name('miniapp.onboarding.save');
 
     // Authenticated Mini App routes
     Route::middleware(['auth'])->group(function () {
-        Route::post('/mode/{role}', [MiniAppController::class, 'switchMode'])
+        Route::post('/mode/{role}', [MiniAppAuthController::class, 'switchMode'])
             ->where('role', 'student|teacher')
             ->name('miniapp.mode.switch');
 
         // Onboarding page
-        Route::get('/onboarding', [MiniAppController::class, 'onboarding'])->name('miniapp.onboarding');
+        Route::get('/onboarding', [MiniAppAuthController::class, 'onboarding'])->name('miniapp.onboarding');
 
         // Routes that require completed onboarding
         Route::middleware([EnsureOnboardingComplete::class])->group(function () {
-            Route::get('/dashboard', [MiniAppController::class, 'dashboard'])->name('miniapp.dashboard');
-            Route::get('/mini', [MiniAppController::class, 'mini'])->name('miniapp.mini');
-            Route::get('/new-tasks', [MiniAppController::class, 'newTasks'])->name('miniapp.new_tasks');
-            Route::get('/part2', [MiniAppController::class, 'part2'])->name('miniapp.part2');
-            Route::get('/tasks-part1', [MiniAppController::class, 'tasksPart1'])->name('miniapp.tasks_part1');
-            Route::post('/mini/start', [MiniAppController::class, 'startMini'])->name('miniapp.mini.start');
-            Route::post('/full/start', [MiniAppController::class, 'startFull'])->name('miniapp.full.start');
-            Route::get('/test/{attemptId}', [MiniAppController::class, 'test'])->name('miniapp.test');
-            Route::get('/results/{attemptId}', [MiniAppController::class, 'results'])->name('miniapp.results');
-            Route::get('/history', [MiniAppController::class, 'history'])->name('miniapp.history');
-            Route::get('/history/{attemptId}', [MiniAppController::class, 'historyDetail'])->name('miniapp.history.detail');
-            Route::get('/tutor', [MiniAppController::class, 'tutor'])->name('miniapp.tutor');
-            Route::get('/homework', [MiniAppController::class, 'studentHomework'])->name('miniapp.homework');
+            Route::get('/dashboard', [MiniAppStudentController::class, 'dashboard'])->name('miniapp.dashboard');
+            Route::get('/mini', [MiniAppStudentController::class, 'mini'])->name('miniapp.mini');
+            Route::get('/new-tasks', [MiniAppStudentController::class, 'newTasks'])->name('miniapp.new_tasks');
+            Route::get('/part2', [MiniAppStudentController::class, 'part2'])->name('miniapp.part2');
+            Route::get('/tasks-part1', [MiniAppStudentController::class, 'tasksPart1'])->name('miniapp.tasks_part1');
+            Route::post('/mini/start', [MiniAppStudentController::class, 'startMini'])->name('miniapp.mini.start');
+            Route::post('/full/start', [MiniAppStudentController::class, 'startFull'])->name('miniapp.full.start');
+            Route::get('/test/{attemptId}', [MiniAppStudentController::class, 'test'])->name('miniapp.test');
+            Route::get('/results/{attemptId}', [MiniAppStudentController::class, 'results'])->name('miniapp.results');
+            Route::get('/history', [MiniAppStudentController::class, 'history'])->name('miniapp.history');
+            Route::get('/history/{attemptId}', [MiniAppStudentController::class, 'historyDetail'])->name('miniapp.history.detail');
+            Route::get('/tutor', [MiniAppStudentController::class, 'tutor'])->name('miniapp.tutor');
+            Route::get('/homework', [MiniAppStudentController::class, 'studentHomework'])->name('miniapp.homework');
 
-            Route::get('/profile', [MiniAppController::class, 'profile'])->name('miniapp.profile');
-            Route::post('/premium/trial', [MiniAppController::class, 'activateTrial'])->name('miniapp.premium.trial');
-            Route::post('/premium/buy', [MiniAppController::class, 'buyPremium'])->name('miniapp.premium.buy');
-            Route::post('/premium/payout', [MiniAppController::class, 'requestPayout'])->name('miniapp.premium.payout');
-            Route::post('/gift/seen', [MiniAppController::class, 'giftSeen'])->name('miniapp.gift.seen');
+            Route::get('/profile', [MiniAppStudentController::class, 'profile'])->name('miniapp.profile');
+            Route::post('/premium/trial', [MiniAppBillingController::class, 'activateTrial'])->name('miniapp.premium.trial');
+            Route::post('/premium/buy', [MiniAppBillingController::class, 'buyPremium'])->name('miniapp.premium.buy');
+            Route::post('/premium/payout', [MiniAppBillingController::class, 'requestPayout'])->name('miniapp.premium.payout');
+            Route::post('/gift/seen', [MiniAppBillingController::class, 'giftSeen'])->name('miniapp.gift.seen');
 
             Route::middleware(['role:teacher,admin'])->prefix('teacher')->name('miniapp.teacher.')->group(function () {
                 Route::get('/', fn () => redirect('/tg/teacher/dashboard'))->name('home');
-                Route::get('/dashboard', [MiniAppController::class, 'teacherDashboard'])->name('dashboard');
-                Route::get('/lessons', [MiniAppController::class, 'teacherLessons'])->name('lessons');
-                Route::get('/students', [MiniAppController::class, 'teacherStudents'])->name('students');
-                Route::get('/students/{studentId}', [MiniAppController::class, 'teacherStudentProfile'])->name('students.profile');
-                Route::get('/students/{studentId}/attempt/{attemptId}', [MiniAppController::class, 'teacherStudentAttemptDetail'])->name('students.attempt');
-                Route::post('/students/{studentId}/ownership', [MiniAppController::class, 'toggleTeacherStudentOwnership'])->name('students.ownership');
-                Route::patch('/students/{studentId}/alias', [MiniAppController::class, 'updateTeacherStudentAlias'])->name('students.alias');
-                Route::get('/variants', [MiniAppController::class, 'teacherVariants'])->name('variants');
-                Route::get('/homework', [MiniAppController::class, 'teacherHomework'])->name('homework');
-                Route::post('/homework/assign', [MiniAppController::class, 'assignHomework'])->name('homework.assign');
-                Route::patch('/students/{studentId}/link', [MiniAppController::class, 'updateStudentLink'])->name('students.link');
-                Route::get('/referrals', [MiniAppController::class, 'teacherReferrals'])->name('referrals');
+                Route::get('/dashboard', [MiniAppTeacherController::class, 'teacherDashboard'])->name('dashboard');
+                Route::get('/lessons', [MiniAppTeacherController::class, 'teacherLessons'])->name('lessons');
+                Route::get('/students', [MiniAppTeacherController::class, 'teacherStudents'])->name('students');
+                Route::get('/students/{studentId}', [MiniAppTeacherController::class, 'teacherStudentProfile'])->name('students.profile');
+                Route::get('/students/{studentId}/attempt/{attemptId}', [MiniAppTeacherController::class, 'teacherStudentAttemptDetail'])->name('students.attempt');
+                Route::post('/students/{studentId}/ownership', [MiniAppTeacherController::class, 'toggleTeacherStudentOwnership'])->name('students.ownership');
+                Route::patch('/students/{studentId}/alias', [MiniAppTeacherController::class, 'updateTeacherStudentAlias'])->name('students.alias');
+                Route::get('/variants', [MiniAppTeacherController::class, 'teacherVariants'])->name('variants');
+                Route::get('/homework', [MiniAppTeacherController::class, 'teacherHomework'])->name('homework');
+                Route::post('/homework/assign', [MiniAppTeacherController::class, 'assignHomework'])->name('homework.assign');
+                Route::patch('/students/{studentId}/link', [MiniAppTeacherController::class, 'updateStudentLink'])->name('students.link');
+                Route::get('/referrals', [MiniAppTeacherController::class, 'teacherReferrals'])->name('referrals');
             });
         });
 
         // Admin routes for curated variants
         Route::middleware(['role:teacher,admin'])->prefix('admin')->group(function () {
-            Route::get('/variants', [MiniAppController::class, 'adminVariants'])->name('miniapp.admin.variants');
-            Route::post('/variants/create', [MiniAppController::class, 'createCuratedVariant'])->name('miniapp.admin.variants.create');
+            Route::get('/variants', [MiniAppAdminController::class, 'adminVariants'])->name('miniapp.admin.variants');
+            Route::post('/variants/create', [MiniAppAdminController::class, 'createCuratedVariant'])->name('miniapp.admin.variants.create');
         });
     });
 });
