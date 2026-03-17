@@ -8,6 +8,7 @@ use App\Http\Controllers\JarvisMaterialPageController;
 use App\Http\Controllers\AdminTaskAnswerController;
 use App\Http\Controllers\AdminTaskStatusController;
 use App\Http\Controllers\MiniAppController;
+use App\Http\Controllers\MiniAppTeacherController;
 use App\Http\Controllers\OgeAttemptController;
 use App\Http\Controllers\OgeTemplateController;
 use App\Http\Controllers\RepetitorController;
@@ -446,18 +447,18 @@ Route::prefix('tg')->group(function () {
 
             Route::middleware(['role:teacher,admin'])->prefix('teacher')->name('miniapp.teacher.')->group(function () {
                 Route::get('/', fn () => redirect('/tg/teacher/dashboard'))->name('home');
-                Route::get('/dashboard', [MiniAppController::class, 'teacherDashboard'])->name('dashboard');
-                Route::get('/lessons', [MiniAppController::class, 'teacherLessons'])->name('lessons');
-                Route::get('/students', [MiniAppController::class, 'teacherStudents'])->name('students');
-                Route::get('/students/{studentId}', [MiniAppController::class, 'teacherStudentProfile'])->name('students.profile');
-                Route::get('/students/{studentId}/attempt/{attemptId}', [MiniAppController::class, 'teacherStudentAttemptDetail'])->name('students.attempt');
-                Route::post('/students/{studentId}/ownership', [MiniAppController::class, 'toggleTeacherStudentOwnership'])->name('students.ownership');
-                Route::patch('/students/{studentId}/alias', [MiniAppController::class, 'updateTeacherStudentAlias'])->name('students.alias');
-                Route::get('/variants', [MiniAppController::class, 'teacherVariants'])->name('variants');
-                Route::get('/homework', [MiniAppController::class, 'teacherHomework'])->name('homework');
-                Route::post('/homework/assign', [MiniAppController::class, 'assignHomework'])->name('homework.assign');
-                Route::patch('/students/{studentId}/link', [MiniAppController::class, 'updateStudentLink'])->name('students.link');
-                Route::get('/referrals', [MiniAppController::class, 'teacherReferrals'])->name('referrals');
+                Route::get('/dashboard', [MiniAppTeacherController::class, 'teacherDashboard'])->name('dashboard');
+                Route::get('/lessons', [MiniAppTeacherController::class, 'teacherLessons'])->name('lessons');
+                Route::get('/students', [MiniAppTeacherController::class, 'teacherStudents'])->name('students');
+                Route::get('/students/{studentId}', [MiniAppTeacherController::class, 'teacherStudentProfile'])->name('students.profile');
+                Route::get('/students/{studentId}/attempt/{attemptId}', [MiniAppTeacherController::class, 'teacherStudentAttemptDetail'])->name('students.attempt');
+                Route::post('/students/{studentId}/ownership', [MiniAppTeacherController::class, 'toggleTeacherStudentOwnership'])->name('students.ownership');
+                Route::patch('/students/{studentId}/alias', [MiniAppTeacherController::class, 'updateTeacherStudentAlias'])->name('students.alias');
+                Route::get('/variants', [MiniAppTeacherController::class, 'teacherVariants'])->name('variants');
+                Route::get('/homework', [MiniAppTeacherController::class, 'teacherHomework'])->name('homework');
+                Route::post('/homework/assign', [MiniAppTeacherController::class, 'assignHomework'])->name('homework.assign');
+                Route::patch('/students/{studentId}/link', [MiniAppTeacherController::class, 'updateStudentLink'])->name('students.link');
+                Route::get('/referrals', [MiniAppTeacherController::class, 'teacherReferrals'])->name('referrals');
             });
         });
 
