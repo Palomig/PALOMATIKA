@@ -94,7 +94,16 @@ class MiniAppStudentController extends Controller
                 'answeredCount' => $answeredCount,
                 'totalCount' => $totalCount,
                 'startedAt' => $att->started_at,
-                'type' => $isMini ? 'Мини-ОГЭ' : 'Полный вариант',
+                'type' => match ($mode) {
+                    'mini_algebra' => 'Мини-ОГЭ · Алгебра',
+                    'mini_geometry' => 'Мини-ОГЭ · Геометрия',
+                    'mini_mixed' => 'Мини-ОГЭ · Смешанное',
+                    'mini_part2' => 'Мини-ОГЭ · 2-я часть',
+                    'full' => 'Полный вариант',
+                    'part2' => '2-я часть',
+                    'tasks_part1' => '1-я часть',
+                    default => $isMini ? 'Мини-ОГЭ' : 'Вариант ОГЭ',
+                },
             ];
         }
 
