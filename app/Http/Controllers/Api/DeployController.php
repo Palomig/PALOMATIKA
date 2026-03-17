@@ -46,6 +46,7 @@ class DeployController extends Controller
         'pool:test-generate',
         'premium:gift',
         'user:set-referrer',
+        'user:delete-telegram',
     ];
 
     /**
