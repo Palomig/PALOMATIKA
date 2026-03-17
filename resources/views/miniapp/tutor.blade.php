@@ -96,15 +96,7 @@
     <div class="topbar-title">Репетитор</div>
   </div>
 
-  {{-- AUDIENCE TOGGLE --}}
-  <div class="audience-toggle">
-    <button class="toggle-btn" :class="{ active: audience === 'student' }" @click="audience = 'student'">🎓 Я ученик</button>
-    <button class="toggle-btn" :class="{ active: audience === 'parent' }" @click="audience = 'parent'">👨‍👩‍👧 Я родитель</button>
-  </div>
-
-  {{-- STUDENT VIEW --}}
-  <template x-if="audience === 'student'">
-    <div style="display:flex;flex-direction:column;gap:14px;">
+  <div style="display:flex;flex-direction:column;gap:14px;">
       <div class="tutor-hero">
         <div class="tutor-avatar">👨‍🏫</div>
         <div class="tutor-name">Станислав Олегович · Руслан Романович</div>
@@ -159,57 +151,6 @@
         <a href="https://yandex.ru/maps/?text=г.Чехов,+ул.+Московская,+87/1" class="cta-btn cta-map" target="_blank">📍 На карте</a>
       </div>
     </div>
-  </template>
-
-  {{-- PARENT VIEW --}}
-  <template x-if="audience === 'parent'">
-    <div style="display:flex;flex-direction:column;gap:14px;">
-      <div class="parent-insight">
-        <div class="parent-title">Результат вашего ребёнка</div>
-        <div class="parent-text">
-          @if(isset($lastCorrect) && isset($lastTotal))
-          Последний пробный ОГЭ: <strong>{{ $lastCorrect }}/{{ $lastTotal }}</strong> правильных ответов.
-          @if(isset($weakTopics) && count($weakTopics) > 0)
-          <br>Слабые темы: <strong>{{ collect($weakTopics)->pluck('name')->take(3)->join(', ') }}</strong>.
-          @endif
-          @else
-          Ваш ребёнок пока не прошёл ни одного пробного теста. Попросите его решить хотя бы один вариант, чтобы увидеть реальный уровень.
-          @endif
-        </div>
-      </div>
-
-      <div class="tutor-hero">
-        <div class="tutor-avatar">👨‍🏫</div>
-        <div class="tutor-name">Станислав Олегович · Руслан Романович</div>
-        <div class="tutor-role">Репетиторы по математике · г. Чехов</div>
-        <div class="tutor-text">
-          <strong>Более 5 лет</strong> опыта подготовки к ОГЭ. Занятия очно в Чехове, индивидуально и в мини-группах.
-        </div>
-      </div>
-
-      <div class="parent-facts" style="opacity:0;animation:fadeUp 0.3s ease 0.15s forwards;">
-        <div class="parent-fact"><span class="parent-fact-icon">⚠️</span> До ОГЭ осталось меньше 4 месяцев — каждая неделя на счету</div>
-        <div class="parent-fact"><span class="parent-fact-icon">📊</span> 70% учеников, которые начинают подготовку за 3+ месяца, получают оценку 4 или 5</div>
-        <div class="parent-fact"><span class="parent-fact-icon">🎁</span> Первое занятие — <strong>бесплатно</strong>, без обязательств</div>
-      </div>
-
-      <div class="info-rows">
-        <div class="info-row">
-          <div class="info-icon">📍</div>
-          <div>
-            <div class="info-label">Адрес</div>
-            <div class="info-value">г. Чехов, ул. Московская, 87/1</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="cta-group">
-        <a href="https://t.me/Palomig" class="cta-btn cta-tg" @click.prevent="openTg()">✈️ Написать в Telegram</a>
-        <a href="tel:+79103017110" class="cta-btn cta-phone">📞 Позвонить</a>
-        <a href="https://yandex.ru/maps/?text=г.Чехов,+ул.+Московская,+87/1" class="cta-btn cta-map" target="_blank">📍 На карте</a>
-      </div>
-    </div>
-  </template>
 
 </div>
 @endsection
@@ -218,7 +159,6 @@
 <script>
 function tutorPage() {
   return {
-    audience: 'student',
     openTg() {
       const tg = window.Telegram?.WebApp;
       if (tg) { tg.openTelegramLink('https://t.me/Palomig'); }
