@@ -91,6 +91,14 @@ class TelegramMiniAppAuthService
             ->first();
 
         if ($user) {
+            $updates = [];
+            $newUsername = trim((string) ($telegramUser['username'] ?? ''));
+            if ($newUsername !== '' && $user->tg_username !== $newUsername) {
+                $updates['tg_username'] = $newUsername;
+            }
+            if ($updates !== []) {
+                $user->update($updates);
+            }
             return $user;
         }
 
@@ -103,6 +111,7 @@ class TelegramMiniAppAuthService
             'name' => $name,
             'oauth_provider' => 'telegram',
             'oauth_id' => $telegramId,
+            'tg_username' => trim((string) ($telegramUser['username'] ?? '')) ?: null,
             'avatar' => $telegramUser['photo_url'] ?? null,
             'trial_ends_at' => now()->addDays(7),
         ]);
