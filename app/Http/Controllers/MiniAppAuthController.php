@@ -179,7 +179,7 @@ class MiniAppAuthController extends Controller
         $data = $request->validate([
             'name' => 'required|string|min:2|max:100',
             'grade_num' => 'required|integer|in:9',
-            'grade_letter' => 'required|string|in:А,Б,В,Г,Д',
+            'grade_letter' => 'required|string|in:А,Б,В,Г,Д,К,М',
             'school_number' => 'required|string|max:20',
             'city' => 'nullable|string|max:80',
             'onboarding_token' => 'nullable|string|max:128',
