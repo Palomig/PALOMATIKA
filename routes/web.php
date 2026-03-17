@@ -7,6 +7,7 @@ use App\Http\Controllers\EgeController;
 use App\Http\Controllers\JarvisMaterialPageController;
 use App\Http\Controllers\AdminTaskAnswerController;
 use App\Http\Controllers\AdminTaskStatusController;
+use App\Http\Controllers\MiniAppBillingController;
 use App\Http\Controllers\MiniAppController;
 use App\Http\Controllers\MiniAppTeacherController;
 use App\Http\Controllers\OgeAttemptController;
@@ -440,10 +441,10 @@ Route::prefix('tg')->group(function () {
             Route::get('/homework', [MiniAppController::class, 'studentHomework'])->name('miniapp.homework');
 
             Route::get('/profile', [MiniAppController::class, 'profile'])->name('miniapp.profile');
-            Route::post('/premium/trial', [MiniAppController::class, 'activateTrial'])->name('miniapp.premium.trial');
-            Route::post('/premium/buy', [MiniAppController::class, 'buyPremium'])->name('miniapp.premium.buy');
-            Route::post('/premium/payout', [MiniAppController::class, 'requestPayout'])->name('miniapp.premium.payout');
-            Route::post('/gift/seen', [MiniAppController::class, 'giftSeen'])->name('miniapp.gift.seen');
+            Route::post('/premium/trial', [MiniAppBillingController::class, 'activateTrial'])->name('miniapp.premium.trial');
+            Route::post('/premium/buy', [MiniAppBillingController::class, 'buyPremium'])->name('miniapp.premium.buy');
+            Route::post('/premium/payout', [MiniAppBillingController::class, 'requestPayout'])->name('miniapp.premium.payout');
+            Route::post('/gift/seen', [MiniAppBillingController::class, 'giftSeen'])->name('miniapp.gift.seen');
 
             Route::middleware(['role:teacher,admin'])->prefix('teacher')->name('miniapp.teacher.')->group(function () {
                 Route::get('/', fn () => redirect('/tg/teacher/dashboard'))->name('home');
