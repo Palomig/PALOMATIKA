@@ -8,6 +8,7 @@ use App\Http\Controllers\JarvisMaterialPageController;
 use App\Http\Controllers\AdminTaskAnswerController;
 use App\Http\Controllers\AdminTaskStatusController;
 use App\Http\Controllers\MiniAppAdminController;
+use App\Http\Controllers\MiniAppAuthController;
 use App\Http\Controllers\MiniAppBillingController;
 use App\Http\Controllers\MiniAppController;
 use App\Http\Controllers\MiniAppTeacherController;
@@ -404,26 +405,26 @@ Route::get('/forstas', [BoardController::class, 'architecture'])->name('board.ar
 // ========================================================================
 Route::prefix('tg')->group(function () {
     // Public: home/landing (no auth required)
-    Route::get('/', [MiniAppController::class, 'home'])->name('miniapp.home');
+    Route::get('/', [MiniAppAuthController::class, 'home'])->name('miniapp.home');
 
     // Server-side auth: form POST with initData → verify HMAC → login → bridge redirect
     // CSRF exempted (uses Telegram HMAC instead), see VerifyCsrfToken
-    Route::post('/auth', [MiniAppController::class, 'authenticate'])->name('miniapp.auth');
-    Route::post('/auth/bridge-ping', [MiniAppController::class, 'authBridgePing'])->name('miniapp.auth.bridge_ping');
-    Route::get('/auth/continue', [MiniAppController::class, 'authContinue'])->name('miniapp.auth.continue');
+    Route::post('/auth', [MiniAppAuthController::class, 'authenticate'])->name('miniapp.auth');
+    Route::post('/auth/bridge-ping', [MiniAppAuthController::class, 'authBridgePing'])->name('miniapp.auth.bridge_ping');
+    Route::get('/auth/continue', [MiniAppAuthController::class, 'authContinue'])->name('miniapp.auth.continue');
 
     // Onboarding submit is public endpoint with one-time onboarding token fallback
     // (needed for unstable WebView session continuity on some VPN/mobile paths).
-    Route::post('/onboarding', [MiniAppController::class, 'saveOnboarding'])->name('miniapp.onboarding.save');
+    Route::post('/onboarding', [MiniAppAuthController::class, 'saveOnboarding'])->name('miniapp.onboarding.save');
 
     // Authenticated Mini App routes
     Route::middleware(['auth'])->group(function () {
-        Route::post('/mode/{role}', [MiniAppController::class, 'switchMode'])
+        Route::post('/mode/{role}', [MiniAppAuthController::class, 'switchMode'])
             ->where('role', 'student|teacher')
             ->name('miniapp.mode.switch');
 
         // Onboarding page
-        Route::get('/onboarding', [MiniAppController::class, 'onboarding'])->name('miniapp.onboarding');
+        Route::get('/onboarding', [MiniAppAuthController::class, 'onboarding'])->name('miniapp.onboarding');
 
         // Routes that require completed onboarding
         Route::middleware([EnsureOnboardingComplete::class])->group(function () {
