@@ -10,7 +10,7 @@ use App\Http\Controllers\AdminTaskStatusController;
 use App\Http\Controllers\MiniAppAdminController;
 use App\Http\Controllers\MiniAppAuthController;
 use App\Http\Controllers\MiniAppBillingController;
-use App\Http\Controllers\MiniAppController;
+use App\Http\Controllers\MiniAppStudentController;
 use App\Http\Controllers\MiniAppTeacherController;
 use App\Http\Controllers\OgeAttemptController;
 use App\Http\Controllers\OgeTemplateController;
@@ -428,21 +428,21 @@ Route::prefix('tg')->group(function () {
 
         // Routes that require completed onboarding
         Route::middleware([EnsureOnboardingComplete::class])->group(function () {
-            Route::get('/dashboard', [MiniAppController::class, 'dashboard'])->name('miniapp.dashboard');
-            Route::get('/mini', [MiniAppController::class, 'mini'])->name('miniapp.mini');
-            Route::get('/new-tasks', [MiniAppController::class, 'newTasks'])->name('miniapp.new_tasks');
-            Route::get('/part2', [MiniAppController::class, 'part2'])->name('miniapp.part2');
-            Route::get('/tasks-part1', [MiniAppController::class, 'tasksPart1'])->name('miniapp.tasks_part1');
-            Route::post('/mini/start', [MiniAppController::class, 'startMini'])->name('miniapp.mini.start');
-            Route::post('/full/start', [MiniAppController::class, 'startFull'])->name('miniapp.full.start');
-            Route::get('/test/{attemptId}', [MiniAppController::class, 'test'])->name('miniapp.test');
-            Route::get('/results/{attemptId}', [MiniAppController::class, 'results'])->name('miniapp.results');
-            Route::get('/history', [MiniAppController::class, 'history'])->name('miniapp.history');
-            Route::get('/history/{attemptId}', [MiniAppController::class, 'historyDetail'])->name('miniapp.history.detail');
-            Route::get('/tutor', [MiniAppController::class, 'tutor'])->name('miniapp.tutor');
-            Route::get('/homework', [MiniAppController::class, 'studentHomework'])->name('miniapp.homework');
+            Route::get('/dashboard', [MiniAppStudentController::class, 'dashboard'])->name('miniapp.dashboard');
+            Route::get('/mini', [MiniAppStudentController::class, 'mini'])->name('miniapp.mini');
+            Route::get('/new-tasks', [MiniAppStudentController::class, 'newTasks'])->name('miniapp.new_tasks');
+            Route::get('/part2', [MiniAppStudentController::class, 'part2'])->name('miniapp.part2');
+            Route::get('/tasks-part1', [MiniAppStudentController::class, 'tasksPart1'])->name('miniapp.tasks_part1');
+            Route::post('/mini/start', [MiniAppStudentController::class, 'startMini'])->name('miniapp.mini.start');
+            Route::post('/full/start', [MiniAppStudentController::class, 'startFull'])->name('miniapp.full.start');
+            Route::get('/test/{attemptId}', [MiniAppStudentController::class, 'test'])->name('miniapp.test');
+            Route::get('/results/{attemptId}', [MiniAppStudentController::class, 'results'])->name('miniapp.results');
+            Route::get('/history', [MiniAppStudentController::class, 'history'])->name('miniapp.history');
+            Route::get('/history/{attemptId}', [MiniAppStudentController::class, 'historyDetail'])->name('miniapp.history.detail');
+            Route::get('/tutor', [MiniAppStudentController::class, 'tutor'])->name('miniapp.tutor');
+            Route::get('/homework', [MiniAppStudentController::class, 'studentHomework'])->name('miniapp.homework');
 
-            Route::get('/profile', [MiniAppController::class, 'profile'])->name('miniapp.profile');
+            Route::get('/profile', [MiniAppStudentController::class, 'profile'])->name('miniapp.profile');
             Route::post('/premium/trial', [MiniAppBillingController::class, 'activateTrial'])->name('miniapp.premium.trial');
             Route::post('/premium/buy', [MiniAppBillingController::class, 'buyPremium'])->name('miniapp.premium.buy');
             Route::post('/premium/payout', [MiniAppBillingController::class, 'requestPayout'])->name('miniapp.premium.payout');

@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
-class MiniAppController extends Controller
+class MiniAppStudentController extends Controller
 {
     use Traits\MiniAppHelpers;
 
