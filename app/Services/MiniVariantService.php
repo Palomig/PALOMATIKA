@@ -28,7 +28,7 @@ class MiniVariantService
         shuffle($topics);
         $selected = array_slice($topics, 0, 5);
 
-        return $this->pickOnePerTopic($selected);
+        return $this->pickOnePerTopic($selected, 'production');
     }
 
     /**
@@ -36,7 +36,7 @@ class MiniVariantService
      */
     public function generateGeometry(): array
     {
-        return $this->pickOnePerTopic($this->geometryTopics);
+        return $this->pickOnePerTopic($this->geometryTopics, 'production');
     }
 
     /**
@@ -54,8 +54,8 @@ class MiniVariantService
         shuffle($geoPool);
         $geoSelected = array_slice($geoPool, 0, 3);
 
-        $algTasks = $this->pickOnePerTopic($algSelected);
-        $geoTasks = $this->pickOnePerTopic($geoSelected);
+        $algTasks = $this->pickOnePerTopic($algSelected, 'production');
+        $geoTasks = $this->pickOnePerTopic($geoSelected, 'production');
 
         return array_merge($algTasks, $geoTasks);
     }
@@ -66,7 +66,7 @@ class MiniVariantService
     public function generateFull(): array
     {
         $allTopics = array_merge($this->algebraTopics, $this->geometryTopics);
-        return $this->pickOnePerTopic($allTopics);
+        return $this->pickOnePerTopic($allTopics, 'production');
     }
 
     /**

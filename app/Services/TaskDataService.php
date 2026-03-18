@@ -440,20 +440,7 @@ class TaskDataService
                     ];
                 } else {
                     foreach ($zadanie['tasks'] ?? [] as $task) {
-                        $allTasks[] = [
-                            'topic_id' => $topicId,
-                            'topic_title' => $meta['title'],
-                            'block_number' => $block['number'],
-                            'block_title' => $block['title'],
-                            'zadanie_number' => $zadanie['number'],
-                            'instruction' => $zadanie['instruction'],
-                            'type' => $zadanie['type'] ?? 'expression',
-                            'svg_type' => $zadanie['svg_type'] ?? null,
-                            'options_render_mode' => $zadanie['options_render_mode'] ?? null,
-                            'points' => $zadanie['points'] ?? null,
-                            'options' => $zadanie['options'] ?? null,
-                            'task' => $task,
-                        ];
+                        $allTasks[] = $this->buildTaskPayload($topicId, $meta, $block, $zadanie, $task);
                     }
                 }
             }
@@ -470,9 +457,9 @@ class TaskDataService
     /**
      * Получить случайные задания из конкретного блока темы
      */
-    public function getRandomTasksFromBlock(string $topicId, int $blockNumber, int $count = 1): array
+    public function getRandomTasksFromBlock(string $topicId, int $blockNumber, int $count = 1, ?string $status = null): array
     {
-        $blocks = $this->getBlocks($topicId);
+        $blocks = $this->getBlocks($topicId, $status);
         $meta = $this->getTopicMeta($topicId);
         $allTasks = [];
 
@@ -495,20 +482,7 @@ class TaskDataService
                         ];
                     } else {
                         foreach ($zadanie['tasks'] ?? [] as $task) {
-                            $allTasks[] = [
-                                'topic_id' => $topicId,
-                                'topic_title' => $meta['title'],
-                                'block_number' => $block['number'],
-                                'block_title' => $block['title'],
-                                'zadanie_number' => $zadanie['number'],
-                                'instruction' => $zadanie['instruction'],
-                                'type' => $zadanie['type'] ?? 'expression',
-                                'svg_type' => $zadanie['svg_type'] ?? null,
-                                'options_render_mode' => $zadanie['options_render_mode'] ?? null,
-                                'points' => $zadanie['points'] ?? null,
-                                'options' => $zadanie['options'] ?? null,
-                                'task' => $task,
-                            ];
+                            $allTasks[] = $this->buildTaskPayload($topicId, $meta, $block, $zadanie, $task);
                         }
                     }
                 }
@@ -527,9 +501,9 @@ class TaskDataService
     /**
      * Получить случайные задания из конкретного zadanie
      */
-    public function getRandomTasksFromZadanie(string $topicId, int $blockNumber, int $zadanieNumber, int $count = 1): array
+    public function getRandomTasksFromZadanie(string $topicId, int $blockNumber, int $zadanieNumber, int $count = 1, ?string $status = null): array
     {
-        $blocks = $this->getBlocks($topicId);
+        $blocks = $this->getBlocks($topicId, $status);
         $meta = $this->getTopicMeta($topicId);
         $allTasks = [];
 
@@ -554,22 +528,7 @@ class TaskDataService
                             ];
                         } else {
                             foreach ($zadanie['tasks'] ?? [] as $task) {
-                                $allTasks[] = [
-                                    'topic_id' => $topicId,
-                                    'topic_title' => $meta['title'],
-                                    'block_number' => $block['number'],
-                                    'block_title' => $block['title'],
-                                    'zadanie_number' => $zadanie['number'],
-                                    'instruction' => $zadanie['instruction'],
-                                    'type' => $zadanie['type'] ?? 'expression',
-                                    'svg_type' => $zadanie['svg_type'] ?? null,
-                                    'options_render_mode' => $zadanie['options_render_mode'] ?? null,
-                                    'points' => $zadanie['points'] ?? null,
-                                    // Сначала проверяем options в задаче (для matching), затем в задании
-                                    'options' => $task['options'] ?? $zadanie['options'] ?? null,
-                                    'task' => $task,
-                                    // SVG уже встроен в task['svg'] (если есть)
-                                ];
+                                $allTasks[] = $this->buildTaskPayload($topicId, $meta, $block, $zadanie, $task);
                             }
                         }
                         break;
@@ -585,6 +544,24 @@ class TaskDataService
 
         shuffle($allTasks);
         return array_slice($allTasks, 0, $count);
+    }
+
+    private function buildTaskPayload(string $topicId, array $meta, array $block, array $zadanie, array $task): array
+    {
+        return [
+            'topic_id' => $topicId,
+            'topic_title' => $meta['title'],
+            'block_number' => $block['number'],
+            'block_title' => $block['title'],
+            'zadanie_number' => $zadanie['number'],
+            'instruction' => $zadanie['instruction'],
+            'type' => $zadanie['type'] ?? 'expression',
+            'svg_type' => $zadanie['svg_type'] ?? null,
+            'options_render_mode' => $zadanie['options_render_mode'] ?? null,
+            'points' => $zadanie['points'] ?? null,
+            'options' => $task['options'] ?? $zadanie['options'] ?? null,
+            'task' => $task,
+        ];
     }
 
     /**

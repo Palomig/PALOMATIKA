@@ -109,4 +109,26 @@ class MiniAppTaskCanonicalizerTest extends TestCase
         $this->assertSame('X', $norm['options'][0]['label']);
         $this->assertSame('Y', $norm['options'][1]['label']);
     }
+
+    public function test_nested_graph_options_are_preserved_for_topic_13_ui(): void
+    {
+        $svc = new MiniAppTaskCanonicalizer();
+        $task = [
+            'type' => 'expression',
+            'task' => [
+                'answer' => '[2; +∞)',
+                'graph_options' => [
+                    ['index' => 1, 'text' => '[2; +∞)', 'svg' => '<svg></svg>'],
+                    ['index' => 2, 'text' => '(-∞; 2)', 'svg' => '<svg></svg>'],
+                ],
+                'graph_options_mode' => 'compact_number_line',
+            ],
+        ];
+
+        $norm = $svc->normalizeForUi($task);
+
+        $this->assertCount(2, $norm['graph_options']);
+        $this->assertSame('compact_number_line', $norm['graph_options_mode']);
+        $this->assertSame('[2; +∞)', $norm['graph_options'][0]['text']);
+    }
 }
