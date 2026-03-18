@@ -29,6 +29,8 @@ class MiniAppTaskCanonicalizer
         $task['svg'] = $task['svg'] ?? ($inner['svg'] ?? null);
         $task['image'] = $task['image'] ?? ($inner['image'] ?? null);
         $task['options'] = $task['options'] ?? ($inner['options'] ?? null);
+        $task['graph_options'] = $task['graph_options'] ?? ($inner['graph_options'] ?? null);
+        $task['graph_options_mode'] = $task['graph_options_mode'] ?? ($inner['graph_options_mode'] ?? null);
         $task = $this->normalizeStableOptions($task);
 
         // statements-mode fallback for old payloads

@@ -120,7 +120,8 @@ class MiniAppAdminController extends Controller
                 $topicId,
                 (int) $blockNumber,
                 (int) $zadanieNumber,
-                1
+                1,
+                'production'
             );
 
             if (!empty($task)) {

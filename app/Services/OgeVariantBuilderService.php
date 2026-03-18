@@ -92,7 +92,8 @@ class OgeVariantBuilderService
                 $topicId,
                 $randomZadanie['block'],
                 $randomZadanie['zadanie'],
-                1
+                1,
+                'production'
             );
 
             if (empty($tasksFromZadanie)) {
@@ -143,7 +144,7 @@ class OgeVariantBuilderService
         $defaultZadaniya = [];
         $defaultTopics = ['06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17'];
         foreach ($defaultTopics as $topicId) {
-            $blocks = $this->taskDataService->getBlocks($topicId);
+            $blocks = $this->taskDataService->getBlocks($topicId, 'production');
             foreach ($blocks as $block) {
                 foreach ($block['zadaniya'] ?? [] as $zadanie) {
                     $defaultZadaniya[] = "{$topicId}_{$block['number']}_{$zadanie['number']}";
