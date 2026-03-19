@@ -728,6 +728,12 @@
           <template x-if="currentTask.type !== 'matching' && currentTask.type !== 'matching_signs' && normalizedOptions(currentTask).length > 0">
             <div>
               <div class="answer-label">Выбери ответ</div>
+              {{-- DEBUG: show raw option data --}}
+              <div style="background:#1a1a2e;border:1px solid #f00;padding:8px;margin-bottom:8px;font-size:11px;color:#0f0;word-break:break-all;border-radius:8px">
+                <template x-for="(opt, oi) in normalizedOptions(currentTask)" :key="'dbg'+oi">
+                  <div x-text="'opt['+oi+']: label=' + JSON.stringify(opt?.label) + ' | latex=' + /\\\\[a-zA-Z]+/.test(String(opt?.label??'')) + ' | katex=' + (typeof katex !== 'undefined')"></div>
+                </template>
+              </div>
               <div class="test-options">
                 <template x-for="(opt, oi) in normalizedOptions(currentTask)" :key="oi">
                   <div class="test-option"
