@@ -661,11 +661,11 @@
       <div class="test-dot"
            :class="{
              'active': idx === current,
-             'answered': idx !== current && answers[task.task_number] !== undefined && answers[task.task_number] !== ''
+             'answered': idx !== current && answers[taskKey(task)] !== undefined && answers[taskKey(task)] !== ''
            }"
            @click="goTo(idx)">
-        <span x-text="task.task_number"></span>
-        <template x-if="answers[task.task_number] !== undefined && answers[task.task_number] !== '' && idx !== current">
+        <span x-text="displayTaskNumber(task)"></span>
+        <template x-if="answers[taskKey(task)] !== undefined && answers[taskKey(task)] !== '' && idx !== current">
           <div class="dot-check">&#10003;</div>
         </template>
       </div>
@@ -679,7 +679,7 @@
       <div :key="current">
         {{-- Meta --}}
         <div class="q-meta q-anim" :style="'animation-delay: 0s'">
-          <div class="q-num" x-text="'Задание ' + currentTask.task_number"></div>
+          <div class="q-num" x-text="'Задание ' + displayTaskNumber(currentTask)"></div>
           <div class="q-topic-badge" x-text="topicName(currentTask.topic_id)"></div>
           <div class="q-topic-badge" style="opacity:.8" x-text="'ID: ' + taskLocator(currentTask)"></div>
         </div>
@@ -706,17 +706,17 @@
 
         {{-- SVG image --}}
         <template x-if="currentTask.svg">
-          <div class="q-svg-wrap q-anim" :class="{ 'q-svg-wide': String(currentTask.task_number) === '11' }" :style="'animation-delay: 0.08s; margin-top: 16px'"
+          <div class="q-svg-wrap q-anim" :class="{ 'q-svg-wide': String(displayTaskNumber(currentTask)) === '11' }" :style="'animation-delay: 0.08s; margin-top: 16px'"
                x-html="currentTask.svg"></div>
         </template>
 
         {{-- Image fallback (PNG/JPG/SVG file path or inline SVG string) --}}
         <template x-if="!currentTask.svg && currentTask.image && String(currentTask.image).trim().startsWith('<svg')">
-          <div class="q-svg-wrap q-anim" :class="{ 'q-svg-wide': String(currentTask.task_number) === '11' }" :style="'animation-delay: 0.08s; margin-top: 16px'"
+          <div class="q-svg-wrap q-anim" :class="{ 'q-svg-wide': String(displayTaskNumber(currentTask)) === '11' }" :style="'animation-delay: 0.08s; margin-top: 16px'"
                x-html="currentTask.image"></div>
         </template>
         <template x-if="!currentTask.svg && currentTask.image && !String(currentTask.image).trim().startsWith('<svg')">
-          <div class="q-svg-wrap q-anim" :class="{ 'q-svg-wide': String(currentTask.task_number) === '11' }" :style="'animation-delay: 0.08s; margin-top: 16px'">
+          <div class="q-svg-wrap q-anim" :class="{ 'q-svg-wide': String(displayTaskNumber(currentTask)) === '11' }" :style="'animation-delay: 0.08s; margin-top: 16px'">
             <img :src="resolveTaskImageSrc(currentTask)" alt="task image" style="max-width:100%; height:auto; display:block; margin:0 auto; border-radius:12px;">
           </div>
         </template>
@@ -731,7 +731,7 @@
               <div class="test-options">
                 <template x-for="(opt, oi) in normalizedOptions(currentTask)" :key="oi">
                   <div class="test-option"
-                       :class="{ 'selected': answers[currentTask.task_number] === optionAnswerValue(opt, oi) }"
+                       :class="{ 'selected': answers[taskKey(currentTask)] === optionAnswerValue(opt, oi) }"
                        @click="selectOption(opt, oi)">
                     <div class="test-option-letter" x-text="['А','Б','В','Г','Д','Е'][oi] || (oi+1)"></div>
                     <div class="test-option-text" x-html="optionHtml(opt)"></div>
@@ -764,7 +764,7 @@
                      inputmode="text"
                      placeholder="Например: 123"
                      autocomplete="off"
-                     x-model="answers[currentTask.task_number]"
+                     x-model="answers[taskKey(currentTask)]"
                      x-ref="answerInput">
               <div class="answer-hint" x-text="normalizedOptions(currentTask).length > 0 ? 'Введи цифры по порядку' : 'Введи буквы по порядку'"></div>
             </div>
@@ -779,21 +779,21 @@
                      inputmode="text"
                      placeholder="Ответ"
                      autocomplete="off"
-                     x-model="answers[currentTask.task_number]"
+                     x-model="answers[taskKey(currentTask)]"
                      x-ref="answerInput">
               <div class="answer-hint">Введи число и переходи дальше</div>
             </div>
           </template>
 
           {{-- Photo upload for Part 2 tasks --}}
-          <template x-if="currentTask && currentTask.task_number >= 20">
+          <template x-if="currentTask && displayTaskNumber(currentTask) >= 20">
             <div class="photo-upload-area">
               <input type="file" accept="image/*" capture="environment"
                      x-ref="photoInput" style="display:none"
                      @change="uploadPhoto($event)">
               <button type="button" class="photo-btn" @click="$refs.photoInput.click()"
-                      :class="{ 'has-photo': photos[currentTask.task_number] }">
-                <span x-text="photos[currentTask.task_number] ? '📷 Фото прикреплено' : '📷 Сфотографировать решение'"></span>
+                      :class="{ 'has-photo': photos[taskKey(currentTask)] }">
+                <span x-text="photos[taskKey(currentTask)] ? '📷 Фото прикреплено' : '📷 Сфотографировать решение'"></span>
               </button>
               <div class="photo-hint">Необязательно, но поможет при проверке</div>
             </div>
@@ -1023,6 +1023,16 @@
       },
 
       // Topic name helper
+      taskKey(task) {
+        const raw = Number(task?.attempt_task_number ?? task?.task_number ?? 0);
+        return Number.isFinite(raw) && raw > 0 ? raw : 0;
+      },
+
+      displayTaskNumber(task) {
+        const raw = Number(task?.display_task_number ?? task?.task_number ?? this.taskKey(task));
+        return Number.isFinite(raw) && raw > 0 ? raw : this.taskKey(task);
+      },
+
       taskLocator(t) {
         const tid = String(t?.topic_id ?? 'x').padStart(2, '0');
         const b = t?.block_number ?? 'x';
@@ -1096,7 +1106,7 @@
 
       // Answer handling
       selectOption(opt, idx) {
-        const tn = this.currentTask.task_number;
+        const tn = this.taskKey(this.currentTask);
         this.answers[tn] = this.optionAnswerValue(opt, idx);
       },
 
@@ -1137,7 +1147,7 @@
       async uploadPhoto(event) {
         const file = event.target.files?.[0];
         if (!file) return;
-        const tn = this.currentTask.task_number;
+        const tn = this.taskKey(this.currentTask);
         const formData = new FormData();
         formData.append('photo', file);
         try {

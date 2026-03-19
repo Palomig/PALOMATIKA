@@ -243,8 +243,8 @@ class OgeVariantPoolService
                     }
                 }
 
-                $needAlg = max(0, 3 - $currentAlg);
-                $needGeo = max(0, 2 - $currentGeo);
+                $needAlg = max(0, 4 - $currentAlg);
+                $needGeo = max(0, 3 - $currentGeo);
 
                 $algFallback = $fallbackTopicIds['alg'] ?? [];
                 $geoFallback = $fallbackTopicIds['geo'] ?? [];
