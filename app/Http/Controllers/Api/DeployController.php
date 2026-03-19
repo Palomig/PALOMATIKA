@@ -47,6 +47,7 @@ class DeployController extends Controller
         'premium:gift',
         'user:set-referrer',
         'user:delete-telegram',
+        'qa:setup-users',
     ];
 
     /**
