@@ -15,17 +15,20 @@ class MiniAppTaskCanonicalizer
         $task['text'] = $task['text'] ?? ($inner['text'] ?? null);
         $task['expression'] = $task['expression'] ?? ($inner['expression'] ?? null);
 
-        if (($task['expression'] === null || $task['expression'] === '') && isset($inner['point_value'])) {
-            $task['expression'] = (string) $inner['point_value'];
-        }
-        if (($task['expression'] === null || $task['expression'] === '') && isset($inner['target'])) {
-            $task['expression'] = (string) $inner['target'];
-        }
-        if (($task['expression'] === null || $task['expression'] === '') && isset($task['point_value'])) {
-            $task['expression'] = (string) $task['point_value'];
-        }
-        if (($task['expression'] === null || $task['expression'] === '') && isset($task['target'])) {
-            $task['expression'] = (string) $task['target'];
+        // point_value/target are internal values (e.g. coordinate on number line),
+        // NOT display expressions. Only use them if there is no SVG/image.
+        $hasSvgOrImage = !empty($inner['svg'] ?? ($task['svg'] ?? null))
+            || !empty($inner['image'] ?? ($task['image'] ?? null));
+
+        if (!$hasSvgOrImage && ($task['expression'] === null || $task['expression'] === '')) {
+            $task['expression'] = (string) ($inner['point_value']
+                ?? $inner['target']
+                ?? $task['point_value']
+                ?? $task['target']
+                ?? '');
+            if ($task['expression'] === '') {
+                $task['expression'] = null;
+            }
         }
 
         // Topic 7 structured types: build expression from left/right or segment fields.

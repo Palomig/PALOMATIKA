@@ -371,19 +371,20 @@ class OgeVariantPoolService
         $normalized['text'] = $inner['text'] ?? ($task['text'] ?? null);
         $normalized['expression'] = $inner['expression'] ?? ($task['expression'] ?? null);
 
-        // Fallback for topic-7 coordinate tasks where explicit expression may be missing,
-        // but scalar target value exists in structured fields.
-        if (($normalized['expression'] === null || $normalized['expression'] === '') && isset($inner['point_value'])) {
-            $normalized['expression'] = (string) $inner['point_value'];
-        }
-        if (($normalized['expression'] === null || $normalized['expression'] === '') && isset($inner['target'])) {
-            $normalized['expression'] = (string) $inner['target'];
-        }
-        if (($normalized['expression'] === null || $normalized['expression'] === '') && isset($task['point_value'])) {
-            $normalized['expression'] = (string) $task['point_value'];
-        }
-        if (($normalized['expression'] === null || $normalized['expression'] === '') && isset($task['target'])) {
-            $normalized['expression'] = (string) $task['target'];
+        // point_value/target are internal values (e.g. coordinate on number line),
+        // NOT display expressions. Only use them if there is no SVG/image to show.
+        $hasSvgOrImage = !empty($inner['svg'] ?? ($task['svg'] ?? null))
+            || !empty($inner['image'] ?? ($task['image'] ?? null));
+
+        if (!$hasSvgOrImage && ($normalized['expression'] === null || $normalized['expression'] === '')) {
+            $normalized['expression'] = (string) ($inner['point_value']
+                ?? $inner['target']
+                ?? $task['point_value']
+                ?? $task['target']
+                ?? '');
+            if ($normalized['expression'] === '') {
+                $normalized['expression'] = null;
+            }
         }
 
         // Topic 7 structured types: build expression from left/right or segment fields.
