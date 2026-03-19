@@ -49,6 +49,7 @@ class DeployController extends Controller
         'user:delete-telegram',
         'qa:setup-users',
         'variants:normalize-miniapp',
+        'variants:flush-miniapp',
     ];
 
     /**
