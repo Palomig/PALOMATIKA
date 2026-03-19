@@ -514,19 +514,19 @@ class MiniAppStudentController extends Controller
         // Sanitize tasks once on server before rendering client payload.
         $tasks = array_map(fn ($t) => is_array($t) ? $this->taskSanitizer->sanitize($t) : $t, $tasks);
 
-        // Keep mini-test tasks ordered by exam number (6, 8, 9, 10, ...)
+        $tasks = $this->normalizeAttemptTasksForMiniApp($variant, $tasks);
+
+        // Sort by display_task_number (exam number) after normalization has set it.
         if (is_array($tasks)) {
             usort($tasks, function ($a, $b) {
-                $an = (int) (($a['task_number'] ?? 0));
-                $bn = (int) (($b['task_number'] ?? 0));
+                $an = (int) ($a['display_task_number'] ?? 0);
+                $bn = (int) ($b['display_task_number'] ?? 0);
                 return $an <=> $bn;
             });
         }
 
         // Get existing answers for this attempt
-        $existingAnswers = $attempt->answers()
-            ->pluck('current_answer', 'task_number')
-            ->toArray();
+        $existingAnswers = $this->resolveExistingAttemptAnswersForMiniApp($attempt, $tasks);
 
         $mode = $variant->mode ?? 'full';
         $title = $variant->title ?? 'Вариант ОГЭ';
@@ -539,6 +539,83 @@ class MiniAppStudentController extends Controller
             'title' => $title,
             'battleMode' => $request->boolean('battle'),
         ]);
+    }
+
+    /**
+     * Assign two non-overlapping numbering fields to every task:
+     *
+     *  - display_task_number — the exam number shown in the UI (e.g. 6, 8, 12).
+     *  - attempt_task_number — a stable 1..N key used to store/match answers
+     *    on both client (JS `taskKey()`) and server (scoring). For mini modes
+     *    this is always sequential; for full variants it equals task_number.
+     *
+     * @param array<int, array<string, mixed>> $tasks
+     * @return array<int, array<string, mixed>>
+     */
+    private function normalizeAttemptTasksForMiniApp(OgeVariant $variant, array $tasks): array
+    {
+        $useSequentialAttemptNumbers = str_starts_with((string) ($variant->mode ?? ''), 'mini_');
+
+        foreach ($tasks as $index => $task) {
+            if (!is_array($task)) {
+                continue;
+            }
+
+            if (!isset($task['display_task_number'])) {
+                $task['display_task_number'] = (int) ($task['task_number']
+                    ?? $task['zadanie_number']
+                    ?? ($index + 1));
+            }
+
+            if ($useSequentialAttemptNumbers && !isset($task['attempt_task_number'])) {
+                $task['attempt_task_number'] = $index + 1;
+            }
+
+            $tasks[$index] = $task;
+        }
+
+        return $tasks;
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $tasks
+     * @return array<int, string>
+     */
+    private function resolveExistingAttemptAnswersForMiniApp(OgeAttempt $attempt, array $tasks): array
+    {
+        $existingAnswers = $attempt->answers()
+            ->pluck('current_answer', 'task_number')
+            ->toArray();
+
+        if (empty($existingAnswers)) {
+            return [];
+        }
+
+        $mapped = [];
+        foreach ($tasks as $index => $task) {
+            if (!is_array($task)) {
+                continue;
+            }
+
+            $attemptTaskNumber = (int) ($task['attempt_task_number']
+                ?? $task['task_number']
+                ?? ($index + 1));
+            $displayTaskNumber = (int) ($task['display_task_number']
+                ?? $task['task_number']
+                ?? $task['zadanie_number']
+                ?? $attemptTaskNumber);
+
+            if (array_key_exists($attemptTaskNumber, $existingAnswers)) {
+                $mapped[$attemptTaskNumber] = $existingAnswers[$attemptTaskNumber];
+                continue;
+            }
+
+            if (array_key_exists($displayTaskNumber, $existingAnswers)) {
+                $mapped[$attemptTaskNumber] = $existingAnswers[$displayTaskNumber];
+            }
+        }
+
+        return $mapped;
     }
 
     /**

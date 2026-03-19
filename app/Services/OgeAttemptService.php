@@ -683,6 +683,7 @@ class OgeAttemptService
         } else {
             $configuredTasks = $attempt->variant?->config_json['tasks'] ?? null;
             if (is_array($configuredTasks) && !empty($configuredTasks)) {
+                $configuredTasks = $this->normalizeConfiguredTasksForAttempt($attempt, $configuredTasks);
                 $tasks = $configuredTasks;
             } else {
                 $selected = $attempt->variant?->config_json['zadaniya'] ?? null;
@@ -727,7 +728,10 @@ class OgeAttemptService
 
         $configuredTasks = $attempt->variant?->config_json['tasks'] ?? null;
         if (is_array($configuredTasks) && !empty($configuredTasks)) {
-            return $this->buildMapsFromTaskArray($configuredTasks, 6);
+            return $this->buildMapsFromTaskArray(
+                $this->normalizeConfiguredTasksForAttempt($attempt, $configuredTasks),
+                6
+            );
         }
 
         $selected = $attempt->variant?->config_json['zadaniya'] ?? null;
@@ -793,6 +797,51 @@ class OgeAttemptService
         }
 
         return [$answerMap, $detailMap];
+    }
+
+    /**
+     * Legacy mini-app pool variants often stored only exam numbers (6, 8, 15, ...)
+     * and omitted stable attempt_task_number values. For mini modes we normalize them
+     * to 1..N so submit/status/scoring all address the same slots.
+     *
+     * @param array<int, array<string, mixed>> $tasks
+     * @return array<int, array<string, mixed>>
+     */
+    private function normalizeConfiguredTasksForAttempt(OgeAttempt $attempt, array $tasks): array
+    {
+        if (!$this->shouldUseSequentialAttemptNumbers($attempt)) {
+            return $tasks;
+        }
+
+        foreach ($tasks as $index => $taskData) {
+            if (!is_array($taskData)) {
+                continue;
+            }
+
+            $displayTaskNumber = (int) ($taskData['display_task_number']
+                ?? $taskData['task_number']
+                ?? $taskData['zadanie_number']
+                ?? ($index + 1));
+
+            if (($taskData['attempt_task_number'] ?? null) === null) {
+                $taskData['attempt_task_number'] = $index + 1;
+            }
+
+            if (($taskData['display_task_number'] ?? null) === null) {
+                $taskData['display_task_number'] = $displayTaskNumber;
+            }
+
+            $tasks[$index] = $taskData;
+        }
+
+        return $tasks;
+    }
+
+    private function shouldUseSequentialAttemptNumbers(OgeAttempt $attempt): bool
+    {
+        $mode = (string) ($attempt->variant?->mode ?? '');
+
+        return str_starts_with($mode, 'mini_');
     }
 
     /**
@@ -1078,7 +1127,25 @@ class OgeAttemptService
                 }
             }
         } else {
-            $numbers = range(6, 19);
+            $configuredTasks = $attempt->variant?->config_json['tasks'] ?? [];
+            if (is_array($configuredTasks) && !empty($configuredTasks)) {
+                $configuredTasks = $this->normalizeConfiguredTasksForAttempt($attempt, $configuredTasks);
+                foreach ($configuredTasks as $index => $taskData) {
+                    if (!is_array($taskData)) {
+                        continue;
+                    }
+
+                    $n = (int) ($taskData['attempt_task_number']
+                        ?? $taskData['task_number']
+                        ?? $taskData['test_number']
+                        ?? ($index + 1));
+                    if ($n >= 1 && $n <= 255) {
+                        $numbers[] = $n;
+                    }
+                }
+            } else {
+                $numbers = range(6, 19);
+            }
         }
 
         foreach ([$attempt->answers, $attempt->taskTimings, $attempt->scorings] as $collection) {
