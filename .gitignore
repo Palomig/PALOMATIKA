@@ -36,3 +36,4 @@ yarn-error.log
 /tmp_exports/
 /public/debug-*.php
 /scripts/__pycache__/
+public/qa-report.html
