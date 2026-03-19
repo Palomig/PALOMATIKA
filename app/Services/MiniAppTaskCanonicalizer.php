@@ -264,18 +264,18 @@ class MiniAppTaskCanonicalizer
 
             if (is_array($option)) {
                 $id = isset($option['id']) && $option['id'] !== '' ? (string) $option['id'] : $defaultId;
-                $label = (string) ($option['label'] ?? $option['text'] ?? $option['value'] ?? '');
+                $label = $this->latexToUnicode((string) ($option['label'] ?? $option['text'] ?? $option['value'] ?? ''));
 
                 $normalized[] = array_merge($option, [
                     'id' => $id,
                     'label' => $label,
-                    'text' => (string) ($option['text'] ?? $label),
+                    'text' => $this->latexToUnicode((string) ($option['text'] ?? $label)),
                     'value' => (string) ($option['value'] ?? $label),
                 ]);
                 continue;
             }
 
-            $label = (string) $option;
+            $label = $this->latexToUnicode((string) $option);
             $normalized[] = [
                 'id' => $defaultId,
                 'label' => $label,
@@ -305,6 +305,23 @@ class MiniAppTaskCanonicalizer
         }
 
         return $task;
+    }
+
+    /**
+     * Convert common LaTeX constructs to Unicode for plain-text display.
+     */
+    private function latexToUnicode(string $text): string
+    {
+        // \sqrt{X} → √X
+        $text = preg_replace('/\\\\sqrt\{([^}]+)\}/', '√$1', $text);
+        // \frac{A}{B} → A/B
+        $text = preg_replace('/\\\\frac\{([^}]+)\}\{([^}]+)\}/', '$1/$2', $text);
+        // \pi → π, \infty → ∞
+        $text = str_replace(['\\pi', '\\infty', '\\cdot', '\\times', '\\leq', '\\geq', '\\neq'], ['π', '∞', '·', '×', '≤', '≥', '≠'], $text);
+        // Clean remaining braces from simple expressions: {,} → ,
+        $text = str_replace(['{', '}'], '', $text);
+
+        return $text;
     }
 
     private function optionIdByIndex(int $index): string
