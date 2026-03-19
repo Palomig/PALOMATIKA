@@ -12,7 +12,7 @@ class QaSetupUsersCommand extends Command
     protected $description = 'Create or verify QA test users (student, teacher, admin)';
 
     private const USERS = [
-        ['name' => 'QA Student', 'email' => 'qa-student@palomatika.ru', 'role' => 'student', 'grade' => '9К'],
+        ['name' => 'QA Student', 'email' => 'qa-student@palomatika.ru', 'role' => 'student', 'grade' => 9],
         ['name' => 'QA Teacher', 'email' => 'qa-teacher@palomatika.ru', 'role' => 'teacher', 'grade' => null],
         ['name' => 'QA Admin',   'email' => 'qa-admin@palomatika.ru',   'role' => 'admin',   'grade' => null],
     ];
