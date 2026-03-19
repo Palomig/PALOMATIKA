@@ -728,15 +728,6 @@
           <template x-if="currentTask.type !== 'matching' && currentTask.type !== 'matching_signs' && normalizedOptions(currentTask).length > 0">
             <div>
               <div class="answer-label">Выбери ответ</div>
-              {{-- DEBUG: show raw option data --}}
-              <div style="background:#1a1a2e;border:1px solid #f00;padding:8px;margin-bottom:8px;font-size:11px;color:#0f0;word-break:break-all;border-radius:8px">
-                <template x-for="(opt, oi) in normalizedOptions(currentTask)" :key="'dbg'+oi">
-                  <div>
-                    <span x-text="'opt['+oi+']: '+ JSON.stringify(opt?.label)"></span>
-                    <span x-text="' → html=' + optionHtml(opt).substring(0,60)"></span>
-                  </div>
-                </template>
-              </div>
               <div class="test-options">
                 <template x-for="(opt, oi) in normalizedOptions(currentTask)" :key="oi">
                   <div class="test-option"
@@ -1016,15 +1007,7 @@
         }
         const raw = String(opt?.label ?? opt?.text ?? opt ?? '').trim();
         if (!raw) return '';
-        const looksLikeLatex = /\\[a-zA-Z]+|\^|_|\{/.test(raw);
-        console.log('[optionHtml]', { raw, looksLikeLatex, katexLoaded: typeof katex !== 'undefined' });
-        if (looksLikeLatex && typeof katex !== 'undefined') {
-          try {
-            const rendered = katex.renderToString(raw, { throwOnError: false, trust: true });
-            console.log('[optionHtml] rendered:', rendered.substring(0, 80));
-            return rendered;
-          } catch (e) { console.warn('[optionHtml] KaTeX error:', e); }
-        }
+        // Server pre-converts LaTeX to Unicode (√, π, etc.) so just return as-is.
         return raw;
       },
 
