@@ -1008,10 +1008,13 @@
         const raw = String(opt?.label ?? opt?.text ?? opt ?? '').trim();
         if (!raw) return '';
         const looksLikeLatex = /\\[a-zA-Z]+|\^|_|\{/.test(raw);
+        console.log('[optionHtml]', { raw, looksLikeLatex, katexLoaded: typeof katex !== 'undefined' });
         if (looksLikeLatex && typeof katex !== 'undefined') {
           try {
-            return katex.renderToString(raw, { throwOnError: false, trust: true });
-          } catch (e) { /* fall through */ }
+            const rendered = katex.renderToString(raw, { throwOnError: false, trust: true });
+            console.log('[optionHtml] rendered:', rendered.substring(0, 80));
+            return rendered;
+          } catch (e) { console.warn('[optionHtml] KaTeX error:', e); }
         }
         return raw;
       },
