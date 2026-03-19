@@ -48,6 +48,7 @@ class DeployController extends Controller
         'user:set-referrer',
         'user:delete-telegram',
         'qa:setup-users',
+        'variants:normalize-miniapp',
     ];
 
     /**
