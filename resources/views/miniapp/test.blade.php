@@ -1007,10 +1007,11 @@
         }
         const raw = String(opt?.label ?? opt?.text ?? opt ?? '').trim();
         if (!raw) return '';
-        const hasMathDelimiters = /\$[^$]+\$|\\\([^)]*\\\)|\\\[[\s\S]*?\\\]/.test(raw);
-        const looksLikeLatex = /\\[a-zA-Z]+|\^|_/.test(raw);
-        if (!hasMathDelimiters && looksLikeLatex) {
-          return `$${raw}$`;
+        const looksLikeLatex = /\\[a-zA-Z]+|\^|_|\{/.test(raw);
+        if (looksLikeLatex && typeof katex !== 'undefined') {
+          try {
+            return katex.renderToString(raw, { throwOnError: false, trust: true });
+          } catch (e) { /* fall through */ }
         }
         return raw;
       },
