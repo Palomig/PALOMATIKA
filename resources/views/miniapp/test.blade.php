@@ -934,9 +934,11 @@
         // Scroll active dot into view on init
         this.$nextTick(() => this.scrollActiveDot());
 
-        // Render initial KaTeX
+        // Render initial KaTeX (double-tick for x-for + x-html in options)
         this.$nextTick(() => {
-          document.fonts.ready.then(() => this.renderTaskMath());
+          this.$nextTick(() => {
+            document.fonts.ready.then(() => this.renderTaskMath());
+          });
           // Fallback re-render after 1 second
           setTimeout(() => this.renderTaskMath(), 1000);
         });
@@ -1062,6 +1064,8 @@
           this.renderTaskMath();
           this.focusInput();
           this.$refs.questionArea?.scrollTo({ top: 0 });
+          // Second pass: x-for + x-html in options may need an extra tick.
+          this.$nextTick(() => this.renderTaskMath());
         });
       },
 
