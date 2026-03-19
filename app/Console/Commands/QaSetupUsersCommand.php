@@ -25,9 +25,10 @@ class QaSetupUsersCommand extends Command
             $existing = User::where('email', $data['email'])->first();
 
             if ($existing) {
-                // Ensure role and password are correct
+                // Ensure role, password and onboarding are correct
                 $existing->role = $data['role'];
                 $existing->password = Hash::make(self::PASSWORD);
+                $existing->onboarding_completed_at = $existing->onboarding_completed_at ?? now();
                 $existing->save();
                 $this->line("EXISTS: {$data['email']} (id={$existing->id}, role={$data['role']}) — password reset");
                 continue;
@@ -39,6 +40,7 @@ class QaSetupUsersCommand extends Command
                 'password' => Hash::make(self::PASSWORD),
                 'role'     => $data['role'],
                 'grade'    => $data['grade'],
+                'onboarding_completed_at' => now(),
             ]);
 
             $this->line("CREATED: {$data['email']} (id={$user->id}, role={$data['role']})");
