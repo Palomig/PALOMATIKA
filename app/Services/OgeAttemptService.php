@@ -579,6 +579,31 @@ class OgeAttemptService
 
         $config = is_array($variant->config_json ?? null) ? $variant->config_json : [];
         if (is_array($config['tasks'] ?? null) && !empty($config['tasks'])) {
+            $normalizedTasks = [];
+            $changed = false;
+            $canonicalizer = $this->taskCanonicalizer ?? app(MiniAppTaskCanonicalizer::class);
+
+            foreach ($config['tasks'] as $task) {
+                if (!is_array($task)) {
+                    $normalizedTasks[] = $task;
+                    continue;
+                }
+
+                $normalizedTask = $canonicalizer->normalizeForUi($task);
+                $normalizedTasks[] = $normalizedTask;
+                if ($normalizedTask !== $task) {
+                    $changed = true;
+                }
+            }
+
+            if ($changed) {
+                $config['tasks'] = $normalizedTasks;
+                $variant->forceFill([
+                    'config_json' => $config,
+                ])->save();
+                $variant->refresh();
+            }
+
             return;
         }
 
@@ -809,27 +834,30 @@ class OgeAttemptService
      */
     private function normalizeConfiguredTasksForAttempt(OgeAttempt $attempt, array $tasks): array
     {
-        if (!$this->shouldUseSequentialAttemptNumbers($attempt)) {
-            return $tasks;
-        }
+        $useSequential = $this->shouldUseSequentialAttemptNumbers($attempt);
+        $canonicalizer = $this->taskCanonicalizer ?? app(MiniAppTaskCanonicalizer::class);
 
         foreach ($tasks as $index => $taskData) {
             if (!is_array($taskData)) {
                 continue;
             }
 
-            $displayTaskNumber = (int) ($taskData['display_task_number']
-                ?? $taskData['task_number']
-                ?? $taskData['zadanie_number']
-                ?? ($index + 1));
+            if ($useSequential) {
+                $displayTaskNumber = (int) ($taskData['display_task_number']
+                    ?? $taskData['task_number']
+                    ?? $taskData['zadanie_number']
+                    ?? ($index + 1));
 
-            if (($taskData['attempt_task_number'] ?? null) === null) {
-                $taskData['attempt_task_number'] = $index + 1;
+                if (($taskData['attempt_task_number'] ?? null) === null) {
+                    $taskData['attempt_task_number'] = $index + 1;
+                }
+
+                if (($taskData['display_task_number'] ?? null) === null) {
+                    $taskData['display_task_number'] = $displayTaskNumber;
+                }
             }
 
-            if (($taskData['display_task_number'] ?? null) === null) {
-                $taskData['display_task_number'] = $displayTaskNumber;
-            }
+            $taskData = $canonicalizer->normalizeForUi($taskData);
 
             $tasks[$index] = $taskData;
         }

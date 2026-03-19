@@ -10,6 +10,8 @@ class MiniAppTaskCanonicalizer
     {
         $inner = is_array($task['task'] ?? null) ? $task['task'] : [];
 
+        $task = $this->ensureSelectedStatements($task, $inner);
+
         $task['text'] = $task['text'] ?? ($inner['text'] ?? null);
         $task['expression'] = $task['expression'] ?? ($inner['expression'] ?? null);
 
@@ -73,6 +75,111 @@ class MiniAppTaskCanonicalizer
         }
 
         return $task;
+    }
+
+    private function ensureSelectedStatements(array $task, array $inner): array
+    {
+        $type = (string) ($task['type'] ?? $inner['type'] ?? '');
+        if ($type !== 'statements') {
+            return $task;
+        }
+
+        $selected = $task['selected_statements'] ?? null;
+        if (is_array($selected) && !empty($selected)) {
+            $task['selected_statements'] = $this->assignDisplayNumbers($selected);
+            $task['statements'] = $task['selected_statements'];
+            return $task;
+        }
+
+        $raw = $task['statements'] ?? $inner['statements'] ?? null;
+        if (!is_array($raw) || empty($raw)) {
+            return $task;
+        }
+
+        $instruction = (string) ($task['instruction'] ?? $inner['instruction'] ?? '');
+        $task['selected_statements'] = $this->selectStatementsForVariant($raw, $instruction);
+        $task['statements'] = $task['selected_statements'];
+
+        return $task;
+    }
+
+    /**
+     * Deterministically reduce topic-19 style statements to the OGE display set.
+     * Default rule: 2 true + 1 false. "Какое ..." means 1 true + 2 false.
+     *
+     * @param array<int, mixed> $statements
+     * @return array<int, array<string, mixed>>
+     */
+    private function selectStatementsForVariant(array $statements, string $instruction): array
+    {
+        if (count($statements) <= 3) {
+            return $this->assignDisplayNumbers($statements);
+        }
+
+        $normalized = [];
+        foreach (array_values($statements) as $index => $statement) {
+            if (is_array($statement)) {
+                $normalized[] = $statement + ['_original_index' => $index];
+            } else {
+                $normalized[] = [
+                    'text' => (string) $statement,
+                    'is_true' => false,
+                    '_original_index' => $index,
+                ];
+            }
+        }
+
+        $lower = mb_strtolower(trim($instruction));
+        $desiredTrueCount = str_starts_with($lower, 'какое') ? 1 : 2;
+        $desiredFalseCount = 3 - $desiredTrueCount;
+
+        $trueStatements = array_values(array_filter($normalized, fn ($s) => !empty($s['is_true'])));
+        $falseStatements = array_values(array_filter($normalized, fn ($s) => empty($s['is_true'])));
+
+        if (count($trueStatements) < $desiredTrueCount || count($falseStatements) < $desiredFalseCount) {
+            if ($desiredTrueCount === 2 && count($trueStatements) >= 1 && count($falseStatements) >= 2) {
+                $desiredTrueCount = 1;
+                $desiredFalseCount = 2;
+            } elseif ($desiredTrueCount === 1 && count($trueStatements) >= 2 && count($falseStatements) >= 1) {
+                $desiredTrueCount = 2;
+                $desiredFalseCount = 1;
+            } else {
+                return $this->assignDisplayNumbers(array_slice($normalized, 0, 3));
+            }
+        }
+
+        $selected = array_merge(
+            array_slice($trueStatements, 0, $desiredTrueCount),
+            array_slice($falseStatements, 0, $desiredFalseCount)
+        );
+
+        usort($selected, fn ($a, $b) => (int) ($a['_original_index'] ?? 0) <=> (int) ($b['_original_index'] ?? 0));
+
+        return $this->assignDisplayNumbers($selected);
+    }
+
+    /**
+     * @param array<int, mixed> $statements
+     * @return array<int, array<string, mixed>>
+     */
+    private function assignDisplayNumbers(array $statements): array
+    {
+        $selected = [];
+
+        foreach (array_values($statements) as $index => $statement) {
+            if (!is_array($statement)) {
+                $statement = [
+                    'text' => (string) $statement,
+                    'is_true' => false,
+                ];
+            }
+
+            $statement['display_number'] = $index + 1;
+            unset($statement['_original_index']);
+            $selected[] = $statement;
+        }
+
+        return $selected;
     }
 
     private function resolveCanonicalAnswer(array $task, array $inner): array

@@ -6,6 +6,7 @@ use App\Models\OgeAttempt;
 use App\Models\OgeAttemptAnswer;
 use App\Models\OgeVariant;
 use App\Models\User;
+use App\Services\OgeAttemptService;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
@@ -183,7 +184,10 @@ class MiniAppAttemptFlowTest extends TestCase
 
     public function test_mini_attempt_submit_and_status_use_sequential_attempt_numbers(): void
     {
-        $student = User::factory()->create(['role' => 'student']);
+        $student = User::factory()->create([
+            'role' => 'student',
+            'onboarding_completed_at' => now(),
+        ]);
 
         $variant = OgeVariant::create([
             'hash' => 'minist01',
@@ -199,13 +203,7 @@ class MiniAppAttemptFlowTest extends TestCase
             ],
         ]);
 
-        $attempt = OgeAttempt::create([
-            'variant_id' => $variant->id,
-            'student_id' => $student->id,
-            'status' => 'active',
-            'started_at' => now()->subMinutes(3),
-            'last_seen_at' => now(),
-        ]);
+        [, $attempt] = app(OgeAttemptService::class)->startAttempt($student, $variant->hash);
 
         $this->actingAs($student)
             ->postJson("/api/oge/attempts/{$attempt->id}/submit", [
@@ -227,5 +225,63 @@ class MiniAppAttemptFlowTest extends TestCase
 
         $this->assertSame([1, 2, 3], OgeAttemptAnswer::where('attempt_id', $attempt->id)->orderBy('task_number')->pluck('task_number')->all());
         $this->assertSame([1, 2, 3], collect($statusResponse->json('tasks'))->pluck('task_number')->all());
+    }
+
+    public function test_full_miniapp_attempt_trims_legacy_topic_19_payload_to_three_statements_and_scores_against_it(): void
+    {
+        $student = User::factory()->create([
+            'role' => 'student',
+            'onboarding_completed_at' => now(),
+        ]);
+
+        $variant = OgeVariant::create([
+            'hash' => 'full1901',
+            'title' => 'Полный вариант ОГЭ',
+            'source' => OgeVariant::SOURCE_MINIAPP,
+            'mode' => OgeVariant::MODE_FULL,
+            'config_json' => [
+                'tasks' => [
+                    [
+                        'task_number' => 19,
+                        'topic_id' => '19',
+                        'type' => 'statements',
+                        'instruction' => 'Какие из данных утверждений верны?',
+                        'statements' => [
+                            ['text' => 'Утверждение 1', 'is_true' => true],
+                            ['text' => 'Утверждение 2', 'is_true' => false],
+                            ['text' => 'Утверждение 3', 'is_true' => true],
+                            ['text' => 'Утверждение 4', 'is_true' => false],
+                            ['text' => 'Утверждение 5', 'is_true' => true],
+                            ['text' => 'Утверждение 6', 'is_true' => false],
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $student->id,
+            'status' => 'active',
+            'started_at' => now()->subMinutes(3),
+            'last_seen_at' => now(),
+        ]);
+
+        $page = $this->actingAs($student)
+            ->get("/tg/test/{$attempt->id}")
+            ->assertOk();
+
+        $tasks = $page->viewData('tasks');
+        $this->assertIsArray($tasks);
+        $this->assertCount(1, $tasks);
+        $this->assertSame(
+            ['Утверждение 1', 'Утверждение 2', 'Утверждение 3'],
+            array_column($tasks[0]['selected_statements'] ?? [], 'text')
+        );
+        $this->assertSame(
+            ['Утверждение 1', 'Утверждение 2', 'Утверждение 3'],
+            array_column($tasks[0]['statements'] ?? [], 'text')
+        );
+
     }
 }
