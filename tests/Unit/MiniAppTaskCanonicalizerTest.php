@@ -54,6 +54,28 @@ class MiniAppTaskCanonicalizerTest extends TestCase
         $this->assertSame('13', $norm['canonical_answer']);
     }
 
+    public function test_statements_task_derives_three_statement_selection_from_legacy_payload(): void
+    {
+        $svc = new MiniAppTaskCanonicalizer();
+        $task = [
+            'type' => 'statements',
+            'instruction' => 'Какие из данных утверждений верны?',
+            'statements' => [
+                ['text' => 'A', 'is_true' => true],
+                ['text' => 'B', 'is_true' => false],
+                ['text' => 'C', 'is_true' => true],
+                ['text' => 'D', 'is_true' => false],
+                ['text' => 'E', 'is_true' => true],
+            ],
+        ];
+
+        $norm = $svc->normalizeForUi($task);
+
+        $this->assertCount(3, $norm['selected_statements']);
+        $this->assertSame(['A', 'B', 'C'], array_column($norm['selected_statements'], 'text'));
+        $this->assertSame('13', $norm['canonical_answer']);
+    }
+
     public function test_numeric_text_answer_kind_for_non_index_value(): void
     {
         $svc = new MiniAppTaskCanonicalizer();
