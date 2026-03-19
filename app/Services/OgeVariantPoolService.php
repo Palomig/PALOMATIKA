@@ -386,6 +386,19 @@ class OgeVariantPoolService
             $normalized['expression'] = (string) $task['target'];
         }
 
+        // Topic 7 structured types: build expression from left/right or segment fields.
+        if (($normalized['expression'] === null || $normalized['expression'] === '')) {
+            $left = $inner['left'] ?? ($task['left'] ?? null);
+            $right = $inner['right'] ?? ($task['right'] ?? null);
+            $segment = $inner['segment'] ?? ($task['segment'] ?? null);
+
+            if ($left !== null && $right !== null) {
+                $normalized['expression'] = $left . ' \\text{ и } ' . $right;
+            } elseif ($segment !== null) {
+                $normalized['expression'] = (string) $segment;
+            }
+        }
+
         $normalized['svg'] = $inner['svg'] ?? ($task['svg'] ?? null);
         $normalized['image'] = $inner['image'] ?? ($task['image'] ?? null);
 
