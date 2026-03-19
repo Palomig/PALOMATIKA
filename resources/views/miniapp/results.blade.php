@@ -499,7 +499,7 @@
 
   {{-- RETRY --}}
   <a href="{{ url('/tg/dashboard') }}" class="btn-retry anim-up" style="animation-delay:0.4s">
-    Пройти следующий вариант
+    Вернуться на главную
   </a>
 
 </div>
