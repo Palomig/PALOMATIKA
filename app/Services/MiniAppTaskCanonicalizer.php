@@ -28,6 +28,19 @@ class MiniAppTaskCanonicalizer
             $task['expression'] = (string) $task['target'];
         }
 
+        // Topic 7 structured types: build expression from left/right or segment fields.
+        if (($task['expression'] === null || $task['expression'] === '')) {
+            $left = $inner['left'] ?? ($task['left'] ?? null);
+            $right = $inner['right'] ?? ($task['right'] ?? null);
+            $segment = $inner['segment'] ?? ($task['segment'] ?? null);
+
+            if ($left !== null && $right !== null) {
+                $task['expression'] = $left . ' \\text{ и } ' . $right;
+            } elseif ($segment !== null) {
+                $task['expression'] = (string) $segment;
+            }
+        }
+
         $task['svg'] = $task['svg'] ?? ($inner['svg'] ?? null);
         $task['image'] = $task['image'] ?? ($inner['image'] ?? null);
         $task['options'] = $task['options'] ?? ($inner['options'] ?? null);
