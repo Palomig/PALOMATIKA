@@ -731,7 +731,10 @@
               {{-- DEBUG: show raw option data --}}
               <div style="background:#1a1a2e;border:1px solid #f00;padding:8px;margin-bottom:8px;font-size:11px;color:#0f0;word-break:break-all;border-radius:8px">
                 <template x-for="(opt, oi) in normalizedOptions(currentTask)" :key="'dbg'+oi">
-                  <div x-text="'opt['+oi+']: label=' + JSON.stringify(opt?.label) + ' | latex=' + /\\\\[a-zA-Z]+/.test(String(opt?.label??'')) + ' | katex=' + (typeof katex !== 'undefined')"></div>
+                  <div>
+                    <span x-text="'opt['+oi+']: '+ JSON.stringify(opt?.label)"></span>
+                    <span x-text="' → html=' + optionHtml(opt).substring(0,60)"></span>
+                  </div>
                 </template>
               </div>
               <div class="test-options">
