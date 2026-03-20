@@ -57,6 +57,52 @@ class MiniAppTeacherController extends Controller
             ->limit(8)
             ->get(['id', 'hash', 'title', 'mode', 'is_curated', 'created_at']);
 
+        // Recent student attempts — for quick access during lessons
+        $myStudentIds = TeacherStudent::query()
+            ->where('teacher_id', $teacherId)
+            ->pluck('student_id');
+
+        $aliasMap = TeacherStudent::query()
+            ->where('teacher_id', $teacherId)
+            ->whereNotNull('student_alias')
+            ->where('student_alias', '!=', '')
+            ->pluck('student_alias', 'student_id');
+
+        $recentAttempts = [];
+        if ($myStudentIds->isNotEmpty()) {
+            $recentAttempts = OgeAttempt::query()
+                ->whereIn('student_id', $myStudentIds)
+                ->whereIn('status', ['submitted', 'scored'])
+                ->with([
+                    'variant:id,hash,title,mode',
+                    'student:id,name',
+                    'scorings:id,attempt_id,is_correct',
+                ])
+                ->orderByRaw('COALESCE(submitted_at, updated_at) DESC')
+                ->limit(15)
+                ->get()
+                ->map(function (OgeAttempt $att) use ($aliasMap) {
+                    $correct = $att->scorings->where('is_correct', true)->count();
+                    $configTaskCount = count($att->variant?->config_json['tasks'] ?? []);
+                    $total = $configTaskCount > 0 ? $configTaskCount : $att->scorings->count();
+                    $time = null;
+                    if ($att->started_at && $att->submitted_at) {
+                        $time = $att->submitted_at->diffInSeconds($att->started_at);
+                    }
+                    return [
+                        'attempt_id' => $att->id,
+                        'student_id' => $att->student_id,
+                        'student_name' => $aliasMap[$att->student_id] ?? $att->student?->name ?? '?',
+                        'label' => $this->variantModeLabel($att->variant),
+                        'correct' => $correct,
+                        'total' => $total,
+                        'time' => $time,
+                        'date' => $att->submitted_at,
+                    ];
+                })
+                ->all();
+        }
+
         return view('miniapp.teacher-dashboard', [
             'user' => $user,
             'studentCount' => $studentCount,
@@ -64,6 +110,7 @@ class MiniAppTeacherController extends Controller
             'variantsCount' => $variantsCount,
             'curatedCount' => $curatedCount,
             'recentVariants' => $recentVariants,
+            'recentAttempts' => $recentAttempts,
             'effectiveRole' => $this->resolveMiniAppRole($request, $user),
             'canSwitchMode' => $user->role === 'admin',
         ]);
