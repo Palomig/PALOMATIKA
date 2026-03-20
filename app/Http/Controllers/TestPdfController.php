@@ -4267,6 +4267,23 @@ class TestPdfController extends Controller
     }
 
     /**
+     * Static placement test for new students (2 tasks per topic 6-18, excluding 19).
+     */
+    public function showPlacementTest()
+    {
+        $payload = $this->ogeVariantBuilder->buildPlacementTest();
+
+        return view('test.oge-variant', [
+            'tasks' => $payload['tasks'] ?? [],
+            'variantNumber' => 0,
+            'variantHash' => 'placement',
+            'selectedZadaniya' => [],
+            'initialAttemptLocked' => false,
+            'placementMode' => true,
+        ]);
+    }
+
+    /**
      * Show OGE variant by hash (deterministic based on hash)
      */
     public function showOgeVariant(string $hash, Request $request)
@@ -4403,6 +4420,8 @@ class TestPdfController extends Controller
                 'topic_id' => $task['topic_id'] ?? '',
                 'task_number' => $displayTaskNumber,
                 'attempt_task_number' => $attemptTaskNumber,
+                'slot' => $attemptTaskNumber,
+                'exam_number' => $displayTaskNumber > 0 ? $displayTaskNumber : $attemptTaskNumber,
                 'topic_title' => $task['topic_title'] ?? '',
                 'block_number' => $task['block_number'] ?? 1,
                 'block_title' => $task['block_title'] ?? '',
@@ -4837,6 +4856,9 @@ class TestPdfController extends Controller
         foreach ($customTasks as $index => &$task) {
             $task['test_number'] = $index + 1;
             $task['attempt_task_number'] = $index + 1;
+            $task['slot'] = $index + 1;
+            $examNumber = (int) ($task['task_number'] ?? $task['topic_id'] ?? 0);
+            $task['exam_number'] = $examNumber > 0 ? $examNumber : ($index + 1);
         }
         unset($task);
 

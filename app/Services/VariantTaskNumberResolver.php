@@ -32,7 +32,7 @@ class VariantTaskNumberResolver
         $examNumber = self::resolveExamNumber($task);
         $mode = (string) ($variant->mode ?? '');
         $isMini = str_starts_with($mode, 'mini_');
-        $isCustomRandom = $variant->source === OgeVariant::SOURCE_CUSTOM_RANDOM;
+        $isCustomRandom = $variant->source() === OgeVariant::SOURCE_CUSTOM_RANDOM;
 
         if ($isMini) {
             $slot = $index + 1;

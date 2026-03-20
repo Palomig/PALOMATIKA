@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Services\AuditLogger;
 use App\Services\OgeVariantPoolService;
 use App\Services\TaskDataService;
+use App\Services\VariantTaskNumberResolver;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -405,23 +406,21 @@ class MiniAppTeacherController extends Controller
             ])
             ->firstOrFail();
 
+        $cfg = $attempt->variant?->config_json;
+        $configTasks = (is_array($cfg) && isset($cfg['tasks']) && is_array($cfg['tasks'])) ? $cfg['tasks'] : [];
+
         $correct = $attempt->scorings->where('is_correct', true)->count();
-        $total = $attempt->scorings->count();
+        $total = count($configTasks) ?: $attempt->scorings->count();
         $time = null;
         if ($attempt->started_at && $attempt->submitted_at) {
             $time = $attempt->submitted_at->diffInSeconds($attempt->started_at);
         }
 
         $taskMap = [];
-        $cfg = $attempt->variant?->config_json;
-        if (is_array($cfg) && isset($cfg['tasks']) && is_array($cfg['tasks'])) {
-            foreach (array_values($cfg['tasks']) as $idx => $taskDef) {
-                if (!is_array($taskDef)) continue;
-                $num = (int) ($taskDef['task_number'] ?? $taskDef['attempt_task_number'] ?? $taskDef['test_number'] ?? 0);
-                if ($num <= 0) {
-                    $num = ($attempt->variant && $attempt->variant->isCustomRandom()) ? ($idx + 1) : (6 + $idx);
-                }
-                if ($num > 0) $taskMap[$num] = $taskDef;
+        if ($attempt->variant && !empty($configTasks)) {
+            $resolved = VariantTaskNumberResolver::resolveAll($configTasks, $attempt->variant);
+            foreach ($resolved as $entry) {
+                $taskMap[$entry['slot']] = $entry['task'];
             }
         }
 

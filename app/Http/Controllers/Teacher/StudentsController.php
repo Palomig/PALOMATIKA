@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\OgeAttempt;
 use App\Models\User;
 use App\Services\OgeVariantBuilderService;
+use App\Services\VariantTaskNumberResolver;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Contracts\View\View;
@@ -285,20 +286,12 @@ class StudentsController extends Controller
                 $customTasks = $this->loadCustomRandomTasksByHash($variant->hash);
             }
 
-            if (is_array($customTasks)) {
-                foreach ($customTasks as $index => $taskData) {
-                    if (!is_array($taskData)) {
-                        continue;
-                    }
-
-                    $attemptTaskNumber = (int) ($taskData['attempt_task_number'] ?? $taskData['task_number'] ?? $taskData['test_number'] ?? ($index + 1));
-                    if ($attemptTaskNumber < 1 || $attemptTaskNumber > 255) {
-                        continue;
-                    }
-
-                    $presentation = $this->resolveTaskPresentation($taskData);
-                    $definitions[$attemptTaskNumber] = [
-                        'display_task_number' => (int) ($taskData['zadanie_number'] ?? $taskData['real_task_number'] ?? $attemptTaskNumber),
+            if (is_array($customTasks) && $variant) {
+                $resolved = VariantTaskNumberResolver::resolveAll($customTasks, $variant);
+                foreach ($resolved as $entry) {
+                    $presentation = $this->resolveTaskPresentation($entry['task']);
+                    $definitions[$entry['slot']] = [
+                        'display_task_number' => $entry['exam_number'],
                         'task_text' => $presentation['task_text'],
                         'task_visual' => $presentation['task_visual'],
                     ];
@@ -326,22 +319,16 @@ class StudentsController extends Controller
             return $definitions;
         }
 
-        foreach (($payload['tasks'] ?? []) as $index => $taskData) {
-            if (!is_array($taskData)) {
-                continue;
+        if ($variant) {
+            $resolved = VariantTaskNumberResolver::resolveAll($payload['tasks'] ?? [], $variant);
+            foreach ($resolved as $entry) {
+                $presentation = $this->resolveTaskPresentation($entry['task']);
+                $definitions[$entry['slot']] = [
+                    'display_task_number' => $entry['exam_number'],
+                    'task_text' => $presentation['task_text'],
+                    'task_visual' => $presentation['task_visual'],
+                ];
             }
-
-            $attemptTaskNumber = (int) ($taskData['attempt_task_number'] ?? $taskData['task_number'] ?? (6 + $index));
-            if ($attemptTaskNumber < 1 || $attemptTaskNumber > 255) {
-                continue;
-            }
-
-            $presentation = $this->resolveTaskPresentation($taskData);
-            $definitions[$attemptTaskNumber] = [
-                'display_task_number' => (int) ($taskData['zadanie_number'] ?? $taskData['task_number'] ?? $attemptTaskNumber),
-                'task_text' => $presentation['task_text'],
-                'task_visual' => $presentation['task_visual'],
-            ];
         }
 
         return $definitions;

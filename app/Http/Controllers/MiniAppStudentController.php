@@ -16,6 +16,7 @@ use App\Services\OgeAttemptService;
 use App\Services\OgeVariantBuilderService;
 use App\Services\OgeVariantPoolService;
 use App\Services\TaskDataService;
+use App\Services\VariantTaskNumberResolver;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -554,23 +555,16 @@ class MiniAppStudentController extends Controller
      */
     private function normalizeAttemptTasksForMiniApp(OgeVariant $variant, array $tasks): array
     {
-        $useSequentialAttemptNumbers = str_starts_with((string) ($variant->mode ?? ''), 'mini_');
-
         foreach ($tasks as $index => $task) {
             if (!is_array($task)) {
                 continue;
             }
 
-            if (!isset($task['display_task_number'])) {
-                $task['display_task_number'] = (int) ($task['task_number']
-                    ?? $task['zadanie_number']
-                    ?? ($index + 1));
-            }
-
-            if ($useSequentialAttemptNumbers && !isset($task['attempt_task_number'])) {
-                $task['attempt_task_number'] = $index + 1;
-            }
-
+            $numbers = VariantTaskNumberResolver::resolve($task, $index, $variant);
+            $task['display_task_number'] = $numbers['exam_number'];
+            $task['attempt_task_number'] = $numbers['slot'];
+            $task['slot'] = $numbers['slot'];
+            $task['exam_number'] = $numbers['exam_number'];
             $tasks[$index] = $task;
         }
 
@@ -591,27 +585,25 @@ class MiniAppStudentController extends Controller
             return [];
         }
 
+        $variant = $attempt->variant;
         $mapped = [];
         foreach ($tasks as $index => $task) {
             if (!is_array($task)) {
                 continue;
             }
 
-            $attemptTaskNumber = (int) ($task['attempt_task_number']
-                ?? $task['task_number']
-                ?? ($index + 1));
-            $displayTaskNumber = (int) ($task['display_task_number']
-                ?? $task['task_number']
-                ?? $task['zadanie_number']
-                ?? $attemptTaskNumber);
+            $numbers = VariantTaskNumberResolver::resolve($task, $index, $variant);
+            $slot = $numbers['slot'];
+            $examNumber = $numbers['exam_number'];
 
-            if (array_key_exists($attemptTaskNumber, $existingAnswers)) {
-                $mapped[$attemptTaskNumber] = $existingAnswers[$attemptTaskNumber];
+            if (array_key_exists($slot, $existingAnswers)) {
+                $mapped[$slot] = $existingAnswers[$slot];
                 continue;
             }
 
-            if (array_key_exists($displayTaskNumber, $existingAnswers)) {
-                $mapped[$attemptTaskNumber] = $existingAnswers[$displayTaskNumber];
+            // Legacy: answers may have been stored under exam_number
+            if (array_key_exists($examNumber, $existingAnswers)) {
+                $mapped[$slot] = $existingAnswers[$examNumber];
             }
         }
 
@@ -767,23 +759,15 @@ class MiniAppStudentController extends Controller
         // Mini modes use sequential attempt_task_number (1..N) for scoring,
         // while config_json stores the original topic-based task_number.
         $taskMap = [];
-        $displayNumMap = []; // sequential key → topic-based display number
+        $displayNumMap = []; // slot → exam_number for display
         $cfg = $attempt->variant?->config_json;
-        $isMini = str_starts_with((string) ($attempt->variant?->mode ?? ''), 'mini_');
-        if (is_array($cfg) && isset($cfg['tasks']) && is_array($cfg['tasks'])) {
-            foreach (array_values($cfg['tasks']) as $idx => $taskDef) {
-                if (!is_array($taskDef)) continue;
-                $topicNum = (int) ($taskDef['task_number'] ?? $taskDef['zadanie_number'] ?? 0);
-                if ($isMini) {
-                    $num = $idx + 1;
-                    if ($topicNum > 0) $displayNumMap[$num] = $topicNum;
-                } else {
-                    $num = $topicNum;
-                    if ($num <= 0) {
-                        $num = ($attempt->variant && $attempt->variant->isCustomRandom()) ? ($idx + 1) : (6 + $idx);
-                    }
+        if ($attempt->variant && is_array($cfg) && isset($cfg['tasks']) && is_array($cfg['tasks'])) {
+            $resolved = VariantTaskNumberResolver::resolveAll($cfg['tasks'], $attempt->variant);
+            foreach ($resolved as $entry) {
+                $taskMap[$entry['slot']] = $entry['task'];
+                if ($entry['exam_number'] !== $entry['slot']) {
+                    $displayNumMap[$entry['slot']] = $entry['exam_number'];
                 }
-                if ($num > 0) $taskMap[$num] = $taskDef;
             }
         }
 
