@@ -323,11 +323,17 @@
         '19' => 'Высказывания',
     ];
 
-    // Build task_number => locator map from variant config
+    // Build slot => exam_number and locator maps from variant config
     $variantTasks = is_array($attempt->variant?->config_json['tasks'] ?? null)
         ? $attempt->variant->config_json['tasks'] : [];
+    $examNumberMap = [];
     $locatorMap = [];
     foreach ($variantTasks as $vt) {
+        $slot = (int) ($vt['slot'] ?? 0);
+        $examNum = (int) ($vt['exam_number'] ?? $vt['task_number'] ?? 0);
+        if ($slot > 0 && $examNum > 0) {
+            $examNumberMap[$slot] = $examNum;
+        }
         $taskNum = (int) ($vt['task_number'] ?? 0);
         if ($taskNum > 0) {
             $tid = str_pad((string) ($vt['topic_id'] ?? 'x'), 2, '0', STR_PAD_LEFT);
@@ -341,15 +347,17 @@
     // Build rows data for Alpine
     $rows = [];
     foreach ($scorings as $scoring) {
-        $tn = str_pad($scoring->task_number, 2, '0', STR_PAD_LEFT);
+        $slot = (int) $scoring->task_number;
+        $examNum = $examNumberMap[$slot] ?? $slot;
+        $tn = str_pad($examNum, 2, '0', STR_PAD_LEFT);
         $studentAnswer = $answers->firstWhere('task_number', $scoring->task_number);
         $answerText = $studentAnswer ? $studentAnswer->current_answer : '';
 
         $rows[] = [
-            'num' => (int) $scoring->task_number,
+            'num' => $examNum,
             'topicKey' => $tn,
-            'topicName' => $topicNames[$tn] ?? "Задание {$scoring->task_number}",
-            'locator' => $locatorMap[(int) $scoring->task_number] ?? '',
+            'topicName' => $topicNames[$tn] ?? "Задание {$examNum}",
+            'locator' => $locatorMap[$examNum] ?? '',
             'yourAnswer' => $answerText ?? '',
             'correctAnswer' => $scoring->correct_answer ?? '',
             'isCorrect' => (bool) $scoring->is_correct,

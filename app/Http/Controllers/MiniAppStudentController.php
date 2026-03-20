@@ -349,13 +349,28 @@ class MiniAppStudentController extends Controller
                         continue;
                     }
 
+                    $rawOptions = $t['options'] ?? null;
+                    if (is_array($rawOptions)) {
+                        $rawOptions = array_map(function ($o) {
+                            if (is_array($o)) {
+                                foreach (['label', 'text', 'value'] as $k) {
+                                    if (isset($o[$k])) {
+                                        $o[$k] = MiniAppTaskCanonicalizer::latexToUnicode((string) $o[$k]);
+                                    }
+                                }
+                                return $o;
+                            }
+                            return MiniAppTaskCanonicalizer::latexToUnicode((string) $o);
+                        }, $rawOptions);
+                    }
+
                     $tasks[] = [
                         'id'         => $t['id'] ?? null,
                         'text'       => $text,
                         'expression' => $expression !== '' ? $expression : null,
                         'svg'        => $t['svg'] ?? null,
                         'image'      => $t['image'] ?? null,
-                        'options'    => $t['options'] ?? null,
+                        'options'    => $rawOptions,
                         'question'   => $question !== '' ? $question : null,
                         'answer'     => $t['answer'] ?? null,
                     ];

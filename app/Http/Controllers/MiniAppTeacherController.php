@@ -136,7 +136,7 @@ class MiniAppTeacherController extends Controller
         $user = $request->user();
         $teacherId = (int) $user->id;
         $search = trim((string) $request->query('search', ''));
-        $filter = trim((string) $request->query('filter', 'all'));
+        $filter = trim((string) $request->query('filter', 'mine'));
         $scheduleData = $this->collectTeacherScheduleData($user);
         $scheduledStudentIds = collect($scheduleData['currentStudents'])
             ->pluck('student_id')
@@ -229,28 +229,31 @@ class MiniAppTeacherController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-        $students->setCollection(
-            $students->getCollection()->map(function (User $student) use ($scheduledStudentIds) {
-                $student->is_scheduled_today = $scheduledStudentIds->contains((int) $student->id);
-                $student->risk_label = null;
-                $student->risk_tone = 'accent';
+        // Load attempt stats per student for display
+        $studentIds = $students->getCollection()->pluck('id')->all();
+        $attemptStats = [];
+        if (!empty($studentIds) && \Schema::hasTable('oge_scorings')) {
+            $rows = \DB::table('oge_attempts')
+                ->join('oge_scorings', 'oge_scorings.attempt_id', '=', 'oge_attempts.id')
+                ->whereIn('oge_attempts.student_id', $studentIds)
+                ->whereIn('oge_attempts.status', ['submitted', 'scored'])
+                ->selectRaw('oge_attempts.student_id, COUNT(DISTINCT oge_attempts.id) as attempt_count, SUM(oge_scorings.is_correct) as correct_sum, COUNT(oge_scorings.id) as total_sum, MAX(COALESCE(oge_attempts.submitted_at, oge_attempts.updated_at)) as last_attempt')
+                ->groupBy('oge_attempts.student_id')
+                ->get();
+            foreach ($rows as $r) {
+                $attemptStats[(int) $r->student_id] = $r;
+            }
+        }
 
-                if (!(bool) ($student->is_mine ?? false)) {
-                    $student->risk_label = 'Не привязан';
-                    $student->risk_tone = 'red';
-                } elseif (blank($student->evrium_name)) {
-                    $student->risk_label = 'Без расписания';
-                    $student->risk_tone = 'red';
-                } elseif (blank($student->student_alias)) {
-                    $student->risk_label = 'Без алиаса';
-                    $student->risk_tone = 'yellow';
-                } elseif (!$student->last_active_at || $student->last_active_at->lt(now()->subDays(7))) {
-                    $student->risk_label = 'Есть риск';
-                    $student->risk_tone = 'yellow';
-                } else {
-                    $student->risk_label = 'В порядке';
-                    $student->risk_tone = 'green';
-                }
+        $students->setCollection(
+            $students->getCollection()->map(function (User $student) use ($scheduledStudentIds, $attemptStats) {
+                $student->is_scheduled_today = $scheduledStudentIds->contains((int) $student->id);
+                $stats = $attemptStats[(int) $student->id] ?? null;
+                $student->attempt_count = $stats ? (int) $stats->attempt_count : 0;
+                $student->accuracy = ($stats && $stats->total_sum > 0)
+                    ? (int) round(($stats->correct_sum / $stats->total_sum) * 100) : null;
+                $student->last_attempt_at = $stats?->last_attempt
+                    ? \Carbon\Carbon::parse($stats->last_attempt) : null;
 
                 return $student;
             })

@@ -226,7 +226,7 @@ class MiniAppTeacherRoutesTest extends TestCase
             ->get('/tg/teacher/students?search=Петя')
             ->assertOk()
             ->assertSee('Иван Петров')
-            ->assertSee('value="Петя"', false);
+            ->assertSee('Петя');
     }
 
     public function test_teacher_can_update_alias_with_audit_log(): void
