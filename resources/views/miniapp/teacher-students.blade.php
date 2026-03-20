@@ -70,6 +70,17 @@
   }
   .mine-toggle:hover { color: var(--text); }
 
+  .day-picker {
+    display: flex; gap: 4px; justify-content: space-between;
+  }
+  .day-btn {
+    flex: 1; text-align: center; padding: 9px 0; border-radius: 10px;
+    font-size: 12px; font-weight: 800; color: var(--muted);
+    background: var(--surface); border: 1px solid var(--border);
+    text-decoration: none; transition: background .15s, color .15s;
+  }
+  .day-btn.today { border-color: var(--accent); color: var(--accent); }
+  .day-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
   .pager { display: flex; justify-content: center; margin-top: 4px; }
   .empty-msg { text-align: center; padding: 30px 16px; color: var(--muted); font-size: 13px; }
 @endpush
@@ -86,6 +97,15 @@
     <a class="filter-btn {{ $filter === 'all' ? 'active' : '' }}" href="?filter=all{{ $search ? '&search='.urlencode($search) : '' }}">Все</a>
     <a class="filter-btn {{ $filter === 'scheduled' ? 'active' : '' }}" href="?filter=scheduled{{ $search ? '&search='.urlencode($search) : '' }}">По расписанию</a>
   </div>
+
+  @if($filter === 'scheduled')
+    <div class="day-picker">
+      @foreach($dayNames as $dow => $label)
+        <a class="day-btn {{ $dow === $selectedDay ? 'active' : '' }} {{ $dow === $todayDow ? 'today' : '' }}"
+           href="?filter=scheduled&day={{ $dow }}{{ $search ? '&search='.urlencode($search) : '' }}">{{ $label }}</a>
+      @endforeach
+    </div>
+  @endif
 
   <form method="GET" action="/tg/teacher/students" class="search-row">
     <input type="hidden" name="filter" value="{{ $filter }}">

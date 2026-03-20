@@ -137,13 +137,26 @@ class MiniAppTeacherController extends Controller
         $teacherId = (int) $user->id;
         $search = trim((string) $request->query('search', ''));
         $filter = trim((string) $request->query('filter', 'mine'));
-        $scheduleData = $this->collectTeacherScheduleData($user);
-        $scheduledStudentIds = collect($scheduleData['currentStudents'])
+        $selectedDay = (int) $request->query('day', (int) now()->format('N'));
+        if ($selectedDay < 1 || $selectedDay > 7) {
+            $selectedDay = (int) now()->format('N');
+        }
+
+        $relations = TeacherStudent::where('teacher_id', $teacherId)
+            ->with('student:id,name,last_active_at')
+            ->get();
+        $evriumSlots = $this->fetchEvriumSchedule($teacherId);
+        $daySlots = array_filter($evriumSlots, fn($s) => ($s['day'] ?? 0) === $selectedDay);
+        $scheduledStudents = $this->resolveEvriumSlots($daySlots, $relations);
+        $scheduledStudentIds = collect($scheduledStudents)
             ->pluck('student_id')
             ->filter()
             ->map(fn ($id) => (int) $id)
             ->unique()
             ->values();
+
+        $dayNames = [1 => 'Пн', 2 => 'Вт', 3 => 'Ср', 4 => 'Чт', 5 => 'Пт', 6 => 'Сб', 7 => 'Вс'];
+        $todayDow = (int) now()->format('N');
 
         // Show all active students who use app/solve variants, with teacher-specific ownership marker.
         // Use scalar subqueries to avoid duplicates when multiple teacher_students rows exist.
@@ -263,6 +276,9 @@ class MiniAppTeacherController extends Controller
             'students' => $students,
             'search' => $search,
             'filter' => $filter,
+            'selectedDay' => $selectedDay,
+            'todayDow' => $todayDow,
+            'dayNames' => $dayNames,
             'canSwitchMode' => $user->role === 'admin',
             'effectiveRole' => $this->resolveMiniAppRole($request, $user),
         ]);
