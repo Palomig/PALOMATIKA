@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QA Report — Mini App Student</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0d0d0d;color:#e0e0e0}
+.hdr{background:#1a1a2e;padding:20px 24px;border-bottom:1px solid #333}
+.hdr h1{font-size:20px;margin-bottom:6px}
+.hdr .meta{font-size:12px;color:#777}
+.summary{display:flex;gap:12px;padding:14px 24px;background:#111;border-bottom:1px solid #222}
+.badge{padding:5px 12px;border-radius:16px;font-size:12px;font-weight:600}
+.b-ok{background:#062e06;color:#4ade80}.b-fail{background:#2e0606;color:#f87171}.b-warn{background:#2e2e06;color:#fbbf24}.b-total{background:#1a1a2e;color:#93c5fd}
+nav{position:sticky;top:0;background:#111;border-bottom:1px solid #222;padding:8px 16px;z-index:10;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch}
+nav a{display:inline-block;padding:5px 10px;margin:2px;border-radius:6px;font-size:11px;color:#999;text-decoration:none;border-left:3px solid transparent}
+nav a:hover{background:#1a1a1a}
+nav a.ok{border-left-color:#4ade80}nav a.fail{border-left-color:#f87171}nav a.warn,nav a.skip{border-left-color:#fbbf24}
+.step{padding:20px 24px;border-bottom:1px solid #161616}
+.step:target{background:#1a1a2e}
+.sh{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.sn{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.sn.ok{background:#062e06;color:#4ade80}.sn.fail{background:#2e0606;color:#f87171}.sn.warn,.sn.skip{background:#2e2e06;color:#fbbf24}
+.st{font-size:14px;font-weight:600}
+.su{font-size:10px;color:#555;margin-top:1px;word-break:break-all}
+.checks{margin:8px 0;padding-left:18px;list-style:none}
+.checks li{font-size:12px;margin-bottom:2px;color:#aaa;position:relative;padding-left:12px}
+.checks li::before{content:"·";position:absolute;left:0;color:#555}
+.miss{color:#f87171;font-weight:600}
+.si{margin-top:10px;max-width:390px;border-radius:10px;border:1px solid #2a2a2a;cursor:pointer;transition:border-color .2s}
+.si:hover{border-color:#555}
+.ts{font-size:9px;color:#444;margin-top:6px}
+.lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:100;justify-content:center;align-items:center;cursor:zoom-out}
+.lb.on{display:flex}
+.lb img{max-width:95vw;max-height:95vh;border-radius:8px}
+</style>
+</head>
+<body>
+<div class="hdr">
+<h1>QA Report: Mini App — Student Flow</h1>
+<div class="meta">2026-03-20 22:02:29 UTC · https://palomatika.ru · qa-student@palomatika.ru</div>
+</div>
+<div class="summary">
+<span class="badge b-total">16 steps</span>
+<span class="badge b-ok">16 OK</span>
+
+
+</div>
+<nav><a href="#s1" class="ok">1. Login</a><a href="#s2" class="ok">2. /tg Home</a><a href="#s3" class="ok">3. Dashboard</a><a href="#s4" class="ok">4. Mini OGE Selection</a><a href="#s5" class="ok">5. Start Mini Mixed</a><a href="#s6" class="ok">6. Status API</a><a href="#s7" class="ok">7. Commit Answers</a><a href="#s8" class="ok">8. Submit Attempt</a><a href="#s9" class="ok">9. Results Page</a><a href="#s10" class="ok">10. History Detail</a><a href="#s11" class="ok">11. History List</a><a href="#s12" class="ok">12. Profile</a><a href="#s13" class="ok">13. Tasks Part 1</a><a href="#s14" class="ok">14. Part 2</a><a href="#s15" class="ok">15. Homework</a><a href="#s16" class="ok">16. Tutor</a></nav>
+<div class="step" id="s1">
+<div class="sh"><div class="sn ok">1</div><div><div class="st">Login</div><div class="su">https://palomatika.ru/dashboard</div></div></div>
+<ul class="checks"><li>Redirected to: https://palomatika.ru/dashboard</li></ul>
+
+<img class="si" src="screenshots/03-after-login.png" alt="Login" onclick="lbox(this.src)" loading="lazy">
+<div class="ts">2026-03-20T22:01:51.074Z</div>
+</div><div class="step" id="s2">
+<div class="sh"><div class="sn ok">2</div><div><div class="st">/tg Home</div><div class="su">https://palomatika.ru/tg/dashboard</div></div></div>
+<ul class="checks"><li>Final URL: https://palomatika.ru/tg/dashboard</li></ul>
+
+<img class="si" src="screenshots/04-tg-home.png" alt="/tg Home" onclick="lbox(this.src)" loading="lazy">
+<div class="ts">2026-03-20T22:01:53.734Z</div>
+</div><div class="step" id="s3">
+<div class="sh"><div class="sn ok">3</div><div><div class="st">Dashboard</div><div class="su">https://palomatika.ru/tg/dashboard</div></div></div>
+<ul class="checks"><li>Dashboard loaded</li><li>"Мини-ОГЭ" found</li><li>History link found</li><li>Profile link found</li></ul>
+
+<img class="si" src="screenshots/05-dashboard.png" alt="Dashboard" onclick="lbox(this.src)" loading="lazy">
+<div class="ts">2026-03-20T22:01:55.547Z</div>
+</div><div class="step" id="s4">
+<div class="sh"><div class="sn ok">4</div><div><div class="st">Mini OGE Selection</div><div class="su">https://palomatika.ru/tg/mini</div></div></div>
+<ul class="checks"><li>"Алгебра" found</li><li>"Геометрия" found</li><li>"Смешанн" found</li><li><span class="miss">MISSING: "2 часть"</span></li></ul>
+
+<img class="si" src="screenshots/06-mini-selection.png" alt="Mini OGE Selection" onclick="lbox(this.src)" loading="lazy">
+<div class="ts">2026-03-20T22:01:57.402Z</div>
+</div><div class="step" id="s5">
+<div class="sh"><div class="sn ok">5</div><div><div class="st">Start Mini Mixed</div><div class="su">https://palomatika.ru/tg/test/219</div></div></div>
+<ul class="checks"><li>On test page: https://palomatika.ru/tg/test/219</li><li>Response status: 200</li><li>JSON redirect: /tg/test/219</li><li>Attempt ID: 219</li><li>display_task_number present</li><li>attempt_task_number present</li></ul>
+
+<img class="si" src="screenshots/07-test-page.png" alt="Start Mini Mixed" onclick="lbox(this.src)" loading="lazy">
+<div class="ts">2026-03-20T22:02:01.500Z</div>
+</div><div class="step" id="s6">
+<div class="sh"><div class="sn ok">6</div><div><div class="st">Status API</div><div class="su">GET /api/oge/attempts/219/status</div></div></div>
+<ul class="checks"><li>HTTP 200</li><li>tasks_total: 7</li><li>answered: 0</li><li>task numbers: 1, 2, 3, 4, 5, 6, 7</li></ul>
+
+<img class="si" src="screenshots/08-status-api.png" alt="Status API" onclick="lbox(this.src)" loading="lazy">
+<div class="ts">2026-03-20T22:02:02.242Z</div>
+</div><div class="step" id="s7">
+<div class="sh"><div class="sn ok">7</div><div><div class="st">Commit Answers</div><div class="su">POST .../tasks/N/commit</div></div></div>
+<ul class="checks"><li>Task 1: HTTP 200 (answer="11")</li><li>Task 2: HTTP 200 (answer="22")</li><li>Task 3: HTTP 200 (answer="33")</li><li>Task 4: HTTP 200 (answer="44")</li><li>Task 5: HTTP 200 (answer="55")</li><li>Task 6: HTTP 200 (answer="66")</li><li>Task 7: HTTP 200 (answer="77")</li></ul>
+
+<img class="si" src="screenshots/09-after-commits.png" alt="Commit Answers" onclick="lbox(this.src)" loading="lazy">
+<div class="ts">2026-03-20T22:02:04.719Z</div>
+</div><div class="step" id="s8">
+<div class="sh"><div class="sn ok">8</div><div><div class="st">Submit Attempt</div><div class="su">POST .../submit</div></div></div>
+<ul class="checks"><li>HTTP 200</li><li>success: true</li></ul>
+
+<img class="si" src="screenshots/10-after-submit.png" alt="Submit Attempt" onclick="lbox(this.src)" loading="lazy">
+<div class="ts">2026-03-20T22:02:05.456Z</div>
+</div><div class="step" id="s9">
+<div class="sh"><div class="sn ok">9</div><div><div class="st">Results Page</div><div class="su">https://palomatika.ru/tg/results/219</div></div></div>
+<ul class="checks"><li>Score N/M displayed</li><li>Correctness info found</li></ul>
+
+<img class="si" src="screenshots/11-results-page.png" alt="Results Page" onclick="lbox(this.src)" loading="lazy">
+<div class="ts">2026-03-20T22:02:07.226Z</div>
+</div><div class="step" id="s10">
+<div class="sh"><div class="sn ok">10</div><div><div class="st">History Detail</div><div class="su">https://palomatika.ru/tg/history/219</div></div></div>
+<ul class="checks"><li>Score displayed</li><li>Task content present</li><li>Error details shown</li></ul>
+
+<img class="si" src="screenshots/12-history-detail.png" alt="History Detail" onclick="lbox(this.src)" loading="lazy">
+<div class="ts">2026-03-20T22:02:09.136Z</div>
+</div><div class="step" id="s11">
+<div class="sh"><div class="sn ok">11</div><div><div class="st">History List</div><div class="su">https://palomatika.ru/tg/history</div></div></div>
+<ul class="checks"><li>2 history entries found</li><li>Has at least one completed variant</li></ul>
+
+<img class="si" src="screenshots/13-history-list.png" alt="History List" onclick="lbox(this.src)" loading="lazy">
+<div class="ts">2026-03-20T22:02:10.903Z</div>
+</div><div class="step" id="s12">
+<div class="sh"><div class="sn ok">12</div><div><div class="st">Profile</div><div class="su">https://palomatika.ru/tg/profile</div></div></div>
+<ul class="checks"><li>Name "QA Student" shown</li></ul>
+
+<img class="si" src="screenshots/14-profile.png" alt="Profile" onclick="lbox(this.src)" loading="lazy">
+<div class="ts">2026-03-20T22:02:12.452Z</div>
+</div><div class="step" id="s13">
+<div class="sh"><div class="sn ok">13</div><div><div class="st">Tasks Part 1</div><div class="su">https://palomatika.ru/tg/tasks-part1</div></div></div>
+<ul class="checks"><li>Page loaded</li></ul>
+
+<img class="si" src="screenshots/15-tasks-part1.png" alt="Tasks Part 1" onclick="lbox(this.src)" loading="lazy">
+<div class="ts">2026-03-20T22:02:15.834Z</div>
+</div><div class="step" id="s14">
+<div class="sh"><div class="sn ok">14</div><div><div class="st">Part 2</div><div class="su">https://palomatika.ru/tg/part2</div></div></div>
+<ul class="checks"><li>Page loaded</li></ul>
+
+<img class="si" src="screenshots/16-part2.png" alt="Part 2" onclick="lbox(this.src)" loading="lazy">
+<div class="ts">2026-03-20T22:02:21.017Z</div>
+</div><div class="step" id="s15">
+<div class="sh"><div class="sn ok">15</div><div><div class="st">Homework</div><div class="su">https://palomatika.ru/tg/homework</div></div></div>
+<ul class="checks"><li>Page loaded</li></ul>
+
+<img class="si" src="screenshots/17-homework.png" alt="Homework" onclick="lbox(this.src)" loading="lazy">
+<div class="ts">2026-03-20T22:02:24.906Z</div>
+</div><div class="step" id="s16">
+<div class="sh"><div class="sn ok">16</div><div><div class="st">Tutor</div><div class="su">https://palomatika.ru/tg/tutor</div></div></div>
+<ul class="checks"><li>Page loaded</li></ul>
+
+<img class="si" src="screenshots/18-tutor.png" alt="Tutor" onclick="lbox(this.src)" loading="lazy">
+<div class="ts">2026-03-20T22:02:29.269Z</div>
+</div>
+<div id="lb" class="lb" onclick="this.classList.remove('on')"><img id="lbi" src=""></div>
+<script>function lbox(s){document.getElementById('lbi').src=s;document.getElementById('lb').classList.add('on')}</script>
+</body></html>

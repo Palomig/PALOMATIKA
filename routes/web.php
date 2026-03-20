@@ -39,6 +39,24 @@ Route::get('/', function () {
     return view('welcome');
 })->name('landing');
 
+// QA Reports (admin only)
+Route::get('/qa-reports/{path?}', function (string $path = 'index.html') {
+    $basePath = public_path('qa-reports');
+    $filePath = realpath($basePath . '/' . $path);
+    if (!$filePath || !str_starts_with($filePath, $basePath) || !file_exists($filePath)) {
+        abort(404);
+    }
+    $mime = match (pathinfo($filePath, PATHINFO_EXTENSION)) {
+        'html' => 'text/html',
+        'png' => 'image/png',
+        'jpg', 'jpeg' => 'image/jpeg',
+        'css' => 'text/css',
+        'js' => 'application/javascript',
+        default => 'application/octet-stream',
+    };
+    return response()->file($filePath, ['Content-Type' => $mime]);
+})->where('path', '.*')->middleware(['auth', 'role:admin']);
+
 Route::get('/materials', [JarvisMaterialPageController::class, 'index'])->name('materials.index');
 Route::get('/materials/{slug}', [JarvisMaterialPageController::class, 'show'])->name('materials.show');
 
@@ -329,6 +347,7 @@ Route::middleware(['auth', 'role:teacher,admin'])->group(function () {
     Route::get('/oge', [TestPdfController::class, 'ogeGenerator'])->name('oge.generator');
 });
 Route::middleware(['auth', 'role:student,teacher,admin'])->group(function () {
+    Route::get('/oge/placement', [TestPdfController::class, 'showPlacementTest'])->name('oge.placement');
     Route::get('/oge/{hash}', [TestPdfController::class, 'showOgeVariant'])->name('oge.show');
 });
 
