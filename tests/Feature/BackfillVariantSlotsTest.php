@@ -155,6 +155,40 @@ class BackfillVariantSlotsTest extends TestCase
         $this->assertSame(8, $tasks[2]['exam_number']);
     }
 
+    public function test_force_recomputes_incorrect_canonical_fields(): void
+    {
+        // Variant with wrong slot values — force should fix them
+        OgeVariant::create([
+            'hash' => 'bfforc1',
+            'source' => 'miniapp',
+            'mode' => 'mini_mixed',
+            'config_json' => [
+                'tasks' => [
+                    ['slot' => 99, 'exam_number' => 99, 'task_number' => 8, 'topic_id' => '08', 'task' => ['id' => 1]],
+                    ['slot' => 99, 'exam_number' => 99, 'task_number' => 14, 'topic_id' => '14', 'task' => ['id' => 2]],
+                ],
+            ],
+        ]);
+
+        // Without --force: skipped (all tasks have canonical fields)
+        $this->artisan('variants:backfill-slots')
+            ->expectsOutputToContain('Skipped: 1')
+            ->assertExitCode(0);
+
+        // With --force: recomputed
+        $this->artisan('variants:backfill-slots', ['--force' => true])
+            ->expectsOutputToContain('Updated: 1')
+            ->assertExitCode(0);
+
+        $variant = OgeVariant::where('hash', 'bfforc1')->first();
+        $tasks = $variant->config_json['tasks'];
+
+        $this->assertSame(1, $tasks[0]['slot']);
+        $this->assertSame(8, $tasks[0]['exam_number']);
+        $this->assertSame(2, $tasks[1]['slot']);
+        $this->assertSame(14, $tasks[1]['exam_number']);
+    }
+
     public function test_backfill_processes_partially_backfilled_variant(): void
     {
         // First task has canonical fields, second doesn't — command should NOT skip
