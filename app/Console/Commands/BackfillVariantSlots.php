@@ -8,12 +8,15 @@ use Illuminate\Console\Command;
 
 class BackfillVariantSlots extends Command
 {
-    protected $signature = 'variants:backfill-slots {--dry-run : Show what would change without saving}';
+    protected $signature = 'variants:backfill-slots
+        {--dry-run : Show what would change without saving}
+        {--force : Recompute all slots from scratch, ignoring existing canonical fields}';
     protected $description = 'Backfill slot/exam_number canonical fields into config_json tasks for all variants';
 
     public function handle(): int
     {
         $dryRun = $this->option('dry-run');
+        $force = $this->option('force');
 
         $updated = 0;
         $skipped = 0;
@@ -21,7 +24,7 @@ class BackfillVariantSlots extends Command
 
         OgeVariant::query()
             ->whereNotNull('config_json')
-            ->chunkById(100, function ($variants) use ($dryRun, &$updated, &$skipped, &$total) {
+            ->chunkById(100, function ($variants) use ($dryRun, $force, &$updated, &$skipped, &$total) {
                 foreach ($variants as $variant) {
                     $total++;
                     $config = is_array($variant->config_json) ? $variant->config_json : [];
@@ -32,20 +35,23 @@ class BackfillVariantSlots extends Command
                         continue;
                     }
 
-                    // Check if ALL tasks already have canonical fields
-                    $allBackfilled = true;
-                    foreach ($tasks as $task) {
-                        if (is_array($task) && (!isset($task['slot']) || !isset($task['exam_number']))) {
-                            $allBackfilled = false;
-                            break;
+                    if (!$force) {
+                        // Check if ALL tasks already have canonical fields
+                        $allBackfilled = true;
+                        foreach ($tasks as $task) {
+                            if (is_array($task) && (!isset($task['slot']) || !isset($task['exam_number']))) {
+                                $allBackfilled = false;
+                                break;
+                            }
+                        }
+                        if ($allBackfilled) {
+                            $skipped++;
+                            continue;
                         }
                     }
-                    if ($allBackfilled) {
-                        $skipped++;
-                        continue;
-                    }
 
-                    // Resolve each task by its index — avoids identity-matching bugs with duplicate tasks
+                    // Resolve each task by its index
+                    // In --force mode, strip existing canonical fields so resolver recomputes from source data
                     $newTasks = [];
                     foreach (array_values($tasks) as $index => $task) {
                         if (!is_array($task)) {
@@ -53,7 +59,12 @@ class BackfillVariantSlots extends Command
                             continue;
                         }
 
-                        $numbers = VariantTaskNumberResolver::resolve($task, $index, $variant);
+                        $taskForResolve = $task;
+                        if ($force) {
+                            unset($taskForResolve['slot'], $taskForResolve['exam_number']);
+                        }
+
+                        $numbers = VariantTaskNumberResolver::resolve($taskForResolve, $index, $variant);
                         $task['slot'] = $numbers['slot'];
                         $task['exam_number'] = $numbers['exam_number'];
                         $newTasks[] = $task;
