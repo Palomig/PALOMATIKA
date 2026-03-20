@@ -44,9 +44,17 @@
     <div style="width:34px;"></div>
   </div>
 
+  @php
+    $alias = $teacherRelation?->student_alias;
+    $displayName = $alias ?: $student->name;
+  @endphp
   <div class="card">
-    <div class="name">{{ $student->name }}</div>
-    <div class="muted">ID: {{ $student->id }} · {{ $student->email ?: 'без email' }}</div>
+    <div class="name">{{ $displayName }}</div>
+    @if($alias)
+      <div class="muted">{{ $student->name }} · ID: {{ $student->id }}</div>
+    @else
+      <div class="muted">ID: {{ $student->id }} · {{ $student->email ?: 'без email' }}</div>
+    @endif
     <div class="stats">
       <div class="stat"><b>{{ $attempts->count() }}</b><span class="muted">попыток</span></div>
       <div class="stat"><b>{{ $scoredTotal }}</b><span class="muted">проверено</span></div>

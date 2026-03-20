@@ -267,18 +267,18 @@ class MiniAppTaskCanonicalizer
 
             if (is_array($option)) {
                 $id = isset($option['id']) && $option['id'] !== '' ? (string) $option['id'] : $defaultId;
-                $label = $this->latexToUnicode((string) ($option['label'] ?? $option['text'] ?? $option['value'] ?? ''));
+                $label = self::latexToUnicode((string) ($option['label'] ?? $option['text'] ?? $option['value'] ?? ''));
 
                 $normalized[] = array_merge($option, [
                     'id' => $id,
                     'label' => $label,
-                    'text' => $this->latexToUnicode((string) ($option['text'] ?? $label)),
+                    'text' => self::latexToUnicode((string) ($option['text'] ?? $label)),
                     'value' => (string) ($option['value'] ?? $label),
                 ]);
                 continue;
             }
 
-            $label = $this->latexToUnicode((string) $option);
+            $label = self::latexToUnicode((string) $option);
             $normalized[] = [
                 'id' => $defaultId,
                 'label' => $label,
@@ -313,7 +313,7 @@ class MiniAppTaskCanonicalizer
     /**
      * Convert common LaTeX constructs to Unicode for plain-text display.
      */
-    private function latexToUnicode(string $text): string
+    public static function latexToUnicode(string $text): string
     {
         // \sqrt{X} → √X
         $text = preg_replace('/\\\\sqrt\{([^}]+)\}/', '√$1', $text);
