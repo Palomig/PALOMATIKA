@@ -50,6 +50,7 @@ class DeployController extends Controller
         'qa:setup-users',
         'variants:normalize-miniapp',
         'variants:flush-miniapp',
+        'variants:backfill-slots',
     ];
 
     /**
