@@ -125,4 +125,62 @@ class BackfillVariantSlotsTest extends TestCase
         $this->assertSame(2, $tasks[1]['slot']);
         $this->assertSame(8, $tasks[1]['exam_number']);
     }
+
+    public function test_backfill_gives_distinct_slots_to_duplicate_tasks(): void
+    {
+        // Two structurally identical tasks — must get different slots
+        $duplicateTask = ['task_number' => 8, 'topic_id' => '08', 'task' => ['id' => 1, 'answer' => '5']];
+
+        OgeVariant::create([
+            'hash' => 'bfdup01',
+            'source' => 'miniapp',
+            'mode' => 'mini_mixed',
+            'config_json' => [
+                'tasks' => [$duplicateTask, $duplicateTask, $duplicateTask],
+            ],
+        ]);
+
+        $this->artisan('variants:backfill-slots')
+            ->assertExitCode(0);
+
+        $variant = OgeVariant::where('hash', 'bfdup01')->first();
+        $tasks = $variant->config_json['tasks'];
+
+        $this->assertCount(3, $tasks);
+        $slots = array_column($tasks, 'slot');
+        $this->assertSame([1, 2, 3], $slots, 'Duplicate tasks must get distinct sequential slots');
+        // All have same exam_number since they are the same topic
+        $this->assertSame(8, $tasks[0]['exam_number']);
+        $this->assertSame(8, $tasks[1]['exam_number']);
+        $this->assertSame(8, $tasks[2]['exam_number']);
+    }
+
+    public function test_backfill_processes_partially_backfilled_variant(): void
+    {
+        // First task has canonical fields, second doesn't — command should NOT skip
+        OgeVariant::create([
+            'hash' => 'bfpart1',
+            'source' => 'miniapp',
+            'mode' => 'mini_mixed',
+            'config_json' => [
+                'tasks' => [
+                    ['slot' => 1, 'exam_number' => 8, 'task_number' => 8, 'task' => ['id' => 1]],
+                    ['task_number' => 14, 'topic_id' => '14', 'task' => ['id' => 2]],
+                ],
+            ],
+        ]);
+
+        $this->artisan('variants:backfill-slots')
+            ->expectsOutputToContain('Updated: 1')
+            ->assertExitCode(0);
+
+        $variant = OgeVariant::where('hash', 'bfpart1')->first();
+        $tasks = $variant->config_json['tasks'];
+
+        // Both tasks now have canonical fields
+        $this->assertSame(1, $tasks[0]['slot']);
+        $this->assertSame(8, $tasks[0]['exam_number']);
+        $this->assertSame(2, $tasks[1]['slot']);
+        $this->assertSame(14, $tasks[1]['exam_number']);
+    }
 }

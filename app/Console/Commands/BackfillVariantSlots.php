@@ -32,36 +32,30 @@ class BackfillVariantSlots extends Command
                         continue;
                     }
 
-                    // Check if already backfilled (first task has both fields)
-                    $firstTask = collect($tasks)->first(fn ($t) => is_array($t));
-                    if ($firstTask && isset($firstTask['slot']) && isset($firstTask['exam_number'])) {
+                    // Check if ALL tasks already have canonical fields
+                    $allBackfilled = true;
+                    foreach ($tasks as $task) {
+                        if (is_array($task) && (!isset($task['slot']) || !isset($task['exam_number']))) {
+                            $allBackfilled = false;
+                            break;
+                        }
+                    }
+                    if ($allBackfilled) {
                         $skipped++;
                         continue;
                     }
 
-                    $resolved = VariantTaskNumberResolver::resolveAll($tasks, $variant);
+                    // Resolve each task by its index — avoids identity-matching bugs with duplicate tasks
                     $newTasks = [];
-
                     foreach (array_values($tasks) as $index => $task) {
                         if (!is_array($task)) {
                             $newTasks[] = $task;
                             continue;
                         }
 
-                        // Find the resolved entry for this task by index match
-                        $entry = null;
-                        foreach ($resolved as $r) {
-                            if ($r['task'] === $task) {
-                                $entry = $r;
-                                break;
-                            }
-                        }
-
-                        if ($entry) {
-                            $task['slot'] = $entry['slot'];
-                            $task['exam_number'] = $entry['exam_number'];
-                        }
-
+                        $numbers = VariantTaskNumberResolver::resolve($task, $index, $variant);
+                        $task['slot'] = $numbers['slot'];
+                        $task['exam_number'] = $numbers['exam_number'];
                         $newTasks[] = $task;
                     }
 
