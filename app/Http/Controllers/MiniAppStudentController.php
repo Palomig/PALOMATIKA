@@ -638,7 +638,9 @@ class MiniAppStudentController extends Controller
 
         $answers = $attempt->answers()->get();
 
-        $totalTasks = $scorings->count();
+        $attempt->loadMissing('variant');
+        $configTaskCount = count($attempt->variant?->config_json['tasks'] ?? []);
+        $totalTasks = $configTaskCount > 0 ? $configTaskCount : $scorings->count();
         $correctCount = $scorings->where('is_correct', true)->count();
 
         $totalTime = 0;
@@ -716,7 +718,8 @@ class MiniAppStudentController extends Controller
         $list = [];
         foreach ($attempts as $att) {
             $correct = $att->scorings->where('is_correct', true)->count();
-            $total = $att->scorings->count();
+            $configTaskCount = count($att->variant?->config_json['tasks'] ?? []);
+            $total = $configTaskCount > 0 ? $configTaskCount : $att->scorings->count();
             $time = null;
             if ($att->started_at && $att->submitted_at) {
                 $time = $att->submitted_at->diffInSeconds($att->started_at);
@@ -753,21 +756,32 @@ class MiniAppStudentController extends Controller
             ->firstOrFail();
 
         $correct = $attempt->scorings->where('is_correct', true)->count();
-        $total = $attempt->scorings->count();
+        $configTaskCount = count($attempt->variant?->config_json['tasks'] ?? []);
+        $total = $configTaskCount > 0 ? $configTaskCount : $attempt->scorings->count();
         $time = null;
         if ($attempt->started_at && $attempt->submitted_at) {
             $time = $attempt->submitted_at->diffInSeconds($attempt->started_at);
         }
 
-        // Build task map from variant config
+        // Build task map from variant config.
+        // Mini modes use sequential attempt_task_number (1..N) for scoring,
+        // while config_json stores the original topic-based task_number.
         $taskMap = [];
+        $displayNumMap = []; // sequential key → topic-based display number
         $cfg = $attempt->variant?->config_json;
+        $isMini = str_starts_with((string) ($attempt->variant?->mode ?? ''), 'mini_');
         if (is_array($cfg) && isset($cfg['tasks']) && is_array($cfg['tasks'])) {
             foreach (array_values($cfg['tasks']) as $idx => $taskDef) {
                 if (!is_array($taskDef)) continue;
-                $num = (int) ($taskDef['task_number'] ?? $taskDef['attempt_task_number'] ?? $taskDef['test_number'] ?? 0);
-                if ($num <= 0) {
-                    $num = ($attempt->variant && $attempt->variant->isCustomRandom()) ? ($idx + 1) : (6 + $idx);
+                $topicNum = (int) ($taskDef['task_number'] ?? $taskDef['zadanie_number'] ?? 0);
+                if ($isMini) {
+                    $num = $idx + 1;
+                    if ($topicNum > 0) $displayNumMap[$num] = $topicNum;
+                } else {
+                    $num = $topicNum;
+                    if ($num <= 0) {
+                        $num = ($attempt->variant && $attempt->variant->isCustomRandom()) ? ($idx + 1) : (6 + $idx);
+                    }
                 }
                 if ($num > 0) $taskMap[$num] = $taskDef;
             }
@@ -804,7 +818,7 @@ class MiniAppStudentController extends Controller
             }
 
             $wrongTasks[] = [
-                'task_number' => $taskNum,
+                'task_number' => $displayNumMap[$taskNum] ?? $taskNum,
                 'task_instruction' => $instructionText,
                 'task_text' => $taskText,
                 'task_expression' => $taskExpression,
@@ -813,6 +827,29 @@ class MiniAppStudentController extends Controller
                 'task_options' => $taskOptions,
                 'student_answer' => (string) (($studentAnswer->current_answer ?? '') ?: '—'),
                 'correct_answer' => (string) (($scoring->correct_answer ?? '') ?: '—'),
+            ];
+        }
+
+        // Add unanswered tasks as errors (student skipped them).
+        $scoredTaskNumbers = $attempt->scorings->pluck('task_number')->map(fn ($n) => (int) $n)->all();
+        foreach ($taskMap as $num => $taskDef) {
+            if (in_array($num, $scoredTaskNumbers, true)) continue;
+            $inner = is_array($taskDef['task'] ?? null) ? $taskDef['task'] : [];
+
+            $instructionText = trim((string) (($taskDef['instruction'] ?? $inner['instruction'] ?? '') ?: ''));
+            $conditionText = trim((string) (($inner['text'] ?? $taskDef['text'] ?? $inner['prompt'] ?? $inner['question'] ?? $inner['condition'] ?? '') ?: ''));
+            $taskText = $conditionText !== '' ? $conditionText : $instructionText;
+
+            $wrongTasks[] = [
+                'task_number' => $displayNumMap[$num] ?? $num,
+                'task_instruction' => ($taskText !== $instructionText) ? $instructionText : '',
+                'task_text' => $taskText,
+                'task_expression' => (string) (($taskDef['expression'] ?? $inner['expression'] ?? '') ?: ''),
+                'task_svg' => (string) (($taskDef['svg'] ?? $inner['svg'] ?? '') ?: ''),
+                'task_image' => (string) (($taskDef['image'] ?? $inner['image'] ?? '') ?: ''),
+                'task_options' => [],
+                'student_answer' => '—',
+                'correct_answer' => (string) (($taskDef['correct_answer'] ?? $inner['answer'] ?? '') ?: '—'),
             ];
         }
 
