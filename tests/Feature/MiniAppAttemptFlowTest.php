@@ -227,6 +227,50 @@ class MiniAppAttemptFlowTest extends TestCase
         $this->assertSame([1, 2, 3], collect($statusResponse->json('tasks'))->pluck('task_number')->all());
     }
 
+    public function test_canonical_slot_exam_number_used_for_scoring_after_backfill(): void
+    {
+        $student = User::factory()->create([
+            'role' => 'student',
+            'onboarding_completed_at' => now(),
+        ]);
+
+        // Variant with canonical slot/exam_number (as backfill would set them)
+        $variant = OgeVariant::create([
+            'hash' => 'canon01',
+            'title' => 'Мини-ОГЭ: Смешанное (backfilled)',
+            'source' => OgeVariant::SOURCE_MINIAPP,
+            'mode' => OgeVariant::MODE_MINI_MIXED,
+            'config_json' => [
+                'tasks' => [
+                    ['slot' => 1, 'exam_number' => 8, 'task_number' => 8, 'topic_id' => '08', 'correct_answer' => '42'],
+                    ['slot' => 2, 'exam_number' => 14, 'task_number' => 14, 'topic_id' => '14', 'correct_answer' => '7'],
+                    ['slot' => 3, 'exam_number' => 17, 'task_number' => 17, 'topic_id' => '17', 'correct_answer' => '100'],
+                ],
+            ],
+        ]);
+
+        [, $attempt] = app(OgeAttemptService::class)->startAttempt($student, $variant->hash);
+
+        $this->actingAs($student)
+            ->postJson("/api/oge/attempts/{$attempt->id}/submit", [
+                'answers' => [
+                    1 => '42',
+                    2 => '7',
+                    3 => 'wrong',
+                ],
+            ])
+            ->assertOk()
+            ->assertJsonPath('success', true);
+
+        // Verify scoring uses slot numbers (1, 2, 3)
+        $scorings = \App\Models\OgeAttemptScoring::where('attempt_id', $attempt->id)->orderBy('task_number')->get();
+        $this->assertCount(3, $scorings);
+        $this->assertSame([1, 2, 3], $scorings->pluck('task_number')->all());
+        $this->assertTrue((bool) $scorings[0]->is_correct);
+        $this->assertTrue((bool) $scorings[1]->is_correct);
+        $this->assertFalse((bool) $scorings[2]->is_correct);
+    }
+
     public function test_full_miniapp_attempt_trims_legacy_topic_19_payload_to_three_statements_and_scores_against_it(): void
     {
         $student = User::factory()->create([

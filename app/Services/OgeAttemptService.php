@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
+use App\Services\VariantTaskNumberResolver;
+
 class OgeAttemptService
 {
     /** @var array<string, array<int, string|null>> Per-request answer map cache */
@@ -723,7 +725,8 @@ class OgeAttemptService
                 continue;
             }
 
-            $tn = (int) ($taskData['attempt_task_number'] ?? $taskData['task_number'] ?? $taskData['test_number'] ?? ($attempt->variant?->isCustomRandom() ? ($index + 1) : (6 + $index)));
+            $numbers = VariantTaskNumberResolver::resolve($taskData, $index, $attempt->variant);
+            $tn = $numbers['slot'];
             if ($tn < 1 || $tn > 255) {
                 continue;
             }
@@ -755,14 +758,14 @@ class OgeAttemptService
         if (is_array($configuredTasks) && !empty($configuredTasks)) {
             return $this->buildMapsFromTaskArray(
                 $this->normalizeConfiguredTasksForAttempt($attempt, $configuredTasks),
-                6
+                $attempt->variant
             );
         }
 
         $selected = $attempt->variant?->config_json['zadaniya'] ?? null;
         $variantPayload = $this->variantBuilder->build($hash, is_array($selected) ? $selected : null);
 
-        return $this->buildMapsFromTaskArray($variantPayload['tasks'] ?? [], 6);
+        return $this->buildMapsFromTaskArray($variantPayload['tasks'] ?? [], $attempt->variant);
     }
 
     /**
@@ -787,7 +790,8 @@ class OgeAttemptService
                 continue;
             }
 
-            $tn = (int) ($taskData['attempt_task_number'] ?? $taskData['task_number'] ?? $taskData['test_number'] ?? ($index + 1));
+            $numbers = VariantTaskNumberResolver::resolve($taskData, $index, $attempt->variant);
+            $tn = $numbers['slot'];
             if ($tn < 1 || $tn > 255) {
                 continue;
             }
@@ -802,7 +806,7 @@ class OgeAttemptService
     /**
      * @return array{0: array<int, string|null>, 1: array<int, array>}
      */
-    private function buildMapsFromTaskArray(array $tasks, int $defaultStartTn): array
+    private function buildMapsFromTaskArray(array $tasks, OgeVariant $variant): array
     {
         $answerMap = [];
         $detailMap = [];
@@ -812,7 +816,8 @@ class OgeAttemptService
                 continue;
             }
 
-            $tn = (int) ($taskData['attempt_task_number'] ?? $taskData['task_number'] ?? $taskData['test_number'] ?? ($defaultStartTn + $index));
+            $numbers = VariantTaskNumberResolver::resolve($taskData, $index, $variant);
+            $tn = $numbers['slot'];
             if ($tn < 1 || $tn > 255) {
                 continue;
             }
@@ -834,7 +839,7 @@ class OgeAttemptService
      */
     private function normalizeConfiguredTasksForAttempt(OgeAttempt $attempt, array $tasks): array
     {
-        $useSequential = $this->shouldUseSequentialAttemptNumbers($attempt);
+        $variant = $attempt->variant;
         $canonicalizer = $this->taskCanonicalizer ?? app(MiniAppTaskCanonicalizer::class);
 
         foreach ($tasks as $index => $taskData) {
@@ -842,34 +847,17 @@ class OgeAttemptService
                 continue;
             }
 
-            if ($useSequential) {
-                $displayTaskNumber = (int) ($taskData['display_task_number']
-                    ?? $taskData['task_number']
-                    ?? $taskData['zadanie_number']
-                    ?? ($index + 1));
-
-                if (($taskData['attempt_task_number'] ?? null) === null) {
-                    $taskData['attempt_task_number'] = $index + 1;
-                }
-
-                if (($taskData['display_task_number'] ?? null) === null) {
-                    $taskData['display_task_number'] = $displayTaskNumber;
-                }
-            }
+            $numbers = VariantTaskNumberResolver::resolve($taskData, $index, $variant);
+            $taskData['attempt_task_number'] = $numbers['slot'];
+            $taskData['display_task_number'] = $numbers['exam_number'];
+            $taskData['slot'] = $numbers['slot'];
+            $taskData['exam_number'] = $numbers['exam_number'];
 
             $taskData = $canonicalizer->normalizeForUi($taskData);
-
             $tasks[$index] = $taskData;
         }
 
         return $tasks;
-    }
-
-    private function shouldUseSequentialAttemptNumbers(OgeAttempt $attempt): bool
-    {
-        $mode = (string) ($attempt->variant?->mode ?? '');
-
-        return str_starts_with($mode, 'mini_');
     }
 
     /**
@@ -1148,7 +1136,7 @@ class OgeAttemptService
                         continue;
                     }
 
-                    $n = (int) ($taskData['attempt_task_number'] ?? $taskData['task_number'] ?? $taskData['test_number'] ?? ($index + 1));
+                    $n = VariantTaskNumberResolver::resolve($taskData, $index, $attempt->variant)['slot'];
                     if ($n >= 1 && $n <= 255) {
                         $numbers[] = $n;
                     }
@@ -1157,16 +1145,12 @@ class OgeAttemptService
         } else {
             $configuredTasks = $attempt->variant?->config_json['tasks'] ?? [];
             if (is_array($configuredTasks) && !empty($configuredTasks)) {
-                $configuredTasks = $this->normalizeConfiguredTasksForAttempt($attempt, $configuredTasks);
                 foreach ($configuredTasks as $index => $taskData) {
                     if (!is_array($taskData)) {
                         continue;
                     }
 
-                    $n = (int) ($taskData['attempt_task_number']
-                        ?? $taskData['task_number']
-                        ?? $taskData['test_number']
-                        ?? ($index + 1));
+                    $n = VariantTaskNumberResolver::resolve($taskData, $index, $attempt->variant)['slot'];
                     if ($n >= 1 && $n <= 255) {
                         $numbers[] = $n;
                     }

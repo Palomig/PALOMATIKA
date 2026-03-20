@@ -286,6 +286,14 @@ class OgeVariantPoolService
             }
         }
 
+        // Assign canonical numbering: slot (1-based sequential) and exam_number (topic).
+        $isMini = in_array($type, ['geometry', 'algebra', 'mixed', 'part2'], true);
+        foreach ($result as $index => $task) {
+            $examNumber = (int) ($task['task_number'] ?? 0);
+            $result[$index]['exam_number'] = $examNumber;
+            $result[$index]['slot'] = $isMini ? ($index + 1) : $examNumber;
+        }
+
         return $result;
     }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Teacher;
 use App\Http\Controllers\Controller;
 use App\Models\OgeVariant;
 use App\Models\User;
+use App\Services\VariantTaskNumberResolver;
 use Illuminate\View\View;
 
 class OgeReviewController extends Controller
@@ -105,26 +106,13 @@ class OgeReviewController extends Controller
         $observedAttemptTaskNumberSet = array_fill_keys($observedAttemptTaskNumbers, true);
 
         $customTasks = $config['custom_tasks'] ?? [];
-        if (is_array($customTasks)) {
-            foreach ($customTasks as $index => $taskData) {
-                if (!is_array($taskData)) {
-                    continue;
-                }
-
-                $displayTaskNumber = (int) ($taskData['zadanie_number'] ?? 0);
-                if ($displayTaskNumber < 1 || $displayTaskNumber > 255) {
-                    continue;
-                }
-
-                $attemptTaskNumber = (int) ($taskData['attempt_task_number'] ?? $taskData['task_number'] ?? $taskData['test_number'] ?? ($index + 1));
-                if ($attemptTaskNumber < 1 || $attemptTaskNumber > 255) {
-                    continue;
-                }
-
+        if (is_array($customTasks) && !empty($customTasks)) {
+            $resolved = VariantTaskNumberResolver::resolveAll($customTasks, $variant);
+            foreach ($resolved as $entry) {
                 $hasVariantTaskDefinition = true;
-                $columnsByDisplayTaskNumber[$displayTaskNumber] = [
-                    'display_task_number' => $displayTaskNumber,
-                    'attempt_task_number' => $attemptTaskNumber,
+                $columnsByDisplayTaskNumber[$entry['exam_number']] = [
+                    'display_task_number' => $entry['exam_number'],
+                    'attempt_task_number' => $entry['slot'],
                 ];
             }
         }
