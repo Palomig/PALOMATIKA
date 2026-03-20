@@ -9,16 +9,20 @@ class SetTaskStatus extends Command
 {
     protected $signature = 'tasks:set-status
         {topicId : Topic ID (e.g. 06, 07, 15)}
-        {taskIds : Comma-separated task IDs (e.g. 1,2,3,7,8)}
-        {--status=production : Status to set (production or draft)}';
+        {taskIds : Comma-separated task IDs (e.g. 1,2,3,7,8) or "all" for all tasks}
+        {--status=production : Status to set (production or draft)}
+        {--block= : Only affect tasks in this block number}';
 
     protected $description = 'Set status for specific tasks in a topic JSON file';
 
     public function handle(TaskDataService $taskDataService): int
     {
         $topicId = str_pad($this->argument('topicId'), 2, '0', STR_PAD_LEFT);
-        $taskIds = array_map('intval', explode(',', $this->argument('taskIds')));
+        $taskIdsArg = $this->argument('taskIds');
+        $allTasks = strtolower($taskIdsArg) === 'all';
+        $taskIds = $allTasks ? [] : array_map('intval', explode(',', $taskIdsArg));
         $status = $this->option('status');
+        $blockFilter = $this->option('block') !== null ? (int) $this->option('block') : null;
 
         if (!in_array($status, ['draft', 'production'])) {
             $this->error('Status must be "draft" or "production"');
@@ -41,11 +45,14 @@ class SetTaskStatus extends Command
 
         foreach ($data['blocks'] as $block) {
             $blockNumber = (int) ($block['number'] ?? 0);
+            if ($blockFilter !== null && $blockNumber !== $blockFilter) {
+                continue;
+            }
             foreach ($block['zadaniya'] ?? [] as $zadanie) {
                 $zadanieNumber = (int) ($zadanie['number'] ?? 0);
                 foreach ($zadanie['tasks'] ?? [] as $task) {
                     $id = (int) ($task['id'] ?? 0);
-                    if (in_array($id, $taskIds, true)) {
+                    if ($allTasks || in_array($id, $taskIds, true)) {
                         $keys[] = sprintf('topic_%s_block_%d_zadanie_%d_task_%d', $topicId, $blockNumber, $zadanieNumber, $id);
                         $foundIds[] = $id;
                     }
@@ -53,18 +60,20 @@ class SetTaskStatus extends Command
             }
         }
 
-        $notFound = array_values(array_diff($taskIds, array_values(array_unique($foundIds))));
-
         if (empty($keys)) {
-            $this->error('No tasks were updated');
+            $this->error('No matching tasks found');
             return 1;
         }
 
         $updated = $taskDataService->bulkUpsertStatusByTaskKeys($topicId, $keys, $status);
-        $this->info("Updated {$updated} task records to '{$status}' in topic {$topicId} (DB storage)");
+        $blockInfo = $blockFilter !== null ? " block {$blockFilter}" : '';
+        $this->info("Updated {$updated} task records to '{$status}' in topic {$topicId}{$blockInfo} (DB storage)");
 
-        if (!empty($notFound)) {
-            $this->warn('Task IDs not found: ' . implode(', ', $notFound));
+        if (!$allTasks) {
+            $notFound = array_values(array_diff($taskIds, array_values(array_unique($foundIds))));
+            if (!empty($notFound)) {
+                $this->warn('Task IDs not found: ' . implode(', ', $notFound));
+            }
         }
 
         return 0;
