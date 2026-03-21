@@ -364,15 +364,32 @@ class MiniAppStudentController extends Controller
                         }, $rawOptions);
                     }
 
+                    $graphOptions = $t['graph_options'] ?? null;
+                    if (is_array($graphOptions)) {
+                        $graphOptions = array_map(function ($option) {
+                            if (!is_array($option)) {
+                                return $option;
+                            }
+
+                            if (isset($option['text'])) {
+                                $option['text'] = MiniAppTaskCanonicalizer::latexToUnicode((string) $option['text']);
+                            }
+
+                            return $option;
+                        }, $graphOptions);
+                    }
+
                     $tasks[] = [
-                        'id'         => $t['id'] ?? null,
-                        'text'       => $text,
-                        'expression' => $expression !== '' ? $expression : null,
-                        'svg'        => $t['svg'] ?? null,
-                        'image'      => $t['image'] ?? null,
-                        'options'    => $rawOptions,
-                        'question'   => $question !== '' ? $question : null,
-                        'answer'     => $t['answer'] ?? null,
+                        'id'                 => $t['id'] ?? null,
+                        'text'               => $text,
+                        'expression'         => $expression !== '' ? $expression : null,
+                        'svg'                => $t['svg'] ?? null,
+                        'image'              => $t['image'] ?? null,
+                        'options'            => $rawOptions,
+                        'graph_options'      => $graphOptions,
+                        'graph_options_mode' => $t['graph_options_mode'] ?? null,
+                        'question'           => $question !== '' ? $question : null,
+                        'answer'             => $t['answer'] ?? null,
                     ];
                 }
                 if (!empty($tasks)) {
