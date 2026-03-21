@@ -156,19 +156,20 @@
         <ol class="task-options">
           @foreach($w['task_options'] as $opt)
             @php
-              $optText = is_string($opt) ? $opt : (string)($opt['label'] ?? $opt['text'] ?? json_encode($opt, JSON_UNESCAPED_UNICODE));
+              $optText = \App\Support\OptionLabelFormatter::optionText($opt);
+              $optLabel = \App\Support\OptionLabelFormatter::optionLabel($opt, $loop->index);
               $hasLatex = (bool) preg_match('/\\\\[a-zA-Z]/', $optText);
             @endphp
-            <li>@if($hasLatex)\({{ $optText }}\)@else{{ $optText }}@endif</li>
+            <li>{{ $optLabel }}. @if($hasLatex)\({{ $optText }}\)@else{{ $optText }}@endif</li>
           @endforeach
         </ol>
       @endif
     </div>
 
     <div class="err-answers">
-      Твой ответ: <b class="err-student-answer">{{ $w['student_answer'] }}</b>
+      Твой ответ: <b class="err-student-answer">{{ \App\Support\OptionLabelFormatter::formatAnswer($w['student_answer'], is_array($w['task_options'] ?? null) ? $w['task_options'] : []) }}</b>
       &nbsp;·&nbsp;
-      Верный: <b class="err-correct-answer">{{ $w['correct_answer'] }}</b>
+      Верный: <b class="err-correct-answer">{{ \App\Support\OptionLabelFormatter::formatAnswer($w['correct_answer'], is_array($w['task_options'] ?? null) ? $w['task_options'] : []) }}</b>
     </div>
   </details>
   @endforeach

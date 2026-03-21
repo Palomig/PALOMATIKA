@@ -733,7 +733,7 @@
                   <div class="test-option"
                        :class="{ 'selected': answers[taskKey(currentTask)] === optionAnswerValue(opt, oi) }"
                        @click="selectOption(opt, oi)">
-                    <div class="test-option-letter" x-text="['А','Б','В','Г','Д','Е'][oi] || (oi+1)"></div>
+                    <div class="test-option-letter" x-text="optionDisplayLabel(opt, oi)"></div>
                     <div class="test-option-text" x-html="optionHtml(opt)"></div>
                   </div>
                 </template>
@@ -998,6 +998,26 @@
         }
         const id = String(opt?.id ?? '').trim();
         return id || String(idx + 1);
+      },
+
+      optionDisplayLabel(opt, idx) {
+        const rawId = String(opt?.id ?? '').trim().toLowerCase();
+        if (/^[a-z]$/.test(rawId)) {
+          return this.optionLabelByIndex(rawId.charCodeAt(0) - 97);
+        }
+        const overflowMatch = rawId.match(/^o([1-9]\d*)$/);
+        if (overflowMatch) {
+          return overflowMatch[1];
+        }
+        if (/^[1-9]\d*$/.test(rawId)) {
+          return rawId;
+        }
+        return this.optionLabelByIndex(idx);
+      },
+
+      optionLabelByIndex(idx) {
+        const labels = ['А', 'Б', 'В', 'Г', 'Д', 'Е'];
+        return labels[idx] || String(idx + 1);
       },
 
       optionHtml(opt) {

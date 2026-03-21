@@ -352,14 +352,22 @@
         $tn = str_pad($examNum, 2, '0', STR_PAD_LEFT);
         $studentAnswer = $answers->firstWhere('task_number', $scoring->task_number);
         $answerText = $studentAnswer ? $studentAnswer->current_answer : '';
+        $taskDef = $variantTasks[$slot - 1] ?? [];
+        $taskInner = is_array($taskDef['task'] ?? null) ? $taskDef['task'] : [];
+        $taskOptions = [];
+        if (is_array($taskDef['options'] ?? null)) {
+            $taskOptions = array_values($taskDef['options']);
+        } elseif (is_array($taskInner['options'] ?? null)) {
+            $taskOptions = array_values($taskInner['options']);
+        }
 
         $rows[] = [
             'num' => $examNum,
             'topicKey' => $tn,
             'topicName' => $topicNames[$tn] ?? "Задание {$examNum}",
             'locator' => $locatorMap[$examNum] ?? '',
-            'yourAnswer' => $answerText ?? '',
-            'correctAnswer' => $scoring->correct_answer ?? '',
+            'yourAnswer' => \App\Support\OptionLabelFormatter::formatAnswer($answerText ?? '', $taskOptions),
+            'correctAnswer' => \App\Support\OptionLabelFormatter::formatAnswer($scoring->correct_answer ?? '', $taskOptions),
             'isCorrect' => (bool) $scoring->is_correct,
         ];
     }

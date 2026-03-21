@@ -175,7 +175,7 @@
               @if(!empty($task['options']) && is_array($task['options']))
                 <div style="margin-top:8px; display:flex; flex-wrap:wrap; gap:6px;">
                   @foreach($task['options'] as $opt)
-                    <span style="padding:4px 10px; border:1px solid var(--border); border-radius:8px; font-size:12px; color:var(--muted);">{{ is_array($opt) ? ($opt['label'] ?? $opt['text'] ?? json_encode($opt)) : $opt }}</span>
+                    <span style="padding:4px 10px; border:1px solid var(--border); border-radius:8px; font-size:12px; color:var(--muted);">{{ \App\Support\OptionLabelFormatter::optionLabel($opt, $loop->index) }}. {{ \App\Support\OptionLabelFormatter::optionText($opt) }}</span>
                   @endforeach
                 </div>
               @endif
@@ -184,9 +184,9 @@
                 <div class="answer-row">
                   <span class="answer-label">Ответ:</span>
                   @if($isPremium)
-                    <span class="answer-value">{{ $task['answer'] }}</span>
+                    <span class="answer-value">{{ \App\Support\OptionLabelFormatter::formatAnswer($task['answer'], is_array($task['options'] ?? null) ? $task['options'] : []) }}</span>
                   @else
-                    <span class="answer-blur">{{ $task['answer'] }}</span>
+                    <span class="answer-blur">{{ \App\Support\OptionLabelFormatter::formatAnswer($task['answer'], is_array($task['options'] ?? null) ? $task['options'] : []) }}</span>
                     <span class="premium-cta" @click="showPremium = true">Premium</span>
                   @endif
                 </div>
