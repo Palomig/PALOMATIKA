@@ -297,7 +297,6 @@ function homePage() {
       this.appReady = true;
 
       // If mini-app was opened with startapp=oge_variant_hash_..., forward into dashboard flow.
-      const tg = window.Telegram?.WebApp;
       const startParamFromTg = tg?.initDataUnsafe?.start_param || '';
       const urlParams = new URLSearchParams(window.location.search);
       const startParamFromUrl = urlParams.get('startapp') || urlParams.get('tgWebAppStartParam') || '';
