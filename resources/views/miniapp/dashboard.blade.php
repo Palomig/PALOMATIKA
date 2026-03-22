@@ -314,6 +314,11 @@
       <div class="tile-sm-name">Репетитор</div>
       <div class="tile-sm-desc">Бесплатный урок</div>
     </a>
+    <div class="tile-sm" @click="handleInvite()">
+      <div class="tile-sm-icon">🎁</div>
+      <div class="tile-sm-name">Пригласить друга</div>
+      <div class="tile-sm-desc">Поделиться ссылкой</div>
+    </div>
   </div>
 
   {{-- FULL VARIANT CHOICE MODAL --}}
