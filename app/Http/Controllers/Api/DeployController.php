@@ -51,6 +51,7 @@ class DeployController extends Controller
         'variants:normalize-miniapp',
         'variants:flush-miniapp',
         'variants:backfill-slots',
+        'user:flush-sessions',
     ];
 
     /**
