@@ -12,7 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
 {{-- Telegram WebApp SDK --}}
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="/js/telegram-web-app.js"></script>
 
 {{-- Alpine.js --}}
 <script defer src="/js/alpine.min.js"></script>
