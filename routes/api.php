@@ -58,7 +58,7 @@ Route::delete('/schedule/{id}', [ScheduleController::class, 'destroy']);
 Route::get('/students/search', [ScheduleController::class, 'searchStudents']);
 
 // Geometry Editor API
-Route::prefix('geometry')->group(function () {
+Route::middleware(['auth', 'role:admin'])->prefix('geometry')->group(function () {
     Route::get('/stats', [GeometryEditorController::class, 'stats']);
     Route::get('/{taskId}/load', [GeometryEditorController::class, 'load']);
     Route::post('/{taskId}/save', [GeometryEditorController::class, 'save']);
