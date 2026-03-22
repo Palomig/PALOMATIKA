@@ -29,6 +29,7 @@ class MiniAppAuthController extends Controller
         if (Auth::check()) {
             /** @var User $user */
             $user = Auth::user();
+
             $startapp = trim((string) ($request->query('startapp', $request->query('tgWebAppStartParam', ''))));
 
             if (!$user->onboarding_completed_at) {
@@ -237,4 +238,5 @@ class MiniAppAuthController extends Controller
 
         return redirect($role === 'teacher' ? '/tg/teacher/dashboard' : '/tg/dashboard');
     }
+
 }
