@@ -203,15 +203,6 @@
 
 @section('body')
 <div class="home-container" x-data="homePage()">
-  <div class="preloader" x-show="!appReady" x-transition.opacity>
-    <div class="preloader-card">
-      <div class="preloader-logo">🤖</div>
-      <div class="preloader-title">Загружаем mini app</div>
-      <div class="preloader-sub">Подготавливаем безопасный вход через Telegram…</div>
-      <div class="preloader-bar"><span></span></div>
-    </div>
-  </div>
-
   <div class="home-topbar">
     <div class="home-logo">palomatika</div>
     <div class="exam-badge">ОГЭ 2026</div>
@@ -258,12 +249,12 @@
 
 
   @auth
-    <a href="/tg/dashboard" class="btn-primary" id="go-btn" style="text-decoration:none;" :style="!appReady ? 'pointer-events:none;opacity:.6' : ''">
+    <a href="/tg/dashboard" class="btn-primary" id="go-btn" style="text-decoration:none;">
       <span style="display:flex;align-items:center;gap:8px;">Войти</span>
     </a>
   @else
-    <button class="btn-primary" id="start-btn" @click="handleLogin()" :disabled="!appReady">
-      <span id="start-btn-text" style="display:flex;align-items:center;gap:8px;" x-text="appReady ? 'Войти' : '⏳ Инициализация…'"></span>
+    <button class="btn-primary" id="start-btn" @click="handleLogin()">
+      <span id="start-btn-text" style="display:flex;align-items:center;gap:8px;">Войти</span>
     </button>
   @endauth
 
@@ -296,11 +287,13 @@ function homePage() {
 
     pad(n) { return String(n).padStart(2, '0'); },
 
-    async init() {
+    init() {
       this.updateCountdown();
       setInterval(() => this.updateCountdown(), 1000);
 
-      await this.waitTelegramReady();
+      // Don't block UI waiting for initData — show page immediately
+      const tg = window.Telegram?.WebApp;
+      try { tg?.ready?.(); } catch (_) {}
       this.appReady = true;
 
       // If mini-app was opened with startapp=oge_variant_hash_..., forward into dashboard flow.
@@ -331,26 +324,6 @@ function homePage() {
       @endif
     },
 
-    async waitTelegramReady() {
-      const tg = window.Telegram?.WebApp;
-      if (!tg) {
-        await new Promise(r => setTimeout(r, 200));
-        return;
-      }
-
-      try { tg.ready?.(); } catch (_) {}
-
-      // Quick check: initData usually arrives within 300ms on mobile.
-      // On desktop it may never arrive — don't block the UI for 4s.
-      const started = Date.now();
-      const timeout = 800;
-      while (Date.now() - started < timeout) {
-        const initData = typeof tg.initData === 'string' ? tg.initData.trim() : '';
-        if (initData.length > 20) return;
-        await new Promise(r => setTimeout(r, 80));
-      }
-    },
-
     updateCountdown() {
       const diff = examDate - new Date();
       if (diff <= 0) return;
@@ -379,15 +352,11 @@ function homePage() {
       if (!initData) {
         this.authErrorCode = 'E_INITDATA_EMPTY';
         this.sendDiag('auth_precheck', this.authErrorCode);
-
-        this.startBotFallbackAuth(btn, btnText).catch((e) => {
-          this.sendDiag('auth_fallback_failed', 'E_FALLBACK_START', { err: e?.message || null });
-          if (tg && tg.showAlert) { tg.showAlert('Не удалось войти. Попробуйте перезапустить мини-приложение.'); }
-          else { alert('Не удалось войти. Попробуйте перезапустить мини-приложение.'); }
-          if (btnText) btnText.innerHTML = 'Войти';
-          if (btn) btn.classList.remove('btn-loading');
-          this.loginInProgress = false;
-        });
+        if (tg && tg.showAlert) { tg.showAlert('Не удалось получить данные Telegram. Попробуйте перезапустить мини-приложение.'); }
+        else { alert('Откройте приложение через Telegram'); }
+        if (btnText) btnText.innerHTML = 'Войти';
+        if (btn) btn.classList.remove('btn-loading');
+        this.loginInProgress = false;
         return;
       }
 
