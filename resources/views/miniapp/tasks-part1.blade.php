@@ -1,6 +1,10 @@
 @extends('layouts.miniapp')
 @section('title', '1я часть ОГЭ — palomatika')
 
+@push('katex')
+@include('partials.head-katex')
+@endpush
+
 @push('styles')
 <style>
   .topics-row {

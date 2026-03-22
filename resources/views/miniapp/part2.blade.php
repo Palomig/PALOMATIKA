@@ -1,6 +1,10 @@
 @extends('layouts.miniapp')
 @section('title', '2я часть ОГЭ — palomatika')
 
+@push('katex')
+@include('partials.head-katex')
+@endpush
+
 @push('styles')
   .topics-row {
     display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px;

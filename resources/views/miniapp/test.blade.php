@@ -1,6 +1,10 @@
 @extends('layouts.miniapp')
 @section('title', $title . ' — palomatika')
 
+@push('katex')
+@include('partials.head-katex')
+@endpush
+
 @push('head')
 <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin>
