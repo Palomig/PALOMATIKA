@@ -15,7 +15,7 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 {{-- Alpine.js --}}
-<script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script defer src="/js/alpine.min.js"></script>
 
 {{-- KaTeX math rendering (opt-in: push to 'katex' stack) --}}
 @stack('katex')
