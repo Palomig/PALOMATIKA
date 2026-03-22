@@ -1,6 +1,10 @@
 @extends('layouts.miniapp')
 @section('title', 'Управление вариантами — palomatika')
 
+@push('katex')
+@include('partials.head-katex')
+@endpush
+
 @push('head')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>

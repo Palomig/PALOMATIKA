@@ -1,6 +1,10 @@
 @extends('layouts.miniapp')
 @section('title', $label . ' — palomatika')
 
+@push('katex')
+@include('partials.head-katex')
+@endpush
+
 @push('styles')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <style>

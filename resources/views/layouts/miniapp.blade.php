@@ -17,8 +17,8 @@
 {{-- Alpine.js --}}
 <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
-{{-- KaTeX math rendering --}}
-@include('partials.head-katex')
+{{-- KaTeX math rendering (opt-in: push to 'katex' stack) --}}
+@stack('katex')
 
 @stack('head')
 
