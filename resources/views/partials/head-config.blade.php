@@ -197,7 +197,7 @@
 </script>
 
 {{-- Telegram WebApp SDK (must load before Alpine.js and telegram-auth.js) --}}
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="/js/telegram-web-app.js"></script>
 
 {{-- Alpine.js --}}
 <script defer src="/js/alpine.min.js"></script>
