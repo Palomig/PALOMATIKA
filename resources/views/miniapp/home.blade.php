@@ -437,13 +437,10 @@ function homePage() {
       this.waiting = true;
       this.sendDiag('auth_fallback_started', 'A_FALLBACK', { has_start_param: !!startParam });
 
-      // Open bot deep link without killing the Mini App on desktop
+      // Open bot deep link — window.open keeps Mini App alive on desktop
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent || '');
       if (isMobile) {
         window.location.href = data.deep_link;
-      } else if (tg && tg.openTelegramLink) {
-        // openTelegramLink keeps the Mini App alive on desktop
-        tg.openTelegramLink(data.deep_link);
       } else {
         window.open(data.deep_link, '_blank');
       }
