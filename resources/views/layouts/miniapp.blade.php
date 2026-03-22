@@ -225,6 +225,27 @@
     });
   }
 
+  // Account mismatch guard: if Telegram user differs from logged-in user, re-auth
+  @auth
+  (function() {
+    const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+    const initData = window.Telegram?.WebApp?.initData;
+    const sessionOauthId = @json(auth()->user()->oauth_id ?? '');
+    if (tgUser && tgUser.id && sessionOauthId && String(tgUser.id) !== String(sessionOauthId) && initData) {
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = '/tg/auth';
+      form.style.display = 'none';
+      const addInput = (n, v) => { const i = document.createElement('input'); i.type='hidden'; i.name=n; i.value=v||''; form.appendChild(i); };
+      addInput('_token', document.querySelector('meta[name="csrf-token"]')?.content || '');
+      addInput('initData', initData);
+      document.body.appendChild(form);
+      form.submit();
+      return;
+    }
+  })();
+  @endauth
+
   // CSRF for fetch requests
   window._csrf = document.querySelector('meta[name="csrf-token"]')?.content;
 
