@@ -334,25 +334,21 @@ function homePage() {
     async waitTelegramReady() {
       const tg = window.Telegram?.WebApp;
       if (!tg) {
-        // Outside Telegram — no initData will ever appear, but allow page interaction.
-        await new Promise(r => setTimeout(r, 350));
+        await new Promise(r => setTimeout(r, 200));
         return;
       }
 
       try { tg.ready?.(); } catch (_) {}
 
+      // Quick check: initData usually arrives within 300ms on mobile.
+      // On desktop it may never arrive — don't block the UI for 4s.
       const started = Date.now();
-      const timeout = 4000; // 4s — enough for slow VPN/proxy connections
+      const timeout = 800;
       while (Date.now() - started < timeout) {
         const initData = typeof tg.initData === 'string' ? tg.initData.trim() : '';
-        if (initData.length > 20) return; // initData is ready
-        await new Promise(r => setTimeout(r, 100));
+        if (initData.length > 20) return;
+        await new Promise(r => setTimeout(r, 80));
       }
-
-      // Timeout reached — initData never arrived.
-      // appReady will still be set to true so the UI is interactive,
-      // but handleLogin() will show an error if initData is empty.
-      console.warn('[palomatika] Telegram initData not available after ' + timeout + 'ms');
     },
 
     updateCountdown() {
