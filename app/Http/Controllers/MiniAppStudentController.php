@@ -50,12 +50,6 @@ class MiniAppStudentController extends Controller
             return redirect('/tg/teacher/dashboard');
         }
 
-        // Новые ученики проходят диагностику перед дашбордом
-        $diagnosticService = app(\App\Services\DiagnosticService::class);
-        if (!$diagnosticService->hasCompletedDiagnostic($user->id)) {
-            return redirect()->route('miniapp.diagnostic');
-        }
-
         // If Mini App was opened via startapp=oge_variant_hash_..., jump directly to test.
         $startParam = trim((string) $request->query('startapp', ''));
         if ($startParam === '') {
