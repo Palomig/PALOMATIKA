@@ -11,9 +11,16 @@
 
   .demo-banner {
     background: linear-gradient(90deg, #f59e0b, #f97316);
-    color: #fff; text-align: center; padding: 8px 16px;
+    color: #fff; padding: 8px 16px;
     font-size: 13px; font-weight: 700; letter-spacing: 0.05em;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
   }
+  .demo-banner-text { flex: 1; text-align: center; }
+  .demo-review-link {
+    background: rgba(0,0,0,0.2); color: #fff; text-decoration: none;
+    padding: 4px 10px; border-radius: 6px; font-size: 11px; white-space: nowrap;
+  }
+  .demo-review-link:hover { background: rgba(0,0,0,0.35); }
 
   .wrap { max-width: 480px; margin: 0 auto; padding: 16px; }
 
@@ -69,7 +76,10 @@
 </head>
 <body>
 
-<div class="demo-banner">🔍 ДЕМО-РЕЖИМ — результаты не сохраняются</div>
+<div class="demo-banner">
+  <span class="demo-banner-text">🔍 ДЕМО-РЕЖИМ — результаты не сохраняются</span>
+  <a href="{{ route('demo.diagnostic.review') }}" class="demo-review-link">✏️ Проверить вопросы</a>
+</div>
 
 <div class="wrap">
 <div x-data="diagApp()" x-init="init()">
