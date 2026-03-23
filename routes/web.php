@@ -417,6 +417,10 @@ Route::prefix('api/board')->group(function () {
     Route::get('/meta', [BoardController::class, 'apiGetMeta']);
 });
 
+// Public demo: diagnostic test preview (no auth)
+Route::get('/demo/diagnostic', [\App\Http\Controllers\DiagnosticDemoController::class, 'show'])->name('demo.diagnostic');
+Route::post('/demo/diagnostic', [\App\Http\Controllers\DiagnosticDemoController::class, 'check'])->name('demo.diagnostic.check');
+
 Route::get('/kanban', [BoardController::class, 'kanban'])->name('board.kanban');
 Route::get('/roadmap', [BoardController::class, 'roadmap'])->name('board.roadmap');
 Route::get('/forstas', [BoardController::class, 'architecture'])->name('board.architecture');
