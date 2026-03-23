@@ -21,14 +21,27 @@
     margin-bottom: 12px;
   }
   .q-category { font-size: 10px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
-  .q-text { font-size: 15px; color: var(--text); line-height: 1.6; margin-bottom: 16px; }
-  .q-input {
+  .q-text { font-size: 15px; color: var(--text); line-height: 1.6; margin-bottom: 16px; font-weight: 600; }
+
+  /* MC choices */
+  .choices { display: flex; flex-direction: column; gap: 8px; }
+  .choice-btn {
+    display: flex; align-items: center; gap: 12px;
     width: 100%; padding: 12px 14px;
-    background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
-    color: var(--text); font-size: 16px; outline: none;
-    box-sizing: border-box;
+    background: var(--bg); border: 1.5px solid var(--border);
+    border-radius: 10px; cursor: pointer; text-align: left;
+    font-size: 14px; color: var(--text);
+    transition: border-color 0.15s, background 0.15s;
   }
-  .q-input:focus { border-color: var(--accent); }
+  .choice-btn:hover { border-color: var(--accent); }
+  .choice-btn.selected { border-color: var(--accent); background: rgba(79,142,247,0.1); color: var(--accent); font-weight: 700; }
+  .choice-letter {
+    width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+    background: var(--surface2); color: var(--muted); font-weight: 800; font-size: 12px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, color 0.15s;
+  }
+  .choice-btn.selected .choice-letter { background: var(--accent); color: #fff; }
 
   .nav-btns { display: flex; gap: 8px; margin-top: 8px; }
   .btn-prev, .btn-next, .btn-submit {
@@ -38,6 +51,7 @@
   .btn-prev { background: var(--surface); border: 1px solid var(--border); color: var(--text); }
   .btn-next, .btn-submit { background: var(--accent); color: #fff; }
   .btn-prev:disabled { opacity: 0.3; }
+  .btn-next:disabled { opacity: 0.4; cursor: default; }
 
   .dots { display: flex; gap: 4px; justify-content: center; flex-wrap: wrap; margin: 12px 0; }
   .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: background 0.2s; }
@@ -45,18 +59,18 @@
   .dot.active { background: var(--text); }
 @endpush
 
-@section('content')
+@section('body')
 <div x-data="diagApp()" x-init="init()">
 
   <div class="diag-header">
     <div class="diag-title">Диагностика</div>
-    <div class="diag-subtitle">Ответьте на вопросы, чтобы мы<br>подобрали задания по вашему уровню</div>
+    <div class="diag-subtitle">Выберите правильный ответ — мы подберём<br>задания по вашему уровню</div>
   </div>
 
   <div class="progress-wrap">
     <div class="progress-label">
       <span>Вопрос <span x-text="current + 1"></span> из {{ $totalQuestions }}</span>
-      <span x-text="Math.round((current / {{ $totalQuestions }}) * 100) + '%'"></span>
+      <span x-text="Math.round(((current + 1) / {{ $totalQuestions }}) * 100) + '%'"></span>
     </div>
     <div class="progress-bar">
       <div class="progress-fill" :style="'width:' + Math.round(((current + 1) / {{ $totalQuestions }}) * 100) + '%'"></div>
@@ -73,15 +87,23 @@
   @foreach($questions as $i => $q)
   <div class="question-card" x-show="current === {{ $i }}" x-transition.opacity>
     <div class="q-category">{{ $q['category'] }} · {{ $q['skill_name'] }}</div>
-    <div class="q-text">{{ $q['question']['question'] ?? $q['question']['text'] ?? '' }}</div>
-    <input
-      class="q-input"
-      type="text"
-      inputmode="decimal"
-      placeholder="Введите ответ"
-      x-model="answers[{{ $i }}]"
-      @keydown.enter="next()"
-    >
+    <div class="q-text">{{ $q['question']['question'] ?? '' }}</div>
+
+    @if(($q['type'] ?? '') === 'mc')
+    <div class="choices">
+      @foreach($q['question']['choices'] as $ci => $choice)
+      <button
+        type="button"
+        class="choice-btn"
+        :class="{ selected: answers[{{ $i }}] === '{{ $ci }}' }"
+        @click="selectChoice({{ $i }}, '{{ $ci }}')"
+      >
+        <span class="choice-letter">{{ ['А','Б','В','Г'][$ci] }}</span>
+        <span>{{ $choice }}</span>
+      </button>
+      @endforeach
+    </div>
+    @endif
   </div>
   @endforeach
 
@@ -91,15 +113,18 @@
       class="btn-next"
       x-show="current < {{ $totalQuestions - 1 }}"
       @click="next()"
+      :disabled="answers[current] === ''"
     >Вперёд →</button>
     <button
       class="btn-submit"
       x-show="current === {{ $totalQuestions - 1 }}"
       @click="submit()"
-    >Завершить</button>
+      :disabled="answers[current] === '' || submitting"
+      x-text="submitting ? 'Сохраняем...' : 'Завершить'"
+    ></button>
   </div>
 
-  {{-- Скрытая форма для сабмита --}}
+  {{-- Скрытая форма --}}
   <form id="diag-form" method="POST" action="{{ route('miniapp.diagnostic.submit') }}" style="display:none">
     @csrf
     <template x-for="(ans, i) in answers" :key="i">
@@ -114,10 +139,22 @@ function diagApp() {
   return {
     current: 0,
     answers: Array({{ $totalQuestions }}).fill(''),
+    submitting: false,
     init() {},
     prev() { if (this.current > 0) this.current--; },
-    next() { if (this.current < {{ $totalQuestions - 1 }}) this.current++; },
+    next() {
+      if (this.current < {{ $totalQuestions - 1 }}) this.current++;
+    },
+    selectChoice(questionIndex, choiceIndex) {
+      this.answers[questionIndex] = choiceIndex;
+      // Автоматически переходим к следующему через 400ms
+      if (questionIndex < {{ $totalQuestions - 1 }}) {
+        setTimeout(() => { this.current = questionIndex + 1; }, 400);
+      }
+    },
     submit() {
+      if (this.submitting) return;
+      this.submitting = true;
       document.getElementById('diag-form').submit();
     }
   }

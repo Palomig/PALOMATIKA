@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Data\DiagnosticQuestionBank;
 use App\Models\Skill;
 use App\Models\UserSkill;
 use Illuminate\Support\Facades\Storage;
@@ -13,52 +14,46 @@ class DiagnosticService
     public function __construct() {}
 
     /**
-     * Вернуть вопросы из статичного теста, составленного учителем.
-     * Читает storage/app/diagnostic_test.json.
+     * Вернуть вопросы для диагностического теста.
+     * Использует банк MC-вопросов (DiagnosticQuestionBank).
      *
-     * @return array<int, array{skill_id: int, skill_name: string, category: string, question: array, correct_answer: string}>
+     * @return array<int, array{skill_id: int, skill_name: string, category: string, type: string, question: array, correct_answer: string}>
      */
     public function generateQuestions(): array
     {
-        if (!Storage::exists(self::STORAGE_PATH)) {
-            return [];
-        }
-
-        $saved = json_decode(Storage::get(self::STORAGE_PATH), true) ?? [];
+        $bank = DiagnosticQuestionBank::all();
         $questions = [];
 
-        foreach ($saved as $entry) {
-            $skillId = (int) ($entry['skill_id'] ?? 0);
-            $skillName = $entry['skill_name'] ?? '';
+        // Загружаем все нужные навыки одним запросом
+        $skillIds = array_keys($bank);
+        $skills = Skill::whereIn('id', $skillIds)->where('is_active', true)->get()->keyBy('id');
 
-            // Получить категорию из БД для красивого отображения
-            $skill = Skill::find($skillId);
-            $category = $skill?->category ?? $skill?->parent?->name ?? '';
+        foreach ($bank as $skillId => $mc) {
+            $skill = $skills->get($skillId);
+            if (!$skill) continue;
 
-            foreach ($entry['tasks'] ?? [] as $task) {
-                $questions[] = [
-                    'skill_id'     => $skillId,
-                    'skill_name'   => $skillName,
-                    'category'     => $category,
-                    'question'     => $task,
-                    'correct_answer' => $task['answer'] ?? '',
-                ];
-            }
+            $questions[] = [
+                'skill_id'       => $skillId,
+                'skill_name'     => $skill->name,
+                'category'       => $skill->category ?? '',
+                'type'           => 'mc',
+                'question'       => [
+                    'question' => $mc['question'],
+                    'choices'  => $mc['choices'],
+                ],
+                'correct_answer' => (string) $mc['correct'],
+            ];
         }
 
         return $questions;
     }
 
     /**
-     * Проверить, составлен ли диагностический тест учителем.
+     * Диагностический тест всегда доступен (банк вопросов встроен).
      */
     public function isTestConfigured(): bool
     {
-        if (!Storage::exists(self::STORAGE_PATH)) {
-            return false;
-        }
-        $saved = json_decode(Storage::get(self::STORAGE_PATH), true) ?? [];
-        return !empty($saved);
+        return !empty(DiagnosticQuestionBank::all());
     }
 
     /**
