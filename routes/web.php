@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\Auth\TelegramBotAuthController;
+use App\Http\Controllers\ParentAppController;
+use App\Http\Controllers\ParentAuthController;
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\EgeController;
 use App\Http\Controllers\JarvisMaterialPageController;
@@ -543,4 +545,18 @@ Route::prefix('test')->group(function () {
 
     // Legacy
     Route::post('/parse-pdf', [TestPdfController::class, 'parsePdf'])->name('test.parsePdf');
+});
+
+// Маршруты приложения для родителей (/parent/*)
+Route::prefix('parent')->group(function () {
+    Route::get('/', [ParentAuthController::class, 'home'])->name('parent.home');
+    Route::post('/auth', [ParentAuthController::class, 'authenticate'])->name('parent.auth');
+    Route::get('/auth/continue', [ParentAuthController::class, 'authContinue'])->name('parent.auth.continue');
+
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/dashboard', [ParentAppController::class, 'dashboard'])->name('parent.dashboard');
+        Route::get('/child/{studentId}/skills', [ParentAppController::class, 'childSkills'])->name('parent.child.skills');
+        Route::get('/child/{studentId}/attendance', [ParentAppController::class, 'childAttendance'])->name('parent.child.attendance');
+        Route::get('/child/{studentId}/homework', [ParentAppController::class, 'childHomework'])->name('parent.child.homework');
+    });
 });
