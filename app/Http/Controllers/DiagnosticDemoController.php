@@ -45,6 +45,56 @@ class DiagnosticDemoController extends Controller
         return view('demo.diagnostic-results', compact('results', 'score', 'total', 'percent'));
     }
 
+    public function review()
+    {
+        $bank     = DiagnosticQuestionBank::all();
+        $skillIds = array_keys($bank);
+        $skills   = Skill::whereIn('id', $skillIds)->where('is_active', true)->get()->keyBy('id');
+
+        $reviewPath = storage_path('app/diagnostic_review.json');
+        $saved      = file_exists($reviewPath)
+            ? (json_decode(file_get_contents($reviewPath), true) ?? [])
+            : [];
+        $approved = $saved['approved'] ?? null;
+        $rejected = $saved['rejected'] ?? [];
+
+        $items = [];
+        foreach ($bank as $skillId => $mc) {
+            $skill = $skills->get($skillId);
+            $items[] = [
+                'skill_id'   => $skillId,
+                'skill_name' => $skill?->name ?? "Навык #$skillId",
+                'category'   => $skill?->category ?? '',
+                'question'   => $mc['question'],
+                'choices'    => $mc['choices'],
+                'correct'    => $mc['correct'],
+                'status'     => $approved === null
+                    ? 'pending'
+                    : (in_array($skillId, $approved, true)
+                        ? 'approved'
+                        : (in_array($skillId, $rejected, true) ? 'rejected' : 'pending')),
+            ];
+        }
+
+        return view('demo.diagnostic-review', [
+            'items'         => $items,
+            'approvedCount' => $approved !== null ? count($approved) : 0,
+            'rejectedCount' => count($rejected),
+            'totalCount'    => count($items),
+        ]);
+    }
+
+    public function saveReview(Request $request)
+    {
+        $approved = array_map('intval', $request->input('approved', []));
+        $rejected = array_map('intval', $request->input('rejected', []));
+
+        $data = ['approved' => $approved, 'rejected' => $rejected];
+        file_put_contents(storage_path('app/diagnostic_review.json'), json_encode($data, JSON_PRETTY_PRINT));
+
+        return redirect()->route('demo.diagnostic.review')->with('saved', true);
+    }
+
     private function buildQuestions(): array
     {
         $bank     = DiagnosticQuestionBank::all();
