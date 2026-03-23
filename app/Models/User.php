@@ -172,6 +172,22 @@ class User extends Authenticatable
         return $this->hasMany(OgeGeneratorTemplate::class, 'user_id');
     }
 
+    // Родитель видит этих учеников
+    public function children(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'parent_student', 'parent_id', 'student_id')
+            ->withPivot('relation')
+            ->withTimestamps();
+    }
+
+    // Родители ученика
+    public function parents(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'parent_student', 'student_id', 'parent_id')
+            ->withPivot('relation')
+            ->withTimestamps();
+    }
+
     // Helpers
 
     public function isStudent(): bool
@@ -187,6 +203,11 @@ class User extends Authenticatable
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
+    }
+
+    public function isParent(): bool
+    {
+        return $this->role === 'parent';
     }
 
     public function isSuperuser(): bool
