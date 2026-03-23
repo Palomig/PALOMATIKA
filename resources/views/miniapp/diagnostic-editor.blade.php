@@ -124,7 +124,7 @@
   .toast.show { opacity: 1; }
 @endpush
 
-@section('content')
+@section('body')
 <div x-data="diagEditor()" x-init="init()" style="margin: -16px;">
 
 <div class="de-topbar">
