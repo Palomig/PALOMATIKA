@@ -40,11 +40,11 @@ jobs:
   deploy:
     needs: auto-merge
     if: |
-      always() && (
-        github.ref == 'refs/heads/main' ||
-        (startsWith(github.ref, 'refs/heads/claude/') && needs.auto-merge.result == 'success')
-      )
+      github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    concurrency:
+      group: production-deploy
+      cancel-in-progress: false
 
     steps:
       - name: Checkout main branch
@@ -88,6 +88,58 @@ jobs:
       #       php artisan deploy:refresh
 
       # Option 2: Webhook trigger (requires DEPLOY_WEBHOOK_SECRET)
+      - name: Trigger deploy refresh webhook
+        continue-on-error: true
+        run: |
+          if [ -n "${{ secrets.DEPLOY_WEBHOOK_SECRET }}" ]; then
+            curl -s -X POST "https://cw95865.tmweb.ru/api/deploy/refresh" \
+              -H "X-Deploy-Secret: ${{ secrets.DEPLOY_WEBHOOK_SECRET }}" \
+              -H "Content-Type: application/json" \
+              --max-time 120
+          else
+            echo "DEPLOY_WEBHOOK_SECRET not configured, skipping webhook"
+          fi
+
+  deploy-retry:
+    needs: [auto-merge, deploy]
+    if: always() && needs.deploy.result == 'failure'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: production-deploy
+      cancel-in-progress: false
+
+    steps:
+      - name: Wait 30 seconds before retry
+        run: sleep 30
+
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Deploy to Timeweb via FTP (retry)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./
+          server-dir: /OGE/
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.github/**
+            **/.vscode/**
+            **/.idea/**
+            **/tests/**
+            **/phpunit.xml
+            **/*.md
+            **/.DS_Store
+            **/vendor/**
+            **/docs/oge_project_package.zip
+
       - name: Trigger deploy refresh webhook
         continue-on-error: true
         run: |
