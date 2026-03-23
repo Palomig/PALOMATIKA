@@ -28,10 +28,24 @@ class DiagnosticEditorController extends Controller
 
         $saved = $this->loadSavedTest();
 
+        $selectedItems = collect($saved)->flatMap(fn ($s) =>
+            collect($s['tasks'] ?? [])->map(fn ($t) => [
+                'skill_id'       => $s['skill_id'],
+                'skill_name'     => $s['skill_name'],
+                'topic_id'       => $t['topic_id'] ?? '',
+                'block_number'   => $t['block_number'] ?? null,
+                'zadanie_number' => $t['zadanie_number'] ?? null,
+                'task_index'     => $t['task_index'] ?? 0,
+                'text'           => $t['question'] ?? $t['text'] ?? '',
+                'answer'         => $t['answer'] ?? '',
+            ])
+        )->values()->all();
+
         return view('miniapp.diagnostic-editor', [
             'skillsByCategory' => $skills,
-            'savedTest' => $saved,
-            'totalQuestions' => collect($saved)->sum(fn ($s) => count($s['tasks'] ?? [])),
+            'savedTest'        => $saved,
+            'selectedItems'    => $selectedItems,
+            'totalQuestions'   => collect($saved)->sum(fn ($s) => count($s['tasks'] ?? [])),
         ]);
     }
 
