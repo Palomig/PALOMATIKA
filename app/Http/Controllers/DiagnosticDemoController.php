@@ -51,10 +51,7 @@ class DiagnosticDemoController extends Controller
         $skillIds = array_keys($bank);
         $skills   = Skill::whereIn('id', $skillIds)->where('is_active', true)->get()->keyBy('id');
 
-        $reviewPath = storage_path('app/diagnostic_review.json');
-        $saved      = file_exists($reviewPath)
-            ? (json_decode(file_get_contents($reviewPath), true) ?? [])
-            : [];
+        $saved    = DiagnosticQuestionBank::loadReview();
         $approved = $saved['approved'] ?? null;
         $rejected = $saved['rejected'] ?? [];
 
@@ -89,8 +86,7 @@ class DiagnosticDemoController extends Controller
         $approved = array_map('intval', $request->input('approved', []));
         $rejected = array_map('intval', $request->input('rejected', []));
 
-        $data = ['approved' => $approved, 'rejected' => $rejected];
-        file_put_contents(storage_path('app/diagnostic_review.json'), json_encode($data, JSON_PRETTY_PRINT));
+        DiagnosticQuestionBank::saveReview($approved, $rejected);
 
         return redirect()->route('demo.diagnostic.review')->with('saved', true);
     }
