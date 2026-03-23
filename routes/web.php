@@ -486,6 +486,9 @@ Route::prefix('tg')->group(function () {
                 Route::post('/homework/assign', [MiniAppTeacherController::class, 'assignHomework'])->name('homework.assign');
                 Route::patch('/students/{studentId}/link', [MiniAppTeacherController::class, 'updateStudentLink'])->name('students.link');
                 Route::get('/referrals', [MiniAppTeacherController::class, 'teacherReferrals'])->name('referrals');
+                Route::get('/diagnostic-editor', [\App\Http\Controllers\DiagnosticEditorController::class, 'index'])->name('diagnostic.editor');
+                Route::post('/diagnostic-editor/save', [\App\Http\Controllers\DiagnosticEditorController::class, 'save'])->name('diagnostic.editor.save');
+                Route::get('/diagnostic-editor/tasks', [\App\Http\Controllers\DiagnosticEditorController::class, 'browseTasks'])->name('diagnostic.editor.tasks');
             });
         });
 

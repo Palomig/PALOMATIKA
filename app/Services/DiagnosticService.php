@@ -4,94 +4,61 @@ namespace App\Services;
 
 use App\Models\Skill;
 use App\Models\UserSkill;
+use Illuminate\Support\Facades\Storage;
 
 class DiagnosticService
 {
-    /** Количество вопросов на каждый листовой навык */
-    private const QUESTIONS_PER_SKILL = 2;
+    private const STORAGE_PATH = 'diagnostic_test.json';
 
-    /** ELO-подобный коэффициент обучения для диагностики */
-    private const K = 0.25;
-
-    public function __construct(
-        private readonly TaskDataService $taskDataService,
-    ) {}
+    public function __construct() {}
 
     /**
-     * Сгенерировать диагностические вопросы, покрывающие все листовые навыки.
-     * Каждый вопрос — задание из JSON банка, привязанное к skill_id.
+     * Вернуть вопросы из статичного теста, составленного учителем.
+     * Читает storage/app/diagnostic_test.json.
      *
      * @return array<int, array{skill_id: int, skill_name: string, category: string, question: array, correct_answer: string}>
      */
     public function generateQuestions(): array
     {
-        $leafSkills = Skill::active()
-            ->whereNotNull('parent_id')
-            ->whereDoesntHave('children')
-            ->with('parent')
-            ->orderBy('category')
-            ->orderBy('sort_order')
-            ->get();
+        if (!Storage::exists(self::STORAGE_PATH)) {
+            return [];
+        }
 
+        $saved = json_decode(Storage::get(self::STORAGE_PATH), true) ?? [];
         $questions = [];
 
-        foreach ($leafSkills as $skill) {
-            $ogeNumbers = $skill->oge_numbers ?? [];
-            if (empty($ogeNumbers)) {
-                continue;
-            }
+        foreach ($saved as $entry) {
+            $skillId = (int) ($entry['skill_id'] ?? 0);
+            $skillName = $entry['skill_name'] ?? '';
 
-            // Выбрать задания из связанных тем ОГЭ
-            $picked = $this->pickTasksForSkill($skill, self::QUESTIONS_PER_SKILL);
+            // Получить категорию из БД для красивого отображения
+            $skill = Skill::find($skillId);
+            $category = $skill?->category ?? $skill?->parent?->name ?? '';
 
-            foreach ($picked as $task) {
+            foreach ($entry['tasks'] ?? [] as $task) {
                 $questions[] = [
-                    'skill_id' => $skill->id,
-                    'skill_name' => $skill->name,
-                    'category' => $skill->category ?? $skill->parent?->name ?? '',
-                    'question' => $task,
+                    'skill_id'     => $skillId,
+                    'skill_name'   => $skillName,
+                    'category'     => $category,
+                    'question'     => $task,
                     'correct_answer' => $task['answer'] ?? '',
                 ];
             }
         }
 
-        // Перемешать, чтобы вопросы не шли кластерами по категориям
-        shuffle($questions);
-
         return $questions;
     }
 
     /**
-     * Выбрать N случайных production-заданий из тем ОГЭ, связанных с навыком.
+     * Проверить, составлен ли диагностический тест учителем.
      */
-    private function pickTasksForSkill(Skill $skill, int $count): array
+    public function isTestConfigured(): bool
     {
-        $ogeNumbers = $skill->oge_numbers ?? [];
-        $allTasks = [];
-
-        foreach ($ogeNumbers as $ogeNum) {
-            $topicId = str_pad($ogeNum, 2, '0', STR_PAD_LEFT);
-            $blocks = $this->taskDataService->getBlocks($topicId, 'production');
-
-            foreach ($blocks as $block) {
-                foreach ($block['zadaniya'] ?? [] as $zadanie) {
-                    foreach ($zadanie['tasks'] ?? [] as $task) {
-                        $allTasks[] = array_merge($task, [
-                            'topic_id' => $topicId,
-                            'block_number' => $block['number'] ?? null,
-                            'zadanie_number' => $zadanie['number'] ?? null,
-                        ]);
-                    }
-                }
-            }
+        if (!Storage::exists(self::STORAGE_PATH)) {
+            return false;
         }
-
-        if (empty($allTasks)) {
-            return [];
-        }
-
-        shuffle($allTasks);
-        return array_slice($allTasks, 0, $count);
+        $saved = json_decode(Storage::get(self::STORAGE_PATH), true) ?? [];
+        return !empty($saved);
     }
 
     /**
