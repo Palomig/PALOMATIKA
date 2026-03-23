@@ -39,8 +39,9 @@ jobs:
 
   deploy:
     needs: auto-merge
+    # Run after auto-merge on claude/** push, OR directly on main push
     if: |
-      github.ref == 'refs/heads/main'
+      always() && (needs.auto-merge.result == 'success' || github.ref == 'refs/heads/main')
     runs-on: ubuntu-latest
     concurrency:
       group: production-deploy
@@ -75,19 +76,6 @@ jobs:
             **/vendor/**
             **/docs/oge_project_package.zip
 
-      # Option 1: SSH post-deploy (requires SSH_* secrets)
-      # Uncomment and add secrets: SSH_HOST, SSH_USER, SSH_KEY
-      # - name: Post-deploy refresh via SSH
-      #   uses: appleboy/ssh-action@v1.0.3
-      #   with:
-      #     host: ${{ secrets.SSH_HOST }}
-      #     username: ${{ secrets.SSH_USER }}
-      #     key: ${{ secrets.SSH_KEY }}
-      #     script: |
-      #       cd /home/c/cw95865/OGE
-      #       php artisan deploy:refresh
-
-      # Option 2: Webhook trigger (requires DEPLOY_WEBHOOK_SECRET)
       - name: Trigger deploy refresh webhook
         continue-on-error: true
         run: |
