@@ -21,30 +21,20 @@ class DiagnosticService
      */
     public function generateQuestions(): array
     {
-        $bank = DiagnosticQuestionBank::approved();
         $questions = [];
-
-        // Загружаем все нужные навыки одним запросом
-        $skillIds = array_keys($bank);
-        $skills = Skill::whereIn('id', $skillIds)->where('is_active', true)->get()->keyBy('id');
-
-        foreach ($bank as $skillId => $mc) {
-            $skill = $skills->get($skillId);
-            if (!$skill) continue;
-
+        foreach (DiagnosticQuestionBank::approved() as $id => $q) {
             $questions[] = [
-                'skill_id'       => $skillId,
-                'skill_name'     => $skill->name,
-                'category'       => $skill->category ?? '',
+                'skill_id'       => $id,
+                'skill_name'     => $q['topic_name'],
+                'category'       => 'Задание ' . $q['topic_id'],
                 'type'           => 'mc',
                 'question'       => [
-                    'question' => $mc['question'],
-                    'choices'  => $mc['choices'],
+                    'question' => $q['question'],
+                    'choices'  => $q['choices'],
                 ],
-                'correct_answer' => (string) $mc['correct'],
+                'correct_answer' => (string) $q['correct'],
             ];
         }
-
         return $questions;
     }
 

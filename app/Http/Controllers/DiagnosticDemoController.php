@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Data\DiagnosticQuestionBank;
-use App\Models\Skill;
 use Illuminate\Http\Request;
 
 class DiagnosticDemoController extends Controller
@@ -93,25 +92,17 @@ class DiagnosticDemoController extends Controller
 
     private function buildQuestions(): array
     {
-        $bank     = DiagnosticQuestionBank::all();
-        $skillIds = array_keys($bank);
-        $skills   = Skill::whereIn('id', $skillIds)->where('is_active', true)->get()->keyBy('id');
-
         $questions = [];
-        foreach ($bank as $skillId => $mc) {
-            $skill = $skills->get($skillId);
-            if (!$skill) continue;
-
+        foreach (DiagnosticQuestionBank::all() as $id => $q) {
             $questions[] = [
-                'skill_id'       => $skillId,
-                'skill_name'     => $skill->name,
-                'category'       => $skill->category ?? '',
+                'skill_id'       => $id,
+                'skill_name'     => $q['topic_name'],
+                'category'       => 'Задание ' . $q['topic_id'],
                 'type'           => 'mc',
-                'question'       => ['question' => $mc['question'], 'choices' => $mc['choices']],
-                'correct_answer' => (string) $mc['correct'],
+                'question'       => ['question' => $q['question'], 'choices' => $q['choices']],
+                'correct_answer' => (string) $q['correct'],
             ];
         }
-
         return $questions;
     }
 }
