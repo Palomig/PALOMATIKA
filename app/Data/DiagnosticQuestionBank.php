@@ -326,4 +326,53 @@ class DiagnosticQuestionBank
     {
         return static::all()[$skillId] ?? null;
     }
+
+    /**
+     * Вернуть только одобренные вопросы.
+     * Если файл ревью отсутствует — возвращает все.
+     */
+    public static function approved(): array
+    {
+        $review = static::loadReview();
+        $approved = $review['approved'] ?? null;
+
+        if ($approved === null) {
+            return static::all();
+        }
+
+        return array_filter(
+            static::all(),
+            fn ($mc, $id) => in_array($id, $approved, true),
+            ARRAY_FILTER_USE_BOTH
+        );
+    }
+
+    public static function loadReview(): array
+    {
+        try {
+            $row = \DB::table('app_settings')->where('key', 'diagnostic_review')->first();
+            if ($row) {
+                return json_decode($row->value, true) ?? [];
+            }
+        } catch (\Throwable $e) {
+            // таблица ещё не создана — fallback на файл
+        }
+
+        $path = storage_path('app/diagnostic_review.json');
+        if (file_exists($path)) {
+            return json_decode(file_get_contents($path), true) ?? [];
+        }
+
+        return [];
+    }
+
+    public static function saveReview(array $approved, array $rejected): void
+    {
+        $data = json_encode(['approved' => $approved, 'rejected' => $rejected]);
+        \DB::table('app_settings')->upsert(
+            [['key' => 'diagnostic_review', 'value' => $data, 'updated_at' => now()]],
+            ['key'],
+            ['value', 'updated_at']
+        );
+    }
 }
