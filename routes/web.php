@@ -420,6 +420,8 @@ Route::prefix('api/board')->group(function () {
 // Public demo: diagnostic test preview (no auth)
 Route::get('/demo/diagnostic', [\App\Http\Controllers\DiagnosticDemoController::class, 'show'])->name('demo.diagnostic');
 Route::post('/demo/diagnostic', [\App\Http\Controllers\DiagnosticDemoController::class, 'check'])->name('demo.diagnostic.check');
+Route::get('/demo/diagnostic/review', [\App\Http\Controllers\DiagnosticDemoController::class, 'review'])->name('demo.diagnostic.review');
+Route::post('/demo/diagnostic/review', [\App\Http\Controllers\DiagnosticDemoController::class, 'saveReview'])->name('demo.diagnostic.review.save');
 
 Route::get('/kanban', [BoardController::class, 'kanban'])->name('board.kanban');
 Route::get('/roadmap', [BoardController::class, 'roadmap'])->name('board.roadmap');
@@ -567,3 +569,4 @@ Route::prefix('parent')->group(function () {
         Route::get('/child/{studentId}/homework', [ParentAppController::class, 'childHomework'])->name('parent.child.homework');
     });
 });
+
