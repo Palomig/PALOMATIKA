@@ -1092,12 +1092,16 @@ class MiniAppStudentController extends Controller
             $userAnswer = trim($answers[$i] ?? '');
             $correctAnswer = trim($q['correct_answer'] ?? '');
 
-            $normalizedUser = $this->normalizeDiagnosticAnswer($userAnswer);
-            $normalizedCorrect = $this->normalizeDiagnosticAnswer($correctAnswer);
+            if (($q['type'] ?? '') === 'mc') {
+                $isCorrect = $userAnswer === $correctAnswer;
+            } else {
+                $isCorrect = $this->normalizeDiagnosticAnswer($userAnswer)
+                    === $this->normalizeDiagnosticAnswer($correctAnswer);
+            }
 
             $results[] = [
-                'skill_id' => $q['skill_id'],
-                'is_correct' => $normalizedUser === $normalizedCorrect,
+                'skill_id'   => $q['skill_id'],
+                'is_correct' => $isCorrect,
             ];
         }
 
