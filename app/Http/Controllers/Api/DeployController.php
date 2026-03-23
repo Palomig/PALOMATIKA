@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -18,6 +19,8 @@ use Illuminate\Support\Str;
  */
 class DeployController extends Controller
 {
+    private const DEPLOY_REFRESH_LOCK_KEY = 'deploy:refresh:running';
+
     /**
      * Allowed artisan commands (whitelist for security).
      */
@@ -126,9 +129,25 @@ class DeployController extends Controller
             return $error;
         }
 
+        if (!Cache::add(self::DEPLOY_REFRESH_LOCK_KEY, true, now()->addMinutes(10))) {
+            Log::warning('Deploy refresh webhook skipped because another refresh is already running', [
+                'ip' => $request->ip(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'command' => 'deploy:refresh',
+                'error' => 'Deploy refresh is already running',
+            ], 409);
+        }
+
         Log::info('Deploy refresh webhook triggered', ['ip' => $request->ip()]);
 
-        return $this->runCommand('deploy:refresh');
+        try {
+            return $this->runCommand('deploy:refresh');
+        } finally {
+            Cache::forget(self::DEPLOY_REFRESH_LOCK_KEY);
+        }
     }
 
     /**
@@ -382,5 +401,30 @@ class DeployController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
+    }
+
+    /**
+     * Tail the Laravel log file (last N lines).
+     *
+     * GET /api/deploy/log?lines=50
+     * Header: X-Deploy-Secret: <secret>
+     */
+    public function tailLog(Request $request): JsonResponse
+    {
+        if ($error = $this->verifySecret($request)) {
+            return $error;
+        }
+
+        $lines = min((int) $request->input('lines', 50), 200);
+        $logPath = storage_path('logs/laravel.log');
+
+        if (!file_exists($logPath)) {
+            return response()->json(['lines' => [], 'note' => 'Log file not found']);
+        }
+
+        $content = file($logPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $tail = array_slice($content, -$lines);
+
+        return response()->json(['lines' => $tail, 'total' => count($content)]);
     }
 }
