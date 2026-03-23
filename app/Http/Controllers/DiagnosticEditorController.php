@@ -20,33 +20,43 @@ class DiagnosticEditorController extends Controller
      */
     public function index()
     {
-        $skills = Skill::active()
-            ->orderBy('category')
-            ->orderBy('sort_order')
-            ->get()
-            ->groupBy('category');
+        try {
+            $skills = Skill::active()
+                ->orderBy('category')
+                ->orderBy('sort_order')
+                ->get()
+                ->groupBy('category');
 
-        $saved = $this->loadSavedTest();
+            $saved = $this->loadSavedTest();
 
-        $selectedItems = collect($saved)->flatMap(fn ($s) =>
-            collect($s['tasks'] ?? [])->map(fn ($t) => [
-                'skill_id'       => $s['skill_id'],
-                'skill_name'     => $s['skill_name'],
-                'topic_id'       => $t['topic_id'] ?? '',
-                'block_number'   => $t['block_number'] ?? null,
-                'zadanie_number' => $t['zadanie_number'] ?? null,
-                'task_index'     => $t['task_index'] ?? 0,
-                'text'           => $t['question'] ?? $t['text'] ?? '',
-                'answer'         => $t['answer'] ?? '',
-            ])
-        )->values()->all();
+            $selectedItems = collect($saved)->flatMap(fn ($s) =>
+                collect($s['tasks'] ?? [])->map(fn ($t) => [
+                    'skill_id'       => $s['skill_id'],
+                    'skill_name'     => $s['skill_name'],
+                    'topic_id'       => $t['topic_id'] ?? '',
+                    'block_number'   => $t['block_number'] ?? null,
+                    'zadanie_number' => $t['zadanie_number'] ?? null,
+                    'task_index'     => $t['task_index'] ?? 0,
+                    'text'           => $t['question'] ?? $t['text'] ?? '',
+                    'answer'         => $t['answer'] ?? '',
+                ])
+            )->values()->all();
 
-        return view('miniapp.diagnostic-editor', [
-            'skillsByCategory' => $skills,
-            'savedTest'        => $saved,
-            'selectedItems'    => $selectedItems,
-            'totalQuestions'   => collect($saved)->sum(fn ($s) => count($s['tasks'] ?? [])),
-        ]);
+            return view('miniapp.diagnostic-editor', [
+                'skillsByCategory' => $skills,
+                'savedTest'        => $saved,
+                'selectedItems'    => $selectedItems,
+                'totalQuestions'   => collect($saved)->sum(fn ($s) => count($s['tasks'] ?? [])),
+            ]);
+        } catch (\Throwable $e) {
+            return response(
+                get_class($e) . ': ' . $e->getMessage() . "\n\n" .
+                $e->getFile() . ':' . $e->getLine() . "\n\n" .
+                $e->getTraceAsString(),
+                500,
+                ['Content-Type' => 'text/plain']
+            );
+        }
     }
 
     /**
