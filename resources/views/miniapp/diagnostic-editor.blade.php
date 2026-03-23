@@ -233,20 +233,7 @@ function diagEditor() {
     toastMsg: '',
 
     // Flat list of selected {skill_id, skill_name, topic_id, block_number, zadanie_number, task_index, text, answer}
-    selectedItems: @json(
-      collect($savedTest)->flatMap(fn($s) =>
-        collect($s['tasks'] ?? [])->map(fn($t) => [
-          'skill_id' => $s['skill_id'],
-          'skill_name' => $s['skill_name'],
-          'topic_id' => $t['topic_id'] ?? '',
-          'block_number' => $t['block_number'] ?? null,
-          'zadanie_number' => $t['zadanie_number'] ?? null,
-          'task_index' => $t['task_index'] ?? 0,
-          'text' => $t['question'] ?? $t['text'] ?? '',
-          'answer' => $t['answer'] ?? '',
-        ])
-      )->values()
-    ),
+    selectedItems: @json($selectedItems),
 
     init() {},
 
