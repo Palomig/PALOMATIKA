@@ -21,7 +21,7 @@ class DiagnosticService
      */
     public function generateQuestions(): array
     {
-        $bank = DiagnosticQuestionBank::all();
+        $bank = DiagnosticQuestionBank::approved();
         $questions = [];
 
         // Загружаем все нужные навыки одним запросом
