@@ -448,6 +448,9 @@ Route::prefix('tg')->group(function () {
         // Routes that require completed onboarding
         Route::middleware([EnsureOnboardingComplete::class])->group(function () {
             Route::get('/dashboard', [MiniAppStudentController::class, 'dashboard'])->name('miniapp.dashboard');
+            Route::get('/diagnostic', [MiniAppStudentController::class, 'diagnostic'])->name('miniapp.diagnostic');
+            Route::post('/diagnostic/submit', [MiniAppStudentController::class, 'submitDiagnostic'])->name('miniapp.diagnostic.submit');
+            Route::get('/diagnostic/results', [MiniAppStudentController::class, 'diagnosticResults'])->name('miniapp.diagnostic.results');
             Route::get('/mini', [MiniAppStudentController::class, 'mini'])->name('miniapp.mini');
             Route::get('/new-tasks', [MiniAppStudentController::class, 'newTasks'])->name('miniapp.new_tasks');
             Route::get('/part2', [MiniAppStudentController::class, 'part2'])->name('miniapp.part2');
