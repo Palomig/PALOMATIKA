@@ -17,5 +17,6 @@ class VerifyCsrfToken extends Middleware
         'tg/auth',
         'tg/auth/bridge-ping',
         'tg/onboarding',
+        'parent/auth',
     ];
 }

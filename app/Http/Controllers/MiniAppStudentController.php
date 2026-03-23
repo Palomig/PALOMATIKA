@@ -50,6 +50,12 @@ class MiniAppStudentController extends Controller
             return redirect('/tg/teacher/dashboard');
         }
 
+        // Новые ученики проходят диагностику перед дашбордом
+        $diagnosticService = app(\App\Services\DiagnosticService::class);
+        if (!$diagnosticService->hasCompletedDiagnostic($user->id)) {
+            return redirect()->route('miniapp.diagnostic');
+        }
+
         // If Mini App was opened via startapp=oge_variant_hash_..., jump directly to test.
         $startParam = trim((string) $request->query('startapp', ''));
         if ($startParam === '') {
@@ -1057,5 +1063,85 @@ class MiniAppStudentController extends Controller
             'referralCount' => $referralCount,
             'pendingPayout' => $pendingPayout,
         ]);
+    }
+
+    public function diagnostic(Request $request, \App\Services\DiagnosticService $diagnosticService)
+    {
+        $user = Auth::user();
+
+        if ($diagnosticService->hasCompletedDiagnostic($user->id)) {
+            return redirect()->route('miniapp.diagnostic.results');
+        }
+
+        $questions = $diagnosticService->generateQuestions();
+        $request->session()->put('diagnostic_questions', $questions);
+
+        return view('miniapp.diagnostic', [
+            'questions' => $questions,
+            'totalQuestions' => count($questions),
+        ]);
+    }
+
+    public function submitDiagnostic(Request $request, \App\Services\DiagnosticService $diagnosticService)
+    {
+        $user = Auth::user();
+        $questions = $request->session()->pull('diagnostic_questions', []);
+
+        if (empty($questions)) {
+            return redirect()->route('miniapp.diagnostic');
+        }
+
+        $answers = $request->input('answers', []);
+        $results = [];
+
+        foreach ($questions as $i => $q) {
+            $userAnswer = trim($answers[$i] ?? '');
+            $correctAnswer = trim($q['correct_answer'] ?? '');
+
+            $normalizedUser = $this->normalizeDiagnosticAnswer($userAnswer);
+            $normalizedCorrect = $this->normalizeDiagnosticAnswer($correctAnswer);
+
+            $results[] = [
+                'skill_id' => $q['skill_id'],
+                'is_correct' => $normalizedUser === $normalizedCorrect,
+            ];
+        }
+
+        $diagnosticService->processResults($user->id, $results);
+
+        return redirect()->route('miniapp.diagnostic.results');
+    }
+
+    public function diagnosticResults(\App\Services\DiagnosticService $diagnosticService)
+    {
+        $user = Auth::user();
+
+        if (!$diagnosticService->hasCompletedDiagnostic($user->id)) {
+            return redirect()->route('miniapp.diagnostic');
+        }
+
+        $userSkills = $user->skills()
+            ->with('skill.parent')
+            ->orderBy('weight', 'asc')
+            ->get();
+
+        $byCategory = $userSkills->groupBy(fn ($us) => $us->skill->category ?? $us->skill->parent?->name ?? 'Другое');
+
+        return view('miniapp.diagnostic-results', [
+            'byCategory' => $byCategory,
+            'weakSkills' => $userSkills->where('weight', '<', 0.5)->values(),
+            'strongSkills' => $userSkills->where('weight', '>=', 0.7)->values(),
+            'averageWeight' => round($userSkills->avg('weight') ?? 0, 3),
+        ]);
+    }
+
+    private function normalizeDiagnosticAnswer(string $answer): string
+    {
+        $answer = mb_strtolower(trim($answer));
+        $answer = str_replace(',', '.', $answer);
+        if (is_numeric($answer)) {
+            $answer = rtrim(rtrim((string) floatval($answer), '0'), '.');
+        }
+        return $answer;
     }
 }

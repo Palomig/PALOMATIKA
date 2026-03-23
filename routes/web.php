@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\Auth\TelegramBotAuthController;
+use App\Http\Controllers\ParentAppController;
+use App\Http\Controllers\ParentAuthController;
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\EgeController;
 use App\Http\Controllers\JarvisMaterialPageController;
@@ -448,6 +450,9 @@ Route::prefix('tg')->group(function () {
         // Routes that require completed onboarding
         Route::middleware([EnsureOnboardingComplete::class])->group(function () {
             Route::get('/dashboard', [MiniAppStudentController::class, 'dashboard'])->name('miniapp.dashboard');
+            Route::get('/diagnostic', [MiniAppStudentController::class, 'diagnostic'])->name('miniapp.diagnostic');
+            Route::post('/diagnostic/submit', [MiniAppStudentController::class, 'submitDiagnostic'])->name('miniapp.diagnostic.submit');
+            Route::get('/diagnostic/results', [MiniAppStudentController::class, 'diagnosticResults'])->name('miniapp.diagnostic.results');
             Route::get('/mini', [MiniAppStudentController::class, 'mini'])->name('miniapp.mini');
             Route::get('/new-tasks', [MiniAppStudentController::class, 'newTasks'])->name('miniapp.new_tasks');
             Route::get('/part2', [MiniAppStudentController::class, 'part2'])->name('miniapp.part2');
@@ -540,4 +545,18 @@ Route::prefix('test')->group(function () {
 
     // Legacy
     Route::post('/parse-pdf', [TestPdfController::class, 'parsePdf'])->name('test.parsePdf');
+});
+
+// Маршруты приложения для родителей (/parent/*)
+Route::prefix('parent')->group(function () {
+    Route::get('/', [ParentAuthController::class, 'home'])->name('parent.home');
+    Route::post('/auth', [ParentAuthController::class, 'authenticate'])->name('parent.auth');
+    Route::get('/auth/continue', [ParentAuthController::class, 'authContinue'])->name('parent.auth.continue');
+
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/dashboard', [ParentAppController::class, 'dashboard'])->name('parent.dashboard');
+        Route::get('/child/{studentId}/skills', [ParentAppController::class, 'childSkills'])->name('parent.child.skills');
+        Route::get('/child/{studentId}/attendance', [ParentAppController::class, 'childAttendance'])->name('parent.child.attendance');
+        Route::get('/child/{studentId}/homework', [ParentAppController::class, 'childHomework'])->name('parent.child.homework');
+    });
 });
