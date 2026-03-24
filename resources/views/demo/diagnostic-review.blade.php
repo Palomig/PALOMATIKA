@@ -3,194 +3,222 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Проверка вопросов диагностики — palomatika</title>
+<title>Проверка вопросов — palomatika</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0e1117; color: #e8eaf0; min-height: 100vh; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0b0d14; color: #e8eaf0; display: flex; flex-direction: column; }
 
-  .top-bar { background: #1a1d27; border-bottom: 1px solid #2a2d3a; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
-  .top-bar-title { font-size: 15px; font-weight: 800; }
-  .top-bar-stats { font-size: 12px; color: #8b92a5; display: flex; gap: 14px; align-items: center; }
-  .stat-approved { color: #22c55e; font-weight: 700; }
-  .stat-rejected { color: #ef4444; font-weight: 700; }
-  .reset-btn-top { background: transparent; border: 1px solid #3a3d4a; color: #8b92a5; padding: 4px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; }
-  .reset-btn-top:hover { border-color: #ef4444; color: #ef4444; }
+/* ── TOP BAR ── */
+.top-bar {
+  flex-shrink: 0;
+  background: #13161f; border-bottom: 1px solid #22253a;
+  padding: 10px 20px; display: flex; align-items: center; gap: 16px;
+}
+.top-bar-title { font-size: 14px; font-weight: 800; color: #e8eaf0; white-space: nowrap; }
+.stats { display: flex; gap: 10px; align-items: center; margin-left: auto; }
+.stat { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 20px; }
+.stat-a { background: rgba(34,197,94,0.15); color: #22c55e; }
+.stat-r { background: rgba(239,68,68,0.12); color: #ef4444; }
+.stat-p { background: rgba(79,142,247,0.12); color: #6b8fff; }
+.save-btn {
+  padding: 7px 18px; background: #4f8ef7; color: #fff; border: none;
+  border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap;
+}
+.save-btn:hover { background: #3a7ae0; }
+.reset-btn {
+  padding: 6px 12px; background: transparent; border: 1px solid #2a2d3a;
+  color: #8b92a5; border-radius: 8px; font-size: 12px; cursor: pointer; white-space: nowrap;
+}
+.reset-btn:hover { border-color: #ef4444; color: #ef4444; }
 
-  .save-bar { background: #1a1d27; border-top: 1px solid #2a2d3a; padding: 12px 20px; position: sticky; bottom: 0; z-index: 10; }
-  .save-btn { display: block; width: 100%; max-width: 480px; margin: 0 auto; padding: 14px; background: #4f8ef7; color: #fff; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; }
-  .save-btn:hover { background: #3a7ae0; }
+.stale-bar {
+  flex-shrink: 0;
+  background: rgba(245,158,11,0.1); border-bottom: 1px solid rgba(245,158,11,0.25);
+  padding: 8px 20px; font-size: 12px; color: #f59e0b; font-weight: 600; text-align: center;
+}
+.saved-bar {
+  flex-shrink: 0;
+  background: rgba(34,197,94,0.1); border-bottom: 1px solid rgba(34,197,94,0.2);
+  padding: 8px 20px; font-size: 12px; color: #22c55e; font-weight: 700; text-align: center;
+}
 
-  .wrap { max-width: 700px; margin: 0 auto; padding: 16px 16px 80px; }
+/* ── BOARD ── */
+.board {
+  flex: 1; overflow-x: auto; overflow-y: hidden;
+  display: flex; gap: 10px; padding: 12px 16px 16px;
+  align-items: flex-start;
+}
+.board::-webkit-scrollbar { height: 6px; }
+.board::-webkit-scrollbar-track { background: #0b0d14; }
+.board::-webkit-scrollbar-thumb { background: #22253a; border-radius: 3px; }
 
-  .banner { border-radius: 10px; padding: 10px 16px; font-size: 13px; font-weight: 700; text-align: center; margin-bottom: 16px; }
-  .banner.saved { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.3); color: #22c55e; }
-  .banner.stale { background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.3); color: #f59e0b; }
+/* ── COLUMN ── */
+.col {
+  flex-shrink: 0; width: 230px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.col-header {
+  padding: 8px 10px; background: #13161f; border: 1px solid #22253a;
+  border-radius: 10px; position: sticky; top: 0;
+}
+.col-title { font-size: 11px; font-weight: 800; color: #4f8ef7; text-transform: uppercase; letter-spacing: 0.08em; }
+.col-sub { font-size: 10px; color: #8b92a5; margin-top: 3px; }
+.col-progress { margin-top: 6px; height: 3px; background: #22253a; border-radius: 2px; }
+.col-progress-fill { height: 3px; background: #22c55e; border-radius: 2px; transition: width 0.3s; }
 
-  .filter-bar { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
-  .filter-btn { padding: 6px 14px; border-radius: 20px; border: 1.5px solid #2a2d3a; background: transparent; color: #8b92a5; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; }
-  .filter-btn.active { border-color: #4f8ef7; background: rgba(79,142,247,0.12); color: #4f8ef7; }
-  .filter-btn.approved-filter.active { border-color: #22c55e; background: rgba(34,197,94,0.12); color: #22c55e; }
-  .filter-btn.rejected-filter.active { border-color: #ef4444; background: rgba(239,68,68,0.1); color: #ef4444; }
+/* ── CARD ── */
+.q-card {
+  background: #13161f; border: 1px solid #22253a; border-radius: 10px;
+  padding: 11px; cursor: default; transition: border-color 0.15s, opacity 0.15s;
+  position: relative;
+}
+.q-card.approved { border-color: #22c55e; background: rgba(34,197,94,0.05); }
+.q-card.rejected { border-color: #3a1f1f; opacity: 0.5; }
 
-  .topic-header { font-size: 11px; font-weight: 800; color: #8b92a5; text-transform: uppercase; letter-spacing: 0.1em; padding: 16px 0 8px; border-top: 1px solid #2a2d3a; margin-top: 8px; }
-  .topic-header:first-of-type { border-top: none; margin-top: 0; }
+.q-num { font-size: 9px; font-weight: 800; color: #3a4060; margin-bottom: 5px; letter-spacing: 0.06em; }
+.q-text { font-size: 13px; color: #c8cfe0; font-weight: 600; line-height: 1.45; margin-bottom: 8px; }
 
-  .q-card { background: #1a1d27; border: 1px solid #2a2d3a; border-radius: 14px; padding: 16px; margin-bottom: 10px; transition: border-color 0.15s; }
-  .q-card.approved { border-left: 3px solid #22c55e; }
-  .q-card.rejected { border-left: 3px solid #ef4444; opacity: 0.55; }
+.choices { display: flex; flex-direction: column; gap: 3px; margin-bottom: 9px; }
+.choice { font-size: 11px; color: #5a6080; padding: 3px 6px; border-radius: 4px; line-height: 1.3; }
+.choice.correct { background: rgba(34,197,94,0.1); color: #4ade80; font-weight: 700; }
 
-  .q-text { font-size: 15px; color: #e8eaf0; font-weight: 700; line-height: 1.5; margin-bottom: 12px; }
-  .q-choices { display: flex; flex-direction: column; gap: 4px; margin-bottom: 14px; }
-  .q-choice { font-size: 12px; color: #8b92a5; padding: 5px 8px; border-radius: 6px; }
-  .q-choice.correct { background: rgba(34,197,94,0.12); color: #22c55e; font-weight: 700; }
-
-  .q-actions { display: flex; gap: 8px; }
-  .btn-approve, .btn-reject {
-    flex: 1; padding: 9px; border-radius: 9px; font-size: 13px; font-weight: 700;
-    border: 1.5px solid; cursor: pointer; transition: all 0.15s;
-  }
-  .btn-approve { border-color: #22c55e; color: #22c55e; background: transparent; }
-  .btn-approve.active { background: rgba(34,197,94,0.2); }
-  .btn-reject { border-color: #ef4444; color: #ef4444; background: transparent; }
-  .btn-reject.active { background: rgba(239,68,68,0.15); }
+.actions { display: flex; gap: 5px; }
+.btn-a, .btn-r {
+  flex: 1; padding: 6px 0; border-radius: 7px; font-size: 11px; font-weight: 700;
+  border: 1.5px solid; cursor: pointer; transition: all 0.12s; background: transparent;
+}
+.btn-a { border-color: rgba(34,197,94,0.3); color: #4ade80; }
+.btn-a:hover, .btn-a.on { background: rgba(34,197,94,0.18); border-color: #22c55e; }
+.btn-r { border-color: rgba(239,68,68,0.25); color: #f87171; }
+.btn-r:hover, .btn-r.on { background: rgba(239,68,68,0.15); border-color: #ef4444; }
 </style>
 </head>
 <body>
 
 <div class="top-bar">
-  <div class="top-bar-title">Проверка вопросов · {{ $totalCount }}</div>
-  <div class="top-bar-stats">
-    <span class="stat-approved" id="stat-approved">✓ {{ $approvedCount }}</span>
-    <span class="stat-rejected" id="stat-rejected">✗ {{ $rejectedCount }}</span>
-    <form method="POST" action="{{ route('demo.diagnostic.review.save') }}" style="margin:0">
-      @csrf
-      <input type="hidden" name="reset" value="1">
-      <button type="submit" class="reset-btn-top">Сбросить всё</button>
-    </form>
+  <div class="top-bar-title">Проверка вопросов</div>
+  <div class="stats">
+    <span class="stat stat-a" id="stat-a">✓ <span id="cnt-a">{{ $approvedCount }}</span></span>
+    <span class="stat stat-r" id="stat-r">✗ <span id="cnt-r">{{ $rejectedCount }}</span></span>
+    <span class="stat stat-p">? <span id="cnt-p">{{ $totalCount - $approvedCount - $rejectedCount }}</span></span>
   </div>
-</div>
-
-<div class="wrap">
-
-  @if($isStale)
-  <div class="banner stale">⚠ Банк вопросов изменился — старые оценки сброшены. Проверьте заново.</div>
-  @endif
-
-  @if(session('saved'))
-  <div class="banner saved">✓ Сохранено — {{ $approvedCount }} вопросов одобрено</div>
-  @endif
-
-  <div class="filter-bar">
-    <button class="filter-btn active" onclick="filterCards('all', this)">Все ({{ $totalCount }})</button>
-    <button class="filter-btn approved-filter" onclick="filterCards('approved', this)">Одобрены</button>
-    <button class="filter-btn rejected-filter" onclick="filterCards('rejected', this)">Отклонены</button>
-    <button class="filter-btn" onclick="filterCards('pending', this)">Не проверены</button>
-  </div>
-
-  <form id="review-form" method="POST" action="{{ route('demo.diagnostic.review.save') }}">
-    @csrf
-
-    @php $prevTopic = null; @endphp
-    @foreach($items as $item)
-      @if($item['is_new_topic'])
-      <div class="topic-header" data-topic-header="{{ $item['topic_id'] }}">
-        Задание {{ $item['topic_id'] }} — {{ $item['topic_name'] }}
-      </div>
-      @endif
-
-      @php $letters = ['А','Б','В','Г']; @endphp
-      <div class="q-card {{ $item['status'] }}" id="card-{{ $item['id'] }}" data-status="{{ $item['status'] }}" data-topic="{{ $item['topic_id'] }}">
-        <div class="q-text">{{ $item['question'] }}</div>
-        <div class="q-choices">
-          @foreach($item['choices'] as $ci => $choice)
-          <div class="q-choice {{ $ci === $item['correct'] ? 'correct' : '' }}">
-            {{ $letters[$ci] }}. {{ $choice }}{{ $ci === $item['correct'] ? ' ✓' : '' }}
-          </div>
-          @endforeach
-        </div>
-        <div class="q-actions">
-          <button type="button" class="btn-approve {{ $item['status'] === 'approved' ? 'active' : '' }}"
-            onclick="setStatus({{ $item['id'] }}, 'approved', this)">✓ Подходит</button>
-          <button type="button" class="btn-reject {{ $item['status'] === 'rejected' ? 'active' : '' }}"
-            onclick="setStatus({{ $item['id'] }}, 'rejected', this)">✗ Не подходит</button>
-        </div>
-      </div>
-    @endforeach
-
-    <div id="hidden-inputs"></div>
+  <form id="reset-form" method="POST" action="{{ route('demo.diagnostic.review.save') }}" style="margin:0">
+    @csrf <input type="hidden" name="reset" value="1">
+    <button type="submit" class="reset-btn">Сбросить</button>
   </form>
-
+  <form id="save-form" method="POST" action="{{ route('demo.diagnostic.review.save') }}" style="margin:0">
+    @csrf
+    <div id="hidden-inputs"></div>
+    <button type="submit" class="save-btn">Сохранить</button>
+  </form>
 </div>
 
-<div class="save-bar">
-  <button class="save-btn" onclick="document.getElementById('review-form').submit()">Сохранить изменения</button>
+@if($isStale)
+<div class="stale-bar">⚠ Банк вопросов изменился — старые оценки сброшены. Проверьте заново.</div>
+@endif
+@if(session('saved'))
+<div class="saved-bar">✓ Сохранено — {{ $approvedCount }} одобрено</div>
+@endif
+
+<div class="board">
+
+@php
+  $byTopic = [];
+  foreach ($items as $item) {
+      $byTopic[$item['topic_id']][] = $item;
+  }
+  $letters = ['А','Б','В','Г'];
+@endphp
+
+@foreach($byTopic as $topicId => $cards)
+@php
+  $topicName = $cards[0]['topic_name'];
+  $approvedInTopic = count(array_filter($cards, fn($c) => $c['status'] === 'approved'));
+@endphp
+<div class="col" id="col-{{ $topicId }}">
+  <div class="col-header">
+    <div class="col-title">№{{ $topicId }}</div>
+    <div class="col-sub">{{ $topicName }}</div>
+    <div class="col-progress">
+      <div class="col-progress-fill" id="prog-{{ $topicId }}"
+           style="width: {{ $approvedInTopic * 25 }}%"></div>
+    </div>
+  </div>
+
+  @foreach($cards as $card)
+  <div class="q-card {{ $card['status'] }}" id="card-{{ $card['id'] }}" data-status="{{ $card['status'] }}" data-topic="{{ $topicId }}">
+    <div class="q-num">{{ $topicId }}.{{ $loop->iteration }}</div>
+    <div class="q-text">{{ $card['question'] }}</div>
+    <div class="choices">
+      @foreach($card['choices'] as $ci => $choice)
+      <div class="choice {{ $ci === $card['correct'] ? 'correct' : '' }}">
+        {{ $letters[$ci] }}. {{ $choice }}
+      </div>
+      @endforeach
+    </div>
+    <div class="actions">
+      <button type="button" class="btn-a {{ $card['status'] === 'approved' ? 'on' : '' }}"
+        onclick="toggle({{ $card['id'] }}, 'approved')">✓ Да</button>
+      <button type="button" class="btn-r {{ $card['status'] === 'rejected' ? 'on' : '' }}"
+        onclick="toggle({{ $card['id'] }}, 'rejected')">✗ Нет</button>
+    </div>
+  </div>
+  @endforeach
+</div>
+@endforeach
+
 </div>
 
 <script>
-const statuses = {};
-
+const s = {};
 @foreach($items as $item)
-statuses[{{ $item['id'] }}] = '{{ $item['status'] }}';
+s[{{ $item['id'] }}] = { status: '{{ $item['status'] }}', topic: {{ $item['topic_id'] }} };
 @endforeach
 
-function setStatus(id, status, btn) {
-  const card = document.getElementById('card-' + id);
-  if (statuses[id] === status) {
-    statuses[id] = 'pending';
-    card.className = 'q-card pending';
-    card.dataset.status = 'pending';
-    btn.classList.remove('active');
-  } else {
-    statuses[id] = status;
-    card.className = 'q-card ' + status;
-    card.dataset.status = status;
-    card.querySelectorAll('.btn-approve, .btn-reject').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-  }
+function toggle(id, action) {
+  const prev = s[id].status;
+  s[id].status = prev === action ? 'pending' : action;
+  render(id);
   updateStats();
-  buildHiddenInputs();
+  buildInputs();
+}
+
+function render(id) {
+  const card = document.getElementById('card-' + id);
+  const st = s[id].status;
+  card.className = 'q-card ' + st;
+  card.dataset.status = st;
+  card.querySelector('.btn-a').classList.toggle('on', st === 'approved');
+  card.querySelector('.btn-r').classList.toggle('on', st === 'rejected');
+
+  // update column progress bar
+  const topic = s[id].topic;
+  const cards = Object.values(s).filter(x => x.topic === topic);
+  const done = cards.filter(x => x.status === 'approved').length;
+  document.getElementById('prog-' + topic).style.width = (done * 25) + '%';
 }
 
 function updateStats() {
-  const a = Object.values(statuses).filter(s => s === 'approved').length;
-  const r = Object.values(statuses).filter(s => s === 'rejected').length;
-  document.getElementById('stat-approved').textContent = '✓ ' + a;
-  document.getElementById('stat-rejected').textContent = '✗ ' + r;
+  const vals = Object.values(s);
+  document.getElementById('cnt-a').textContent = vals.filter(x => x.status === 'approved').length;
+  document.getElementById('cnt-r').textContent = vals.filter(x => x.status === 'rejected').length;
+  document.getElementById('cnt-p').textContent = vals.filter(x => x.status === 'pending').length;
 }
 
-function buildHiddenInputs() {
+function buildInputs() {
   const c = document.getElementById('hidden-inputs');
   c.innerHTML = '';
   let ai = 0, ri = 0;
-  for (const [id, s] of Object.entries(statuses)) {
-    if (s === 'approved') {
-      const inp = document.createElement('input');
-      inp.type = 'hidden'; inp.name = 'approved[' + (ai++) + ']'; inp.value = id;
-      c.appendChild(inp);
-    } else if (s === 'rejected') {
-      const inp = document.createElement('input');
-      inp.type = 'hidden'; inp.name = 'rejected[' + (ri++) + ']'; inp.value = id;
-      c.appendChild(inp);
+  for (const [id, d] of Object.entries(s)) {
+    if (d.status === 'approved') {
+      c.innerHTML += `<input type="hidden" name="approved[${ai++}]" value="${id}">`;
+    } else if (d.status === 'rejected') {
+      c.innerHTML += `<input type="hidden" name="rejected[${ri++}]" value="${id}">`;
     }
   }
 }
-
-function filterCards(filter, btn) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('.q-card').forEach(card => {
-    card.style.display = (filter === 'all' || card.dataset.status === filter) ? '' : 'none';
-  });
-  // Скрываем заголовки тем, если все карточки темы скрыты
-  document.querySelectorAll('[data-topic-header]').forEach(h => {
-    const topic = h.dataset.topicHeader;
-    const visible = [...document.querySelectorAll(`.q-card[data-topic="${topic}"]`)]
-      .some(c => c.style.display !== 'none');
-    h.style.display = visible ? '' : 'none';
-  });
-}
-
-buildHiddenInputs();
+buildInputs();
 </script>
 </body>
 </html>
