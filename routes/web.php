@@ -183,6 +183,10 @@ Route::prefix('repetitor')->name('repetitor.')->group(function () {
     Route::get('/vector', [RepetitorController::class, 'vectorAngle'])->name('vector');
 });
 
+Route::prefix('learn')->name('learn.')->group(function () {
+    Route::get('/fractions', fn() => view('learn.fractions'))->name('fractions');
+});
+
 // Authenticated routes
 Route::middleware(['auth'])->group(function () {
     Route::post('/view-as/clear', function (Request $request) {
