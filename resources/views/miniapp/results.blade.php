@@ -372,6 +372,8 @@
         ];
     }
 
+    usort($rows, fn($a, $b) => $a['num'] <=> $b['num']);
+
     // Collect wrong topic names for tutor CTA
     $wrongTopics = collect($rows)->where('isCorrect', false)->pluck('topicName')->unique()->values()->all();
 
