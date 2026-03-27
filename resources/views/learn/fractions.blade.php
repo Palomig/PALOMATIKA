@@ -108,7 +108,7 @@
         <div class="px-5 py-4 flex items-center gap-3" style="border-bottom: 1px solid rgba(30,41,59,0.8);">
             <span class="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold"
                   style="background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.35); color: #34d399;">1</span>
-            <span class="text-slate-200 font-medium text-sm">Разложим знаменатели через НОД</span>
+            <span class="text-slate-200 font-medium text-sm">Разложим знаменатели на множители</span>
         </div>
 
         <div class="mx-4 my-4 rounded-xl flex items-center justify-center py-3" style="background: #070f1c;">
@@ -162,7 +162,7 @@
 
         <div class="px-5 pb-5 space-y-2.5">
             <div class="text-sm text-slate-300 leading-relaxed">
-                Представим каждый знаменатель как <span class="text-green-400 font-semibold">НОД × уникальная часть</span>:
+                Представим каждый знаменатель как произведение множителей, где есть <span class="text-green-400 font-semibold">1 общий множитель</span>, который мы зачёркиваем, а второй множитель умножаем на противоположную дробь:
             </div>
             <div class="grid grid-cols-2 gap-2">
                 <div class="rounded-lg px-3 py-2 text-sm" style="background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2);">
