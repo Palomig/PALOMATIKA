@@ -520,9 +520,20 @@ class OgeAttemptService
         }
 
         $attempt->loadMissing('answers');
+
+        $scoredTaskNumbers = [];
         foreach ($attempt->answers as $answer) {
             $taskNumber = (int) $answer->task_number;
+            $scoredTaskNumbers[] = $taskNumber;
             $this->persistScoringRow($attempt->id, $taskNumber, $answer->current_answer, $correctByTaskNumber[$taskNumber] ?? null);
+        }
+
+        // Score unanswered tasks as incorrect so totals are always accurate.
+        foreach (array_keys($correctByTaskNumber) as $taskNumber) {
+            $taskNumber = (int) $taskNumber;
+            if (!in_array($taskNumber, $scoredTaskNumbers, true)) {
+                $this->persistScoringRow($attempt->id, $taskNumber, '', $correctByTaskNumber[$taskNumber] ?? null);
+            }
         }
     }
 

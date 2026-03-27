@@ -393,7 +393,8 @@ class MiniAppTeacherController extends Controller
                 continue;
             }
             $correct = $att->scorings->where('is_correct', true)->count();
-            $total = $att->scorings->count();
+            $configTaskCount = count($att->variant?->config_json['tasks'] ?? []);
+            $total = $configTaskCount > 0 ? $configTaskCount : $att->scorings->count();
             $time = null;
             if ($att->started_at && $att->submitted_at) {
                 $time = $att->submitted_at->diffInSeconds($att->started_at);
