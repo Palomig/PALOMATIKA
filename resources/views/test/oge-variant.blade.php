@@ -94,16 +94,29 @@
             <span>ОГЭ. Тренировочный вариант</span>
             <span>palomatika.ru</span>
         </div>
-        <h1 class="exam-title text-3xl sm:text-4xl text-white mb-2">Вариант № {{ $variantNumber ?? rand(1, 99) }}</h1>
-        <p class="text-slate-400">Задания 6–19</p>
+        @if(!empty($placementMode))
+            <h1 class="exam-title text-3xl sm:text-4xl text-white mb-2">Входной тест</h1>
+            <p class="text-slate-400">Проверка базовых навыков · Задания 6–18</p>
+        @else
+            <h1 class="exam-title text-3xl sm:text-4xl text-white mb-2">Вариант № {{ $variantNumber ?? rand(1, 99) }}</h1>
+            <p class="text-slate-400">Задания 6–19</p>
+        @endif
     </header>
 
     {{-- Instructions --}}
     <div class="bg-dark-light/40 rounded-xl p-5 mb-8 border border-slate-800">
+        @if(!empty($placementMode))
+        <p class="text-slate-300 text-sm leading-relaxed">
+            <strong class="text-white">Инструкция:</strong> Этот тест поможет определить ваш текущий уровень подготовки.
+            По каждой теме даны 2 задания, проверяющие разные навыки. Ответами являются число или последовательность цифр.
+            Запишите ответ в поле ответа без пробелов и запятых.
+        </p>
+        @else
         <p class="text-slate-300 text-sm leading-relaxed">
             <strong class="text-white">Инструкция:</strong> Ответами к заданиям 6–19 являются число или последовательность цифр.
             Запишите ответ в поле ответа. Если ответом является последовательность цифр, то запишите её без пробелов, запятых и других дополнительных символов.
         </p>
+        @endif
     </div>
 
     {{-- Stats --}}

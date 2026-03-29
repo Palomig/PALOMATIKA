@@ -1,0 +1,14 @@
+[Unit]
+Description=Telegram MTProxy (bot-compatible)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStartPre=/usr/local/bin/mtproxy-bot-refresh
+ExecStart=/usr/local/bin/mtproxy-bot-run
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

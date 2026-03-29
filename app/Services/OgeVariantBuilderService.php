@@ -253,4 +253,112 @@ class OgeVariantBuilderService
 
         return implode('', $indexes);
     }
+
+    /**
+     * Build a static placement test for new students.
+     *
+     * Returns 2 tasks per topic (6-18, excluding 19) that test different skills.
+     * Uses a fixed seed for deterministic task selection.
+     *
+     * @return array{tasks: array<int, array>, variantNumber: int, selectedZadaniya: array}
+     */
+    public function buildPlacementTest(): array
+    {
+        // Fixed seed for deterministic task selection
+        mt_srand(crc32('placement_test_v1'));
+
+        $topicTitles = [
+            '06' => 'Дроби и степени',
+            '07' => 'Числа, координатная прямая',
+            '08' => 'Квадратные корни и степени',
+            '09' => 'Уравнения',
+            '11' => 'Графики функций',
+            '13' => 'Неравенства',
+            '15' => 'Треугольники',
+            '16' => 'Окружность',
+            '17' => 'Четырёхугольники',
+            '18' => 'Фигуры на клетчатой бумаге',
+        ];
+
+        // zadaniya per topic testing different skills.
+        // Format: [topicId, block, zadanie, skill description]
+        $selections = [
+            // Topic 06: Дроби и степени
+            ['06', 3, 5, 'Сложение обыкновенных дробей'],
+            ['06', 1, 2, 'Сложение и вычитание десятичных дробей'],
+            ['06', 1, 1, 'Умножение и деление обыкновенных дробей'],
+            // Topic 07: Числа, координатная прямая
+            ['07', 1, 10, 'Между какими целыми числами заключено число'],
+            ['07', 2, 8, 'Какому промежутку принадлежит корень'],
+            // Topic 08: Квадратные корни и степени
+            ['08', 1, 3, 'Простые степени и корни'],
+            ['08', 1, 8, 'Вычисление корня из степени'],
+            ['08', 3, 5, 'Свойства степеней'],
+            // Topic 09: Уравнения
+            ['09', 1, 1, 'Линейное уравнение'],
+            ['09', 1, 4, 'Квадратное уравнение'],
+            // Topic 11: Графики функций (matching — 1 задание, т.к. оно уже комплексное)
+            ['11', 1, 0, 'Соответствие графиков и формул'],
+            // Topic 13: Неравенства
+            ['13', 1, 1, 'Линейное неравенство'],
+            ['13', 1, 6, 'Квадратное неравенство'],
+            // Topic 15: Треугольники
+            ['15', 1, 3, 'Углы треугольника'],
+            ['15', 1, 9, 'Площадь прямоугольного треугольника'],
+            // Topic 16: Окружность
+            ['16', 1, 1, 'Базовые свойства окружности'],
+            ['16', 1, 4, 'Вписанные и центральные углы'],
+            // Topic 17: Четырёхугольники
+            ['17', 1, 1, 'Свойства четырёхугольников'],
+            ['17', 1, 2, 'Площади четырёхугольников'],
+            // Topic 18: Фигуры на клетчатой бумаге
+            ['18', 1, 1, 'Длина отрезка на клетчатой бумаге'],
+            ['18', 1, 4, 'Площадь фигуры на клетчатой бумаге'],
+        ];
+
+        $tasks = [];
+
+        foreach ($selections as $sel) {
+            [$topicId, $blockNumber, $zadanieNumber] = $sel;
+
+            // Topic 11 matching: use special method
+            if ($topicId === '11') {
+                $matchingSet = $this->taskDataService->getRandomMatchingSet($topicId);
+                if ($matchingSet) {
+                    $matchingSet['topic_id'] = $topicId;
+                    $matchingSet['topic_title'] = $topicTitles[$topicId] ?? '';
+                    $matchingSet['task_number'] = 11;
+                    $matchingSet['correct_answer'] = $this->buildMatchingCorrectAnswer($matchingSet);
+                    $tasks[] = $matchingSet;
+                }
+                continue;
+            }
+
+            $tasksFromZadanie = $this->taskDataService->getRandomTasksFromZadanie(
+                $topicId,
+                $blockNumber,
+                $zadanieNumber,
+                1
+            );
+
+            if (empty($tasksFromZadanie)) {
+                continue;
+            }
+
+            $task = $tasksFromZadanie[0];
+            $task['topic_id'] = $topicId;
+            $task['topic_title'] = $topicTitles[$topicId] ?? '';
+            $task['task_number'] = (int) ltrim($topicId, '0');
+            $task = $this->enrichTaskWithCorrectAnswer($task);
+            $tasks[] = $task;
+        }
+
+        mt_srand();
+
+        return [
+            'tasks' => $tasks,
+            'variantNumber' => 0,
+            'selectedZadaniya' => [],
+        ];
+    }
 }

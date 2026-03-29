@@ -11,7 +11,6 @@ use App\Http\Controllers\Api\LeaderboardController;
 use App\Http\Controllers\Api\ScheduleController;
 use App\Http\Controllers\Api\ProgressController;
 use App\Http\Controllers\Api\SkillController;
-use App\Http\Controllers\Api\SmartCartProxyController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\TopicController;
 use App\Http\Controllers\Auth\TelegramBotAuthController;
@@ -66,11 +65,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('geometry')->group(function ()
     Route::delete('/{taskId}/metadata', [GeometryEditorController::class, 'delete']);
 });
 
-// SmartCart proxy routes (forward to /smartcart/api/*)
-Route::options('/prices/bulk', [SmartCartProxyController::class, 'options']);
-Route::post('/prices/bulk', [SmartCartProxyController::class, 'bulkPrices']);
-Route::get('/stores', [SmartCartProxyController::class, 'stores']);
-Route::get('/cart', [SmartCartProxyController::class, 'cart']);
 
 Route::middleware(['auth:sanctum', 'role:teacher,admin'])->group(function () {
     Route::get('/topics', [TopicController::class, 'index']);
