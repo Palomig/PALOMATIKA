@@ -504,55 +504,6 @@ Route::prefix('tg')->group(function () {
     });
 });
 
-// Test pages for PDF parsing (legacy, public for development)
-Route::prefix('test')->group(function () {
-    // Index page with all topics
-    Route::get('/', [TestPdfController::class, 'index'])->name('test.index');
-
-    // Static parsed pages
-    Route::get('/6', [TestPdfController::class, 'topic06'])->name('test.topic06');
-    Route::get('/7', [TestPdfController::class, 'topic07'])->name('test.topic07');
-    Route::get('/8', [TestPdfController::class, 'topic08'])->name('test.topic08');
-    Route::get('/9', [TestPdfController::class, 'topic09'])->name('test.topic09');
-    Route::get('/10', [TestPdfController::class, 'topic10'])->name('test.topic10');
-    Route::get('/11', [TestPdfController::class, 'topic11'])->name('test.topic11');
-    Route::get('/12', [TestPdfController::class, 'topic12'])->name('test.topic12');
-    Route::get('/13', [TestPdfController::class, 'topic13'])->name('test.topic13');
-    Route::get('/14', [TestPdfController::class, 'topic14'])->name('test.topic14');
-    // Topics 15, 16, 17 — redirect to new unified system with pre-baked SVG
-    Route::get('/15', fn() => redirect()->route('topics.show', 15))->name('test.topic15');
-    Route::get('/16', fn() => redirect()->route('topics.show', 16))->name('test.topic16');
-    Route::get('/17', fn() => redirect()->route('topics.show', 17))->name('test.topic17');
-    Route::get('/18', [TestPdfController::class, 'topic18'])->name('test.topic18');
-    Route::get('/19', [TestPdfController::class, 'topic19'])->name('test.topic19');
-
-    // PDF Parser Web Interface
-    Route::get('/pdf', [TestPdfController::class, 'pdfParserIndex'])->name('test.pdf.index');
-    Route::post('/pdf/upload', [TestPdfController::class, 'uploadPdf'])->name('test.pdf.upload');
-    Route::get('/pdf/json/{topicId}', [TestPdfController::class, 'downloadJson'])->name('test.pdf.download-json');
-
-    // Dynamic parsed pages
-    Route::get('/parsed/{topicId}', [TestPdfController::class, 'showParsedPage'])->name('test.parsed');
-
-    // Test Generator
-    Route::get('/generator', [TestPdfController::class, 'testGenerator'])->name('test.generator');
-    Route::post('/generator/generate', [TestPdfController::class, 'generateRandomTest'])->name('test.generator.generate');
-    Route::get('/generator/result/{hash}', [TestPdfController::class, 'showGeneratedRandomTest'])
-        ->where('hash', '[a-z0-9]{8}')
-        ->name('test.generator.show');
-
-    // OGE Variant Generator (tasks 6-19)
-    Route::middleware(['auth', 'role:teacher,admin'])->group(function () {
-        Route::get('/oge', [TestPdfController::class, 'ogeGenerator'])->name('test.oge.generator');
-        Route::post('/oge/save', [TestPdfController::class, 'saveVariant'])->name('test.oge.save');
-    });
-    Route::middleware(['auth', 'role:student,teacher,admin'])->group(function () {
-        Route::get('/oge/{hash}', [TestPdfController::class, 'showOgeVariant'])->name('test.oge.show');
-    });
-
-    // Legacy
-    Route::post('/parse-pdf', [TestPdfController::class, 'parsePdf'])->name('test.parsePdf');
-});
 
 // Маршруты приложения для родителей (/parent/*)
 Route::prefix('parent')->group(function () {
