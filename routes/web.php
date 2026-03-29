@@ -62,12 +62,6 @@ Route::get('/qa-reports/{path?}', function (string $path = 'index.html') {
 Route::get('/materials', [JarvisMaterialPageController::class, 'index'])->name('materials.index');
 Route::get('/materials/{slug}', [JarvisMaterialPageController::class, 'show'])->name('materials.show');
 
-// Meal Plan (SmartCart)
-Route::get('/meal-plan', function () {
-    $json = file_get_contents(public_path('smartcart/data/meal-plan.json'));
-    $data = json_decode($json, true);
-    return view('meal-plan', ['data' => $data]);
-})->name('meal-plan');
 
 // Telegram Bot Webhook (excluded from CSRF in VerifyCsrfToken middleware)
 Route::post('/telegram/webhook', [TelegramBotAuthController::class, 'webhook'])
@@ -239,76 +233,12 @@ Route::middleware(['auth'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    // Student pages (redirects to new topics system)
-    Route::get('/student/topics', function () {
-        return redirect()->route('topics.index');
-    })->name('student.topics');
+    // Teacher utility pages (audit, materials, OGE review)
+    Route::prefix('teacher')->name('teacher.')->middleware('role:teacher,admin')->group(function () {
+        Route::get('/audit', [TeacherAuditController::class, 'index'])->name('audit.index');
+        Route::get('/materials', [JarvisMaterialPageController::class, 'teacherIndex'])->name('materials.index');
 
-    Route::get('/practice', function () {
-        return view('student.practice');
-    })->name('practice');
-
-    Route::get('/leaderboard', function () {
-        return view('student.leaderboard');
-    })->name('leaderboard');
-
-    Route::get('/badges', function () {
-        return view('student.badges');
-    })->name('badges');
-
-    Route::get('/duels', function () {
-        return view('student.duels');
-    })->name('duels');
-
-    // Teacher pages
-    Route::prefix('teacher')->name('teacher.')->group(function () {
-        Route::get('/', function () {
-            $user = auth()->user();
-            $viewAsRole = $user && $user->role === 'admin' ? session('view_as_role') : null;
-            if ($viewAsRole === 'student') {
-                return redirect()->to('/dashboard');
-            }
-
-            return view('teacher.dashboard');
-        })->name('dashboard');
-
-        Route::middleware('role:teacher,admin')->group(function () {
-            Route::get('/students', [StudentsController::class, 'index'])->name('students');
-            Route::get('/students/{id}', [StudentsController::class, 'show'])->name('students.show');
-        });
-
-        Route::middleware('role:teacher,admin')->prefix('groups')->name('groups.')->group(function () {
-            Route::get('/', [StudentGroupController::class, 'index'])->name('index');
-            Route::get('/data', [StudentGroupController::class, 'groups'])->name('data');
-            Route::get('/students', [StudentGroupController::class, 'students'])->name('students');
-            Route::post('/', [StudentGroupController::class, 'store'])->name('store');
-            Route::post('/{group}/students', [StudentGroupController::class, 'addStudent'])->name('students.add');
-            Route::delete('/{group}/students/{studentId}', [StudentGroupController::class, 'removeStudent'])->name('students.remove');
-            Route::delete('/{group}', [StudentGroupController::class, 'destroy'])->name('destroy');
-        });
-
-        Route::get('/homework', function () {
-            return view('teacher.homework');
-        })->name('homework');
-
-        Route::get('/homework/create', function () {
-            return view('teacher.homework');
-        })->name('homework.create');
-
-        Route::get('/analytics', function () {
-            return view('teacher.analytics');
-        })->name('analytics');
-
-        Route::get('/earnings', function () {
-            return view('teacher.earnings');
-        })->name('earnings');
-
-        Route::middleware('role:teacher,admin')->group(function () {
-            Route::get('/audit', [TeacherAuditController::class, 'index'])->name('audit.index');
-            Route::get('/materials', [JarvisMaterialPageController::class, 'teacherIndex'])->name('materials.index');
-        });
-
-        Route::prefix('oge')->name('oge.')->middleware('role:teacher,admin')->group(function () {
+        Route::prefix('oge')->name('oge.')->group(function () {
             Route::get('/teachers', [OgeReviewController::class, 'teachers'])->name('teachers');
             Route::get('/teachers/{teacherId}/variants', [OgeReviewController::class, 'variants'])->name('variants');
             Route::get('/variants/{variantId}/results', [OgeReviewController::class, 'results'])->name('results');
@@ -510,55 +440,6 @@ Route::prefix('tg')->group(function () {
     });
 });
 
-// Test pages for PDF parsing (legacy, public for development)
-Route::prefix('test')->group(function () {
-    // Index page with all topics
-    Route::get('/', [TestPdfController::class, 'index'])->name('test.index');
-
-    // Static parsed pages
-    Route::get('/6', [TestPdfController::class, 'topic06'])->name('test.topic06');
-    Route::get('/7', [TestPdfController::class, 'topic07'])->name('test.topic07');
-    Route::get('/8', [TestPdfController::class, 'topic08'])->name('test.topic08');
-    Route::get('/9', [TestPdfController::class, 'topic09'])->name('test.topic09');
-    Route::get('/10', [TestPdfController::class, 'topic10'])->name('test.topic10');
-    Route::get('/11', [TestPdfController::class, 'topic11'])->name('test.topic11');
-    Route::get('/12', [TestPdfController::class, 'topic12'])->name('test.topic12');
-    Route::get('/13', [TestPdfController::class, 'topic13'])->name('test.topic13');
-    Route::get('/14', [TestPdfController::class, 'topic14'])->name('test.topic14');
-    // Topics 15, 16, 17 — redirect to new unified system with pre-baked SVG
-    Route::get('/15', fn() => redirect()->route('topics.show', 15))->name('test.topic15');
-    Route::get('/16', fn() => redirect()->route('topics.show', 16))->name('test.topic16');
-    Route::get('/17', fn() => redirect()->route('topics.show', 17))->name('test.topic17');
-    Route::get('/18', [TestPdfController::class, 'topic18'])->name('test.topic18');
-    Route::get('/19', [TestPdfController::class, 'topic19'])->name('test.topic19');
-
-    // PDF Parser Web Interface
-    Route::get('/pdf', [TestPdfController::class, 'pdfParserIndex'])->name('test.pdf.index');
-    Route::post('/pdf/upload', [TestPdfController::class, 'uploadPdf'])->name('test.pdf.upload');
-    Route::get('/pdf/json/{topicId}', [TestPdfController::class, 'downloadJson'])->name('test.pdf.download-json');
-
-    // Dynamic parsed pages
-    Route::get('/parsed/{topicId}', [TestPdfController::class, 'showParsedPage'])->name('test.parsed');
-
-    // Test Generator
-    Route::get('/generator', [TestPdfController::class, 'testGenerator'])->name('test.generator');
-    Route::post('/generator/generate', [TestPdfController::class, 'generateRandomTest'])->name('test.generator.generate');
-    Route::get('/generator/result/{hash}', [TestPdfController::class, 'showGeneratedRandomTest'])
-        ->where('hash', '[a-z0-9]{8}')
-        ->name('test.generator.show');
-
-    // OGE Variant Generator (tasks 6-19)
-    Route::middleware(['auth', 'role:teacher,admin'])->group(function () {
-        Route::get('/oge', [TestPdfController::class, 'ogeGenerator'])->name('test.oge.generator');
-        Route::post('/oge/save', [TestPdfController::class, 'saveVariant'])->name('test.oge.save');
-    });
-    Route::middleware(['auth', 'role:student,teacher,admin'])->group(function () {
-        Route::get('/oge/{hash}', [TestPdfController::class, 'showOgeVariant'])->name('test.oge.show');
-    });
-
-    // Legacy
-    Route::post('/parse-pdf', [TestPdfController::class, 'parsePdf'])->name('test.parsePdf');
-});
 
 // Маршруты приложения для родителей (/parent/*)
 Route::prefix('parent')->group(function () {

@@ -5,10 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\OgeVariant;
 use App\Models\OgeAttempt;
 use App\Services\AuditLogger;
-use App\Services\PdfParserService;
-use App\Services\PdfTaskParser;
 use App\Services\TaskGeneratorService;
-use App\Services\AdvancedPdfParser;
 use App\Services\OgeVariantBuilderService;
 use App\Services\TaskDataService;
 use Illuminate\Database\QueryException;
@@ -24,24 +21,18 @@ use Illuminate\Support\Facades\Validator;
 
 class TestPdfController extends Controller
 {
-    protected PdfParserService $pdfParser;
     protected TaskGeneratorService $taskGenerator;
-    protected AdvancedPdfParser $advancedParser;
     protected TaskDataService $taskDataService;
     protected OgeVariantBuilderService $ogeVariantBuilder;
     protected AuditLogger $auditLogger;
 
     public function __construct(
-        PdfParserService $pdfParser,
         TaskGeneratorService $taskGenerator,
-        AdvancedPdfParser $advancedParser,
         TaskDataService $taskDataService,
         OgeVariantBuilderService $ogeVariantBuilder,
         AuditLogger $auditLogger
     ) {
-        $this->pdfParser = $pdfParser;
         $this->taskGenerator = $taskGenerator;
-        $this->advancedParser = $advancedParser;
         $this->taskDataService = $taskDataService;
         $this->ogeVariantBuilder = $ogeVariantBuilder;
         $this->auditLogger = $auditLogger;

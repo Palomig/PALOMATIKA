@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Подключить MTProxy | PALOMATIKA</title>
+  <meta name="description" content="Откройте Telegram и подключите MTProxy PALOMATIKA через QR-код или кнопку.">
+  <style>
+    :root {
+      --page: #08111f;
+      --card: #0f1b2f;
+      --card-border: rgba(118, 152, 216, 0.16);
+      --text: #edf4ff;
+      --muted: #9ab0d3;
+      --button: #13233d;
+      --button-text: #7fd2ff;
+      --shadow: rgba(0, 0, 0, 0.34);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--text);
+      background: var(--page);
+    }
+
+    .card {
+      width: min(92vw, 480px);
+      padding: 28px 28px 24px;
+      border: 1px solid var(--card-border);
+      border-radius: 32px;
+      background: var(--card);
+      box-shadow: 0 30px 80px var(--shadow);
+      text-align: center;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #12233f;
+      color: #7ecfff;
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .brand-mark {
+      width: 26px;
+      height: 26px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #19304f;
+      color: #119af5;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin: 18px 0 10px;
+      font-size: clamp(32px, 7vw, 50px);
+      line-height: 0.94;
+      letter-spacing: -0.04em;
+    }
+
+    p {
+      margin: 0 auto;
+      max-width: 32ch;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.55;
+    }
+
+    .qr-shell {
+      position: relative;
+      margin: 26px auto 22px;
+      width: min(72vw, 340px);
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+    }
+
+    .qr {
+      width: 100%;
+      max-width: 320px;
+      filter: drop-shadow(0 18px 28px rgba(17, 24, 39, 0.12));
+    }
+
+    .action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 58px;
+      padding: 16px 22px;
+      border-radius: 18px;
+      background: var(--button);
+      color: var(--button-text);
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 700;
+      border: 1px solid rgba(127, 210, 255, 0.18);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22);
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+
+    .action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 30px rgba(17, 24, 39, 0.12);
+    }
+
+    .hint {
+      margin-top: 14px;
+      font-size: 14px;
+      color: #9ab0d3;
+    }
+
+    .code {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: #12203a;
+      color: #95acd2;
+      font-size: 12px;
+      line-height: 1.45;
+      word-break: break-all;
+    }
+
+    @media (max-width: 520px) {
+      .card {
+        padding: 22px 18px 18px;
+        border-radius: 26px;
+      }
+
+      .qr-shell {
+        width: min(82vw, 300px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="brand">
+      <span class="brand-mark">T</span>
+      <span>PALOMATIKA Proxy</span>
+    </div>
+    <h1>Открой Telegram<br>в один тап</h1>
+    <p>Сканируйте QR-код камерой или нажмите кнопку ниже. Ссылка ведёт напрямую в приложение Telegram и предлагает подключить прокси.</p>
+
+    <div class="qr-shell">
+      <img class="qr" src="./assets/telegram-proxy-qr.svg" alt="QR-код для подключения MTProxy в Telegram">
+    </div>
+
+    <a class="action" href="tg://proxy?server=193.23.3.134&port=8444&secret=d58de839d4d522103d715ddb40c1a59d">Открыть в Telegram</a>
+    <div class="hint">Если кнопка не сработала в браузере, откройте QR-код камерой телефона.</div>
+    <div class="code">tg://proxy?server=193.23.3.134&port=8444&secret=d58de839d4d522103d715ddb40c1a59d</div>
+  </main>
+</body>
+</html>

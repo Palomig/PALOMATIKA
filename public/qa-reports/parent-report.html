@@ -1,0 +1,84 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QA Parent Report — 23.03.2026, 19:17:02</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,sans-serif;background:#0f0f14;color:#e0e0e0;padding:0 0 60px}
+  header{background:#1a1a2e;padding:20px 24px;border-bottom:1px solid #222}
+  h1{font-size:18px;color:#fff;margin-bottom:8px}
+  .badges{display:flex;gap:8px;flex-wrap:wrap}
+  .badge{padding:4px 10px;border-radius:6px;font-size:12px;font-weight:700}
+  .b-ok{background:#14532d;color:#4ade80}
+  .b-fail{background:#7f1d1d;color:#f87171}
+  .b-warn{background:#78350f;color:#fbbf24}
+  .b-total{background:#1e293b;color:#94a3b8}
+  nav{background:#16161e;padding:12px 24px;border-bottom:1px solid #1e1e2e;display:flex;gap:8px;flex-wrap:wrap}
+  nav a{font-size:12px;padding:4px 8px;border-radius:6px;text-decoration:none;color:#94a3b8;background:#1e1e2e}
+  nav a.ok{color:#4ade80} nav a.fail{color:#f87171} nav a.warn{color:#fbbf24}
+  .step{padding:20px 24px;border-bottom:1px solid #161616}
+  .step:target{background:#1a1a2e}
+  .sh{display:flex;gap:14px;align-items:flex-start;margin-bottom:12px}
+  .sn{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0}
+  .sn.ok{background:#14532d;color:#4ade80}
+  .sn.fail{background:#7f1d1d;color:#f87171}
+  .sn.warn{background:#78350f;color:#fbbf24}
+  .st{font-size:15px;font-weight:700;color:#fff}
+  .su{font-size:11px;color:#555;margin-top:2px;word-break:break-all}
+  .checks{margin-bottom:10px}
+  .check{font-size:12px;color:#888;padding:2px 0}
+  .err{background:#2d1010;border:1px solid #5a1414;border-radius:6px;padding:10px;font-size:11px;color:#f87171;white-space:pre-wrap;overflow-x:auto;margin-bottom:10px}
+  .si{width:320px;border-radius:8px;border:1px solid #222;cursor:zoom-in;display:block}
+  #lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:999;cursor:zoom-out;align-items:center;justify-content:center}
+  #lb.open{display:flex} #lb img{max-width:95vw;max-height:95vh;border-radius:8px}
+</style>
+</head>
+<body>
+<div id="lb" onclick="this.classList.remove('open')"><img id="lbimg"></div>
+<header>
+  <h1>QA Parent Report — palomatika.ru/parent — 23.03.2026, 19:17:02</h1>
+  <div class="badges">
+    <span class="badge b-ok">7 OK</span>
+    <span class="badge b-fail">0 FAIL</span>
+    <span class="badge b-warn">0 WARN</span>
+    <span class="badge b-total">7 steps</span>
+  </div>
+</header>
+<nav><a href="#s1" class="ok">1. Login (parent)</a><a href="#s2" class="ok">2. /parent Home</a><a href="#s3" class="ok">3. Parent Dashboard</a><a href="#s4" class="ok">4. Child Skills</a><a href="#s5" class="ok">5. Child Attendance</a><a href="#s6" class="ok">6. Child Homework</a><a href="#s7" class="ok">7. Access control (wrong child)</a></nav>
+<div class="step" id="s1">
+<div class="sh"><div class="sn ok">1</div><div><div class="st">Login (parent)</div><div class="su">https://palomatika.ru/dashboard</div></div></div>
+<div class="checks"><div class="check">· URL after login: https://palomatika.ru/dashboard</div><div class="check">· Redirected away from /login: true</div></div>
+
+<img class="si" src="screenshots-parent/01-login.png" alt="Login (parent)" onclick="lbox(this.src)" loading="lazy">
+</div><div class="step" id="s2">
+<div class="sh"><div class="sn ok">2</div><div><div class="st">/parent Home</div><div class="su">https://palomatika.ru/parent/dashboard</div></div></div>
+<div class="checks"><div class="check">· URL: https://palomatika.ru/parent/dashboard</div><div class="check">· Contains /parent: true</div></div>
+
+<img class="si" src="screenshots-parent/02-parent-home.png" alt="/parent Home" onclick="lbox(this.src)" loading="lazy">
+</div><div class="step" id="s3">
+<div class="sh"><div class="sn ok">3</div><div><div class="st">Parent Dashboard</div><div class="su">https://palomatika.ru/parent/dashboard</div></div></div>
+<div class="checks"><div class="check">· URL: https://palomatika.ru/parent/dashboard</div><div class="check">· Access ok: true</div><div class="check">· Child cards visible: 1</div></div>
+
+<img class="si" src="screenshots-parent/03-parent-dashboard.png" alt="Parent Dashboard" onclick="lbox(this.src)" loading="lazy">
+</div><div class="step" id="s4">
+<div class="sh"><div class="sn ok">4</div><div><div class="st">Child Skills</div><div class="su">https://palomatika.ru/parent/child/35/skills</div></div></div>
+<div class="checks"><div class="check">· URL: https://palomatika.ru/parent/child/35/skills</div><div class="check">· Page accessible: true</div></div>
+
+<img class="si" src="screenshots-parent/04-child-skills.png" alt="Child Skills" onclick="lbox(this.src)" loading="lazy">
+</div><div class="step" id="s5">
+<div class="sh"><div class="sn ok">5</div><div><div class="st">Child Attendance</div><div class="su">https://palomatika.ru/parent/child/35/attendance</div></div></div>
+<div class="checks"><div class="check">· URL: https://palomatika.ru/parent/child/35/attendance</div><div class="check">· Page accessible: true</div></div>
+
+<img class="si" src="screenshots-parent/05-child-attendance.png" alt="Child Attendance" onclick="lbox(this.src)" loading="lazy">
+</div><div class="step" id="s6">
+<div class="sh"><div class="sn ok">6</div><div><div class="st">Child Homework</div><div class="su">https://palomatika.ru/parent/child/35/homework</div></div></div>
+<div class="checks"><div class="check">· URL: https://palomatika.ru/parent/child/35/homework</div><div class="check">· Page accessible: true</div></div>
+
+<img class="si" src="screenshots-parent/06-child-homework.png" alt="Child Homework" onclick="lbox(this.src)" loading="lazy">
+</div><div class="step" id="s7">
+<div class="sh"><div class="sn ok">7</div><div><div class="st">Access control (wrong child)</div><div class="su">https://palomatika.ru/parent/child/36/skills</div></div></div>
+<div class="checks"><div class="check">· Accessing child 36 (QA Teacher, not linked to this parent)</div><div class="check">· Blocked: true</div><div class="check">· URL: https://palomatika.ru/parent/child/36/skills</div></div>
+
+<img class="si" src="screenshots-parent/07-access-control-wrong-child.png" alt="Access control (wrong child)" onclick="lbox(this.src)" loading="lazy">
+</div>
+<script>function lbox(s){document.getElementById('lbimg').src=s;document.getElementById('lb').classList.add('open')}</script>
+</body></html>
