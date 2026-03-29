@@ -233,65 +233,12 @@ Route::middleware(['auth'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    // Student pages (redirects to new topics system)
-    Route::get('/student/topics', function () {
-        return redirect()->route('topics.index');
-    })->name('student.topics');
+    // Teacher utility pages (audit, materials, OGE review)
+    Route::prefix('teacher')->name('teacher.')->middleware('role:teacher,admin')->group(function () {
+        Route::get('/audit', [TeacherAuditController::class, 'index'])->name('audit.index');
+        Route::get('/materials', [JarvisMaterialPageController::class, 'teacherIndex'])->name('materials.index');
 
-    Route::get('/practice', function () {
-        return view('student.practice');
-    })->name('practice');
-
-
-    // Teacher pages
-    Route::prefix('teacher')->name('teacher.')->group(function () {
-        Route::get('/', function () {
-            $user = auth()->user();
-            $viewAsRole = $user && $user->role === 'admin' ? session('view_as_role') : null;
-            if ($viewAsRole === 'student') {
-                return redirect()->to('/dashboard');
-            }
-
-            return view('teacher.dashboard');
-        })->name('dashboard');
-
-        Route::middleware('role:teacher,admin')->group(function () {
-            Route::get('/students', [StudentsController::class, 'index'])->name('students');
-            Route::get('/students/{id}', [StudentsController::class, 'show'])->name('students.show');
-        });
-
-        Route::middleware('role:teacher,admin')->prefix('groups')->name('groups.')->group(function () {
-            Route::get('/', [StudentGroupController::class, 'index'])->name('index');
-            Route::get('/data', [StudentGroupController::class, 'groups'])->name('data');
-            Route::get('/students', [StudentGroupController::class, 'students'])->name('students');
-            Route::post('/', [StudentGroupController::class, 'store'])->name('store');
-            Route::post('/{group}/students', [StudentGroupController::class, 'addStudent'])->name('students.add');
-            Route::delete('/{group}/students/{studentId}', [StudentGroupController::class, 'removeStudent'])->name('students.remove');
-            Route::delete('/{group}', [StudentGroupController::class, 'destroy'])->name('destroy');
-        });
-
-        Route::get('/homework', function () {
-            return view('teacher.homework');
-        })->name('homework');
-
-        Route::get('/homework/create', function () {
-            return view('teacher.homework');
-        })->name('homework.create');
-
-        Route::get('/analytics', function () {
-            return view('teacher.analytics');
-        })->name('analytics');
-
-        Route::get('/earnings', function () {
-            return view('teacher.earnings');
-        })->name('earnings');
-
-        Route::middleware('role:teacher,admin')->group(function () {
-            Route::get('/audit', [TeacherAuditController::class, 'index'])->name('audit.index');
-            Route::get('/materials', [JarvisMaterialPageController::class, 'teacherIndex'])->name('materials.index');
-        });
-
-        Route::prefix('oge')->name('oge.')->middleware('role:teacher,admin')->group(function () {
+        Route::prefix('oge')->name('oge.')->group(function () {
             Route::get('/teachers', [OgeReviewController::class, 'teachers'])->name('teachers');
             Route::get('/teachers/{teacherId}/variants', [OgeReviewController::class, 'variants'])->name('variants');
             Route::get('/variants/{variantId}/results', [OgeReviewController::class, 'results'])->name('results');
