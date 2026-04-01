@@ -128,6 +128,7 @@ Only old website pages/controllers unrelated to task database or mini app:
 - SVG data baked into DB
 - `TaskDataService`, `GeometrySvgRenderer`, `OgeVariantBuilderService`, `OgeAttemptService`, `TaskAnswerResolver`
 - `/topics/*` controller and views
+- `/materials/*` controller and views (`JarvisMaterialPageController`)
 - All database migrations
 - `database/migrations/`
 
