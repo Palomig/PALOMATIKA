@@ -9,8 +9,9 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Expand homework_type enum
-        DB::statement("ALTER TABLE homeworks MODIFY homework_type ENUM('specific_tasks','topic_random','weak_skills','full_variant','topic_practice') NOT NULL");
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE homeworks MODIFY homework_type ENUM('specific_tasks','topic_random','weak_skills','full_variant','topic_practice') NOT NULL");
+        }
 
         Schema::table('homeworks', function (Blueprint $table) {
             $table->string('variant_hash', 32)->nullable()->after('tasks_count');
@@ -23,6 +24,10 @@ return new class extends Migration
         Schema::table('homeworks', function (Blueprint $table) {
             $table->dropColumn(['variant_hash', 'topic_number']);
         });
+
+        if (DB::getDriverName() === 'sqlite') {
+            return;
+        }
 
         DB::statement("ALTER TABLE homeworks MODIFY homework_type ENUM('specific_tasks','topic_random','weak_skills') NOT NULL");
     }

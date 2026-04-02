@@ -121,8 +121,8 @@
                         <h5 class="font-semibold mb-3">Основные файлы:</h5>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             <div class="bg-dark rounded-lg p-3">
-                                <code class="text-green-400 text-sm">welcome.blade.php</code>
-                                <p class="text-gray-400 text-sm mt-1">Главная страница сайта (landing). Первое, что видит посетитель.</p>
+                                <code class="text-green-400 text-sm">landing.blade.php</code>
+                                <p class="text-gray-400 text-sm mt-1">Главная страница сайта с переходом в student/teacher PWA.</p>
                             </div>
                             <div class="bg-dark rounded-lg p-3">
                                 <code class="text-green-400 text-sm">dashboard.blade.php</code>

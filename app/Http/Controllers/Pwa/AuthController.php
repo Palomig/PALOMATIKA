@@ -12,6 +12,7 @@ use Laravel\Socialite\Facades\Socialite;
 class AuthController extends Controller
 {
     private const ALLOWED_PROVIDERS = ['vkontakte', 'google', 'yandex'];
+    private const MIGRATION_SESSION_KEY = 'pwa_migration_token';
 
     /**
      * Determine which subdomain we're on (student|teacher).
@@ -33,8 +34,22 @@ class AuthController extends Controller
     public function showTeacherLogin(Request $request)
     {
         if (Auth::check()) {
-            return redirect('http://teacher.' . config('app.base_domain') . '/dashboard');
+            $user = Auth::user();
+
+            if ($user && in_array($user->role, ['teacher', 'admin'], true)) {
+                return redirect('http://teacher.' . config('app.base_domain') . '/dashboard');
+            }
+
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            $request->session()->flash('error', 'Этот аккаунт не имеет доступа к кабинету репетитора.');
+
+            return view('pwa.shared.login', [
+                'context' => 'teacher',
+            ]);
         }
+
         return view('pwa.shared.login', ['context' => 'teacher']);
     }
 
@@ -44,6 +59,8 @@ class AuthController extends Controller
     public function redirect(Request $request, string $provider)
     {
         abort_unless(in_array($provider, self::ALLOWED_PROVIDERS), 404);
+        $this->rememberMigrationToken($request);
+
         $callbackUrl = 'https://student.' . config('app.base_domain') . '/auth/' . $provider . '/callback';
         return Socialite::driver($provider)->redirectUrl($callbackUrl)->redirect();
     }
@@ -73,7 +90,8 @@ class AuthController extends Controller
                 ->with('error', 'Ошибка авторизации. Попробуйте ещё раз.');
         }
 
-        $user = $this->findOrCreateUser($socialUser, $provider);
+        $migrationToken = trim((string) $request->session()->pull(self::MIGRATION_SESSION_KEY, ''));
+        $user = $this->findOrCreateUser($socialUser, $provider, $migrationToken);
         Auth::login($user, true);
         $request->session()->regenerate();
 
@@ -104,6 +122,16 @@ class AuthController extends Controller
         }
 
         $user = $this->findOrCreateUser($socialUser, $provider);
+
+        if (!in_array($user->role, ['teacher', 'admin'], true)) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect('http://teacher.' . config('app.base_domain') . '/login')
+                ->with('error', 'Этот аккаунт не имеет доступа к кабинету репетитора.');
+        }
+
         Auth::login($user, true);
         $request->session()->regenerate();
 
@@ -133,13 +161,40 @@ class AuthController extends Controller
         ]);
     }
 
-    private function findOrCreateUser($socialUser, string $provider): User
+    private function rememberMigrationToken(Request $request): void
     {
-        // Normalise provider name: Socialite uses 'vkontakte', store as 'vk'
+        $token = trim((string) $request->query('migration_token', ''));
+
+        if ($token !== '') {
+            $request->session()->put(self::MIGRATION_SESSION_KEY, $token);
+        }
+    }
+
+    private function findOrCreateUser($socialUser, string $provider, string $migrationToken = ''): User
+    {
         $storedProvider = match($provider) {
             'vkontakte' => 'vk',
             default => $provider,
         };
+
+        if ($migrationToken !== '') {
+            $payload = Cache::pull('pwa_migration:' . $migrationToken);
+
+            if (is_array($payload) && !empty($payload['user_id'])) {
+                $user = User::find((int) $payload['user_id']);
+
+                if ($user) {
+                    $user->forceFill([
+                        'oauth_provider' => $storedProvider,
+                        'oauth_id' => (string) $socialUser->getId(),
+                        'email' => $socialUser->getEmail() ?: $user->email,
+                        'avatar' => $socialUser->getAvatar() ?: $user->avatar,
+                    ])->save();
+
+                    return $user;
+                }
+            }
+        }
 
         $user = User::where('oauth_provider', $storedProvider)
             ->where('oauth_id', (string) $socialUser->getId())

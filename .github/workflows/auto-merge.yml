@@ -53,9 +53,6 @@ jobs:
         with:
           ref: main
 
-      - name: Install PHP dependencies
-        run: composer install --no-dev --optimize-autoloader --no-interaction
-
       - name: Deploy to Timeweb via FTP
         id: ftp-deploy
         continue-on-error: true
@@ -78,6 +75,7 @@ jobs:
             **/phpunit.xml
             **/*.md
             **/.DS_Store
+            **/vendor/**
             **/docs/oge_project_package.zip
 
       - name: Wait 30s before retry
@@ -105,6 +103,7 @@ jobs:
             **/phpunit.xml
             **/*.md
             **/.DS_Store
+            **/vendor/**
             **/docs/oge_project_package.zip
 
       - name: Trigger deploy refresh webhook

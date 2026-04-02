@@ -30,4 +30,13 @@ class PwaRoutesTest extends TestCase
         $response = $this->get('http://student.palomatika.ru/');
         $response->assertRedirect();
     }
+
+    public function test_root_landing_links_to_student_and_teacher_pwas(): void
+    {
+        $response = $this->get('/');
+
+        $response->assertOk();
+        $response->assertSee('student.palomatika.ru', false);
+        $response->assertSee('teacher.palomatika.ru', false);
+    }
 }
