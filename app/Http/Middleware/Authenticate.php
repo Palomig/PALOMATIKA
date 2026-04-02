@@ -25,6 +25,13 @@ class Authenticate extends Middleware
             return url('/tg');
         }
 
+        // PWA subdomain routes — redirect to /login on same subdomain
+        $host = $request->getHost();
+        $baseDomain = config('app.base_domain', 'palomatika.ru');
+        if (str_ends_with($host, '.' . $baseDomain)) {
+            return 'http://' . $host . '/login';
+        }
+
         return route('login');
     }
 }
