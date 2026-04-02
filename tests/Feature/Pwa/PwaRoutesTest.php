@@ -22,7 +22,7 @@ class PwaRoutesTest extends TestCase
     {
         $response = $this->get('http://student.palomatika.ru/manifest.json');
         $response->assertStatus(200);
-        $response->assertHeader('Content-Type', 'application/json');
+        $response->assertHeader('Content-Type', 'application/manifest+json');
     }
 
     public function test_student_dashboard_requires_auth(): void
