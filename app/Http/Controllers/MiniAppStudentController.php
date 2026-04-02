@@ -116,8 +116,16 @@ class MiniAppStudentController extends Controller
             ->orderBy('id')
             ->first();
 
+        // Generate one-time migration token for this user
+        $migrationToken = \Illuminate\Support\Str::random(32);
+        \Illuminate\Support\Facades\Cache::put(
+            'pwa_migration:' . $migrationToken,
+            ['user_id' => $user->id],
+            now()->addMinutes(10)
+        );
+
         return view('miniapp.dashboard', compact(
-            'user', 'weakTopics', 'newFipiCount', 'activeAttemptsList', 'hasTeacher', 'pendingGift'
+            'user', 'weakTopics', 'newFipiCount', 'activeAttemptsList', 'hasTeacher', 'pendingGift', 'migrationToken'
         ));
     }
 

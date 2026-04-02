@@ -189,6 +189,9 @@
 @section('body')
 <div class="page" x-data="dashboardPage()">
 
+  {{-- MIGRATION BANNER --}}
+  @include('miniapp.partials.migration-banner', ['migrationToken' => $migrationToken])
+
   {{-- GREETING + COUNTDOWN --}}
   <div class="greeting">
     <div class="greeting-name">Привет, {{ $user->name ?? 'ученик' }}!</div>
