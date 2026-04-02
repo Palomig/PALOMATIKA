@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 return new class extends Migration
 {
@@ -69,8 +70,24 @@ $$5 + 10 + 20 + 40 = 75 \quad ✓$$
 Ответ: $S_4 = 75$
 CONTENT;
 
+        $ownerTeacherId = DB::table('users')
+            ->whereIn('role', ['teacher', 'admin'])
+            ->orderBy('id')
+            ->value('id');
+
+        if (!$ownerTeacherId) {
+            $ownerTeacherId = DB::table('users')->insertGetId([
+                'name' => 'Palomatika System Teacher',
+                'email' => 'system-teacher@palomatika.local',
+                'password' => bcrypt(Str::random(32)),
+                'role' => 'teacher',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ]);
+        }
+
         DB::table('jarvis_materials')->insert([
-            'owner_teacher_id' => 1,
+            'owner_teacher_id' => $ownerTeacherId,
             'title' => 'Геометрическая прогрессия: объяснение и задачи',
             'slug' => $slug,
             'excerpt' => 'Что такое геометрическая прогрессия, формулы n-го члена и суммы, два разобранных задания с ответами',

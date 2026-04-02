@@ -120,7 +120,7 @@ class BoardController extends Controller
                     'description' => 'HTML страницы, которые видит пользователь',
                     'color' => 'green',
                     'files' => [
-                        'welcome.blade.php' => 'Главная страница (landing)',
+                        'landing.blade.php' => 'Главная страница с выбором PWA',
                         'dashboard.blade.php' => 'Личный кабинет ученика',
                         'topics/index.blade.php' => 'Список всех тем ОГЭ',
                         'topics/show.blade.php' => 'Страница с заданиями темы',

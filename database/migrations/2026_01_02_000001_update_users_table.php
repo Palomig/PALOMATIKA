@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             // OAuth
-            $table->enum('oauth_provider', ['telegram', 'vk', 'yandex'])->nullable()->after('remember_token');
+            $table->enum('oauth_provider', ['telegram', 'vk', 'yandex', 'google'])->nullable()->after('remember_token');
             $table->string('oauth_id')->nullable()->after('oauth_provider');
 
             // Профиль

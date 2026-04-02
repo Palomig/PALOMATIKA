@@ -9,8 +9,9 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Добавить 'parent' в enum ролей
-        DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('student','teacher','admin','parent') NOT NULL DEFAULT 'student'");
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('student','teacher','admin','parent') NOT NULL DEFAULT 'student'");
+        }
 
         // Связка родитель-ученик (привязка вручную)
         Schema::create('parent_student', function (Blueprint $table) {
@@ -28,6 +29,11 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('parent_student');
+
+        if (DB::getDriverName() === 'sqlite') {
+            return;
+        }
+
         DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('student','teacher','admin') NOT NULL DEFAULT 'student'");
     }
 };

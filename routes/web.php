@@ -38,7 +38,7 @@ use Illuminate\Support\Facades\Route;
 
 // Landing (browser only — Telegram Mini App uses /tg/)
 Route::get('/', function () {
-    return view('welcome');
+    return view('landing');
 })->name('landing');
 
 // QA Reports (admin only)
@@ -454,4 +454,3 @@ Route::prefix('parent')->group(function () {
         Route::get('/child/{studentId}/homework', [ParentAppController::class, 'childHomework'])->name('parent.child.homework');
     });
 });
-
