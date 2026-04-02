@@ -57,6 +57,8 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'base_domain' => env('APP_BASE_DOMAIN', 'palomatika.ru'),
+
     'asset_url' => env('ASSET_URL'),
 
     /*

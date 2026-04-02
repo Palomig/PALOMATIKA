@@ -37,6 +37,12 @@ class RouteServiceProvider extends ServiceProvider
                 ->prefix('api')
                 ->group(base_path('routes/api.php'));
 
+            // PWA routes must be registered before web.php so domain-specific routes
+            // take precedence over catch-all routes like Route::get('/').
+            Route::middleware('web')
+                ->withoutMiddleware([\App\Http\Middleware\CaptureTelegramStartParam::class])
+                ->group(base_path('routes/pwa.php'));
+
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
         });

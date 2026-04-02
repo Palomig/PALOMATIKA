@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Pwa;
 
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\MiniAppHelpers;
 use App\Models\OgeAttempt;
 use App\Models\OgeAttemptScoring;
 use App\Models\OgeVariant;
 use App\Models\StarTransaction;
 use App\Models\TeacherStudent;
-use App\Models\UserGift;
 use App\Models\User;
+use App\Models\UserGift;
 use App\Services\MiniAppTaskCanonicalizer;
 use App\Services\MiniAppTaskSanitizer;
 use App\Services\MiniVariantService;
@@ -23,9 +25,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
-class MiniAppStudentController extends Controller
+class StudentController extends Controller
 {
-    use Traits\MiniAppHelpers;
+    use MiniAppHelpers;
 
     public function __construct(
         private readonly MiniVariantService $miniVariant,
@@ -35,7 +37,46 @@ class MiniAppStudentController extends Controller
         private readonly TaskDataService $taskData,
         private readonly MiniAppTaskCanonicalizer $taskCanonicalizer,
         private readonly MiniAppTaskSanitizer $taskSanitizer,
-    ) {
+    ) {}
+
+    private function base(): string
+    {
+        return 'http://student.' . config('app.base_domain');
+    }
+
+    // Onboarding (GET)
+    public function onboarding(Request $request)
+    {
+        if (Auth::check() && Auth::user()->onboarding_completed_at) {
+            return redirect($this->base() . '/');
+        }
+        return view('pwa.student.onboarding');
+    }
+
+    // Onboarding (POST)
+    public function saveOnboarding(Request $request)
+    {
+        $data = $request->validate([
+            'name'          => 'required|string|min:2|max:100',
+            'grade_num'     => 'required|integer|in:9',
+            'grade_letter'  => 'required|string|in:А,Б,В,Г,Д,К,М',
+            'school_number' => 'required|string|max:20',
+            'city'          => 'nullable|string|max:80',
+        ]);
+
+        $user = $request->user();
+        abort_unless($user, 401);
+
+        $user->update([
+            'name'                    => $data['name'],
+            'grade_num'               => $data['grade_num'],
+            'grade_letter'            => $data['grade_letter'],
+            'school_number'           => $data['school_number'],
+            'city'                    => $data['city'] ?: 'Чехов',
+            'onboarding_completed_at' => now(),
+        ]);
+
+        return redirect($this->base() . '/');
     }
 
     /**
@@ -44,30 +85,6 @@ class MiniAppStudentController extends Controller
     public function dashboard(Request $request)
     {
         $user = Auth::user();
-        $effectiveRole = $this->resolveMiniAppRole($request, $user);
-
-        if ($effectiveRole === 'teacher') {
-            return redirect('/tg/teacher/dashboard');
-        }
-
-        // If Mini App was opened via startapp=oge_variant_hash_..., jump directly to test.
-        $startParam = trim((string) $request->query('startapp', ''));
-        if ($startParam === '') {
-            $startParam = trim((string) $request->query('tgWebAppStartParam', ''));
-        }
-        if ($startParam === '') {
-            $startParam = trim((string) $request->session()->get('telegram_start_param', ''));
-        }
-
-        if ($startParam !== '' && preg_match('/^oge_variant_hash_([a-z0-9]{8,32})$/i', $startParam, $m)) {
-            $hash = strtolower($m[1]);
-            $variant = OgeVariant::whereRaw('LOWER(hash) = ?', [$hash])->first();
-            if ($variant) {
-                [$variant, $attempt] = $this->attemptService->startAttempt($user, $variant->hash);
-                $request->session()->forget('telegram_start_param');
-                return redirect('/tg/test/' . $attempt->id . '?battle=1');
-            }
-        }
 
         // Weak topics (from all submitted/scored attempts)
         $weakTopics = $this->computeWeakTopics($user->id);
@@ -110,22 +127,13 @@ class MiniAppStudentController extends Controller
 
         $hasTeacher = TeacherStudent::where('student_id', $user->id)->exists();
 
-        // Check for pending gift
         $pendingGift = UserGift::where('user_id', $user->id)
             ->whereNull('shown_at')
             ->orderBy('id')
             ->first();
 
-        // Generate one-time migration token for this user
-        $migrationToken = \Illuminate\Support\Str::random(32);
-        \Illuminate\Support\Facades\Cache::put(
-            'pwa_migration:' . $migrationToken,
-            ['user_id' => $user->id],
-            now()->addMinutes(10)
-        );
-
-        return view('miniapp.dashboard', compact(
-            'user', 'weakTopics', 'newFipiCount', 'activeAttemptsList', 'hasTeacher', 'pendingGift', 'migrationToken'
+        return view('pwa.student.dashboard', compact(
+            'user', 'weakTopics', 'newFipiCount', 'activeAttemptsList', 'hasTeacher', 'pendingGift'
         ));
     }
 
@@ -167,9 +175,7 @@ class MiniAppStudentController extends Controller
             $all = [];
             foreach ($tasks as $task) {
                 $text = trim((string) ($task['text'] ?? ''));
-                if ($text === '') {
-                    continue;
-                }
+                if ($text === '') continue;
 
                 $all[] = [
                     'id' => $task['id'] ?? null,
@@ -182,7 +188,6 @@ class MiniAppStudentController extends Controller
             }
             $newByTopic[$topicId] = $all;
 
-            // Topic 10: grouped spoiler view with explicit task id mapping
             if ($topicId === '10') {
                 $spec = [
                     ['title' => 'Орёл или решка', 'ids' => array_merge(range(85, 94), range(77, 80))],
@@ -198,13 +203,9 @@ class MiniAppStudentController extends Controller
                     $groupTasks = [];
                     foreach ($groupSpec['ids'] as $id) {
                         $task = $allTasksIndexed[$id] ?? null;
-                        if (!$task) {
-                            continue;
-                        }
+                        if (!$task) continue;
                         $text = trim((string) ($task['text'] ?? ''));
-                        if ($text === '') {
-                            continue;
-                        }
+                        if ($text === '') continue;
 
                         $groupTasks[] = [
                             'id' => $task['id'] ?? null,
@@ -215,12 +216,8 @@ class MiniAppStudentController extends Controller
                             'answer' => $task['answer'] ?? null,
                         ];
                     }
-
                     if (!empty($groupTasks)) {
-                        $groups[] = [
-                            'title' => $groupSpec['title'],
-                            'tasks' => $groupTasks,
-                        ];
+                        $groups[] = ['title' => $groupSpec['title'], 'tasks' => $groupTasks];
                     }
                 }
                 $groupedByTopic[$topicId] = $groups;
@@ -229,13 +226,12 @@ class MiniAppStudentController extends Controller
             }
         }
 
-        return view('miniapp.new-tasks', [
+        return view('pwa.student.new-tasks', [
             'topics' => $topics,
             'selectedTopic' => $selected,
             'newByTopic' => $newByTopic,
             'groupedByTopic' => $groupedByTopic,
-            'isPremium'     => Auth::user()->hasTgPremium(),
-            'trialUsed'     => (bool) Auth::user()->tg_trial_used,
+            'isPremium' => true, // No billing gate in PWA
         ]);
     }
 
@@ -247,10 +243,7 @@ class MiniAppStudentController extends Controller
         $topicsMeta = [
             '20' => ['title' => 'Уравнения', 'icon' => '🔢'],
             '21' => ['title' => 'Текстовые задачи', 'icon' => '🚗'],
-            // '22' => ['title' => 'Графики', 'icon' => '📈'],
             '23' => ['title' => 'Геометрия (вычисление)', 'icon' => '📐'],
-            // '24' => ['title' => 'Геометрия (доказательство)', 'icon' => '✏️'],
-            // '25' => ['title' => 'Геометрия (повышенная)', 'icon' => '🔺'],
         ];
 
         $topics = array_keys($topicsMeta);
@@ -280,22 +273,17 @@ class MiniAppStudentController extends Controller
                     $instruction = trim((string) ($zadanie['instruction'] ?? ''));
                     $num = $zadanie['number'] ?? '';
                     $title = $section !== '' ? $section : ($instruction !== '' ? "Задание {$num}. {$instruction}" : "Задание {$num}");
-                    $zadaniya[] = [
-                        'title' => $title,
-                        'hint'  => $zadanie['answer_hint'] ?? null,
-                        'tasks' => $tasks,
-                    ];
+                    $zadaniya[] = ['title' => $title, 'hint' => $zadanie['answer_hint'] ?? null, 'tasks' => $tasks];
                 }
             }
         }
 
-        return view('miniapp.part2', [
+        return view('pwa.student.part2', [
             'topicsMeta'    => $topicsMeta,
             'topics'        => $topics,
             'selectedTopic' => $selected,
             'zadaniya'      => $zadaniya,
-            'isPremium'     => Auth::user()->hasTgPremium(),
-            'trialUsed'     => (bool) Auth::user()->tg_trial_used,
+            'isPremium'     => true, // No billing gate in PWA
         ]);
     }
 
@@ -317,21 +305,15 @@ class MiniAppStudentController extends Controller
             foreach (($block['zadaniya'] ?? []) as $zadanie) {
                 $zadanieType = $zadanie['type'] ?? '';
 
-                // Handle statement-type zadaniya (topic 19)
                 if ($zadanieType === 'statements' && !empty($zadanie['statements'])) {
                     $tasks = [];
                     foreach ($zadanie['statements'] as $s) {
                         $text = trim((string) ($s['text'] ?? ''));
                         if ($text === '') continue;
                         $tasks[] = [
-                            'id'         => $s['id'] ?? null,
-                            'text'       => $text,
-                            'expression' => null,
-                            'svg'        => $s['svg'] ?? null,
-                            'image'      => $s['image'] ?? null,
-                            'options'    => null,
-                            'question'   => null,
-                            'answer'     => $s['answer'] ?? null,
+                            'id' => $s['id'] ?? null, 'text' => $text, 'expression' => null,
+                            'svg' => $s['svg'] ?? null, 'image' => $s['image'] ?? null,
+                            'options' => null, 'question' => null, 'answer' => $s['answer'] ?? null,
                         ];
                     }
                     if (!empty($tasks)) {
@@ -345,14 +327,12 @@ class MiniAppStudentController extends Controller
                     continue;
                 }
 
-                // Handle regular tasks
                 $tasks = [];
                 foreach (($zadanie['tasks'] ?? []) as $t) {
                     $text = trim((string) ($t['text'] ?? ''));
                     $expression = trim((string) ($t['expression'] ?? ''));
                     $question = trim((string) ($t['question'] ?? ''));
 
-                    // Skip tasks that have no displayable content at all
                     if ($text === '' && $expression === '' && empty($t['svg']) && empty($t['image']) && $question === '') {
                         continue;
                     }
@@ -372,32 +352,15 @@ class MiniAppStudentController extends Controller
                         }, $rawOptions);
                     }
 
-                    $graphOptions = $t['graph_options'] ?? null;
-                    if (is_array($graphOptions)) {
-                        $graphOptions = array_map(function ($option) {
-                            if (!is_array($option)) {
-                                return $option;
-                            }
-
-                            if (isset($option['text'])) {
-                                $option['text'] = MiniAppTaskCanonicalizer::latexToUnicode((string) $option['text']);
-                            }
-
-                            return $option;
-                        }, $graphOptions);
-                    }
-
                     $tasks[] = [
-                        'id'                 => $t['id'] ?? null,
-                        'text'               => $text,
-                        'expression'         => $expression !== '' ? $expression : null,
-                        'svg'                => $t['svg'] ?? null,
-                        'image'              => $t['image'] ?? null,
-                        'options'            => $rawOptions,
-                        'graph_options'      => $graphOptions,
-                        'graph_options_mode' => $t['graph_options_mode'] ?? null,
-                        'question'           => $question !== '' ? $question : null,
-                        'answer'             => $t['answer'] ?? null,
+                        'id'         => $t['id'] ?? null,
+                        'text'       => $text,
+                        'expression' => $expression !== '' ? $expression : null,
+                        'svg'        => $t['svg'] ?? null,
+                        'image'      => $t['image'] ?? null,
+                        'options'    => $rawOptions,
+                        'question'   => $question !== '' ? $question : null,
+                        'answer'     => $t['answer'] ?? null,
                     ];
                 }
                 if (!empty($tasks)) {
@@ -406,23 +369,19 @@ class MiniAppStudentController extends Controller
                     $label = trim((string) ($zadanie['label'] ?? ''));
                     $num = $zadanie['number'] ?? '';
                     $title = $label !== '' ? $label : ($section !== '' ? $section : ($instruction !== '' ? "Задание {$num}. {$instruction}" : "Задание {$num}"));
-                    $zadaniya[] = [
-                        'title' => $title,
-                        'tasks' => $tasks,
-                    ];
+                    $zadaniya[] = ['title' => $title, 'tasks' => $tasks];
                 }
             }
         }
 
         $taskCount = array_sum(array_map(fn($z) => count($z['tasks']), $zadaniya));
 
-        return view('miniapp.tasks-part1', [
+        return view('pwa.student.tasks-part1', [
             'topicIds'      => $topicIds,
             'selectedTopic' => $selected,
             'zadaniya'      => $zadaniya,
             'taskCount'     => $taskCount,
-            'isPremium'     => Auth::user()->hasTgPremium(),
-            'trialUsed'     => (bool) Auth::user()->tg_trial_used,
+            'isPremium'     => true, // No billing gate in PWA
         ]);
     }
 
@@ -431,7 +390,7 @@ class MiniAppStudentController extends Controller
      */
     public function mini()
     {
-        return view('miniapp.mini');
+        return view('pwa.student.mini');
     }
 
     /**
@@ -450,31 +409,18 @@ class MiniAppStudentController extends Controller
         try {
             $variant = $this->poolService->getOrCreateVariant($user, $mode);
         } catch (\Throwable $e) {
-            \Log::error('Mini start pool error', [
-                'user' => $user->id,
-                'mode' => $mode,
-                'error' => $e->getMessage(),
-                'class' => get_class($e),
-                'file' => $e->getFile() . ':' . $e->getLine(),
-                'trace' => array_slice(explode("\n", $e->getTraceAsString()), 0, 5),
-            ]);
-            return response()->json([
-                'error' => 'Нет доступных заданий для этого режима. Попробуйте позже.',
-            ], 422);
+            Log::error('PWA Mini start pool error', ['user' => $user->id, 'mode' => $mode, 'error' => $e->getMessage()]);
+            return response()->json(['error' => 'Нет доступных заданий для этого режима. Попробуйте позже.'], 422);
         }
 
         try {
             [$variant, $attempt] = $this->attemptService->startAttempt($user, $variant->hash);
         } catch (\Throwable $e) {
-            \Log::error('Mini start attempt error', ['user' => $user->id, 'mode' => $mode, 'hash' => $variant->hash, 'error' => $e->getMessage()]);
-            return response()->json([
-                'error' => 'Ошибка создания попытки: ' . mb_substr($e->getMessage(), 0, 100),
-            ], 500);
+            Log::error('PWA Mini start attempt error', ['user' => $user->id, 'mode' => $mode, 'error' => $e->getMessage()]);
+            return response()->json(['error' => 'Ошибка создания попытки: ' . mb_substr($e->getMessage(), 0, 100)], 500);
         }
 
-        return response()->json([
-            'redirect' => '/tg/test/' . $attempt->id,
-        ]);
+        return response()->json(['redirect' => $this->base() . '/test/' . $attempt->id]);
     }
 
     /**
@@ -493,24 +439,18 @@ class MiniAppStudentController extends Controller
         try {
             $variant = $this->poolService->getOrCreateVariant($user, $type);
         } catch (\RuntimeException $e) {
-            \Log::warning('Full start pool error', ['user' => $user->id, 'error' => $e->getMessage()]);
-            return response()->json([
-                'error' => 'Нет доступных заданий. Попробуйте позже.',
-            ], 422);
+            Log::warning('PWA Full start pool error', ['user' => $user->id, 'error' => $e->getMessage()]);
+            return response()->json(['error' => 'Нет доступных заданий. Попробуйте позже.'], 422);
         }
 
         try {
             [$variant, $attempt] = $this->attemptService->startAttempt($user, $variant->hash);
         } catch (\Throwable $e) {
-            \Log::error('Full start attempt error', ['user' => $user->id, 'hash' => $variant->hash, 'error' => $e->getMessage()]);
-            return response()->json([
-                'error' => 'Ошибка создания попытки: ' . mb_substr($e->getMessage(), 0, 100),
-            ], 500);
+            Log::error('PWA Full start attempt error', ['user' => $user->id, 'error' => $e->getMessage()]);
+            return response()->json(['error' => 'Ошибка создания попытки: ' . mb_substr($e->getMessage(), 0, 100)], 500);
         }
 
-        return response()->json([
-            'redirect' => '/tg/test/' . $attempt->id,
-        ]);
+        return response()->json(['redirect' => $this->base() . '/test/' . $attempt->id]);
     }
 
     /**
@@ -523,15 +463,13 @@ class MiniAppStudentController extends Controller
             ->where('student_id', $user->id)
             ->firstOrFail();
 
-        // If attempt is already finalized, redirect to results
         if (in_array($attempt->status, ['submitted', 'scored', 'error'], true)) {
-            return redirect('/tg/results/' . $attempt->id);
+            return redirect($this->base() . '/results/' . $attempt->id);
         }
 
         $variant = $attempt->variant;
         $config = $variant->config_json ?? [];
 
-        // Get tasks from config (mini app variants) or build from hash
         if (!empty($config['tasks'])) {
             $tasks = $config['tasks'];
         } else {
@@ -539,67 +477,33 @@ class MiniAppStudentController extends Controller
             $tasks = $builtVariant['tasks'] ?? [];
         }
 
-        // Normalize task payload for mini-app UI (works for both old and new variants)
-        $tasks = array_map(function ($task) {
-            if (!is_array($task)) {
-                return $task;
-            }
-
-            return $this->taskCanonicalizer->normalizeForUi($task);
-        }, $tasks);
-
-        if (config('features.shuffle_options', false)) {
-            $tasks = array_map(fn ($t) => is_array($t) ? $this->shuffleTaskOptionsForAttempt($t, (int) $attempt->id) : $t, $tasks);
-        }
-
-        // Sanitize tasks once on server before rendering client payload.
+        $tasks = array_map(fn ($task) => is_array($task) ? $this->taskCanonicalizer->normalizeForUi($task) : $task, $tasks);
         $tasks = array_map(fn ($t) => is_array($t) ? $this->taskSanitizer->sanitize($t) : $t, $tasks);
-
         $tasks = $this->normalizeAttemptTasksForMiniApp($variant, $tasks);
 
-        // Sort by display_task_number (exam number) after normalization has set it.
         if (is_array($tasks)) {
-            usort($tasks, function ($a, $b) {
-                $an = (int) ($a['display_task_number'] ?? 0);
-                $bn = (int) ($b['display_task_number'] ?? 0);
-                return $an <=> $bn;
-            });
+            usort($tasks, fn($a, $b) => ((int)($a['display_task_number'] ?? 0)) <=> ((int)($b['display_task_number'] ?? 0)));
         }
 
-        // Get existing answers for this attempt
         $existingAnswers = $this->resolveExistingAttemptAnswersForMiniApp($attempt, $tasks);
 
         $mode = $variant->mode ?? 'full';
         $title = $variant->title ?? 'Вариант ОГЭ';
 
-        return view('miniapp.test', [
+        return view('pwa.student.test', [
             'attempt' => $attempt,
             'tasks' => $tasks,
             'answers' => $existingAnswers,
             'mode' => $mode,
             'title' => $title,
-            'battleMode' => $request->boolean('battle'),
+            'battleMode' => false,
         ]);
     }
 
-    /**
-     * Assign two non-overlapping numbering fields to every task:
-     *
-     *  - display_task_number — the exam number shown in the UI (e.g. 6, 8, 12).
-     *  - attempt_task_number — a stable 1..N key used to store/match answers
-     *    on both client (JS `taskKey()`) and server (scoring). For mini modes
-     *    this is always sequential; for full variants it equals task_number.
-     *
-     * @param array<int, array<string, mixed>> $tasks
-     * @return array<int, array<string, mixed>>
-     */
     private function normalizeAttemptTasksForMiniApp(OgeVariant $variant, array $tasks): array
     {
         foreach ($tasks as $index => $task) {
-            if (!is_array($task)) {
-                continue;
-            }
-
+            if (!is_array($task)) continue;
             $numbers = VariantTaskNumberResolver::resolve($task, $index, $variant);
             $task['display_task_number'] = $numbers['exam_number'];
             $task['attempt_task_number'] = $numbers['slot'];
@@ -607,31 +511,18 @@ class MiniAppStudentController extends Controller
             $task['exam_number'] = $numbers['exam_number'];
             $tasks[$index] = $task;
         }
-
         return $tasks;
     }
 
-    /**
-     * @param array<int, array<string, mixed>> $tasks
-     * @return array<int, string>
-     */
     private function resolveExistingAttemptAnswersForMiniApp(OgeAttempt $attempt, array $tasks): array
     {
-        $existingAnswers = $attempt->answers()
-            ->pluck('current_answer', 'task_number')
-            ->toArray();
-
-        if (empty($existingAnswers)) {
-            return [];
-        }
+        $existingAnswers = $attempt->answers()->pluck('current_answer', 'task_number')->toArray();
+        if (empty($existingAnswers)) return [];
 
         $variant = $attempt->variant;
         $mapped = [];
         foreach ($tasks as $index => $task) {
-            if (!is_array($task)) {
-                continue;
-            }
-
+            if (!is_array($task)) continue;
             $numbers = VariantTaskNumberResolver::resolve($task, $index, $variant);
             $slot = $numbers['slot'];
             $examNumber = $numbers['exam_number'];
@@ -640,13 +531,10 @@ class MiniAppStudentController extends Controller
                 $mapped[$slot] = $existingAnswers[$slot];
                 continue;
             }
-
-            // Legacy: answers may have been stored under exam_number
             if (array_key_exists($examNumber, $existingAnswers)) {
                 $mapped[$slot] = $existingAnswers[$examNumber];
             }
         }
-
         return $mapped;
     }
 
@@ -661,13 +549,10 @@ class MiniAppStudentController extends Controller
             ->firstOrFail();
 
         if (!in_array($attempt->status, ['submitted', 'scored', 'error'], true)) {
-            return redirect('/tg/test/' . $attempt->id);
+            return redirect($this->base() . '/test/' . $attempt->id);
         }
 
-        $scorings = OgeAttemptScoring::where('attempt_id', $attempt->id)
-            ->orderBy('task_number')
-            ->get();
-
+        $scorings = OgeAttemptScoring::where('attempt_id', $attempt->id)->orderBy('task_number')->get();
         $answers = $attempt->answers()->get();
 
         $attempt->loadMissing('variant');
@@ -680,61 +565,13 @@ class MiniAppStudentController extends Controller
             $totalTime = $attempt->submitted_at->diffInSeconds($attempt->started_at);
         }
 
-        // Battle leaderboard: only for variants created via bot /battle command.
-        $leaderboard = [];
-        $isBattleVariant = !empty($attempt->variant?->config_json['is_battle']);
-        if ($isBattleVariant && $attempt->variant_id) {
-            $battleAttempts = OgeAttempt::where('variant_id', $attempt->variant_id)
-                ->whereIn('status', ['submitted', 'scored'])
-                ->with(['student:id,name', 'scorings'])
-                ->get();
-
-            foreach ($battleAttempts as $a) {
-                $aTotal = $a->scorings->count();
-                $aCorrect = $a->scorings->where('is_correct', true)->count();
-                $aTime = 0;
-                if ($a->started_at && $a->submitted_at) {
-                    $aTime = $a->submitted_at->diffInSeconds($a->started_at);
-                }
-
-                $leaderboard[] = [
-                    'attempt_id' => (int) $a->id,
-                    'student_name' => (string) ($a->student->name ?? 'Участник'),
-                    'correct' => $aCorrect,
-                    'total' => $aTotal,
-                    'time_sec' => $aTime,
-                    'is_me' => (int) $a->student_id === (int) $user->id,
-                ];
-            }
-
-            usort($leaderboard, function ($x, $y) {
-                // 1) more correct is better
-                if ($x['correct'] !== $y['correct']) {
-                    return $y['correct'] <=> $x['correct'];
-                }
-                // 2) less time is better (non-zero preferred over zero)
-                if ($x['time_sec'] !== $y['time_sec']) {
-                    if ($x['time_sec'] === 0) return 1;
-                    if ($y['time_sec'] === 0) return -1;
-                    return $x['time_sec'] <=> $y['time_sec'];
-                }
-                // 3) stable fallback
-                return $x['attempt_id'] <=> $y['attempt_id'];
-            });
-
-            foreach ($leaderboard as $idx => &$row) {
-                $row['rank'] = $idx + 1;
-            }
-            unset($row);
-        }
-
-        return view('miniapp.results', compact(
-            'attempt', 'scorings', 'answers', 'totalTasks', 'correctCount', 'totalTime', 'leaderboard', 'isBattleVariant'
+        return view('pwa.student.results', compact(
+            'attempt', 'scorings', 'answers', 'totalTasks', 'correctCount', 'totalTime'
         ));
     }
 
     /**
-     * Student attempt history — list of all completed attempts.
+     * Student attempt history.
      */
     public function history()
     {
@@ -756,22 +593,14 @@ class MiniAppStudentController extends Controller
             if ($att->started_at && $att->submitted_at) {
                 $time = $att->submitted_at->diffInSeconds($att->started_at);
             }
-
-            $list[] = [
-                'id' => $att->id,
-                'label' => $this->variantModeLabel($att->variant),
-                'correct' => $correct,
-                'total' => $total,
-                'time' => $time,
-                'date' => $att->submitted_at,
-            ];
+            $list[] = ['id' => $att->id, 'label' => $this->variantModeLabel($att->variant), 'correct' => $correct, 'total' => $total, 'time' => $time, 'date' => $att->submitted_at];
         }
 
-        return view('miniapp.history', compact('user', 'list'));
+        return view('pwa.student.history', compact('user', 'list'));
     }
 
     /**
-     * Student attempt history — detail view showing errors for a specific attempt.
+     * Student attempt history — detail view.
      */
     public function historyDetail(Request $request, int $attemptId)
     {
@@ -780,11 +609,7 @@ class MiniAppStudentController extends Controller
         $attempt = OgeAttempt::where('id', $attemptId)
             ->where('student_id', $user->id)
             ->whereIn('status', ['submitted', 'scored'])
-            ->with([
-                'variant:id,hash,title,mode,config_json',
-                'answers:id,attempt_id,task_number,current_answer',
-                'scorings:id,attempt_id,task_number,is_correct,correct_answer',
-            ])
+            ->with(['variant:id,hash,title,mode,config_json', 'answers:id,attempt_id,task_number,current_answer', 'scorings:id,attempt_id,task_number,is_correct,correct_answer'])
             ->firstOrFail();
 
         $correct = $attempt->scorings->where('is_correct', true)->count();
@@ -795,11 +620,8 @@ class MiniAppStudentController extends Controller
             $time = $attempt->submitted_at->diffInSeconds($attempt->started_at);
         }
 
-        // Build task map from variant config.
-        // Mini modes use sequential attempt_task_number (1..N) for scoring,
-        // while config_json stores the original topic-based task_number.
         $taskMap = [];
-        $displayNumMap = []; // slot → exam_number for display
+        $displayNumMap = [];
         $cfg = $attempt->variant?->config_json;
         if ($attempt->variant && is_array($cfg) && isset($cfg['tasks']) && is_array($cfg['tasks'])) {
             $resolved = VariantTaskNumberResolver::resolveAll($cfg['tasks'], $attempt->variant);
@@ -811,7 +633,6 @@ class MiniAppStudentController extends Controller
             }
         }
 
-        // Build wrong tasks list (reusing teacher profile logic)
         $wrongTasks = [];
         foreach ($attempt->scorings as $scoring) {
             if ($scoring->is_correct !== false && (int) $scoring->is_correct !== 0) continue;
@@ -831,15 +652,10 @@ class MiniAppStudentController extends Controller
             }
 
             $taskText = $conditionText !== '' ? $conditionText : $instructionText;
-            $taskExpression = (string) (($def['expression'] ?? $inner['expression'] ?? $inner['formula'] ?? $inner['latex'] ?? '') ?: '');
+            $taskExpression = (string) (($def['expression'] ?? $inner['expression'] ?? '') ?: '');
 
-            $rawOptions = $def['options'] ?? $inner['options'] ?? $def['variants'] ?? $inner['variants'] ?? null;
-            $taskOptions = [];
-            if (is_array($rawOptions)) {
-                $taskOptions = array_values($rawOptions);
-            } elseif (is_string($rawOptions) && trim($rawOptions) !== '') {
-                $taskOptions = array_values(array_filter(array_map('trim', preg_split('/\R+/', $rawOptions))));
-            }
+            $rawOptions = $def['options'] ?? $inner['options'] ?? null;
+            $taskOptions = is_array($rawOptions) ? array_values($rawOptions) : [];
 
             $wrongTasks[] = [
                 'task_number' => $displayNumMap[$taskNum] ?? $taskNum,
@@ -854,34 +670,11 @@ class MiniAppStudentController extends Controller
             ];
         }
 
-        // Add unanswered tasks as errors (student skipped them).
-        $scoredTaskNumbers = $attempt->scorings->pluck('task_number')->map(fn ($n) => (int) $n)->all();
-        foreach ($taskMap as $num => $taskDef) {
-            if (in_array($num, $scoredTaskNumbers, true)) continue;
-            $inner = is_array($taskDef['task'] ?? null) ? $taskDef['task'] : [];
-
-            $instructionText = trim((string) (($taskDef['instruction'] ?? $inner['instruction'] ?? '') ?: ''));
-            $conditionText = trim((string) (($inner['text'] ?? $taskDef['text'] ?? $inner['prompt'] ?? $inner['question'] ?? $inner['condition'] ?? '') ?: ''));
-            $taskText = $conditionText !== '' ? $conditionText : $instructionText;
-
-            $wrongTasks[] = [
-                'task_number' => $displayNumMap[$num] ?? $num,
-                'task_instruction' => ($taskText !== $instructionText) ? $instructionText : '',
-                'task_text' => $taskText,
-                'task_expression' => (string) (($taskDef['expression'] ?? $inner['expression'] ?? '') ?: ''),
-                'task_svg' => (string) (($taskDef['svg'] ?? $inner['svg'] ?? '') ?: ''),
-                'task_image' => (string) (($taskDef['image'] ?? $inner['image'] ?? '') ?: ''),
-                'task_options' => [],
-                'student_answer' => '—',
-                'correct_answer' => (string) (($taskDef['correct_answer'] ?? $inner['answer'] ?? '') ?: '—'),
-            ];
-        }
-
         usort($wrongTasks, fn($a, $b) => $a['task_number'] <=> $b['task_number']);
 
         $label = $this->variantModeLabel($attempt->variant);
 
-        return view('miniapp.history-detail', compact('user', 'attempt', 'label', 'correct', 'total', 'time', 'wrongTasks'));
+        return view('pwa.student.history-detail', compact('user', 'attempt', 'label', 'correct', 'total', 'time', 'wrongTasks'));
     }
 
     /**
@@ -891,7 +684,6 @@ class MiniAppStudentController extends Controller
     {
         $user = Auth::user();
 
-        // Get last result for context
         $lastAttempt = OgeAttempt::where('student_id', $user->id)
             ->whereIn('status', ['submitted', 'scored'])
             ->orderByDesc('submitted_at')
@@ -899,7 +691,7 @@ class MiniAppStudentController extends Controller
 
         $lastCorrect = 0;
         $lastTotal = 0;
-        $weakTopics = [];
+        $weakTopics = $this->computeWeakTopics($user->id);
 
         if ($lastAttempt) {
             $scorings = OgeAttemptScoring::where('attempt_id', $lastAttempt->id)->get();
@@ -907,9 +699,61 @@ class MiniAppStudentController extends Controller
             $lastCorrect = $scorings->where('is_correct', true)->count();
         }
 
-        $weakTopics = $this->computeWeakTopics($user->id);
+        return view('pwa.student.tutor', compact('lastCorrect', 'lastTotal', 'weakTopics'));
+    }
 
-        return view('miniapp.tutor', compact('lastCorrect', 'lastTotal', 'weakTopics'));
+    /**
+     * Student homework page.
+     */
+    public function studentHomework(Request $request)
+    {
+        $user = $request->user();
+
+        $assignments = \App\Models\HomeworkAssignment::where('student_id', $user->id)
+            ->with('homework')
+            ->orderByDesc('created_at')
+            ->limit(50)
+            ->get();
+
+        $list = [];
+        foreach ($assignments as $a) {
+            $hw = $a->homework;
+            if (!$hw) continue;
+            $list[] = [
+                'id' => $a->id,
+                'homework_id' => $hw->id,
+                'type' => $hw->homework_type,
+                'title' => $hw->title,
+                'topic_number' => $hw->topic_number,
+                'variant_hash' => $hw->variant_hash,
+                'status' => $a->status,
+                'assigned_at' => $hw->assigned_at,
+                'completed_at' => $a->completed_at,
+            ];
+        }
+
+        return view('pwa.student.homework', compact('user', 'list'));
+    }
+
+    /**
+     * Profile page.
+     */
+    public function profile()
+    {
+        $user = Auth::user();
+
+        $transactions = StarTransaction::where('user_id', $user->id)
+            ->orderByDesc('created_at')
+            ->limit(50)
+            ->get();
+
+        $referralCount = User::where('referred_by_user_id', $user->id)->count();
+
+        return view('pwa.student.profile', [
+            'user' => $user,
+            'transactions' => $transactions,
+            'referralCount' => $referralCount,
+        ]);
     }
 
     protected function countNewFipiTasks(): int
@@ -934,9 +778,6 @@ class MiniAppStudentController extends Controller
         return $count;
     }
 
-    /**
-     * Compute weak topics from all submitted/scored attempts.
-     */
     protected function computeWeakTopics(int $userId): array
     {
         $topicNames = [
@@ -958,11 +799,9 @@ class MiniAppStudentController extends Controller
             ->groupBy('s.task_number')
             ->get();
 
-        if ($stats->isEmpty()) {
-            return [];
-        }
+        if ($stats->isEmpty()) return [];
 
-        $topics = $stats->map(function ($row) use ($topicNames) {
+        return $stats->map(function ($row) use ($topicNames) {
             $pct = $row->total > 0 ? round(($row->correct / $row->total) * 100) : 0;
             return [
                 'task_number' => $row->task_number,
@@ -972,182 +811,5 @@ class MiniAppStudentController extends Controller
                 'correct' => $row->correct,
             ];
         })->sortBy('pct')->take(4)->values()->toArray();
-
-        return $topics;
-    }
-
-    private function shuffleTaskOptionsForAttempt(array $task, int $attemptId): array
-    {
-        $options = $task['options'] ?? null;
-        if (!is_array($options) || count($options) < 2) {
-            return $task;
-        }
-
-        $type = (string) ($task['type'] ?? '');
-        if (in_array($type, ['matching', 'matching_signs', 'matching_4', 'statements'], true)) {
-            return $task;
-        }
-
-        // Deterministic shuffle per attempt/task, so UI remains stable on refresh.
-        $seed = crc32($attemptId . ':' . (string) ($task['task_number'] ?? 0));
-        mt_srand($seed);
-        $indexes = range(0, count($options) - 1);
-        for ($i = count($indexes) - 1; $i > 0; $i--) {
-            $j = mt_rand(0, $i);
-            [$indexes[$i], $indexes[$j]] = [$indexes[$j], $indexes[$i]];
-        }
-        mt_srand();
-
-        $shuffled = [];
-        foreach ($indexes as $idx) {
-            $shuffled[] = $options[$idx];
-        }
-
-        $task['options'] = $shuffled;
-
-        return $task;
-    }
-
-    /**
-     * Student homework page — list assigned homework.
-     */
-    public function studentHomework(Request $request)
-    {
-        $user = $request->user();
-
-        $assignments = \App\Models\HomeworkAssignment::where('student_id', $user->id)
-            ->with('homework')
-            ->orderByDesc('created_at')
-            ->limit(50)
-            ->get();
-
-        $list = [];
-        foreach ($assignments as $a) {
-            $hw = $a->homework;
-            if (!$hw) continue;
-
-            $list[] = [
-                'id' => $a->id,
-                'homework_id' => $hw->id,
-                'type' => $hw->homework_type,
-                'title' => $hw->title,
-                'topic_number' => $hw->topic_number,
-                'variant_hash' => $hw->variant_hash,
-                'status' => $a->status,
-                'assigned_at' => $hw->assigned_at,
-                'completed_at' => $a->completed_at,
-            ];
-        }
-
-        return view('miniapp.student-homework', compact('user', 'list'));
-    }
-
-    public function profile()
-    {
-        $user = Auth::user();
-
-        $transactions = StarTransaction::where('user_id', $user->id)
-            ->orderByDesc('created_at')
-            ->limit(50)
-            ->get();
-
-        $referralCount = User::where('referred_by_user_id', $user->id)->count();
-        $pendingPayout = StarTransaction::where('user_id', $user->id)
-            ->where('type', 'payout')
-            ->where('status', 'pending')
-            ->exists();
-
-        return view('miniapp.profile', [
-            'user' => $user,
-            'isPremium' => $user->hasTgPremium(),
-            'trialUsed' => (bool) $user->tg_trial_used,
-            'transactions' => $transactions,
-            'referralCount' => $referralCount,
-            'pendingPayout' => $pendingPayout,
-        ]);
-    }
-
-    public function diagnostic(Request $request, \App\Services\DiagnosticService $diagnosticService)
-    {
-        $user = Auth::user();
-
-        if ($diagnosticService->hasCompletedDiagnostic($user->id)) {
-            return redirect()->route('miniapp.diagnostic.results');
-        }
-
-        $questions = $diagnosticService->generateQuestions();
-        $request->session()->put('diagnostic_questions', $questions);
-
-        return view('miniapp.diagnostic', [
-            'questions' => $questions,
-            'totalQuestions' => count($questions),
-        ]);
-    }
-
-    public function submitDiagnostic(Request $request, \App\Services\DiagnosticService $diagnosticService)
-    {
-        $user = Auth::user();
-        $questions = $request->session()->pull('diagnostic_questions', []);
-
-        if (empty($questions)) {
-            return redirect()->route('miniapp.diagnostic');
-        }
-
-        $answers = $request->input('answers', []);
-        $results = [];
-
-        foreach ($questions as $i => $q) {
-            $userAnswer = trim($answers[$i] ?? '');
-            $correctAnswer = trim($q['correct_answer'] ?? '');
-
-            if (($q['type'] ?? '') === 'mc') {
-                $isCorrect = $userAnswer === $correctAnswer;
-            } else {
-                $isCorrect = $this->normalizeDiagnosticAnswer($userAnswer)
-                    === $this->normalizeDiagnosticAnswer($correctAnswer);
-            }
-
-            $results[] = [
-                'skill_id'   => $q['skill_id'],
-                'is_correct' => $isCorrect,
-            ];
-        }
-
-        $diagnosticService->processResults($user->id, $results);
-
-        return redirect()->route('miniapp.diagnostic.results');
-    }
-
-    public function diagnosticResults(\App\Services\DiagnosticService $diagnosticService)
-    {
-        $user = Auth::user();
-
-        if (!$diagnosticService->hasCompletedDiagnostic($user->id)) {
-            return redirect()->route('miniapp.diagnostic');
-        }
-
-        $userSkills = $user->skills()
-            ->with('skill.parent')
-            ->orderBy('weight', 'asc')
-            ->get();
-
-        $byCategory = $userSkills->groupBy(fn ($us) => $us->skill->category ?? $us->skill->parent?->name ?? 'Другое');
-
-        return view('miniapp.diagnostic-results', [
-            'byCategory' => $byCategory,
-            'weakSkills' => $userSkills->where('weight', '<', 0.5)->values(),
-            'strongSkills' => $userSkills->where('weight', '>=', 0.7)->values(),
-            'averageWeight' => round($userSkills->avg('weight') ?? 0, 3),
-        ]);
-    }
-
-    private function normalizeDiagnosticAnswer(string $answer): string
-    {
-        $answer = mb_strtolower(trim($answer));
-        $answer = str_replace(',', '.', $answer);
-        if (is_numeric($answer)) {
-            $answer = rtrim(rtrim((string) floatval($answer), '0'), '.');
-        }
-        return $answer;
     }
 }

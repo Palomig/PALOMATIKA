@@ -1,4 +1,4 @@
-@extends('layouts.miniapp')
+@extends('layouts.pwa')
 @section('title', 'Дашборд — palomatika')
 
 @push('styles')
@@ -189,9 +189,6 @@
 @section('body')
 <div class="page" x-data="dashboardPage()">
 
-  {{-- MIGRATION BANNER --}}
-  @include('miniapp.partials.migration-banner', ['migrationToken' => $migrationToken])
-
   {{-- GREETING + COUNTDOWN --}}
   <div class="greeting">
     <div class="greeting-name">Привет, {{ $user->name ?? 'ученик' }}!</div>
@@ -204,12 +201,12 @@
 
   {{-- PREMIUM STATUS --}}
   @if(Auth::user()->hasTgPremium())
-    <a href="/tg/profile" class="premium-strip active">
+    <a href="/profile" class="premium-strip active">
       <span class="premium-strip-dot"></span>
       Premium · {{ now()->diffInDays(Auth::user()->tg_premium_until) }} дн
     </a>
   @else
-    <a href="/tg/profile" class="premium-strip inactive">
+    <a href="/profile" class="premium-strip inactive">
       <span class="premium-strip-dot"></span>
       Нет Premium
     </a>
@@ -217,7 +214,7 @@
 
   {{-- RESUME BANNER --}}
   @if(count($activeAttemptsList) === 1)
-  <a href="/tg/test/{{ $activeAttemptsList[0]['id'] }}" class="resume-banner">
+  <a href="/test/{{ $activeAttemptsList[0]['id'] }}" class="resume-banner">
     <div class="resume-left">
       <div class="resume-pulse"></div>
       <div class="resume-info">
@@ -261,7 +258,7 @@
 
   {{-- ACTION TILES --}}
   <div class="tile-row">
-    <a href="/tg/mini" class="tile-big tile-purple">
+    <a href="/mini" class="tile-big tile-purple">
       <div class="tile-icon">⚡</div>
       <div class="tile-name">Мини-ОГЭ</div>
       <div class="tile-desc">Короткая тренировка по одной теме</div>
@@ -286,7 +283,7 @@
       @endif
     </a>
     @if($hasTeacher ?? false)
-    <a href="/tg/homework" class="tile-sm">
+    <a href="/homework" class="tile-sm">
       <div class="tile-sm-icon">📖</div>
       <div class="tile-sm-name">Домашка</div>
       <div class="tile-sm-desc">Задания от учителя</div>
@@ -299,12 +296,12 @@
       <div class="tile-badge badge-blue tile-badge-top-right" style="font-size:8px;">Soon</div>
     </div>
     @endif
-    <a href="/tg/history" class="tile-sm">
+    <a href="/history" class="tile-sm">
       <div class="tile-sm-icon">📊</div>
       <div class="tile-sm-name">История</div>
       <div class="tile-sm-desc">Все попытки</div>
     </a>
-    <a href="/tg/profile" class="tile-sm">
+    <a href="/profile" class="tile-sm">
       <div class="tile-sm-icon">👤</div>
       <div class="tile-sm-name">Профиль</div>
       <div class="tile-sm-desc">Premium · Рефералы</div>
@@ -312,7 +309,7 @@
         <div class="tile-badge badge-purple tile-badge-top-right" style="font-size:8px;">Premium</div>
       @endif
     </a>
-    <a href="/tg/tutor" class="tile-sm">
+    <a href="/tutor" class="tile-sm">
       <div class="tile-sm-icon">👨‍🏫</div>
       <div class="tile-sm-name">Репетитор</div>
       <div class="tile-sm-desc">Бесплатный урок</div>
@@ -363,7 +360,7 @@
         <div class="fv-title">Нерешённые варианты</div>
 
         @foreach($activeAttemptsList as $att)
-        <a href="/tg/test/{{ $att['id'] }}" class="fv-option">
+        <a href="/test/{{ $att['id'] }}" class="fv-option">
           <div class="fv-opt-icon">{{ $att['type'] === 'Мини-ОГЭ' ? '⚡' : '📝' }}</div>
           <div>
             <div class="fv-opt-name">{{ $att['type'] }}</div>
@@ -388,7 +385,7 @@
         <div class="fv-handle"></div>
         <div class="fv-title">База заданий</div>
 
-        <a href="/tg/new-tasks" class="fv-option">
+        <a href="/new-tasks" class="fv-option">
           <div class="fv-opt-icon">🆕</div>
           <div>
             <div class="fv-opt-name">Новые задания</div>
@@ -399,7 +396,7 @@
           </div>
         </a>
 
-        <a href="/tg/tasks-part1" class="fv-option">
+        <a href="/tasks-part1" class="fv-option">
           <div class="fv-opt-icon">📝</div>
           <div>
             <div class="fv-opt-name">1я часть</div>
@@ -407,7 +404,7 @@
           </div>
         </a>
 
-        <a href="/tg/part2" class="fv-option">
+        <a href="/part2" class="fv-option">
           <div class="fv-opt-icon">✍️</div>
           <div>
             <div class="fv-opt-name">2я часть ОГЭ</div>
@@ -438,7 +435,7 @@
 
 </div>
 
-@include('miniapp.partials.gift-overlay')
+@include('pwa.student.partials.gift-overlay')
 
 @endsection
 
@@ -460,7 +457,7 @@ function dashboardPage() {
 
       try {
         const body = withPart2 ? { part2: true } : {};
-        const res = await window.fetchPost('/tg/full/start', body);
+        const res = await window.fetchPost('/full/start', body);
         if (!res.ok && res.status === 419) {
           alert('Сессия истекла. Перезайдите в приложение.');
           this.startingFull = false;
