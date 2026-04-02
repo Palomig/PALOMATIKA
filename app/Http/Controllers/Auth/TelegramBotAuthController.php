@@ -101,6 +101,12 @@ class TelegramBotAuthController extends Controller
             Cache::put($this->startParamCacheKey($token), $startParam, now()->addMinutes(10));
         }
 
+        // PWA context: store redirect subdomain so login() knows where to send the user
+        $pwaRedirect = trim((string) $request->input('pwa_redirect', ''));
+        if (in_array($pwaRedirect, ['student', 'teacher'], true)) {
+            Cache::put('tg_auth_pwa_redirect:' . $token, $pwaRedirect, now()->addMinutes(10));
+        }
+
         $botUsername = config('services.telegram.bot_username');
         $deepLink = "https://t.me/{$botUsername}?start={$token}";
 
@@ -417,7 +423,21 @@ class TelegramBotAuthController extends Controller
             return redirect()->to($redirectTo);
         }
 
-        $fallbackRedirect = $user->onboarding_completed_at ? '/tg/dashboard' : '/tg/onboarding';
+        // PWA redirect: if the login was initiated from a PWA subdomain, go there
+        $pwaContext = Cache::pull('tg_auth_pwa_redirect:' . $token, '');
+        if (in_array($pwaContext, ['student', 'teacher'], true)) {
+            $baseDomain = config('app.base_domain', 'palomatika.ru');
+            if ($pwaContext === 'teacher') {
+                $fallbackRedirect = 'https://teacher.' . $baseDomain . '/dashboard';
+            } else {
+                $fallbackRedirect = $user->onboarding_completed_at
+                    ? 'https://student.' . $baseDomain . '/'
+                    : 'https://student.' . $baseDomain . '/onboarding';
+            }
+        } else {
+            $fallbackRedirect = $user->onboarding_completed_at ? '/tg/dashboard' : '/tg/onboarding';
+        }
+
         Log::info('tg_token_login_success', [
             'trace_id' => $traceId !== '' ? $traceId : null,
             'token' => $token,
