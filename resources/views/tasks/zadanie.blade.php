@@ -11,7 +11,7 @@
     $type = $zadanie['type'] ?? 'expression';
 @endphp
 
-<div class="mb-10">
+<div class="mb-10" id="zadanie-{{ $topicId }}-{{ $block['number'] }}-{{ $zadanie['number'] }}">
     {{-- Zadanie Header --}}
     @php
         $isAdminForZadanie = auth()->check() && auth()->user()?->isAdmin();
@@ -37,6 +37,29 @@
                 @endif
             </h3>
             <div class="flex items-center gap-2 shrink-0">
+                @if(!empty($zadanie['illustration']))
+                    @php $illModalId = 'ill-' . $topicId . '-' . $block['number'] . '-' . $zadanie['number']; @endphp
+                    <button type="button"
+                            onclick="showZadanieIllustration('{{ $illModalId }}')"
+                            class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-indigo-700 text-slate-200 hover:text-white text-xs font-medium transition"
+                            title="Показать рисунок">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        Рисунок
+                    </button>
+                    <div id="{{ $illModalId }}" class="zadanie-illustration-modal hidden fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm" onclick="if(event.target===this)this.classList.add('hidden')">
+                        <div class="bg-slate-800 border border-slate-600 rounded-2xl p-5 shadow-2xl max-w-xs w-full mx-4">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-slate-300 text-sm font-medium">Задание {{ $zadanie['number'] }}</span>
+                                <button onclick="document.getElementById('{{ $illModalId }}').classList.add('hidden')" class="text-slate-500 hover:text-white transition p-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                </button>
+                            </div>
+                            <div class="rounded-lg overflow-hidden">{!! $zadanie['illustration'] !!}</div>
+                        </div>
+                    </div>
+                @endif
                 @if($isAdminForZadanie && !empty($zadanieTaskKeys))
                     <button type="button"
                             class="js-zadanie-status-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition text-xs font-medium {{ $allProduction ? 'bg-emerald-700 text-emerald-100 hover:bg-emerald-600' : 'bg-slate-700 text-slate-300 hover:bg-slate-600' }}"
@@ -133,6 +156,15 @@
 
 @once
 <script>
+    function showZadanieIllustration(id) {
+        document.getElementById(id)?.classList.remove('hidden');
+    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.zadanie-illustration-modal').forEach(m => m.classList.add('hidden'));
+        }
+    });
+
     window.ZadanieStatusToggle = window.ZadanieStatusToggle || {
         async toggle(button) {
             const topicId = button.dataset.topicId;

@@ -64,7 +64,8 @@
               "type": "geometry",
               "status": "active"
             }
-          ]
+          ],
+          "illustration": "<svg viewBox=\"0 0 220 185\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"220\" height=\"185\" fill=\"#0a1628\"/><polygon points=\"30,155 75,55 195,55 150,155\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/><line x1=\"30\" y1=\"155\" x2=\"120\" y2=\"55\" stroke=\"#d4a855\" stroke-width=\"1.5\" stroke-dasharray=\"4,3\"/><circle cx=\"120\" cy=\"55\" r=\"3\" fill=\"#d4a855\"/><text x=\"14\" y=\"168\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >A</text><text x=\"68\" y=\"48\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >B</text><text x=\"197\" y=\"48\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >C</text><text x=\"152\" y=\"170\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >D</text><text x=\"117\" y=\"47\" fill=\"#d4a855\" font-size=\"12\" font-family=\"serif\" font-style=\"italic\" >K</text></svg>"
         },
         {
           "number": 2,
@@ -119,7 +120,8 @@
               "type": "geometry",
               "status": "active"
             }
-          ]
+          ],
+          "illustration": "<svg viewBox=\"0 0 220 200\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"220\" height=\"200\" fill=\"#0a1628\"/><polygon points=\"110,20 195,100 110,180 25,100\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/><line x1=\"110\" y1=\"20\" x2=\"110\" y2=\"180\" stroke=\"#5a9fcf\" stroke-width=\"1\" stroke-dasharray=\"5,3\"/><line x1=\"25\" y1=\"100\" x2=\"195\" y2=\"100\" stroke=\"#5a9fcf\" stroke-width=\"1\" stroke-dasharray=\"5,3\"/><circle cx=\"110\" cy=\"100\" r=\"3\" fill=\"#d4a855\"/><line x1=\"110\" y1=\"100\" x2=\"71\" y2=\"142\" stroke=\"#10b981\" stroke-width=\"1.5\"/><circle cx=\"71\" cy=\"142\" r=\"3\" fill=\"#10b981\"/><path d=\"M65,138 L69,134 L73,138\" fill=\"none\" stroke=\"#9ca3af\" stroke-width=\"1\"/><text x=\"104\" y=\"14\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >A</text><text x=\"197\" y=\"104\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >B</text><text x=\"102\" y=\"195\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >C</text><text x=\"8\" y=\"104\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >D</text><text x=\"115\" y=\"95\" fill=\"#d4a855\" font-size=\"11\" font-family=\"serif\" font-style=\"italic\" >O</text><text x=\"54\" y=\"155\" fill=\"#10b981\" font-size=\"11\" font-family=\"serif\" font-style=\"italic\" >H</text></svg>"
         },
         {
           "number": 3,
@@ -174,7 +176,8 @@
               "type": "geometry",
               "status": "active"
             }
-          ]
+          ],
+          "illustration": "<svg viewBox=\"0 0 220 190\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"220\" height=\"190\" fill=\"#0a1628\"/><polygon points=\"100,45 195,45 185,155 90,155\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/><line x1=\"100\" y1=\"45\" x2=\"100\" y2=\"155\" stroke=\"#10b981\" stroke-width=\"1.5\"/><circle cx=\"100\" cy=\"155\" r=\"3\" fill=\"#10b981\"/><rect x=\"100\" y=\"147\" width=\"8\" height=\"8\" fill=\"none\" stroke=\"#9ca3af\" stroke-width=\"1\"/><line x1=\"90\" y1=\"165\" x2=\"100\" y2=\"165\" stroke=\"#9ca3af\" stroke-width=\"1\"/><text x=\"90\" y=\"175\" fill=\"#9ca3af\" font-size=\"10\" font-family=\"serif\" >DH</text><line x1=\"100\" y1=\"165\" x2=\"185\" y2=\"165\" stroke=\"#9ca3af\" stroke-width=\"1\"/><text x=\"130\" y=\"175\" fill=\"#9ca3af\" font-size=\"10\" font-family=\"serif\" >HC</text><text x=\"84\" y=\"42\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >A</text><text x=\"197\" y=\"42\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >B</text><text x=\"187\" y=\"170\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >C</text><text x=\"75\" y=\"170\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >D</text><text x=\"104\" y=\"152\" fill=\"#10b981\" font-size=\"11\" font-family=\"serif\" font-style=\"italic\" >H</text></svg>"
         },
         {
           "number": 4,
@@ -213,7 +216,8 @@
               "type": "geometry",
               "status": "active"
             }
-          ]
+          ],
+          "illustration": "<svg viewBox=\"0 0 220 190\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"220\" height=\"190\" fill=\"#0a1628\"/><polygon points=\"30,160 30,55 190,160\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/><rect x=\"30\" y=\"152\" width=\"8\" height=\"8\" fill=\"none\" stroke=\"#9ca3af\" stroke-width=\"1\"/><line x1=\"30\" y1=\"160\" x2=\"110\" y2=\"108\" stroke=\"#d4a855\" stroke-width=\"1.5\" stroke-dasharray=\"4,3\"/><circle cx=\"110\" cy=\"108\" r=\"3\" fill=\"#d4a855\"/><text x=\"15\" y=\"170\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >C</text><text x=\"18\" y=\"52\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >A</text><text x=\"192\" y=\"170\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >B</text><text x=\"112\" y=\"104\" fill=\"#d4a855\" font-size=\"12\" font-family=\"serif\" font-style=\"italic\" >K</text></svg>"
         },
         {
           "number": 5,
@@ -300,7 +304,8 @@
               "type": "geometry",
               "status": "active"
             }
-          ]
+          ],
+          "illustration": "<svg viewBox=\"0 0 220 190\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"220\" height=\"190\" fill=\"#0a1628\"/><polygon points=\"50,160 50,55 190,160\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/><rect x=\"50\" y=\"152\" width=\"8\" height=\"8\" fill=\"none\" stroke=\"#9ca3af\" stroke-width=\"1\"/><line x1=\"50\" y1=\"160\" x2=\"97\" y2=\"89\" stroke=\"#10b981\" stroke-width=\"1.5\"/><circle cx=\"97\" cy=\"89\" r=\"3\" fill=\"#10b981\"/><path d=\"M92,92 L95,87 L100,90\" fill=\"none\" stroke=\"#9ca3af\" stroke-width=\"1\"/><text x=\"35\" y=\"172\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >C</text><text x=\"38\" y=\"52\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >A</text><text x=\"192\" y=\"172\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >B</text><text x=\"100\" y=\"86\" fill=\"#10b981\" font-size=\"11\" font-family=\"serif\" font-style=\"italic\" >H</text></svg>"
         },
         {
           "number": 6,
@@ -355,7 +360,8 @@
               "type": "geometry",
               "status": "active"
             }
-          ]
+          ],
+          "illustration": "<svg viewBox=\"0 0 220 190\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"220\" height=\"190\" fill=\"#0a1628\"/><polygon points=\"30,155 70,55 190,55 180,155\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/><circle cx=\"50\" cy=\"105\" r=\"3\" fill=\"#d4a855\"/><line x1=\"30\" y1=\"155\" x2=\"70\" y2=\"55\" stroke=\"#5a9fcf\" stroke-width=\"0\"/><line x1=\"30\" y1=\"155\" x2=\"55\" y2=\"105\" stroke=\"#d4a855\" stroke-width=\"1.5\" stroke-dasharray=\"4,3\"/><line x1=\"70\" y1=\"55\" x2=\"50\" y2=\"105\" stroke=\"#d4a855\" stroke-width=\"1.5\" stroke-dasharray=\"4,3\"/><line x1=\"30\" y1=\"155\" x2=\"50\" y2=\"105\" stroke=\"#d4a855\" stroke-width=\"1.5\"/><line x1=\"70\" y1=\"55\" x2=\"50\" y2=\"105\" stroke=\"#d4a855\" stroke-width=\"1.5\"/><text x=\"14\" y=\"168\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >A</text><text x=\"64\" y=\"48\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >B</text><text x=\"192\" y=\"48\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >C</text><text x=\"182\" y=\"170\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >D</text><text x=\"40\" y=\"102\" fill=\"#d4a855\" font-size=\"12\" font-family=\"serif\" font-style=\"italic\" >F</text></svg>"
         },
         {
           "number": 7,
@@ -410,7 +416,8 @@
               "type": "geometry",
               "status": "active"
             }
-          ]
+          ],
+          "illustration": "<svg viewBox=\"0 0 220 190\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"220\" height=\"190\" fill=\"#0a1628\"/><polygon points=\"25,165 110,25 195,165\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/><line x1=\"78\" y1=\"83\" x2=\"142\" y2=\"83\" stroke=\"#d4a855\" stroke-width=\"1.5\"/><circle cx=\"78\" cy=\"83\" r=\"3\" fill=\"#d4a855\"/><circle cx=\"142\" cy=\"83\" r=\"3\" fill=\"#d4a855\"/><path d=\"M103,83 l3,-5 l3,5\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1\"/><path d=\"M20,165 l3,-5 l3,5\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1\"/><text x=\"10\" y=\"177\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >A</text><text x=\"105\" y=\"18\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >B</text><text x=\"197\" y=\"177\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >C</text><text x=\"65\" y=\"80\" fill=\"#d4a855\" font-size=\"12\" font-family=\"serif\" font-style=\"italic\" >M</text><text x=\"145\" y=\"80\" fill=\"#d4a855\" font-size=\"12\" font-family=\"serif\" font-style=\"italic\" >N</text></svg>"
         },
         {
           "number": 8,
@@ -465,7 +472,8 @@
               "type": "geometry",
               "status": "active"
             }
-          ]
+          ],
+          "illustration": "<svg viewBox=\"0 0 220 195\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"220\" height=\"195\" fill=\"#0a1628\"/><line x1=\"10\" y1=\"60\" x2=\"210\" y2=\"60\" stroke=\"#5a9fcf\" stroke-width=\"1\" stroke-dasharray=\"6,3\"/><line x1=\"10\" y1=\"155\" x2=\"210\" y2=\"155\" stroke=\"#5a9fcf\" stroke-width=\"1\" stroke-dasharray=\"6,3\"/><circle cx=\"40\" cy=\"60\" r=\"3\" fill=\"#60a5fa\"/><circle cx=\"160\" cy=\"60\" r=\"3\" fill=\"#60a5fa\"/><circle cx=\"65\" cy=\"155\" r=\"3\" fill=\"#60a5fa\"/><circle cx=\"180\" cy=\"155\" r=\"3\" fill=\"#60a5fa\"/><line x1=\"40\" y1=\"60\" x2=\"180\" y2=\"155\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/><line x1=\"160\" y1=\"60\" x2=\"65\" y2=\"155\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/><circle cx=\"112\" cy=\"107\" r=\"3\" fill=\"#d4a855\"/><text x=\"27\" y=\"55\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >A</text><text x=\"162\" y=\"55\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >B</text><text x=\"50\" y=\"173\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >D</text><text x=\"182\" y=\"173\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >C</text><text x=\"116\" y=\"104\" fill=\"#d4a855\" font-size=\"12\" font-family=\"serif\" font-style=\"italic\" >M</text></svg>"
         },
         {
           "number": 9,
@@ -520,7 +528,8 @@
               "type": "geometry",
               "status": "active"
             }
-          ]
+          ],
+          "illustration": "<svg viewBox=\"0 0 220 190\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"220\" height=\"190\" fill=\"#0a1628\"/><polygon points=\"30,165 110,75 190,165\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/><rect x=\"102\" y=\"75\" width=\"8\" height=\"8\" fill=\"none\" stroke=\"#9ca3af\" stroke-width=\"1\"/><line x1=\"110\" y1=\"75\" x2=\"110\" y2=\"165\" stroke=\"#10b981\" stroke-width=\"1.5\"/><circle cx=\"110\" cy=\"165\" r=\"3\" fill=\"#10b981\"/><rect x=\"110\" y=\"157\" width=\"8\" height=\"8\" fill=\"none\" stroke=\"#9ca3af\" stroke-width=\"1\"/><text x=\"16\" y=\"177\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >A</text><text x=\"104\" y=\"68\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >B</text><text x=\"192\" y=\"177\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >C</text><text x=\"115\" y=\"163\" fill=\"#10b981\" font-size=\"11\" font-family=\"serif\" font-style=\"italic\" >H</text></svg>"
         },
         {
           "number": 10,
@@ -623,7 +632,8 @@
               "type": "geometry",
               "status": "active"
             }
-          ]
+          ],
+          "illustration": "<svg viewBox=\"0 0 220 190\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"220\" height=\"190\" fill=\"#0a1628\"/><polygon points=\"25,155 45,55 185,55 195,155\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/><path d=\"M55,55 A15,15 0 0,1 45,70\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/><path d=\"M175,55 A15,15 0 0,0 185,70\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.5\"/><text x=\"58\" y=\"68\" fill=\"#d4a855\" font-size=\"12\" font-family=\"serif\" font-style=\"italic\" >β</text><text x=\"162\" y=\"70\" fill=\"#d4a855\" font-size=\"12\" font-family=\"serif\" font-style=\"italic\" >γ</text><text x=\"10\" y=\"168\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >A</text><text x=\"38\" y=\"48\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >B</text><text x=\"187\" y=\"48\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >C</text><text x=\"197\" y=\"168\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >D</text></svg>"
         },
         {
           "number": 11,
@@ -678,7 +688,8 @@
               "type": "geometry",
               "status": "active"
             }
-          ]
+          ],
+          "illustration": "<svg viewBox=\"0 0 220 190\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"220\" height=\"190\" fill=\"#0a1628\"/><polygon points=\"25,160 75,55 185,55 195,160\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/><line x1=\"50\" y1=\"108\" x2=\"190\" y2=\"108\" stroke=\"#d4a855\" stroke-width=\"1.5\"/><circle cx=\"50\" cy=\"108\" r=\"3\" fill=\"#d4a855\"/><circle cx=\"190\" cy=\"108\" r=\"3\" fill=\"#d4a855\"/><path d=\"M105,108 l3,-5 l3,5\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.2\"/><path d=\"M125,55 l3,-5 l3,5\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.2\"/><path d=\"M108,160 l3,-5 l3,5\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.2\"/><text x=\"10\" y=\"172\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >A</text><text x=\"68\" y=\"48\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >B</text><text x=\"187\" y=\"48\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >C</text><text x=\"197\" y=\"172\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >D</text><text x=\"38\" y=\"106\" fill=\"#d4a855\" font-size=\"12\" font-family=\"serif\" font-style=\"italic\" >E</text><text x=\"193\" y=\"106\" fill=\"#d4a855\" font-size=\"12\" font-family=\"serif\" font-style=\"italic\" >F</text></svg>"
         },
         {
           "number": 12,
@@ -765,7 +776,8 @@
               "type": "geometry",
               "status": "active"
             }
-          ]
+          ],
+          "illustration": "<svg viewBox=\"0 0 220 210\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"220\" height=\"210\" fill=\"#0a1628\"/><circle cx=\"110\" cy=\"105\" r=\"85\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/><circle cx=\"110\" cy=\"105\" r=\"3\" fill=\"#d4a855\"/><text x=\"114\" y=\"101\" fill=\"#d4a855\" font-size=\"11\" font-family=\"serif\" font-style=\"italic\" >O</text><line x1=\"37\" y1=\"65\" x2=\"183\" y2=\"65\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/><line x1=\"41\" y1=\"155\" x2=\"179\" y2=\"155\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/><line x1=\"110\" y1=\"105\" x2=\"110\" y2=\"65\" stroke=\"#10b981\" stroke-width=\"1.2\" stroke-dasharray=\"4,3\"/><line x1=\"110\" y1=\"105\" x2=\"110\" y2=\"155\" stroke=\"#10b981\" stroke-width=\"1.2\" stroke-dasharray=\"4,3\"/><circle cx=\"110\" cy=\"65\" r=\"2.5\" fill=\"#10b981\"/><circle cx=\"110\" cy=\"155\" r=\"2.5\" fill=\"#10b981\"/><text x=\"32\" y=\"62\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >A</text><text x=\"185\" y=\"62\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >B</text><text x=\"36\" y=\"170\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >C</text><text x=\"181\" y=\"170\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >D</text></svg>"
         },
         {
           "number": 13,
@@ -836,7 +848,8 @@
               "type": "geometry",
               "status": "active"
             }
-          ]
+          ],
+          "illustration": "<svg viewBox=\"0 0 220 195\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"220\" height=\"195\" fill=\"#0a1628\"/><polygon points=\"25,170 110,80 195,170\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/><rect x=\"102\" y=\"80\" width=\"8\" height=\"8\" fill=\"none\" stroke=\"#9ca3af\" stroke-width=\"1\"/><line x1=\"110\" y1=\"80\" x2=\"110\" y2=\"170\" stroke=\"#c8dce8\" stroke-width=\"1.2\" stroke-dasharray=\"4,3\"/><rect x=\"110\" y=\"162\" width=\"8\" height=\"8\" fill=\"none\" stroke=\"#9ca3af\" stroke-width=\"1\"/><circle cx=\"110\" cy=\"125\" r=\"45\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.2\"/><circle cx=\"70\" cy=\"125\" r=\"3\" fill=\"#10b981\"/><circle cx=\"150\" cy=\"125\" r=\"3\" fill=\"#10b981\"/><text x=\"10\" y=\"182\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >A</text><text x=\"104\" y=\"73\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >B</text><text x=\"197\" y=\"182\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >C</text><text x=\"115\" y=\"168\" fill=\"#c8dce8\" font-size=\"11\" font-family=\"serif\" font-style=\"italic\" >H</text><text x=\"55\" y=\"122\" fill=\"#10b981\" font-size=\"12\" font-family=\"serif\" font-style=\"italic\" >P</text><text x=\"153\" y=\"122\" fill=\"#10b981\" font-size=\"12\" font-family=\"serif\" font-style=\"italic\" >K</text></svg>"
         },
         {
           "number": 14,
@@ -923,7 +936,8 @@
               "type": "geometry",
               "status": "active"
             }
-          ]
+          ],
+          "illustration": "<svg viewBox=\"0 0 220 195\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"220\" height=\"195\" fill=\"#0a1628\"/><polygon points=\"110,22 30,170 190,170\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/><circle cx=\"110\" cy=\"114\" r=\"84\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.2\"/><circle cx=\"96\" cy=\"47\" r=\"3\" fill=\"#10b981\"/><circle cx=\"124\" cy=\"47\" r=\"3\" fill=\"#10b981\"/><text x=\"104\" y=\"15\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >A</text><text x=\"15\" y=\"182\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >B</text><text x=\"192\" y=\"182\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >C</text><text x=\"82\" y=\"44\" fill=\"#10b981\" font-size=\"12\" font-family=\"serif\" font-style=\"italic\" >K</text><text x=\"127\" y=\"44\" fill=\"#10b981\" font-size=\"12\" font-family=\"serif\" font-style=\"italic\" >P</text></svg>"
         },
         {
           "number": 15,
@@ -1026,7 +1040,8 @@
               "type": "geometry",
               "status": "active"
             }
-          ]
+          ],
+          "illustration": "<svg viewBox=\"0 0 220 185\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"220\" height=\"185\" fill=\"#0a1628\"/><polygon points=\"20,155 155,155 200,88\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/><rect x=\"155\" y=\"147\" width=\"8\" height=\"8\" fill=\"none\" stroke=\"#9ca3af\" stroke-width=\"1\"/><circle cx=\"155\" cy=\"107\" r=\"3\" fill=\"#d4a855\"/><circle cx=\"155\" cy=\"107\" r=\"48\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.2\"/><line x1=\"155\" y1=\"107\" x2=\"155\" y2=\"155\" stroke=\"#5a9fcf\" stroke-width=\"1\" stroke-dasharray=\"4,3\"/><text x=\"6\" y=\"167\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >A</text><text x=\"149\" y=\"173\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >B</text><text x=\"202\" y=\"86\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >C</text><text x=\"158\" y=\"104\" fill=\"#d4a855\" font-size=\"11\" font-family=\"serif\" font-style=\"italic\" >O</text></svg>"
         },
         {
           "number": 16,
@@ -1081,7 +1096,8 @@
               "type": "geometry",
               "status": "active"
             }
-          ]
+          ],
+          "illustration": "<svg viewBox=\"0 0 220 200\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"220\" height=\"200\" fill=\"#0a1628\"/><circle cx=\"110\" cy=\"107\" r=\"85\" fill=\"none\" stroke=\"#d4a855\" stroke-width=\"1.2\"/><polygon points=\"110,22 32,168 188,168\" fill=\"none\" stroke=\"#c8dce8\" stroke-width=\"1.5\"/><circle cx=\"110\" cy=\"107\" r=\"3\" fill=\"#d4a855\"/><line x1=\"110\" y1=\"107\" x2=\"110\" y2=\"22\" stroke=\"#5a9fcf\" stroke-width=\"1\" stroke-dasharray=\"4,3\"/><path d=\"M100,35 A15,15 0 0,1 120,35\" fill=\"none\" stroke=\"#10b981\" stroke-width=\"1.5\"/><text x=\"104\" y=\"15\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >A</text><text x=\"16\" y=\"180\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >B</text><text x=\"190\" y=\"180\" fill=\"#60a5fa\" font-size=\"13\" font-family=\"serif\" font-style=\"italic\" >C</text><text x=\"114\" y=\"103\" fill=\"#d4a855\" font-size=\"11\" font-family=\"serif\" font-style=\"italic\" >O</text><text x=\"115\" y=\"65\" fill=\"#5a9fcf\" font-size=\"11\" font-family=\"serif\" font-style=\"italic\" >R</text></svg>"
         }
       ]
     }
