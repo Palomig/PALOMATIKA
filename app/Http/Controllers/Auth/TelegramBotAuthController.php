@@ -349,9 +349,17 @@ class TelegramBotAuthController extends Controller
             ->first();
 
         if (!$authToken || $authToken->isExpired()) {
+            // Determine specific failure reason for diagnostics
+            $failureReason = match (true) {
+                $authToken === null => 'not_found',
+                $authToken->isExpired() => 'expired',
+                default => 'invalid_status',
+            };
+
             Log::warning('tg_token_login_failed', [
                 'trace_id' => $traceId !== '' ? $traceId : null,
                 'token' => $token,
+                'reason' => $failureReason,
                 'ip' => $request->ip(),
                 'ua' => $request->userAgent(),
             ]);
@@ -364,6 +372,7 @@ class TelegramBotAuthController extends Controller
                 'subject_id' => $token,
                 'ip' => request()->ip(),
                 'user_agent' => request()->userAgent(),
+                'payload_json' => ['reason' => $failureReason, 'trace_id' => $traceId !== '' ? $traceId : null],
             ]);
             return redirect()->to('/tg')
                 ->with('error', 'Сессия авторизации истекла. Попробуйте снова.');
