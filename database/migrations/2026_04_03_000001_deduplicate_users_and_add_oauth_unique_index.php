@@ -22,7 +22,7 @@ return new class extends Migration
         foreach ($duplicates as $dup) {
             $allIds = array_map('intval', explode(',', $dup->all_ids));
             $keepId = (int) $dup->keep_id;
-            $removeIds = array_filter($allIds, fn($id) => $id !== $keepId);
+            $removeIds = array_values(array_filter($allIds, fn($id) => $id !== $keepId));
 
             if (empty($removeIds)) {
                 continue;
@@ -44,7 +44,7 @@ return new class extends Migration
                 if (Schema::hasTable($table) && Schema::hasColumn($table, $column)) {
                     DB::statement(
                         "UPDATE `{$table}` SET `{$column}` = ? WHERE `{$column}` IN ({$removePlaceholders})",
-                        array_merge([$keepId], $removeIds)
+                        array_values(array_merge([$keepId], $removeIds))
                     );
                 }
             }
