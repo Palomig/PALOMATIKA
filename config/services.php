@@ -67,7 +67,7 @@ return [
         // BotFather Mini App short name (used in https://t.me/<bot>/<short_name>?startapp=...)
         'mini_app_short_name' => env('TELEGRAM_MINI_APP_SHORT_NAME'),
         // Max age for Telegram WebApp auth_date validation.
-        'webapp_auth_max_age' => (int) env('TELEGRAM_WEBAPP_AUTH_MAX_AGE', 86400),
+        'webapp_auth_max_age' => (int) env('TELEGRAM_WEBAPP_AUTH_MAX_AGE', 600),
         // Отдельный токен для родительского бота (@palomatika_parent_bot)
         'parent_bot_token' => env('TELEGRAM_PARENT_BOT_TOKEN'),
     ],

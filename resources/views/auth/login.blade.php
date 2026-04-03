@@ -221,7 +221,25 @@ function telegramAutoLogin() {
 
                 // Auto-login immediately
                 this.performAutoLogin(webApp, initData);
+                return;
             }
+
+            // Restore pending token after mobile navigation (iOS kills poller when deep_link opens)
+            try {
+                const pendingToken = sessionStorage.getItem('tg_pending_token');
+                if (pendingToken) {
+                    this.token = pendingToken;
+                    this.waiting = true;
+                    this.startPolling();
+                }
+            } catch (_) {}
+
+            // Resume poller when user returns to tab after opening Telegram
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible' && this.waiting && !this.pollInterval) {
+                    this.startPolling();
+                }
+            });
         },
 
         async performAutoLogin(webApp, initData) {
@@ -438,13 +456,11 @@ function telegramAuth() {
             this.loading = false;
             this.waiting = true;
 
-            const ua = navigator.userAgent || '';
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(ua);
-            if (isMobile) {
-                window.location.href = data.deep_link;
-            } else {
-                window.open(data.deep_link, '_blank');
-            }
+            // Store token so poller can be restored if page is reloaded on mobile
+            try { sessionStorage.setItem('tg_pending_token', data.token); } catch (_) {}
+
+            // Always open in new tab/app so this page stays alive with the poller
+            window.open(data.deep_link, '_blank');
             this.startPolling();
 
             return {
@@ -490,6 +506,7 @@ function telegramAuth() {
                 clearInterval(this.pollInterval);
                 this.pollInterval = null;
             }
+            try { sessionStorage.removeItem('tg_pending_token'); } catch (_) {}
         },
 
         generateTraceId() {

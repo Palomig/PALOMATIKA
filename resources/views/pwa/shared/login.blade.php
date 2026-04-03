@@ -39,7 +39,7 @@
 
       {{-- Telegram --}}
       @if(config('services.telegram.bot_username'))
-      <div x-data="pwaTelegramAuth('{{ $context }}')" style="display:flex;flex-direction:column;gap:6px;">
+      <div x-data="pwaTelegramAuth('{{ $context }}')" x-init="init()" style="display:flex;flex-direction:column;gap:6px;">
         <button @click="start()" :disabled="loading || waiting"
           class="btn btn-surface" style="justify-content:flex-start;gap:14px;opacity:1;"
           :style="(loading || waiting) ? 'opacity:0.6' : ''">
@@ -78,6 +78,27 @@ function pwaTelegramAuth(context) {
     error: '',
     pollInterval: null,
 
+    init() {
+      // Restore pending token after mobile navigation (iOS kills poller when deep_link opens)
+      try {
+        const pendingToken = sessionStorage.getItem('tg_pending_token');
+        if (pendingToken) {
+          this.waiting = true;
+          this.poll(pendingToken);
+        }
+      } catch (_) {}
+
+      // Resume poller when user returns to tab after opening Telegram
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible' && this.waiting && !this.pollInterval) {
+          try {
+            const token = sessionStorage.getItem('tg_pending_token');
+            if (token) this.poll(token);
+          } catch (_) {}
+        }
+      });
+    },
+
     async start() {
       this.loading = true;
       this.error = '';
@@ -100,12 +121,11 @@ function pwaTelegramAuth(context) {
         this.loading = false;
         this.waiting = true;
 
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        if (isMobile) {
-          window.location.href = data.deep_link;
-        } else {
-          window.open(data.deep_link, '_blank');
-        }
+        // Store token so poller can be restored if page is reloaded on mobile
+        try { sessionStorage.setItem('tg_pending_token', data.token); } catch (_) {}
+
+        // Always open in new tab/app so this page stays alive with the poller
+        window.open(data.deep_link, '_blank');
 
         this.poll(data.token);
       } catch (e) {
@@ -115,11 +135,14 @@ function pwaTelegramAuth(context) {
     },
 
     poll(token) {
+      if (this.pollInterval) clearInterval(this.pollInterval);
       let attempts = 0;
       this.pollInterval = setInterval(async () => {
         if (++attempts > 150) {
           clearInterval(this.pollInterval);
+          this.pollInterval = null;
           this.waiting = false;
+          try { sessionStorage.removeItem('tg_pending_token'); } catch (_) {}
           this.error = 'Время ожидания истекло. Попробуйте снова.';
           return;
         }
@@ -128,9 +151,13 @@ function pwaTelegramAuth(context) {
           const data = await res.json();
           if (data.status === 'authenticated') {
             clearInterval(this.pollInterval);
+            this.pollInterval = null;
+            try { sessionStorage.removeItem('tg_pending_token'); } catch (_) {}
             window.location.href = data.login_url;
           } else if (data.status === 'expired' || data.status === 'not_found') {
             clearInterval(this.pollInterval);
+            this.pollInterval = null;
+            try { sessionStorage.removeItem('tg_pending_token'); } catch (_) {}
             this.waiting = false;
             this.error = 'Сессия истекла. Попробуйте снова.';
           }
