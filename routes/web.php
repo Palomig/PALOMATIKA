@@ -278,14 +278,10 @@ Route::middleware(['auth', 'role:teacher,admin'])->prefix('topics')->name('topic
     Route::get('/{id}/svg', [TopicController::class, 'showWithServerSvg'])->name('svg')->where('id', '[0-9]+');
 });
 
-// OGE Generator (new url, shared implementation with legacy test pages)
-Route::middleware(['auth', 'role:teacher,admin'])->group(function () {
-    Route::get('/oge', [TestPdfController::class, 'ogeGenerator'])->name('oge.generator');
-});
-Route::middleware(['auth', 'role:student,teacher,admin'])->group(function () {
-    Route::get('/oge/placement', [TestPdfController::class, 'showPlacementTest'])->name('oge.placement');
-    Route::get('/oge/{hash}', [TestPdfController::class, 'showOgeVariant'])->name('oge.show');
-});
+// OGE Generator — public (no auth required)
+Route::get('/oge', [TestPdfController::class, 'ogeGenerator'])->name('oge.generator');
+Route::get('/oge/placement', [TestPdfController::class, 'showPlacementTest'])->name('oge.placement');
+Route::get('/oge/{hash}', [TestPdfController::class, 'showOgeVariant'])->name('oge.show');
 
 // ========================================================================
 // ЕГЭ Routes (обособленная система)
