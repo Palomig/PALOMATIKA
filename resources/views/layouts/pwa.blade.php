@@ -71,6 +71,7 @@
   .btn-accent:hover { filter: brightness(1.1); }
   .btn-green { background: var(--green); color: #fff; }
   .btn-surface { background: var(--surface); border: 1px solid var(--border); color: var(--text); }
+  .btn-left { justify-content: flex-start !important; gap: 14px !important; width: 100%; }
   .note { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--muted2); border-radius: var(--r); padding: 13px 16px; font-size: 12px; font-weight: 600; color: var(--muted); line-height: 1.6; }
   .hidden { display: none !important; }
   @keyframes fadeUp   { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
