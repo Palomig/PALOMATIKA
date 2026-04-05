@@ -278,10 +278,10 @@ Route::middleware(['auth', 'role:teacher,admin'])->prefix('topics')->name('topic
     Route::get('/{id}/svg', [TopicController::class, 'showWithServerSvg'])->name('svg')->where('id', '[0-9]+');
 });
 
-// OGE Generator — public (no auth required)
-Route::get('/oge', [TestPdfController::class, 'ogeGenerator'])->name('oge.generator');
-Route::get('/oge/placement', [TestPdfController::class, 'showPlacementTest'])->name('oge.placement');
-Route::get('/oge/{hash}', [TestPdfController::class, 'showOgeVariant'])->name('oge.show');
+// OGE Generator — legacy, redirect to student app
+Route::get('/oge', fn() => redirect('https://student.palomatika.ru'))->name('oge.generator');
+Route::get('/oge/placement', fn() => redirect('https://student.palomatika.ru'))->name('oge.placement');
+Route::get('/oge/{hash}', fn() => redirect('https://student.palomatika.ru'))->name('oge.show');
 
 // ========================================================================
 // ЕГЭ Routes (обособленная система)
