@@ -353,6 +353,18 @@ Route::post('/demo/diagnostic', [\App\Http\Controllers\DiagnosticDemoController:
 Route::get('/demo/diagnostic/review', [\App\Http\Controllers\DiagnosticDemoController::class, 'review'])->name('demo.diagnostic.review');
 Route::post('/demo/diagnostic/review', [\App\Http\Controllers\DiagnosticDemoController::class, 'saveReview'])->name('demo.diagnostic.review.save');
 
+// QA: login as test student (protected by deploy secret, never for real users)
+Route::get('/qa/login', function (\Illuminate\Http\Request $request) {
+    $secret = config('services.deploy.webhook_secret');
+    if (!$secret || !hash_equals($secret, (string) $request->query('secret', ''))) {
+        abort(403);
+    }
+    $user = \App\Models\User::find(2);
+    if (!$user) abort(404, 'Test user not found');
+    \Illuminate\Support\Facades\Auth::login($user);
+    return redirect($request->query('redirect', '/'));
+});
+
 Route::get('/kanban', [BoardController::class, 'kanban'])->name('board.kanban');
 Route::get('/roadmap', [BoardController::class, 'roadmap'])->name('board.roadmap');
 Route::get('/forstas', [BoardController::class, 'architecture'])->name('board.architecture');
