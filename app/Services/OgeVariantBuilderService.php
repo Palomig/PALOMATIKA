@@ -81,6 +81,14 @@ class OgeVariantBuilderService
                 continue;
             }
 
+            if ($topicId === '19') {
+                $task = $this->buildStatementsTaskFromGlobalPool($topicId, $topicTitles[$topicId] ?? '');
+                if ($task) {
+                    $tasks[] = $task;
+                }
+                continue;
+            }
+
             $randomIndex = $this->pickRandomIndex(count($zadaniyaList));
             if ($randomIndex === null) {
                 continue;
@@ -153,6 +161,67 @@ class OgeVariantBuilderService
         }
 
         return $defaultZadaniya;
+    }
+
+    /**
+     * Build a single statements task for topic 19 by pooling ALL statements
+     * from every block and zadanie, then picking 2 true + 1 false.
+     */
+    private function buildStatementsTaskFromGlobalPool(string $topicId, string $topicTitle): ?array
+    {
+        $blocks = $this->taskDataService->getBlocks($topicId, 'production');
+
+        $truePool  = [];
+        $falsePool = [];
+
+        foreach ($blocks as $block) {
+            foreach ($block['zadaniya'] as $zadanie) {
+                if (($zadanie['type'] ?? '') !== 'statements') {
+                    continue;
+                }
+                foreach ($zadanie['statements'] ?? [] as $statement) {
+                    if (!empty($statement['is_true'])) {
+                        $truePool[]  = $statement;
+                    } else {
+                        $falsePool[] = $statement;
+                    }
+                }
+            }
+        }
+
+        if (empty($truePool) || empty($falsePool)) {
+            return null;
+        }
+
+        $pickedTrue  = $this->pickDistinctRandomIndexes(count($truePool),  min(2, count($truePool)));
+        $pickedFalse = $this->pickDistinctRandomIndexes(count($falsePool), min(1, count($falsePool)));
+
+        $selected = [];
+        foreach ($pickedTrue  as $i) { $selected[] = $truePool[$i]; }
+        foreach ($pickedFalse as $i) { $selected[] = $falsePool[$i]; }
+
+        shuffle($selected); // mt_rand is seeded, so this is deterministic per hash
+
+        $display = 1;
+        $truthyIndexes = [];
+        foreach ($selected as &$statement) {
+            $statement['display_number'] = $display;
+            if (!empty($statement['is_true'])) {
+                $truthyIndexes[] = (string) $display;
+            }
+            $display++;
+        }
+        unset($statement);
+
+        return [
+            'type'                => 'statements',
+            'instruction'         => 'Укажите номера верных утверждений.',
+            'topic_id'            => $topicId,
+            'topic_title'         => $topicTitle,
+            'task_number'         => (int) ltrim($topicId, '0'),
+            'selected_statements' => $selected,
+            'correct_answer'      => implode('', $truthyIndexes),
+        ];
     }
 
     private function enrichTaskWithCorrectAnswer(array $task): array
