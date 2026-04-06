@@ -386,7 +386,7 @@
 
   {{-- TOP BAR --}}
   <div class="topbar anim-down">
-    <a href="{{ url('/dashboard') }}" class="back-btn">&lsaquo;</a>
+    <a href="{{ route('pwa.student.dashboard') }}" class="back-btn">&lsaquo;</a>
     <div>
       <div class="topbar-title">Результаты</div>
     </div>
@@ -516,7 +516,7 @@
   @endif
 
   {{-- RETRY --}}
-  <a href="{{ url('/dashboard') }}" class="btn-retry anim-up" style="animation-delay:0.4s">
+  <a href="{{ route('pwa.student.dashboard') }}" class="btn-retry anim-up" style="animation-delay:0.4s">
     Вернуться на главную
   </a>
 

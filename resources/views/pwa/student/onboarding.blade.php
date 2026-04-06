@@ -179,7 +179,7 @@ function onboardingPage() {
 
         const data = await res.json().catch(() => ({}));
         if (res.ok) {
-          window.location.href = '/dashboard';
+          window.location.href = '{{ route("pwa.student.dashboard") }}';
         } else {
           alert(data.message || 'Ошибка сохранения');
         }
