@@ -94,6 +94,7 @@ class StudentController extends Controller
         // Find all unfinished attempts for resume banner
         $activeAttempts = OgeAttempt::where('student_id', $user->id)
             ->where('status', 'active')
+            ->where('last_seen_at', '>=', now()->subDays(7))
             ->with('variant')
             ->orderByDesc('last_seen_at')
             ->get();
