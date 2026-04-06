@@ -241,7 +241,47 @@ class TaskDataService
 
         if ($status !== null) {
             $blocks = $this->filterBlocksByStatus($topicId, $blocks, $status);
+        } else {
+            $blocks = $this->enrichBlocksWithStatus($topicId, $blocks);
         }
+
+        return $blocks;
+    }
+
+    /**
+     * Inject resolved DB status into every task/statement so views can display
+     * the real status without filtering.
+     */
+    protected function enrichBlocksWithStatus(string $topicId, array $blocks): array
+    {
+        foreach ($blocks as &$block) {
+            $blockNumber = (int) ($block['number'] ?? 0);
+            foreach ($block['zadaniya'] as &$zadanie) {
+                $zadanieNumber = (int) ($zadanie['number'] ?? 0);
+
+                if (($zadanie['type'] ?? '') === 'statements' && isset($zadanie['statements'])) {
+                    foreach ($zadanie['statements'] as &$statement) {
+                        $statement['status'] = $this->resolveItemStatus(
+                            $topicId, $blockNumber, $zadanieNumber,
+                            'statement', (int) ($statement['id'] ?? 0),
+                            (string) ($statement['status'] ?? 'draft')
+                        );
+                    }
+                    unset($statement);
+                } else {
+                    foreach ($zadanie['tasks'] as &$task) {
+                        $task['status'] = $this->resolveItemStatus(
+                            $topicId, $blockNumber, $zadanieNumber,
+                            'task', (int) ($task['id'] ?? 0),
+                            (string) ($task['status'] ?? 'draft')
+                        );
+                    }
+                    unset($task);
+                }
+            }
+            unset($zadanie);
+        }
+        unset($block);
 
         return $blocks;
     }
