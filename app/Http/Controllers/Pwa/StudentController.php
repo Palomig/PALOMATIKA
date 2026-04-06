@@ -735,7 +735,7 @@ class StudentController extends Controller
             ];
         }
 
-        return view('pwa.student.homework', compact('user', 'list'));
+        return view('pwa.student.student-homework', compact('user', 'list'));
     }
 
     /**

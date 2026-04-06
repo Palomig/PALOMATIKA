@@ -494,3 +494,7 @@ function dashboardPage() {
 }
 </script>
 @endpush
+
+@push('install-prompt')
+@include('pwa.shared.ios-install-prompt')
+@endpush

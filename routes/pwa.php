@@ -34,6 +34,7 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
     Route::middleware(['auth', 'pwa.onboarding'])->group(function () {
         Route::get('/', [StudentController::class, 'dashboard'])->name('pwa.student.dashboard');
         Route::get('/mini', [StudentController::class, 'mini'])->name('pwa.student.mini');
+        Route::get('/new-tasks', [StudentController::class, 'newTasks'])->name('pwa.student.new-tasks');
         Route::get('/part2', [StudentController::class, 'part2'])->name('pwa.student.part2');
         Route::get('/tasks-part1', [StudentController::class, 'tasksPart1'])->name('pwa.student.tasks-part1');
         Route::post('/mini/start', [StudentController::class, 'startMini'])->name('pwa.student.mini.start');

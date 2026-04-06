@@ -88,7 +88,7 @@
 @section('body')
 <div class="page" x-data="studentsPage()">
   <div class="topbar">
-    <a href="{{ route('miniapp.teacher.dashboard') }}" class="back-btn">‹</a>
+    <a href="{{ route('pwa.teacher.dashboard') }}" class="back-btn">‹</a>
     <div class="topbar-title">Ученики</div>
   </div>
 

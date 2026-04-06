@@ -129,7 +129,7 @@
 @section('body')
 <div class="page" x-data="teacherHw()">
   <div class="topbar">
-    <a href="{{ route('miniapp.teacher.dashboard') }}" class="back">←</a>
+    <a href="{{ route('pwa.teacher.dashboard') }}" class="back">←</a>
     <div class="topbar-title">Домашка</div>
     <div style="width:34px;"></div>
   </div>

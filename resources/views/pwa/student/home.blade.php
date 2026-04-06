@@ -249,7 +249,7 @@
 
 
   @auth
-    <a href="{{ route('miniapp.dashboard') }}" class="btn-primary" id="go-btn" style="text-decoration:none;">
+    <a href="{{ route('pwa.student.dashboard') }}" class="btn-primary" id="go-btn" style="text-decoration:none;">
       <span style="display:flex;align-items:center;gap:8px;">Войти</span>
     </a>
   @else

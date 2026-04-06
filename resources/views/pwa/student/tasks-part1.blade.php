@@ -125,7 +125,7 @@
 
 @section('body')
 <div class="page task-render-scope" x-data="taskBrowser()">
-  <a href="{{ route('miniapp.dashboard') }}" class="back-btn">‹</a>
+  <a href="{{ route('pwa.student.dashboard') }}" class="back-btn">‹</a>
 
   <div class="hero" style="opacity:0; animation: fadeUp 0.3s ease 0.04s forwards;">
     <div class="hero-title">1я часть ОГЭ</div>

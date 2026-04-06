@@ -28,7 +28,7 @@
 @section('body')
 <div class="page">
   <div class="topbar">
-    <a href="{{ route('miniapp.teacher.dashboard') }}" class="back-btn">‹</a>
+    <a href="{{ route('pwa.teacher.dashboard') }}" class="back-btn">‹</a>
     <div class="topbar-title">Уроки сегодня</div>
   </div>
 
