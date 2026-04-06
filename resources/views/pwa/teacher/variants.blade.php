@@ -11,7 +11,7 @@
 @section('body')
 <div class="page">
   <div class="topbar">
-    <a href="/dashboard" class="back-btn">‹</a>
+    <a href="{{ route('miniapp.teacher.dashboard') }}" class="back-btn">‹</a>
     <div class="topbar-title">Варианты</div>
   </div>
 

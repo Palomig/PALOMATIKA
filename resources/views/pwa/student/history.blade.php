@@ -42,7 +42,7 @@
 @section('body')
 <div class="page">
   <div class="topbar">
-    <a href="/dashboard" class="back">←</a>
+    <a href="{{ route('miniapp.dashboard') }}" class="back">←</a>
     <div class="topbar-title">История</div>
     <div style="width:34px;"></div>
   </div>
