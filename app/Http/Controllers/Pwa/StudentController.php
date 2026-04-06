@@ -232,6 +232,7 @@ class StudentController extends Controller
             'newByTopic' => $newByTopic,
             'groupedByTopic' => $groupedByTopic,
             'isPremium' => true, // No billing gate in PWA
+            'trialUsed' => true,
         ]);
     }
 
@@ -284,6 +285,7 @@ class StudentController extends Controller
             'selectedTopic' => $selected,
             'zadaniya'      => $zadaniya,
             'isPremium'     => true, // No billing gate in PWA
+            'trialUsed'     => true,  // No trial UI in PWA
         ]);
     }
 
@@ -382,6 +384,7 @@ class StudentController extends Controller
             'zadaniya'      => $zadaniya,
             'taskCount'     => $taskCount,
             'isPremium'     => true, // No billing gate in PWA
+            'trialUsed'     => true,
         ]);
     }
 
@@ -750,9 +753,11 @@ class StudentController extends Controller
         $referralCount = User::where('referred_by_user_id', $user->id)->count();
 
         return view('pwa.student.profile', [
-            'user' => $user,
-            'transactions' => $transactions,
+            'user'          => $user,
+            'transactions'  => $transactions,
             'referralCount' => $referralCount,
+            'isPremium'     => true,
+            'trialUsed'     => true,
         ]);
     }
 

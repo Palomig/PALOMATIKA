@@ -84,7 +84,7 @@
     <div class="profile-role">{{ $user->role === 'teacher' ? 'Учитель' : 'Ученик' }}</div>
 
     @if($isPremium)
-      <div class="premium-badge active">Premium до {{ $user->tg_premium_until->format('d.m.Y') }}</div>
+      <div class="premium-badge active">Premium до {{ $user->tg_premium_until?->format('d.m.Y') ?? '∞' }}</div>
     @else
       <div class="premium-badge inactive" @click="showPremium = true">Активировать Premium</div>
     @endif
