@@ -40,6 +40,7 @@ class DeployController extends Controller
         'pool:flush',
         'oge:rescore-attempts',
         'oge:backfill-answers',
+        'oge:abandon-stale',
         'tasks:add-status',
         'tasks:set-status',
         'task-statuses:import',
