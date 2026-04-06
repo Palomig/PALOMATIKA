@@ -92,8 +92,8 @@
 
 @yield('body')
 
-{{-- iOS PWA install prompt --}}
-@include('pwa.shared.ios-install-prompt')
+{{-- iOS PWA install prompt (only on dashboard, injected via @stack) --}}
+@stack('install-prompt')
 
 <script>
   window._csrf = document.querySelector('meta[name="csrf-token"]')?.content;

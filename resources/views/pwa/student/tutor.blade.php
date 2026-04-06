@@ -92,7 +92,7 @@
 <div class="page" x-data="tutorPage()">
 
   <div class="topbar">
-    <a href="{{ route('miniapp.dashboard') }}" class="back-btn">‹</a>
+    <a href="{{ route('pwa.student.dashboard') }}" class="back-btn">‹</a>
     <div class="topbar-title">Репетитор</div>
   </div>
 

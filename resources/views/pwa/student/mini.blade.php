@@ -69,7 +69,7 @@
 <div class="page" x-data="miniPage()">
 
   <div class="topbar">
-    <a href="{{ route('miniapp.dashboard') }}" class="back-btn">‹</a>
+    <a href="{{ route('pwa.student.dashboard') }}" class="back-btn">‹</a>
     <div class="topbar-title">Мини-ОГЭ</div>
   </div>
 
