@@ -161,17 +161,19 @@ class OgeVariantBuilderService
 
         if ($type === 'statements' && isset($task['statements']) && is_array($task['statements'])) {
             $allStatements = $task['statements'];
-            $selected = [];
 
-            if (count($allStatements) > 3) {
-                $keys = $this->pickDistinctRandomIndexes(count($allStatements), 3);
-                sort($keys);
-                foreach ($keys as $key) {
-                    $selected[] = $allStatements[$key];
-                }
-            } else {
-                $selected = $allStatements;
-            }
+            $truePool  = array_values(array_filter($allStatements, fn($s) => !empty($s['is_true'])));
+            $falsePool = array_values(array_filter($allStatements, fn($s) =>  empty($s['is_true'])));
+
+            $pickedTrue  = $this->pickDistinctRandomIndexes(count($truePool),  min(2, count($truePool)));
+            $pickedFalse = $this->pickDistinctRandomIndexes(count($falsePool), min(1, count($falsePool)));
+
+            $selected = [];
+            foreach ($pickedTrue  as $i) { $selected[] = ['_orig_idx' => array_search($truePool[$i],  $allStatements), 'stmt' => $truePool[$i]]; }
+            foreach ($pickedFalse as $i) { $selected[] = ['_orig_idx' => array_search($falsePool[$i], $allStatements), 'stmt' => $falsePool[$i]]; }
+
+            usort($selected, fn($a, $b) => $a['_orig_idx'] <=> $b['_orig_idx']);
+            $selected = array_column($selected, 'stmt');
 
             $display = 1;
             $truthyIndexes = [];
