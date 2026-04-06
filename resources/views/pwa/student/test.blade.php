@@ -1197,10 +1197,10 @@
       confirmExit() {
         if (this.answeredCount > 0) {
           if (confirm('Выйти из теста? Ответы будут сохранены при завершении теста.')) {
-            window.location.href = '/dashboard';
+            window.location.href = '{{ route("pwa.student.dashboard") }}';
           }
         } else {
-          window.location.href = '/dashboard';
+          window.location.href = '{{ route("pwa.student.dashboard") }}';
         }
       },
 
