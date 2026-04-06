@@ -268,7 +268,7 @@ class TaskDataService
                         );
                     }
                     unset($statement);
-                } else {
+                } elseif (!empty($zadanie['tasks'])) {
                     foreach ($zadanie['tasks'] as &$task) {
                         $task['status'] = $this->resolveItemStatus(
                             $topicId, $blockNumber, $zadanieNumber,
