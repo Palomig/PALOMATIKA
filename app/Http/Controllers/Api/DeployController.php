@@ -48,6 +48,7 @@ class DeployController extends Controller
         'task-statuses:import',
         'audit:prune',
         'materials:backfill',
+        'materials:delete',
         'assets:audit-semantic-svg',
         'topics:diagnose',
         'pool:test-generate',
