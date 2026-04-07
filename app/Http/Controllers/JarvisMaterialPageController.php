@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\JarvisMaterial;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class JarvisMaterialPageController extends Controller
@@ -29,12 +30,17 @@ class JarvisMaterialPageController extends Controller
         ]);
     }
 
-    public function show(string $slug): View
+    public function show(string $slug): View|RedirectResponse
     {
         $material = JarvisMaterial::query()
             ->where('slug', $slug)
             ->where('status', JarvisMaterial::STATUS_PUBLISHED)
             ->firstOrFail();
+
+        // Static HTML files (uploaded via deploy API) are served directly
+        if (file_exists(public_path("materials/{$slug}.html"))) {
+            return redirect("/materials/{$slug}.html");
+        }
 
         return view('materials.show', [
             'material' => $material,
