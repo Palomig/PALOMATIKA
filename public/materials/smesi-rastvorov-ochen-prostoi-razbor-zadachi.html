@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Смешивание растворов — очень простой разбор задачи | Palomatika</title>
+  <meta name="description" content="Очень простой пошаговый разбор задачи на смешивание растворов с объяснением каждого действия.">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body,{delimiters:[{left:'\\(',right:'\\)',display:false},{left:'$$',right:'$$',display:true}]});"></script>
+  <style>
+    body{font-family:Arial,sans-serif;background:#0b1220;color:#e5e7eb;line-height:1.65;margin:0}
+    .wrap{max-width:920px;margin:0 auto;padding:24px}
+    h1,h2,h3{color:#fff;margin:0 0 10px}
+    h1{font-size:1.7em;line-height:1.3}
+    .lead{opacity:.9;margin:0 0 16px;font-size:1.05em}
+    .card{background:#111a2b;border:1px solid #24324a;border-radius:12px;padding:16px;margin:14px 0}
+    .rule{background:#0f172a;border-left:4px solid #60a5fa;padding:10px 12px;border-radius:8px;margin:10px 0}
+    .tip{background:#13243a;border-left:4px solid #34d399;padding:10px 12px;border-radius:8px;margin:10px 0}
+    .warn{background:#2a1a22;border-left:4px solid #fb7185;padding:10px 12px;border-radius:8px;margin:10px 0}
+    .ex{background:#0d1829;border:1px solid #2a3b58;border-radius:10px;padding:10px 12px;margin:8px 0}
+    ol,ul{padding-left:20px;margin:8px 0}
+    li{margin:6px 0}
+    code{background:#0b1323;padding:2px 6px;border-radius:6px}
+    .katex-display{overflow-x:auto;overflow-y:hidden;padding-bottom:4px}
+    .tg-cta{background:linear-gradient(135deg,#2563eb,#7c3aed);border:none;border-radius:14px;padding:20px 24px;margin:20px 0;text-align:center;display:block;text-decoration:none;transition:transform .15s,box-shadow .15s}
+    .tg-cta:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(99,102,241,.35)}
+    .tg-cta-title{color:#fff;font-size:1.15em;font-weight:700;margin:0 0 6px}
+    .tg-cta-sub{color:rgba(255,255,255,.8);font-size:.9em;margin:0}
+    .tg-cta-btn{display:inline-block;margin-top:12px;background:#fff;color:#4f46e5;font-weight:700;padding:10px 28px;border-radius:10px;font-size:1em;text-decoration:none}
+    .svg-wrap{margin:18px 0;text-align:center}
+    .svg-wrap svg{max-width:100%;height:auto}
+    .svg-caption{font-size:.82em;color:#64748b;margin-top:6px}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Смешивание растворов — очень простой разбор задачи</h1>
+  <p class="lead">Разберём задачу так, чтобы было понятно буквально каждое действие. Здесь самый удобный ход — обозначить проценты в двух растворах и составить 2 уравнения.</p>
+
+  <div class="card">
+    <h2>Условие коротко</h2>
+    <div class="ex">
+      Есть два сосуда: в первом 10 кг раствора, во втором 16 кг раствора.<br>
+      Концентрации разные.<br>
+      Если слить всё вместе, получится 55% кислоты.<br>
+      Если слить <b>равные массы</b> этих растворов, получится 61% кислоты.<br>
+      Нужно найти, сколько процентов кислоты в <b>первом</b> растворе.
+    </div>
+
+    <!-- SVG 1: два начальных сосуда -->
+    <div class="svg-wrap">
+      <svg viewBox="0 0 480 190" width="480" xmlns="http://www.w3.org/2000/svg">
+        <!-- фон -->
+        <rect width="480" height="190" fill="#0d1829" rx="10"/>
+
+        <!-- Сосуд 1 (10 кг) -->
+        <!-- горлышко -->
+        <rect x="126" y="28" width="68" height="10" rx="3" fill="none" stroke="#60a5fa" stroke-width="1.5"/>
+        <!-- тело сосуда -->
+        <rect x="118" y="38" width="84" height="118" rx="4" fill="#0b1932" stroke="#60a5fa" stroke-width="2"/>
+        <!-- жидкость (10/16 = 62.5% → высота = 0.625*114 = 71px) -->
+        <rect x="120" y="84" width="80" height="70" rx="2" fill="#1e3a6e"/>
+        <!-- блик на жидкости -->
+        <rect x="120" y="84" width="80" height="6" rx="2" fill="#2d5aad" opacity="0.5"/>
+        <!-- метки -->
+        <text x="160" y="105" text-anchor="middle" font-size="15" fill="#93c5fd" font-weight="bold">x %</text>
+        <text x="160" y="124" text-anchor="middle" font-size="12" fill="#7ea8e8">10 кг</text>
+        <text x="160" y="172" text-anchor="middle" font-size="13" fill="#94a3b8">Сосуд 1</text>
+
+        <!-- Стрелка «+» в середине -->
+        <text x="240" y="105" text-anchor="middle" font-size="30" fill="#475569">+</text>
+
+        <!-- Сосуд 2 (16 кг) -->
+        <!-- горлышко -->
+        <rect x="276" y="28" width="68" height="10" rx="3" fill="none" stroke="#818cf8" stroke-width="1.5"/>
+        <!-- тело сосуда -->
+        <rect x="268" y="38" width="84" height="118" rx="4" fill="#0b1932" stroke="#818cf8" stroke-width="2"/>
+        <!-- жидкость (16/16 = 100% → высота = 114px) -->
+        <rect x="270" y="40" width="80" height="114" rx="2" fill="#312e81"/>
+        <!-- блик -->
+        <rect x="270" y="40" width="80" height="6" rx="2" fill="#4338ca" opacity="0.5"/>
+        <!-- метки -->
+        <text x="310" y="88" text-anchor="middle" font-size="15" fill="#c4b5fd" font-weight="bold">y %</text>
+        <text x="310" y="107" text-anchor="middle" font-size="12" fill="#a5b4e8">16 кг</text>
+        <text x="310" y="172" text-anchor="middle" font-size="13" fill="#94a3b8">Сосуд 2</text>
+      </svg>
+      <p class="svg-caption">Два исходных раствора с неизвестными концентрациями x% и y%</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Шаг 1. Вводим обозначения</h2>
+    <div class="rule">
+      Пусть в первом растворе кислоты \(x\%\), а во втором — \(y\%\).
+    </div>
+    <div class="tip">
+      Мы пока не знаем эти проценты, поэтому обозначаем их буквами. Это стандартный первый шаг в задачах на смеси.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Шаг 2. Составляем первое уравнение по смешиванию всех 26 кг</h2>
+    <p>Когда смешали всё, общая масса стала:</p>
+    <div class="rule">
+      \(10+16=26\) кг.
+    </div>
+    <p>В этом новом растворе 55% кислоты, значит масса кислоты равна:</p>
+    <div class="rule">
+      \(26 \cdot 0{,}55 = 14{,}3\) кг.
+    </div>
+    <p>Теперь выразим массу кислоты через исходные растворы:</p>
+    <ul>
+      <li>в первом сосуде кислоты было \(10 \cdot \frac{x}{100}\) кг;</li>
+      <li>во втором сосуде кислоты было \(16 \cdot \frac{y}{100}\) кг.</li>
+    </ul>
+    <p>Сумма этих количеств должна быть 14,3 кг:</p>
+    <div class="rule">
+      $$10\cdot \frac{x}{100} + 16\cdot \frac{y}{100} = 14{,}3$$
+    </div>
+    <p>Упростим:</p>
+    <div class="rule">
+      $$0{,}1x + 0{,}16y = 14{,}3$$
+    </div>
+    <p>Умножим всё уравнение на 100, чтобы убрать десятичные дроби:</p>
+    <div class="rule">
+      $$10x + 16y = 1430$$
+    </div>
+    <div class="tip">
+      Это первое уравнение. Оно описывает ситуацию: <b>слили все 10 кг и все 16 кг</b>.
+    </div>
+
+    <!-- SVG 2: случай 1 — слить всё -->
+    <div class="svg-wrap">
+      <svg viewBox="0 0 520 180" width="520" xmlns="http://www.w3.org/2000/svg">
+        <rect width="520" height="180" fill="#0d1829" rx="10"/>
+
+        <!-- Сосуд 1 — весь (10 кг) -->
+        <rect x="28" y="30" width="72" height="104" rx="4" fill="#0b1932" stroke="#60a5fa" stroke-width="2"/>
+        <rect x="30" y="96" width="68" height="36" rx="2" fill="#1e3a6e"/>
+        <text x="64" y="84" text-anchor="middle" font-size="12" fill="#60a5fa">x%</text>
+        <text x="64" y="120" text-anchor="middle" font-size="11" fill="#93c5fd">10 кг</text>
+        <text x="64" y="152" text-anchor="middle" font-size="11" fill="#64748b">Сосуд 1</text>
+        <!-- "весь" пометка -->
+        <text x="64" y="22" text-anchor="middle" font-size="10" fill="#34d399">весь</text>
+
+        <!-- + -->
+        <text x="122" y="90" text-anchor="middle" font-size="26" fill="#475569">+</text>
+
+        <!-- Сосуд 2 — весь (16 кг) -->
+        <rect x="148" y="30" width="72" height="104" rx="4" fill="#0b1932" stroke="#818cf8" stroke-width="2"/>
+        <rect x="150" y="32" width="68" height="100" rx="2" fill="#312e81"/>
+        <text x="184" y="70" text-anchor="middle" font-size="12" fill="#c4b5fd">y%</text>
+        <text x="184" y="90" text-anchor="middle" font-size="11" fill="#a5b4e8">16 кг</text>
+        <text x="184" y="152" text-anchor="middle" font-size="11" fill="#64748b">Сосуд 2</text>
+        <text x="184" y="22" text-anchor="middle" font-size="10" fill="#34d399">весь</text>
+
+        <!-- стрелка → -->
+        <line x1="234" y1="82" x2="282" y2="82" stroke="#475569" stroke-width="2" marker-end="url(#arr1)"/>
+        <defs>
+          <marker id="arr1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#475569"/>
+          </marker>
+        </defs>
+        <text x="258" y="74" text-anchor="middle" font-size="10" fill="#64748b">сливаем</text>
+
+        <!-- Результат — большой сосуд (26 кг, 55%) -->
+        <rect x="296" y="16" width="100" height="118" rx="4" fill="#0b1932" stroke="#34d399" stroke-width="2.5"/>
+        <rect x="298" y="18" width="96" height="114" rx="2" fill="#0f3a2a"/>
+        <text x="346" y="60" text-anchor="middle" font-size="16" fill="#34d399" font-weight="bold">55%</text>
+        <text x="346" y="82" text-anchor="middle" font-size="13" fill="#6ee7b7">26 кг</text>
+        <text x="346" y="152" text-anchor="middle" font-size="11" fill="#64748b">Смесь</text>
+
+        <!-- уравнение справа -->
+        <text x="420" y="66" text-anchor="middle" font-size="11" fill="#94a3b8">10·x/100</text>
+        <text x="420" y="84" text-anchor="middle" font-size="11" fill="#94a3b8">+ 16·y/100</text>
+        <text x="420" y="102" text-anchor="middle" font-size="11" fill="#94a3b8">= 14,3</text>
+      </svg>
+      <p class="svg-caption">Случай 1: сливаем все 10 кг + все 16 кг → 26 кг раствора с 55% кислоты</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Шаг 3. Понимаем фразу «слили равные массы»</h2>
+    <p>Теперь самая важная мысль.</p>
+    <div class="ex">
+      Из первого сосуда всего 10 кг, из второго — 16 кг.<br>
+      Значит одинаковыми порциями из них можно взять максимум по 10 кг.<br>
+      Больше из первого сосуда взять нельзя — там всего 10 кг.
+    </div>
+    <div class="rule">
+      Значит во втором случае взяли 10 кг из первого раствора и 10 кг из второго раствора.
+    </div>
+    <div class="tip">
+      Вот почему здесь не нужно вводить новую переменную для массы. Равные массы уже определяются самим условием: берём весь первый сосуд (10 кг) и столько же из второго.
+    </div>
+
+    <!-- SVG 3: случай 2 — равные массы -->
+    <div class="svg-wrap">
+      <svg viewBox="0 0 520 185" width="520" xmlns="http://www.w3.org/2000/svg">
+        <rect width="520" height="185" fill="#0d1829" rx="10"/>
+
+        <!-- Сосуд 1 — весь (10 кг) -->
+        <rect x="28" y="30" width="72" height="104" rx="4" fill="#0b1932" stroke="#60a5fa" stroke-width="2"/>
+        <rect x="30" y="68" width="68" height="64" rx="2" fill="#1e3a6e"/>
+        <text x="64" y="58" text-anchor="middle" font-size="12" fill="#60a5fa">x%</text>
+        <text x="64" y="98" text-anchor="middle" font-size="11" fill="#93c5fd">10 кг</text>
+        <text x="64" y="152" text-anchor="middle" font-size="11" fill="#64748b">Сосуд 1</text>
+        <text x="64" y="22" text-anchor="middle" font-size="10" fill="#34d399">весь (10 кг)</text>
+
+        <!-- + -->
+        <text x="122" y="90" text-anchor="middle" font-size="26" fill="#475569">+</text>
+
+        <!-- Сосуд 2 — только 10 из 16 кг -->
+        <rect x="148" y="30" width="72" height="104" rx="4" fill="#0b1932" stroke="#818cf8" stroke-width="2"/>
+        <!-- остаток (6 кг) — серый -->
+        <rect x="150" y="32" width="68" height="38" rx="2" fill="#1e1e3a" opacity="0.5"/>
+        <!-- берём 10 из 16 = 62.5%, высота 65px -->
+        <rect x="150" y="70" width="68" height="62" rx="2" fill="#312e81"/>
+        <!-- пунктирная линия раздела -->
+        <line x1="148" y1="70" x2="220" y2="70" stroke="#fb923c" stroke-width="1.5" stroke-dasharray="4,3"/>
+        <text x="184" y="60" text-anchor="middle" font-size="10" fill="#64748b" opacity="0.7">6 кг (не берём)</text>
+        <text x="184" y="95" text-anchor="middle" font-size="12" fill="#c4b5fd">y%</text>
+        <text x="184" y="113" text-anchor="middle" font-size="11" fill="#a5b4e8">10 кг</text>
+        <text x="184" y="152" text-anchor="middle" font-size="11" fill="#64748b">Сосуд 2</text>
+        <text x="184" y="22" text-anchor="middle" font-size="10" fill="#fb923c">берём 10 из 16</text>
+
+        <!-- стрелка → -->
+        <line x1="234" y1="82" x2="282" y2="82" stroke="#475569" stroke-width="2" marker-end="url(#arr2)"/>
+        <defs>
+          <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 z" fill="#475569"/>
+          </marker>
+        </defs>
+        <text x="258" y="74" text-anchor="middle" font-size="10" fill="#64748b">сливаем</text>
+
+        <!-- Результат — сосуд (20 кг, 61%) -->
+        <rect x="296" y="25" width="96" height="109" rx="4" fill="#0b1932" stroke="#f59e0b" stroke-width="2.5"/>
+        <rect x="298" y="27" width="92" height="105" rx="2" fill="#2d1f05"/>
+        <text x="344" y="68" text-anchor="middle" font-size="16" fill="#f59e0b" font-weight="bold">61%</text>
+        <text x="344" y="88" text-anchor="middle" font-size="13" fill="#fcd34d">20 кг</text>
+        <text x="344" y="152" text-anchor="middle" font-size="11" fill="#64748b">Смесь</text>
+
+        <!-- уравнение справа -->
+        <text x="430" y="62" text-anchor="middle" font-size="11" fill="#94a3b8">10·x/100</text>
+        <text x="430" y="80" text-anchor="middle" font-size="11" fill="#94a3b8">+ 10·y/100</text>
+        <text x="430" y="98" text-anchor="middle" font-size="11" fill="#94a3b8">= 12,2</text>
+      </svg>
+      <p class="svg-caption">Случай 2: берём все 10 кг из сосуда 1 и 10 кг из сосуда 2 → 20 кг с 61% кислоты</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Шаг 4. Составляем второе уравнение</h2>
+    <p>Смешали 10 кг первого раствора и 10 кг второго раствора.</p>
+    <p>Общая масса смеси:</p>
+    <div class="rule">
+      \(10+10=20\) кг.
+    </div>
+    <p>Концентрация получилась 61%, значит кислоты в смеси:</p>
+    <div class="rule">
+      \(20 \cdot 0{,}61 = 12{,}2\) кг.
+    </div>
+    <p>Масса кислоты в этих 20 кг равна:</p>
+    <ul>
+      <li>из первого раствора: \(10\cdot\frac{x}{100}\),</li>
+      <li>из второго раствора: \(10\cdot\frac{y}{100}\).</li>
+    </ul>
+    <div class="rule">
+      $$10\cdot\frac{x}{100}+10\cdot\frac{y}{100}=12{,}2$$
+    </div>
+    <p>Упростим:</p>
+    <div class="rule">
+      $$0{,}1x+0{,}1y=12{,}2$$
+    </div>
+    <p>Умножаем на 10:</p>
+    <div class="rule">
+      $$x+y=122$$
+    </div>
+    <div class="tip">
+      Это второе уравнение. Теперь у нас есть система из двух уравнений и двух неизвестных.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Шаг 5. Решаем систему</h2>
+    <div class="rule">
+      $$\begin{cases}
+      10x + 16y = 1430,\\
+      x + y = 122
+      \end{cases}$$
+    </div>
+    <p>Из второго уравнения выразим \(x\):</p>
+    <div class="rule">
+      $$x = 122 - y$$
+    </div>
+    <p>Подставляем в первое:</p>
+    <div class="rule">
+      $$10(122-y)+16y=1430$$
+    </div>
+    <p>Раскрываем скобки:</p>
+    <div class="rule">
+      $$1220 - 10y + 16y = 1430$$
+    </div>
+    <p>Приводим подобные:</p>
+    <div class="rule">
+      $$1220 + 6y = 1430$$
+    </div>
+    <p>Вычитаем 1220:</p>
+    <div class="rule">
+      $$6y = 210$$
+    </div>
+    <p>Делим на 6:</p>
+    <div class="rule">
+      $$y = 35$$
+    </div>
+    <p>Тогда</p>
+    <div class="rule">
+      $$x = 122 - 35 = 87$$
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Ответ</h2>
+    <div class="rule">
+      В первом растворе содержится \(87\%\) кислоты.
+    </div>
+    <div class="warn">
+      Частая ошибка: во втором условии брать «равные массы» как что-то неизвестное и усложнять задачу. Здесь проще заметить, что из первого сосуда всего 10 кг, значит равные массы — это по 10 кг.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Совсем коротко в 3 строки</h2>
+    <div class="ex">
+      1) По первому условию: \(10x+16y=1430\).<br>
+      2) По второму условию: \(x+y=122\).<br>
+      3) Решаем систему и получаем \(x=87\).
+    </div>
+  </div>
+
+  <a href="https://t.me/PalomatikaBot/app" class="tg-cta">
+    <p class="tg-cta-title">🚀 Хочешь потренироваться?</p>
+    <p class="tg-cta-sub">В нашем мини-приложении Telegram — задачи ОГЭ с пошаговым разбором, таймером и статистикой</p>
+    <span class="tg-cta-btn">Открыть Palomatika →</span>
+  </a>
+</div>
+</body>
+</html>
