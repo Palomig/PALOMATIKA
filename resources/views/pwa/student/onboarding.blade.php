@@ -173,6 +173,7 @@ function onboardingPage() {
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
+            'X-CSRF-TOKEN': window._csrf,
           },
           body: JSON.stringify(payload),
         });
