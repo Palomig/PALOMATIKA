@@ -550,7 +550,12 @@ class MiniAppTeacherController extends Controller
         $label = $this->variantModeLabel($attempt->variant);
         $backUrl = "/tg/teacher/students/{$studentId}";
 
-        return view('miniapp.history-detail', compact('attempt', 'label', 'correct', 'total', 'time', 'wrongTasks', 'backUrl'));
+        $suspicion = $this->suspicionService->analyze($attempt->id);
+        $isSuspicious     = $suspicion['is_suspicious'];
+        $suspicionReasons = $suspicion['reasons'];
+        $suspicionScore   = $suspicion['score'];
+
+        return view('miniapp.history-detail', compact('attempt', 'label', 'correct', 'total', 'time', 'wrongTasks', 'backUrl', 'isSuspicious', 'suspicionReasons', 'suspicionScore'));
     }
 
     public function toggleTeacherStudentOwnership(Request $request, int $studentId, AuditLogger $audit): \Illuminate\Http\JsonResponse

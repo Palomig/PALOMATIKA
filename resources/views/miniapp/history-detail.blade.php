@@ -79,6 +79,30 @@
     color: var(--muted); font-size: 14px; font-weight: 600;
     opacity: 0; animation: fadeUp 0.3s ease 0.12s forwards;
   }
+  .suspicion-card {
+    background: rgba(239,68,68,0.08);
+    border: 1px solid rgba(239,68,68,0.3);
+    border-radius: var(--r);
+    padding: 12px 14px;
+    margin-bottom: 16px;
+    opacity: 0; animation: fadeUp 0.3s ease 0.04s forwards;
+  }
+  .suspicion-card summary {
+    cursor: pointer; list-style: none;
+    display: flex; align-items: center; gap: 8px;
+    font-weight: 700; font-size: 13px; color: #ef4444;
+  }
+  .suspicion-card summary::-webkit-details-marker { display: none; }
+  .suspicion-card[open] summary { margin-bottom: 10px; }
+  .suspicion-reasons {
+    font-size: 12px; color: var(--text); line-height: 1.6;
+    padding-left: 4px;
+  }
+  .suspicion-reasons li { margin: 4px 0; }
+  .suspicion-note {
+    font-size: 11px; color: var(--muted); margin-top: 8px;
+    padding-top: 8px; border-top: 1px dashed rgba(239,68,68,0.2);
+  }
 </style>
 @endpush
 
@@ -111,6 +135,23 @@
     <div class="topbar-title">{{ $label }}</div>
     <div style="width:34px;"></div>
   </div>
+
+  @if($isSuspicious ?? false)
+  <details class="suspicion-card">
+    <summary>
+      <span>⚠ Подозрительно</span>
+      <span style="font-size:11px;font-weight:600;margin-left:auto;">Подробнее ›</span>
+    </summary>
+    <ul class="suspicion-reasons">
+      @foreach($suspicionReasons as $reason)
+        <li>{{ $reason }}</li>
+      @endforeach
+    </ul>
+    <div class="suspicion-note">
+      Это автоматическое обнаружение на основе поведения при решении. Не является доказательством.
+    </div>
+  </details>
+  @endif
 
   @php
     $pct = $total > 0 ? round(($correct / $total) * 100) : 0;
