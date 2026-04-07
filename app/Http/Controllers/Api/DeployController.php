@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\JarvisMaterial;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -320,6 +322,50 @@ class DeployController extends Controller
         file_put_contents($path, $html);
 
         $url = url('/materials/' . $slug . '.html');
+
+        // Upsert a JarvisMaterial DB record so the material appears in the catalog
+        $title = trim($request->input('title', ''));
+        $excerpt = trim($request->input('excerpt', ''));
+        $category = trim($request->input('category', ''));
+
+        if ($title === '') {
+            // Extract <title> from HTML as fallback
+            preg_match('/<title[^>]*>([^<]+)<\/title>/i', $html, $m);
+            $title = isset($m[1]) ? trim($m[1]) : $slug;
+        }
+
+        $adminUser = User::where('role', 'admin')->orderBy('id')->first();
+
+        if ($adminUser) {
+            $existing = JarvisMaterial::where('slug', $slug)->first();
+
+            if ($existing) {
+                $existing->title = $title;
+                if ($excerpt !== '') {
+                    $existing->excerpt = $excerpt;
+                }
+                if ($category !== '') {
+                    $existing->category = $category;
+                }
+                $existing->source_content = $html;
+                $existing->status = JarvisMaterial::STATUS_PUBLISHED;
+                if (!$existing->published_at) {
+                    $existing->published_at = now();
+                }
+                $existing->save();
+            } else {
+                JarvisMaterial::create([
+                    'owner_teacher_id' => $adminUser->id,
+                    'title' => $title,
+                    'slug' => $slug,
+                    'excerpt' => $excerpt ?: null,
+                    'category' => $category ?: null,
+                    'source_content' => $html,
+                    'status' => JarvisMaterial::STATUS_PUBLISHED,
+                    'published_at' => now(),
+                ]);
+            }
+        }
 
         Log::info('Material uploaded via deploy API', [
             'slug' => $slug,
