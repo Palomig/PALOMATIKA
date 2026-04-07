@@ -248,6 +248,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     let lastScrollAtMs = performance.now();
     let hiddenSinceMs = document.hidden ? Date.now() : null;
     let pendingAwayMs = 0;
+    let lastReturnedAtMs = null;
+    let lastHiddenDurationMs = 0;
 
     const SCROLL_SETTLE_MS = 400;
     const FOCUS_DELAY_MS = 2000;
@@ -262,6 +264,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         blur: (id, task) => `/api/oge/attempts/${id}/tasks/${task}/blur`,
         commit: (id, task) => `/api/oge/attempts/${id}/tasks/${task}/commit`,
         heartbeat: (id) => `/api/oge/attempts/${id}/heartbeat`,
+        telemetry: (id) => `/api/oge/attempts/${id}/telemetry`,
         submit: (id) => `/api/oge/attempts/${id}/submit`,
     };
 
@@ -428,6 +431,31 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
+    function attachPasteListeners() {
+        document.querySelectorAll('.js-answer-input').forEach(input => {
+            input.addEventListener('paste', async () => {
+                if (!attemptId || locked) return;
+                const card = input.closest('.task-card[data-attempt-task-number], .task-card[data-task-number]');
+                const taskNum = card
+                    ? parseInt(card.dataset.attemptTaskNumber || card.dataset.taskNumber || '0', 10) || null
+                    : null;
+                const timeSinceReturn = lastReturnedAtMs ? Date.now() - lastReturnedAtMs : 0;
+                try {
+                    await post(api.telemetry(attemptId), {
+                        event_type: 'answer_pasted',
+                        task_number: taskNum,
+                        payload: {
+                            away_ms_before: lastHiddenDurationMs,
+                            time_since_return_ms: timeSinceReturn,
+                        },
+                        client_ts: new Date().toISOString(),
+                    });
+                } catch (_) { /* fire-and-forget */ }
+            }, { passive: true });
+        });
+    }
+    attachPasteListeners();
+
     cards.forEach(card => {
         const taskNumber = resolveAttemptTaskNumber(card);
         const input = card.querySelector('.js-answer-input');
@@ -524,7 +552,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         if (hiddenSinceMs) {
-            pendingAwayMs += Math.max(0, Date.now() - hiddenSinceMs);
+            lastHiddenDurationMs = Math.max(0, Date.now() - hiddenSinceMs);
+            lastReturnedAtMs = Date.now();
+            pendingAwayMs += lastHiddenDurationMs;
             hiddenSinceMs = null;
         }
 
