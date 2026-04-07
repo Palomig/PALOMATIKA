@@ -10,6 +10,7 @@ use App\Models\OgeVariant;
 use App\Models\TeacherStudent;
 use App\Models\User;
 use App\Services\AuditLogger;
+use App\Services\OgeAttemptSuspicionService;
 use App\Services\OgeVariantPoolService;
 use App\Services\TaskDataService;
 use App\Services\VariantTaskNumberResolver;
@@ -23,6 +24,7 @@ class MiniAppTeacherController extends Controller
     public function __construct(
         private readonly TaskDataService $taskData,
         private readonly OgeVariantPoolService $poolService,
+        private readonly OgeAttemptSuspicionService $suspicionService,
     ) {
     }
 
@@ -409,6 +411,16 @@ class MiniAppTeacherController extends Controller
                 'date' => $att->submitted_at,
             ];
         }
+
+        // Batch suspicion analysis for all displayed attempts
+        $historyAttemptIds = array_column($historyList, 'id');
+        $suspicionMap = $this->suspicionService->analyzeMany($historyAttemptIds);
+        foreach ($historyList as &$h) {
+            $s = $suspicionMap[$h['id']] ?? ['is_suspicious' => false, 'reasons' => []];
+            $h['is_suspicious']     = $s['is_suspicious'];
+            $h['suspicion_reasons'] = $s['reasons'];
+        }
+        unset($h);
 
         $weakTopics = collect($topicStats)
             ->map(function (array $topic) {
