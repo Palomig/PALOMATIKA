@@ -107,6 +107,33 @@ class OgeAttemptController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function telemetry(Request $request, OgeAttempt $attempt): JsonResponse
+    {
+        $this->authorizeAttempt($request, $attempt);
+        $this->guardActiveAttempt($attempt);
+
+        $validated = $request->validate([
+            'event_type' => 'required|string|max:64|in:answer_pasted',
+            'task_number' => 'nullable|integer',
+            'payload'     => 'nullable|array',
+            'client_ts'   => 'nullable|date',
+        ]);
+
+        $taskNumber = isset($validated['task_number']) && $this->isValidTaskNumber((int) $validated['task_number'])
+            ? (int) $validated['task_number']
+            : null;
+
+        $this->attemptService->appendEvent(
+            $attempt,
+            $validated['event_type'],
+            $taskNumber,
+            $validated['payload'] ?? [],
+            $validated['client_ts'] ?? null
+        );
+
+        return response()->json(['success' => true]);
+    }
+
     public function commit(Request $request, OgeAttempt $attempt, int $taskNumber): JsonResponse
     {
         $this->authorizeAttempt($request, $attempt);
