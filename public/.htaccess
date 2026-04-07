@@ -23,6 +23,9 @@
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ https://%{HTTP_HOST}%1 [L,R=301]
 
+    # Route /materials catalog through Laravel (real directory exists but index should be Laravel)
+    RewriteRule ^materials/?$ index.php [L]
+
     # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
