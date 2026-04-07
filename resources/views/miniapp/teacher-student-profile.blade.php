@@ -34,6 +34,18 @@
   .score-good { color: #86efac; }
   .score-mid { color: #fde68a; }
   .score-bad { color: #fca5a5; }
+  .badge-suspicious {
+    display: inline-block;
+    background: rgba(239,68,68,0.15);
+    color: #ef4444;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 5px;
+    margin-left: 6px;
+    vertical-align: middle;
+    letter-spacing: 0.03em;
+  }
 @endpush
 
 @section('body')
@@ -72,7 +84,12 @@
       @endphp
       <a href="/tg/teacher/students/{{ $student->id }}/attempt/{{ $h['id'] }}" class="attempt-card">
         <div class="attempt-left">
-          <div class="attempt-label">{{ $h['label'] }}</div>
+          <div class="attempt-label">
+            {{ $h['label'] }}
+            @if($h['is_suspicious'] ?? false)
+              <span class="badge-suspicious">⚠ Подозрительно</span>
+            @endif
+          </div>
           <div class="attempt-meta">
             {{ $h['date']?->format('d.m.Y H:i') }}
             @if($timeStr) &middot; {{ $timeStr }} @endif

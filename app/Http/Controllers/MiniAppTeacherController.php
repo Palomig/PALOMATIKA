@@ -10,6 +10,7 @@ use App\Models\OgeVariant;
 use App\Models\TeacherStudent;
 use App\Models\User;
 use App\Services\AuditLogger;
+use App\Services\OgeAttemptSuspicionService;
 use App\Services\OgeVariantPoolService;
 use App\Services\TaskDataService;
 use App\Services\VariantTaskNumberResolver;
@@ -23,6 +24,7 @@ class MiniAppTeacherController extends Controller
     public function __construct(
         private readonly TaskDataService $taskData,
         private readonly OgeVariantPoolService $poolService,
+        private readonly OgeAttemptSuspicionService $suspicionService,
     ) {
     }
 
@@ -410,6 +412,16 @@ class MiniAppTeacherController extends Controller
             ];
         }
 
+        // Batch suspicion analysis for all displayed attempts
+        $historyAttemptIds = array_column($historyList, 'id');
+        $suspicionMap = $this->suspicionService->analyzeMany($historyAttemptIds);
+        foreach ($historyList as &$h) {
+            $s = $suspicionMap[$h['id']] ?? ['is_suspicious' => false, 'reasons' => []];
+            $h['is_suspicious']     = $s['is_suspicious'];
+            $h['suspicion_reasons'] = $s['reasons'];
+        }
+        unset($h);
+
         $weakTopics = collect($topicStats)
             ->map(function (array $topic) {
                 $accuracy = $topic['total'] > 0 ? (int) round(($topic['correct'] / $topic['total']) * 100) : 0;
@@ -538,7 +550,12 @@ class MiniAppTeacherController extends Controller
         $label = $this->variantModeLabel($attempt->variant);
         $backUrl = "/tg/teacher/students/{$studentId}";
 
-        return view('miniapp.history-detail', compact('attempt', 'label', 'correct', 'total', 'time', 'wrongTasks', 'backUrl'));
+        $suspicion = $this->suspicionService->analyze($attempt->id);
+        $isSuspicious     = $suspicion['is_suspicious'];
+        $suspicionReasons = $suspicion['reasons'];
+        $suspicionScore   = $suspicion['score'];
+
+        return view('miniapp.history-detail', compact('attempt', 'label', 'correct', 'total', 'time', 'wrongTasks', 'backUrl', 'isSuspicious', 'suspicionReasons', 'suspicionScore'));
     }
 
     public function toggleTeacherStudentOwnership(Request $request, int $studentId, AuditLogger $audit): \Illuminate\Http\JsonResponse

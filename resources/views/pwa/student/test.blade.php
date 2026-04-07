@@ -892,6 +892,9 @@
       elapsed: 0,
       _timerInterval: null,
       _initialized: false,
+      _hiddenAtMs: null,
+      _lastAwayMs: 0,
+      _returnedAtMs: null,
       battleStarted: false,
 
       // Computed
@@ -928,6 +931,35 @@
           if (this.answeredCount > 0 && !this.submitting) {
             e.preventDefault();
           }
+        });
+
+        // Visibility tracking for cheat detection
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) {
+            this._hiddenAtMs = Date.now();
+          } else {
+            this._lastAwayMs = this._hiddenAtMs ? Math.max(0, Date.now() - this._hiddenAtMs) : 0;
+            this._returnedAtMs = Date.now();
+            this._hiddenAtMs = null;
+          }
+        });
+
+        // Paste tracking: detect "screenshot → AI → paste" pattern
+        document.addEventListener('paste', async () => {
+          if (!this.attemptId) return;
+          const taskNum = this.currentTask?.task_number ?? null;
+          const timeSinceReturn = this._returnedAtMs ? Date.now() - this._returnedAtMs : 0;
+          try {
+            await window.fetchPost(`/api/oge/attempts/${this.attemptId}/telemetry`, {
+              event_type: 'answer_pasted',
+              task_number: taskNum,
+              payload: {
+                away_ms_before: this._lastAwayMs,
+                time_since_return_ms: timeSinceReturn,
+              },
+              client_ts: new Date().toISOString(),
+            });
+          } catch (_) { /* fire-and-forget */ }
         });
 
         // Start stopwatch only when allowed (battle mode waits for explicit start)
