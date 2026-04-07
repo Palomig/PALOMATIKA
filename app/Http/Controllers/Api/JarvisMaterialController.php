@@ -35,6 +35,7 @@ class JarvisMaterialController extends Controller
             'title' => ['required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255'],
             'excerpt' => ['nullable', 'string'],
+            'category' => ['nullable', 'string', 'max:100'],
             'source_content' => ['required', 'string'],
             'meta' => ['nullable', 'array'],
         ]);
@@ -44,6 +45,7 @@ class JarvisMaterialController extends Controller
             'title' => $payload['title'],
             'slug' => JarvisMaterial::generateUniqueSlug($payload['slug'] ?? $payload['title']),
             'excerpt' => $payload['excerpt'] ?? null,
+            'category' => $payload['category'] ?? null,
             'source_content' => $payload['source_content'],
             'status' => JarvisMaterial::STATUS_DRAFT,
             'published_at' => null,
@@ -61,6 +63,7 @@ class JarvisMaterialController extends Controller
             'title' => ['sometimes', 'required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255'],
             'excerpt' => ['nullable', 'string'],
+            'category' => ['nullable', 'string', 'max:100'],
             'source_content' => ['sometimes', 'required', 'string'],
             'meta' => ['nullable', 'array'],
             'status' => ['sometimes', Rule::in([
@@ -80,6 +83,10 @@ class JarvisMaterialController extends Controller
 
         if (array_key_exists('excerpt', $payload)) {
             $material->excerpt = $payload['excerpt'];
+        }
+
+        if (array_key_exists('category', $payload)) {
+            $material->category = $payload['category'];
         }
 
         if (array_key_exists('source_content', $payload)) {
