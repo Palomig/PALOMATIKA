@@ -17,6 +17,7 @@ class JarvisMaterial extends Model
         'title',
         'slug',
         'excerpt',
+        'category',
         'source_content',
         'status',
         'published_at',

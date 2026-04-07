@@ -16,8 +16,16 @@ class JarvisMaterialPageController extends Controller
             ->orderByDesc('id')
             ->get();
 
+        $categories = $materials
+            ->pluck('category')
+            ->filter()
+            ->unique()
+            ->sort()
+            ->values();
+
         return view('materials.index', [
             'materials' => $materials,
+            'categories' => $categories,
         ]);
     }
 
