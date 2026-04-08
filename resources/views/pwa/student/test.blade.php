@@ -1150,9 +1150,9 @@
           const task = this.currentTask;
           if (!task) return;
           const isChoiceType = ['choice', 'simple_choice', 'fraction_choice', 'interval_choice'].includes(task.type);
-          if (!isChoiceType) {
+          if (!isChoiceType && !('ontouchstart' in window)) {
             setTimeout(() => {
-              // Find the visible input in the question area
+              // Find the visible input in the question area (desktop only — on touch devices, auto-focus opens keyboard immediately)
               const inp = this.$refs.questionArea?.querySelector('.answer-input');
               if (inp) inp.focus();
             }, 200);
