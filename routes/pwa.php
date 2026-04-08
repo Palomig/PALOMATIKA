@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Pwa\AuthController;
+use App\Http\Controllers\Pwa\EgeStudentController;
 use App\Http\Controllers\Pwa\ManifestController;
 use App\Http\Controllers\Pwa\StudentController;
 use App\Http\Controllers\Pwa\TeacherController;
@@ -47,6 +48,14 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
         Route::get('/profile', [StudentController::class, 'profile'])->name('pwa.student.profile');
         Route::get('/homework', [StudentController::class, 'studentHomework'])->name('pwa.student.homework');
         Route::get('/tutor', [StudentController::class, 'tutor'])->name('pwa.student.tutor');
+
+        // ЕГЭ (10–11 класс)
+        Route::prefix('ege-app')->name('pwa.student.ege.')->group(function () {
+            Route::get('/',                   [EgeStudentController::class, 'home'])      ->name('home');
+            Route::post('/full/start',        [EgeStudentController::class, 'startFull']) ->name('start');
+            Route::get('/test/{attemptId}',   [EgeStudentController::class, 'test'])      ->name('test');
+            Route::get('/results/{attemptId}',[EgeStudentController::class, 'results'])   ->name('results');
+        });
 
         // ВПР (5–8 класс)
         Route::prefix('vpr')->name('pwa.student.vpr.')->group(function () {
