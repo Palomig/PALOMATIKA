@@ -93,14 +93,14 @@
       <div class="class-row">
         <div>
           <div class="chips">
-            <template x-for="g in [8, 9]" :key="g">
+            <template x-for="g in [5, 6, 7, 8, 9, 10, 11]" :key="g">
               <div class="chip" :class="{ 'selected': grade === g }" @click="grade = g" x-text="g"></div>
             </template>
           </div>
         </div>
         <div>
           <div class="chips">
-            <template x-for="l in ['А','Б','В','Г','Д','К','М']" :key="l">
+            <template x-for="l in ['А','Б','В','Г','Д','И','К','М']" :key="l">
               <div class="chip" :class="{ 'selected': letter === l }" @click="letter = l" x-text="l"></div>
             </template>
           </div>

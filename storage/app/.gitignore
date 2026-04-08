@@ -4,4 +4,13 @@
 !tasks/*.json
 !tasks/ege/
 !tasks/ege/*.json
+!tasks/vpr/
+!tasks/vpr/grade_5/
+!tasks/vpr/grade_5/*.json
+!tasks/vpr/grade_6/
+!tasks/vpr/grade_6/*.json
+!tasks/vpr/grade_7/
+!tasks/vpr/grade_7/*.json
+!tasks/vpr/grade_8/
+!tasks/vpr/grade_8/*.json
 !.gitignore

@@ -1,0 +1,41 @@
+<?php
+namespace Tests\Unit;
+
+use App\Services\VprTaskDataService;
+use Tests\TestCase;
+
+class VprTaskDataServiceTest extends TestCase
+{
+    public function test_base_path_resolves_by_grade(): void
+    {
+        $svc5 = new VprTaskDataService(5);
+        $svc8 = new VprTaskDataService(8);
+
+        // Grade-specific paths resolve correctly — non-existent topic returns false
+        $this->assertFalse($svc5->topicDataExists('99'));
+        $this->assertFalse($svc8->topicDataExists('99'));
+    }
+
+    public function test_get_topic_meta_returns_defaults_for_unknown_topic(): void
+    {
+        $svc = new VprTaskDataService(5);
+        $meta = $svc->getTopicMeta('99');
+        $this->assertArrayHasKey('title', $meta);
+        $this->assertArrayHasKey('color', $meta);
+    }
+
+    public function test_grade_5_has_18_topic_metas(): void
+    {
+        $svc = new VprTaskDataService(5);
+        $this->assertCount(18, $svc->getAllTopicsMeta());
+    }
+
+    public function test_all_grades_have_18_topics(): void
+    {
+        foreach ([5, 6, 7, 8] as $grade) {
+            $svc = new VprTaskDataService($grade);
+            $this->assertCount(18, $svc->getAllTopicsMeta(),
+                "Grade $grade should have 18 topics");
+        }
+    }
+}

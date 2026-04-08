@@ -13,6 +13,12 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // Audit prune is manual-only by request.
+
+        // Ежегодный перевод классов — 1 июня в 03:00
+        $schedule->command('grades:promote', ['--no-interaction'])
+                 ->yearlyOn(6, 1, '03:00')
+                 ->withoutOverlapping()
+                 ->runInBackground();
     }
 
     /**

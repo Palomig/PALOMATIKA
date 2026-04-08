@@ -22,8 +22,16 @@ class OgeVariant extends Model
     public const MODE_FULL_WITH_PART2 = 'full_with_part2';
     public const MODE_MINI_PART2 = 'mini_part2';
 
+    public const EXAM_OGE  = 'oge';
+    public const EXAM_VPR5 = 'vpr_5';
+    public const EXAM_VPR6 = 'vpr_6';
+    public const EXAM_VPR7 = 'vpr_7';
+    public const EXAM_VPR8 = 'vpr_8';
+    public const EXAM_EGE  = 'ege';
+
     protected $fillable = [
         'hash',
+        'exam_type',
         'owner_teacher_id',
         'title',
         'source',

@@ -58,8 +58,8 @@ class StudentController extends Controller
     {
         $data = $request->validate([
             'name'          => 'required|string|min:2|max:100',
-            'grade_num'     => 'required|integer|in:9',
-            'grade_letter'  => 'required|string|in:А,Б,В,Г,Д,К,М',
+            'grade_num'     => 'required|integer|in:5,6,7,8,9,10,11',
+            'grade_letter'  => 'required|string|in:А,Б,В,Г,Д,И,К,М',
             'school_number' => 'required|string|max:20',
             'city'          => 'nullable|string|max:80',
         ]);
@@ -84,7 +84,21 @@ class StudentController extends Controller
      */
     public function dashboard(Request $request)
     {
-        $user = Auth::user();
+        $user  = Auth::user();
+        $grade = (int) ($user->grade_num ?? 9);
+
+        // Перенаправить на нужный дашборд по классу
+        if ($grade >= 5 && $grade <= 8) {
+            return redirect()->route('pwa.student.vpr.home');
+        }
+        if ($grade >= 10 && $grade <= 11) {
+            return redirect()->route('pwa.student.ege.home');
+        }
+        if ($grade === 12) {
+            return redirect()->route('pwa.student.history');
+        }
+
+        // grade === 9 → существующий ОГЭ dashboard (продолжаем)
 
         // Weak topics (from all submitted/scored attempts)
         $weakTopics = $this->computeWeakTopics($user->id);
