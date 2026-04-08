@@ -11,9 +11,9 @@ class VprTaskDataServiceTest extends TestCase
         $svc5 = new VprTaskDataService(5);
         $svc8 = new VprTaskDataService(8);
 
-        // basePath is protected — test via topicExists returning false for missing file
-        $this->assertFalse($svc5->topicDataExists('01')); // no files yet
-        $this->assertFalse($svc8->topicDataExists('01'));
+        // Grade-specific paths resolve correctly — non-existent topic returns false
+        $this->assertFalse($svc5->topicDataExists('99'));
+        $this->assertFalse($svc8->topicDataExists('99'));
     }
 
     public function test_get_topic_meta_returns_defaults_for_unknown_topic(): void
