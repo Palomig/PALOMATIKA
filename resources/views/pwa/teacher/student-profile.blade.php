@@ -49,7 +49,16 @@
     $displayName = $alias ?: $student->name;
   @endphp
   <div class="card">
-    <div class="name">{{ $displayName }}</div>
+    <div class="name">
+      {{ $displayName }}
+      @if($student->grade_num)
+        <span style="font-size:10px;font-weight:800;color:var(--muted);
+                     background:var(--surface);border:1px solid var(--border);
+                     padding:2px 6px;border-radius:6px;margin-left:6px;">
+          {{ $student->grade_num }}
+        </span>
+      @endif
+    </div>
     @if($alias)
       <div class="muted">{{ $student->name }} · ID: {{ $student->id }}</div>
     @else

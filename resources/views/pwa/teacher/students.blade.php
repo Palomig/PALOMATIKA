@@ -133,6 +133,13 @@
           </div>
           <div class="s-info">
             <div class="s-name" x-text="displayName({{ $student->id }})">{{ $displayName }}</div>
+            @if($student->grade_num)
+              <span style="font-size:10px;font-weight:800;color:var(--muted);
+                           background:var(--surface);border:1px solid var(--border);
+                           padding:2px 6px;border-radius:6px;margin-left:6px;">
+                {{ $student->grade_num }}
+              </span>
+            @endif
             @if($hasAlias)
               <div class="s-original">{{ $student->name }}</div>
             @else
