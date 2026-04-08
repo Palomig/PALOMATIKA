@@ -21,16 +21,12 @@ class EnsureUserRole
             abort(401);
         }
 
-        // Admin can switch view mode to simulate teacher/student permissions.
-        $effectiveRole = $user->role;
+        // Admin always passes any role check — view_as_role only affects UI rendering, not API access.
         if ($user->role === 'admin') {
-            $viewAs = $request->hasSession() ? $request->session()->get('view_as_role') : null;
-            if (in_array($viewAs, ['student', 'teacher'], true)) {
-                $effectiveRole = $viewAs;
-            }
+            return $next($request);
         }
 
-        if (empty($roles) || in_array($effectiveRole, $roles, true)) {
+        if (empty($roles) || in_array($user->role, $roles, true)) {
             return $next($request);
         }
 
