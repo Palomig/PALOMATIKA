@@ -26,7 +26,7 @@ class AuthController extends Controller
     public function showLogin(Request $request)
     {
         if (Auth::check()) {
-            return redirect('http://student.' . config('app.base_domain') . '/');
+            return redirect('https://student.' . config('app.base_domain') . '/');
         }
         return view('pwa.shared.login', ['context' => 'student']);
     }
@@ -37,7 +37,7 @@ class AuthController extends Controller
             $user = Auth::user();
 
             if ($user && in_array($user->role, ['teacher', 'admin'], true)) {
-                return redirect('http://teacher.' . config('app.base_domain') . '/dashboard');
+                return redirect('https://teacher.' . config('app.base_domain') . '/dashboard');
             }
 
             Auth::logout();
@@ -86,7 +86,7 @@ class AuthController extends Controller
             $callbackUrl = 'https://student.' . config('app.base_domain') . '/auth/' . $provider . '/callback';
             $socialUser = Socialite::driver($provider)->redirectUrl($callbackUrl)->user();
         } catch (\Throwable $e) {
-            return redirect('http://student.' . config('app.base_domain') . '/login')
+            return redirect('https://student.' . config('app.base_domain') . '/login')
                 ->with('error', 'Ошибка авторизации. Попробуйте ещё раз.');
         }
 
@@ -100,7 +100,7 @@ class AuthController extends Controller
             return redirect($intended);
         }
 
-        $base = 'http://student.' . config('app.base_domain');
+        $base = 'https://student.' . config('app.base_domain');
         return $user->onboarding_completed_at
             ? redirect($base . '/')
             : redirect($base . '/onboarding');
@@ -117,7 +117,7 @@ class AuthController extends Controller
             $callbackUrl = 'https://teacher.' . config('app.base_domain') . '/auth/' . $provider . '/callback';
             $socialUser = Socialite::driver($provider)->redirectUrl($callbackUrl)->user();
         } catch (\Throwable $e) {
-            return redirect('http://teacher.' . config('app.base_domain') . '/login')
+            return redirect('https://teacher.' . config('app.base_domain') . '/login')
                 ->with('error', 'Ошибка авторизации. Попробуйте ещё раз.');
         }
 
@@ -128,14 +128,14 @@ class AuthController extends Controller
             $request->session()->invalidate();
             $request->session()->regenerateToken();
 
-            return redirect('http://teacher.' . config('app.base_domain') . '/login')
+            return redirect('https://teacher.' . config('app.base_domain') . '/login')
                 ->with('error', 'Этот аккаунт не имеет доступа к кабинету репетитора.');
         }
 
         Auth::login($user, true);
         $request->session()->regenerate();
 
-        return redirect('http://teacher.' . config('app.base_domain') . '/dashboard');
+        return redirect('https://teacher.' . config('app.base_domain') . '/dashboard');
     }
 
     public function logout(Request $request)
@@ -144,7 +144,7 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('http://' . $host . '/login');
+        return redirect('https://' . $host . '/login');
     }
 
     /**
