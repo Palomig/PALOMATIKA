@@ -1,9 +1,10 @@
 <?php
 
 use App\Http\Controllers\Pwa\AuthController;
+use App\Http\Controllers\Pwa\ManifestController;
 use App\Http\Controllers\Pwa\StudentController;
 use App\Http\Controllers\Pwa\TeacherController;
-use App\Http\Controllers\Pwa\ManifestController;
+use App\Http\Controllers\Pwa\VprController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -46,6 +47,15 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
         Route::get('/profile', [StudentController::class, 'profile'])->name('pwa.student.profile');
         Route::get('/homework', [StudentController::class, 'studentHomework'])->name('pwa.student.homework');
         Route::get('/tutor', [StudentController::class, 'tutor'])->name('pwa.student.tutor');
+
+        // ВПР (5–8 класс)
+        Route::prefix('vpr')->name('pwa.student.vpr.')->group(function () {
+            Route::get('/',                   [VprController::class, 'home'])      ->name('home');
+            Route::post('/full/start',        [VprController::class, 'startFull']) ->name('start');
+            Route::get('/test/{attemptId}',   [VprController::class, 'test'])      ->name('test');
+            Route::get('/results/{attemptId}',[VprController::class, 'results'])   ->name('results');
+        });
+
     });
 });
 
