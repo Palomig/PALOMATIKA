@@ -119,6 +119,16 @@ class TaskAnswerResolver
             return $digitsOnly === $correct;
         }
 
+        // Coordinate-pair answers: "(1; -3); (5/2; 0)" — compare as order-independent sets,
+        // normalizing fractions to decimals so that 5/2 == 2.5.
+        if (str_contains((string) $correctAnswer, '(') && str_contains((string) $correctAnswer, ';')) {
+            $correctPairs = $this->parseCoordinatePairs((string) $correctAnswer);
+            $userPairs    = $this->parseCoordinatePairs((string) $userAnswer);
+            if ($correctPairs !== null && $userPairs !== null) {
+                return $correctPairs === $userPairs;
+            }
+        }
+
         return $user !== '' && $user === $correct;
     }
 
@@ -678,6 +688,74 @@ class TaskAnswerResolver
         $end = (int) ceil($max) - 1;
 
         return max(0, $end - $start + 1);
+    }
+
+    /**
+     * Parse a string containing coordinate pairs like "(1; -3); (5/2; 0)" or "(2.5;0)(1;-3)".
+     * Returns a sorted array of [x, y] string pairs, or null if parsing fails.
+     *
+     * @return array<int, array{0: string, 1: string}>|null
+     */
+    private function parseCoordinatePairs(string $value): ?array
+    {
+        preg_match_all('/\(([^)]+)\)/', $value, $matches);
+        if (empty($matches[1])) {
+            return null;
+        }
+
+        $pairs = [];
+        foreach ($matches[1] as $pairStr) {
+            $parts = preg_split('/;/', $pairStr);
+            if (count($parts) !== 2) {
+                return null;
+            }
+            $x = $this->normalizeCoordinate(trim($parts[0]));
+            $y = $this->normalizeCoordinate(trim($parts[1]));
+            if ($x === null || $y === null) {
+                return null;
+            }
+            $pairs[] = [$x, $y];
+        }
+
+        usort($pairs, static function (array $a, array $b): int {
+            $cmp = strcmp($a[0], $b[0]);
+            return $cmp !== 0 ? $cmp : strcmp($a[1], $b[1]);
+        });
+
+        return $pairs;
+    }
+
+    /**
+     * Normalize a single coordinate value: strip spaces, convert fraction (5/2) or decimal (2.5)
+     * to a canonical float string.
+     */
+    private function normalizeCoordinate(string $value): ?string
+    {
+        $value = str_replace(['−', '–'], '-', $value);
+        $value = str_replace([' ', ','], ['', '.'], $value);
+
+        if (preg_match('/^(-?\d+)\/(\d+)$/', $value, $m)) {
+            $den = (int) $m[2];
+            if ($den === 0) {
+                return null;
+            }
+            return $this->floatToCanonical((float) $m[1] / $den);
+        }
+
+        if (is_numeric($value)) {
+            return $this->floatToCanonical((float) $value);
+        }
+
+        return null;
+    }
+
+    private function floatToCanonical(float $num): string
+    {
+        if (abs($num - round($num)) < 1e-9) {
+            return (string) (int) round($num);
+        }
+
+        return rtrim(rtrim(sprintf('%.10F', $num), '0'), '.');
     }
 
     private function isChoiceType(string $type): bool
