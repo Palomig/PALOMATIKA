@@ -179,6 +179,7 @@ Route::prefix('repetitor')->name('repetitor.')->group(function () {
 
 Route::prefix('learn')->name('learn.')->group(function () {
     Route::get('/fractions', fn() => view('learn.fractions'))->name('fractions');
+    Route::get('/angles', fn() => view('learn.angles'))->name('angles');
 });
 
 // Authenticated routes
