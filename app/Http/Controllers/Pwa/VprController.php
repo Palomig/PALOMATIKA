@@ -77,7 +77,7 @@ class VprController extends Controller
     /**
      * Страница решения варианта ВПР.
      */
-    public function test(Request $request, int $attemptId, OgeAttemptService $attemptService)
+    public function test(Request $request, int $attemptId)
     {
         $user    = Auth::user();
         $attempt = OgeAttempt::where('id', $attemptId)
@@ -85,13 +85,18 @@ class VprController extends Controller
             ->with('variant')
             ->firstOrFail();
 
-        $variant     = $attempt->variant;
-        $tasks       = $attemptService->buildAttemptPayload($attempt);
-        $answers     = $attempt->answers()->pluck('current_answer', 'task_number');
-        $isSubmitted = $attempt->status === 'submitted';
+        if (in_array($attempt->status, ['submitted', 'scored', 'error'], true)) {
+            return redirect()->route('pwa.student.vpr.results', $attempt->id);
+        }
+
+        $variant = $attempt->variant;
+        $tasks   = $variant->config_json['tasks'] ?? [];
+        $answers = $attempt->answers()->pluck('current_answer', 'task_number');
+        $mode    = $variant->mode ?? 'full';
+        $title   = $variant->title ?? 'Вариант ВПР';
 
         return view('pwa.student.vpr-test', compact(
-            'user', 'attempt', 'variant', 'tasks', 'answers', 'isSubmitted'
+            'attempt', 'tasks', 'answers', 'mode', 'title'
         ));
     }
 
