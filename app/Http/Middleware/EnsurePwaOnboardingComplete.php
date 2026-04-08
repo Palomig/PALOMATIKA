@@ -24,7 +24,7 @@ class EnsurePwaOnboardingComplete
             } else {
                 // Redirect to onboarding on same subdomain
                 $host = $request->getHost();
-                return redirect('http://' . $host . '/onboarding');
+                return redirect('https://' . $host . '/onboarding');
             }
         }
 

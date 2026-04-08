@@ -41,7 +41,7 @@ class StudentController extends Controller
 
     private function base(): string
     {
-        return 'http://student.' . config('app.base_domain');
+        return 'https://student.' . config('app.base_domain');
     }
 
     // Onboarding (GET)
@@ -438,17 +438,22 @@ class StudentController extends Controller
             return response()->json(['error' => 'Сессия истекла. Перезайдите в приложение.'], 401);
         }
 
-        $type = $request->boolean('part2') ? 'full_with_part2' : 'full';
+        $variantHash = trim((string) $request->input('variant_hash', ''));
 
-        try {
-            $variant = $this->poolService->getOrCreateVariant($user, $type);
-        } catch (\RuntimeException $e) {
-            Log::warning('PWA Full start pool error', ['user' => $user->id, 'error' => $e->getMessage()]);
-            return response()->json(['error' => 'Нет доступных заданий. Попробуйте позже.'], 422);
+        if ($variantHash === '') {
+            $type = $request->boolean('part2') ? 'full_with_part2' : 'full';
+
+            try {
+                $variant = $this->poolService->getOrCreateVariant($user, $type);
+                $variantHash = $variant->hash;
+            } catch (\RuntimeException $e) {
+                Log::warning('PWA Full start pool error', ['user' => $user->id, 'error' => $e->getMessage()]);
+                return response()->json(['error' => 'Нет доступных заданий. Попробуйте позже.'], 422);
+            }
         }
 
         try {
-            [$variant, $attempt] = $this->attemptService->startAttempt($user, $variant->hash);
+            [$variant, $attempt] = $this->attemptService->startAttempt($user, $variantHash);
         } catch (\Throwable $e) {
             Log::error('PWA Full start attempt error', ['user' => $user->id, 'error' => $e->getMessage()]);
             return response()->json(['error' => 'Ошибка создания попытки: ' . mb_substr($e->getMessage(), 0, 100)], 500);

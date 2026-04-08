@@ -50,16 +50,15 @@
   @forelse($list as $i => $hw)
     @php
       if ($hw['type'] === 'full_variant' && $hw['variant_hash']) {
-          $href = '/tg/test-start/' . $hw['variant_hash'];
+          $href = null;
+          $variantHash = $hw['variant_hash'];
       } elseif ($hw['type'] === 'topic_practice' && $hw['topic_number']) {
           $tn = (int) $hw['topic_number'];
-          if ($tn <= 19) {
-              $href = '/tg/tasks-part1?topic=' . $tn;
-          } else {
-              $href = '/tg/part2?topic=' . $tn;
-          }
+          $href = $tn <= 19 ? '/tasks-part1?topic=' . $tn : '/part2?topic=' . $tn;
+          $variantHash = null;
       } else {
           $href = '#';
+          $variantHash = null;
       }
       $statusLabel = match($hw['status']) {
           'completed' => 'Выполнено',
@@ -67,6 +66,15 @@
           default => 'Назначено',
       };
     @endphp
+    @if($variantHash)
+    <div class="hw-item" style="--i:{{ $i }}; cursor:pointer;" onclick="startHomeworkVariant('{{ $variantHash }}', this)">
+      <div class="hw-left">
+        <div class="hw-label">{{ $hw['title'] }}</div>
+        <div class="hw-meta">{{ $hw['assigned_at']?->format('d.m.Y') }}</div>
+      </div>
+      <div class="hw-status status-{{ $hw['status'] }}">{{ $statusLabel }}</div>
+    </div>
+    @else
     <a href="{{ $href }}" class="hw-item" style="--i:{{ $i }}">
       <div class="hw-left">
         <div class="hw-label">{{ $hw['title'] }}</div>
@@ -74,6 +82,7 @@
       </div>
       <div class="hw-status status-{{ $hw['status'] }}">{{ $statusLabel }}</div>
     </a>
+    @endif
   @empty
     <div class="empty-state">
       <div class="empty-icon">📚</div>
@@ -82,3 +91,27 @@
   @endforelse
 </div>
 @endsection
+
+@push('scripts')
+<script>
+async function startHomeworkVariant(hash, el) {
+  el.style.opacity = '0.6';
+  el.style.pointerEvents = 'none';
+  try {
+    const res = await window.fetchPost('/full/start', { variant_hash: hash });
+    const data = await res.json();
+    if (res.ok && data.redirect) {
+      window.location.href = data.redirect;
+    } else {
+      alert(data.error || 'Ошибка запуска варианта');
+      el.style.opacity = '';
+      el.style.pointerEvents = '';
+    }
+  } catch (e) {
+    alert('Ошибка соединения');
+    el.style.opacity = '';
+    el.style.pointerEvents = '';
+  }
+}
+</script>
+@endpush

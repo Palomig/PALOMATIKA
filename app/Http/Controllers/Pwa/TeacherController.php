@@ -28,7 +28,7 @@ class TeacherController extends Controller
 
     private function base(): string
     {
-        return 'http://teacher.' . config('app.base_domain');
+        return 'https://teacher.' . config('app.base_domain');
     }
 
     public function dashboard(Request $request)
