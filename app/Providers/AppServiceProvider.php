@@ -12,7 +12,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // VPR services — grade-specific, bound with factory
+        $this->app->bind(\App\Services\VprTaskDataService::class, function ($app, $params) {
+            $grade = $params['grade'] ?? (auth()->user()?->grade_num ?? 5);
+            return new \App\Services\VprTaskDataService((int) $grade);
+        });
     }
 
     /**
