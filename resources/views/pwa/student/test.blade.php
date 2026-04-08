@@ -1188,7 +1188,7 @@
           const data = await res.json();
           if (res.ok) {
             try { localStorage.removeItem(this._draftKey); } catch (e) {}
-            window.location.href = `/tg/results/${this.attemptId}`;
+            window.location.href = `/results/${this.attemptId}`;
           } else {
             alert(data.message || 'Ошибка при отправке');
             this.submitting = false;
