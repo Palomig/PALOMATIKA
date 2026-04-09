@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="csrf-token" content="{{ csrf_token() }}">
+<meta name="route-name" content="{{ Route::currentRouteName() ?? '' }}">
 <meta name="theme-color" content="#111318" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#f7f8fc" media="(prefers-color-scheme: light)">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -128,6 +129,131 @@
 </script>
 
 @stack('scripts')
+
+{{-- Bug report button + modal --}}
+<div x-data="bugReport()" x-cloak>
+
+  {{-- Floating trigger button --}}
+  <button @click="open = true" aria-label="Сообщить об ошибке"
+    style="position:fixed;bottom:calc(20px + var(--safe-bottom));right:16px;z-index:900;
+           width:40px;height:40px;border-radius:50%;border:1px solid var(--border);
+           background:var(--surface2);color:var(--muted);cursor:pointer;
+           display:flex;align-items:center;justify-content:center;
+           box-shadow:0 2px 8px rgba(0,0,0,.25);transition:opacity .2s;"
+    :style="open ? 'opacity:0;pointer-events:none' : 'opacity:1'">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 8v4m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/>
+    </svg>
+  </button>
+
+  {{-- Modal backdrop --}}
+  <div x-show="open" @click.self="open = false" x-transition:enter="anim-in"
+    style="position:fixed;inset:0;z-index:950;background:rgba(0,0,0,.55);display:flex;align-items:flex-end;justify-content:center;">
+
+    {{-- Sheet --}}
+    <div x-show="open" x-transition:enter="anim-up"
+      style="width:100%;max-width:480px;background:var(--surface);border-radius:20px 20px 0 0;
+             padding:24px 20px calc(24px + var(--safe-bottom));display:flex;flex-direction:column;gap:14px;">
+
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-family:var(--display);font-size:16px;color:var(--text);">Сообщить об ошибке</span>
+        <button @click="open = false"
+          style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:22px;line-height:1;padding:4px;">×</button>
+      </div>
+
+      <template x-if="sent">
+        <div style="text-align:center;padding:20px 0;color:var(--green);font-weight:700;font-size:15px;">
+          Спасибо! Репорт отправлен.
+        </div>
+      </template>
+
+      <template x-if="!sent">
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="font-size:12px;color:var(--muted);font-weight:600;line-height:1.5;">
+            Опишите что произошло (необязательно). Мы автоматически соберём данные о странице, браузере и устройстве.
+          </div>
+
+          <textarea x-model="description" placeholder="Что пошло не так?" rows="4"
+            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:12px;
+                   padding:12px;color:var(--text);font-family:var(--body);font-size:14px;
+                   resize:none;outline:none;"></textarea>
+
+          <div x-show="error" x-text="error" style="font-size:12px;color:var(--red);font-weight:600;"></div>
+
+          <button @click="submit()" :disabled="loading"
+            style="width:100%;background:var(--accent);color:#fff;border:none;border-radius:12px;
+                   padding:14px;font-family:var(--display);font-size:15px;cursor:pointer;"
+            :style="loading ? 'opacity:.6' : ''">
+            <span x-show="!loading">Отправить</span>
+            <span x-show="loading">Отправка...</span>
+          </button>
+        </div>
+      </template>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function bugReport() {
+  // Collect JS errors in a ring buffer (max 10)
+  const jsErrors = [];
+  const _onerror = window.onerror;
+  window.onerror = function(msg, src, line, col, err) {
+    if (jsErrors.length < 10) jsErrors.push({ message: msg, source: src + ':' + line });
+    if (_onerror) _onerror.apply(this, arguments);
+  };
+  window.addEventListener('unhandledrejection', function(e) {
+    if (jsErrors.length < 10) jsErrors.push({ message: 'UnhandledRejection: ' + (e.reason?.message || e.reason), source: '' });
+  });
+
+  return {
+    open: false,
+    sent: false,
+    loading: false,
+    error: '',
+    description: '',
+
+    async submit() {
+      this.loading = true;
+      this.error   = '';
+
+      const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+      const screenInfo = {
+        screen_w:   screen.width,
+        screen_h:   screen.height,
+        window_w:   window.innerWidth,
+        window_h:   window.innerHeight,
+        dpr:        window.devicePixelRatio || 1,
+        pwa:        window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true,
+        online:     navigator.onLine,
+        connection: conn ? (conn.effectiveType || conn.type || '?') : 'unknown',
+        language:   navigator.language,
+        timezone:   Intl.DateTimeFormat().resolvedOptions().timeZone,
+      };
+
+      try {
+        const res = await window.fetchPost('/bug-report', {
+          url:         window.location.href,
+          route_name:  document.querySelector('meta[name="route-name"]')?.content || null,
+          description: this.description.trim() || null,
+          user_agent:  navigator.userAgent,
+          screen_info: screenInfo,
+          js_errors:   jsErrors.length ? jsErrors : null,
+        });
+
+        if (!res.ok) throw new Error('Ошибка сервера');
+        this.sent = true;
+        setTimeout(() => { this.open = false; this.sent = false; this.description = ''; }, 2500);
+      } catch (e) {
+        this.error = 'Не удалось отправить. Попробуйте ещё раз.';
+      } finally {
+        this.loading = false;
+      }
+    },
+  };
+}
+</script>
 
 </body>
 </html>
