@@ -8,7 +8,7 @@
     <div style="font-family:var(--display);font-size:15px;color:var(--accent);">palomatika</div>
     <div style="background:var(--accent-bg);border:1px solid var(--accent);color:var(--accent);
                 font-size:10px;font-weight:800;padding:4px 10px;border-radius:20px;letter-spacing:.08em;">
-      ВПР · {{ $grade }} КЛАСС
+      ВПР · {{ $grade ?? '?' }} КЛАСС
     </div>
   </div>
 
@@ -18,7 +18,7 @@
     <h1 style="font-family:var(--display);font-size:clamp(28px,8vw,40px);line-height:1.1;margin-bottom:8px;">
       Подготовка к <em style="color:var(--accent);">ВПР</em>
     </h1>
-    <p style="font-size:14px;color:var(--muted);font-weight:600;">{{ $grade }} класс · 18 заданий</p>
+    <p style="font-size:14px;color:var(--muted);font-weight:600;">{{ $grade ?? '?' }} класс · 18 заданий</p>
   </div>
 
   {{-- Незавершённые попытки --}}
