@@ -138,6 +138,33 @@ class AuthController extends Controller
         return redirect('https://teacher.' . config('app.base_domain') . '/dashboard');
     }
 
+    /**
+     * QA login endpoint — logs in a user by email, secured by deploy secret.
+     * Used exclusively for automated browser testing (Playwright/Puppeteer).
+     *
+     * GET /qa-login?email=qa-student@palomatika.ru&secret=<DEPLOY_WEBHOOK_SECRET>
+     */
+    public function qaLogin(Request $request)
+    {
+        $secret = config('services.deploy.webhook_secret');
+        if (empty($secret) || !hash_equals($secret, (string) $request->query('secret', ''))) {
+            abort(403, 'Forbidden');
+        }
+
+        $email = trim((string) $request->query('email', 'qa-student@palomatika.ru'));
+        $user = \App\Models\User::where('email', $email)->first();
+
+        if (!$user) {
+            abort(404, "QA user not found: {$email}");
+        }
+
+        Auth::login($user, true);
+        $request->session()->regenerate();
+
+        $redirect = trim((string) $request->query('redirect', '/'));
+        return redirect('https://student.' . config('app.base_domain') . $redirect);
+    }
+
     public function logout(Request $request)
     {
         $host = $request->getHost();

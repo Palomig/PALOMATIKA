@@ -29,6 +29,9 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
     Route::get('/auth/{provider}/callback', [AuthController::class, 'callback'])->name('pwa.student.auth.callback');
     Route::post('/logout', [AuthController::class, 'logout'])->name('pwa.student.logout');
 
+    // QA-only login (secured by deploy secret, not exposed to users)
+    Route::get('/qa-login', [AuthController::class, 'qaLogin'])->name('pwa.student.qa-login');
+
     // Onboarding (no auth required — new users land here)
     Route::get('/onboarding', [StudentController::class, 'onboarding'])->name('pwa.student.onboarding');
     Route::post('/onboarding', [StudentController::class, 'saveOnboarding'])->name('pwa.student.onboarding.save');
