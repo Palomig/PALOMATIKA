@@ -110,11 +110,6 @@
         <a class="cta cta-student" href="https://student.palomatika.ru">Я ученик</a>
         <a class="cta cta-teacher" href="https://teacher.palomatika.ru">Я репетитор</a>
 
-        <p class="links">
-            <a href="/topics">База заданий</a>
-            ·
-            <a href="/materials">Материалы</a>
-        </p>
     </main>
 </body>
 </html>
