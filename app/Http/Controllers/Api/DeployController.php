@@ -453,6 +453,60 @@ class DeployController extends Controller
     }
 
     /**
+     * Create a QA session for a test user by email.
+     * Returns the session ID to use as a cookie for browser automation.
+     *
+     * POST /api/deploy/qa-session
+     * Header: X-Deploy-Secret: <secret>
+     * Body: { "email": "qa-student@palomatika.ru" }
+     */
+    public function qaSession(Request $request): JsonResponse
+    {
+        if ($error = $this->verifySecret($request)) {
+            return $error;
+        }
+
+        $email = trim($request->input('email', 'qa-student@palomatika.ru'));
+        $user = User::where('email', $email)->first();
+
+        if (!$user) {
+            return response()->json(['error' => "User not found: {$email}"], 404);
+        }
+
+        // Generate a session ID
+        $sessionId = Str::random(40);
+
+        // Build Laravel session payload (serialized PHP array)
+        $guardKey = 'login_web_' . sha1('Illuminate\Auth\SessionGuard' . 'web' . 'App\Models\User');
+        $payload = serialize([
+            '_token' => Str::random(40),
+            $guardKey => $user->id,
+            '_previous' => ['url' => 'https://student.palomatika.ru/'],
+            '_flash' => ['old' => [], 'new' => []],
+        ]);
+
+        DB::table('sessions')->insert([
+            'id' => $sessionId,
+            'user_id' => $user->id,
+            'ip_address' => $request->ip(),
+            'user_agent' => 'QA-Playwright/1.0',
+            'payload' => base64_encode($payload),
+            'last_activity' => time(),
+        ]);
+
+        Log::info("QA session created for user {$user->id} ({$email})", ['session' => $sessionId]);
+
+        return response()->json([
+            'success' => true,
+            'session_id' => $sessionId,
+            'user_id' => $user->id,
+            'user_name' => $user->name,
+            'user_role' => $user->role,
+            'cookie_name' => config('session.cookie', 'laravel_session'),
+        ]);
+    }
+
+    /**
      * Tail the Laravel log file (last N lines).
      *
      * GET /api/deploy/log?lines=50

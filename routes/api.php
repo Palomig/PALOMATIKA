@@ -41,6 +41,7 @@ Route::get('/deploy/commands', [DeployController::class, 'commands']);
 Route::post('/deploy/query', [DeployController::class, 'query']);
 Route::get('/deploy/tables', [DeployController::class, 'tables']);
 Route::get('/deploy/log', [DeployController::class, 'tailLog']);
+Route::post('/deploy/qa-session', [DeployController::class, 'qaSession']);
 Route::post('/deploy/material', [DeployController::class, 'uploadMaterial']);
 Route::get('/deploy/materials', [DeployController::class, 'listMaterials']);
 
