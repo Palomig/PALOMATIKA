@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -494,11 +495,15 @@ class DeployController extends Controller
             'last_activity' => time(),
         ]);
 
+        // Encrypt session ID as Laravel does for the cookie value
+        $encryptedSessionId = Crypt::encrypt($sessionId, false);
+
         Log::info("QA session created for user {$user->id} ({$email})", ['session' => $sessionId]);
 
         return response()->json([
             'success' => true,
             'session_id' => $sessionId,
+            'cookie_value' => $encryptedSessionId,
             'user_id' => $user->id,
             'user_name' => $user->name,
             'user_role' => $user->role,
