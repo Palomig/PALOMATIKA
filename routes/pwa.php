@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Pwa\AuthController;
+use App\Http\Controllers\Pwa\BugReportController;
 use App\Http\Controllers\Pwa\EgeStudentController;
 use App\Http\Controllers\Pwa\ManifestController;
 use App\Http\Controllers\Pwa\StudentController;
@@ -18,6 +19,9 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
     // PWA assets
     Route::get('/manifest.json', [ManifestController::class, 'student'])->name('pwa.student.manifest');
     Route::get('/sw.js', [ManifestController::class, 'serviceWorker'])->name('pwa.sw');
+
+    // Bug reports
+    Route::post('/bug-report', [BugReportController::class, 'store'])->name('pwa.student.bug-report');
 
     // Auth
     Route::get('/login', [AuthController::class, 'showLogin'])->name('pwa.student.login');
@@ -78,6 +82,9 @@ Route::domain('teacher.' . config('app.base_domain'))->group(function () {
     // PWA assets
     Route::get('/manifest.json', [ManifestController::class, 'teacher'])->name('pwa.teacher.manifest');
     Route::get('/sw.js', [ManifestController::class, 'serviceWorker'])->name('pwa.sw.teacher');
+
+    // Bug reports
+    Route::post('/bug-report', [BugReportController::class, 'store'])->name('pwa.teacher.bug-report');
 
     // Auth
     Route::get('/login', [AuthController::class, 'showTeacherLogin'])->name('pwa.teacher.login');

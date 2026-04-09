@@ -70,6 +70,8 @@ return [
         'webapp_auth_max_age' => (int) env('TELEGRAM_WEBAPP_AUTH_MAX_AGE', 600),
         // Отдельный токен для родительского бота (@palomatika_parent_bot)
         'parent_bot_token' => env('TELEGRAM_PARENT_BOT_TOKEN'),
+        // Chat ID для уведомлений об ошибках (баг-репорты)
+        'admin_chat_id' => env('TELEGRAM_ADMIN_CHAT_ID', '245710727'),
     ],
 
     /*
