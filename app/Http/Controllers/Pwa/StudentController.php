@@ -153,6 +153,67 @@ class StudentController extends Controller
     }
 
     /**
+     * OGE dashboard for grade 8 students (no VPR redirect).
+     */
+    public function ogeDashboard(Request $request)
+    {
+        $user  = Auth::user();
+        $grade = (int) ($user->grade_num ?? 9);
+
+        // Only grade 8 needs this route; others go to their default dashboard
+        if ($grade !== 8) {
+            return redirect()->route('pwa.student.dashboard');
+        }
+
+        $weakTopics = $this->computeWeakTopics($user->id);
+        $newFipiCount = $this->countNewFipiTasks();
+
+        $activeAttempts = OgeAttempt::where('student_id', $user->id)
+            ->where('status', 'active')
+            ->where('last_seen_at', '>=', now()->subDays(7))
+            ->with('variant')
+            ->orderByDesc('last_seen_at')
+            ->get();
+
+        $activeAttemptsList = [];
+        foreach ($activeAttempts as $att) {
+            $variant = $att->variant;
+            if (!$variant) continue;
+            $answeredCount = $att->answers()->count();
+            $totalCount = count($variant->config_json['tasks'] ?? []);
+            $mode = $variant->mode ?? 'full';
+            $isMini = str_starts_with($mode, 'mini_');
+            $activeAttemptsList[] = [
+                'id' => $att->id,
+                'title' => $variant->title ?? 'Вариант ОГЭ',
+                'answeredCount' => $answeredCount,
+                'totalCount' => $totalCount,
+                'startedAt' => $att->started_at,
+                'type' => match ($mode) {
+                    'mini_algebra' => 'Мини-ОГЭ · Алгебра',
+                    'mini_geometry' => 'Мини-ОГЭ · Геометрия',
+                    'mini_mixed' => 'Мини-ОГЭ · Смешанное',
+                    'mini_part2' => 'Мини-ОГЭ · 2-я часть',
+                    'full' => 'Полный вариант',
+                    'part2' => '2-я часть',
+                    'tasks_part1' => '1-я часть',
+                    default => $isMini ? 'Мини-ОГЭ' : 'Вариант ОГЭ',
+                },
+            ];
+        }
+
+        $hasTeacher = TeacherStudent::where('student_id', $user->id)->exists();
+        $pendingGift = UserGift::where('user_id', $user->id)
+            ->whereNull('shown_at')
+            ->orderBy('id')
+            ->first();
+
+        return view('pwa.student.dashboard', compact(
+            'user', 'weakTopics', 'newFipiCount', 'activeAttemptsList', 'hasTeacher', 'pendingGift'
+        ));
+    }
+
+    /**
      * New FIPI tasks showcase by topic.
      */
     public function newTasks(Request $request)

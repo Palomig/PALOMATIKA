@@ -189,6 +189,16 @@
 @section('body')
 <div class="page" x-data="dashboardPage()">
 
+  {{-- VPR toggle for grade 8 --}}
+  @if((int)($user->grade_num ?? 0) === 8)
+  <a href="{{ route('pwa.student.vpr.home') }}"
+     style="display:flex;align-items:center;justify-content:center;gap:8px;
+            padding:11px;border-radius:12px;text-decoration:none;font-size:13px;font-weight:700;
+            color:var(--accent);background:var(--accent-bg);border:1px solid var(--accent-bd);">
+    ← Переключиться на ВПР
+  </a>
+  @endif
+
   {{-- GREETING + COUNTDOWN --}}
   <div class="greeting">
     <div class="greeting-name">Привет, {{ $user->name ?? 'ученик' }}!</div>
