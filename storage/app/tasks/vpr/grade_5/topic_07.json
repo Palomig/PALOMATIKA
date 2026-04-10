@@ -1,6 +1,100 @@
 {
-    "topic_id": "07",
-    "exam_type": "vpr",
-    "grade": 5,
-    "blocks": []
+  "topic_id": "07",
+  "exam_type": "vpr",
+  "grade": 5,
+  "blocks": [
+    {
+      "number": 1,
+      "title": "Тренировочные варианты ВПР 2025",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Задания из 10 тренировочных вариантов",
+          "type": "word_problem",
+          "tasks": [
+            {
+              "id": 1,
+              "text": "Вариант 1.\nКошка съедает две упаковки корма за месяц. Сколько упаковок потребуется двум таким\n кошкам на 4 месяца?",
+              "answer": "16",
+              "status": "production",
+              "variant": 1,
+              "source_pdf": "1_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 2,
+              "text": "Вариант 2.\nАвтобус расходует 13 литров топлива на 100 км пути. Колонна из трёх таких автобусов\n прошла 600 км. Сколько всего литров топлива израсходовали эти автобусы?",
+              "answer": "234",
+              "status": "production",
+              "variant": 2,
+              "source_pdf": "2_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 3,
+              "text": "Вариант 3.\nАвтобус расходует 12 литров топлива на 100 км пути. Колонна из четырёх таких автобусов\n прошла 700 км. Сколько всего литров топлива израсходовали эти автобусы?",
+              "answer": "336",
+              "status": "production",
+              "variant": 3,
+              "source_pdf": "3_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 4,
+              "text": "Вариант 4.\nАвтобус расходует 13 литров топлива на 100 км пути. Колонна из трёх таких автобусов\n прошла 600 км. Сколько всего литров топлива израсходовали эти автобусы?",
+              "answer": "234",
+              "status": "production",
+              "variant": 4,
+              "source_pdf": "4_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 5,
+              "text": "Вариант 5.\nКошка съедает одну упаковку корма за месяц. Сколько упаковок потребуется двум таким\n кошкам на 6 месяцев?",
+              "answer": "12",
+              "status": "production",
+              "variant": 5,
+              "source_pdf": "5_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 6,
+              "text": "Вариант 6.\nАвтобус расходует 13 литров топлива на 100 км пути. Колонна из трёх таких автобусов\n прошла 600 км. Сколько всего литров топлива израсходовали эти автобусы?",
+              "answer": "234",
+              "status": "production",
+              "variant": 6,
+              "source_pdf": "6_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 7,
+              "text": "Вариант 7.\nКошка съедает две упаковки корма за месяц. Сколько упаковок потребуется двум таким\n кошкам на 4 месяца?",
+              "answer": "16",
+              "status": "production",
+              "variant": 7,
+              "source_pdf": "7_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 8,
+              "text": "Вариант 8.\nУтке в день нужно 250 г корма. Сколько килограммов корма нужно на четыре дня восьми\n таким уткам?",
+              "answer": "8",
+              "status": "production",
+              "variant": 8,
+              "source_pdf": "8_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 9,
+              "text": "Вариант 9.\nАвтомобиль двигается с постоянной скоростью 72 км/ч. Какое расстояние проедет\n автомобиль за 5 часов? Ответ дайте в километрах.",
+              "answer": "360",
+              "status": "production",
+              "variant": 9,
+              "source_pdf": "9_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 10,
+              "text": "Вариант 10.\nУтке в день нужно 150 г корма. Сколько килограммов корма нужно на десять дней восьми\n таким уткам?",
+              "answer": "12",
+              "status": "production",
+              "variant": 10,
+              "source_pdf": "10_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
