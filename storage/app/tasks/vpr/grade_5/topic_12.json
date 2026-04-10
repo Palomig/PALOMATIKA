@@ -1,6 +1,100 @@
 {
-    "topic_id": "12",
-    "exam_type": "vpr",
-    "grade": 5,
-    "blocks": []
+  "topic_id": "12",
+  "exam_type": "vpr",
+  "grade": 5,
+  "blocks": [
+    {
+      "number": 1,
+      "title": "Тренировочные варианты ВПР 2025",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Задания из 10 тренировочных вариантов",
+          "type": "word_problem",
+          "tasks": [
+            {
+              "id": 1,
+              "text": "Вариант 1.\nИз двух городов одновременно навстречу друг другу выехали два автомобиля. Один ехал\n со скоростью 40 км/ч, другой — со скоростью 60 км/ч. На сколько километров больше\n проехал второй автомобиль до места их встречи, если расстояние между городами 400 км?",
+              "answer": "80",
+              "status": "production",
+              "variant": 1,
+              "source_pdf": "1_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 2,
+              "text": "Вариант 2.\nВинт самолёта делает 450 оборотов за 6 секунд. Сколько оборотов сделает этот винт\n самолёта за 11 секунд?",
+              "answer": "825",
+              "status": "production",
+              "variant": 2,
+              "source_pdf": "2_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 3,
+              "text": "Вариант 3.\nВал швейной машины за минуту делает 780 оборотов. Сколько оборотов сделал вал\n за 18 секунд?",
+              "answer": "234",
+              "status": "production",
+              "variant": 3,
+              "source_pdf": "3_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 4,
+              "text": "Вариант 4.\nВал швейной машины за минуту делает 720 оборотов. Сколько оборотов сделал вал\n за 18 секунд?",
+              "answer": "216",
+              "status": "production",
+              "variant": 4,
+              "source_pdf": "4_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 5,
+              "text": "Вариант 5.\nЗа 3 часа 3D принтер напечатал 87 деталей. Сколько таких деталей напечатает этот\n 3D принтер за 5 часов?",
+              "answer": "145",
+              "status": "production",
+              "variant": 5,
+              "source_pdf": "5_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 6,
+              "text": "Вариант 6.\nЗа 3 часа 3D принтер напечатал 57 деталей. Сколько таких деталей напечатает этот\n 3D принтер за 4 часа?",
+              "answer": "76",
+              "status": "production",
+              "variant": 6,
+              "source_pdf": "6_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 7,
+              "text": "Вариант 7.\nВал швейной машины за минуту делает 900 оборотов. Сколько оборотов сделал вал\n за 41 секунду?",
+              "answer": "615",
+              "status": "production",
+              "variant": 7,
+              "source_pdf": "7_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 8,
+              "text": "Вариант 8.\nСканер сканирует 144 страницы за 6 минут. Сколько страниц отсканирует этот же сканер\n за 4 минуты?",
+              "answer": "96",
+              "status": "production",
+              "variant": 8,
+              "source_pdf": "8_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 9,
+              "text": "Вариант 9.\nЗа 4 часа 3D принтер напечатал 68 деталей. Сколько таких деталей напечатает этот\n 3D принтер за 5 часов?",
+              "answer": "85",
+              "status": "production",
+              "variant": 9,
+              "source_pdf": "9_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 10,
+              "text": "Вариант 10.\nВал швейной машины за минуту делает 1080 оборотов. Сколько оборотов сделал вал\n за 23 секунды?",
+              "answer": "414",
+              "status": "production",
+              "variant": 10,
+              "source_pdf": "10_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

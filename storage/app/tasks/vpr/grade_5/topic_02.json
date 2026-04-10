@@ -1,6 +1,100 @@
 {
-    "topic_id": "02",
-    "exam_type": "vpr",
-    "grade": 5,
-    "blocks": []
+  "topic_id": "02",
+  "exam_type": "vpr",
+  "grade": 5,
+  "blocks": [
+    {
+      "number": 1,
+      "title": "Тренировочные варианты ВПР 2025",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Задания из 10 тренировочных вариантов",
+          "type": "word_problem",
+          "tasks": [
+            {
+              "id": 1,
+              "text": "Вариант 1.\nВ школе 90 пятиклассников. Две пятых всех пятиклассников поехали на экскурсию в музей,\n а остальные пошли в театр. Сколько пятиклассников пошло в театр?",
+              "answer": "54",
+              "status": "production",
+              "variant": 1,
+              "source_pdf": "1_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 2,
+              "text": "Вариант 2.\nВ магазин завезли овощи. Пять девятых всех овощей — картофель, а две девятых всех\n овощей — помидоры. Сколько килограммов картофеля завезли в магазин, если помидоров\n завезли 72 кг?",
+              "answer": "180",
+              "status": "production",
+              "variant": 2,
+              "source_pdf": "2_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 3,
+              "text": "Вариант 3.\n2\n Лыжник прошёл дистанции, длина которой 30 км. Сколько километров ему осталось\n пройти?",
+              "answer": "18",
+              "status": "production",
+              "variant": 3,
+              "source_pdf": "3_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 4,
+              "text": "Вариант 4.\nОсенью с яблонь сняли яблоки — жёлтые и зелёные. Зелёных яблок сняли 24 кг. Жёлтые\n яблоки составили пять восьмых всех яблок. Сколько всего килограммов яблок сняли?",
+              "answer": "64",
+              "status": "production",
+              "variant": 4,
+              "source_pdf": "4_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 5,
+              "text": "Вариант 5.\nВ школе 98 пятиклассников. Пять седьмых всех пятиклассников поехали на экскурсию\n в музей, а остальные пошли в театр. Сколько пятиклассников пошло в театр?",
+              "answer": "28",
+              "status": "production",
+              "variant": 5,
+              "source_pdf": "5_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 6,
+              "text": "Вариант 6.\nОсенью с яблонь сняли яблоки — жёлтые и зелёные. Зелёных яблок сняли 24 кг. Жёлтые\n яблоки составили семь девятых всех яблок. Сколько всего килограммов яблок сняли?",
+              "answer": "108",
+              "status": "production",
+              "variant": 6,
+              "source_pdf": "6_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 7,
+              "text": "Вариант 7.\nНа полке стоят книги в твёрдом переплёте и книги в мягком переплёте. Пять восьмых книг\n на этой полке — в твёрдом переплёте, а книг в мягком переплёте 12 штук. Сколько всего\n книг на полке?",
+              "answer": "32",
+              "status": "production",
+              "variant": 7,
+              "source_pdf": "7_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 8,
+              "text": "Вариант 8.\nНа полке стоят книги в твёрдом переплёте и книги в мягком переплёте. Пять седьмых книг\n на этой полке — в твёрдом переплёте, а книг в мягком переплёте 12 штук. Сколько всего\n книг на полке?",
+              "answer": "42",
+              "status": "production",
+              "variant": 8,
+              "source_pdf": "8_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 9,
+              "text": "Вариант 9.\nЧетыре седьмых всех учащихся класса составляют мальчики. Сколько всего учащихся в этом\n классе, если в этом классе 9 девочек?",
+              "answer": "21",
+              "status": "production",
+              "variant": 9,
+              "source_pdf": "9_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 10,
+              "text": "Вариант 10.\nВо время чемпионата футбольная команда забила 54 мяча в ворота противника. Лучший\n игрок этой команды забил треть всех мячей. Сколько мячей забили остальные футболисты\n команды?",
+              "answer": "36",
+              "status": "production",
+              "variant": 10,
+              "source_pdf": "10_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

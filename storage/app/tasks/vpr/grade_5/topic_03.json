@@ -1,6 +1,100 @@
 {
-    "topic_id": "03",
-    "exam_type": "vpr",
-    "grade": 5,
-    "blocks": []
+  "topic_id": "03",
+  "exam_type": "vpr",
+  "grade": 5,
+  "blocks": [
+    {
+      "number": 1,
+      "title": "Тренировочные варианты ВПР 2025",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Задания из 10 тренировочных вариантов",
+          "type": "word_problem",
+          "tasks": [
+            {
+              "id": 1,
+              "text": "Вариант 1.\nКаким числом нужно заменить букву А, чтобы получилось верное равенство?\n\n A : 42 = 14",
+              "answer": "588",
+              "status": "production",
+              "variant": 1,
+              "source_pdf": "1_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 2,
+              "text": "Вариант 2.\nКаким числом нужно заменить букву А, чтобы получилось верное равенство?\n\n А + 257 = 571",
+              "answer": "314",
+              "status": "production",
+              "variant": 2,
+              "source_pdf": "2_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 3,
+              "text": "Вариант 3.\nКаким числом нужно заменить букву А, чтобы получилось верное равенство?\n\n 296 + A = 704",
+              "answer": "408",
+              "status": "production",
+              "variant": 3,
+              "source_pdf": "3_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 4,
+              "text": "Вариант 4.\nКаким числом нужно заменить букву А, чтобы получилось верное равенство?\n\n 714 : A = 42",
+              "answer": "17",
+              "status": "production",
+              "variant": 4,
+              "source_pdf": "4_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 5,
+              "text": "Вариант 5.\nКаким числом нужно заменить букву А, чтобы получилось верное равенство?\n\n A ⋅ 28 = 448",
+              "answer": "16",
+              "status": "production",
+              "variant": 5,
+              "source_pdf": "5_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 6,
+              "text": "Вариант 6.\nКаким числом нужно заменить букву А, чтобы получилось верное равенство?\n\n 613 - A = 287",
+              "answer": "326",
+              "status": "production",
+              "variant": 6,
+              "source_pdf": "6_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 7,
+              "text": "Вариант 7.\nКаким числом нужно заменить букву А, чтобы получилось верное равенство?\n\n 513: А = 27",
+              "answer": "19",
+              "status": "production",
+              "variant": 7,
+              "source_pdf": "7_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 8,
+              "text": "Вариант 8.\nКаким числом нужно заменить букву А, чтобы получилось верное равенство?\n\n A ⋅16 = 720",
+              "answer": "45",
+              "status": "production",
+              "variant": 8,
+              "source_pdf": "8_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 9,
+              "text": "Вариант 9.\nКаким числом нужно заменить букву А, чтобы получилось верное равенство?\n\n 972 : A = 81",
+              "answer": "12",
+              "status": "production",
+              "variant": 9,
+              "source_pdf": "9_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 10,
+              "text": "Вариант 10.\nКаким числом нужно заменить букву А, чтобы получилось верное равенство?\n\n A ⋅16 = 720",
+              "answer": "45",
+              "status": "production",
+              "variant": 10,
+              "source_pdf": "10_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

@@ -1,6 +1,100 @@
 {
-    "topic_id": "15",
-    "exam_type": "vpr",
-    "grade": 5,
-    "blocks": []
+  "topic_id": "15",
+  "exam_type": "vpr",
+  "grade": 5,
+  "blocks": [
+    {
+      "number": 1,
+      "title": "Тренировочные варианты ВПР 2025",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Задания из 10 тренировочных вариантов",
+          "type": "word_problem",
+          "tasks": [
+            {
+              "id": 1,
+              "text": "Вариант 1.\nПериметр прямоугольника равен 30 см. Одна из его сторон равна 13 см. Найдите площадь\n этого прямоугольника.",
+              "answer": "26",
+              "status": "production",
+              "variant": 1,
+              "source_pdf": "1_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 2,
+              "text": "Вариант 2.\nПлощадь прямоугольника равна 60 кв. см. Одна из его сторон равна 4 см. Найдите периметр\n этого прямоугольника.",
+              "answer": "38",
+              "status": "production",
+              "variant": 2,
+              "source_pdf": "2_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 3,
+              "text": "Вариант 3.\nПериметр прямоугольника равен 40 см. Одна из его сторон равна 9 см. Найдите площадь\n этого прямоугольника.",
+              "answer": "99",
+              "status": "production",
+              "variant": 3,
+              "source_pdf": "3_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 4,
+              "text": "Вариант 4.\nПлощадь прямоугольника равна 63 кв. см. Одна из его сторон равна 3 см. Найдите периметр\n этого прямоугольника.",
+              "answer": "48",
+              "status": "production",
+              "variant": 4,
+              "source_pdf": "4_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 5,
+              "text": "Вариант 5.\nПлощадь прямоугольника равна 136 кв. см. Одна из его сторон равна 8 см. Найдите периметр\n этого прямоугольника.",
+              "answer": "50",
+              "status": "production",
+              "variant": 5,
+              "source_pdf": "5_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 6,
+              "text": "Вариант 6.\nПлощадь прямоугольника равна 112 кв. см. Одна из его сторон равна 8 см. Найдите периметр\n этого прямоугольника.",
+              "answer": "44",
+              "status": "production",
+              "variant": 6,
+              "source_pdf": "6_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 7,
+              "text": "Вариант 7.\nПлощадь прямоугольника равна 136 кв. см. Одна из его сторон равна 8 см. Найдите периметр\n этого прямоугольника.",
+              "answer": "50",
+              "status": "production",
+              "variant": 7,
+              "source_pdf": "7_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 8,
+              "text": "Вариант 8.\nПлощадь прямоугольника равна 112 кв. см. Одна из его сторон равна 8 см. Найдите периметр\n этого прямоугольника.",
+              "answer": "44",
+              "status": "production",
+              "variant": 8,
+              "source_pdf": "8_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 9,
+              "text": "Вариант 9.\nПериметр квадрата равен 100 см. Найдите площадь этого квадрата.",
+              "answer": "625",
+              "status": "production",
+              "variant": 9,
+              "source_pdf": "9_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            },
+            {
+              "id": 10,
+              "text": "Вариант 10.\nПлощадь прямоугольника равна 112 кв. см. Одна из его сторон равна 8 см. Найдите периметр\n этого прямоугольника.",
+              "answer": "44",
+              "status": "production",
+              "variant": 10,
+              "source_pdf": "10_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
