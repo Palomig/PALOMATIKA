@@ -279,6 +279,16 @@ Route::middleware(['auth', 'role:teacher,admin'])->prefix('topics')->name('topic
     Route::get('/{id}/svg', [TopicController::class, 'showWithServerSvg'])->name('svg')->where('id', '[0-9]+');
 });
 
+// ВПР — База заданий
+Route::middleware(['auth', 'role:teacher,admin'])->prefix('vpr-topics')->name('vpr-topics.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\VprTopicController::class, 'index'])->name('index');
+    Route::get('/{grade}/{id}', [\App\Http\Controllers\VprTopicController::class, 'show'])->name('show')->where(['grade' => '[5-8]', 'id' => '[0-9]+']);
+});
+
+Route::prefix('api/vpr-topics')->middleware(['auth', 'role:teacher,admin'])->group(function () {
+    Route::get('/{grade}/{topicId}', [\App\Http\Controllers\VprTopicController::class, 'apiGetTopicData'])->where(['grade' => '[5-8]', 'topicId' => '[0-9]+']);
+});
+
 // OGE Generator — legacy, redirect to student app
 Route::get('/oge', fn() => redirect('https://student.palomatika.ru'))->name('oge.generator');
 Route::get('/oge/placement', fn() => redirect('https://student.palomatika.ru'))->name('oge.placement');
