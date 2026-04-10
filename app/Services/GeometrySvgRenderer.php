@@ -2018,10 +2018,34 @@ SVG;
         $O = ['x' => 110, 'y' => 100];
         $R = 70;
 
-        // Треугольник ABC в окружности
-        $A = ['x' => 55, 'y' => 145];
-        $B = ['x' => 175, 'y' => 130];
-        $C = ['x' => 90, 'y' => 35];
+        $angleC = (float) ($params['c'] ?? 30); // вписанный угол при C в градусах
+
+        // C размещается сверху для острых/прямых углов, снизу для тупых —
+        // чтобы треугольник выглядел естественно и не был слишком плоским.
+        // Формула: C в точке θ_C на окружности; A = θ_C+180°−angleC, B = θ_C+180°+angleC
+        // (стандартная ориентация, ось Y вниз в SVG)
+        if ($angleC <= 90) {
+            $thetaC = 90; // C сверху
+        } else {
+            $thetaC = 270; // C снизу для тупых углов
+        }
+
+        $C = [
+            'x' => round($O['x'] + $R * cos(deg2rad($thetaC)), 1),
+            'y' => round($O['y'] - $R * sin(deg2rad($thetaC)), 1),
+        ];
+
+        $thetaA = $thetaC + 180 - $angleC;
+        $thetaB = $thetaC + 180 + $angleC;
+
+        $A = [
+            'x' => round($O['x'] + $R * cos(deg2rad($thetaA)), 1),
+            'y' => round($O['y'] - $R * sin(deg2rad($thetaA)), 1),
+        ];
+        $B = [
+            'x' => round($O['x'] + $R * cos(deg2rad($thetaB)), 1),
+            'y' => round($O['y'] - $R * sin(deg2rad($thetaB)), 1),
+        ];
 
         $svg = '';
 
@@ -2031,24 +2055,30 @@ SVG;
         // Треугольник
         $svg .= "  <polygon points=\"{$A['x']},{$A['y']} {$B['x']},{$B['y']} {$C['x']},{$C['y']}\" fill=\"none\" stroke=\"" . self::COLORS['line'] . "\" stroke-width=\"2\"/>\n";
 
-        // Сторона AB (напротив угла C) - акцент
+        // Сторона AB (напротив угла C) — акцент
         $svg .= "  <line x1=\"{$A['x']}\" y1=\"{$A['y']}\" x2=\"{$B['x']}\" y2=\"{$B['y']}\" stroke=\"" . self::COLORS['accent'] . "\" stroke-width=\"2\"/>\n";
 
-        // Угол C
+        // Дуга угла C
         $arcC = $this->makeAngleArc($C, $A, $B, 20);
         $svg .= "  <path d=\"{$arcC}\" fill=\"none\" stroke=\"" . self::COLORS['service'] . "\" stroke-width=\"1.5\"/>\n";
 
-        // Радиус (пунктир)
+        // Радиус OA (пунктир)
         $svg .= "  <line x1=\"{$O['x']}\" y1=\"{$O['y']}\" x2=\"{$A['x']}\" y2=\"{$A['y']}\" stroke=\"" . self::COLORS['aux'] . "\" stroke-width=\"1.5\" stroke-dasharray=\"8,4\"/>\n";
 
-        // Крестики для всех точек
+        // Крестики для O, A, B, C
         $svg .= $this->crosshairs([$O, $A, $B, $C]);
 
-        // Метки
-        $svg .= $this->label('A', ['x' => $A['x'] - 12, 'y' => $A['y'] + 10], self::COLORS['text'], 14);
-        $svg .= $this->label('B', ['x' => $B['x'] + 10, 'y' => $B['y'] + 5], self::COLORS['text'], 14);
-        $svg .= $this->label('C', ['x' => $C['x'] - 5, 'y' => $C['y'] - 12], self::COLORS['text'], 14);
-        $svg .= $this->label('R', ['x' => ($O['x'] + $A['x']) / 2 - 10, 'y' => ($O['y'] + $A['y']) / 2 - 8], self::COLORS['aux'], 13);
+        // Метки вершин (labelPos отталкивается от центра — работает для любого угла)
+        $svg .= $this->label('A', $this->labelPos($A, $O, 16), self::COLORS['text'], 14);
+        $svg .= $this->label('B', $this->labelPos($B, $O, 16), self::COLORS['text'], 14);
+        $svg .= $this->label('C', $this->labelPos($C, $O, 16), self::COLORS['text'], 14);
+
+        // Метка R у середины радиуса OA
+        $Rmid = [
+            'x' => round(($O['x'] + $A['x']) / 2) - 10,
+            'y' => round(($O['y'] + $A['y']) / 2) - 8,
+        ];
+        $svg .= $this->label('R', $Rmid, self::COLORS['aux'], 13);
 
         return $svg;
     }
