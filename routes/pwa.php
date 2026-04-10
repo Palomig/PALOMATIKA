@@ -69,10 +69,11 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
 
         // ВПР (5–8 класс)
         Route::prefix('vpr')->name('pwa.student.vpr.')->group(function () {
-            Route::get('/',                   [VprController::class, 'home'])      ->name('home');
-            Route::post('/full/start',        [VprController::class, 'startFull']) ->name('start');
-            Route::get('/test/{attemptId}',   [VprController::class, 'test'])      ->name('test');
-            Route::get('/results/{attemptId}',[VprController::class, 'results'])   ->name('results');
+            Route::get('/',                   [VprController::class, 'home'])         ->name('home');
+            Route::get('/tasks',              [VprController::class, 'taskDatabase']) ->name('tasks');
+            Route::post('/full/start',        [VprController::class, 'startFull'])    ->name('start');
+            Route::get('/test/{attemptId}',   [VprController::class, 'test'])         ->name('test');
+            Route::get('/results/{attemptId}',[VprController::class, 'results'])      ->name('results');
         });
 
     });

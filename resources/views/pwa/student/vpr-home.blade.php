@@ -51,9 +51,17 @@
   </a>
   @endif
 
+  {{-- База заданий --}}
+  <a href="{{ route('pwa.student.vpr.tasks') }}"
+     style="display:block;text-align:center;margin-top:12px;font-size:13px;
+            color:var(--muted);font-weight:600;padding:12px;
+            background:var(--surface);border:1px solid var(--border);border-radius:12px;">
+    База заданий ВПР
+  </a>
+
   {{-- История --}}
   <a href="{{ route('pwa.student.history') }}"
-     style="display:block;text-align:center;margin-top:20px;font-size:13px;
+     style="display:block;text-align:center;margin-top:8px;font-size:13px;
             color:var(--muted);font-weight:600;">История попыток</a>
 </div>
 @endsection

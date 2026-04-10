@@ -101,6 +101,64 @@ class VprController extends Controller
     }
 
     /**
+     * База заданий ВПР — просмотр всех задач по номеру.
+     */
+    public function taskDatabase(Request $request)
+    {
+        $user  = Auth::user();
+        $grade = (int) ($user->grade_num ?? 8);
+        $maxTopic = $grade === 8 ? 18 : 17;
+
+        $topicIds = array_map(fn($n) => str_pad((string)$n, 2, '0', STR_PAD_LEFT), range(1, $maxTopic));
+
+        $selected = str_pad((string) $request->query('topic', '1'), 2, '0', STR_PAD_LEFT);
+        if (!in_array($selected, $topicIds, true)) {
+            $selected = '01';
+        }
+
+        $taskData = new VprTaskDataService($grade);
+        $blocks   = $taskData->getBlocks($selected);
+
+        $zadaniya = [];
+        foreach ($blocks as $block) {
+            foreach (($block['zadaniya'] ?? []) as $zadanie) {
+                $tasks = [];
+                foreach (($zadanie['tasks'] ?? []) as $t) {
+                    $text       = trim((string) ($t['text'] ?? ''));
+                    $expression = trim((string) ($t['expression'] ?? ''));
+                    $question   = trim((string) ($t['question'] ?? ''));
+                    if ($text === '' && $expression === '' && empty($t['svg']) && empty($t['image']) && $question === '') {
+                        continue;
+                    }
+                    $tasks[] = [
+                        'id'         => $t['id'] ?? null,
+                        'text'       => $text,
+                        'expression' => $expression !== '' ? $expression : null,
+                        'svg'        => $t['svg'] ?? null,
+                        'image'      => $t['image'] ?? null,
+                        'options'    => $t['options'] ?? null,
+                        'question'   => $question !== '' ? $question : null,
+                        'answer'     => $t['answer'] ?? null,
+                    ];
+                }
+                if (!empty($tasks)) {
+                    $num   = $zadanie['number'] ?? '';
+                    $label = trim((string) ($zadanie['label'] ?? ''));
+                    $instr = trim((string) ($zadanie['instruction'] ?? ''));
+                    $title = $label !== '' ? $label : ($instr !== '' ? "Задание {$num}. {$instr}" : "Задание {$num}");
+                    $zadaniya[] = ['title' => $title, 'tasks' => $tasks];
+                }
+            }
+        }
+
+        $taskCount = array_sum(array_map(fn($z) => count($z['tasks']), $zadaniya));
+
+        return view('pwa.student.vpr-tasks', compact(
+            'grade', 'topicIds', 'selected', 'zadaniya', 'taskCount', 'maxTopic'
+        ));
+    }
+
+    /**
      * Страница результатов ВПР.
      */
     public function results(Request $request, int $attemptId)
