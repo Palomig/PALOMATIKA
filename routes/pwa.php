@@ -23,6 +23,9 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
     // Bug reports
     Route::post('/bug-report', [BugReportController::class, 'store'])->name('pwa.student.bug-report');
 
+    // ОГЭ-дашборд для 8-классников (без редиректа на VPR)
+    Route::get('/oge', [StudentController::class, 'ogeDashboard'])->middleware(['auth', 'pwa.onboarding'])->name('pwa.student.oge-dashboard');
+
     // Auth
     Route::get('/login', [AuthController::class, 'showLogin'])->name('pwa.student.login');
     Route::get('/auth/{provider}', [AuthController::class, 'redirect'])->name('pwa.student.auth.redirect');

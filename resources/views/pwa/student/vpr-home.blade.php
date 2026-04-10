@@ -43,10 +43,11 @@
   </form>
 
   @if($grade === 8)
-  <a href="{{ route('pwa.student.dashboard') }}"
+  <a href="{{ route('pwa.student.oge-dashboard') }}"
      style="display:block;text-align:center;margin-top:16px;font-size:13px;
-            color:var(--muted);font-weight:600;">
-    Перейти к подготовке к ОГЭ →
+            color:var(--accent);font-weight:700;padding:12px;
+            background:var(--accent-bg);border:1px solid var(--accent-bd);border-radius:12px;">
+    Переключиться на ОГЭ →
   </a>
   @endif
 
