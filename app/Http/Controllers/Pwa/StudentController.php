@@ -556,9 +556,6 @@ class StudentController extends Controller
 
         if (!empty($config['tasks'])) {
             $tasks = $config['tasks'];
-            // Re-inject current SVGs for geometry tasks — frozen snapshots may have stale SVGs
-            // if svg:bake was re-run after variant creation. Uses cached getBlocks(), no extra DB hits.
-            $tasks = $this->refreshTaskSvgsFromJson($tasks);
         } else {
             $builtVariant = $this->variantBuilder->build($variant->hash);
             $tasks = $builtVariant['tasks'] ?? [];
@@ -585,48 +582,6 @@ class StudentController extends Controller
             'title' => $title,
             'battleMode' => false,
         ]);
-    }
-
-    /**
-     * Re-inject SVGs from current JSON files for tasks that have an svg_type
-     * (geometry, grid_image, etc.). Variants store a frozen snapshot of task data
-     * including SVGs; this ensures stale SVGs from old bakes are replaced with
-     * the current ones. Uses cached getBlocks() — no extra DB queries.
-     */
-    private function refreshTaskSvgsFromJson(array $tasks): array
-    {
-        foreach ($tasks as &$task) {
-            if (!is_array($task) || empty($task['svg_type'])) {
-                continue;
-            }
-
-            $topicId    = $task['topic_id'] ?? null;
-            $blockNum   = $task['block_number'] ?? null;
-            $zadanieNum = $task['zadanie_number'] ?? null;
-            $innerId    = $task['task']['id'] ?? null;
-
-            if (!$topicId || $blockNum === null || $zadanieNum === null || $innerId === null) {
-                continue;
-            }
-
-            $blocks = $this->taskData->getBlocks((string) $topicId);
-            foreach ($blocks as $block) {
-                if ($block['number'] != $blockNum) continue;
-                foreach ($block['zadaniya'] ?? [] as $zadanie) {
-                    if ($zadanie['number'] != $zadanieNum) continue;
-                    foreach ($zadanie['tasks'] ?? [] as $t) {
-                        if ($t['id'] == $innerId && isset($t['svg'])) {
-                            $task['task']['svg'] = $t['svg'];
-                            $task['svg'] = $t['svg'];
-                        }
-                        if ($t['id'] == $innerId) break 3;
-                    }
-                }
-            }
-        }
-        unset($task);
-
-        return $tasks;
     }
 
     private function normalizeAttemptTasksForMiniApp(OgeVariant $variant, array $tasks): array
