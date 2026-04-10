@@ -233,13 +233,15 @@ function bugReport() {
       };
 
       try {
+        const pageContext = (typeof window.__bugContext === 'function') ? window.__bugContext() : null;
         const res = await window.fetchPost('/bug-report', {
-          url:         window.location.href,
-          route_name:  document.querySelector('meta[name="route-name"]')?.content || null,
-          description: this.description.trim() || null,
-          user_agent:  navigator.userAgent,
-          screen_info: screenInfo,
-          js_errors:   jsErrors.length ? jsErrors : null,
+          url:          window.location.href,
+          route_name:   document.querySelector('meta[name="route-name"]')?.content || null,
+          description:  this.description.trim() || null,
+          user_agent:   navigator.userAgent,
+          screen_info:  screenInfo,
+          js_errors:    jsErrors.length ? jsErrors : null,
+          page_context: pageContext,
         });
 
         if (!res.ok) throw new Error('Ошибка сервера');

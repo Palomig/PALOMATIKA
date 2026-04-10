@@ -13,25 +13,27 @@ class BugReportController extends Controller
     public function store(Request $request): \Illuminate\Http\JsonResponse
     {
         $data = $request->validate([
-            'url'         => 'required|string|max:500',
-            'route_name'  => 'nullable|string|max:100',
-            'description' => 'nullable|string|max:2000',
-            'user_agent'  => 'nullable|string|max:500',
-            'screen_info' => 'nullable|array',
-            'js_errors'   => 'nullable|array',
+            'url'          => 'required|string|max:500',
+            'route_name'   => 'nullable|string|max:100',
+            'description'  => 'nullable|string|max:2000',
+            'user_agent'   => 'nullable|string|max:500',
+            'screen_info'  => 'nullable|array',
+            'js_errors'    => 'nullable|array',
+            'page_context' => 'nullable|array',
         ]);
 
         $user = Auth::user();
 
         $report = BugReport::create([
-            'user_id'     => $user?->id,
-            'url'         => $data['url'],
-            'route_name'  => $data['route_name'] ?? null,
-            'description' => $data['description'] ?? null,
-            'user_agent'  => $data['user_agent'] ?? $request->userAgent(),
-            'screen_info' => $data['screen_info'] ?? null,
-            'js_errors'   => $data['js_errors'] ?? null,
-            'ip'          => $request->ip(),
+            'user_id'      => $user?->id,
+            'url'          => $data['url'],
+            'route_name'   => $data['route_name'] ?? null,
+            'description'  => $data['description'] ?? null,
+            'user_agent'   => $data['user_agent'] ?? $request->userAgent(),
+            'screen_info'  => $data['screen_info'] ?? null,
+            'js_errors'    => $data['js_errors'] ?? null,
+            'page_context' => $data['page_context'] ?? null,
+            'ip'           => $request->ip(),
         ]);
 
         $this->notifyTelegram($report, $user);
@@ -71,11 +73,25 @@ class BugReportController extends Controller
             ? "\n\n💬 <b>Описание:</b>\n" . htmlspecialchars($report->description)
             : '';
 
+        $ctxBlock = '';
+        if (!empty($report->page_context)) {
+            $ctx = $report->page_context;
+            $parts = [];
+            if (isset($ctx['attempt_id']))          $parts[] = 'attempt #' . $ctx['attempt_id'];
+            if (isset($ctx['current_task_number'])) $parts[] = 'задание ' . $ctx['current_task_number'];
+            if (isset($ctx['topic_id']))            $parts[] = 'topic ' . $ctx['topic_id'];
+            if (isset($ctx['task_key']))            $parts[] = $ctx['task_key'];
+            if ($parts) {
+                $ctxBlock = "\n📍 <b>Контекст:</b> " . htmlspecialchars(implode(' · ', $parts));
+            }
+        }
+
         $text = "🐛 <b>Баг-репорт #{$report->id}</b>\n"
             . "👤 {$userName}\n"
             . "📱 {$pwa} · {$online} · {$conn} · {$w}×{$h}\n"
             . "🌐 <code>" . htmlspecialchars($report->url) . "</code>\n"
             . "🕐 " . now()->setTimezone('Europe/Moscow')->format('d.m H:i')
+            . $ctxBlock
             . $desc
             . $jsBlock;
 

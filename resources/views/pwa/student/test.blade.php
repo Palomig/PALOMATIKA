@@ -920,6 +920,15 @@
         if (this._initialized) return;
         this._initialized = true;
 
+        // Register page context for bug reports
+        window.__bugContext = () => ({
+          attempt_id: this.attemptId,
+          current_task_number: this.currentTask?.display_task_number ?? null,
+          current_task_index: this.current,
+          topic_id: this.currentTask?.topic_id ?? null,
+          task_key: this.currentTask ? (this.currentTask.topic_id + '_b' + this.currentTask.block_number + '_z' + this.currentTask.zadanie_number + (this.currentTask.task_index != null ? '_t' + this.currentTask.task_index : '')) : null,
+        });
+
         // Restore draft answers from localStorage (survives page refresh)
         this._restoreDraft();
 
