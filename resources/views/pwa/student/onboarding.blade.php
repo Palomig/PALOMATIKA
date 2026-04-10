@@ -141,7 +141,7 @@ function onboardingPage() {
   return {
     name: @json(auth()->user()?->name ?? ''),
     grade: @json(auth()->user()?->grade_num ?? 9),
-    letter: @json(auth()->user()?->grade_letter ?? null),
+    letter: @json(auth()->user()?->grade_letter ?? 'А'),
     school: @json(auth()->user()?->school_number ?? ''),
     city: @json(auth()->user()?->city ?? ''),
     onboardingToken: @json($onboardingToken ?? null),
