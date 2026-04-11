@@ -57,6 +57,15 @@ class VprTaskDataService
             ];
         }
 
+        if ($this->grade === 5 && $topicId === '02') {
+            return [
+                'title' => 'Часть и целое',
+                'description' => 'Текстовые задачи на нахождение части, остатка и целого',
+                'color' => 'cyan',
+                'icon' => 'calculator',
+            ];
+        }
+
         return $this->topicsMeta[$topicId] ?? [
             'title' => "Задание $topicId", 'description' => '',
             'color' => 'gray', 'icon' => 'book',
