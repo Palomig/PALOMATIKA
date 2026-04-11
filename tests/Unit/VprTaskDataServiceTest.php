@@ -66,4 +66,24 @@ class VprTaskDataServiceTest extends TestCase
         $this->assertStringContainsString('Представьте число $4$ в виде дроби со знаменателем 6.', $html);
         $this->assertStringNotContainsString('Представьте выражение $4$ в виде дроби со знаменателем 6.', $html);
     }
+
+    public function test_grade_5_topic_02_uses_parts_and_whole_training_structure(): void
+    {
+        $svc = new VprTaskDataService(5);
+
+        $meta = $svc->getTopicMeta('02');
+        $data = $svc->getTopicData('02');
+
+        $this->assertSame('Часть и целое', $meta['title'] ?? null);
+        $this->assertStringContainsString('част', mb_strtolower((string) ($meta['description'] ?? '')));
+
+        $zadaniya = $data['blocks'][0]['zadaniya'] ?? [];
+        $this->assertCount(3, $zadaniya);
+        $this->assertSame('word_problem', $zadaniya[0]['type'] ?? null);
+        $this->assertSame('word_problem', $zadaniya[1]['type'] ?? null);
+        $this->assertSame('word_problem', $zadaniya[2]['type'] ?? null);
+        $this->assertGreaterThanOrEqual(8, count($zadaniya[0]['tasks'] ?? []));
+        $this->assertGreaterThanOrEqual(8, count($zadaniya[1]['tasks'] ?? []));
+        $this->assertGreaterThanOrEqual(8, count($zadaniya[2]['tasks'] ?? []));
+    }
 }
