@@ -1,6 +1,7 @@
 <?php
 namespace Tests\Unit;
 
+use App\Http\Controllers\VprTopicController;
 use App\Services\VprTaskDataService;
 use Tests\TestCase;
 
@@ -54,5 +55,15 @@ class VprTaskDataServiceTest extends TestCase
         $this->assertSame('expression', $zadaniya[0]['type'] ?? null);
         $this->assertGreaterThanOrEqual(20, count($zadaniya[0]['tasks'] ?? []));
         $this->assertArrayHasKey('expression', $zadaniya[0]['tasks'][0] ?? []);
+    }
+
+    public function test_grade_5_topic_01_renders_number_wording_for_denominator_tasks(): void
+    {
+        $controller = $this->app->make(VprTopicController::class);
+        $response = $controller->show(5, '1');
+        $html = $response->render();
+
+        $this->assertStringContainsString('Представьте число $4$ в виде дроби со знаменателем 6.', $html);
+        $this->assertStringNotContainsString('Представьте выражение $4$ в виде дроби со знаменателем 6.', $html);
     }
 }
