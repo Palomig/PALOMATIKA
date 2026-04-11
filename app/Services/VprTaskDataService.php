@@ -66,6 +66,15 @@ class VprTaskDataService
             ];
         }
 
+        if ($this->grade === 5 && $topicId === '03') {
+            return [
+                'title' => 'Неизвестный компонент',
+                'description' => 'Равенства на нахождение неизвестного числа',
+                'color' => 'teal',
+                'icon' => 'calculator',
+            ];
+        }
+
         return $this->topicsMeta[$topicId] ?? [
             'title' => "Задание $topicId", 'description' => '',
             'color' => 'gray', 'icon' => 'book',

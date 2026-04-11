@@ -5,93 +5,63 @@
   "blocks": [
     {
       "number": 1,
-      "title": "Тренировочные варианты ВПР 2025",
+      "title": "Тренажер",
       "zadaniya": [
         {
           "number": 1,
-          "instruction": "Задания из 10 тренировочных вариантов",
-          "type": "word_problem",
+          "instruction": "Найдите неизвестное число в равенствах на сложение и вычитание",
+          "type": "expression",
           "tasks": [
-            {
-              "id": 1,
-              "text": "Вариант 1.\nКаким числом нужно заменить букву А, чтобы получилось верное равенство?\n\n A : 42 = 14",
-              "answer": "588",
-              "status": "production",
-              "variant": 1,
-              "source_pdf": "1_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
-            },
-            {
-              "id": 2,
-              "text": "Вариант 2.\nКаким числом нужно заменить букву А, чтобы получилось верное равенство?\n\n А + 257 = 571",
-              "answer": "314",
-              "status": "production",
-              "variant": 2,
-              "source_pdf": "2_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
-            },
-            {
-              "id": 3,
-              "text": "Вариант 3.\nКаким числом нужно заменить букву А, чтобы получилось верное равенство?\n\n 296 + A = 704",
-              "answer": "408",
-              "status": "production",
-              "variant": 3,
-              "source_pdf": "3_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
-            },
-            {
-              "id": 4,
-              "text": "Вариант 4.\nКаким числом нужно заменить букву А, чтобы получилось верное равенство?\n\n 714 : A = 42",
-              "answer": "17",
-              "status": "production",
-              "variant": 4,
-              "source_pdf": "4_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
-            },
-            {
-              "id": 5,
-              "text": "Вариант 5.\nКаким числом нужно заменить букву А, чтобы получилось верное равенство?\n\n A ⋅ 28 = 448",
-              "answer": "16",
-              "status": "production",
-              "variant": 5,
-              "source_pdf": "5_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
-            },
-            {
-              "id": 6,
-              "text": "Вариант 6.\nКаким числом нужно заменить букву А, чтобы получилось верное равенство?\n\n 613 - A = 287",
-              "answer": "326",
-              "status": "production",
-              "variant": 6,
-              "source_pdf": "6_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
-            },
-            {
-              "id": 7,
-              "text": "Вариант 7.\nКаким числом нужно заменить букву А, чтобы получилось верное равенство?\n\n 513: А = 27",
-              "answer": "19",
-              "status": "production",
-              "variant": 7,
-              "source_pdf": "7_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
-            },
-            {
-              "id": 8,
-              "text": "Вариант 8.\nКаким числом нужно заменить букву А, чтобы получилось верное равенство?\n\n A ⋅16 = 720",
-              "answer": "45",
-              "status": "production",
-              "variant": 8,
-              "source_pdf": "8_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
-            },
-            {
-              "id": 9,
-              "text": "Вариант 9.\nКаким числом нужно заменить букву А, чтобы получилось верное равенство?\n\n 972 : A = 81",
-              "answer": "12",
-              "status": "production",
-              "variant": 9,
-              "source_pdf": "9_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
-            },
-            {
-              "id": 10,
-              "text": "Вариант 10.\nКаким числом нужно заменить букву А, чтобы получилось верное равенство?\n\n A ⋅16 = 720",
-              "answer": "45",
-              "status": "production",
-              "variant": 10,
-              "source_pdf": "10_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
-            }
+            { "id": 1, "expression": "A + 257 = 571", "answer": "314", "status": "production" },
+            { "id": 2, "expression": "296 + A = 704", "answer": "408", "status": "production" },
+            { "id": 3, "expression": "613 - A = 287", "answer": "326", "status": "production" },
+            { "id": 4, "expression": "A + 148 = 390", "answer": "242", "status": "production" },
+            { "id": 5, "expression": "725 - A = 418", "answer": "307", "status": "production" },
+            { "id": 6, "expression": "A + 369 = 800", "answer": "431", "status": "production" },
+            { "id": 7, "expression": "540 - A = 185", "answer": "355", "status": "production" },
+            { "id": 8, "expression": "A + 426 = 913", "answer": "487", "status": "production" },
+            { "id": 9, "expression": "864 - A = 239", "answer": "625", "status": "production" },
+            { "id": 10, "expression": "178 + A = 456", "answer": "278", "status": "production" },
+            { "id": 11, "expression": "A + 205 = 600", "answer": "395", "status": "production" },
+            { "id": 12, "expression": "930 - A = 470", "answer": "460", "status": "production" }
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Найдите неизвестное число в равенствах на умножение и деление",
+          "type": "expression",
+          "tasks": [
+            { "id": 1, "expression": "A : 42 = 14", "answer": "588", "status": "production" },
+            { "id": 2, "expression": "714 : A = 42", "answer": "17", "status": "production" },
+            { "id": 3, "expression": "A \\cdot 28 = 448", "answer": "16", "status": "production" },
+            { "id": 4, "expression": "513 : A = 27", "answer": "19", "status": "production" },
+            { "id": 5, "expression": "A \\cdot 16 = 720", "answer": "45", "status": "production" },
+            { "id": 6, "expression": "A : 35 = 18", "answer": "630", "status": "production" },
+            { "id": 7, "expression": "936 : A = 39", "answer": "24", "status": "production" },
+            { "id": 8, "expression": "A \\cdot 24 = 600", "answer": "25", "status": "production" },
+            { "id": 9, "expression": "A : 27 = 11", "answer": "297", "status": "production" },
+            { "id": 10, "expression": "864 : A = 27", "answer": "32", "status": "production" },
+            { "id": 11, "expression": "A \\cdot 36 = 972", "answer": "27", "status": "production" },
+            { "id": 12, "expression": "A : 48 = 16", "answer": "768", "status": "production" }
+          ]
+        },
+        {
+          "number": 3,
+          "instruction": "Найдите неизвестное число в смешанных равенствах",
+          "type": "expression",
+          "tasks": [
+            { "id": 1, "expression": "A + 184 = 500", "answer": "316", "status": "production" },
+            { "id": 2, "expression": "672 - A = 298", "answer": "374", "status": "production" },
+            { "id": 3, "expression": "A \\cdot 14 = 462", "answer": "33", "status": "production" },
+            { "id": 4, "expression": "825 : A = 33", "answer": "25", "status": "production" },
+            { "id": 5, "expression": "249 + A = 700", "answer": "451", "status": "production" },
+            { "id": 6, "expression": "901 - A = 456", "answer": "445", "status": "production" },
+            { "id": 7, "expression": "A : 26 = 24", "answer": "624", "status": "production" },
+            { "id": 8, "expression": "A \\cdot 18 = 540", "answer": "30", "status": "production" },
+            { "id": 9, "expression": "A + 329 = 1000", "answer": "671", "status": "production" },
+            { "id": 10, "expression": "750 - A = 280", "answer": "470", "status": "production" },
+            { "id": 11, "expression": "A \\cdot 22 = 814", "answer": "37", "status": "production" },
+            { "id": 12, "expression": "792 : A = 24", "answer": "33", "status": "production" }
           ]
         }
       ]
