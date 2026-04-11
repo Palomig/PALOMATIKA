@@ -86,4 +86,24 @@ class VprTaskDataServiceTest extends TestCase
         $this->assertGreaterThanOrEqual(8, count($zadaniya[1]['tasks'] ?? []));
         $this->assertGreaterThanOrEqual(8, count($zadaniya[2]['tasks'] ?? []));
     }
+
+    public function test_grade_5_topic_03_uses_unknown_component_training_structure(): void
+    {
+        $svc = new VprTaskDataService(5);
+
+        $meta = $svc->getTopicMeta('03');
+        $data = $svc->getTopicData('03');
+
+        $this->assertSame('Неизвестный компонент', $meta['title'] ?? null);
+        $this->assertStringContainsString('равен', mb_strtolower((string) ($meta['description'] ?? '')));
+
+        $zadaniya = $data['blocks'][0]['zadaniya'] ?? [];
+        $this->assertCount(3, $zadaniya);
+        $this->assertSame('expression', $zadaniya[0]['type'] ?? null);
+        $this->assertSame('expression', $zadaniya[1]['type'] ?? null);
+        $this->assertSame('expression', $zadaniya[2]['type'] ?? null);
+        $this->assertGreaterThanOrEqual(8, count($zadaniya[0]['tasks'] ?? []));
+        $this->assertGreaterThanOrEqual(8, count($zadaniya[1]['tasks'] ?? []));
+        $this->assertGreaterThanOrEqual(8, count($zadaniya[2]['tasks'] ?? []));
+    }
 }
