@@ -5,93 +5,75 @@
   "blocks": [
     {
       "number": 1,
-      "title": "Тренировочные варианты ВПР 2025",
+      "title": "Тренажер",
       "zadaniya": [
         {
           "number": 1,
-          "instruction": "Задания из 10 тренировочных вариантов",
-          "type": "word_problem",
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
           "tasks": [
-            {
-              "id": 1,
-              "text": "Вариант 1.\nПредставьте число 9 в виде дроби с числителем 54.",
-              "answer": "54/6",
-              "status": "production",
-              "variant": 1,
-              "source_pdf": "1_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
-            },
-            {
-              "id": 2,
-              "text": "Вариант 2.\nПредставьте число 4 в виде дроби с числителем 36.",
-              "answer": "36/9",
-              "status": "production",
-              "variant": 2,
-              "source_pdf": "2_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
-            },
-            {
-              "id": 3,
-              "text": "Вариант 3.\n16\n Запишите в виде несократимой дроби.",
-              "answer": "8/13",
-              "status": "production",
-              "variant": 3,
-              "source_pdf": "3_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
-            },
-            {
-              "id": 4,
-              "text": "Вариант 4.\nПредставьте число 4 в виде дроби со знаменателем 8.",
-              "answer": "32/8",
-              "status": "production",
-              "variant": 4,
-              "source_pdf": "4_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
-            },
-            {
-              "id": 5,
-              "text": "Вариант 5.\nПредставьте число 4 в виде дроби со знаменателем 6.",
-              "answer": "24/6",
-              "status": "production",
-              "variant": 5,
-              "source_pdf": "5_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
-            },
-            {
-              "id": 6,
-              "text": "Вариант 6.\nПредставьте число 6 в виде дроби со знаменателем 9.",
-              "answer": "54/9",
-              "status": "production",
-              "variant": 6,
-              "source_pdf": "6_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
-            },
-            {
-              "id": 7,
-              "text": "Вариант 7.\n37 9\n Найдите значение выражения - .\n 7 7",
-              "answer": "4",
-              "status": "production",
-              "variant": 7,
-              "source_pdf": "7_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
-            },
-            {
-              "id": 8,
-              "text": "Вариант 8.\nПредставьте число 7 в виде дроби с числителем 63.",
-              "answer": "63/9",
-              "status": "production",
-              "variant": 8,
-              "source_pdf": "8_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
-            },
-            {
-              "id": 9,
-              "text": "Вариант 9.\n37 9\n Найдите значение выражения - .\n 7 7",
-              "answer": "4",
-              "status": "production",
-              "variant": 9,
-              "source_pdf": "9_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
-            },
-            {
-              "id": 10,
-              "text": "Вариант 10.\nПредставьте число 9 в виде дроби со знаменателем 3.",
-              "answer": "27/3",
-              "status": "production",
-              "variant": 10,
-              "source_pdf": "10_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
-            }
+            { "id": 1, "expression": "\\frac{3}{4} + \\frac{1}{4}", "answer": "1", "status": "production" },
+            { "id": 2, "expression": "\\frac{7}{10} - \\frac{1}{5}", "answer": "0.5", "status": "production" },
+            { "id": 3, "expression": "\\frac{2}{5} \\cdot \\frac{15}{4}", "answer": "1.5", "status": "production" },
+            { "id": 4, "expression": "\\frac{7}{8} : \\frac{7}{16}", "answer": "2", "status": "production" },
+            { "id": 5, "expression": "\\frac{3}{20} + \\frac{7}{20}", "answer": "0.5", "status": "production" },
+            { "id": 6, "expression": "\\frac{9}{10} - \\frac{3}{10}", "answer": "0.6", "status": "production" },
+            { "id": 7, "expression": "\\frac{5}{8} + \\frac{1}{8}", "answer": "0.75", "status": "production" },
+            { "id": 8, "expression": "\\frac{4}{5} : \\frac{2}{5}", "answer": "2", "status": "production" },
+            { "id": 9, "expression": "\\frac{11}{20} + \\frac{3}{20}", "answer": "0.7", "status": "production" },
+            { "id": 10, "expression": "\\frac{3}{4} \\cdot \\frac{2}{3}", "answer": "0.5", "status": "production" },
+            { "id": 11, "expression": "\\frac{7}{25} + \\frac{18}{25}", "answer": "1", "status": "production" },
+            { "id": 12, "expression": "\\frac{9}{10} : \\frac{3}{5}", "answer": "1.5", "status": "production" },
+            { "id": 13, "expression": "\\frac{13}{20} - \\frac{1}{4}", "answer": "0.4", "status": "production" },
+            { "id": 14, "expression": "\\frac{3}{5} + \\frac{7}{10}", "answer": "1.3", "status": "production" },
+            { "id": 15, "expression": "\\frac{4}{25} \\cdot \\frac{5}{2}", "answer": "0.4", "status": "production" },
+            { "id": 16, "expression": "\\frac{7}{8} - \\frac{3}{8}", "answer": "0.5", "status": "production" },
+            { "id": 17, "expression": "\\frac{1}{2} + \\frac{9}{20}", "answer": "0.95", "status": "production" },
+            { "id": 18, "expression": "\\frac{6}{25} : \\frac{3}{5}", "answer": "0.4", "status": "production" },
+            { "id": 19, "expression": "\\frac{7}{10} \\cdot \\frac{5}{7}", "answer": "0.5", "status": "production" },
+            { "id": 20, "expression": "\\frac{19}{20} - \\frac{3}{20}", "answer": "0.8", "status": "production" },
+            { "id": 21, "expression": "\\frac{3}{50} + \\frac{11}{25}", "answer": "0.5", "status": "production" },
+            { "id": 22, "expression": "\\frac{4}{5} + \\frac{3}{20}", "answer": "0.95", "status": "production" },
+            { "id": 23, "expression": "\\frac{1}{4} : \\frac{5}{8}", "answer": "0.4", "status": "production" },
+            { "id": 24, "expression": "\\frac{17}{25} + \\frac{2}{25}", "answer": "0.76", "status": "production" }
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Представьте выражение в виде дроби с указанным знаменателем",
+          "type": "expression",
+          "tasks": [
+            { "id": 1, "expression": "\\frac{1}{2} + \\frac{3}{10}", "denominator": 10, "answer": "8", "status": "production" },
+            { "id": 2, "expression": "\\frac{7}{8} - \\frac{1}{4}", "denominator": 8, "answer": "5", "status": "production" },
+            { "id": 3, "expression": "\\frac{2}{5} + \\frac{7}{20}", "denominator": 20, "answer": "15", "status": "production" },
+            { "id": 4, "expression": "\\frac{9}{10} - \\frac{3}{5}", "denominator": 10, "answer": "3", "status": "production" },
+            { "id": 5, "expression": "\\frac{3}{4} + \\frac{1}{20}", "denominator": 20, "answer": "16", "status": "production" },
+            { "id": 6, "expression": "\\frac{11}{25} - \\frac{3}{25}", "denominator": 25, "answer": "8", "status": "production" },
+            { "id": 7, "expression": "\\frac{1}{2} + \\frac{7}{8}", "denominator": 8, "answer": "11", "status": "production" },
+            { "id": 8, "expression": "\\frac{3}{10} + \\frac{9}{50}", "denominator": 50, "answer": "24", "status": "production" },
+            { "id": 9, "expression": "\\frac{7}{20} - \\frac{1}{5}", "denominator": 20, "answer": "3", "status": "production" },
+            { "id": 10, "expression": "\\frac{2}{25} + \\frac{3}{5}", "denominator": 25, "answer": "17", "status": "production" },
+            { "id": 11, "expression": "\\frac{3}{4} - \\frac{7}{20}", "denominator": 20, "answer": "8", "status": "production" },
+            { "id": 12, "expression": "\\frac{1}{8} + \\frac{9}{40}", "denominator": 40, "answer": "14", "status": "production" }
+          ]
+        },
+        {
+          "number": 3,
+          "instruction": "Найдите значение выражения. Представьте результат в виде несократимой обыкновенной дроби. В ответ запишите числитель этой дроби.",
+          "type": "expression",
+          "tasks": [
+            { "id": 1, "expression": "\\frac{6}{8} + \\frac{1}{4}", "answer": "1", "status": "production" },
+            { "id": 2, "expression": "\\frac{9}{12} - \\frac{1}{6}", "answer": "7", "status": "production" },
+            { "id": 3, "expression": "\\frac{3}{5} \\cdot \\frac{10}{9}", "answer": "2", "status": "production" },
+            { "id": 4, "expression": "\\frac{4}{15} : \\frac{2}{5}", "answer": "2", "status": "production" },
+            { "id": 5, "expression": "\\frac{7}{14} + \\frac{3}{7}", "answer": "13", "status": "production" },
+            { "id": 6, "expression": "\\frac{12}{20} - \\frac{3}{10}", "answer": "3", "status": "production" },
+            { "id": 7, "expression": "\\frac{9}{25} + \\frac{6}{15}", "answer": "19", "status": "production" },
+            { "id": 8, "expression": "\\frac{6}{7} \\cdot \\frac{7}{18}", "answer": "1", "status": "production" },
+            { "id": 9, "expression": "\\frac{5}{6} - \\frac{1}{3}", "answer": "1", "status": "production" },
+            { "id": 10, "expression": "\\frac{8}{9} : \\frac{4}{27}", "answer": "6", "status": "production" },
+            { "id": 11, "expression": "\\frac{14}{21} + \\frac{2}{7}", "answer": "20", "status": "production" },
+            { "id": 12, "expression": "\\frac{15}{20} \\cdot \\frac{2}{3}", "answer": "1", "status": "production" }
           ]
         }
       ]

@@ -31,6 +31,8 @@ class VprTopicController extends Controller
             foreach ($service->getAllTopicsMeta() as $topicId => $meta) {
                 if ((int) $topicId > $maxTopic) continue;
 
+                $meta = $service->getTopicMeta($topicId);
+
                 $topics[$topicId] = array_merge($meta, [
                     'exists' => $service->topicDataExists($topicId),
                     'stats'  => $service->topicDataExists($topicId)

@@ -38,4 +38,21 @@ class VprTaskDataServiceTest extends TestCase
                 "Grade $grade should have 18 topics");
         }
     }
+
+    public function test_grade_5_topic_01_uses_fraction_training_meta_and_expression_tasks(): void
+    {
+        $svc = new VprTaskDataService(5);
+
+        $meta = $svc->getTopicMeta('01');
+        $data = $svc->getTopicData('01');
+
+        $this->assertSame('Обыкновенные дроби', $meta['title'] ?? null);
+        $this->assertStringContainsString('дроб', mb_strtolower((string) ($meta['description'] ?? '')));
+
+        $zadaniya = $data['blocks'][0]['zadaniya'] ?? [];
+        $this->assertNotEmpty($zadaniya);
+        $this->assertSame('expression', $zadaniya[0]['type'] ?? null);
+        $this->assertGreaterThanOrEqual(20, count($zadaniya[0]['tasks'] ?? []));
+        $this->assertArrayHasKey('expression', $zadaniya[0]['tasks'][0] ?? []);
+    }
 }

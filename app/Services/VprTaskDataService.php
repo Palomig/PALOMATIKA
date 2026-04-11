@@ -48,6 +48,15 @@ class VprTaskDataService
 
     public function getTopicMeta(string $topicId): array
     {
+        if ($this->grade === 5 && $topicId === '01') {
+            return [
+                'title' => 'Обыкновенные дроби',
+                'description' => 'Вычисления и преобразования обыкновенных дробей',
+                'color' => 'blue',
+                'icon' => 'calculator',
+            ];
+        }
+
         return $this->topicsMeta[$topicId] ?? [
             'title' => "Задание $topicId", 'description' => '',
             'color' => 'gray', 'icon' => 'book',
