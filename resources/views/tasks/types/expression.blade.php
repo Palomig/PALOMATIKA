@@ -12,6 +12,7 @@
     $showTaskAnswer = !$isVariant;
     $answerResolver = app(\App\Services\TaskAnswerResolver::class);
     $isCoreExpressionTopic = in_array((string) $topicId, ['06', '08', '09'], true);
+    $usesNumberWording = isset($grade) && (int) $grade === 5 && (string) $topicId === '01';
     $expressionStyle = ($isVariant && $isCoreExpressionTopic) ? 'font-size:115%;' : '';
 @endphp
 
@@ -50,7 +51,7 @@
                     <span class="text-blue-400 font-bold">{{ $task['id'] }})</span>
                 @endif
                 <span class="text-slate-200 ml-2">
-                    Представьте выражение ${{ $expression }}$ в виде дроби со знаменателем {{ $task['denominator'] }}.
+                    Представьте {{ $usesNumberWording ? 'число' : 'выражение' }} ${{ $expression }}$ в виде дроби со знаменателем {{ $task['denominator'] }}.
                     В ответ запишите числитель полученной дроби.
                 </span>
                 @include('tasks.partials.task-answer', [
