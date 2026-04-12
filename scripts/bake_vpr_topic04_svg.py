@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import json
-from copy import deepcopy
 from pathlib import Path
 
 
@@ -21,7 +20,6 @@ COLORS = {
 
 CHARTS = {
     "mountains": {
-        "kind": "bar",
         "title": "Высоты гор России",
         "y_max": 5700,
         "y_min": 4900,
@@ -39,10 +37,8 @@ CHARTS = {
             "Эльбрус",
         ],
         "values": [5085, 5205, 5033, 4979, 5152, 5025, 5100, 5068, 5642],
-        "value_suffix": "м",
     },
     "hottabych_a": {
-        "kind": "bar",
         "title": "Желания Хоттабыча по дням недели",
         "y_max": 6,
         "y_min": 0,
@@ -52,7 +48,6 @@ CHARTS = {
         "values": [2, 3, 1, 5, 3, 4, 5],
     },
     "hottabych_b": {
-        "kind": "bar",
         "title": "Желания Хоттабыча по дням недели",
         "y_max": 9,
         "y_min": 0,
@@ -62,7 +57,6 @@ CHARTS = {
         "values": [2, 4, 8, 3, 3, 5, 8],
     },
     "football": {
-        "kind": "bar",
         "title": "Чемпионы мира по футболу",
         "y_max": 6,
         "y_min": 0,
@@ -81,7 +75,6 @@ CHARTS = {
         "values": [1, 2, 5, 4, 1, 4, 2, 2],
     },
     "clear_days": {
-        "kind": "bar",
         "title": "Ясные дни в Москве за 2018 год",
         "y_max": 18,
         "y_min": 0,
@@ -104,7 +97,6 @@ CHARTS = {
         "values": [4, 5, 10, 14, 17, 13, 14, 17, 14, 9, 4, 2],
     },
     "lakes": {
-        "kind": "bar",
         "title": "Площади крупнейших озёр России",
         "y_max": 35000,
         "y_min": 0,
@@ -120,10 +112,8 @@ CHARTS = {
             "Ладожское",
         ],
         "values": [3550, 4560, 4070, 31500, 9700, 3350, 17700],
-        "value_suffix": "км²",
     },
     "handball": {
-        "kind": "bar",
         "title": "Чемпионы мира по гандболу",
         "y_max": 7,
         "y_min": 0,
@@ -143,28 +133,49 @@ CHARTS = {
 }
 
 
-TASK_TO_CHART = {
-    1: "mountains",
-    2: "mountains",
-    3: "hottabych_a",
-    4: "hottabych_a",
-    5: "hottabych_a",
-    6: "hottabych_a",
-    7: "football",
-    8: "football",
-    9: "clear_days",
-    10: "clear_days",
-    11: "hottabych_b",
-    12: "hottabych_b",
-    13: "lakes",
-    14: "lakes",
-    15: "football",
-    16: "football",
-    17: "handball",
-    18: "handball",
-    19: "mountains",
-    20: "mountains",
-}
+TOPIC_STRUCTURE = [
+    {
+        "number": 1,
+        "instruction": "Найдите значение по диаграмме",
+        "type": "word_problem",
+        "tasks": [
+            {"id": 1, "chart": "hottabych_a", "text": "Сколько желаний исполнил старик Хоттабыч в четверг?", "answer": "5"},
+            {"id": 2, "chart": "clear_days", "text": "Сколько ясных дней было в июне?", "answer": "13"},
+            {"id": 3, "chart": "hottabych_b", "text": "Сколько желаний исполнил старик Хоттабыч в субботу?", "answer": "5"},
+            {"id": 4, "chart": "football", "text": "Сколько раз становилась чемпионом сборная Германии?", "answer": "4"},
+            {"id": 5, "chart": "football", "text": "Сколько раз становилась чемпионом сборная Уругвая?", "answer": "2"},
+            {"id": 6, "chart": "handball", "text": "Сколько раз становилась чемпионом сборная Дании?", "answer": "1"},
+        ],
+    },
+    {
+        "number": 2,
+        "instruction": "Сравните данные и определите место",
+        "type": "word_problem",
+        "tasks": [
+            {"id": 1, "chart": "mountains", "text": "Какая гора занимает пятое место по высоте?", "answer": "Джангитау"},
+            {"id": 2, "chart": "hottabych_a", "text": "В какой день старик Хоттабыч исполнил меньше всего желаний?", "answer": "в среду"},
+            {"id": 3, "chart": "lakes", "text": "Какое озеро занимает третье место по площади?", "answer": "Онежское"},
+            {"id": 4, "chart": "mountains", "text": "Какая гора занимает третье место по высоте?", "answer": "Коштантау"},
+        ],
+    },
+    {
+        "number": 3,
+        "instruction": "Подсчитайте по условию",
+        "type": "word_problem",
+        "tasks": [
+            {"id": 1, "chart": "mountains", "text": "Сколько гор на диаграмме имеют высоту менее 5000 метров?", "answer": "1"},
+            {"id": 2, "chart": "hottabych_a", "text": "Сколько желаний исполнил старик Хоттабыч за три первых дня недели?", "answer": "6"},
+            {"id": 3, "chart": "hottabych_a", "text": "Сколько желаний исполнил старик Хоттабыч за три первых дня недели?", "answer": "6"},
+            {"id": 4, "chart": "football", "text": "Сколько сборных на диаграмме становились чемпионами ровно 2 раза?", "answer": "3"},
+            {"id": 5, "chart": "clear_days", "text": "Сколько всего ясных дней было в последние три месяца 2018 года?", "answer": "15"},
+            {"id": 6, "chart": "hottabych_b", "text": "Сколько желаний исполнил старик Хоттабыч за четыре последних дня недели?", "answer": "19"},
+            {"id": 7, "chart": "lakes", "text": "Сколько озёр на диаграмме имеют площадь более 5000 квадратных километров?", "answer": "3"},
+            {"id": 8, "chart": "football", "text": "Сколько сборных на диаграмме становились чемпионами 2 раза или больше?", "answer": "6"},
+            {"id": 9, "chart": "handball", "text": "Сколько сборных на диаграмме становились чемпионами мира больше одного раза?", "answer": "4"},
+            {"id": 10, "chart": "mountains", "text": "Сколько гор на диаграмме имеют высоту от 5000 до 5040 метров?", "answer": "2"},
+        ],
+    },
+]
 
 
 def esc(text: str) -> str:
@@ -261,24 +272,54 @@ def make_bar_chart_svg(chart: dict) -> str:
     return "".join(parts)
 
 
+def build_topic_json() -> dict:
+    baked_svgs = {name: make_bar_chart_svg(chart) for name, chart in CHARTS.items()}
+    zadaniya = []
+
+    for zadanie in TOPIC_STRUCTURE:
+        baked_tasks = []
+        for task in zadanie["tasks"]:
+            baked_tasks.append(
+                {
+                    "id": task["id"],
+                    "text": task["text"],
+                    "answer": task["answer"],
+                    "status": "production",
+                    "image": baked_svgs[task["chart"]],
+                }
+            )
+
+        zadaniya.append(
+            {
+                "number": zadanie["number"],
+                "instruction": zadanie["instruction"],
+                "type": zadanie["type"],
+                "tasks": baked_tasks,
+            }
+        )
+
+    return {
+        "topic_id": "04",
+        "exam_type": "vpr",
+        "grade": 5,
+        "blocks": [
+            {
+                "number": 1,
+                "title": "Тренажер",
+                "zadaniya": zadaniya,
+            }
+        ],
+    }
+
+
 def main() -> None:
-    data = json.loads(TOPIC_PATH.read_text(encoding="utf-8"))
-    tasks = data["blocks"][0]["zadaniya"][0]["tasks"]
-
-    baked_svgs = {name: make_bar_chart_svg(cfg) for name, cfg in CHARTS.items()}
-
-    for task in tasks:
-        chart_name = TASK_TO_CHART.get(task["id"])
-        if chart_name is None:
-            raise RuntimeError(f"No chart mapping for task {task['id']}")
-        task["image"] = baked_svgs[chart_name]
-
+    data = build_topic_json()
     TOPIC_PATH.write_text(
         json.dumps(data, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
-
-    print(f"Baked semantic SVG for {len(tasks)} tasks into {TOPIC_PATH}")
+    total_tasks = sum(len(z["tasks"]) for z in data["blocks"][0]["zadaniya"])
+    print(f"Baked semantic SVG and rebuilt topic_04 with {total_tasks} tasks")
 
 
 if __name__ == "__main__":
