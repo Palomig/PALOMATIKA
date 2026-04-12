@@ -9,7 +9,7 @@
       "zadaniya": [
         {
           "number": 1,
-          "instruction": "Найдите неизвестное число в равенствах на сложение и вычитание",
+          "instruction": "Каким числом нужно заменить букву А, чтобы получилось верное равенство?",
           "type": "expression",
           "tasks": [
             { "id": 1, "expression": "A + 257 = 571", "answer": "314", "status": "production" },
@@ -28,7 +28,7 @@
         },
         {
           "number": 2,
-          "instruction": "Найдите неизвестное число в равенствах на умножение и деление",
+          "instruction": "Каким числом нужно заменить букву А, чтобы получилось верное равенство?",
           "type": "expression",
           "tasks": [
             { "id": 1, "expression": "A : 42 = 14", "answer": "588", "status": "production" },
@@ -47,7 +47,7 @@
         },
         {
           "number": 3,
-          "instruction": "Найдите неизвестное число в смешанных равенствах",
+          "instruction": "Каким числом нужно заменить букву А, чтобы получилось верное равенство?",
           "type": "expression",
           "tasks": [
             { "id": 1, "expression": "A + 184 = 500", "answer": "316", "status": "production" },
