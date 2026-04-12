@@ -106,4 +106,20 @@ class VprTaskDataServiceTest extends TestCase
         $this->assertGreaterThanOrEqual(8, count($zadaniya[1]['tasks'] ?? []));
         $this->assertGreaterThanOrEqual(8, count($zadaniya[2]['tasks'] ?? []));
     }
+
+    public function test_grade_5_topic_04_uses_baked_semantic_svg_images(): void
+    {
+        $svc = new VprTaskDataService(5);
+        $data = $svc->getTopicData('04');
+
+        $tasks = $data['blocks'][0]['zadaniya'][0]['tasks'] ?? [];
+        $this->assertNotEmpty($tasks);
+
+        $firstImage = (string) ($tasks[0]['image'] ?? '');
+
+        $this->assertStringContainsString('<svg', $firstImage);
+        $this->assertStringContainsString('<rect', $firstImage);
+        $this->assertStringContainsString('#0a1628', $firstImage);
+        $this->assertStringNotContainsString('data:image/png;base64', $firstImage);
+    }
 }
