@@ -83,7 +83,7 @@ TOPIC_STRUCTURE = [
     },
     {
         "number": 3,
-        "instruction": "Разбейте фигуру на прямоугольники и треугольники",
+        "instruction": "Найдите площадь составной фигуры",
         "type": "word_problem",
         "tasks": [
             {"id": 1, "shape": "notch_8", "answer": "8"},
