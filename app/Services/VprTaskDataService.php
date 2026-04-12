@@ -75,6 +75,15 @@ class VprTaskDataService
             ];
         }
 
+        if ($this->grade === 5 && $topicId === '04') {
+            return [
+                'title' => 'Диаграммы',
+                'description' => 'Чтение данных, сравнение и подсчёт по диаграммам',
+                'color' => 'emerald',
+                'icon' => 'calculator',
+            ];
+        }
+
         return $this->topicsMeta[$topicId] ?? [
             'title' => "Задание $topicId", 'description' => '',
             'color' => 'gray', 'icon' => 'book',

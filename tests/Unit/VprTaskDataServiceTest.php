@@ -122,4 +122,25 @@ class VprTaskDataServiceTest extends TestCase
         $this->assertStringContainsString('#0a1628', $firstImage);
         $this->assertStringNotContainsString('data:image/png;base64', $firstImage);
     }
+
+    public function test_grade_5_topic_04_uses_chart_training_categories_and_clean_text(): void
+    {
+        $svc = new VprTaskDataService(5);
+
+        $meta = $svc->getTopicMeta('04');
+        $data = $svc->getTopicData('04');
+
+        $this->assertSame('Диаграммы', $meta['title'] ?? null);
+        $this->assertStringContainsString('диаграм', mb_strtolower((string) ($meta['description'] ?? '')));
+
+        $zadaniya = $data['blocks'][0]['zadaniya'] ?? [];
+        $this->assertCount(3, $zadaniya);
+        $this->assertSame('word_problem', $zadaniya[0]['type'] ?? null);
+        $this->assertSame('word_problem', $zadaniya[1]['type'] ?? null);
+        $this->assertSame('word_problem', $zadaniya[2]['type'] ?? null);
+
+        $firstTaskText = (string) ($zadaniya[0]['tasks'][0]['text'] ?? '');
+        $this->assertStringNotContainsString('Вариант', $firstTaskText);
+        $this->assertStringNotContainsString('Пользуясь этими данными', $firstTaskText);
+    }
 }
