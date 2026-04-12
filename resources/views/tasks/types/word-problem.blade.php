@@ -32,7 +32,7 @@
                     @if($imageName !== '')
                         <div class="mb-3">
                             @if(\Illuminate\Support\Str::startsWith($imageName, '<svg'))
-                                <div class="rounded-lg overflow-hidden border border-slate-700 bg-slate-900/40 p-2 w-full max-w-[360px] h-[220px] flex items-center justify-center [&>svg]:w-full [&>svg]:h-full [&>svg]:object-contain">
+                                <div class="rounded-lg overflow-hidden border border-slate-700 bg-slate-900/40 p-2 w-full max-w-[560px] h-[320px] flex items-center justify-center [&>svg]:w-full [&>svg]:h-full [&>svg]:object-contain">
                                     {!! $imageName !!}
                                 </div>
                             @else
