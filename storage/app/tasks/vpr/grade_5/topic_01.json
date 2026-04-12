@@ -343,175 +343,151 @@
         {
           "number": 4,
           "instruction": "Представьте число в виде дроби с числителем",
-          "type": "expression",
+          "type": "word_problem",
           "tasks": [
             {
               "id": 1,
-              "expression": "9",
-              "numerator": 54,
               "answer": "6",
-              "status": "production"
+              "status": "production",
+              "text": "Представьте число 9 в виде дроби с числителем 54."
             },
             {
               "id": 2,
-              "expression": "4",
-              "numerator": 36,
               "answer": "9",
-              "status": "production"
+              "status": "production",
+              "text": "Представьте число 4 в виде дроби с числителем 36."
             },
             {
               "id": 3,
-              "expression": "7",
-              "numerator": 63,
               "answer": "9",
-              "status": "production"
+              "status": "production",
+              "text": "Представьте число 7 в виде дроби с числителем 63."
             },
             {
               "id": 4,
-              "expression": "5",
-              "numerator": 35,
               "answer": "7",
-              "status": "production"
+              "status": "production",
+              "text": "Представьте число 5 в виде дроби с числителем 35."
             },
             {
               "id": 5,
-              "expression": "3",
-              "numerator": 18,
               "answer": "6",
-              "status": "production"
+              "status": "production",
+              "text": "Представьте число 3 в виде дроби с числителем 18."
             },
             {
               "id": 6,
-              "expression": "8",
-              "numerator": 56,
               "answer": "7",
-              "status": "production"
+              "status": "production",
+              "text": "Представьте число 8 в виде дроби с числителем 56."
             },
             {
               "id": 7,
-              "expression": "6",
-              "numerator": 48,
               "answer": "8",
-              "status": "production"
+              "status": "production",
+              "text": "Представьте число 6 в виде дроби с числителем 48."
             },
             {
               "id": 8,
-              "expression": "4",
-              "numerator": 20,
               "answer": "5",
-              "status": "production"
+              "status": "production",
+              "text": "Представьте число 4 в виде дроби с числителем 20."
             },
             {
               "id": 9,
-              "expression": "9",
-              "numerator": 63,
               "answer": "7",
-              "status": "production"
+              "status": "production",
+              "text": "Представьте число 9 в виде дроби с числителем 63."
             },
             {
               "id": 10,
-              "expression": "2",
-              "numerator": 16,
               "answer": "8",
-              "status": "production"
+              "status": "production",
+              "text": "Представьте число 2 в виде дроби с числителем 16."
             },
             {
               "id": 11,
-              "expression": "5",
-              "numerator": 40,
               "answer": "8",
-              "status": "production"
+              "status": "production",
+              "text": "Представьте число 5 в виде дроби с числителем 40."
             },
             {
               "id": 12,
-              "expression": "6",
-              "numerator": 54,
               "answer": "9",
-              "status": "production"
+              "status": "production",
+              "text": "Представьте число 6 в виде дроби с числителем 54."
             },
             {
               "id": 13,
-              "expression": "3",
-              "numerator": 21,
               "answer": "7",
-              "status": "production"
+              "status": "production",
+              "text": "Представьте число 3 в виде дроби с числителем 21."
             },
             {
               "id": 14,
-              "expression": "8",
-              "numerator": 72,
               "answer": "9",
-              "status": "production"
+              "status": "production",
+              "text": "Представьте число 8 в виде дроби с числителем 72."
             },
             {
               "id": 15,
-              "expression": "7",
-              "numerator": 42,
               "answer": "6",
-              "status": "production"
+              "status": "production",
+              "text": "Представьте число 7 в виде дроби с числителем 42."
             },
             {
               "id": 16,
-              "expression": "4",
-              "numerator": 32,
               "answer": "8",
-              "status": "production"
+              "status": "production",
+              "text": "Представьте число 4 в виде дроби с числителем 32."
             },
             {
               "id": 17,
-              "expression": "11",
-              "numerator": 44,
               "answer": "4",
-              "status": "production"
+              "status": "production",
+              "text": "Представьте число 11 в виде дроби с числителем 44."
             },
             {
               "id": 18,
-              "expression": "5",
-              "numerator": 25,
               "answer": "5",
-              "status": "production"
+              "status": "production",
+              "text": "Представьте число 5 в виде дроби с числителем 25."
             },
             {
               "id": 19,
-              "expression": "12",
-              "numerator": 60,
               "answer": "5",
-              "status": "production"
+              "status": "production",
+              "text": "Представьте число 12 в виде дроби с числителем 60."
             },
             {
               "id": 20,
-              "expression": "9",
-              "numerator": 45,
               "answer": "5",
-              "status": "production"
+              "status": "production",
+              "text": "Представьте число 9 в виде дроби с числителем 45."
             },
             {
               "id": 21,
-              "expression": "7",
-              "numerator": 28,
               "answer": "4",
-              "status": "production"
+              "status": "production",
+              "text": "Представьте число 7 в виде дроби с числителем 28."
             },
             {
               "id": 22,
-              "expression": "6",
-              "numerator": 42,
               "answer": "7",
-              "status": "production"
+              "status": "production",
+              "text": "Представьте число 6 в виде дроби с числителем 42."
             },
             {
               "id": 23,
-              "expression": "10",
-              "numerator": 80,
               "answer": "8",
-              "status": "production"
+              "status": "production",
+              "text": "Представьте число 10 в виде дроби с числителем 80."
             },
             {
               "id": 24,
-              "expression": "3",
-              "numerator": 24,
               "answer": "8",
-              "status": "production"
+              "status": "production",
+              "text": "Представьте число 3 в виде дроби с числителем 24."
             }
           ]
         }
