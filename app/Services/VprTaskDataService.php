@@ -84,6 +84,15 @@ class VprTaskDataService
             ];
         }
 
+        if ($this->grade === 5 && $topicId === '05') {
+            return [
+                'title' => 'Площадь фигур на клетчатой бумаге',
+                'description' => 'Нахождение площади фигур по клеткам и разбиение на простые части',
+                'color' => 'green',
+                'icon' => 'calculator',
+            ];
+        }
+
         return $this->topicsMeta[$topicId] ?? [
             'title' => "Задание $topicId", 'description' => '',
             'color' => 'gray', 'icon' => 'book',
