@@ -93,6 +93,15 @@ class VprTaskDataService
             ];
         }
 
+        if ($this->grade === 5 && $topicId === '06') {
+            return [
+                'title' => 'Числовой луч',
+                'description' => 'Координаты точек и сравнение чисел на числовом луче',
+                'color' => 'lime',
+                'icon' => 'calculator',
+            ];
+        }
+
         return $this->topicsMeta[$topicId] ?? [
             'title' => "Задание $topicId", 'description' => '',
             'color' => 'gray', 'icon' => 'book',
