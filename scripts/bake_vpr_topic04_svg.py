@@ -207,7 +207,7 @@ def make_bar_chart_svg(chart: dict) -> str:
         return top + plot_h - ratio * plot_h
 
     parts = [
-        f'<svg viewBox="0 0 {width} {height}" class="w-full max-w-[350px] h-auto mx-auto" xmlns="http://www.w3.org/2000/svg">',
+        f'<svg viewBox="0 0 {width} {height}" class="w-full max-w-[520px] h-auto mx-auto" xmlns="http://www.w3.org/2000/svg">',
         f'<rect width="100%" height="100%" fill="{COLORS["bg"]}"/>',
     ]
 
