@@ -9,88 +9,78 @@
       "zadaniya": [
         {
           "number": 1,
-          "instruction": "Задания из 10 тренировочных вариантов",
-          "type": "word_problem",
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
           "tasks": [
             {
               "id": 1,
-              "text": "Вариант 1.\nНайдите значение выражения 20 084 - 425 : (112 - 87 ) ⋅12.",
+              "expression": "20\\,084 - 425 : (112 - 87) \\cdot 12",
               "answer": "19880",
               "status": "production",
-              "variant": 1,
-              "source_pdf": "1_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+              "variant": 1
             },
             {
               "id": 2,
-              "text": "Вариант 2.\nНайдите значение выражения ( 32 905 - 12 177 ) : 8 - 52 ⋅ 27.",
+              "expression": "(32\\,905 - 12\\,177) : 8 - 52 \\cdot 27",
               "answer": "1187",
               "status": "production",
-              "variant": 2,
-              "source_pdf": "2_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+              "variant": 2
             },
             {
               "id": 3,
-              "text": "Вариант 3.\nНайдите значение выражения 36 243 : ( 82 - 73) + 72 450 :18.",
+              "expression": "36\\,243 : (82 - 73) + 72\\,450 : 18",
               "answer": "8052",
               "status": "production",
-              "variant": 3,
-              "source_pdf": "3_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+              "variant": 3
             },
             {
               "id": 4,
-              "text": "Вариант 4.\nНайдите значение выражения 15⋅ 430 + ( 9839 - 8425) :14.",
+              "expression": "15 \\cdot 430 + (9839 - 8425) : 14",
               "answer": "6551",
               "status": "production",
-              "variant": 4,
-              "source_pdf": "4_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+              "variant": 4
             },
             {
               "id": 5,
-              "text": "Вариант 5.\nНайдите значение выражения 15⋅570 + ( 9478 - 8165) :13.",
+              "expression": "15 \\cdot 570 + (9478 - 8165) : 13",
               "answer": "8651",
               "status": "production",
-              "variant": 5,
-              "source_pdf": "5_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+              "variant": 5
             },
             {
               "id": 6,
-              "text": "Вариант 6.\nНайдите значение выражения (1240 - 36⋅ 28) : 29 +1192.",
+              "expression": "(1240 - 36 \\cdot 28) : 29 + 1192",
               "answer": "1200",
               "status": "production",
-              "variant": 6,
-              "source_pdf": "6_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+              "variant": 6
             },
             {
               "id": 7,
-              "text": "Вариант 7.\nНайдите значение выражения ( 3232 - 2828) ⋅8 +1919⋅ 7.",
+              "expression": "(3232 - 2828) \\cdot 8 + 1919 \\cdot 7",
               "answer": "16665",
               "status": "production",
-              "variant": 7,
-              "source_pdf": "7_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+              "variant": 7
             },
             {
               "id": 8,
-              "text": "Вариант 8.\nНайдите значение выражения (1894 + 686⋅3) : ( 201-197 ) .",
+              "expression": "(1894 + 686 \\cdot 3) : (201 - 197)",
               "answer": "988",
               "status": "production",
-              "variant": 8,
-              "source_pdf": "8_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+              "variant": 8
             },
             {
               "id": 9,
-              "text": "Вариант 9.\nНайдите значение выражения ( 3232 - 2828) ⋅8 +1919⋅ 7.",
+              "expression": "(3232 - 2828) \\cdot 8 + 1919 \\cdot 7",
               "answer": "16665",
               "status": "production",
-              "variant": 9,
-              "source_pdf": "9_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+              "variant": 9
             },
             {
               "id": 10,
-              "text": "Вариант 10.\nНайдите значение выражения ( 35 814 - 20 556 ) : 6 - 41⋅37.",
+              "expression": "(35\\,814 - 20\\,556) : 6 - 41 \\cdot 37",
               "answer": "1026",
               "status": "production",
-              "variant": 10,
-              "source_pdf": "10_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
+              "variant": 10
             }
           ]
         }

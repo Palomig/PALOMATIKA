@@ -42,7 +42,8 @@
             { "id": 9, "expression": "A : 27 = 11", "answer": "297", "status": "production" },
             { "id": 10, "expression": "864 : A = 27", "answer": "32", "status": "production" },
             { "id": 11, "expression": "A \\cdot 36 = 972", "answer": "27", "status": "production" },
-            { "id": 12, "expression": "A : 48 = 16", "answer": "768", "status": "production" }
+            { "id": 12, "expression": "A : 48 = 16", "answer": "768", "status": "production" },
+            { "id": 13, "expression": "972 : A = 81", "answer": "12", "status": "production" }
           ]
         },
         {
