@@ -337,6 +337,12 @@
               "expression": "\\frac{8}{13} - \\frac{3}{13}",
               "answer": "5/13",
               "status": "production"
+            },
+            {
+              "id": 13,
+              "expression": "\\frac{37}{7} - \\frac{9}{7}",
+              "answer": "4",
+              "status": "production"
             }
           ]
         },
