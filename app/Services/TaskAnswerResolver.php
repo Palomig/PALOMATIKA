@@ -35,7 +35,8 @@ class TaskAnswerResolver
     {
         foreach (['answer', 'correct_answer'] as $key) {
             if (isset($task[$key]) && $task[$key] !== null && $task[$key] !== '') {
-                $value = trim((string) $task[$key]);
+                $raw = $task[$key];
+                $value = is_array($raw) ? implode('; ', $raw) : trim((string) $raw);
                 if (mb_strtolower($value) === self::UNKNOWN_ANSWER) {
                     continue;
                 }
