@@ -162,6 +162,41 @@ class PwaVprDashboardTest extends TestCase
         $response->assertSee('Результаты');
     }
 
+    public function test_vpr_test_template_uses_primary_prompt_helper_for_selected_tasks(): void
+    {
+        $user = $this->makeStudent(5);
+
+        $variant = OgeVariant::create([
+            'hash' => 'vpr5tt',
+            'exam_type' => OgeVariant::EXAM_VPR5,
+            'title' => 'Вариант ВПР 5 класс',
+            'source' => OgeVariant::SOURCE_MINIAPP,
+            'mode' => OgeVariant::MODE_FULL,
+            'config_json' => ['tasks' => [[
+                'task_number' => 1,
+                'topic_id' => '01',
+                'instruction' => 'Служебный заголовок',
+                'text' => 'Основной текст задания',
+            ]]],
+        ]);
+
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $user->id,
+            'status' => 'active',
+            'started_at' => now()->subMinutes(1),
+            'last_seen_at' => now(),
+        ]);
+
+        $response = $this->actingAs($user)
+            ->get("http://student.palomatika.ru/vpr/test/{$attempt->id}");
+
+        $response->assertOk();
+        $response->assertSee('primaryPrompt(currentTask)', false);
+        $response->assertSee('shouldShowInstruction(currentTask)', false);
+        $response->assertDontSee('currentTask.instruction || currentTask.text ||', false);
+    }
+
     public function test_history_uses_vpr_labels_for_vpr_attempts(): void
     {
         $user = $this->makeStudent(5);
