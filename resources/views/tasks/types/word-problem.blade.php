@@ -47,6 +47,33 @@
                         </div>
                     @endif
 
+                    @if(!empty($task['table']['headers']) && !empty($task['table']['rows']))
+                        <div class="mb-4 overflow-x-auto rounded-lg border border-slate-700 bg-slate-900/40">
+                            <table class="min-w-full text-sm">
+                                <thead>
+                                    <tr class="bg-slate-800/80">
+                                        @foreach($task['table']['headers'] as $header)
+                                            <th class="px-4 py-3 text-left font-semibold text-slate-200 border-b border-slate-700">
+                                                {{ $header }}
+                                            </th>
+                                        @endforeach
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($task['table']['rows'] as $row)
+                                        <tr class="border-b border-slate-800 last:border-b-0">
+                                            @foreach($row as $cell)
+                                                <td class="px-4 py-3 text-slate-300">
+                                                    {{ $cell }}
+                                                </td>
+                                            @endforeach
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
+
                     <p class="text-slate-200 leading-relaxed">{!! nl2br(e($task['text'] ?? '')) !!}</p>
                 </div>
             </div>
