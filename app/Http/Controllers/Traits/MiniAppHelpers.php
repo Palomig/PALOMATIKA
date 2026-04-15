@@ -41,14 +41,21 @@ trait MiniAppHelpers
     {
         if (!$variant) return 'Вариант ОГЭ';
 
+        $isVpr = in_array($variant->exam_type, [
+            OgeVariant::EXAM_VPR5,
+            OgeVariant::EXAM_VPR6,
+            OgeVariant::EXAM_VPR7,
+            OgeVariant::EXAM_VPR8,
+        ], true);
+
         return match ($variant->mode) {
-            OgeVariant::MODE_MINI_ALGEBRA => 'Мини-ОГЭ — алгебра',
-            OgeVariant::MODE_MINI_GEOMETRY => 'Мини-ОГЭ — геометрия',
-            OgeVariant::MODE_MINI_MIXED => 'Мини-ОГЭ — смешанный',
-            OgeVariant::MODE_MINI_PART2 => 'Мини-ОГЭ — 2 часть',
-            OgeVariant::MODE_FULL_WITH_PART2 => 'Полный вариант (1+2 часть)',
-            OgeVariant::MODE_FULL => 'Полный вариант',
-            default => $variant->title ?: 'Вариант ОГЭ',
+            OgeVariant::MODE_MINI_ALGEBRA => $isVpr ? 'Мини-ВПР — алгебра' : 'Мини-ОГЭ — алгебра',
+            OgeVariant::MODE_MINI_GEOMETRY => $isVpr ? 'Мини-ВПР — геометрия' : 'Мини-ОГЭ — геометрия',
+            OgeVariant::MODE_MINI_MIXED => $isVpr ? 'Мини-ВПР — смешанный' : 'Мини-ОГЭ — смешанный',
+            OgeVariant::MODE_MINI_PART2 => $isVpr ? 'Мини-ВПР — 2 часть' : 'Мини-ОГЭ — 2 часть',
+            OgeVariant::MODE_FULL_WITH_PART2 => $isVpr ? 'Полный вариант ВПР (1+2 часть)' : 'Полный вариант (1+2 часть)',
+            OgeVariant::MODE_FULL => $isVpr ? 'Полный вариант ВПР' : 'Полный вариант',
+            default => $variant->title ?: ($isVpr ? 'Вариант ВПР' : 'Вариант ОГЭ'),
         };
     }
 

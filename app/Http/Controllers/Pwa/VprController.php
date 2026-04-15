@@ -4,12 +4,16 @@ namespace App\Http\Controllers\Pwa;
 use App\Http\Controllers\Controller;
 use App\Models\OgeAttempt;
 use App\Models\OgeAttemptScoring;
+use App\Models\TeacherStudent;
+use App\Models\UserGift;
+use App\Models\OgeVariant;
 use App\Services\OgeAttemptService;
 use App\Services\VprTaskDataService;
 use App\Services\VprVariantBuilderService;
 use App\Services\VprVariantPoolService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class VprController extends Controller
 {
@@ -26,7 +30,7 @@ class VprController extends Controller
     public function home(Request $request)
     {
         $user  = Auth::user();
-        $grade = $user->grade_num;
+        $grade = (int) ($user->grade_num ?? 5);
 
         $examType = 'vpr_' . $grade;
         $activeAttempts = OgeAttempt::where('student_id', $user->id)
@@ -37,18 +41,73 @@ class VprController extends Controller
             ->orderByDesc('last_seen_at')
             ->get();
 
-        $activeList = $activeAttempts->map(function ($att) {
+        $activeAttemptsList = $activeAttempts->map(function ($att) {
             $variant = $att->variant;
+            $mode = $variant->mode ?? OgeVariant::MODE_FULL;
+            $isMini = str_starts_with($mode, 'mini_');
+
             return [
                 'id'            => $att->id,
                 'title'         => $variant->title ?? 'Вариант ВПР',
                 'answeredCount' => $att->answers()->count(),
                 'totalCount'    => count($variant->config_json['tasks'] ?? []),
                 'startedAt'     => $att->started_at,
+                'type'          => $isMini ? 'Мини-ВПР' : 'Полный вариант',
             ];
         })->all();
 
-        return view('pwa.student.vpr-home', compact('user', 'grade', 'activeList'));
+        $weakTopics = [];
+        $newFipiCount = 0;
+        $hasTeacher = TeacherStudent::where('student_id', $user->id)->exists();
+        $pendingGift = UserGift::where('user_id', $user->id)
+            ->whereNull('shown_at')
+            ->orderBy('id')
+            ->first();
+
+        return view('pwa.student.vpr-home', compact(
+            'user',
+            'grade',
+            'activeAttemptsList',
+            'weakTopics',
+            'newFipiCount',
+            'hasTeacher',
+            'pendingGift'
+        ));
+    }
+
+    /**
+     * Старт mini-ВПР (POST).
+     */
+    public function startMini(Request $request, OgeAttemptService $attemptService)
+    {
+        $request->validate(['mode' => 'required|string|in:mixed']);
+
+        $user  = Auth::user();
+        $grade = (int) ($user->grade_num ?? 0);
+
+        if ($grade < 5 || $grade > 8) {
+            abort(403, 'ВПР доступно только для 5–8 классов');
+        }
+
+        try {
+            $pool = $this->makePool($grade);
+            $variant = $pool->getOrCreateVariant($user, 'mixed');
+        } catch (\Throwable $e) {
+            Log::error('PWA VPR mini start pool error', ['user' => $user?->id, 'grade' => $grade, 'error' => $e->getMessage()]);
+            return response()->json(['error' => 'Нет доступных заданий для мини-ВПР. Попробуйте позже.'], 422);
+        }
+
+        try {
+            [$variant, $attempt] = $attemptService->startAttempt($user, $variant->hash, [
+                'user_agent' => $request->userAgent(),
+                'ip' => $request->ip(),
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('PWA VPR mini start attempt error', ['user' => $user?->id, 'grade' => $grade, 'error' => $e->getMessage()]);
+            return response()->json(['error' => 'Ошибка создания попытки. Попробуйте ещё раз.'], 500);
+        }
+
+        return response()->json(['redirect' => route('pwa.student.vpr.test', $attempt->id)]);
     }
 
     /**
@@ -64,12 +123,16 @@ class VprController extends Controller
         }
 
         $pool    = $this->makePool($grade);
-        $variant = $pool->getOrCreateVariant($user);
+        $variant = $pool->getOrCreateVariant($user, 'full');
 
         [$variant, $attempt] = $attemptService->startAttempt($user, $variant->hash, [
             'user_agent' => $request->userAgent(),
             'ip'         => $request->ip(),
         ]);
+
+        if ($request->expectsJson()) {
+            return response()->json(['redirect' => route('pwa.student.vpr.test', $attempt->id)]);
+        }
 
         return redirect()->route('pwa.student.vpr.test', $attempt->id);
     }
@@ -107,16 +170,25 @@ class VprController extends Controller
     {
         $user  = Auth::user();
         $grade = (int) ($user->grade_num ?? 8);
-        $maxTopic = $grade === 8 ? 18 : 17;
+        $taskData = new VprTaskDataService($grade);
 
-        $topicIds = array_map(fn($n) => str_pad((string)$n, 2, '0', STR_PAD_LEFT), range(1, $maxTopic));
+        $topicIds = collect(array_keys($taskData->getAllTopicsMeta()))
+            ->map(fn($topicId) => str_pad((string) $topicId, 2, '0', STR_PAD_LEFT))
+            ->filter(fn(string $topicId) => $taskData->topicDataExists($topicId))
+            ->values()
+            ->all();
+
+        if ($topicIds === []) {
+            $topicIds = ['01'];
+        }
+
+        $maxTopic = (int) ltrim((string) end($topicIds), '0');
 
         $selected = str_pad((string) $request->query('topic', '1'), 2, '0', STR_PAD_LEFT);
         if (!in_array($selected, $topicIds, true)) {
-            $selected = '01';
+            $selected = $topicIds[0];
         }
 
-        $taskData = new VprTaskDataService($grade);
         $blocks   = $taskData->getBlocks($selected);
 
         $zadaniya = [];
@@ -166,12 +238,27 @@ class VprController extends Controller
         $user    = Auth::user();
         $attempt = OgeAttempt::where('id', $attemptId)
             ->where('student_id', $user->id)
-            ->where('status', 'submitted')
+            ->whereIn('status', ['submitted', 'scored', 'error'])
             ->with(['variant', 'scorings'])
             ->firstOrFail();
 
-        $scoring = OgeAttemptScoring::where('attempt_id', $attempt->id)->first();
+        $scorings = OgeAttemptScoring::where('attempt_id', $attempt->id)->orderBy('task_number')->get();
+        $answers = $attempt->answers()->get();
+        $totalTasks = count($attempt->variant?->config_json['tasks'] ?? []);
+        $correctCount = $scorings->where('is_correct', true)->count();
+        $totalTime = 0;
+        if ($attempt->started_at && $attempt->submitted_at) {
+            $totalTime = $attempt->submitted_at->diffInSeconds($attempt->started_at);
+        }
 
-        return view('pwa.student.vpr-results', compact('user', 'attempt', 'scoring'));
+        return view('pwa.student.vpr-results', compact(
+            'user',
+            'attempt',
+            'scorings',
+            'answers',
+            'totalTasks',
+            'correctCount',
+            'totalTime'
+        ));
     }
 }

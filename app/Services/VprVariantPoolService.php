@@ -16,33 +16,36 @@ class VprVariantPoolService
         private readonly VprVariantBuilderService $builder,
     ) {}
 
-    public function getOrCreateVariant(User $user): OgeVariant
+    public function getOrCreateVariant(User $user, string $type = 'full'): OgeVariant
     {
         $examType = 'vpr_' . $this->taskData->getGrade();
-        $poolEntry = $this->findUnsolvedVariant($user, $examType);
+        $poolEntry = $this->findUnsolvedVariant($user, $examType, $type);
 
         if ($poolEntry) {
             return $poolEntry->variant;
         }
 
-        return $this->generateNewVariant($examType);
+        return $this->generateNewVariant($examType, $type);
     }
 
-    protected function findUnsolvedVariant(User $user, string $examType): ?OgeVariantPoolEntry
+    protected function findUnsolvedVariant(User $user, string $examType, string $type): ?OgeVariantPoolEntry
     {
         $attempted = OgeAttempt::where('student_id', $user->id)->pluck('variant_id');
 
         return OgeVariantPoolEntry::active()
             ->whereHas('variant', fn($q) => $q->where('exam_type', $examType))
+            ->where('type', $type)
             ->whereNotIn('variant_id', $attempted)
             ->inRandomOrder()
             ->first();
     }
 
-    protected function generateNewVariant(string $examType, int $maxRetries = 8): OgeVariant
+    protected function generateNewVariant(string $examType, string $type, int $maxRetries = 8): OgeVariant
     {
         for ($i = 0; $i < $maxRetries; $i++) {
-            $built = $this->builder->build(Str::random(12));
+            $built = $type === 'mixed'
+                ? $this->builder->buildMini(Str::random(12))
+                : $this->builder->build(Str::random(12));
 
             if (empty($built['tasks'])) {
                 throw new \RuntimeException("No production tasks for $examType");
@@ -56,26 +59,27 @@ class VprVariantPoolService
                 continue;
             }
 
-            return DB::transaction(function () use ($examType, $built, $fingerprint) {
+            return DB::transaction(function () use ($examType, $built, $fingerprint, $type) {
                 $hash = strtolower(Str::random(6));
                 while (OgeVariant::where('hash', $hash)->exists()) {
                     $hash = strtolower(Str::random(6));
                 }
 
                 $grade = (int) explode('_', $examType)[1];
+                $isMini = $type === 'mixed';
 
                 $variant = OgeVariant::create([
                     'hash'        => $hash,
                     'exam_type'   => $examType,
-                    'title'       => "Вариант ВПР {$grade} класс",
-                    'mode'        => OgeVariant::MODE_FULL,
+                    'title'       => $isMini ? "Мини-ВПР {$grade} класс" : "Вариант ВПР {$grade} класс",
+                    'mode'        => $isMini ? OgeVariant::MODE_MINI_MIXED : OgeVariant::MODE_FULL,
                     'source'      => OgeVariant::SOURCE_MINIAPP,
                     'config_json' => ['tasks' => $built['tasks']],
                 ]);
 
                 $poolEntry = OgeVariantPoolEntry::create([
                     'variant_id'       => $variant->id,
-                    'type'             => 'full',
+                    'type'             => $isMini ? 'mixed' : 'full',
                     'status'           => 'active',
                     'task_fingerprint' => $fingerprint,
                     'created_at'       => now(),
