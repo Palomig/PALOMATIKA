@@ -689,11 +689,13 @@
         </div>
 
         {{-- Instruction text --}}
-        <div class="q-text q-anim" :style="'animation-delay: 0.05s; margin-top: 16px'"
-             x-html="formatRichText(currentTask.instruction || currentTask.text || '')"></div>
+        <template x-if="primaryPrompt(currentTask)">
+          <div class="q-text q-anim" :style="'animation-delay: 0.05s; margin-top: 16px'"
+               x-html="formatRichText(primaryPrompt(currentTask))"></div>
+        </template>
 
         {{-- Task text (when instruction is a generic heading and task body is separate) --}}
-        <template x-if="currentTask.instruction && currentTask.text && currentTask.text !== currentTask.instruction">
+        <template x-if="shouldShowInstruction(currentTask) && currentTask.instruction && currentTask.text && currentTask.text !== currentTask.instruction">
           <div class="q-text q-anim" :style="'animation-delay: 0.07s; margin-top: 10px; font-size: 15px; font-weight: 600'"
                x-html="formatRichText(currentTask.text)"></div>
         </template>
@@ -1085,6 +1087,23 @@
       displayTaskNumber(task) {
         const raw = Number(task?.display_task_number ?? task?.task_number ?? this.taskKey(task));
         return Number.isFinite(raw) && raw > 0 ? raw : this.taskKey(task);
+      },
+
+      shouldShowInstruction(task) {
+        const hiddenInstructionTaskNumbers = [1, 2, 4, 5, 6, 7, 8, 9, 11, 12, 14, 15, 16, 17];
+        const taskNumber = Number(this.displayTaskNumber(task));
+
+        return !hiddenInstructionTaskNumbers.includes(taskNumber);
+      },
+
+      primaryPrompt(task) {
+        if (!task) return '';
+
+        if (!this.shouldShowInstruction(task)) {
+          return String(task?.text || '').trim();
+        }
+
+        return String(task?.instruction || task?.text || '').trim();
       },
 
       taskLocator(t) {
