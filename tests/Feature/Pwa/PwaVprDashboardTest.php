@@ -282,6 +282,20 @@ class PwaVprDashboardTest extends TestCase
         $this->assertArrayNotHasKey('image', $taskFourteen);
     }
 
+    public function test_vpr_topic_bank_page_renders_structured_table_for_topic_14(): void
+    {
+        $admin = $this->makeAdmin();
+
+        $response = $this->actingAs($admin)
+            ->get('/vpr-topics/5/14');
+
+        $response->assertOk();
+        $response->assertSee('Стиральный порошок');
+        $response->assertSee('Ариэль');
+        $response->assertSee('Молекула');
+        $response->assertSee('6450');
+    }
+
     public function test_history_uses_vpr_labels_for_vpr_attempts(): void
     {
         $user = $this->makeStudent(5);
