@@ -663,7 +663,7 @@ class StudentController extends Controller
 
         $attempts = OgeAttempt::where('student_id', $user->id)
             ->whereIn('status', ['submitted', 'scored'])
-            ->with(['variant:id,hash,title,mode,config_json', 'scorings:id,attempt_id,is_correct'])
+            ->with(['variant:id,hash,title,mode,exam_type,config_json', 'scorings:id,attempt_id,is_correct'])
             ->orderByDesc('submitted_at')
             ->limit(50)
             ->get();
@@ -693,7 +693,7 @@ class StudentController extends Controller
         $attempt = OgeAttempt::where('id', $attemptId)
             ->where('student_id', $user->id)
             ->whereIn('status', ['submitted', 'scored'])
-            ->with(['variant:id,hash,title,mode,config_json', 'answers:id,attempt_id,task_number,current_answer', 'scorings:id,attempt_id,task_number,is_correct,correct_answer'])
+            ->with(['variant:id,hash,title,mode,exam_type,config_json', 'answers:id,attempt_id,task_number,current_answer', 'scorings:id,attempt_id,task_number,is_correct,correct_answer'])
             ->firstOrFail();
 
         $correct = $attempt->scorings->where('is_correct', true)->count();

@@ -18,15 +18,52 @@ class VprVariantBuilderService
      */
     public function build(string $hash): array
     {
+        return $this->buildFromTopics($hash, $this->allTopics);
+    }
+
+    /**
+     * Собрать мини-вариант ВПР из ограниченного набора тем.
+     *
+     * @return array{tasks: array, variantNumber: int}
+     */
+    public function buildMini(string $hash, int $taskCount = 5): array
+    {
+        $availableTopics = array_values(array_filter(
+            $this->allTopics,
+            fn (string $topicId) => $this->taskData->topicDataExists($topicId)
+        ));
+
+        if ($availableTopics === []) {
+            return ['tasks' => [], 'variantNumber' => 1];
+        }
+
+        $seed = crc32($hash);
+        mt_srand($seed);
+        shuffle($availableTopics);
+        mt_srand();
+
+        $selectedTopics = array_slice($availableTopics, 0, max(1, min($taskCount, count($availableTopics))));
+
+        return $this->buildFromTopics($hash, $selectedTopics);
+    }
+
+    /**
+     * @param array<int, string> $topics
+     * @return array{tasks: array, variantNumber: int}
+     */
+    private function buildFromTopics(string $hash, array $topics): array
+    {
         $seed = crc32($hash);
         mt_srand($seed);
 
         $variantNumber = (abs($seed) % 999) + 1;
         $tasks = [];
 
-        foreach ($this->allTopics as $topicId) {
+        foreach ($topics as $topicId) {
             $item = $this->taskData->getRandomTaskFromTopic($topicId, 'production');
-            if (!$item) continue;
+            if (!$item) {
+                continue;
+            }
 
             $tasks[] = array_merge($item['task'], [
                 'topic_id'       => $topicId,
@@ -36,14 +73,16 @@ class VprVariantBuilderService
                 'instruction'    => $item['instruction'],
                 'block_number'   => $item['block_number'],
                 'zadanie_number' => $item['zadanie_number'],
-                'correct_answer' => $item['task']['answer'] ?? null,
+                'correct_answer' => is_array($item['task']['answer'] ?? null)
+                    ? implode('; ', $item['task']['answer'])
+                    : ($item['task']['answer'] ?? null),
             ]);
         }
 
-        mt_srand(); // restore randomness
+        mt_srand();
 
         return [
-            'tasks'         => $tasks,
+            'tasks' => $tasks,
             'variantNumber' => $variantNumber,
         ];
     }
