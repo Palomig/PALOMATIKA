@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Pwa;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\MiniAppHelpers;
 use App\Models\OgeAttempt;
 use App\Models\OgeAttemptScoring;
 use App\Models\TeacherStudent;
@@ -17,6 +18,22 @@ use Illuminate\Support\Facades\Log;
 
 class VprController extends Controller
 {
+    use MiniAppHelpers;
+
+    private function resolveVprGrade(Request $request): int
+    {
+        $user = Auth::user();
+        $userGrade = (int) ($user->grade_num ?? 0);
+
+        if ($user && $user->role === 'admin') {
+            $requestedGrade = (int) ($request->input('grade', $request->query('grade', 5)));
+
+            return in_array($requestedGrade, [5, 6, 7, 8], true) ? $requestedGrade : 5;
+        }
+
+        return $userGrade;
+    }
+
     private function makePool(int $grade): VprVariantPoolService
     {
         $taskData = new VprTaskDataService($grade);
@@ -30,7 +47,7 @@ class VprController extends Controller
     public function home(Request $request)
     {
         $user  = Auth::user();
-        $grade = (int) ($user->grade_num ?? 5);
+        $grade = $this->resolveVprGrade($request);
 
         $examType = 'vpr_' . $grade;
         $activeAttempts = OgeAttempt::where('student_id', $user->id)
@@ -80,10 +97,13 @@ class VprController extends Controller
      */
     public function startMini(Request $request, OgeAttemptService $attemptService)
     {
-        $request->validate(['mode' => 'required|string|in:mixed']);
+        $request->validate([
+            'mode' => 'required|string|in:mixed',
+            'grade' => 'nullable|integer|in:5,6,7,8',
+        ]);
 
         $user  = Auth::user();
-        $grade = (int) ($user->grade_num ?? 0);
+        $grade = $this->resolveVprGrade($request);
 
         if ($grade < 5 || $grade > 8) {
             abort(403, 'ВПР доступно только для 5–8 классов');
@@ -115,8 +135,12 @@ class VprController extends Controller
      */
     public function startFull(Request $request, OgeAttemptService $attemptService)
     {
+        $request->validate([
+            'grade' => 'nullable|integer|in:5,6,7,8',
+        ]);
+
         $user  = Auth::user();
-        $grade = $user->grade_num;
+        $grade = $this->resolveVprGrade($request);
 
         if ($grade < 5 || $grade > 8) {
             abort(403, 'ВПР доступно только для 5–8 классов');
@@ -169,7 +193,7 @@ class VprController extends Controller
     public function taskDatabase(Request $request)
     {
         $user  = Auth::user();
-        $grade = (int) ($user->grade_num ?? 8);
+        $grade = $this->resolveVprGrade($request);
         $taskData = new VprTaskDataService($grade);
 
         $topicIds = collect(array_keys($taskData->getAllTopicsMeta()))
