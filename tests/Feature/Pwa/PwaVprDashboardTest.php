@@ -278,6 +278,7 @@ class PwaVprDashboardTest extends TestCase
             ['Стиральный порошок', 'Масса, кг', 'Цена, руб.'],
             $taskFourteen['table']['headers'] ?? null
         );
+        $this->assertCount(10, $topicFourteen['blocks'][0]['zadaniya'][0]['tasks'] ?? []);
         $this->assertCount(4, $taskFourteen['table']['rows'] ?? []);
         $this->assertArrayNotHasKey('image', $taskFourteen);
     }
