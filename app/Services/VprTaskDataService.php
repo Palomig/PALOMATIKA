@@ -156,6 +156,7 @@ class VprTaskDataService
             foreach ($block['zadaniya'] ?? [] as $zadIdx => $zadanie) {
                 foreach ($zadanie['tasks'] ?? [] as $task) {
                     if ($status && ($task['status'] ?? 'production') !== $status) continue;
+                    $task = $this->normalizeTask($topicId, $task, $zadanie);
                     $candidates[] = [
                         'task'           => $task,
                         'topic_id'       => $topicId,
@@ -171,5 +172,23 @@ class VprTaskDataService
 
         if (empty($candidates)) return null;
         return $candidates[array_rand($candidates)];
+    }
+
+    private function normalizeTask(string $topicId, array $task, array $zadanie): array
+    {
+        if (
+            $this->grade === 5
+            && $topicId === '01'
+            && empty($task['text'])
+            && isset($task['expression'], $task['denominator'])
+        ) {
+            $task['text'] = sprintf(
+                'Представьте число %s в виде дроби со знаменателем %s. Какой числитель получится?',
+                $task['expression'],
+                $task['denominator']
+            );
+        }
+
+        return $task;
     }
 }

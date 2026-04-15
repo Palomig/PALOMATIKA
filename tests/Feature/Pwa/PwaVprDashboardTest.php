@@ -197,6 +197,91 @@ class PwaVprDashboardTest extends TestCase
         $response->assertDontSee('currentTask.instruction || currentTask.text ||', false);
     }
 
+    public function test_vpr_test_template_supports_special_rendering_for_tasks_4_10_and_14(): void
+    {
+        $user = $this->makeStudent(5);
+
+        $variant = OgeVariant::create([
+            'hash' => 'vpr5ui',
+            'exam_type' => OgeVariant::EXAM_VPR5,
+            'title' => 'Вариант ВПР 5 класс',
+            'source' => OgeVariant::SOURCE_MINIAPP,
+            'mode' => OgeVariant::MODE_FULL,
+            'config_json' => ['tasks' => [
+                [
+                    'task_number' => 4,
+                    'topic_id' => '04',
+                    'text' => "Вступление.\n\n1) Первый вопрос?\n2) Второй вопрос?",
+                    'answer_1' => '1',
+                    'answer_2' => '2',
+                ],
+                [
+                    'task_number' => 10,
+                    'topic_id' => '10',
+                    'text' => "А) $\\frac{17}{9}$\nБ) $\\frac{15}{17}$\nВ) $\\frac{12}{29}$\n\n1) Больше 1.\n2) Меньше 0,5.\n3) Между 0,5 и 1.",
+                ],
+                [
+                    'task_number' => 14,
+                    'topic_id' => '14',
+                    'text' => 'Нужно купить 60 кг стирального порошка.',
+                    'table' => [
+                        'headers' => ['Стиральный порошок', 'Масса, кг', 'Цена, руб.'],
+                        'rows' => [
+                            ['А', '15', '1700'],
+                            ['Б', '10', '1100'],
+                        ],
+                    ],
+                ],
+            ]],
+        ]);
+
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $user->id,
+            'status' => 'active',
+            'started_at' => now()->subMinutes(1),
+            'last_seen_at' => now(),
+        ]);
+
+        $response = $this->actingAs($user)
+            ->get("http://student.palomatika.ru/vpr/test/{$attempt->id}");
+
+        $response->assertOk();
+        $response->assertSee('isTwoAnswerTask(currentTask)', false);
+        $response->assertSee('taskPromptIntro(currentTask)', false);
+        $response->assertSee('taskPromptQuestions(currentTask)', false);
+        $response->assertSee('isTaskTenMatrix(currentTask)', false);
+        $response->assertSee('taskTenFractions(currentTask)', false);
+        $response->assertSee('taskHasHtmlTable(currentTask)', false);
+    }
+
+    public function test_grade_5_vpr_bank_contains_explicit_question_for_task_1_and_structured_table_for_task_14(): void
+    {
+        $topicOne = json_decode((string) file_get_contents(storage_path('app/tasks/vpr/grade_5/topic_01.json')), true);
+        $topicFourteen = json_decode((string) file_get_contents(storage_path('app/tasks/vpr/grade_5/topic_14.json')), true);
+
+        $taskOne = $topicOne['blocks'][0]['zadaniya'][0]['tasks'][0] ?? null;
+        $taskFourteen = $topicFourteen['blocks'][0]['zadaniya'][0]['tasks'][0] ?? null;
+
+        $this->assertIsArray($taskOne);
+        $this->assertIsArray($taskFourteen);
+        $this->assertIsString($taskOne['text'] ?? null);
+        $this->assertStringContainsString('Какой', $taskOne['text']);
+        $this->assertStringContainsString('?', $taskOne['text']);
+
+        $this->assertSame(
+            'Нужно купить 60 кг стирального порошка. Данные о цене и массе стирального порошка в упаковке указаны в таблице. Сколько будет стоить самая дешёвая покупка? Ответ дайте в рублях.',
+            $taskFourteen['text'] ?? null
+        );
+        $this->assertArrayHasKey('table', $taskFourteen);
+        $this->assertSame(
+            ['Стиральный порошок', 'Масса, кг', 'Цена, руб.'],
+            $taskFourteen['table']['headers'] ?? null
+        );
+        $this->assertCount(4, $taskFourteen['table']['rows'] ?? []);
+        $this->assertArrayNotHasKey('image', $taskFourteen);
+    }
+
     public function test_history_uses_vpr_labels_for_vpr_attempts(): void
     {
         $user = $this->makeStudent(5);
