@@ -197,6 +197,25 @@
     color: var(--text);
     line-height: 1.6;
   }
+  .q-prompt-intro {
+    font-weight: 700;
+  }
+  .q-question-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .q-question-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.55;
+  }
   .inline-frac {
     display:inline-flex;
     flex-direction:column;
@@ -358,6 +377,108 @@
     font-weight: 600;
     text-align: center;
     margin-top: 8px;
+  }
+  .multi-answer-grid {
+    display: grid;
+    gap: 12px;
+  }
+  .multi-answer-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .multi-answer-caption {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--muted);
+  }
+  .matrix-fraction-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .matrix-fraction-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 10px;
+    text-align: center;
+  }
+  .matrix-fraction-card strong {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    letter-spacing: 0.08em;
+  }
+  .matrix-fraction-card .fraction-value {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .matrix-fraction-card .fraction-value .katex {
+    font-size: 1.35em;
+  }
+  .matrix-statement-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .matrix-statement-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px 14px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.55;
+  }
+  .matrix-answer-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 10px 10px;
+    margin-top: 4px;
+  }
+  .matrix-answer-table th {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+  .matrix-answer-table td {
+    width: 33.333%;
+  }
+  .matrix-answer-table .answer-input {
+    padding: 14px 0;
+    font-size: 24px;
+    letter-spacing: 0;
+  }
+  .task-table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 14px;
+    overflow-x: auto;
+  }
+  .task-table {
+    width: 100%;
+    min-width: 320px;
+    border-collapse: collapse;
+  }
+  .task-table th,
+  .task-table td {
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 14px;
+    color: var(--text);
+  }
+  .task-table th {
+    background: rgba(79,142,247,0.08);
+    font-weight: 800;
   }
 
   /* ───── PHOTO UPLOAD ───── */
@@ -689,13 +810,44 @@
         </div>
 
         {{-- Instruction text --}}
-        <template x-if="primaryPrompt(currentTask)">
+        <template x-if="hasSplitPrompt(currentTask)">
+          <div class="q-anim" :style="'animation-delay: 0.05s; margin-top: 16px'">
+            <template x-if="taskPromptIntro(currentTask)">
+              <div class="q-text q-prompt-intro" x-html="formatRichText(taskPromptIntro(currentTask))"></div>
+            </template>
+            <div class="q-question-list">
+              <template x-for="(question, qi) in taskPromptQuestions(currentTask)" :key="qi">
+                <div class="q-question-item" x-html="formatRichText(question)"></div>
+              </template>
+            </div>
+          </div>
+        </template>
+
+        <template x-if="!hasSplitPrompt(currentTask) && primaryPrompt(currentTask)">
           <div class="q-text q-anim" :style="'animation-delay: 0.05s; margin-top: 16px'"
                x-html="formatRichText(primaryPrompt(currentTask))"></div>
         </template>
 
         {{-- Task text (when instruction is a generic heading and task body is separate) --}}
-        <template x-if="shouldShowInstruction(currentTask) && currentTask.instruction && currentTask.text && currentTask.text !== currentTask.instruction">
+        <template x-if="isTaskTenMatrix(currentTask)">
+          <div class="q-anim" :style="'animation-delay: 0.07s; margin-top: 12px'">
+            <div class="matrix-fraction-strip">
+              <template x-for="fraction in taskTenFractions(currentTask)" :key="fraction.label">
+                <div class="matrix-fraction-card">
+                  <strong x-text="fraction.label"></strong>
+                  <div class="fraction-value" x-html="formatRichText(fraction.value)"></div>
+                </div>
+              </template>
+            </div>
+            <div class="matrix-statement-list">
+              <template x-for="statement in taskTenStatements(currentTask)" :key="statement">
+                <div class="matrix-statement-item" x-html="formatRichText(statement)"></div>
+              </template>
+            </div>
+          </div>
+        </template>
+
+        <template x-if="!isTaskTenMatrix(currentTask) && shouldShowInstruction(currentTask) && currentTask.instruction && currentTask.text && currentTask.text !== currentTask.instruction">
           <div class="q-text q-anim" :style="'animation-delay: 0.07s; margin-top: 10px; font-size: 15px; font-weight: 600'"
                x-html="formatRichText(currentTask.text)"></div>
         </template>
@@ -711,17 +863,40 @@
         </template>
 
         {{-- SVG image --}}
-        <template x-if="currentTask.svg">
+        <template x-if="taskHasHtmlTable(currentTask)">
+          <div class="task-table-wrap q-anim" :style="'animation-delay: 0.08s; margin-top: 16px'">
+            <table class="task-table">
+              <thead>
+                <tr>
+                  <template x-for="(header, hi) in taskTableHeaders(currentTask)" :key="hi">
+                    <th x-text="header"></th>
+                  </template>
+                </tr>
+              </thead>
+              <tbody>
+                <template x-for="(row, ri) in taskTableRows(currentTask)" :key="ri">
+                  <tr>
+                    <template x-for="(cell, ci) in row" :key="ci">
+                      <td x-text="cell"></td>
+                    </template>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </div>
+        </template>
+
+        <template x-if="!taskHasHtmlTable(currentTask) && currentTask.svg">
           <div class="q-svg-wrap q-anim" :class="{ 'q-svg-wide': String(displayTaskNumber(currentTask)) === '11' }" :style="'animation-delay: 0.08s; margin-top: 16px'"
                x-html="currentTask.svg"></div>
         </template>
 
         {{-- Image fallback (PNG/JPG/SVG file path or inline SVG string) --}}
-        <template x-if="!currentTask.svg && currentTask.image && String(currentTask.image).trim().startsWith('<svg')">
+        <template x-if="!taskHasHtmlTable(currentTask) && !currentTask.svg && currentTask.image && String(currentTask.image).trim().startsWith('<svg')">
           <div class="q-svg-wrap q-anim" :class="{ 'q-svg-wide': String(displayTaskNumber(currentTask)) === '11' }" :style="'animation-delay: 0.08s; margin-top: 16px'"
                x-html="currentTask.image"></div>
         </template>
-        <template x-if="!currentTask.svg && currentTask.image && !String(currentTask.image).trim().startsWith('<svg')">
+        <template x-if="!taskHasHtmlTable(currentTask) && !currentTask.svg && currentTask.image && !String(currentTask.image).trim().startsWith('<svg')">
           <div class="q-svg-wrap q-anim" :class="{ 'q-svg-wide': String(displayTaskNumber(currentTask)) === '11' }" :style="'animation-delay: 0.08s; margin-top: 16px'">
             <img :src="resolveTaskImageSrc(currentTask)" alt="task image" style="max-width:100%; height:auto; display:block; margin:0 auto; border-radius:12px;">
           </div>
@@ -777,7 +952,83 @@
           </template>
 
           {{-- Input type (expression, geometry, word_problem, etc.) --}}
-          <template x-if="normalizedOptions(currentTask).length === 0 && currentTask.type !== 'matching' && currentTask.type !== 'matching_signs'">
+          <template x-if="isTwoAnswerTask(currentTask)">
+            <div>
+              <div class="answer-label">Введи ответы</div>
+              <div class="multi-answer-grid">
+                <div class="multi-answer-field">
+                  <div class="multi-answer-caption">Ответ на вопрос 1</div>
+                  <input class="answer-input"
+                         type="text"
+                         inputmode="text"
+                         autocomplete="off"
+                         placeholder="Ответ 1"
+                         :value="twoAnswerValue(currentTask, 0)"
+                         @input="setTwoAnswerValue(currentTask, 0, $event.target.value)">
+                </div>
+                <div class="multi-answer-field">
+                  <div class="multi-answer-caption">Ответ на вопрос 2</div>
+                  <input class="answer-input"
+                         type="text"
+                         inputmode="text"
+                         autocomplete="off"
+                         placeholder="Ответ 2"
+                         :value="twoAnswerValue(currentTask, 1)"
+                         @input="setTwoAnswerValue(currentTask, 1, $event.target.value)">
+                </div>
+              </div>
+              <div class="answer-hint">Введи ответ на каждый вопрос отдельно</div>
+            </div>
+          </template>
+
+          <template x-if="isTaskTenMatrix(currentTask)">
+            <div>
+              <div class="answer-label">Заполни таблицу</div>
+              <table class="matrix-answer-table">
+                <thead>
+                  <tr>
+                    <th>А</th>
+                    <th>Б</th>
+                    <th>В</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <input class="answer-input"
+                             type="text"
+                             inputmode="numeric"
+                             autocomplete="off"
+                             placeholder="1"
+                             :value="taskTenCellValue(currentTask, 0)"
+                             @input="setTaskTenCellValue(currentTask, 0, $event.target.value)">
+                    </td>
+                    <td>
+                      <input class="answer-input"
+                             type="text"
+                             inputmode="numeric"
+                             autocomplete="off"
+                             placeholder="2"
+                             :value="taskTenCellValue(currentTask, 1)"
+                             @input="setTaskTenCellValue(currentTask, 1, $event.target.value)">
+                    </td>
+                    <td>
+                      <input class="answer-input"
+                             type="text"
+                             inputmode="numeric"
+                             autocomplete="off"
+                             placeholder="3"
+                             :value="taskTenCellValue(currentTask, 2)"
+                             @input="setTaskTenCellValue(currentTask, 2, $event.target.value)">
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="answer-hint">Под каждой буквой укажи номер верного утверждения</div>
+            </div>
+          </template>
+
+          <template x-if="normalizedOptions(currentTask).length === 0 && currentTask.type !== 'matching' && currentTask.type !== 'matching_signs' && !isTwoAnswerTask(currentTask) && !isTaskTenMatrix(currentTask)">
             <div>
               <div class="answer-label">Введи ответ</div>
               <input class="answer-input"
@@ -1075,7 +1326,120 @@
         // Render simple inline fractions like 7/12 with a horizontal bar.
         return raw.replace(/(^|[^\d])([+-]?\d{1,3})\s*\/\s*(\d{1,3})(?!\d)/g, (m, lead, a, b) => {
           return `${lead}<span class="inline-frac"><span class="top">${a}</span><span class="bottom">${b}</span></span>`;
+        }).replace(/\n/g, '<br>');
+      },
+
+      isTwoAnswerTask(task) {
+        return Number(this.displayTaskNumber(task)) === 4
+          && (task?.answer_1 !== undefined || task?.answer_2 !== undefined);
+      },
+
+      hasSplitPrompt(task) {
+        return this.isTwoAnswerTask(task) && this.taskPromptQuestions(task).length > 0;
+      },
+
+      taskPromptIntro(task) {
+        const { intro } = this.parsePromptSections(task);
+        return intro;
+      },
+
+      taskPromptQuestions(task) {
+        const { questions } = this.parsePromptSections(task);
+        return questions;
+      },
+
+      parsePromptSections(task) {
+        const raw = String(task?.text || '').trim();
+        if (!raw) {
+          return { intro: '', questions: [] };
+        }
+
+        const lines = raw.split('\n').map(line => line.trim()).filter(Boolean);
+        const intro = [];
+        const questions = [];
+
+        lines.forEach(line => {
+          if (/^\d+\)/.test(line)) {
+            questions.push(line);
+            return;
+          }
+
+          intro.push(line);
         });
+
+        return {
+          intro: intro.join(' '),
+          questions,
+        };
+      },
+
+      parseCompositeAnswerParts(task, size = 2) {
+        const raw = String(this.answers[this.taskKey(task)] ?? '');
+        const parts = raw.split(/\s*;\s*/).slice(0, size);
+        while (parts.length < size) {
+          parts.push('');
+        }
+
+        return parts;
+      },
+
+      twoAnswerValue(task, index) {
+        return this.parseCompositeAnswerParts(task, 2)[index] ?? '';
+      },
+
+      setTwoAnswerValue(task, index, value) {
+        const parts = this.parseCompositeAnswerParts(task, 2);
+        parts[index] = String(value ?? '').trim();
+        this.answers[this.taskKey(task)] = parts.join('; ').trim();
+      },
+
+      isTaskTenMatrix(task) {
+        return Number(this.displayTaskNumber(task)) === 10;
+      },
+
+      taskTenFractions(task) {
+        return String(task?.text || '')
+          .split('\n')
+          .map(line => line.trim())
+          .filter(line => /^[АБВ]\)/.test(line))
+          .map(line => {
+            const match = line.match(/^([АБВ])\)\s*(.+)$/);
+            return {
+              label: match?.[1] ?? '',
+              value: match?.[2] ?? '',
+            };
+          });
+      },
+
+      taskTenStatements(task) {
+        return String(task?.text || '')
+          .split('\n')
+          .map(line => line.trim())
+          .filter(line => /^\d+\)/.test(line));
+      },
+
+      taskTenCellValue(task, index) {
+        const raw = String(this.answers[this.taskKey(task)] ?? '').padEnd(3, ' ');
+        return (raw[index] ?? ' ').trim();
+      },
+
+      setTaskTenCellValue(task, index, value) {
+        const clean = String(value ?? '').replace(/\D+/g, '').slice(0, 1);
+        const raw = String(this.answers[this.taskKey(task)] ?? '').padEnd(3, ' ').slice(0, 3).split('');
+        raw[index] = clean || ' ';
+        this.answers[this.taskKey(task)] = raw.join('');
+      },
+
+      taskHasHtmlTable(task) {
+        return Array.isArray(task?.table?.headers) && Array.isArray(task?.table?.rows);
+      },
+
+      taskTableHeaders(task) {
+        return this.taskHasHtmlTable(task) ? task.table.headers : [];
+      },
+
+      taskTableRows(task) {
+        return this.taskHasHtmlTable(task) ? task.table.rows : [];
       },
 
       // Topic name helper
