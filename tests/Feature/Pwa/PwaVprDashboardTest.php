@@ -255,13 +255,14 @@ class PwaVprDashboardTest extends TestCase
         $response->assertSee('taskHasHtmlTable(currentTask)', false);
     }
 
-    public function test_grade_5_vpr_bank_contains_explicit_question_for_task_1_and_structured_table_for_task_14(): void
+    public function test_grade_5_vpr_bank_contains_explicit_question_for_task_1_and_structured_tables_for_topic_14(): void
     {
         $topicOne = json_decode((string) file_get_contents(storage_path('app/tasks/vpr/grade_5/topic_01.json')), true);
         $topicFourteen = json_decode((string) file_get_contents(storage_path('app/tasks/vpr/grade_5/topic_14.json')), true);
 
         $taskOne = $topicOne['blocks'][0]['zadaniya'][0]['tasks'][0] ?? null;
-        $taskFourteen = $topicFourteen['blocks'][0]['zadaniya'][0]['tasks'][0] ?? null;
+        $topicFourteenTasks = $topicFourteen['blocks'][0]['zadaniya'][0]['tasks'] ?? [];
+        $taskFourteen = $topicFourteenTasks[0] ?? null;
 
         $this->assertIsArray($taskOne);
         $this->assertIsArray($taskFourteen);
@@ -273,14 +274,20 @@ class PwaVprDashboardTest extends TestCase
             'Нужно купить 60 кг стирального порошка. Данные о цене и массе стирального порошка в упаковке указаны в таблице. Сколько будет стоить самая дешёвая покупка? Ответ дайте в рублях.',
             $taskFourteen['text'] ?? null
         );
+        $this->assertCount(10, $topicFourteenTasks);
         $this->assertArrayHasKey('table', $taskFourteen);
         $this->assertSame(
             ['Стиральный порошок', 'Масса, кг', 'Цена, руб.'],
             $taskFourteen['table']['headers'] ?? null
         );
-        $this->assertCount(10, $topicFourteen['blocks'][0]['zadaniya'][0]['tasks'] ?? []);
         $this->assertCount(4, $taskFourteen['table']['rows'] ?? []);
         $this->assertArrayNotHasKey('image', $taskFourteen);
+
+        foreach ($topicFourteenTasks as $topicFourteenTask) {
+            $this->assertArrayHasKey('table', $topicFourteenTask, 'Task '.$topicFourteenTask['id'].' is missing a structured table.');
+            $this->assertNotEmpty($topicFourteenTask['table']['headers'] ?? [], 'Task '.$topicFourteenTask['id'].' must have table headers.');
+            $this->assertNotEmpty($topicFourteenTask['table']['rows'] ?? [], 'Task '.$topicFourteenTask['id'].' must have table rows.');
+        }
     }
 
     public function test_vpr_topic_bank_page_renders_structured_table_for_topic_14(): void
