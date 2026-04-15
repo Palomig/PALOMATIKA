@@ -23,6 +23,15 @@ class PwaVprDashboardTest extends TestCase
         ]);
     }
 
+    private function makeAdmin(?int $grade = 9): User
+    {
+        return User::factory()->create([
+            'role' => 'admin',
+            'grade_num' => $grade,
+            'onboarding_completed_at' => now(),
+        ]);
+    }
+
     public function test_vpr_dashboard_shows_real_student_grade_and_oge_style_action_cards(): void
     {
         $user = $this->makeStudent(5);
@@ -37,6 +46,18 @@ class PwaVprDashboardTest extends TestCase
         $response->assertSee('База заданий');
         $response->assertSee('История');
         $response->assertSee('Профиль');
+    }
+
+    public function test_admin_vpr_dashboard_defaults_to_grade_5_for_testing(): void
+    {
+        $admin = $this->makeAdmin(9);
+
+        $response = $this->actingAs($admin)
+            ->get('http://student.palomatika.ru/vpr');
+
+        $response->assertOk();
+        $response->assertSee('ВПР · 5 класс');
+        $response->assertDontSee('ВПР · 9 класс');
     }
 
     public function test_vpr_mini_start_creates_mini_vpr_attempt_and_returns_redirect(): void
@@ -57,6 +78,38 @@ class PwaVprDashboardTest extends TestCase
         $this->assertDatabaseHas('oge_variants', [
             'exam_type' => OgeVariant::EXAM_VPR5,
             'mode' => OgeVariant::MODE_MINI_MIXED,
+        ]);
+    }
+
+    public function test_admin_can_start_vpr_variants_for_testing(): void
+    {
+        $admin = $this->makeAdmin(9);
+
+        $miniResponse = $this->actingAs($admin)
+            ->postJson('http://student.palomatika.ru/vpr/mini/start', [
+                'mode' => 'mixed',
+            ]);
+
+        $miniResponse->assertOk();
+        $miniResponse->assertJson(fn (AssertableJson $json) =>
+            $json->where('redirect', fn (string $value) => str_contains($value, '/vpr/test/'))->etc()
+        );
+
+        $fullResponse = $this->actingAs($admin)
+            ->postJson('http://student.palomatika.ru/vpr/full/start');
+
+        $fullResponse->assertOk();
+        $fullResponse->assertJson(fn (AssertableJson $json) =>
+            $json->where('redirect', fn (string $value) => str_contains($value, '/vpr/test/'))->etc()
+        );
+
+        $this->assertDatabaseHas('oge_variants', [
+            'exam_type' => OgeVariant::EXAM_VPR5,
+            'mode' => OgeVariant::MODE_MINI_MIXED,
+        ]);
+        $this->assertDatabaseHas('oge_variants', [
+            'exam_type' => OgeVariant::EXAM_VPR5,
+            'mode' => OgeVariant::MODE_FULL,
         ]);
     }
 

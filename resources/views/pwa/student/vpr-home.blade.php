@@ -214,7 +214,7 @@
   </div>
 
   <div class="tiles-grid">
-    <a href="{{ route('pwa.student.vpr.tasks') }}" class="tile-sm">
+    <a href="{{ route('pwa.student.vpr.tasks', ['grade' => $grade]) }}" class="tile-sm">
       <div class="tile-sm-icon">📚</div>
       <div class="tile-sm-name">База заданий</div>
       <div class="tile-sm-desc">Все задания ВПР по номерам</div>
@@ -353,13 +353,14 @@ function vprDashboardPage() {
     showUnfinished: false,
     startingMini: false,
     startingFull: false,
+    grade: {{ $grade }},
 
     async startMini() {
       if (this.startingMini) return;
       this.startingMini = true;
 
       try {
-        const res = await window.fetchPost('{{ route("pwa.student.vpr.mini.start") }}', { mode: 'mixed' });
+        const res = await window.fetchPost('{{ route("pwa.student.vpr.mini.start") }}', { mode: 'mixed', grade: this.grade });
         const data = await res.json();
         if (res.ok && data.redirect) {
           window.location.href = data.redirect;
@@ -380,7 +381,7 @@ function vprDashboardPage() {
       this.startingFull = true;
 
       try {
-        const res = await window.fetchPost('{{ route("pwa.student.vpr.start") }}', {});
+        const res = await window.fetchPost('{{ route("pwa.student.vpr.start") }}', { grade: this.grade });
         const data = await res.json();
         if (res.ok && data.redirect) {
           window.location.href = data.redirect;
