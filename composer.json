@@ -11,6 +11,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/socialite": "^5.10",
         "laravel/tinker": "^2.8",
+        "minishlink/web-push": "^10.0",
         "socialiteproviders/vkontakte": "^5.0",
         "socialiteproviders/yandex": "^4.1"
     },

@@ -1,5 +1,5 @@
 // public/sw.js
-const CACHE_NAME = 'palomatika-v1';
+const CACHE_NAME = 'palomatika-v2';
 
 // App shell — cached on install
 const SHELL_URLS = [
@@ -52,5 +52,49 @@ self.addEventListener('fetch', (event) => {
           return caches.match('/offline.html');
         }
       })
+  );
+});
+
+// ─── Push Notifications ──────────────────────────────────────────────────────
+
+self.addEventListener('push', (event) => {
+  let data = {};
+  try {
+    data = event.data ? event.data.json() : {};
+  } catch (e) {
+    data = { title: 'Урок', body: event.data ? event.data.text() : '' };
+  }
+
+  const title   = data.title || 'Урок';
+  const options = {
+    body:               data.body || '',
+    icon:               '/icons/apple-touch-icon.png',
+    badge:              '/icons/badge-72.png',
+    data:               { url: data.url || '/lessons' },
+    requireInteraction: true,
+    vibrate:            [200, 100, 200],
+    tag:                data.tag || 'lesson-notify',
+    renotify:           true,
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const url = event.notification.data?.url || '/lessons';
+
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windows) => {
+      // If there is already an open window on the same origin, focus it and navigate
+      for (const w of windows) {
+        if (w.url.startsWith(self.registration.scope)) {
+          w.focus();
+          return w.navigate(url);
+        }
+      }
+      // Otherwise open a new window
+      return clients.openWindow(url);
+    })
   );
 });

@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <meta name="route-name" content="{{ Route::currentRouteName() ?? '' }}">
+<meta name="vapid-public-key" content="{{ config('services.vapid.public_key') }}">
 <meta name="theme-color" content="#111318" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#f7f8fc" media="(prefers-color-scheme: light)">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -136,14 +137,18 @@
   {{-- Floating trigger button --}}
   <button @click="open = true" aria-label="Сообщить об ошибке"
     style="position:fixed;bottom:calc(20px + var(--safe-bottom));right:16px;z-index:900;
-           width:40px;height:40px;border-radius:50%;border:1px solid var(--border);
-           background:var(--surface2);color:var(--muted);cursor:pointer;
-           display:flex;align-items:center;justify-content:center;
-           box-shadow:0 2px 8px rgba(0,0,0,.25);transition:opacity .2s;"
-    :style="open ? 'opacity:0;pointer-events:none' : 'opacity:1'">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+           height:48px;padding:0 18px 0 14px;border-radius:24px;border:none;
+           background:rgba(220,38,38,0.92);color:#fff;cursor:pointer;
+           display:flex;align-items:center;gap:8px;
+           box-shadow:0 4px 16px rgba(220,38,38,.45),0 2px 6px rgba(0,0,0,.3);
+           font-family:var(--body);font-size:14px;font-weight:600;
+           transition:opacity .2s,transform .15s;white-space:nowrap;"
+    :style="open ? 'opacity:0;pointer-events:none' : 'opacity:1'"
+    @mouseenter="$el.style.transform='scale(1.04)'" @mouseleave="$el.style.transform='scale(1)'">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
       <path d="M12 8v4m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/>
     </svg>
+    <span>Ошибка?</span>
   </button>
 
   {{-- Modal backdrop --}}
