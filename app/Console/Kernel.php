@@ -14,6 +14,12 @@ class Kernel extends ConsoleKernel
     {
         // Audit prune is manual-only by request.
 
+        // Уведомления об уроках — каждую минуту
+        $schedule->command('lessons:notify')
+                 ->everyMinute()
+                 ->withoutOverlapping()
+                 ->runInBackground();
+
         // Ежегодный перевод классов — 1 июня в 03:00
         $schedule->command('grades:promote', ['--no-interaction'])
                  ->yearlyOn(6, 1, '03:00')
