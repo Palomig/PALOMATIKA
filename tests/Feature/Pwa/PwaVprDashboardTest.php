@@ -634,6 +634,20 @@ class PwaVprDashboardTest extends TestCase
         $response->assertSee('6450');
     }
 
+    public function test_student_test_templates_do_not_force_numeric_inputmode(): void
+    {
+        $templates = [
+            resource_path('views/pwa/student/test.blade.php'),
+            resource_path('views/pwa/student/ege-test.blade.php'),
+            resource_path('views/pwa/student/vpr-test.blade.php'),
+        ];
+
+        foreach ($templates as $template) {
+            $contents = (string) file_get_contents($template);
+            $this->assertStringNotContainsString('inputmode="numeric"', $contents, $template.' should not force numeric inputmode on Android.');
+        }
+    }
+
     public function test_history_uses_vpr_labels_for_vpr_attempts(): void
     {
         $user = $this->makeStudent(5);

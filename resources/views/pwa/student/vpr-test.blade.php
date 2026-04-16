@@ -997,7 +997,7 @@
                     <td>
                       <input class="answer-input"
                              type="text"
-                             inputmode="numeric"
+                             inputmode="text"
                              autocomplete="off"
                              placeholder="1"
                              :value="taskTenCellValue(currentTask, 0)"
@@ -1006,7 +1006,7 @@
                     <td>
                       <input class="answer-input"
                              type="text"
-                             inputmode="numeric"
+                             inputmode="text"
                              autocomplete="off"
                              placeholder="2"
                              :value="taskTenCellValue(currentTask, 1)"
@@ -1015,7 +1015,7 @@
                     <td>
                       <input class="answer-input"
                              type="text"
-                             inputmode="numeric"
+                             inputmode="text"
                              autocomplete="off"
                              placeholder="3"
                              :value="taskTenCellValue(currentTask, 2)"
