@@ -300,9 +300,16 @@ class VprController extends Controller
      */
     private function normalizeAttemptTasks(OgeVariant $variant, array $tasks): array
     {
+        $grade = (int) preg_replace('/\D+/', '', (string) ($variant->exam_type ?? ''));
+        $taskData = ($grade >= 5 && $grade <= 8) ? new VprTaskDataService($grade) : null;
+
         foreach ($tasks as $index => $task) {
             if (!is_array($task)) {
                 continue;
+            }
+
+            if ($taskData && !empty($task['topic_id'])) {
+                $task = $taskData->canonicalizeLegacyTask((string) $task['topic_id'], $task);
             }
 
             $numbers = VariantTaskNumberResolver::resolve($task, $index, $variant);

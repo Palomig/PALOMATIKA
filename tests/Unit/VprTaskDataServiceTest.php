@@ -218,4 +218,26 @@ class VprTaskDataServiceTest extends TestCase
         $this->assertStringNotContainsString('Вариант', $firstTaskText);
         $this->assertStringNotContainsString('На числовом луче', $firstTaskText);
     }
+
+    public function test_canonicalize_legacy_task_replaces_embedded_png_table_with_structured_table(): void
+    {
+        $svc = new VprTaskDataService(5);
+
+        $legacyTask = [
+            'id' => 1,
+            'topic_id' => '14',
+            'task_number' => 14,
+            'source_pdf' => '1_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf',
+            'image' => '<svg><image href="data:image/png;base64,AAAA" /></svg>',
+            'text' => 'legacy',
+        ];
+
+        $normalized = $svc->canonicalizeLegacyTask('14', $legacyTask);
+
+        $this->assertArrayHasKey('table', $normalized);
+        $this->assertNotEmpty($normalized['table']['headers'] ?? []);
+        $this->assertNotEmpty($normalized['table']['rows'] ?? []);
+        $this->assertArrayNotHasKey('image', $normalized);
+        $this->assertSame('6450', $normalized['answer'] ?? null);
+    }
 }

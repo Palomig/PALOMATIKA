@@ -176,6 +176,8 @@ class VprTaskDataService
 
     private function normalizeTask(string $topicId, array $task, array $zadanie): array
     {
+        $task = $this->canonicalizeLegacyTask($topicId, $task);
+
         if (
             $this->grade === 5
             && $topicId === '01'
@@ -190,5 +192,71 @@ class VprTaskDataService
         }
 
         return $task;
+    }
+
+    public function canonicalizeLegacyTask(string $topicId, array $task): array
+    {
+        $topicId = str_pad((string) $topicId, 2, '0', STR_PAD_LEFT);
+
+        if (!$this->containsEmbeddedBase64Image($task)) {
+            return $task;
+        }
+
+        $canonicalTask = $this->findCanonicalTask($topicId, $task);
+        if ($canonicalTask === null) {
+            return $task;
+        }
+
+        foreach (['text', 'expression', 'svg', 'image', 'table', 'options', 'answer', 'correct_answer', 'answer_1', 'answer_2'] as $field) {
+            if (array_key_exists($field, $canonicalTask)) {
+                $task[$field] = $canonicalTask[$field];
+                continue;
+            }
+
+            unset($task[$field]);
+        }
+
+        return $task;
+    }
+
+    private function containsEmbeddedBase64Image(array $task): bool
+    {
+        $image = (string) ($task['image'] ?? '');
+
+        return str_contains($image, 'data:image/png;base64')
+            || str_contains($image, 'data:image/jpeg;base64')
+            || str_contains($image, 'data:image/jpg;base64');
+    }
+
+    private function findCanonicalTask(string $topicId, array $legacyTask): ?array
+    {
+        $data = $this->getTopicData($topicId);
+        $legacyId = (int) ($legacyTask['id'] ?? 0);
+        $legacyVariant = (int) ($legacyTask['variant'] ?? 0);
+        $legacySourcePdf = trim((string) ($legacyTask['source_pdf'] ?? ''));
+
+        foreach ($data['blocks'] ?? [] as $block) {
+            foreach ($block['zadaniya'] ?? [] as $zadanie) {
+                foreach ($zadanie['tasks'] ?? [] as $task) {
+                    $taskId = (int) ($task['id'] ?? 0);
+                    $taskVariant = (int) ($task['variant'] ?? 0);
+                    $taskSourcePdf = trim((string) ($task['source_pdf'] ?? ''));
+
+                    if ($legacyId > 0 && $taskId === $legacyId) {
+                        return $task;
+                    }
+
+                    if ($legacyVariant > 0 && $taskVariant === $legacyVariant) {
+                        return $task;
+                    }
+
+                    if ($legacySourcePdf !== '' && $taskSourcePdf !== '' && $taskSourcePdf === $legacySourcePdf) {
+                        return $task;
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 }
