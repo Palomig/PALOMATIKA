@@ -693,9 +693,9 @@ class StudentController extends Controller
         $user = Auth::user();
 
         $attempt = OgeAttempt::where('id', $attemptId)
-            ->where('student_id', $user->id)
             ->whereIn('status', ['submitted', 'scored'])
             ->with(['variant:id,hash,title,mode,exam_type,config_json', 'answers:id,attempt_id,task_number,current_answer', 'scorings:id,attempt_id,task_number,is_correct,correct_answer'])
+            ->when($user->role !== 'admin', fn ($query) => $query->where('student_id', $user->id))
             ->firstOrFail();
 
         $correct = $attempt->scorings->where('is_correct', true)->count();

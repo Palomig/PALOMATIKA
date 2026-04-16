@@ -229,6 +229,44 @@ class PwaVprDashboardTest extends TestCase
         $response->assertSee('Результаты');
     }
 
+    public function test_admin_can_open_student_history_detail_for_vpr_attempt(): void
+    {
+        $student = $this->makeStudent(6);
+        $admin = $this->makeAdmin();
+
+        $variant = OgeVariant::create([
+            'hash' => 'vpr6admhist',
+            'exam_type' => OgeVariant::EXAM_VPR6,
+            'title' => 'Мини-ВПР 6 класс',
+            'source' => OgeVariant::SOURCE_MINIAPP,
+            'mode' => OgeVariant::MODE_MINI_MIXED,
+            'config_json' => ['tasks' => [['task_number' => 12, 'topic_id' => '12', 'text' => 'Задание']]],
+        ]);
+
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $student->id,
+            'status' => 'scored',
+            'started_at' => now()->subMinutes(5),
+            'submitted_at' => now(),
+            'last_seen_at' => now(),
+        ]);
+
+        OgeAttemptScoring::create([
+            'attempt_id' => $attempt->id,
+            'task_number' => 12,
+            'is_correct' => false,
+            'correct_answer' => '42',
+            'checked_at' => now(),
+        ]);
+
+        $response = $this->actingAs($admin)
+            ->get("http://student.palomatika.ru/history/{$attempt->id}");
+
+        $response->assertOk();
+        $response->assertSee('Мини-ВПР');
+    }
+
     public function test_vpr_test_template_uses_primary_prompt_helper_for_selected_tasks(): void
     {
         $user = $this->makeStudent(5);
