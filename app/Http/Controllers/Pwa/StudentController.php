@@ -660,8 +660,100 @@ class StudentController extends Controller
     public function history()
     {
         $user = Auth::user();
+        $list = $this->buildHistoryListForStudent($user);
 
-        $attempts = OgeAttempt::where('student_id', $user->id)
+        $backUrl = $this->studentHomeUrl($user);
+
+        return view('pwa.student.history', compact('user', 'list', 'backUrl'));
+    }
+
+    /**
+     * History route entry point.
+     * Students keep opening attempt details by ID.
+     * Admins can use `/history/{studentId}` to open a student's history page.
+     */
+    public function historyEntry(Request $request, int $historyId)
+    {
+        $user = $request->user();
+
+        if ($user->role === 'admin') {
+            $student = User::where('role', 'student')->find($historyId);
+
+            if ($student) {
+                return $this->adminHistory($request, $student->id);
+            }
+        }
+
+        return $this->historyDetail($request, $historyId);
+    }
+
+    /**
+     * Admin view of a student's history list.
+     */
+    public function adminHistory(Request $request, int $studentId)
+    {
+        abort_unless($request->user()?->role === 'admin', 403);
+
+        $student = User::where('role', 'student')->findOrFail($studentId);
+        $list = $this->buildHistoryListForStudent($student);
+        $backUrl = route('pwa.student.dashboard');
+
+        return view('pwa.student.admin-history', compact('student', 'list', 'backUrl'));
+    }
+
+    /**
+     * Student attempt history — detail view.
+     */
+    public function historyDetail(Request $request, int $attemptId)
+    {
+        $user = Auth::user();
+        $attempt = $this->loadHistoryAttempt($attemptId, $user->role === 'admin' ? null : $user->id);
+        $detail = $this->buildHistoryDetailViewData($attempt);
+        $backUrl = $this->studentHomeUrl($user);
+
+        return view('pwa.student.history-detail', array_merge($detail, [
+            'user' => $user,
+            'backUrl' => $backUrl,
+            'student' => $attempt->student,
+            'studentContext' => null,
+        ]));
+    }
+
+    /**
+     * Admin view of a specific student's history detail.
+     */
+    public function adminHistoryDetail(Request $request, int $studentId, int $attemptId)
+    {
+        abort_unless($request->user()?->role === 'admin', 403);
+
+        $student = User::where('role', 'student')->findOrFail($studentId);
+        $attempt = $this->loadHistoryAttempt($attemptId, $student->id);
+        $detail = $this->buildHistoryDetailViewData($attempt);
+        $backUrl = $this->base() . '/history/' . $student->id;
+
+        return view('pwa.student.history-detail', array_merge($detail, [
+            'user' => $request->user(),
+            'backUrl' => $backUrl,
+            'student' => $student,
+            'studentContext' => $student->name,
+        ]));
+    }
+
+    private function studentHomeUrl(User $user): string
+    {
+        $grade = (int) ($user->grade_num ?? 9);
+
+        return match (true) {
+            $grade >= 5 && $grade <= 8 => route('pwa.student.vpr.home'),
+            $grade >= 10 && $grade <= 11 => route('pwa.student.ege.home'),
+            $grade === 12 => route('pwa.student.history'),
+            default => route('pwa.student.dashboard'),
+        };
+    }
+
+    private function buildHistoryListForStudent(User $student): array
+    {
+        $attempts = OgeAttempt::where('student_id', $student->id)
             ->whereIn('status', ['submitted', 'scored'])
             ->with(['variant:id,hash,title,mode,exam_type,config_json', 'scorings:id,attempt_id,is_correct'])
             ->orderByDesc('submitted_at')
@@ -677,27 +769,36 @@ class StudentController extends Controller
             if ($att->started_at && $att->submitted_at) {
                 $time = $att->submitted_at->diffInSeconds($att->started_at);
             }
-            $list[] = ['id' => $att->id, 'label' => $this->variantModeLabel($att->variant), 'correct' => $correct, 'total' => $total, 'time' => $time, 'date' => $att->submitted_at];
+            $list[] = [
+                'id' => $att->id,
+                'label' => $this->variantModeLabel($att->variant),
+                'hash' => $att->variant->hash ?? null,
+                'correct' => $correct,
+                'total' => $total,
+                'time' => $time,
+                'date' => $att->submitted_at,
+            ];
         }
 
-        $backUrl = $this->studentHomeUrl($user);
-
-        return view('pwa.student.history', compact('user', 'list', 'backUrl'));
+        return $list;
     }
 
-    /**
-     * Student attempt history — detail view.
-     */
-    public function historyDetail(Request $request, int $attemptId)
+    private function loadHistoryAttempt(int $attemptId, ?int $studentId = null): OgeAttempt
     {
-        $user = Auth::user();
-
-        $attempt = OgeAttempt::where('id', $attemptId)
+        return OgeAttempt::where('id', $attemptId)
             ->whereIn('status', ['submitted', 'scored'])
-            ->with(['variant:id,hash,title,mode,exam_type,config_json', 'answers:id,attempt_id,task_number,current_answer', 'scorings:id,attempt_id,task_number,is_correct,correct_answer'])
-            ->when($user->role !== 'admin', fn ($query) => $query->where('student_id', $user->id))
+            ->with([
+                'student:id,name,grade_num',
+                'variant:id,hash,title,mode,exam_type,config_json',
+                'answers:id,attempt_id,task_number,current_answer',
+                'scorings:id,attempt_id,task_number,is_correct,correct_answer',
+            ])
+            ->when($studentId !== null, fn ($query) => $query->where('student_id', $studentId))
             ->firstOrFail();
+    }
 
+    private function buildHistoryDetailViewData(OgeAttempt $attempt): array
+    {
         $correct = $attempt->scorings->where('is_correct', true)->count();
         $configTaskCount = count($attempt->variant?->config_json['tasks'] ?? []);
         $total = $configTaskCount > 0 ? $configTaskCount : $attempt->scorings->count();
@@ -721,7 +822,9 @@ class StudentController extends Controller
 
         $wrongTasks = [];
         foreach ($attempt->scorings as $scoring) {
-            if ($scoring->is_correct !== false && (int) $scoring->is_correct !== 0) continue;
+            if ($scoring->is_correct !== false && (int) $scoring->is_correct !== 0) {
+                continue;
+            }
 
             $taskNum = (int) $scoring->task_number;
             $studentAnswer = $attempt->answers->firstWhere('task_number', $taskNum);
@@ -734,7 +837,9 @@ class StudentController extends Controller
             if ($instructionText !== '' && $conditionText !== '') {
                 $normI = preg_replace('/\s+/u', ' ', mb_strtolower($instructionText));
                 $normC = preg_replace('/\s+/u', ' ', mb_strtolower($conditionText));
-                if ($normI === $normC) $instructionText = '';
+                if ($normI === $normC) {
+                    $instructionText = '';
+                }
             }
 
             $taskText = $conditionText !== '' ? $conditionText : $instructionText;
@@ -756,23 +861,16 @@ class StudentController extends Controller
             ];
         }
 
-        usort($wrongTasks, fn($a, $b) => $a['task_number'] <=> $b['task_number']);
+        usort($wrongTasks, fn ($a, $b) => $a['task_number'] <=> $b['task_number']);
 
-        $label = $this->variantModeLabel($attempt->variant);
-
-        return view('pwa.student.history-detail', compact('user', 'attempt', 'label', 'correct', 'total', 'time', 'wrongTasks'));
-    }
-
-    private function studentHomeUrl(User $user): string
-    {
-        $grade = (int) ($user->grade_num ?? 9);
-
-        return match (true) {
-            $grade >= 5 && $grade <= 8 => route('pwa.student.vpr.home'),
-            $grade >= 10 && $grade <= 11 => route('pwa.student.ege.home'),
-            $grade === 12 => route('pwa.student.history'),
-            default => route('pwa.student.dashboard'),
-        };
+        return [
+            'attempt' => $attempt,
+            'label' => $this->variantModeLabel($attempt->variant),
+            'correct' => $correct,
+            'total' => $total,
+            'time' => $time,
+            'wrongTasks' => $wrongTasks,
+        ];
     }
 
     /**

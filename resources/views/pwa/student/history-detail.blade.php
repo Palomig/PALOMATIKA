@@ -30,6 +30,7 @@
   .score-bad { color: var(--red); }
   .summary-details { flex: 1; }
   .summary-label { font-size: 12px; font-weight: 700; color: var(--muted); }
+  .summary-student { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
   .summary-time { font-size: 11px; font-weight: 600; color: var(--muted); margin-top: 2px; }
   .summary-date { font-size: 10px; font-weight: 600; color: var(--muted); margin-top: 2px; }
 
@@ -121,6 +122,9 @@
   <div class="summary-card">
     <div class="summary-score {{ $scoreClass }}">{{ $correct }}<small>/{{ $total }}</small></div>
     <div class="summary-details">
+      @if(!empty($studentContext))
+      <div class="summary-student">{{ $studentContext }}</div>
+      @endif
       <div class="summary-label">правильных ответов</div>
       @if($timeStr)
       <div class="summary-time">⏱ {{ $timeStr }}</div>
