@@ -43,6 +43,7 @@ class VprVariantBuilderService
         mt_srand();
 
         $selectedTopics = array_slice($availableTopics, 0, max(1, min($taskCount, count($availableTopics))));
+        usort($selectedTopics, fn (string $left, string $right) => (int) $left <=> (int) $right);
 
         return $this->buildFromTopics($hash, $selectedTopics);
     }
