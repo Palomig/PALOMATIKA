@@ -162,6 +162,73 @@ class PwaVprDashboardTest extends TestCase
         $response->assertSee('Результаты');
     }
 
+    public function test_admin_can_open_student_vpr_test_page(): void
+    {
+        $student = $this->makeStudent(6);
+        $admin = $this->makeAdmin();
+
+        $variant = OgeVariant::create([
+            'hash' => 'vpr6admtest',
+            'exam_type' => OgeVariant::EXAM_VPR6,
+            'title' => 'Вариант ВПР 6 класс',
+            'source' => OgeVariant::SOURCE_MINIAPP,
+            'mode' => OgeVariant::MODE_FULL,
+            'config_json' => ['tasks' => [['task_number' => 2, 'topic_id' => '02', 'text' => 'Задание']]],
+        ]);
+
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $student->id,
+            'status' => 'active',
+            'started_at' => now()->subMinutes(3),
+            'last_seen_at' => now(),
+        ]);
+
+        $response = $this->actingAs($admin)
+            ->get("http://student.palomatika.ru/vpr/test/{$attempt->id}");
+
+        $response->assertOk();
+        $response->assertSee('Вариант ВПР 6 класс');
+    }
+
+    public function test_admin_can_open_student_vpr_results_page(): void
+    {
+        $student = $this->makeStudent(6);
+        $admin = $this->makeAdmin();
+
+        $variant = OgeVariant::create([
+            'hash' => 'vpr6admres',
+            'exam_type' => OgeVariant::EXAM_VPR6,
+            'title' => 'Вариант ВПР 6 класс',
+            'source' => OgeVariant::SOURCE_MINIAPP,
+            'mode' => OgeVariant::MODE_FULL,
+            'config_json' => ['tasks' => [['task_number' => 2, 'topic_id' => '02', 'text' => 'Задание']]],
+        ]);
+
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $student->id,
+            'status' => 'scored',
+            'started_at' => now()->subMinutes(5),
+            'submitted_at' => now(),
+            'last_seen_at' => now(),
+        ]);
+
+        OgeAttemptScoring::create([
+            'attempt_id' => $attempt->id,
+            'task_number' => 2,
+            'is_correct' => true,
+            'correct_answer' => '42',
+            'checked_at' => now(),
+        ]);
+
+        $response = $this->actingAs($admin)
+            ->get("http://student.palomatika.ru/vpr/results/{$attempt->id}");
+
+        $response->assertOk();
+        $response->assertSee('Результаты');
+    }
+
     public function test_vpr_test_template_uses_primary_prompt_helper_for_selected_tasks(): void
     {
         $user = $this->makeStudent(5);
@@ -255,6 +322,112 @@ class PwaVprDashboardTest extends TestCase
         $response->assertSee('taskHasHtmlTable(currentTask)', false);
     }
 
+    public function test_vpr_test_maps_legacy_mini_answers_from_exam_numbers_to_attempt_slots(): void
+    {
+        $user = $this->makeStudent(6);
+
+        $variant = OgeVariant::create([
+            'hash' => 'vpr6legacy',
+            'exam_type' => OgeVariant::EXAM_VPR6,
+            'title' => 'Мини-ВПР 6 класс',
+            'source' => OgeVariant::SOURCE_MINIAPP,
+            'mode' => OgeVariant::MODE_MINI_MIXED,
+            'config_json' => ['tasks' => [
+                ['task_number' => 2, 'topic_id' => '02', 'text' => 'Первое задание'],
+                ['task_number' => 3, 'topic_id' => '03', 'text' => 'Второе задание'],
+                ['task_number' => 12, 'topic_id' => '12', 'text' => 'Третье задание'],
+                ['task_number' => 16, 'topic_id' => '16', 'text' => 'Четвёртое задание'],
+                ['task_number' => 17, 'topic_id' => '17', 'text' => 'Пятое задание'],
+            ]],
+        ]);
+
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $user->id,
+            'status' => 'active',
+            'started_at' => now()->subMinutes(4),
+            'last_seen_at' => now(),
+        ]);
+
+        $attempt->answers()->createMany([
+            ['task_number' => 2, 'current_answer' => '-3,15', 'commits_count' => 1, 'is_final' => false],
+            ['task_number' => 3, 'current_answer' => '196', 'commits_count' => 1, 'is_final' => false],
+            ['task_number' => 12, 'current_answer' => '10', 'commits_count' => 1, 'is_final' => false],
+            ['task_number' => 16, 'current_answer' => '162', 'commits_count' => 1, 'is_final' => false],
+            ['task_number' => 17, 'current_answer' => '53', 'commits_count' => 1, 'is_final' => false],
+        ]);
+
+        $response = $this->actingAs($user)
+            ->get("http://student.palomatika.ru/vpr/test/{$attempt->id}");
+
+        $response->assertOk();
+        $response->assertSee('"attempt_task_number":1', false);
+        $response->assertSee('"display_task_number":12', false);
+        $response->assertSee('"1":"-3,15"', false);
+        $response->assertSee('"3":"10"', false);
+        $response->assertSee('"5":"53"', false);
+        $response->assertDontSee('"12":"10"', false);
+        $response->assertDontSee('"16":"162"', false);
+        $response->assertDontSee('"17":"53"', false);
+    }
+
+    public function test_vpr_results_page_uses_canonical_task_slots_for_legacy_mini_attempts(): void
+    {
+        $user = $this->makeStudent(6);
+
+        $variant = OgeVariant::create([
+            'hash' => 'vpr6legacyres',
+            'exam_type' => OgeVariant::EXAM_VPR6,
+            'title' => 'Мини-ВПР 6 класс',
+            'source' => OgeVariant::SOURCE_MINIAPP,
+            'mode' => OgeVariant::MODE_MINI_MIXED,
+            'config_json' => ['tasks' => [
+                ['task_number' => 2, 'topic_id' => '02', 'text' => 'Первое задание'],
+                ['task_number' => 3, 'topic_id' => '03', 'text' => 'Второе задание'],
+                ['task_number' => 12, 'topic_id' => '12', 'text' => 'Третье задание'],
+                ['task_number' => 16, 'topic_id' => '16', 'text' => 'Четвёртое задание'],
+                ['task_number' => 17, 'topic_id' => '17', 'text' => 'Пятое задание'],
+            ]],
+        ]);
+
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $user->id,
+            'status' => 'scored',
+            'started_at' => now()->subMinutes(5),
+            'submitted_at' => now(),
+            'last_seen_at' => now(),
+        ]);
+
+        $attempt->answers()->createMany([
+            ['task_number' => 2, 'current_answer' => '-3,15', 'commits_count' => 1, 'is_final' => true],
+            ['task_number' => 3, 'current_answer' => '196', 'commits_count' => 1, 'is_final' => true],
+            ['task_number' => 12, 'current_answer' => '10', 'commits_count' => 1, 'is_final' => true],
+            ['task_number' => 16, 'current_answer' => '162', 'commits_count' => 1, 'is_final' => true],
+            ['task_number' => 17, 'current_answer' => '53', 'commits_count' => 1, 'is_final' => true],
+        ]);
+
+        $attempt->scorings()->createMany([
+            ['task_number' => 1, 'is_correct' => false, 'correct_answer' => '3.15', 'checked_at' => now()],
+            ['task_number' => 2, 'is_correct' => true, 'correct_answer' => '196', 'checked_at' => now()],
+            ['task_number' => 3, 'is_correct' => true, 'correct_answer' => '10', 'checked_at' => now()],
+            ['task_number' => 4, 'is_correct' => false, 'correct_answer' => '156', 'checked_at' => now()],
+            ['task_number' => 5, 'is_correct' => false, 'correct_answer' => '31', 'checked_at' => now()],
+            ['task_number' => 12, 'is_correct' => null, 'correct_answer' => null, 'checked_at' => now()],
+            ['task_number' => 16, 'is_correct' => null, 'correct_answer' => null, 'checked_at' => now()],
+            ['task_number' => 17, 'is_correct' => null, 'correct_answer' => null, 'checked_at' => now()],
+        ]);
+
+        $response = $this->actingAs($user)
+            ->get("http://student.palomatika.ru/vpr/results/{$attempt->id}");
+
+        $response->assertOk();
+        $response->assertSee('"num":2', false);
+        $response->assertSee('"num":12', false);
+        $response->assertSee('"num":16', false);
+        $response->assertSee('"num":17', false);
+    }
+
     public function test_grade_5_vpr_bank_contains_explicit_question_for_task_1_and_structured_tables_for_topic_14(): void
     {
         $topicOne = json_decode((string) file_get_contents(storage_path('app/tasks/vpr/grade_5/topic_01.json')), true);
@@ -340,5 +513,17 @@ class PwaVprDashboardTest extends TestCase
         $response->assertOk();
         $response->assertSee('Мини-ВПР');
         $response->assertDontSee('Мини-ОГЭ');
+    }
+
+    public function test_history_back_button_points_to_vpr_dashboard_for_grade_5(): void
+    {
+        $user = $this->makeStudent(5);
+
+        $response = $this->actingAs($user)
+            ->get('http://student.palomatika.ru/history');
+
+        $response->assertOk();
+        $response->assertSee('href="' . route('pwa.student.vpr.home') . '"', false);
+        $response->assertDontSee('href="' . route('pwa.student.dashboard') . '" class="back"', false);
     }
 }

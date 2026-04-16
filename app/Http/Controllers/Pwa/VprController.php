@@ -9,9 +9,11 @@ use App\Models\TeacherStudent;
 use App\Models\UserGift;
 use App\Models\OgeVariant;
 use App\Services\OgeAttemptService;
+use App\Services\VariantTaskNumberResolver;
 use App\Services\VprTaskDataService;
 use App\Services\VprVariantBuilderService;
 use App\Services\VprVariantPoolService;
+use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -168,8 +170,8 @@ class VprController extends Controller
     {
         $user    = Auth::user();
         $attempt = OgeAttempt::where('id', $attemptId)
-            ->where('student_id', $user->id)
             ->with('variant')
+            ->when($user->role !== 'admin', fn ($query) => $query->where('student_id', $user->id))
             ->firstOrFail();
 
         if (in_array($attempt->status, ['submitted', 'scored', 'error'], true)) {
@@ -177,8 +179,8 @@ class VprController extends Controller
         }
 
         $variant = $attempt->variant;
-        $tasks   = $variant->config_json['tasks'] ?? [];
-        $answers = $attempt->answers()->pluck('current_answer', 'task_number');
+        $tasks   = $this->normalizeAttemptTasks($variant, $variant->config_json['tasks'] ?? []);
+        $answers = $this->resolveExistingAttemptAnswers($attempt, $tasks);
         $mode    = $variant->mode ?? 'full';
         $title   = $variant->title ?? 'Вариант ВПР';
 
@@ -261,14 +263,20 @@ class VprController extends Controller
     {
         $user    = Auth::user();
         $attempt = OgeAttempt::where('id', $attemptId)
-            ->where('student_id', $user->id)
             ->whereIn('status', ['submitted', 'scored', 'error'])
             ->with(['variant', 'scorings'])
+            ->when($user->role !== 'admin', fn ($query) => $query->where('student_id', $user->id))
             ->firstOrFail();
 
-        $scorings = OgeAttemptScoring::where('attempt_id', $attempt->id)->orderBy('task_number')->get();
-        $answers = $attempt->answers()->get();
-        $totalTasks = count($attempt->variant?->config_json['tasks'] ?? []);
+        $variantTasks = $this->normalizeAttemptTasks($attempt->variant, $attempt->variant?->config_json['tasks'] ?? []);
+        if ($attempt->variant) {
+            $config = is_array($attempt->variant->config_json) ? $attempt->variant->config_json : [];
+            $config['tasks'] = $variantTasks;
+            $attempt->variant->config_json = $config;
+        }
+        $scorings = $this->resolveResultScorings($attempt, $variantTasks);
+        $answers = $this->resolveResultAnswers($attempt, $variantTasks);
+        $totalTasks = count($variantTasks);
         $correctCount = $scorings->where('is_correct', true)->count();
         $totalTime = 0;
         if ($attempt->started_at && $attempt->submitted_at) {
@@ -284,5 +292,155 @@ class VprController extends Controller
             'correctCount',
             'totalTime'
         ));
+    }
+
+    /**
+     * @param array<int, mixed> $tasks
+     * @return array<int, array<string, mixed>>
+     */
+    private function normalizeAttemptTasks(OgeVariant $variant, array $tasks): array
+    {
+        foreach ($tasks as $index => $task) {
+            if (!is_array($task)) {
+                continue;
+            }
+
+            $numbers = VariantTaskNumberResolver::resolve($task, $index, $variant);
+            $task['display_task_number'] = $numbers['exam_number'];
+            $task['attempt_task_number'] = $numbers['slot'];
+            $task['slot'] = $numbers['slot'];
+            $task['exam_number'] = $numbers['exam_number'];
+            $tasks[$index] = $task;
+        }
+
+        return $tasks;
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $tasks
+     * @return array<int, string>
+     */
+    private function resolveExistingAttemptAnswers(OgeAttempt $attempt, array $tasks): array
+    {
+        $existingAnswers = $attempt->answers()->pluck('current_answer', 'task_number')->toArray();
+        if ($existingAnswers === []) {
+            return [];
+        }
+
+        $maxSlot = count($tasks);
+        $hasLegacyNumbering = collect(array_keys($existingAnswers))
+            ->contains(fn ($taskNumber) => (int) $taskNumber > $maxSlot);
+
+        $mapped = [];
+        foreach ($tasks as $task) {
+            if (!is_array($task)) {
+                continue;
+            }
+
+            $slot = (int) ($task['attempt_task_number'] ?? 0);
+            $examNumber = (int) ($task['display_task_number'] ?? $task['task_number'] ?? 0);
+            if ($slot < 1) {
+                continue;
+            }
+
+            if ($hasLegacyNumbering && $examNumber > 0 && array_key_exists($examNumber, $existingAnswers)) {
+                $mapped[$slot] = $existingAnswers[$examNumber];
+                continue;
+            }
+
+            if (array_key_exists($slot, $existingAnswers)) {
+                $mapped[$slot] = $existingAnswers[$slot];
+                continue;
+            }
+
+            if (!$hasLegacyNumbering && $examNumber > 0 && array_key_exists($examNumber, $existingAnswers)) {
+                $mapped[$slot] = $existingAnswers[$examNumber];
+            }
+        }
+
+        return $mapped;
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $tasks
+     */
+    private function resolveResultScorings(OgeAttempt $attempt, array $tasks): Collection
+    {
+        $rawScorings = OgeAttemptScoring::where('attempt_id', $attempt->id)
+            ->orderBy('task_number')
+            ->get();
+
+        $slotNumbers = collect($tasks)
+            ->map(fn (array $task) => (int) ($task['attempt_task_number'] ?? 0))
+            ->filter(fn (int $slot) => $slot > 0)
+            ->values();
+
+        $displayToSlot = collect($tasks)
+            ->mapWithKeys(function (array $task) {
+                $slot = (int) ($task['attempt_task_number'] ?? 0);
+                $display = (int) ($task['display_task_number'] ?? $task['task_number'] ?? 0);
+
+                return $slot > 0 && $display > 0 ? [$display => $slot] : [];
+            });
+
+        $canonical = collect();
+        foreach ($slotNumbers as $slot) {
+            $scoring = $rawScorings->firstWhere('task_number', $slot);
+            if (!$scoring) {
+                $displayNumber = $displayToSlot->search($slot, true);
+                if (is_int($displayNumber) && $displayNumber > 0) {
+                    $scoring = $rawScorings->firstWhere('task_number', $displayNumber);
+                }
+            }
+
+            if ($scoring) {
+                $canonical->push($scoring);
+            }
+        }
+
+        return $canonical;
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $tasks
+     */
+    private function resolveResultAnswers(OgeAttempt $attempt, array $tasks): Collection
+    {
+        $rawAnswers = $attempt->answers()->get();
+        $answersByTask = $rawAnswers->keyBy(fn ($answer) => (int) $answer->task_number);
+        $maxSlot = count($tasks);
+        $hasLegacyNumbering = $answersByTask->keys()->contains(fn ($taskNumber) => (int) $taskNumber > $maxSlot);
+        $canonical = collect();
+
+        foreach ($tasks as $task) {
+            if (!is_array($task)) {
+                continue;
+            }
+
+            $slot = (int) ($task['attempt_task_number'] ?? 0);
+            $display = (int) ($task['display_task_number'] ?? $task['task_number'] ?? 0);
+            if ($slot < 1) {
+                continue;
+            }
+
+            $answer = null;
+            if ($hasLegacyNumbering && $display > 0) {
+                $answer = $answersByTask->get($display);
+            }
+
+            if (!$answer) {
+                $answer = $answersByTask->get($slot);
+            }
+
+            if (!$answer && !$hasLegacyNumbering && $display > 0) {
+                $answer = $answersByTask->get($display);
+            }
+
+            if ($answer) {
+                $canonical->push($answer);
+            }
+        }
+
+        return $canonical;
     }
 }
