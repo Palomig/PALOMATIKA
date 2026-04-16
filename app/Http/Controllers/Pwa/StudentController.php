@@ -19,6 +19,7 @@ use App\Services\OgeVariantBuilderService;
 use App\Services\OgeVariantPoolService;
 use App\Services\TaskDataService;
 use App\Services\VariantTaskNumberResolver;
+use App\Services\VprTaskDataService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -800,7 +801,8 @@ class StudentController extends Controller
     private function buildHistoryDetailViewData(OgeAttempt $attempt): array
     {
         $correct = $attempt->scorings->where('is_correct', true)->count();
-        $configTaskCount = count($attempt->variant?->config_json['tasks'] ?? []);
+        $variantTasks = $this->canonicalizeHistoryVariantTasks($attempt->variant);
+        $configTaskCount = count($variantTasks);
         $total = $configTaskCount > 0 ? $configTaskCount : $attempt->scorings->count();
         $time = null;
         if ($attempt->started_at && $attempt->submitted_at) {
@@ -809,9 +811,8 @@ class StudentController extends Controller
 
         $taskMap = [];
         $displayNumMap = [];
-        $cfg = $attempt->variant?->config_json;
-        if ($attempt->variant && is_array($cfg) && isset($cfg['tasks']) && is_array($cfg['tasks'])) {
-            $resolved = VariantTaskNumberResolver::resolveAll($cfg['tasks'], $attempt->variant);
+        if ($attempt->variant && $variantTasks !== []) {
+            $resolved = VariantTaskNumberResolver::resolveAll($variantTasks, $attempt->variant);
             foreach ($resolved as $entry) {
                 $taskMap[$entry['slot']] = $entry['task'];
                 if ($entry['exam_number'] !== $entry['slot']) {
@@ -871,6 +872,39 @@ class StudentController extends Controller
             'time' => $time,
             'wrongTasks' => $wrongTasks,
         ];
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    private function canonicalizeHistoryVariantTasks(?OgeVariant $variant): array
+    {
+        $tasks = $variant?->config_json['tasks'] ?? [];
+        if (!is_array($tasks) || $tasks === []) {
+            return [];
+        }
+
+        $examType = (string) ($variant?->exam_type ?? '');
+        if (!str_starts_with($examType, 'vpr_')) {
+            return $tasks;
+        }
+
+        $grade = (int) preg_replace('/\D+/', '', $examType);
+        if ($grade < 5 || $grade > 8) {
+            return $tasks;
+        }
+
+        $taskData = new VprTaskDataService($grade);
+
+        foreach ($tasks as $index => $task) {
+            if (!is_array($task) || empty($task['topic_id'])) {
+                continue;
+            }
+
+            $tasks[$index] = $taskData->canonicalizeLegacyTask((string) $task['topic_id'], $task);
+        }
+
+        return $tasks;
     }
 
     /**

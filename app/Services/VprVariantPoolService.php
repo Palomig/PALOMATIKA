@@ -33,7 +33,9 @@ class VprVariantPoolService
         $attempted = OgeAttempt::where('student_id', $user->id)->pluck('variant_id');
 
         return OgeVariantPoolEntry::active()
-            ->whereHas('variant', fn($q) => $q->where('exam_type', $examType))
+            ->whereHas('variant', fn($q) => $q
+                ->where('exam_type', $examType)
+                ->whereRaw('CAST(config_json AS CHAR) NOT LIKE ?', ['%base64,%']))
             ->where('type', $type)
             ->whereNotIn('variant_id', $attempted)
             ->inRandomOrder()

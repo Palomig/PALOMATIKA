@@ -5,6 +5,7 @@ namespace Tests\Feature\Pwa;
 use App\Models\OgeVariant;
 use App\Models\OgeAttempt;
 use App\Models\OgeAttemptScoring;
+use App\Models\OgeVariantPoolEntry;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -583,6 +584,129 @@ class PwaVprDashboardTest extends TestCase
         $response->assertSee('"num":12', false);
         $response->assertSee('"num":16', false);
         $response->assertSee('"num":17', false);
+    }
+
+    public function test_admin_history_detail_canonicalizes_legacy_vpr_table_tasks(): void
+    {
+        $student = $this->makeStudent(5);
+        $admin = $this->makeAdmin();
+
+        $variant = OgeVariant::create([
+            'hash' => 'vpr5legacytable',
+            'exam_type' => OgeVariant::EXAM_VPR5,
+            'title' => 'Вариант ВПР 5 класс',
+            'source' => OgeVariant::SOURCE_MINIAPP,
+            'mode' => OgeVariant::MODE_FULL,
+            'config_json' => ['tasks' => [[
+                'id' => 1,
+                'task_number' => 14,
+                'topic_id' => '14',
+                'source_pdf' => '1_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf',
+                'text' => 'legacy',
+                'image' => '<svg><image href="data:image/png;base64,AAAA" /></svg>',
+            ]]],
+        ]);
+
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $student->id,
+            'status' => 'scored',
+            'started_at' => now()->subMinutes(5),
+            'submitted_at' => now(),
+            'last_seen_at' => now(),
+        ]);
+
+        OgeAttemptScoring::create([
+            'attempt_id' => $attempt->id,
+            'task_number' => 14,
+            'is_correct' => false,
+            'correct_answer' => '6450',
+            'checked_at' => now(),
+        ]);
+
+        $attempt->answers()->create([
+            'task_number' => 14,
+            'current_answer' => '6400',
+            'commits_count' => 1,
+            'is_final' => true,
+        ]);
+
+        $response = $this->actingAs($admin)
+            ->get("http://student.palomatika.ru/history/{$student->id}/{$attempt->id}");
+
+        $response->assertOk();
+        $response->assertSee('Нужно купить 60 кг стирального порошка.');
+        $response->assertSee('6450');
+        $response->assertSee('6400');
+        $response->assertDontSee('data:image/png;base64', false);
+    }
+
+    public function test_vpr_full_start_skips_legacy_pool_variants_with_embedded_base64_images(): void
+    {
+        $user = $this->makeStudent(5);
+
+        $dirtyVariant = OgeVariant::create([
+            'hash' => 'vpr5dirtypool',
+            'exam_type' => OgeVariant::EXAM_VPR5,
+            'title' => 'Грязный вариант ВПР 5 класс',
+            'source' => OgeVariant::SOURCE_MINIAPP,
+            'mode' => OgeVariant::MODE_FULL,
+            'config_json' => ['tasks' => [[
+                'id' => 1,
+                'task_number' => 14,
+                'topic_id' => '14',
+                'source_pdf' => '1_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf',
+                'image' => '<svg><image href="data:image/png;base64,AAAA" /></svg>',
+            ]]],
+        ]);
+
+        $cleanVariant = OgeVariant::create([
+            'hash' => 'vpr5cleanpool',
+            'exam_type' => OgeVariant::EXAM_VPR5,
+            'title' => 'Чистый вариант ВПР 5 класс',
+            'source' => OgeVariant::SOURCE_MINIAPP,
+            'mode' => OgeVariant::MODE_FULL,
+            'config_json' => ['tasks' => [[
+                'id' => 1,
+                'task_number' => 14,
+                'topic_id' => '14',
+                'text' => 'Нужно купить 60 кг стирального порошка.',
+                'table' => [
+                    'headers' => ['Стиральный порошок', 'Масса, кг', 'Цена, руб.'],
+                    'rows' => [
+                        ['Ариэль', '15', '1700'],
+                        ['Лотос', '10', '1100'],
+                    ],
+                ],
+            ]]],
+        ]);
+
+        OgeVariantPoolEntry::create([
+            'variant_id' => $dirtyVariant->id,
+            'type' => 'full',
+            'status' => 'active',
+            'task_fingerprint' => 'dirty-fingerprint',
+            'created_at' => now(),
+        ]);
+
+        OgeVariantPoolEntry::create([
+            'variant_id' => $cleanVariant->id,
+            'type' => 'full',
+            'status' => 'active',
+            'task_fingerprint' => 'clean-fingerprint',
+            'created_at' => now(),
+        ]);
+
+        $response = $this->actingAs($user)
+            ->postJson('http://student.palomatika.ru/vpr/full/start');
+
+        $response->assertOk();
+
+        $attempt = OgeAttempt::latest('id')->first();
+
+        $this->assertNotNull($attempt);
+        $this->assertSame($cleanVariant->id, $attempt->variant_id);
+        $this->assertNotSame($dirtyVariant->id, $attempt->variant_id);
     }
 
     public function test_grade_5_vpr_bank_contains_explicit_question_for_task_1_and_structured_tables_for_topic_14(): void
