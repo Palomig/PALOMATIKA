@@ -3,7 +3,6 @@
 use App\Http\Controllers\Pwa\AuthController;
 use App\Http\Controllers\Pwa\BugReportController;
 use App\Http\Controllers\Pwa\EgeStudentController;
-use App\Http\Controllers\Pwa\LessonAttendanceController;
 use App\Http\Controllers\Pwa\ManifestController;
 use App\Http\Controllers\Pwa\StudentController;
 use App\Http\Controllers\Pwa\TeacherController;
@@ -112,11 +111,6 @@ Route::domain('teacher.' . config('app.base_domain'))->group(function () {
         Route::patch('/students/{studentId}/alias', [TeacherController::class, 'updateAlias'])->name('pwa.teacher.student.alias');
         Route::patch('/students/{studentId}/link', [TeacherController::class, 'updateStudentLink'])->name('pwa.teacher.student.link');
         Route::get('/lessons', [TeacherController::class, 'lessons'])->name('pwa.teacher.lessons');
-        Route::get('/lessons/attendance', [LessonAttendanceController::class, 'load'])->name('pwa.teacher.lessons.attendance.load');
-        Route::post('/lessons/attendance', [LessonAttendanceController::class, 'save'])->name('pwa.teacher.lessons.attendance.save');
-        Route::post('/lessons/report', [LessonAttendanceController::class, 'sendDailyReport'])->name('pwa.teacher.lessons.report');
-        Route::post('/push/subscribe', [LessonAttendanceController::class, 'subscribe'])->name('pwa.teacher.push.subscribe');
-        Route::delete('/push/subscribe', [LessonAttendanceController::class, 'unsubscribe'])->name('pwa.teacher.push.unsubscribe');
         Route::get('/homework', [TeacherController::class, 'homework'])->name('pwa.teacher.homework');
         Route::post('/homework/assign', [TeacherController::class, 'assignHomework'])->name('pwa.teacher.homework.assign');
         Route::get('/variants', [TeacherController::class, 'variants'])->name('pwa.teacher.variants');

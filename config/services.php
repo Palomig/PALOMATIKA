@@ -101,16 +101,4 @@ return [
         'webhook_secret' => env('DEPLOY_WEBHOOK_SECRET'),
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Web Push (VAPID)
-    |--------------------------------------------------------------------------
-    */
-
-    'vapid' => [
-        'subject'     => env('VAPID_SUBJECT', 'mailto:admin@palomatika.ru'),
-        'public_key'  => env('VAPID_PUBLIC_KEY'),
-        'private_key' => env('VAPID_PRIVATE_KEY'),
-    ],
-
 ];
