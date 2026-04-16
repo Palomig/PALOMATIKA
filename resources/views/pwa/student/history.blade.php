@@ -42,7 +42,7 @@
 @section('body')
 <div class="page">
   <div class="topbar">
-    <a href="{{ route('pwa.student.dashboard') }}" class="back">←</a>
+    <a href="{{ $backUrl ?? route('pwa.student.dashboard') }}" class="back">←</a>
     <div class="topbar-title">История</div>
     <div style="width:34px;"></div>
   </div>

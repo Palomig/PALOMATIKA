@@ -680,7 +680,9 @@ class StudentController extends Controller
             $list[] = ['id' => $att->id, 'label' => $this->variantModeLabel($att->variant), 'correct' => $correct, 'total' => $total, 'time' => $time, 'date' => $att->submitted_at];
         }
 
-        return view('pwa.student.history', compact('user', 'list'));
+        $backUrl = $this->studentHomeUrl($user);
+
+        return view('pwa.student.history', compact('user', 'list', 'backUrl'));
     }
 
     /**
@@ -759,6 +761,18 @@ class StudentController extends Controller
         $label = $this->variantModeLabel($attempt->variant);
 
         return view('pwa.student.history-detail', compact('user', 'attempt', 'label', 'correct', 'total', 'time', 'wrongTasks'));
+    }
+
+    private function studentHomeUrl(User $user): string
+    {
+        $grade = (int) ($user->grade_num ?? 9);
+
+        return match (true) {
+            $grade >= 5 && $grade <= 8 => route('pwa.student.vpr.home'),
+            $grade >= 10 && $grade <= 11 => route('pwa.student.ege.home'),
+            $grade === 12 => route('pwa.student.history'),
+            default => route('pwa.student.dashboard'),
+        };
     }
 
     /**
