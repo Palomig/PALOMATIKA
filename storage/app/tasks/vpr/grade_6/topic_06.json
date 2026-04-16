@@ -1,6 +1,86 @@
 {
-    "topic_id": "06",
-    "exam_type": "vpr",
-    "grade": 6,
-    "blocks": []
+  "topic_id": "06",
+  "exam_type": "vpr",
+  "grade": 6,
+  "blocks": [
+    {
+      "number": 1,
+      "title": "Тренировочные задания ВПР 2025",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Найдите значение выражения",
+          "type": "expression",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "-2|y - 1| \\text{ при } y = -4",
+              "answer": "-10",
+              "status": "production"
+            },
+            {
+              "id": 2,
+              "expression": "3|x + 2| \\text{ при } x = -5",
+              "answer": "9",
+              "status": "production"
+            },
+            {
+              "id": 3,
+              "expression": "-4|z - 3| \\text{ при } z = 7",
+              "answer": "-16",
+              "status": "production"
+            },
+            {
+              "id": 4,
+              "expression": "2|a + 5| \\text{ при } a = -8",
+              "answer": "6",
+              "status": "production"
+            },
+            {
+              "id": 5,
+              "expression": "-3|b - 2| \\text{ при } b = 6",
+              "answer": "-12",
+              "status": "production"
+            },
+            {
+              "id": 6,
+              "expression": "5|x + 1| \\text{ при } x = -4",
+              "answer": "15",
+              "status": "production"
+            },
+            {
+              "id": 7,
+              "expression": "-2|y + 3| \\text{ при } y = -8",
+              "answer": "-10",
+              "status": "production"
+            },
+            {
+              "id": 8,
+              "expression": "4|x - 5| \\text{ при } x = 1",
+              "answer": "16",
+              "status": "production"
+            },
+            {
+              "id": 9,
+              "expression": "-3|z + 4| \\text{ при } z = -1",
+              "answer": "-9",
+              "status": "production"
+            },
+            {
+              "id": 10,
+              "expression": "6|a - 2| \\text{ при } a = 5",
+              "answer": "18",
+              "status": "production"
+            },
+            {
+              "id": 11,
+              "expression": "-5|b + 6| \\text{ при } b = -2",
+              "answer": "-20",
+              "status": "production"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

@@ -1,6 +1,86 @@
 {
-    "topic_id": "08",
-    "exam_type": "vpr",
-    "grade": 6,
-    "blocks": []
+  "topic_id": "08",
+  "exam_type": "vpr",
+  "grade": 6,
+  "blocks": [
+    {
+      "number": 1,
+      "title": "Тренировочные задания ВПР 2025",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Найдите неизвестное значение x из равенства",
+          "type": "expression",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "6x - x = 8{,}4 - 0{,}9",
+              "answer": "1.5",
+              "status": "production"
+            },
+            {
+              "id": 2,
+              "expression": "7x - 2x = 6{,}5 + 3{,}5",
+              "answer": "2",
+              "status": "production"
+            },
+            {
+              "id": 3,
+              "expression": "4x + 3x = 9{,}1 - 2{,}1",
+              "answer": "1",
+              "status": "production"
+            },
+            {
+              "id": 4,
+              "expression": "8x - 3x = 12{,}5 + 2{,}5",
+              "answer": "3",
+              "status": "production"
+            },
+            {
+              "id": 5,
+              "expression": "9x - 4x = 7{,}5 + 2{,}5",
+              "answer": "2",
+              "status": "production"
+            },
+            {
+              "id": 6,
+              "expression": "3x + 2x = 11{,}4 + 3{,}6",
+              "answer": "3",
+              "status": "production"
+            },
+            {
+              "id": 7,
+              "expression": "7x - 3x = 8{,}8 + 3{,}2",
+              "answer": "3",
+              "status": "production"
+            },
+            {
+              "id": 8,
+              "expression": "5x + 2x = 14{,}7 - 0{,}7",
+              "answer": "2",
+              "status": "production"
+            },
+            {
+              "id": 9,
+              "expression": "6x - x = 12{,}5 + 2{,}5",
+              "answer": "3",
+              "status": "production"
+            },
+            {
+              "id": 10,
+              "expression": "4x + x = 7{,}5 + 2{,}5",
+              "answer": "2",
+              "status": "production"
+            },
+            {
+              "id": 11,
+              "expression": "8x - 2x = 10{,}8 + 1{,}2",
+              "answer": "2",
+              "status": "production"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

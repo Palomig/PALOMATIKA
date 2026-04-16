@@ -1,6 +1,86 @@
 {
-    "topic_id": "01",
-    "exam_type": "vpr",
-    "grade": 6,
-    "blocks": []
+  "topic_id": "01",
+  "exam_type": "vpr",
+  "grade": 6,
+  "blocks": [
+    {
+      "number": 1,
+      "title": "Тренировочные задания ВПР 2025",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Вычислите",
+          "type": "expression",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "-2 \\cdot (54 + 129)",
+              "answer": "-366",
+              "status": "production"
+            },
+            {
+              "id": 2,
+              "expression": "-3 \\cdot (25 + 48)",
+              "answer": "-219",
+              "status": "production"
+            },
+            {
+              "id": 3,
+              "expression": "-5 \\cdot (12 + 35)",
+              "answer": "-235",
+              "status": "production"
+            },
+            {
+              "id": 4,
+              "expression": "-4 \\cdot (63 + 27)",
+              "answer": "-360",
+              "status": "production"
+            },
+            {
+              "id": 5,
+              "expression": "-7 \\cdot (12 + 19)",
+              "answer": "-217",
+              "status": "production"
+            },
+            {
+              "id": 6,
+              "expression": "-2 \\cdot (84 + 36)",
+              "answer": "-240",
+              "status": "production"
+            },
+            {
+              "id": 7,
+              "expression": "-6 \\cdot (14 + 23)",
+              "answer": "-222",
+              "status": "production"
+            },
+            {
+              "id": 8,
+              "expression": "-3 \\cdot (45 + 55)",
+              "answer": "-300",
+              "status": "production"
+            },
+            {
+              "id": 9,
+              "expression": "-8 \\cdot (11 + 24)",
+              "answer": "-280",
+              "status": "production"
+            },
+            {
+              "id": 10,
+              "expression": "-4 \\cdot (38 + 12)",
+              "answer": "-200",
+              "status": "production"
+            },
+            {
+              "id": 11,
+              "expression": "-9 \\cdot (16 + 44)",
+              "answer": "-540",
+              "status": "production"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
