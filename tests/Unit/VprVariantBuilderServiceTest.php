@@ -11,8 +11,11 @@ class VprVariantBuilderServiceTest extends TestCase
     {
         $taskData = $this->getMockBuilder(VprTaskDataService::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getRandomTaskFromTopic', 'getTopicMeta'])
+            ->onlyMethods(['getRandomTaskFromTopic', 'getTopicMeta', 'topicDataExists'])
             ->getMock();
+
+        $taskData->method('topicDataExists')
+            ->willReturn(true);
 
         $taskData->method('getTopicMeta')
             ->willReturnCallback(fn(string $topicId) => [
@@ -58,5 +61,22 @@ class VprVariantBuilderServiceTest extends TestCase
         $numbers  = array_column($result['tasks'], 'task_number');
         sort($numbers);
         $this->assertSame(range(1, 18), $numbers);
+    }
+
+    public function test_build_mini_returns_five_tasks_sorted_by_task_number(): void
+    {
+        $builder = $this->makeService(5);
+
+        $result = $builder->buildMini('mini-hash');
+
+        $numbers = array_column($result['tasks'], 'task_number');
+
+        $this->assertCount(5, $result['tasks']);
+        $this->assertSame($numbers, array_values(array_unique($numbers)));
+
+        $sortedNumbers = $numbers;
+        sort($sortedNumbers);
+
+        $this->assertSame($sortedNumbers, $numbers);
     }
 }
