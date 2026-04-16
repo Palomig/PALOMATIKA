@@ -267,6 +267,125 @@ class PwaVprDashboardTest extends TestCase
         $response->assertSee('Мини-ВПР');
     }
 
+    public function test_admin_can_open_student_history_list_by_student_id(): void
+    {
+        $student = $this->makeStudent(5);
+        $student->forceFill(['name' => 'Мария Прокина'])->save();
+        $admin = $this->makeAdmin();
+
+        $variant = OgeVariant::create([
+            'hash' => 'vpr5adminhist',
+            'exam_type' => OgeVariant::EXAM_VPR5,
+            'title' => 'Вариант ВПР 5 класс',
+            'source' => OgeVariant::SOURCE_MINIAPP,
+            'mode' => OgeVariant::MODE_FULL,
+            'config_json' => ['tasks' => [['task_number' => 1, 'topic_id' => '01', 'text' => 'Задание']]],
+        ]);
+
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $student->id,
+            'status' => 'scored',
+            'started_at' => now()->subMinutes(5),
+            'submitted_at' => now(),
+            'last_seen_at' => now(),
+        ]);
+
+        OgeAttemptScoring::create([
+            'attempt_id' => $attempt->id,
+            'task_number' => 1,
+            'is_correct' => true,
+            'correct_answer' => '42',
+            'checked_at' => now(),
+        ]);
+
+        $response = $this->actingAs($admin)
+            ->get("http://student.palomatika.ru/history/{$student->id}");
+
+        $response->assertOk();
+        $response->assertSee('Мария Прокина');
+        $response->assertSee("/history/{$student->id}/{$attempt->id}", false);
+        $response->assertDontSee("/history/{$attempt->id}", false);
+    }
+
+    public function test_admin_can_open_student_history_attempt_by_student_and_attempt_id(): void
+    {
+        $student = $this->makeStudent(6);
+        $student->forceFill(['name' => 'Маша Митрофанова'])->save();
+        $admin = $this->makeAdmin();
+
+        $variant = OgeVariant::create([
+            'hash' => 'vpr6ahd',
+            'exam_type' => OgeVariant::EXAM_VPR6,
+            'title' => 'Мини-ВПР 6 класс',
+            'source' => OgeVariant::SOURCE_MINIAPP,
+            'mode' => OgeVariant::MODE_MINI_MIXED,
+            'config_json' => ['tasks' => [['task_number' => 12, 'topic_id' => '12', 'text' => 'Задание']]],
+        ]);
+
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $student->id,
+            'status' => 'scored',
+            'started_at' => now()->subMinutes(4),
+            'submitted_at' => now(),
+            'last_seen_at' => now(),
+        ]);
+
+        OgeAttemptScoring::create([
+            'attempt_id' => $attempt->id,
+            'task_number' => 12,
+            'is_correct' => false,
+            'correct_answer' => '42',
+            'checked_at' => now(),
+        ]);
+
+        $response = $this->actingAs($admin)
+            ->get("http://student.palomatika.ru/history/{$student->id}/{$attempt->id}");
+
+        $response->assertOk();
+        $response->assertSee('Маша Митрофанова');
+        $response->assertSee("/history/{$student->id}", false);
+    }
+
+    public function test_admin_history_attempt_route_requires_attempt_to_belong_to_student(): void
+    {
+        $student = $this->makeStudent(5);
+        $otherStudent = $this->makeStudent(6);
+        $admin = $this->makeAdmin();
+
+        $variant = OgeVariant::create([
+            'hash' => 'vpradminmismatch',
+            'exam_type' => OgeVariant::EXAM_VPR6,
+            'title' => 'Вариант ВПР 6 класс',
+            'source' => OgeVariant::SOURCE_MINIAPP,
+            'mode' => OgeVariant::MODE_FULL,
+            'config_json' => ['tasks' => [['task_number' => 2, 'topic_id' => '02', 'text' => 'Задание']]],
+        ]);
+
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $otherStudent->id,
+            'status' => 'scored',
+            'started_at' => now()->subMinutes(6),
+            'submitted_at' => now(),
+            'last_seen_at' => now(),
+        ]);
+
+        OgeAttemptScoring::create([
+            'attempt_id' => $attempt->id,
+            'task_number' => 2,
+            'is_correct' => true,
+            'correct_answer' => '42',
+            'checked_at' => now(),
+        ]);
+
+        $response = $this->actingAs($admin)
+            ->get("http://student.palomatika.ru/history/{$student->id}/{$attempt->id}");
+
+        $response->assertNotFound();
+    }
+
     public function test_vpr_test_template_uses_primary_prompt_helper_for_selected_tasks(): void
     {
         $user = $this->makeStudent(5);

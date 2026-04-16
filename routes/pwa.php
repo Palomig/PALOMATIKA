@@ -54,7 +54,8 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
         Route::get('/test/{attemptId}', [StudentController::class, 'test'])->name('pwa.student.test');
         Route::get('/results/{attemptId}', [StudentController::class, 'results'])->name('pwa.student.results');
         Route::get('/history', [StudentController::class, 'history'])->name('pwa.student.history');
-        Route::get('/history/{attemptId}', [StudentController::class, 'historyDetail'])->name('pwa.student.history.detail');
+        Route::get('/history/{studentId}/{attemptId}', [StudentController::class, 'adminHistoryDetail'])->name('pwa.student.history.student-detail');
+        Route::get('/history/{historyId}', [StudentController::class, 'historyEntry'])->name('pwa.student.history.detail');
         Route::get('/profile', [StudentController::class, 'profile'])->name('pwa.student.profile');
         Route::get('/homework', [StudentController::class, 'studentHomework'])->name('pwa.student.homework');
         Route::get('/tutor', [StudentController::class, 'tutor'])->name('pwa.student.tutor');
