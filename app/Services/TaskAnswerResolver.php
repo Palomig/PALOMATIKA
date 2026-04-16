@@ -120,6 +120,15 @@ class TaskAnswerResolver
             return $digitsOnly === $correct;
         }
 
+        // Fraction / mixed-number answers: "12/7" == "1 5/7", "-3/4" == "-0.75"
+        $correctFrac = $this->parseFractionValue((string) $correctAnswer);
+        if ($correctFrac !== null) {
+            $userFrac = $this->parseFractionValue($userRaw);
+            if ($userFrac !== null) {
+                return abs($correctFrac - $userFrac) < 1e-9;
+            }
+        }
+
         // Coordinate-pair answers: "(1; -3); (5/2; 0)" — compare as order-independent sets,
         // normalizing fractions to decimals so that 5/2 == 2.5.
         if (str_contains((string) $correctAnswer, '(') && str_contains((string) $correctAnswer, ';')) {
@@ -697,6 +706,44 @@ class TaskAnswerResolver
      *
      * @return array<int, array{0: string, 1: string}>|null
      */
+    /**
+     * Parse a fraction or mixed number to float.
+     * Handles: "12/7", "-3/4", "1 5/7", "-1 5/7", "1.5"
+     * Returns null if the string is not a recognisable fraction/number.
+     */
+    private function parseFractionValue(string $value): ?float
+    {
+        $value = trim(mb_strtolower($value));
+        $value = str_replace(['−', '–', ','], ['-', '-', '.'], $value);
+        $value = preg_replace('/\s+/', ' ', $value) ?? $value;
+
+        // Mixed number: "1 5/7" or "-1 5/7"
+        if (preg_match('/^(-?\d+)\s+(\d+)\/(\d+)$/', $value, $m)) {
+            $whole = (int) $m[1];
+            $num   = (int) $m[2];
+            $den   = (int) $m[3];
+            if ($den === 0) return null;
+            $sign = $whole < 0 ? -1 : 1;
+            return $whole + $sign * ($num / $den);
+        }
+
+        // Improper fraction: "12/7" or "-12/7"
+        if (preg_match('/^(-?\d+)\/(\d+)$/', $value, $m)) {
+            $num = (int) $m[1];
+            $den = (int) $m[2];
+            if ($den === 0) return null;
+            return $num / $den;
+        }
+
+        // Plain decimal / integer (no spaces)
+        $compact = str_replace(' ', '', $value);
+        if (preg_match('/^-?\d+(?:\.\d+)?$/', $compact)) {
+            return (float) $compact;
+        }
+
+        return null;
+    }
+
     private function parseCoordinatePairs(string $value): ?array
     {
         preg_match_all('/\(([^)]+)\)/', $value, $matches);
