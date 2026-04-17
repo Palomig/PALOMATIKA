@@ -36,6 +36,31 @@ class VprController extends Controller
         return $userGrade;
     }
 
+    /**
+     * Не-админ с классом вне [5-8] не должен видеть ВПР-дашборд —
+     * перенаправляем на универсальный диспетчер, который разведёт по экзаменам.
+     */
+    private function redirectIfWrongGrade(int $grade)
+    {
+        $user = Auth::user();
+        if ($user && $user->role === 'admin') {
+            return null;
+        }
+        if ($grade < 5 || $grade > 8) {
+            return redirect()->route('pwa.student.dashboard');
+        }
+        return null;
+    }
+
+    /**
+     * Определяет класс по exam_type варианта (vpr_5 → 5). Дефолт — 5.
+     */
+    private function gradeFromVariant(?OgeVariant $variant): int
+    {
+        $grade = (int) preg_replace('/\D+/', '', (string) ($variant->exam_type ?? ''));
+        return ($grade >= 5 && $grade <= 8) ? $grade : 5;
+    }
+
     private function makePool(int $grade): VprVariantPoolService
     {
         $taskData = new VprTaskDataService($grade);
@@ -50,6 +75,10 @@ class VprController extends Controller
     {
         $user  = Auth::user();
         $grade = $this->resolveVprGrade($request);
+
+        if ($redirect = $this->redirectIfWrongGrade($grade)) {
+            return $redirect;
+        }
 
         $examType = 'vpr_' . $grade;
         $activeAttempts = OgeAttempt::where('student_id', $user->id)
@@ -184,8 +213,10 @@ class VprController extends Controller
         $mode    = $variant->mode ?? 'full';
         $title   = $variant->title ?? 'Вариант ВПР';
 
+        $topicNames = (new VprTaskDataService($this->gradeFromVariant($variant)))->getTopicNamesMap();
+
         return view('pwa.student.vpr-test', compact(
-            'attempt', 'tasks', 'answers', 'mode', 'title'
+            'attempt', 'tasks', 'answers', 'mode', 'title', 'topicNames'
         ));
     }
 
@@ -283,6 +314,8 @@ class VprController extends Controller
             $totalTime = $attempt->submitted_at->diffInSeconds($attempt->started_at);
         }
 
+        $topicNames = (new VprTaskDataService($this->gradeFromVariant($attempt->variant)))->getTopicNamesMap();
+
         return view('pwa.student.vpr-results', compact(
             'user',
             'attempt',
@@ -290,7 +323,8 @@ class VprController extends Controller
             'answers',
             'totalTasks',
             'correctCount',
-            'totalTime'
+            'totalTime',
+            'topicNames'
         ));
     }
 
@@ -300,8 +334,8 @@ class VprController extends Controller
      */
     private function normalizeAttemptTasks(OgeVariant $variant, array $tasks): array
     {
-        $grade = (int) preg_replace('/\D+/', '', (string) ($variant->exam_type ?? ''));
-        $taskData = ($grade >= 5 && $grade <= 8) ? new VprTaskDataService($grade) : null;
+        $rawGrade = (int) preg_replace('/\D+/', '', (string) ($variant->exam_type ?? ''));
+        $taskData = ($rawGrade >= 5 && $rawGrade <= 8) ? new VprTaskDataService($rawGrade) : null;
 
         foreach ($tasks as $index => $task) {
             if (!is_array($task)) {

@@ -9,13 +9,6 @@ class VprTopicController extends Controller
 {
     private const GRADES = [5, 6, 7, 8];
 
-    private const GRADE_TOPIC_COUNT = [
-        5 => 17,
-        6 => 17,
-        7 => 17,
-        8 => 18,
-    ];
-
     /**
      * Список всех тем по классам.
      */
@@ -24,8 +17,8 @@ class VprTopicController extends Controller
         $gradeData = [];
 
         foreach (self::GRADES as $grade) {
-            $maxTopic = self::GRADE_TOPIC_COUNT[$grade];
             $service  = new VprTaskDataService($grade);
+            $maxTopic = $service->getMaxTopic();
             $topics   = [];
 
             foreach ($service->getAllTopicsMeta() as $topicId => $meta) {
@@ -60,13 +53,12 @@ class VprTopicController extends Controller
         }
 
         $topicId  = str_pad($id, 2, '0', STR_PAD_LEFT);
-        $maxTopic = self::GRADE_TOPIC_COUNT[$grade];
+        $service  = new VprTaskDataService($grade);
+        $maxTopic = $service->getMaxTopic();
 
         if ((int) $topicId < 1 || (int) $topicId > $maxTopic) {
             abort(404, "Задание {$topicId} не существует для {$grade} класса");
         }
-
-        $service  = new VprTaskDataService($grade);
         $topicMeta = $service->getTopicMeta($topicId);
         $blocks    = $service->getBlocks($topicId);
 

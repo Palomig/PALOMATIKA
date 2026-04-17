@@ -821,4 +821,97 @@ class PwaVprDashboardTest extends TestCase
         $response->assertSee('href="' . route('pwa.student.vpr.home') . '"', false);
         $response->assertDontSee('href="' . route('pwa.student.dashboard') . '" class="back"', false);
     }
+
+    public function test_vpr_home_redirects_non_admin_students_with_wrong_grade_away(): void
+    {
+        $user = $this->makeStudent(9);
+
+        $response = $this->actingAs($user)
+            ->get('http://student.palomatika.ru/vpr');
+
+        $response->assertRedirect(route('pwa.student.dashboard'));
+    }
+
+    public function test_vpr_test_page_uses_grade_specific_topic_names_not_oge_names(): void
+    {
+        $user = $this->makeStudent(6);
+
+        $variant = OgeVariant::create([
+            'hash' => 'vpr6topics',
+            'exam_type' => OgeVariant::EXAM_VPR6,
+            'title' => 'Вариант ВПР 6 класс',
+            'source' => OgeVariant::SOURCE_MINIAPP,
+            'mode' => OgeVariant::MODE_FULL,
+            'config_json' => ['tasks' => [
+                ['task_number' => 14, 'topic_id' => '14', 'text' => 'Задание'],
+                ['task_number' => 16, 'topic_id' => '16', 'text' => 'Задание'],
+                ['task_number' => 17, 'topic_id' => '17', 'text' => 'Задание'],
+            ]],
+        ]);
+
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $user->id,
+            'status' => 'active',
+            'started_at' => now()->subMinutes(1),
+            'last_seen_at' => now(),
+        ]);
+
+        $response = $this->actingAs($user)
+            ->get("http://student.palomatika.ru/vpr/test/{$attempt->id}");
+
+        $response->assertOk();
+        // OGE-ные имена тем не должны попасть на страницу ВПР 6-го класса.
+        $response->assertDontSee('Прогрессии');
+        $response->assertDontSee('Четырёхугольники');
+        $response->assertDontSee('Окружность');
+    }
+
+    public function test_vpr_results_page_uses_grade_specific_topic_names_not_oge_names(): void
+    {
+        $user = $this->makeStudent(5);
+
+        $variant = OgeVariant::create([
+            'hash' => 'vpr5topres',
+            'exam_type' => OgeVariant::EXAM_VPR5,
+            'title' => 'Вариант ВПР 5 класс',
+            'source' => OgeVariant::SOURCE_MINIAPP,
+            'mode' => OgeVariant::MODE_FULL,
+            'config_json' => ['tasks' => [
+                ['task_number' => 1, 'topic_id' => '01', 'text' => 'Задание'],
+                ['task_number' => 7, 'topic_id' => '07', 'text' => 'Задание'],
+                ['task_number' => 13, 'topic_id' => '13', 'text' => 'Задание'],
+                ['task_number' => 14, 'topic_id' => '14', 'text' => 'Задание'],
+            ]],
+        ]);
+
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $user->id,
+            'status' => 'scored',
+            'started_at' => now()->subMinutes(5),
+            'submitted_at' => now(),
+            'last_seen_at' => now(),
+        ]);
+
+        $attempt->scorings()->createMany([
+            ['task_number' => 1, 'is_correct' => true,  'correct_answer' => '1',   'checked_at' => now()],
+            ['task_number' => 2, 'is_correct' => true,  'correct_answer' => '234', 'checked_at' => now()],
+            ['task_number' => 3, 'is_correct' => true,  'correct_answer' => '10',  'checked_at' => now()],
+            ['task_number' => 4, 'is_correct' => false, 'correct_answer' => '125', 'checked_at' => now()],
+        ]);
+
+        $response = $this->actingAs($user)
+            ->get("http://student.palomatika.ru/vpr/results/{$attempt->id}");
+
+        $response->assertOk();
+        // rows отдаются в Alpine через @json — юникод экранирован \uXXXX.
+        // Поэтому сравниваем в JSON-форме.
+        $jsonEncode = fn (string $s) => trim((string) json_encode($s), '"');
+        $response->assertSee($jsonEncode('Обыкновенные дроби'), false);
+        // ОГЭ-ные имена тем не должны просочиться.
+        $response->assertDontSee($jsonEncode('Числа'), false);
+        $response->assertDontSee($jsonEncode('Неравенства'), false);
+        $response->assertDontSee($jsonEncode('Прогрессии'), false);
+    }
 }

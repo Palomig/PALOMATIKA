@@ -12,8 +12,16 @@ class VprTaskDataService
 {
     protected string $basePath;
 
-    // Метаданные тем одинаковы для всех классов — 18 заданий.
-    // Заголовки будут уточнены когда придут PDF.
+    // Количество тем ВПР по классам (5-7: 17 заданий, 8: 18 заданий).
+    public const GRADE_TOPIC_COUNT = [
+        5 => 17,
+        6 => 17,
+        7 => 17,
+        8 => 18,
+    ];
+
+    // Generic-метаданные (цвет/иконка) — одинаковы для всех классов.
+    // Заголовки переопределяются per-grade через $gradeTopicTitles.
     protected array $topicsMeta = [
         '01' => ['title' => 'Задание 1',  'description' => '', 'color' => 'blue',    'icon' => 'calculator'],
         '02' => ['title' => 'Задание 2',  'description' => '', 'color' => 'cyan',    'icon' => 'calculator'],
@@ -35,6 +43,21 @@ class VprTaskDataService
         '18' => ['title' => 'Задание 18', 'description' => '', 'color' => 'slate',   'icon' => 'calculator'],
     ];
 
+    // Grade-specific названия и описания тем. Нет записи ⇒ fallback «Задание N».
+    protected array $gradeTopicMeta = [
+        5 => [
+            '01' => ['title' => 'Обыкновенные дроби',              'description' => 'Вычисления и преобразования обыкновенных дробей'],
+            '02' => ['title' => 'Часть и целое',                   'description' => 'Текстовые задачи на нахождение части, остатка и целого'],
+            '03' => ['title' => 'Неизвестный компонент',           'description' => 'Равенства на нахождение неизвестного числа'],
+            '04' => ['title' => 'Диаграммы',                        'description' => 'Чтение данных, сравнение и подсчёт по диаграммам'],
+            '05' => ['title' => 'Площадь фигур на клетчатой бумаге','description' => 'Нахождение площади фигур по клеткам и разбиение на простые части'],
+            '06' => ['title' => 'Числовой луч',                    'description' => 'Координаты точек и сравнение чисел на числовом луче'],
+        ],
+        6 => [],
+        7 => [],
+        8 => [],
+    ];
+
     public function __construct(protected int $grade)
     {
         $this->basePath = storage_path("app/tasks/vpr/grade_{$grade}");
@@ -48,67 +71,41 @@ class VprTaskDataService
 
     public function getTopicMeta(string $topicId): array
     {
-        if ($this->grade === 5 && $topicId === '01') {
-            return [
-                'title' => 'Обыкновенные дроби',
-                'description' => 'Вычисления и преобразования обыкновенных дробей',
-                'color' => 'blue',
-                'icon' => 'calculator',
-            ];
-        }
-
-        if ($this->grade === 5 && $topicId === '02') {
-            return [
-                'title' => 'Часть и целое',
-                'description' => 'Текстовые задачи на нахождение части, остатка и целого',
-                'color' => 'cyan',
-                'icon' => 'calculator',
-            ];
-        }
-
-        if ($this->grade === 5 && $topicId === '03') {
-            return [
-                'title' => 'Неизвестный компонент',
-                'description' => 'Равенства на нахождение неизвестного числа',
-                'color' => 'teal',
-                'icon' => 'calculator',
-            ];
-        }
-
-        if ($this->grade === 5 && $topicId === '04') {
-            return [
-                'title' => 'Диаграммы',
-                'description' => 'Чтение данных, сравнение и подсчёт по диаграммам',
-                'color' => 'emerald',
-                'icon' => 'calculator',
-            ];
-        }
-
-        if ($this->grade === 5 && $topicId === '05') {
-            return [
-                'title' => 'Площадь фигур на клетчатой бумаге',
-                'description' => 'Нахождение площади фигур по клеткам и разбиение на простые части',
-                'color' => 'green',
-                'icon' => 'calculator',
-            ];
-        }
-
-        if ($this->grade === 5 && $topicId === '06') {
-            return [
-                'title' => 'Числовой луч',
-                'description' => 'Координаты точек и сравнение чисел на числовом луче',
-                'color' => 'lime',
-                'icon' => 'calculator',
-            ];
-        }
-
-        return $this->topicsMeta[$topicId] ?? [
+        $base = $this->topicsMeta[$topicId] ?? [
             'title' => "Задание $topicId", 'description' => '',
             'color' => 'gray', 'icon' => 'book',
         ];
+
+        $override = $this->gradeTopicMeta[$this->grade][$topicId] ?? [];
+
+        return array_merge($base, $override);
     }
 
     public function getAllTopicsMeta(): array { return $this->topicsMeta; }
+
+    /**
+     * Максимальный номер темы для этого класса (5-7 → 17, 8 → 18).
+     */
+    public function getMaxTopic(): int
+    {
+        return self::GRADE_TOPIC_COUNT[$this->grade] ?? 18;
+    }
+
+    /**
+     * Карта `[topicId => title]` только для тем, существующих у этого класса.
+     * Использует grade-specific названия с фолбэком на «Задание N».
+     *
+     * @return array<string, string>
+     */
+    public function getTopicNamesMap(): array
+    {
+        $map = [];
+        for ($n = 1; $n <= $this->getMaxTopic(); $n++) {
+            $topicId = str_pad((string) $n, 2, '0', STR_PAD_LEFT);
+            $map[$topicId] = $this->getTopicMeta($topicId)['title'];
+        }
+        return $map;
+    }
 
     public function topicDataExists(string $topicId): bool
     {
