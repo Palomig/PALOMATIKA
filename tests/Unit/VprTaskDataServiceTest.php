@@ -219,6 +219,40 @@ class VprTaskDataServiceTest extends TestCase
         $this->assertStringNotContainsString('На числовом луче', $firstTaskText);
     }
 
+    public function test_get_max_topic_returns_17_for_grades_5_to_7_and_18_for_grade_8(): void
+    {
+        $this->assertSame(17, (new VprTaskDataService(5))->getMaxTopic());
+        $this->assertSame(17, (new VprTaskDataService(6))->getMaxTopic());
+        $this->assertSame(17, (new VprTaskDataService(7))->getMaxTopic());
+        $this->assertSame(18, (new VprTaskDataService(8))->getMaxTopic());
+    }
+
+    public function test_get_topic_names_map_respects_max_topics_per_grade(): void
+    {
+        $map5 = (new VprTaskDataService(5))->getTopicNamesMap();
+        $map8 = (new VprTaskDataService(8))->getTopicNamesMap();
+
+        $this->assertCount(17, $map5);
+        $this->assertArrayHasKey('17', $map5);
+        $this->assertArrayNotHasKey('18', $map5);
+
+        $this->assertCount(18, $map8);
+        $this->assertArrayHasKey('18', $map8);
+    }
+
+    public function test_get_topic_names_map_uses_grade_specific_titles_where_available(): void
+    {
+        $map5 = (new VprTaskDataService(5))->getTopicNamesMap();
+
+        $this->assertSame('Обыкновенные дроби', $map5['01']);
+        $this->assertSame('Числовой луч', $map5['06']);
+        // Для непереопределённых тем — дефолт «Задание N», НЕ OGE-названия.
+        $this->assertSame('Задание 7', $map5['07']);
+        $this->assertNotSame('Числа', $map5['07']);
+        $this->assertNotSame('Неравенства', $map5['13']);
+        $this->assertNotSame('Прогрессии', $map5['14']);
+    }
+
     public function test_canonicalize_legacy_task_replaces_embedded_png_table_with_structured_table(): void
     {
         $svc = new VprTaskDataService(5);

@@ -306,22 +306,9 @@
     $totalSeconds = $totalTime % 60;
     $timeFormatted = sprintf('%02d:%02d', $totalMinutes, $totalSeconds);
 
-    $topicNames = [
-        '06' => 'Дроби',
-        '07' => 'Числа',
-        '08' => 'Корни',
-        '09' => 'Уравнения',
-        '10' => 'Вероятность',
-        '11' => 'Графики',
-        '12' => 'Формулы',
-        '13' => 'Неравенства',
-        '14' => 'Прогрессии',
-        '15' => 'Треугольники',
-        '16' => 'Окружность',
-        '17' => 'Четырёхугольники',
-        '18' => 'Клетчатая бумага',
-        '19' => 'Высказывания',
-    ];
+    // $topicNames приходит из VprController::results() (grade-specific для ВПР),
+    // но оставляем fallback на случай прямого рендера/legacy.
+    $topicNames = $topicNames ?? [];
 
     // Build slot => exam_number and locator maps from variant config
     $variantTasks = is_array($attempt->variant?->config_json['tasks'] ?? null)
