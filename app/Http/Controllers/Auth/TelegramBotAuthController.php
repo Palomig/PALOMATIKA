@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\OgeVariant;
 use App\Models\StarTransaction;
 use App\Models\TelegramAuthToken;
 use App\Models\User;
@@ -302,7 +301,10 @@ class TelegramBotAuthController extends Controller
             $authFields['start_param'] = $fallbackStartParam;
         }
 
-        $redirectTo = $this->resolvePostLoginRedirect($authFields);
+        $effectiveStartParam = trim((string) ($authFields['start_param'] ?? ''));
+        $this->tgMiniAuth->linkReferralFromStartParam($user, $effectiveStartParam);
+
+        $redirectTo = $this->tgMiniAuth->pwaLandingUrl($user, $effectiveStartParam !== '' ? $effectiveStartParam : null);
 
         $this->auditLogger->log([
             'event_type' => 'telegram_webapp_login_success',
@@ -401,13 +403,8 @@ class TelegramBotAuthController extends Controller
         Cache::forget($this->startParamCacheKey($token));
         request()->session()->forget('telegram_start_param');
 
-        // Track referral for newly created users
-        if ($user->wasRecentlyCreated && preg_match('/^ref_(\d+)$/', $startParam, $refMatch)) {
-            $referrerId = (int) $refMatch[1];
-            if ($referrerId !== $user->id && User::where('id', $referrerId)->exists()) {
-                $user->update(['referred_by_user_id' => $referrerId]);
-            }
-        }
+        // Auto-link referrals (sets referred_by_user_id + teacher_students when applicable)
+        $this->tgMiniAuth->linkReferralFromStartParam($user, $startParam);
 
         $this->auditLogger->log([
             'event_type' => 'telegram_token_login_success',
@@ -421,31 +418,10 @@ class TelegramBotAuthController extends Controller
             'user_agent' => request()->userAgent(),
         ]);
 
-        if ($startParam !== '') {
-            $redirectTo = $this->resolvePostLoginRedirect(['start_param' => $startParam]);
-            Log::info('tg_token_login_success', [
-                'trace_id' => $traceId !== '' ? $traceId : null,
-                'token' => $token,
-                'user_id' => $user->id,
-                'redirect_to' => $redirectTo,
-            ]);
-            return redirect()->to($redirectTo);
-        }
+        // Drop any stale pwa redirect context — unified Mini App always lands on PWA subdomain.
+        Cache::forget('tg_auth_pwa_redirect:' . $token);
 
-        // PWA redirect: if the login was initiated from a PWA subdomain, go there
-        $pwaContext = Cache::pull('tg_auth_pwa_redirect:' . $token, '');
-        if (in_array($pwaContext, ['student', 'teacher'], true)) {
-            $baseDomain = config('app.base_domain', 'palomatika.ru');
-            if ($pwaContext === 'teacher') {
-                $fallbackRedirect = 'https://teacher.' . $baseDomain . '/dashboard';
-            } else {
-                $fallbackRedirect = $user->onboarding_completed_at
-                    ? 'https://student.' . $baseDomain . '/'
-                    : 'https://student.' . $baseDomain . '/onboarding';
-            }
-        } else {
-            $fallbackRedirect = $user->onboarding_completed_at ? '/tg/dashboard' : '/tg/onboarding';
-        }
+        $fallbackRedirect = $this->tgMiniAuth->pwaLandingUrl($user, $startParam !== '' ? $startParam : null);
 
         Log::info('tg_token_login_success', [
             'trace_id' => $traceId !== '' ? $traceId : null,
@@ -846,63 +822,6 @@ class TelegramBotAuthController extends Controller
             'avatar' => $telegramUser['photo_url'] ?? null,
             'trial_ends_at' => now()->addDays(7),
         ]);
-    }
-
-    /**
-     * @param array<string, string> $authFields
-     */
-    private function resolvePostLoginRedirect(array $authFields): string
-    {
-        $startParam = trim((string) ($authFields['start_param'] ?? ''));
-
-        if ($startParam !== '') {
-            // Explicit mini app marker from fallback login flow
-            if (str_starts_with($startParam, 'miniapp_')) {
-                $user = auth()->user();
-                if ($user && !$user->onboarding_completed_at) {
-                    return url('/tg/onboarding');
-                }
-                return url('/tg/dashboard');
-            }
-
-            // Legacy payload: oge_variant_{id}
-            if (preg_match('/^oge_variant_(\d+)$/', $startParam, $matches)) {
-                $variantId = (int) $matches[1];
-                $variant = OgeVariant::find($variantId);
-                if ($variant && !empty($variant->hash)) {
-                    return url('/tg/dashboard?startapp=oge_variant_hash_' . $variant->hash);
-                }
-            }
-
-            // New payload: oge_variant_hash_{hash}
-            if (preg_match('/^oge_variant_hash_([a-z0-9]{8,32})$/i', $startParam, $matches)) {
-                $hash = strtolower($matches[1]);
-                // Keep battle flow inside Mini App context (dashboard handles startapp payload).
-                return url('/tg/dashboard?startapp=oge_variant_hash_' . $hash);
-            }
-
-            // Tolerant payload: oge_variant_{hash}
-            if (preg_match('/^oge_variant_([a-z0-9]{8,32})$/i', $startParam, $matches)) {
-                $hash = strtolower($matches[1]);
-                return url('/tg/dashboard?startapp=oge_variant_hash_' . $hash);
-            }
-        }
-
-        // Mini App: check if user needs onboarding, redirect to /tg/ flow
-        $user = auth()->user();
-        if ($user) {
-            // Check if request came from Mini App context (has query_id or start_param)
-            $isWebApp = !empty($authFields['query_id']) || request()->is('api/auth/telegram/*');
-            if ($isWebApp) {
-                if (!$user->onboarding_completed_at) {
-                    return url('/tg/onboarding');
-                }
-                return url('/tg/dashboard');
-            }
-        }
-
-        // Mini App is isolated from the browser site: Telegram auth never redirects outside /tg.
-        return url('/tg/dashboard');
     }
 
     /**

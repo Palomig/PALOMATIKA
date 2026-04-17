@@ -32,16 +32,7 @@ class MiniAppAuthController extends Controller
 
             $startapp = trim((string) ($request->query('startapp', $request->query('tgWebAppStartParam', ''))));
 
-            if (!$user->onboarding_completed_at) {
-                return redirect('/tg/onboarding');
-            }
-
-            $target = '/tg/dashboard';
-            if ($startapp !== '') {
-                $target .= '?startapp=' . rawurlencode($startapp);
-            }
-
-            return redirect($target);
+            return redirect($this->tgMiniAuth->pwaLandingUrl($user, $startapp));
         }
 
         return view('miniapp.home');
@@ -82,30 +73,10 @@ class MiniAppAuthController extends Controller
             $request->session()->put('telegram_start_param', $startParam);
         }
 
-        // Track referral for newly created users
-        if ($user->wasRecentlyCreated) {
-            $referrerId = null;
+        // Auto-link referrals (sets referred_by_user_id + teacher_students when applicable)
+        $this->tgMiniAuth->linkReferralFromStartParam($user, $startParam);
 
-            if (preg_match('/^ref_(\d+)$/', $startParam, $refMatch)) {
-                // ref_{user_id} — direct internal ID
-                $referrerId = (int) $refMatch[1];
-            } elseif (preg_match('/^ref_tg_(\d+)$/', $startParam, $refMatch)) {
-                // ref_tg_{telegram_id} — lookup by Telegram oauth_id
-                $referrer = User::where('oauth_provider', 'telegram')
-                    ->where('oauth_id', $refMatch[1])
-                    ->first();
-                $referrerId = $referrer?->id;
-            }
-
-            if ($referrerId && $referrerId !== $user->id && User::where('id', $referrerId)->exists()) {
-                $user->update(['referred_by_user_id' => $referrerId]);
-            }
-        }
-
-        $redirectTo = !$user->onboarding_completed_at ? '/tg/onboarding' : '/tg/dashboard';
-        if ($startParam !== '') {
-            $redirectTo .= '?startapp=' . rawurlencode($startParam);
-        }
+        $redirectTo = $this->tgMiniAuth->pwaLandingUrl($user, $startParam);
 
         // Use a one-time handoff token to survive Telegram WebView cookie quirks.
         // The auth-bridge page will navigate to /tg/auth/continue?token=... which
@@ -139,14 +110,7 @@ class MiniAppAuthController extends Controller
                 Auth::login($user, true);
                 $request->session()->regenerate();
 
-                // Render onboarding inline to avoid yet another redirect hop
-                if (!$user->onboarding_completed_at) {
-                    return view('miniapp.onboarding', [
-                        'onboardingToken' => $this->issueOnboardingToken($user->id),
-                    ]);
-                }
-
-                $target = (string) ($handoff['redirect_to'] ?? '/tg/dashboard');
+                $target = (string) ($handoff['redirect_to'] ?? $this->tgMiniAuth->pwaLandingUrl($user));
                 return response()->view('miniapp.auth-bridge-final', ['target' => $target]);
             }
         }
@@ -157,7 +121,8 @@ class MiniAppAuthController extends Controller
             return redirect('/tg')->with('error', 'Сессия входа не сохранилась. Попробуйте ещё раз.');
         }
 
-        $target = !$user->onboarding_completed_at ? '/tg/onboarding' : '/tg/dashboard';
+        $startParam = trim((string) $request->session()->get('telegram_start_param', ''));
+        $target = $this->tgMiniAuth->pwaLandingUrl($user, $startParam);
         return response()->view('miniapp.auth-bridge-final', ['target' => $target]);
     }
 
@@ -236,7 +201,10 @@ class MiniAppAuthController extends Controller
             'payload_json' => ['source' => 'miniapp'],
         ]);
 
-        return redirect($role === 'teacher' ? '/tg/teacher/dashboard' : '/tg/dashboard');
+        $baseDomain = (string) config('app.base_domain', 'palomatika.ru');
+        return redirect($role === 'teacher'
+            ? 'https://teacher.' . $baseDomain . '/dashboard'
+            : 'https://student.' . $baseDomain . '/');
     }
 
 }

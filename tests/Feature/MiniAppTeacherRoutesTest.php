@@ -192,13 +192,13 @@ class MiniAppTeacherRoutesTest extends TestCase
 
         $this->actingAs($admin)
             ->post('/tg/mode/teacher')
-            ->assertRedirect('/tg/teacher/dashboard');
+            ->assertRedirect('https://teacher.palomatika.ru/dashboard');
 
         $this->assertSame('teacher', session('view_as_role'));
 
         $this->actingAs($admin)
             ->post('/tg/mode/student')
-            ->assertRedirect('/tg/dashboard');
+            ->assertRedirect('https://student.palomatika.ru/');
 
         $this->assertSame('student', session('view_as_role'));
     }
