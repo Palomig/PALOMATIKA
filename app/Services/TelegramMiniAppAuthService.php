@@ -2,10 +2,88 @@
 
 namespace App\Services;
 
+use App\Models\TeacherStudent;
 use App\Models\User;
 
 class TelegramMiniAppAuthService
 {
+    /**
+     * Resolve the final PWA landing URL for a Telegram user after auth.
+     * Returns an absolute URL on student./teacher. subdomain so Telegram webview
+     * navigates to the full PWA experience (shared session cookie on .base_domain).
+     *
+     * Deep-link variant hashes are forwarded as ?startapp= so the target page
+     * (CaptureTelegramStartParam middleware + dashboard) can open the variant.
+     */
+    public function pwaLandingUrl(?User $user, ?string $startParam = null): string
+    {
+        $baseDomain = (string) config('app.base_domain', 'palomatika.ru');
+        $isTeacher = $user && in_array($user->role, ['teacher', 'admin'], true);
+
+        $home = $isTeacher
+            ? 'https://teacher.' . $baseDomain . '/dashboard'
+            : 'https://student.' . $baseDomain . '/';
+
+        $startParam = is_string($startParam) ? trim($startParam) : '';
+        if ($startParam === '') {
+            return $home;
+        }
+
+        // Variant hash payloads — forward to student dashboard with startapp so
+        // CaptureTelegramStartParam redirects to the correct variant page.
+        if (preg_match('/^oge_variant_hash_([a-z0-9]{8,32})$/i', $startParam, $m)
+            || (preg_match('/^oge_variant_([a-z0-9]{8,32})$/i', $startParam, $m) && !ctype_digit($m[1]))) {
+            $hash = strtolower($m[1]);
+            return 'https://student.' . $baseDomain . '/?startapp=oge_variant_hash_' . $hash;
+        }
+
+        // miniapp_ / ref_ / anything else → plain landing (middlewares handle the rest).
+        return $home;
+    }
+
+    /**
+     * If startParam is a referral marker (ref_{userId} or ref_tg_{tgId}),
+     * set referred_by_user_id and — when the referrer is a teacher/admin —
+     * create the teacher_students link so the teacher sees the student
+     * in their dashboard even before any attempt is submitted.
+     */
+    public function linkReferralFromStartParam(User $user, ?string $startParam): void
+    {
+        $startParam = is_string($startParam) ? trim($startParam) : '';
+        if ($startParam === '') {
+            return;
+        }
+
+        $referrerId = null;
+        if (preg_match('/^ref_(\d+)$/', $startParam, $m)) {
+            $referrerId = (int) $m[1];
+        } elseif (preg_match('/^ref_tg_(\d+)$/', $startParam, $m)) {
+            $referrerId = User::where('oauth_provider', 'telegram')
+                ->where('oauth_id', $m[1])
+                ->value('id');
+        }
+
+        if (!$referrerId || $referrerId === $user->id) {
+            return;
+        }
+
+        $referrer = User::find($referrerId);
+        if (!$referrer) {
+            return;
+        }
+
+        if ($user->referred_by_user_id === null) {
+            $user->update(['referred_by_user_id' => $referrerId]);
+        }
+
+        if (in_array($referrer->role, ['teacher', 'admin'], true)) {
+            TeacherStudent::firstOrCreate(
+                ['teacher_id' => $referrerId, 'student_id' => $user->id],
+                ['source' => 'referral']
+            );
+        }
+    }
+
     /**
      * @param array<string,mixed> $initDataUnsafe
      * @return array{0: array<string,string>, 1: array<string,mixed>}

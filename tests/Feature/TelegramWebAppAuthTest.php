@@ -46,6 +46,16 @@ class TelegramWebAppAuthTest extends TestCase
             $table->timestamps();
         });
 
+        Schema::create('teacher_students', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('teacher_id');
+            $table->unsignedBigInteger('student_id');
+            $table->string('source', 32)->default('referral');
+            $table->string('student_alias', 80)->nullable();
+            $table->string('evrium_name', 100)->nullable();
+            $table->timestamp('created_at')->useCurrent();
+        });
+
         Schema::create('telegram_auth_tokens', function (Blueprint $table) {
             $table->id();
             $table->string('token')->unique();
@@ -89,10 +99,7 @@ class TelegramWebAppAuthTest extends TestCase
             ->assertJsonPath('success', true);
 
         $redirectTo = (string) $response->json('redirect_to');
-        $this->assertTrue(
-            str_starts_with($redirectTo, url('/tg/')),
-            'Telegram mini app login must stay inside /tg routes'
-        );
+        $this->assertStringStartsWith('https://student.', $redirectTo, 'Telegram mini app should redirect students to student PWA subdomain');
 
         $this->assertAuthenticatedAs($user);
         $this->assertSame(1, User::where('oauth_provider', 'telegram')->where('oauth_id', '987654321')->count());
@@ -126,6 +133,38 @@ class TelegramWebAppAuthTest extends TestCase
         $this->assertNotNull($createdUser);
         $this->assertSame('Anna Smirnova', $createdUser->name);
         $this->assertSame('https://t.me/i/userpic/320/anna.jpg', $createdUser->avatar);
+    }
+
+    public function test_webapp_login_with_ref_teacher_start_param_links_student_to_teacher(): void
+    {
+        $teacher = User::factory()->create([
+            'name' => 'Teacher',
+            'role' => 'teacher',
+        ]);
+
+        $initData = $this->makeSignedInitData([
+            'auth_date' => (string) now()->timestamp,
+            'start_param' => 'ref_' . $teacher->id,
+            'user' => [
+                'id' => 555666777,
+                'first_name' => 'Nina',
+            ],
+        ]);
+
+        $response = $this->postJson('/api/auth/telegram/webapp-login', [
+            'initData' => $initData,
+        ]);
+
+        $response->assertOk()->assertJsonPath('success', true);
+
+        $student = User::where('oauth_provider', 'telegram')->where('oauth_id', '555666777')->firstOrFail();
+
+        $this->assertSame($teacher->id, $student->referred_by_user_id);
+        $this->assertDatabaseHas('teacher_students', [
+            'teacher_id' => $teacher->id,
+            'student_id' => $student->id,
+            'source' => 'referral',
+        ]);
     }
 
     public function test_invalid_signature_is_rejected(): void

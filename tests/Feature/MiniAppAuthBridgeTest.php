@@ -105,22 +105,24 @@ class MiniAppAuthBridgeTest extends TestCase
 
     // --- Onboarding Token Fallback ---
 
-    public function test_auth_continue_renders_onboarding_for_user_without_onboarding(): void
+    public function test_auth_continue_forwards_onboarding_target_to_pwa_bridge(): void
     {
         $user = User::factory()->create([
             'onboarding_completed_at' => null,
         ]);
 
+        $pwaTarget = 'https://student.palomatika.ru/';
         $token = 'test_handoff_onboarding';
         Cache::put('tg_auth_handoff:' . $token, [
             'user_id' => $user->id,
-            'redirect_to' => '/tg/onboarding',
+            'redirect_to' => $pwaTarget,
         ], now()->addMinutes(2));
 
         $response = $this->get('/tg/auth/continue?token=' . $token);
 
         $response->assertOk();
-        $response->assertViewIs('miniapp.onboarding');
+        $response->assertViewIs('miniapp.auth-bridge-final');
+        $response->assertViewHas('target', $pwaTarget);
         $this->assertAuthenticatedAs($user);
     }
 
@@ -165,37 +167,53 @@ class MiniAppAuthBridgeTest extends TestCase
 
     // --- Home Redirect Invariants ---
 
-    public function test_home_redirects_authed_user_to_dashboard(): void
+    public function test_home_redirects_authed_student_to_pwa_student_subdomain(): void
     {
         $user = User::factory()->create([
+            'role' => 'student',
             'onboarding_completed_at' => now(),
         ]);
 
         $response = $this->actingAs($user)->get('/tg');
 
-        $response->assertRedirect('/tg/dashboard');
+        $response->assertRedirect('https://student.palomatika.ru/');
     }
 
-    public function test_home_redirects_authed_user_without_onboarding_to_onboarding(): void
+    public function test_home_redirects_authed_teacher_to_pwa_teacher_subdomain(): void
     {
         $user = User::factory()->create([
+            'role' => 'teacher',
+            'onboarding_completed_at' => now(),
+        ]);
+
+        $response = $this->actingAs($user)->get('/tg');
+
+        $response->assertRedirect('https://teacher.palomatika.ru/dashboard');
+    }
+
+    public function test_home_redirects_authed_user_without_onboarding_to_pwa_landing(): void
+    {
+        // PWA subdomain's own onboarding middleware redirects non-onboarded users to /onboarding.
+        $user = User::factory()->create([
+            'role' => 'student',
             'onboarding_completed_at' => null,
         ]);
 
         $response = $this->actingAs($user)->get('/tg');
 
-        $response->assertRedirect('/tg/onboarding');
+        $response->assertRedirect('https://student.palomatika.ru/');
     }
 
-    public function test_home_preserves_startapp_param(): void
+    public function test_home_forwards_variant_hash_startapp_to_pwa(): void
     {
         $user = User::factory()->create([
+            'role' => 'student',
             'onboarding_completed_at' => now(),
         ]);
 
-        $response = $this->actingAs($user)->get('/tg?startapp=ref_42');
+        $response = $this->actingAs($user)->get('/tg?startapp=oge_variant_hash_abc12345');
 
-        $response->assertRedirect('/tg/dashboard?startapp=ref_42');
+        $response->assertRedirect('https://student.palomatika.ru/?startapp=oge_variant_hash_abc12345');
     }
 
     // --- Bridge Ping ---
