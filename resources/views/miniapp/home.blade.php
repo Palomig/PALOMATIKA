@@ -249,7 +249,7 @@
 
 
   @auth
-    <a href="/tg/dashboard" class="btn-primary" id="go-btn" style="text-decoration:none;">
+    <a href="/tg" class="btn-primary" id="go-btn" style="text-decoration:none;">
       <span style="display:flex;align-items:center;gap:8px;">Войти</span>
     </a>
   @else
@@ -303,7 +303,7 @@ function homePage() {
       const startParam = (startParamFromTg || startParamFromUrl || '').trim();
       if (startParam && /^oge_variant_hash_[a-z0-9]{8,32}$/i.test(startParam)) {
         @auth
-          window.location.replace('/tg/dashboard?startapp=' + encodeURIComponent(startParam));
+          window.location.replace('/tg?startapp=' + encodeURIComponent(startParam));
           return;
         @else
           // For unauthenticated users opened via battle deep link,

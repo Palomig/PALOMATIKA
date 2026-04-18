@@ -303,8 +303,11 @@ function homePage() {
       const startParam = (startParamFromTg || startParamFromUrl || '').trim();
       if (startParam && /^oge_variant_hash_[a-z0-9]{8,32}$/i.test(startParam)) {
         @auth
-          window.location.replace('/tg/dashboard?startapp=' + encodeURIComponent(startParam));
-          return;
+          const hashMatch = startParam.match(/^oge_variant_hash_([a-z0-9]{8,32})$/i);
+          if (hashMatch) {
+            window.location.replace('/oge/' + hashMatch[1].toLowerCase());
+            return;
+          }
         @else
           // For unauthenticated users opened via battle deep link,
           // auto-run Telegram auth without requiring manual "Начать подготовку" click.
