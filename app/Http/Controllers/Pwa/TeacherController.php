@@ -108,6 +108,10 @@ class TeacherController extends Controller
         $teacherId = (int) $user->id;
         $search = trim((string) $request->query('search', ''));
         $filter = trim((string) $request->query('filter', 'mine'));
+        $gradeRaw = trim((string) $request->query('grade', ''));
+        $grade = ($gradeRaw !== '' && ctype_digit($gradeRaw) && (int) $gradeRaw >= 5 && (int) $gradeRaw <= 11)
+            ? (int) $gradeRaw
+            : null;
         $selectedDay = (int) $request->query('day', (int) now()->format('N'));
         if ($selectedDay < 1 || $selectedDay > 7) {
             $selectedDay = (int) now()->format('N');
@@ -147,18 +151,52 @@ class TeacherController extends Controller
             $studentsQuery->whereExists(function ($sub) use ($teacherId) {
                 $sub->selectRaw('1')->from('teacher_students')->whereColumn('teacher_students.student_id', 'users.id')->where('teacher_students.teacher_id', $teacherId);
             });
+        } elseif ($filter === 'unlinked') {
+            $studentsQuery->whereNotExists(function ($sub) use ($teacherId) {
+                $sub->selectRaw('1')->from('teacher_students')->whereColumn('teacher_students.student_id', 'users.id')->where('teacher_students.teacher_id', $teacherId);
+            });
+            if ($grade !== null) {
+                $studentsQuery->where('users.grade_num', $grade);
+            }
         } elseif ($filter === 'scheduled' && $scheduledStudentIds->isNotEmpty()) {
             $studentsQuery->whereIn('users.id', $scheduledStudentIds);
         } elseif ($filter === 'scheduled') {
             $studentsQuery->whereRaw('1 = 0');
         }
 
-        $students = $studentsQuery->orderByRaw('COALESCE(users.last_active_at, users.created_at) DESC')->orderBy('users.name')->paginate(20)->withQueryString();
+        $students = $studentsQuery
+            ->addSelect('users.grade_num', 'users.grade_letter')
+            ->orderByRaw('COALESCE(users.last_active_at, users.created_at) DESC')->orderBy('users.name')->paginate(20)->withQueryString();
+
+        $availableGrades = [];
+        if ($filter === 'unlinked') {
+            $availableGrades = User::where('users.role', 'student')
+                ->whereNotNull('users.grade_num')
+                ->whereNotExists(function ($sub) use ($teacherId) {
+                    $sub->selectRaw('1')->from('teacher_students')->whereColumn('teacher_students.student_id', 'users.id')->where('teacher_students.teacher_id', $teacherId);
+                })
+                ->where(function ($q) {
+                    $q->whereExists(function ($sub) {
+                        $sub->selectRaw('1')->from('oge_attempts')->whereColumn('oge_attempts.student_id', 'users.id');
+                    })->orWhereExists(function ($sub) {
+                        $sub->selectRaw('1')->from('teacher_students')->whereColumn('teacher_students.student_id', 'users.id');
+                    });
+                })
+                ->distinct()
+                ->orderBy('users.grade_num')
+                ->pluck('users.grade_num')
+                ->map(fn($g) => (int) $g)
+                ->unique()
+                ->values()
+                ->all();
+        }
 
         return view('pwa.teacher.students', [
             'students' => $students,
             'search' => $search,
             'filter' => $filter,
+            'grade' => $grade,
+            'availableGrades' => $availableGrades,
             'selectedDay' => $selectedDay,
             'todayDow' => $todayDow,
             'dayNames' => $dayNames,

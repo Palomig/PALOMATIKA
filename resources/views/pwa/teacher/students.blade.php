@@ -81,6 +81,14 @@
   }
   .day-btn.today { border-color: var(--accent); color: var(--accent); }
   .day-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .grade-picker { display: flex; gap: 6px; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
+  .grade-btn {
+    padding: 7px 12px; border-radius: 10px; font-size: 12px; font-weight: 700;
+    white-space: nowrap; border: 1px solid var(--border); background: var(--surface);
+    color: var(--muted); cursor: pointer; text-decoration: none; text-align: center;
+    min-width: 38px;
+  }
+  .grade-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
   .pager { display: flex; justify-content: center; margin-top: 4px; }
   .empty-msg { text-align: center; padding: 30px 16px; color: var(--muted); font-size: 13px; }
 @endpush
@@ -94,7 +102,7 @@
 
   <div class="filters">
     <a class="filter-btn {{ $filter === 'mine' ? 'active' : '' }}" href="?filter=mine{{ $search ? '&search='.urlencode($search) : '' }}">Мои</a>
-    <a class="filter-btn {{ $filter === 'all' ? 'active' : '' }}" href="?filter=all{{ $search ? '&search='.urlencode($search) : '' }}">Все</a>
+    <a class="filter-btn {{ $filter === 'unlinked' ? 'active' : '' }}" href="?filter=unlinked{{ $search ? '&search='.urlencode($search) : '' }}">Без привязки</a>
     <a class="filter-btn {{ $filter === 'scheduled' ? 'active' : '' }}" href="?filter=scheduled{{ $search ? '&search='.urlencode($search) : '' }}">По расписанию</a>
   </div>
 
@@ -103,6 +111,17 @@
       @foreach($dayNames as $dow => $label)
         <a class="day-btn {{ $dow === $selectedDay ? 'active' : '' }} {{ $dow === $todayDow ? 'today' : '' }}"
            href="?filter=scheduled&day={{ $dow }}{{ $search ? '&search='.urlencode($search) : '' }}">{{ $label }}</a>
+      @endforeach
+    </div>
+  @endif
+
+  @if($filter === 'unlinked' && !empty($availableGrades))
+    <div class="grade-picker">
+      <a class="grade-btn {{ $grade === null ? 'active' : '' }}"
+         href="?filter=unlinked{{ $search ? '&search='.urlencode($search) : '' }}">Все классы</a>
+      @foreach($availableGrades as $g)
+        <a class="grade-btn {{ $grade === $g ? 'active' : '' }}"
+           href="?filter=unlinked&grade={{ $g }}{{ $search ? '&search='.urlencode($search) : '' }}">{{ $g }}</a>
       @endforeach
     </div>
   @endif
@@ -181,6 +200,10 @@
           Ничего не найдено по «{{ $search }}»
         @elseif($filter === 'mine')
           У вас ещё нет привязанных учеников
+        @elseif($filter === 'unlinked' && $grade !== null)
+          Нет непривязанных учеников в {{ $grade }} классе
+        @elseif($filter === 'unlinked')
+          Нет непривязанных учеников
         @else
           Список пуст
         @endif
