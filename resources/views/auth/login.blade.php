@@ -261,7 +261,7 @@ function telegramAutoLogin() {
                 }
 
                 // Mini App auth must remain inside isolated /tg routes.
-                window.location.href = data.redirect_to || '/tg/dashboard';
+                window.location.href = data.redirect_to || '/tg';
             } catch (err) {
                 this.autoLoginLoading = false;
                 this.autoLoginError = err.message || 'Не удалось войти автоматически';
@@ -319,7 +319,7 @@ function loginForm() {
                 if (data.token) {
                     localStorage.setItem('auth_token', data.token);
                 }
-                window.location.href = data.redirect_to || '/tg/dashboard';
+                window.location.href = data.redirect_to || '/tg';
             } catch (err) {
                 this.error = err.message;
                 this.shaking = true;
@@ -410,7 +410,7 @@ function telegramAuth() {
                 }
 
                 // Telegram Mini App auth is isolated from browser routes.
-                window.location.href = data.redirect_to || '/tg/dashboard';
+                window.location.href = data.redirect_to || '/tg';
                 return { success: true };
             } catch (err) {
                 return {

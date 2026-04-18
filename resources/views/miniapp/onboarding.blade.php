@@ -179,7 +179,7 @@ function onboardingPage() {
 
         const data = await res.json().catch(() => ({}));
         if (res.ok) {
-          window.location.href = '/tg/dashboard';
+          window.location.href = '/tg';
         } else {
           alert(data.message || 'Ошибка сохранения');
         }

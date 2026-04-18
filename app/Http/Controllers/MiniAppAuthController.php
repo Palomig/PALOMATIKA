@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Services\AuditLogger;
 use App\Services\TelegramMiniAppAuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -179,32 +178,6 @@ class MiniAppAuthController extends Controller
         ]);
 
         return response()->json(['success' => true]);
-    }
-
-    public function switchMode(Request $request, string $role, AuditLogger $audit)
-    {
-        abort_unless($request->user()?->role === 'admin', 403);
-        abort_unless(in_array($role, ['student', 'teacher'], true), 404);
-
-        $request->session()->put('view_as_role', $role);
-
-        $audit->log([
-            'event_type' => 'view_as_set',
-            'category' => 'admin',
-            'severity' => 'info',
-            'actor_user_id' => $request->user()->id,
-            'actor_role' => 'admin',
-            'subject_type' => 'view_as_role',
-            'subject_id' => $role,
-            'ip' => $request->ip(),
-            'user_agent' => $request->userAgent(),
-            'payload_json' => ['source' => 'miniapp'],
-        ]);
-
-        $baseDomain = (string) config('app.base_domain', 'palomatika.ru');
-        return redirect($role === 'teacher'
-            ? 'https://teacher.' . $baseDomain . '/dashboard'
-            : 'https://student.' . $baseDomain . '/');
     }
 
 }

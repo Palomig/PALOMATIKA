@@ -9,11 +9,7 @@ use App\Http\Controllers\EgeController;
 use App\Http\Controllers\JarvisMaterialPageController;
 use App\Http\Controllers\AdminTaskAnswerController;
 use App\Http\Controllers\AdminTaskStatusController;
-use App\Http\Controllers\MiniAppAdminController;
 use App\Http\Controllers\MiniAppAuthController;
-use App\Http\Controllers\MiniAppBillingController;
-use App\Http\Controllers\MiniAppStudentController;
-use App\Http\Controllers\MiniAppTeacherController;
 use App\Http\Controllers\OgeAttemptController;
 use App\Http\Controllers\OgeTemplateController;
 use App\Http\Controllers\RepetitorController;
@@ -22,7 +18,6 @@ use App\Http\Controllers\Teacher\StudentsController;
 use App\Http\Controllers\TestPdfController;
 use App\Http\Controllers\Teacher\StudentGroupController;
 use App\Http\Controllers\Teacher\OgeReviewController;
-use App\Http\Middleware\EnsureOnboardingComplete;
 use App\Services\AuditLogger;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
@@ -382,13 +377,15 @@ Route::get('/roadmap', [BoardController::class, 'roadmap'])->name('board.roadmap
 Route::get('/forstas', [BoardController::class, 'architecture'])->name('board.architecture');
 
 // ========================================================================
-// Telegram Mini App Routes (/tg/*)
+// Telegram → PWA auth bridge (/tg/*)
+// Legacy Mini App pages have moved to PWA subdomains (student./teacher.).
+// These routes exist only to carry Telegram WebView auth → PWA session handoff.
 // ========================================================================
 Route::prefix('tg')->group(function () {
-    // Public: home/landing (no auth required)
+    // Public: home/landing — redirects authed users to PWA subdomain
     Route::get('/', [MiniAppAuthController::class, 'home'])->name('miniapp.home');
 
-    // Server-side auth: form POST with initData → verify HMAC → login → bridge redirect
+    // Server-side Telegram WebApp auth: form POST with initData → verify HMAC → login → bridge redirect
     // CSRF exempted (uses Telegram HMAC instead), see VerifyCsrfToken
     Route::post('/auth', [MiniAppAuthController::class, 'authenticate'])->name('miniapp.auth');
     Route::post('/auth/bridge-ping', [MiniAppAuthController::class, 'authBridgePing'])->name('miniapp.auth.bridge_ping');
@@ -398,65 +395,9 @@ Route::prefix('tg')->group(function () {
     // (needed for unstable WebView session continuity on some VPN/mobile paths).
     Route::post('/onboarding', [MiniAppAuthController::class, 'saveOnboarding'])->name('miniapp.onboarding.save');
 
-    // Authenticated Mini App routes
+    // Onboarding page (authenticated)
     Route::middleware(['auth'])->group(function () {
-        Route::post('/mode/{role}', [MiniAppAuthController::class, 'switchMode'])
-            ->where('role', 'student|teacher')
-            ->name('miniapp.mode.switch');
-
-        // Onboarding page
         Route::get('/onboarding', [MiniAppAuthController::class, 'onboarding'])->name('miniapp.onboarding');
-
-        // Routes that require completed onboarding
-        Route::middleware([EnsureOnboardingComplete::class])->group(function () {
-            Route::get('/dashboard', [MiniAppStudentController::class, 'dashboard'])->name('miniapp.dashboard');
-            Route::get('/diagnostic', [MiniAppStudentController::class, 'diagnostic'])->name('miniapp.diagnostic');
-            Route::post('/diagnostic/submit', [MiniAppStudentController::class, 'submitDiagnostic'])->name('miniapp.diagnostic.submit');
-            Route::get('/diagnostic/results', [MiniAppStudentController::class, 'diagnosticResults'])->name('miniapp.diagnostic.results');
-            Route::get('/mini', [MiniAppStudentController::class, 'mini'])->name('miniapp.mini');
-            Route::get('/new-tasks', [MiniAppStudentController::class, 'newTasks'])->name('miniapp.new_tasks');
-            Route::get('/part2', [MiniAppStudentController::class, 'part2'])->name('miniapp.part2');
-            Route::get('/tasks-part1', [MiniAppStudentController::class, 'tasksPart1'])->name('miniapp.tasks_part1');
-            Route::post('/mini/start', [MiniAppStudentController::class, 'startMini'])->name('miniapp.mini.start');
-            Route::post('/full/start', [MiniAppStudentController::class, 'startFull'])->name('miniapp.full.start');
-            Route::get('/test/{attemptId}', [MiniAppStudentController::class, 'test'])->name('miniapp.test');
-            Route::get('/results/{attemptId}', [MiniAppStudentController::class, 'results'])->name('miniapp.results');
-            Route::get('/history', [MiniAppStudentController::class, 'history'])->name('miniapp.history');
-            Route::get('/history/{attemptId}', [MiniAppStudentController::class, 'historyDetail'])->name('miniapp.history.detail');
-            Route::get('/tutor', [MiniAppStudentController::class, 'tutor'])->name('miniapp.tutor');
-            Route::get('/homework', [MiniAppStudentController::class, 'studentHomework'])->name('miniapp.homework');
-
-            Route::get('/profile', [MiniAppStudentController::class, 'profile'])->name('miniapp.profile');
-            Route::post('/premium/trial', [MiniAppBillingController::class, 'activateTrial'])->name('miniapp.premium.trial');
-            Route::post('/premium/buy', [MiniAppBillingController::class, 'buyPremium'])->name('miniapp.premium.buy');
-            Route::post('/premium/payout', [MiniAppBillingController::class, 'requestPayout'])->name('miniapp.premium.payout');
-            Route::post('/gift/seen', [MiniAppBillingController::class, 'giftSeen'])->name('miniapp.gift.seen');
-
-            Route::middleware(['role:teacher,admin'])->prefix('teacher')->name('miniapp.teacher.')->group(function () {
-                Route::get('/', fn () => redirect('/tg/teacher/dashboard'))->name('home');
-                Route::get('/dashboard', [MiniAppTeacherController::class, 'teacherDashboard'])->name('dashboard');
-                Route::get('/lessons', [MiniAppTeacherController::class, 'teacherLessons'])->name('lessons');
-                Route::get('/students', [MiniAppTeacherController::class, 'teacherStudents'])->name('students');
-                Route::get('/students/{studentId}', [MiniAppTeacherController::class, 'teacherStudentProfile'])->name('students.profile');
-                Route::get('/students/{studentId}/attempt/{attemptId}', [MiniAppTeacherController::class, 'teacherStudentAttemptDetail'])->name('students.attempt');
-                Route::post('/students/{studentId}/ownership', [MiniAppTeacherController::class, 'toggleTeacherStudentOwnership'])->name('students.ownership');
-                Route::patch('/students/{studentId}/alias', [MiniAppTeacherController::class, 'updateTeacherStudentAlias'])->name('students.alias');
-                Route::get('/variants', [MiniAppTeacherController::class, 'teacherVariants'])->name('variants');
-                Route::get('/homework', [MiniAppTeacherController::class, 'teacherHomework'])->name('homework');
-                Route::post('/homework/assign', [MiniAppTeacherController::class, 'assignHomework'])->name('homework.assign');
-                Route::patch('/students/{studentId}/link', [MiniAppTeacherController::class, 'updateStudentLink'])->name('students.link');
-                Route::get('/referrals', [MiniAppTeacherController::class, 'teacherReferrals'])->name('referrals');
-                Route::get('/diagnostic-editor', [\App\Http\Controllers\DiagnosticEditorController::class, 'index'])->name('diagnostic.editor');
-                Route::post('/diagnostic-editor/save', [\App\Http\Controllers\DiagnosticEditorController::class, 'save'])->name('diagnostic.editor.save');
-                Route::get('/diagnostic-editor/tasks', [\App\Http\Controllers\DiagnosticEditorController::class, 'browseTasks'])->name('diagnostic.editor.tasks');
-            });
-        });
-
-        // Admin routes for curated variants
-        Route::middleware(['role:teacher,admin'])->prefix('admin')->group(function () {
-            Route::get('/variants', [MiniAppAdminController::class, 'adminVariants'])->name('miniapp.admin.variants');
-            Route::post('/variants/create', [MiniAppAdminController::class, 'createCuratedVariant'])->name('miniapp.admin.variants.create');
-        });
     });
 });
 

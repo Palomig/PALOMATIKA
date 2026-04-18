@@ -67,7 +67,7 @@ class MiniAppAuthBridgeTest extends TestCase
         $token = 'test_handoff_token_abc';
         Cache::put('tg_auth_handoff:' . $token, [
             'user_id' => $user->id,
-            'redirect_to' => '/tg/dashboard',
+            'redirect_to' => 'https://student.palomatika.ru/',
         ], now()->addMinutes(2));
 
         $response = $this->get('/tg/auth/continue?token=' . $token);
