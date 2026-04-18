@@ -86,10 +86,18 @@
   .text-accent { color: var(--accent); }
   .flex-center { display: flex; align-items: center; justify-content: center; }
 
+  .pwa-role-switcher { position: sticky; top: 0; z-index: 800; display: flex; gap: 6px; padding: calc(8px + var(--safe-top)) 12px 8px; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); justify-content: center; }
+  .pwa-role-switcher__btn { flex: 0 1 140px; text-align: center; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface2); color: var(--muted); font-family: var(--body); font-size: 13px; font-weight: 700; text-decoration: none; letter-spacing: 0.02em; transition: background 0.15s, color 0.15s, border-color 0.15s; }
+  .pwa-role-switcher__btn:active { transform: scale(0.97); }
+  .pwa-role-switcher__btn.is-active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  @supports not (backdrop-filter: blur(8px)) { .pwa-role-switcher { background: var(--bg); } }
+
   @stack('styles')
 </style>
 </head>
 <body>
+
+@include('pwa.shared.role-switcher')
 
 @yield('body')
 
