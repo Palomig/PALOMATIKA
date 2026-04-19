@@ -1,0 +1,20 @@
+{
+  "name": "agent-board",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --env-file=.env --watch src/server.js",
+    "start": "node --env-file=.env src/server.js",
+    "smoke": "node --input-type=module -e \"import { existsSync } from 'node:fs'; if (!existsSync('src/server.js')) process.exit(1); console.log('ok');\"",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.10.0",
+    "cookie-parser": "^1.4.7",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "jsdom": "^26.1.0",
+    "supertest": "^7.1.0"
+  }
+}

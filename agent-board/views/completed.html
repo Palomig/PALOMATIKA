@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Completed Work</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <div id="completed-page" class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Live Delivery Ledger</p>
+          <h1>Completed Work</h1>
+        </div>
+        <nav class="topbar-actions">
+          <a class="nav-link" href="/">Board</a>
+          <a class="nav-link active" href="/completed">Completed</a>
+          <span id="completed-live-indicator" class="status-chip status-waiting">Live: connecting</span>
+          <button id="logout-button" class="ghost-button" type="button">Logout</button>
+        </nav>
+      </header>
+
+      <section class="composer-card completed-controls">
+        <div>
+          <p class="section-label">History Filters</p>
+          <h2>Выполненные задачи</h2>
+        </div>
+        <div class="filters-grid">
+          <label class="field">
+            <span>Проект</span>
+            <select id="project-filter">
+              <option value="all">Все</option>
+              <option value="palomatika">Palomatika</option>
+              <option value="evrium">Evrium</option>
+            </select>
+          </label>
+          <label class="field field-wide">
+            <span>Поиск</span>
+            <input id="search-filter" type="search" placeholder="summary, id, MCP, skill...">
+          </label>
+        </div>
+      </section>
+
+      <main id="completed-list" class="completed-list"></main>
+    </div>
+
+    <script type="module" src="/static/completed.js"></script>
+  </body>
+</html>

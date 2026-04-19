@@ -4,6 +4,7 @@ use App\Http\Controllers\Pwa\AuthController;
 use App\Http\Controllers\Pwa\BugReportController;
 use App\Http\Controllers\Pwa\EgeStudentController;
 use App\Http\Controllers\Pwa\ManifestController;
+use App\Http\Controllers\Pwa\PracticeController;
 use App\Http\Controllers\Pwa\StudentController;
 use App\Http\Controllers\Pwa\TeacherController;
 use App\Http\Controllers\Pwa\VprController;
@@ -59,6 +60,12 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
         Route::get('/profile', [StudentController::class, 'profile'])->name('pwa.student.profile');
         Route::get('/homework', [StudentController::class, 'studentHomework'])->name('pwa.student.homework');
         Route::get('/tutor', [StudentController::class, 'tutor'])->name('pwa.student.tutor');
+        Route::prefix('practice')->name('pwa.student.practice.')->group(function () {
+            Route::get('/', [PracticeController::class, 'index'])->name('index');
+            Route::get('/mini-games', [PracticeController::class, 'miniGames'])->name('mini-games');
+            Route::get('/mini-games/{slug}', [PracticeController::class, 'showMiniGame'])->name('mini-games.show');
+            Route::get('/api/mini-games/{slug}/question', [PracticeController::class, 'question'])->name('mini-games.question');
+        });
 
         // ЕГЭ (10–11 класс)
         Route::prefix('ege-app')->name('pwa.student.ege.')->group(function () {

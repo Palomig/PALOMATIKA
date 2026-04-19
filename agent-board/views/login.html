@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Board Login</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body class="login-shell">
+    <main class="login-card">
+      <p class="eyebrow">Palomatika Internal Ops</p>
+      <h1>Agent Board</h1>
+      <p class="lede">Локальная доска задач для `Claude`, `Codex` и `Jarvis`.</p>
+
+      <form id="login-form" class="stack">
+        <label class="field">
+          <span>Пароль</span>
+          <input id="password" name="password" type="password" inputmode="numeric" autocomplete="current-password" required>
+        </label>
+        <button type="submit" class="primary-button">Войти</button>
+        <p id="login-error" class="form-error" hidden></p>
+      </form>
+    </main>
+
+    <script type="module">
+      const form = document.getElementById("login-form");
+      const error = document.getElementById("login-error");
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        error.hidden = true;
+
+        const response = await fetch("/api/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            password: new FormData(form).get("password")
+          })
+        });
+
+        if (!response.ok) {
+          error.hidden = false;
+          error.textContent = "Неверный пароль";
+          return;
+        }
+
+        window.location.href = "/";
+      });
+    </script>
+  </body>
+</html>
