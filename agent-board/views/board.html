@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Board</title>
+    <link rel="stylesheet" href="/static/styles.css">
+  </head>
+  <body>
+    <div id="board-page" class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Local Agent Orchestrator</p>
+          <h1>Agent Board</h1>
+        </div>
+        <nav class="topbar-actions">
+          <a class="nav-link active" href="/">Board</a>
+          <a class="nav-link" href="/completed">Completed</a>
+          <span id="live-indicator" class="status-chip status-waiting">Live: connecting</span>
+          <button id="logout-button" class="ghost-button" type="button">Logout</button>
+        </nav>
+      </header>
+
+      <section class="composer-card">
+        <div>
+          <p class="section-label">Quick Create</p>
+          <h2>Новая задача</h2>
+        </div>
+        <form id="task-form" class="task-form">
+          <label class="field">
+            <span>Название</span>
+            <input name="title" type="text" maxlength="120" required>
+          </label>
+          <label class="field field-wide">
+            <span>Описание</span>
+            <textarea name="description" rows="2" maxlength="500"></textarea>
+          </label>
+          <label class="field">
+            <span>Проект</span>
+            <select name="project" required>
+              <option value="palomatika">Palomatika</option>
+              <option value="evrium">Evrium</option>
+            </select>
+          </label>
+          <button class="primary-button" type="submit">Добавить</button>
+          <p id="task-form-error" class="form-error" hidden></p>
+        </form>
+      </section>
+
+      <div class="board-layout">
+        <main class="kanban-grid">
+          <section class="column column-neutral" data-column="unassigned">
+            <header class="column-header">
+              <h2>1. Без агента</h2>
+              <span id="count-unassigned" class="count-pill">0</span>
+            </header>
+            <div id="column-unassigned" class="card-lane"></div>
+          </section>
+
+          <section class="column column-claude" data-column="claude">
+            <header class="column-header">
+              <h2>2. Claude</h2>
+              <span id="count-claude" class="count-pill">0</span>
+            </header>
+            <div id="column-claude" class="card-lane"></div>
+          </section>
+
+          <section class="column column-codex" data-column="codex">
+            <header class="column-header">
+              <h2>3. Codex</h2>
+              <span id="count-codex" class="count-pill">0</span>
+            </header>
+            <div id="column-codex" class="card-lane"></div>
+          </section>
+        </main>
+
+        <aside class="registry-panel">
+          <section class="registry-card">
+            <div class="registry-card-header">
+              <p class="section-label">Agents</p>
+              <h2>Кто есть на сервере</h2>
+            </div>
+            <div id="agents-list" class="registry-list"></div>
+          </section>
+
+          <section class="registry-card">
+            <div class="registry-card-header">
+              <p class="section-label">MCP Servers</p>
+              <h2>Быстрые ID</h2>
+            </div>
+            <div id="mcp-list" class="registry-list"></div>
+          </section>
+
+          <section class="registry-card">
+            <div class="registry-card-header">
+              <p class="section-label">Skills</p>
+              <h2>Доступные навыки</h2>
+            </div>
+            <div id="skills-list" class="registry-list"></div>
+          </section>
+        </aside>
+      </div>
+    </div>
+
+    <script type="module" src="/static/board.js"></script>
+  </body>
+</html>
