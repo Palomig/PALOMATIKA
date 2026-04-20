@@ -227,6 +227,7 @@ import {
 } from '/js/oge-task-visibility.js';
 import {
     applyCommitSuccessToCard,
+    bindOptionPanelsToAnswerInput,
     resolveAttemptTaskNumber,
     setAllCardsLocked,
     shouldLockForConflict,
@@ -463,6 +464,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const edit = card.querySelector('.js-answer-edit');
         const status = card.querySelector('.js-save-status');
         let statusResetTimer = null;
+
+        bindOptionPanelsToAnswerInput(card);
 
         function showStatus(message, mode = 'info') {
             if (!status) return;
