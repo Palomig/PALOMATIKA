@@ -19,11 +19,8 @@
     font-family: var(--display); font-size: 30px; line-height: 1.2;
     text-align: center; padding: 18px; border-radius: 18px; background: var(--surface2); margin: 12px 0 14px;
   }
-  .game-graph {
-    display: flex; justify-content: center;
-    padding: 12px; border-radius: 18px; background: #ffffff; margin: 12px 0 14px;
-  }
-  .game-graph .practice-graph-svg { width: 100%; max-width: 220px; height: auto; display: block; }
+  .game-graph { display: flex; justify-content: center; margin: 12px 0 14px; }
+  .game-graph .practice-graph-svg { width: 100%; max-width: 260px; height: auto; display: block; }
   .game-prompt { text-align: center; font-size: 13px; font-weight: 700; color: var(--muted); }
   .game-options { display: flex; flex-direction: column; gap: 10px; }
   .game-option {
