@@ -77,4 +77,24 @@ class PwaPracticeRoutesTest extends TestCase
             ],
         ]);
     }
+
+    public function test_functions_game_page_and_question_api_work(): void
+    {
+        $student = $this->makeStudent();
+
+        $this->actingAs($student)
+            ->get('http://student.palomatika.ru/practice/mini-games/functions')
+            ->assertOk()
+            ->assertSee('Графики функций')
+            ->assertSee('15 секунд на ход');
+
+        $response = $this->actingAs($student)
+            ->getJson('http://student.palomatika.ru/practice/api/mini-games/functions/question?score=0');
+
+        $response->assertOk();
+        $response->assertJsonPath('question.equation', null);
+        $graph = $response->json('question.graph');
+        $this->assertIsString($graph);
+        $this->assertStringContainsString('<svg', $graph);
+    }
 }

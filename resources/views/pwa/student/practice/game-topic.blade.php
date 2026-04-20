@@ -19,6 +19,11 @@
     font-family: var(--display); font-size: 30px; line-height: 1.2;
     text-align: center; padding: 18px; border-radius: 18px; background: var(--surface2); margin: 12px 0 14px;
   }
+  .game-graph {
+    display: flex; justify-content: center;
+    padding: 12px; border-radius: 18px; background: #ffffff; margin: 12px 0 14px;
+  }
+  .game-graph .practice-graph-svg { width: 100%; max-width: 220px; height: auto; display: block; }
   .game-prompt { text-align: center; font-size: 13px; font-weight: 700; color: var(--muted); }
   .game-options { display: flex; flex-direction: column; gap: 10px; }
   .game-option {
@@ -26,6 +31,12 @@
     border-radius: 16px; padding: 15px 16px; text-align: left; cursor: pointer; font-size: 16px; font-weight: 800;
   }
   .game-option:disabled { opacity: .65; cursor: default; }
+  .opt-frac {
+    display: inline-flex; flex-direction: column; vertical-align: middle;
+    margin: 0 3px; line-height: 1; font-size: 0.92em;
+  }
+  .opt-frac > span { display: block; padding: 2px 8px; text-align: center; }
+  .opt-frac > .num { border-bottom: 2px solid currentColor; }
   .game-result-score { font-family: var(--display); font-size: 42px; line-height: 1; margin: 10px 0 8px; }
   .theory-list { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
   .theory-item {
@@ -39,6 +50,7 @@
   slug: @js($game['slug']),
   endpoint: @js(route('pwa.student.practice.mini-games.question', $game['slug'])),
   theory: @js($game['theory']),
+  turnSeconds: @js((int) ($game['turn_seconds'] ?? 10)),
 })">
   <div class="topbar">
     <a href="{{ route('pwa.student.practice.mini-games') }}" class="back-btn">‹</a>
@@ -82,10 +94,28 @@
         <div class="pill pill-red">⏱ <span x-text="timeLeft"></span> сек</div>
       </div>
       <div class="game-prompt" x-text="question.prompt"></div>
-      <div class="game-equation" x-text="question.equation"></div>
+      <template x-if="question.graph">
+        <div class="game-graph" x-html="question.graph"></div>
+      </template>
+      <template x-if="question.equation">
+        <div class="game-equation" x-text="question.equation"></div>
+      </template>
       <div class="game-options">
         <template x-for="option in question.options" :key="option.id">
-          <button class="game-option" @click="chooseOption(option)" :disabled="loading" x-text="option.label"></button>
+          <button class="game-option" @click="chooseOption(option)" :disabled="loading">
+            <template x-if="option.fraction">
+              <span>
+                <span x-text="option.fraction.prefix"></span>
+                <span class="opt-frac">
+                  <span class="num" x-text="option.fraction.numerator"></span>
+                  <span class="den" x-text="option.fraction.denominator"></span>
+                </span>
+              </span>
+            </template>
+            <template x-if="!option.fraction">
+              <span x-text="option.label"></span>
+            </template>
+          </button>
         </template>
       </div>
     </div>
@@ -117,9 +147,10 @@ function practiceGamePage(config) {
     slug: config.slug,
     endpoint: config.endpoint,
     theory: config.theory,
+    turnSeconds: config.turnSeconds,
     status: 'intro',
     score: 0,
-    timeLeft: 10,
+    timeLeft: config.turnSeconds,
     timerId: null,
     loading: false,
     question: null,
@@ -135,7 +166,7 @@ function practiceGamePage(config) {
       this.clearTimer();
       this.status = 'intro';
       this.question = null;
-      this.timeLeft = 10;
+      this.timeLeft = this.turnSeconds;
     },
 
     async loadQuestion() {
@@ -155,7 +186,7 @@ function practiceGamePage(config) {
         this.question = data.question;
         this.theory = data.game.theory;
         this.status = 'playing';
-        this.timeLeft = 10;
+        this.timeLeft = this.turnSeconds;
         this.startTimer();
       } catch (error) {
         console.error(error);
