@@ -1379,7 +1379,9 @@
       },
 
       isTaskTenMatrix(task) {
-        return Number(this.displayTaskNumber(task)) === 10;
+        return Number(this.displayTaskNumber(task)) === 10
+          && this.taskTenFractions(task).length === 3
+          && this.taskTenStatements(task).length === 3;
       },
 
       taskTenFractions(task) {

@@ -514,6 +514,44 @@ class PwaVprDashboardTest extends TestCase
         $response->assertSee('taskHasHtmlTable(currentTask)', false);
     }
 
+    public function test_vpr_task_10_special_matrix_mode_requires_fraction_and_statement_shape(): void
+    {
+        $user = $this->makeStudent(5);
+
+        $variant = OgeVariant::create([
+            'hash' => 'vpr5task10guard',
+            'exam_type' => OgeVariant::EXAM_VPR5,
+            'title' => 'Вариант ВПР 5 класс',
+            'source' => OgeVariant::SOURCE_MINIAPP,
+            'mode' => OgeVariant::MODE_FULL,
+            'config_json' => ['tasks' => [
+                [
+                    'task_number' => 10,
+                    'topic_id' => '10',
+                    'text' => 'Обычное десятое задание без матрицы.',
+                    'instruction' => 'Введи ответ',
+                    'answer' => '42',
+                ],
+            ]],
+        ]);
+
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $user->id,
+            'status' => 'active',
+            'started_at' => now()->subMinutes(1),
+            'last_seen_at' => now(),
+        ]);
+
+        $response = $this->actingAs($user)
+            ->get("http://student.palomatika.ru/vpr/test/{$attempt->id}");
+
+        $response->assertOk();
+        $response->assertSee('taskTenFractions(task).length === 3', false);
+        $response->assertSee('taskTenStatements(task).length === 3', false);
+        $response->assertDontSee('return Number(this.displayTaskNumber(task)) === 10;', false);
+    }
+
     public function test_vpr_test_maps_legacy_mini_answers_from_exam_numbers_to_attempt_slots(): void
     {
         $user = $this->makeStudent(6);
