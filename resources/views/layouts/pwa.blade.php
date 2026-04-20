@@ -92,6 +92,208 @@
   .pwa-role-switcher__btn.is-active { background: var(--accent); color: #fff; border-color: var(--accent); }
   @supports not (backdrop-filter: blur(8px)) { .pwa-role-switcher { background: var(--bg); } }
 
+  .bug-report-trigger {
+    position: fixed;
+    right: max(16px, env(safe-area-inset-right, 0px));
+    bottom: calc(20px + var(--safe-bottom));
+    z-index: 1100;
+    min-width: 164px;
+    height: 52px;
+    border: 1px solid rgba(255,255,255,.16);
+    border-radius: 999px;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: #fff;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 0 18px;
+    box-shadow: 0 16px 34px rgba(127,29,29,.34), 0 4px 12px rgba(0,0,0,.28);
+    transition: transform .18s ease, opacity .18s ease, box-shadow .18s ease, filter .18s ease;
+    font-family: var(--display);
+    font-size: 14px;
+    font-weight: 700;
+    touch-action: manipulation;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .bug-report-trigger:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 20px 40px rgba(127,29,29,.38), 0 8px 16px rgba(0,0,0,.3);
+    filter: brightness(1.02);
+  }
+  .bug-report-trigger:active { transform: translateY(0) scale(.98); }
+  .bug-report-trigger.is-hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .bug-report-trigger__icon {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 auto;
+  }
+  .bug-report-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1150;
+    background: rgba(3,6,14,.72);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .bug-report-card {
+    width: min(100%, 520px);
+    background: linear-gradient(180deg, rgba(19,28,46,.98) 0%, rgba(12,18,31,.98) 100%);
+    border: 1px solid rgba(148,163,184,.18);
+    border-radius: 24px;
+    padding: 22px 20px calc(20px + var(--safe-bottom));
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: 0 24px 80px rgba(0,0,0,.45);
+  }
+  .bug-report-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .bug-report-lead {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+  .bug-report-lead__badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    background: rgba(239,68,68,.14);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #f87171;
+    flex: 0 0 auto;
+  }
+  .bug-report-lead__title {
+    font-family: var(--display);
+    font-size: 18px;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .bug-report-lead__text {
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.45;
+  }
+  .bug-report-close {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,.04);
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 22px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    transition: background .15s ease, color .15s ease, transform .15s ease;
+  }
+  .bug-report-close:hover {
+    background: rgba(255,255,255,.08);
+    color: var(--text);
+  }
+  .bug-report-close:active { transform: scale(.96); }
+  .bug-report-success {
+    text-align: center;
+    padding: 20px 0;
+    color: var(--green);
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .bug-report-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .bug-report-textarea {
+    width: 100%;
+    min-height: 128px;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(148,163,184,.18);
+    border-radius: 16px;
+    padding: 14px 15px;
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 14px;
+    line-height: 1.5;
+    resize: vertical;
+    outline: none;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .bug-report-textarea:focus {
+    border-color: rgba(248,113,113,.42);
+    box-shadow: 0 0 0 3px rgba(239,68,68,.12), inset 0 1px 0 rgba(255,255,255,.03);
+  }
+  .bug-report-error {
+    font-size: 12px;
+    color: var(--red);
+    font-weight: 700;
+  }
+  .bug-report-submit {
+    width: 100%;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: #fff;
+    border: none;
+    border-radius: 16px;
+    padding: 15px 16px;
+    font-family: var(--display);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 12px 26px rgba(127,29,29,.28);
+    transition: transform .15s ease, opacity .15s ease, filter .15s ease;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .bug-report-submit:hover { filter: brightness(1.03); }
+  .bug-report-submit:active { transform: scale(.985); }
+  .bug-report-submit.is-loading,
+  .bug-report-submit:disabled {
+    opacity: .65;
+    cursor: default;
+    filter: none;
+  }
+
+  @media (max-width: 640px) {
+    .bug-report-trigger {
+      min-width: 0;
+      width: 56px;
+      padding: 0;
+      border-radius: 18px;
+    }
+    .bug-report-trigger__label {
+      display: none;
+    }
+    .bug-report-backdrop {
+      align-items: flex-end;
+      padding: 12px;
+    }
+    .bug-report-card {
+      width: 100%;
+      border-radius: 24px 24px 18px 18px;
+      padding-bottom: calc(18px + var(--safe-bottom));
+    }
+  }
+
   @stack('styles')
 </style>
 </head>
@@ -139,60 +341,72 @@
 @stack('scripts')
 
 {{-- Bug report button + modal --}}
-<div x-data="bugReport()" x-cloak>
+<div x-data="bugReport()" x-init="init()" x-cloak>
 
   {{-- Floating trigger button --}}
-  <button @click="open = true" aria-label="Сообщить об ошибке"
-    style="position:fixed;bottom:calc(20px + var(--safe-bottom));right:16px;z-index:900;
-           width:40px;height:40px;border-radius:50%;border:1px solid var(--border);
-           background:var(--surface2);color:var(--muted);cursor:pointer;
-           display:flex;align-items:center;justify-content:center;
-           box-shadow:0 2px 8px rgba(0,0,0,.25);transition:opacity .2s;"
-    :style="open ? 'opacity:0;pointer-events:none' : 'opacity:1'">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <button type="button"
+    class="bug-report-trigger"
+    :class="{ 'is-hidden': open }"
+    x-show="!open"
+    @click="open = true"
+    aria-label="Сообщить об ошибке"
+    data-bug-report-trigger>
+    <svg class="bug-report-trigger__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M12 8v4m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/>
     </svg>
+    <span class="bug-report-trigger__label">Баг-репорт</span>
   </button>
 
   {{-- Modal backdrop --}}
   <div x-show="open" @click.self="open = false" x-transition:enter="anim-in"
-    style="position:fixed;inset:0;z-index:950;background:rgba(0,0,0,.55);display:flex;align-items:flex-end;justify-content:center;">
+    class="bug-report-backdrop"
+    data-bug-report-modal>
 
-    {{-- Sheet --}}
+    {{-- Modal --}}
     <div x-show="open" x-transition:enter="anim-up"
-      style="width:100%;max-width:480px;background:var(--surface);border-radius:20px 20px 0 0;
-             padding:24px 20px calc(24px + var(--safe-bottom));display:flex;flex-direction:column;gap:14px;">
+      class="bug-report-card">
 
-      <div style="display:flex;align-items:center;justify-content:space-between;">
-        <span style="font-family:var(--display);font-size:16px;color:var(--text);">Сообщить об ошибке</span>
-        <button @click="open = false"
-          style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:22px;line-height:1;padding:4px;">×</button>
+      <div class="bug-report-head">
+        <div class="bug-report-lead">
+          <div class="bug-report-lead__badge">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 8v4m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="bug-report-lead__title">Сообщить об ошибке</div>
+            <div class="bug-report-lead__text">Опиши баг — мы автоматически приложим данные о странице, браузере и устройстве.</div>
+          </div>
+        </div>
+        <button type="button"
+          class="bug-report-close"
+          @click="close()"
+          aria-label="Закрыть"
+          data-bug-report-close>×</button>
       </div>
 
       <template x-if="sent">
-        <div style="text-align:center;padding:20px 0;color:var(--green);font-weight:700;font-size:15px;">
+        <div class="bug-report-success">
           Спасибо! Репорт отправлен.
         </div>
       </template>
 
       <template x-if="!sent">
-        <div style="display:flex;flex-direction:column;gap:12px;">
-          <div style="font-size:12px;color:var(--muted);font-weight:600;line-height:1.5;">
-            Опишите что произошло (необязательно). Мы автоматически соберём данные о странице, браузере и устройстве.
-          </div>
+        <div class="bug-report-form">
+          <textarea x-model="description"
+            class="bug-report-textarea"
+            placeholder="Коротко: что сломано, где именно и что ожидалось?"
+            rows="5"></textarea>
 
-          <textarea x-model="description" placeholder="Что пошло не так?" rows="4"
-            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:12px;
-                   padding:12px;color:var(--text);font-family:var(--body);font-size:14px;
-                   resize:none;outline:none;"></textarea>
+          <div x-show="error" x-text="error" class="bug-report-error"></div>
 
-          <div x-show="error" x-text="error" style="font-size:12px;color:var(--red);font-weight:600;"></div>
-
-          <button @click="submit()" :disabled="loading"
-            style="width:100%;background:var(--accent);color:#fff;border:none;border-radius:12px;
-                   padding:14px;font-family:var(--display);font-size:15px;cursor:pointer;"
-            :style="loading ? 'opacity:.6' : ''">
-            <span x-show="!loading">Отправить</span>
+          <button type="button"
+            @click="submit()"
+            :disabled="loading"
+            class="bug-report-submit"
+            :class="{ 'is-loading': loading }"
+            data-bug-report-submit>
+            <span x-show="!loading">Отправить репорт</span>
             <span x-show="loading">Отправка...</span>
           </button>
         </div>
@@ -221,6 +435,17 @@ function bugReport() {
     loading: false,
     error: '',
     description: '',
+
+    init() {
+      this.$watch('open', (isOpen) => {
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+      });
+    },
+
+    close() {
+      this.open = false;
+      this.error = '';
+    },
 
     async submit() {
       this.loading = true;
@@ -254,7 +479,11 @@ function bugReport() {
 
         if (!res.ok) throw new Error('Ошибка сервера');
         this.sent = true;
-        setTimeout(() => { this.open = false; this.sent = false; this.description = ''; }, 2500);
+        setTimeout(() => {
+          this.close();
+          this.sent = false;
+          this.description = '';
+        }, 2500);
       } catch (e) {
         this.error = 'Не удалось отправить. Попробуйте ещё раз.';
       } finally {

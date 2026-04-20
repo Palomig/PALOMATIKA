@@ -192,6 +192,40 @@ class PwaVprDashboardTest extends TestCase
         $response->assertSee('Вариант ВПР 6 класс');
     }
 
+    public function test_vpr_test_page_renders_clickable_bug_report_trigger_and_modal_controls(): void
+    {
+        $student = $this->makeStudent(6);
+
+        $variant = OgeVariant::create([
+            'hash' => 'vpr6bugreport',
+            'exam_type' => OgeVariant::EXAM_VPR6,
+            'title' => 'Вариант ВПР 6 класс',
+            'source' => OgeVariant::SOURCE_MINIAPP,
+            'mode' => OgeVariant::MODE_FULL,
+            'config_json' => ['tasks' => [['task_number' => 2, 'topic_id' => '02', 'text' => 'Задание']]],
+        ]);
+
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $student->id,
+            'status' => 'active',
+            'started_at' => now()->subMinutes(3),
+            'last_seen_at' => now(),
+        ]);
+
+        $response = $this->actingAs($student)
+            ->get("http://student.palomatika.ru/vpr/test/{$attempt->id}");
+
+        $response->assertOk();
+        $response->assertSee('data-bug-report-trigger', false);
+        $response->assertSee('data-bug-report-modal', false);
+        $response->assertSee('bug-report-trigger', false);
+        $response->assertSee('bug-report-close', false);
+        $response->assertSee('bug-report-submit', false);
+        $response->assertSee('x-show="!open"', false);
+        $response->assertDontSee(':style="open ? &#039;opacity:0;pointer-events:none&#039; : &#039;opacity:1&#039;"', false);
+    }
+
     public function test_admin_can_open_student_vpr_results_page(): void
     {
         $student = $this->makeStudent(6);
