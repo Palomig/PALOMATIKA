@@ -24,10 +24,16 @@
   .game-prompt { text-align: center; font-size: 13px; font-weight: 700; color: var(--muted); }
   .game-options { display: flex; flex-direction: column; gap: 10px; }
   .game-option {
+    position: relative; overflow: hidden; isolation: isolate;
     width: 100%; border: 1px solid var(--border); background: var(--surface2); color: var(--text);
     border-radius: 16px; padding: 15px 16px; text-align: left; cursor: pointer; font-size: 16px; font-weight: 800;
   }
   .game-option:disabled { opacity: .65; cursor: default; }
+  .game-option-progress {
+    position: absolute; inset: 0; z-index: -1; transform-origin: left center;
+    background: linear-gradient(90deg, rgba(52,208,126,.32), rgba(52,208,126,.12));
+    transition: transform .1s linear; pointer-events: none;
+  }
   .opt-frac {
     display: inline-flex; flex-direction: column; vertical-align: middle;
     margin: 0 3px; line-height: 1; font-size: 0.92em;
@@ -100,6 +106,7 @@
       <div class="game-options">
         <template x-for="option in question.options" :key="option.id">
           <button class="game-option" @click="chooseOption(option)" :disabled="loading">
+            <span class="game-option-progress" :style="`transform: scaleX(${timeProgress})`"></span>
             <template x-if="option.fraction">
               <span>
                 <span x-text="option.fraction.prefix"></span>
@@ -148,6 +155,7 @@ function practiceGamePage(config) {
     status: 'intro',
     score: 0,
     timeLeft: config.turnSeconds,
+    timeProgress: 1,
     timerId: null,
     loading: false,
     question: null,
@@ -164,6 +172,7 @@ function practiceGamePage(config) {
       this.status = 'intro';
       this.question = null;
       this.timeLeft = this.turnSeconds;
+      this.timeProgress = 1;
     },
 
     async loadQuestion() {
@@ -196,12 +205,21 @@ function practiceGamePage(config) {
 
     startTimer() {
       this.clearTimer();
+      const startTime = Date.now();
+      const duration = this.turnSeconds * 1000;
+      this.timeLeft = this.turnSeconds;
+      this.timeProgress = 1;
       this.timerId = setInterval(() => {
-        this.timeLeft -= 1;
-        if (this.timeLeft <= 0) {
+        const remaining = duration - (Date.now() - startTime);
+        if (remaining <= 0) {
+          this.timeLeft = 0;
+          this.timeProgress = 0;
           this.finishGame('timeout');
+          return;
         }
-      }, 1000);
+        this.timeLeft = Math.ceil(remaining / 1000);
+        this.timeProgress = remaining / duration;
+      }, 100);
     },
 
     clearTimer() {
