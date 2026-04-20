@@ -93,6 +93,10 @@
         . '-b' . ($block['number'] ?? 'x')
         . '-z' . ($taskData['zadanie_number'] ?? 'x')
         . '-i' . ($sourceTaskId ?? 'x');
+    $primaryTask = is_array($taskData['task'] ?? null) ? $taskData['task'] : [];
+    $usesOptionIndexAnswer = is_array($primaryTask['graph_options'] ?? null) && !empty($primaryTask['graph_options']);
+    $answerPlaceholder = $usesOptionIndexAnswer ? 'Введи номер варианта' : 'Введите ответ';
+    $answerHint = $usesOptionIndexAnswer ? 'Выбери рисунок и введи его номер в поле ответа.' : '';
 
     $attemptTaskNumber = isset($attemptTaskNumber) ? (int) $attemptTaskNumber : (int) ($taskData['attempt_task_number'] ?? $taskNumber);
     if ($attemptTaskNumber < 1) {
@@ -142,7 +146,7 @@
                 <span class="text-slate-400 text-sm font-medium">Ответ:</span>
                 <input type="text"
                        class="js-answer-input flex-1 max-w-xs px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-{{ $color }}-600 transition-colors"
-                       placeholder="Введите ответ"
+                       placeholder="{{ $answerPlaceholder }}"
                        @if($initialLocked) disabled @endif>
 
                 @if(!empty($studentMode))
@@ -230,7 +234,7 @@
                 <span class="text-slate-400 text-sm font-medium">Ответ:</span>
                 <input type="text"
                        class="js-answer-input flex-1 max-w-xs px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-{{ $color }}-600 transition-colors"
-                       placeholder="Введите ответ"
+                       placeholder="{{ $answerPlaceholder }}"
                        @if($initialLocked) disabled @endif>
 
                 @if(!empty($studentMode))
@@ -247,6 +251,9 @@
                     <span class="js-save-status text-xs text-emerald-400 opacity-0"></span>
                 @endif
             </div>
+            @if($answerHint !== '')
+                <p class="mt-3 text-xs text-slate-400">{{ $answerHint }}</p>
+            @endif
         </div>
     </div>
 @endif

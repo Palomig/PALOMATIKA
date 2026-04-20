@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 
 import {
   applyCommitSuccessToCard,
+  bindOptionPanelsToAnswerInput,
   setAllCardsLocked,
 } from '../../public/js/oge-attempt-ui.mjs';
 
@@ -54,4 +55,36 @@ test('submit lock disables all inputs and finish button', () => {
   assert.equal(cardA.edit.disabled, true);
   assert.equal(cardB.input.disabled, true);
   assert.equal(finishButton.disabled, true);
+});
+
+test('clicking a graph option panel fills the answer input with its index', () => {
+  const listeners = new Map();
+  const input = { value: '', disabled: false };
+  const panelA = {
+    dataset: { optionIndex: '3' },
+    addEventListener(event, handler) {
+      listeners.set(`a:${event}`, handler);
+    },
+  };
+  const panelB = {
+    dataset: { optionIndex: '4' },
+    addEventListener(event, handler) {
+      listeners.set(`b:${event}`, handler);
+    },
+  };
+  const card = {
+    querySelector(selector) {
+      if (selector === '.js-answer-input') return input;
+      return null;
+    },
+    querySelectorAll(selector) {
+      if (selector === '[data-option-index]') return [panelA, panelB];
+      return [];
+    },
+  };
+
+  bindOptionPanelsToAnswerInput(card);
+  listeners.get('a:click')();
+
+  assert.equal(input.value, '3');
 });

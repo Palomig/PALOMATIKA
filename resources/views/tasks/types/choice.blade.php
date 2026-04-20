@@ -158,6 +158,9 @@
                             <div class="bg-slate-700/50 rounded-lg p-3 hover:bg-slate-700 cursor-pointer transition border border-slate-600"
                                  data-z10-option-panel="{{ $graphOptionIndex }}"
                                  data-option-index="{{ $graphOptionIndex }}"
+                                 tabindex="0"
+                                 role="button"
+                                 aria-label="Выбрать вариант {{ $graphOptionIndex }}"
                                  @if($graphOptionText !== '') data-option-text="{{ $graphOptionText }}" @endif>
                                 <div class="flex items-start gap-2">
                                     <span class="text-cyan-400 font-bold shrink-0">{{ $graphOptionIndex }})</span>

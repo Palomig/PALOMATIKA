@@ -183,6 +183,40 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
         $this->assertStringContainsString('viewBox="0 0 420 60"', $html);
     }
 
+    public function test_topic_13_z13_variant_task_explains_that_student_must_enter_option_number(): void
+    {
+        Cache::forget('topic_data_13');
+
+        $blocks = app(TaskDataService::class)->getBlocks('13');
+        $zadanie = $blocks[0]['zadaniya'][12] ?? null; // Z13
+        $this->assertIsArray($zadanie);
+
+        $task = $zadanie['tasks'][0] ?? null;
+        $this->assertIsArray($task);
+
+        $view = $this->view('tasks.variant-task', [
+            'taskData' => [
+                'task_number' => 13,
+                'attempt_task_number' => 13,
+                'topic_id' => '13',
+                'instruction' => (string) ($zadanie['instruction'] ?? ''),
+                'type' => (string) ($zadanie['type'] ?? 'choice'),
+                'zadanie_number' => 13,
+                'task' => $task,
+            ],
+            'taskNumber' => 13,
+            'attemptTaskNumber' => 13,
+            'color' => 'teal',
+            'studentMode' => true,
+            'initialLocked' => false,
+        ]);
+
+        $html = (string) $view;
+
+        $this->assertStringContainsString('placeholder="Введи номер варианта"', $html);
+        $this->assertStringContainsString('Выбери рисунок и введи его номер', $html);
+    }
+
     public function test_topic_13_z13_task5_uses_minus_six_sevenths_semantics_and_stacked_fraction_labels(): void
     {
         Cache::forget('topic_data_13');
