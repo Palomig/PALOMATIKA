@@ -25,7 +25,7 @@
   .game-options { display: flex; flex-direction: column; gap: 10px; }
   .game-option {
     position: relative; overflow: hidden; isolation: isolate;
-    width: 100%; border: 1px solid var(--border); background: var(--surface2); color: var(--text);
+    width: 100%; border: 1px solid rgba(255,255,255,.22); background: var(--surface2); color: var(--text);
     border-radius: 16px; padding: 15px 16px; text-align: left; cursor: pointer; font-size: 16px; font-weight: 800;
   }
   .game-option:disabled { opacity: .65; cursor: default; }
