@@ -31,8 +31,7 @@
   .game-option:disabled { opacity: .65; cursor: default; }
   .game-option-progress {
     position: absolute; inset: 0; z-index: -1; transform-origin: left center;
-    background: linear-gradient(90deg, rgba(52,208,126,.32), rgba(52,208,126,.12));
-    transition: transform .1s linear; pointer-events: none;
+    transition: transform .1s linear, background .3s linear; pointer-events: none;
   }
   .opt-frac {
     display: inline-flex; flex-direction: column; vertical-align: middle;
@@ -106,7 +105,7 @@
       <div class="game-options">
         <template x-for="option in question.options" :key="option.id">
           <button class="game-option" @click="chooseOption(option)" :disabled="loading">
-            <span class="game-option-progress" :style="`transform: scaleX(${timeProgress})`"></span>
+            <span class="game-option-progress" :style="progressStyle"></span>
             <template x-if="option.fraction">
               <span>
                 <span x-text="option.fraction.prefix"></span>
@@ -160,6 +159,19 @@ function practiceGamePage(config) {
     loading: false,
     question: null,
     resultReason: 'wrong',
+
+    get progressStyle() {
+      const threshold = 3 / this.turnSeconds;
+      const ratio = this.timeProgress <= threshold
+        ? 0
+        : (this.timeProgress - threshold) / (1 - threshold);
+      const hue = Math.round(ratio * 140);
+      const sat = 70;
+      return `transform: scaleX(${this.timeProgress});`
+        + ` background: linear-gradient(90deg,`
+        + ` hsla(${hue}, ${sat}%, 50%, .36),`
+        + ` hsla(${hue}, ${sat}%, 50%, .14));`;
+    },
 
     async startGame() {
       this.score = 0;
