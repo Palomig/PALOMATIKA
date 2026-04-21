@@ -120,7 +120,7 @@ class VprTaskDataService
             $path = "{$this->basePath}/topic_{$topicId}.json";
             if (!File::exists($path)) return [];
             $data = json_decode(File::get($path), true) ?? [];
-            return $data;
+            return $this->normalizeTopicData($topicId, $data);
         });
     }
 
@@ -188,7 +188,48 @@ class VprTaskDataService
             );
         }
 
+        if (
+            $this->grade === 5
+            && $topicId === '01'
+            && !empty($task['text'])
+            && str_contains((string) $task['text'], 'в виде дроби с числителем')
+            && !str_contains((string) $task['text'], 'В ответ запишите знаменатель полученной дроби.')
+        ) {
+            $task['text'] = rtrim((string) $task['text']);
+            $task['text'] .= ' В ответ запишите знаменатель полученной дроби.';
+        }
+
         return $task;
+    }
+
+    private function normalizeTopicData(string $topicId, array $data): array
+    {
+        if (empty($data['blocks']) || !is_array($data['blocks'])) {
+            return $data;
+        }
+
+        foreach ($data['blocks'] as $blockIndex => $block) {
+            if (!is_array($block) || empty($block['zadaniya']) || !is_array($block['zadaniya'])) {
+                continue;
+            }
+
+            foreach ($block['zadaniya'] as $zadanieIndex => $zadanie) {
+                if (!is_array($zadanie) || empty($zadanie['tasks']) || !is_array($zadanie['tasks'])) {
+                    continue;
+                }
+
+                foreach ($zadanie['tasks'] as $taskIndex => $task) {
+                    if (!is_array($task)) {
+                        continue;
+                    }
+
+                    $data['blocks'][$blockIndex]['zadaniya'][$zadanieIndex]['tasks'][$taskIndex] =
+                        $this->normalizeTask($topicId, $task, $zadanie);
+                }
+            }
+        }
+
+        return $data;
     }
 
     public function canonicalizeLegacyTask(string $topicId, array $task): array
