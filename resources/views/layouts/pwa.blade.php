@@ -97,8 +97,8 @@
     right: max(16px, env(safe-area-inset-right, 0px));
     bottom: calc(20px + var(--safe-bottom));
     z-index: 1100;
-    min-width: 164px;
-    height: 52px;
+    min-width: 82px;
+    height: 26px;
     border: 1px solid rgba(255,255,255,.16);
     border-radius: 999px;
     background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
@@ -107,12 +107,12 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    padding: 0 18px;
-    box-shadow: 0 16px 34px rgba(127,29,29,.34), 0 4px 12px rgba(0,0,0,.28);
+    gap: 5px;
+    padding: 0 9px;
+    box-shadow: 0 10px 20px rgba(127,29,29,.28), 0 3px 8px rgba(0,0,0,.24);
     transition: transform .18s ease, opacity .18s ease, box-shadow .18s ease, filter .18s ease;
     font-family: var(--display);
-    font-size: 14px;
+    font-size: 11px;
     font-weight: 700;
     touch-action: manipulation;
     -webkit-appearance: none;
@@ -120,7 +120,7 @@
   }
   .bug-report-trigger:hover {
     transform: translateY(-1px);
-    box-shadow: 0 20px 40px rgba(127,29,29,.38), 0 8px 16px rgba(0,0,0,.3);
+    box-shadow: 0 12px 24px rgba(127,29,29,.32), 0 5px 10px rgba(0,0,0,.28);
     filter: brightness(1.02);
   }
   .bug-report-trigger:active { transform: translateY(0) scale(.98); }
@@ -129,8 +129,8 @@
     pointer-events: none;
   }
   .bug-report-trigger__icon {
-    width: 20px;
-    height: 20px;
+    width: 10px;
+    height: 10px;
     flex: 0 0 auto;
   }
   .bug-report-backdrop {
@@ -276,12 +276,17 @@
   @media (max-width: 640px) {
     .bug-report-trigger {
       min-width: 0;
-      width: 56px;
+      width: 28px;
+      height: 26px;
       padding: 0;
-      border-radius: 18px;
+      border-radius: 12px;
     }
     .bug-report-trigger__label {
       display: none;
+    }
+    .bug-report-trigger__icon {
+      width: 10px;
+      height: 10px;
     }
     .bug-report-backdrop {
       align-items: flex-end;
