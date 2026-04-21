@@ -126,6 +126,18 @@ class MiniAppAuthBridgeTest extends TestCase
         $this->assertAuthenticatedAs($user);
     }
 
+    public function test_miniapp_onboarding_page_contains_grade_letter_e(): void
+    {
+        $user = User::factory()->create([
+            'onboarding_completed_at' => null,
+        ]);
+
+        $response = $this->actingAs($user)->get('/tg/onboarding');
+
+        $response->assertOk();
+        $response->assertSee("'А','Б','В','Г','Д','Е','К','М'", false);
+    }
+
     public function test_save_onboarding_with_token_fallback_when_session_lost(): void
     {
         $user = User::factory()->create([

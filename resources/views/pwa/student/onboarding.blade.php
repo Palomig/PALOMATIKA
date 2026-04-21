@@ -100,7 +100,7 @@
         </div>
         <div>
           <div class="chips">
-            <template x-for="l in ['А','Б','В','Г','Д','И','К','М']" :key="l">
+            <template x-for="l in ['А','Б','В','Г','Д','Е','И','К','М']" :key="l">
               <div class="chip" :class="{ 'selected': letter === l }" @click="letter = l" x-text="l"></div>
             </template>
           </div>

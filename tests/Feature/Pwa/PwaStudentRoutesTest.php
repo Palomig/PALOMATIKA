@@ -22,4 +22,14 @@ class PwaStudentRoutesTest extends TestCase
         $response = $this->actingAs($user)->get('http://student.palomatika.ru/onboarding');
         $response->assertStatus(200);
     }
+
+    public function test_onboarding_page_contains_grade_letter_e(): void
+    {
+        $user = User::factory()->create(['oauth_provider' => 'vk', 'oauth_id' => '1']);
+
+        $response = $this->actingAs($user)->get('http://student.palomatika.ru/onboarding');
+
+        $response->assertOk();
+        $response->assertSee("'А','Б','В','Г','Д','Е','И','К','М'", false);
+    }
 }
