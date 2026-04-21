@@ -67,6 +67,15 @@ class VprTaskDataServiceTest extends TestCase
         $this->assertStringNotContainsString('Представьте выражение $4$ в виде дроби со знаменателем 6.', $html);
     }
 
+    public function test_grade_5_topic_01_renders_denominator_answer_instruction_for_numerator_tasks(): void
+    {
+        $controller = $this->app->make(VprTopicController::class);
+        $response = $controller->show(5, '1');
+        $html = $response->render();
+
+        $this->assertStringContainsString('Представьте число 7 в виде дроби с числителем 42. В ответ запишите знаменатель полученной дроби.', $html);
+    }
+
     public function test_grade_5_topic_02_uses_parts_and_whole_training_structure(): void
     {
         $svc = new VprTaskDataService(5);
