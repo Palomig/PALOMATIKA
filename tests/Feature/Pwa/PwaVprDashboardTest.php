@@ -939,6 +939,43 @@ class PwaVprDashboardTest extends TestCase
         $response->assertDontSee('Окружность');
     }
 
+    public function test_vpr_test_page_uses_question_field_when_text_is_missing(): void
+    {
+        $user = $this->makeStudent(6);
+
+        $variant = OgeVariant::create([
+            'hash' => 'vpr6q7miss',
+            'exam_type' => OgeVariant::EXAM_VPR6,
+            'title' => 'Вариант ВПР 6 класс',
+            'source' => OgeVariant::SOURCE_MINIAPP,
+            'mode' => OgeVariant::MODE_FULL,
+            'config_json' => ['tasks' => [[
+                'task_number' => 7,
+                'topic_id' => '07',
+                'instruction' => 'Сопоставьте точки и координаты.',
+                'question' => 'Среди чисел есть координаты всех трёх точек: 1) 0,6; 2) 1,5; 3) 2,1.',
+                'image' => '<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"></svg>',
+                'answer' => '123',
+            ]]],
+        ]);
+
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $user->id,
+            'status' => 'active',
+            'started_at' => now()->subMinutes(1),
+            'last_seen_at' => now(),
+        ]);
+
+        $response = $this->actingAs($user)
+            ->get("http://student.palomatika.ru/vpr/test/{$attempt->id}");
+
+        $response->assertOk();
+        $encodedQuestion = trim((string) json_encode('Среди чисел есть координаты всех трёх точек: 1) 0,6; 2) 1,5; 3) 2,1.'), '"');
+        $response->assertSee($encodedQuestion, false);
+        $response->assertSee("return String(task?.text || task?.question || '').trim();", false);
+    }
+
     public function test_vpr_results_page_uses_grade_specific_topic_names_not_oge_names(): void
     {
         $user = $this->makeStudent(5);

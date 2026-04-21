@@ -847,9 +847,9 @@
           </div>
         </template>
 
-        <template x-if="!isTaskTenMatrix(currentTask) && shouldShowInstruction(currentTask) && currentTask.instruction && currentTask.text && currentTask.text !== currentTask.instruction">
+        <template x-if="!isTaskTenMatrix(currentTask) && shouldShowInstruction(currentTask) && currentTask.instruction && taskBody(currentTask) && taskBody(currentTask) !== currentTask.instruction">
           <div class="q-text q-anim" :style="'animation-delay: 0.07s; margin-top: 10px; font-size: 15px; font-weight: 600'"
-               x-html="formatRichText(currentTask.text)"></div>
+               x-html="formatRichText(taskBody(currentTask))"></div>
         </template>
 
         {{-- Expression (KaTeX) --}}
@@ -1319,6 +1319,10 @@
           && (task?.answer_1 !== undefined || task?.answer_2 !== undefined);
       },
 
+      taskBody(task) {
+        return String(task?.text || task?.question || '').trim();
+      },
+
       hasSplitPrompt(task) {
         return this.isTwoAnswerTask(task) && this.taskPromptQuestions(task).length > 0;
       },
@@ -1334,7 +1338,7 @@
       },
 
       parsePromptSections(task) {
-        const raw = String(task?.text || '').trim();
+        const raw = this.taskBody(task);
         if (!raw) {
           return { intro: '', questions: [] };
         }
@@ -1451,10 +1455,10 @@
         if (!task) return '';
 
         if (!this.shouldShowInstruction(task)) {
-          return String(task?.text || '').trim();
+          return this.taskBody(task);
         }
 
-        return String(task?.instruction || task?.text || '').trim();
+        return String(task?.instruction || this.taskBody(task) || '').trim();
       },
 
       taskLocator(t) {
