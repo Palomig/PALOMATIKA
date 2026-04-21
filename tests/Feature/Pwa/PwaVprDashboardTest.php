@@ -34,6 +34,36 @@ class PwaVprDashboardTest extends TestCase
         ]);
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    private function extractSerializedTasks(string $html): array
+    {
+        $matched = preg_match('/tasks:\s*(\[[\s\S]*?\])\s*,\s*attemptId:/', $html, $matches);
+        $this->assertSame(1, $matched, 'Could not extract serialized tasks payload from VPR test page.');
+
+        $tasks = json_decode($matches[1], true);
+
+        $this->assertIsArray($tasks, 'Serialized tasks payload must decode to an array.');
+
+        return $tasks;
+    }
+
+    /**
+     * @param  array<int, array<string, mixed>>  $tasks
+     * @return array<string, mixed>
+     */
+    private function findSerializedTaskByNumber(array $tasks, int $taskNumber): array
+    {
+        foreach ($tasks as $task) {
+            if ((int) ($task['task_number'] ?? 0) === $taskNumber) {
+                return $task;
+            }
+        }
+
+        $this->fail("Could not find serialized task #{$taskNumber} in VPR payload.");
+    }
+
     public function test_vpr_dashboard_shows_real_student_grade_and_oge_style_action_cards(): void
     {
         $user = $this->makeStudent(5);
@@ -459,7 +489,7 @@ class PwaVprDashboardTest extends TestCase
         $response->assertNotFound();
     }
 
-    public function test_vpr_test_template_uses_primary_prompt_helper_for_selected_tasks(): void
+    public function test_vpr_test_template_serializes_both_text_and_instruction_without_duplicating_prompt(): void
     {
         $user = $this->makeStudent(5);
 
@@ -489,9 +519,20 @@ class PwaVprDashboardTest extends TestCase
             ->get("http://student.palomatika.ru/vpr/test/{$attempt->id}");
 
         $response->assertOk();
-        $response->assertSee('primaryPrompt(currentTask)', false);
-        $response->assertSee('shouldShowInstruction(currentTask)', false);
-        $response->assertDontSee('currentTask.instruction || currentTask.text ||', false);
+
+        $html = $response->getContent();
+        $encoded = fn (string $value) => trim((string) json_encode($value), '"');
+
+        $this->assertStringContainsString($encoded('Основной текст задания'), $html);
+        $this->assertStringContainsString($encoded('Служебный заголовок'), $html);
+        $this->assertStringNotContainsString('currentTask.instruction || currentTask.text ||', $html);
+
+        $textOccurrences = substr_count($html, $encoded('Основной текст задания'));
+        $this->assertSame(
+            1,
+            $textOccurrences,
+            'Primary prompt text must appear exactly once in the serialized Alpine payload.'
+        );
     }
 
     public function test_vpr_test_template_supports_special_rendering_for_tasks_4_10_and_14(): void
@@ -544,12 +585,28 @@ class PwaVprDashboardTest extends TestCase
             ->get("http://student.palomatika.ru/vpr/test/{$attempt->id}");
 
         $response->assertOk();
-        $response->assertSee('isTwoAnswerTask(currentTask)', false);
-        $response->assertSee('taskPromptIntro(currentTask)', false);
-        $response->assertSee('taskPromptQuestions(currentTask)', false);
-        $response->assertSee('isTaskTenMatrix(currentTask)', false);
-        $response->assertSee('taskTenFractions(currentTask)', false);
-        $response->assertSee('taskHasHtmlTable(currentTask)', false);
+        $tasks = $this->extractSerializedTasks($response->getContent());
+
+        $task4 = $this->findSerializedTaskByNumber($tasks, 4);
+        $this->assertSame("Вступление.\n\n1) Первый вопрос?\n2) Второй вопрос?", $task4['text'] ?? null);
+        $this->assertSame('1', $task4['answer_1'] ?? null);
+        $this->assertSame('2', $task4['answer_2'] ?? null);
+
+        $task10 = $this->findSerializedTaskByNumber($tasks, 10);
+        $this->assertSame(
+            "А) $\\frac{17}{9}$\nБ) $\\frac{15}{17}$\nВ) $\\frac{12}{29}$\n\n1) Больше 1.\n2) Меньше 0,5.\n3) Между 0,5 и 1.",
+            $task10['text'] ?? null
+        );
+
+        $task14 = $this->findSerializedTaskByNumber($tasks, 14);
+        $this->assertSame(
+            ['Стиральный порошок', 'Масса, кг', 'Цена, руб.'],
+            $task14['table']['headers'] ?? null
+        );
+        $this->assertSame(
+            [['А', '15', '1700'], ['Б', '10', '1100']],
+            $task14['table']['rows'] ?? null
+        );
     }
 
     public function test_vpr_task_10_special_matrix_mode_requires_fraction_and_statement_shape(): void
@@ -585,9 +642,14 @@ class PwaVprDashboardTest extends TestCase
             ->get("http://student.palomatika.ru/vpr/test/{$attempt->id}");
 
         $response->assertOk();
-        $response->assertSee('taskTenFractions(task).length === 3', false);
-        $response->assertSee('taskTenStatements(task).length === 3', false);
-        $response->assertDontSee('return Number(this.displayTaskNumber(task)) === 10;', false);
+        $tasks = $this->extractSerializedTasks($response->getContent());
+        $task10 = $this->findSerializedTaskByNumber($tasks, 10);
+
+        $this->assertSame('Обычное десятое задание без матрицы.', $task10['text'] ?? null);
+        $this->assertSame('Введи ответ', $task10['instruction'] ?? null);
+        $this->assertArrayNotHasKey('table', $task10);
+        $this->assertArrayNotHasKey('answer_1', $task10);
+        $this->assertArrayNotHasKey('answer_2', $task10);
     }
 
     public function test_vpr_test_maps_legacy_mini_answers_from_exam_numbers_to_attempt_slots(): void
@@ -1009,9 +1071,15 @@ class PwaVprDashboardTest extends TestCase
             ->get("http://student.palomatika.ru/vpr/test/{$attempt->id}");
 
         $response->assertOk();
-        $encodedQuestion = trim((string) json_encode('Среди чисел есть координаты всех трёх точек: 1) 0,6; 2) 1,5; 3) 2,1.'), '"');
-        $response->assertSee($encodedQuestion, false);
-        $response->assertSee("return String(task?.text || task?.question || '').trim();", false);
+        $tasks = $this->extractSerializedTasks($response->getContent());
+        $task7 = $this->findSerializedTaskByNumber($tasks, 7);
+
+        $this->assertSame(
+            'Среди чисел есть координаты всех трёх точек: 1) 0,6; 2) 1,5; 3) 2,1.',
+            $task7['question'] ?? null
+        );
+        $this->assertSame('Сопоставьте точки и координаты.', $task7['instruction'] ?? null);
+        $this->assertArrayNotHasKey('text', $task7);
     }
 
     public function test_vpr_results_page_uses_grade_specific_topic_names_not_oge_names(): void

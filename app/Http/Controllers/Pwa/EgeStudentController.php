@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Pwa;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\MiniAppHelpers;
 use App\Models\OgeAttempt;
 use App\Models\OgeAttemptScoring;
 use App\Services\EgeTaskDataService;
@@ -13,6 +14,8 @@ use Illuminate\Support\Facades\Auth;
 
 class EgeStudentController extends Controller
 {
+    use MiniAppHelpers;
+
     private function makePool(): EgeVariantPoolService
     {
         $taskData = app(EgeTaskDataService::class);
@@ -23,7 +26,9 @@ class EgeStudentController extends Controller
     public function home(Request $request)
     {
         $user  = Auth::user();
-        $grade = $user->grade_num;
+        $grade = $this->supportsStudentViewContext($request, $user)
+            ? 9
+            : (int) ($user->grade_num ?? 9);
 
         $activeAttempts = OgeAttempt::where('student_id', $user->id)
             ->where('status', 'active')
@@ -50,7 +55,10 @@ class EgeStudentController extends Controller
     public function startFull(Request $request, OgeAttemptService $attemptService)
     {
         $user = Auth::user();
-        if ($user->grade_num < 10 || $user->grade_num > 11) {
+        if (
+            !$this->supportsStudentViewContext($request, $user)
+            && ($user->grade_num < 10 || $user->grade_num > 11)
+        ) {
             abort(403, 'ЕГЭ доступно только для 10–11 классов');
         }
 

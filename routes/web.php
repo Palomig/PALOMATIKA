@@ -219,6 +219,28 @@ Route::middleware(['auth'])->group(function () {
         return redirect()->back()->withInput();
     })->name('view-as.set');
 
+    Route::post('/view-as/student/exam/{exam}', function (Request $request, string $exam) {
+        abort_unless(in_array($request->user()?->role, ['teacher', 'admin'], true), 403);
+        abort_unless(in_array($exam, ['oge', 'vpr'], true), 404);
+
+        $request->session()->put('view_as_exam', $exam);
+        if ($exam === 'vpr' && !in_array((int) $request->session()->get('view_as_vpr_grade'), [5, 6, 7, 8], true)) {
+            $request->session()->put('view_as_vpr_grade', 5);
+        }
+
+        return redirect()->route('pwa.student.dashboard');
+    })->name('view-as.student.exam');
+
+    Route::post('/view-as/student/vpr-grade/{grade}', function (Request $request, int $grade) {
+        abort_unless(in_array($request->user()?->role, ['teacher', 'admin'], true), 403);
+        abort_unless(in_array($grade, [5, 6, 7, 8], true), 404);
+
+        $request->session()->put('view_as_exam', 'vpr');
+        $request->session()->put('view_as_vpr_grade', $grade);
+
+        return redirect()->route('pwa.student.dashboard');
+    })->name('view-as.student.vpr-grade');
+
     Route::get('/dashboard', function () {
         $user = auth()->user();
         $viewAsRole = $user && $user->role === 'admin' ? session('view_as_role') : null;

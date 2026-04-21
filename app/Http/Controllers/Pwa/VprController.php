@@ -27,9 +27,18 @@ class VprController extends Controller
         $user = Auth::user();
         $userGrade = (int) ($user->grade_num ?? 0);
 
+        if ($this->supportsStudentViewContext($request, $user)) {
+            $requestedGrade = (int) ($request->input('grade', $request->query('grade', 0)));
+
+            if (in_array($requestedGrade, [5, 6, 7, 8], true)) {
+                return $requestedGrade;
+            }
+
+            return $this->resolveStudentViewVprGrade($request, $user);
+        }
+
         if ($user && $user->role === 'admin') {
             $requestedGrade = (int) ($request->input('grade', $request->query('grade', 5)));
-
             return in_array($requestedGrade, [5, 6, 7, 8], true) ? $requestedGrade : 5;
         }
 
@@ -43,7 +52,7 @@ class VprController extends Controller
     private function redirectIfWrongGrade(int $grade)
     {
         $user = Auth::user();
-        if ($user && $user->role === 'admin') {
+        if ($user && ($user->role === 'admin' || $user->role === 'teacher')) {
             return null;
         }
         if ($grade < 5 || $grade > 8) {

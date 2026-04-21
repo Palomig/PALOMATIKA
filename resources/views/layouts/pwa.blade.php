@@ -86,11 +86,18 @@
   .text-accent { color: var(--accent); }
   .flex-center { display: flex; align-items: center; justify-content: center; }
 
-  .pwa-role-switcher { position: sticky; top: 0; z-index: 800; display: flex; gap: 6px; padding: calc(8px + var(--safe-top)) 12px 8px; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); justify-content: center; }
+  .pwa-role-switcher-shell { position: sticky; top: 0; z-index: 800; padding: calc(8px + var(--safe-top)) 12px 8px; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+  .pwa-role-switcher { display: flex; gap: 6px; justify-content: center; }
   .pwa-role-switcher__btn { flex: 0 1 140px; text-align: center; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface2); color: var(--muted); font-family: var(--body); font-size: 13px; font-weight: 700; text-decoration: none; letter-spacing: 0.02em; transition: background 0.15s, color 0.15s, border-color 0.15s; }
   .pwa-role-switcher__btn:active { transform: scale(0.97); }
   .pwa-role-switcher__btn.is-active { background: var(--accent); color: #fff; border-color: var(--accent); }
-  @supports not (backdrop-filter: blur(8px)) { .pwa-role-switcher { background: var(--bg); } }
+  .pwa-context-switcher { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; align-items: center; }
+  .pwa-context-switcher__row { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+  .pwa-context-switcher__row form { margin: 0; }
+  .pwa-context-switcher__btn { min-width: 74px; text-align: center; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface2); color: var(--muted); font-family: var(--body); font-size: 12px; font-weight: 700; cursor: pointer; }
+  .pwa-context-switcher__btn--grade { min-width: 42px; }
+  .pwa-context-switcher__btn.is-active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  @supports not (backdrop-filter: blur(8px)) { .pwa-role-switcher-shell { background: var(--bg); } }
 
   .bug-report-trigger {
     position: fixed;
@@ -117,6 +124,11 @@
     touch-action: manipulation;
     -webkit-appearance: none;
     appearance: none;
+  }
+  .bug-report-trigger::before {
+    content: '';
+    position: absolute;
+    inset: -12px -10px;
   }
   .bug-report-trigger:hover {
     transform: translateY(-1px);
@@ -345,159 +357,7 @@
 
 @stack('scripts')
 
-{{-- Bug report button + modal --}}
-<div x-data="bugReport()" x-init="init()" x-cloak>
-
-  {{-- Floating trigger button --}}
-  <button type="button"
-    class="bug-report-trigger"
-    :class="{ 'is-hidden': open }"
-    x-show="!open"
-    @click="open = true"
-    aria-label="Сообщить об ошибке"
-    data-bug-report-trigger>
-    <svg class="bug-report-trigger__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M12 8v4m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/>
-    </svg>
-    <span class="bug-report-trigger__label">Баг-репорт</span>
-  </button>
-
-  {{-- Modal backdrop --}}
-  <div x-show="open" @click.self="open = false" x-transition:enter="anim-in"
-    class="bug-report-backdrop"
-    data-bug-report-modal>
-
-    {{-- Modal --}}
-    <div x-show="open" x-transition:enter="anim-up"
-      class="bug-report-card">
-
-      <div class="bug-report-head">
-        <div class="bug-report-lead">
-          <div class="bug-report-lead__badge">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 8v4m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/>
-            </svg>
-          </div>
-          <div>
-            <div class="bug-report-lead__title">Сообщить об ошибке</div>
-            <div class="bug-report-lead__text">Опиши баг — мы автоматически приложим данные о странице, браузере и устройстве.</div>
-          </div>
-        </div>
-        <button type="button"
-          class="bug-report-close"
-          @click="close()"
-          aria-label="Закрыть"
-          data-bug-report-close>×</button>
-      </div>
-
-      <template x-if="sent">
-        <div class="bug-report-success">
-          Спасибо! Репорт отправлен.
-        </div>
-      </template>
-
-      <template x-if="!sent">
-        <div class="bug-report-form">
-          <textarea x-model="description"
-            class="bug-report-textarea"
-            placeholder="Коротко: что сломано, где именно и что ожидалось?"
-            rows="5"></textarea>
-
-          <div x-show="error" x-text="error" class="bug-report-error"></div>
-
-          <button type="button"
-            @click="submit()"
-            :disabled="loading"
-            class="bug-report-submit"
-            :class="{ 'is-loading': loading }"
-            data-bug-report-submit>
-            <span x-show="!loading">Отправить репорт</span>
-            <span x-show="loading">Отправка...</span>
-          </button>
-        </div>
-      </template>
-
-    </div>
-  </div>
-</div>
-
-<script>
-function bugReport() {
-  // Collect JS errors in a ring buffer (max 10)
-  const jsErrors = [];
-  const _onerror = window.onerror;
-  window.onerror = function(msg, src, line, col, err) {
-    if (jsErrors.length < 10) jsErrors.push({ message: msg, source: src + ':' + line });
-    if (_onerror) _onerror.apply(this, arguments);
-  };
-  window.addEventListener('unhandledrejection', function(e) {
-    if (jsErrors.length < 10) jsErrors.push({ message: 'UnhandledRejection: ' + (e.reason?.message || e.reason), source: '' });
-  });
-
-  return {
-    open: false,
-    sent: false,
-    loading: false,
-    error: '',
-    description: '',
-
-    init() {
-      this.$watch('open', (isOpen) => {
-        document.body.style.overflow = isOpen ? 'hidden' : '';
-      });
-    },
-
-    close() {
-      this.open = false;
-      this.error = '';
-    },
-
-    async submit() {
-      this.loading = true;
-      this.error   = '';
-
-      const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-      const screenInfo = {
-        screen_w:   screen.width,
-        screen_h:   screen.height,
-        window_w:   window.innerWidth,
-        window_h:   window.innerHeight,
-        dpr:        window.devicePixelRatio || 1,
-        pwa:        window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true,
-        online:     navigator.onLine,
-        connection: conn ? (conn.effectiveType || conn.type || '?') : 'unknown',
-        language:   navigator.language,
-        timezone:   Intl.DateTimeFormat().resolvedOptions().timeZone,
-      };
-
-      try {
-        const pageContext = (typeof window.__bugContext === 'function') ? window.__bugContext() : null;
-        const res = await window.fetchPost('/bug-report', {
-          url:          window.location.href,
-          route_name:   document.querySelector('meta[name="route-name"]')?.content || null,
-          description:  this.description.trim() || null,
-          user_agent:   navigator.userAgent,
-          screen_info:  screenInfo,
-          js_errors:    jsErrors.length ? jsErrors : null,
-          page_context: pageContext,
-        });
-
-        if (!res.ok) throw new Error('Ошибка сервера');
-        this.sent = true;
-        setTimeout(() => {
-          this.close();
-          this.sent = false;
-          this.description = '';
-        }, 2500);
-      } catch (e) {
-        this.error = 'Не удалось отправить. Попробуйте ещё раз.';
-      } finally {
-        this.loading = false;
-      }
-    },
-  };
-}
-</script>
+@include('pwa.shared.bug-report')
 
 </body>
 </html>

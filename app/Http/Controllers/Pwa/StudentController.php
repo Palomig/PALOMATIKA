@@ -86,7 +86,18 @@ class StudentController extends Controller
     public function dashboard(Request $request)
     {
         $user  = Auth::user();
+        $previewExam = $this->resolveStudentViewExam($request, $user);
         $grade = (int) ($user->grade_num ?? 9);
+
+        if ($previewExam === 'vpr') {
+            return redirect()->route('pwa.student.vpr.home', [
+                'grade' => $this->resolveStudentViewVprGrade($request, $user),
+            ]);
+        }
+
+        if ($previewExam === 'oge') {
+            $grade = 9;
+        }
 
         // Перенаправить на нужный дашборд по классу
         if ($grade >= 5 && $grade <= 8) {
