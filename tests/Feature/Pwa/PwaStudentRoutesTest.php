@@ -23,13 +23,18 @@ class PwaStudentRoutesTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_onboarding_page_contains_grade_letter_e(): void
+    public function test_pwa_and_miniapp_onboarding_use_identical_grade_letters(): void
     {
         $user = User::factory()->create(['oauth_provider' => 'vk', 'oauth_id' => '1']);
 
-        $response = $this->actingAs($user)->get('http://student.palomatika.ru/onboarding');
+        $pwaResponse = $this->actingAs($user)->get('http://student.palomatika.ru/onboarding');
+        $miniappResponse = $this->actingAs($user)->get('/tg/onboarding');
 
-        $response->assertOk();
-        $response->assertSee("'А','Б','В','Г','Д','Е','И','К','М'", false);
+        $pwaResponse->assertOk();
+        $miniappResponse->assertOk();
+
+        $letters = "'А','Б','В','Г','Д','Е','К','М'";
+        $pwaResponse->assertSee($letters, false);
+        $miniappResponse->assertSee($letters, false);
     }
 }

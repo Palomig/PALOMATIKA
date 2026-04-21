@@ -76,6 +76,20 @@ class VprTaskDataServiceTest extends TestCase
         $this->assertStringContainsString('Представьте число 7 в виде дроби с числителем 42. В ответ запишите знаменатель полученной дроби.', $html);
     }
 
+    public function test_grade_5_topic_01_source_contains_full_denominator_instruction_for_numerator_tasks(): void
+    {
+        $data = json_decode((string) file_get_contents(storage_path('app/tasks/vpr/grade_5/topic_01.json')), true);
+        $tasks = $data['blocks'][0]['zadaniya'][3]['tasks'] ?? [];
+
+        $matchingTask = collect($tasks)->firstWhere('id', 15);
+
+        $this->assertIsArray($matchingTask);
+        $this->assertSame(
+            'Представьте число 7 в виде дроби с числителем 42. В ответ запишите знаменатель полученной дроби.',
+            $matchingTask['text'] ?? null
+        );
+    }
+
     public function test_grade_5_topic_02_uses_parts_and_whole_training_structure(): void
     {
         $svc = new VprTaskDataService(5);
@@ -143,10 +157,9 @@ class VprTaskDataServiceTest extends TestCase
         $this->assertStringContainsString('диаграм', mb_strtolower((string) ($meta['description'] ?? '')));
 
         $zadaniya = $data['blocks'][0]['zadaniya'] ?? [];
-        $this->assertCount(3, $zadaniya);
+        $this->assertCount(1, $zadaniya);
         $this->assertSame('word_problem', $zadaniya[0]['type'] ?? null);
-        $this->assertSame('word_problem', $zadaniya[1]['type'] ?? null);
-        $this->assertSame('word_problem', $zadaniya[2]['type'] ?? null);
+        $this->assertGreaterThanOrEqual(10, count($zadaniya[0]['tasks'] ?? []));
 
         $firstTaskText = (string) ($zadaniya[0]['tasks'][0]['text'] ?? '');
         $this->assertStringNotContainsString('Вариант', $firstTaskText);
@@ -188,7 +201,8 @@ class VprTaskDataServiceTest extends TestCase
 
         $firstTaskText = (string) ($zadaniya[0]['tasks'][0]['text'] ?? '');
         $this->assertStringNotContainsString('Вариант', $firstTaskText);
-        $this->assertStringNotContainsString('Бумага расчерчена', $firstTaskText);
+        $this->assertStringContainsString('Бумага расчерчена', $firstTaskText);
+        $this->assertStringContainsString('Найдите площадь', $firstTaskText);
     }
 
     public function test_grade_5_topic_06_uses_baked_number_line_svg_images(): void

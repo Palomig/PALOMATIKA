@@ -95,8 +95,8 @@
         . '-i' . ($sourceTaskId ?? 'x');
     $primaryTask = is_array($taskData['task'] ?? null) ? $taskData['task'] : [];
     $usesOptionIndexAnswer = is_array($primaryTask['graph_options'] ?? null) && !empty($primaryTask['graph_options']);
-    $answerPlaceholder = $usesOptionIndexAnswer ? 'Введи номер варианта' : 'Введите ответ';
-    $answerHint = $usesOptionIndexAnswer ? 'Выбери рисунок и введи его номер в поле ответа.' : '';
+    $answerPlaceholder = $usesOptionIndexAnswer ? 'Введите номер варианта' : 'Введите ответ';
+    $answerHint = $usesOptionIndexAnswer ? 'Выберите рисунок и введите его номер в поле ответа.' : '';
 
     $attemptTaskNumber = isset($attemptTaskNumber) ? (int) $attemptTaskNumber : (int) ($taskData['attempt_task_number'] ?? $taskNumber);
     if ($attemptTaskNumber < 1) {

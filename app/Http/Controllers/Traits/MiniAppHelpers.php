@@ -10,6 +10,35 @@ use Illuminate\Support\Str;
 
 trait MiniAppHelpers
 {
+    protected function supportsStudentViewContext(Request $request, ?User $user): bool
+    {
+        return $user
+            && in_array($user->role, ['teacher', 'admin'], true)
+            && str_starts_with($request->getHost(), 'student.');
+    }
+
+    protected function resolveStudentViewExam(Request $request, ?User $user): ?string
+    {
+        if (!$this->supportsStudentViewContext($request, $user)) {
+            return null;
+        }
+
+        $exam = (string) ($request->session()->get('view_as_exam') ?? 'oge');
+
+        return in_array($exam, ['oge', 'vpr'], true) ? $exam : 'oge';
+    }
+
+    protected function resolveStudentViewVprGrade(Request $request, ?User $user): int
+    {
+        if (!$this->supportsStudentViewContext($request, $user)) {
+            return 5;
+        }
+
+        $grade = (int) ($request->session()->get('view_as_vpr_grade') ?? 5);
+
+        return in_array($grade, [5, 6, 7, 8], true) ? $grade : 5;
+    }
+
     protected function issueOnboardingToken(int $userId): string
     {
         $token = Str::random(48);

@@ -213,8 +213,8 @@ class Topic13RuntimeSvgMigrationTest extends TestCase
 
         $html = (string) $view;
 
-        $this->assertStringContainsString('placeholder="Введи номер варианта"', $html);
-        $this->assertStringContainsString('Выбери рисунок и введи его номер', $html);
+        $this->assertStringContainsString('placeholder="Введите номер варианта"', $html);
+        $this->assertStringContainsString('Выберите рисунок и введите его номер', $html);
     }
 
     public function test_topic_13_z13_task5_uses_minus_six_sevenths_semantics_and_stacked_fraction_labels(): void

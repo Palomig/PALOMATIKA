@@ -188,17 +188,6 @@ class VprTaskDataService
             );
         }
 
-        if (
-            $this->grade === 5
-            && $topicId === '01'
-            && !empty($task['text'])
-            && str_contains((string) $task['text'], 'в виде дроби с числителем')
-            && !str_contains((string) $task['text'], 'В ответ запишите знаменатель полученной дроби.')
-        ) {
-            $task['text'] = rtrim((string) $task['text']);
-            $task['text'] .= ' В ответ запишите знаменатель полученной дроби.';
-        }
-
         return $task;
     }
 
