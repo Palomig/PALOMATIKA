@@ -203,13 +203,11 @@
       <div class="tile-icon">⚡</div>
       <div class="tile-name">Мини-ВПР</div>
       <div class="tile-desc">Короткая тренировка в формате ВПР</div>
-      <div class="tile-badge badge-purple">~10 мин</div>
     </a>
     <a href="#" class="tile-big tile-blue" @click.prevent="startFull()">
       <div class="tile-icon">📝</div>
       <div class="tile-name">Полный вариант</div>
       <div class="tile-desc">Как на настоящей работе ВПР</div>
-      <div class="tile-badge badge-blue">~45 мин</div>
     </a>
   </div>
 
