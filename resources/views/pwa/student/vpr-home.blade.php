@@ -217,19 +217,18 @@
       <div class="tile-sm-name">База заданий</div>
       <div class="tile-sm-desc">Все задания ВПР по номерам</div>
     </a>
+    <a href="/practice" class="tile-sm">
+      <div class="tile-sm-icon">🎮</div>
+      <div class="tile-sm-name">Практика</div>
+      <div class="tile-sm-desc">Мини-игры и тренажёры</div>
+      <div class="tile-badge badge-blue tile-badge-top-right" style="font-size:8px;">New</div>
+    </a>
     @if($hasTeacher ?? false)
     <a href="{{ route('pwa.student.homework') }}" class="tile-sm">
       <div class="tile-sm-icon">📖</div>
       <div class="tile-sm-name">Домашка</div>
       <div class="tile-sm-desc">Задания от учителя</div>
     </a>
-    @else
-    <div class="tile-sm" style="opacity:0.5;cursor:default;">
-      <div class="tile-sm-icon">🔍</div>
-      <div class="tile-sm-name">Разбор ошибок</div>
-      <div class="tile-sm-desc">Скоро</div>
-      <div class="tile-badge badge-blue tile-badge-top-right" style="font-size:8px;">Soon</div>
-    </div>
     @endif
     <a href="{{ route('pwa.student.history') }}" class="tile-sm">
       <div class="tile-sm-icon">📊</div>

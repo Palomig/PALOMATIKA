@@ -6,6 +6,7 @@ use App\Models\OgeVariant;
 use App\Models\OgeAttempt;
 use App\Models\OgeAttemptScoring;
 use App\Models\OgeVariantPoolEntry;
+use App\Models\TeacherStudent;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -45,8 +46,45 @@ class PwaVprDashboardTest extends TestCase
         $response->assertSee('Мини-ВПР');
         $response->assertSee('Полный вариант');
         $response->assertSee('База заданий');
+        $response->assertSee('Практика');
         $response->assertSee('История');
         $response->assertSee('Профиль');
+    }
+
+    public function test_vpr_dashboard_shows_oge_style_practice_card_without_teacher(): void
+    {
+        $user = $this->makeStudent(7);
+
+        $response = $this->actingAs($user)
+            ->get('http://student.palomatika.ru/vpr');
+
+        $response->assertOk();
+        $response->assertSee('Практика');
+        $response->assertSee('href="/practice"', false);
+        $response->assertDontSee('Разбор ошибок');
+        $response->assertDontSee('Скоро');
+    }
+
+    public function test_vpr_dashboard_keeps_homework_and_practice_for_students_with_teacher(): void
+    {
+        $user = $this->makeStudent(6);
+        $teacher = User::factory()->create([
+            'role' => 'teacher',
+            'grade_num' => 6,
+            'onboarding_completed_at' => now(),
+        ]);
+
+        TeacherStudent::create([
+            'teacher_id' => $teacher->id,
+            'student_id' => $user->id,
+        ]);
+
+        $response = $this->actingAs($user)
+            ->get('http://student.palomatika.ru/vpr');
+
+        $response->assertOk();
+        $response->assertSee('Практика');
+        $response->assertSee('Домашка');
     }
 
     public function test_admin_vpr_dashboard_defaults_to_grade_5_for_testing(): void
