@@ -272,13 +272,11 @@
       <div class="tile-icon">⚡</div>
       <div class="tile-name">Мини-ОГЭ</div>
       <div class="tile-desc">Короткая тренировка по одной теме</div>
-      <div class="tile-badge badge-purple">~10 мин</div>
     </a>
     <a href="#" class="tile-big tile-blue" @click.prevent="showFullChoice = true">
       <div class="tile-icon">📝</div>
       <div class="tile-name">Полный вариант</div>
       <div class="tile-desc">Как на экзамене</div>
-      <div class="tile-badge badge-blue">~45 мин</div>
     </a>
   </div>
 
