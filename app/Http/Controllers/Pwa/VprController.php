@@ -9,6 +9,7 @@ use App\Models\TeacherStudent;
 use App\Models\UserGift;
 use App\Models\OgeVariant;
 use App\Services\OgeAttemptService;
+use App\Services\StudentExamAccessService;
 use App\Services\VariantTaskNumberResolver;
 use App\Services\VprTaskDataService;
 use App\Services\VprVariantBuilderService;
@@ -21,6 +22,11 @@ use Illuminate\Support\Facades\Log;
 class VprController extends Controller
 {
     use MiniAppHelpers;
+
+    private function examAccess(): StudentExamAccessService
+    {
+        return app(StudentExamAccessService::class);
+    }
 
     private function resolveVprGrade(Request $request): int
     {
@@ -207,10 +213,15 @@ class VprController extends Controller
     public function test(Request $request, int $attemptId)
     {
         $user    = Auth::user();
-        $attempt = OgeAttempt::where('id', $attemptId)
+        $query = OgeAttempt::where('id', $attemptId)
             ->with('variant')
-            ->when($user->role !== 'admin', fn ($query) => $query->where('student_id', $user->id))
-            ->firstOrFail();
+            ->when($user->role !== 'admin', fn ($query) => $query->where('student_id', $user->id));
+
+        if ($user->role !== 'admin') {
+            $this->examAccess()->applyAttemptAccessScope($query, $user);
+        }
+
+        $attempt = $query->firstOrFail();
 
         if (in_array($attempt->status, ['submitted', 'scored', 'error'], true)) {
             return redirect()->route('pwa.student.vpr.results', $attempt->id);
@@ -302,11 +313,16 @@ class VprController extends Controller
     public function results(Request $request, int $attemptId)
     {
         $user    = Auth::user();
-        $attempt = OgeAttempt::where('id', $attemptId)
+        $query = OgeAttempt::where('id', $attemptId)
             ->whereIn('status', ['submitted', 'scored', 'error'])
             ->with(['variant', 'scorings'])
-            ->when($user->role !== 'admin', fn ($query) => $query->where('student_id', $user->id))
-            ->firstOrFail();
+            ->when($user->role !== 'admin', fn ($query) => $query->where('student_id', $user->id));
+
+        if ($user->role !== 'admin') {
+            $this->examAccess()->applyAttemptAccessScope($query, $user);
+        }
+
+        $attempt = $query->firstOrFail();
 
         $variantTasks = $this->normalizeAttemptTasks($attempt->variant, $attempt->variant?->config_json['tasks'] ?? []);
         if ($attempt->variant) {

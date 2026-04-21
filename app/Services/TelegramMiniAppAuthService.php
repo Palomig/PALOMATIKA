@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Models\OgeVariant;
 use App\Models\TeacherStudent;
 use App\Models\User;
+use Illuminate\Support\Facades\Schema;
 
 class TelegramMiniAppAuthService
 {
@@ -29,11 +31,22 @@ class TelegramMiniAppAuthService
             return $home;
         }
 
-        // Variant hash payloads — forward to student dashboard with startapp so
-        // CaptureTelegramStartParam redirects to the correct variant page.
+        // Variant hash payloads are validated against the real variant exam_type
+        // so oge_variant_hash_* naming does not bypass grade-based access rules.
         if (preg_match('/^oge_variant_hash_([a-z0-9]{8,32})$/i', $startParam, $m)
             || (preg_match('/^oge_variant_([a-z0-9]{8,32})$/i', $startParam, $m) && !ctype_digit($m[1]))) {
             $hash = strtolower($m[1]);
+            $variant = Schema::hasTable('oge_variants')
+                ? OgeVariant::where('hash', $hash)->first()
+                : null;
+
+            if ($user && $user->role === 'student' && $variant) {
+                $examAccess = app(StudentExamAccessService::class);
+                if (!$examAccess->canAccessVariant($user, $variant)) {
+                    return $home;
+                }
+            }
+
             return 'https://student.' . $baseDomain . '/?startapp=oge_variant_hash_' . $hash;
         }
 

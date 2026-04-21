@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\OgeAttempt;
+use App\Models\OgeVariant;
 use App\Services\OgeAttemptService;
 use App\Services\AuditLogger;
 use App\Services\OgeTelegramResultSummaryService;
+use App\Services\StudentExamAccessService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -15,6 +17,7 @@ class OgeAttemptController extends Controller
         private readonly OgeAttemptService $attemptService,
         private readonly AuditLogger $auditLogger,
         private readonly OgeTelegramResultSummaryService $telegramResultSummaryService,
+        private readonly StudentExamAccessService $examAccess,
     )
     {
     }
@@ -22,6 +25,9 @@ class OgeAttemptController extends Controller
     public function start(Request $request, string $hash): JsonResponse
     {
         $student = $request->user();
+        $variant = OgeVariant::where('hash', $hash)->firstOrFail();
+
+        abort_unless($this->examAccess->canAccessVariant($student, $variant), 403);
 
         [$variant, $attempt] = $this->attemptService->startAttempt($student, $hash, [
             'user_agent' => $request->userAgent(),
