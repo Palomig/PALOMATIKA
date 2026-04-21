@@ -296,7 +296,8 @@ function homePage() {
       try { tg?.ready?.(); } catch (_) {}
       this.appReady = true;
 
-      // If mini-app was opened with startapp=oge_variant_hash_..., forward into dashboard flow.
+      // If mini-app was opened with startapp=oge_variant_hash_..., start the variant through
+      // the server guard so the real exam_type comes from the DB, not from the payload name.
       const startParamFromTg = tg?.initDataUnsafe?.start_param || '';
       const urlParams = new URLSearchParams(window.location.search);
       const startParamFromUrl = urlParams.get('startapp') || urlParams.get('tgWebAppStartParam') || '';
@@ -305,7 +306,28 @@ function homePage() {
         @auth
           const hashMatch = startParam.match(/^oge_variant_hash_([a-z0-9]{8,32})$/i);
           if (hashMatch) {
-            window.location.replace('/oge/' + hashMatch[1].toLowerCase());
+            fetch('/full/start', {
+              method: 'POST',
+              credentials: 'include',
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': window._csrf,
+              },
+              body: JSON.stringify({ variant_hash: hashMatch[1].toLowerCase() }),
+            })
+              .then(async (response) => {
+                const payload = await response.json().catch(() => ({}));
+                if (!response.ok || !payload.redirect) {
+                  throw new Error(payload.error || 'Не удалось открыть вариант');
+                }
+                window.location.replace(payload.redirect);
+              })
+              .catch((error) => {
+                const msg = error?.message || 'Не удалось открыть вариант';
+                if (tg?.showAlert) tg.showAlert(msg);
+                else alert(msg);
+              });
             return;
           }
         @else

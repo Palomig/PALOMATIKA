@@ -15,6 +15,7 @@ use App\Services\MiniAppTaskCanonicalizer;
 use App\Services\MiniAppTaskSanitizer;
 use App\Services\MiniVariantService;
 use App\Services\OgeAttemptService;
+use App\Services\StudentExamAccessService;
 use App\Services\OgeVariantBuilderService;
 use App\Services\OgeVariantPoolService;
 use App\Services\TaskDataService;
@@ -33,6 +34,7 @@ class StudentController extends Controller
     public function __construct(
         private readonly MiniVariantService $miniVariant,
         private readonly OgeAttemptService $attemptService,
+        private readonly StudentExamAccessService $examAccess,
         private readonly OgeVariantBuilderService $variantBuilder,
         private readonly OgeVariantPoolService $poolService,
         private readonly TaskDataService $taskData,
@@ -122,8 +124,11 @@ class StudentController extends Controller
             ->where('status', 'active')
             ->where('last_seen_at', '>=', now()->subDays(7))
             ->with('variant')
-            ->orderByDesc('last_seen_at')
-            ->get();
+            ->orderByDesc('last_seen_at');
+
+        $this->examAccess->applyAttemptAccessScope($activeAttempts, $user);
+
+        $activeAttempts = $activeAttempts->get();
 
         $activeAttemptsList = [];
         foreach ($activeAttempts as $att) {
@@ -184,8 +189,11 @@ class StudentController extends Controller
             ->where('status', 'active')
             ->where('last_seen_at', '>=', now()->subDays(7))
             ->with('variant')
-            ->orderByDesc('last_seen_at')
-            ->get();
+            ->orderByDesc('last_seen_at');
+
+        $this->examAccess->applyAttemptAccessScope($activeAttempts, $user);
+
+        $activeAttempts = $activeAttempts->get();
 
         $activeAttemptsList = [];
         foreach ($activeAttempts as $att) {
@@ -497,6 +505,8 @@ class StudentController extends Controller
             return response()->json(['error' => 'Сессия истекла. Перезайдите в приложение.'], 401);
         }
 
+        abort_unless($this->examAccess->canAccessExamType($user, OgeVariant::EXAM_OGE), 403);
+
         try {
             $variant = $this->poolService->getOrCreateVariant($user, $mode);
         } catch (\Throwable $e) {
@@ -528,6 +538,8 @@ class StudentController extends Controller
         $variantHash = trim((string) $request->input('variant_hash', ''));
 
         if ($variantHash === '') {
+            abort_unless($this->examAccess->canAccessExamType($user, OgeVariant::EXAM_OGE), 403);
+
             $type = $request->boolean('part2') ? 'full_with_part2' : 'full';
 
             try {
@@ -539,6 +551,9 @@ class StudentController extends Controller
             }
         }
 
+        $requestedVariant = OgeVariant::where('hash', $variantHash)->firstOrFail();
+        abort_unless($this->examAccess->canAccessVariant($user, $requestedVariant), 403);
+
         try {
             [$variant, $attempt] = $this->attemptService->startAttempt($user, $variantHash);
         } catch (\Throwable $e) {
@@ -546,7 +561,7 @@ class StudentController extends Controller
             return response()->json(['error' => 'Ошибка создания попытки: ' . mb_substr($e->getMessage(), 0, 100)], 500);
         }
 
-        return response()->json(['redirect' => $this->base() . '/test/' . $attempt->id]);
+        return response()->json(['redirect' => $this->attemptRedirectUrl($variant, $attempt->id)]);
     }
 
     /**
@@ -557,6 +572,8 @@ class StudentController extends Controller
         $user = Auth::user();
         $attempt = OgeAttempt::where('id', $attemptId)
             ->where('student_id', $user->id)
+            ->with('variant')
+            ->tap(fn ($query) => $this->examAccess->applyAttemptAccessScope($query, $user))
             ->firstOrFail();
 
         if (in_array($attempt->status, ['submitted', 'scored', 'error'], true)) {
@@ -634,6 +651,18 @@ class StudentController extends Controller
         return $mapped;
     }
 
+    private function attemptRedirectUrl(OgeVariant $variant, int $attemptId): string
+    {
+        return match ($variant->exam_type) {
+            OgeVariant::EXAM_VPR5,
+            OgeVariant::EXAM_VPR6,
+            OgeVariant::EXAM_VPR7,
+            OgeVariant::EXAM_VPR8 => route('pwa.student.vpr.test', $attemptId),
+            OgeVariant::EXAM_EGE => route('pwa.student.ege.test', $attemptId),
+            default => $this->base() . '/test/' . $attemptId,
+        };
+    }
+
     /**
      * Results screen — submitted attempt.
      */
@@ -642,6 +671,8 @@ class StudentController extends Controller
         $user = Auth::user();
         $attempt = OgeAttempt::where('id', $attemptId)
             ->where('student_id', $user->id)
+            ->with('variant')
+            ->tap(fn ($query) => $this->examAccess->applyAttemptAccessScope($query, $user))
             ->firstOrFail();
 
         if (!in_array($attempt->status, ['submitted', 'scored', 'error'], true)) {
@@ -672,7 +703,7 @@ class StudentController extends Controller
     public function history()
     {
         $user = Auth::user();
-        $list = $this->buildHistoryListForStudent($user);
+        $list = $this->buildHistoryListForStudent($user, $user);
 
         $backUrl = $this->studentHomeUrl($user);
 
@@ -707,7 +738,7 @@ class StudentController extends Controller
         abort_unless($request->user()?->role === 'admin', 403);
 
         $student = User::where('role', 'student')->findOrFail($studentId);
-        $list = $this->buildHistoryListForStudent($student);
+        $list = $this->buildHistoryListForStudent($student, $request->user());
         $backUrl = route('pwa.student.dashboard');
 
         return view('pwa.student.admin-history', compact('student', 'list', 'backUrl'));
@@ -719,7 +750,7 @@ class StudentController extends Controller
     public function historyDetail(Request $request, int $attemptId)
     {
         $user = Auth::user();
-        $attempt = $this->loadHistoryAttempt($attemptId, $user->role === 'admin' ? null : $user->id);
+        $attempt = $this->loadHistoryAttempt($attemptId, $user->role === 'admin' ? null : $user->id, $user);
         $detail = $this->buildHistoryDetailViewData($attempt);
         $backUrl = $this->studentHomeUrl($user);
 
@@ -739,7 +770,7 @@ class StudentController extends Controller
         abort_unless($request->user()?->role === 'admin', 403);
 
         $student = User::where('role', 'student')->findOrFail($studentId);
-        $attempt = $this->loadHistoryAttempt($attemptId, $student->id);
+        $attempt = $this->loadHistoryAttempt($attemptId, $student->id, $request->user());
         $detail = $this->buildHistoryDetailViewData($attempt);
         $backUrl = $this->base() . '/history/' . $student->id;
 
@@ -763,14 +794,19 @@ class StudentController extends Controller
         };
     }
 
-    private function buildHistoryListForStudent(User $student): array
+    private function buildHistoryListForStudent(User $student, ?User $viewer = null): array
     {
-        $attempts = OgeAttempt::where('student_id', $student->id)
+        $attemptsQuery = OgeAttempt::where('student_id', $student->id)
             ->whereIn('status', ['submitted', 'scored'])
             ->with(['variant:id,hash,title,mode,exam_type,config_json', 'scorings:id,attempt_id,is_correct'])
             ->orderByDesc('submitted_at')
-            ->limit(50)
-            ->get();
+            ->limit(50);
+
+        if ($viewer?->role === 'student') {
+            $this->examAccess->applyAttemptAccessScope($attemptsQuery, $viewer);
+        }
+
+        $attempts = $attemptsQuery->get();
 
         $list = [];
         foreach ($attempts as $att) {
@@ -795,9 +831,9 @@ class StudentController extends Controller
         return $list;
     }
 
-    private function loadHistoryAttempt(int $attemptId, ?int $studentId = null): OgeAttempt
+    private function loadHistoryAttempt(int $attemptId, ?int $studentId = null, ?User $viewer = null): OgeAttempt
     {
-        return OgeAttempt::where('id', $attemptId)
+        $query = OgeAttempt::where('id', $attemptId)
             ->whereIn('status', ['submitted', 'scored'])
             ->with([
                 'student:id,name,grade_num',
@@ -805,8 +841,13 @@ class StudentController extends Controller
                 'answers:id,attempt_id,task_number,current_answer',
                 'scorings:id,attempt_id,task_number,is_correct,correct_answer',
             ])
-            ->when($studentId !== null, fn ($query) => $query->where('student_id', $studentId))
-            ->firstOrFail();
+            ->when($studentId !== null, fn ($query) => $query->where('student_id', $studentId));
+
+        if ($viewer?->role === 'student') {
+            $this->examAccess->applyAttemptAccessScope($query, $viewer);
+        }
+
+        return $query->firstOrFail();
     }
 
     private function buildHistoryDetailViewData(OgeAttempt $attempt): array
