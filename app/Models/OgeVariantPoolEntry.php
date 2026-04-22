@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\VariantPoolSchema;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -49,6 +50,10 @@ class OgeVariantPoolEntry extends Model
 
     public function scopeForExamType(Builder $query, string $examType): Builder
     {
+        if (!VariantPoolSchema::hasExamTypeColumn()) {
+            return $query;
+        }
+
         return $query->where('exam_type', $examType);
     }
 

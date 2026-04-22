@@ -6,6 +6,7 @@ use App\Models\OgeVariant;
 use App\Models\OgeVariantPoolEntry;
 use App\Models\OgeVariantPoolTask;
 use App\Models\User;
+use App\Support\VariantPoolSchema;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -20,11 +21,16 @@ class EgeVariantPoolService
     {
         $attempted = OgeAttempt::where('student_id', $user->id)->pluck('variant_id');
 
-        $poolEntry = OgeVariantPoolEntry::active()
-            ->forExamType(OgeVariant::EXAM_EGE)
+        $poolQuery = OgeVariantPoolEntry::active()
+            ->whereHas('variant', fn ($q) => $q->where('exam_type', OgeVariant::EXAM_EGE))
             ->whereNotIn('variant_id', $attempted)
-            ->inRandomOrder()
-            ->first();
+            ->inRandomOrder();
+
+        if (VariantPoolSchema::hasExamTypeColumn()) {
+            $poolQuery->forExamType(OgeVariant::EXAM_EGE);
+        }
+
+        $poolEntry = $poolQuery->first();
 
         if ($poolEntry) return $poolEntry->variant;
 
@@ -41,7 +47,14 @@ class EgeVariantPoolService
                 array_map(fn($t) => $t['topic_id'] . '_' . ($t['id'] ?? ''), $built['tasks'])
             ));
 
-            if (OgeVariantPoolEntry::where('exam_type', OgeVariant::EXAM_EGE)->where('task_fingerprint', $fingerprint)->exists()) continue;
+            $duplicateQuery = OgeVariantPoolEntry::query()->where('task_fingerprint', $fingerprint);
+            if (VariantPoolSchema::hasExamTypeColumn()) {
+                $duplicateQuery->where('exam_type', OgeVariant::EXAM_EGE);
+            } else {
+                $duplicateQuery->whereHas('variant', fn ($q) => $q->where('exam_type', OgeVariant::EXAM_EGE));
+            }
+
+            if ($duplicateQuery->exists()) continue;
 
             return DB::transaction(function () use ($built, $fingerprint) {
                 $hash = strtolower(Str::random(6));
@@ -58,14 +71,19 @@ class EgeVariantPoolService
                     'config_json' => ['tasks' => $built['tasks']],
                 ]);
 
-                $poolEntry = OgeVariantPoolEntry::create([
+                $poolEntryPayload = [
                     'variant_id'       => $variant->id,
-                    'exam_type'        => OgeVariant::EXAM_EGE,
                     'type'             => 'full',
                     'status'           => 'active',
                     'task_fingerprint' => $fingerprint,
                     'created_at'       => now(),
-                ]);
+                ];
+
+                if (VariantPoolSchema::hasExamTypeColumn()) {
+                    $poolEntryPayload['exam_type'] = OgeVariant::EXAM_EGE;
+                }
+
+                $poolEntry = OgeVariantPoolEntry::create($poolEntryPayload);
 
                 foreach ($built['tasks'] as $idx => $task) {
                     OgeVariantPoolTask::create([
