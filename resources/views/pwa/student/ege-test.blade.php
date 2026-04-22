@@ -710,17 +710,35 @@
 
         {{-- SVG image --}}
         <template x-if="currentTask.svg">
-          <div class="q-svg-wrap q-anim" :class="{ 'q-svg-wide': String(displayTaskNumber(currentTask)) === '11' }" :style="'animation-delay: 0.08s; margin-top: 16px'"
+          <div class="q-svg-wrap q-anim"
+               :class="{
+                 'q-svg-wide': String(displayTaskNumber(currentTask)) === '11',
+                 'is-clickable': canOpenImageViewer(currentTask)
+               }"
+               :style="'animation-delay: 0.08s; margin-top: 16px'"
+               @click="openImageViewer(currentTask)"
                x-html="currentTask.svg"></div>
         </template>
 
         {{-- Image fallback (PNG/JPG/SVG file path or inline SVG string) --}}
         <template x-if="!currentTask.svg && currentTask.image && String(currentTask.image).trim().startsWith('<svg')">
-          <div class="q-svg-wrap q-anim" :class="{ 'q-svg-wide': String(displayTaskNumber(currentTask)) === '11' }" :style="'animation-delay: 0.08s; margin-top: 16px'"
+          <div class="q-svg-wrap q-anim"
+               :class="{
+                 'q-svg-wide': String(displayTaskNumber(currentTask)) === '11',
+                 'is-clickable': canOpenImageViewer(currentTask)
+               }"
+               :style="'animation-delay: 0.08s; margin-top: 16px'"
+               @click="openImageViewer(currentTask)"
                x-html="currentTask.image"></div>
         </template>
         <template x-if="!currentTask.svg && currentTask.image && !String(currentTask.image).trim().startsWith('<svg')">
-          <div class="q-svg-wrap q-anim" :class="{ 'q-svg-wide': String(displayTaskNumber(currentTask)) === '11' }" :style="'animation-delay: 0.08s; margin-top: 16px'">
+          <div class="q-svg-wrap q-anim"
+               :class="{
+                 'q-svg-wide': String(displayTaskNumber(currentTask)) === '11',
+                 'is-clickable': canOpenImageViewer(currentTask)
+               }"
+               :style="'animation-delay: 0.08s; margin-top: 16px'"
+               @click="openImageViewer(currentTask)">
             <img :src="resolveTaskImageSrc(currentTask)" alt="task image" style="max-width:100%; height:auto; display:block; margin:0 auto; border-radius:12px;">
           </div>
         </template>
@@ -853,6 +871,8 @@
     </div>
   </div>
 
+  @include('pwa.student.partials.image-viewer')
+
 </div>
 @endsection
 
@@ -888,6 +908,13 @@
       answers: @json($answers ?? (object)[]),
       photos: {},
       showModal: false,
+      imageViewer: {
+        open: false,
+        src: '',
+        inlineSvg: '',
+        alt: '',
+        landscape: false,
+      },
       submitting: false,
       elapsed: 0,
       _timerInterval: null,
@@ -1106,6 +1133,44 @@
         if (/^https?:\/\//i.test(raw) || raw.startsWith('/')) return raw;
         const topicId = String(task?.topic_id ?? '').padStart(2, '0');
         return `/images/tasks/${topicId}/${raw}`;
+      },
+
+      canOpenImageViewer(task) {
+        if (!task || task?.viewer_disabled) return false;
+
+        const svg = String(task?.svg || '').trim();
+        const image = String(task?.image || '').trim();
+
+        return svg !== '' || image !== '';
+      },
+
+      isLandscapeViewer(task) {
+        return String(task?.viewer_orientation || 'default') === 'landscape';
+      },
+
+      openImageViewer(task) {
+        if (!this.canOpenImageViewer(task)) return;
+
+        const svg = String(task?.svg || '').trim();
+        const image = String(task?.image || '').trim();
+        const inlineSvg = svg.startsWith('<svg')
+          ? svg
+          : (image.startsWith('<svg') ? image : '');
+
+        this.imageViewer = {
+          open: true,
+          src: inlineSvg ? '' : this.resolveTaskImageSrc(task),
+          inlineSvg,
+          alt: String(task?.instruction || task?.text || 'Изображение задания').trim(),
+          landscape: this.isLandscapeViewer(task),
+        };
+
+        document.body.style.overflow = 'hidden';
+      },
+
+      closeImageViewer() {
+        this.imageViewer.open = false;
+        document.body.style.overflow = '';
       },
 
       // Navigation

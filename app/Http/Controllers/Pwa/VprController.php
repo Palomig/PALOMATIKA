@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Pwa;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Pwa\Concerns\NormalizesTaskImageViewer;
 use App\Http\Controllers\Traits\MiniAppHelpers;
 use App\Models\OgeAttempt;
 use App\Models\OgeAttemptScoring;
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\Log;
 class VprController extends Controller
 {
     use MiniAppHelpers;
+    use NormalizesTaskImageViewer;
 
     private function examAccess(): StudentExamAccessService
     {
@@ -388,7 +390,7 @@ class VprController extends Controller
             $tasks[$index] = $task;
         }
 
-        return $tasks;
+        return $this->normalizeTaskImageViewerMeta($variant, $tasks);
     }
 
     /**

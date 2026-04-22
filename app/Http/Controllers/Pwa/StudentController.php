@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Pwa;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Pwa\Concerns\NormalizesTaskImageViewer;
 use App\Http\Controllers\Traits\MiniAppHelpers;
 use App\Models\OgeAttempt;
 use App\Models\OgeAttemptScoring;
@@ -30,6 +31,7 @@ use Illuminate\Support\Facades\Log;
 class StudentController extends Controller
 {
     use MiniAppHelpers;
+    use NormalizesTaskImageViewer;
 
     public function __construct(
         private readonly MiniVariantService $miniVariant,
@@ -624,7 +626,8 @@ class StudentController extends Controller
             $task['exam_number'] = $numbers['exam_number'];
             $tasks[$index] = $task;
         }
-        return $tasks;
+
+        return $this->normalizeTaskImageViewerMeta($variant, $tasks);
     }
 
     private function resolveExistingAttemptAnswersForMiniApp(OgeAttempt $attempt, array $tasks): array
