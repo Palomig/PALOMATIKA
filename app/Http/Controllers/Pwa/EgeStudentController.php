@@ -2,9 +2,11 @@
 namespace App\Http\Controllers\Pwa;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Pwa\Concerns\NormalizesTaskImageViewer;
 use App\Http\Controllers\Traits\MiniAppHelpers;
 use App\Models\OgeAttempt;
 use App\Models\OgeAttemptScoring;
+use App\Models\OgeVariant;
 use App\Services\EgeTaskDataService;
 use App\Services\EgeVariantBuilderService;
 use App\Services\EgeVariantPoolService;
@@ -15,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 class EgeStudentController extends Controller
 {
     use MiniAppHelpers;
+    use NormalizesTaskImageViewer;
 
     private function makePool(): EgeVariantPoolService
     {
@@ -84,7 +87,7 @@ class EgeStudentController extends Controller
         }
 
         $variant = $attempt->variant;
-        $tasks   = $variant->config_json['tasks'] ?? [];
+        $tasks   = $this->normalizeTaskImageViewerMeta($variant, $variant->config_json['tasks'] ?? []);
         $answers = $attempt->answers()->pluck('current_answer', 'task_number');
         $mode    = $variant->mode ?? 'full';
         $title   = $variant->title ?? 'Вариант ЕГЭ';
