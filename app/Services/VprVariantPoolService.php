@@ -33,6 +33,7 @@ class VprVariantPoolService
         $attempted = OgeAttempt::where('student_id', $user->id)->pluck('variant_id');
 
         return OgeVariantPoolEntry::active()
+            ->forExamType($examType)
             ->whereHas('variant', fn($q) => $q
                 ->where('exam_type', $examType)
                 ->whereRaw('CAST(config_json AS CHAR) NOT LIKE ?', ['%base64,%']))
@@ -57,7 +58,7 @@ class VprVariantPoolService
                 array_map(fn($t) => $t['topic_id'] . '_' . ($t['id'] ?? ''), $built['tasks'])
             ));
 
-            if (OgeVariantPoolEntry::where('task_fingerprint', $fingerprint)->exists()) {
+            if (OgeVariantPoolEntry::where('exam_type', $examType)->where('task_fingerprint', $fingerprint)->exists()) {
                 continue;
             }
 
@@ -81,6 +82,7 @@ class VprVariantPoolService
 
                 $poolEntry = OgeVariantPoolEntry::create([
                     'variant_id'       => $variant->id,
+                    'exam_type'        => $examType,
                     'type'             => $isMini ? 'mixed' : 'full',
                     'status'           => 'active',
                     'task_fingerprint' => $fingerprint,
