@@ -90,6 +90,30 @@ class VprTaskDataServiceTest extends TestCase
         );
     }
 
+    public function test_grade_5_topic_11_production_tasks_have_unique_texts(): void
+    {
+        $data = json_decode((string) file_get_contents(storage_path('app/tasks/vpr/grade_5/topic_11.json')), true);
+        $tasks = $data['blocks'][0]['zadaniya'][0]['tasks'] ?? [];
+
+        $productionTexts = collect($tasks)
+            ->filter(fn (array $task) => ($task['status'] ?? 'production') === 'production')
+            ->map(function (array $task) {
+                $text = mb_strtolower((string) ($task['text'] ?? ''));
+                $text = preg_replace('/\s+/u', ' ', trim($text));
+
+                return $text;
+            })
+            ->filter()
+            ->values();
+
+        $this->assertNotEmpty($productionTexts);
+        $this->assertCount(
+            $productionTexts->count(),
+            $productionTexts->unique()->values(),
+            'Production tasks in VPR grade 5 topic 11 must not duplicate the same wording.'
+        );
+    }
+
     public function test_grade_5_topic_02_uses_parts_and_whole_training_structure(): void
     {
         $svc = new VprTaskDataService(5);

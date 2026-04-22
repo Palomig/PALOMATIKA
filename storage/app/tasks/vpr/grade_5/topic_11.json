@@ -40,7 +40,7 @@
               "id": 4,
               "text": "В одном резервуаре в 7 раз больше воды, чем в другом. Сколько кубических метров воды в каждом резервуаре, если в двух резервуарах вместе 1920 кубических метров воды?",
               "answer": "240 и 1680",
-              "status": "production",
+              "status": "draft",
               "variant": 4,
               "source_pdf": "4_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
             },
@@ -48,7 +48,7 @@
               "id": 5,
               "text": "Масса первого мешка сахара в 3,4 раза меньше массы второго. Найдите массу более\n тяжёлого мешка, если она на 20,4 кг больше. Ответ дайте в килограммах.",
               "answer": "28,9",
-              "status": "production",
+              "status": "draft",
               "variant": 5,
               "source_pdf": "5_trenirovochny_variant_VPR_2025_po_matematike_5_klass.pdf"
             },
