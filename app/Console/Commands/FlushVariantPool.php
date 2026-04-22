@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Support\VariantPoolSchema;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -19,7 +20,11 @@ class FlushVariantPool extends Command
         }
 
         if ($examType = $this->option('exam-type')) {
+            if (!VariantPoolSchema::hasExamTypeColumn()) {
+                $this->warn('Column oge_variant_pool.exam_type is missing; ignoring --exam-type filter until migrations are applied.');
+            } else {
             $query->where('exam_type', $examType);
+            }
         }
 
         $count = $query->update(['status' => 'deactivated']);
