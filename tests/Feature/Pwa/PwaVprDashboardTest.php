@@ -652,6 +652,50 @@ class PwaVprDashboardTest extends TestCase
         $this->assertArrayNotHasKey('answer_2', $task10);
     }
 
+    public function test_vpr_test_hides_duplicate_expression_block_for_grade_5_topic_01_denominator_tasks(): void
+    {
+        $user = $this->makeStudent(5);
+
+        $variant = OgeVariant::create([
+            'hash' => 'vpr5fractionexpr',
+            'exam_type' => OgeVariant::EXAM_VPR5,
+            'title' => 'Вариант ВПР 5 класс',
+            'source' => OgeVariant::SOURCE_MINIAPP,
+            'mode' => OgeVariant::MODE_FULL,
+            'config_json' => ['tasks' => [[
+                'id' => 23,
+                'task_number' => 1,
+                'topic_id' => '01',
+                'instruction' => 'Представьте число в виде дроби со знаменателем',
+                'text' => 'Представьте число 10 в виде дроби со знаменателем 7. Какой числитель получится?',
+                'expression' => '10',
+                'denominator' => 7,
+                'answer' => '70',
+            ]]],
+        ]);
+
+        $attempt = OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $user->id,
+            'status' => 'active',
+            'started_at' => now()->subMinute(),
+            'last_seen_at' => now(),
+        ]);
+
+        $response = $this->actingAs($user)
+            ->get("http://student.palomatika.ru/vpr/test/{$attempt->id}");
+
+        $response->assertOk();
+        $tasks = $this->extractSerializedTasks($response->getContent());
+        $taskOne = $this->findSerializedTaskByNumber($tasks, 1);
+
+        $this->assertSame(
+            'Представьте число 10 в виде дроби со знаменателем 7. Какой числитель получится?',
+            $taskOne['text'] ?? null
+        );
+        $this->assertArrayNotHasKey('expression', $taskOne);
+    }
+
     public function test_vpr_test_maps_legacy_mini_answers_from_exam_numbers_to_attempt_slots(): void
     {
         $user = $this->makeStudent(6);

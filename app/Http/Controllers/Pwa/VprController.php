@@ -371,6 +371,15 @@ class VprController extends Controller
                 $task = $taskData->canonicalizeLegacyTask((string) $task['topic_id'], $task);
             }
 
+            if (
+                $rawGrade === 5
+                && (string) ($task['topic_id'] ?? '') === '01'
+                && !empty($task['denominator'])
+                && trim((string) ($task['text'] ?? '')) !== ''
+            ) {
+                unset($task['expression']);
+            }
+
             $numbers = VariantTaskNumberResolver::resolve($task, $index, $variant);
             $task['display_task_number'] = $numbers['exam_number'];
             $task['attempt_task_number'] = $numbers['slot'];
