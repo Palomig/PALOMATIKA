@@ -13,6 +13,8 @@ use Illuminate\Support\Str;
 
 class OgeVariantPoolService
 {
+    private const EXAM_TYPE = OgeVariant::EXAM_OGE;
+
     // Algebra topics: 06-14
     protected array $algebraTopics = ['06', '07', '08', '09', '10', '11', '12', '13', '14'];
 
@@ -69,6 +71,7 @@ class OgeVariantPoolService
             ->pluck('variant_id');
 
         return OgeVariantPoolEntry::active()
+            ->forExamType(self::EXAM_TYPE)
             ->ofType($type)
             ->whereNotIn('variant_id', $attemptedVariantIds)
             ->inRandomOrder()
@@ -92,7 +95,7 @@ class OgeVariantPoolService
             $fingerprint = $this->computeFingerprint($taskRefs);
 
             // Check uniqueness of full variant composition
-            if (OgeVariantPoolEntry::where('task_fingerprint', $fingerprint)->exists()) {
+            if (OgeVariantPoolEntry::where('exam_type', self::EXAM_TYPE)->where('task_fingerprint', $fingerprint)->exists()) {
                 continue; // Duplicate — retry with different random selection
             }
 
@@ -120,6 +123,7 @@ class OgeVariantPoolService
                 // Create the OgeVariant
                 $variant = OgeVariant::create([
                     'hash' => $hash,
+                    'exam_type' => self::EXAM_TYPE,
                     'title' => $titleMap[$type] ?? 'Вариант ОГЭ',
                     'mode' => $modeMap[$type] ?? null,
                     'source' => OgeVariant::SOURCE_MINIAPP,
@@ -129,6 +133,7 @@ class OgeVariantPoolService
                 // Create pool entry
                 $poolEntry = OgeVariantPoolEntry::create([
                     'variant_id' => $variant->id,
+                    'exam_type' => self::EXAM_TYPE,
                     'type' => $type,
                     'status' => 'active',
                     'task_fingerprint' => $fingerprint,

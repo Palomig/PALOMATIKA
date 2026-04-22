@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class FlushVariantPool extends Command
 {
-    protected $signature = 'pool:flush {--type= : Only flush specific type (full, mixed, algebra, geometry)}';
+    protected $signature = 'pool:flush {--type= : Only flush specific type (full, mixed, algebra, geometry)} {--exam-type= : Only flush a specific exam track (oge, vpr_5, vpr_6, vpr_7, vpr_8, ege)}';
     protected $description = 'Expire all active pool entries so fresh variants are generated';
 
     public function handle(): int
@@ -16,6 +16,10 @@ class FlushVariantPool extends Command
 
         if ($type = $this->option('type')) {
             $query->where('type', $type);
+        }
+
+        if ($examType = $this->option('exam-type')) {
+            $query->where('exam_type', $examType);
         }
 
         $count = $query->update(['status' => 'deactivated']);

@@ -14,6 +14,7 @@ class OgeVariantPoolEntry extends Model
 
     protected $fillable = [
         'variant_id',
+        'exam_type',
         'type',
         'status',
         'task_fingerprint',
@@ -44,6 +45,11 @@ class OgeVariantPoolEntry extends Model
     public function scopeOfType(Builder $query, string $type): Builder
     {
         return $query->where('type', $type);
+    }
+
+    public function scopeForExamType(Builder $query, string $examType): Builder
+    {
+        return $query->where('exam_type', $examType);
     }
 
     public function deactivate(): void

@@ -21,7 +21,7 @@ class EgeVariantPoolService
         $attempted = OgeAttempt::where('student_id', $user->id)->pluck('variant_id');
 
         $poolEntry = OgeVariantPoolEntry::active()
-            ->whereHas('variant', fn($q) => $q->where('exam_type', OgeVariant::EXAM_EGE))
+            ->forExamType(OgeVariant::EXAM_EGE)
             ->whereNotIn('variant_id', $attempted)
             ->inRandomOrder()
             ->first();
@@ -41,7 +41,7 @@ class EgeVariantPoolService
                 array_map(fn($t) => $t['topic_id'] . '_' . ($t['id'] ?? ''), $built['tasks'])
             ));
 
-            if (OgeVariantPoolEntry::where('task_fingerprint', $fingerprint)->exists()) continue;
+            if (OgeVariantPoolEntry::where('exam_type', OgeVariant::EXAM_EGE)->where('task_fingerprint', $fingerprint)->exists()) continue;
 
             return DB::transaction(function () use ($built, $fingerprint) {
                 $hash = strtolower(Str::random(6));
@@ -60,6 +60,7 @@ class EgeVariantPoolService
 
                 $poolEntry = OgeVariantPoolEntry::create([
                     'variant_id'       => $variant->id,
+                    'exam_type'        => OgeVariant::EXAM_EGE,
                     'type'             => 'full',
                     'status'           => 'active',
                     'task_fingerprint' => $fingerprint,
