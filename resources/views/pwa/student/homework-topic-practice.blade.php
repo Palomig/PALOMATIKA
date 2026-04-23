@@ -1,0 +1,106 @@
+@extends('layouts.pwa')
+@section('title', 'Домашка — palomatika')
+
+@push('styles')
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .back { color: var(--text); text-decoration: none; font-size: 18px; padding: 6px 8px; border: 1px solid var(--border); border-radius: 10px; }
+  .topbar-title { font-family: var(--display); font-size: 18px; color: var(--text); }
+  .hw-summary {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 14px 16px; margin-bottom: 12px;
+  }
+  .hw-summary-title { font-family: var(--display); font-size: 16px; color: var(--text); }
+  .hw-summary-meta { margin-top: 4px; font-size: 12px; color: var(--muted); font-weight: 700; }
+  .task-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 14px 16px; margin-bottom: 10px;
+  }
+  .task-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+  .task-num { font-family: var(--display); font-size: 14px; color: var(--text); }
+  .task-state { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; padding: 3px 8px; border-radius: 6px; white-space: nowrap; }
+  .state-open { color: #93bbfd; background: rgba(59,130,246,.2); }
+  .state-retry { color: #fcd34d; background: rgba(234,179,8,.2); }
+  .state-done { color: #86efac; background: rgba(34,197,94,.2); }
+  .task-text { color: var(--text); font-size: 14px; line-height: 1.45; overflow-wrap: anywhere; }
+  .task-instruction { color: var(--muted); font-size: 12px; font-weight: 700; margin-bottom: 6px; }
+  .task-form { margin-top: 12px; display: grid; gap: 8px; }
+  .task-input {
+    width: 100%; padding: 11px 12px; border-radius: 10px;
+    border: 1px solid var(--border); background: var(--surface2);
+    color: var(--text); font-size: 14px;
+  }
+  .file-input { color: var(--muted); font-size: 12px; font-weight: 700; }
+  .submit-btn {
+    width: 100%; border: none; border-radius: 10px; padding: 11px 14px;
+    background: var(--accent); color: #fff; font-weight: 900; font-size: 13px;
+  }
+  .submit-btn:active { opacity: .75; }
+  .notice {
+    margin-bottom: 10px; padding: 10px 12px; border-radius: 10px;
+    font-size: 13px; font-weight: 700;
+  }
+  .notice-ok { color: #86efac; background: rgba(34,197,94,.14); border: 1px solid rgba(34,197,94,.24); }
+  .notice-error { color: #fecaca; background: rgba(239,68,68,.14); border: 1px solid rgba(239,68,68,.24); }
+@endpush
+
+@section('body')
+<div class="page">
+  <div class="topbar">
+    <a href="{{ route('pwa.student.homework') }}" class="back">←</a>
+    <div class="topbar-title">Домашка</div>
+    <div style="width:34px;"></div>
+  </div>
+
+  @if(session('success'))
+    <div class="notice notice-ok">{{ session('success') }}</div>
+  @endif
+  @if(session('error'))
+    <div class="notice notice-error">{{ session('error') }}</div>
+  @endif
+  @if($errors->any())
+    <div class="notice notice-error">{{ $errors->first() }}</div>
+  @endif
+
+  <div class="hw-summary">
+    <div class="hw-summary-title">{{ $homework->title ?: 'Домашнее задание' }}</div>
+    <div class="hw-summary-meta">{{ $assignment->tasks_completed }} из {{ $assignment->tasks_total }} принято</div>
+  </div>
+
+  @foreach($homework->topicTasks as $task)
+    @php
+      $payload = $task->task_payload ?? [];
+      $submission = $submissions->get($task->id);
+      $accepted = $submission && $submission->accepted_at;
+      $needsRetry = $submission && !$submission->accepted_at && (int) $submission->attempts_count === 1;
+      $stateClass = $accepted ? 'state-done' : ($needsRetry ? 'state-retry' : 'state-open');
+      $stateLabel = $accepted ? 'Принято' : ($needsRetry ? 'Повторить' : 'Открыто');
+      $text = $payload['text_html'] ?? $payload['text'] ?? $payload['question'] ?? $payload['expression'] ?? 'Задача';
+    @endphp
+
+    <div class="task-card">
+      <div class="task-head">
+        <div class="task-num">Задача {{ $task->task_order }}</div>
+        <div class="task-state {{ $stateClass }}">{{ $stateLabel }}</div>
+      </div>
+
+      @if(!empty($payload['instruction']))
+        <div class="task-instruction">{{ $payload['instruction'] }}</div>
+      @endif
+
+      <div class="task-text">{!! $text !!}</div>
+
+      @if(!$accepted)
+        <form class="task-form" method="POST" action="{{ route('pwa.student.homework.topic.submit', [$assignment, $task]) }}" enctype="multipart/form-data">
+          @csrf
+          <input class="task-input" type="text" name="answer" placeholder="Ответ" value="{{ old('answer') }}" required>
+          <input class="file-input" type="file" name="solution_photo" accept="image/*" required>
+          <button class="submit-btn" type="submit">{{ $needsRetry ? 'Отправить вторую попытку' : 'Отправить' }}</button>
+        </form>
+      @endif
+    </div>
+  @endforeach
+</div>
+@endsection

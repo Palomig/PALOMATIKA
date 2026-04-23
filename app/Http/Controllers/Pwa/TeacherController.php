@@ -403,16 +403,23 @@ class TeacherController extends Controller
         }
 
         $allEvriumNames = collect($evriumSlots)->pluck('students')->flatten()->unique()->sort()->values()->all();
+        $topicOptions = collect($this->taskData->getAllTopicsMeta())
+            ->map(fn (array $meta, string $topicId) => [
+                'number' => (int) ltrim($topicId, '0'),
+                'title' => $meta['title'] ?? "Тема {$topicId}",
+            ])
+            ->sortBy('number')
+            ->values();
 
         $recentHomework = \App\Models\Homework::where('teacher_id', $user->id)
-            ->whereIn('homework_type', ['full_variant', 'topic_practice'])
+            ->whereIn('homework_type', ['full_variant', 'topic_practice', 'topic_photo_practice'])
             ->orderByDesc('assigned_at')
             ->limit(30)
             ->get();
         $recentHomework->load('assignments.student:id,name');
 
         return view('pwa.teacher.homework', compact(
-            'user', 'currentStudents', 'prevStudents', 'prevDayLabel', 'allStudents', 'allEvriumNames', 'recentHomework'
+            'user', 'currentStudents', 'prevStudents', 'prevDayLabel', 'allStudents', 'allEvriumNames', 'topicOptions', 'recentHomework'
         ) + ['todayLabel' => $scheduleData['todayLabel']]);
     }
 
@@ -421,14 +428,77 @@ class TeacherController extends Controller
         $user = $request->user();
 
         $data = $request->validate([
-            'student_id' => 'required|exists:users,id',
-            'type' => 'required|in:full_variant,topic_practice',
-            'topic_number' => 'required_if:type,topic_practice|nullable|integer',
+            'student_id' => 'nullable|exists:users,id',
+            'student_ids' => 'nullable|array',
+            'student_ids.*' => 'exists:users,id',
+            'type' => 'required|in:full_variant,topic_practice,topic_photo_practice',
+            'topic_number' => 'required_if:type,topic_practice,topic_photo_practice|nullable|integer',
         ]);
 
-        $studentId = (int) $data['student_id'];
-        $isTeacher = TeacherStudent::where('teacher_id', $user->id)->where('student_id', $studentId)->exists();
-        if (!$isTeacher) return back()->with('error', 'Ученик не найден.');
+        $studentIds = collect($data['student_ids'] ?? [])
+            ->push($data['student_id'] ?? null)
+            ->filter()
+            ->map(fn ($id) => (int) $id)
+            ->unique()
+            ->values();
+
+        if ($studentIds->isEmpty()) {
+            return back()->with('error', 'Выберите ученика.');
+        }
+
+        $linkedStudentIds = TeacherStudent::where('teacher_id', $user->id)
+            ->whereIn('student_id', $studentIds)
+            ->pluck('student_id')
+            ->map(fn ($id) => (int) $id)
+            ->values();
+
+        if ($linkedStudentIds->count() !== $studentIds->count()) {
+            return back()->with('error', 'Один из учеников не найден.');
+        }
+
+        if ($data['type'] === 'topic_photo_practice') {
+            $topicNumber = (int) ($data['topic_number'] ?? 0);
+            if ($topicNumber < 1) {
+                return back()->with('error', 'Выберите тему.');
+            }
+
+            $tasks = $this->selectTopicHomeworkTasks($topicNumber, 10);
+            if (count($tasks) < 10) {
+                return back()->with('error', 'В выбранной теме меньше 10 задач с ответами.');
+            }
+
+            $homework = new \App\Models\Homework();
+            $homework->teacher_id = $user->id;
+            $homework->homework_type = 'topic_photo_practice';
+            $homework->topic_number = $topicNumber;
+            $homework->tasks_count = 10;
+            $homework->title = "Тема {$topicNumber}: 10 задач с фото решения";
+            $homework->assigned_at = now();
+            $homework->save();
+
+            foreach ($tasks as $index => $task) {
+                \App\Models\HomeworkTopicTask::create([
+                    'homework_id' => $homework->id,
+                    'topic_number' => $topicNumber,
+                    'task_order' => $index + 1,
+                    'task_payload' => $task['payload'],
+                    'correct_answer' => $task['answer'],
+                ]);
+            }
+
+            foreach ($studentIds as $studentId) {
+                \App\Models\HomeworkAssignment::create([
+                    'homework_id' => $homework->id,
+                    'student_id' => $studentId,
+                    'status' => 'assigned',
+                    'tasks_total' => 10,
+                ]);
+            }
+
+            return back()->with('success', 'ДЗ выдано!');
+        }
+
+        $studentId = (int) $studentIds->first();
 
         $homework = new \App\Models\Homework();
         $homework->teacher_id = $user->id;
@@ -454,6 +524,60 @@ class TeacherController extends Controller
         \App\Models\HomeworkAssignment::create(['homework_id' => $homework->id, 'student_id' => $studentId, 'status' => 'assigned']);
 
         return back()->with('success', 'ДЗ выдано!');
+    }
+
+    /**
+     * @return array<int, array{payload: array<string, mixed>, answer: string}>
+     */
+    private function selectTopicHomeworkTasks(int $topicNumber, int $count): array
+    {
+        $topicId = str_pad((string) $topicNumber, 2, '0', STR_PAD_LEFT);
+        $blocks = $this->taskData->getBlocks($topicId, 'production');
+        $tasks = $this->collectTopicHomeworkTasks($topicId, $blocks);
+
+        if (count($tasks) < $count) {
+            $tasks = $this->collectTopicHomeworkTasks($topicId, $this->taskData->getBlocks($topicId));
+        }
+
+        shuffle($tasks);
+
+        return array_slice($tasks, 0, $count);
+    }
+
+    /**
+     * @return array<int, array{payload: array<string, mixed>, answer: string}>
+     */
+    private function collectTopicHomeworkTasks(string $topicId, array $blocks): array
+    {
+        $tasks = [];
+
+        foreach ($blocks as $block) {
+            foreach ($block['zadaniya'] ?? [] as $zadanie) {
+                foreach ($zadanie['tasks'] ?? [] as $task) {
+                    $answer = $task['correct_answer'] ?? $task['answer'] ?? null;
+                    if (is_array($answer)) {
+                        $answer = implode('; ', $answer);
+                    }
+
+                    $answer = trim((string) $answer);
+                    if ($answer === '') {
+                        continue;
+                    }
+
+                    $payload = $task;
+                    $payload['topic_id'] = $topicId;
+                    $payload['instruction'] = $zadanie['instruction'] ?? '';
+                    $payload['type'] = $zadanie['type'] ?? 'task';
+
+                    $tasks[] = [
+                        'payload' => $payload,
+                        'answer' => $answer,
+                    ];
+                }
+            }
+        }
+
+        return $tasks;
     }
 
     public function updateStudentLink(Request $request, int $studentId): \Illuminate\Http\JsonResponse

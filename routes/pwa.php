@@ -60,6 +60,8 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
         Route::get('/profile', [StudentController::class, 'profile'])->name('pwa.student.profile');
         Route::post('/gift/seen', [StudentController::class, 'markGiftSeen'])->name('pwa.student.gift.seen');
         Route::get('/homework', [StudentController::class, 'studentHomework'])->name('pwa.student.homework');
+        Route::get('/homework/{assignment}', [StudentController::class, 'showTopicHomework'])->name('pwa.student.homework.topic');
+        Route::post('/homework/{assignment}/tasks/{homeworkTask}', [StudentController::class, 'submitTopicHomeworkTask'])->name('pwa.student.homework.topic.submit');
         Route::get('/tutor', [StudentController::class, 'tutor'])->name('pwa.student.tutor');
         Route::prefix('practice')->name('pwa.student.practice.')->group(function () {
             Route::get('/', [PracticeController::class, 'index'])->name('index');
