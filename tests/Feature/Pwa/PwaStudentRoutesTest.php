@@ -39,6 +39,23 @@ class PwaStudentRoutesTest extends TestCase
         $miniappResponse->assertSee($letters, false);
     }
 
+    public function test_authenticated_student_request_updates_last_active_at(): void
+    {
+        $user = User::factory()->create([
+            'role' => 'student',
+            'grade_num' => 9,
+            'last_active_at' => null,
+            'onboarding_completed_at' => now(),
+        ]);
+
+        $this->actingAs($user)
+            ->get('http://student.palomatika.ru/')
+            ->assertOk();
+
+        $this->assertNotNull($user->fresh()->last_active_at);
+        $this->assertTrue($user->fresh()->last_active_at->greaterThanOrEqualTo(now()->subMinute()));
+    }
+
     public function test_student_can_mark_pending_gift_as_seen(): void
     {
         $user = User::factory()->create([
