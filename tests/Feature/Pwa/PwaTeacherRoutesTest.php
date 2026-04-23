@@ -189,29 +189,38 @@ class PwaTeacherRoutesTest extends TestCase
         $response->assertDontSee('Other Teacher Online');
     }
 
-    public function test_online_recent_scope_shows_recent_students_by_last_activity_desc(): void
+    public function test_online_recent_scope_shows_students_active_in_last_two_days_by_last_activity_desc(): void
     {
         $teacher = User::factory()->create([
             'role' => 'teacher',
             'onboarding_completed_at' => now(),
         ]);
 
+        $currentSeenAt = now()->subMinutes(2);
+        $recentSeenAt = now()->subHours(8);
+        $olderSeenAt = now()->subDay();
         $currentStudent = User::factory()->create([
             'role' => 'student',
             'name' => 'Current Online',
-            'last_active_at' => now()->subMinutes(2),
+            'last_active_at' => $currentSeenAt,
             'onboarding_completed_at' => now(),
         ]);
         $recentStudent = User::factory()->create([
             'role' => 'student',
             'name' => 'Recently Online',
-            'last_active_at' => now()->subMinutes(8),
+            'last_active_at' => $recentSeenAt,
             'onboarding_completed_at' => now(),
         ]);
         $olderStudent = User::factory()->create([
             'role' => 'student',
             'name' => 'Older Online',
-            'last_active_at' => now()->subMinutes(40),
+            'last_active_at' => $olderSeenAt,
+            'onboarding_completed_at' => now(),
+        ]);
+        $tooOldStudent = User::factory()->create([
+            'role' => 'student',
+            'name' => 'Too Old Online',
+            'last_active_at' => now()->subDays(3),
             'onboarding_completed_at' => now(),
         ]);
         $neverOnlineStudent = User::factory()->create([
@@ -221,7 +230,7 @@ class PwaTeacherRoutesTest extends TestCase
             'onboarding_completed_at' => now(),
         ]);
 
-        foreach ([$currentStudent, $recentStudent, $olderStudent, $neverOnlineStudent] as $student) {
+        foreach ([$currentStudent, $recentStudent, $olderStudent, $tooOldStudent, $neverOnlineStudent] as $student) {
             TeacherStudent::create(['teacher_id' => $teacher->id, 'student_id' => $student->id, 'source' => 'manual']);
         }
 
@@ -231,8 +240,12 @@ class PwaTeacherRoutesTest extends TestCase
         $response->assertOk();
         $response->assertSee('Сейчас');
         $response->assertSee('Недавно');
-        $response->assertSeeInOrder(['Recently Online', 'Older Online']);
-        $response->assertDontSee('Current Online');
+        $response->assertSeeInOrder(['Current Online', 'Recently Online', 'Older Online']);
+        $response->assertSee('был онлайн');
+        $response->assertSee($currentSeenAt->format('d.m H:i'));
+        $response->assertSee($recentSeenAt->format('d.m H:i'));
+        $response->assertSee($olderSeenAt->format('d.m H:i'));
+        $response->assertDontSee('Too Old Online');
         $response->assertDontSee('Never Online');
     }
 }

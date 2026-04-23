@@ -109,6 +109,7 @@ class TeacherController extends Controller
         $search = trim((string) $request->query('search', ''));
         $filter = trim((string) $request->query('filter', 'mine'));
         $onlineSince = now()->subMinutes(5);
+        $recentOnlineSince = now()->subDays(2);
         $onlineScope = trim((string) $request->query('online_scope', 'current'));
         if (!in_array($onlineScope, ['current', 'recent'], true)) {
             $onlineScope = 'current';
@@ -167,7 +168,7 @@ class TeacherController extends Controller
             if ($onlineScope === 'recent') {
                 $studentsQuery
                     ->whereNotNull('users.last_active_at')
-                    ->where('users.last_active_at', '<', $onlineSince);
+                    ->where('users.last_active_at', '>=', $recentOnlineSince);
             } else {
                 $studentsQuery->where('users.last_active_at', '>=', $onlineSince);
             }
@@ -209,6 +210,7 @@ class TeacherController extends Controller
             'search' => $search,
             'filter' => $filter,
             'onlineSince' => $onlineSince,
+            'recentOnlineSince' => $recentOnlineSince,
             'onlineScope' => $onlineScope,
             'grade' => $grade,
             'availableGrades' => $availableGrades,
