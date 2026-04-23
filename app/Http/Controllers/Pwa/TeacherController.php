@@ -15,7 +15,9 @@ use App\Services\OgeVariantPoolService;
 use App\Services\TaskDataService;
 use App\Services\VariantTaskNumberResolver;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class TeacherController extends Controller
 {
@@ -132,8 +134,22 @@ class TeacherController extends Controller
         $dayNames = [1 => 'Пн', 2 => 'Вт', 3 => 'Ср', 4 => 'Чт', 5 => 'Пт', 6 => 'Сб', 7 => 'Вс'];
         $todayDow = (int) now()->format('N');
 
+        $attemptActivity = DB::table('oge_attempts')
+            ->selectRaw('student_id, MAX(COALESCE(last_seen_at, submitted_at, started_at, updated_at, created_at)) as attempt_activity_at')
+            ->groupBy('student_id');
+        $activitySql = 'CASE
+            WHEN users.last_active_at IS NULL THEN attempt_activity.attempt_activity_at
+            WHEN attempt_activity.attempt_activity_at IS NULL THEN users.last_active_at
+            WHEN users.last_active_at >= attempt_activity.attempt_activity_at THEN users.last_active_at
+            ELSE attempt_activity.attempt_activity_at
+        END';
+
         $studentsQuery = User::where('users.role', 'student')
+            ->leftJoinSub($attemptActivity, 'attempt_activity', function ($join) {
+                $join->on('attempt_activity.student_id', '=', 'users.id');
+            })
             ->select(['users.id', 'users.name', 'users.email', 'users.avatar', 'users.last_active_at'])
+            ->selectRaw($activitySql . ' as activity_at')
             ->selectRaw('(SELECT ts.student_alias FROM teacher_students ts WHERE ts.teacher_id = ? AND ts.student_id = users.id ORDER BY ts.id DESC LIMIT 1) as student_alias', [$teacherId])
             ->selectRaw('(SELECT ts.created_at FROM teacher_students ts WHERE ts.teacher_id = ? AND ts.student_id = users.id ORDER BY ts.id DESC LIMIT 1) as linked_at', [$teacherId])
             ->selectRaw('(SELECT ts.evrium_name FROM teacher_students ts WHERE ts.teacher_id = ? AND ts.student_id = users.id ORDER BY ts.id DESC LIMIT 1) as evrium_name', [$teacherId])
@@ -166,11 +182,15 @@ class TeacherController extends Controller
                 });
 
             if ($onlineScope === 'recent') {
-                $studentsQuery
-                    ->whereNotNull('users.last_active_at')
-                    ->where('users.last_active_at', '>=', $recentOnlineSince);
+                $studentsQuery->where(function ($query) use ($recentOnlineSince) {
+                    $query->where('users.last_active_at', '>=', $recentOnlineSince)
+                        ->orWhere('attempt_activity.attempt_activity_at', '>=', $recentOnlineSince);
+                });
             } else {
-                $studentsQuery->where('users.last_active_at', '>=', $onlineSince);
+                $studentsQuery->where(function ($query) use ($onlineSince) {
+                    $query->where('users.last_active_at', '>=', $onlineSince)
+                        ->orWhere('attempt_activity.attempt_activity_at', '>=', $onlineSince);
+                });
             }
         } elseif ($filter === 'unlinked') {
             $studentsQuery->whereNotExists(function ($sub) use ($teacherId) {
@@ -187,7 +207,18 @@ class TeacherController extends Controller
 
         $students = $studentsQuery
             ->addSelect('users.grade_num', 'users.grade_letter')
-            ->orderByRaw('COALESCE(users.last_active_at, users.created_at) DESC')->orderBy('users.name')->paginate(20)->withQueryString();
+            ->orderByRaw('COALESCE(' . $activitySql . ', users.created_at) DESC')->orderBy('users.name')->paginate(20)->withQueryString();
+
+        $students->getCollection()->transform(function (User $student) {
+            if (!empty($student->activity_at)) {
+                $activityAt = Carbon::parse($student->activity_at);
+                if ($student->last_active_at === null || $activityAt->gt($student->last_active_at)) {
+                    $student->last_active_at = $activityAt;
+                }
+            }
+
+            return $student;
+        });
 
         $availableGrades = [];
         if ($filter === 'unlinked') {

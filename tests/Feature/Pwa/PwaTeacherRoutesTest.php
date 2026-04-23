@@ -3,6 +3,8 @@
 namespace Tests\Feature\Pwa;
 
 use App\Models\TeacherStudent;
+use App\Models\OgeAttempt;
+use App\Models\OgeVariant;
 use App\Models\User;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Config;
@@ -199,6 +201,7 @@ class PwaTeacherRoutesTest extends TestCase
         $currentSeenAt = now()->subMinutes(2);
         $recentSeenAt = now()->subHours(8);
         $olderSeenAt = now()->subDay();
+        $attemptSeenAt = now()->subHours(3);
         $currentStudent = User::factory()->create([
             'role' => 'student',
             'name' => 'Current Online',
@@ -217,6 +220,12 @@ class PwaTeacherRoutesTest extends TestCase
             'last_active_at' => $olderSeenAt,
             'onboarding_completed_at' => now(),
         ]);
+        $attemptActiveStudent = User::factory()->create([
+            'role' => 'student',
+            'name' => 'Attempt Active',
+            'last_active_at' => null,
+            'onboarding_completed_at' => now(),
+        ]);
         $tooOldStudent = User::factory()->create([
             'role' => 'student',
             'name' => 'Too Old Online',
@@ -230,9 +239,18 @@ class PwaTeacherRoutesTest extends TestCase
             'onboarding_completed_at' => now(),
         ]);
 
-        foreach ([$currentStudent, $recentStudent, $olderStudent, $tooOldStudent, $neverOnlineStudent] as $student) {
+        foreach ([$currentStudent, $recentStudent, $olderStudent, $attemptActiveStudent, $tooOldStudent, $neverOnlineStudent] as $student) {
             TeacherStudent::create(['teacher_id' => $teacher->id, 'student_id' => $student->id, 'source' => 'manual']);
         }
+
+        $variant = OgeVariant::create(['hash' => 'recent01']);
+        OgeAttempt::create([
+            'variant_id' => $variant->id,
+            'student_id' => $attemptActiveStudent->id,
+            'status' => 'active',
+            'started_at' => $attemptSeenAt->copy()->subMinutes(15),
+            'last_seen_at' => $attemptSeenAt,
+        ]);
 
         $response = $this->actingAs($teacher)
             ->get('http://teacher.palomatika.ru/students?filter=online&online_scope=recent');
@@ -240,9 +258,10 @@ class PwaTeacherRoutesTest extends TestCase
         $response->assertOk();
         $response->assertSee('Сейчас');
         $response->assertSee('Недавно');
-        $response->assertSeeInOrder(['Current Online', 'Recently Online', 'Older Online']);
+        $response->assertSeeInOrder(['Current Online', 'Attempt Active', 'Recently Online', 'Older Online']);
         $response->assertSee('был онлайн');
         $response->assertSee($currentSeenAt->format('d.m H:i'));
+        $response->assertSee($attemptSeenAt->format('d.m H:i'));
         $response->assertSee($recentSeenAt->format('d.m H:i'));
         $response->assertSee($olderSeenAt->format('d.m H:i'));
         $response->assertDontSee('Too Old Online');
