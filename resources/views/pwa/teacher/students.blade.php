@@ -206,7 +206,13 @@
                 <span class="s-stat">{{ $student->last_attempt_at->diffForHumans(short: true) }}</span>
               @endif
               @if($filter === 'online' && $student->last_active_at)
-                <span class="s-stat"><b>{{ $onlineScope === 'recent' ? 'был онлайн' : 'онлайн' }}</b> {{ $student->last_active_at->diffForHumans(short: true) }}</span>
+                <span class="s-stat">
+                  <b>{{ $onlineScope === 'recent' ? 'был онлайн' : 'онлайн' }}</b>
+                  {{ $student->last_active_at->diffForHumans(short: true) }}
+                  @if($onlineScope === 'recent')
+                    · {{ $student->last_active_at->format('d.m H:i') }}
+                  @endif
+                </span>
               @endif
             </div>
           </div>
