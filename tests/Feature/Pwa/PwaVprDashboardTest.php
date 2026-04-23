@@ -667,7 +667,7 @@ class PwaVprDashboardTest extends TestCase
                 'task_number' => 1,
                 'topic_id' => '01',
                 'instruction' => 'Представьте число в виде дроби со знаменателем',
-                'text' => 'Представьте число 10 в виде дроби со знаменателем 7. Какой числитель получится?',
+                'text' => 'Представьте число 10 в виде дроби со знаменателем 7. В ответ запишите только числитель полученной дроби.',
                 'expression' => '10',
                 'denominator' => 7,
                 'answer' => '70',
@@ -690,7 +690,7 @@ class PwaVprDashboardTest extends TestCase
         $taskOne = $this->findSerializedTaskByNumber($tasks, 1);
 
         $this->assertSame(
-            'Представьте число 10 в виде дроби со знаменателем 7. Какой числитель получится?',
+            'Представьте число 10 в виде дроби со знаменателем 7. В ответ запишите только числитель полученной дроби.',
             $taskOne['text'] ?? null
         );
         $this->assertArrayNotHasKey('expression', $taskOne);
