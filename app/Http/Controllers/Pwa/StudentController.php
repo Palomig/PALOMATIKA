@@ -84,6 +84,26 @@ class StudentController extends Controller
         return redirect($this->base() . '/');
     }
 
+    public function markGiftSeen(Request $request)
+    {
+        $data = $request->validate([
+            'gift_id' => 'required|integer',
+        ]);
+
+        $user = $request->user();
+        abort_unless($user, 401);
+
+        UserGift::query()
+            ->where('id', $data['gift_id'])
+            ->where('user_id', $user->id)
+            ->whereNull('shown_at')
+            ->update([
+                'shown_at' => now(),
+            ]);
+
+        return response()->json(['ok' => true]);
+    }
+
     /**
      * Dashboard — main hub after login.
      */

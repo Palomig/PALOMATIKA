@@ -261,10 +261,15 @@ function giftBox() {
       this.opened = true;
       setTimeout(() => { this.showResult = true; }, 900);
     },
-    dismiss() {
+    async dismiss() {
       this.visible = false;
-      // Mark gift as shown
-      window.fetchPost('/gift/seen', { gift_id: {{ $pendingGift->id }} });
+      try {
+        await window.fetchPost('{{ route('pwa.student.gift.seen') }}', {
+          gift_id: {{ $pendingGift->id }},
+        });
+      } catch (error) {
+        console.warn('Failed to mark gift as seen', error);
+      }
     }
   };
 }
