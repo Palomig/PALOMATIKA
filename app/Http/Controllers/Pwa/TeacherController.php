@@ -109,6 +109,10 @@ class TeacherController extends Controller
         $search = trim((string) $request->query('search', ''));
         $filter = trim((string) $request->query('filter', 'mine'));
         $onlineSince = now()->subMinutes(5);
+        $onlineScope = trim((string) $request->query('online_scope', 'current'));
+        if (!in_array($onlineScope, ['current', 'recent'], true)) {
+            $onlineScope = 'current';
+        }
         $gradeRaw = trim((string) $request->query('grade', ''));
         $grade = ($gradeRaw !== '' && ctype_digit($gradeRaw) && (int) $gradeRaw >= 5 && (int) $gradeRaw <= 11)
             ? (int) $gradeRaw
@@ -156,11 +160,17 @@ class TeacherController extends Controller
                 $sub->selectRaw('1')->from('teacher_students')->whereColumn('teacher_students.student_id', 'users.id')->where('teacher_students.teacher_id', $teacherId);
             });
         } elseif ($filter === 'online') {
-            $studentsQuery
-                ->where('users.last_active_at', '>=', $onlineSince)
-                ->whereExists(function ($sub) use ($teacherId) {
+            $studentsQuery->whereExists(function ($sub) use ($teacherId) {
                     $sub->selectRaw('1')->from('teacher_students')->whereColumn('teacher_students.student_id', 'users.id')->where('teacher_students.teacher_id', $teacherId);
                 });
+
+            if ($onlineScope === 'recent') {
+                $studentsQuery
+                    ->whereNotNull('users.last_active_at')
+                    ->where('users.last_active_at', '<', $onlineSince);
+            } else {
+                $studentsQuery->where('users.last_active_at', '>=', $onlineSince);
+            }
         } elseif ($filter === 'unlinked') {
             $studentsQuery->whereNotExists(function ($sub) use ($teacherId) {
                 $sub->selectRaw('1')->from('teacher_students')->whereColumn('teacher_students.student_id', 'users.id')->where('teacher_students.teacher_id', $teacherId);
@@ -199,6 +209,7 @@ class TeacherController extends Controller
             'search' => $search,
             'filter' => $filter,
             'onlineSince' => $onlineSince,
+            'onlineScope' => $onlineScope,
             'grade' => $grade,
             'availableGrades' => $availableGrades,
             'selectedDay' => $selectedDay,

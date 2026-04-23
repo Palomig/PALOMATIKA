@@ -188,4 +188,51 @@ class PwaTeacherRoutesTest extends TestCase
         $response->assertDontSee('Offline Student');
         $response->assertDontSee('Other Teacher Online');
     }
+
+    public function test_online_recent_scope_shows_recent_students_by_last_activity_desc(): void
+    {
+        $teacher = User::factory()->create([
+            'role' => 'teacher',
+            'onboarding_completed_at' => now(),
+        ]);
+
+        $currentStudent = User::factory()->create([
+            'role' => 'student',
+            'name' => 'Current Online',
+            'last_active_at' => now()->subMinutes(2),
+            'onboarding_completed_at' => now(),
+        ]);
+        $recentStudent = User::factory()->create([
+            'role' => 'student',
+            'name' => 'Recently Online',
+            'last_active_at' => now()->subMinutes(8),
+            'onboarding_completed_at' => now(),
+        ]);
+        $olderStudent = User::factory()->create([
+            'role' => 'student',
+            'name' => 'Older Online',
+            'last_active_at' => now()->subMinutes(40),
+            'onboarding_completed_at' => now(),
+        ]);
+        $neverOnlineStudent = User::factory()->create([
+            'role' => 'student',
+            'name' => 'Never Online',
+            'last_active_at' => null,
+            'onboarding_completed_at' => now(),
+        ]);
+
+        foreach ([$currentStudent, $recentStudent, $olderStudent, $neverOnlineStudent] as $student) {
+            TeacherStudent::create(['teacher_id' => $teacher->id, 'student_id' => $student->id, 'source' => 'manual']);
+        }
+
+        $response = $this->actingAs($teacher)
+            ->get('http://teacher.palomatika.ru/students?filter=online&online_scope=recent');
+
+        $response->assertOk();
+        $response->assertSee('Сейчас');
+        $response->assertSee('Недавно');
+        $response->assertSeeInOrder(['Recently Online', 'Older Online']);
+        $response->assertDontSee('Current Online');
+        $response->assertDontSee('Never Online');
+    }
 }
