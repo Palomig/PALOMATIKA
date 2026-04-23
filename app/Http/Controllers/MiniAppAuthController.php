@@ -60,36 +60,46 @@ class MiniAppAuthController extends Controller
             return redirect('/tg')->with('error', 'Данные Telegram недействительны. Перезапустите mini app.');
         }
 
-        $user = $this->tgMiniAuth->findOrCreateUser($telegramUser);
+        try {
+            $user = $this->tgMiniAuth->findOrCreateUser($telegramUser);
 
-        // Login with remember token + regenerate session for security
-        Auth::login($user, true);
-        $request->session()->regenerate();
+            // Login with remember token + regenerate session for security
+            Auth::login($user, true);
+            $request->session()->regenerate();
 
-        // Build redirect target
-        $startParam = trim((string) ($authFields['start_param'] ?? $request->input('startParam', '')));
-        if ($startParam !== '') {
-            $request->session()->put('telegram_start_param', $startParam);
+            // Build redirect target
+            $startParam = trim((string) ($authFields['start_param'] ?? $request->input('startParam', '')));
+            if ($startParam !== '') {
+                $request->session()->put('telegram_start_param', $startParam);
+            }
+
+            // Auto-link referrals (sets referred_by_user_id + teacher_students when applicable)
+            $this->tgMiniAuth->linkReferralFromStartParam($user, $startParam);
+
+            $redirectTo = $this->tgMiniAuth->pwaLandingUrl($user, $startParam);
+
+            // Use a one-time handoff token to survive Telegram WebView cookie quirks.
+            // The auth-bridge page will navigate to /tg/auth/continue?token=... which
+            // re-establishes the session if the cookie was lost during the redirect hop.
+            $handoffToken = Str::random(40);
+            Cache::put('tg_auth_handoff:' . $handoffToken, [
+                'user_id' => $user->id,
+                'redirect_to' => $redirectTo,
+            ], now()->addMinutes(2));
+
+            return response()->view('miniapp.auth-bridge', [
+                'redirectTo' => $redirectTo,
+                'handoffToken' => $handoffToken,
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('tg_auth_login_failed', [
+                'reason' => $e->getMessage(),
+                'telegram_user_id' => $telegramUser['id'] ?? null,
+                'ip' => $request->ip(),
+            ]);
+
+            return redirect('/tg')->with('error', 'Не удалось завершить вход через Telegram. Попробуйте ещё раз.');
         }
-
-        // Auto-link referrals (sets referred_by_user_id + teacher_students when applicable)
-        $this->tgMiniAuth->linkReferralFromStartParam($user, $startParam);
-
-        $redirectTo = $this->tgMiniAuth->pwaLandingUrl($user, $startParam);
-
-        // Use a one-time handoff token to survive Telegram WebView cookie quirks.
-        // The auth-bridge page will navigate to /tg/auth/continue?token=... which
-        // re-establishes the session if the cookie was lost during the redirect hop.
-        $handoffToken = Str::random(40);
-        Cache::put('tg_auth_handoff:' . $handoffToken, [
-            'user_id' => $user->id,
-            'redirect_to' => $redirectTo,
-        ], now()->addMinutes(2));
-
-        return response()->view('miniapp.auth-bridge', [
-            'redirectTo' => $redirectTo,
-            'handoffToken' => $handoffToken,
-        ]);
     }
 
     public function authBridgePing(Request $request)

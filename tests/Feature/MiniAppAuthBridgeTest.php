@@ -3,11 +3,13 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Services\TelegramMiniAppAuthService;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Mockery;
 use Tests\TestCase;
 
 class MiniAppAuthBridgeTest extends TestCase
@@ -235,5 +237,60 @@ class MiniAppAuthBridgeTest extends TestCase
         $response = $this->postJson('/tg/auth/bridge-ping');
 
         $response->assertOk()->assertJsonPath('ok', true);
+    }
+
+    public function test_authenticate_redirects_back_instead_of_throwing_500_when_user_sync_fails(): void
+    {
+        $mock = Mockery::mock(TelegramMiniAppAuthService::class);
+        $mock->shouldReceive('extractAndVerify')
+            ->once()
+            ->with('auth_date=1&hash=abc')
+            ->andReturn([['start_param' => 'miniapp_home'], ['id' => '12345', 'username' => 'hiallglhf']]);
+        $mock->shouldReceive('findOrCreateUser')
+            ->once()
+            ->andThrow(new \RuntimeException('Broken user sync'));
+        app()->instance(TelegramMiniAppAuthService::class, $mock);
+
+        $response = $this->from('/tg')->post('/tg/auth', [
+            'initData' => 'auth_date=1&hash=abc',
+        ]);
+
+        $response->assertRedirect('/tg');
+        $response->assertSessionHas('error');
+    }
+
+    public function test_find_or_create_user_reuses_legacy_teacher_record_with_matching_oauth_id(): void
+    {
+        $teacher = User::factory()->create([
+            'role' => 'teacher',
+            'oauth_provider' => null,
+            'oauth_id' => '245710727',
+            'tg_username' => null,
+            'onboarding_completed_at' => now(),
+        ]);
+
+        /** @var TelegramMiniAppAuthService $service */
+        $service = app(TelegramMiniAppAuthService::class);
+
+        $resolved = $service->findOrCreateUser([
+            'id' => '245710727',
+            'username' => 'hiallglhf',
+            'first_name' => 'Test',
+            'last_name' => 'Teacher',
+        ]);
+
+        $this->assertSame($teacher->id, $resolved->id);
+        $this->assertSame('teacher', $resolved->role);
+
+        $teacher->refresh();
+        $this->assertSame('telegram', $teacher->oauth_provider);
+        $this->assertSame('245710727', $teacher->oauth_id);
+        $this->assertSame('hiallglhf', $teacher->tg_username);
+    }
+
+    protected function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
     }
 }
