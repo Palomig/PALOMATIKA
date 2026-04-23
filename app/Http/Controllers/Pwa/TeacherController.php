@@ -108,6 +108,7 @@ class TeacherController extends Controller
         $teacherId = (int) $user->id;
         $search = trim((string) $request->query('search', ''));
         $filter = trim((string) $request->query('filter', 'mine'));
+        $onlineSince = now()->subMinutes(5);
         $gradeRaw = trim((string) $request->query('grade', ''));
         $grade = ($gradeRaw !== '' && ctype_digit($gradeRaw) && (int) $gradeRaw >= 5 && (int) $gradeRaw <= 11)
             ? (int) $gradeRaw
@@ -154,6 +155,12 @@ class TeacherController extends Controller
             $studentsQuery->whereExists(function ($sub) use ($teacherId) {
                 $sub->selectRaw('1')->from('teacher_students')->whereColumn('teacher_students.student_id', 'users.id')->where('teacher_students.teacher_id', $teacherId);
             });
+        } elseif ($filter === 'online') {
+            $studentsQuery
+                ->where('users.last_active_at', '>=', $onlineSince)
+                ->whereExists(function ($sub) use ($teacherId) {
+                    $sub->selectRaw('1')->from('teacher_students')->whereColumn('teacher_students.student_id', 'users.id')->where('teacher_students.teacher_id', $teacherId);
+                });
         } elseif ($filter === 'unlinked') {
             $studentsQuery->whereNotExists(function ($sub) use ($teacherId) {
                 $sub->selectRaw('1')->from('teacher_students')->whereColumn('teacher_students.student_id', 'users.id')->where('teacher_students.teacher_id', $teacherId);
@@ -191,6 +198,7 @@ class TeacherController extends Controller
             'students' => $students,
             'search' => $search,
             'filter' => $filter,
+            'onlineSince' => $onlineSince,
             'grade' => $grade,
             'availableGrades' => $availableGrades,
             'selectedDay' => $selectedDay,
