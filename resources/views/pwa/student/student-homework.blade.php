@@ -52,6 +52,9 @@
       if ($hw['type'] === 'full_variant' && $hw['variant_hash']) {
           $href = null;
           $variantHash = $hw['variant_hash'];
+      } elseif ($hw['type'] === 'topic_photo_practice') {
+          $href = route('pwa.student.homework.topic', $hw['id']);
+          $variantHash = null;
       } elseif ($hw['type'] === 'topic_practice' && $hw['topic_number']) {
           $tn = (int) $hw['topic_number'];
           $href = $tn <= 19 ? '/tasks-part1?topic=' . $tn : '/part2?topic=' . $tn;

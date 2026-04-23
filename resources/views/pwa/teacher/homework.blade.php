@@ -124,6 +124,16 @@
   .fv-opt-icon { font-size: 28px; flex-shrink: 0; }
   .fv-opt-title { font-family: var(--display); font-size: 15px; color: var(--text); }
   .fv-opt-desc { font-size: 11px; font-weight: 600; color: var(--muted); margin-top: 2px; line-height: 1.3; }
+  .student-pick-list {
+    max-height: 160px; overflow-y: auto; display: grid; gap: 6px;
+    margin-top: 8px; padding-right: 2px;
+  }
+  .student-pick {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 10px; border-radius: 9px;
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text); font-size: 12px; font-weight: 700;
+  }
 @endpush
 
 @section('body')
@@ -295,9 +305,35 @@
             <input type="radio" name="type" value="topic_practice" x-ref="typeTopic" x-model="selectedType">
           </div>
 
-          <div x-show="selectedType === 'topic_practice'" x-cloak style="margin-top:12px;">
-            <label style="display:block; font-size:12px; color:var(--muted); margin-bottom:6px;">Номер темы</label>
-            <input type="number" name="topic_number" min="1" max="30" placeholder="Например: 6" style="width:100%; padding:12px; border-radius:10px; border:1px solid var(--border); background:var(--surface); color:var(--text);">
+          <div class="fv-option" style="cursor:pointer" @click="$refs.typePhotoTopic.checked = true; selectedType = 'topic_photo_practice'">
+            <div class="fv-opt-icon">▣</div>
+            <div>
+              <div class="fv-opt-title">10 задач с фото</div>
+              <div class="fv-opt-desc">Ученик вводит ответ и прикрепляет фото решения</div>
+            </div>
+            <input type="radio" name="type" value="topic_photo_practice" x-ref="typePhotoTopic" x-model="selectedType">
+          </div>
+
+          <div x-show="selectedType === 'topic_practice' || selectedType === 'topic_photo_practice'" x-cloak style="margin-top:12px;">
+            <label style="display:block; font-size:12px; color:var(--muted); margin-bottom:6px;">Тема</label>
+            <select name="topic_number" style="width:100%; padding:12px; border-radius:10px; border:1px solid var(--border); background:var(--surface); color:var(--text);">
+              <option value="">Выберите тему</option>
+              @foreach($topicOptions as $topic)
+                <option value="{{ $topic['number'] }}">Тема {{ $topic['number'] }} · {{ $topic['title'] }}</option>
+              @endforeach
+            </select>
+          </div>
+
+          <div x-show="selectedType === 'topic_photo_practice'" x-cloak style="margin-top:12px;">
+            <label style="display:block; font-size:12px; color:var(--muted); margin-bottom:6px;">Ученики</label>
+            <div class="student-pick-list">
+              @foreach($allStudents as $student)
+                <label class="student-pick">
+                  <input type="checkbox" name="student_ids[]" value="{{ $student->id }}" :checked="assignStudentId === {{ $student->id }}">
+                  <span>{{ $student->student_alias ?? $student->name }}</span>
+                </label>
+              @endforeach
+            </div>
           </div>
 
           <button type="submit" class="btn btn-accent" style="margin-top:14px; width:100%;">Выдать ДЗ</button>

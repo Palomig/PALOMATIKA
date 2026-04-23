@@ -53,6 +53,11 @@ class Homework extends Model
         return $this->hasMany(HomeworkAssignment::class);
     }
 
+    public function topicTasks(): HasMany
+    {
+        return $this->hasMany(HomeworkTopicTask::class)->orderBy('task_order');
+    }
+
     public function attempts(): HasMany
     {
         return $this->hasMany(Attempt::class);

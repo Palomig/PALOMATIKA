@@ -10,6 +10,9 @@ use App\Models\OgeAttemptScoring;
 use App\Models\OgeVariant;
 use App\Models\StarTransaction;
 use App\Models\TeacherStudent;
+use App\Models\HomeworkAssignment;
+use App\Models\HomeworkTopicTask;
+use App\Models\HomeworkTopicTaskSubmission;
 use App\Models\User;
 use App\Models\UserGift;
 use App\Services\MiniAppTaskCanonicalizer;
@@ -1038,6 +1041,106 @@ class StudentController extends Controller
         }
 
         return view('pwa.student.student-homework', compact('user', 'list'));
+    }
+
+    public function showTopicHomework(Request $request, HomeworkAssignment $assignment)
+    {
+        $user = $request->user();
+        abort_unless((int) $assignment->student_id === (int) $user->id, 403);
+
+        $assignment->load(['homework.topicTasks', 'topicTaskSubmissions']);
+        abort_unless($assignment->homework?->homework_type === 'topic_photo_practice', 404);
+
+        if ($assignment->status === 'assigned') {
+            $assignment->update([
+                'status' => 'started',
+                'started_at' => now(),
+            ]);
+        }
+
+        $submissions = $assignment->topicTaskSubmissions->keyBy('homework_topic_task_id');
+
+        return view('pwa.student.homework-topic-practice', [
+            'assignment' => $assignment->refresh()->load('homework.topicTasks'),
+            'homework' => $assignment->homework,
+            'submissions' => $submissions,
+        ]);
+    }
+
+    public function submitTopicHomeworkTask(Request $request, HomeworkAssignment $assignment, HomeworkTopicTask $homeworkTask)
+    {
+        $user = $request->user();
+        abort_unless((int) $assignment->student_id === (int) $user->id, 403);
+
+        $assignment->load('homework');
+        abort_unless($assignment->homework?->homework_type === 'topic_photo_practice', 404);
+        abort_unless((int) $homeworkTask->homework_id === (int) $assignment->homework_id, 404);
+
+        $validated = $request->validate([
+            'answer' => 'required|string|max:255',
+            'solution_photo' => 'required|image|max:5120',
+        ]);
+
+        $submission = HomeworkTopicTaskSubmission::firstOrNew([
+            'homework_assignment_id' => $assignment->id,
+            'homework_topic_task_id' => $homeworkTask->id,
+        ]);
+
+        if ($submission->exists && $submission->accepted_at !== null) {
+            return back()->with('success', 'Эта задача уже принята.');
+        }
+
+        $answer = trim((string) $validated['answer']);
+        $attemptsCount = min(((int) $submission->attempts_count) + 1, 2);
+        $path = $request->file('solution_photo')->store("homework_solutions/{$assignment->id}", 'public');
+        $isCorrect = $this->homeworkAnswerMatches($homeworkTask->correct_answer, $answer);
+
+        $submission->attempts_count = $attemptsCount;
+        $submission->solution_photo_path = $path;
+        $submission->is_correct = $isCorrect;
+
+        if ($attemptsCount === 1) {
+            $submission->first_answer = $answer;
+        } else {
+            $submission->second_answer = $answer;
+        }
+
+        if ($isCorrect || $attemptsCount >= 2) {
+            $submission->accepted_at = now();
+        }
+
+        $submission->save();
+
+        $this->refreshTopicHomeworkProgress($assignment);
+
+        if (!$isCorrect && $attemptsCount === 1) {
+            return back()->with('error', 'Ответ не совпал с правильным. Попробуй ещё раз, фото решения нужно прикрепить снова.');
+        }
+
+        return back()->with('success', $isCorrect ? 'Задача принята: ответ верный.' : 'Вторая попытка принята. Учитель посмотрит решение по фото.');
+    }
+
+    private function homeworkAnswerMatches(?string $correctAnswer, string $answer): bool
+    {
+        $normalize = static fn (?string $value): string => preg_replace('/\s+/u', '', mb_strtolower(trim((string) $value)));
+
+        return $normalize($correctAnswer) === $normalize($answer);
+    }
+
+    private function refreshTopicHomeworkProgress(HomeworkAssignment $assignment): void
+    {
+        $accepted = HomeworkTopicTaskSubmission::where('homework_assignment_id', $assignment->id)
+            ->whereNotNull('accepted_at')
+            ->get();
+        $total = (int) ($assignment->tasks_total ?: $assignment->homework?->tasks_count ?: $assignment->homework?->topicTasks()->count() ?: 0);
+
+        $assignment->update([
+            'status' => $total > 0 && $accepted->count() >= $total ? 'completed' : 'started',
+            'tasks_completed' => $accepted->count(),
+            'tasks_correct' => $accepted->where('is_correct', true)->count(),
+            'started_at' => $assignment->started_at ?: now(),
+            'completed_at' => $total > 0 && $accepted->count() >= $total ? now() : null,
+        ]);
     }
 
     /**
