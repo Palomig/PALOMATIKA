@@ -828,14 +828,24 @@
   </div>
 
   {{-- ───── BOTTOM BAR ───── --}}
+  {{-- Две отдельные кнопки (через x-if) вместо одной с ветвлением: гарантирует,
+       что «Завершить тест» — отдельный DOM-узел со своим handler-ом, и исключает
+       класс багов «лейбл обновился, но click-ветка — нет» на Chromium-форках
+       (замечено у учеников на Яндекс.Браузере). --}}
   <div class="test-bottom">
-    <button class="test-btn-prev" :disabled="current === 0" @click="prev()">&#8249;</button>
-    <button class="test-btn-next"
-            :class="{ 'finish': current === total - 1 }"
-            @click="next()">
-      <span x-text="current === total - 1 ? 'Завершить тест' : 'Следующее'"></span>
-      <span>&#8250;</span>
-    </button>
+    <button class="test-btn-prev" :disabled="current <= 0" @click="prev()">&#8249;</button>
+    <template x-if="current < total - 1">
+      <button class="test-btn-next" @click="goNext()">
+        <span>Следующее</span>
+        <span>&#8250;</span>
+      </button>
+    </template>
+    <template x-if="current >= total - 1">
+      <button class="test-btn-next finish" @click="openFinishModal()" data-testid="finish-variant-btn">
+        <span>Завершить тест</span>
+        <span>&#8250;</span>
+      </button>
+    </template>
   </div>
 
   {{-- ───── FINISH MODAL ───── --}}
@@ -1175,7 +1185,12 @@
 
       // Navigation
       goTo(idx) {
-        this.current = idx;
+        const total = this.total;
+        const clamped = total > 0 ? Math.max(0, Math.min(idx, total - 1)) : 0;
+        if (this.imageViewer?.open) {
+          this.closeImageViewer();
+        }
+        this.current = clamped;
         this.scrollActiveDot();
         this.$nextTick(() => {
           this.renderTaskMath();
@@ -1186,16 +1201,38 @@
         });
       },
 
+      _blurActive() {
+        try {
+          const el = document.activeElement;
+          if (el && typeof el.blur === 'function' && el !== document.body) el.blur();
+        } catch (_) {}
+      },
+
       prev() {
+        this._blurActive();
         if (this.current > 0) this.goTo(this.current - 1);
       },
 
-      next() {
-        if (this.current === this.total - 1) {
+      goNext() {
+        this._blurActive();
+        if (this.current >= this.total - 1) {
           this.showModal = true;
           return;
         }
         this.goTo(this.current + 1);
+      },
+
+      openFinishModal() {
+        this._blurActive();
+        this.showModal = true;
+      },
+
+      next() {
+        if (this.current >= this.total - 1) {
+          this.openFinishModal();
+          return;
+        }
+        this.goNext();
       },
 
       scrollActiveDot() {
