@@ -127,13 +127,6 @@ class TeacherController extends Controller
         $todayDow = (int) now()->format('N');
 
         $studentsQuery = User::where('users.role', 'student')
-            ->where(function ($q) {
-                $q->whereExists(function ($sub) {
-                    $sub->selectRaw('1')->from('oge_attempts')->whereColumn('oge_attempts.student_id', 'users.id');
-                })->orWhereExists(function ($sub) {
-                    $sub->selectRaw('1')->from('teacher_students')->whereColumn('teacher_students.student_id', 'users.id');
-                });
-            })
             ->select(['users.id', 'users.name', 'users.email', 'users.avatar', 'users.last_active_at'])
             ->selectRaw('(SELECT ts.student_alias FROM teacher_students ts WHERE ts.teacher_id = ? AND ts.student_id = users.id ORDER BY ts.id DESC LIMIT 1) as student_alias', [$teacherId])
             ->selectRaw('(SELECT ts.created_at FROM teacher_students ts WHERE ts.teacher_id = ? AND ts.student_id = users.id ORDER BY ts.id DESC LIMIT 1) as linked_at', [$teacherId])
@@ -146,6 +139,16 @@ class TeacherController extends Controller
                         ->orWhereRaw('EXISTS (SELECT 1 FROM teacher_students ts WHERE ts.teacher_id = ? AND ts.student_id = users.id AND ts.student_alias like ?)', [$teacherId, '%' . $search . '%']);
                 });
             });
+
+        if ($filter !== 'unlinked') {
+            $studentsQuery->where(function ($q) {
+                $q->whereExists(function ($sub) {
+                    $sub->selectRaw('1')->from('oge_attempts')->whereColumn('oge_attempts.student_id', 'users.id');
+                })->orWhereExists(function ($sub) {
+                    $sub->selectRaw('1')->from('teacher_students')->whereColumn('teacher_students.student_id', 'users.id');
+                });
+            });
+        }
 
         if ($filter === 'mine') {
             $studentsQuery->whereExists(function ($sub) use ($teacherId) {
@@ -174,13 +177,6 @@ class TeacherController extends Controller
                 ->whereNotNull('users.grade_num')
                 ->whereNotExists(function ($sub) use ($teacherId) {
                     $sub->selectRaw('1')->from('teacher_students')->whereColumn('teacher_students.student_id', 'users.id')->where('teacher_students.teacher_id', $teacherId);
-                })
-                ->where(function ($q) {
-                    $q->whereExists(function ($sub) {
-                        $sub->selectRaw('1')->from('oge_attempts')->whereColumn('oge_attempts.student_id', 'users.id');
-                    })->orWhereExists(function ($sub) {
-                        $sub->selectRaw('1')->from('teacher_students')->whereColumn('teacher_students.student_id', 'users.id');
-                    });
                 })
                 ->distinct()
                 ->orderBy('users.grade_num')
