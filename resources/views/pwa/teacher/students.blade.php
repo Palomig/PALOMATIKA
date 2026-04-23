@@ -14,6 +14,17 @@
     background: var(--green, #22c55e); margin-right: 5px; vertical-align: middle;
     box-shadow: 0 0 0 3px rgba(34,197,94,.12);
   }
+  .online-scope {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 4px;
+  }
+  .online-scope-btn {
+    text-align: center; padding: 8px 10px; border-radius: 9px;
+    font-size: 12px; font-weight: 800; color: var(--muted);
+    text-decoration: none;
+  }
+  .online-scope-btn.active { background: var(--accent); color: #fff; }
   .search-row { display: flex; gap: 8px; }
   .search-row input {
     flex: 1; background: var(--surface); border: 1px solid var(--border);
@@ -121,6 +132,15 @@
     </div>
   @endif
 
+  @if($filter === 'online')
+    <div class="online-scope">
+      <a class="online-scope-btn {{ $onlineScope === 'current' ? 'active' : '' }}"
+         href="?filter=online&online_scope=current{{ $search ? '&search='.urlencode($search) : '' }}">Сейчас</a>
+      <a class="online-scope-btn {{ $onlineScope === 'recent' ? 'active' : '' }}"
+         href="?filter=online&online_scope=recent{{ $search ? '&search='.urlencode($search) : '' }}">Недавно</a>
+    </div>
+  @endif
+
   @if($filter === 'unlinked' && !empty($availableGrades))
     <div class="grade-picker">
       <a class="grade-btn {{ $grade === null ? 'active' : '' }}"
@@ -134,6 +154,9 @@
 
   <form method="GET" action="/students" class="search-row">
     <input type="hidden" name="filter" value="{{ $filter }}">
+    @if($filter === 'online')
+      <input type="hidden" name="online_scope" value="{{ $onlineScope }}">
+    @endif
     <input type="text" name="search" value="{{ $search }}" placeholder="Поиск по имени или алиасу">
     <button type="submit" class="btn btn-surface" style="font-size:12px;">Найти</button>
   </form>
@@ -183,7 +206,7 @@
                 <span class="s-stat">{{ $student->last_attempt_at->diffForHumans(short: true) }}</span>
               @endif
               @if($filter === 'online' && $student->last_active_at)
-                <span class="s-stat"><b>онлайн</b> {{ $student->last_active_at->diffForHumans(short: true) }}</span>
+                <span class="s-stat"><b>{{ $onlineScope === 'recent' ? 'был онлайн' : 'онлайн' }}</b> {{ $student->last_active_at->diffForHumans(short: true) }}</span>
               @endif
             </div>
           </div>
@@ -214,7 +237,7 @@
         @elseif($filter === 'unlinked')
           Нет непривязанных учеников
         @elseif($filter === 'online')
-          Сейчас никто из ваших учеников не онлайн
+          {{ $onlineScope === 'recent' ? 'Нет недавней активности учеников' : 'Сейчас никто из ваших учеников не онлайн' }}
         @else
           Список пуст
         @endif
