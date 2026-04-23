@@ -9,6 +9,11 @@
     color: var(--muted); cursor: pointer; text-decoration: none; text-align: center;
   }
   .filter-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .online-dot {
+    display: inline-block; width: 7px; height: 7px; border-radius: 999px;
+    background: var(--green, #22c55e); margin-right: 5px; vertical-align: middle;
+    box-shadow: 0 0 0 3px rgba(34,197,94,.12);
+  }
   .search-row { display: flex; gap: 8px; }
   .search-row input {
     flex: 1; background: var(--surface); border: 1px solid var(--border);
@@ -102,6 +107,7 @@
 
   <div class="filters">
     <a class="filter-btn {{ $filter === 'mine' ? 'active' : '' }}" href="?filter=mine{{ $search ? '&search='.urlencode($search) : '' }}">Мои</a>
+    <a class="filter-btn {{ $filter === 'online' ? 'active' : '' }}" href="?filter=online{{ $search ? '&search='.urlencode($search) : '' }}"><span class="online-dot"></span>Онлайн</a>
     <a class="filter-btn {{ $filter === 'unlinked' ? 'active' : '' }}" href="?filter=unlinked{{ $search ? '&search='.urlencode($search) : '' }}">Без привязки</a>
     <a class="filter-btn {{ $filter === 'scheduled' ? 'active' : '' }}" href="?filter=scheduled{{ $search ? '&search='.urlencode($search) : '' }}">По расписанию</a>
   </div>
@@ -176,6 +182,9 @@
               @if($student->last_attempt_at)
                 <span class="s-stat">{{ $student->last_attempt_at->diffForHumans(short: true) }}</span>
               @endif
+              @if($filter === 'online' && $student->last_active_at)
+                <span class="s-stat"><b>онлайн</b> {{ $student->last_active_at->diffForHumans(short: true) }}</span>
+              @endif
             </div>
           </div>
           <div class="s-chevron">›</div>
@@ -204,6 +213,8 @@
           Нет непривязанных учеников в {{ $grade }} классе
         @elseif($filter === 'unlinked')
           Нет непривязанных учеников
+        @elseif($filter === 'online')
+          Сейчас никто из ваших учеников не онлайн
         @else
           Список пуст
         @endif

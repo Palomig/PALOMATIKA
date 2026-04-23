@@ -144,4 +144,48 @@ class PwaTeacherRoutesTest extends TestCase
         $response->assertSee('Fresh Student');
         $response->assertDontSee('Linked Student');
     }
+
+    public function test_online_filter_shows_only_current_teachers_recently_active_students(): void
+    {
+        $teacher = User::factory()->create([
+            'role' => 'teacher',
+            'onboarding_completed_at' => now(),
+        ]);
+        $otherTeacher = User::factory()->create([
+            'role' => 'teacher',
+            'onboarding_completed_at' => now(),
+        ]);
+
+        $onlineStudent = User::factory()->create([
+            'role' => 'student',
+            'name' => 'Online Student',
+            'last_active_at' => now()->subMinutes(2),
+            'onboarding_completed_at' => now(),
+        ]);
+        $offlineStudent = User::factory()->create([
+            'role' => 'student',
+            'name' => 'Offline Student',
+            'last_active_at' => now()->subMinutes(20),
+            'onboarding_completed_at' => now(),
+        ]);
+        $otherOnlineStudent = User::factory()->create([
+            'role' => 'student',
+            'name' => 'Other Teacher Online',
+            'last_active_at' => now()->subMinute(),
+            'onboarding_completed_at' => now(),
+        ]);
+
+        TeacherStudent::create(['teacher_id' => $teacher->id, 'student_id' => $onlineStudent->id, 'source' => 'manual']);
+        TeacherStudent::create(['teacher_id' => $teacher->id, 'student_id' => $offlineStudent->id, 'source' => 'manual']);
+        TeacherStudent::create(['teacher_id' => $otherTeacher->id, 'student_id' => $otherOnlineStudent->id, 'source' => 'manual']);
+
+        $response = $this->actingAs($teacher)
+            ->get('http://teacher.palomatika.ru/students?filter=online');
+
+        $response->assertOk();
+        $response->assertSee('Онлайн');
+        $response->assertSee('Online Student');
+        $response->assertDontSee('Offline Student');
+        $response->assertDontSee('Other Teacher Online');
+    }
 }
