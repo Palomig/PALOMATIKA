@@ -52,7 +52,7 @@
                 @endif
                 <span class="text-slate-200 ml-2">
                     Представьте {{ $usesNumberWording ? 'число' : 'выражение' }} ${{ $expression }}$ в виде дроби со знаменателем {{ $task['denominator'] }}.
-                    В ответ запишите числитель полученной дроби.
+                    В ответ запишите {{ $usesNumberWording ? 'только ' : '' }}числитель полученной дроби.
                 </span>
                 @include('tasks.partials.task-answer', [
                     'showTaskAnswer' => $showTaskAnswer,

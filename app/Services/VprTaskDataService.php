@@ -178,11 +178,10 @@ class VprTaskDataService
         if (
             $this->grade === 5
             && $topicId === '01'
-            && empty($task['text'])
             && isset($task['expression'], $task['denominator'])
         ) {
             $task['text'] = sprintf(
-                'Представьте число %s в виде дроби со знаменателем %s. Какой числитель получится?',
+                'Представьте число %s в виде дроби со знаменателем %s. В ответ запишите только числитель полученной дроби.',
                 $task['expression'],
                 $task['denominator']
             );

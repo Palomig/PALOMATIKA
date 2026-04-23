@@ -64,7 +64,27 @@ class VprTaskDataServiceTest extends TestCase
         $html = $response->render();
 
         $this->assertStringContainsString('Представьте число $4$ в виде дроби со знаменателем 6.', $html);
+        $this->assertStringContainsString('В ответ запишите только числитель полученной дроби.', $html);
         $this->assertStringNotContainsString('Представьте выражение $4$ в виде дроби со знаменателем 6.', $html);
+    }
+
+    public function test_grade_5_topic_01_normalizes_denominator_tasks_with_numerator_only_instruction(): void
+    {
+        $svc = new VprTaskDataService(5);
+        $data = $svc->getTopicData('01');
+        $tasks = $data['blocks'][0]['zadaniya'][0]['tasks'] ?? [];
+
+        $sourceTask = collect($tasks)->firstWhere('id', 1);
+        $generatedTask = collect($tasks)->firstWhere('id', 2);
+
+        $this->assertSame(
+            'Представьте число 4 в виде дроби со знаменателем 6. В ответ запишите только числитель полученной дроби.',
+            $sourceTask['text'] ?? null
+        );
+        $this->assertSame(
+            'Представьте число 7 в виде дроби со знаменателем 9. В ответ запишите только числитель полученной дроби.',
+            $generatedTask['text'] ?? null
+        );
     }
 
     public function test_grade_5_topic_01_renders_denominator_answer_instruction_for_numerator_tasks(): void
