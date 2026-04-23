@@ -181,11 +181,13 @@ class TelegramMiniAppAuthService
             ->where('oauth_id', $telegramId)
             ->first();
 
+        $tgUsername = $this->normalizeTelegramUsername($telegramUser['username'] ?? null);
+        $avatar = $this->normalizeAvatarUrl($telegramUser['photo_url'] ?? null);
+
         if ($user) {
             $updates = [];
-            $newUsername = trim((string) ($telegramUser['username'] ?? ''));
-            if ($newUsername !== '' && $user->tg_username !== $newUsername) {
-                $updates['tg_username'] = $newUsername;
+            if ($tgUsername !== null && $user->tg_username !== $tgUsername) {
+                $updates['tg_username'] = $tgUsername;
             }
             if ($updates !== []) {
                 $user->update($updates);
@@ -193,17 +195,33 @@ class TelegramMiniAppAuthService
             return $user;
         }
 
-        $name = trim(((string) ($telegramUser['first_name'] ?? '')) . ' ' . ((string) ($telegramUser['last_name'] ?? '')));
-        if ($name === '') {
-            $name = (string) ($telegramUser['username'] ?? 'User');
+        $legacyUser = User::whereNull('oauth_provider')
+            ->where('oauth_id', $telegramId)
+            ->orderBy('id')
+            ->first();
+
+        if ($legacyUser) {
+            $updates = ['oauth_provider' => 'telegram'];
+            if ($tgUsername !== null && $legacyUser->tg_username !== $tgUsername) {
+                $updates['tg_username'] = $tgUsername;
+            }
+            if ($avatar !== null && $legacyUser->avatar !== $avatar) {
+                $updates['avatar'] = $avatar;
+            }
+
+            $legacyUser->update($updates);
+
+            return $legacyUser;
         }
+
+        $name = $this->normalizeDisplayName($telegramUser);
 
         return User::create([
             'name' => $name,
             'oauth_provider' => 'telegram',
             'oauth_id' => $telegramId,
-            'tg_username' => trim((string) ($telegramUser['username'] ?? '')) ?: null,
-            'avatar' => $telegramUser['photo_url'] ?? null,
+            'tg_username' => $tgUsername,
+            'avatar' => $avatar,
             'trial_ends_at' => now()->addDays(7),
         ]);
     }
@@ -226,5 +244,32 @@ class TelegramMiniAppAuthService
         }
 
         return $initDataUnsafe;
+    }
+
+    /**
+     * @param array<string,mixed> $telegramUser
+     */
+    private function normalizeDisplayName(array $telegramUser): string
+    {
+        $name = trim(((string) ($telegramUser['first_name'] ?? '')) . ' ' . ((string) ($telegramUser['last_name'] ?? '')));
+        if ($name === '') {
+            $name = (string) ($telegramUser['username'] ?? 'User');
+        }
+
+        return mb_substr(trim($name), 0, 255);
+    }
+
+    private function normalizeTelegramUsername(mixed $username): ?string
+    {
+        $normalized = trim((string) $username);
+
+        return $normalized !== '' ? mb_substr($normalized, 0, 100) : null;
+    }
+
+    private function normalizeAvatarUrl(mixed $photoUrl): ?string
+    {
+        $normalized = trim((string) $photoUrl);
+
+        return $normalized !== '' ? mb_substr($normalized, 0, 255) : null;
     }
 }

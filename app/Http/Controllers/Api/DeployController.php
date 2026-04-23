@@ -54,6 +54,8 @@ class DeployController extends Controller
         'topics:diagnose',
         'pool:test-generate',
         'premium:gift',
+        'user:promote-teacher',
+        'user:promote-admin',
         'user:set-referrer',
         'user:delete-telegram',
         'qa:setup-users',

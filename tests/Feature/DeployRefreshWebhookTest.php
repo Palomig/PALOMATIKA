@@ -53,4 +53,19 @@ class DeployRefreshWebhookTest extends TestCase
                 'command' => 'deploy:refresh',
             ]);
     }
+
+    public function test_deploy_commands_endpoint_includes_user_role_promotion_commands(): void
+    {
+        $response = $this->withHeaders([
+            'X-Deploy-Secret' => 'test-secret',
+        ])->getJson('/api/deploy/commands');
+
+        $response->assertOk();
+
+        $commands = $response->json('commands');
+
+        $this->assertIsArray($commands);
+        $this->assertContains('user:promote-teacher', $commands);
+        $this->assertContains('user:promote-admin', $commands);
+    }
 }
