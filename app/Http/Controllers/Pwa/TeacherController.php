@@ -685,7 +685,7 @@ class TeacherController extends Controller
             ->selectRaw($activitySql . ' as activity_at')
             ->orderByRaw('COALESCE(' . $activitySql . ', users.created_at) DESC')
             ->orderBy('users.name')
-            ->limit(250)
+            ->limit(2000)
             ->get()
             ->map(function (User $student) use ($relations) {
                 $relation = $relations->get($student->id);
@@ -724,7 +724,7 @@ class TeacherController extends Controller
         }
     }
 
-    protected function resolveEvriumSlots(array $slots, \Illuminate\Support\Collection $relations): array
+    protected function resolveEvriumSlots(array $slots, \Illuminate\Support\Collection $relations, ?string $lessonDate = null): array
     {
         $evriumMap = [];
         foreach ($relations as $rel) {
@@ -751,6 +751,7 @@ class TeacherController extends Controller
                     'evrium_name' => $evriumName,
                     'time_start' => $slot['time_start'] ?? '',
                     'time_end' => $slot['time_end'] ?? '',
+                    'lesson_date' => $lessonDate,
                     'student_id' => $first?->student_id,
                     'student_ids' => $linkedRelations->pluck('student_id')->map(fn ($id) => (int) $id)->values()->all(),
                     'student_name' => $first ? ($first->student?->name ?? 'Ученик #' . $first->student_id) : null,
@@ -820,25 +821,38 @@ class TeacherController extends Controller
     {
         $dow = (int) now()->format('N');
         $dayNames = [1 => 'Пн', 2 => 'Вт', 3 => 'Ср', 4 => 'Чт', 5 => 'Пт', 6 => 'Сб', 7 => 'Вс'];
+        $todayDate = now()->toDateString();
 
         $relations = TeacherStudent::where('teacher_id', $user->id)->with('student:id,name,last_active_at')->get();
         $evriumSlots = $this->fetchEvriumSchedule($user->id);
         $todayEvrium = array_filter($evriumSlots, fn($s) => ($s['day'] ?? 0) === $dow);
         $todayLessons = $this->buildTodayLessonSlots($todayEvrium, $relations);
-        $currentStudents = $this->resolveEvriumSlots($todayEvrium, $relations);
+        $currentStudents = $this->resolveEvriumSlots($todayEvrium, $relations, $todayDate);
 
         $prevStudents = [];
         $prevDayLabel = '';
+        $prevDate = null;
         for ($offset = 1; $offset <= 7; $offset++) {
             $checkDow = (($dow - 1 - $offset % 7) + 7) % 7 + 1;
             $daySlots = array_filter($evriumSlots, fn($s) => ($s['day'] ?? 0) === $checkDow);
             if (!empty($daySlots)) {
-                $prevStudents = $this->resolveEvriumSlots($daySlots, $relations);
+                $prevDate = now()->subDays($offset)->toDateString();
+                $prevStudents = $this->resolveEvriumSlots($daySlots, $relations, $prevDate);
                 $prevDayLabel = $dayNames[$checkDow];
                 break;
             }
         }
 
-        return ['relations' => $relations, 'evriumSlots' => $evriumSlots, 'todayLessons' => $todayLessons, 'currentStudents' => $currentStudents, 'prevStudents' => $prevStudents, 'prevDayLabel' => $prevDayLabel, 'todayLabel' => $dayNames[$dow]];
+        return [
+            'relations' => $relations,
+            'evriumSlots' => $evriumSlots,
+            'todayLessons' => $todayLessons,
+            'currentStudents' => $currentStudents,
+            'prevStudents' => $prevStudents,
+            'prevDayLabel' => $prevDayLabel,
+            'prevDate' => $prevDate,
+            'todayLabel' => $dayNames[$dow],
+            'todayDate' => $todayDate,
+        ];
     }
 }
