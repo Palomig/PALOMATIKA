@@ -123,6 +123,7 @@ Route::domain('teacher.' . config('app.base_domain'))->group(function () {
         Route::patch('/students/{studentId}/link', [TeacherController::class, 'updateStudentLink'])->name('pwa.teacher.student.link');
         Route::get('/lessons', [TeacherController::class, 'lessons'])->name('pwa.teacher.lessons');
         Route::get('/homework', [TeacherController::class, 'homework'])->name('pwa.teacher.homework');
+        Route::get('/homework/topic-tasks/{topicNumber}', [TeacherController::class, 'topicTasks'])->name('pwa.teacher.homework.topic-tasks')->whereNumber('topicNumber');
         Route::post('/homework/assign', [TeacherController::class, 'assignHomework'])->name('pwa.teacher.homework.assign');
         Route::get('/variants', [TeacherController::class, 'variants'])->name('pwa.teacher.variants');
         Route::get('/referrals', [TeacherController::class, 'referrals'])->name('pwa.teacher.referrals');

@@ -489,8 +489,10 @@ class TeacherController extends Controller
             'student_id' => 'nullable|exists:users,id',
             'student_ids' => 'nullable|array',
             'student_ids.*' => 'exists:users,id',
-            'type' => 'required|in:full_variant,topic_practice,topic_photo_practice',
-            'topic_number' => 'required_if:type,topic_practice,topic_photo_practice|nullable|integer',
+            'type' => 'required|in:mini_variant,topic_photo_practice',
+            'topic_number' => 'required_if:type,topic_photo_practice|nullable|integer',
+            'task_indices' => 'nullable|array|max:60',
+            'task_indices.*' => 'integer|min:0',
         ]);
 
         $studentIds = collect($data['student_ids'] ?? [])
@@ -520,17 +522,30 @@ class TeacherController extends Controller
                 return back()->with('error', 'Выберите тему.');
             }
 
-            $tasks = $this->selectTopicHomeworkTasks($topicNumber, 10);
-            if (count($tasks) < 10) {
-                return back()->with('error', 'В выбранной теме меньше 10 задач с ответами.');
+            $allTasks = $this->collectAllTopicHomeworkTasks($topicNumber);
+            if (count($allTasks) === 0) {
+                return back()->with('error', 'В выбранной теме нет задач с ответами.');
             }
+
+            $indices = collect($data['task_indices'] ?? [])
+                ->map(fn ($i) => (int) $i)
+                ->filter(fn ($i) => $i >= 0 && $i < count($allTasks))
+                ->unique()
+                ->values();
+
+            if ($indices->isEmpty()) {
+                return back()->with('error', 'Выберите хотя бы одну задачу.');
+            }
+
+            $tasks = $indices->map(fn (int $i) => $allTasks[$i])->values()->all();
+            $tasksCount = count($tasks);
 
             $homework = new \App\Models\Homework();
             $homework->teacher_id = $user->id;
             $homework->homework_type = 'topic_photo_practice';
             $homework->topic_number = $topicNumber;
-            $homework->tasks_count = 10;
-            $homework->title = "Тема {$topicNumber}: 10 задач с фото решения";
+            $homework->tasks_count = $tasksCount;
+            $homework->title = "Тема {$topicNumber}: {$tasksCount} " . $this->pluralizeTasks($tasksCount) . ' с фото решения';
             $homework->assigned_at = now();
             $homework->save();
 
@@ -549,57 +564,82 @@ class TeacherController extends Controller
                     'homework_id' => $homework->id,
                     'student_id' => $studentId,
                     'status' => 'assigned',
-                    'tasks_total' => 10,
+                    'tasks_total' => $tasksCount,
                 ]);
             }
 
             return back()->with('success', 'ДЗ выдано!');
         }
 
+        // mini_variant
         $studentId = (int) $studentIds->first();
+        $student = User::findOrFail($studentId);
+        try {
+            $variant = $this->poolService->getOrCreateVariant($student, 'mixed');
+        } catch (\RuntimeException $e) {
+            return back()->with('error', 'Не удалось создать мини-вариант: ' . $e->getMessage());
+        }
 
         $homework = new \App\Models\Homework();
         $homework->teacher_id = $user->id;
-        $homework->homework_type = $data['type'];
-
-        if ($data['type'] === 'full_variant') {
-            $student = User::findOrFail($studentId);
-            try {
-                $variant = $this->poolService->getOrCreateVariant($student, 'full');
-            } catch (\RuntimeException $e) {
-                return back()->with('error', 'Не удалось создать вариант: ' . $e->getMessage());
-            }
-            $homework->variant_hash = $variant->hash;
-            $homework->title = 'Полный вариант ОГЭ';
-        } else {
-            $homework->topic_number = (int) $data['topic_number'];
-            $homework->title = 'Тема ' . (int) $data['topic_number'];
-        }
-
+        $homework->homework_type = 'full_variant';
+        $homework->variant_hash = $variant->hash;
+        $homework->title = 'Мини-вариант ОГЭ';
         $homework->assigned_at = now();
         $homework->save();
 
         \App\Models\HomeworkAssignment::create(['homework_id' => $homework->id, 'student_id' => $studentId, 'status' => 'assigned']);
 
-        return back()->with('success', 'ДЗ выдано!');
+        return back()->with('success', 'Мини-вариант выдан!');
+    }
+
+    public function topicTasks(int $topicNumber): \Illuminate\Http\JsonResponse
+    {
+        $tasks = $this->collectAllTopicHomeworkTasks($topicNumber);
+        $list = array_map(function (array $entry, int $index) {
+            $payload = $entry['payload'];
+            $text = (string) ($payload['text_html'] ?? $payload['text'] ?? $payload['question'] ?? $payload['expression'] ?? $payload['prompt'] ?? '');
+            $text = trim(preg_replace('/\s+/u', ' ', strip_tags($text)) ?? '');
+            if (mb_strlen($text) > 120) {
+                $text = mb_substr($text, 0, 117) . '…';
+            }
+
+            return [
+                'index' => $index,
+                'task_order_hint' => $index + 1,
+                'instruction' => (string) ($payload['instruction'] ?? ''),
+                'text' => $text,
+                'answer' => (string) $entry['answer'],
+            ];
+        }, $tasks, array_keys($tasks));
+
+        return response()->json(['topic_number' => $topicNumber, 'tasks' => $list]);
+    }
+
+    private function pluralizeTasks(int $count): string
+    {
+        $mod100 = $count % 100;
+        if ($mod100 >= 11 && $mod100 <= 14) {
+            return 'задач';
+        }
+        $mod10 = $count % 10;
+        if ($mod10 === 1) return 'задача';
+        if ($mod10 >= 2 && $mod10 <= 4) return 'задачи';
+        return 'задач';
     }
 
     /**
      * @return array<int, array{payload: array<string, mixed>, answer: string}>
      */
-    private function selectTopicHomeworkTasks(int $topicNumber, int $count): array
+    private function collectAllTopicHomeworkTasks(int $topicNumber): array
     {
         $topicId = str_pad((string) $topicNumber, 2, '0', STR_PAD_LEFT);
-        $blocks = $this->taskData->getBlocks($topicId, 'production');
-        $tasks = $this->collectTopicHomeworkTasks($topicId, $blocks);
-
-        if (count($tasks) < $count) {
+        $tasks = $this->collectTopicHomeworkTasks($topicId, $this->taskData->getBlocks($topicId, 'production'));
+        if (count($tasks) === 0) {
             $tasks = $this->collectTopicHomeworkTasks($topicId, $this->taskData->getBlocks($topicId));
         }
 
-        shuffle($tasks);
-
-        return array_slice($tasks, 0, $count);
+        return $tasks;
     }
 
     /**

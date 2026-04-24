@@ -44,10 +44,53 @@
   }
   .notice-ok { color: #86efac; background: rgba(34,197,94,.14); border: 1px solid rgba(34,197,94,.24); }
   .notice-error { color: #fecaca; background: rgba(239,68,68,.14); border: 1px solid rgba(239,68,68,.24); }
+
+  .photo-slot { display: flex; align-items: center; gap: 10px; }
+  .photo-label {
+    flex: 1; display: flex; align-items: center; gap: 8px;
+    padding: 10px 12px; border-radius: 10px; cursor: pointer;
+    background: var(--surface2); border: 1px dashed var(--border);
+    color: var(--muted); font-size: 12px; font-weight: 700;
+  }
+  .photo-label.has-file { color: var(--green); border-color: rgba(34,197,94,.4); border-style: solid; background: rgba(34,197,94,.08); }
+  .photo-label input { display: none; }
+  .photo-label-icon { font-size: 18px; }
+
+  .hw-modal-overlay {
+    position: fixed; inset: 0; z-index: 250;
+    background: rgba(0,0,0,.6); backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .hw-modal {
+    width: 100%; max-width: 360px;
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 22px 22px 18px;
+    box-shadow: 0 20px 50px rgba(0,0,0,.45);
+    text-align: center;
+    animation: fadeUp 0.25s ease;
+  }
+  .hw-modal-icon {
+    font-size: 34px; margin-bottom: 6px;
+  }
+  .hw-modal-title {
+    font-family: var(--display); font-size: 18px; color: var(--text);
+    margin-bottom: 6px;
+  }
+  .hw-modal-body {
+    color: var(--muted); font-size: 13px; font-weight: 600; line-height: 1.45;
+    margin-bottom: 16px;
+  }
+  .hw-modal-btn {
+    width: 100%; border: none; border-radius: 10px; padding: 11px 14px;
+    background: var(--accent); color: #fff; font-weight: 900; font-size: 13px;
+    cursor: pointer;
+  }
+  .hw-modal-btn:active { opacity: .75; }
 @endpush
 
 @section('body')
-<div class="page">
+<div class="page" x-data="hwTopicPractice()">
   <div class="topbar">
     <a href="{{ route('pwa.student.homework') }}" class="back">←</a>
     <div class="topbar-title">Домашка</div>
@@ -93,14 +136,49 @@
       <div class="task-text">{!! $text !!}</div>
 
       @if(!$accepted)
-        <form class="task-form" method="POST" action="{{ route('pwa.student.homework.topic.submit', [$assignment, $task]) }}" enctype="multipart/form-data">
+        <form class="task-form" method="POST" action="{{ route('pwa.student.homework.topic.submit', [$assignment, $task]) }}" enctype="multipart/form-data"
+              x-data="{ hasFile: false }" @submit="onTaskFormSubmit($event, $data)">
           @csrf
           <input class="task-input" type="text" name="answer" placeholder="Ответ" value="{{ old('answer') }}" required>
-          <input class="file-input" type="file" name="solution_photo" accept="image/*" required>
+          <div class="photo-slot">
+            <label class="photo-label" :class="hasFile && 'has-file'">
+              <span class="photo-label-icon">📷</span>
+              <span x-text="hasFile ? 'Фото решения прикреплено' : 'Прикрепить фото решения'"></span>
+              <input type="file" name="solution_photo" accept="image/*" capture="environment"
+                     @change="hasFile = $event.target.files && $event.target.files.length > 0">
+            </label>
+          </div>
           <button class="submit-btn" type="submit">{{ $needsRetry ? 'Отправить вторую попытку' : 'Отправить' }}</button>
         </form>
       @endif
     </div>
   @endforeach
+
+  <template x-if="showPhotoModal">
+    <div class="hw-modal-overlay" @click.self="showPhotoModal = false">
+      <div class="hw-modal">
+        <div class="hw-modal-icon">📷</div>
+        <div class="hw-modal-title">Нужно фото решения</div>
+        <div class="hw-modal-body">Без фото решения домашняя работа не принимается. Сфотографируй тетрадь с решением и прикрепи фото к ответу.</div>
+        <button type="button" class="hw-modal-btn" @click="showPhotoModal = false">Понятно</button>
+      </div>
+    </div>
+  </template>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+function hwTopicPractice() {
+  return {
+    showPhotoModal: false,
+    onTaskFormSubmit(event, scope) {
+      if (!scope.hasFile) {
+        event.preventDefault();
+        this.showPhotoModal = true;
+      }
+    },
+  };
+}
+</script>
+@endpush

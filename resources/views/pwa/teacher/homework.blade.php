@@ -180,6 +180,30 @@
   .profile-option-time { font-size: 11px; font-weight: 800; color: var(--accent); white-space: nowrap; }
   .profile-option-hit { color: var(--green); }
   .profile-empty { text-align: center; padding: 20px 10px; color: var(--muted); font-size: 12px; font-weight: 600; }
+
+  .task-pick-list {
+    max-height: 280px; overflow-y: auto;
+    display: flex; flex-direction: column; gap: 6px;
+    padding-right: 2px;
+  }
+  .task-pick {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 9px 11px; border-radius: 10px;
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text); font-size: 12px; cursor: pointer;
+    line-height: 1.35;
+  }
+  .task-pick-active { border-color: var(--accent-bd); background: var(--accent-bg); }
+  .task-pick input[type=checkbox] { margin-top: 2px; flex-shrink: 0; }
+  .task-pick-body { flex: 1; min-width: 0; }
+  .task-pick-head {
+    display: flex; justify-content: space-between; gap: 6px;
+    font-weight: 800; margin-bottom: 2px;
+  }
+  .task-pick-num { color: var(--text); font-size: 12px; }
+  .task-pick-answer { color: var(--muted); font-size: 10px; font-weight: 700; white-space: nowrap; }
+  .task-pick-instruction { color: var(--muted); font-size: 10px; font-weight: 700; margin-bottom: 2px; }
+  .task-pick-text { color: var(--text); font-size: 12px; font-weight: 600; }
 @endpush
 
 @section('body')
@@ -363,45 +387,67 @@
         <div class="fv-handle"></div>
         <div class="fv-title">ДЗ для <span x-text="assignName"></span></div>
 
-        <form method="POST" action="/homework/assign">
+        <form method="POST" action="/homework/assign" @submit="handleAssignSubmit($event)">
           @csrf
           <input type="hidden" name="student_id" :value="assignStudentId">
 
-          <div class="fv-option" style="cursor:pointer" @click="$refs.typeFullVariant.checked = true; selectedType = 'full_variant'">
+          <div class="fv-option" style="cursor:pointer" @click="$refs.typeMiniVariant.checked = true; selectedType = 'mini_variant'">
             <div class="fv-opt-icon">📝</div>
             <div>
-              <div class="fv-opt-title">Полный вариант</div>
-              <div class="fv-opt-desc">Автоматически создать и выдать полный вариант ОГЭ</div>
+              <div class="fv-opt-title">Мини-вариант</div>
+              <div class="fv-opt-desc">7 задач (4 алгебра + 3 геометрия), автоматически сгенерирован</div>
             </div>
-            <input type="radio" name="type" value="full_variant" x-ref="typeFullVariant" x-model="selectedType">
-          </div>
-
-          <div class="fv-option" style="cursor:pointer" @click="$refs.typeTopic.checked = true; selectedType = 'topic_practice'">
-            <div class="fv-opt-icon">🎯</div>
-            <div>
-              <div class="fv-opt-title">Практика по теме</div>
-              <div class="fv-opt-desc">Выдать задания по конкретной теме</div>
-            </div>
-            <input type="radio" name="type" value="topic_practice" x-ref="typeTopic" x-model="selectedType">
+            <input type="radio" name="type" value="mini_variant" x-ref="typeMiniVariant" x-model="selectedType">
           </div>
 
           <div class="fv-option" style="cursor:pointer" @click="$refs.typePhotoTopic.checked = true; selectedType = 'topic_photo_practice'">
-            <div class="fv-opt-icon">▣</div>
+            <div class="fv-opt-icon">🎯</div>
             <div>
-              <div class="fv-opt-title">10 задач с фото</div>
-              <div class="fv-opt-desc">Ученик вводит ответ и прикрепляет фото решения</div>
+              <div class="fv-opt-title">Практика по теме</div>
+              <div class="fv-opt-desc">Выбираешь тему и конкретные задачи. Ученик решает и прикладывает фото решения</div>
             </div>
             <input type="radio" name="type" value="topic_photo_practice" x-ref="typePhotoTopic" x-model="selectedType">
           </div>
 
-          <div x-show="selectedType === 'topic_practice' || selectedType === 'topic_photo_practice'" x-cloak style="margin-top:12px;">
+          <div x-show="selectedType === 'topic_photo_practice'" x-cloak style="margin-top:12px;">
             <label style="display:block; font-size:12px; color:var(--muted); margin-bottom:6px;">Тема</label>
-            <select name="topic_number" style="width:100%; padding:12px; border-radius:10px; border:1px solid var(--border); background:var(--surface); color:var(--text);">
+            <select name="topic_number" x-model="selectedTopic" @change="onTopicChange()" style="width:100%; padding:12px; border-radius:10px; border:1px solid var(--border); background:var(--surface); color:var(--text);">
               <option value="">Выберите тему</option>
               @foreach($topicOptions as $topic)
                 <option value="{{ $topic['number'] }}">Тема {{ $topic['number'] }} · {{ $topic['title'] }}</option>
               @endforeach
             </select>
+          </div>
+
+          <div x-show="selectedType === 'topic_photo_practice' && selectedTopic" x-cloak style="margin-top:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <label style="font-size:12px; color:var(--muted);">Задачи <span x-text="taskPickerLabel()"></span></label>
+              <div style="display:flex; gap:6px;">
+                <button type="button" class="link-btn" style="padding:4px 8px;" @click="selectAllTopicTasks()">Все</button>
+                <button type="button" class="link-btn" style="padding:4px 8px;" @click="selectRandomTopicTasks(10)">Случайные 10</button>
+                <button type="button" class="link-btn" style="padding:4px 8px;" @click="clearTopicTasks()">Сбросить</button>
+              </div>
+            </div>
+            <div x-show="topicTasksLoading" x-cloak class="profile-empty">Загрузка задач…</div>
+            <div x-show="!topicTasksLoading && topicTasksError" x-cloak class="profile-empty" style="color:var(--red);" x-text="topicTasksError"></div>
+            <div x-show="!topicTasksLoading && !topicTasksError" class="task-pick-list" x-cloak>
+              <template x-for="task in topicTasks" :key="task.index">
+                <label class="task-pick" :class="selectedTaskIndices.includes(task.index) && 'task-pick-active'">
+                  <input type="checkbox" name="task_indices[]" :value="task.index"
+                         :checked="selectedTaskIndices.includes(task.index)"
+                         @change="toggleTaskIndex(task.index)">
+                  <div class="task-pick-body">
+                    <div class="task-pick-head">
+                      <span class="task-pick-num" x-text="'#' + task.task_order_hint"></span>
+                      <span class="task-pick-answer" x-text="'ответ: ' + task.answer"></span>
+                    </div>
+                    <div class="task-pick-instruction" x-show="task.instruction" x-text="task.instruction"></div>
+                    <div class="task-pick-text" x-text="task.text"></div>
+                  </div>
+                </label>
+              </template>
+              <div x-show="topicTasks.length === 0" class="profile-empty">В этой теме нет задач с ответами.</div>
+            </div>
           </div>
 
           <div x-show="selectedType === 'topic_photo_practice'" x-cloak style="margin-top:12px;">
@@ -488,12 +534,17 @@ function teacherHw() {
     profileSearch: '',
     profileMode: 'all',
     profiles: @json($profileLinkOptions),
+    selectedTopic: '',
+    topicTasks: [],
+    topicTasksLoading: false,
+    topicTasksError: '',
+    selectedTaskIndices: [],
 
     openAssign(studentId, name) {
       this.assignStudentId = studentId;
       this.assignStudentIds = [studentId];
       this.assignName = name;
-      this.selectedType = 'full_variant';
+      this.resetAssignForm();
       this.showAssign = true;
     },
 
@@ -502,8 +553,82 @@ function teacherHw() {
       this.assignStudentId = ids[0] || null;
       this.assignStudentIds = ids;
       this.assignName = name;
-      this.selectedType = 'full_variant';
+      this.resetAssignForm();
       this.showAssign = true;
+    },
+
+    resetAssignForm() {
+      this.selectedType = 'mini_variant';
+      this.selectedTopic = '';
+      this.topicTasks = [];
+      this.topicTasksError = '';
+      this.selectedTaskIndices = [];
+    },
+
+    async onTopicChange() {
+      this.selectedTaskIndices = [];
+      this.topicTasks = [];
+      this.topicTasksError = '';
+      if (!this.selectedTopic) return;
+      this.topicTasksLoading = true;
+      try {
+        const res = await fetch(`/homework/topic-tasks/${this.selectedTopic}`, {
+          credentials: 'include',
+          headers: { 'Accept': 'application/json' },
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        this.topicTasks = Array.isArray(data.tasks) ? data.tasks : [];
+      } catch (e) {
+        this.topicTasksError = 'Не удалось загрузить задачи темы.';
+      } finally {
+        this.topicTasksLoading = false;
+      }
+    },
+
+    toggleTaskIndex(idx) {
+      const i = this.selectedTaskIndices.indexOf(idx);
+      if (i >= 0) this.selectedTaskIndices.splice(i, 1);
+      else this.selectedTaskIndices.push(idx);
+    },
+
+    selectAllTopicTasks() {
+      this.selectedTaskIndices = this.topicTasks.map(t => t.index);
+    },
+
+    selectRandomTopicTasks(n) {
+      const all = this.topicTasks.map(t => t.index);
+      for (let i = all.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [all[i], all[j]] = [all[j], all[i]];
+      }
+      this.selectedTaskIndices = all.slice(0, Math.min(n, all.length));
+    },
+
+    clearTopicTasks() {
+      this.selectedTaskIndices = [];
+    },
+
+    taskPickerLabel() {
+      const total = this.topicTasks.length;
+      const picked = this.selectedTaskIndices.length;
+      if (total === 0) return '';
+      return `(${picked} из ${total})`;
+    },
+
+    handleAssignSubmit(event) {
+      if (this.selectedType === 'topic_photo_practice') {
+        if (!this.selectedTopic) {
+          event.preventDefault();
+          alert('Выберите тему.');
+          return;
+        }
+        if (this.selectedTaskIndices.length === 0) {
+          event.preventDefault();
+          alert('Выберите хотя бы одну задачу.');
+          return;
+        }
+      }
     },
 
     openLink(evriumName, timeStart, timeEnd, lessonDate) {
