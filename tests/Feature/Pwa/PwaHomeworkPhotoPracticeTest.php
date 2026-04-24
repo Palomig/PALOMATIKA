@@ -146,6 +146,41 @@ class PwaHomeworkPhotoPracticeTest extends TestCase
         ]);
     }
 
+    public function test_teacher_assigns_mini_vpr_to_grade_5_student(): void
+    {
+        $teacher = User::factory()->create([
+            'role' => 'teacher',
+            'onboarding_completed_at' => now(),
+        ]);
+        $student = User::factory()->create([
+            'role' => 'student',
+            'grade_num' => 5,
+            'onboarding_completed_at' => now(),
+        ]);
+        TeacherStudent::create([
+            'teacher_id' => $teacher->id,
+            'student_id' => $student->id,
+            'source' => 'manual',
+        ]);
+
+        $response = $this->actingAs($teacher)->post('http://teacher.palomatika.ru/homework/assign', [
+            'type' => 'mini_variant',
+            'student_id' => $student->id,
+        ]);
+
+        $response->assertRedirect();
+        $response->assertSessionHasNoErrors();
+        $response->assertSessionHas('success');
+
+        $homework = Homework::query()->latest('id')->first();
+        $this->assertNotNull($homework);
+        $this->assertSame('Мини-ВПР 5 класс', $homework->title);
+        $this->assertNotNull($homework->variant_hash);
+
+        $variant = \App\Models\OgeVariant::where('hash', $homework->variant_hash)->firstOrFail();
+        $this->assertSame('vpr_5', $variant->exam_type);
+    }
+
     public function test_teacher_can_link_multiple_profiles_to_same_evrium_student(): void
     {
         $teacher = User::factory()->create([

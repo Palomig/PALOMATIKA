@@ -394,8 +394,8 @@
           <div class="fv-option" style="cursor:pointer" @click="$refs.typeMiniVariant.checked = true; selectedType = 'mini_variant'">
             <div class="fv-opt-icon">📝</div>
             <div>
-              <div class="fv-opt-title">Мини-вариант</div>
-              <div class="fv-opt-desc">7 задач (4 алгебра + 3 геометрия), автоматически сгенерирован</div>
+              <div class="fv-opt-title" x-text="miniVariantTitle()"></div>
+              <div class="fv-opt-desc" x-text="miniVariantDesc()"></div>
             </div>
             <input type="radio" name="type" value="mini_variant" x-ref="typeMiniVariant" x-model="selectedType">
           </div>
@@ -539,6 +539,30 @@ function teacherHw() {
     topicTasksLoading: false,
     topicTasksError: '',
     selectedTaskIndices: [],
+    studentGrades: @json($studentGrades ?? (object) []),
+
+    assignStudentGrade() {
+      if (!this.assignStudentId) return null;
+      const g = this.studentGrades[this.assignStudentId];
+      return typeof g === 'number' ? g : null;
+    },
+
+    isAssignVpr() {
+      const g = this.assignStudentGrade();
+      return g !== null && g >= 5 && g <= 8;
+    },
+
+    miniVariantTitle() {
+      const g = this.assignStudentGrade();
+      if (g !== null && g >= 5 && g <= 8) return `Мини-ВПР ${g} класс`;
+      return 'Мини-вариант ОГЭ';
+    },
+
+    miniVariantDesc() {
+      return this.isAssignVpr()
+        ? 'Короткий вариант ВПР, автоматически сгенерирован под класс ученика'
+        : '7 задач (4 алгебра + 3 геометрия), автоматически сгенерирован';
+    },
 
     openAssign(studentId, name) {
       this.assignStudentId = studentId;

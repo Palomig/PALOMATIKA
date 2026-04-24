@@ -14,6 +14,9 @@ use App\Services\AuditLogger;
 use App\Services\OgeVariantPoolService;
 use App\Services\TaskDataService;
 use App\Services\VariantTaskNumberResolver;
+use App\Services\VprTaskDataService;
+use App\Services\VprVariantBuilderService;
+use App\Services\VprVariantPoolService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -451,13 +454,17 @@ class TeacherController extends Controller
         $prevDayLabel = $scheduleData['prevDayLabel'];
 
         $allStudentIds = $relations->pluck('student_id');
-        $allStudents = User::whereIn('id', $allStudentIds)->select('id', 'name')->orderBy('name')->get();
+        $allStudents = User::whereIn('id', $allStudentIds)->select('id', 'name', 'grade_num')->orderBy('name')->get();
 
         $relMap = $relations->keyBy('student_id');
         foreach ($allStudents as $s) {
             $s->evrium_name = $relMap[$s->id]->evrium_name ?? null;
             $s->student_alias = $relMap[$s->id]->student_alias ?? null;
         }
+
+        $studentGrades = $allStudents
+            ->mapWithKeys(fn (User $s) => [(int) $s->id => $s->grade_num !== null ? (int) $s->grade_num : null])
+            ->all();
 
         $allEvriumNames = collect($evriumSlots)->pluck('students')->flatten()->unique()->sort()->values()->all();
         $profileLinkOptions = $this->collectProfileLinkOptions((int) $user->id);
@@ -477,7 +484,7 @@ class TeacherController extends Controller
         $recentHomework->load('assignments.student:id,name');
 
         return view('pwa.teacher.homework', compact(
-            'user', 'currentStudents', 'prevStudents', 'prevDayLabel', 'allStudents', 'allEvriumNames', 'profileLinkOptions', 'topicOptions', 'recentHomework'
+            'user', 'currentStudents', 'prevStudents', 'prevDayLabel', 'allStudents', 'allEvriumNames', 'profileLinkOptions', 'topicOptions', 'recentHomework', 'studentGrades'
         ) + ['todayLabel' => $scheduleData['todayLabel']]);
     }
 
@@ -574,8 +581,19 @@ class TeacherController extends Controller
         // mini_variant
         $studentId = (int) $studentIds->first();
         $student = User::findOrFail($studentId);
+
         try {
-            $variant = $this->poolService->getOrCreateVariant($student, 'mixed');
+            if ($this->isVprGrade($student)) {
+                $grade = (int) $student->grade_num;
+                $pool = $this->buildVprPool($grade);
+                $variant = $pool->getOrCreateVariant($student, 'mixed');
+                $title = "Мини-ВПР {$grade} класс";
+                $success = "Мини-ВПР {$grade} класс выдан!";
+            } else {
+                $variant = $this->poolService->getOrCreateVariant($student, 'mixed');
+                $title = 'Мини-вариант ОГЭ';
+                $success = 'Мини-вариант выдан!';
+            }
         } catch (\RuntimeException $e) {
             return back()->with('error', 'Не удалось создать мини-вариант: ' . $e->getMessage());
         }
@@ -584,13 +602,26 @@ class TeacherController extends Controller
         $homework->teacher_id = $user->id;
         $homework->homework_type = 'full_variant';
         $homework->variant_hash = $variant->hash;
-        $homework->title = 'Мини-вариант ОГЭ';
+        $homework->title = $title;
         $homework->assigned_at = now();
         $homework->save();
 
         \App\Models\HomeworkAssignment::create(['homework_id' => $homework->id, 'student_id' => $studentId, 'status' => 'assigned']);
 
-        return back()->with('success', 'Мини-вариант выдан!');
+        return back()->with('success', $success);
+    }
+
+    private function isVprGrade(User $student): bool
+    {
+        $grade = (int) ($student->grade_num ?? 0);
+        return $grade >= 5 && $grade <= 8;
+    }
+
+    private function buildVprPool(int $grade): VprVariantPoolService
+    {
+        $taskData = new VprTaskDataService($grade);
+        $builder = new VprVariantBuilderService($taskData);
+        return new VprVariantPoolService($taskData, $builder);
     }
 
     public function topicTasks(int $topicNumber): \Illuminate\Http\JsonResponse
