@@ -129,7 +129,12 @@ class TeacherController extends Controller
         $evriumSlots = $this->fetchEvriumSchedule($teacherId);
         $daySlots = array_filter($evriumSlots, fn($s) => ($s['day'] ?? 0) === $selectedDay);
         $scheduledStudents = $this->resolveEvriumSlots($daySlots, $relations);
-        $scheduledStudentIds = collect($scheduledStudents)->pluck('student_id')->filter()->map(fn($id) => (int)$id)->unique()->values();
+        $scheduledStudentIds = collect($scheduledStudents)
+            ->flatMap(fn ($student) => $student['student_ids'] ?? [$student['student_id'] ?? null])
+            ->filter()
+            ->map(fn($id) => (int)$id)
+            ->unique()
+            ->values();
 
         $dayNames = [1 => 'Пн', 2 => 'Вт', 3 => 'Ср', 4 => 'Чт', 5 => 'Пт', 6 => 'Сб', 7 => 'Вс'];
         $todayDow = (int) now()->format('N');
@@ -455,6 +460,7 @@ class TeacherController extends Controller
         }
 
         $allEvriumNames = collect($evriumSlots)->pluck('students')->flatten()->unique()->sort()->values()->all();
+        $profileLinkOptions = $this->collectProfileLinkOptions((int) $user->id);
         $topicOptions = collect($this->taskData->getAllTopicsMeta())
             ->map(fn (array $meta, string $topicId) => [
                 'number' => (int) ltrim($topicId, '0'),
@@ -471,7 +477,7 @@ class TeacherController extends Controller
         $recentHomework->load('assignments.student:id,name');
 
         return view('pwa.teacher.homework', compact(
-            'user', 'currentStudents', 'prevStudents', 'prevDayLabel', 'allStudents', 'allEvriumNames', 'topicOptions', 'recentHomework'
+            'user', 'currentStudents', 'prevStudents', 'prevDayLabel', 'allStudents', 'allEvriumNames', 'profileLinkOptions', 'topicOptions', 'recentHomework'
         ) + ['todayLabel' => $scheduleData['todayLabel']]);
     }
 
@@ -636,7 +642,11 @@ class TeacherController extends Controller
     {
         $user = $request->user();
         $data = $request->validate(['evrium_name' => 'nullable|string|max:100', 'alias' => 'nullable|string|max:80']);
-        $relation = TeacherStudent::where('teacher_id', $user->id)->where('student_id', $studentId)->firstOrFail();
+        $student = User::where('role', 'student')->findOrFail($studentId);
+        $relation = TeacherStudent::firstOrCreate(
+            ['teacher_id' => $user->id, 'student_id' => $student->id],
+            ['source' => 'manual']
+        );
 
         if (array_key_exists('evrium_name', $data)) {
             $val = trim((string) ($data['evrium_name'] ?? ''));
@@ -649,6 +659,51 @@ class TeacherController extends Controller
 
         $relation->save();
         return response()->json(['ok' => true]);
+    }
+
+    private function collectProfileLinkOptions(int $teacherId): array
+    {
+        $attemptActivity = DB::table('oge_attempts')
+            ->selectRaw('student_id, MAX(COALESCE(last_seen_at, submitted_at, started_at, updated_at, created_at)) as attempt_activity_at')
+            ->groupBy('student_id');
+        $activitySql = 'CASE
+            WHEN users.last_active_at IS NULL THEN attempt_activity.attempt_activity_at
+            WHEN attempt_activity.attempt_activity_at IS NULL THEN users.last_active_at
+            WHEN users.last_active_at >= attempt_activity.attempt_activity_at THEN users.last_active_at
+            ELSE attempt_activity.attempt_activity_at
+        END';
+
+        $relations = TeacherStudent::where('teacher_id', $teacherId)
+            ->get(['student_id', 'student_alias', 'evrium_name'])
+            ->keyBy('student_id');
+
+        return User::where('users.role', 'student')
+            ->leftJoinSub($attemptActivity, 'attempt_activity', function ($join) {
+                $join->on('attempt_activity.student_id', '=', 'users.id');
+            })
+            ->select(['users.id', 'users.name', 'users.email', 'users.last_active_at'])
+            ->selectRaw($activitySql . ' as activity_at')
+            ->orderByRaw('COALESCE(' . $activitySql . ', users.created_at) DESC')
+            ->orderBy('users.name')
+            ->limit(250)
+            ->get()
+            ->map(function (User $student) use ($relations) {
+                $relation = $relations->get($student->id);
+                $activityAt = $student->activity_at ? Carbon::parse($student->activity_at) : null;
+
+                return [
+                    'id' => (int) $student->id,
+                    'name' => $student->name ?: 'Ученик #' . $student->id,
+                    'email' => $student->email,
+                    'last_active_at' => $activityAt?->toIso8601String(),
+                    'last_active_label' => $activityAt ? $activityAt->format('d.m H:i') . ' · ' . $activityAt->diffForHumans(short: true) : 'нет активности',
+                    'linked_evrium_name' => $relation?->evrium_name,
+                    'student_alias' => $relation?->student_alias,
+                    'is_linked_to_teacher' => $relation !== null,
+                ];
+            })
+            ->values()
+            ->all();
     }
 
     // ---- Schedule helpers (copied from MiniAppTeacherController) ----
@@ -673,14 +728,36 @@ class TeacherController extends Controller
     {
         $evriumMap = [];
         foreach ($relations as $rel) {
-            if ($rel->evrium_name) $evriumMap[$rel->evrium_name] = $rel;
+            if ($rel->evrium_name) {
+                $evriumMap[$rel->evrium_name][] = $rel;
+            }
         }
 
         $result = [];
         foreach ($slots as $slot) {
             foreach ($slot['students'] ?? [] as $evriumName) {
-                $rel = $evriumMap[$evriumName] ?? null;
-                $result[] = ['evrium_name' => $evriumName, 'time_start' => $slot['time_start'] ?? '', 'time_end' => $slot['time_end'] ?? '', 'student_id' => $rel?->student_id, 'student_name' => $rel ? ($rel->student?->name ?? 'Ученик #' . $rel->student_id) : null, 'student_alias' => $rel?->student_alias, 'linked' => $rel !== null];
+                $linkedRelations = collect($evriumMap[$evriumName] ?? []);
+                $profiles = $linkedRelations->map(function ($rel) {
+                    return [
+                        'student_id' => (int) $rel->student_id,
+                        'student_name' => $rel->student?->name ?? 'Ученик #' . $rel->student_id,
+                        'student_alias' => $rel->student_alias,
+                        'last_active_at' => $rel->student?->last_active_at,
+                    ];
+                })->values()->all();
+                $first = $linkedRelations->first();
+
+                $result[] = [
+                    'evrium_name' => $evriumName,
+                    'time_start' => $slot['time_start'] ?? '',
+                    'time_end' => $slot['time_end'] ?? '',
+                    'student_id' => $first?->student_id,
+                    'student_ids' => $linkedRelations->pluck('student_id')->map(fn ($id) => (int) $id)->values()->all(),
+                    'student_name' => $first ? ($first->student?->name ?? 'Ученик #' . $first->student_id) : null,
+                    'student_alias' => $first?->student_alias,
+                    'linked_profiles' => $profiles,
+                    'linked' => $linkedRelations->isNotEmpty(),
+                ];
             }
         }
         return $result;
@@ -690,16 +767,32 @@ class TeacherController extends Controller
     {
         $evriumMap = [];
         foreach ($relations as $rel) {
-            if ($rel->evrium_name) $evriumMap[$rel->evrium_name] = $rel;
+            if ($rel->evrium_name) {
+                $evriumMap[$rel->evrium_name][] = $rel;
+            }
         }
 
         $result = [];
         foreach ($slots as $slot) {
             $students = [];
             foreach ($slot['students'] ?? [] as $evriumName) {
-                $rel = $evriumMap[$evriumName] ?? null;
-                $student = $rel?->student;
-                $students[] = ['evrium_name' => $evriumName, 'student_id' => $rel?->student_id, 'student_name' => $rel ? ($rel->student_alias ?: ($student?->name ?: 'Ученик #' . $rel->student_id)) : $evriumName, 'student_full_name' => $student?->name, 'student_alias' => $rel?->student_alias, 'linked' => $rel !== null];
+                $linkedRelations = collect($evriumMap[$evriumName] ?? []);
+                $first = $linkedRelations->first();
+                $student = $first?->student;
+                $students[] = [
+                    'evrium_name' => $evriumName,
+                    'student_id' => $first?->student_id,
+                    'student_ids' => $linkedRelations->pluck('student_id')->map(fn ($id) => (int) $id)->values()->all(),
+                    'student_name' => $first ? ($first->student_alias ?: ($student?->name ?: 'Ученик #' . $first->student_id)) : $evriumName,
+                    'student_full_name' => $student?->name,
+                    'student_alias' => $first?->student_alias,
+                    'linked_profiles' => $linkedRelations->map(fn ($rel) => [
+                        'student_id' => (int) $rel->student_id,
+                        'student_name' => $rel->student_alias ?: ($rel->student?->name ?? 'Ученик #' . $rel->student_id),
+                        'student_full_name' => $rel->student?->name,
+                    ])->values()->all(),
+                    'linked' => $linkedRelations->isNotEmpty(),
+                ];
             }
             $status = $this->determineLessonStatus((string) ($slot['time_start'] ?? ''), (string) ($slot['time_end'] ?? ''));
             $result[] = ['time_start' => (string) ($slot['time_start'] ?? ''), 'time_end' => (string) ($slot['time_end'] ?? ''), 'status_key' => $status['key'], 'status_label' => $status['label'], 'students' => $students];
