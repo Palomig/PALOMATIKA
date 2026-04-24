@@ -63,6 +63,49 @@ class PwaHomeworkPhotoPracticeTest extends TestCase
         }
     }
 
+    public function test_teacher_can_link_multiple_profiles_to_same_evrium_student(): void
+    {
+        $teacher = User::factory()->create([
+            'role' => 'teacher',
+            'onboarding_completed_at' => now(),
+        ]);
+        $firstProfile = User::factory()->create([
+            'role' => 'student',
+            'name' => 'Ivan Main',
+            'last_active_at' => now()->subMinutes(8),
+            'onboarding_completed_at' => now(),
+        ]);
+        $secondProfile = User::factory()->create([
+            'role' => 'student',
+            'name' => 'Ivan Duplicate',
+            'last_active_at' => now()->subHour(),
+            'onboarding_completed_at' => now(),
+        ]);
+
+        foreach ([$firstProfile, $secondProfile] as $profile) {
+            $this->actingAs($teacher)
+                ->patchJson("http://teacher.palomatika.ru/students/{$profile->id}/link", [
+                    'evrium_name' => 'Иван Иванов',
+                    'alias' => $profile->name,
+                ])
+                ->assertOk()
+                ->assertJson(['ok' => true]);
+        }
+
+        $this->assertDatabaseHas('teacher_students', [
+            'teacher_id' => $teacher->id,
+            'student_id' => $firstProfile->id,
+            'evrium_name' => 'Иван Иванов',
+        ]);
+        $this->assertDatabaseHas('teacher_students', [
+            'teacher_id' => $teacher->id,
+            'student_id' => $secondProfile->id,
+            'evrium_name' => 'Иван Иванов',
+        ]);
+
+        $this->assertSame(2, TeacherStudent::where('teacher_id', $teacher->id)->where('evrium_name', 'Иван Иванов')->count());
+    }
+
     public function test_student_must_attach_photo_and_second_wrong_answer_is_accepted(): void
     {
         Storage::fake('public');

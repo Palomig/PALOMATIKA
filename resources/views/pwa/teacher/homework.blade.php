@@ -51,6 +51,22 @@
     background: var(--surface2); border-radius: 5px;
     padding: 2px 6px; margin-left: 6px;
   }
+  .profile-stack { display: flex; flex-direction: column; gap: 4px; margin-top: 7px; }
+  .profile-chip {
+    display: inline-flex; align-items: center; gap: 6px; width: fit-content;
+    max-width: 100%; padding: 4px 7px; border-radius: 8px;
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text); font-size: 11px; font-weight: 700;
+  }
+  .profile-chip span { color: var(--muted); font-weight: 600; }
+  .link-actions { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+  .link-btn {
+    font-size: 11px; font-weight: 800; color: var(--accent);
+    background: var(--accent-bg); border: 1px solid var(--accent-bd);
+    border-radius: 8px; padding: 6px 12px; cursor: pointer;
+    white-space: nowrap;
+  }
+  .link-btn:active { opacity: .7; }
 
   .settings-btn {
     font-size: 14px; padding: 4px 8px; cursor: pointer;
@@ -134,6 +150,22 @@
     background: var(--surface); border: 1px solid var(--border);
     color: var(--text); font-size: 12px; font-weight: 700;
   }
+  .profile-search {
+    width: 100%; padding: 11px 12px; border-radius: 10px;
+    border: 1px solid var(--border); background: var(--surface);
+    color: var(--text); font-size: 13px; margin-bottom: 10px;
+  }
+  .profile-list { max-height: 310px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+  .profile-option {
+    width: 100%; text-align: left; border: 1px solid var(--border);
+    background: var(--surface); color: var(--text); border-radius: 12px;
+    padding: 10px 11px; cursor: pointer;
+  }
+  .profile-option:active { background: var(--surface2); }
+  .profile-option-main { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
+  .profile-option-name { font-size: 13px; font-weight: 800; }
+  .profile-option-meta { font-size: 11px; color: var(--muted); margin-top: 2px; line-height: 1.35; }
+  .profile-option-time { font-size: 11px; font-weight: 800; color: var(--accent); white-space: nowrap; }
 @endpush
 
 @section('body')
@@ -185,10 +217,27 @@
             @endif
           </div>
         </div>
-        @if($s['linked'])
-          <button class="assign-btn" @click="openAssign({{ $s['student_id'] }}, '{{ e($s['student_alias'] ?? $s['student_name'] ?? '') }}')">Дать ДЗ</button>
-        @endif
+        <div class="link-actions">
+          @if($s['linked'])
+            <button class="assign-btn" @click="openAssignMany(@js($s['student_ids'] ?? [$s['student_id']]), @js($s['student_alias'] ?? $s['student_name'] ?? $s['evrium_name']))">Дать ДЗ</button>
+            <button class="link-btn" @click="openLink(@js($s['evrium_name']))">+ профиль</button>
+          @else
+            <button class="link-btn" @click="openLink(@js($s['evrium_name']))">Привязать</button>
+          @endif
+        </div>
       </div>
+      @if($s['linked'] && count($s['linked_profiles'] ?? []) > 0)
+        <div class="profile-stack" style="margin:-4px 0 10px 14px;">
+          @foreach($s['linked_profiles'] as $profile)
+            <div class="profile-chip">
+              {{ $profile['student_alias'] ?: $profile['student_name'] }}
+              @if($profile['last_active_at'])
+                <span>{{ $profile['last_active_at']->format('d.m H:i') }}</span>
+              @endif
+            </div>
+          @endforeach
+        </div>
+      @endif
     @empty
       <div class="empty-note">Нет уроков на сегодня.</div>
     @endforelse
@@ -213,10 +262,27 @@
             @endif
           </div>
         </div>
-        @if($s['linked'])
-          <button class="assign-btn" @click="openAssign({{ $s['student_id'] }}, '{{ e($s['student_alias'] ?? $s['student_name'] ?? '') }}')">Дать ДЗ</button>
-        @endif
+        <div class="link-actions">
+          @if($s['linked'])
+            <button class="assign-btn" @click="openAssignMany(@js($s['student_ids'] ?? [$s['student_id']]), @js($s['student_alias'] ?? $s['student_name'] ?? $s['evrium_name']))">Дать ДЗ</button>
+            <button class="link-btn" @click="openLink(@js($s['evrium_name']))">+ профиль</button>
+          @else
+            <button class="link-btn" @click="openLink(@js($s['evrium_name']))">Привязать</button>
+          @endif
+        </div>
       </div>
+      @if($s['linked'] && count($s['linked_profiles'] ?? []) > 0)
+        <div class="profile-stack" style="margin:-4px 0 10px 14px;">
+          @foreach($s['linked_profiles'] as $profile)
+            <div class="profile-chip">
+              {{ $profile['student_alias'] ?: $profile['student_name'] }}
+              @if($profile['last_active_at'])
+                <span>{{ $profile['last_active_at']->format('d.m H:i') }}</span>
+              @endif
+            </div>
+          @endforeach
+        </div>
+      @endif
     @empty
       <div class="empty-note">Нет данных о прошлом уроке.</div>
     @endforelse
@@ -329,7 +395,7 @@
             <div class="student-pick-list">
               @foreach($allStudents as $student)
                 <label class="student-pick">
-                  <input type="checkbox" name="student_ids[]" value="{{ $student->id }}" :checked="assignStudentId === {{ $student->id }}">
+                  <input type="checkbox" name="student_ids[]" value="{{ $student->id }}" :checked="assignStudentIds.includes({{ $student->id }})">
                   <span>{{ $student->student_alias ?? $student->name }}</span>
                 </label>
               @endforeach
@@ -338,6 +404,38 @@
 
           <button type="submit" class="btn btn-accent" style="margin-top:14px; width:100%;">Выдать ДЗ</button>
         </form>
+      </div>
+    </div>
+  </template>
+
+  <template x-if="showLink">
+    <div class="fv-overlay" @click.self="showLink = false">
+      <div class="fv-sheet">
+        <div class="fv-handle"></div>
+        <div class="fv-title">Привязать <span x-text="linkEvriumName"></span></div>
+        <input class="profile-search" type="search" x-model="profileSearch" placeholder="Поиск профиля">
+        <div class="profile-list">
+          <template x-for="profile in filteredProfiles()" :key="profile.id">
+            <button type="button" class="profile-option" @click="linkProfile(profile)">
+              <div class="profile-option-main">
+                <div>
+                  <div class="profile-option-name" x-text="profile.student_alias || profile.name"></div>
+                  <div class="profile-option-meta">
+                    <span x-text="profile.name"></span>
+                    <template x-if="profile.email"><span> · <span x-text="profile.email"></span></span></template>
+                  </div>
+                  <div class="profile-option-meta">
+                    <span x-text="profile.is_linked_to_teacher ? 'уже в ваших учениках' : 'новый профиль для вас'"></span>
+                    <template x-if="profile.linked_evrium_name">
+                      <span> · расписание: <span x-text="profile.linked_evrium_name"></span></span>
+                    </template>
+                  </div>
+                </div>
+                <div class="profile-option-time" x-text="profile.last_active_label"></div>
+              </div>
+            </button>
+          </template>
+        </div>
       </div>
     </div>
   </template>
@@ -350,15 +448,74 @@ function teacherHw() {
   return {
     tab: 'current',
     showAssign: false,
+    showLink: false,
     assignStudentId: null,
+    assignStudentIds: [],
     assignName: '',
     selectedType: 'full_variant',
+    linkEvriumName: '',
+    profileSearch: '',
+    profiles: @json($profileLinkOptions),
 
     openAssign(studentId, name) {
       this.assignStudentId = studentId;
+      this.assignStudentIds = [studentId];
       this.assignName = name;
       this.selectedType = 'full_variant';
       this.showAssign = true;
+    },
+
+    openAssignMany(studentIds, name) {
+      const ids = (studentIds || []).filter(Boolean);
+      this.assignStudentId = ids[0] || null;
+      this.assignStudentIds = ids;
+      this.assignName = name;
+      this.selectedType = 'full_variant';
+      this.showAssign = true;
+    },
+
+    openLink(evriumName) {
+      this.linkEvriumName = evriumName;
+      this.profileSearch = evriumName || '';
+      this.showLink = true;
+    },
+
+    filteredProfiles() {
+      const q = (this.profileSearch || '').trim().toLowerCase();
+      const terms = q.split(/\s+/).filter(Boolean);
+      return this.profiles.filter((profile) => {
+        const haystack = [
+          profile.name || '',
+          profile.email || '',
+          profile.student_alias || '',
+          profile.linked_evrium_name || '',
+        ].join(' ').toLowerCase();
+        return terms.every((term) => haystack.includes(term));
+      }).slice(0, 80);
+    },
+
+    async linkProfile(profile) {
+      const res = await fetch(`/students/${profile.id}/link`, {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': window._csrf,
+        },
+        body: JSON.stringify({
+          alias: profile.student_alias || profile.name || '',
+          evrium_name: this.linkEvriumName || '',
+        }),
+      });
+
+      if (!res.ok) {
+        const tg = window.Telegram?.WebApp;
+        if (tg?.showAlert) tg.showAlert('Не удалось привязать профиль');
+        return;
+      }
+
+      window.location.reload();
     },
 
     async saveLink(studentId, alias, evriumName) {
