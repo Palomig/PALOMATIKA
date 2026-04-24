@@ -155,6 +155,18 @@
     border: 1px solid var(--border); background: var(--surface);
     color: var(--text); font-size: 13px; margin-bottom: 10px;
   }
+  .profile-mode-tabs { display: flex; gap: 6px; margin-bottom: 10px; }
+  .profile-mode-tab {
+    flex: 1; text-align: center; padding: 8px 6px;
+    font-size: 11px; font-weight: 800; color: var(--muted);
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; cursor: pointer;
+  }
+  .profile-mode-tab.active {
+    color: var(--accent); background: var(--accent-bg);
+    border-color: var(--accent-bd);
+  }
+  .profile-mode-sub { font-size: 9px; font-weight: 600; margin-top: 2px; opacity: 0.75; }
   .profile-list { max-height: 310px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
   .profile-option {
     width: 100%; text-align: left; border: 1px solid var(--border);
@@ -166,6 +178,8 @@
   .profile-option-name { font-size: 13px; font-weight: 800; }
   .profile-option-meta { font-size: 11px; color: var(--muted); margin-top: 2px; line-height: 1.35; }
   .profile-option-time { font-size: 11px; font-weight: 800; color: var(--accent); white-space: nowrap; }
+  .profile-option-hit { color: var(--green); }
+  .profile-empty { text-align: center; padding: 20px 10px; color: var(--muted); font-size: 12px; font-weight: 600; }
 @endpush
 
 @section('body')
@@ -220,9 +234,9 @@
         <div class="link-actions">
           @if($s['linked'])
             <button class="assign-btn" @click="openAssignMany(@js($s['student_ids'] ?? [$s['student_id']]), @js($s['student_alias'] ?? $s['student_name'] ?? $s['evrium_name']))">Дать ДЗ</button>
-            <button class="link-btn" @click="openLink(@js($s['evrium_name']))">+ профиль</button>
+            <button class="link-btn" @click="openLink(@js($s['evrium_name']), @js($s['time_start'] ?? ''), @js($s['time_end'] ?? ''), @js($s['lesson_date'] ?? ''))">+ профиль</button>
           @else
-            <button class="link-btn" @click="openLink(@js($s['evrium_name']))">Привязать</button>
+            <button class="link-btn" @click="openLink(@js($s['evrium_name']), @js($s['time_start'] ?? ''), @js($s['time_end'] ?? ''), @js($s['lesson_date'] ?? ''))">Привязать</button>
           @endif
         </div>
       </div>
@@ -265,9 +279,9 @@
         <div class="link-actions">
           @if($s['linked'])
             <button class="assign-btn" @click="openAssignMany(@js($s['student_ids'] ?? [$s['student_id']]), @js($s['student_alias'] ?? $s['student_name'] ?? $s['evrium_name']))">Дать ДЗ</button>
-            <button class="link-btn" @click="openLink(@js($s['evrium_name']))">+ профиль</button>
+            <button class="link-btn" @click="openLink(@js($s['evrium_name']), @js($s['time_start'] ?? ''), @js($s['time_end'] ?? ''), @js($s['lesson_date'] ?? ''))">+ профиль</button>
           @else
-            <button class="link-btn" @click="openLink(@js($s['evrium_name']))">Привязать</button>
+            <button class="link-btn" @click="openLink(@js($s['evrium_name']), @js($s['time_start'] ?? ''), @js($s['time_end'] ?? ''), @js($s['lesson_date'] ?? ''))">Привязать</button>
           @endif
         </div>
       </div>
@@ -413,6 +427,16 @@
       <div class="fv-sheet">
         <div class="fv-handle"></div>
         <div class="fv-title">Привязать <span x-text="linkEvriumName"></span></div>
+        <div class="profile-mode-tabs" x-show="linkHasLessonWindow()" x-cloak>
+          <div class="profile-mode-tab" :class="profileMode === 'all' && 'active'" @click="profileMode = 'all'">
+            Все
+            <div class="profile-mode-sub" x-text="profiles.length + ' уч.'"></div>
+          </div>
+          <div class="profile-mode-tab" :class="profileMode === 'online' && 'active'" @click="profileMode = 'online'">
+            Онлайн на уроке
+            <div class="profile-mode-sub" x-text="lessonWindowLabel()"></div>
+          </div>
+        </div>
         <input class="profile-search" type="search" x-model="profileSearch" placeholder="Поиск профиля">
         <div class="profile-list">
           <template x-for="profile in filteredProfiles()" :key="profile.id">
@@ -431,9 +455,13 @@
                     </template>
                   </div>
                 </div>
-                <div class="profile-option-time" x-text="profile.last_active_label"></div>
+                <div class="profile-option-time" :class="wasOnlineAtLesson(profile) && 'profile-option-hit'"
+                     x-text="wasOnlineAtLesson(profile) ? ('на уроке · ' + profile.last_active_label) : profile.last_active_label"></div>
               </div>
             </button>
+          </template>
+          <template x-if="filteredProfiles().length === 0">
+            <div class="profile-empty" x-text="profileMode === 'online' ? 'Никто не был онлайн во время этого урока. Попробуйте вкладку «Все».' : 'Никого не нашли. Очистите поиск или поменяйте имя.'"></div>
           </template>
         </div>
       </div>
@@ -454,7 +482,11 @@ function teacherHw() {
     assignName: '',
     selectedType: 'full_variant',
     linkEvriumName: '',
+    linkTimeStart: '',
+    linkTimeEnd: '',
+    linkLessonDate: '',
     profileSearch: '',
+    profileMode: 'all',
     profiles: @json($profileLinkOptions),
 
     openAssign(studentId, name) {
@@ -474,16 +506,55 @@ function teacherHw() {
       this.showAssign = true;
     },
 
-    openLink(evriumName) {
-      this.linkEvriumName = evriumName;
-      this.profileSearch = evriumName || '';
+    openLink(evriumName, timeStart, timeEnd, lessonDate) {
+      this.linkEvriumName = evriumName || '';
+      this.linkTimeStart = timeStart || '';
+      this.linkTimeEnd = timeEnd || '';
+      this.linkLessonDate = lessonDate || '';
+      this.profileSearch = '';
+      this.profileMode = this.linkHasLessonWindow() ? 'online' : 'all';
       this.showLink = true;
+    },
+
+    linkHasLessonWindow() {
+      return !!(this.linkLessonDate && this.linkTimeStart);
+    },
+
+    lessonWindowLabel() {
+      if (!this.linkTimeStart) return '—';
+      const end = this.linkTimeEnd || '';
+      return end ? (this.linkTimeStart + '–' + end) : this.linkTimeStart;
+    },
+
+    parseLessonDateTime(time) {
+      if (!this.linkLessonDate || !time) return null;
+      const parts = String(time).split(':');
+      if (parts.length < 2) return null;
+      const [y, mo, d] = this.linkLessonDate.split('-').map(Number);
+      const h = parseInt(parts[0], 10);
+      const mi = parseInt(parts[1], 10);
+      if ([y, mo, d, h, mi].some(Number.isNaN)) return null;
+      return new Date(y, mo - 1, d, h, mi, 0, 0).getTime();
+    },
+
+    wasOnlineAtLesson(profile) {
+      if (!this.linkHasLessonWindow() || !profile.last_active_at) return false;
+      const start = this.parseLessonDateTime(this.linkTimeStart);
+      const end = this.linkTimeEnd ? this.parseLessonDateTime(this.linkTimeEnd) : (start !== null ? start + 60 * 60 * 1000 : null);
+      if (start === null || end === null) return false;
+      const pad = 10 * 60 * 1000;
+      const ts = Date.parse(profile.last_active_at);
+      if (Number.isNaN(ts)) return false;
+      return ts >= (start - pad) && ts <= (end + pad);
     },
 
     filteredProfiles() {
       const q = (this.profileSearch || '').trim().toLowerCase();
       const terms = q.split(/\s+/).filter(Boolean);
+      const onlyOnline = this.profileMode === 'online' && this.linkHasLessonWindow();
       return this.profiles.filter((profile) => {
+        if (onlyOnline && !this.wasOnlineAtLesson(profile)) return false;
+        if (!terms.length) return true;
         const haystack = [
           profile.name || '',
           profile.email || '',
@@ -491,7 +562,7 @@ function teacherHw() {
           profile.linked_evrium_name || '',
         ].join(' ').toLowerCase();
         return terms.every((term) => haystack.includes(term));
-      }).slice(0, 80);
+      }).slice(0, 120);
     },
 
     async linkProfile(profile) {
