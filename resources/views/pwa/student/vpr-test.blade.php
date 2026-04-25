@@ -163,6 +163,7 @@
   /* ───── QUESTION AREA ───── */
   .test-question {
     flex: 1;
+    min-height: 0;
     padding: 20px 16px;
     overflow-y: auto;
     display: flex;
@@ -507,6 +508,8 @@
     display: flex;
     gap: 10px;
     flex-shrink: 0;
+    position: relative;
+    z-index: 2;
   }
   .test-btn-prev {
     flex: 0 0 52px;
