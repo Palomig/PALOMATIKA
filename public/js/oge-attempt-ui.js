@@ -25,6 +25,18 @@ export function applyCommitSuccessToCard(card) {
   if (edit) edit.classList.remove('hidden');
 }
 
+export function hydrateCardWithSavedAnswer(card, answer) {
+  if (!card) return false;
+  if (typeof answer !== 'string' || answer.trim() === '') return false;
+
+  const input = card.querySelector('.js-answer-input');
+  if (!input) return false;
+
+  input.value = answer;
+  applyCommitSuccessToCard(card);
+  return true;
+}
+
 export function bindOptionPanelsToAnswerInput(card) {
   if (!card) return;
 

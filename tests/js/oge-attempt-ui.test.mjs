@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import {
   applyCommitSuccessToCard,
   bindOptionPanelsToAnswerInput,
+  hydrateCardWithSavedAnswer,
   setAllCardsLocked,
 } from '../../public/js/oge-attempt-ui.mjs';
 
@@ -55,6 +56,30 @@ test('submit lock disables all inputs and finish button', () => {
   assert.equal(cardA.edit.disabled, true);
   assert.equal(cardB.input.disabled, true);
   assert.equal(finishButton.disabled, true);
+});
+
+test('hydrateCardWithSavedAnswer fills value and locks input when answer is non-empty', () => {
+  const card = makeCard();
+  card.input.value = '';
+
+  const ok = hydrateCardWithSavedAnswer(card, '42');
+
+  assert.equal(ok, true);
+  assert.equal(card.input.value, '42');
+  assert.equal(card.input.disabled, true);
+  assert.equal(card.edit.classList.contains('hidden'), false);
+});
+
+test('hydrateCardWithSavedAnswer ignores empty / whitespace / non-string answers', () => {
+  for (const answer of ['', '   ', null, undefined, 0, 42]) {
+    const card = makeCard();
+
+    const ok = hydrateCardWithSavedAnswer(card, answer);
+
+    assert.equal(ok, false);
+    assert.equal(card.input.disabled, false);
+    assert.equal(card.edit.classList.contains('hidden'), true);
+  }
 });
 
 test('clicking a graph option panel fills the answer input with its index', () => {
