@@ -1198,11 +1198,23 @@
         if (this._initialized) return;
         this._initialized = true;
 
-        // Restore draft answers from localStorage (survives page refresh)
+        // Snapshot answers already on the server (came in as $answers from VprController::test).
+        // Anything that diverges from this snapshot will be debounced-committed via the OGE attempt API.
+        this._lastSyncedAnswers = this._snapshotAnswers();
+        this._pendingCommitTimers = {};
+
+        // Restore localStorage drafts on top (client-only, may not have hit the server yet).
         this._restoreDraft();
 
-        // Auto-save draft to localStorage on any answer change
-        this.$watch('answers', () => this._saveDraft(), { deep: true });
+        // Auto-save draft to localStorage AND debounce per-task commits to the server on any change.
+        this.$watch('answers', () => {
+          this._saveDraft();
+          this._scheduleServerSync();
+        }, { deep: true });
+
+        // Push any localStorage-only answers to the server right away so reload from another
+        // device / cleared cache also restores them.
+        this._scheduleServerSync();
 
         // Warn before leaving with unsaved answers
         window.addEventListener('beforeunload', (e) => {
@@ -1276,6 +1288,57 @@
             }
           }
         } catch (e) { /* corrupted — ignore */ }
+      },
+
+      _snapshotAnswers() {
+        const snap = {};
+        for (const [k, v] of Object.entries(this.answers || {})) {
+          snap[k] = String(v ?? '').trim();
+        }
+        return snap;
+      },
+
+      _scheduleServerSync() {
+        if (!this.attemptId) return;
+        const DEBOUNCE_MS = 800;
+        for (const [key, value] of Object.entries(this.answers || {})) {
+          const taskNum = Number(key);
+          if (!Number.isFinite(taskNum) || taskNum < 1) continue;
+
+          const current = String(value ?? '').trim();
+          // Server endpoint requires a non-empty answer (max 255 chars). Empty/cleared values
+          // stay only in localStorage; on reload the previous server value is preserved.
+          if (current === '' || current.length > 255) continue;
+          if (current === (this._lastSyncedAnswers[key] ?? '')) continue;
+
+          if (this._pendingCommitTimers[key]) {
+            clearTimeout(this._pendingCommitTimers[key]);
+          }
+          this._pendingCommitTimers[key] = setTimeout(() => {
+            delete this._pendingCommitTimers[key];
+            this._commitAnswerToServer(taskNum, current);
+          }, DEBOUNCE_MS);
+        }
+      },
+
+      async _commitAnswerToServer(taskNum, answer) {
+        if (!this.attemptId) return;
+        try {
+          const res = await window.fetchPost(`/api/oge/attempts/${this.attemptId}/tasks/${taskNum}/commit`, {
+            answer,
+            client_ts: new Date().toISOString(),
+          });
+          if (res?.ok) {
+            this._lastSyncedAnswers[String(taskNum)] = answer;
+          }
+        } catch (e) { /* fail soft — localStorage remains as a backup */ }
+      },
+
+      _cancelPendingCommits() {
+        for (const t of Object.values(this._pendingCommitTimers || {})) {
+          clearTimeout(t);
+        }
+        this._pendingCommitTimers = {};
       },
 
       startTimer() {
@@ -1645,10 +1708,12 @@
         this.answers[tn] = this.optionAnswerValue(opt, idx);
       },
 
-      // Submit test — sends all answers in one request, no intermediate commits
+      // Submit test — sends all answers in one request. Per-task commits via $watch are
+      // additionally used to persist progress mid-attempt across reloads / devices.
       async submitTest() {
         if (this.submitting) return;
         this.submitting = true;
+        this._cancelPendingCommits();
 
         // Collect all non-empty answers
         const finalAnswers = {};

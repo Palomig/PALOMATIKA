@@ -36,18 +36,18 @@ class OnboardingGradeTest extends TestCase
              ])->assertSessionHasErrors('grade_num');
     }
 
-    public function test_letter_и_is_accepted(): void
+    public function test_letter_е_is_accepted(): void
     {
         $user = User::factory()->create(['role' => 'student']);
         $this->actingAs($user)
              ->post('https://student.' . config('app.base_domain') . '/onboarding', [
                  'name'          => 'Тест',
                  'grade_num'     => 7,
-                 'grade_letter'  => 'И',
+                 'grade_letter'  => 'Е',
                  'school_number' => '1',
                  'city'          => 'Москва',
              ])->assertRedirect();
 
-        $this->assertSame('И', $user->fresh()->grade_letter);
+        $this->assertSame('Е', $user->fresh()->grade_letter);
     }
 }

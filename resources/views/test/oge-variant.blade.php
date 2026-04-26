@@ -228,6 +228,7 @@ import {
 import {
     applyCommitSuccessToCard,
     bindOptionPanelsToAnswerInput,
+    hydrateCardWithSavedAnswer,
     resolveAttemptTaskNumber,
     setAllCardsLocked,
     shouldLockForConflict,
@@ -261,6 +262,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const api = {
         start: `/api/oge/variants/${variantHash}/attempt/start`,
+        status: (id) => `/api/oge/attempts/${id}/status`,
         focus: (id, task) => `/api/oge/attempts/${id}/tasks/${task}/focus`,
         blur: (id, task) => `/api/oge/attempts/${id}/tasks/${task}/blur`,
         commit: (id, task) => `/api/oge/attempts/${id}/tasks/${task}/commit`,
@@ -311,6 +313,30 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else {
             const raw = await response.text().catch(() => '');
             payload = raw ? { message: raw } : null;
+        }
+
+        if (!response.ok) {
+            const error = new Error(`Request failed: ${response.status}`);
+            error.status = response.status;
+            error.payload = payload;
+            throw error;
+        }
+
+        return payload ?? {};
+    }
+
+    async function getJson(url) {
+        const response = await fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': csrf,
+            },
+        });
+
+        let payload = null;
+        const contentType = response.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+            payload = await response.json().catch(() => null);
         }
 
         if (!response.ok) {
@@ -431,6 +457,23 @@ document.addEventListener('DOMContentLoaded', async () => {
         setAllCardsLocked(cards, finishButton, true);
         return;
     }
+
+    try {
+        const statusRes = await getJson(api.status(attemptId));
+        const savedTasks = Array.isArray(statusRes?.tasks) ? statusRes.tasks : [];
+        if (savedTasks.length > 0) {
+            const cardsByTaskNumber = new Map();
+            cards.forEach((card) => {
+                const num = resolveAttemptTaskNumber(card);
+                if (num > 0) cardsByTaskNumber.set(num, card);
+            });
+            for (const task of savedTasks) {
+                const card = cardsByTaskNumber.get(Number(task.task_number));
+                if (!card) continue;
+                hydrateCardWithSavedAnswer(card, task.answer);
+            }
+        }
+    } catch (_) { /* fail soft — fresh page is still usable */ }
 
     function attachPasteListeners() {
         document.querySelectorAll('.js-answer-input').forEach(input => {
