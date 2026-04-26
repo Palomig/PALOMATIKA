@@ -314,4 +314,96 @@ class PwaHomeworkPhotoPracticeTest extends TestCase
             'tasks_correct' => 0,
         ]);
     }
+
+    public function test_geometry_homework_renders_inline_svg(): void
+    {
+        $student = User::factory()->create([
+            'role' => 'student',
+            'grade_num' => 9,
+            'onboarding_completed_at' => now(),
+        ]);
+        $teacher = User::factory()->create([
+            'role' => 'teacher',
+            'onboarding_completed_at' => now(),
+        ]);
+
+        $homework = Homework::create([
+            'teacher_id' => $teacher->id,
+            'homework_type' => 'topic_photo_practice',
+            'title' => 'Тема 15: 1 задача с фото решения',
+            'topic_number' => 15,
+            'tasks_count' => 1,
+            'assigned_at' => now(),
+        ]);
+        HomeworkTopicTask::create([
+            'homework_id' => $homework->id,
+            'topic_number' => 15,
+            'task_order' => 1,
+            'task_payload' => [
+                'id' => 1,
+                'topic_id' => '15',
+                'text' => 'Найдите площадь треугольника.',
+                'svg' => '<svg viewBox="0 0 100 100" data-testid="geometry-svg"><polygon points="10,90 90,90 50,10"/></svg>',
+                'image' => '23-1.png',
+            ],
+            'correct_answer' => '42',
+        ]);
+        $assignment = HomeworkAssignment::create([
+            'homework_id' => $homework->id,
+            'student_id' => $student->id,
+            'status' => 'assigned',
+            'tasks_total' => 1,
+        ]);
+
+        $this->actingAs($student)
+            ->get("http://student.palomatika.ru/homework/{$assignment->id}")
+            ->assertOk()
+            ->assertSee('data-testid="geometry-svg"', false)
+            ->assertSee('Найдите площадь треугольника.');
+    }
+
+    public function test_homework_renders_image_file_when_no_inline_svg(): void
+    {
+        $student = User::factory()->create([
+            'role' => 'student',
+            'grade_num' => 9,
+            'onboarding_completed_at' => now(),
+        ]);
+        $teacher = User::factory()->create([
+            'role' => 'teacher',
+            'onboarding_completed_at' => now(),
+        ]);
+
+        $homework = Homework::create([
+            'teacher_id' => $teacher->id,
+            'homework_type' => 'topic_photo_practice',
+            'title' => 'Тема 10: 1 задача с фото решения',
+            'topic_number' => 10,
+            'tasks_count' => 1,
+            'assigned_at' => now(),
+        ]);
+        HomeworkTopicTask::create([
+            'homework_id' => $homework->id,
+            'topic_number' => 10,
+            'task_order' => 1,
+            'task_payload' => [
+                'id' => 5,
+                'topic_id' => '10',
+                'text' => 'Решите задачу по диаграмме.',
+                'image' => 'p-05-new.jpg',
+            ],
+            'correct_answer' => '7',
+        ]);
+        $assignment = HomeworkAssignment::create([
+            'homework_id' => $homework->id,
+            'student_id' => $student->id,
+            'status' => 'assigned',
+            'tasks_total' => 1,
+        ]);
+
+        $this->actingAs($student)
+            ->get("http://student.palomatika.ru/homework/{$assignment->id}")
+            ->assertOk()
+            ->assertSee('/images/tasks/10/p-05-new.jpg', false);
+    }
 }
