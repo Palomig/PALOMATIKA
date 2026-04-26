@@ -26,6 +26,10 @@
   .state-done { color: #86efac; background: rgba(34,197,94,.2); }
   .task-text { color: var(--text); font-size: 14px; line-height: 1.45; overflow-wrap: anywhere; }
   .task-instruction { color: var(--muted); font-size: 12px; font-weight: 700; margin-bottom: 6px; }
+  .task-visual { margin: 4px 0 10px; display: flex; justify-content: center; }
+  .task-visual svg { max-width: 100%; width: auto; height: auto; display: block; }
+  .task-visual img { max-width: 100%; height: auto; display: block; border-radius: 8px; }
+  .task-visual > .task-visual-frame { width: 100%; max-width: 320px; }
   .task-form { margin-top: 12px; display: grid; gap: 8px; }
   .task-input {
     width: 100%; padding: 11px 12px; border-radius: 10px;
@@ -121,6 +125,12 @@
       $stateClass = $accepted ? 'state-done' : ($needsRetry ? 'state-retry' : 'state-open');
       $stateLabel = $accepted ? 'Принято' : ($needsRetry ? 'Повторить' : 'Открыто');
       $text = $payload['text_html'] ?? $payload['text'] ?? $payload['question'] ?? $payload['expression'] ?? 'Задача';
+      $svg = $payload['svg'] ?? null;
+      $image = $payload['image'] ?? null;
+      $hasInlineSvg = is_string($svg) && str_contains($svg, '<svg');
+      $hasLegacyInlineSvg = !$hasInlineSvg && is_string($image) && str_starts_with(ltrim($image), '<svg');
+      $hasImageFile = !$hasInlineSvg && !$hasLegacyInlineSvg && is_string($image) && $image !== '';
+      $payloadTopicId = (string) ($payload['topic_id'] ?? '');
     @endphp
 
     <div class="task-card">
@@ -131,6 +141,16 @@
 
       @if(!empty($payload['instruction']))
         <div class="task-instruction">{{ $payload['instruction'] }}</div>
+      @endif
+
+      @if($hasInlineSvg)
+        <div class="task-visual"><div class="task-visual-frame">{!! $svg !!}</div></div>
+      @elseif($hasLegacyInlineSvg)
+        <div class="task-visual"><div class="task-visual-frame">{!! $image !!}</div></div>
+      @elseif($hasImageFile && $payloadTopicId !== '')
+        <div class="task-visual">
+          <img src="{{ asset('images/tasks/' . $payloadTopicId . '/' . $image) }}" alt="Иллюстрация к задаче">
+        </div>
       @endif
 
       <div class="task-text">{!! $text !!}</div>
