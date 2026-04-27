@@ -50,13 +50,17 @@
 @section('body')
 <div class="page" x-data="practiceGamePage({
   slug: @js($game['slug']),
-  endpoint: @js(route('pwa.student.practice.mini-games.question', $game['slug'])),
+  startEndpoint: @js(route('pwa.student.practice.mini-games.start', $game['slug'])),
+  answerEndpoint: @js(route('pwa.student.practice.mini-games.answer', $game['slug'])),
+  timeoutEndpoint: @js(route('pwa.student.practice.mini-games.timeout', $game['slug'])),
+  leaderboardUrl: @js(route('pwa.student.practice.mini-games.leaderboard', $game['slug'])),
   theory: @js($game['theory']),
   turnSeconds: @js((int) ($game['turn_seconds'] ?? 10)),
 })">
   <div class="topbar">
     <a href="{{ route('pwa.student.practice.mini-games') }}" class="back-btn">‹</a>
     <div class="topbar-title">{{ $game['title'] }}</div>
+    <a :href="leaderboardUrl" class="pill pill-accent" style="text-decoration:none;margin-left:auto;">🏆 Лидерборд</a>
   </div>
 
   <template x-if="status === 'intro'">
@@ -138,6 +142,7 @@
       </div>
 
       <button class="btn btn-green" style="margin-top:18px;" @click="restart()">Сыграть ещё</button>
+      <a :href="leaderboardUrl" class="btn btn-accent" style="margin-top:8px;display:block;text-align:center;text-decoration:none;">🏆 Открыть лидерборд</a>
     </div>
   </template>
 </div>
@@ -148,10 +153,14 @@
 function practiceGamePage(config) {
   return {
     slug: config.slug,
-    endpoint: config.endpoint,
+    startEndpoint: config.startEndpoint,
+    answerEndpoint: config.answerEndpoint,
+    timeoutEndpoint: config.timeoutEndpoint,
+    leaderboardUrl: config.leaderboardUrl,
     theory: config.theory,
     turnSeconds: config.turnSeconds,
     status: 'intro',
+    runId: null,
     score: 0,
     timeLeft: config.turnSeconds,
     timeProgress: 1,
@@ -175,44 +184,51 @@ function practiceGamePage(config) {
 
     async startGame() {
       this.score = 0;
+      this.runId = null;
       this.resultReason = 'wrong';
-      await this.loadQuestion();
+      this.loading = true;
+      try {
+        const data = await this.postJson(this.startEndpoint, {});
+        this.runId = data.run_id;
+        this.score = data.score ?? 0;
+        this.question = data.question;
+        if (data.game?.theory) this.theory = data.game.theory;
+        this.status = 'playing';
+        this.timeLeft = this.turnSeconds;
+        this.startTimer();
+      } catch (error) {
+        console.error(error);
+        alert('Не удалось начать игру. Попробуй ещё раз.');
+        this.status = 'intro';
+      } finally {
+        this.loading = false;
+      }
     },
 
     async restart() {
       this.clearTimer();
       this.status = 'intro';
       this.question = null;
+      this.runId = null;
       this.timeLeft = this.turnSeconds;
       this.timeProgress = 1;
     },
 
-    async loadQuestion() {
-      this.loading = true;
-
-      try {
-        const response = await fetch(`${this.endpoint}?score=${this.score}`, {
-          headers: { 'Accept': 'application/json' },
-          credentials: 'include',
-        });
-
-        if (!response.ok) {
-          throw new Error('Не удалось загрузить вопрос');
-        }
-
-        const data = await response.json();
-        this.question = data.question;
-        this.theory = data.game.theory;
-        this.status = 'playing';
-        this.timeLeft = this.turnSeconds;
-        this.startTimer();
-      } catch (error) {
-        console.error(error);
-        alert('Не удалось загрузить задание. Попробуй ещё раз.');
-        this.status = 'intro';
-      } finally {
-        this.loading = false;
+    async postJson(url, body) {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-CSRF-TOKEN': window._csrf || '',
+        },
+        credentials: 'include',
+        body: JSON.stringify(body),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
       }
+      return response.json();
     },
 
     startTimer() {
@@ -226,7 +242,7 @@ function practiceGamePage(config) {
         if (remaining <= 0) {
           this.timeLeft = 0;
           this.timeProgress = 0;
-          this.finishGame('timeout');
+          this.handleTimeout();
           return;
         }
         this.timeLeft = Math.ceil(remaining / 1000);
@@ -242,17 +258,47 @@ function practiceGamePage(config) {
     },
 
     async chooseOption(option) {
-      if (this.loading) return;
-
+      if (this.loading || !this.runId) return;
       this.clearTimer();
-
-      if (!option.is_correct) {
+      this.loading = true;
+      try {
+        const data = await this.postJson(this.answerEndpoint, {
+          run_id: this.runId,
+          option_id: option.id,
+        });
+        if (data.status === 'continue') {
+          this.score = data.score ?? this.score;
+          this.question = data.question;
+          this.timeLeft = this.turnSeconds;
+          this.startTimer();
+        } else {
+          this.score = data.score ?? this.score;
+          this.finishGame(data.reason || 'wrong');
+        }
+      } catch (error) {
+        console.error(error);
         this.finishGame('wrong');
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async handleTimeout() {
+      if (!this.runId) {
+        this.finishGame('timeout');
         return;
       }
-
-      this.score += 1;
-      await this.loadQuestion();
+      this.loading = true;
+      try {
+        const data = await this.postJson(this.timeoutEndpoint, { run_id: this.runId });
+        this.score = data.score ?? this.score;
+        this.finishGame(data.reason || 'timeout');
+      } catch (error) {
+        console.error(error);
+        this.finishGame('timeout');
+      } finally {
+        this.loading = false;
+      }
     },
 
     finishGame(reason) {
