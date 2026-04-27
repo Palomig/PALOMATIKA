@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\PracticeGameRun;
+use App\Models\User;
 use InvalidArgumentException;
 
 class PracticeGameService
@@ -9,6 +11,113 @@ class PracticeGameService
     public function __construct(
         private readonly PracticeGraphRenderer $graphRenderer = new PracticeGraphRenderer(),
     ) {}
+
+    public function startRun(User $user, string $slug): array
+    {
+        $this->getMiniGame($slug);
+
+        $question = $this->generateQuestion($slug, 0);
+        $run = PracticeGameRun::create([
+            'user_id' => $user->id,
+            'slug' => $slug,
+            'score' => 0,
+            'started_at' => now(),
+            'current_question' => [
+                'correct_id' => $this->extractCorrectId($question),
+                'task_type' => $question['task_type'] ?? null,
+                'level' => $question['level'] ?? null,
+            ],
+        ]);
+
+        return [
+            'run' => $run,
+            'question' => $this->stripAnswers($question),
+        ];
+    }
+
+    public function submitAnswer(PracticeGameRun $run, string $optionId): array
+    {
+        if (!$run->isOpen()) {
+            return [
+                'status' => 'over',
+                'score' => $run->score,
+                'reason' => $run->end_reason,
+            ];
+        }
+
+        $correctId = (string) ($run->current_question['correct_id'] ?? '');
+        if ($correctId === '' || $optionId !== $correctId) {
+            $run->forceFill([
+                'end_reason' => PracticeGameRun::REASON_WRONG,
+                'ended_at' => now(),
+                'current_question' => null,
+            ])->save();
+
+            return [
+                'status' => 'over',
+                'score' => $run->score,
+                'reason' => PracticeGameRun::REASON_WRONG,
+            ];
+        }
+
+        $newScore = $run->score + 1;
+        $next = $this->generateQuestion($run->slug, $newScore);
+
+        $run->forceFill([
+            'score' => $newScore,
+            'current_question' => [
+                'correct_id' => $this->extractCorrectId($next),
+                'task_type' => $next['task_type'] ?? null,
+                'level' => $next['level'] ?? null,
+            ],
+        ])->save();
+
+        return [
+            'status' => 'continue',
+            'score' => $newScore,
+            'question' => $this->stripAnswers($next),
+        ];
+    }
+
+    public function markTimeout(PracticeGameRun $run): array
+    {
+        if ($run->isOpen()) {
+            $run->forceFill([
+                'end_reason' => PracticeGameRun::REASON_TIMEOUT,
+                'ended_at' => now(),
+                'current_question' => null,
+            ])->save();
+        }
+
+        return [
+            'status' => 'over',
+            'score' => $run->score,
+            'reason' => $run->end_reason ?? PracticeGameRun::REASON_TIMEOUT,
+        ];
+    }
+
+    private function extractCorrectId(array $question): string
+    {
+        foreach ($question['options'] ?? [] as $option) {
+            if (!empty($option['is_correct'])) {
+                return (string) $option['id'];
+            }
+        }
+
+        throw new InvalidArgumentException('Generated question has no correct option');
+    }
+
+    private function stripAnswers(array $question): array
+    {
+        $options = array_map(static function (array $option): array {
+            unset($option['is_correct']);
+            return $option;
+        }, $question['options'] ?? []);
+
+        $question['options'] = array_values($options);
+
+        return $question;
+    }
 
     public function allMiniGames(): array
     {

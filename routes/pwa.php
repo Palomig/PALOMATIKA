@@ -67,7 +67,10 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
             Route::get('/', [PracticeController::class, 'index'])->name('index');
             Route::get('/mini-games', [PracticeController::class, 'miniGames'])->name('mini-games');
             Route::get('/mini-games/{slug}', [PracticeController::class, 'showMiniGame'])->name('mini-games.show');
-            Route::get('/api/mini-games/{slug}/question', [PracticeController::class, 'question'])->name('mini-games.question');
+            Route::get('/mini-games/{slug}/leaderboard', [PracticeController::class, 'leaderboard'])->name('mini-games.leaderboard');
+            Route::post('/api/mini-games/{slug}/start', [PracticeController::class, 'startRun'])->name('mini-games.start');
+            Route::post('/api/mini-games/{slug}/answer', [PracticeController::class, 'answerRun'])->name('mini-games.answer');
+            Route::post('/api/mini-games/{slug}/timeout', [PracticeController::class, 'timeoutRun'])->name('mini-games.timeout');
         });
 
         // ЕГЭ (10–11 класс)
