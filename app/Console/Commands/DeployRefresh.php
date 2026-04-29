@@ -21,6 +21,7 @@ class DeployRefresh extends Command
 {
     protected $signature = 'deploy:refresh
                             {--skip-svg : Skip SVG regeneration}
+                            {--skip-migrations : Skip database migrations}
                             {--force : Force regenerate all SVGs even if up to date}
                             {--no-cache : Skip cache warming in production}';
 
@@ -38,17 +39,24 @@ class DeployRefresh extends Command
         $this->info('🚀 Starting deploy refresh...');
         $this->newLine();
 
-        // Step 1: Clear all caches
+        // Step 1: Run pending migrations
+        if (!$this->option('skip-migrations')) {
+            $this->runMigrations();
+        } else {
+            $this->comment('⏭️  Skipping migrations (--skip-migrations)');
+        }
+
+        // Step 2: Clear all caches
         $this->clearAllCaches();
 
-        // Step 2: Regenerate SVGs if needed
+        // Step 3: Regenerate SVGs if needed
         if (!$this->option('skip-svg')) {
             $this->regenerateSvgs();
         } else {
             $this->comment('⏭️  Skipping SVG regeneration (--skip-svg)');
         }
 
-        // Step 3: Warm caches in production
+        // Step 4: Warm caches in production
         if (app()->environment('production') && !$this->option('no-cache')) {
             $this->warmCaches();
         }
@@ -58,6 +66,41 @@ class DeployRefresh extends Command
         $this->info("✅ Deploy refresh completed in {$elapsed}s");
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * Run pending database migrations
+     */
+    protected function runMigrations(): void
+    {
+        $this->info('🗄️  Running migrations...');
+
+        try {
+            $exitCode = Artisan::call('migrate', ['--force' => true]);
+            $output = trim(Artisan::output());
+
+            if ($exitCode === Command::SUCCESS) {
+                if ($output !== '' && !str_contains($output, 'Nothing to migrate')) {
+                    foreach (explode("\n", $output) as $line) {
+                        $line = trim($line);
+                        if ($line !== '') {
+                            $this->line("   {$line}");
+                        }
+                    }
+                } else {
+                    $this->line('   ✓ Nothing to migrate');
+                }
+            } else {
+                $this->error("   ✗ Migrations failed (exit {$exitCode})");
+                if ($output !== '') {
+                    $this->line($output);
+                }
+            }
+        } catch (\Exception $e) {
+            $this->error('   ✗ ' . $e->getMessage());
+        }
+
+        $this->newLine();
     }
 
     /**
