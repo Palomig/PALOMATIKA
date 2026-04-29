@@ -135,6 +135,30 @@ class PracticeGameService
         return $game;
     }
 
+    public function allCategories(): array
+    {
+        return array_values(config('practice_games.categories', []));
+    }
+
+    public function getCategory(string $slug): array
+    {
+        $category = config("practice_games.categories.{$slug}");
+
+        if (!is_array($category)) {
+            throw new InvalidArgumentException("Unknown practice category [{$slug}]");
+        }
+
+        return $category;
+    }
+
+    public function gamesByCategory(string $slug): array
+    {
+        return array_values(array_filter(
+            $this->allMiniGames(),
+            static fn (array $game): bool => ($game['category'] ?? null) === $slug,
+        ));
+    }
+
     public function resolveLevel(string $slug, int $score): array
     {
         $game = $this->getMiniGame($slug);

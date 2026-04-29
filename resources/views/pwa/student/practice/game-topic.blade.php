@@ -58,7 +58,7 @@
   turnSeconds: @js((int) ($game['turn_seconds'] ?? 10)),
 })">
   <div class="topbar">
-    <a href="{{ route('pwa.student.practice.mini-games') }}" class="back-btn">‹</a>
+    <a href="{{ isset($game['category']) ? route('pwa.student.practice.category', $game['category']) : route('pwa.student.practice.index') }}" class="back-btn">‹</a>
     <div class="topbar-title">{{ $game['title'] }}</div>
     <a :href="leaderboardUrl" class="pill pill-accent" style="text-decoration:none;margin-left:auto;">🏆 Лидерборд</a>
   </div>

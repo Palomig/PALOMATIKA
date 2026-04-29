@@ -65,7 +65,7 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
         Route::get('/tutor', [StudentController::class, 'tutor'])->name('pwa.student.tutor');
         Route::prefix('practice')->name('pwa.student.practice.')->group(function () {
             Route::get('/', [PracticeController::class, 'index'])->name('index');
-            Route::get('/mini-games', [PracticeController::class, 'miniGames'])->name('mini-games');
+            Route::get('/category/{slug}', [PracticeController::class, 'category'])->name('category');
             Route::get('/mini-games/{slug}', [PracticeController::class, 'showMiniGame'])->name('mini-games.show');
             Route::get('/mini-games/{slug}/leaderboard', [PracticeController::class, 'leaderboard'])->name('mini-games.leaderboard');
             Route::post('/api/mini-games/{slug}/start', [PracticeController::class, 'startRun'])->name('mini-games.start');

@@ -1,10 +1,27 @@
 <?php
 
 return [
-    'mini_games' => [
+    'categories' => [
         'equations' => [
             'slug' => 'equations',
             'title' => 'Уравнения',
+            'description' => 'Тренажёры по решению уравнений.',
+            'icon' => '🧮',
+        ],
+        'graphs' => [
+            'slug' => 'graphs',
+            'title' => 'Графики',
+            'description' => 'Тренажёры по графикам функций.',
+            'icon' => '📈',
+        ],
+    ],
+    'mini_games' => [
+        'equations' => [
+            'slug' => 'equations',
+            'category' => 'equations',
+            'title' => 'Уравнения',
+            'card_title' => 'Перенос через =',
+            'card_description' => 'Выбирай правильный следующий шаг переноса. До первой ошибки.',
             'description' => 'Мини-игра на перенос через равно и типичные ошибки со знаками и делением.',
             'icon' => '🧮',
             'turn_seconds' => 10,
@@ -85,7 +102,10 @@ return [
         ],
         'functions' => [
             'slug' => 'functions',
+            'category' => 'graphs',
             'title' => 'Графики функций',
+            'card_title' => 'Определение коэффициентов по рисунку',
+            'card_description' => 'По графику определи знак коэффициента линейной функции или параболы.',
             'description' => 'Мини-игра на определение знаков коэффициентов по графику линейной функции и параболы.',
             'icon' => '📈',
             'turn_seconds' => 15,

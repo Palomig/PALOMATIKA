@@ -1,5 +1,5 @@
 @extends('layouts.pwa')
-@section('title', 'Мини-игры — palomatika')
+@section('title', $category['title'] . ' — palomatika')
 
 @push('styles')
   .games-list { display: flex; flex-direction: column; gap: 12px; }
@@ -20,11 +20,7 @@
 <div class="page">
   <div class="topbar">
     <a href="{{ route('pwa.student.practice.index') }}" class="back-btn">‹</a>
-    <div class="topbar-title">Мини-игры</div>
-  </div>
-
-  <div class="note anim-up" style="animation-delay:.04s;">
-    Короткие игровые тренировки, где мы отрабатываем один навык до автоматизма. Сейчас доступна первая тема.
+    <div class="topbar-title">{{ $category['title'] }}</div>
   </div>
 
   <div class="games-list">
@@ -33,8 +29,8 @@
         <div class="game-card-icon">{{ $game['icon'] ?? '🎮' }}</div>
         <div>
           <div class="pill pill-green" style="width:max-content;margin-bottom:10px;">Активно</div>
-          <div class="game-card-title">{{ $game['title'] }}</div>
-          <div class="game-card-desc">{{ $game['description'] }}</div>
+          <div class="game-card-title">{{ $game['card_title'] ?? $game['title'] }}</div>
+          <div class="game-card-desc">{{ $game['card_description'] ?? $game['description'] }}</div>
         </div>
       </a>
     @endforeach

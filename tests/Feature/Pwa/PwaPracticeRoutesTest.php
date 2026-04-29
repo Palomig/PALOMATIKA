@@ -44,13 +44,20 @@ class PwaPracticeRoutesTest extends TestCase
             ->get('http://student.palomatika.ru/practice')
             ->assertOk()
             ->assertSee('Практика')
-            ->assertSee('Мини-игры');
+            ->assertSee('Уравнения')
+            ->assertSee('Графики');
 
         $this->actingAs($student)
-            ->get('http://student.palomatika.ru/practice/mini-games')
+            ->get('http://student.palomatika.ru/practice/category/equations')
             ->assertOk()
-            ->assertSee('Мини-игры')
-            ->assertSee('Уравнения');
+            ->assertSee('Уравнения')
+            ->assertSee('Перенос через =');
+
+        $this->actingAs($student)
+            ->get('http://student.palomatika.ru/practice/category/graphs')
+            ->assertOk()
+            ->assertSee('Графики')
+            ->assertSee('Определение коэффициентов по рисунку');
 
         $this->actingAs($student)
             ->get('http://student.palomatika.ru/practice/mini-games/equations')
