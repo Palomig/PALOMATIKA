@@ -45,6 +45,24 @@
     background: var(--surface2); border: 1px solid var(--border); border-radius: 14px;
     padding: 12px 14px; font-size: 12px; font-weight: 600; color: var(--muted); line-height: 1.5;
   }
+
+  .lb-scope-hint { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-top: 4px; }
+  .lb-table { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
+  .lb-row {
+    display: grid; grid-template-columns: 36px 1fr auto; align-items: center; gap: 10px;
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 12px;
+    padding: 10px 14px;
+  }
+  .lb-row.is-viewer { border-color: var(--accent); background: rgba(99,102,241,.08); }
+  .lb-rank { font-family: var(--display); font-size: 18px; color: var(--muted); }
+  .lb-rank.is-top1 { color: #facc15; }
+  .lb-rank.is-top2 { color: #d1d5db; }
+  .lb-rank.is-top3 { color: #f97316; }
+  .lb-name { font-size: 14px; color: var(--text); font-weight: 700; }
+  .lb-class { font-size: 11px; color: var(--muted); font-weight: 600; margin-top: 2px; }
+  .lb-score { font-family: var(--display); font-size: 18px; color: var(--green); }
+  .lb-empty { color: var(--muted); font-size: 13px; font-weight: 600; line-height: 1.5; margin-top: 10px; }
+  .lb-divider { text-align: center; color: var(--muted); font-size: 11px; font-weight: 700; letter-spacing: .12em; margin: 8px 0 4px; }
 @endpush
 
 @section('body')
@@ -60,7 +78,6 @@
   <div class="topbar">
     <a href="{{ isset($game['category']) ? route('pwa.student.practice.category', $game['category']) : route('pwa.student.practice.index') }}" class="back-btn">‹</a>
     <div class="topbar-title">{{ $game['title'] }}</div>
-    <a :href="leaderboardUrl" class="pill pill-accent" style="text-decoration:none;margin-left:auto;">🏆 Лидерборд</a>
   </div>
 
   <template x-if="status === 'intro'">
@@ -79,15 +96,51 @@
       <button class="btn btn-green anim-up" style="animation-delay:.1s;" @click="startGame()">Начать</button>
 
       <div class="game-result anim-up" style="animation-delay:.14s;">
-        <div class="sec-label">Что будет после игры</div>
-        <div class="game-copy" style="margin-top:10px;">
-          Если ошибёшься или не успеешь за 10 секунд, увидишь экран `Игра окончена`, свой счёт, основные правила темы и кнопку `Сыграть ещё`.
-        </div>
-        <div class="theory-list">
-          @foreach(($game['theory']['items'] ?? []) as $item)
-            <div class="theory-item">{{ $item }}</div>
-          @endforeach
-        </div>
+        <div class="sec-label">🏆 Лидерборд</div>
+        @php
+          $scopeLabel = match ($boardScope) { 'class' => 'твой класс', 'school' => 'твоя школа', default => 'все ученики' };
+        @endphp
+        <div class="lb-scope-hint">{{ $scopeLabel }} · за всё время</div>
+
+        @if(!$board['available'])
+          <div class="lb-empty">Чтобы видеть лидерборд класса, укажи в профиле школу, номер класса и букву.</div>
+        @elseif(empty($board['entries']))
+          <div class="lb-empty">Здесь пока пусто. Сыграй раунд — твой результат появится первым.</div>
+        @else
+          <div class="lb-table">
+            @foreach(array_slice($board['entries'], 0, 10) as $entry)
+              @php
+                $rankClass = match ($entry['rank']) { 1 => 'is-top1', 2 => 'is-top2', 3 => 'is-top3', default => '' };
+              @endphp
+              <div class="lb-row {{ $entry['is_viewer'] ? 'is-viewer' : '' }}">
+                <div class="lb-rank {{ $rankClass }}">{{ $entry['rank'] }}</div>
+                <div>
+                  <div class="lb-name">{{ $entry['name'] }}{{ $entry['is_viewer'] ? ' (ты)' : '' }}</div>
+                  @if(!empty($entry['class']))
+                    <div class="lb-class">{{ $entry['class'] }}</div>
+                  @endif
+                </div>
+                <div class="lb-score">{{ $entry['score'] }}</div>
+              </div>
+            @endforeach
+          </div>
+
+          @if(!empty($board['viewer_entry']))
+            <div class="lb-divider">···</div>
+            <div class="lb-table">
+              <div class="lb-row is-viewer">
+                <div class="lb-rank">{{ $board['viewer_entry']['rank'] }}</div>
+                <div>
+                  <div class="lb-name">{{ $board['viewer_entry']['name'] }} (ты)</div>
+                  @if(!empty($board['viewer_entry']['class']))
+                    <div class="lb-class">{{ $board['viewer_entry']['class'] }}</div>
+                  @endif
+                </div>
+                <div class="lb-score">{{ $board['viewer_entry']['score'] }}</div>
+              </div>
+            </div>
+          @endif
+        @endif
       </div>
     </div>
   </template>

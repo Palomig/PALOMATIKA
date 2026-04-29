@@ -184,4 +184,44 @@ class PwaPracticeLeaderboardTest extends TestCase
             ->assertSee('За всё время')
             ->assertSee('На этой неделе');
     }
+
+    public function test_intro_screen_renders_inline_leaderboard_with_classmates(): void
+    {
+        $viewer = $this->makeStudent(['name' => 'Иван Петров']);
+        $classmate = $this->makeStudent(['name' => 'Аня Сидорова']);
+        $this->logRun($classmate, 'equations', 7);
+
+        $this->actingAs($viewer)
+            ->get('http://student.palomatika.ru/practice/mini-games/equations')
+            ->assertOk()
+            ->assertSee('🏆 Лидерборд', false)
+            ->assertSee('твой класс')
+            ->assertSee('Аня С.')
+            ->assertDontSee('Что будет после игры');
+    }
+
+    public function test_intro_screen_falls_back_to_all_scope_for_user_without_class(): void
+    {
+        $viewer = $this->makeStudent(['grade_letter' => null, 'school_number' => null]);
+        $other = $this->makeStudent(['grade_letter' => 'Б']);
+        $this->logRun($other, 'equations', 3);
+
+        $this->actingAs($viewer)
+            ->get('http://student.palomatika.ru/practice/mini-games/equations')
+            ->assertOk()
+            ->assertSee('все ученики')
+            ->assertDontSee('твой класс');
+    }
+
+    public function test_intro_screen_does_not_show_topbar_leaderboard_button(): void
+    {
+        $viewer = $this->makeStudent();
+
+        $response = $this->actingAs($viewer)
+            ->get('http://student.palomatika.ru/practice/mini-games/equations')
+            ->assertOk();
+
+        $body = $response->getContent();
+        $this->assertStringNotContainsString('🏆 Лидерборд</a>', $body, 'topbar pill should be removed');
+    }
 }

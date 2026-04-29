@@ -34,10 +34,18 @@ class PracticeController extends Controller
         ]);
     }
 
-    public function showMiniGame(string $slug)
+    public function showMiniGame(Request $request, string $slug)
     {
+        $game = $this->practiceGames->getMiniGame($slug);
+        $viewer = $request->user();
+        $scopes = $this->leaderboard->availableScopes($viewer);
+        $defaultScope = $scopes['class'] ? 'class' : 'all';
+        $board = $this->leaderboard->topRuns($slug, $defaultScope, 'all_time', $viewer);
+
         return view('pwa.student.practice.game-topic', [
-            'game' => $this->practiceGames->getMiniGame($slug),
+            'game' => $game,
+            'board' => $board,
+            'boardScope' => $defaultScope,
         ]);
     }
 
