@@ -19,13 +19,18 @@ class PracticeController extends Controller
 
     public function index()
     {
-        return view('pwa.student.practice.index');
+        return view('pwa.student.practice.index', [
+            'categories' => $this->practiceGames->allCategories(),
+        ]);
     }
 
-    public function miniGames()
+    public function category(string $slug)
     {
-        return view('pwa.student.practice.mini-games', [
-            'games' => $this->practiceGames->allMiniGames(),
+        $category = $this->practiceGames->getCategory($slug);
+
+        return view('pwa.student.practice.category', [
+            'category' => $category,
+            'games' => $this->practiceGames->gamesByCategory($slug),
         ]);
     }
 
