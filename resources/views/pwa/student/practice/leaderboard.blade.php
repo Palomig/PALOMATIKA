@@ -44,8 +44,13 @@
   </div>
 
   @php
-    $scopeLabels = ['class' => 'Класс', 'school' => 'Школа', 'all' => 'Все'];
+    $scopeLabels = ['all' => 'Все', 'school' => 'Школа', 'class' => 'Класс', 'group' => 'Группа'];
     $periodLabels = ['all_time' => 'За всё время', 'week' => 'На этой неделе'];
+    $scopeDisabledHint = [
+      'school' => 'Укажи в профиле номер школы',
+      'class' => 'Укажи в профиле школу, класс и букву',
+      'group' => 'Доступно, когда тебя добавит репетитор',
+    ];
   @endphp
 
   <div class="lb-section-label">Скоп</div>
@@ -53,7 +58,8 @@
     @foreach($scopeLabels as $key => $label)
       @php $enabled = $availableScopes[$key] ?? false; @endphp
       <a href="{{ route('pwa.student.practice.mini-games.leaderboard', ['slug' => $game['slug'], 'scope' => $key, 'period' => $period]) }}"
-         class="lb-tab {{ $scope === $key ? 'is-active' : '' }} {{ !$enabled ? 'is-disabled' : '' }}">
+         class="lb-tab {{ $scope === $key ? 'is-active' : '' }} {{ !$enabled ? 'is-disabled' : '' }}"
+         @if(!$enabled) title="{{ $scopeDisabledHint[$key] ?? '' }}" @endif>
         {{ $label }}
       </a>
     @endforeach
@@ -71,7 +77,7 @@
 
   @if(!$board['available'])
     <div class="lb-empty">
-      Чтобы видеть лидерборд класса, укажи в профиле школу, номер класса и букву.
+      {{ $scopeDisabledHint[$scope] ?? 'Лидерборд недоступен.' }}
     </div>
   @elseif(empty($board['entries']))
     <div class="lb-empty">

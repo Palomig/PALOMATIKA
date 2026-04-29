@@ -3,6 +3,7 @@
 namespace Tests\Feature\Pwa;
 
 use App\Models\PracticeGameRun;
+use App\Models\TeacherStudent;
 use App\Models\User;
 use App\Services\PracticeLeaderboardService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -154,6 +155,98 @@ class PwaPracticeLeaderboardTest extends TestCase
         $this->assertSame(7, $board['entries'][0]['score']);
     }
 
+    public function test_group_scope_for_teacher_filters_to_linked_students(): void
+    {
+        $teacher = User::factory()->create([
+            'role' => 'teacher',
+            'oauth_provider' => 'vk',
+            'oauth_id' => 'lb-teacher-' . self::$seq++,
+        ]);
+        $linked1 = $this->makeStudent(['name' => 'Линк Один', 'school_number' => '1']);
+        $linked2 = $this->makeStudent(['name' => 'Линк Два', 'school_number' => '2']);
+        $unlinked = $this->makeStudent(['name' => 'Чужой Ученик', 'school_number' => '3']);
+
+        TeacherStudent::create(['teacher_id' => $teacher->id, 'student_id' => $linked1->id, 'source' => 'manual']);
+        TeacherStudent::create(['teacher_id' => $teacher->id, 'student_id' => $linked2->id, 'source' => 'manual']);
+
+        $this->logRun($linked1, 'equations', 8);
+        $this->logRun($linked2, 'equations', 5);
+        $this->logRun($unlinked, 'equations', 99);
+
+        $board = app(PracticeLeaderboardService::class)
+            ->topRuns('equations', 'group', 'all_time', $teacher);
+
+        $this->assertTrue($board['available']);
+        $this->assertCount(2, $board['entries']);
+        $names = array_column($board['entries'], 'name');
+        $this->assertContains('Линк О.', $names);
+        $this->assertContains('Линк Д.', $names);
+        $this->assertNotContains('Чужой У.', $names);
+    }
+
+    public function test_group_scope_for_student_includes_classmates_under_same_teacher(): void
+    {
+        $teacher = User::factory()->create([
+            'role' => 'teacher',
+            'oauth_provider' => 'vk',
+            'oauth_id' => 'lb-teacher-' . self::$seq++,
+        ]);
+        $viewer = $this->makeStudent(['name' => 'Я Сам', 'school_number' => '1']);
+        $peer = $this->makeStudent(['name' => 'Сосед По Группе', 'school_number' => '2']);
+        $stranger = $this->makeStudent(['name' => 'Чужой Ученик', 'school_number' => '3']);
+
+        TeacherStudent::create(['teacher_id' => $teacher->id, 'student_id' => $viewer->id, 'source' => 'manual']);
+        TeacherStudent::create(['teacher_id' => $teacher->id, 'student_id' => $peer->id, 'source' => 'manual']);
+
+        $this->logRun($viewer, 'equations', 4);
+        $this->logRun($peer, 'equations', 9);
+        $this->logRun($stranger, 'equations', 99);
+
+        $board = app(PracticeLeaderboardService::class)
+            ->topRuns('equations', 'group', 'all_time', $viewer);
+
+        $this->assertTrue($board['available']);
+        $this->assertCount(2, $board['entries']);
+        $this->assertSame('Сосед П.', $board['entries'][0]['name']);
+    }
+
+    public function test_group_scope_unavailable_without_link(): void
+    {
+        $viewer = $this->makeStudent();
+        $this->logRun($viewer, 'equations', 5);
+
+        $service = app(PracticeLeaderboardService::class);
+
+        $this->assertFalse($service->availableScopes($viewer)['group']);
+
+        $board = $service->topRuns('equations', 'group', 'all_time', $viewer);
+        $this->assertFalse($board['available']);
+    }
+
+    public function test_admin_default_scope_is_all_and_school_class_disabled(): void
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+            'name' => 'Админ',
+            'oauth_provider' => 'vk',
+            'oauth_id' => 'lb-admin-' . self::$seq++,
+            'onboarding_completed_at' => now(),
+            'school_number' => '1',
+            'grade_num' => 9,
+            'grade_letter' => 'Д',
+            'city' => 'Чехов',
+        ]);
+        $student = $this->makeStudent(['name' => 'Один Ученик', 'school_number' => '8', 'grade_letter' => 'Д']);
+        $this->logRun($student, 'equations', 12);
+
+        $this->actingAs($admin)
+            ->get('http://student.palomatika.ru/practice/mini-games/equations')
+            ->assertOk()
+            ->assertSee('все ученики')
+            ->assertSee('Один У.')
+            ->assertDontSee('Здесь пока пусто');
+    }
+
     public function test_only_best_score_per_user_appears(): void
     {
         $viewer = $this->makeStudent();
@@ -181,11 +274,12 @@ class PwaPracticeLeaderboardTest extends TestCase
             ->assertSee('Класс')
             ->assertSee('Школа')
             ->assertSee('Все')
+            ->assertSee('Группа')
             ->assertSee('За всё время')
             ->assertSee('На этой неделе');
     }
 
-    public function test_intro_screen_renders_inline_leaderboard_with_classmates(): void
+    public function test_intro_screen_defaults_to_all_scope(): void
     {
         $viewer = $this->makeStudent(['name' => 'Иван Петров']);
         $classmate = $this->makeStudent(['name' => 'Аня Сидорова']);
@@ -195,9 +289,25 @@ class PwaPracticeLeaderboardTest extends TestCase
             ->get('http://student.palomatika.ru/practice/mini-games/equations')
             ->assertOk()
             ->assertSee('🏆 Лидерборд', false)
-            ->assertSee('твой класс')
+            ->assertSee('все ученики')
             ->assertSee('Аня С.')
             ->assertDontSee('Что будет после игры');
+    }
+
+    public function test_intro_screen_class_scope_via_query_param(): void
+    {
+        $viewer = $this->makeStudent(['name' => 'Иван Петров']);
+        $classmate = $this->makeStudent(['name' => 'Аня Сидорова']);
+        $otherClass = $this->makeStudent(['name' => 'Маша Иванова', 'grade_letter' => 'Б']);
+        $this->logRun($classmate, 'equations', 7);
+        $this->logRun($otherClass, 'equations', 99);
+
+        $this->actingAs($viewer)
+            ->get('http://student.palomatika.ru/practice/mini-games/equations?scope=class')
+            ->assertOk()
+            ->assertSee('твой класс')
+            ->assertSee('Аня С.')
+            ->assertDontSee('Маша И.');
     }
 
     public function test_intro_screen_falls_back_to_all_scope_for_user_without_class(): void
@@ -207,7 +317,7 @@ class PwaPracticeLeaderboardTest extends TestCase
         $this->logRun($other, 'equations', 3);
 
         $this->actingAs($viewer)
-            ->get('http://student.palomatika.ru/practice/mini-games/equations')
+            ->get('http://student.palomatika.ru/practice/mini-games/equations?scope=class')
             ->assertOk()
             ->assertSee('все ученики')
             ->assertDontSee('твой класс');
