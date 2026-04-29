@@ -39,14 +39,23 @@ class PracticeController extends Controller
         $game = $this->practiceGames->getMiniGame($slug);
         $viewer = $request->user();
         $scopes = $this->leaderboard->availableScopes($viewer);
-        $defaultScope = $scopes['class'] ? 'class' : 'all';
-        $board = $this->leaderboard->topRuns($slug, $defaultScope, 'all_time', $viewer);
+        $scope = $this->normalizeScope((string) $request->query('scope', 'all'), $scopes);
+        $board = $this->leaderboard->topRuns($slug, $scope, 'all_time', $viewer);
 
         return view('pwa.student.practice.game-topic', [
             'game' => $game,
             'board' => $board,
-            'boardScope' => $defaultScope,
+            'boardScope' => $scope,
+            'availableScopes' => $scopes,
         ]);
+    }
+
+    private function normalizeScope(string $scope, array $available): string
+    {
+        if (!in_array($scope, ['all', 'school', 'class', 'group'], true)) {
+            return 'all';
+        }
+        return ($available[$scope] ?? false) ? $scope : 'all';
     }
 
     public function startRun(Request $request, string $slug): JsonResponse
@@ -102,24 +111,23 @@ class PracticeController extends Controller
     public function leaderboard(Request $request, string $slug)
     {
         $game = $this->practiceGames->getMiniGame($slug);
-        $scope = (string) $request->query('scope', 'class');
+        $viewer = $request->user();
+        $scopes = $this->leaderboard->availableScopes($viewer);
+        $scope = $this->normalizeScope((string) $request->query('scope', 'all'), $scopes);
         $period = (string) $request->query('period', 'all_time');
 
-        if (!in_array($scope, ['class', 'school', 'all'], true)) {
-            $scope = 'class';
-        }
         if (!in_array($period, ['all_time', 'week'], true)) {
             $period = 'all_time';
         }
 
-        $board = $this->leaderboard->topRuns($slug, $scope, $period, $request->user());
+        $board = $this->leaderboard->topRuns($slug, $scope, $period, $viewer);
 
         return view('pwa.student.practice.leaderboard', [
             'game' => $game,
             'scope' => $scope,
             'period' => $period,
             'board' => $board,
-            'availableScopes' => $this->leaderboard->availableScopes($request->user()),
+            'availableScopes' => $scopes,
         ]);
     }
 

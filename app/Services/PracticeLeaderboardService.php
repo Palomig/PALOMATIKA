@@ -62,6 +62,7 @@ class PracticeLeaderboardService
             'all' => true,
             'school' => $this->hasSchool($viewer),
             'class' => $this->hasClass($viewer),
+            'group' => $this->hasGroup($viewer),
         ];
     }
 
@@ -71,6 +72,9 @@ class PracticeLeaderboardService
             return null;
         }
         if ($scope === 'school' && !$this->hasSchool($viewer)) {
+            return null;
+        }
+        if ($scope === 'group' && !$this->hasGroup($viewer)) {
             return null;
         }
 
@@ -97,6 +101,12 @@ class PracticeLeaderboardService
             if ($viewer->city) {
                 $query->where('users.city', $viewer->city);
             }
+        } elseif ($scope === 'group') {
+            $studentIds = $this->groupStudentIds($viewer);
+            if (empty($studentIds)) {
+                return null;
+            }
+            $query->whereIn('users.id', $studentIds);
         }
 
         return $query;
@@ -150,6 +160,42 @@ class PracticeLeaderboardService
         return $this->hasSchool($viewer)
             && $viewer->grade_num !== null
             && !empty($viewer->grade_letter);
+    }
+
+    private function hasGroup(User $viewer): bool
+    {
+        if ($viewer->role === 'teacher') {
+            return DB::table('teacher_students')->where('teacher_id', $viewer->id)->exists();
+        }
+        if ($viewer->role === 'student') {
+            return DB::table('teacher_students')->where('student_id', $viewer->id)->exists();
+        }
+        return false;
+    }
+
+    private function groupStudentIds(User $viewer): array
+    {
+        if ($viewer->role === 'teacher') {
+            return DB::table('teacher_students')
+                ->where('teacher_id', $viewer->id)
+                ->pluck('student_id')
+                ->all();
+        }
+        if ($viewer->role === 'student') {
+            $teacherIds = DB::table('teacher_students')
+                ->where('student_id', $viewer->id)
+                ->pluck('teacher_id');
+            if ($teacherIds->isEmpty()) {
+                return [];
+            }
+            return DB::table('teacher_students')
+                ->whereIn('teacher_id', $teacherIds)
+                ->pluck('student_id')
+                ->unique()
+                ->values()
+                ->all();
+        }
+        return [];
     }
 
     private function formatName(string $fullName): string

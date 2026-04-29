@@ -47,6 +47,15 @@
   }
 
   .lb-scope-hint { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-top: 4px; }
+  .lb-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+  .lb-tab {
+    flex: 1 1 0; min-width: max-content; text-align: center;
+    padding: 7px 10px; border-radius: 10px; border: 1px solid var(--border);
+    background: var(--surface2); color: var(--text); font-size: 12px; font-weight: 700;
+    text-decoration: none; cursor: pointer;
+  }
+  .lb-tab.is-active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .lb-tab.is-disabled { opacity: .4; pointer-events: none; }
   .lb-table { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
   .lb-row {
     display: grid; grid-template-columns: 36px 1fr auto; align-items: center; gap: 10px;
@@ -98,12 +107,29 @@
       <div class="game-result anim-up" style="animation-delay:.14s;">
         <div class="sec-label">🏆 Лидерборд</div>
         @php
-          $scopeLabel = match ($boardScope) { 'class' => 'твой класс', 'school' => 'твоя школа', default => 'все ученики' };
+          $scopeLabels = ['all' => 'Все', 'school' => 'Школа', 'class' => 'Класс', 'group' => 'Группа'];
+          $scopeHints = ['all' => 'все ученики', 'school' => 'твоя школа', 'class' => 'твой класс', 'group' => 'твоя группа'];
+          $scopeDisabledHint = [
+            'school' => 'Укажи в профиле номер школы',
+            'class' => 'Укажи в профиле школу, класс и букву',
+            'group' => 'Доступно, когда тебя добавит репетитор',
+          ];
         @endphp
-        <div class="lb-scope-hint">{{ $scopeLabel }} · за всё время</div>
+        <div class="lb-tabs">
+          @foreach($scopeLabels as $key => $label)
+            @php $enabled = $availableScopes[$key] ?? false; @endphp
+            @if($enabled)
+              <a href="{{ route('pwa.student.practice.mini-games.show', ['slug' => $game['slug'], 'scope' => $key]) }}"
+                 class="lb-tab {{ $boardScope === $key ? 'is-active' : '' }}">{{ $label }}</a>
+            @else
+              <span class="lb-tab is-disabled" title="{{ $scopeDisabledHint[$key] ?? '' }}">{{ $label }}</span>
+            @endif
+          @endforeach
+        </div>
+        <div class="lb-scope-hint">{{ $scopeHints[$boardScope] ?? 'все ученики' }} · за всё время</div>
 
         @if(!$board['available'])
-          <div class="lb-empty">Чтобы видеть лидерборд класса, укажи в профиле школу, номер класса и букву.</div>
+          <div class="lb-empty">{{ $scopeDisabledHint[$boardScope] ?? 'Лидерборд недоступен.' }}</div>
         @elseif(empty($board['entries']))
           <div class="lb-empty">Здесь пока пусто. Сыграй раунд — твой результат появится первым.</div>
         @else
