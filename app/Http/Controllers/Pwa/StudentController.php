@@ -376,6 +376,7 @@ class StudentController extends Controller
 
         $data = $this->taskData->getTopicData($selected);
         $zadaniya = [];
+        $shortLabels = $this->part2ShortLabels()[$selected] ?? [];
 
         foreach (($data['blocks'] ?? []) as $block) {
             foreach (($block['zadaniya'] ?? []) as $zadanie) {
@@ -393,9 +394,16 @@ class StudentController extends Controller
                 if (!empty($tasks)) {
                     $section = trim((string) ($zadanie['section'] ?? ''));
                     $instruction = trim((string) ($zadanie['instruction'] ?? ''));
-                    $num = $zadanie['number'] ?? '';
+                    $num = (int) ($zadanie['number'] ?? 0);
                     $title = $section !== '' ? $section : ($instruction !== '' ? "Задание {$num}. {$instruction}" : "Задание {$num}");
-                    $zadaniya[] = ['title' => $title, 'hint' => $zadanie['answer_hint'] ?? null, 'tasks' => $tasks];
+                    $short = $shortLabels[$num] ?? null;
+                    $zadaniya[] = [
+                        'number'   => $num,
+                        'title'    => $short['title'] ?? $title,
+                        'subtitle' => $short['subtitle'] ?? null,
+                        'hint'     => $zadanie['answer_hint'] ?? null,
+                        'tasks'    => $tasks,
+                    ];
                 }
             }
         }
@@ -408,6 +416,60 @@ class StudentController extends Controller
             'isPremium'     => true, // No billing gate in PWA
             'trialUsed'     => true,  // No trial UI in PWA
         ]);
+    }
+
+    private function part2ShortLabels(): array
+    {
+        return [
+            '20' => [
+                1  => ['title' => 'Значение выражения',     'subtitle' => 'По данному отношению'],
+                2  => ['title' => 'Кубическое уравнение',   'subtitle' => 'Группировка'],
+                3  => ['title' => 'Уравнение с корнем',     'subtitle' => 'Перенос радикала'],
+                4  => ['title' => 'Произведение скобок',    'subtitle' => 'С квадратом суммы'],
+                5  => ['title' => 'Дробно-рациональное',    'subtitle' => 'Замена 1/x = t'],
+                6  => ['title' => 'Биквадратное',           'subtitle' => 'Замена (x ± a)² = t'],
+                7  => ['title' => 'Степенное уравнение',    'subtitle' => 'x⁴ = (·)²'],
+                8  => ['title' => 'Система уравнений',      'subtitle' => 'Подстановка'],
+                9  => ['title' => 'Однородная система',     'subtitle' => 'Деление уравнений'],
+                10 => ['title' => 'Неравенство с корнем',   'subtitle' => 'Замена (x − a)'],
+                11 => ['title' => 'Дробное неравенство',    'subtitle' => 'Метод интервалов'],
+            ],
+            '21' => [
+                1  => ['title' => 'Движение по прямой',     'subtitle' => 'Один объект'],
+                2  => ['title' => 'Движение навстречу',     'subtitle' => 'По прямой'],
+                3  => ['title' => 'Движение вдогонку',      'subtitle' => 'Автомобили'],
+                4  => ['title' => 'Движение вдогонку',      'subtitle' => 'Велосипедисты'],
+                5  => ['title' => 'Движение вдогонку',      'subtitle' => 'Половина пути'],
+                6  => ['title' => 'По окружности',          'subtitle' => 'Замкнутая трасса'],
+                7  => ['title' => 'Средняя скорость',       'subtitle' => 'Найти среднюю'],
+                8  => ['title' => 'Протяжённые тела',       'subtitle' => 'Найти длину поезда'],
+                9  => ['title' => 'Движение по воде',       'subtitle' => 'Баржа'],
+                10 => ['title' => 'Движение по воде',       'subtitle' => 'Плот и лодка'],
+                11 => ['title' => 'Движение по воде',       'subtitle' => 'Моторная лодка'],
+                12 => ['title' => 'Движение по воде',       'subtitle' => 'Теплоход'],
+                13 => ['title' => 'Проценты',               'subtitle' => 'Концентрация'],
+                14 => ['title' => 'Проценты',               'subtitle' => 'Урожай / фрукты'],
+                15 => ['title' => 'Совместная работа',      'subtitle' => 'Производительность'],
+            ],
+            '23' => [
+                1  => ['title' => 'Параллелограмм · биссектриса', 'subtitle' => 'Найти периметр'],
+                2  => ['title' => 'Ромб · диагонали',             'subtitle' => 'Найти углы ромба'],
+                3  => ['title' => 'Ромб · высота',                'subtitle' => 'Найти высоту ромба'],
+                4  => ['title' => 'Прямоугольный треугольник',    'subtitle' => 'Найти медиану по катетам'],
+                5  => ['title' => 'Высота к гипотенузе',          'subtitle' => 'Прямоугольный треугольник'],
+                6  => ['title' => 'Трапеция · биссектрисы',       'subtitle' => 'Найти боковую сторону AB'],
+                7  => ['title' => 'Подобие треугольников',        'subtitle' => 'Найти отрезок BN'],
+                8  => ['title' => 'Параллельные прямые',          'subtitle' => 'Найти отрезок MC'],
+                9  => ['title' => 'Высота из прямого угла',       'subtitle' => 'Найти AB'],
+                10 => ['title' => 'Трапеция · углы',              'subtitle' => 'Найти боковую сторону AB'],
+                11 => ['title' => 'Трапеция · параллельная прямая','subtitle' => 'Найти отрезок EF'],
+                12 => ['title' => 'Хорды окружности',             'subtitle' => 'Найти длину хорды CD'],
+                13 => ['title' => 'Высота прямоугольного Δ',      'subtitle' => 'Найти BH или PK'],
+                14 => ['title' => 'Окружность · стороны Δ',       'subtitle' => 'Найти отрезок KP'],
+                15 => ['title' => 'Окружность на стороне Δ',      'subtitle' => 'Найти AC или диаметр'],
+                16 => ['title' => 'Описанная окружность',         'subtitle' => 'Найти BC по углам и радиусу'],
+            ],
+        ];
     }
 
     /**
