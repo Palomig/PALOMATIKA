@@ -127,7 +127,7 @@
   .page-header { display: flex; align-items: center; gap: 12px; opacity: 0; animation: fadeDown 0.3s ease forwards; }
   .page-header .back-btn { width: 42px; height: 42px; font-size: 26px; font-weight: 700; color: var(--text); }
   .page-header .header-title { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-  .ord-suffix { font-size: 0.5em; }
+  .ord-suffix { font-size: 0.75em; text-transform: lowercase; margin-left: 1px; }
 @endpush
 
 @section('body')
