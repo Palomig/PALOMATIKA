@@ -146,7 +146,7 @@
 
   <div class="task-list">
     @forelse($zadaniya as $group)
-      <details class="spoiler" {{ $loop->first ? 'open' : '' }}>
+      <details class="spoiler">
         <summary>{{ $group['title'] }} <span style="font-size:11px;color:var(--muted);font-weight:400;">({{ count($group['tasks']) }})</span></summary>
         <div class="spoiler-body">
           @foreach($group['tasks'] as $task)
