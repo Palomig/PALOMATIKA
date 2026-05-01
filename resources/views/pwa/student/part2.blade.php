@@ -126,8 +126,9 @@
 
   .page-header { display: flex; align-items: center; gap: 12px; opacity: 0; animation: fadeDown 0.3s ease forwards; }
   .page-header .back-btn { width: 42px; height: 42px; font-size: 26px; font-weight: 700; color: var(--text); }
-  .page-header .header-title { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
-  .ord-suffix { font-size: 0.75em; text-transform: lowercase; margin-left: 1px; }
+  .page-header .header-title { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .page-header .header-name { font-family: var(--display); font-size: 15px; color: var(--text); line-height: 1.2; }
+  .page-header .header-desc { font-size: 11px; font-weight: 600; color: var(--muted); line-height: 1.3; }
 @endpush
 
 @section('body')
@@ -135,8 +136,8 @@
   <div class="page-header">
     <a href="{{ route('pwa.student.dashboard') }}" class="back-btn">‹</a>
     <div class="header-title">
-      <div class="sec-label">2<span class="ord-suffix">я</span> часть ОГЭ</div>
-      <div class="sec-label">задания 20–25</div>
+      <div class="header-name">2я часть ОГЭ</div>
+      <div class="header-desc">Задания 20–25</div>
     </div>
   </div>
 
