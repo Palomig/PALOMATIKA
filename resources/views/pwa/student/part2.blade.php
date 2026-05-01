@@ -21,10 +21,12 @@
     transition: all .15s ease;
   }
   .topic-chip.active {
-    border-color: var(--purple-bd);
-    background: var(--purple-bg);
-    color: var(--purple);
+    border-color: var(--purple);
+    background: var(--purple);
+    color: #fff;
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--purple) 28%, transparent);
   }
+  .topic-chip.active .topic-chip-num { color: #fff; }
   .topic-chip.disabled {
     opacity: 0.4; cursor: default; pointer-events: none;
   }
@@ -122,15 +124,20 @@
   .pm-btn-trial { background: var(--purple-bg); border: 1px solid var(--purple-bd); color: var(--purple); }
   .pm-btn-trial:active { filter: brightness(0.9); }
   .pm-cancel { display: block; width: 100%; padding: 14px; background: none; border: none; color: var(--muted); font-size: 14px; font-weight: 700; cursor: pointer; }
+
+  .page-header { display: flex; align-items: center; gap: 12px; opacity: 0; animation: fadeDown 0.3s ease forwards; }
+  .page-header .back-btn { width: 42px; height: 42px; font-size: 26px; font-weight: 700; color: var(--text); }
+  .page-header .header-title { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 @endpush
 
 @section('body')
 <div class="page task-render-scope" x-data="taskBrowser()">
-  <a href="{{ route('pwa.student.dashboard') }}" class="back-btn">‹</a>
-
-  <div class="hero" style="opacity:0; animation: fadeUp 0.3s ease 0.04s forwards;">
-    <div class="hero-title">2я часть ОГЭ</div>
-    <div class="hero-sub">задания 20–25</div>
+  <div class="page-header">
+    <a href="{{ route('pwa.student.dashboard') }}" class="back-btn">‹</a>
+    <div class="header-title">
+      <div class="sec-label">2я часть ОГЭ</div>
+      <div class="sec-label">задания 20–25</div>
+    </div>
   </div>
 
   <div class="sec-label">Выбери тему</div>
