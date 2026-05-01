@@ -21,12 +21,11 @@
     transition: all .15s ease;
   }
   .topic-chip.active {
-    border-color: var(--purple);
-    background: var(--purple);
-    color: #fff;
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--purple) 28%, transparent);
+    border-color: #d1d5db;
+    background: #d1d5db;
+    color: #1c1f27;
   }
-  .topic-chip.active .topic-chip-num { color: #fff; }
+  .topic-chip.active .topic-chip-num { color: #1c1f27; }
   .topic-chip.disabled {
     opacity: 0.4; cursor: default; pointer-events: none;
   }
