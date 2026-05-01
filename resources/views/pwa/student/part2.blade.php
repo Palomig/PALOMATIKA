@@ -143,6 +143,7 @@
   <div class="sec-label">Выбери тему</div>
   <div class="topics-row">
     @foreach($topicsMeta as $tid => $meta)
+      @php $tid = (string) $tid; @endphp
       <a class="topic-chip {{ $selectedTopic === $tid ? 'active' : '' }} {{ !in_array($tid, $topics) ? 'disabled' : '' }}"
          href="{{ in_array($tid, $topics) ? url('/part2?topic=' . $tid) : '#' }}">
         <span class="topic-chip-icon">{{ $meta['icon'] }}</span>
