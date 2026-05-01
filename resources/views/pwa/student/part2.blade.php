@@ -139,7 +139,7 @@
 
   <div class="task-list">
     @forelse($zadaniya as $group)
-      <details class="spoiler" {{ $loop->first ? 'open' : '' }}>
+      <details class="spoiler">
         <summary>{{ $group['title'] }}</summary>
         <div class="spoiler-body">
           @if($group['hint'])
