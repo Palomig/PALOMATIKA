@@ -127,6 +127,7 @@
   .page-header { display: flex; align-items: center; gap: 12px; opacity: 0; animation: fadeDown 0.3s ease forwards; }
   .page-header .back-btn { width: 42px; height: 42px; font-size: 26px; font-weight: 700; color: var(--text); }
   .page-header .header-title { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .ord-suffix { font-size: 0.5em; }
 @endpush
 
 @section('body')
@@ -134,7 +135,7 @@
   <div class="page-header">
     <a href="{{ route('pwa.student.dashboard') }}" class="back-btn">‹</a>
     <div class="header-title">
-      <div class="sec-label">2я часть ОГЭ</div>
+      <div class="sec-label">2<span class="ord-suffix">я</span> часть ОГЭ</div>
       <div class="sec-label">задания 20–25</div>
     </div>
   </div>
