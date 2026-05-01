@@ -7,18 +7,19 @@
 
 @push('styles')
   .topics-row {
-    display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px;
+    display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
+    gap: 6px; padding-bottom: 2px;
     opacity: 0; animation: fadeUp 0.3s ease 0.08s forwards;
   }
   .topic-chip {
-    display: flex; align-items: center; gap: 6px;
-    min-width: max-content;
-    padding: 8px 14px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    padding: 10px 4px; border-radius: 10px;
     border: 1px solid var(--border);
     background: var(--surface);
     color: var(--text); text-decoration: none;
-    font-family: var(--display); font-size: 13px;
+    font-family: var(--display); font-size: 14px;
     transition: all .15s ease;
+    min-width: 0;
   }
   .topic-chip.active {
     border-color: #d1d5db;
@@ -29,7 +30,6 @@
   .topic-chip.disabled {
     opacity: 0.4; cursor: default; pointer-events: none;
   }
-  .topic-chip-icon { font-size: 16px; }
   .topic-chip-num { font-weight: 700; }
 
   .spoiler {
@@ -145,20 +145,13 @@
       @php $tid = (string) $tid; @endphp
       <a class="topic-chip {{ $selectedTopic === $tid ? 'active' : '' }} {{ !in_array($tid, $topics) ? 'disabled' : '' }}"
          href="{{ in_array($tid, $topics) ? url('/part2?topic=' . $tid) : '#' }}">
-        <span class="topic-chip-icon">{{ $meta['icon'] }}</span>
         <span class="topic-chip-num">{{ $tid }}</span>
       </a>
     @endforeach
     {{-- Show coming soon topics --}}
-    @foreach([
-      '22' => ['title' => 'Графики', 'icon' => '📈'],
-      '23' => ['title' => 'Геометрия (выч.)', 'icon' => '📐'],
-      '24' => ['title' => 'Геометрия (док.)', 'icon' => '✏️'],
-      '25' => ['title' => 'Геометрия (пов.)', 'icon' => '🔺'],
-    ] as $tid => $meta)
+    @foreach(['22', '24', '25'] as $tid)
       @if(!isset($topicsMeta[$tid]))
         <span class="topic-chip disabled">
-          <span class="topic-chip-icon">{{ $meta['icon'] }}</span>
           <span class="topic-chip-num">{{ $tid }}</span>
         </span>
       @endif
