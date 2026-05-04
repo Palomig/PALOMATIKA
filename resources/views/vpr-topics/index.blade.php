@@ -16,10 +16,20 @@
             <h1 class="exam-title text-3xl sm:text-4xl text-white">База заданий ВПР</h1>
             <p class="text-slate-400 mt-2">5–8 классы · Математика. Выберите класс и задание.</p>
         </div>
-        <a href="{{ route('topics.index') }}"
-           class="shrink-0 px-4 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 transition text-sm">
-            → База ОГЭ
-        </a>
+        <div class="flex gap-2 shrink-0 flex-wrap">
+            <a href="{{ route('topics.index') }}"
+               class="px-4 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 transition text-sm">
+                → ОГЭ
+            </a>
+            <a href="{{ route('alg-topics.index') }}"
+               class="px-4 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 transition text-sm">
+                → Алгебра
+            </a>
+            <a href="{{ route('geom-topics.index') }}"
+               class="px-4 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 transition text-sm">
+                → Геометрия
+            </a>
+        </div>
     </header>
 
     @foreach($gradeData as $grade => $data)

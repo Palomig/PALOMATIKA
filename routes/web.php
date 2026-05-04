@@ -306,6 +306,18 @@ Route::prefix('api/vpr-topics')->middleware(['auth', 'role:teacher,admin'])->gro
     Route::get('/{grade}/{topicId}', [\App\Http\Controllers\VprTopicController::class, 'apiGetTopicData'])->where(['grade' => '[5-8]', 'topicId' => '[0-9]+']);
 });
 
+// Алгебра — База заданий (5–8 классы), скелет под наполнение
+Route::middleware(['auth', 'role:teacher,admin'])->prefix('alg-topics')->name('alg-topics.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\AlgTopicController::class, 'index'])->name('index');
+    Route::get('/{grade}/{id}', [\App\Http\Controllers\AlgTopicController::class, 'show'])->name('show')->where(['grade' => '[5-8]', 'id' => '[0-9]+']);
+});
+
+// Геометрия — База заданий (7–9 классы), скелет под наполнение
+Route::middleware(['auth', 'role:teacher,admin'])->prefix('geom-topics')->name('geom-topics.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\GeomTopicController::class, 'index'])->name('index');
+    Route::get('/{grade}/{id}', [\App\Http\Controllers\GeomTopicController::class, 'show'])->name('show')->where(['grade' => '[7-9]', 'id' => '[0-9]+']);
+});
+
 // OGE Generator — legacy, redirect to student app
 Route::get('/oge', fn() => redirect('https://student.palomatika.ru'))->name('oge.generator');
 Route::get('/oge/placement', fn() => redirect('https://student.palomatika.ru'))->name('oge.placement');
