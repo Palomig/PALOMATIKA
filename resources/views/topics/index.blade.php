@@ -52,6 +52,9 @@
 
     <div class="mt-8 flex flex-wrap gap-2">
         <a href="{{ route('oge.generator') }}" class="px-4 py-2 rounded-lg bg-emerald-700 text-white hover:bg-emerald-600 transition">Генератор вариантов</a>
+        <a href="{{ route('vpr-topics.index') }}" class="px-4 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 transition">→ ВПР</a>
+        <a href="{{ route('alg-topics.index') }}" class="px-4 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 transition">→ Алгебра 5–8</a>
+        <a href="{{ route('geom-topics.index') }}" class="px-4 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 transition">→ Геометрия 7–9</a>
         <a href="{{ route('test.index') }}" class="px-4 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 transition">Legacy-раздел</a>
     </div>
 </div>
