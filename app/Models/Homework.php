@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Homework extends Model
 {
@@ -17,7 +16,6 @@ class Homework extends Model
         'teacher_id',
         'title',
         'homework_type',
-        'topic_id',
         'tasks_count',
         'variant_hash',
         'topic_number',
@@ -36,18 +34,6 @@ class Homework extends Model
         return $this->belongsTo(User::class, 'teacher_id');
     }
 
-    public function topic(): BelongsTo
-    {
-        return $this->belongsTo(Topic::class);
-    }
-
-    public function tasks(): BelongsToMany
-    {
-        return $this->belongsToMany(Task::class, 'homework_tasks')
-            ->withPivot('task_order')
-            ->orderByPivot('task_order');
-    }
-
     public function assignments(): HasMany
     {
         return $this->hasMany(HomeworkAssignment::class);
@@ -56,11 +42,6 @@ class Homework extends Model
     public function topicTasks(): HasMany
     {
         return $this->hasMany(HomeworkTopicTask::class)->orderBy('task_order');
-    }
-
-    public function attempts(): HasMany
-    {
-        return $this->hasMany(Attempt::class);
     }
 
     public function isOverdue(): bool

@@ -92,11 +92,6 @@ class User extends Authenticatable
         return $this->hasMany(UserBadge::class);
     }
 
-    public function attempts(): HasMany
-    {
-        return $this->hasMany(Attempt::class);
-    }
-
     public function subscriptions(): HasMany
     {
         return $this->hasMany(Subscription::class);
