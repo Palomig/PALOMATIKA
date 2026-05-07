@@ -52,12 +52,6 @@ class Skill extends Model
         return $this->hasMany(UserSkill::class);
     }
 
-    public function tasks(): BelongsToMany
-    {
-        return $this->belongsToMany(Task::class, 'task_skills')
-            ->withPivot('relevance');
-    }
-
     public function scopeActive($query)
     {
         return $query->where('is_active', true);

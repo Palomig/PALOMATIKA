@@ -10,11 +10,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             LeagueSeeder::class,
-            TopicSeeder::class,
             SkillSeeder::class,
             BadgeSeeder::class,
-            TaskSeeder::class,
-            OgeTaskSeeder::class,
         ]);
     }
 }

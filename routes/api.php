@@ -3,11 +3,8 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DeployController;
 use App\Http\Controllers\Api\OAuthController;
-use App\Http\Controllers\Api\HomeworkController;
 use App\Http\Controllers\Api\JarvisMaterialController;
 use App\Http\Controllers\Api\ScheduleController;
-use App\Http\Controllers\Api\TaskController;
-use App\Http\Controllers\Api\TopicController;
 use App\Http\Controllers\Auth\TelegramBotAuthController;
 use App\Http\Controllers\GeometryEditorController;
 use App\Http\Controllers\TestPdfController;
@@ -62,11 +59,6 @@ Route::middleware(['auth', 'role:admin'])->prefix('geometry')->group(function ()
 });
 
 
-Route::middleware(['auth:sanctum', 'role:teacher,admin'])->group(function () {
-    Route::get('/topics', [TopicController::class, 'index']);
-    Route::get('/topics/{topic}', [TopicController::class, 'show']);
-});
-
 Route::middleware(['auth:sanctum', 'role:teacher,admin', 'throttle:oge-variants-v1'])->group(function () {
     Route::post('/oge/variants/generator', [TestPdfController::class, 'apiCreateOgeGeneratorVariantV1']);
     Route::post('/oge/variants/custom-random', [TestPdfController::class, 'apiCreateOgeCustomRandomVariantV1']);
@@ -84,30 +76,10 @@ Route::middleware(['auth:sanctum', 'role:teacher,admin'])->prefix('materials')->
 });
 
 
-// Tasks (public for practice, auth optional for tracking)
-Route::get('/tasks/next', [TaskController::class, 'getNext']);
-Route::get('/tasks/{task}', [TaskController::class, 'show']);
-
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
     // Auth
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::put('/auth/profile', [AuthController::class, 'updateProfile']);
-
-    // Topics progress
-    Route::get('/topics/{topic}/progress', [TopicController::class, 'progress']);
-
-    // Tasks (protected actions)
-    Route::post('/tasks/{task}/start', [TaskController::class, 'startAttempt']);
-    Route::post('/attempts/{attempt}/submit', [TaskController::class, 'submitAttempt']);
-
-    // Homework
-    Route::get('/homework', [HomeworkController::class, 'index']);
-    Route::post('/homework', [HomeworkController::class, 'store']);
-    Route::get('/homework/{homework}', [HomeworkController::class, 'show']);
-    Route::get('/homework/{homework}/statistics', [HomeworkController::class, 'statistics']);
-    Route::post('/homework/assignments/{assignment}/start', [HomeworkController::class, 'start']);
-    Route::post('/homework/assignments/{assignment}/complete', [HomeworkController::class, 'complete']);
-
 });
