@@ -78,16 +78,10 @@ class AuthController extends Controller
     public function me(Request $request): JsonResponse
     {
         $user = $request->user();
-        $user->load(['streak', 'skills.skill', 'badges.badge']);
+        $user->load(['skills.skill']);
 
         return response()->json([
             'user' => $user,
-            'stats' => [
-                'total_attempts' => $user->attempts()->count(),
-                'correct_attempts' => $user->attempts()->where('is_correct', true)->count(),
-                'current_streak' => $user->streak?->current_streak ?? 0,
-                'badges_count' => $user->badges()->count(),
-            ],
         ]);
     }
 

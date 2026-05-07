@@ -37,7 +37,7 @@
     </div>
 
     <!-- Stats grid -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
         <div class="bg-dark-light rounded-xl p-4 border border-gray-800">
             <div class="text-2xl font-bold text-green-400" x-text="stats.total_correct || 0"></div>
             <div class="text-gray-400 text-sm">верных ответов</div>
@@ -49,10 +49,6 @@
         <div class="bg-dark-light rounded-xl p-4 border border-gray-800">
             <div class="text-2xl font-bold text-coral" x-text="stats.total_xp || 0"></div>
             <div class="text-gray-400 text-sm">опыта</div>
-        </div>
-        <div class="bg-dark-light rounded-xl p-4 border border-gray-800">
-            <div class="text-2xl font-bold text-amber-400" x-text="stats.badges_count || 0"></div>
-            <div class="text-gray-400 text-sm">бейджей</div>
         </div>
     </div>
 
@@ -144,8 +140,7 @@ function dashboardPage() {
             daily_goal: 10,
             total_correct: 0,
             accuracy: 0,
-            total_xp: 0,
-            badges_count: 0
+            total_xp: 0
         },
         topics: [],
         recentActivity: [],

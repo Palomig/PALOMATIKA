@@ -7,7 +7,6 @@ use App\Http\Controllers\Traits\MiniAppHelpers;
 use App\Models\OgeAttempt;
 use App\Models\OgeAttemptScoring;
 use App\Models\TeacherStudent;
-use App\Models\UserGift;
 use App\Models\OgeVariant;
 use App\Services\OgeAttemptService;
 use App\Services\StudentExamAccessService;
@@ -124,10 +123,6 @@ class VprController extends Controller
         $weakTopics = [];
         $newFipiCount = 0;
         $hasTeacher = TeacherStudent::where('student_id', $user->id)->exists();
-        $pendingGift = UserGift::where('user_id', $user->id)
-            ->whereNull('shown_at')
-            ->orderBy('id')
-            ->first();
 
         return view('pwa.student.vpr-home', compact(
             'user',
@@ -135,8 +130,7 @@ class VprController extends Controller
             'activeAttemptsList',
             'weakTopics',
             'newFipiCount',
-            'hasTeacher',
-            'pendingGift'
+            'hasTeacher'
         ));
     }
 

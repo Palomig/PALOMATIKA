@@ -107,19 +107,6 @@
                             </div>
                         </div>
                     </div>
-                @else
-                    {{-- Streak --}}
-                    <div class="p-4 border-t border-gray-800">
-                        <div class="bg-gradient-to-r from-orange-500 to-coral rounded-xl p-4 text-white">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <div class="text-2xl font-bold" x-text="streak?.current_streak || 0"></div>
-                                    <div class="text-orange-100 text-sm">дней подряд</div>
-                                </div>
-                                <div class="text-4xl">🔥</div>
-                            </div>
-                        </div>
-                    </div>
                 @endif
 
                 {{-- Logout --}}
@@ -220,7 +207,6 @@
         return {
             sidebarOpen: window.innerWidth >= 1024,
             user: null,
-            streak: null,
             referralLink: '',
             role: role,
 
@@ -245,9 +231,6 @@
                     if (response.ok) {
                         const data = await response.json();
                         this.user = data.user;
-                        if (this.role === 'student') {
-                            this.streak = data.streak;
-                        }
                         if (this.role === 'teacher') {
                             this.referralLink = window.location.origin + '/ref/' + (data.user?.referral_code || 'TEACHER');
                         }
