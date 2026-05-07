@@ -48,8 +48,6 @@ class TeacherStudentsPageTest extends TestCase
             $table->string('password')->nullable();
             $table->string('remember_token', 100)->nullable();
             $table->string('role', 32)->default('student');
-            $table->timestamp('subscription_ends_at')->nullable();
-            $table->timestamp('trial_ends_at')->nullable();
             $table->timestamp('last_active_at')->nullable();
             $table->timestamps();
         });
