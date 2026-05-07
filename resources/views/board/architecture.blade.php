@@ -342,7 +342,7 @@
                             </p>
                             <ul class="text-gray-300 space-y-2 ml-4">
                                 <li>📁 <strong>JSON файлы</strong> — все задания ОГЭ и ЕГЭ. Легко редактировать.</li>
-                                <li>🗄️ <strong>MySQL база</strong> — пользователи, прогресс, достижения, дуэли.</li>
+                                <li>🗄️ <strong>MySQL база</strong> — пользователи, попытки, домашние задания, мини-игры.</li>
                             </ul>
                         </div>
                         <h5 class="font-semibold mb-3">Структура JSON файлов:</h5>
@@ -389,7 +389,7 @@
                             </div>
                             <div class="text-left">
                                 <h4 class="text-lg font-semibold">База данных (MySQL)</h4>
-                                <p class="text-gray-400 text-sm">Пользователи, прогресс, достижения</p>
+                                <p class="text-gray-400 text-sm">Пользователи, попытки, домашние задания</p>
                             </div>
                         </div>
                         <svg class="w-5 h-5 text-gray-400 transition-transform" :class="{ 'rotate-180': expandedLayer === 'database' }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -407,27 +407,27 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                             <div class="bg-dark rounded-lg p-3">
                                 <div class="text-gray-300 font-semibold">users</div>
-                                <p class="text-gray-500 text-sm">Все пользователи: имя, email, пароль, роль (ученик/учитель)</p>
+                                <p class="text-gray-500 text-sm">Все пользователи: имя, email, пароль, роль (ученик/учитель/родитель)</p>
                             </div>
                             <div class="bg-dark rounded-lg p-3">
-                                <div class="text-gray-300 font-semibold">attempts</div>
-                                <p class="text-gray-500 text-sm">Попытки решения задач: кто решал, когда, правильно ли</p>
+                                <div class="text-gray-300 font-semibold">oge_attempts</div>
+                                <p class="text-gray-500 text-sm">Попытки решения вариантов ОГЭ/ЕГЭ/ВПР: кто, когда, что ответил</p>
                             </div>
                             <div class="bg-dark rounded-lg p-3">
-                                <div class="text-gray-300 font-semibold">badges</div>
-                                <p class="text-gray-500 text-sm">Достижения: "Первые шаги", "Серия 7 дней" и др.</p>
+                                <div class="text-gray-300 font-semibold">homeworks / homework_topic_tasks</div>
+                                <p class="text-gray-500 text-sm">Домашние задания от учителей и снимки задач</p>
                             </div>
                             <div class="bg-dark rounded-lg p-3">
-                                <div class="text-gray-300 font-semibold">leagues</div>
-                                <p class="text-gray-500 text-sm">Лиги: Bronze, Silver, Gold, Platinum, Diamond, Champion</p>
+                                <div class="text-gray-300 font-semibold">teacher_students</div>
+                                <p class="text-gray-500 text-sm">Связь учитель↔ученик</p>
                             </div>
                             <div class="bg-dark rounded-lg p-3">
-                                <div class="text-gray-300 font-semibold">duels</div>
-                                <p class="text-gray-500 text-sm">Дуэли между учениками: кто с кем, счёт, результат</p>
+                                <div class="text-gray-300 font-semibold">practice_game_runs</div>
+                                <p class="text-gray-500 text-sm">Мини-игры (уравнения, графики) и лидерборд</p>
                             </div>
                             <div class="bg-dark rounded-lg p-3">
-                                <div class="text-gray-300 font-semibold">homework</div>
-                                <p class="text-gray-500 text-sm">Домашние задания от учителей</p>
+                                <div class="text-gray-300 font-semibold">skills</div>
+                                <p class="text-gray-500 text-sm">Каталог навыков и уровни владения у ученика</p>
                             </div>
                         </div>
                     </div>
