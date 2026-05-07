@@ -152,10 +152,11 @@ class MiniAppAuthController extends Controller
     public function saveOnboarding(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string|min:2|max:100',
+            'first_name' => 'required|string|min:2|max:100',
+            'last_name' => 'required|string|min:2|max:100',
             'grade_num' => 'required|integer|in:5,6,7,8,9,10,11',
             'grade_letter' => 'required|string|in:А,Б,В,Г,Д,Е,К,М',
-            'school_number' => 'required|string|max:20',
+            'school_number' => 'required|integer|min:1|max:9999',
             'city' => 'nullable|string|max:80',
             'onboarding_token' => 'nullable|string|max:128',
         ]);
@@ -178,8 +179,13 @@ class MiniAppAuthController extends Controller
             return response()->json(['message' => 'Unauthenticated.'], 401);
         }
 
+        $first = trim($data['first_name']);
+        $last = trim($data['last_name']);
+
         $user->update([
-            'name' => $data['name'],
+            'first_name' => $first,
+            'last_name' => $last,
+            'name' => trim("{$first} {$last}"),
             'grade_num' => $data['grade_num'],
             'grade_letter' => $data['grade_letter'],
             'school_number' => $data['school_number'],
