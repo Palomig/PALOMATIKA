@@ -58,7 +58,6 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
         Route::get('/history/{studentId}/{attemptId}', [StudentController::class, 'adminHistoryDetail'])->name('pwa.student.history.student-detail');
         Route::get('/history/{historyId}', [StudentController::class, 'historyEntry'])->name('pwa.student.history.detail');
         Route::get('/profile', [StudentController::class, 'profile'])->name('pwa.student.profile');
-        Route::post('/gift/seen', [StudentController::class, 'markGiftSeen'])->name('pwa.student.gift.seen');
         Route::get('/homework', [StudentController::class, 'studentHomework'])->name('pwa.student.homework');
         Route::get('/homework/{assignment}', [StudentController::class, 'showTopicHomework'])->name('pwa.student.homework.topic');
         Route::post('/homework/{assignment}/tasks/{homeworkTask}', [StudentController::class, 'submitTopicHomeworkTask'])->name('pwa.student.homework.topic.submit');

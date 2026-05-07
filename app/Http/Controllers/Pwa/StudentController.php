@@ -14,7 +14,6 @@ use App\Models\HomeworkAssignment;
 use App\Models\HomeworkTopicTask;
 use App\Models\HomeworkTopicTaskSubmission;
 use App\Models\User;
-use App\Models\UserGift;
 use App\Services\MiniAppTaskCanonicalizer;
 use App\Services\MiniAppTaskSanitizer;
 use App\Services\MiniVariantService;
@@ -85,26 +84,6 @@ class StudentController extends Controller
         ]);
 
         return redirect($this->base() . '/');
-    }
-
-    public function markGiftSeen(Request $request)
-    {
-        $data = $request->validate([
-            'gift_id' => 'required|integer',
-        ]);
-
-        $user = $request->user();
-        abort_unless($user, 401);
-
-        UserGift::query()
-            ->where('id', $data['gift_id'])
-            ->where('user_id', $user->id)
-            ->whereNull('shown_at')
-            ->update([
-                'shown_at' => now(),
-            ]);
-
-        return response()->json(['ok' => true]);
     }
 
     /**
@@ -184,13 +163,8 @@ class StudentController extends Controller
 
         $hasTeacher = TeacherStudent::where('student_id', $user->id)->exists();
 
-        $pendingGift = UserGift::where('user_id', $user->id)
-            ->whereNull('shown_at')
-            ->orderBy('id')
-            ->first();
-
         return view('pwa.student.dashboard', compact(
-            'user', 'weakTopics', 'newFipiCount', 'activeAttemptsList', 'hasTeacher', 'pendingGift'
+            'user', 'weakTopics', 'newFipiCount', 'activeAttemptsList', 'hasTeacher'
         ));
     }
 
@@ -248,13 +222,9 @@ class StudentController extends Controller
         }
 
         $hasTeacher = TeacherStudent::where('student_id', $user->id)->exists();
-        $pendingGift = UserGift::where('user_id', $user->id)
-            ->whereNull('shown_at')
-            ->orderBy('id')
-            ->first();
 
         return view('pwa.student.dashboard', compact(
-            'user', 'weakTopics', 'newFipiCount', 'activeAttemptsList', 'hasTeacher', 'pendingGift'
+            'user', 'weakTopics', 'newFipiCount', 'activeAttemptsList', 'hasTeacher'
         ));
     }
 

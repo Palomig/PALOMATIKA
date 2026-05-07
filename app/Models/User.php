@@ -77,19 +77,9 @@ class User extends Authenticatable
         return $this->hasMany(User::class, 'referred_by_user_id');
     }
 
-    public function streak(): HasOne
-    {
-        return $this->hasOne(UserStreak::class);
-    }
-
     public function skills(): HasMany
     {
         return $this->hasMany(UserSkill::class);
-    }
-
-    public function badges(): HasMany
-    {
-        return $this->hasMany(UserBadge::class);
     }
 
     public function subscriptions(): HasMany
@@ -107,21 +97,6 @@ class User extends Authenticatable
         return $this->hasMany(HomeworkAssignment::class, 'student_id');
     }
 
-    public function leagueParticipations(): HasMany
-    {
-        return $this->hasMany(LeagueParticipant::class);
-    }
-
-    public function challengerDuels(): HasMany
-    {
-        return $this->hasMany(Duel::class, 'challenger_id');
-    }
-
-    public function opponentDuels(): HasMany
-    {
-        return $this->hasMany(Duel::class, 'opponent_id');
-    }
-
     public function students(): HasMany
     {
         return $this->hasMany(TeacherStudent::class, 'teacher_id');
@@ -130,11 +105,6 @@ class User extends Authenticatable
     public function teachers(): HasMany
     {
         return $this->hasMany(TeacherStudent::class, 'student_id');
-    }
-
-    public function dailyStats(): HasMany
-    {
-        return $this->hasMany(UserDailyStat::class);
     }
 
     public function ownedStudentGroups(): HasMany

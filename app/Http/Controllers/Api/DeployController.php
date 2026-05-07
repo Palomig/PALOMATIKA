@@ -53,7 +53,6 @@ class DeployController extends Controller
         'assets:audit-semantic-svg',
         'topics:diagnose',
         'pool:test-generate',
-        'premium:gift',
         'user:promote-teacher',
         'user:promote-admin',
         'user:set-referrer',

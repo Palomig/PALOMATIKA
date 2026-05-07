@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Models\OgeAttempt;
 use App\Models\User;
-use App\Models\UserGift;
 use Illuminate\Console\Command;
 
 class DeleteTelegramUserCommand extends Command
@@ -33,10 +32,6 @@ class DeleteTelegramUserCommand extends Command
         $attempts = OgeAttempt::whereIn('student_id', $userIds)->count();
         OgeAttempt::whereIn('student_id', $userIds)->delete();
         $this->info("Deleted {$attempts} OGE attempts");
-
-        $gifts = UserGift::whereIn('user_id', $userIds)->count();
-        UserGift::whereIn('user_id', $userIds)->delete();
-        $this->info("Deleted {$gifts} user gifts");
 
         // Delete users
         User::whereIn('id', $userIds)->delete();
