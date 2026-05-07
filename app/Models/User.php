@@ -31,10 +31,7 @@ class User extends Authenticatable
         'partner_commission_percent',
         'partner_status',
         'partner_approved_at',
-        'subscription_plan',
-        'subscription_ends_at',
         'has_ai_addon',
-        'trial_ends_at',
         'tg_premium_until',
         'tg_trial_used',
         'star_balance',
@@ -56,8 +53,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'partner_approved_at' => 'datetime',
-        'subscription_ends_at' => 'datetime',
-        'trial_ends_at' => 'datetime',
         'last_active_at' => 'datetime',
         'has_ai_addon' => 'boolean',
         'onboarding_completed_at' => 'datetime',
@@ -80,11 +75,6 @@ class User extends Authenticatable
     public function skills(): HasMany
     {
         return $this->hasMany(UserSkill::class);
-    }
-
-    public function subscriptions(): HasMany
-    {
-        return $this->hasMany(Subscription::class);
     }
 
     public function homeworks(): HasMany
@@ -178,25 +168,6 @@ class User extends Authenticatable
     public function isSuperuser(): bool
     {
         return $this->isAdmin();
-    }
-
-    public function hasActiveSubscription(): bool
-    {
-        if ($this->trial_ends_at && $this->trial_ends_at->isFuture()) {
-            return true;
-        }
-
-        return $this->subscription_ends_at && $this->subscription_ends_at->isFuture();
-    }
-
-    public function getSubscriptionPlanLabel(): string
-    {
-        return match($this->subscription_plan) {
-            'start' => 'Старт',
-            'standard' => 'Стандарт',
-            'premium' => 'Премиум',
-            default => 'Бесплатный',
-        };
     }
 
     public function starTransactions(): HasMany
