@@ -83,9 +83,15 @@
   <form class="form" @submit.prevent="handleSubmit()">
 
     <div class="field">
-      <label class="field-label" for="name">Твоё имя</label>
-      <input class="field-input" id="name" type="text" placeholder="Например, Алексей"
-        autocomplete="given-name" inputmode="text" x-model="name" minlength="2">
+      <label class="field-label" for="first_name">Имя</label>
+      <input class="field-input" id="first_name" type="text" placeholder="Например, Алексей"
+        autocomplete="given-name" inputmode="text" x-model="firstName" minlength="2">
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="last_name">Фамилия</label>
+      <input class="field-input" id="last_name" type="text" placeholder="Например, Иванов"
+        autocomplete="family-name" inputmode="text" x-model="lastName" minlength="2">
     </div>
 
     <div class="field">
@@ -110,8 +116,8 @@
 
     <div class="field">
       <label class="field-label" for="school">Номер школы</label>
-      <input class="field-input" id="school" type="text" placeholder="Например, 3"
-        inputmode="numeric" x-model="school">
+      <input class="field-input" id="school" type="number" placeholder="Например, 3"
+        inputmode="numeric" min="1" max="9999" step="1" x-model.number="school">
     </div>
 
     <div class="field">
@@ -139,16 +145,21 @@
 <script>
 function onboardingPage() {
   return {
-    name: @json(auth()->user()?->name ?? ''),
+    firstName: @json(auth()->user()?->first_name ?? ''),
+    lastName: @json(auth()->user()?->last_name ?? ''),
     grade: @json(auth()->user()?->grade_num ?? 9),
     letter: @json(auth()->user()?->grade_letter ?? 'А'),
-    school: @json(auth()->user()?->school_number ?? ''),
+    school: @json((int) (auth()->user()?->school_number ?? 0) ?: ''),
     city: @json(auth()->user()?->city ?? ''),
     onboardingToken: @json($onboardingToken ?? null),
     submitting: false,
 
     get isValid() {
-      return this.name.trim().length >= 2 && this.letter && this.school.trim().length >= 1;
+      const schoolNum = parseInt(this.school, 10);
+      return this.firstName.trim().length >= 2
+        && this.lastName.trim().length >= 2
+        && this.letter
+        && Number.isInteger(schoolNum) && schoolNum >= 1 && schoolNum <= 9999;
     },
 
     async handleSubmit() {
@@ -157,10 +168,11 @@ function onboardingPage() {
       try {
         // Use session-based web endpoint (onboarding token as fallback for WebView cookie loss)
         const payload = {
-          name: this.name.trim(),
+          first_name: this.firstName.trim(),
+          last_name: this.lastName.trim(),
           grade_num: this.grade,
           grade_letter: this.letter,
-          school_number: this.school.trim(),
+          school_number: parseInt(this.school, 10),
           city: this.city.trim() || 'Чехов',
         };
         if (this.onboardingToken) {

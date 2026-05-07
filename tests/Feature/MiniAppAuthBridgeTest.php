@@ -34,6 +34,8 @@ class MiniAppAuthBridgeTest extends TestCase
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
+            $table->string('first_name', 100)->nullable();
+            $table->string('last_name', 100)->nullable();
             $table->string('email')->nullable()->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
@@ -50,7 +52,6 @@ class MiniAppAuthBridgeTest extends TestCase
             $table->timestamp('last_active_at')->nullable();
             $table->timestamp('onboarding_completed_at')->nullable();
             $table->unsignedBigInteger('referred_by_user_id')->nullable();
-            $table->timestamp('trial_ends_at')->nullable();
             $table->boolean('tg_trial_used')->default(false);
             $table->timestamp('tg_premium_until')->nullable();
             $table->integer('star_balance')->default(0);
@@ -152,7 +153,8 @@ class MiniAppAuthBridgeTest extends TestCase
         ], now()->addMinutes(20));
 
         $response = $this->postJson('/tg/onboarding', [
-            'name' => 'Тест Ученик',
+            'first_name' => 'Тест',
+            'last_name' => 'Ученик',
             'grade_num' => 9,
             'grade_letter' => 'А',
             'school_number' => '42',
@@ -163,6 +165,8 @@ class MiniAppAuthBridgeTest extends TestCase
         $response->assertOk()->assertJsonPath('success', true);
 
         $user->refresh();
+        $this->assertSame('Тест', $user->first_name);
+        $this->assertSame('Ученик', $user->last_name);
         $this->assertSame('Тест Ученик', $user->name);
         $this->assertNotNull($user->onboarding_completed_at);
     }
@@ -170,7 +174,8 @@ class MiniAppAuthBridgeTest extends TestCase
     public function test_save_onboarding_without_session_and_without_token_returns_401(): void
     {
         $response = $this->postJson('/tg/onboarding', [
-            'name' => 'Тест',
+            'first_name' => 'Тест',
+            'last_name' => 'Тестов',
             'grade_num' => 9,
             'grade_letter' => 'А',
             'school_number' => '42',
