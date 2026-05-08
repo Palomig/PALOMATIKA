@@ -19,6 +19,7 @@ class User extends Authenticatable
         'name',
         'first_name',
         'last_name',
+        'name_unverified',
         'email',
         'password',
         'oauth_provider',
@@ -58,6 +59,7 @@ class User extends Authenticatable
         'onboarding_completed_at' => 'datetime',
         'tg_premium_until' => 'datetime',
         'tg_trial_used' => 'boolean',
+        'name_unverified' => 'boolean',
     ];
 
     // Relationships

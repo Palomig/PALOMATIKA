@@ -14,8 +14,8 @@ class OnboardingGradeTest extends TestCase
         $user = User::factory()->create(['role' => 'student']);
         $this->actingAs($user)
              ->post('https://student.' . config('app.base_domain') . '/onboarding', [
-                 'first_name'    => 'Тест',
-                 'last_name'     => 'Тестов',
+                 'first_name'    => 'Иван',
+                 'last_name'     => 'Иванов',
                  'grade_num'     => 5,
                  'grade_letter'  => 'А',
                  'school_number' => '1',
@@ -30,8 +30,8 @@ class OnboardingGradeTest extends TestCase
         $user = User::factory()->create(['role' => 'student']);
         $this->actingAs($user)
              ->post('https://student.' . config('app.base_domain') . '/onboarding', [
-                 'first_name'    => 'Тест',
-                 'last_name'     => 'Тестов',
+                 'first_name'    => 'Иван',
+                 'last_name'     => 'Иванов',
                  'grade_num'     => 4,
                  'grade_letter'  => 'А',
                  'school_number' => '1',
@@ -43,8 +43,8 @@ class OnboardingGradeTest extends TestCase
         $user = User::factory()->create(['role' => 'student']);
         $this->actingAs($user)
              ->post('https://student.' . config('app.base_domain') . '/onboarding', [
-                 'first_name'    => 'Тест',
-                 'last_name'     => 'Тестов',
+                 'first_name'    => 'Иван',
+                 'last_name'     => 'Иванов',
                  'grade_num'     => 7,
                  'grade_letter'  => 'Е',
                  'school_number' => '1',

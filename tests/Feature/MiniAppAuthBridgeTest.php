@@ -36,6 +36,7 @@ class MiniAppAuthBridgeTest extends TestCase
             $table->string('name')->nullable();
             $table->string('first_name', 100)->nullable();
             $table->string('last_name', 100)->nullable();
+            $table->boolean('name_unverified')->default(false);
             $table->string('email')->nullable()->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
@@ -153,8 +154,8 @@ class MiniAppAuthBridgeTest extends TestCase
         ], now()->addMinutes(20));
 
         $response = $this->postJson('/tg/onboarding', [
-            'first_name' => 'Тест',
-            'last_name' => 'Ученик',
+            'first_name' => 'Иван',
+            'last_name' => 'Иванов',
             'grade_num' => 9,
             'grade_letter' => 'А',
             'school_number' => '42',
@@ -165,17 +166,17 @@ class MiniAppAuthBridgeTest extends TestCase
         $response->assertOk()->assertJsonPath('success', true);
 
         $user->refresh();
-        $this->assertSame('Тест', $user->first_name);
-        $this->assertSame('Ученик', $user->last_name);
-        $this->assertSame('Тест Ученик', $user->name);
+        $this->assertSame('Иван', $user->first_name);
+        $this->assertSame('Иванов', $user->last_name);
+        $this->assertSame('Иван Иванов', $user->name);
         $this->assertNotNull($user->onboarding_completed_at);
     }
 
     public function test_save_onboarding_without_session_and_without_token_returns_401(): void
     {
         $response = $this->postJson('/tg/onboarding', [
-            'first_name' => 'Тест',
-            'last_name' => 'Тестов',
+            'first_name' => 'Иван',
+            'last_name' => 'Иванов',
             'grade_num' => 9,
             'grade_letter' => 'А',
             'school_number' => '42',

@@ -152,13 +152,17 @@ class MiniAppAuthController extends Controller
     public function saveOnboarding(Request $request)
     {
         $data = $request->validate([
-            'first_name' => 'required|string|min:2|max:100',
-            'last_name' => 'required|string|min:2|max:100',
-            'grade_num' => 'required|integer|in:5,6,7,8,9,10,11',
-            'grade_letter' => 'required|string|in:А,Б,В,Г,Д,Е,К,М',
-            'school_number' => 'required|integer|min:1|max:9999',
-            'city' => 'nullable|string|max:80',
+            'first_name'      => 'required|string|min:2|max:100|regex:/^[А-Яа-яЁёA-Za-z\-\']{2,100}$/u',
+            'last_name'       => 'required|string|min:2|max:100|regex:/^[А-Яа-яЁёA-Za-z\-\']{2,100}$/u',
+            'name_unverified' => 'nullable|boolean',
+            'grade_num'       => 'required|integer|in:5,6,7,8,9,10,11',
+            'grade_letter'    => 'required|string|in:А,Б,В,Г,Д,Е,К,М',
+            'school_number'   => 'required|integer|min:1|max:9999',
+            'city'            => 'nullable|string|max:80',
             'onboarding_token' => 'nullable|string|max:128',
+        ], [
+            'first_name.regex' => 'Имя может содержать только буквы, дефис и апостроф.',
+            'last_name.regex'  => 'Фамилия может содержать только буквы, дефис и апостроф.',
         ]);
 
         $user = $request->user();
@@ -179,13 +183,25 @@ class MiniAppAuthController extends Controller
             return response()->json(['message' => 'Unauthenticated.'], 401);
         }
 
-        $first = trim($data['first_name']);
-        $last = trim($data['last_name']);
+        $names = app(\App\Services\NameDictionaryService::class);
+        $first = $names->capitalize($data['first_name']);
+        $last  = $names->capitalize($data['last_name']);
+        $unverifiedFlag = (bool) ($data['name_unverified'] ?? false);
+
+        if (!$unverifiedFlag && !$names->isKnownName($first)) {
+            return response()->json([
+                'message' => 'Имя «' . $first . '» не найдено в списке. Если вы ввели имя правильно, отметьте «моё имя отсутствует в списке».',
+                'errors' => [
+                    'first_name' => ['Имя не найдено в списке.'],
+                ],
+            ], 422);
+        }
 
         $user->update([
             'first_name' => $first,
             'last_name' => $last,
             'name' => trim("{$first} {$last}"),
+            'name_unverified' => $unverifiedFlag,
             'grade_num' => $data['grade_num'],
             'grade_letter' => $data['grade_letter'],
             'school_number' => $data['school_number'],
