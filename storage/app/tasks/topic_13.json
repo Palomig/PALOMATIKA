@@ -869,7 +869,7 @@
                 }
               ],
               "status": "draft",
-              "answer": "a",
+              "answer": "d",
               "options_render_mode": "text_options"
             },
             {
@@ -902,7 +902,7 @@
                 }
               ],
               "status": "draft",
-              "answer": "a",
+              "answer": "d",
               "options_render_mode": "text_options"
             },
             {
@@ -935,7 +935,7 @@
                 }
               ],
               "status": "draft",
-              "answer": "a",
+              "answer": "c",
               "options_render_mode": "text_options"
             },
             {
@@ -1001,7 +1001,7 @@
                 }
               ],
               "status": "draft",
-              "answer": "a",
+              "answer": "b",
               "options_render_mode": "text_options"
             },
             {
@@ -1034,7 +1034,7 @@
                 }
               ],
               "status": "draft",
-              "answer": "a",
+              "answer": "c",
               "options_render_mode": "text_options"
             },
             {
@@ -1999,7 +1999,7 @@
                   "value": "(-∞; +∞)"
                 }
               ],
-              "answer": "c",
+              "answer": "a",
               "status": "draft",
               "options_render_mode": "text_options"
             },
@@ -2032,7 +2032,7 @@
                   "value": "нет решений"
                 }
               ],
-              "answer": "b",
+              "answer": "c",
               "status": "draft",
               "options_render_mode": "text_options"
             },
@@ -2065,7 +2065,7 @@
                   "value": "(-∞; +∞)"
                 }
               ],
-              "answer": "d",
+              "answer": "b",
               "status": "draft",
               "options_render_mode": "text_options"
             },
@@ -2131,7 +2131,7 @@
                   "value": "(-∞; -4) ∪ (4; +∞)"
                 }
               ],
-              "answer": "b",
+              "answer": "a",
               "status": "draft",
               "options_render_mode": "text_options"
             },
@@ -2164,7 +2164,7 @@
                   "value": "[-9; 9]"
                 }
               ],
-              "answer": "d",
+              "answer": "a",
               "status": "draft",
               "options_render_mode": "text_options"
             },
@@ -2197,7 +2197,7 @@
                   "value": "нет решений"
                 }
               ],
-              "answer": "c",
+              "answer": "a",
               "status": "draft",
               "options_render_mode": "text_options"
             },
@@ -2230,7 +2230,7 @@
                   "value": "(-∞; -3) ∪ (3; +∞)"
                 }
               ],
-              "answer": "b",
+              "answer": "d",
               "status": "draft",
               "options_render_mode": "text_options"
             },
@@ -2263,7 +2263,7 @@
                   "value": "нет решений"
                 }
               ],
-              "answer": "d",
+              "answer": "a",
               "status": "draft",
               "options_render_mode": "text_options"
             }
@@ -2304,7 +2304,7 @@
                   "value": "[7; +∞)"
                 }
               ],
-              "answer": "c",
+              "answer": "b",
               "status": "draft",
               "options_render_mode": "text_options"
             },
@@ -2370,7 +2370,7 @@
                   "value": "[0; 10]"
                 }
               ],
-              "answer": "d",
+              "answer": "a",
               "status": "draft",
               "options_render_mode": "text_options"
             },
@@ -2403,7 +2403,7 @@
                   "value": "(-∞; 0) ∪ (3; +∞)"
                 }
               ],
-              "answer": "c",
+              "answer": "b",
               "status": "draft",
               "options_render_mode": "text_options"
             },
@@ -2436,7 +2436,7 @@
                   "value": "(-∞; 0] ∪ [8; +∞)"
                 }
               ],
-              "answer": "b",
+              "answer": "d",
               "status": "draft",
               "options_render_mode": "text_options"
             },
@@ -2502,7 +2502,7 @@
                   "value": "(-∞; 0] ∪ [6; +∞)"
                 }
               ],
-              "answer": "c",
+              "answer": "a",
               "status": "draft",
               "options_render_mode": "text_options"
             },
