@@ -94,6 +94,11 @@
         autocomplete="family-name" inputmode="text" x-model="lastName" minlength="2">
     </div>
 
+    <div class="field" style="display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--muted);">
+      <input id="name_unverified" type="checkbox" x-model="nameUnverified" style="margin-top:3px;">
+      <label for="name_unverified" style="cursor:pointer;line-height:1.4;">Моё имя отсутствует в списке (учитель проверит)</label>
+    </div>
+
     <div class="field">
       <div class="field-label">Класс</div>
       <div class="class-row">
@@ -147,6 +152,7 @@ function onboardingPage() {
   return {
     firstName: @json(auth()->user()?->first_name ?? ''),
     lastName: @json(auth()->user()?->last_name ?? ''),
+    nameUnverified: @json((bool) (auth()->user()?->name_unverified ?? false)),
     grade: @json(auth()->user()?->grade_num ?? 9),
     letter: @json(auth()->user()?->grade_letter ?? null),
     school: @json((int) (auth()->user()?->school_number ?? 0) ?: ''),
@@ -170,6 +176,7 @@ function onboardingPage() {
         const payload = {
           first_name: this.firstName.trim(),
           last_name: this.lastName.trim(),
+          name_unverified: this.nameUnverified ? 1 : 0,
           grade_num: this.grade,
           grade_letter: this.letter,
           school_number: parseInt(this.school, 10),
