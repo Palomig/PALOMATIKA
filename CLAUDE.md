@@ -35,7 +35,7 @@
 - PDF изображения (`docs/oge_data/images/`, `docs/ege_data/images/`) — **только референс**
 
 ### 2. Единый источник данных
-- ОГЭ: `storage/app/tasks/topic_{id}.json` (геометрия: `*_geometry.json`)
+- ОГЭ: `storage/app/tasks/topic_{id}.json` (геометрия там же; bake перезаписывает только поле `svg`)
 - ЕГЭ: `storage/app/tasks/ege/topic_{id}.json`
 - ВПР: `storage/app/tasks/vpr/grade_{N}/topic_{id}.json` (классы 5–8)
 - `TaskDataService` / `EgeTaskDataService` / `VprTaskDataService` — единственные сервисы для доступа к данным
