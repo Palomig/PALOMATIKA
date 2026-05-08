@@ -14,6 +14,8 @@ class EnsurePwaOnboardingComplete
 
         if ($user && !$user->onboarding_completed_at) {
             $hasProfile = !empty($user->name)
+                && !empty($user->first_name)
+                && !empty($user->last_name)
                 && !empty($user->grade_num)
                 && !empty($user->grade_letter)
                 && !empty($user->school_number)
@@ -22,7 +24,6 @@ class EnsurePwaOnboardingComplete
             if ($hasProfile) {
                 $user->forceFill(['onboarding_completed_at' => now()])->save();
             } else {
-                // Redirect to onboarding on same subdomain
                 $host = $request->getHost();
                 return redirect('https://' . $host . '/onboarding');
             }

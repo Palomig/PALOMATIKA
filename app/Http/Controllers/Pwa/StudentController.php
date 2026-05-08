@@ -54,7 +54,8 @@ class StudentController extends Controller
     // Onboarding (GET)
     public function onboarding(Request $request)
     {
-        if (Auth::check() && Auth::user()->onboarding_completed_at) {
+        $user = Auth::user();
+        if ($user && $user->onboarding_completed_at && !empty($user->first_name) && !empty($user->last_name)) {
             return redirect($this->base() . '/');
         }
         return view('pwa.student.onboarding');
