@@ -12,9 +12,9 @@ use Illuminate\Support\Facades\File;
 /**
  * Bake SVG strings into JSON file (one-time generation)
  *
- * This command reads geometry data from topic_XX_geometry.json,
- * renders SVG for each task using appropriate renderer,
- * and saves the result to topic_XX.json with ready-to-use SVG strings.
+ * This command reads tasks directly from topic_XX.json, renders SVG for each
+ * task using the appropriate renderer, and writes the rendered SVG back into
+ * the same file. Single source of truth — no separate _geometry.json needed.
  *
  * Supported topics:
  * - 07: Координатная прямая (NumberLineSvgRenderer)
@@ -22,8 +22,8 @@ use Illuminate\Support\Facades\File;
  * - 18: Фигуры на клетчатой бумаге (GridSvgRenderer)
  * - 15, 16, 17: Геометрия (GeometrySvgRenderer)
  *
- * After running this command, the geometry JSON files can be deleted
- * as the SVG is now stored directly in the main JSON.
+ * Safety: tasks with their own `svg_type` that differs from the zadanie's
+ * `svg_type` are skipped — their `svg` field is preserved as-is.
  */
 class BakeSvgToJson extends Command
 {
@@ -53,16 +53,16 @@ class BakeSvgToJson extends Command
             return $this->handleTopic18($dryRun);
         }
 
-        $geometryPath = storage_path("app/tasks/topic_{$topicId}_geometry.json");
+        $topicPath = storage_path("app/tasks/topic_{$topicId}.json");
 
-        if (!File::exists($geometryPath)) {
-            $this->error("Geometry file not found: {$geometryPath}");
+        if (!File::exists($topicPath)) {
+            $this->error("Topic file not found: {$topicPath}");
             return Command::FAILURE;
         }
 
-        $this->info("Reading geometry data from: topic_{$topicId}_geometry.json");
+        $this->info("Reading topic data from: topic_{$topicId}.json");
 
-        $data = json_decode(File::get($geometryPath), true);
+        $data = json_decode(File::get($topicPath), true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
             $this->error("JSON parse error: " . json_last_error_msg());
@@ -92,6 +92,11 @@ class BakeSvgToJson extends Command
 
                 // Render SVG for each task
                 foreach ($zadanie['tasks'] as $taskIndex => &$task) {
+                    // Preserve tasks with a custom svg_type that doesn't match the zadanie's.
+                    if (isset($task['svg_type']) && $task['svg_type'] !== $svgType) {
+                        $this->line("  ↷ Task {$task['id']}: skipped (custom svg_type={$task['svg_type']})");
+                        continue;
+                    }
                     try {
                         $params = $task['params'] ?? [];
 
@@ -121,25 +126,18 @@ class BakeSvgToJson extends Command
         $data['exported_at'] = now()->toIso8601String();
         $data['svg_baked'] = true;
 
-        // Save to main JSON file (overwrite)
-        $outputPath = storage_path("app/tasks/topic_{$topicId}.json");
-
         $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
-        if (File::put($outputPath, $json) === false) {
-            $this->error("Failed to write to: {$outputPath}");
+        if (File::put($topicPath, $json) === false) {
+            $this->error("Failed to write to: {$topicPath}");
             return Command::FAILURE;
         }
 
         $this->newLine();
         $this->info("✅ Done! Generated {$count} SVGs ({$errors} errors)");
-        $this->info("   Saved to: {$outputPath}");
+        $this->info("   Saved to: {$topicPath}");
         $this->newLine();
-        $this->comment("Next steps:");
-        $this->comment("  1. Verify SVGs look correct: php artisan tinker");
-        $this->comment("     > json_decode(file_get_contents(storage_path('app/tasks/topic_{$topicId}.json')), true)['blocks'][0]['zadaniya'][0]['tasks'][0]['svg']");
-        $this->comment("  2. Delete geometry file: rm storage/app/tasks/topic_{$topicId}_geometry.json");
-        $this->comment("  3. Clear cache: php artisan cache:clear");
+        $this->comment("Next: php artisan cache:clear");
 
         return Command::SUCCESS;
     }
@@ -380,23 +378,23 @@ class BakeSvgToJson extends Command
     /**
      * Handle topic 18 (grid figures)
      *
-     * Reads topic_18_geometry.json and bakes SVG into topic_18.json.
+     * Reads and writes topic_18.json (single source of truth).
      * Supports both formats:
      * - legacy tasks (geometry + deterministic renderer variants)
      * - new tasks (task-level grid payload)
      */
     private function handleTopic18(bool $dryRun): int
     {
-        $geometryPath = storage_path('app/tasks/topic_18_geometry.json');
+        $topicPath = storage_path('app/tasks/topic_18.json');
 
-        if (!File::exists($geometryPath)) {
-            $this->error("Geometry file not found: {$geometryPath}");
+        if (!File::exists($topicPath)) {
+            $this->error("Topic file not found: {$topicPath}");
             return Command::FAILURE;
         }
 
-        $this->info('Reading geometry data from: topic_18_geometry.json');
+        $this->info('Reading topic data from: topic_18.json');
 
-        $data = json_decode(File::get($geometryPath), true);
+        $data = json_decode(File::get($topicPath), true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
             $this->error('JSON parse error: ' . json_last_error_msg());
@@ -458,26 +456,21 @@ class BakeSvgToJson extends Command
             return Command::SUCCESS;
         }
 
-        // Обновляем метаданные
         $data['exported_at'] = now()->toIso8601String();
         $data['svg_baked'] = true;
 
-        // Сохраняем в основной JSON файл
-        $outputPath = storage_path('app/tasks/topic_18.json');
-
         $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
-        if (File::put($outputPath, $json) === false) {
-            $this->error("Failed to write to: {$outputPath}");
+        if (File::put($topicPath, $json) === false) {
+            $this->error("Failed to write to: {$topicPath}");
             return Command::FAILURE;
         }
 
         $this->newLine();
         $this->info("✅ Done! Generated {$count} SVGs ({$errors} errors, {$skipped} skipped)");
-        $this->info("   Saved to: {$outputPath}");
+        $this->info("   Saved to: {$topicPath}");
         $this->newLine();
-        $this->comment('Next steps:');
-        $this->comment('  1. Clear cache: php artisan cache:clear');
+        $this->comment('Next: php artisan cache:clear');
 
         return Command::SUCCESS;
     }

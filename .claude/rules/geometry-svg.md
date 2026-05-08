@@ -1,23 +1,29 @@
 ---
-glob: "storage/app/tasks/*_geometry.json"
+glob: "storage/app/tasks/topic_{15,16,17,18}.json"
 ---
 
-# Правила при работе с geometry JSON
+# Правила при работе с геометрией (топики 15, 16, 17, 18)
 
-## Это ИСТОЧНИК — не результат
+## Один файл — один источник правды
+Источник и результат живут в одном файле `topic_XX.json`:
+- редактируй `geometry`, `svg_type`, `params` напрямую
+- bake перезаписывает только поле `svg` (не трогай его руками)
+
 ```
-*_geometry.json  ← РЕДАКТИРУЙ ЗДЕСЬ
-      ↓
+topic_XX.json  ← редактируй geometry/params/etc.
+     ↓
 php artisan svg:bake {id}
-      ↓
-topic_XX.json    ← SVG записывается сюда (не трогать вручную)
+     ↓
+topic_XX.json  ← поле "svg" обновляется, остальное сохраняется
 ```
 
-## После любых изменений — обязательно
+## После любых изменений geometry/params
 ```bash
 php artisan svg:bake {id}   # например: svg:bake 15
 php artisan cache:clear
 ```
+
+Bake пропускает задачи с собственным `task.svg_type`, отличным от `zadanie.svg_type` — их `svg` остаётся как есть.
 
 ## Критические правила SVG
 - `max-w-[250px]` — **ФИКСИРОВАННЫЙ** размер, никогда не менять
