@@ -11,6 +11,15 @@ class NameDictionaryService
     private const PATH = 'data/first_names.json';
 
     /**
+     * Resolves the dictionary path. Lives in resources/data/ (committed),
+     * not storage/app/ (which is in .gitignore on this project).
+     */
+    private function dictionaryPath(): string
+    {
+        return resource_path(self::PATH);
+    }
+
+    /**
      * Проверяет, что first_name (после нормализации) есть в словаре.
      * Дефис/апостроф разделяют составные имена — каждая часть проверяется
      * отдельно. Возвращает true если ВСЕ части в словаре.
@@ -77,7 +86,7 @@ class NameDictionaryService
     private function dictionary(): array
     {
         return Cache::remember(self::CACHE_KEY, self::CACHE_TTL, function () {
-            $path = storage_path('app/' . self::PATH);
+            $path = $this->dictionaryPath();
             if (!is_file($path)) {
                 return [];
             }
