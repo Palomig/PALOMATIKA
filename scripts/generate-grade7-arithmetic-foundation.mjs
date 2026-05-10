@@ -49,10 +49,14 @@ const addDifferentSignsB = [
   [-21.7, 30.1], [11.11, -15.5], [-5.6, 5.1], [6.03, -9.08],
 ];
 
-const addNegatives = [
+const addNegativeIntegers = [
   [-8, -6], [-3, -11], [-15, -4], [-20, -13], [-7, -9], [-18, -22], [-31, -6], [-45, -15],
+  [-12, -18], [-24, -7], [-5, -36], [-19, -14], [-27, -23], [-40, -9], [-16, -28], [-33, -17],
+];
+
+const addNegativeDecimals = [
   [-2.5, -4.8], [-7.3, -1.9], [-0.6, -8.7], [-12.4, -3.6], [-5.05, -9.15], [-10.7, -0.8],
-  [-18.25, -2.75], [-4.4, -6.06],
+  [-18.25, -2.75], [-4.4, -6.06], [-3.75, -1.25], [-0.9, -2.8], [-14.6, -0.4], [-6.08, -7.92],
 ];
 
 const subtractPairs = [
@@ -219,9 +223,10 @@ const expandedDecimals = [
 const blocks = [
   block(1, "Знаки и отрицательные числа", [
     zadanie(1, "Вычислите и объясните знак ответа:", "add_different_signs", makePairTasks(expandedDifferentSigns.slice(0, 48), "add_different_signs", "intro")),
-    zadanie(2, "Вычислите сумму двух отрицательных чисел:", "negative_number_meaning", makePairTasks([...addNegatives, ...addNegatives.map(([a, b]) => [a - 10, b - 5])], "negative_number_meaning", "intro")),
+    zadanie(2, "Вычислите сумму двух отрицательных чисел:", "negative_number_meaning", makePairTasks([...addNegativeIntegers, ...addNegativeIntegers.map(([a, b]) => [a - 10, b - 5])], "negative_number_meaning", "intro")),
     zadanie(3, "Вычислите десятичные числа с разными знаками:", "add_different_signs", makePairTasks(addDifferentSignsB, "add_different_signs", "base")),
-    zadanie(4, "Найдите ошибку в рассуждении ученика:", "estimate_and_error_check", makeErrorTasks()),
+    zadanie(4, "Вычислите сумму двух отрицательных десятичных чисел:", "negative_number_meaning", makePairTasks(addNegativeDecimals, "negative_number_meaning", "base")),
+    zadanie(5, "Найдите ошибку в рассуждении ученика:", "estimate_and_error_check", makeErrorTasks()),
   ]),
   block(2, "Вычитание и противоположные числа", [
     zadanie(1, "Вычислите, заменяя вычитание прибавлением противоположного числа:", "subtract_as_opposite", makeSubtractTasks([...subtractPairs, ...subtractPairs.map(([a, b]) => [a + 10, b - 4])], "subtract_as_opposite", "base")),
@@ -259,7 +264,7 @@ const blocks = [
 let number = 8;
 for (const skillBlock of [
   ["Дополнительная серия: разные знаки", "add_different_signs", makePairTasks(expandedDifferentSigns.slice(12, 36).map(([a, b]) => [a - 5, b + 9]), "add_different_signs", "base")],
-  ["Дополнительная серия: отрицательные суммы", "negative_number_meaning", makePairTasks(addNegatives.map(([a, b]) => [a * 2, b - 3]), "negative_number_meaning", "base")],
+  ["Дополнительная серия: отрицательные суммы", "negative_number_meaning", makePairTasks(addNegativeIntegers.map(([a, b]) => [a * 2, b - 3]), "negative_number_meaning", "base")],
   ["Дополнительная серия: вычитание", "subtract_as_opposite", makeSubtractTasks(subtractPairs.map(([a, b]) => [a * 2, b + 1]), "subtract_as_opposite", "base")],
   ["Дополнительная серия: десятичные суммы", "decimal_add_subtract", makeDecimalAddTasks(expandedDecimals.slice(10, 34).map(values => values.map(v => Math.round((v - 2.2) * 1000) / 1000)))],
   ["Дополнительная серия: порядок действий", "operation_order", makeOperationTasks(operationOrder.map(([e, a]) => [`${e} - 3`, a - 3]))],

@@ -103,7 +103,7 @@
       "goal": "Ученик заранее оценивает ответ и замечает ошибки со знаком или размером числа."
     }
   ],
-  "exported_at": "2026-05-10T16:05:23.153Z",
+  "exported_at": "2026-05-10T16:09:51.840Z",
   "source": "PALOMATIKA generated arithmetic foundation bank",
   "blocks": [
     {
@@ -628,8 +628,8 @@
             },
             {
               "id": 9,
-              "expression": "-2,5 + (-4,8)",
-              "answer": "-7,3",
+              "expression": "-12 + (-18)",
+              "answer": "-30",
               "status": "ready",
               "skill": "negative_number_meaning",
               "type": "drill",
@@ -637,8 +637,8 @@
             },
             {
               "id": 10,
-              "expression": "-7,3 + (-1,9)",
-              "answer": "-9,2",
+              "expression": "-24 + (-7)",
+              "answer": "-31",
               "status": "ready",
               "skill": "negative_number_meaning",
               "type": "drill",
@@ -646,8 +646,8 @@
             },
             {
               "id": 11,
-              "expression": "-0,6 + (-8,7)",
-              "answer": "-9,3",
+              "expression": "-5 + (-36)",
+              "answer": "-41",
               "status": "ready",
               "skill": "negative_number_meaning",
               "type": "drill",
@@ -655,8 +655,8 @@
             },
             {
               "id": 12,
-              "expression": "-12,4 + (-3,6)",
-              "answer": "-16",
+              "expression": "-19 + (-14)",
+              "answer": "-33",
               "status": "ready",
               "skill": "negative_number_meaning",
               "type": "drill",
@@ -664,8 +664,8 @@
             },
             {
               "id": 13,
-              "expression": "-5,05 + (-9,15)",
-              "answer": "-14,2",
+              "expression": "-27 + (-23)",
+              "answer": "-50",
               "status": "ready",
               "skill": "negative_number_meaning",
               "type": "drill",
@@ -673,8 +673,8 @@
             },
             {
               "id": 14,
-              "expression": "-10,7 + (-0,8)",
-              "answer": "-11,5",
+              "expression": "-40 + (-9)",
+              "answer": "-49",
               "status": "ready",
               "skill": "negative_number_meaning",
               "type": "drill",
@@ -682,8 +682,8 @@
             },
             {
               "id": 15,
-              "expression": "-18,25 + (-2,75)",
-              "answer": "-21",
+              "expression": "-16 + (-28)",
+              "answer": "-44",
               "status": "ready",
               "skill": "negative_number_meaning",
               "type": "drill",
@@ -691,8 +691,8 @@
             },
             {
               "id": 16,
-              "expression": "-4,4 + (-6,06)",
-              "answer": "-10,46",
+              "expression": "-33 + (-17)",
+              "answer": "-50",
               "status": "ready",
               "skill": "negative_number_meaning",
               "type": "drill",
@@ -772,8 +772,8 @@
             },
             {
               "id": 25,
-              "expression": "-12,5 + (-9,8)",
-              "answer": "-22,3",
+              "expression": "-22 + (-23)",
+              "answer": "-45",
               "status": "ready",
               "skill": "negative_number_meaning",
               "type": "drill",
@@ -781,8 +781,8 @@
             },
             {
               "id": 26,
-              "expression": "-17,3 + (-6,9)",
-              "answer": "-24,2",
+              "expression": "-34 + (-12)",
+              "answer": "-46",
               "status": "ready",
               "skill": "negative_number_meaning",
               "type": "drill",
@@ -790,8 +790,8 @@
             },
             {
               "id": 27,
-              "expression": "-10,6 + (-13,7)",
-              "answer": "-24,3",
+              "expression": "-15 + (-41)",
+              "answer": "-56",
               "status": "ready",
               "skill": "negative_number_meaning",
               "type": "drill",
@@ -799,8 +799,8 @@
             },
             {
               "id": 28,
-              "expression": "-22,4 + (-8,6)",
-              "answer": "-31",
+              "expression": "-29 + (-19)",
+              "answer": "-48",
               "status": "ready",
               "skill": "negative_number_meaning",
               "type": "drill",
@@ -808,8 +808,8 @@
             },
             {
               "id": 29,
-              "expression": "-15,05 + (-14,15)",
-              "answer": "-29,2",
+              "expression": "-37 + (-28)",
+              "answer": "-65",
               "status": "ready",
               "skill": "negative_number_meaning",
               "type": "drill",
@@ -817,8 +817,8 @@
             },
             {
               "id": 30,
-              "expression": "-20,7 + (-5,8)",
-              "answer": "-26,5",
+              "expression": "-50 + (-14)",
+              "answer": "-64",
               "status": "ready",
               "skill": "negative_number_meaning",
               "type": "drill",
@@ -826,8 +826,8 @@
             },
             {
               "id": 31,
-              "expression": "-28,25 + (-7,75)",
-              "answer": "-36",
+              "expression": "-26 + (-33)",
+              "answer": "-59",
               "status": "ready",
               "skill": "negative_number_meaning",
               "type": "drill",
@@ -835,8 +835,8 @@
             },
             {
               "id": 32,
-              "expression": "-14,4 + (-11,06)",
-              "answer": "-25,46",
+              "expression": "-43 + (-22)",
+              "answer": "-65",
               "status": "ready",
               "skill": "negative_number_meaning",
               "type": "drill",
@@ -997,6 +997,121 @@
         },
         {
           "number": 4,
+          "instruction": "Вычислите сумму двух отрицательных десятичных чисел:",
+          "micro_skill": "negative_number_meaning",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "-2,5 + (-4,8)",
+              "answer": "-7,3",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 2,
+              "expression": "-7,3 + (-1,9)",
+              "answer": "-9,2",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 3,
+              "expression": "-0,6 + (-8,7)",
+              "answer": "-9,3",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 4,
+              "expression": "-12,4 + (-3,6)",
+              "answer": "-16",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 5,
+              "expression": "-5,05 + (-9,15)",
+              "answer": "-14,2",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 6,
+              "expression": "-10,7 + (-0,8)",
+              "answer": "-11,5",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 7,
+              "expression": "-18,25 + (-2,75)",
+              "answer": "-21",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 8,
+              "expression": "-4,4 + (-6,06)",
+              "answer": "-10,46",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 9,
+              "expression": "-3,75 + (-1,25)",
+              "answer": "-5",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 10,
+              "expression": "-0,9 + (-2,8)",
+              "answer": "-3,7",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 11,
+              "expression": "-14,6 + (-0,4)",
+              "answer": "-15",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 12,
+              "expression": "-6,08 + (-7,92)",
+              "answer": "-14",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            }
+          ]
+        },
+        {
+          "number": 5,
           "instruction": "Найдите ошибку в рассуждении ученика:",
           "micro_skill": "estimate_and_error_check",
           "tasks": [
@@ -3579,8 +3694,8 @@
             },
             {
               "id": 9,
-              "expression": "-5 + (-7,8)",
-              "answer": "-12,8",
+              "expression": "-24 + (-21)",
+              "answer": "-45",
               "status": "ready",
               "skill": "negative_number_meaning",
               "type": "drill",
@@ -3588,8 +3703,8 @@
             },
             {
               "id": 10,
-              "expression": "-14,6 + (-4,9)",
-              "answer": "-19,5",
+              "expression": "-48 + (-10)",
+              "answer": "-58",
               "status": "ready",
               "skill": "negative_number_meaning",
               "type": "drill",
@@ -3597,8 +3712,8 @@
             },
             {
               "id": 11,
-              "expression": "-1,2 + (-11,7)",
-              "answer": "-12,9",
+              "expression": "-10 + (-39)",
+              "answer": "-49",
               "status": "ready",
               "skill": "negative_number_meaning",
               "type": "drill",
@@ -3606,8 +3721,8 @@
             },
             {
               "id": 12,
-              "expression": "-24,8 + (-6,6)",
-              "answer": "-31,4",
+              "expression": "-38 + (-17)",
+              "answer": "-55",
               "status": "ready",
               "skill": "negative_number_meaning",
               "type": "drill",
@@ -3615,8 +3730,8 @@
             },
             {
               "id": 13,
-              "expression": "-10,1 + (-12,15)",
-              "answer": "-22,25",
+              "expression": "-54 + (-26)",
+              "answer": "-80",
               "status": "ready",
               "skill": "negative_number_meaning",
               "type": "drill",
@@ -3624,8 +3739,8 @@
             },
             {
               "id": 14,
-              "expression": "-21,4 + (-3,8)",
-              "answer": "-25,2",
+              "expression": "-80 + (-12)",
+              "answer": "-92",
               "status": "ready",
               "skill": "negative_number_meaning",
               "type": "drill",
@@ -3633,8 +3748,8 @@
             },
             {
               "id": 15,
-              "expression": "-36,5 + (-5,75)",
-              "answer": "-42,25",
+              "expression": "-32 + (-31)",
+              "answer": "-63",
               "status": "ready",
               "skill": "negative_number_meaning",
               "type": "drill",
@@ -3642,8 +3757,8 @@
             },
             {
               "id": 16,
-              "expression": "-8,8 + (-9,06)",
-              "answer": "-17,86",
+              "expression": "-66 + (-20)",
+              "answer": "-86",
               "status": "ready",
               "skill": "negative_number_meaning",
               "type": "drill",

@@ -68,6 +68,21 @@ class AlgTopicDataServiceTest extends TestCase
         $this->assertFileDoesNotExist(storage_path('app/tasks/vpr/grade_7/topic_00.json'));
     }
 
+    public function test_arithmetic_negative_integer_series_does_not_mix_decimals(): void
+    {
+        Cache::flush();
+
+        $service = new AlgTaskDataService(7);
+        $data = $service->getTopicData('00');
+
+        $negativeSumSeries = $data['blocks'][0]['zadaniya'][1];
+
+        $this->assertSame('Вычислите сумму двух отрицательных чисел:', $negativeSumSeries['instruction']);
+        foreach ($negativeSumSeries['tasks'] as $task) {
+            $this->assertStringNotContainsString(',', $task['expression']);
+        }
+    }
+
     public function test_teacher_can_open_grade_7_arithmetic_base_topic_page(): void
     {
         Cache::flush();
