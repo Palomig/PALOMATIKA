@@ -83,6 +83,30 @@ class AlgTopicDataServiceTest extends TestCase
         }
     }
 
+    public function test_arithmetic_base_uses_colon_for_division_not_slash(): void
+    {
+        Cache::flush();
+
+        $service = new AlgTaskDataService(7);
+        $data = $service->getTopicData('00');
+
+        foreach ($data['blocks'] as $block) {
+            foreach ($block['zadaniya'] as $zadanie) {
+                foreach ($zadanie['tasks'] as $task) {
+                    $this->assertStringNotContainsString('/', $task['expression'] ?? '');
+                    $this->assertStringNotContainsString('/', $task['prompt'] ?? '');
+                }
+            }
+        }
+
+        foreach ($data['homework_sets'] as $homeworkSet) {
+            foreach ($homeworkSet['tasks'] as $task) {
+                $this->assertStringNotContainsString('/', $task['expression'] ?? '');
+                $this->assertStringNotContainsString('/', $task['prompt'] ?? '');
+            }
+        }
+    }
+
     public function test_teacher_can_open_grade_7_arithmetic_base_topic_page(): void
     {
         Cache::flush();
