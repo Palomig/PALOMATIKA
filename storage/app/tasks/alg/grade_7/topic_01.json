@@ -1,0 +1,1664 @@
+{
+  "topic_id": "01",
+  "meta": {
+    "title": "Раскрытие скобок и подобные",
+    "description": "Преобразование выражений: раскрытие скобок, приведение подобных слагаемых",
+    "color": "blue",
+    "icon": "calculator",
+    "grade": 7,
+    "subject": "algebra",
+    "skills": [
+      "Раскрывать скобки со знаком плюс перед скобкой",
+      "Раскрывать скобки со знаком минус перед скобкой",
+      "Умножать число на сумму/разность (распределительное свойство)",
+      "Приводить подобные слагаемые",
+      "Упрощать выражения с несколькими скобками",
+      "Доказывать тождества преобразованием"
+    ],
+    "stats": {
+      "problems_in_section": 61,
+      "practice_kept": 39,
+      "theory_dropped": 22
+    }
+  },
+  "exported_at": "2026-05-05T09:00:14.483Z",
+  "source": "Макарычев Ю.Н. — Алгебра 7 класс, 2023",
+  "blocks": [
+    {
+      "number": 1,
+      "title": "Учебник Макарычев",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Найдите значение выражения:",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "37,6 - 5,84 + 3,95 - 8,9;",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 87,
+                "label": "а",
+                "page": 22,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 2,
+              "expression": "81 - 45,34 + 19,6 + 21,75;",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 87,
+                "label": "б",
+                "page": 22,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 3,
+              "expression": "17,1 * 3,8 / 4,5 * 0,5;",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 87,
+                "label": "в",
+                "page": 22,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 4,
+              "expression": "81,9 / 4,5 / 0,28 * 1,2.",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 87,
+                "label": "г",
+                "page": 22,
+                "has_figure": false
+              },
+              "level": "advanced"
+            },
+            {
+              "id": 5,
+              "expression": "8,91 + 25,7 + 1,09",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 91,
+                "label": "а",
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 6,
+              "expression": "6,64 + 7,12 + 2,88",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 91,
+                "label": "б",
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 7,
+              "expression": "7,15 - 9,42 + 12,85 - 0,58",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 91,
+                "label": "в",
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 8,
+              "expression": "18,9 - 6,8 - 5,2 - 4,1",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 91,
+                "label": "г",
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 9,
+              "expression": "5 3/4 - 2 1/7 + 1 1/4 - 4 6/7",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 93,
+                "label": "а",
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "advanced"
+            },
+            {
+              "id": 10,
+              "expression": "8 2/3 - 6 3/5 - 2 2/5 + 1 7/9",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 93,
+                "label": "б",
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "advanced"
+            },
+            {
+              "id": 11,
+              "expression": "3,5 * 6,8 + 3,5 * 3,2",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 96,
+                "label": "а",
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "advanced"
+            },
+            {
+              "id": 12,
+              "expression": "12,4 * 14,3 - 12,4 * 4,3",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 96,
+                "label": "б",
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "advanced"
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "(без инструкции)",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "Для детского сада купили 5 наборов карандашей и 10 альбомов для рисования. Набор карандашей стоит а рублей, а альбом стоит b рублей. Какова стоимость покупки?",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 99,
+                "label": null,
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 2,
+              "expression": "Автомобиль двигался t ч со скоростью 60 км/ч и p ч со скоростью 50 км/ч. Какова средняя скорость автомобиля?",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 100,
+                "label": null,
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "advanced"
+            },
+            {
+              "id": 3,
+              "expression": "Техническое перевооружение цеха позволило выпускать в сутки 180 станков вместо 160. На сколько процентов повысился выпуск станков в сутки?",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 128,
+                "label": null,
+                "page": 31,
+                "has_figure": true
+              },
+              "level": "advanced"
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "instruction": "Упростите выражение:",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "1,6 * (-0,2n)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 110,
+                "label": "а",
+                "page": 29,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 2,
+              "expression": "-6,4a * (-5c)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 110,
+                "label": "б",
+                "page": 29,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 3,
+              "expression": "5 - (a - 3)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 119,
+                "label": "а",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 4,
+              "expression": "7 + (12 - 2b)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 119,
+                "label": "б",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 5,
+              "expression": "64 - (14 + 7x)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 119,
+                "label": "в",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 6,
+              "expression": "38 + (12p - 8)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 119,
+                "label": "г",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 7,
+              "expression": "(x - 1) + (12 - 7.5x)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 122,
+                "label": "а",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 8,
+              "expression": "(2p + 1.9) - (7 - p)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 122,
+                "label": "б",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 9,
+              "expression": "(3 - 0.4a) - (10 - 0.8a)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 122,
+                "label": "в",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 10,
+              "expression": "b - (4 - 2b) + (3b - 1)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 122,
+                "label": "г",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 11,
+              "expression": "y - (y + 4) + (y - 4)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 122,
+                "label": "д",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 12,
+              "expression": "4x - (1 - 2x) + (2x - 7)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 122,
+                "label": "е",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            }
+          ]
+        },
+        {
+          "number": 4,
+          "instruction": "Приведите подобные слагаемые:",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "5a + 27a - a",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 114,
+                "label": "а",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 2,
+              "expression": "12b - 17b - b",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 114,
+                "label": "б",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 3,
+              "expression": "6x - 14 - 13x + 26",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 114,
+                "label": "в",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 4,
+              "expression": "-8 - y + 17 - 10y",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 114,
+                "label": "г",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 5,
+              "expression": "13a + 2b - 2a - b",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 115,
+                "label": "а",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 6,
+              "expression": "41x - 58x + 6y - y",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 115,
+                "label": "б",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 7,
+              "expression": "-5.1a - 4b - 4.9a + b",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 115,
+                "label": "в",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 8,
+              "expression": "7.5x + y - 8.5x - 3.5y",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 115,
+                "label": "г",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 9,
+              "expression": "8x - 6y + 7x - 2y",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 116,
+                "label": "а",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 10,
+              "expression": "27p + 14q - 16p - 3q",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 116,
+                "label": "б",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 11,
+              "expression": "3.5b - 2.4c - 0.6c - 0.7b",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 116,
+                "label": "в",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 12,
+              "expression": "1.6a + 4x - 2.8a - 7.5x",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 116,
+                "label": "г",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            }
+          ]
+        },
+        {
+          "number": 5,
+          "instruction": "Вычислите наиболее рациональным способом:",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "3,17 + 10,2 + 0,83 + 9,8",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 90,
+                "label": "а",
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 2,
+              "expression": "4,11 + 15,5 + 0,89 + 4,4",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 90,
+                "label": "б",
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 3,
+              "expression": "15,21 - 3,9 - 4,7 + 6,79",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 90,
+                "label": "в",
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 4,
+              "expression": "-4,27 + 3,8 - 5,73 - 3,3",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 90,
+                "label": "г",
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 5,
+              "expression": "50 * 1,34 * 0,2",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 94,
+                "label": "а",
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 6,
+              "expression": "-75,7 * 0,5 * 20",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 94,
+                "label": "б",
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 7,
+              "expression": "25 * (-15,8) * 4",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 94,
+                "label": "в",
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 8,
+              "expression": "0,47 * 0,4 * 25",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 94,
+                "label": "г",
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "base"
+            }
+          ]
+        },
+        {
+          "number": 6,
+          "instruction": "Раскройте скобки и приведите подобные слагаемые:",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "x + (2x + 0.5)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 120,
+                "label": "а",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 2,
+              "expression": "3x - (x - 2)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 120,
+                "label": "б",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 3,
+              "expression": "4a - (a + 6)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 120,
+                "label": "в",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 4,
+              "expression": "6b + (10 - 4.5b)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 120,
+                "label": "г",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 5,
+              "expression": "3(6 - 5x) + 17x - 10",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 124,
+                "label": "а)",
+                "page": 31,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 6,
+              "expression": "8(3y + 4) - 29y + 14",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 124,
+                "label": "б)",
+                "page": 31,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 7,
+              "expression": "7(2z - 3) + 6z - 12",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 124,
+                "label": "в)",
+                "page": 31,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 8,
+              "expression": "2(7.3 - 1.6a) + 3.2a - 9.6",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 124,
+                "label": "г)",
+                "page": 31,
+                "has_figure": false
+              },
+              "level": "advanced"
+            },
+            {
+              "id": 9,
+              "expression": "-5(0.3b + 1.7) + 12.5 - 8.5b",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 124,
+                "label": "д)",
+                "page": 31,
+                "has_figure": false
+              },
+              "level": "advanced"
+            },
+            {
+              "id": 10,
+              "expression": "-4(3.3 - 8c) + 4.8c + 5.2",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 124,
+                "label": "е)",
+                "page": 31,
+                "has_figure": false
+              },
+              "level": "advanced"
+            }
+          ]
+        },
+        {
+          "number": 7,
+          "instruction": "Упростите выражение и найдите его значение:",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "(5x - 1) - (2 - 8x) при x = 0.75",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 121,
+                "label": "а",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 2,
+              "expression": "(6 - 2x) + (15 - 3x) при x = -0.2",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 121,
+                "label": "б",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 3,
+              "expression": "12 + 7x - (1 - 3x) при x = -1.7",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 121,
+                "label": "в",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 4,
+              "expression": "37 - (x - 16) + (11x - 53) при x = -0.03",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 121,
+                "label": "г",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 5,
+              "expression": "0.6(p - 3) + p + 2 при p = 0.5",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 125,
+                "label": "а)",
+                "page": 31,
+                "has_figure": false
+              },
+              "level": "advanced"
+            },
+            {
+              "id": 6,
+              "expression": "4(0.5q - 6) - 14q + 21 при q = 1/3",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 125,
+                "label": "б)",
+                "page": 31,
+                "has_figure": false
+              },
+              "level": "advanced"
+            }
+          ]
+        },
+        {
+          "number": 8,
+          "instruction": "Используя распределительное свойство умножения, выполните действие:",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "3 1/8 * 5",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 95,
+                "label": "а",
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 2,
+              "expression": "7 * 2 2/7",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 95,
+                "label": "б",
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 3,
+              "expression": "2 2/5 * 10",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 95,
+                "label": "в",
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 4,
+              "expression": "6 * 4 5/12",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 95,
+                "label": "г",
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "base"
+            }
+          ]
+        },
+        {
+          "number": 9,
+          "instruction": "Вычислите:",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "15,7 * 3,09 + 15,7 * 2,91",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 97,
+                "label": "а",
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 2,
+              "expression": "4,03 * 27,9 - 17,9 * 4,03",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 97,
+                "label": "б",
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "base"
+            }
+          ]
+        },
+        {
+          "number": 10,
+          "instruction": "Докажите, что:",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "24 * 17 + 17 * 6 сумма делится на 5",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 98,
+                "label": "а",
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 2,
+              "expression": "34 * 85 + 34 * 36 сумма делится на 11",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 98,
+                "label": "б",
+                "page": 25,
+                "has_figure": false
+              },
+              "level": "base"
+            }
+          ]
+        },
+        {
+          "number": 11,
+          "instruction": "Верно ли утверждение:",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "6(x - y) = 6x - 6y равенство является тождеством",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 108,
+                "label": "а",
+                "page": 29,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 2,
+              "expression": "3a - 4 = a + (2a - 4) равенство является тождеством",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 108,
+                "label": "б",
+                "page": 29,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 3,
+              "expression": "25(a - a) = 25 равенство является тождеством",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 108,
+                "label": "в",
+                "page": 29,
+                "has_figure": false
+              },
+              "level": "base"
+            }
+          ]
+        },
+        {
+          "number": 12,
+          "instruction": "Упростите выражение, используя переместительное и сочетательное свойства умножения:",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "-6,2a * 5",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 109,
+                "label": "а",
+                "page": 29,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 2,
+              "expression": "4c * (-1,25)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 109,
+                "label": "б",
+                "page": 29,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 3,
+              "expression": "0,3x * (-12y)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 109,
+                "label": "в",
+                "page": 29,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 4,
+              "expression": "-0,1b * (-2,3c)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 109,
+                "label": "г",
+                "page": 29,
+                "has_figure": false
+              },
+              "level": "base"
+            }
+          ]
+        },
+        {
+          "number": 13,
+          "instruction": "Преобразуйте выражение в тождественно равное, используя распределительное свойство умножения:",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "7(x - y)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 111,
+                "label": "а",
+                "page": 29,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 2,
+              "expression": "(a - 4b) * 3",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 111,
+                "label": "б",
+                "page": 29,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 3,
+              "expression": "-23 * (2a - 3b + 1)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 111,
+                "label": "в",
+                "page": 29,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 4,
+              "expression": "1,5 * (-3x + 4y - 5z)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 111,
+                "label": "г",
+                "page": 29,
+                "has_figure": false
+              },
+              "level": "advanced"
+            }
+          ]
+        },
+        {
+          "number": 14,
+          "instruction": "Раскройте скобки:",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "x + (b + c + d - m)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 117,
+                "label": "а",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 2,
+              "expression": "a - (b - c - d)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 117,
+                "label": "б",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 3,
+              "expression": "x + y - (b + c - m)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 117,
+                "label": "в",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 4,
+              "expression": "x + (a - b) - (c + d)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 117,
+                "label": "г",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            }
+          ]
+        },
+        {
+          "number": 15,
+          "instruction": "Запишите без скобок выражение:",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "m + (a - k - b)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 118,
+                "label": "а",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 2,
+              "expression": "m - (a - k - b)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 118,
+                "label": "б",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 3,
+              "expression": "x + a + (m - 2)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 118,
+                "label": "в",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 4,
+              "expression": "a - (b - c) + (m + n)",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 118,
+                "label": "г",
+                "page": 30,
+                "has_figure": false
+              },
+              "level": "base"
+            }
+          ]
+        },
+        {
+          "number": 16,
+          "instruction": "Составьте выражение по условию задачи и упростите его:",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "У Игоря 3 альбома с марками. В первом альбоме a марок, во втором — на 15 марок больше, чем в первом, а в третьем — втрое больше, чем во втором. Сколько марок в трёх альбомах?",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 126,
+                "label": "а)",
+                "page": 31,
+                "has_figure": false
+              },
+              "level": "advanced"
+            },
+            {
+              "id": 2,
+              "expression": "Пётр приобрёл 8 билетов лотереи «Удача» и 6 билетов лотереи «Надежда». Билет лотереи «Удача» стоил a р., а лотереи «Надежда» был на 10% дороже. Найдите стоимость покупки.",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 126,
+                "label": "б)",
+                "page": 31,
+                "has_figure": false
+              },
+              "level": "advanced"
+            }
+          ]
+        },
+        {
+          "number": 17,
+          "instruction": "Сравните значения выражений, не вычисляя их. Ответ запишите в виде неравенства.",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "1/5 - 1/6 и 1/6 - 1/5",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 127,
+                "label": "а)",
+                "page": 31,
+                "has_figure": false
+              },
+              "level": "base"
+            },
+            {
+              "id": 2,
+              "expression": "3.7 * 1/3 и 3.7 / 1/3",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 127,
+                "label": "б)",
+                "page": 31,
+                "has_figure": false
+              },
+              "level": "advanced"
+            },
+            {
+              "id": 3,
+              "expression": "5.6 / 2.5 и 5.6 * 2.5",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 127,
+                "label": "в)",
+                "page": 31,
+                "has_figure": false
+              },
+              "level": "advanced"
+            }
+          ]
+        },
+        {
+          "number": 18,
+          "instruction": "Контрольные вопросы и задания",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "-5x + 4y - y - 3x Какие слагаемые называют подобными? Что означает выражение «привести подобные слагаемые»? Приведите подобные слагаемые в сумме",
+              "answer": null,
+              "status": "draft",
+              "src": {
+                "number": 4,
+                "label": null,
+                "page": 31,
+                "has_figure": false
+              },
+              "level": "base"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "curriculum": {
+    "year_position": "weeks_3_5",
+    "lesson_hours": 6,
+    "homework_size": "15-20",
+    "main_idea": "Скобки - это группа. Раскрыть скобки - значит выполнить действие с каждым элементом группы.",
+    "prerequisites": [
+      "Понимание переменной как числа",
+      "Сложение и вычитание рациональных чисел",
+      "Умножение числа на сумму",
+      "Подобные слагаемые"
+    ],
+    "common_misconceptions": [
+      "Меняет знак только первый член после минуса",
+      "Не умножает коэффициент на каждый член скобки",
+      "Смешивает раскрытие скобок и приведение подобных"
+    ],
+    "lesson_flow": [
+      {
+        "minutes": "0-10",
+        "activity": "Скобки как набор, чек, коробка или площадь."
+      },
+      {
+        "minutes": "10-25",
+        "activity": "Плюс перед скобкой: добавляем группу."
+      },
+      {
+        "minutes": "25-45",
+        "activity": "Минус перед скобкой: вычитаем всю группу."
+      },
+      {
+        "minutes": "45-65",
+        "activity": "Коэффициент перед скобкой: повторяем группу."
+      },
+      {
+        "minutes": "65-85",
+        "activity": "Раскрытие скобок и приведение подобных."
+      },
+      {
+        "minutes": "85-105",
+        "activity": "Реальные контексты: деньги, площадь, тарифы."
+      },
+      {
+        "minutes": "105-115",
+        "activity": "Мини-проверка на 5 заданий."
+      },
+      {
+        "minutes": "115-120",
+        "activity": "Домашка и типичные ошибки."
+      }
+    ]
+  },
+  "micro_skills": [
+    {
+      "id": "parentheses_as_group",
+      "title": "Скобки как группа",
+      "goal": "Ученик объясняет выражение со скобками через набор, чек, площадь или повторяющуюся ситуацию."
+    },
+    {
+      "id": "plus_before_parentheses",
+      "title": "Плюс перед скобкой",
+      "goal": "Ученик раскрывает скобки после плюса без изменения знаков."
+    },
+    {
+      "id": "minus_before_parentheses",
+      "title": "Минус перед скобкой",
+      "goal": "Ученик вычитает всю группу и меняет знак каждого члена."
+    },
+    {
+      "id": "coefficient_before_parentheses",
+      "title": "Коэффициент перед скобкой",
+      "goal": "Ученик умножает каждый член группы на коэффициент."
+    },
+    {
+      "id": "open_and_collect_like_terms",
+      "title": "Раскрытие и подобные",
+      "goal": "Ученик раскрывает скобки и приводит подобные слагаемые."
+    },
+    {
+      "id": "error_analysis",
+      "title": "Поиск ошибок",
+      "goal": "Ученик находит типичные ошибки со знаками и объясняет исправление."
+    }
+  ],
+  "homework_sets": [
+    {
+      "id": "hw_01_parentheses_meaning",
+      "title": "Раскрытие скобок: смысл и базовая техника",
+      "target_minutes": 35,
+      "tasks_count": 20,
+      "tasks": [
+        {
+          "id": 1,
+          "prompt": "Придумай ситуацию к выражению 2(x + 300). Раскрой скобки и объясни, что означает каждый член.",
+          "answer": "2(x + 300) = 2x + 600. Например, два одинаковых заказа: в каждом товар за x рублей и доставка 300 рублей.",
+          "skill": "parentheses_as_group",
+          "type": "concept",
+          "difficulty": "intro",
+          "hint": "Представь два одинаковых набора."
+        },
+        {
+          "id": 2,
+          "prompt": "Придумай ситуацию к выражению 1000 - (x + 150). Раскрой скобки и объясни знаки.",
+          "answer": "1000 - (x + 150) = 1000 - x - 150. Из бюджета вычитается вся покупка: цена x и доставка 150.",
+          "skill": "minus_before_parentheses",
+          "type": "concept",
+          "difficulty": "intro",
+          "hint": "Вычитается не только x, а вся группа в скобках."
+        },
+        {
+          "id": 3,
+          "prompt": "Придумай ситуацию к выражению 500 - (x - 80). Почему после раскрытия появляется +80?",
+          "answer": "500 - (x - 80) = 500 - x + 80. Если покупка стоит x рублей со скидкой 80 рублей, то вычитаем меньшую сумму.",
+          "skill": "minus_before_parentheses",
+          "type": "concept",
+          "difficulty": "base",
+          "hint": "x - 80 означает цену после скидки."
+        },
+        {
+          "id": 4,
+          "prompt": "Раскрой скобки: 8 + (x + 5).",
+          "answer": "x + 13",
+          "skill": "plus_before_parentheses",
+          "type": "drill",
+          "difficulty": "intro",
+          "hint": "Плюс перед скобкой не меняет знаки."
+        },
+        {
+          "id": 5,
+          "prompt": "Раскрой скобки: 12 + (a - 7).",
+          "answer": "a + 5",
+          "skill": "plus_before_parentheses",
+          "type": "drill",
+          "difficulty": "intro",
+          "hint": "Сначала убери скобки, потом сложи числа."
+        },
+        {
+          "id": 6,
+          "prompt": "Раскрой скобки: 20 - (x + 6).",
+          "answer": "14 - x",
+          "skill": "minus_before_parentheses",
+          "type": "drill",
+          "difficulty": "base",
+          "hint": "Минус перед скобкой меняет знак каждого члена внутри."
+        },
+        {
+          "id": 7,
+          "prompt": "Раскрой скобки: 15 - (y - 9).",
+          "answer": "24 - y",
+          "skill": "minus_before_parentheses",
+          "type": "drill",
+          "difficulty": "base",
+          "hint": "Вычитание -9 превращается в +9."
+        },
+        {
+          "id": 8,
+          "prompt": "Раскрой скобки: 3(x + 4).",
+          "answer": "3x + 12",
+          "skill": "coefficient_before_parentheses",
+          "type": "drill",
+          "difficulty": "intro",
+          "hint": "Умножь на 3 каждый член скобки."
+        },
+        {
+          "id": 9,
+          "prompt": "Раскрой скобки: 5(a - 2).",
+          "answer": "5a - 10",
+          "skill": "coefficient_before_parentheses",
+          "type": "drill",
+          "difficulty": "intro",
+          "hint": "5 умножается и на a, и на -2."
+        },
+        {
+          "id": 10,
+          "prompt": "Раскрой скобки: -2(x + 7).",
+          "answer": "-2x - 14",
+          "skill": "coefficient_before_parentheses",
+          "type": "drill",
+          "difficulty": "base",
+          "hint": "Отрицательный коэффициент меняет знаки при умножении."
+        },
+        {
+          "id": 11,
+          "prompt": "Раскрой скобки: -4(y - 3).",
+          "answer": "-4y + 12",
+          "skill": "coefficient_before_parentheses",
+          "type": "drill",
+          "difficulty": "base",
+          "hint": "Посчитай -4 * y и -4 * (-3)."
+        },
+        {
+          "id": 12,
+          "prompt": "Упрости выражение: 2(x + 5) + 3x.",
+          "answer": "5x + 10",
+          "skill": "open_and_collect_like_terms",
+          "type": "drill",
+          "difficulty": "base",
+          "hint": "Сначала раскрой скобки, потом собери x."
+        },
+        {
+          "id": 13,
+          "prompt": "Упрости выражение: 4(a - 2) + 7.",
+          "answer": "4a - 1",
+          "skill": "open_and_collect_like_terms",
+          "type": "drill",
+          "difficulty": "base",
+          "hint": "После раскрытия скобок сложи -8 и 7."
+        },
+        {
+          "id": 14,
+          "prompt": "Упрости выражение: 10 - 2(x + 3).",
+          "answer": "4 - 2x",
+          "skill": "open_and_collect_like_terms",
+          "type": "drill",
+          "difficulty": "standard",
+          "hint": "-2 умножается на каждый член скобки."
+        },
+        {
+          "id": 15,
+          "prompt": "Упрости выражение: 3(y - 4) + 2(y + 1).",
+          "answer": "5y - 10",
+          "skill": "open_and_collect_like_terms",
+          "type": "drill",
+          "difficulty": "standard",
+          "hint": "Раскрой обе скобки и собери подобные."
+        },
+        {
+          "id": 16,
+          "prompt": "Упрости выражение: 5(a + 2) - 3(a - 1).",
+          "answer": "2a + 13",
+          "skill": "open_and_collect_like_terms",
+          "type": "drill",
+          "difficulty": "standard",
+          "hint": "Перед второй скобкой стоит -3."
+        },
+        {
+          "id": 17,
+          "prompt": "Один набор состоит из тетради за x рублей и ручки за 35 рублей. Купили 6 наборов. Запиши стоимость покупки двумя способами.",
+          "answer": "6(x + 35) = 6x + 210.",
+          "skill": "coefficient_before_parentheses",
+          "type": "real_context",
+          "difficulty": "base",
+          "hint": "В каждом из 6 наборов есть тетрадь и ручка."
+        },
+        {
+          "id": 18,
+          "prompt": "У прямоугольника одна сторона равна x + 4, другая равна 3. Запиши площадь и раскрой скобки.",
+          "answer": "3(x + 4) = 3x + 12.",
+          "skill": "coefficient_before_parentheses",
+          "type": "real_context",
+          "difficulty": "base",
+          "hint": "Площадь прямоугольника равна произведению сторон."
+        },
+        {
+          "id": 19,
+          "prompt": "У Пети было 1200 рублей. Он купил товар за x рублей со скидкой 100 рублей. Запиши, сколько денег осталось, и раскрой скобки.",
+          "answer": "1200 - (x - 100) = 1200 - x + 100.",
+          "skill": "minus_before_parentheses",
+          "type": "real_context",
+          "difficulty": "standard",
+          "hint": "Цена со скидкой равна x - 100."
+        },
+        {
+          "id": 20,
+          "prompt": "Ученик написал: 6 - (x + 2) = 6 - x + 2. Найди ошибку, запиши правильно и объясни словами.",
+          "answer": "Правильно: 6 - (x + 2) = 6 - x - 2 = 4 - x. Ошибка: ученик не вычел второй член группы.",
+          "skill": "error_analysis",
+          "type": "error_analysis",
+          "difficulty": "base",
+          "hint": "Минус перед скобкой относится ко всем членам внутри.",
+          "common_mistake": "6 - x + 2"
+        }
+      ]
+    }
+  ]
+}
