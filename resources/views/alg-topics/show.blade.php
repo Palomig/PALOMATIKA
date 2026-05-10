@@ -44,7 +44,7 @@
                 @if($tid === $topicId)
                     <span class="px-2.5 py-1 rounded-lg bg-{{ $topicMeta['color'] ?? 'emerald' }}-500 text-white font-bold text-xs">{{ (int)$tid }}</span>
                 @else
-                    <a href="{{ route('alg-topics.show', ['grade' => $grade, 'id' => ltrim($tid, '0')]) }}"
+                    <a href="{{ route('alg-topics.show', ['grade' => $grade, 'id' => (string) (int) $tid]) }}"
                        class="px-2.5 py-1 rounded-lg bg-gray-800 text-gray-400 hover:bg-gray-700 transition text-xs">{{ (int)$tid }}</a>
                 @endif
             @endforeach

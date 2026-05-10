@@ -1,0 +1,729 @@
+{
+  "topic_id": "00",
+  "meta": {
+    "title": "Арифметическая база перед алгеброй",
+    "description": "Знаки, отрицательные числа, десятичные дроби, порядок действий, прикидка и проверка ответа",
+    "color": "emerald",
+    "icon": "calculator",
+    "grade": 7,
+    "subject": "algebra",
+    "strand": "arithmetic_foundation",
+    "skills": [
+      "Понимать отрицательное число как долг, температуру или движение влево по числовой прямой",
+      "Складывать и вычитать числа с разными знаками",
+      "Выполнять действия с десятичными дробями",
+      "Соблюдать порядок действий",
+      "Оценивать примерный ответ до вычисления",
+      "Проверять результат обратным действием или подстановкой",
+      "Находить типичные ошибки со знаками"
+    ]
+  },
+  "curriculum": {
+    "year_position": "weeks_1_2_or_diagnostic",
+    "lesson_hours": 2,
+    "homework_size": "15-20",
+    "main_idea": "Перед алгеброй ученик должен уверенно считать с числами: понимать знак, порядок действий и примерный размер ответа.",
+    "prerequisites": [
+      "Натуральные числа",
+      "Обычные вычисления в столбик",
+      "Понимание десятичной записи числа"
+    ],
+    "common_misconceptions": [
+      "-8 + 6 считают как -14 или 14",
+      "Вычитание отрицательного числа воспринимают как обычное вычитание",
+      "Умножение и деление выполняют не слева направо",
+      "Запятую в десятичных дробях переносят механически",
+      "Не делают прикидку и не замечают невозможный ответ"
+    ],
+    "lesson_flow": [
+      {
+        "minutes": "0-15",
+        "activity": "Диагностика: знаки, простые отрицательные числа, десятичные дроби."
+      },
+      {
+        "minutes": "15-35",
+        "activity": "Отрицательные числа через долг, температуру и числовую прямую."
+      },
+      {
+        "minutes": "35-55",
+        "activity": "Сложение и вычитание чисел с разными знаками."
+      },
+      {
+        "minutes": "55-75",
+        "activity": "Десятичные дроби и аккуратная запись."
+      },
+      {
+        "minutes": "75-95",
+        "activity": "Порядок действий и вычисление слева направо для умножения/деления."
+      },
+      {
+        "minutes": "95-110",
+        "activity": "Прикидка ответа и поиск невозможных результатов."
+      },
+      {
+        "minutes": "110-120",
+        "activity": "Разбор ошибок и домашка."
+      }
+    ]
+  },
+  "micro_skills": [
+    {
+      "id": "negative_number_meaning",
+      "title": "Смысл отрицательного числа",
+      "goal": "Ученик объясняет отрицательное число через долг, температуру или движение по числовой прямой."
+    },
+    {
+      "id": "add_different_signs",
+      "title": "Сложение чисел с разными знаками",
+      "goal": "Ученик находит разность модулей и ставит знак числа с большим модулем."
+    },
+    {
+      "id": "subtract_as_opposite",
+      "title": "Вычитание как прибавление противоположного",
+      "goal": "Ученик заменяет вычитание прибавлением противоположного числа."
+    },
+    {
+      "id": "decimal_add_subtract",
+      "title": "Сложение и вычитание десятичных дробей",
+      "goal": "Ученик записывает запятую под запятой и контролирует разряды."
+    },
+    {
+      "id": "decimal_multiply_divide",
+      "title": "Умножение и деление десятичных дробей",
+      "goal": "Ученик выполняет умножение и деление десятичных дробей без потери смысла результата."
+    },
+    {
+      "id": "operation_order",
+      "title": "Порядок действий",
+      "goal": "Ученик выполняет умножение и деление слева направо, затем сложение и вычитание слева направо."
+    },
+    {
+      "id": "estimate_and_error_check",
+      "title": "Прикидка и поиск ошибок",
+      "goal": "Ученик заранее оценивает ответ и замечает ошибки со знаком или размером числа."
+    }
+  ],
+  "exported_at": "2026-05-10T00:00:00.000Z",
+  "source": "PALOMATIKA generated arithmetic foundation bank",
+  "blocks": [
+    {
+      "number": 1,
+      "title": "Знаки и отрицательные числа",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Вычислите и объясните знак ответа:",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "-8 + 6",
+              "answer": "-2",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro",
+              "hint": "Долг 8, вернули 6, долг остался 2."
+            },
+            {
+              "id": 2,
+              "expression": "-8 + (-6)",
+              "answer": "-14",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro",
+              "hint": "Два долга складываются."
+            },
+            {
+              "id": 3,
+              "expression": "9 + (-14)",
+              "answer": "-5",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 4,
+              "expression": "-15 + 22",
+              "answer": "7",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 5,
+              "expression": "-3,5 + 1,2",
+              "answer": "-2,3",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 6,
+              "expression": "4,8 + (-7,1)",
+              "answer": "-2,3",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Найдите ошибку в рассуждении ученика:",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "Ученик написал: -8 + 6 = -14. Объясните ошибку.",
+              "answer": "-8 + 6 = -2. Ошибка: ученик сложил модули, хотя знаки разные.",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "error_analysis",
+              "difficulty": "base",
+              "common_mistake": "-14"
+            },
+            {
+              "id": 2,
+              "expression": "Ученик написал: -9 + 12 = -3. Объясните ошибку.",
+              "answer": "-9 + 12 = 3. Ошибка: модуль 12 больше, поэтому знак положительный.",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "error_analysis",
+              "difficulty": "base",
+              "common_mistake": "-3"
+            },
+            {
+              "id": 3,
+              "expression": "Ученик написал: -5 - 7 = 2. Объясните ошибку.",
+              "answer": "-5 - 7 = -12. Ошибка: вычитание 7 увеличивает долг.",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "error_analysis",
+              "difficulty": "base",
+              "common_mistake": "2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "Вычитание и противоположные числа",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Вычислите, заменяя вычитание прибавлением противоположного числа:",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "7 - 10",
+              "answer": "-3",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 2,
+              "expression": "-4 - 9",
+              "answer": "-13",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 3,
+              "expression": "-6 - (-11)",
+              "answer": "5",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base",
+              "hint": "Вычесть -11 значит прибавить 11."
+            },
+            {
+              "id": 4,
+              "expression": "13 - (-8)",
+              "answer": "21",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 5,
+              "expression": "-2,4 - 3,7",
+              "answer": "-6,1",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 6,
+              "expression": "5,6 - (-1,9)",
+              "answer": "7,5",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "title": "Десятичные дроби: сложение и вычитание",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Вычислите аккуратно, записывая запятую под запятой:",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "37,6 - 5,84 + 3,95 - 8,9",
+              "answer": "26,81",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard",
+              "hint": "Прикидка: 38 - 6 + 4 - 9 = 27."
+            },
+            {
+              "id": 2,
+              "expression": "81 - 45,34 + 19,6 + 21,75",
+              "answer": "77,01",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard",
+              "hint": "Прикидка: 81 - 45 + 20 + 22 = 78."
+            },
+            {
+              "id": 3,
+              "expression": "12,4 - 8,75 + 3,6",
+              "answer": "7,25",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 4,
+              "expression": "5,03 + 17,8 - 6,125",
+              "answer": "16,705",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 5,
+              "expression": "-4,7 + 9,25 - 1,6",
+              "answer": "2,95",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "title": "Десятичные дроби: умножение и деление",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Вычислите, соблюдая порядок действий слева направо:",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "17,1 * 3,8 / 4,5 * 0,5",
+              "answer": "7,22",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard",
+              "hint": "Умножение и деление выполняются слева направо."
+            },
+            {
+              "id": 2,
+              "expression": "81,9 / 4,5 / 0,28 * 1,2",
+              "answer": "78",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard",
+              "hint": "81,9 / 4,5 = 18,2; 18,2 / 0,28 = 65."
+            },
+            {
+              "id": 3,
+              "expression": "2,4 * 1,5 / 0,6",
+              "answer": "6",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 4,
+              "expression": "7,2 / 0,9 * 1,25",
+              "answer": "10",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 5,
+              "expression": "0,48 / 0,12 * 2,5",
+              "answer": "10",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "base"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "title": "Порядок действий",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Вычислите по действиям:",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "6 - 2 * 4",
+              "answer": "-2",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 2,
+              "expression": "(6 - 2) * 4",
+              "answer": "16",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 3,
+              "expression": "18 / 3 * 2",
+              "answer": "12",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base",
+              "hint": "Деление и умножение выполняются слева направо."
+            },
+            {
+              "id": 4,
+              "expression": "18 / (3 * 2)",
+              "answer": "3",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 5,
+              "expression": "5 - 3 * (4 - 7)",
+              "answer": "14",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "standard"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "title": "Прикидка и проверка ответа",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Сначала сделайте прикидку, затем вычислите точно:",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "49,8 - 21,3 + 10,1",
+              "answer": "38,6",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "base",
+              "hint": "Прикидка: 50 - 21 + 10 = 39."
+            },
+            {
+              "id": 2,
+              "expression": "-19,7 + 8,9",
+              "answer": "-10,8",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "base",
+              "hint": "Ответ должен быть отрицательным, потому что 19,7 больше 8,9."
+            },
+            {
+              "id": 3,
+              "expression": "3,98 * 2,1",
+              "answer": "8,358",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard",
+              "hint": "Прикидка: 4 * 2 = 8."
+            },
+            {
+              "id": 4,
+              "expression": "42,3 / 6,1",
+              "answer": "6,9344262295",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "stretch",
+              "hint": "Прикидка: 42 / 6 = 7."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "title": "Реальные ситуации",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Решите задачу и объясните, почему знак ответа именно такой:",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "Температура была -8 °C, затем повысилась на 6 °C. Какая стала температура?",
+              "answer": "-2 °C",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "real_context",
+              "difficulty": "intro"
+            },
+            {
+              "id": 2,
+              "expression": "На карте счета было 1200 рублей. Списали 1580 рублей. Какой баланс стал на счете?",
+              "answer": "-380 рублей",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "real_context",
+              "difficulty": "base"
+            },
+            {
+              "id": 3,
+              "expression": "Лифт был на этаже -2 и поднялся на 7 этажей. На каком этаже он оказался?",
+              "answer": "5",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "real_context",
+              "difficulty": "base"
+            },
+            {
+              "id": 4,
+              "expression": "Маша купила 3 тетради по 37,6 рубля и ручку за 45,8 рубля. Сколько она заплатила?",
+              "answer": "158,6 рубля",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "real_context",
+              "difficulty": "standard"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "homework_sets": [
+    {
+      "id": "hw_00_arithmetic_diagnostic",
+      "title": "Арифметическая база: знаки, дроби, порядок действий",
+      "target_minutes": 35,
+      "tasks_count": 20,
+      "tasks": [
+        {
+          "id": 1,
+          "prompt": "Вычисли и объясни через долг или температуру: -8 + 6.",
+          "answer": "-2",
+          "skill": "add_different_signs",
+          "type": "concept",
+          "difficulty": "intro",
+          "hint": "Долг 8, вернули 6."
+        },
+        {
+          "id": 2,
+          "prompt": "Вычисли: -8 + (-6). Чем этот пример отличается от -8 + 6?",
+          "answer": "-14; здесь складываются два отрицательных числа.",
+          "skill": "negative_number_meaning",
+          "type": "concept",
+          "difficulty": "intro"
+        },
+        {
+          "id": 3,
+          "prompt": "Вычисли: 9 + (-14).",
+          "answer": "-5",
+          "skill": "add_different_signs",
+          "type": "drill",
+          "difficulty": "intro"
+        },
+        {
+          "id": 4,
+          "prompt": "Вычисли: -15 + 22.",
+          "answer": "7",
+          "skill": "add_different_signs",
+          "type": "drill",
+          "difficulty": "intro"
+        },
+        {
+          "id": 5,
+          "prompt": "Вычисли: 7 - 10.",
+          "answer": "-3",
+          "skill": "subtract_as_opposite",
+          "type": "drill",
+          "difficulty": "intro"
+        },
+        {
+          "id": 6,
+          "prompt": "Вычисли: -6 - (-11).",
+          "answer": "5",
+          "skill": "subtract_as_opposite",
+          "type": "drill",
+          "difficulty": "base"
+        },
+        {
+          "id": 7,
+          "prompt": "Вычисли: 37,6 - 5,84 + 3,95 - 8,9.",
+          "answer": "26,81",
+          "skill": "decimal_add_subtract",
+          "type": "drill",
+          "difficulty": "standard",
+          "hint": "Сделай прикидку: около 27."
+        },
+        {
+          "id": 8,
+          "prompt": "Вычисли: 81 - 45,34 + 19,6 + 21,75.",
+          "answer": "77,01",
+          "skill": "decimal_add_subtract",
+          "type": "drill",
+          "difficulty": "standard"
+        },
+        {
+          "id": 9,
+          "prompt": "Вычисли: 17,1 * 3,8 / 4,5 * 0,5.",
+          "answer": "7,22",
+          "skill": "decimal_multiply_divide",
+          "type": "drill",
+          "difficulty": "standard"
+        },
+        {
+          "id": 10,
+          "prompt": "Вычисли: 81,9 / 4,5 / 0,28 * 1,2.",
+          "answer": "78",
+          "skill": "decimal_multiply_divide",
+          "type": "drill",
+          "difficulty": "standard"
+        },
+        {
+          "id": 11,
+          "prompt": "Вычисли: 6 - 2 * 4.",
+          "answer": "-2",
+          "skill": "operation_order",
+          "type": "drill",
+          "difficulty": "intro"
+        },
+        {
+          "id": 12,
+          "prompt": "Вычисли: (6 - 2) * 4.",
+          "answer": "16",
+          "skill": "operation_order",
+          "type": "drill",
+          "difficulty": "intro"
+        },
+        {
+          "id": 13,
+          "prompt": "Вычисли: 18 / 3 * 2.",
+          "answer": "12",
+          "skill": "operation_order",
+          "type": "drill",
+          "difficulty": "base"
+        },
+        {
+          "id": 14,
+          "prompt": "Вычисли: 18 / (3 * 2).",
+          "answer": "3",
+          "skill": "operation_order",
+          "type": "drill",
+          "difficulty": "base"
+        },
+        {
+          "id": 15,
+          "prompt": "Сначала сделай прикидку, затем вычисли: 49,8 - 21,3 + 10,1.",
+          "answer": "38,6",
+          "skill": "estimate_and_error_check",
+          "type": "guided",
+          "difficulty": "base"
+        },
+        {
+          "id": 16,
+          "prompt": "Сначала определи знак ответа, затем вычисли: -19,7 + 8,9.",
+          "answer": "-10,8",
+          "skill": "estimate_and_error_check",
+          "type": "guided",
+          "difficulty": "base"
+        },
+        {
+          "id": 17,
+          "prompt": "Температура была -8 °C, затем повысилась на 6 °C. Какая стала температура?",
+          "answer": "-2 °C",
+          "skill": "negative_number_meaning",
+          "type": "real_context",
+          "difficulty": "intro"
+        },
+        {
+          "id": 18,
+          "prompt": "На карте счета было 1200 рублей. Списали 1580 рублей. Какой баланс стал на счете?",
+          "answer": "-380 рублей",
+          "skill": "negative_number_meaning",
+          "type": "real_context",
+          "difficulty": "base"
+        },
+        {
+          "id": 19,
+          "prompt": "Ученик написал: -8 + 6 = -14. Найди ошибку и объясни правильно.",
+          "answer": "-8 + 6 = -2. При разных знаках нужно вычесть модули, а не сложить.",
+          "skill": "estimate_and_error_check",
+          "type": "error_analysis",
+          "difficulty": "base"
+        },
+        {
+          "id": 20,
+          "prompt": "Ученик написал: 18 / 3 * 2 = 3. Найди ошибку.",
+          "answer": "18 / 3 * 2 = 12. Умножение и деление выполняются слева направо.",
+          "skill": "operation_order",
+          "type": "error_analysis",
+          "difficulty": "base"
+        }
+      ]
+    }
+  ]
+}
