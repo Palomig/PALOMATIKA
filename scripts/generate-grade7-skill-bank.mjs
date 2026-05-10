@@ -455,6 +455,53 @@ const groupTitles = {
 const source = fs.existsSync(SOURCE) ? JSON.parse(fs.readFileSync(SOURCE, "utf8")) : null;
 const sourceTopics = source?.topics?.map(t => ({ id: t.topic_id, title: t.meta?.title, tasks: (t.blocks ?? []).flatMap(b => (b.zadaniya ?? []).flatMap(z => z.tasks ?? [])).length })) ?? [];
 
+function makeHomeworkSets(skill, levelBlocks) {
+  const byLevel = Object.fromEntries(levelBlocks.map(level => [level.id, level.tasks]));
+  const take = (level, start, count) => byLevel[level].slice(start, start + count).map((task, index) => ({
+    ...task,
+    id: index + 1,
+    source_task_id: task.id,
+  }));
+
+  return [
+    {
+      id: "hw-simple",
+      title: "Домашка: закрепить шаблон",
+      target_minutes: 25,
+      tasks_count: 18,
+      mix: { simple: 14, medium: 4, high: 0 },
+      tasks: [
+        ...take("simple", 0, 14),
+        ...take("medium", 0, 4),
+      ].map((task, index) => ({ ...task, id: index + 1 })),
+    },
+    {
+      id: "hw-medium",
+      title: "Домашка: рабочий уровень",
+      target_minutes: 35,
+      tasks_count: 18,
+      mix: { simple: 5, medium: 10, high: 3 },
+      tasks: [
+        ...take("simple", 14, 5),
+        ...take("medium", 4, 10),
+        ...take("high", 0, 3),
+      ].map((task, index) => ({ ...task, id: index + 1 })),
+    },
+    {
+      id: "hw-high",
+      title: "Домашка: проверка прочности",
+      target_minutes: 45,
+      tasks_count: 20,
+      mix: { simple: 4, medium: 6, high: 10 },
+      tasks: [
+        ...take("simple", 6, 4),
+        ...take("medium", 12, 6),
+        ...take("high", 3, 10),
+      ].map((task, index) => ({ ...task, id: index + 1 })),
+    },
+  ];
+}
+
 const skills = skillCatalog.map(([group, title, slug, factoryName], index) => {
   const id = String(index + 1).padStart(2, "0");
   const skill = {
@@ -474,6 +521,7 @@ const skills = skillCatalog.map(([group, title, slug, factoryName], index) => {
   return {
     ...skill,
     levels: levelBlocks,
+    homework_sets: makeHomeworkSets(skill, levelBlocks),
     tasks_count: levelBlocks.reduce((sum, level) => sum + level.tasks.length, 0),
   };
 });

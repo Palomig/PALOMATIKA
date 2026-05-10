@@ -19,6 +19,7 @@ for (const skill of data.skills) {
   assert.ok(skill.task_type, `${skill.id} has task_type`);
   assert.equal(skill.levels.length, 3, `${skill.slug} must have three levels`);
   assert.deepEqual(skill.levels.map(level => level.id), ["simple", "medium", "high"]);
+  assert.equal(skill.homework_sets.length, 3, `${skill.slug} must have three homework sets`);
 
   for (const level of skill.levels) {
     assert.ok(level.tasks.length >= 15, `${skill.slug}/${level.id} should have enough homework tasks`);
@@ -32,6 +33,22 @@ for (const skill of data.skills) {
         const value = task[field] ?? "";
         assert.ok(!value.includes("*"), `${skill.slug} task ${task.id} ${field} contains raw *`);
         assert.ok(!value.includes("/"), `${skill.slug} task ${task.id} ${field} contains raw /`);
+      }
+    }
+  }
+
+  for (const homeworkSet of skill.homework_sets) {
+    assert.ok(homeworkSet.tasks.length >= 15 && homeworkSet.tasks.length <= 20, `${skill.slug}/${homeworkSet.id} should contain 15-20 tasks`);
+    assert.equal(homeworkSet.tasks.length, homeworkSet.tasks_count, `${skill.slug}/${homeworkSet.id} tasks_count mismatch`);
+
+    for (const task of homeworkSet.tasks) {
+      assert.equal(task.task_type, skill.task_type, `${skill.slug}/${homeworkSet.id} mixes task types`);
+      assert.equal(task.skill, skill.id, `${skill.slug}/${homeworkSet.id} task points to another skill`);
+
+      for (const field of ["expression", "prompt"]) {
+        const value = task[field] ?? "";
+        assert.ok(!value.includes("*"), `${skill.slug}/${homeworkSet.id} task ${task.id} ${field} contains raw *`);
+        assert.ok(!value.includes("/"), `${skill.slug}/${homeworkSet.id} task ${task.id} ${field} contains raw /`);
       }
     }
   }

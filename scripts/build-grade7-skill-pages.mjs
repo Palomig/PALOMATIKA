@@ -91,7 +91,16 @@ function shell(title, body) {
     .status{margin-top:8px;color:var(--green);font-weight:800;font-size:11px}
     .status span{display:inline-block;width:8px;height:8px;background:var(--green);border-radius:999px;margin-right:4px}
     .group-title{margin:34px 0 14px}
+    .homework-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+    .homework-card{border:1px solid rgba(148,163,184,.22);background:#111a2a;border-radius:8px;padding:14px}
+    .homework-card h3{font-size:16px;margin-bottom:8px}
+    .homework-card p{margin:0;color:var(--muted);font-size:13px}
+    .homework-card details{margin-top:10px}
+    .homework-card summary{cursor:pointer;color:var(--blue);font-weight:700;font-size:13px}
+    .homework-card ol{margin:10px 0 0;padding-left:22px;color:#dce7f5}
+    .homework-card li{margin:6px 0}
     @media(max-width:1020px){.grid,.taskgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:1020px){.homework-list{grid-template-columns:1fr}}
     @media(max-width:640px){.grid,.taskgrid{grid-template-columns:1fr}.wrap{padding-inline:14px}h1{font-size:28px}}
   </style>
 </head>
@@ -108,6 +117,17 @@ function taskCard(task) {
   </div>`;
 }
 
+function homeworkCard(set) {
+  return `<article class="homework-card">
+    <h3>${escapeHtml(set.title)}</h3>
+    <p>${set.tasks_count} заданий · ${set.target_minutes} мин · простой ${set.mix.simple}, средний ${set.mix.medium}, высокий ${set.mix.high}</p>
+    <details>
+      <summary>Показать задания</summary>
+      <ol>${set.tasks.map(task => `<li>${mathText(task.expression)}</li>`).join("")}</ol>
+    </details>
+  </article>`;
+}
+
 function skillPage(skill) {
   const body = `<div class="wrap">
     <a href="/alg-skills/7/">← Все навыки 7 класса</a>
@@ -121,6 +141,10 @@ function skillPage(skill) {
         <div class="stat"><b>${escapeHtml(skill.task_type)}</b> тип</div>
       </div>
     </header>
+    <section class="panel">
+      <h2>Готовые домашки</h2>
+      <div class="homework-list">${skill.homework_sets.map(homeworkCard).join("")}</div>
+    </section>
     ${skill.levels.map(level => `<section class="panel ${levelClass[level.id]}">
       <div class="level-head">
         <div>
@@ -164,6 +188,7 @@ function indexPage() {
         <div class="group">${escapeHtml(skill.group_title)}</div>
         <div class="chips">
           <span class="chip">${skill.tasks_count} задач</span>
+          <span class="chip">3 домашки</span>
           <span class="chip">3 уровня</span>
         </div>
       </a>`).join("")}</div>
