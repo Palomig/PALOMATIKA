@@ -50,12 +50,24 @@ class AlgTopicController extends Controller
         }
 
         $topicMeta   = $service->getTopicMeta($topicId);
+        $topicData   = $service->getTopicData($topicId);
         $blocks      = $service->getBlocks($topicId);
         $stats       = $service->getTopicStats($topicId);
         $allTopicIds = $service->getExistingTopicIds();
+        $curriculum   = $topicData['curriculum'] ?? [];
+        $microSkills  = $topicData['micro_skills'] ?? [];
+        $homeworkSets = $topicData['homework_sets'] ?? [];
 
         return view('alg-topics.show', compact(
-            'grade', 'topicId', 'topicMeta', 'blocks', 'stats', 'allTopicIds'
+            'grade',
+            'topicId',
+            'topicMeta',
+            'blocks',
+            'stats',
+            'allTopicIds',
+            'curriculum',
+            'microSkills',
+            'homeworkSets'
         ));
     }
 }

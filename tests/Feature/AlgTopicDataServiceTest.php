@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Services\AlgTaskDataService;
+use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
 
@@ -21,5 +22,22 @@ class AlgTopicDataServiceTest extends TestCase
         $this->assertArrayHasKey('micro_skills', $data);
         $this->assertArrayHasKey('homework_sets', $data);
         $this->assertNotEmpty($data['homework_sets'][0]['tasks']);
+    }
+
+    public function test_teacher_sees_curriculum_summary_on_grade_7_topic_page(): void
+    {
+        Cache::flush();
+
+        $teacher = User::factory()->make(['role' => 'teacher']);
+
+        $this->actingAs($teacher)
+            ->get('/alg-topics/7/1')
+            ->assertOk()
+            ->assertSee('Главная идея')
+            ->assertSee('Скобки - это группа')
+            ->assertSee('Микронавыки')
+            ->assertSee('Скобки как группа')
+            ->assertSee('Домашние работы')
+            ->assertSee('Раскрытие скобок: смысл и базовая техника');
     }
 }
