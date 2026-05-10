@@ -13,13 +13,30 @@
 
         $topicForApi = isset($topicId) ? str_pad((string) $topicId, 2, '0', STR_PAD_LEFT) : null;
         $canEditAnswer = auth()->check() && auth()->user()?->isAdmin() && $resolvedTaskKey !== '' && $topicForApi !== null;
+        $renderedAnswer = e($resolvedAnswer);
+
+        if (str_contains($resolvedAnswer, '\\')) {
+            $renderedAnswer = preg_replace_callback(
+                '/(?<![A-Za-zА-Яа-яЁё])(-?\d+(?:,\d+)?(?:\s*(?:\\\\cdot|[:=+\-])\s*-?\d+(?:,\d+)?|\s*[+\-]\s*\(-?\d+(?:,\d+)?\)|\s*[:=+\-]\s*\([^)]*\)|\s*\\\\cdot\s*\([^)]*\))*)/u',
+                static function (array $matches): string {
+                    $fragment = trim($matches[1]);
+
+                    if ($fragment === '' || !preg_match('/\d/u', $fragment)) {
+                        return $matches[0];
+                    }
+
+                    return '$' . $fragment . '$';
+                },
+                $renderedAnswer
+            );
+        }
     @endphp
 
     <div class="mt-3 text-xs js-task-answer-block" @if($resolvedTaskKey !== '') data-task-key="{{ $resolvedTaskKey }}" @endif>
         <div class="flex items-center gap-2 flex-wrap">
             <span class="text-slate-500">Ответ:</span>
             @if($resolvedAnswer !== '')
-                <span class="text-emerald-400 font-mono js-task-answer-value">{{ $resolvedAnswer }}</span>
+                <span class="text-emerald-400 font-mono js-task-answer-value">{!! $renderedAnswer !!}</span>
             @else
                 <span class="text-amber-400 js-task-answer-value">нет в базе</span>
             @endif

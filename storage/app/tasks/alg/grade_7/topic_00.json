@@ -103,7 +103,7 @@
       "goal": "Ученик заранее оценивает ответ и замечает ошибки со знаком или размером числа."
     }
   ],
-  "exported_at": "2026-05-10T16:19:02.176Z",
+  "exported_at": "2026-05-10T16:24:29.706Z",
   "source": "PALOMATIKA generated arithmetic foundation bank",
   "blocks": [
     {
@@ -1147,8 +1147,8 @@
             },
             {
               "id": 4,
-              "expression": "Ученик написал: 18 : 3 * 2 = 3. Объясните ошибку.",
-              "answer": "18 : 3 * 2 = 12. Деление и умножение идут слева направо.",
+              "expression": "Ученик написал: 18 : 3 \\cdot 2 = 3. Объясните ошибку.",
+              "answer": "18 : 3 \\cdot 2 = 12. Деление и умножение идут слева направо.",
               "status": "ready",
               "skill": "estimate_and_error_check",
               "type": "error_analysis",
@@ -1157,8 +1157,8 @@
             },
             {
               "id": 5,
-              "expression": "Ученик написал: 6 - 2 * 4 = 16. Объясните ошибку.",
-              "answer": "6 - 2 * 4 = -2. Сначала выполняем умножение.",
+              "expression": "Ученик написал: 6 - 2 \\cdot 4 = 16. Объясните ошибку.",
+              "answer": "6 - 2 \\cdot 4 = -2. Сначала выполняем умножение.",
               "status": "ready",
               "skill": "estimate_and_error_check",
               "type": "error_analysis",
@@ -2208,7 +2208,7 @@
           "tasks": [
             {
               "id": 1,
-              "expression": "17,1 * 3,8 : 4,5 * 0,5",
+              "expression": "17,1 \\cdot 3,8 : 4,5 \\cdot 0,5",
               "answer": "7,22",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2218,7 +2218,7 @@
             },
             {
               "id": 2,
-              "expression": "81,9 : 4,5 : 0,28 * 1,2",
+              "expression": "81,9 : 4,5 : 0,28 \\cdot 1,2",
               "answer": "78",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2228,7 +2228,7 @@
             },
             {
               "id": 3,
-              "expression": "2,4 * 1,5 : 0,6",
+              "expression": "2,4 \\cdot 1,5 : 0,6",
               "answer": "6",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2237,7 +2237,7 @@
             },
             {
               "id": 4,
-              "expression": "7,2 : 0,9 * 1,25",
+              "expression": "7,2 : 0,9 \\cdot 1,25",
               "answer": "10",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2246,7 +2246,7 @@
             },
             {
               "id": 5,
-              "expression": "0,48 : 0,12 * 2,5",
+              "expression": "0,48 : 0,12 \\cdot 2,5",
               "answer": "10",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2255,7 +2255,7 @@
             },
             {
               "id": 6,
-              "expression": "3,6 * 2,5 : 0,9",
+              "expression": "3,6 \\cdot 2,5 : 0,9",
               "answer": "10",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2264,7 +2264,7 @@
             },
             {
               "id": 7,
-              "expression": "12,5 * 0,8 : 2",
+              "expression": "12,5 \\cdot 0,8 : 2",
               "answer": "5",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2273,7 +2273,7 @@
             },
             {
               "id": 8,
-              "expression": "6,3 : 0,7 * 1,4",
+              "expression": "6,3 : 0,7 \\cdot 1,4",
               "answer": "12,6",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2282,7 +2282,7 @@
             },
             {
               "id": 9,
-              "expression": "0,96 : 0,24 * 3,5",
+              "expression": "0,96 : 0,24 \\cdot 3,5",
               "answer": "14",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2291,7 +2291,7 @@
             },
             {
               "id": 10,
-              "expression": "15,75 : 2,5 * 0,4",
+              "expression": "15,75 : 2,5 \\cdot 0,4",
               "answer": "2,52",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2300,7 +2300,7 @@
             },
             {
               "id": 11,
-              "expression": "4,8 * 0,75 : 1,2",
+              "expression": "4,8 \\cdot 0,75 : 1,2",
               "answer": "3",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2309,7 +2309,7 @@
             },
             {
               "id": 12,
-              "expression": "9,45 : 0,35 * 0,2",
+              "expression": "9,45 : 0,35 \\cdot 0,2",
               "answer": "5,4",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2318,7 +2318,7 @@
             },
             {
               "id": 13,
-              "expression": "1,44 : 0,18 * 2,1",
+              "expression": "1,44 : 0,18 \\cdot 2,1",
               "answer": "16,8",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2327,7 +2327,7 @@
             },
             {
               "id": 14,
-              "expression": "18,6 * 0,5 : 3,1",
+              "expression": "18,6 \\cdot 0,5 : 3,1",
               "answer": "3",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2336,7 +2336,7 @@
             },
             {
               "id": 15,
-              "expression": "2,25 * 4,8 : 0,6",
+              "expression": "2,25 \\cdot 4,8 : 0,6",
               "answer": "18",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2345,7 +2345,7 @@
             },
             {
               "id": 16,
-              "expression": "11,2 : 1,4 * 0,75",
+              "expression": "11,2 : 1,4 \\cdot 0,75",
               "answer": "6",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2354,7 +2354,7 @@
             },
             {
               "id": 17,
-              "expression": "17,1 * 3,8 : 4,5 * 0,5",
+              "expression": "17,1 \\cdot 3,8 : 4,5 \\cdot 0,5",
               "answer": "7,22",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2363,7 +2363,7 @@
             },
             {
               "id": 18,
-              "expression": "81,9 : 4,5 : 0,28 * 1,2",
+              "expression": "81,9 : 4,5 : 0,28 \\cdot 1,2",
               "answer": "78",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2372,7 +2372,7 @@
             },
             {
               "id": 19,
-              "expression": "2,4 * 1,5 : 0,6",
+              "expression": "2,4 \\cdot 1,5 : 0,6",
               "answer": "6",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2381,7 +2381,7 @@
             },
             {
               "id": 20,
-              "expression": "7,2 : 0,9 * 1,25",
+              "expression": "7,2 : 0,9 \\cdot 1,25",
               "answer": "10",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2390,7 +2390,7 @@
             },
             {
               "id": 21,
-              "expression": "0,48 : 0,12 * 2,5",
+              "expression": "0,48 : 0,12 \\cdot 2,5",
               "answer": "10",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2399,7 +2399,7 @@
             },
             {
               "id": 22,
-              "expression": "3,6 * 2,5 : 0,9",
+              "expression": "3,6 \\cdot 2,5 : 0,9",
               "answer": "10",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2408,7 +2408,7 @@
             },
             {
               "id": 23,
-              "expression": "12,5 * 0,8 : 2",
+              "expression": "12,5 \\cdot 0,8 : 2",
               "answer": "5",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2417,7 +2417,7 @@
             },
             {
               "id": 24,
-              "expression": "6,3 : 0,7 * 1,4",
+              "expression": "6,3 : 0,7 \\cdot 1,4",
               "answer": "12,6",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2426,7 +2426,7 @@
             },
             {
               "id": 25,
-              "expression": "0,96 : 0,24 * 3,5",
+              "expression": "0,96 : 0,24 \\cdot 3,5",
               "answer": "14",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2435,7 +2435,7 @@
             },
             {
               "id": 26,
-              "expression": "15,75 : 2,5 * 0,4",
+              "expression": "15,75 : 2,5 \\cdot 0,4",
               "answer": "2,52",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2444,7 +2444,7 @@
             },
             {
               "id": 27,
-              "expression": "4,8 * 0,75 : 1,2",
+              "expression": "4,8 \\cdot 0,75 : 1,2",
               "answer": "3",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2453,7 +2453,7 @@
             },
             {
               "id": 28,
-              "expression": "9,45 : 0,35 * 0,2",
+              "expression": "9,45 : 0,35 \\cdot 0,2",
               "answer": "5,4",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2462,7 +2462,7 @@
             },
             {
               "id": 29,
-              "expression": "1,44 : 0,18 * 2,1",
+              "expression": "1,44 : 0,18 \\cdot 2,1",
               "answer": "16,8",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2471,7 +2471,7 @@
             },
             {
               "id": 30,
-              "expression": "18,6 * 0,5 : 3,1",
+              "expression": "18,6 \\cdot 0,5 : 3,1",
               "answer": "3",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2480,7 +2480,7 @@
             },
             {
               "id": 31,
-              "expression": "2,25 * 4,8 : 0,6",
+              "expression": "2,25 \\cdot 4,8 : 0,6",
               "answer": "18",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2489,7 +2489,7 @@
             },
             {
               "id": 32,
-              "expression": "11,2 : 1,4 * 0,75",
+              "expression": "11,2 : 1,4 \\cdot 0,75",
               "answer": "6",
               "status": "ready",
               "skill": "decimal_multiply_divide",
@@ -2505,7 +2505,7 @@
           "tasks": [
             {
               "id": 1,
-              "expression": "17,1 * 3,8 : 4,5 * 0,5",
+              "expression": "17,1 \\cdot 3,8 : 4,5 \\cdot 0,5",
               "answer": "7,22",
               "status": "ready",
               "skill": "estimate_and_error_check",
@@ -2515,7 +2515,7 @@
             },
             {
               "id": 2,
-              "expression": "81,9 : 4,5 : 0,28 * 1,2",
+              "expression": "81,9 : 4,5 : 0,28 \\cdot 1,2",
               "answer": "78",
               "status": "ready",
               "skill": "estimate_and_error_check",
@@ -2525,7 +2525,7 @@
             },
             {
               "id": 3,
-              "expression": "2,4 * 1,5 : 0,6",
+              "expression": "2,4 \\cdot 1,5 : 0,6",
               "answer": "6",
               "status": "ready",
               "skill": "estimate_and_error_check",
@@ -2534,7 +2534,7 @@
             },
             {
               "id": 4,
-              "expression": "7,2 : 0,9 * 1,25",
+              "expression": "7,2 : 0,9 \\cdot 1,25",
               "answer": "10",
               "status": "ready",
               "skill": "estimate_and_error_check",
@@ -2543,7 +2543,7 @@
             },
             {
               "id": 5,
-              "expression": "0,48 : 0,12 * 2,5",
+              "expression": "0,48 : 0,12 \\cdot 2,5",
               "answer": "10",
               "status": "ready",
               "skill": "estimate_and_error_check",
@@ -2552,7 +2552,7 @@
             },
             {
               "id": 6,
-              "expression": "3,6 * 2,5 : 0,9",
+              "expression": "3,6 \\cdot 2,5 : 0,9",
               "answer": "10",
               "status": "ready",
               "skill": "estimate_and_error_check",
@@ -2561,7 +2561,7 @@
             },
             {
               "id": 7,
-              "expression": "12,5 * 0,8 : 2",
+              "expression": "12,5 \\cdot 0,8 : 2",
               "answer": "5",
               "status": "ready",
               "skill": "estimate_and_error_check",
@@ -2570,7 +2570,7 @@
             },
             {
               "id": 8,
-              "expression": "6,3 : 0,7 * 1,4",
+              "expression": "6,3 : 0,7 \\cdot 1,4",
               "answer": "12,6",
               "status": "ready",
               "skill": "estimate_and_error_check",
@@ -2579,7 +2579,7 @@
             },
             {
               "id": 9,
-              "expression": "0,96 : 0,24 * 3,5",
+              "expression": "0,96 : 0,24 \\cdot 3,5",
               "answer": "14",
               "status": "ready",
               "skill": "estimate_and_error_check",
@@ -2588,7 +2588,7 @@
             },
             {
               "id": 10,
-              "expression": "15,75 : 2,5 * 0,4",
+              "expression": "15,75 : 2,5 \\cdot 0,4",
               "answer": "2,52",
               "status": "ready",
               "skill": "estimate_and_error_check",
@@ -2597,7 +2597,7 @@
             },
             {
               "id": 11,
-              "expression": "4,8 * 0,75 : 1,2",
+              "expression": "4,8 \\cdot 0,75 : 1,2",
               "answer": "3",
               "status": "ready",
               "skill": "estimate_and_error_check",
@@ -2606,7 +2606,7 @@
             },
             {
               "id": 12,
-              "expression": "9,45 : 0,35 * 0,2",
+              "expression": "9,45 : 0,35 \\cdot 0,2",
               "answer": "5,4",
               "status": "ready",
               "skill": "estimate_and_error_check",
@@ -2628,7 +2628,7 @@
           "tasks": [
             {
               "id": 1,
-              "expression": "6 - 2 * 4",
+              "expression": "6 - 2 \\cdot 4",
               "answer": "-2",
               "status": "ready",
               "skill": "operation_order",
@@ -2637,7 +2637,7 @@
             },
             {
               "id": 2,
-              "expression": "(6 - 2) * 4",
+              "expression": "(6 - 2) \\cdot 4",
               "answer": "16",
               "status": "ready",
               "skill": "operation_order",
@@ -2646,7 +2646,7 @@
             },
             {
               "id": 3,
-              "expression": "18 : 3 * 2",
+              "expression": "18 : 3 \\cdot 2",
               "answer": "12",
               "status": "ready",
               "skill": "operation_order",
@@ -2655,7 +2655,7 @@
             },
             {
               "id": 4,
-              "expression": "18 : (3 * 2)",
+              "expression": "18 : (3 \\cdot 2)",
               "answer": "3",
               "status": "ready",
               "skill": "operation_order",
@@ -2664,7 +2664,7 @@
             },
             {
               "id": 5,
-              "expression": "5 - 3 * (4 - 7)",
+              "expression": "5 - 3 \\cdot (4 - 7)",
               "answer": "14",
               "status": "ready",
               "skill": "operation_order",
@@ -2673,7 +2673,7 @@
             },
             {
               "id": 6,
-              "expression": "24 : 6 + 3 * 5",
+              "expression": "24 : 6 + 3 \\cdot 5",
               "answer": "19",
               "status": "ready",
               "skill": "operation_order",
@@ -2682,7 +2682,7 @@
             },
             {
               "id": 7,
-              "expression": "30 - 18 : 3 * 2",
+              "expression": "30 - 18 : 3 \\cdot 2",
               "answer": "18",
               "status": "ready",
               "skill": "operation_order",
@@ -2691,7 +2691,7 @@
             },
             {
               "id": 8,
-              "expression": "(30 - 18) : 3 * 2",
+              "expression": "(30 - 18) : 3 \\cdot 2",
               "answer": "8",
               "status": "ready",
               "skill": "operation_order",
@@ -2700,7 +2700,7 @@
             },
             {
               "id": 9,
-              "expression": "7 * (2 - 5) + 4",
+              "expression": "7 \\cdot (2 - 5) + 4",
               "answer": "-17",
               "status": "ready",
               "skill": "operation_order",
@@ -2727,7 +2727,7 @@
             },
             {
               "id": 12,
-              "expression": "3 - 4 * 5 + 18",
+              "expression": "3 - 4 \\cdot 5 + 18",
               "answer": "1",
               "status": "ready",
               "skill": "operation_order",
@@ -2736,7 +2736,7 @@
             },
             {
               "id": 13,
-              "expression": "2,5 * (8 - 12)",
+              "expression": "2,5 \\cdot (8 - 12)",
               "answer": "-10",
               "status": "ready",
               "skill": "operation_order",
@@ -2754,7 +2754,7 @@
             },
             {
               "id": 15,
-              "expression": "4 * (-3 + 8) - 7",
+              "expression": "4 \\cdot (-3 + 8) - 7",
               "answer": "13",
               "status": "ready",
               "skill": "operation_order",
@@ -2763,7 +2763,7 @@
             },
             {
               "id": 16,
-              "expression": "-6 + 2 * (9 - 14)",
+              "expression": "-6 + 2 \\cdot (9 - 14)",
               "answer": "-16",
               "status": "ready",
               "skill": "operation_order",
@@ -2772,7 +2772,7 @@
             },
             {
               "id": 17,
-              "expression": "(6 - 2 * 4) + 5",
+              "expression": "(6 - 2 \\cdot 4) + 5",
               "answer": "3",
               "status": "ready",
               "skill": "operation_order",
@@ -2781,7 +2781,7 @@
             },
             {
               "id": 18,
-              "expression": "((6 - 2) * 4) + 5",
+              "expression": "((6 - 2) \\cdot 4) + 5",
               "answer": "21",
               "status": "ready",
               "skill": "operation_order",
@@ -2790,7 +2790,7 @@
             },
             {
               "id": 19,
-              "expression": "(18 : 3 * 2) + 5",
+              "expression": "(18 : 3 \\cdot 2) + 5",
               "answer": "17",
               "status": "ready",
               "skill": "operation_order",
@@ -2799,7 +2799,7 @@
             },
             {
               "id": 20,
-              "expression": "(18 : (3 * 2)) + 5",
+              "expression": "(18 : (3 \\cdot 2)) + 5",
               "answer": "8",
               "status": "ready",
               "skill": "operation_order",
@@ -2808,7 +2808,7 @@
             },
             {
               "id": 21,
-              "expression": "(5 - 3 * (4 - 7)) + 5",
+              "expression": "(5 - 3 \\cdot (4 - 7)) + 5",
               "answer": "19",
               "status": "ready",
               "skill": "operation_order",
@@ -2817,7 +2817,7 @@
             },
             {
               "id": 22,
-              "expression": "(24 : 6 + 3 * 5) + 5",
+              "expression": "(24 : 6 + 3 \\cdot 5) + 5",
               "answer": "24",
               "status": "ready",
               "skill": "operation_order",
@@ -2826,7 +2826,7 @@
             },
             {
               "id": 23,
-              "expression": "(30 - 18 : 3 * 2) + 5",
+              "expression": "(30 - 18 : 3 \\cdot 2) + 5",
               "answer": "23",
               "status": "ready",
               "skill": "operation_order",
@@ -2835,7 +2835,7 @@
             },
             {
               "id": 24,
-              "expression": "((30 - 18) : 3 * 2) + 5",
+              "expression": "((30 - 18) : 3 \\cdot 2) + 5",
               "answer": "13",
               "status": "ready",
               "skill": "operation_order",
@@ -2844,7 +2844,7 @@
             },
             {
               "id": 25,
-              "expression": "(7 * (2 - 5) + 4) + 5",
+              "expression": "(7 \\cdot (2 - 5) + 4) + 5",
               "answer": "-12",
               "status": "ready",
               "skill": "operation_order",
@@ -2871,7 +2871,7 @@
             },
             {
               "id": 28,
-              "expression": "(3 - 4 * 5 + 18) + 5",
+              "expression": "(3 - 4 \\cdot 5 + 18) + 5",
               "answer": "6",
               "status": "ready",
               "skill": "operation_order",
@@ -2880,7 +2880,7 @@
             },
             {
               "id": 29,
-              "expression": "(2,5 * (8 - 12)) + 5",
+              "expression": "(2,5 \\cdot (8 - 12)) + 5",
               "answer": "-5",
               "status": "ready",
               "skill": "operation_order",
@@ -2898,7 +2898,7 @@
             },
             {
               "id": 31,
-              "expression": "(4 * (-3 + 8) - 7) + 5",
+              "expression": "(4 \\cdot (-3 + 8) - 7) + 5",
               "answer": "18",
               "status": "ready",
               "skill": "operation_order",
@@ -2907,7 +2907,7 @@
             },
             {
               "id": 32,
-              "expression": "(-6 + 2 * (9 - 14)) + 5",
+              "expression": "(-6 + 2 \\cdot (9 - 14)) + 5",
               "answer": "-11",
               "status": "ready",
               "skill": "operation_order",
@@ -2923,7 +2923,7 @@
           "tasks": [
             {
               "id": 1,
-              "expression": "6 - 2 * 4",
+              "expression": "6 - 2 \\cdot 4",
               "answer": "-2",
               "status": "ready",
               "skill": "operation_order",
@@ -2932,7 +2932,7 @@
             },
             {
               "id": 2,
-              "expression": "(6 - 2) * 4",
+              "expression": "(6 - 2) \\cdot 4",
               "answer": "16",
               "status": "ready",
               "skill": "operation_order",
@@ -2959,7 +2959,7 @@
             },
             {
               "id": 5,
-              "expression": "18 : 3 * 2",
+              "expression": "18 : 3 \\cdot 2",
               "answer": "12",
               "status": "ready",
               "skill": "operation_order",
@@ -2968,7 +2968,7 @@
             },
             {
               "id": 6,
-              "expression": "18 : (3 * 2)",
+              "expression": "18 : (3 \\cdot 2)",
               "answer": "3",
               "status": "ready",
               "skill": "operation_order",
@@ -2977,7 +2977,7 @@
             },
             {
               "id": 7,
-              "expression": "20 - 4 * 3",
+              "expression": "20 - 4 \\cdot 3",
               "answer": "8",
               "status": "ready",
               "skill": "operation_order",
@@ -2986,7 +2986,7 @@
             },
             {
               "id": 8,
-              "expression": "(20 - 4) * 3",
+              "expression": "(20 - 4) \\cdot 3",
               "answer": "48",
               "status": "ready",
               "skill": "operation_order",
@@ -2995,7 +2995,7 @@
             },
             {
               "id": 9,
-              "expression": "2 * (7 - 10)",
+              "expression": "2 \\cdot (7 - 10)",
               "answer": "-6",
               "status": "ready",
               "skill": "operation_order",
@@ -3004,7 +3004,7 @@
             },
             {
               "id": 10,
-              "expression": "2 * 7 - 10",
+              "expression": "2 \\cdot 7 - 10",
               "answer": "4",
               "status": "ready",
               "skill": "operation_order",
@@ -3013,7 +3013,7 @@
             },
             {
               "id": 11,
-              "expression": "5 + 3 * (2 - 8)",
+              "expression": "5 + 3 \\cdot (2 - 8)",
               "answer": "-13",
               "status": "ready",
               "skill": "operation_order",
@@ -3022,7 +3022,7 @@
             },
             {
               "id": 12,
-              "expression": "(5 + 3) * (2 - 8)",
+              "expression": "(5 + 3) \\cdot (2 - 8)",
               "answer": "-48",
               "status": "ready",
               "skill": "operation_order",
@@ -3209,8 +3209,8 @@
             },
             {
               "id": 4,
-              "expression": "Ученик написал: 18 : 3 * 2 = 3. Объясните ошибку.",
-              "answer": "18 : 3 * 2 = 12. Деление и умножение идут слева направо.",
+              "expression": "Ученик написал: 18 : 3 \\cdot 2 = 3. Объясните ошибку.",
+              "answer": "18 : 3 \\cdot 2 = 12. Деление и умножение идут слева направо.",
               "status": "ready",
               "skill": "estimate_and_error_check",
               "type": "error_analysis",
@@ -3219,8 +3219,8 @@
             },
             {
               "id": 5,
-              "expression": "Ученик написал: 6 - 2 * 4 = 16. Объясните ошибку.",
-              "answer": "6 - 2 * 4 = -2. Сначала выполняем умножение.",
+              "expression": "Ученик написал: 6 - 2 \\cdot 4 = 16. Объясните ошибку.",
+              "answer": "6 - 2 \\cdot 4 = -2. Сначала выполняем умножение.",
               "status": "ready",
               "skill": "estimate_and_error_check",
               "type": "error_analysis",
@@ -4185,7 +4185,7 @@
           "tasks": [
             {
               "id": 1,
-              "expression": "6 - 2 * 4 - 3",
+              "expression": "6 - 2 \\cdot 4 - 3",
               "answer": "-5",
               "status": "ready",
               "skill": "operation_order",
@@ -4194,7 +4194,7 @@
             },
             {
               "id": 2,
-              "expression": "(6 - 2) * 4 - 3",
+              "expression": "(6 - 2) \\cdot 4 - 3",
               "answer": "13",
               "status": "ready",
               "skill": "operation_order",
@@ -4203,7 +4203,7 @@
             },
             {
               "id": 3,
-              "expression": "18 : 3 * 2 - 3",
+              "expression": "18 : 3 \\cdot 2 - 3",
               "answer": "9",
               "status": "ready",
               "skill": "operation_order",
@@ -4212,7 +4212,7 @@
             },
             {
               "id": 4,
-              "expression": "18 : (3 * 2) - 3",
+              "expression": "18 : (3 \\cdot 2) - 3",
               "answer": "0",
               "status": "ready",
               "skill": "operation_order",
@@ -4221,7 +4221,7 @@
             },
             {
               "id": 5,
-              "expression": "5 - 3 * (4 - 7) - 3",
+              "expression": "5 - 3 \\cdot (4 - 7) - 3",
               "answer": "11",
               "status": "ready",
               "skill": "operation_order",
@@ -4230,7 +4230,7 @@
             },
             {
               "id": 6,
-              "expression": "24 : 6 + 3 * 5 - 3",
+              "expression": "24 : 6 + 3 \\cdot 5 - 3",
               "answer": "16",
               "status": "ready",
               "skill": "operation_order",
@@ -4239,7 +4239,7 @@
             },
             {
               "id": 7,
-              "expression": "30 - 18 : 3 * 2 - 3",
+              "expression": "30 - 18 : 3 \\cdot 2 - 3",
               "answer": "15",
               "status": "ready",
               "skill": "operation_order",
@@ -4248,7 +4248,7 @@
             },
             {
               "id": 8,
-              "expression": "(30 - 18) : 3 * 2 - 3",
+              "expression": "(30 - 18) : 3 \\cdot 2 - 3",
               "answer": "5",
               "status": "ready",
               "skill": "operation_order",
@@ -4257,7 +4257,7 @@
             },
             {
               "id": 9,
-              "expression": "7 * (2 - 5) + 4 - 3",
+              "expression": "7 \\cdot (2 - 5) + 4 - 3",
               "answer": "-20",
               "status": "ready",
               "skill": "operation_order",
@@ -4284,7 +4284,7 @@
             },
             {
               "id": 12,
-              "expression": "3 - 4 * 5 + 18 - 3",
+              "expression": "3 - 4 \\cdot 5 + 18 - 3",
               "answer": "-2",
               "status": "ready",
               "skill": "operation_order",
@@ -4293,7 +4293,7 @@
             },
             {
               "id": 13,
-              "expression": "2,5 * (8 - 12) - 3",
+              "expression": "2,5 \\cdot (8 - 12) - 3",
               "answer": "-13",
               "status": "ready",
               "skill": "operation_order",
@@ -4311,7 +4311,7 @@
             },
             {
               "id": 15,
-              "expression": "4 * (-3 + 8) - 7 - 3",
+              "expression": "4 \\cdot (-3 + 8) - 7 - 3",
               "answer": "10",
               "status": "ready",
               "skill": "operation_order",
@@ -4320,7 +4320,7 @@
             },
             {
               "id": 16,
-              "expression": "-6 + 2 * (9 - 14) - 3",
+              "expression": "-6 + 2 \\cdot (9 - 14) - 3",
               "answer": "-19",
               "status": "ready",
               "skill": "operation_order",
@@ -4422,63 +4422,63 @@
         },
         {
           "id": 9,
-          "expression": "17,1 * 3,8 : 4,5 * 0,5",
+          "expression": "17,1 \\cdot 3,8 : 4,5 \\cdot 0,5",
           "answer": "7,22",
           "status": "ready",
           "skill": "decimal_multiply_divide",
           "type": "drill",
           "difficulty": "standard",
-          "prompt": "Вычисли: 17,1 * 3,8 : 4,5 * 0,5."
+          "prompt": "Вычисли: 17,1 \\cdot 3,8 : 4,5 \\cdot 0,5."
         },
         {
           "id": 10,
-          "expression": "81,9 : 4,5 : 0,28 * 1,2",
+          "expression": "81,9 : 4,5 : 0,28 \\cdot 1,2",
           "answer": "78",
           "status": "ready",
           "skill": "decimal_multiply_divide",
           "type": "drill",
           "difficulty": "standard",
-          "prompt": "Вычисли: 81,9 : 4,5 : 0,28 * 1,2."
+          "prompt": "Вычисли: 81,9 : 4,5 : 0,28 \\cdot 1,2."
         },
         {
           "id": 11,
-          "expression": "6 - 2 * 4",
+          "expression": "6 - 2 \\cdot 4",
           "answer": "-2",
           "status": "ready",
           "skill": "operation_order",
           "type": "drill",
           "difficulty": "base",
-          "prompt": "Вычисли: 6 - 2 * 4."
+          "prompt": "Вычисли: 6 - 2 \\cdot 4."
         },
         {
           "id": 12,
-          "expression": "(6 - 2) * 4",
+          "expression": "(6 - 2) \\cdot 4",
           "answer": "16",
           "status": "ready",
           "skill": "operation_order",
           "type": "drill",
           "difficulty": "base",
-          "prompt": "Вычисли: (6 - 2) * 4."
+          "prompt": "Вычисли: (6 - 2) \\cdot 4."
         },
         {
           "id": 13,
-          "expression": "18 : 3 * 2",
+          "expression": "18 : 3 \\cdot 2",
           "answer": "12",
           "status": "ready",
           "skill": "operation_order",
           "type": "drill",
           "difficulty": "base",
-          "prompt": "Вычисли: 18 : 3 * 2."
+          "prompt": "Вычисли: 18 : 3 \\cdot 2."
         },
         {
           "id": 14,
-          "expression": "18 : (3 * 2)",
+          "expression": "18 : (3 \\cdot 2)",
           "answer": "3",
           "status": "ready",
           "skill": "operation_order",
           "type": "drill",
           "difficulty": "base",
-          "prompt": "Вычисли: 18 : (3 * 2)."
+          "prompt": "Вычисли: 18 : (3 \\cdot 2)."
         },
         {
           "id": 15,
@@ -4532,13 +4532,13 @@
         },
         {
           "id": 20,
-          "expression": "Ученик написал: 18 : 3 * 2 = 3. Найди ошибку.",
-          "answer": "18 : 3 * 2 = 12. Умножение и деление выполняются слева направо.",
+          "expression": "Ученик написал: 18 : 3 \\cdot 2 = 3. Найди ошибку.",
+          "answer": "18 : 3 \\cdot 2 = 12. Умножение и деление выполняются слева направо.",
           "status": "ready",
           "skill": "operation_order",
           "type": "error_analysis",
           "difficulty": "base",
-          "prompt": "Вычисли: Ученик написал: 18 : 3 * 2 = 3. Найди ошибку.."
+          "prompt": "Вычисли: Ученик написал: 18 : 3 \\cdot 2 = 3. Найди ошибку.."
         }
       ]
     }

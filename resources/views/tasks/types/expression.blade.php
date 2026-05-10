@@ -14,6 +14,28 @@
     $isCoreExpressionTopic = in_array((string) $topicId, ['06', '08', '09'], true);
     $usesNumberWording = isset($grade) && (int) $grade === 5 && (string) $topicId === '01';
     $expressionStyle = ($isVariant && $isCoreExpressionTopic) ? 'font-size:115%;' : '';
+    $renderMathText = static function (string $text): string {
+        $normalized = preg_replace('/\s+/u', ' ', trim($text));
+        $escaped = e($normalized);
+
+        if (!preg_match('/[А-Яа-яЁё]/u', $normalized)) {
+            return '$' . $escaped . '$';
+        }
+
+        return preg_replace_callback(
+            '/(?<![A-Za-zА-Яа-яЁё])(-?\d+(?:,\d+)?(?:\s*(?:\\\\cdot|[:=+\-])\s*-?\d+(?:,\d+)?|\s*[+\-]\s*\(-?\d+(?:,\d+)?\)|\s*[:=+\-]\s*\([^)]*\)|\s*\\\\cdot\s*\([^)]*\))*)/u',
+            static function (array $matches): string {
+                $fragment = trim($matches[1]);
+
+                if ($fragment === '' || !preg_match('/\d/u', $fragment)) {
+                    return $matches[0];
+                }
+
+                return '$' . $fragment . '$';
+            },
+            $escaped
+        );
+    };
 @endphp
 
 @if($tasksCount === 1 && !$hasDenominator)
@@ -29,7 +51,7 @@
         @if(!$isVariant)
             <span class="text-blue-400 font-bold">{{ $taskId }})</span>
         @endif
-        <span class="text-slate-200 {{ $isVariant ? '' : 'ml-2' }} math-serif whitespace-nowrap" style="{{ $expressionStyle }}">${{ $expression }}$</span>
+        <span class="text-slate-200 {{ $isVariant ? '' : 'ml-2' }} math-serif whitespace-nowrap" style="{{ $expressionStyle }}">{!! $renderMathText($expression) !!}</span>
         @include('tasks.partials.task-answer', [
             'showTaskAnswer' => $showTaskAnswer,
             'taskAnswer' => $answerResolver->resolveFromTaskAndZadanie($zadanie, $task),
@@ -51,7 +73,7 @@
                     <span class="text-blue-400 font-bold">{{ $task['id'] }})</span>
                 @endif
                 <span class="text-slate-200 ml-2">
-                    Представьте {{ $usesNumberWording ? 'число' : 'выражение' }} ${{ $expression }}$ в виде дроби со знаменателем {{ $task['denominator'] }}.
+                    Представьте {{ $usesNumberWording ? 'число' : 'выражение' }} {!! $renderMathText($expression) !!} в виде дроби со знаменателем {{ $task['denominator'] }}.
                     В ответ запишите {{ $usesNumberWording ? 'только ' : '' }}числитель полученной дроби.
                 </span>
                 @include('tasks.partials.task-answer', [
@@ -77,7 +99,7 @@
                     <span class="text-blue-400 font-bold">{{ $task['id'] }})</span>
                 @endif
                 <div class="inline-block max-w-full align-middle overflow-x-auto overflow-y-hidden ml-2">
-                    <span class="text-slate-200 math-serif whitespace-nowrap" style="{{ $expressionStyle }}">${{ $expression }}$</span>
+                    <span class="text-slate-200 math-serif whitespace-nowrap" style="{{ $expressionStyle }}">{!! $renderMathText($expression) !!}</span>
                 </div>
                 @include('tasks.partials.task-answer', [
                     'showTaskAnswer' => $showTaskAnswer,
@@ -101,7 +123,7 @@
                 @if(!$isVariant)
                     <span class="text-blue-400 font-bold">{{ $task['id'] }})</span>
                 @endif
-                <span class="text-slate-200 {{ $isVariant ? '' : 'ml-2' }} math-serif" style="{{ $expressionStyle }}">${{ $expression }}$</span>
+                <span class="text-slate-200 {{ $isVariant ? '' : 'ml-2' }} math-serif" style="{{ $expressionStyle }}">{!! $renderMathText($expression) !!}</span>
                 @include('tasks.partials.task-answer', [
                     'showTaskAnswer' => $showTaskAnswer,
                     'taskAnswer' => $answerResolver->resolveFromTaskAndZadanie($zadanie, $task),
