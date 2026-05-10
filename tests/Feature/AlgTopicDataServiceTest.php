@@ -57,6 +57,13 @@ class AlgTopicDataServiceTest extends TestCase
         $this->assertArrayHasKey('curriculum', $data);
         $this->assertCount(7, $data['micro_skills']);
         $this->assertNotEmpty($data['homework_sets'][0]['tasks']);
+        $totalTasks = collect($data['blocks'])
+            ->flatMap(fn (array $block) => $block['zadaniya'] ?? [])
+            ->sum(fn (array $zadanie) => count($zadanie['tasks'] ?? []));
+        $seriesCount = collect($data['blocks'])
+            ->sum(fn (array $block) => count($block['zadaniya'] ?? []));
+        $this->assertGreaterThanOrEqual(350, $totalTasks);
+        $this->assertGreaterThanOrEqual(20, $seriesCount);
         $this->assertFileDoesNotExist(storage_path('app/tasks/topic_00.json'));
         $this->assertFileDoesNotExist(storage_path('app/tasks/vpr/grade_7/topic_00.json'));
     }
