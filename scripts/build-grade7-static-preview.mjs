@@ -32,7 +32,7 @@ const mathText = (value) => {
 };
 
 const taskCard = (task, index) => `
-<div class="task">
+<div class="task ${hasCyrillic(task.expression ?? task.prompt ?? "") ? "task-text" : ""}">
   <button class="flag" title="Пометить">⚑</button>
   <div class="expr-line"><span class="num">${index})</span><span class="expr">${mathText(task.expression ?? task.prompt ?? "")}</span></div>
   <div class="answer"><span>Ответ:</span> <b>${String(task.answer ?? "").includes("\\") ? mathText(task.answer) : escapeHtml(task.answer ?? "")}</b> <span class="source">[AI]</span></div>
@@ -80,7 +80,9 @@ const html = `<!doctype html>
     .flag{position:absolute;right:10px;top:10px;width:28px;height:28px;border:0;border-radius:6px;background:#263449;color:#92a0b4;cursor:pointer}
     .expr-line{display:flex;gap:10px;align-items:flex-start;padding-right:32px}
     .num{color:#60a5fa;font-weight:800;font-size:17px}
-    .expr{font-family:"KaTeX_Main","Times New Roman",serif;font-size:18px;font-weight:650;color:#f8fafc;min-width:0;overflow-x:auto;white-space:nowrap}
+    .expr{font-family:"KaTeX_Main","Times New Roman",serif;font-size:18px;font-weight:650;color:#f8fafc;min-width:0;white-space:nowrap}
+    .task-text .expr{font-size:16px;line-height:1.45;white-space:normal;overflow-wrap:anywhere}
+    .task-text .expr .katex{white-space:nowrap}
     .expr .katex{font-size:1.08em}
     .answer{color:#7890b2;font-size:13px;margin-top:16px}
     .answer b{color:#34d399;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}

@@ -42,6 +42,7 @@
     @php
         $task = $tasks[0] ?? [];
         $expression = preg_replace('/\s+/u', ' ', trim((string) ($task['expression'] ?? '')));
+        $hasTextExpression = preg_match('/[А-Яа-яЁё]/u', $expression) === 1;
         $taskId = $task['id'] ?? 1;
         $taskKey = "topic_{$topicId}_block_{$block['number']}_zadanie_{$zadanie['number']}_task_{$taskId}";
         $taskInfo = "Блок {$block['number']} ({$block['title']}), Задание {$zadanie['number']}, Задача {$taskId}<br>Выражение: <code>{$expression}</code>";
@@ -51,7 +52,7 @@
         @if(!$isVariant)
             <span class="text-blue-400 font-bold">{{ $taskId }})</span>
         @endif
-        <span class="text-slate-200 {{ $isVariant ? '' : 'ml-2' }} math-serif whitespace-nowrap" style="{{ $expressionStyle }}">{!! $renderMathText($expression) !!}</span>
+        <span class="text-slate-200 {{ $isVariant ? '' : 'ml-2' }} math-serif {{ $hasTextExpression ? 'whitespace-normal break-words' : 'whitespace-nowrap' }}" style="{{ $expressionStyle }}">{!! $renderMathText($expression) !!}</span>
         @include('tasks.partials.task-answer', [
             'showTaskAnswer' => $showTaskAnswer,
             'taskAnswer' => $answerResolver->resolveFromTaskAndZadanie($zadanie, $task),
@@ -64,6 +65,7 @@
         @foreach($tasks as $task)
             @php
                 $expression = preg_replace('/\s+/u', ' ', trim((string) ($task['expression'] ?? '')));
+                $hasTextExpression = preg_match('/[А-Яа-яЁё]/u', $expression) === 1;
                 $taskKey = "topic_{$topicId}_block_{$block['number']}_zadanie_{$zadanie['number']}_task_{$task['id']}";
                 $taskInfo = "Блок {$block['number']} ({$block['title']}), Задание {$zadanie['number']}, Задача {$task['id']}<br>Выражение: <code>{$expression}</code>";
             @endphp
@@ -90,6 +92,7 @@
         @foreach($tasks as $task)
             @php
                 $expression = preg_replace('/\s+/u', ' ', trim((string) ($task['expression'] ?? '')));
+                $hasTextExpression = preg_match('/[А-Яа-яЁё]/u', $expression) === 1;
                 $taskKey = "topic_{$topicId}_block_{$block['number']}_zadanie_{$zadanie['number']}_task_{$task['id']}";
                 $taskInfo = "Блок {$block['number']} ({$block['title']}), Задание {$zadanie['number']}, Задача {$task['id']}<br>Выражение: <code>" . substr($expression, 0, 80) . "...</code>";
             @endphp
@@ -98,8 +101,8 @@
                 @if(!$isVariant)
                     <span class="text-blue-400 font-bold">{{ $task['id'] }})</span>
                 @endif
-                <div class="inline-block max-w-full align-middle overflow-x-auto overflow-y-hidden ml-2">
-                    <span class="text-slate-200 math-serif whitespace-nowrap" style="{{ $expressionStyle }}">{!! $renderMathText($expression) !!}</span>
+                <div class="{{ $hasTextExpression ? 'block' : 'inline-block overflow-x-auto overflow-y-hidden' }} max-w-full align-middle ml-2">
+                    <span class="text-slate-200 math-serif {{ $hasTextExpression ? 'whitespace-normal break-words' : 'whitespace-nowrap' }}" style="{{ $expressionStyle }}">{!! $renderMathText($expression) !!}</span>
                 </div>
                 @include('tasks.partials.task-answer', [
                     'showTaskAnswer' => $showTaskAnswer,
@@ -115,6 +118,7 @@
         @foreach($tasks as $task)
             @php
                 $expression = preg_replace('/\s+/u', ' ', trim((string) ($task['expression'] ?? '')));
+                $hasTextExpression = preg_match('/[А-Яа-яЁё]/u', $expression) === 1;
                 $taskKey = "topic_{$topicId}_block_{$block['number']}_zadanie_{$zadanie['number']}_task_{$task['id']}";
                 $taskInfo = "Блок {$block['number']} ({$block['title']}), Задание {$zadanie['number']}, Задача {$task['id']}<br>Выражение: <code>{$expression}</code>";
             @endphp
@@ -123,7 +127,7 @@
                 @if(!$isVariant)
                     <span class="text-blue-400 font-bold">{{ $task['id'] }})</span>
                 @endif
-                <span class="text-slate-200 {{ $isVariant ? '' : 'ml-2' }} math-serif" style="{{ $expressionStyle }}">{!! $renderMathText($expression) !!}</span>
+                <span class="text-slate-200 {{ $isVariant ? '' : 'ml-2' }} math-serif {{ $hasTextExpression ? 'whitespace-normal break-words' : '' }}" style="{{ $expressionStyle }}">{!! $renderMathText($expression) !!}</span>
                 @include('tasks.partials.task-answer', [
                     'showTaskAnswer' => $showTaskAnswer,
                     'taskAnswer' => $answerResolver->resolveFromTaskAndZadanie($zadanie, $task),
