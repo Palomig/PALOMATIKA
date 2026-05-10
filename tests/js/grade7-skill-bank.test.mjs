@@ -8,6 +8,12 @@ assert.ok(fs.existsSync(path), "skills.json must exist; run scripts/generate-gra
 
 const data = JSON.parse(fs.readFileSync(path, "utf8"));
 
+const difficultyScore = (expression) => {
+  const text = String(expression ?? "");
+  const operators = text.match(/\\cdot|[()+\-:=^{}]/g)?.length ?? 0;
+  return operators + text.length / 18;
+};
+
 assert.equal(data.grade, 7);
 assert.equal(data.subject, "algebra");
 assert.ok(data.skills.length >= 25, "skill bank should be split into narrow skill pages");
@@ -20,6 +26,13 @@ for (const skill of data.skills) {
   assert.equal(skill.levels.length, 3, `${skill.slug} must have three levels`);
   assert.deepEqual(skill.levels.map(level => level.id), ["simple", "medium", "high"]);
   assert.equal(skill.homework_sets.length, 3, `${skill.slug} must have three homework sets`);
+
+  const averageDifficulty = Object.fromEntries(skill.levels.map(level => [
+    level.id,
+    level.tasks.reduce((sum, task) => sum + difficultyScore(task.expression), 0) / level.tasks.length,
+  ]));
+  assert.ok(averageDifficulty.medium > averageDifficulty.simple, `${skill.slug} medium level should be structurally harder than simple`);
+  assert.ok(averageDifficulty.high > averageDifficulty.medium, `${skill.slug} high level should be structurally harder than medium`);
 
   for (const level of skill.levels) {
     assert.ok(level.tasks.length >= 15, `${skill.slug}/${level.id} should have enough homework tasks`);

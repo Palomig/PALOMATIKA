@@ -7,8 +7,8 @@ const SOURCE = "/var/www/html/grade7-topics.json";
 const mul = "\\cdot";
 const levels = [
   { id: "simple", title: "Простой", description: "Чистый шаблон, один основной шаг." },
-  { id: "medium", title: "Средний", description: "Тот же навык с отрицательными числами, скобками или десятичными." },
-  { id: "high", title: "Высокий", description: "Навык внутри проверки, ошибки ученика или обратной задачи." },
+  { id: "medium", title: "Средний", description: "Два-три шага: скобки, отрицательные коэффициенты, несколько однотипных преобразований." },
+  { id: "high", title: "Высокий", description: "Задачи в стиле дидактических материалов: вложенность, пропуски, обратные условия, проверка тождества или обоснование." },
 ];
 
 const clean = (n) => {
@@ -18,6 +18,7 @@ const clean = (n) => {
 const par = (n) => n < 0 ? `(${clean(n)})` : clean(n);
 const gcd = (a, b) => b === 0 ? Math.abs(a) : gcd(b, a % b);
 const shufflePick = (arr, i) => arr[i % arr.length];
+const coefVar = (coef, variable) => coef === 1 ? variable : coef === -1 ? `-${variable}` : `${coef}${variable}`;
 
 function task(id, expression, answer, level, skill, type, prompt = null) {
   return {
@@ -30,6 +31,11 @@ function task(id, expression, answer, level, skill, type, prompt = null) {
     task_type: type,
     prompt: prompt ?? `Выполните: ${expression}.`,
   };
+}
+
+function withOffset(expr, answer, offset) {
+  if (offset === 0) return [expr, answer];
+  return [`(${expr}) ${offset > 0 ? "+" : "-"} ${Math.abs(offset)}`, clean(Number(String(answer).replace(",", ".")) + offset)];
 }
 
 function linSolve(a, b, c) {
@@ -51,6 +57,10 @@ const factories = {
       const [a, b] = shufflePick(pairs, i);
       const aa = a - Math.floor(i / pairs.length) * (level === "high" ? 3 : 1);
       const bb = b + Math.floor(i / pairs.length) * (level === "simple" ? 1 : 2);
+      if (level === "high") {
+        const c = i % 2 ? -(7 + i) : 5 + i;
+        return task(i + 1, `${clean(aa)} + ${par(bb)} - ${par(c)}`, clean(aa + bb - c), level, skill.id, skill.task_type);
+      }
       return task(i + 1, `${clean(aa)} + ${par(bb)}`, clean(aa + bb), level, skill.id, skill.task_type);
     });
   },
@@ -67,6 +77,10 @@ const factories = {
     return Array.from({ length: count }, (_, i) => {
       const a = level === "simple" ? 10 + i : (i % 2 ? -8 - i : 14 + i);
       const b = level === "high" ? (i % 2 ? -12 - i : 18 + i) : (i % 2 ? -4 - i : 3 + i);
+      if (level === "high") {
+        const c = i % 2 ? -(6 + i) : 9 + i;
+        return task(i + 1, `${clean(a)} - ${par(b)} + ${par(c)}`, clean(a - b + c), level, skill.id, skill.task_type);
+      }
       return task(i + 1, `${clean(a)} - ${par(b)}`, clean(a - b), level, skill.id, skill.task_type);
     });
   },
@@ -80,8 +94,8 @@ const factories = {
         ? `${clean(a)} + ${clean(b)}`
         : level === "medium"
           ? `${clean(a + 3)} - ${clean(b)} + ${clean(c)}`
-          : `${clean(a + 7)} - ${clean(b + 4)} + ${clean(c)} - ${clean(0.3 * i + 0.8)}`;
-      const answer = level === "simple" ? a + b : level === "medium" ? a + 3 - b + c : a + 7 - (b + 4) + c - (0.3 * i + 0.8);
+          : `(${clean(a + 7)} - ${clean(b + 4)}) + (${clean(c)} - ${clean(0.3 * i + 0.8)}) - ${clean(1.25 + i / 20)}`;
+      const answer = level === "simple" ? a + b : level === "medium" ? a + 3 - b + c : (a + 7 - (b + 4)) + (c - (0.3 * i + 0.8)) - (1.25 + i / 20);
       return task(i + 1, expression, clean(answer), level, skill.id, skill.task_type);
     });
   },
@@ -94,9 +108,9 @@ const factories = {
       const expression = level === "simple"
         ? `${clean(a)} ${mul} ${clean(b)}`
         : level === "medium"
-          ? `${clean(a * 3)} : ${clean(0.6)}`
-          : `${clean(a)} ${mul} ${clean(b)} : ${clean(c)}`;
-      const answer = level === "simple" ? a * b : level === "medium" ? (a * 3) / 0.6 : a * b / c;
+          ? `${clean(a * 3)} : ${clean(0.6)} - ${clean(1.5 + i / 10)}`
+          : `(${clean(a)} ${mul} ${clean(b)} : ${clean(c)}) - (${clean(a)} + ${clean(c)})`;
+      const answer = level === "simple" ? a * b : level === "medium" ? (a * 3) / 0.6 - (1.5 + i / 10) : a * b / c - (a + c);
       return task(i + 1, expression, clean(answer), level, skill.id, skill.task_type);
     });
   },
@@ -107,9 +121,9 @@ const factories = {
       const expression = level === "simple"
         ? `${a} - ${b} ${mul} ${c}`
         : level === "medium"
-          ? `(${a} - ${b}) ${mul} ${c}`
-          : `${a * 3} : ${c} ${mul} ${b} - ${i}`;
-      const answer = level === "simple" ? a - b * c : level === "medium" ? (a - b) * c : (a * 3) / c * b - i;
+          ? `(${a} - ${b}) ${mul} ${c} + ${b}^2`
+          : `${a * 3} : (${c} - ${b % 2}) ${mul} ${b} - (${i} + ${c})`;
+      const answer = level === "simple" ? a - b * c : level === "medium" ? (a - b) * c + b ** 2 : (a * 3) / (c - b % 2) * b - (i + c);
       return task(i + 1, expression, clean(answer), level, skill.id, skill.task_type);
     });
   },
@@ -119,8 +133,8 @@ const factories = {
     return Array.from({ length: count }, (_, i) => {
       const v = shufflePick(vars, i);
       const a = 2 + i, b = 3 + (i % 6);
-      const expression = level === "simple" ? `${v} + (${a}${v} + ${b})` : level === "medium" ? `${a}${v} + (${b}${v} - ${i + 1})` : `${a}${v} - ${i} + (${b}${v} + ${i + 4} - ${v})`;
-      const answer = level === "simple" ? `${a + 1}${v} + ${b}` : level === "medium" ? `${a + b}${v} - ${i + 1}` : `${a + b - 1}${v} + 4`;
+      const expression = level === "simple" ? `${v} + (${a}${v} + ${b})` : level === "medium" ? `${a}${v} + (${b}${v} - ${i + 1}) + (${v} + ${i + 2})` : `${a}${v} - ${i} + (${b}${v} + ${i + 4} - ${v}) + (${2 * i + 1} - ${v})`;
+      const answer = level === "simple" ? `${a + 1}${v} + ${b}` : level === "medium" ? `${a + b + 1}${v} + 1` : `${a + b - 2}${v} + ${i + 5}`;
       return task(i + 1, expression, answer, level, skill.id, skill.task_type);
     });
   },
@@ -130,8 +144,8 @@ const factories = {
     return Array.from({ length: count }, (_, i) => {
       const v = shufflePick(vars, i);
       const a = 5 + i, b = 2 + (i % 5), c = 1 + (i % 4);
-      const expression = level === "simple" ? `${a}${v} - (${b}${v} + ${c})` : level === "medium" ? `${a}${v} - (${b}${v} - ${c})` : `${a}${v} + ${c} - (${b}${v} - ${i + 2} + ${v})`;
-      const answer = level === "simple" ? `${a - b}${v} - ${c}` : level === "medium" ? `${a - b}${v} + ${c}` : `${a - b - 1}${v} + ${c + i + 2}`;
+      const expression = level === "simple" ? `${a}${v} - (${b}${v} + ${c})` : level === "medium" ? `${a}${v} - (${b}${v} - ${c}) + (${v} - ${i + 1})` : `${a}${v} + ${c} - (${b}${v} - ${i + 2} + ${v}) - (${2}${v} - ${i})`;
+      const answer = level === "simple" ? `${a - b}${v} - ${c}` : level === "medium" ? `${a - b + 1}${v} ${c - i - 1 < 0 ? "-" : "+"} ${Math.abs(c - i - 1)}` : `${a - b - 3}${v} + ${c + 2 * i + 2}`;
       return task(i + 1, expression, answer, level, skill.id, skill.task_type);
     });
   },
@@ -142,8 +156,12 @@ const factories = {
       const v = shufflePick(vars, i);
       const k = level === "simple" ? 2 + (i % 7) : i % 2 ? -(2 + i % 5) : 3 + i % 6;
       const a = 2 + (i % 5), b = level === "high" ? -(1 + i % 6) : 1 + i % 8;
-      const expression = `${clean(k)}(${a}${v} ${b < 0 ? "-" : "+"} ${Math.abs(b)})`;
-      const answer = `${clean(k * a)}${v} ${k * b < 0 ? "-" : "+"} ${clean(Math.abs(k * b))}`;
+      const expression = level === "high"
+        ? `${clean(k)}(${a}${v} ${b < 0 ? "-" : "+"} ${Math.abs(b)}) - ${clean(k - 1)}(${v} - ${Math.abs(b)})`
+        : `${clean(k)}(${a}${v} ${b < 0 ? "-" : "+"} ${Math.abs(b)})`;
+      const answer = level === "high"
+        ? `${clean(k * a - (k - 1))}${v} ${k * b + (k - 1) * Math.abs(b) < 0 ? "-" : "+"} ${clean(Math.abs(k * b + (k - 1) * Math.abs(b)))}`
+        : `${clean(k * a)}${v} ${k * b < 0 ? "-" : "+"} ${clean(Math.abs(k * b))}`;
       return task(i + 1, expression, answer, level, skill.id, skill.task_type);
     });
   },
@@ -153,8 +171,14 @@ const factories = {
     return Array.from({ length: count }, (_, i) => {
       const v = shufflePick(vars, i);
       const a = 3 + i, b = level === "simple" ? 5 + i : -(2 + i), c = level === "high" ? -1 * (4 + i) : 1 + (i % 4);
-      const expression = `${a}${v} ${b < 0 ? "-" : "+"} ${Math.abs(b)}${v} ${c < 0 ? "-" : "+"} ${Math.abs(c)}`;
-      return task(i + 1, expression, `${a + b}${v} ${c < 0 ? "-" : "+"} ${Math.abs(c)}`, level, skill.id, skill.task_type);
+      const expression = level === "high"
+        ? `${a}${v} ${b < 0 ? "-" : "+"} ${Math.abs(b)}${v} ${c < 0 ? "-" : "+"} ${Math.abs(c)} - (${2}${v} - ${i + 1})`
+        : level === "medium"
+          ? `${a}${v} ${b < 0 ? "-" : "+"} ${Math.abs(b)}${v} + ${i + 2} - ${3}${v}`
+        : `${a}${v} ${b < 0 ? "-" : "+"} ${Math.abs(b)}${v} ${c < 0 ? "-" : "+"} ${Math.abs(c)}`;
+      const coef = level === "high" ? a + b - 2 : level === "medium" ? a + b - 3 : a + b;
+      const free = level === "high" ? c + i + 1 : level === "medium" ? i + 2 : c;
+      return task(i + 1, expression, `${coef}${v} ${free < 0 ? "-" : "+"} ${Math.abs(free)}`, level, skill.id, skill.task_type);
     });
   },
 
@@ -162,8 +186,10 @@ const factories = {
     return Array.from({ length: count }, (_, i) => {
       const x = level === "simple" ? i + 1 : level === "medium" ? -(i + 1) : (i + 1) / 2;
       const a = 2 + (i % 5), b = 3 + i;
-      const expression = `${a}x ${b % 2 ? "+" : "-"} ${b}, при x = ${clean(x)}`;
-      const answer = b % 2 ? a * x + b : a * x - b;
+      const expression = level === "high"
+        ? `${a}(x - ${i + 1}) + ${b}x, при x = ${clean(x)}`
+        : `${a}x ${b % 2 ? "+" : "-"} ${b}, при x = ${clean(x)}`;
+      const answer = level === "high" ? a * (x - i - 1) + b * x : b % 2 ? a * x + b : a * x - b;
       return task(i + 1, expression, clean(answer), level, skill.id, skill.task_type);
     });
   },
@@ -174,6 +200,10 @@ const factories = {
       const a = level === "high" ? 3 + (i % 5) : 2 + (i % 4);
       const b = i + 5;
       const c = a * x + b;
+      if (level === "high") {
+        const right = c + 2 * (x - 1);
+        return task(i + 1, `${a}x + ${b} + 2(x - 1) = ${clean(right)}`, clean(x), level, skill.id, skill.task_type, "Решите уравнение.");
+      }
       return task(i + 1, `${a}x + ${b} = ${clean(c)}`, clean(x), level, skill.id, skill.task_type, "Решите уравнение.");
     });
   },
@@ -183,7 +213,11 @@ const factories = {
       const x = level === "simple" ? i + 3 : level === "medium" ? -(i + 3) : i % 2 ? -i - 4 : i + 4;
       const a = level === "high" ? -(5 + i) : 4 + i;
       const b = x + a;
-      const expression = `x ${a < 0 ? "-" : "+"} ${Math.abs(a)} = ${clean(b)}`;
+      const expression = level === "high"
+        ? `(x ${a < 0 ? "-" : "+"} ${Math.abs(a)}) + ${i + 2} = ${clean(b + i + 2)}`
+        : level === "medium"
+          ? `x ${a < 0 ? "-" : "+"} ${Math.abs(a)} - ${i + 1} = ${clean(b - i - 1)}`
+        : `x ${a < 0 ? "-" : "+"} ${Math.abs(a)} = ${clean(b)}`;
       return task(i + 1, expression, clean(x), level, skill.id, skill.task_type, "Решите уравнение.");
     });
   },
@@ -192,6 +226,9 @@ const factories = {
     return Array.from({ length: count }, (_, i) => {
       const x = level === "simple" ? i + 2 : level === "medium" ? -(i + 2) : i % 2 ? -i - 3 : i + 3;
       const a = level === "high" ? -(2 + (i % 6)) : 2 + (i % 8);
+      if (level === "high") {
+        return task(i + 1, `${a}x - ${i + 3} = ${clean(a * x - i - 3)}`, clean(x), level, skill.id, skill.task_type, "Решите уравнение.");
+      }
       return task(i + 1, `${a}x = ${clean(a * x)}`, clean(x), level, skill.id, skill.task_type, "Решите уравнение.");
     });
   },
@@ -202,6 +239,10 @@ const factories = {
       const a = level === "high" ? 0.3 + (i % 5) / 10 : 0.5 + (i % 4) / 10;
       const b = 1.2 + i / 10;
       const c = a * x + b;
+      if (level === "high") {
+        const right = c - 0.2 * (x + 1);
+        return task(i + 1, `${clean(a)}x + ${clean(b)} - 0,2(x + 1) = ${clean(right)}`, clean(x), level, skill.id, skill.task_type, "Решите уравнение с десятичными коэффициентами.");
+      }
       return task(i + 1, `${clean(a)}x + ${clean(b)} = ${clean(c)}`, clean(x), level, skill.id, skill.task_type, "Решите уравнение с десятичными коэффициентами.");
     });
   },
@@ -211,6 +252,12 @@ const factories = {
       const x = i % 2 ? -(i + 1) : i + 1;
       const a = 5 + (i % 5), c = 2 + (i % 3), b = i + 4;
       const d = (a - c) * x + b;
+      if (level === "high") {
+        return task(i + 1, `${a}x + ${b} - (${c}x - ${i + 1}) = ${clean(d + i + 1)}`, clean(x), level, skill.id, skill.task_type, "Решите уравнение.");
+      }
+      if (level === "medium") {
+        return task(i + 1, `${a}x + ${b} - ${i + 2} = ${c}x + ${clean(d - i - 2)}`, clean(x), level, skill.id, skill.task_type, "Решите уравнение.");
+      }
       return task(i + 1, `${a}x + ${b} = ${c}x + ${clean(d)}`, clean(x), level, skill.id, skill.task_type, "Решите уравнение.");
     });
   },
@@ -220,8 +267,11 @@ const factories = {
       const x = i % 2 ? -i - 2 : i + 2;
       const k = level === "simple" ? 2 : 3 + (i % 4);
       const a = 2 + (i % 5), b = i + 1, c = 4 + (i % 4);
-      const right = k * (a * x + b) + c;
-      return task(i + 1, `${k}(${a}x + ${b}) + ${c} = ${clean(right)}`, clean(x), level, skill.id, skill.task_type, "Решите уравнение.");
+      const right = level === "high" ? k * (a * x + b) + c - (x - 2) : k * (a * x + b) + c;
+      const expression = level === "high"
+        ? `${k}(${a}x + ${b}) + ${c} - (x - 2) = ${clean(right)}`
+        : `${k}(${a}x + ${b}) + ${c} = ${clean(right)}`;
+      return task(i + 1, expression, clean(x), level, skill.id, skill.task_type, "Решите уравнение.");
     });
   },
 
@@ -229,6 +279,10 @@ const factories = {
     return Array.from({ length: count }, (_, i) => {
       const base = level === "simple" ? 2 + (i % 7) : level === "medium" ? -(2 + (i % 5)) : (i % 2 ? -1 : 1) * (2 + (i % 4));
       const exp = level === "simple" ? 2 + (i % 3) : 3 + (i % 3);
+      if (level === "high") {
+        const second = 1 + (i % 4);
+        return task(i + 1, `${par(base)}^${exp} - ${par(base)}^2 + ${second}`, clean(base ** exp - base ** 2 + second), level, skill.id, skill.task_type);
+      }
       return task(i + 1, `${par(base)}^${exp}`, clean(base ** exp), level, skill.id, skill.task_type);
     });
   },
@@ -238,8 +292,16 @@ const factories = {
     return Array.from({ length: count }, (_, i) => {
       const v = shufflePick(vars, i);
       const a = 2 + (i % 6), b = 3 + (i % 5);
-      const expression = skill.id.includes("divide") ? `${v}^${a + b} : ${v}^${b}` : skill.id.includes("power-of-power") ? `(${v}^${a})^${b}` : `${v}^${a} ${mul} ${v}^${b}`;
-      const answer = skill.id.includes("divide") ? `${v}^${a}` : skill.id.includes("power-of-power") ? `${v}^${a * b}` : `${v}^${a + b}`;
+      const expression = skill.slug.includes("divide")
+        ? level === "high" ? `${v}^${a + b + 2} : ${v}^${b} ${mul} ${v}^2` : level === "medium" ? `${v}^${a + b + 1} : ${v}^${b}` : `${v}^${a + b} : ${v}^${b}`
+        : skill.slug.includes("power-of-power")
+          ? level === "high" ? `(${v}^${a})^${b} : ${v}^${a}` : level === "medium" ? `(${v}^${a})^${b} ${mul} ${v}` : `(${v}^${a})^${b}`
+          : level === "high" ? `${v}^${a} ${mul} ${v}^${b} ${mul} ${v}^2` : level === "medium" ? `${v}^${a} ${mul} ${v}^${b} ${mul} ${v}` : `${v}^${a} ${mul} ${v}^${b}`;
+      const answer = skill.slug.includes("divide")
+        ? level === "high" ? `${v}^${a + 4}` : level === "medium" ? `${v}^${a + 1}` : `${v}^${a}`
+        : skill.slug.includes("power-of-power")
+          ? level === "high" ? `${v}^${a * b - a}` : level === "medium" ? `${v}^${a * b + 1}` : `${v}^${a * b}`
+          : level === "high" ? `${v}^${a + b + 2}` : level === "medium" ? `${v}^${a + b + 1}` : `${v}^${a + b}`;
       return task(i + 1, expression, answer, level, skill.id, skill.task_type);
     });
   },
@@ -249,8 +311,14 @@ const factories = {
     return Array.from({ length: count }, (_, i) => {
       const [v1, v2] = shufflePick(vars, i);
       const k1 = 2 + (i % 5), k2 = level === "simple" ? 3 : -(3 + i % 4);
-      const expression = `${k1}${v1} ${mul} ${k2}${v2}`;
-      return task(i + 1, expression, `${k1 * k2}${v1}${v2}`, level, skill.id, skill.task_type);
+      if (level === "high") {
+        const k3 = 2 + (i % 3);
+        const expression = `${k1}${v1}^2 ${mul} ${k2}${v2} ${mul} ${k3}${v1}${v2}^2`;
+        return task(i + 1, expression, `${k1 * k2 * k3}${v1}^3${v2}^3`, level, skill.id, skill.task_type);
+      }
+      const expression = level === "medium" ? `${k1}${v1}^2 ${mul} ${k2}${v1}${v2}` : `${k1}${v1} ${mul} ${k2}${v2}`;
+      const answer = level === "medium" ? `${k1 * k2}${v1}^3${v2}` : `${k1 * k2}${v1}${v2}`;
+      return task(i + 1, expression, answer, level, skill.id, skill.task_type);
     });
   },
 
@@ -258,16 +326,34 @@ const factories = {
     return Array.from({ length: count }, (_, i) => {
       const a = 2 + (i % 7), b = level === "simple" ? 3 + (i % 5) : -(3 + (i % 5));
       const p = 1 + (i % 4), q = 2 + (i % 5);
-      return task(i + 1, `${a}x^${p} ${mul} ${b}x^${q}`, `${a * b}x^${p + q}`, level, skill.id, skill.task_type);
+      if (level === "high") {
+        const c = i % 2 ? -2 : 3;
+        return task(i + 1, `${a}x^${p}y ${mul} ${b}x^${q}y^2 ${mul} ${c}xy`, `${a * b * c}x^${p + q + 1}y^4`, level, skill.id, skill.task_type);
+      }
+      const yPart = level === "medium" ? "y" : "";
+      return task(i + 1, `${a}x^${p}${yPart} ${mul} ${b}x^${q}${yPart}`, `${a * b}x^${p + q}${level === "medium" ? "y^2" : ""}`, level, skill.id, skill.task_type);
     });
   },
 
   polynomial_add(skill, level, count) {
     return Array.from({ length: count }, (_, i) => {
       const a = 2 + i, b = 3 + (i % 5), c = 4 + (i % 4), d = 1 + i;
-      const sign = skill.id.includes("subtract") ? "-" : "+";
-      const expression = `(${a}x + ${b}) ${sign} (${c}x + ${d})`;
-      const answer = sign === "+" ? `${a + c}x + ${b + d}` : `${a - c}x ${b - d < 0 ? "-" : "+"} ${Math.abs(b - d)}`;
+      const sign = skill.slug.includes("subtract") ? "-" : "+";
+      const expression = level === "high"
+        ? `(${a}x^2 - ${b}x + ${i + 1}) ${sign} (${c}x^2 + ${d}x - ${i + 3}) ${sign === "+" ? "+" : "-"} (${2}x^2 - ${i + 2})`
+        : level === "medium"
+          ? `(${a}x^2 + ${b}x - ${i + 1}) ${sign} (${c}x^2 + ${d}x + ${i + 3})`
+          : `(${a}x + ${b}) ${sign} (${c}x + ${d})`;
+      let answer;
+      if (level === "high") {
+        const s = sign === "+" ? 1 : -1;
+        answer = `${a + s * c + s * 2}x^2 ${-b + s * d >= 0 ? "+" : "-"} ${Math.abs(-b + s * d)}x ${i + 1 + s * (-(i + 3)) + s * (-(i + 2)) < 0 ? "-" : "+"} ${Math.abs(i + 1 + s * (-(i + 3)) + s * (-(i + 2)))}`;
+      } else if (level === "medium") {
+        const s = sign === "+" ? 1 : -1;
+        answer = `${a + s * c}x^2 + ${b + s * d}x ${-i - 1 + s * (i + 3) < 0 ? "-" : "+"} ${Math.abs(-i - 1 + s * (i + 3))}`;
+      } else {
+        answer = sign === "+" ? `${a + c}x + ${b + d}` : `${a - c}x ${b - d < 0 ? "-" : "+"} ${Math.abs(b - d)}`;
+      }
       return task(i + 1, expression, answer, level, skill.id, skill.task_type);
     });
   },
@@ -275,12 +361,13 @@ const factories = {
   multiply_poly(skill, level, count) {
     return Array.from({ length: count }, (_, i) => {
       const a = 2 + (i % 5), b = 1 + i, c = level === "simple" ? 1 : 2 + (i % 4), d = 3 + (i % 5);
-      const expression = skill.id.includes("monomial")
-        ? `${a}x(${c}x + ${d})`
-        : `(${a}x + ${b})(${c}x + ${d})`;
-      const answer = skill.id.includes("monomial")
-        ? `${a * c}x^2 + ${a * d}x`
-        : `${a * c}x^2 + ${a * d + b * c}x + ${b * d}`;
+      const cx = coefVar(c, "x");
+      const expression = skill.slug.includes("monomial")
+        ? level === "high" ? `${a}x(${c}x^2 - ${d}x + ${i + 2})` : level === "medium" ? `${a}x(${cx} - ${d}) + ${i + 1}x` : `${a}x(${cx} + ${d})`
+        : level === "high" ? `(${a}x - ${b})(${cx} + ${d}) - ${i + 1}x` : level === "medium" ? `(${a}x - ${b})(${cx} + ${d}) + ${i + 1}` : `(${a}x + ${b})(${cx} + ${d})`;
+      const answer = skill.slug.includes("monomial")
+        ? level === "high" ? `${a * c}x^3 - ${a * d}x^2 + ${a * (i + 2)}x` : level === "medium" ? `${a * c}x^2 ${-a * d + i + 1 < 0 ? "-" : "+"} ${Math.abs(-a * d + i + 1)}x` : `${a * c}x^2 + ${a * d}x`
+        : level === "high" ? `${a * c}x^2 + ${a * d - b * c - i - 1}x - ${b * d}` : level === "medium" ? `${a * c}x^2 + ${a * d - b * c}x ${-b * d + i + 1 < 0 ? "-" : "+"} ${Math.abs(-b * d + i + 1)}` : `${a * c}x^2 + ${a * d + b * c}x + ${b * d}`;
       return task(i + 1, expression, answer, level, skill.id, skill.task_type);
     });
   },
@@ -288,7 +375,12 @@ const factories = {
   factor_common(skill, level, count) {
     return Array.from({ length: count }, (_, i) => {
       const k = 2 + (i % 7), a = 3 + (i % 5), b = 4 + (i % 4);
-      return task(i + 1, `${k * a}x + ${k * b}`, `${k}(${a}x + ${b})`, level, skill.id, skill.task_type);
+      if (level === "high") {
+        return task(i + 1, `${k * a}x^2y + ${k * b}xy^2 - ${k * (i + 1)}xy`, `${k}xy(${a}x + ${b}y - ${i + 1})`, level, skill.id, skill.task_type);
+      }
+      const expression = level === "medium" ? `${k * a}x^2 + ${k * b}x` : `${k * a}x + ${k * b}`;
+      const answer = level === "medium" ? `${k}x(${a}x + ${b})` : `${k}(${a}x + ${b})`;
+      return task(i + 1, expression, answer, level, skill.id, skill.task_type);
     });
   },
 
@@ -297,12 +389,15 @@ const factories = {
       const a = level === "simple" ? 2 + (i % 6) : 3 + (i % 7);
       const b = 1 + (i % 5);
       let expression, answer;
-      if (skill.id.includes("square-sum")) {
-        expression = `(${a}x + ${b})^2`; answer = `${a * a}x^2 + ${2 * a * b}x + ${b * b}`;
-      } else if (skill.id.includes("square-difference")) {
-        expression = `(${a}x - ${b})^2`; answer = `${a * a}x^2 - ${2 * a * b}x + ${b * b}`;
+      if (skill.slug.includes("square-sum")) {
+        expression = level === "high" ? `(${a}x + ${b})^2 - (${a}x - ${b})^2` : level === "medium" ? `(${a}x + ${coefVar(b, "y")})^2` : `(${a}x + ${b})^2`;
+        answer = level === "high" ? `${4 * a * b}x` : level === "medium" ? `${a * a}x^2 + ${2 * a * b}xy + ${coefVar(b * b, "y^2")}` : `${a * a}x^2 + ${2 * a * b}x + ${b * b}`;
+      } else if (skill.slug.includes("square-difference")) {
+        expression = level === "high" ? `(${a}x - ${b})^2 + ${2 * a * b}x` : level === "medium" ? `(${a}x - ${coefVar(b, "y")})^2` : `(${a}x - ${b})^2`;
+        answer = level === "high" ? `${a * a}x^2 + ${b * b}` : level === "medium" ? `${a * a}x^2 - ${2 * a * b}xy + ${coefVar(b * b, "y^2")}` : `${a * a}x^2 - ${2 * a * b}x + ${b * b}`;
       } else {
-        expression = `(${a}x - ${b})(${a}x + ${b})`; answer = `${a * a}x^2 - ${b * b}`;
+        expression = level === "high" ? `(${a}x - ${b})(${a}x + ${b}) + (${b} - ${a}x)^2` : level === "medium" ? `(${a}x - ${b}y)(${a}x + ${b}y)` : `(${a}x - ${b})(${a}x + ${b})`;
+        answer = level === "high" ? `-${2 * a * b}x` : level === "medium" ? `${a * a}x^2 - ${b * b}y^2` : `${a * a}x^2 - ${b * b}`;
       }
       return task(i + 1, expression, answer, level, skill.id, skill.task_type);
     });
@@ -312,12 +407,15 @@ const factories = {
     return Array.from({ length: count }, (_, i) => {
       const a = 2 + (i % 6), b = 1 + (i % 5);
       let expression, answer;
-      if (skill.id.includes("factor-square-sum")) {
-        expression = `${a * a}x^2 + ${2 * a * b}x + ${b * b}`; answer = `(${a}x + ${b})^2`;
-      } else if (skill.id.includes("factor-square-difference")) {
-        expression = `${a * a}x^2 - ${2 * a * b}x + ${b * b}`; answer = `(${a}x - ${b})^2`;
+      if (skill.slug.includes("factor-square-sum")) {
+        expression = level === "high" ? `${a * a}x^2 + ${2 * a * b}x + ${b * b} - y^2` : level === "medium" ? `${a * a}x^2 + ${2 * a * b}xy + ${b * b}y^2` : `${a * a}x^2 + ${2 * a * b}x + ${b * b}`;
+        answer = level === "high" ? `(${a}x + ${b} - y)(${a}x + ${b} + y)` : level === "medium" ? `(${a}x + ${b}y)^2` : `(${a}x + ${b})^2`;
+      } else if (skill.slug.includes("factor-square-difference")) {
+        expression = level === "high" ? `${a * a}x^2 - ${2 * a * b}x + ${b * b} - y^2` : level === "medium" ? `${a * a}x^2 - ${2 * a * b}xy + ${b * b}y^2` : `${a * a}x^2 - ${2 * a * b}x + ${b * b}`;
+        answer = level === "high" ? `(${a}x - ${b} - y)(${a}x - ${b} + y)` : level === "medium" ? `(${a}x - ${b}y)^2` : `(${a}x - ${b})^2`;
       } else {
-        expression = `${a * a}x^2 - ${b * b}`; answer = `(${a}x - ${b})(${a}x + ${b})`;
+        expression = level === "high" ? `${a * a}x^2 - (${coefVar(b, "y")} + z)^2` : level === "medium" ? `${a * a}x^2 - ${coefVar(b * b, "a^2")}` : `${a * a}x^2 - ${b * b}`;
+        answer = level === "high" ? `(${a}x - ${coefVar(b, "y")} - z)(${a}x + ${coefVar(b, "y")} + z)` : level === "medium" ? `(${a}x - ${coefVar(b, "a")})(${a}x + ${coefVar(b, "a")})` : `(${a}x - ${b})(${a}x + ${b})`;
       }
       return task(i + 1, expression, answer, level, skill.id, skill.task_type, "Разложите на множители.");
     });
@@ -328,6 +426,10 @@ const factories = {
       const k = level === "simple" ? 2 + (i % 4) : -(2 + (i % 5));
       const b = i - 5;
       const x = level === "high" ? -i : i + 1;
+      if (level === "high") {
+        const expression = `y = ${k}(x - ${i + 1}) ${b < 0 ? "-" : "+"} ${Math.abs(b)}, x = ${clean(x)}`;
+        return task(i + 1, expression, clean(k * (x - i - 1) + b), level, skill.id, skill.task_type, "Найдите значение функции.");
+      }
       const expression = `y = ${k}x ${b < 0 ? "-" : "+"} ${Math.abs(b)}, x = ${clean(x)}`;
       return task(i + 1, expression, clean(k * x + b), level, skill.id, skill.task_type, "Найдите значение функции.");
     });
@@ -338,8 +440,11 @@ const factories = {
       const k = level === "simple" ? 2 + (i % 5) : -(2 + (i % 5));
       const b = i - 4;
       const x = i + 1;
-      const y = k * x + b;
-      return task(i + 1, `y = ${k}x ${b < 0 ? "-" : "+"} ${Math.abs(b)}, y = ${clean(y)}`, clean(x), level, skill.id, skill.task_type, "Найдите x по значению y.");
+      const y = level === "high" ? k * (x - 2) + b : k * x + b;
+      const expression = level === "high"
+        ? `y = ${k}(x - 2) ${b < 0 ? "-" : "+"} ${Math.abs(b)}, y = ${clean(y)}`
+        : `y = ${k}x ${b < 0 ? "-" : "+"} ${Math.abs(b)}, y = ${clean(y)}`;
+      return task(i + 1, expression, clean(x), level, skill.id, skill.task_type, "Найдите x по значению y.");
     });
   },
 
@@ -348,7 +453,14 @@ const factories = {
       const k = 2 + (i % 6);
       const root = level === "simple" ? i + 1 : level === "medium" ? -(i + 1) : i + 0.5;
       const b = -k * root;
-      return task(i + 1, `y = ${k}x ${b < 0 ? "-" : "+"} ${clean(Math.abs(b))}`, `(${clean(root)}; 0)`, level, skill.id, skill.task_type, "Найдите точку пересечения графика с осью x.");
+      const shift = i % 3;
+      const highB = b + k * shift;
+      const expression = level === "high"
+        ? `y = ${k}(x - ${shift}) ${highB < 0 ? "-" : "+"} ${clean(Math.abs(highB))}` 
+        : level === "medium"
+          ? `y = ${k}(x + 1) ${b - k < 0 ? "-" : "+"} ${clean(Math.abs(b - k))}`
+        : `y = ${k}x ${b < 0 ? "-" : "+"} ${clean(Math.abs(b))}`;
+      return task(i + 1, expression, `(${clean(root)}; 0)`, level, skill.id, skill.task_type, "Найдите точку пересечения графика с осью x.");
     });
   },
 
@@ -357,9 +469,10 @@ const factories = {
       const k = level === "simple" ? 2 : -2 - (i % 4);
       const b = i - 3;
       const x = i % 2 ? i + 1 : -i - 1;
-      const y = k * x + b + (i % 3 === 0 ? 1 : 0);
-      const ok = y === k * x + b;
-      return task(i + 1, `y = ${k}x ${b < 0 ? "-" : "+"} ${Math.abs(b)}, A(${clean(x)}; ${clean(y)})`, ok ? "да" : "нет", level, skill.id, skill.task_type, "Проверьте, принадлежит ли точка графику.");
+      const y = level === "high" ? k * (x - 1) + b + (i % 3 === 0 ? 1 : 0) : k * x + b + (i % 3 === 0 ? 1 : 0);
+      const ok = level === "high" ? y === k * (x - 1) + b : y === k * x + b;
+      const expression = level === "high" ? `y = ${k}(x - 1) ${b < 0 ? "-" : "+"} ${Math.abs(b)}, A(${clean(x)}; ${clean(y)})` : `y = ${k}x ${b < 0 ? "-" : "+"} ${Math.abs(b)}, A(${clean(x)}; ${clean(y)})`;
+      return task(i + 1, expression, ok ? "да" : "нет", level, skill.id, skill.task_type, "Проверьте, принадлежит ли точка графику.");
     });
   },
 
@@ -368,7 +481,12 @@ const factories = {
       const x = i + 1, y = level === "simple" ? i + 2 : -(i + 2);
       const a = 2 + (i % 4), b = 1 + (i % 3), c = 1 + (i % 5), d = 3 + (i % 4);
       const e = a * x + b * y, f = c * x - d * y;
-      const expression = `{ ${a}x + ${b}y = ${clean(e)}, ${c}x - ${d}y = ${clean(f)} }`;
+      const shiftedX = c === 1 ? "(x - 1)" : `${c}(x - 1)`;
+      const expression = level === "high"
+        ? `{ ${coefVar(a, "x")} + ${coefVar(b, "y")} = ${clean(e)}, ${shiftedX} - ${coefVar(d, "y")} = ${clean(f - c)} }`
+        : level === "medium"
+          ? `{ ${a}(x + 1) + ${coefVar(b, "y")} = ${clean(e + a)}, ${coefVar(c, "x")} - ${coefVar(d, "y")} = ${clean(f)} }`
+        : `{ ${coefVar(a, "x")} + ${coefVar(b, "y")} = ${clean(e)}, ${coefVar(c, "x")} - ${coefVar(d, "y")} = ${clean(f)} }`;
       return task(i + 1, expression, `x = ${clean(x)}, y = ${clean(y)}`, level, skill.id, skill.task_type, "Решите систему.");
     });
   },
@@ -377,9 +495,14 @@ const factories = {
     return Array.from({ length: count }, (_, i) => {
       const x = i + 1, y = level === "simple" ? i + 2 : -(i + 2);
       const a = 2 + (i % 4), b = 1 + (i % 3), c = 1 + (i % 5), d = 3 + (i % 4);
-      const e = a * x + b * y, f = c * x - d * y + (i % 3 === 0 ? 1 : 0);
-      const ok = f === c * x - d * y;
-      const expression = `{ ${a}x + ${b}y = ${clean(e)}, ${c}x - ${d}y = ${clean(f)} }, (${clean(x)}; ${clean(y)})`;
+      const e = a * x + b * y, f = level === "high" ? c * (x - 1) - d * y + (i % 3 === 0 ? 1 : 0) : c * x - d * y + (i % 3 === 0 ? 1 : 0);
+      const ok = level === "high" ? f === c * (x - 1) - d * y : f === c * x - d * y;
+      const shiftedX = c === 1 ? "(x - 1)" : `${c}(x - 1)`;
+      const expression = level === "high"
+        ? `{ ${coefVar(a, "x")} + ${coefVar(b, "y")} = ${clean(e)}, ${shiftedX} - ${coefVar(d, "y")} = ${clean(f)} }, (${clean(x)}; ${clean(y)})`
+        : level === "medium"
+          ? `{ ${a}(x + 1) + ${coefVar(b, "y")} = ${clean(e + a)}, ${coefVar(c, "x")} - ${coefVar(d, "y")} = ${clean(f)} }, (${clean(x)}; ${clean(y)})`
+          : `{ ${coefVar(a, "x")} + ${coefVar(b, "y")} = ${clean(e)}, ${coefVar(c, "x")} - ${coefVar(d, "y")} = ${clean(f)} }, (${clean(x)}; ${clean(y)})`;
       return task(i + 1, expression, ok ? "да" : "нет", level, skill.id, skill.task_type, "Проверьте, является ли пара решением системы.");
     });
   },
@@ -389,8 +512,10 @@ const factories = {
       const a = 2 + (i % 7), b = level === "simple" ? 1 : 2 + (i % 5), c = 6 + i;
       const g = gcd(c, b);
       const yTerm = b === 1 ? "y" : `${b}y`;
-      const expression = `${a}x + ${yTerm} = ${c}`;
-      const answer = b === 1 ? `y = ${c} - ${a}x` : `y = (${c / g} - ${a / g}x) : ${b / g}`;
+      const expression = level === "high" ? `${a}(x - 1) + ${b}(y + 2) = ${c}` : level === "medium" ? `${a}(x + 1) + ${yTerm} = ${c}` : `${coefVar(a, "x")} + ${yTerm} = ${c}`;
+      const answer = b === 1
+        ? level === "high" ? `y = ${c + a - 2 * b} - ${a}x` : level === "medium" ? `y = ${c - a} - ${a}x` : `y = ${c} - ${a}x`
+        : level === "high" ? `y = (${c + a - 2 * b} - ${a}x) : ${b}` : level === "medium" ? `y = (${c - a} - ${a}x) : ${b}` : `y = (${c / g} - ${a / g}x) : ${b / g}`;
       return task(i + 1, expression, answer, level, skill.id, skill.task_type, "Выразите y через x.");
     });
   },
@@ -511,7 +636,7 @@ const skills = skillCatalog.map(([group, title, slug, factoryName], index) => {
     group,
     group_title: groupTitles[group],
     task_type: factoryName,
-    source: "Макарычев Ю.Н. — Алгебра 7 класс, 2023; PALOMATIKA generated practice",
+    source: "Макарычев Ю.Н. — Алгебра 7 класс, 2023; Звавич Л.И. и др. — Алгебра 7 класс. Дидактические материалы, 2012; PALOMATIKA generated practice",
   };
   const factory = factories[factoryName];
   const levelBlocks = levels.map(level => ({
