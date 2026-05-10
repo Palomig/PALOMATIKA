@@ -1,0 +1,187 @@
+#!/usr/bin/env node
+
+import fs from "node:fs";
+import path from "node:path";
+
+const DATA_PATH = "/home/dev/palomatika/storage/app/tasks/alg/grade_7/skills.json";
+const OUT_DIR = "/var/www/html/alg-skills/7";
+const data = JSON.parse(fs.readFileSync(DATA_PATH, "utf8"));
+
+const escapeHtml = (value) => String(value ?? "")
+  .replace(/&/g, "&amp;")
+  .replace(/</g, "&lt;")
+  .replace(/>/g, "&gt;")
+  .replace(/"/g, "&quot;")
+  .replace(/'/g, "&#039;");
+
+const hasCyrillic = (value) => /[А-Яа-яЁё]/u.test(String(value ?? ""));
+
+const mathText = (value) => {
+  const text = String(value ?? "").replace(/\s+/gu, " ").trim();
+  const escaped = escapeHtml(text);
+
+  if (!hasCyrillic(text)) {
+    return `$${escaped}$`;
+  }
+
+  return escaped.replace(
+    /(?<![A-Za-zА-Яа-яЁё])(-?\d+(?:,\d+)?(?:\s*(?:\\cdot|[:=+\-])\s*-?\d+(?:,\d+)?|\s*[+\-]\s*\(-?\d+(?:,\d+)?\)|\s*[:=+\-]\s*\([^)]*\)|\s*\\cdot\s*\([^)]*\)|\s*\^\d+)*)/gu,
+    (match, fragment) => fragment && /\d/u.test(fragment) ? `$${fragment.trim()}$` : match,
+  );
+};
+
+const levelClass = {
+  simple: "level-simple",
+  medium: "level-medium",
+  high: "level-high",
+};
+
+const levelName = {
+  simple: "Простой",
+  medium: "Средний",
+  high: "Высокий",
+};
+
+function shell(title, body) {
+  return `<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${escapeHtml(title)}</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$',right:'$',display:false},{left:'$$',right:'$$',display:true}],throwOnError:false})"></script>
+  <style>
+    :root{color-scheme:dark;--bg:#101122;--panel:#172033;--line:#304158;--text:#edf2f7;--muted:#94a3b8;--blue:#60a5fa;--green:#34d399;--yellow:#facc15;--red:#fb7185}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    .wrap{max-width:1180px;margin:0 auto;padding:34px 20px 80px}
+    a{color:var(--blue);text-decoration:none}
+    .top{border-bottom:1px solid rgba(148,163,184,.22);padding-bottom:22px;margin-bottom:24px}
+    .eyebrow{color:var(--muted);font-size:13px}
+    h1{font-size:34px;line-height:1.12;margin:8px 0;letter-spacing:0}
+    h2{font-size:22px;margin:0 0 14px;letter-spacing:0}
+    h3{font-size:17px;margin:0;letter-spacing:0}
+    .muted{color:var(--muted)}
+    .stats,.chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    .stat,.chip{border:1px solid rgba(148,163,184,.22);background:var(--panel);padding:8px 11px;border-radius:8px}
+    .stat b{color:var(--blue)}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+    .skill-card,.panel,.task{background:var(--panel);border:1px solid var(--line);border-radius:8px}
+    .skill-card{padding:16px;min-height:148px}
+    .skill-card .id{color:var(--blue);font-weight:800}
+    .skill-card .title{font-weight:750;font-size:18px;margin:8px 0 10px}
+    .skill-card .group{color:var(--muted);font-size:13px}
+    .panel{padding:18px;margin:24px 0}
+    .level-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;border-bottom:1px solid rgba(148,163,184,.18);padding-bottom:12px;margin-bottom:14px}
+    .level-badge{font-size:12px;font-weight:800;border-radius:999px;padding:4px 9px}
+    .level-simple .level-badge{color:var(--green);background:rgba(52,211,153,.13)}
+    .level-medium .level-badge{color:var(--yellow);background:rgba(250,204,21,.13)}
+    .level-high .level-badge{color:var(--red);background:rgba(251,113,133,.13)}
+    .taskgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+    .task{position:relative;padding:14px 12px;min-height:118px}
+    .flag{position:absolute;right:10px;top:10px;width:28px;height:28px;border:0;border-radius:6px;background:#263449;color:#92a0b4}
+    .expr-line{display:flex;gap:10px;align-items:flex-start;padding-right:32px}
+    .num{color:var(--blue);font-weight:800;font-size:17px}
+    .expr{font-family:"KaTeX_Main","Times New Roman",serif;font-size:18px;font-weight:650;color:#f8fafc;min-width:0;white-space:normal;overflow-wrap:anywhere}
+    .expr .katex{font-size:1.08em;white-space:nowrap}
+    .answer{color:#7890b2;font-size:13px;margin-top:16px}
+    .answer b{color:var(--green);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+    .status{margin-top:8px;color:var(--green);font-weight:800;font-size:11px}
+    .status span{display:inline-block;width:8px;height:8px;background:var(--green);border-radius:999px;margin-right:4px}
+    .group-title{margin:34px 0 14px}
+    @media(max-width:1020px){.grid,.taskgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:640px){.grid,.taskgrid{grid-template-columns:1fr}.wrap{padding-inline:14px}h1{font-size:28px}}
+  </style>
+</head>
+<body>${body}</body>
+</html>`;
+}
+
+function taskCard(task) {
+  return `<div class="task">
+    <button class="flag" title="Пометить">⚑</button>
+    <div class="expr-line"><span class="num">${task.id})</span><span class="expr">${mathText(task.expression)}</span></div>
+    <div class="answer"><span>Ответ:</span> <b>${String(task.answer).includes("\\") ? mathText(task.answer) : escapeHtml(task.answer)}</b> <span class="muted">[AI]</span></div>
+    <div class="status"><span></span>PROD</div>
+  </div>`;
+}
+
+function skillPage(skill) {
+  const body = `<div class="wrap">
+    <a href="/alg-skills/7/">← Все навыки 7 класса</a>
+    <header class="top">
+      <div class="eyebrow">PALOMATIKA · Алгебра · 7 класс · ${escapeHtml(skill.group_title)}</div>
+      <h1>${skill.id}. ${escapeHtml(skill.title)}</h1>
+      <div class="muted">Одна страница тренирует один конкретный навык. Уровни отличаются только сложностью чисел и количеством шагов, а не типом задания.</div>
+      <div class="stats">
+        <div class="stat"><b>${skill.tasks_count}</b> задач</div>
+        <div class="stat"><b>3</b> уровня</div>
+        <div class="stat"><b>${escapeHtml(skill.task_type)}</b> тип</div>
+      </div>
+    </header>
+    ${skill.levels.map(level => `<section class="panel ${levelClass[level.id]}">
+      <div class="level-head">
+        <div>
+          <h2>${escapeHtml(level.title)}</h2>
+          <div class="muted">${escapeHtml(level.description)}</div>
+        </div>
+        <div class="level-badge">${levelName[level.id]}</div>
+      </div>
+      <div class="taskgrid">${level.tasks.map(taskCard).join("")}</div>
+    </section>`).join("")}
+  </div>`;
+
+  return shell(`${skill.title} · Алгебра 7 класс`, body);
+}
+
+function indexPage() {
+  const groups = data.groups
+    .map(group => ({
+      ...group,
+      skills: data.skills.filter(skill => skill.group === group.id),
+    }))
+    .filter(group => group.skills.length);
+
+  const body = `<div class="wrap">
+    <a href="/alg-topics/7/0/">← Арифметическая база</a>
+    <header class="top">
+      <div class="eyebrow">PALOMATIKA · Алгебра · 7 класс</div>
+      <h1>Банк навыков</h1>
+      <div class="muted">Не главы учебника, а отдельные действия ученика. Репетитор выбирает ровно тот навык, который нужно добить на уроке или в домашке.</div>
+      <div class="stats">
+        <div class="stat"><b>${data.skills.length}</b> навыков</div>
+        <div class="stat"><b>${data.skills.reduce((sum, skill) => sum + skill.tasks_count, 0)}</b> задач</div>
+        <div class="stat"><b>3</b> уровня на каждый навык</div>
+      </div>
+    </header>
+    ${groups.map(group => `<section>
+      <h2 class="group-title">${escapeHtml(group.title)}</h2>
+      <div class="grid">${group.skills.map(skill => `<a class="skill-card" href="/alg-skills/7/${skill.slug}/">
+        <div class="id">${skill.id}</div>
+        <div class="title">${escapeHtml(skill.title)}</div>
+        <div class="group">${escapeHtml(skill.group_title)}</div>
+        <div class="chips">
+          <span class="chip">${skill.tasks_count} задач</span>
+          <span class="chip">3 уровня</span>
+        </div>
+      </a>`).join("")}</div>
+    </section>`).join("")}
+  </div>`;
+
+  return shell("Банк навыков · Алгебра 7 класс", body);
+}
+
+fs.rmSync(OUT_DIR, { recursive: true, force: true });
+fs.mkdirSync(OUT_DIR, { recursive: true });
+fs.writeFileSync(path.join(OUT_DIR, "index.html"), indexPage());
+fs.writeFileSync(path.join(OUT_DIR, "skills.json"), JSON.stringify(data, null, 2));
+
+for (const skill of data.skills) {
+  const dir = path.join(OUT_DIR, skill.slug);
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, "index.html"), skillPage(skill));
+}
+
+console.log(`built ${data.skills.length} skill pages -> ${OUT_DIR}`);
