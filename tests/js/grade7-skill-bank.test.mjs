@@ -74,6 +74,8 @@ for (const skill of data.skills) {
     assert.match(highExpressions, /=\s*-?\d*y\b/, `${skill.slug} high level should include systems with a variable on the right side of equals`);
   }
   if (skill.slug === "system-solve") {
+    const simpleExpressions = skill.levels.find(level => level.id === "simple").tasks.map(task => task.expression).join("\n");
+    assert.match(simpleExpressions, /[+-]\s*y = [^\\]+\\\\[^\\]+[+-]\s*y =/, `${skill.slug}/simple should include systems where y cancels immediately`);
     for (const levelId of ["medium", "high"]) {
       const answers = skill.levels.find(level => level.id === levelId).tasks.map(task => task.answer).join("\n");
       assert.match(answers, /\\frac\{-?\d+\}\{\d+\}/, `${skill.slug}/${levelId} should include ordinary fractional answers`);

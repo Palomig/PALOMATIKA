@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-11T14:36:27.781Z",
+  "generated_at": "2026-05-11T14:49:51.526Z",
   "grade": 7,
   "subject": "algebra",
   "source_topics": [
@@ -51284,13 +51284,13 @@
           "tasks": [
             {
               "id": 1,
-              "expression": "\\begin{cases} 2x + y = 4 \\\\ x - 3y = -5 \\end{cases}",
+              "expression": "\\begin{cases} 2x + y = 4 \\\\ x - y = -1 \\end{cases}",
               "answer": "x = 1, y = 2",
               "status": "ready",
               "level": "simple",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему сложением: одна переменная сокращается сразу."
             },
             {
               "id": 2,
@@ -51314,13 +51314,13 @@
             },
             {
               "id": 4,
-              "expression": "\\begin{cases} 5x + y = 25 \\\\ 4x - 6y = -14 \\end{cases}",
+              "expression": "\\begin{cases} 5x + y = 25 \\\\ 4x - y = 11 \\end{cases}",
               "answer": "x = 4, y = 5",
               "status": "ready",
               "level": "simple",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему сложением: одна переменная сокращается сразу."
             },
             {
               "id": 5,
@@ -51344,13 +51344,13 @@
             },
             {
               "id": 7,
-              "expression": "\\begin{cases} 4x + y = 36 \\\\ 2x - 5y = -26 \\end{cases}",
+              "expression": "\\begin{cases} 4x + y = 36 \\\\ 2x - y = 6 \\end{cases}",
               "answer": "x = 7, y = 8",
               "status": "ready",
               "level": "simple",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему сложением: одна переменная сокращается сразу."
             },
             {
               "id": 8,
@@ -51374,13 +51374,13 @@
             },
             {
               "id": 10,
-              "expression": "\\begin{cases} 3x + y = 41 \\\\ 5x - 4y = 6 \\end{cases}",
+              "expression": "\\begin{cases} 3x + y = 41 \\\\ 5x - y = 39 \\end{cases}",
               "answer": "x = 10, y = 11",
               "status": "ready",
               "level": "simple",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему сложением: одна переменная сокращается сразу."
             },
             {
               "id": 11,
@@ -51404,13 +51404,13 @@
             },
             {
               "id": 13,
-              "expression": "\\begin{cases} 2x + y = 40 \\\\ 3x - 3y = -3 \\end{cases}",
+              "expression": "\\begin{cases} 2x + y = 40 \\\\ 3x - y = 25 \\end{cases}",
               "answer": "x = 13, y = 14",
               "status": "ready",
               "level": "simple",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему сложением: одна переменная сокращается сразу."
             },
             {
               "id": 14,
@@ -51434,13 +51434,13 @@
             },
             {
               "id": 16,
-              "expression": "\\begin{cases} 5x + y = 97 \\\\ x - 6y = -86 \\end{cases}",
+              "expression": "\\begin{cases} 5x + y = 97 \\\\ x - y = -1 \\end{cases}",
               "answer": "x = 16, y = 17",
               "status": "ready",
               "level": "simple",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему сложением: одна переменная сокращается сразу."
             },
             {
               "id": 17,
@@ -51464,13 +51464,13 @@
             },
             {
               "id": 19,
-              "expression": "\\begin{cases} 4x + y = 96 \\\\ 4x - 5y = -24 \\end{cases}",
+              "expression": "\\begin{cases} 4x + y = 96 \\\\ 4x - y = 56 \\end{cases}",
               "answer": "x = 19, y = 20",
               "status": "ready",
               "level": "simple",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему сложением: одна переменная сокращается сразу."
             },
             {
               "id": 20,
@@ -51893,13 +51893,13 @@
           "tasks": [
             {
               "id": 1,
-              "expression": "\\begin{cases} 2x + y = 4 \\\\ x - 3y = -5 \\end{cases}",
+              "expression": "\\begin{cases} 2x + y = 4 \\\\ x - y = -1 \\end{cases}",
               "answer": "x = 1, y = 2",
               "status": "ready",
               "level": "simple",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему сложением: одна переменная сокращается сразу.",
               "source_task_id": 1
             },
             {
@@ -51926,13 +51926,13 @@
             },
             {
               "id": 4,
-              "expression": "\\begin{cases} 5x + y = 25 \\\\ 4x - 6y = -14 \\end{cases}",
+              "expression": "\\begin{cases} 5x + y = 25 \\\\ 4x - y = 11 \\end{cases}",
               "answer": "x = 4, y = 5",
               "status": "ready",
               "level": "simple",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему сложением: одна переменная сокращается сразу.",
               "source_task_id": 4
             },
             {
@@ -51959,13 +51959,13 @@
             },
             {
               "id": 7,
-              "expression": "\\begin{cases} 4x + y = 36 \\\\ 2x - 5y = -26 \\end{cases}",
+              "expression": "\\begin{cases} 4x + y = 36 \\\\ 2x - y = 6 \\end{cases}",
               "answer": "x = 7, y = 8",
               "status": "ready",
               "level": "simple",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему сложением: одна переменная сокращается сразу.",
               "source_task_id": 7
             },
             {
@@ -51992,13 +51992,13 @@
             },
             {
               "id": 10,
-              "expression": "\\begin{cases} 3x + y = 41 \\\\ 5x - 4y = 6 \\end{cases}",
+              "expression": "\\begin{cases} 3x + y = 41 \\\\ 5x - y = 39 \\end{cases}",
               "answer": "x = 10, y = 11",
               "status": "ready",
               "level": "simple",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему сложением: одна переменная сокращается сразу.",
               "source_task_id": 10
             },
             {
@@ -52025,13 +52025,13 @@
             },
             {
               "id": 13,
-              "expression": "\\begin{cases} 2x + y = 40 \\\\ 3x - 3y = -3 \\end{cases}",
+              "expression": "\\begin{cases} 2x + y = 40 \\\\ 3x - y = 25 \\end{cases}",
               "answer": "x = 13, y = 14",
               "status": "ready",
               "level": "simple",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему сложением: одна переменная сокращается сразу.",
               "source_task_id": 13
             },
             {
@@ -52115,13 +52115,13 @@
             },
             {
               "id": 2,
-              "expression": "\\begin{cases} 5x + y = 97 \\\\ x - 6y = -86 \\end{cases}",
+              "expression": "\\begin{cases} 5x + y = 97 \\\\ x - y = -1 \\end{cases}",
               "answer": "x = 16, y = 17",
               "status": "ready",
               "level": "simple",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему сложением: одна переменная сокращается сразу.",
               "source_task_id": 16
             },
             {
@@ -52148,13 +52148,13 @@
             },
             {
               "id": 5,
-              "expression": "\\begin{cases} 4x + y = 96 \\\\ 4x - 5y = -24 \\end{cases}",
+              "expression": "\\begin{cases} 4x + y = 96 \\\\ 4x - y = 56 \\end{cases}",
               "answer": "x = 19, y = 20",
               "status": "ready",
               "level": "simple",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему сложением: одна переменная сокращается сразу.",
               "source_task_id": 19
             },
             {
@@ -52315,13 +52315,13 @@
           "tasks": [
             {
               "id": 1,
-              "expression": "\\begin{cases} 4x + y = 36 \\\\ 2x - 5y = -26 \\end{cases}",
+              "expression": "\\begin{cases} 4x + y = 36 \\\\ 2x - y = 6 \\end{cases}",
               "answer": "x = 7, y = 8",
               "status": "ready",
               "level": "simple",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему сложением: одна переменная сокращается сразу.",
               "source_task_id": 7
             },
             {
@@ -52348,13 +52348,13 @@
             },
             {
               "id": 4,
-              "expression": "\\begin{cases} 3x + y = 41 \\\\ 5x - 4y = 6 \\end{cases}",
+              "expression": "\\begin{cases} 3x + y = 41 \\\\ 5x - y = 39 \\end{cases}",
               "answer": "x = 10, y = 11",
               "status": "ready",
               "level": "simple",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему сложением: одна переменная сокращается сразу.",
               "source_task_id": 10
             },
             {

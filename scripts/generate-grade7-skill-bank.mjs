@@ -550,6 +550,11 @@ const factories = {
       const shiftedX = c === 1 ? "(x - 1)" : `${c}(x - 1)`;
       const rightCoef = -(2 + (i % 5));
       const leftConst = a * x + rightCoef * y;
+      if (level === "simple" && i % 3 === 0) {
+        const first = `${coefVar(a, "x")} + y = ${clean(a * x + y)}`;
+        const second = `${coefVar(c, "x")} - y = ${clean(c * x - y)}`;
+        return task(i + 1, systemExpr(first, second), `x = ${clean(x)}, y = ${clean(y)}`, level, skill.id, skill.task_type, "Решите систему сложением: одна переменная сокращается сразу.");
+      }
       const expression = level === "high"
         ? systemExpr(`${clean(leftConst)} - ${coefVar(a, "x")} = ${coefVar(rightCoef, "y")}`, `${shiftedX} - ${coefVar(d, "y")} = ${clean(f - c)}`)
         : level === "medium"
