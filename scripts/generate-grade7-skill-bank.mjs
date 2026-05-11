@@ -21,6 +21,7 @@ const par = (n) => n < 0 ? `(${clean(n)})` : clean(n);
 const gcd = (a, b) => b === 0 ? Math.abs(a) : gcd(b, a % b);
 const shufflePick = (arr, i) => arr[i % arr.length];
 const coefVar = (coef, variable) => coef === 1 ? variable : coef === -1 ? `-${variable}` : `${coef}${variable}`;
+const systemExpr = (first, second, suffix = "") => `\\begin{cases} ${first} \\\\ ${second} \\end{cases}${suffix}`;
 
 function task(id, expression, answer, level, skill, type, prompt = null) {
   return {
@@ -492,10 +493,10 @@ const factories = {
       const e = a * x + b * y, f = c * x - d * y;
       const shiftedX = c === 1 ? "(x - 1)" : `${c}(x - 1)`;
       const expression = level === "high"
-        ? `{ ${coefVar(a, "x")} + ${coefVar(b, "y")} = ${clean(e)}, ${shiftedX} - ${coefVar(d, "y")} = ${clean(f - c)} }`
+        ? systemExpr(`${coefVar(a, "x")} + ${coefVar(b, "y")} = ${clean(e)}`, `${shiftedX} - ${coefVar(d, "y")} = ${clean(f - c)}`)
         : level === "medium"
-          ? `{ ${a}(x + 1) + ${coefVar(b, "y")} = ${clean(e + a)}, ${coefVar(c, "x")} - ${coefVar(d, "y")} = ${clean(f)} }`
-        : `{ ${coefVar(a, "x")} + ${coefVar(b, "y")} = ${clean(e)}, ${coefVar(c, "x")} - ${coefVar(d, "y")} = ${clean(f)} }`;
+          ? systemExpr(`${a}(x + 1) + ${coefVar(b, "y")} = ${clean(e + a)}`, `${coefVar(c, "x")} - ${coefVar(d, "y")} = ${clean(f)}`)
+        : systemExpr(`${coefVar(a, "x")} + ${coefVar(b, "y")} = ${clean(e)}`, `${coefVar(c, "x")} - ${coefVar(d, "y")} = ${clean(f)}`);
       return task(i + 1, expression, `x = ${clean(x)}, y = ${clean(y)}`, level, skill.id, skill.task_type, "Решите систему.");
     });
   },
@@ -508,10 +509,10 @@ const factories = {
       const ok = level === "high" ? f === c * (x - 1) - d * y : f === c * x - d * y;
       const shiftedX = c === 1 ? "(x - 1)" : `${c}(x - 1)`;
       const expression = level === "high"
-        ? `{ ${coefVar(a, "x")} + ${coefVar(b, "y")} = ${clean(e)}, ${shiftedX} - ${coefVar(d, "y")} = ${clean(f)} }, (${clean(x)}; ${clean(y)})`
+        ? systemExpr(`${coefVar(a, "x")} + ${coefVar(b, "y")} = ${clean(e)}`, `${shiftedX} - ${coefVar(d, "y")} = ${clean(f)}`, `, (${clean(x)}; ${clean(y)})`)
         : level === "medium"
-          ? `{ ${a}(x + 1) + ${coefVar(b, "y")} = ${clean(e + a)}, ${coefVar(c, "x")} - ${coefVar(d, "y")} = ${clean(f)} }, (${clean(x)}; ${clean(y)})`
-          : `{ ${coefVar(a, "x")} + ${coefVar(b, "y")} = ${clean(e)}, ${coefVar(c, "x")} - ${coefVar(d, "y")} = ${clean(f)} }, (${clean(x)}; ${clean(y)})`;
+          ? systemExpr(`${a}(x + 1) + ${coefVar(b, "y")} = ${clean(e + a)}`, `${coefVar(c, "x")} - ${coefVar(d, "y")} = ${clean(f)}`, `, (${clean(x)}; ${clean(y)})`)
+          : systemExpr(`${coefVar(a, "x")} + ${coefVar(b, "y")} = ${clean(e)}`, `${coefVar(c, "x")} - ${coefVar(d, "y")} = ${clean(f)}`, `, (${clean(x)}; ${clean(y)})`);
       return task(i + 1, expression, ok ? "да" : "нет", level, skill.id, skill.task_type, "Проверьте, является ли пара решением системы.");
     });
   },

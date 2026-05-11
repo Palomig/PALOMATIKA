@@ -69,6 +69,10 @@ for (const skill of data.skills) {
       assert.equal(task.task_type, skill.task_type, `${skill.slug} mixes task types`);
       assert.equal(task.skill, skill.id, `${skill.slug} task points to another skill`);
       assert.ok(task.answer !== null && task.answer !== undefined && task.answer !== "", `${skill.slug} task ${task.id} has answer`);
+      if (["system-check-solution", "system-solve"].includes(skill.slug)) {
+        assert.ok(task.expression.includes("\\begin{cases}"), `${skill.slug} task ${task.id} should render as a KaTeX cases system`);
+        assert.ok(!task.expression.trim().startsWith("{ "), `${skill.slug} task ${task.id} should not use raw brace notation for systems`);
+      }
 
       for (const field of ["expression", "prompt"]) {
         const value = task[field] ?? "";
@@ -85,6 +89,10 @@ for (const skill of data.skills) {
     for (const task of homeworkSet.tasks) {
       assert.equal(task.task_type, skill.task_type, `${skill.slug}/${homeworkSet.id} mixes task types`);
       assert.equal(task.skill, skill.id, `${skill.slug}/${homeworkSet.id} task points to another skill`);
+      if (["system-check-solution", "system-solve"].includes(skill.slug)) {
+        assert.ok(task.expression.includes("\\begin{cases}"), `${skill.slug}/${homeworkSet.id} task ${task.id} should render as a KaTeX cases system`);
+        assert.ok(!task.expression.trim().startsWith("{ "), `${skill.slug}/${homeworkSet.id} task ${task.id} should not use raw brace notation for systems`);
+      }
 
       for (const field of ["expression", "prompt"]) {
         const value = task[field] ?? "";
