@@ -492,8 +492,10 @@ const factories = {
       const a = 2 + (i % 4), b = 1 + (i % 3), c = 1 + (i % 5), d = 3 + (i % 4);
       const e = a * x + b * y, f = c * x - d * y;
       const shiftedX = c === 1 ? "(x - 1)" : `${c}(x - 1)`;
+      const rightCoef = -(2 + (i % 5));
+      const leftConst = a * x + rightCoef * y;
       const expression = level === "high"
-        ? systemExpr(`${coefVar(a, "x")} + ${coefVar(b, "y")} = ${clean(e)}`, `${shiftedX} - ${coefVar(d, "y")} = ${clean(f - c)}`)
+        ? systemExpr(`${clean(leftConst)} - ${coefVar(a, "x")} = ${coefVar(rightCoef, "y")}`, `${shiftedX} - ${coefVar(d, "y")} = ${clean(f - c)}`)
         : level === "medium"
           ? systemExpr(`${a}(x + 1) + ${coefVar(b, "y")} = ${clean(e + a)}`, `${coefVar(c, "x")} - ${coefVar(d, "y")} = ${clean(f)}`)
         : systemExpr(`${coefVar(a, "x")} + ${coefVar(b, "y")} = ${clean(e)}`, `${coefVar(c, "x")} - ${coefVar(d, "y")} = ${clean(f)}`);
@@ -508,8 +510,10 @@ const factories = {
       const e = a * x + b * y, f = level === "high" ? c * (x - 1) - d * y + (i % 3 === 0 ? 1 : 0) : c * x - d * y + (i % 3 === 0 ? 1 : 0);
       const ok = level === "high" ? f === c * (x - 1) - d * y : f === c * x - d * y;
       const shiftedX = c === 1 ? "(x - 1)" : `${c}(x - 1)`;
+      const rightCoef = -(2 + (i % 5));
+      const leftConst = a * x + rightCoef * y;
       const expression = level === "high"
-        ? systemExpr(`${coefVar(a, "x")} + ${coefVar(b, "y")} = ${clean(e)}`, `${shiftedX} - ${coefVar(d, "y")} = ${clean(f)}`, `, (${clean(x)}; ${clean(y)})`)
+        ? systemExpr(`${clean(leftConst)} - ${coefVar(a, "x")} = ${coefVar(rightCoef, "y")}`, `${shiftedX} - ${coefVar(d, "y")} = ${clean(f)}`, `, (${clean(x)}; ${clean(y)})`)
         : level === "medium"
           ? systemExpr(`${a}(x + 1) + ${coefVar(b, "y")} = ${clean(e + a)}`, `${coefVar(c, "x")} - ${coefVar(d, "y")} = ${clean(f)}`, `, (${clean(x)}; ${clean(y)})`)
           : systemExpr(`${coefVar(a, "x")} + ${coefVar(b, "y")} = ${clean(e)}`, `${coefVar(c, "x")} - ${coefVar(d, "y")} = ${clean(f)}`, `, (${clean(x)}; ${clean(y)})`);

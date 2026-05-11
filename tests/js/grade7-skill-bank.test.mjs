@@ -63,6 +63,11 @@ for (const skill of data.skills) {
   ]));
   assert.ok(averageReferenceComplexity.high >= averageReferenceComplexity.medium - 0.25, `${skill.slug} high level should preserve Zvavich/Makarychev-style complexity markers`);
 
+  if (["system-check-solution", "system-solve"].includes(skill.slug)) {
+    const highExpressions = skill.levels.find(level => level.id === "high").tasks.map(task => task.expression).join("\n");
+    assert.match(highExpressions, /=\s*-?\d*y\b/, `${skill.slug} high level should include systems with a variable on the right side of equals`);
+  }
+
   for (const level of skill.levels) {
     assert.ok(level.tasks.length >= 15, `${skill.slug}/${level.id} should have enough homework tasks`);
 

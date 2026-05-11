@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-11T13:12:21.318Z",
+  "generated_at": "2026-05-11T13:36:58.586Z",
   "grade": 7,
   "subject": "algebra",
   "source_topics": [
@@ -49140,7 +49140,7 @@
           "tasks": [
             {
               "id": 1,
-              "expression": "\\begin{cases} 2x + y = 0 \\\\ (x - 1) - 3y = 7 \\end{cases}, (1; -2)",
+              "expression": "\\begin{cases} 6 - 2x = -2y \\\\ (x - 1) - 3y = 7 \\end{cases}, (1; -2)",
               "answer": "нет",
               "status": "ready",
               "level": "high",
@@ -49150,7 +49150,7 @@
             },
             {
               "id": 2,
-              "expression": "\\begin{cases} 3x + 2y = 0 \\\\ 2(x - 1) - 4y = 14 \\end{cases}, (2; -3)",
+              "expression": "\\begin{cases} 15 - 3x = -3y \\\\ 2(x - 1) - 4y = 14 \\end{cases}, (2; -3)",
               "answer": "да",
               "status": "ready",
               "level": "high",
@@ -49160,7 +49160,7 @@
             },
             {
               "id": 3,
-              "expression": "\\begin{cases} 4x + 3y = 0 \\\\ 3(x - 1) - 5y = 26 \\end{cases}, (3; -4)",
+              "expression": "\\begin{cases} 28 - 4x = -4y \\\\ 3(x - 1) - 5y = 26 \\end{cases}, (3; -4)",
               "answer": "да",
               "status": "ready",
               "level": "high",
@@ -49170,7 +49170,7 @@
             },
             {
               "id": 4,
-              "expression": "\\begin{cases} 5x + y = 15 \\\\ 4(x - 1) - 6y = 43 \\end{cases}, (4; -5)",
+              "expression": "\\begin{cases} 45 - 5x = -5y \\\\ 4(x - 1) - 6y = 43 \\end{cases}, (4; -5)",
               "answer": "нет",
               "status": "ready",
               "level": "high",
@@ -49180,7 +49180,7 @@
             },
             {
               "id": 5,
-              "expression": "\\begin{cases} 2x + 2y = -2 \\\\ 5(x - 1) - 3y = 38 \\end{cases}, (5; -6)",
+              "expression": "\\begin{cases} 46 - 2x = -6y \\\\ 5(x - 1) - 3y = 38 \\end{cases}, (5; -6)",
               "answer": "да",
               "status": "ready",
               "level": "high",
@@ -49190,7 +49190,7 @@
             },
             {
               "id": 6,
-              "expression": "\\begin{cases} 3x + 3y = -3 \\\\ (x - 1) - 4y = 33 \\end{cases}, (6; -7)",
+              "expression": "\\begin{cases} 32 - 3x = -2y \\\\ (x - 1) - 4y = 33 \\end{cases}, (6; -7)",
               "answer": "да",
               "status": "ready",
               "level": "high",
@@ -49200,7 +49200,7 @@
             },
             {
               "id": 7,
-              "expression": "\\begin{cases} 4x + y = 20 \\\\ 2(x - 1) - 5y = 53 \\end{cases}, (7; -8)",
+              "expression": "\\begin{cases} 52 - 4x = -3y \\\\ 2(x - 1) - 5y = 53 \\end{cases}, (7; -8)",
               "answer": "нет",
               "status": "ready",
               "level": "high",
@@ -49210,7 +49210,7 @@
             },
             {
               "id": 8,
-              "expression": "\\begin{cases} 5x + 2y = 22 \\\\ 3(x - 1) - 6y = 75 \\end{cases}, (8; -9)",
+              "expression": "\\begin{cases} 76 - 5x = -4y \\\\ 3(x - 1) - 6y = 75 \\end{cases}, (8; -9)",
               "answer": "да",
               "status": "ready",
               "level": "high",
@@ -49220,7 +49220,7 @@
             },
             {
               "id": 9,
-              "expression": "\\begin{cases} 2x + 3y = -12 \\\\ 4(x - 1) - 3y = 62 \\end{cases}, (9; -10)",
+              "expression": "\\begin{cases} 68 - 2x = -5y \\\\ 4(x - 1) - 3y = 62 \\end{cases}, (9; -10)",
               "answer": "да",
               "status": "ready",
               "level": "high",
@@ -49230,7 +49230,7 @@
             },
             {
               "id": 10,
-              "expression": "\\begin{cases} 3x + y = 19 \\\\ 5(x - 1) - 4y = 90 \\end{cases}, (10; -11)",
+              "expression": "\\begin{cases} 96 - 3x = -6y \\\\ 5(x - 1) - 4y = 90 \\end{cases}, (10; -11)",
               "answer": "нет",
               "status": "ready",
               "level": "high",
@@ -49240,7 +49240,7 @@
             },
             {
               "id": 11,
-              "expression": "\\begin{cases} 4x + 2y = 20 \\\\ (x - 1) - 5y = 70 \\end{cases}, (11; -12)",
+              "expression": "\\begin{cases} 68 - 4x = -2y \\\\ (x - 1) - 5y = 70 \\end{cases}, (11; -12)",
               "answer": "да",
               "status": "ready",
               "level": "high",
@@ -49250,7 +49250,7 @@
             },
             {
               "id": 12,
-              "expression": "\\begin{cases} 5x + 3y = 21 \\\\ 2(x - 1) - 6y = 100 \\end{cases}, (12; -13)",
+              "expression": "\\begin{cases} 99 - 5x = -3y \\\\ 2(x - 1) - 6y = 100 \\end{cases}, (12; -13)",
               "answer": "да",
               "status": "ready",
               "level": "high",
@@ -49260,7 +49260,7 @@
             },
             {
               "id": 13,
-              "expression": "\\begin{cases} 2x + y = 12 \\\\ 3(x - 1) - 3y = 79 \\end{cases}, (13; -14)",
+              "expression": "\\begin{cases} 82 - 2x = -4y \\\\ 3(x - 1) - 3y = 79 \\end{cases}, (13; -14)",
               "answer": "нет",
               "status": "ready",
               "level": "high",
@@ -49270,7 +49270,7 @@
             },
             {
               "id": 14,
-              "expression": "\\begin{cases} 3x + 2y = 12 \\\\ 4(x - 1) - 4y = 112 \\end{cases}, (14; -15)",
+              "expression": "\\begin{cases} 117 - 3x = -5y \\\\ 4(x - 1) - 4y = 112 \\end{cases}, (14; -15)",
               "answer": "да",
               "status": "ready",
               "level": "high",
@@ -49280,7 +49280,7 @@
             },
             {
               "id": 15,
-              "expression": "\\begin{cases} 4x + 3y = 12 \\\\ 5(x - 1) - 5y = 150 \\end{cases}, (15; -16)",
+              "expression": "\\begin{cases} 156 - 4x = -6y \\\\ 5(x - 1) - 5y = 150 \\end{cases}, (15; -16)",
               "answer": "да",
               "status": "ready",
               "level": "high",
@@ -49290,7 +49290,7 @@
             },
             {
               "id": 16,
-              "expression": "\\begin{cases} 5x + y = 63 \\\\ (x - 1) - 6y = 118 \\end{cases}, (16; -17)",
+              "expression": "\\begin{cases} 114 - 5x = -2y \\\\ (x - 1) - 6y = 118 \\end{cases}, (16; -17)",
               "answer": "нет",
               "status": "ready",
               "level": "high",
@@ -49300,7 +49300,7 @@
             },
             {
               "id": 17,
-              "expression": "\\begin{cases} 2x + 2y = -2 \\\\ 2(x - 1) - 3y = 86 \\end{cases}, (17; -18)",
+              "expression": "\\begin{cases} 88 - 2x = -3y \\\\ 2(x - 1) - 3y = 86 \\end{cases}, (17; -18)",
               "answer": "да",
               "status": "ready",
               "level": "high",
@@ -49310,7 +49310,7 @@
             },
             {
               "id": 18,
-              "expression": "\\begin{cases} 3x + 3y = -3 \\\\ 3(x - 1) - 4y = 127 \\end{cases}, (18; -19)",
+              "expression": "\\begin{cases} 130 - 3x = -4y \\\\ 3(x - 1) - 4y = 127 \\end{cases}, (18; -19)",
               "answer": "да",
               "status": "ready",
               "level": "high",
@@ -49711,7 +49711,7 @@
             },
             {
               "id": 16,
-              "expression": "\\begin{cases} 2x + y = 0 \\\\ (x - 1) - 3y = 7 \\end{cases}, (1; -2)",
+              "expression": "\\begin{cases} 6 - 2x = -2y \\\\ (x - 1) - 3y = 7 \\end{cases}, (1; -2)",
               "answer": "нет",
               "status": "ready",
               "level": "high",
@@ -49722,7 +49722,7 @@
             },
             {
               "id": 17,
-              "expression": "\\begin{cases} 3x + 2y = 0 \\\\ 2(x - 1) - 4y = 14 \\end{cases}, (2; -3)",
+              "expression": "\\begin{cases} 15 - 3x = -3y \\\\ 2(x - 1) - 4y = 14 \\end{cases}, (2; -3)",
               "answer": "да",
               "status": "ready",
               "level": "high",
@@ -49733,7 +49733,7 @@
             },
             {
               "id": 18,
-              "expression": "\\begin{cases} 4x + 3y = 0 \\\\ 3(x - 1) - 5y = 26 \\end{cases}, (3; -4)",
+              "expression": "\\begin{cases} 28 - 4x = -4y \\\\ 3(x - 1) - 5y = 26 \\end{cases}, (3; -4)",
               "answer": "да",
               "status": "ready",
               "level": "high",
@@ -49867,7 +49867,7 @@
             },
             {
               "id": 11,
-              "expression": "\\begin{cases} 5x + y = 15 \\\\ 4(x - 1) - 6y = 43 \\end{cases}, (4; -5)",
+              "expression": "\\begin{cases} 45 - 5x = -5y \\\\ 4(x - 1) - 6y = 43 \\end{cases}, (4; -5)",
               "answer": "нет",
               "status": "ready",
               "level": "high",
@@ -49878,7 +49878,7 @@
             },
             {
               "id": 12,
-              "expression": "\\begin{cases} 2x + 2y = -2 \\\\ 5(x - 1) - 3y = 38 \\end{cases}, (5; -6)",
+              "expression": "\\begin{cases} 46 - 2x = -6y \\\\ 5(x - 1) - 3y = 38 \\end{cases}, (5; -6)",
               "answer": "да",
               "status": "ready",
               "level": "high",
@@ -49889,7 +49889,7 @@
             },
             {
               "id": 13,
-              "expression": "\\begin{cases} 3x + 3y = -3 \\\\ (x - 1) - 4y = 33 \\end{cases}, (6; -7)",
+              "expression": "\\begin{cases} 32 - 3x = -2y \\\\ (x - 1) - 4y = 33 \\end{cases}, (6; -7)",
               "answer": "да",
               "status": "ready",
               "level": "high",
@@ -49900,7 +49900,7 @@
             },
             {
               "id": 14,
-              "expression": "\\begin{cases} 4x + y = 20 \\\\ 2(x - 1) - 5y = 53 \\end{cases}, (7; -8)",
+              "expression": "\\begin{cases} 52 - 4x = -3y \\\\ 2(x - 1) - 5y = 53 \\end{cases}, (7; -8)",
               "answer": "нет",
               "status": "ready",
               "level": "high",
@@ -49911,7 +49911,7 @@
             },
             {
               "id": 15,
-              "expression": "\\begin{cases} 5x + 2y = 22 \\\\ 3(x - 1) - 6y = 75 \\end{cases}, (8; -9)",
+              "expression": "\\begin{cases} 76 - 5x = -4y \\\\ 3(x - 1) - 6y = 75 \\end{cases}, (8; -9)",
               "answer": "да",
               "status": "ready",
               "level": "high",
@@ -49922,7 +49922,7 @@
             },
             {
               "id": 16,
-              "expression": "\\begin{cases} 2x + 3y = -12 \\\\ 4(x - 1) - 3y = 62 \\end{cases}, (9; -10)",
+              "expression": "\\begin{cases} 68 - 2x = -5y \\\\ 4(x - 1) - 3y = 62 \\end{cases}, (9; -10)",
               "answer": "да",
               "status": "ready",
               "level": "high",
@@ -49933,7 +49933,7 @@
             },
             {
               "id": 17,
-              "expression": "\\begin{cases} 3x + y = 19 \\\\ 5(x - 1) - 4y = 90 \\end{cases}, (10; -11)",
+              "expression": "\\begin{cases} 96 - 3x = -6y \\\\ 5(x - 1) - 4y = 90 \\end{cases}, (10; -11)",
               "answer": "нет",
               "status": "ready",
               "level": "high",
@@ -49944,7 +49944,7 @@
             },
             {
               "id": 18,
-              "expression": "\\begin{cases} 4x + 2y = 20 \\\\ (x - 1) - 5y = 70 \\end{cases}, (11; -12)",
+              "expression": "\\begin{cases} 68 - 4x = -2y \\\\ (x - 1) - 5y = 70 \\end{cases}, (11; -12)",
               "answer": "да",
               "status": "ready",
               "level": "high",
@@ -49955,7 +49955,7 @@
             },
             {
               "id": 19,
-              "expression": "\\begin{cases} 5x + 3y = 21 \\\\ 2(x - 1) - 6y = 100 \\end{cases}, (12; -13)",
+              "expression": "\\begin{cases} 99 - 5x = -3y \\\\ 2(x - 1) - 6y = 100 \\end{cases}, (12; -13)",
               "answer": "да",
               "status": "ready",
               "level": "high",
@@ -49966,7 +49966,7 @@
             },
             {
               "id": 20,
-              "expression": "\\begin{cases} 2x + y = 12 \\\\ 3(x - 1) - 3y = 79 \\end{cases}, (13; -14)",
+              "expression": "\\begin{cases} 82 - 2x = -4y \\\\ 3(x - 1) - 3y = 79 \\end{cases}, (13; -14)",
               "answer": "нет",
               "status": "ready",
               "level": "high",
@@ -51698,7 +51698,7 @@
           "tasks": [
             {
               "id": 1,
-              "expression": "\\begin{cases} 2x + y = 0 \\\\ (x - 1) - 3y = 6 \\end{cases}",
+              "expression": "\\begin{cases} 6 - 2x = -2y \\\\ (x - 1) - 3y = 6 \\end{cases}",
               "answer": "x = 1, y = -2",
               "status": "ready",
               "level": "high",
@@ -51708,7 +51708,7 @@
             },
             {
               "id": 2,
-              "expression": "\\begin{cases} 3x + 2y = 0 \\\\ 2(x - 1) - 4y = 14 \\end{cases}",
+              "expression": "\\begin{cases} 15 - 3x = -3y \\\\ 2(x - 1) - 4y = 14 \\end{cases}",
               "answer": "x = 2, y = -3",
               "status": "ready",
               "level": "high",
@@ -51718,7 +51718,7 @@
             },
             {
               "id": 3,
-              "expression": "\\begin{cases} 4x + 3y = 0 \\\\ 3(x - 1) - 5y = 26 \\end{cases}",
+              "expression": "\\begin{cases} 28 - 4x = -4y \\\\ 3(x - 1) - 5y = 26 \\end{cases}",
               "answer": "x = 3, y = -4",
               "status": "ready",
               "level": "high",
@@ -51728,7 +51728,7 @@
             },
             {
               "id": 4,
-              "expression": "\\begin{cases} 5x + y = 15 \\\\ 4(x - 1) - 6y = 42 \\end{cases}",
+              "expression": "\\begin{cases} 45 - 5x = -5y \\\\ 4(x - 1) - 6y = 42 \\end{cases}",
               "answer": "x = 4, y = -5",
               "status": "ready",
               "level": "high",
@@ -51738,7 +51738,7 @@
             },
             {
               "id": 5,
-              "expression": "\\begin{cases} 2x + 2y = -2 \\\\ 5(x - 1) - 3y = 38 \\end{cases}",
+              "expression": "\\begin{cases} 46 - 2x = -6y \\\\ 5(x - 1) - 3y = 38 \\end{cases}",
               "answer": "x = 5, y = -6",
               "status": "ready",
               "level": "high",
@@ -51748,7 +51748,7 @@
             },
             {
               "id": 6,
-              "expression": "\\begin{cases} 3x + 3y = -3 \\\\ (x - 1) - 4y = 33 \\end{cases}",
+              "expression": "\\begin{cases} 32 - 3x = -2y \\\\ (x - 1) - 4y = 33 \\end{cases}",
               "answer": "x = 6, y = -7",
               "status": "ready",
               "level": "high",
@@ -51758,7 +51758,7 @@
             },
             {
               "id": 7,
-              "expression": "\\begin{cases} 4x + y = 20 \\\\ 2(x - 1) - 5y = 52 \\end{cases}",
+              "expression": "\\begin{cases} 52 - 4x = -3y \\\\ 2(x - 1) - 5y = 52 \\end{cases}",
               "answer": "x = 7, y = -8",
               "status": "ready",
               "level": "high",
@@ -51768,7 +51768,7 @@
             },
             {
               "id": 8,
-              "expression": "\\begin{cases} 5x + 2y = 22 \\\\ 3(x - 1) - 6y = 75 \\end{cases}",
+              "expression": "\\begin{cases} 76 - 5x = -4y \\\\ 3(x - 1) - 6y = 75 \\end{cases}",
               "answer": "x = 8, y = -9",
               "status": "ready",
               "level": "high",
@@ -51778,7 +51778,7 @@
             },
             {
               "id": 9,
-              "expression": "\\begin{cases} 2x + 3y = -12 \\\\ 4(x - 1) - 3y = 62 \\end{cases}",
+              "expression": "\\begin{cases} 68 - 2x = -5y \\\\ 4(x - 1) - 3y = 62 \\end{cases}",
               "answer": "x = 9, y = -10",
               "status": "ready",
               "level": "high",
@@ -51788,7 +51788,7 @@
             },
             {
               "id": 10,
-              "expression": "\\begin{cases} 3x + y = 19 \\\\ 5(x - 1) - 4y = 89 \\end{cases}",
+              "expression": "\\begin{cases} 96 - 3x = -6y \\\\ 5(x - 1) - 4y = 89 \\end{cases}",
               "answer": "x = 10, y = -11",
               "status": "ready",
               "level": "high",
@@ -51798,7 +51798,7 @@
             },
             {
               "id": 11,
-              "expression": "\\begin{cases} 4x + 2y = 20 \\\\ (x - 1) - 5y = 70 \\end{cases}",
+              "expression": "\\begin{cases} 68 - 4x = -2y \\\\ (x - 1) - 5y = 70 \\end{cases}",
               "answer": "x = 11, y = -12",
               "status": "ready",
               "level": "high",
@@ -51808,7 +51808,7 @@
             },
             {
               "id": 12,
-              "expression": "\\begin{cases} 5x + 3y = 21 \\\\ 2(x - 1) - 6y = 100 \\end{cases}",
+              "expression": "\\begin{cases} 99 - 5x = -3y \\\\ 2(x - 1) - 6y = 100 \\end{cases}",
               "answer": "x = 12, y = -13",
               "status": "ready",
               "level": "high",
@@ -51818,7 +51818,7 @@
             },
             {
               "id": 13,
-              "expression": "\\begin{cases} 2x + y = 12 \\\\ 3(x - 1) - 3y = 78 \\end{cases}",
+              "expression": "\\begin{cases} 82 - 2x = -4y \\\\ 3(x - 1) - 3y = 78 \\end{cases}",
               "answer": "x = 13, y = -14",
               "status": "ready",
               "level": "high",
@@ -51828,7 +51828,7 @@
             },
             {
               "id": 14,
-              "expression": "\\begin{cases} 3x + 2y = 12 \\\\ 4(x - 1) - 4y = 112 \\end{cases}",
+              "expression": "\\begin{cases} 117 - 3x = -5y \\\\ 4(x - 1) - 4y = 112 \\end{cases}",
               "answer": "x = 14, y = -15",
               "status": "ready",
               "level": "high",
@@ -51838,7 +51838,7 @@
             },
             {
               "id": 15,
-              "expression": "\\begin{cases} 4x + 3y = 12 \\\\ 5(x - 1) - 5y = 150 \\end{cases}",
+              "expression": "\\begin{cases} 156 - 4x = -6y \\\\ 5(x - 1) - 5y = 150 \\end{cases}",
               "answer": "x = 15, y = -16",
               "status": "ready",
               "level": "high",
@@ -51848,7 +51848,7 @@
             },
             {
               "id": 16,
-              "expression": "\\begin{cases} 5x + y = 63 \\\\ (x - 1) - 6y = 117 \\end{cases}",
+              "expression": "\\begin{cases} 114 - 5x = -2y \\\\ (x - 1) - 6y = 117 \\end{cases}",
               "answer": "x = 16, y = -17",
               "status": "ready",
               "level": "high",
@@ -51858,7 +51858,7 @@
             },
             {
               "id": 17,
-              "expression": "\\begin{cases} 2x + 2y = -2 \\\\ 2(x - 1) - 3y = 86 \\end{cases}",
+              "expression": "\\begin{cases} 88 - 2x = -3y \\\\ 2(x - 1) - 3y = 86 \\end{cases}",
               "answer": "x = 17, y = -18",
               "status": "ready",
               "level": "high",
@@ -51868,7 +51868,7 @@
             },
             {
               "id": 18,
-              "expression": "\\begin{cases} 3x + 3y = -3 \\\\ 3(x - 1) - 4y = 127 \\end{cases}",
+              "expression": "\\begin{cases} 130 - 3x = -4y \\\\ 3(x - 1) - 4y = 127 \\end{cases}",
               "answer": "x = 18, y = -19",
               "status": "ready",
               "level": "high",
@@ -52269,7 +52269,7 @@
             },
             {
               "id": 16,
-              "expression": "\\begin{cases} 2x + y = 0 \\\\ (x - 1) - 3y = 6 \\end{cases}",
+              "expression": "\\begin{cases} 6 - 2x = -2y \\\\ (x - 1) - 3y = 6 \\end{cases}",
               "answer": "x = 1, y = -2",
               "status": "ready",
               "level": "high",
@@ -52280,7 +52280,7 @@
             },
             {
               "id": 17,
-              "expression": "\\begin{cases} 3x + 2y = 0 \\\\ 2(x - 1) - 4y = 14 \\end{cases}",
+              "expression": "\\begin{cases} 15 - 3x = -3y \\\\ 2(x - 1) - 4y = 14 \\end{cases}",
               "answer": "x = 2, y = -3",
               "status": "ready",
               "level": "high",
@@ -52291,7 +52291,7 @@
             },
             {
               "id": 18,
-              "expression": "\\begin{cases} 4x + 3y = 0 \\\\ 3(x - 1) - 5y = 26 \\end{cases}",
+              "expression": "\\begin{cases} 28 - 4x = -4y \\\\ 3(x - 1) - 5y = 26 \\end{cases}",
               "answer": "x = 3, y = -4",
               "status": "ready",
               "level": "high",
@@ -52425,7 +52425,7 @@
             },
             {
               "id": 11,
-              "expression": "\\begin{cases} 5x + y = 15 \\\\ 4(x - 1) - 6y = 42 \\end{cases}",
+              "expression": "\\begin{cases} 45 - 5x = -5y \\\\ 4(x - 1) - 6y = 42 \\end{cases}",
               "answer": "x = 4, y = -5",
               "status": "ready",
               "level": "high",
@@ -52436,7 +52436,7 @@
             },
             {
               "id": 12,
-              "expression": "\\begin{cases} 2x + 2y = -2 \\\\ 5(x - 1) - 3y = 38 \\end{cases}",
+              "expression": "\\begin{cases} 46 - 2x = -6y \\\\ 5(x - 1) - 3y = 38 \\end{cases}",
               "answer": "x = 5, y = -6",
               "status": "ready",
               "level": "high",
@@ -52447,7 +52447,7 @@
             },
             {
               "id": 13,
-              "expression": "\\begin{cases} 3x + 3y = -3 \\\\ (x - 1) - 4y = 33 \\end{cases}",
+              "expression": "\\begin{cases} 32 - 3x = -2y \\\\ (x - 1) - 4y = 33 \\end{cases}",
               "answer": "x = 6, y = -7",
               "status": "ready",
               "level": "high",
@@ -52458,7 +52458,7 @@
             },
             {
               "id": 14,
-              "expression": "\\begin{cases} 4x + y = 20 \\\\ 2(x - 1) - 5y = 52 \\end{cases}",
+              "expression": "\\begin{cases} 52 - 4x = -3y \\\\ 2(x - 1) - 5y = 52 \\end{cases}",
               "answer": "x = 7, y = -8",
               "status": "ready",
               "level": "high",
@@ -52469,7 +52469,7 @@
             },
             {
               "id": 15,
-              "expression": "\\begin{cases} 5x + 2y = 22 \\\\ 3(x - 1) - 6y = 75 \\end{cases}",
+              "expression": "\\begin{cases} 76 - 5x = -4y \\\\ 3(x - 1) - 6y = 75 \\end{cases}",
               "answer": "x = 8, y = -9",
               "status": "ready",
               "level": "high",
@@ -52480,7 +52480,7 @@
             },
             {
               "id": 16,
-              "expression": "\\begin{cases} 2x + 3y = -12 \\\\ 4(x - 1) - 3y = 62 \\end{cases}",
+              "expression": "\\begin{cases} 68 - 2x = -5y \\\\ 4(x - 1) - 3y = 62 \\end{cases}",
               "answer": "x = 9, y = -10",
               "status": "ready",
               "level": "high",
@@ -52491,7 +52491,7 @@
             },
             {
               "id": 17,
-              "expression": "\\begin{cases} 3x + y = 19 \\\\ 5(x - 1) - 4y = 89 \\end{cases}",
+              "expression": "\\begin{cases} 96 - 3x = -6y \\\\ 5(x - 1) - 4y = 89 \\end{cases}",
               "answer": "x = 10, y = -11",
               "status": "ready",
               "level": "high",
@@ -52502,7 +52502,7 @@
             },
             {
               "id": 18,
-              "expression": "\\begin{cases} 4x + 2y = 20 \\\\ (x - 1) - 5y = 70 \\end{cases}",
+              "expression": "\\begin{cases} 68 - 4x = -2y \\\\ (x - 1) - 5y = 70 \\end{cases}",
               "answer": "x = 11, y = -12",
               "status": "ready",
               "level": "high",
@@ -52513,7 +52513,7 @@
             },
             {
               "id": 19,
-              "expression": "\\begin{cases} 5x + 3y = 21 \\\\ 2(x - 1) - 6y = 100 \\end{cases}",
+              "expression": "\\begin{cases} 99 - 5x = -3y \\\\ 2(x - 1) - 6y = 100 \\end{cases}",
               "answer": "x = 12, y = -13",
               "status": "ready",
               "level": "high",
@@ -52524,7 +52524,7 @@
             },
             {
               "id": 20,
-              "expression": "\\begin{cases} 2x + y = 12 \\\\ 3(x - 1) - 3y = 78 \\end{cases}",
+              "expression": "\\begin{cases} 82 - 2x = -4y \\\\ 3(x - 1) - 3y = 78 \\end{cases}",
               "answer": "x = 13, y = -14",
               "status": "ready",
               "level": "high",
