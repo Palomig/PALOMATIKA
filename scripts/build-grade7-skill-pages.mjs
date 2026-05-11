@@ -67,6 +67,11 @@ function shell(title, body) {
     .stats,.chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
     .stat,.chip{border:1px solid rgba(148,163,184,.22);background:var(--panel);padding:8px 11px;border-radius:8px}
     .stat b{color:var(--blue)}
+    .view-switch{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+    .view-switch button{border:1px solid rgba(148,163,184,.3);background:#111a2a;color:var(--muted);border-radius:8px;padding:9px 12px;font-weight:800;cursor:pointer}
+    .view-switch button.is-active{background:rgba(96,165,250,.16);border-color:rgba(96,165,250,.7);color:#dbeafe}
+    .skill-page[data-task-view="types"] .all-view{display:none}
+    .skill-page[data-task-view="all"] .types-view{display:none}
     .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
     .skill-card,.panel,.task{background:var(--panel);border:1px solid var(--line);border-radius:8px}
     .skill-card{padding:16px;min-height:148px}
@@ -105,9 +110,45 @@ function shell(title, body) {
     @media(max-width:1020px){.homework-list{grid-template-columns:1fr}}
     @media(max-width:640px){.grid,.taskgrid{grid-template-columns:1fr}.wrap{padding-inline:14px}h1{font-size:28px}}
   </style>
+  <script>
+    document.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-view-button]');
+      if (!button) return;
+      const page = button.closest('[data-task-view]');
+      if (!page) return;
+      const view = button.getAttribute('data-view-button');
+      page.setAttribute('data-task-view', view);
+      page.querySelectorAll('[data-view-button]').forEach((item) => {
+        item.classList.toggle('is-active', item === button);
+      });
+    });
+  </script>
 </head>
 <body>${body}</body>
 </html>`;
+}
+
+function taskSignature(expression) {
+  return String(expression ?? "")
+    .replace(/\\frac\{[^}]+\}\{[^}]+\}/gu, "\\frac{n}{n}")
+    .replace(/-?\d+(?:,\d+)?/gu, "n")
+    .replace(/\s+/gu, " ")
+    .trim();
+}
+
+function representativeTasks(tasks, limit = 9) {
+  const seen = new Set();
+  const picked = [];
+
+  for (const task of tasks) {
+    const signature = taskSignature(task.expression);
+    if (seen.has(signature)) continue;
+    seen.add(signature);
+    picked.push({ ...task, id: picked.length + 1 });
+    if (picked.length >= limit) break;
+  }
+
+  return picked.length ? picked : tasks.slice(0, Math.min(tasks.length, limit));
 }
 
 function taskCard(task) {
@@ -131,7 +172,7 @@ function homeworkCard(set) {
 }
 
 function skillPage(skill) {
-  const body = `<div class="wrap">
+  const body = `<div class="wrap skill-page" data-task-view="types">
     <a href="/alg-skills/7/">← Все навыки 7 класса</a>
     <header class="top">
       <div class="eyebrow">PALOMATIKA · Алгебра · 7 класс · ${escapeHtml(skill.group_title)}</div>
@@ -142,21 +183,43 @@ function skillPage(skill) {
         <div class="stat"><b>3</b> уровня</div>
         <div class="stat"><b>${escapeHtml(skill.task_type)}</b> тип</div>
       </div>
-    </header>
-    <section class="panel">
-      <h2>Готовые домашки</h2>
-      <div class="homework-list">${skill.homework_sets.map(homeworkCard).join("")}</div>
-    </section>
-    ${skill.levels.map(level => `<section class="panel ${levelClass[level.id]}">
-      <div class="level-head">
-        <div>
-          <h2>${escapeHtml(level.title)}</h2>
-          <div class="muted">${escapeHtml(level.description)}</div>
-        </div>
-        <div class="level-badge">${levelName[level.id]}</div>
+      <div class="view-switch" aria-label="Режим просмотра заданий">
+        <button class="is-active" type="button" data-view-button="types">Типы примеров</button>
+        <button type="button" data-view-button="all">Все задания</button>
       </div>
-      <div class="taskgrid">${level.tasks.map(taskCard).join("")}</div>
-    </section>`).join("")}
+    </header>
+    <div class="types-view">
+      <section class="panel">
+        <h2>Типы примеров</h2>
+        <div class="muted">Показаны разные шаблоны заданий без повторов числовых вариантов. Этот режим нужен для быстрой оценки разнообразия.</div>
+      </section>
+      ${skill.levels.map(level => `<section class="panel ${levelClass[level.id]}">
+        <div class="level-head">
+          <div>
+            <h2>${escapeHtml(level.title)}</h2>
+            <div class="muted">${escapeHtml(level.description)}</div>
+          </div>
+          <div class="level-badge">${levelName[level.id]}</div>
+        </div>
+        <div class="taskgrid">${representativeTasks(level.tasks).map(taskCard).join("")}</div>
+      </section>`).join("")}
+    </div>
+    <div class="all-view">
+      <section class="panel">
+        <h2>Готовые домашки</h2>
+        <div class="homework-list">${skill.homework_sets.map(homeworkCard).join("")}</div>
+      </section>
+      ${skill.levels.map(level => `<section class="panel ${levelClass[level.id]}">
+        <div class="level-head">
+          <div>
+            <h2>${escapeHtml(level.title)}</h2>
+            <div class="muted">${escapeHtml(level.description)}</div>
+          </div>
+          <div class="level-badge">${levelName[level.id]}</div>
+        </div>
+        <div class="taskgrid">${level.tasks.map(taskCard).join("")}</div>
+      </section>`).join("")}
+    </div>
   </div>`;
 
   return shell(`${skill.title} · Алгебра 7 класс`, body);

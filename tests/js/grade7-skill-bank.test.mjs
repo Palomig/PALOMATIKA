@@ -39,6 +39,10 @@ assert.ok(pageBuilder.includes(".taskgrid{display:grid;grid-template-columns:rep
 assert.ok(!pageBuilder.includes(".level-high .taskgrid{grid-template-columns:repeat(2,minmax(0,1fr))}"), "high level should not use a separate two-column grid");
 assert.ok(!pageBuilder.includes(".expr .katex{font-size:1.08em;white-space:nowrap}"), "KaTeX expressions should not force long tasks into a single unbreakable line");
 assert.ok(pageBuilder.includes(".expr .katex .base{display:inline;white-space:normal}"), "KaTeX inner boxes should allow long equations to wrap inside task cards");
+assert.ok(pageBuilder.includes('data-task-view="types"'), "skill pages should open in example-type view");
+assert.ok(pageBuilder.includes('data-view-button="types"'), "skill pages should have a button for example types");
+assert.ok(pageBuilder.includes('data-view-button="all"'), "skill pages should have a button for all generated tasks");
+assert.ok(pageBuilder.includes("function representativeTasks"), "static builder should derive representative task types");
 
 for (const skill of data.skills) {
   assert.ok(skill.id, "skill has id");
