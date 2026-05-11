@@ -34,7 +34,8 @@ const referenceComplexityScore = (task) => {
 assert.equal(data.grade, 7);
 assert.equal(data.subject, "algebra");
 assert.ok(data.skills.length >= 25, "skill bank should be split into narrow skill pages");
-assert.ok(pageBuilder.includes(".level-high .taskgrid{grid-template-columns:repeat(2,minmax(0,1fr))}"), "high level task grid should use wider cards so long equations fit");
+assert.ok(pageBuilder.includes(".taskgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}"), "task grid should show three tasks per row on desktop");
+assert.ok(!pageBuilder.includes(".level-high .taskgrid{grid-template-columns:repeat(2,minmax(0,1fr))}"), "high level should not use a separate two-column grid");
 assert.ok(!pageBuilder.includes(".expr .katex{font-size:1.08em;white-space:nowrap}"), "KaTeX expressions should not force long tasks into a single unbreakable line");
 assert.ok(pageBuilder.includes(".expr .katex .base{display:inline;white-space:normal}"), "KaTeX inner boxes should allow long equations to wrap inside task cards");
 
