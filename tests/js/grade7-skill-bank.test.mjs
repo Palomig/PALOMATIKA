@@ -43,6 +43,7 @@ assert.ok(pageBuilder.includes('data-task-view="types"'), "skill pages should op
 assert.ok(pageBuilder.includes('data-view-button="types"'), "skill pages should have a button for example types");
 assert.ok(pageBuilder.includes('data-view-button="all"'), "skill pages should have a button for all generated tasks");
 assert.ok(pageBuilder.includes("function representativeTasks"), "static builder should derive representative task types");
+assert.ok(pageBuilder.includes("function taskFeatureKey"), "static builder should preserve distinct algebraic features in type view");
 
 for (const skill of data.skills) {
   assert.ok(skill.id, "skill has id");
@@ -79,6 +80,7 @@ for (const skill of data.skills) {
     }
     const highExpressions = skill.levels.find(level => level.id === "high").tasks.map(task => task.expression).join("\n");
     assert.match(highExpressions, /\\frac\{[^}]+\}\{\d+\}/, `${skill.slug}/high should include systems with ordinary fractional coefficients`);
+    assert.match(highExpressions, /\(x\s*[-+]\s*\d+\)/, `${skill.slug}/high should include systems with parentheses around shifted variables`);
   }
   if (skill.slug === "system-check-solution-3-vars") {
     const allExpressions = skill.levels.flatMap(level => level.tasks.map(task => task.expression));

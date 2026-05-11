@@ -136,12 +136,24 @@ function taskSignature(expression) {
     .trim();
 }
 
-function representativeTasks(tasks, limit = 9) {
+function taskFeatureKey(expression) {
+  const text = String(expression ?? "");
+  const features = [];
+  if (text.includes("\\frac")) features.push("fractions");
+  if (/\([xyz]\s*[-+]\s*\d+\)/u.test(text)) features.push("shifted-variable");
+  if (/=\s*-?\d+[xyz]\b/u.test(text)) features.push("variable-right");
+  if (text.includes("z")) features.push("three-vars");
+  if ((text.match(/\\\\/g)?.length ?? 0) >= 2) features.push("three-equations");
+  if ((text.match(/\(/g)?.length ?? 0) >= 2) features.push("nested-parentheses");
+  return features.length ? features.join("|") : "plain";
+}
+
+function representativeTasks(tasks, limit = 12) {
   const seen = new Set();
   const picked = [];
 
   for (const task of tasks) {
-    const signature = taskSignature(task.expression);
+    const signature = `${taskFeatureKey(task.expression)}::${taskSignature(task.expression)}`;
     if (seen.has(signature)) continue;
     seen.add(signature);
     picked.push({ ...task, id: picked.length + 1 });

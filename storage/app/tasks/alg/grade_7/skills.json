@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-11T14:09:18.787Z",
+  "generated_at": "2026-05-11T14:16:02.435Z",
   "grade": 7,
   "subject": "algebra",
   "source_topics": [
@@ -51698,43 +51698,43 @@
           "tasks": [
             {
               "id": 1,
-              "expression": "\\begin{cases} \\frac{x + y}{2} = -\\frac{1}{4} \\\\ \\frac{x - 3y}{3} = \\frac{5}{2} \\end{cases}",
+              "expression": "\\begin{cases} 4x + 2y = 5 \\\\ 2(x - 1) - 6y = 13 \\end{cases}",
               "answer": "x = \\frac{3}{2}, y = -2",
               "status": "ready",
               "level": "high",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему с дробными коэффициентами."
+              "prompt": "Решите систему со скобками."
             },
             {
               "id": 2,
-              "expression": "\\begin{cases} 0 - 9x = -9y \\\\ 6x - 12y = 10 \\end{cases}",
+              "expression": "\\begin{cases} \\frac{x + y}{3} = -\\frac{10}{9} \\\\ \\frac{2x - 4y}{4} = \\frac{5}{6} \\end{cases}",
               "answer": "x = -\\frac{5}{3}, y = -\\frac{5}{3}",
               "status": "ready",
               "level": "high",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему с дробными коэффициентами."
             },
             {
               "id": 3,
-              "expression": "\\begin{cases} \\frac{x + y}{4} = \\frac{1}{16} \\\\ \\frac{3x - 5y}{5} = \\frac{51}{20} \\end{cases}",
+              "expression": "\\begin{cases} 52 - 16x = -16y \\\\ 12x - 20y = 51 \\end{cases}",
               "answer": "x = \\frac{7}{4}, y = -\\frac{3}{2}",
               "status": "ready",
               "level": "high",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему с дробными коэффициентами."
+              "prompt": "Решите систему."
             },
             {
               "id": 4,
-              "expression": "\\begin{cases} -10 - 10x = -10y \\\\ 8x - 12y = 6 \\end{cases}",
+              "expression": "\\begin{cases} 10x + 2y = -88 \\\\ 8(x - 1) - 12y = -2 \\end{cases}",
               "answer": "x = -\\frac{9}{2}, y = -\\frac{7}{2}",
               "status": "ready",
               "level": "high",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему со скобками."
             },
             {
               "id": 5,
@@ -51758,43 +51758,43 @@
             },
             {
               "id": 7,
-              "expression": "\\begin{cases} \\frac{x + y}{2} = \\frac{5}{4} \\\\ \\frac{2x - 5y}{3} = \\frac{40}{3} \\end{cases}",
+              "expression": "\\begin{cases} 8x + 2y = 80 \\\\ 4(x - 1) - 10y = 76 \\end{cases}",
               "answer": "x = \\frac{15}{2}, y = -5",
               "status": "ready",
               "level": "high",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему с дробными коэффициентами."
+              "prompt": "Решите систему со скобками."
             },
             {
               "id": 8,
-              "expression": "\\begin{cases} -41 - 15x = -12y \\\\ 9x - 18y = 15 \\end{cases}",
+              "expression": "\\begin{cases} \\frac{x + y}{3} = -\\frac{28}{9} \\\\ \\frac{3x - 6y}{4} = \\frac{5}{4} \\end{cases}",
               "answer": "x = -\\frac{17}{3}, y = -\\frac{11}{3}",
               "status": "ready",
               "level": "high",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему с дробными коэффициентами."
             },
             {
               "id": 9,
-              "expression": "\\begin{cases} \\frac{x + y}{4} = \\frac{7}{16} \\\\ \\frac{4x - 3y}{5} = \\frac{28}{5} \\end{cases}",
+              "expression": "\\begin{cases} 98 - 8x = -20y \\\\ 16x - 12y = 112 \\end{cases}",
               "answer": "x = \\frac{19}{4}, y = -3",
               "status": "ready",
               "level": "high",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему с дробными коэффициентами."
+              "prompt": "Решите систему."
             },
             {
               "id": 10,
-              "expression": "\\begin{cases} 15 - 6x = -12y \\\\ 10x - 8y = -53 \\end{cases}",
+              "expression": "\\begin{cases} 6x + 2y = -181 \\\\ 10(x - 1) - 8y = -63 \\end{cases}",
               "answer": "x = -\\frac{21}{2}, y = -\\frac{13}{2}",
               "status": "ready",
               "level": "high",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему со скобками."
             },
             {
               "id": 11,
@@ -51818,43 +51818,43 @@
             },
             {
               "id": 13,
-              "expression": "\\begin{cases} \\frac{x + y}{2} = \\frac{11}{4} \\\\ \\frac{3x - 3y}{3} = \\frac{43}{2} \\end{cases}",
+              "expression": "\\begin{cases} 4x + 2y = 119 \\\\ 6(x - 1) - 6y = 123 \\end{cases}",
               "answer": "x = \\frac{27}{2}, y = -8",
               "status": "ready",
               "level": "high",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему с дробными коэффициентами."
+              "prompt": "Решите систему со скобками."
             },
             {
               "id": 14,
-              "expression": "\\begin{cases} -2 - 9x = -15y \\\\ 12x - 12y = -48 \\end{cases}",
+              "expression": "\\begin{cases} \\frac{x + y}{3} = -\\frac{46}{9} \\\\ \\frac{4x - 4y}{4} = -4 \\end{cases}",
               "answer": "x = -\\frac{29}{3}, y = -\\frac{17}{3}",
               "status": "ready",
               "level": "high",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему с дробными коэффициентами."
             },
             {
               "id": 15,
-              "expression": "\\begin{cases} \\frac{x + y}{4} = \\frac{13}{16} \\\\ \\frac{5x - 5y}{5} = \\frac{49}{4} \\end{cases}",
+              "expression": "\\begin{cases} 232 - 16x = -24y \\\\ 20x - 20y = 245 \\end{cases}",
               "answer": "x = \\frac{31}{4}, y = -\\frac{9}{2}",
               "status": "ready",
               "level": "high",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему с дробными коэффициентами."
+              "prompt": "Решите систему."
             },
             {
               "id": 16,
-              "expression": "\\begin{cases} -127 - 10x = -4y \\\\ 2x - 12y = 81 \\end{cases}",
+              "expression": "\\begin{cases} 10x + 2y = -217 \\\\ 2(x - 1) - 12y = 79 \\end{cases}",
               "answer": "x = -\\frac{33}{2}, y = -\\frac{19}{2}",
               "status": "ready",
               "level": "high",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему со скобками."
             },
             {
               "id": 17,
@@ -52269,35 +52269,35 @@
             },
             {
               "id": 16,
-              "expression": "\\begin{cases} \\frac{x + y}{2} = -\\frac{1}{4} \\\\ \\frac{x - 3y}{3} = \\frac{5}{2} \\end{cases}",
+              "expression": "\\begin{cases} 4x + 2y = 5 \\\\ 2(x - 1) - 6y = 13 \\end{cases}",
               "answer": "x = \\frac{3}{2}, y = -2",
               "status": "ready",
               "level": "high",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему с дробными коэффициентами.",
+              "prompt": "Решите систему со скобками.",
               "source_task_id": 1
             },
             {
               "id": 17,
-              "expression": "\\begin{cases} 0 - 9x = -9y \\\\ 6x - 12y = 10 \\end{cases}",
+              "expression": "\\begin{cases} \\frac{x + y}{3} = -\\frac{10}{9} \\\\ \\frac{2x - 4y}{4} = \\frac{5}{6} \\end{cases}",
               "answer": "x = -\\frac{5}{3}, y = -\\frac{5}{3}",
               "status": "ready",
               "level": "high",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему с дробными коэффициентами.",
               "source_task_id": 2
             },
             {
               "id": 18,
-              "expression": "\\begin{cases} \\frac{x + y}{4} = \\frac{1}{16} \\\\ \\frac{3x - 5y}{5} = \\frac{51}{20} \\end{cases}",
+              "expression": "\\begin{cases} 52 - 16x = -16y \\\\ 12x - 20y = 51 \\end{cases}",
               "answer": "x = \\frac{7}{4}, y = -\\frac{3}{2}",
               "status": "ready",
               "level": "high",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему с дробными коэффициентами.",
+              "prompt": "Решите систему.",
               "source_task_id": 3
             }
           ]
@@ -52425,13 +52425,13 @@
             },
             {
               "id": 11,
-              "expression": "\\begin{cases} -10 - 10x = -10y \\\\ 8x - 12y = 6 \\end{cases}",
+              "expression": "\\begin{cases} 10x + 2y = -88 \\\\ 8(x - 1) - 12y = -2 \\end{cases}",
               "answer": "x = -\\frac{9}{2}, y = -\\frac{7}{2}",
               "status": "ready",
               "level": "high",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему со скобками.",
               "source_task_id": 4
             },
             {
@@ -52458,46 +52458,46 @@
             },
             {
               "id": 14,
-              "expression": "\\begin{cases} \\frac{x + y}{2} = \\frac{5}{4} \\\\ \\frac{2x - 5y}{3} = \\frac{40}{3} \\end{cases}",
+              "expression": "\\begin{cases} 8x + 2y = 80 \\\\ 4(x - 1) - 10y = 76 \\end{cases}",
               "answer": "x = \\frac{15}{2}, y = -5",
               "status": "ready",
               "level": "high",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему с дробными коэффициентами.",
+              "prompt": "Решите систему со скобками.",
               "source_task_id": 7
             },
             {
               "id": 15,
-              "expression": "\\begin{cases} -41 - 15x = -12y \\\\ 9x - 18y = 15 \\end{cases}",
+              "expression": "\\begin{cases} \\frac{x + y}{3} = -\\frac{28}{9} \\\\ \\frac{3x - 6y}{4} = \\frac{5}{4} \\end{cases}",
               "answer": "x = -\\frac{17}{3}, y = -\\frac{11}{3}",
               "status": "ready",
               "level": "high",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему с дробными коэффициентами.",
               "source_task_id": 8
             },
             {
               "id": 16,
-              "expression": "\\begin{cases} \\frac{x + y}{4} = \\frac{7}{16} \\\\ \\frac{4x - 3y}{5} = \\frac{28}{5} \\end{cases}",
+              "expression": "\\begin{cases} 98 - 8x = -20y \\\\ 16x - 12y = 112 \\end{cases}",
               "answer": "x = \\frac{19}{4}, y = -3",
               "status": "ready",
               "level": "high",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему с дробными коэффициентами.",
+              "prompt": "Решите систему.",
               "source_task_id": 9
             },
             {
               "id": 17,
-              "expression": "\\begin{cases} 15 - 6x = -12y \\\\ 10x - 8y = -53 \\end{cases}",
+              "expression": "\\begin{cases} 6x + 2y = -181 \\\\ 10(x - 1) - 8y = -63 \\end{cases}",
               "answer": "x = -\\frac{21}{2}, y = -\\frac{13}{2}",
               "status": "ready",
               "level": "high",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему со скобками.",
               "source_task_id": 10
             },
             {
@@ -52524,13 +52524,13 @@
             },
             {
               "id": 20,
-              "expression": "\\begin{cases} \\frac{x + y}{2} = \\frac{11}{4} \\\\ \\frac{3x - 3y}{3} = \\frac{43}{2} \\end{cases}",
+              "expression": "\\begin{cases} 4x + 2y = 119 \\\\ 6(x - 1) - 6y = 123 \\end{cases}",
               "answer": "x = \\frac{27}{2}, y = -8",
               "status": "ready",
               "level": "high",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему с дробными коэффициентами.",
+              "prompt": "Решите систему со скобками.",
               "source_task_id": 13
             }
           ]
