@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-11T14:16:02.435Z",
+  "generated_at": "2026-05-11T14:36:27.781Z",
   "grade": 7,
   "subject": "algebra",
   "source_topics": [
@@ -51491,23 +51491,23 @@
           "tasks": [
             {
               "id": 1,
-              "expression": "\\begin{cases} 4x + 2y = 2 \\\\ 2x - 6y = 15 \\end{cases}",
+              "expression": "\\begin{cases} 4x + 2y = 2 \\\\ 2(x + 1) - 6y = 17 \\end{cases}",
               "answer": "x = \\frac{3}{2}, y = -2",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему со скобками."
             },
             {
               "id": 2,
-              "expression": "\\begin{cases} 9x + 6y = -25 \\\\ 6x - 12y = 10 \\end{cases}",
+              "expression": "\\begin{cases} 0 - 9x = -9y \\\\ 6x - 12y = 10 \\end{cases}",
               "answer": "x = -\\frac{5}{3}, y = -\\frac{5}{3}",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему, где переменная стоит справа от равно."
             },
             {
               "id": 3,
@@ -51521,23 +51521,23 @@
             },
             {
               "id": 4,
-              "expression": "\\begin{cases} 10x + 2y = -52 \\\\ 8x - 12y = 6 \\end{cases}",
+              "expression": "\\begin{cases} 10x + 2y = -52 \\\\ 8(x + 1) - 12y = 14 \\end{cases}",
               "answer": "x = -\\frac{9}{2}, y = -\\frac{7}{2}",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему со скобками."
             },
             {
               "id": 5,
-              "expression": "\\begin{cases} 6x + 6y = 6 \\\\ 15x - 9y = 79 \\end{cases}",
+              "expression": "\\begin{cases} 38 - 6x = -6y \\\\ 15x - 9y = 79 \\end{cases}",
               "answer": "x = \\frac{11}{3}, y = -\\frac{8}{3}",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему, где переменная стоит справа от равно."
             },
             {
               "id": 6,
@@ -51551,23 +51551,23 @@
             },
             {
               "id": 7,
-              "expression": "\\begin{cases} 8x + 2y = 50 \\\\ 4x - 10y = 80 \\end{cases}",
+              "expression": "\\begin{cases} 8x + 2y = 50 \\\\ 4(x + 1) - 10y = 84 \\end{cases}",
               "answer": "x = \\frac{15}{2}, y = -5",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему со скобками."
             },
             {
               "id": 8,
-              "expression": "\\begin{cases} 15x + 6y = -107 \\\\ 9x - 18y = 15 \\end{cases}",
+              "expression": "\\begin{cases} -30 - 15x = -15y \\\\ 9x - 18y = 15 \\end{cases}",
               "answer": "x = -\\frac{17}{3}, y = -\\frac{11}{3}",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему, где переменная стоит справа от равно."
             },
             {
               "id": 9,
@@ -51581,23 +51581,23 @@
             },
             {
               "id": 10,
-              "expression": "\\begin{cases} 6x + 2y = -76 \\\\ 10x - 8y = -53 \\end{cases}",
+              "expression": "\\begin{cases} 6x + 2y = -76 \\\\ 10(x + 1) - 8y = -43 \\end{cases}",
               "answer": "x = -\\frac{21}{2}, y = -\\frac{13}{2}",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему со скобками."
             },
             {
               "id": 11,
-              "expression": "\\begin{cases} 12x + 6y = 64 \\\\ 3x - 15y = 93 \\end{cases}",
+              "expression": "\\begin{cases} 148 - 12x = -12y \\\\ 3x - 15y = 93 \\end{cases}",
               "answer": "x = \\frac{23}{3}, y = -\\frac{14}{3}",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему, где переменная стоит справа от равно."
             },
             {
               "id": 12,
@@ -51611,23 +51611,23 @@
             },
             {
               "id": 13,
-              "expression": "\\begin{cases} 4x + 2y = 38 \\\\ 6x - 6y = 129 \\end{cases}",
+              "expression": "\\begin{cases} 4x + 2y = 38 \\\\ 6(x + 1) - 6y = 135 \\end{cases}",
               "answer": "x = \\frac{27}{2}, y = -8",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему со скобками."
             },
             {
               "id": 14,
-              "expression": "\\begin{cases} 9x + 6y = -121 \\\\ 12x - 12y = -48 \\end{cases}",
+              "expression": "\\begin{cases} -36 - 9x = -9y \\\\ 12x - 12y = -48 \\end{cases}",
               "answer": "x = -\\frac{29}{3}, y = -\\frac{17}{3}",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему, где переменная стоит справа от равно."
             },
             {
               "id": 15,
@@ -51641,23 +51641,23 @@
             },
             {
               "id": 16,
-              "expression": "\\begin{cases} 10x + 2y = -184 \\\\ 2x - 12y = 81 \\end{cases}",
+              "expression": "\\begin{cases} 10x + 2y = -184 \\\\ 2(x + 1) - 12y = 83 \\end{cases}",
               "answer": "x = -\\frac{33}{2}, y = -\\frac{19}{2}",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему со скобками."
             },
             {
               "id": 17,
-              "expression": "\\begin{cases} 6x + 6y = 30 \\\\ 6x - 9y = 130 \\end{cases}",
+              "expression": "\\begin{cases} 110 - 6x = -6y \\\\ 6x - 9y = 130 \\end{cases}",
               "answer": "x = \\frac{35}{3}, y = -\\frac{20}{3}",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему, где переменная стоит справа от равно."
             },
             {
               "id": 18,
@@ -51671,23 +51671,23 @@
             },
             {
               "id": 19,
-              "expression": "\\begin{cases} 8x + 2y = 134 \\\\ 8x - 10y = 266 \\end{cases}",
+              "expression": "\\begin{cases} 8x + 2y = 134 \\\\ 8(x + 1) - 10y = 274 \\end{cases}",
               "answer": "x = \\frac{39}{2}, y = -11",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему со скобками."
             },
             {
               "id": 20,
-              "expression": "\\begin{cases} 15x + 6y = -251 \\\\ 15x - 18y = -67 \\end{cases}",
+              "expression": "\\begin{cases} -90 - 15x = -15y \\\\ 15x - 18y = -67 \\end{cases}",
               "answer": "x = -\\frac{41}{3}, y = -\\frac{23}{3}",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему."
+              "prompt": "Решите систему, где переменная стоит справа от равно."
             }
           ]
         },
@@ -52047,24 +52047,24 @@
             },
             {
               "id": 15,
-              "expression": "\\begin{cases} 4x + 2y = 2 \\\\ 2x - 6y = 15 \\end{cases}",
+              "expression": "\\begin{cases} 4x + 2y = 2 \\\\ 2(x + 1) - 6y = 17 \\end{cases}",
               "answer": "x = \\frac{3}{2}, y = -2",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему со скобками.",
               "source_task_id": 1
             },
             {
               "id": 16,
-              "expression": "\\begin{cases} 9x + 6y = -25 \\\\ 6x - 12y = 10 \\end{cases}",
+              "expression": "\\begin{cases} 0 - 9x = -9y \\\\ 6x - 12y = 10 \\end{cases}",
               "answer": "x = -\\frac{5}{3}, y = -\\frac{5}{3}",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему, где переменная стоит справа от равно.",
               "source_task_id": 2
             },
             {
@@ -52080,13 +52080,13 @@
             },
             {
               "id": 18,
-              "expression": "\\begin{cases} 10x + 2y = -52 \\\\ 8x - 12y = 6 \\end{cases}",
+              "expression": "\\begin{cases} 10x + 2y = -52 \\\\ 8(x + 1) - 12y = 14 \\end{cases}",
               "answer": "x = -\\frac{9}{2}, y = -\\frac{7}{2}",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему со скобками.",
               "source_task_id": 4
             }
           ]
@@ -52159,13 +52159,13 @@
             },
             {
               "id": 6,
-              "expression": "\\begin{cases} 6x + 6y = 6 \\\\ 15x - 9y = 79 \\end{cases}",
+              "expression": "\\begin{cases} 38 - 6x = -6y \\\\ 15x - 9y = 79 \\end{cases}",
               "answer": "x = \\frac{11}{3}, y = -\\frac{8}{3}",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему, где переменная стоит справа от равно.",
               "source_task_id": 5
             },
             {
@@ -52181,24 +52181,24 @@
             },
             {
               "id": 8,
-              "expression": "\\begin{cases} 8x + 2y = 50 \\\\ 4x - 10y = 80 \\end{cases}",
+              "expression": "\\begin{cases} 8x + 2y = 50 \\\\ 4(x + 1) - 10y = 84 \\end{cases}",
               "answer": "x = \\frac{15}{2}, y = -5",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему со скобками.",
               "source_task_id": 7
             },
             {
               "id": 9,
-              "expression": "\\begin{cases} 15x + 6y = -107 \\\\ 9x - 18y = 15 \\end{cases}",
+              "expression": "\\begin{cases} -30 - 15x = -15y \\\\ 9x - 18y = 15 \\end{cases}",
               "answer": "x = -\\frac{17}{3}, y = -\\frac{11}{3}",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему, где переменная стоит справа от равно.",
               "source_task_id": 8
             },
             {
@@ -52214,24 +52214,24 @@
             },
             {
               "id": 11,
-              "expression": "\\begin{cases} 6x + 2y = -76 \\\\ 10x - 8y = -53 \\end{cases}",
+              "expression": "\\begin{cases} 6x + 2y = -76 \\\\ 10(x + 1) - 8y = -43 \\end{cases}",
               "answer": "x = -\\frac{21}{2}, y = -\\frac{13}{2}",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему со скобками.",
               "source_task_id": 10
             },
             {
               "id": 12,
-              "expression": "\\begin{cases} 12x + 6y = 64 \\\\ 3x - 15y = 93 \\end{cases}",
+              "expression": "\\begin{cases} 148 - 12x = -12y \\\\ 3x - 15y = 93 \\end{cases}",
               "answer": "x = \\frac{23}{3}, y = -\\frac{14}{3}",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему, где переменная стоит справа от равно.",
               "source_task_id": 11
             },
             {
@@ -52247,24 +52247,24 @@
             },
             {
               "id": 14,
-              "expression": "\\begin{cases} 4x + 2y = 38 \\\\ 6x - 6y = 129 \\end{cases}",
+              "expression": "\\begin{cases} 4x + 2y = 38 \\\\ 6(x + 1) - 6y = 135 \\end{cases}",
               "answer": "x = \\frac{27}{2}, y = -8",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему со скобками.",
               "source_task_id": 13
             },
             {
               "id": 15,
-              "expression": "\\begin{cases} 9x + 6y = -121 \\\\ 12x - 12y = -48 \\end{cases}",
+              "expression": "\\begin{cases} -36 - 9x = -9y \\\\ 12x - 12y = -48 \\end{cases}",
               "answer": "x = -\\frac{29}{3}, y = -\\frac{17}{3}",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему, где переменная стоит справа от равно.",
               "source_task_id": 14
             },
             {
@@ -52359,24 +52359,24 @@
             },
             {
               "id": 5,
-              "expression": "\\begin{cases} 4x + 2y = 38 \\\\ 6x - 6y = 129 \\end{cases}",
+              "expression": "\\begin{cases} 4x + 2y = 38 \\\\ 6(x + 1) - 6y = 135 \\end{cases}",
               "answer": "x = \\frac{27}{2}, y = -8",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему со скобками.",
               "source_task_id": 13
             },
             {
               "id": 6,
-              "expression": "\\begin{cases} 9x + 6y = -121 \\\\ 12x - 12y = -48 \\end{cases}",
+              "expression": "\\begin{cases} -36 - 9x = -9y \\\\ 12x - 12y = -48 \\end{cases}",
               "answer": "x = -\\frac{29}{3}, y = -\\frac{17}{3}",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему, где переменная стоит справа от равно.",
               "source_task_id": 14
             },
             {
@@ -52392,24 +52392,24 @@
             },
             {
               "id": 8,
-              "expression": "\\begin{cases} 10x + 2y = -184 \\\\ 2x - 12y = 81 \\end{cases}",
+              "expression": "\\begin{cases} 10x + 2y = -184 \\\\ 2(x + 1) - 12y = 83 \\end{cases}",
               "answer": "x = -\\frac{33}{2}, y = -\\frac{19}{2}",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему со скобками.",
               "source_task_id": 16
             },
             {
               "id": 9,
-              "expression": "\\begin{cases} 6x + 6y = 30 \\\\ 6x - 9y = 130 \\end{cases}",
+              "expression": "\\begin{cases} 110 - 6x = -6y \\\\ 6x - 9y = 130 \\end{cases}",
               "answer": "x = \\frac{35}{3}, y = -\\frac{20}{3}",
               "status": "ready",
               "level": "medium",
               "skill": "41",
               "task_type": "system_solve",
-              "prompt": "Решите систему.",
+              "prompt": "Решите систему, где переменная стоит справа от равно.",
               "source_task_id": 17
             },
             {

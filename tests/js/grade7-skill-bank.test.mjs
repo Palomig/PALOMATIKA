@@ -78,6 +78,9 @@ for (const skill of data.skills) {
       const answers = skill.levels.find(level => level.id === levelId).tasks.map(task => task.answer).join("\n");
       assert.match(answers, /\\frac\{-?\d+\}\{\d+\}/, `${skill.slug}/${levelId} should include ordinary fractional answers`);
     }
+    const mediumExpressions = skill.levels.find(level => level.id === "medium").tasks.map(task => task.expression).join("\n");
+    assert.match(mediumExpressions, /\(x\s*[-+]\s*\d+\)/, `${skill.slug}/medium should include systems with parentheses around shifted variables`);
+    assert.match(mediumExpressions, /=\s*-?\d*y\b/, `${skill.slug}/medium should include systems with a variable on the right side of equals`);
     const highExpressions = skill.levels.find(level => level.id === "high").tasks.map(task => task.expression).join("\n");
     assert.match(highExpressions, /\\frac\{[^}]+\}\{\d+\}/, `${skill.slug}/high should include systems with ordinary fractional coefficients`);
     assert.match(highExpressions, /\(x\s*[-+]\s*\d+\)/, `${skill.slug}/high should include systems with parentheses around shifted variables`);

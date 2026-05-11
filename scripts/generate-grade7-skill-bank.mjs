@@ -502,6 +502,17 @@ const factories = {
         const a = 2 + (i % 4), b = 1 + (i % 3), c = 1 + (i % 5), d = 3 + (i % 4);
         const eNum = a * xNum + b * yNum;
         const fNum = c * xNum - d * yNum;
+        if (level === "medium" && i % 3 === 0) {
+          const shiftedNum = c * (xNum + den) - d * yNum;
+          const expression = systemExpr(`${coefVar(a * den, "x")} + ${coefVar(b * den, "y")} = ${clean(eNum)}`, `${coefVar(c * den, "(x + 1)")} - ${coefVar(d * den, "y")} = ${clean(shiftedNum)}`);
+          return task(i + 1, expression, `x = ${frac(xNum, den)}, y = ${frac(yNum, den)}`, level, skill.id, skill.task_type, "Решите систему со скобками.");
+        }
+        if (level === "medium" && i % 3 === 1) {
+          const rightCoef = -(2 + (i % 4));
+          const leftConst = a * xNum + rightCoef * yNum;
+          const expression = systemExpr(`${clean(leftConst)} - ${coefVar(a * den, "x")} = ${coefVar(rightCoef * den, "y")}`, `${coefVar(c * den, "x")} - ${coefVar(d * den, "y")} = ${clean(fNum)}`);
+          return task(i + 1, expression, `x = ${frac(xNum, den)}, y = ${frac(yNum, den)}`, level, skill.id, skill.task_type, "Решите систему, где переменная стоит справа от равно.");
+        }
         if (level === "high" && i % 3 === 0) {
           const shiftedFirstNum = (a + c) * xNum + b * yNum - a * den;
           const shiftedSecondNum = c * (xNum - den) - d * yNum;
