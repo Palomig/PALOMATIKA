@@ -151,6 +151,23 @@ function cleanJsonText(content) {
   return start >= 0 ? stripped.slice(start).trim() : stripped;
 }
 
+function parseModelJson(content) {
+  const text = cleanJsonText(content);
+  try {
+    return JSON.parse(text);
+  } catch (error) {
+    // Models sometimes emit math snippets such as \cdot or \begin inside JSON
+    // strings. JSON only allows a small set of escaped characters, so escape
+    // stray backslashes and try once more.
+    const repaired = text.replace(/\\(?!["\\/bfnrtu])/g, "\\\\");
+    try {
+      return JSON.parse(repaired);
+    } catch {
+      throw error;
+    }
+  }
+}
+
 async function minimaxPage(page) {
   const res = await fetch(minimaxEndpoint, {
     method: "POST",
@@ -171,7 +188,7 @@ async function minimaxPage(page) {
     throw new Error(`MiniMax API ${json.base_resp.status_code}: ${json.base_resp.status_msg}`);
   }
   const content = json.content ?? json.data?.content ?? json.choices?.[0]?.message?.content ?? "";
-  return JSON.parse(cleanJsonText(content));
+  return parseModelJson(content);
 }
 
 async function deepseekNormalize(page, pageRef) {
@@ -230,7 +247,7 @@ ${JSON.stringify(pageRef)}`;
   if (!res.ok) throw new Error(`DeepSeek HTTP ${res.status}: ${body.slice(0, 240)}`);
   const json = JSON.parse(body);
   const content = json.choices?.[0]?.message?.content ?? "";
-  return JSON.parse(cleanJsonText(content));
+  return parseModelJson(content);
 }
 
 async function processPage(page) {
