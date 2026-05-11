@@ -80,12 +80,15 @@ function shell(title, body) {
     .level-medium .level-badge{color:var(--yellow);background:rgba(250,204,21,.13)}
     .level-high .level-badge{color:var(--red);background:rgba(251,113,133,.13)}
     .taskgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+    .level-high .taskgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
     .task{position:relative;padding:14px 12px;min-height:118px}
     .flag{position:absolute;right:10px;top:10px;width:28px;height:28px;border:0;border-radius:6px;background:#263449;color:#92a0b4}
-    .expr-line{display:flex;gap:10px;align-items:flex-start;padding-right:32px}
+    .expr-line{display:flex;gap:10px;align-items:flex-start;min-width:0;padding-right:32px}
     .num{color:var(--blue);font-weight:800;font-size:17px}
-    .expr{font-family:"KaTeX_Main","Times New Roman",serif;font-size:18px;font-weight:650;color:#f8fafc;min-width:0;white-space:normal;overflow-wrap:anywhere}
-    .expr .katex{font-size:1.08em;white-space:nowrap}
+    .expr{display:block;font-family:"KaTeX_Main","Times New Roman",serif;font-size:18px;font-weight:650;color:#f8fafc;min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere;word-break:normal;line-height:1.35}
+    .expr .katex{font-size:1.08em;white-space:normal;max-width:100%}
+    .expr .katex-html{white-space:normal;overflow-wrap:anywhere}
+    .expr .katex .base{display:inline;white-space:normal}
     .answer{color:#7890b2;font-size:13px;margin-top:16px}
     .answer b{color:var(--green);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
     .status{margin-top:8px;color:var(--green);font-weight:800;font-size:11px}
@@ -99,7 +102,7 @@ function shell(title, body) {
     .homework-card summary{cursor:pointer;color:var(--blue);font-weight:700;font-size:13px}
     .homework-card ol{margin:10px 0 0;padding-left:22px;color:#dce7f5}
     .homework-card li{margin:6px 0}
-    @media(max-width:1020px){.grid,.taskgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:1020px){.grid,.taskgrid,.level-high .taskgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media(max-width:1020px){.homework-list{grid-template-columns:1fr}}
     @media(max-width:640px){.grid,.taskgrid{grid-template-columns:1fr}.wrap{padding-inline:14px}h1{font-size:28px}}
   </style>

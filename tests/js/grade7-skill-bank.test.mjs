@@ -4,9 +4,12 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 
 const path = "storage/app/tasks/alg/grade_7/skills.json";
+const pageBuilderPath = "scripts/build-grade7-skill-pages.mjs";
 assert.ok(fs.existsSync(path), "skills.json must exist; run scripts/generate-grade7-skill-bank.mjs first");
+assert.ok(fs.existsSync(pageBuilderPath), "static page builder must exist");
 
 const data = JSON.parse(fs.readFileSync(path, "utf8"));
+const pageBuilder = fs.readFileSync(pageBuilderPath, "utf8");
 
 const difficultyScore = (expression) => {
   const text = String(expression ?? "");
@@ -31,6 +34,9 @@ const referenceComplexityScore = (task) => {
 assert.equal(data.grade, 7);
 assert.equal(data.subject, "algebra");
 assert.ok(data.skills.length >= 25, "skill bank should be split into narrow skill pages");
+assert.ok(pageBuilder.includes(".level-high .taskgrid{grid-template-columns:repeat(2,minmax(0,1fr))}"), "high level task grid should use wider cards so long equations fit");
+assert.ok(!pageBuilder.includes(".expr .katex{font-size:1.08em;white-space:nowrap}"), "KaTeX expressions should not force long tasks into a single unbreakable line");
+assert.ok(pageBuilder.includes(".expr .katex .base{display:inline;white-space:normal}"), "KaTeX inner boxes should allow long equations to wrap inside task cards");
 
 for (const skill of data.skills) {
   assert.ok(skill.id, "skill has id");
