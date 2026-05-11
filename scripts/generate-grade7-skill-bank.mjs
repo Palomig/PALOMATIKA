@@ -19,6 +19,13 @@ const clean = (n) => {
 };
 const par = (n) => n < 0 ? `(${clean(n)})` : clean(n);
 const gcd = (a, b) => b === 0 ? Math.abs(a) : gcd(b, a % b);
+const frac = (num, den) => {
+  const sign = num * den < 0 ? "-" : "";
+  const n = Math.abs(num);
+  const d = Math.abs(den);
+  const g = gcd(n, d);
+  return d / g === 1 ? `${sign}${n / g}` : `${sign}\\frac{${n / g}}{${d / g}}`;
+};
 const shufflePick = (arr, i) => arr[i % arr.length];
 const coefVar = (coef, variable) => coef === 1 ? variable : coef === -1 ? `-${variable}` : `${coef}${variable}`;
 const systemExpr = (first, second, suffix = "") => `\\begin{cases} ${first} \\\\ ${second} \\end{cases}${suffix}`;
@@ -488,6 +495,18 @@ const factories = {
 
   system_solve(skill, level, count) {
     return Array.from({ length: count }, (_, i) => {
+      if (level === "medium" || level === "high") {
+        const den = 2 + (i % 3);
+        const xNum = i % 2 ? -(2 * i + 3) : 2 * i + 3;
+        const yNum = -(i + 4);
+        const a = 2 + (i % 4), b = 1 + (i % 3), c = 1 + (i % 5), d = 3 + (i % 4);
+        const eNum = a * xNum + b * yNum;
+        const fNum = c * xNum - d * yNum;
+        const expression = level === "high"
+          ? systemExpr(`${clean(a * xNum - (2 + (i % 5)) * yNum)} - ${coefVar(a * den, "x")} = ${coefVar(-(2 + (i % 5)) * den, "y")}`, `${coefVar(c * den, "x")} - ${coefVar(d * den, "y")} = ${clean(fNum)}`)
+          : systemExpr(`${coefVar(a * den, "x")} + ${coefVar(b * den, "y")} = ${clean(eNum)}`, `${coefVar(c * den, "x")} - ${coefVar(d * den, "y")} = ${clean(fNum)}`);
+        return task(i + 1, expression, `x = ${frac(xNum, den)}, y = ${frac(yNum, den)}`, level, skill.id, skill.task_type, "Решите систему.");
+      }
       const x = i + 1, y = level === "simple" ? i + 2 : -(i + 2);
       const a = 2 + (i % 4), b = 1 + (i % 3), c = 1 + (i % 5), d = 3 + (i % 4);
       const e = a * x + b * y, f = c * x - d * y;
