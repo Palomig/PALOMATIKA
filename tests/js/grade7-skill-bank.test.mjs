@@ -34,6 +34,7 @@ const referenceComplexityScore = (task) => {
 assert.equal(data.grade, 7);
 assert.equal(data.subject, "algebra");
 assert.ok(data.skills.length >= 25, "skill bank should be split into narrow skill pages");
+assert.ok(data.skills.some(skill => skill.slug === "system-check-solution-3-vars"), "skill bank should include a separate skill for checking systems with three variables");
 assert.ok(pageBuilder.includes(".taskgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}"), "task grid should show three tasks per row on desktop");
 assert.ok(!pageBuilder.includes(".level-high .taskgrid{grid-template-columns:repeat(2,minmax(0,1fr))}"), "high level should not use a separate two-column grid");
 assert.ok(!pageBuilder.includes(".expr .katex{font-size:1.08em;white-space:nowrap}"), "KaTeX expressions should not force long tasks into a single unbreakable line");
@@ -72,6 +73,13 @@ for (const skill of data.skills) {
       const answers = skill.levels.find(level => level.id === levelId).tasks.map(task => task.answer).join("\n");
       assert.match(answers, /\\frac\{-?\d+\}\{\d+\}/, `${skill.slug}/${levelId} should include ordinary fractional answers`);
     }
+    const highExpressions = skill.levels.find(level => level.id === "high").tasks.map(task => task.expression).join("\n");
+    assert.match(highExpressions, /\\frac\{[^}]+\}\{\d+\}/, `${skill.slug}/high should include systems with ordinary fractional coefficients`);
+  }
+  if (skill.slug === "system-check-solution-3-vars") {
+    const allExpressions = skill.levels.flatMap(level => level.tasks.map(task => task.expression));
+    assert.ok(allExpressions.every(expression => expression.includes("z")), `${skill.slug} should use three variables`);
+    assert.ok(allExpressions.every(expression => expression.includes("\\begin{cases}")), `${skill.slug} should render as KaTeX cases`);
   }
 
   for (const level of skill.levels) {

@@ -502,6 +502,19 @@ const factories = {
         const a = 2 + (i % 4), b = 1 + (i % 3), c = 1 + (i % 5), d = 3 + (i % 4);
         const eNum = a * xNum + b * yNum;
         const fNum = c * xNum - d * yNum;
+        if (level === "high" && i % 2 === 0) {
+          const den2 = 3 + (i % 3);
+          const secondNum = c * xNum - d * yNum;
+          return task(
+            i + 1,
+            systemExpr(`\\frac{x + y}{${den}} = ${frac(xNum + yNum, den * den)}`, `\\frac{${coefVar(c, "x")} - ${coefVar(d, "y")}}{${den2}} = ${frac(secondNum, den * den2)}`),
+            `x = ${frac(xNum, den)}, y = ${frac(yNum, den)}`,
+            level,
+            skill.id,
+            skill.task_type,
+            "Решите систему с дробными коэффициентами.",
+          );
+        }
         const expression = level === "high"
           ? systemExpr(`${clean(a * xNum - (2 + (i % 5)) * yNum)} - ${coefVar(a * den, "x")} = ${coefVar(-(2 + (i % 5)) * den, "y")}`, `${coefVar(c * den, "x")} - ${coefVar(d * den, "y")} = ${clean(fNum)}`)
           : systemExpr(`${coefVar(a * den, "x")} + ${coefVar(b * den, "y")} = ${clean(eNum)}`, `${coefVar(c * den, "x")} - ${coefVar(d * den, "y")} = ${clean(fNum)}`);
@@ -537,6 +550,26 @@ const factories = {
           ? systemExpr(`${a}(x + 1) + ${coefVar(b, "y")} = ${clean(e + a)}`, `${coefVar(c, "x")} - ${coefVar(d, "y")} = ${clean(f)}`, `, (${clean(x)}; ${clean(y)})`)
           : systemExpr(`${coefVar(a, "x")} + ${coefVar(b, "y")} = ${clean(e)}`, `${coefVar(c, "x")} - ${coefVar(d, "y")} = ${clean(f)}`, `, (${clean(x)}; ${clean(y)})`);
       return task(i + 1, expression, ok ? "да" : "нет", level, skill.id, skill.task_type, "Проверьте, является ли пара решением системы.");
+    });
+  },
+
+  system_check_3_vars(skill, level, count) {
+    return Array.from({ length: count }, (_, i) => {
+      const x = i + 1;
+      const y = level === "simple" ? i + 2 : -(i + 2);
+      const z = level === "high" ? -(i + 3) : i + 3;
+      const miss = i % 3 === 0 ? 1 : 0;
+      const first = level === "high"
+        ? `${coefVar(2 + (i % 3), "x")} + y - z = ${clean((2 + (i % 3)) * x + y - z + miss)}`
+        : `x + y - z = ${clean(x + y - z + miss)}`;
+      const second = level === "simple"
+        ? `x - y + z = ${clean(x - y + z)}`
+        : `${coefVar(2, "x")} - y + ${coefVar(2 + (i % 2), "z")} = ${clean(2 * x - y + (2 + (i % 2)) * z)}`;
+      const third = level === "high"
+        ? `x + ${coefVar(2 + (i % 4), "y")} + ${coefVar(3, "z")} = ${clean(x + (2 + (i % 4)) * y + 3 * z)}`
+        : `x + y + z = ${clean(x + y + z)}`;
+      const ok = miss === 0;
+      return task(i + 1, systemExpr(first, `${second} \\\\ ${third}`, `, (${clean(x)}; ${clean(y)}; ${clean(z)})`), ok ? "да" : "нет", level, skill.id, skill.task_type, "Проверьте, является ли тройка решением системы.");
     });
   },
 
@@ -596,6 +629,7 @@ const skillCatalog = [
   ["systems", "Проверка решения системы", "system-check-solution", "system_check"],
   ["systems", "Выразить переменную из линейного уравнения с двумя переменными", "system-express-variable", "system_express_variable"],
   ["systems", "Решение системы линейных уравнений", "system-solve", "system_solve"],
+  ["systems", "Проверка решения системы с тремя переменными", "system-check-solution-3-vars", "system_check_3_vars"],
 ];
 
 const groupTitles = {
