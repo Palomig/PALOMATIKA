@@ -14,6 +14,20 @@ const difficultyScore = (expression) => {
   return operators + text.length / 18;
 };
 
+const referenceComplexityScore = (task) => {
+  const text = `${task.expression ?? ""} ${task.prompt ?? ""}`.toLowerCase();
+  let score = 0;
+  if ((text.match(/\(/g)?.length ?? 0) >= 2) score += 1;
+  if ((text.match(/=/g)?.length ?? 0) >= 1 && text.includes("x")) score += 1;
+  if (/[xyzmnab]/.test(text) && text.match(/[xyzmnab]/g)?.length >= 2) score += 1;
+  if (text.includes("^2") || text.includes("^3")) score += 1;
+  if (text.includes("{")) score += 1;
+  if (text.includes(":") || text.includes("\\cdot")) score += 1;
+  if (/(пропуск|ошибк|проверьте|разложите|докажите|сравните|найдите)/.test(text)) score += 1;
+  if (text.length >= 34) score += 1;
+  return score;
+};
+
 assert.equal(data.grade, 7);
 assert.equal(data.subject, "algebra");
 assert.ok(data.skills.length >= 25, "skill bank should be split into narrow skill pages");
@@ -23,6 +37,8 @@ for (const skill of data.skills) {
   assert.ok(skill.slug, `${skill.id} has slug`);
   assert.ok(skill.title, `${skill.id} has title`);
   assert.ok(skill.task_type, `${skill.id} has task_type`);
+  assert.equal(skill.reference_profile?.mode, "difficulty_calibrated_from_non_verbatim_references", `${skill.slug} should keep its reference calibration profile`);
+  assert.ok(skill.reference_profile.zvavich_refs + skill.reference_profile.makarychev_refs > 0, `${skill.slug} should be backed by Zvavich or Makarychev references`);
   assert.equal(skill.levels.length, 3, `${skill.slug} must have three levels`);
   assert.deepEqual(skill.levels.map(level => level.id), ["simple", "medium", "high"]);
   assert.equal(skill.homework_sets.length, 3, `${skill.slug} must have three homework sets`);
@@ -33,6 +49,12 @@ for (const skill of data.skills) {
   ]));
   assert.ok(averageDifficulty.medium > averageDifficulty.simple, `${skill.slug} medium level should be structurally harder than simple`);
   assert.ok(averageDifficulty.high > averageDifficulty.medium, `${skill.slug} high level should be structurally harder than medium`);
+
+  const averageReferenceComplexity = Object.fromEntries(skill.levels.map(level => [
+    level.id,
+    level.tasks.reduce((sum, task) => sum + referenceComplexityScore(task), 0) / level.tasks.length,
+  ]));
+  assert.ok(averageReferenceComplexity.high >= averageReferenceComplexity.medium - 0.25, `${skill.slug} high level should preserve Zvavich/Makarychev-style complexity markers`);
 
   for (const level of skill.levels) {
     assert.ok(level.tasks.length >= 15, `${skill.slug}/${level.id} should have enough homework tasks`);
