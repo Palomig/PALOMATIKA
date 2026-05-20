@@ -54,7 +54,7 @@
                     $color = $topic['color'] ?? 'emerald';
                     $stats = $topic['stats'] ?? null;
                 @endphp
-                <a href="{{ route('alg-topics.show', ['grade' => $grade, 'id' => ltrim($topicId, '0')]) }}"
+                <a href="{{ route('alg-topics.show', ['grade' => $grade, 'id' => (string) (int) $topicId]) }}"
                    class="group block rounded-xl border border-slate-800 bg-dark-light/30 p-4 hover:border-slate-700 hover:bg-dark-light/50 transition">
                     <div class="flex items-start gap-3 mb-3">
                         <div class="w-10 h-10 rounded-lg border border-{{ $color }}-700/60 bg-{{ $color }}-900/20 text-{{ $color }}-300 font-semibold flex items-center justify-center shrink-0 text-sm">

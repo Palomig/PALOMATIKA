@@ -44,7 +44,7 @@
                 @if($tid === $topicId)
                     <span class="px-2.5 py-1 rounded-lg bg-{{ $topicMeta['color'] ?? 'emerald' }}-500 text-white font-bold text-xs">{{ (int)$tid }}</span>
                 @else
-                    <a href="{{ route('alg-topics.show', ['grade' => $grade, 'id' => ltrim($tid, '0')]) }}"
+                    <a href="{{ route('alg-topics.show', ['grade' => $grade, 'id' => (string) (int) $tid]) }}"
                        class="px-2.5 py-1 rounded-lg bg-gray-800 text-gray-400 hover:bg-gray-700 transition text-xs">{{ (int)$tid }}</a>
                 @endif
             @endforeach
@@ -73,6 +73,51 @@
             <span class="text-gray-400 ml-2">задач</span>
         </div>
     </div>
+
+    {{-- Curriculum summary --}}
+    @if(!empty($curriculum) || !empty($microSkills) || !empty($homeworkSets))
+        <section class="bg-dark-light rounded-xl p-6 border border-gray-800 mb-8">
+            @if(!empty($curriculum['main_idea']))
+                <div class="mb-5">
+                    <h2 class="text-white font-semibold mb-2">Главная идея</h2>
+                    <p class="text-gray-300">{{ $curriculum['main_idea'] }}</p>
+                </div>
+            @endif
+
+            @if(!empty($microSkills))
+                <h3 class="text-white font-semibold mb-3">Микронавыки</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    @foreach($microSkills as $skill)
+                        <div class="rounded-lg border border-gray-800 bg-dark/30 p-3">
+                            <div class="text-{{ $topicMeta['color'] ?? 'emerald' }}-300 font-medium">
+                                {{ $skill['title'] ?? $skill['id'] ?? 'Навык' }}
+                            </div>
+                            @if(!empty($skill['goal']))
+                                <div class="text-sm text-gray-400 mt-1">{{ $skill['goal'] }}</div>
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+
+            @if(!empty($homeworkSets))
+                <h3 class="text-white font-semibold mt-5 mb-3">Домашние работы</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    @foreach($homeworkSets as $set)
+                        <div class="rounded-lg border border-gray-800 bg-dark/30 p-3">
+                            <div class="text-gray-200 font-medium">{{ $set['title'] ?? 'Домашняя работа' }}</div>
+                            <div class="text-sm text-gray-500 mt-1">
+                                {{ $set['tasks_count'] ?? count($set['tasks'] ?? []) }} заданий
+                                @if(!empty($set['target_minutes']))
+                                    · {{ $set['target_minutes'] }} мин
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        </section>
+    @endif
 
     {{-- Content --}}
     @if(empty($blocks))

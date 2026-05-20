@@ -1,0 +1,4546 @@
+{
+  "topic_id": "00",
+  "meta": {
+    "title": "Арифметическая база перед алгеброй",
+    "description": "Знаки, отрицательные числа, десятичные дроби, порядок действий, прикидка и проверка ответа",
+    "color": "emerald",
+    "icon": "calculator",
+    "grade": 7,
+    "subject": "algebra",
+    "strand": "arithmetic_foundation",
+    "skills": [
+      "Понимать отрицательное число как долг, температуру или движение влево по числовой прямой",
+      "Складывать и вычитать числа с разными знаками",
+      "Выполнять действия с десятичными дробями",
+      "Соблюдать порядок действий",
+      "Оценивать примерный ответ до вычисления",
+      "Проверять результат обратным действием или подстановкой",
+      "Находить типичные ошибки со знаками"
+    ]
+  },
+  "curriculum": {
+    "year_position": "weeks_1_2_or_diagnostic",
+    "lesson_hours": 2,
+    "homework_size": "15-20",
+    "main_idea": "Перед алгеброй ученик должен уверенно считать с числами: понимать знак, порядок действий и примерный размер ответа.",
+    "prerequisites": [
+      "Натуральные числа",
+      "Обычные вычисления в столбик",
+      "Понимание десятичной записи числа"
+    ],
+    "common_misconceptions": [
+      "-8 + 6 считают как -14 или 14",
+      "Вычитание отрицательного числа воспринимают как обычное вычитание",
+      "Умножение и деление выполняют не слева направо",
+      "Запятую в десятичных дробях переносят механически",
+      "Не делают прикидку и не замечают невозможный ответ"
+    ],
+    "lesson_flow": [
+      {
+        "minutes": "0-15",
+        "activity": "Диагностика: знаки, простые отрицательные числа, десятичные дроби."
+      },
+      {
+        "minutes": "15-35",
+        "activity": "Отрицательные числа через долг, температуру и числовую прямую."
+      },
+      {
+        "minutes": "35-55",
+        "activity": "Сложение и вычитание чисел с разными знаками."
+      },
+      {
+        "minutes": "55-75",
+        "activity": "Десятичные дроби и аккуратная запись."
+      },
+      {
+        "minutes": "75-95",
+        "activity": "Порядок действий и вычисление слева направо для умножения/деления."
+      },
+      {
+        "minutes": "95-110",
+        "activity": "Прикидка ответа и поиск невозможных результатов."
+      },
+      {
+        "minutes": "110-120",
+        "activity": "Разбор ошибок и домашка."
+      }
+    ]
+  },
+  "micro_skills": [
+    {
+      "id": "negative_number_meaning",
+      "title": "Смысл отрицательного числа",
+      "goal": "Ученик объясняет отрицательное число через долг, температуру или движение по числовой прямой."
+    },
+    {
+      "id": "add_different_signs",
+      "title": "Сложение чисел с разными знаками",
+      "goal": "Ученик находит разность модулей и ставит знак числа с большим модулем."
+    },
+    {
+      "id": "subtract_as_opposite",
+      "title": "Вычитание как прибавление противоположного",
+      "goal": "Ученик заменяет вычитание прибавлением противоположного числа."
+    },
+    {
+      "id": "decimal_add_subtract",
+      "title": "Сложение и вычитание десятичных дробей",
+      "goal": "Ученик записывает запятую под запятой и контролирует разряды."
+    },
+    {
+      "id": "decimal_multiply_divide",
+      "title": "Умножение и деление десятичных дробей",
+      "goal": "Ученик выполняет умножение и деление десятичных дробей без потери смысла результата."
+    },
+    {
+      "id": "operation_order",
+      "title": "Порядок действий",
+      "goal": "Ученик выполняет умножение и деление слева направо, затем сложение и вычитание слева направо."
+    },
+    {
+      "id": "estimate_and_error_check",
+      "title": "Прикидка и поиск ошибок",
+      "goal": "Ученик заранее оценивает ответ и замечает ошибки со знаком или размером числа."
+    }
+  ],
+  "exported_at": "2026-05-10T16:24:29.706Z",
+  "source": "PALOMATIKA generated arithmetic foundation bank",
+  "blocks": [
+    {
+      "number": 1,
+      "title": "Знаки и отрицательные числа",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Вычислите и объясните знак ответа:",
+          "micro_skill": "add_different_signs",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "-8 + 6",
+              "answer": "-2",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 2,
+              "expression": "-9 + 4",
+              "answer": "-5",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 3,
+              "expression": "-12 + 5",
+              "answer": "-7",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 4,
+              "expression": "-15 + 22",
+              "answer": "7",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 5,
+              "expression": "-18 + 7",
+              "answer": "-11",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 6,
+              "expression": "-24 + 9",
+              "answer": "-15",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 7,
+              "expression": "-31 + 15",
+              "answer": "-16",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 8,
+              "expression": "-40 + 18",
+              "answer": "-22",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 9,
+              "expression": "-6 + 11",
+              "answer": "5",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 10,
+              "expression": "-13 + 20",
+              "answer": "7",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 11,
+              "expression": "-21 + 8",
+              "answer": "-13",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 12,
+              "expression": "-35 + 14",
+              "answer": "-21",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 13,
+              "expression": "-7 + 19",
+              "answer": "12",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 14,
+              "expression": "-28 + 30",
+              "answer": "2",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 15,
+              "expression": "-42 + 17",
+              "answer": "-25",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 16,
+              "expression": "-56 + 21",
+              "answer": "-35",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 17,
+              "expression": "7 + (-10)",
+              "answer": "-3",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 18,
+              "expression": "18 + (-25)",
+              "answer": "-7",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 19,
+              "expression": "4 + (-13)",
+              "answer": "-9",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 20,
+              "expression": "29 + (-41)",
+              "answer": "-12",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 21,
+              "expression": "15 + (-6)",
+              "answer": "9",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 22,
+              "expression": "23 + (-11)",
+              "answer": "12",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 23,
+              "expression": "32 + (-50)",
+              "answer": "-18",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 24,
+              "expression": "44 + (-18)",
+              "answer": "26",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 25,
+              "expression": "-18 + 9",
+              "answer": "-9",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 26,
+              "expression": "-16 + 11",
+              "answer": "-5",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 27,
+              "expression": "-19 + 7",
+              "answer": "-12",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 28,
+              "expression": "-18 + 7",
+              "answer": "-11",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 29,
+              "expression": "-22 + 8",
+              "answer": "-14",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 30,
+              "expression": "-24 + 9",
+              "answer": "-15",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 31,
+              "expression": "-25 + 25",
+              "answer": "0",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 32,
+              "expression": "-30 + 43",
+              "answer": "13",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 33,
+              "expression": "-28 + 10",
+              "answer": "-18",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 34,
+              "expression": "-36 + 13",
+              "answer": "-23",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 35,
+              "expression": "-34 + 12",
+              "answer": "-22",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 36,
+              "expression": "-48 + 17",
+              "answer": "-31",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 37,
+              "expression": "-41 + 18",
+              "answer": "-23",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 38,
+              "expression": "-62 + 29",
+              "answer": "-33",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 39,
+              "expression": "-50 + 21",
+              "answer": "-29",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 40,
+              "expression": "-80 + 35",
+              "answer": "-45",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 41,
+              "expression": "-16 + 14",
+              "answer": "-2",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 42,
+              "expression": "-12 + 21",
+              "answer": "9",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 43,
+              "expression": "-23 + 23",
+              "answer": "0",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 44,
+              "expression": "-26 + 39",
+              "answer": "13",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 45,
+              "expression": "-31 + 11",
+              "answer": "-20",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 46,
+              "expression": "-42 + 15",
+              "answer": "-27",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 47,
+              "expression": "-45 + 17",
+              "answer": "-28",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 48,
+              "expression": "-70 + 27",
+              "answer": "-43",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "intro"
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Вычислите сумму двух отрицательных чисел:",
+          "micro_skill": "negative_number_meaning",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "-8 + (-6)",
+              "answer": "-14",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 2,
+              "expression": "-3 + (-11)",
+              "answer": "-14",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 3,
+              "expression": "-15 + (-4)",
+              "answer": "-19",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 4,
+              "expression": "-20 + (-13)",
+              "answer": "-33",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 5,
+              "expression": "-7 + (-9)",
+              "answer": "-16",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 6,
+              "expression": "-18 + (-22)",
+              "answer": "-40",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 7,
+              "expression": "-31 + (-6)",
+              "answer": "-37",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 8,
+              "expression": "-45 + (-15)",
+              "answer": "-60",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 9,
+              "expression": "-12 + (-18)",
+              "answer": "-30",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 10,
+              "expression": "-24 + (-7)",
+              "answer": "-31",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 11,
+              "expression": "-5 + (-36)",
+              "answer": "-41",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 12,
+              "expression": "-19 + (-14)",
+              "answer": "-33",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 13,
+              "expression": "-27 + (-23)",
+              "answer": "-50",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 14,
+              "expression": "-40 + (-9)",
+              "answer": "-49",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 15,
+              "expression": "-16 + (-28)",
+              "answer": "-44",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 16,
+              "expression": "-33 + (-17)",
+              "answer": "-50",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 17,
+              "expression": "-18 + (-11)",
+              "answer": "-29",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 18,
+              "expression": "-13 + (-16)",
+              "answer": "-29",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 19,
+              "expression": "-25 + (-9)",
+              "answer": "-34",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 20,
+              "expression": "-30 + (-18)",
+              "answer": "-48",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 21,
+              "expression": "-17 + (-14)",
+              "answer": "-31",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 22,
+              "expression": "-28 + (-27)",
+              "answer": "-55",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 23,
+              "expression": "-41 + (-11)",
+              "answer": "-52",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 24,
+              "expression": "-55 + (-20)",
+              "answer": "-75",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 25,
+              "expression": "-22 + (-23)",
+              "answer": "-45",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 26,
+              "expression": "-34 + (-12)",
+              "answer": "-46",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 27,
+              "expression": "-15 + (-41)",
+              "answer": "-56",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 28,
+              "expression": "-29 + (-19)",
+              "answer": "-48",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 29,
+              "expression": "-37 + (-28)",
+              "answer": "-65",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 30,
+              "expression": "-50 + (-14)",
+              "answer": "-64",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 31,
+              "expression": "-26 + (-33)",
+              "answer": "-59",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 32,
+              "expression": "-43 + (-22)",
+              "answer": "-65",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "intro"
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "instruction": "Вычислите десятичные числа с разными знаками:",
+          "micro_skill": "add_different_signs",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "-3,5 + 1,2",
+              "answer": "-2,3",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 2,
+              "expression": "4,8 + (-7,1)",
+              "answer": "-2,3",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 3,
+              "expression": "-12,6 + 5,4",
+              "answer": "-7,2",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 4,
+              "expression": "8,75 + (-2,3)",
+              "answer": "6,45",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 5,
+              "expression": "-9,4 + 11,8",
+              "answer": "2,4",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 6,
+              "expression": "15,2 + (-18,9)",
+              "answer": "-3,7",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 7,
+              "expression": "-0,8 + 1,5",
+              "answer": "0,7",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 8,
+              "expression": "2,4 + (-6,7)",
+              "answer": "-4,3",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 9,
+              "expression": "-13,25 + 8,5",
+              "answer": "-4,75",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 10,
+              "expression": "19,6 + (-4,35)",
+              "answer": "15,25",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 11,
+              "expression": "-7,05 + 3,8",
+              "answer": "-3,25",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 12,
+              "expression": "0,9 + (-2,4)",
+              "answer": "-1,5",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 13,
+              "expression": "-21,7 + 30,1",
+              "answer": "8,4",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 14,
+              "expression": "11,11 + (-15,5)",
+              "answer": "-4,39",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 15,
+              "expression": "-5,6 + 5,1",
+              "answer": "-0,5",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 16,
+              "expression": "6,03 + (-9,08)",
+              "answer": "-3,05",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            }
+          ]
+        },
+        {
+          "number": 4,
+          "instruction": "Вычислите сумму двух отрицательных десятичных чисел:",
+          "micro_skill": "negative_number_meaning",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "-2,5 + (-4,8)",
+              "answer": "-7,3",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 2,
+              "expression": "-7,3 + (-1,9)",
+              "answer": "-9,2",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 3,
+              "expression": "-0,6 + (-8,7)",
+              "answer": "-9,3",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 4,
+              "expression": "-12,4 + (-3,6)",
+              "answer": "-16",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 5,
+              "expression": "-5,05 + (-9,15)",
+              "answer": "-14,2",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 6,
+              "expression": "-10,7 + (-0,8)",
+              "answer": "-11,5",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 7,
+              "expression": "-18,25 + (-2,75)",
+              "answer": "-21",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 8,
+              "expression": "-4,4 + (-6,06)",
+              "answer": "-10,46",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 9,
+              "expression": "-3,75 + (-1,25)",
+              "answer": "-5",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 10,
+              "expression": "-0,9 + (-2,8)",
+              "answer": "-3,7",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 11,
+              "expression": "-14,6 + (-0,4)",
+              "answer": "-15",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 12,
+              "expression": "-6,08 + (-7,92)",
+              "answer": "-14",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            }
+          ]
+        },
+        {
+          "number": 5,
+          "instruction": "Найдите ошибку в рассуждении ученика:",
+          "micro_skill": "estimate_and_error_check",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "Ученик написал: -8 + 6 = -14. Объясните ошибку.",
+              "answer": "-8 + 6 = -2. При разных знаках вычитаем модули.",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "error_analysis",
+              "difficulty": "base",
+              "common_mistake": "-14"
+            },
+            {
+              "id": 2,
+              "expression": "Ученик написал: -9 + 12 = -3. Объясните ошибку.",
+              "answer": "-9 + 12 = 3. Модуль 12 больше, значит ответ положительный.",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "error_analysis",
+              "difficulty": "base",
+              "common_mistake": "-3"
+            },
+            {
+              "id": 3,
+              "expression": "Ученик написал: -5 - 7 = 2. Объясните ошибку.",
+              "answer": "-5 - 7 = -12. Вычитание 7 увеличивает долг.",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "error_analysis",
+              "difficulty": "base",
+              "common_mistake": "2"
+            },
+            {
+              "id": 4,
+              "expression": "Ученик написал: 18 : 3 \\cdot 2 = 3. Объясните ошибку.",
+              "answer": "18 : 3 \\cdot 2 = 12. Деление и умножение идут слева направо.",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "error_analysis",
+              "difficulty": "base",
+              "common_mistake": "3"
+            },
+            {
+              "id": 5,
+              "expression": "Ученик написал: 6 - 2 \\cdot 4 = 16. Объясните ошибку.",
+              "answer": "6 - 2 \\cdot 4 = -2. Сначала выполняем умножение.",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "error_analysis",
+              "difficulty": "base",
+              "common_mistake": "16"
+            },
+            {
+              "id": 6,
+              "expression": "Ученик написал: -6 - (-11) = -17. Объясните ошибку.",
+              "answer": "-6 - (-11) = 5. Вычесть -11 значит прибавить 11.",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "error_analysis",
+              "difficulty": "base",
+              "common_mistake": "-17"
+            },
+            {
+              "id": 7,
+              "expression": "Ученик написал: 0,5 + 0,25 = 0,30. Объясните ошибку.",
+              "answer": "0,5 + 0,25 = 0,75. Нужно складывать разряды.",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "error_analysis",
+              "difficulty": "base",
+              "common_mistake": "0,30"
+            },
+            {
+              "id": 8,
+              "expression": "Ученик написал: 4,8 : 0,6 = 0,8. Объясните ошибку.",
+              "answer": "4,8 : 0,6 = 8. Деление на число меньше 1 увеличивает результат.",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "error_analysis",
+              "difficulty": "base",
+              "common_mistake": "0,8"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "title": "Вычитание и противоположные числа",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Вычислите, заменяя вычитание прибавлением противоположного числа:",
+          "micro_skill": "subtract_as_opposite",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "7 - 10",
+              "answer": "-3",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 2,
+              "expression": "-4 - 9",
+              "answer": "-13",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 3,
+              "expression": "-6 - (-11)",
+              "answer": "5",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 4,
+              "expression": "13 - (-8)",
+              "answer": "21",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 5,
+              "expression": "-2,4 - 3,7",
+              "answer": "-6,1",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 6,
+              "expression": "5,6 - (-1,9)",
+              "answer": "7,5",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 7,
+              "expression": "-12 - 7",
+              "answer": "-19",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 8,
+              "expression": "8 - (-15)",
+              "answer": "23",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 9,
+              "expression": "-20 - (-5)",
+              "answer": "-15",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 10,
+              "expression": "4,5 - 8,2",
+              "answer": "-3,7",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 11,
+              "expression": "-3,75 - (-1,25)",
+              "answer": "-2,5",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 12,
+              "expression": "0,6 - (-2,8)",
+              "answer": "3,4",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 13,
+              "expression": "-9,4 - 6,7",
+              "answer": "-16,1",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 14,
+              "expression": "11,2 - (-4,5)",
+              "answer": "15,7",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 15,
+              "expression": "-15,8 - (-20,1)",
+              "answer": "4,3",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 16,
+              "expression": "22 - 35",
+              "answer": "-13",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 17,
+              "expression": "-40 - (-18)",
+              "answer": "-22",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 18,
+              "expression": "6,06 - (-3,03)",
+              "answer": "9,09",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 19,
+              "expression": "17 - 6",
+              "answer": "11",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 20,
+              "expression": "6 - 5",
+              "answer": "1",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 21,
+              "expression": "4 - (-15)",
+              "answer": "19",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 22,
+              "expression": "23 - (-12)",
+              "answer": "35",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 23,
+              "expression": "7,6 - (-0,3)",
+              "answer": "7,9",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 24,
+              "expression": "15,6 - (-5,9)",
+              "answer": "21,5",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 25,
+              "expression": "-2 - 3",
+              "answer": "-5",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 26,
+              "expression": "18 - (-19)",
+              "answer": "37",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 27,
+              "expression": "-10 - (-9)",
+              "answer": "-1",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 28,
+              "expression": "14,5 - 4,2",
+              "answer": "10,3",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 29,
+              "expression": "6,25 - (-5,25)",
+              "answer": "11,5",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 30,
+              "expression": "10,6 - (-6,8)",
+              "answer": "17,4",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 31,
+              "expression": "0,6 - 2,7",
+              "answer": "-2,1",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 32,
+              "expression": "21,2 - (-8,5)",
+              "answer": "29,7",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 33,
+              "expression": "-5,8 - (-24,1)",
+              "answer": "18,3",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 34,
+              "expression": "32 - 31",
+              "answer": "1",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 35,
+              "expression": "-30 - (-22)",
+              "answer": "-8",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 36,
+              "expression": "16,06 - (-7,03)",
+              "answer": "23,09",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Вычислите выражения с двумя минусами:",
+          "micro_skill": "subtract_as_opposite",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "3 - (-5)",
+              "answer": "8",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 2,
+              "expression": "-7 - (-12)",
+              "answer": "5",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 3,
+              "expression": "0 - (-9)",
+              "answer": "9",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 4,
+              "expression": "18 - (-20)",
+              "answer": "38",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 5,
+              "expression": "-14 - (-3)",
+              "answer": "-11",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 6,
+              "expression": "2,5 - (-7,5)",
+              "answer": "10",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 7,
+              "expression": "-4,6 - (-1,2)",
+              "answer": "-3,4",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 8,
+              "expression": "11,8 - (-0,9)",
+              "answer": "12,7",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 9,
+              "expression": "-20,5 - (-30,1)",
+              "answer": "9,6",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 10,
+              "expression": "6,4 - (-8,8)",
+              "answer": "15,2",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "title": "Десятичные дроби: сложение и вычитание",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Найдите значение выражения:",
+          "micro_skill": "decimal_add_subtract",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "37,6 - 5,84 + 3,95 - 8,9",
+              "answer": "26,81",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard",
+              "hint": "Сначала сделай прикидку, затем считай точно."
+            },
+            {
+              "id": 2,
+              "expression": "81 - 45,34 + 19,6 + 21,75",
+              "answer": "77,01",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard",
+              "hint": "Сначала сделай прикидку, затем считай точно."
+            },
+            {
+              "id": 3,
+              "expression": "12,4 - 8,75 + 3,6",
+              "answer": "7,25",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 4,
+              "expression": "5,03 + 17,8 - 6,125",
+              "answer": "16,705",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 5,
+              "expression": "-4,7 + 9,25 - 1,6",
+              "answer": "2,95",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 6,
+              "expression": "42,5 - 13,75 - 6,8",
+              "answer": "21,95",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 7,
+              "expression": "0,56 + 3,407 - 1,9",
+              "answer": "2,067",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 8,
+              "expression": "100 - 37,68 + 4,2 - 15,99",
+              "answer": "50,53",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 9,
+              "expression": "7,15 - 0,8 + 12,006",
+              "answer": "18,356",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 10,
+              "expression": "-20,4 + 5,55 + 9,3",
+              "answer": "-5,55",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 11,
+              "expression": "63,08 - 12,7 - 9,005",
+              "answer": "41,375",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 12,
+              "expression": "1,25 + 3,75 - 2,6",
+              "answer": "2,4",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 13,
+              "expression": "-8,08 + 11,4 - 0,72",
+              "answer": "2,6",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 14,
+              "expression": "17,001 - 6,31 + 2,9",
+              "answer": "13,591",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 15,
+              "expression": "90,5 - 44,44 - 10,06",
+              "answer": "36",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 16,
+              "expression": "3,3 - 7,77 + 12,12",
+              "answer": "7,65",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 17,
+              "expression": "56,04 + 8,96 - 20,5",
+              "answer": "44,5",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 18,
+              "expression": "-1,25 - 3,75 + 9,4",
+              "answer": "4,4",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 19,
+              "expression": "14,8 - 6,006 + 0,26",
+              "answer": "9,054",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 20,
+              "expression": "72,72 - 7,27 - 27,2",
+              "answer": "38,25",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 21,
+              "expression": "39,3 - 7,14 + 5,65 - 10,2",
+              "answer": "27,61",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 22,
+              "expression": "82,7 - 46,64 + 21,3 + 23,45",
+              "answer": "80,81",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 23,
+              "expression": "14,1 - 10,05 + 5,3",
+              "answer": "9,35",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 24,
+              "expression": "6,73 + 19,5 - 7,425",
+              "answer": "18,805",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 25,
+              "expression": "-6 + 10,95 - 2,9",
+              "answer": "2,05",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 26,
+              "expression": "44,2 - 15,05 - 8,1",
+              "answer": "21,05",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 27,
+              "expression": "2,26 + 5,107 - 3,2",
+              "answer": "4,167",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 28,
+              "expression": "101,7 - 38,98 + 5,9 - 17,29",
+              "answer": "51,33",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 29,
+              "expression": "8,85 - 2,1 + 13,706",
+              "answer": "20,456",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 30,
+              "expression": "-21,7 + 7,25 + 11",
+              "answer": "-3,45",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 31,
+              "expression": "64,78 - 14 - 10,305",
+              "answer": "40,475",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 32,
+              "expression": "2,95 + 5,45 - 3,9",
+              "answer": "4,5",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 33,
+              "expression": "-9,38 + 13,1 - 2,02",
+              "answer": "1,7",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 34,
+              "expression": "18,701 - 7,61 + 4,6",
+              "answer": "15,691",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 35,
+              "expression": "92,2 - 45,74 - 11,36",
+              "answer": "35,1",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 36,
+              "expression": "5 - 9,07 + 13,82",
+              "answer": "9,75",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 37,
+              "expression": "57,74 + 10,66 - 21,8",
+              "answer": "46,6",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 38,
+              "expression": "-2,55 - 5,05 + 11,1",
+              "answer": "3,5",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 39,
+              "expression": "16,5 - 7,306 + 1,96",
+              "answer": "11,154",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 40,
+              "expression": "74,42 - 8,57 - 28,5",
+              "answer": "37,35",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Вычислите, контролируя запятую и разряды:",
+          "micro_skill": "decimal_add_subtract",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "56,4 - 8,76 + 5,925 - 13,35",
+              "answer": "40,215",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard",
+              "hint": "Сначала сделай прикидку, затем считай точно."
+            },
+            {
+              "id": 2,
+              "expression": "121,5 - 68,01 + 29,4 + 32,625",
+              "answer": "115,515",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard",
+              "hint": "Сначала сделай прикидку, затем считай точно."
+            },
+            {
+              "id": 3,
+              "expression": "18,6 - 13,125 + 5,4",
+              "answer": "10,875",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 4,
+              "expression": "7,545 + 26,7 - 9,187",
+              "answer": "25,058",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 5,
+              "expression": "-7,05 + 13,875 - 2,4",
+              "answer": "4,425",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 6,
+              "expression": "63,75 - 20,625 - 10,2",
+              "answer": "32,925",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 7,
+              "expression": "0,84 + 5,111 - 2,85",
+              "answer": "3,101",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 8,
+              "expression": "150 - 56,52 + 6,3 - 23,985",
+              "answer": "75,795",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 9,
+              "expression": "10,725 - 1,2 + 18,009",
+              "answer": "27,534",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 10,
+              "expression": "-30,6 + 8,325 + 13,95",
+              "answer": "-8,325",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 11,
+              "expression": "94,62 - 19,05 - 13,507",
+              "answer": "62,063",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 12,
+              "expression": "1,875 + 5,625 - 3,9",
+              "answer": "3,6",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 13,
+              "expression": "-12,12 + 17,1 - 1,08",
+              "answer": "3,9",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 14,
+              "expression": "25,502 - 9,465 + 4,35",
+              "answer": "20,387",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 15,
+              "expression": "135,75 - 66,66 - 15,09",
+              "answer": "54",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 16,
+              "expression": "4,95 - 11,655 + 18,18",
+              "answer": "11,475",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 17,
+              "expression": "84,06 + 13,44 - 30,75",
+              "answer": "66,75",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 18,
+              "expression": "-1,875 - 5,625 + 14,1",
+              "answer": "6,6",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 19,
+              "expression": "22,2 - 9,009 + 0,39",
+              "answer": "13,581",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 20,
+              "expression": "109,08 - 10,905 - 40,8",
+              "answer": "57,375",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "title": "Десятичные дроби: умножение и деление",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Вычислите, соблюдая порядок действий слева направо:",
+          "micro_skill": "decimal_multiply_divide",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "17,1 \\cdot 3,8 : 4,5 \\cdot 0,5",
+              "answer": "7,22",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard",
+              "hint": "Умножение и деление выполняются слева направо."
+            },
+            {
+              "id": 2,
+              "expression": "81,9 : 4,5 : 0,28 \\cdot 1,2",
+              "answer": "78",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard",
+              "hint": "Умножение и деление выполняются слева направо."
+            },
+            {
+              "id": 3,
+              "expression": "2,4 \\cdot 1,5 : 0,6",
+              "answer": "6",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 4,
+              "expression": "7,2 : 0,9 \\cdot 1,25",
+              "answer": "10",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 5,
+              "expression": "0,48 : 0,12 \\cdot 2,5",
+              "answer": "10",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 6,
+              "expression": "3,6 \\cdot 2,5 : 0,9",
+              "answer": "10",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 7,
+              "expression": "12,5 \\cdot 0,8 : 2",
+              "answer": "5",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 8,
+              "expression": "6,3 : 0,7 \\cdot 1,4",
+              "answer": "12,6",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 9,
+              "expression": "0,96 : 0,24 \\cdot 3,5",
+              "answer": "14",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 10,
+              "expression": "15,75 : 2,5 \\cdot 0,4",
+              "answer": "2,52",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 11,
+              "expression": "4,8 \\cdot 0,75 : 1,2",
+              "answer": "3",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 12,
+              "expression": "9,45 : 0,35 \\cdot 0,2",
+              "answer": "5,4",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 13,
+              "expression": "1,44 : 0,18 \\cdot 2,1",
+              "answer": "16,8",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 14,
+              "expression": "18,6 \\cdot 0,5 : 3,1",
+              "answer": "3",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 15,
+              "expression": "2,25 \\cdot 4,8 : 0,6",
+              "answer": "18",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 16,
+              "expression": "11,2 : 1,4 \\cdot 0,75",
+              "answer": "6",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 17,
+              "expression": "17,1 \\cdot 3,8 : 4,5 \\cdot 0,5",
+              "answer": "7,22",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 18,
+              "expression": "81,9 : 4,5 : 0,28 \\cdot 1,2",
+              "answer": "78",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 19,
+              "expression": "2,4 \\cdot 1,5 : 0,6",
+              "answer": "6",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 20,
+              "expression": "7,2 : 0,9 \\cdot 1,25",
+              "answer": "10",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 21,
+              "expression": "0,48 : 0,12 \\cdot 2,5",
+              "answer": "10",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 22,
+              "expression": "3,6 \\cdot 2,5 : 0,9",
+              "answer": "10",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 23,
+              "expression": "12,5 \\cdot 0,8 : 2",
+              "answer": "5",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 24,
+              "expression": "6,3 : 0,7 \\cdot 1,4",
+              "answer": "12,6",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 25,
+              "expression": "0,96 : 0,24 \\cdot 3,5",
+              "answer": "14",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 26,
+              "expression": "15,75 : 2,5 \\cdot 0,4",
+              "answer": "2,52",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 27,
+              "expression": "4,8 \\cdot 0,75 : 1,2",
+              "answer": "3",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 28,
+              "expression": "9,45 : 0,35 \\cdot 0,2",
+              "answer": "5,4",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 29,
+              "expression": "1,44 : 0,18 \\cdot 2,1",
+              "answer": "16,8",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 30,
+              "expression": "18,6 \\cdot 0,5 : 3,1",
+              "answer": "3",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 31,
+              "expression": "2,25 \\cdot 4,8 : 0,6",
+              "answer": "18",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 32,
+              "expression": "11,2 : 1,4 \\cdot 0,75",
+              "answer": "6",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "drill",
+              "difficulty": "standard"
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Сначала сделайте прикидку, затем вычислите точно:",
+          "micro_skill": "estimate_and_error_check",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "17,1 \\cdot 3,8 : 4,5 \\cdot 0,5",
+              "answer": "7,22",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard",
+              "hint": "Умножение и деление выполняются слева направо."
+            },
+            {
+              "id": 2,
+              "expression": "81,9 : 4,5 : 0,28 \\cdot 1,2",
+              "answer": "78",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard",
+              "hint": "Умножение и деление выполняются слева направо."
+            },
+            {
+              "id": 3,
+              "expression": "2,4 \\cdot 1,5 : 0,6",
+              "answer": "6",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard"
+            },
+            {
+              "id": 4,
+              "expression": "7,2 : 0,9 \\cdot 1,25",
+              "answer": "10",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard"
+            },
+            {
+              "id": 5,
+              "expression": "0,48 : 0,12 \\cdot 2,5",
+              "answer": "10",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard"
+            },
+            {
+              "id": 6,
+              "expression": "3,6 \\cdot 2,5 : 0,9",
+              "answer": "10",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard"
+            },
+            {
+              "id": 7,
+              "expression": "12,5 \\cdot 0,8 : 2",
+              "answer": "5",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard"
+            },
+            {
+              "id": 8,
+              "expression": "6,3 : 0,7 \\cdot 1,4",
+              "answer": "12,6",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard"
+            },
+            {
+              "id": 9,
+              "expression": "0,96 : 0,24 \\cdot 3,5",
+              "answer": "14",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard"
+            },
+            {
+              "id": 10,
+              "expression": "15,75 : 2,5 \\cdot 0,4",
+              "answer": "2,52",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard"
+            },
+            {
+              "id": 11,
+              "expression": "4,8 \\cdot 0,75 : 1,2",
+              "answer": "3",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard"
+            },
+            {
+              "id": 12,
+              "expression": "9,45 : 0,35 \\cdot 0,2",
+              "answer": "5,4",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "title": "Порядок действий",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Вычислите по действиям:",
+          "micro_skill": "operation_order",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "6 - 2 \\cdot 4",
+              "answer": "-2",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 2,
+              "expression": "(6 - 2) \\cdot 4",
+              "answer": "16",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 3,
+              "expression": "18 : 3 \\cdot 2",
+              "answer": "12",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 4,
+              "expression": "18 : (3 \\cdot 2)",
+              "answer": "3",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 5,
+              "expression": "5 - 3 \\cdot (4 - 7)",
+              "answer": "14",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 6,
+              "expression": "24 : 6 + 3 \\cdot 5",
+              "answer": "19",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 7,
+              "expression": "30 - 18 : 3 \\cdot 2",
+              "answer": "18",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 8,
+              "expression": "(30 - 18) : 3 \\cdot 2",
+              "answer": "8",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 9,
+              "expression": "7 \\cdot (2 - 5) + 4",
+              "answer": "-17",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 10,
+              "expression": "40 : 5 : 2",
+              "answer": "4",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 11,
+              "expression": "40 : (5 : 2)",
+              "answer": "16",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 12,
+              "expression": "3 - 4 \\cdot 5 + 18",
+              "answer": "1",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 13,
+              "expression": "2,5 \\cdot (8 - 12)",
+              "answer": "-10",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 14,
+              "expression": "12,6 : 0,3 - 15",
+              "answer": "27",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 15,
+              "expression": "4 \\cdot (-3 + 8) - 7",
+              "answer": "13",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 16,
+              "expression": "-6 + 2 \\cdot (9 - 14)",
+              "answer": "-16",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 17,
+              "expression": "(6 - 2 \\cdot 4) + 5",
+              "answer": "3",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 18,
+              "expression": "((6 - 2) \\cdot 4) + 5",
+              "answer": "21",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 19,
+              "expression": "(18 : 3 \\cdot 2) + 5",
+              "answer": "17",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 20,
+              "expression": "(18 : (3 \\cdot 2)) + 5",
+              "answer": "8",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 21,
+              "expression": "(5 - 3 \\cdot (4 - 7)) + 5",
+              "answer": "19",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 22,
+              "expression": "(24 : 6 + 3 \\cdot 5) + 5",
+              "answer": "24",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 23,
+              "expression": "(30 - 18 : 3 \\cdot 2) + 5",
+              "answer": "23",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 24,
+              "expression": "((30 - 18) : 3 \\cdot 2) + 5",
+              "answer": "13",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 25,
+              "expression": "(7 \\cdot (2 - 5) + 4) + 5",
+              "answer": "-12",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 26,
+              "expression": "(40 : 5 : 2) + 5",
+              "answer": "9",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 27,
+              "expression": "(40 : (5 : 2)) + 5",
+              "answer": "21",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 28,
+              "expression": "(3 - 4 \\cdot 5 + 18) + 5",
+              "answer": "6",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 29,
+              "expression": "(2,5 \\cdot (8 - 12)) + 5",
+              "answer": "-5",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 30,
+              "expression": "(12,6 : 0,3 - 15) + 5",
+              "answer": "32",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 31,
+              "expression": "(4 \\cdot (-3 + 8) - 7) + 5",
+              "answer": "18",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 32,
+              "expression": "(-6 + 2 \\cdot (9 - 14)) + 5",
+              "answer": "-11",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Сравните выражения с разными скобками:",
+          "micro_skill": "operation_order",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "6 - 2 \\cdot 4",
+              "answer": "-2",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 2,
+              "expression": "(6 - 2) \\cdot 4",
+              "answer": "16",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 3,
+              "expression": "40 : 5 : 2",
+              "answer": "4",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 4,
+              "expression": "40 : (5 : 2)",
+              "answer": "16",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 5,
+              "expression": "18 : 3 \\cdot 2",
+              "answer": "12",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 6,
+              "expression": "18 : (3 \\cdot 2)",
+              "answer": "3",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 7,
+              "expression": "20 - 4 \\cdot 3",
+              "answer": "8",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 8,
+              "expression": "(20 - 4) \\cdot 3",
+              "answer": "48",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 9,
+              "expression": "2 \\cdot (7 - 10)",
+              "answer": "-6",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 10,
+              "expression": "2 \\cdot 7 - 10",
+              "answer": "4",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 11,
+              "expression": "5 + 3 \\cdot (2 - 8)",
+              "answer": "-13",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 12,
+              "expression": "(5 + 3) \\cdot (2 - 8)",
+              "answer": "-48",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "title": "Прикидка и проверка ответа",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Сначала сделайте прикидку, затем вычислите точно:",
+          "micro_skill": "estimate_and_error_check",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "49,8 - 21,3 + 10,1",
+              "answer": "38,6",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard",
+              "hint": "Сначала сделай прикидку, затем считай точно."
+            },
+            {
+              "id": 2,
+              "expression": "-19,7 + 8,9",
+              "answer": "-10,8",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard",
+              "hint": "Сначала сделай прикидку, затем считай точно."
+            },
+            {
+              "id": 3,
+              "expression": "3,98 + 4,2",
+              "answer": "8,18",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard"
+            },
+            {
+              "id": 4,
+              "expression": "42,3 - 6,1",
+              "answer": "36,2",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard"
+            },
+            {
+              "id": 5,
+              "expression": "98,5 - 49,2 - 10,4",
+              "answer": "38,9",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard"
+            },
+            {
+              "id": 6,
+              "expression": "0,97 + 1,99 - 0,51",
+              "answer": "2,45",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard"
+            },
+            {
+              "id": 7,
+              "expression": "-30,2 + 12,8",
+              "answer": "-17,4",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard"
+            },
+            {
+              "id": 8,
+              "expression": "19,99 - 5,01 + 4,02",
+              "answer": "19",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard"
+            },
+            {
+              "id": 9,
+              "expression": "100,1 - 99,8",
+              "answer": "0,3",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard"
+            },
+            {
+              "id": 10,
+              "expression": "-8,4 + 2,2 + 1,1",
+              "answer": "-5,1",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard"
+            },
+            {
+              "id": 11,
+              "expression": "56,6 - 12,4 + 8,8",
+              "answer": "53",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard"
+            },
+            {
+              "id": 12,
+              "expression": "7,07 - 9,9 + 4,4",
+              "answer": "1,57",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard"
+            },
+            {
+              "id": 13,
+              "expression": "-14,5 + 20,2 - 3,1",
+              "answer": "2,6",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard"
+            },
+            {
+              "id": 14,
+              "expression": "0,5 - 1,25 + 2,75",
+              "answer": "2",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "guided",
+              "difficulty": "standard"
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Выберите, какой ответ невозможен по прикидке, и исправьте вычисление:",
+          "micro_skill": "estimate_and_error_check",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "Ученик написал: -8 + 6 = -14. Объясните ошибку.",
+              "answer": "-8 + 6 = -2. При разных знаках вычитаем модули.",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "error_analysis",
+              "difficulty": "base",
+              "common_mistake": "-14"
+            },
+            {
+              "id": 2,
+              "expression": "Ученик написал: -9 + 12 = -3. Объясните ошибку.",
+              "answer": "-9 + 12 = 3. Модуль 12 больше, значит ответ положительный.",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "error_analysis",
+              "difficulty": "base",
+              "common_mistake": "-3"
+            },
+            {
+              "id": 3,
+              "expression": "Ученик написал: -5 - 7 = 2. Объясните ошибку.",
+              "answer": "-5 - 7 = -12. Вычитание 7 увеличивает долг.",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "error_analysis",
+              "difficulty": "base",
+              "common_mistake": "2"
+            },
+            {
+              "id": 4,
+              "expression": "Ученик написал: 18 : 3 \\cdot 2 = 3. Объясните ошибку.",
+              "answer": "18 : 3 \\cdot 2 = 12. Деление и умножение идут слева направо.",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "error_analysis",
+              "difficulty": "base",
+              "common_mistake": "3"
+            },
+            {
+              "id": 5,
+              "expression": "Ученик написал: 6 - 2 \\cdot 4 = 16. Объясните ошибку.",
+              "answer": "6 - 2 \\cdot 4 = -2. Сначала выполняем умножение.",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "error_analysis",
+              "difficulty": "base",
+              "common_mistake": "16"
+            },
+            {
+              "id": 6,
+              "expression": "Ученик написал: -6 - (-11) = -17. Объясните ошибку.",
+              "answer": "-6 - (-11) = 5. Вычесть -11 значит прибавить 11.",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "error_analysis",
+              "difficulty": "base",
+              "common_mistake": "-17"
+            },
+            {
+              "id": 7,
+              "expression": "Ученик написал: 0,5 + 0,25 = 0,30. Объясните ошибку.",
+              "answer": "0,5 + 0,25 = 0,75. Нужно складывать разряды.",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "error_analysis",
+              "difficulty": "base",
+              "common_mistake": "0,30"
+            },
+            {
+              "id": 8,
+              "expression": "Ученик написал: 4,8 : 0,6 = 0,8. Объясните ошибку.",
+              "answer": "4,8 : 0,6 = 8. Деление на число меньше 1 увеличивает результат.",
+              "status": "ready",
+              "skill": "estimate_and_error_check",
+              "type": "error_analysis",
+              "difficulty": "base",
+              "common_mistake": "0,8"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "title": "Реальные ситуации",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Решите задачу и объясните, почему знак ответа именно такой:",
+          "micro_skill": "negative_number_meaning",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "Температура была -8 °C, затем повысилась на 6 °C. Какая стала температура?",
+              "answer": "-2 °C",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "real_context",
+              "difficulty": "intro"
+            },
+            {
+              "id": 2,
+              "expression": "На карте счета было 1200 рублей. Списали 1580 рублей. Какой баланс стал на счете?",
+              "answer": "-380 рублей",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "real_context",
+              "difficulty": "intro"
+            },
+            {
+              "id": 3,
+              "expression": "Лифт был на этаже -2 и поднялся на 7 этажей. На каком этаже он оказался?",
+              "answer": "5",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "real_context",
+              "difficulty": "intro"
+            },
+            {
+              "id": 4,
+              "expression": "Маша купила 3 тетради по 37,6 рубля и ручку за 45,8 рубля. Сколько она заплатила?",
+              "answer": "158,6 рубля",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "real_context",
+              "difficulty": "intro"
+            },
+            {
+              "id": 5,
+              "expression": "В городе утром было -5 °C, днем стало на 12 °C теплее. Какая температура днем?",
+              "answer": "7 °C",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "real_context",
+              "difficulty": "base"
+            },
+            {
+              "id": 6,
+              "expression": "Баланс был -240 рублей, на счет внесли 500 рублей. Какой стал баланс?",
+              "answer": "260 рублей",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "real_context",
+              "difficulty": "base"
+            },
+            {
+              "id": 7,
+              "expression": "Команда потеряла 8 очков штрафа и получила 11 очков бонуса. Какой итог?",
+              "answer": "3 очка",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "real_context",
+              "difficulty": "base"
+            },
+            {
+              "id": 8,
+              "expression": "Подвал находится на этаже -3. Человек поднялся на 5 этажей. Где он оказался?",
+              "answer": "2 этаж",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "real_context",
+              "difficulty": "base"
+            },
+            {
+              "id": 9,
+              "expression": "Товар стоил 199,9 рубля. Купили 4 товара. Сколько заплатили?",
+              "answer": "799,6 рубля",
+              "status": "ready",
+              "skill": "decimal_multiply_divide",
+              "type": "real_context",
+              "difficulty": "base"
+            },
+            {
+              "id": 10,
+              "expression": "Было 2,5 литра воды, вылили 3,2 литра с учетом долга по емкости. Какой баланс воды?",
+              "answer": "-0,7 литра",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "real_context",
+              "difficulty": "base"
+            },
+            {
+              "id": 11,
+              "expression": "Температура была 4 °C, затем снизилась на 9 °C. Какая стала температура?",
+              "answer": "-5 °C",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "real_context",
+              "difficulty": "base"
+            },
+            {
+              "id": 12,
+              "expression": "Счет был -150 рублей, списали еще 80 рублей. Какой стал счет?",
+              "answer": "-230 рублей",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "real_context",
+              "difficulty": "base"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "title": "Дополнительная серия: разные знаки",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Вычислите:",
+          "micro_skill": "add_different_signs",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "-12 + 28",
+              "answer": "16",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 2,
+              "expression": "-33 + 39",
+              "answer": "6",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 3,
+              "expression": "-47 + 26",
+              "answer": "-21",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 4,
+              "expression": "-61 + 30",
+              "answer": "-31",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 5,
+              "expression": "2 + (-1)",
+              "answer": "1",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 6,
+              "expression": "13 + (-16)",
+              "answer": "-3",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 7,
+              "expression": "-1 + (-4)",
+              "answer": "-5",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 8,
+              "expression": "24 + (-32)",
+              "answer": "-8",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 9,
+              "expression": "10 + 3",
+              "answer": "13",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 10,
+              "expression": "18 + (-2)",
+              "answer": "16",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 11,
+              "expression": "27 + (-41)",
+              "answer": "-14",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 12,
+              "expression": "39 + (-9)",
+              "answer": "30",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 13,
+              "expression": "-23 + 18",
+              "answer": "-5",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 14,
+              "expression": "-21 + 20",
+              "answer": "-1",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 15,
+              "expression": "-24 + 16",
+              "answer": "-8",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 16,
+              "expression": "-23 + 16",
+              "answer": "-7",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 17,
+              "expression": "-27 + 17",
+              "answer": "-10",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 18,
+              "expression": "-29 + 18",
+              "answer": "-11",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 19,
+              "expression": "-30 + 34",
+              "answer": "4",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 20,
+              "expression": "-35 + 52",
+              "answer": "17",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 21,
+              "expression": "-33 + 19",
+              "answer": "-14",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 22,
+              "expression": "-41 + 22",
+              "answer": "-19",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 23,
+              "expression": "-39 + 21",
+              "answer": "-18",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 24,
+              "expression": "-53 + 26",
+              "answer": "-27",
+              "status": "ready",
+              "skill": "add_different_signs",
+              "type": "drill",
+              "difficulty": "base"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "title": "Дополнительная серия: отрицательные суммы",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Вычислите:",
+          "micro_skill": "negative_number_meaning",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "-16 + (-9)",
+              "answer": "-25",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 2,
+              "expression": "-6 + (-14)",
+              "answer": "-20",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 3,
+              "expression": "-30 + (-7)",
+              "answer": "-37",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 4,
+              "expression": "-40 + (-16)",
+              "answer": "-56",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 5,
+              "expression": "-14 + (-12)",
+              "answer": "-26",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 6,
+              "expression": "-36 + (-25)",
+              "answer": "-61",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 7,
+              "expression": "-62 + (-9)",
+              "answer": "-71",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 8,
+              "expression": "-90 + (-18)",
+              "answer": "-108",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 9,
+              "expression": "-24 + (-21)",
+              "answer": "-45",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 10,
+              "expression": "-48 + (-10)",
+              "answer": "-58",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 11,
+              "expression": "-10 + (-39)",
+              "answer": "-49",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 12,
+              "expression": "-38 + (-17)",
+              "answer": "-55",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 13,
+              "expression": "-54 + (-26)",
+              "answer": "-80",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 14,
+              "expression": "-80 + (-12)",
+              "answer": "-92",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 15,
+              "expression": "-32 + (-31)",
+              "answer": "-63",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 16,
+              "expression": "-66 + (-20)",
+              "answer": "-86",
+              "status": "ready",
+              "skill": "negative_number_meaning",
+              "type": "drill",
+              "difficulty": "base"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "title": "Дополнительная серия: вычитание",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Вычислите:",
+          "micro_skill": "subtract_as_opposite",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "14 - 11",
+              "answer": "3",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 2,
+              "expression": "-8 - 10",
+              "answer": "-18",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 3,
+              "expression": "-12 - (-10)",
+              "answer": "-2",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 4,
+              "expression": "26 - (-7)",
+              "answer": "33",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 5,
+              "expression": "-4,8 - 4,7",
+              "answer": "-9,5",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 6,
+              "expression": "11,2 - (-0,9)",
+              "answer": "12,1",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 7,
+              "expression": "-24 - 8",
+              "answer": "-32",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 8,
+              "expression": "16 - (-14)",
+              "answer": "30",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 9,
+              "expression": "-40 - (-4)",
+              "answer": "-36",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 10,
+              "expression": "9 - 9,2",
+              "answer": "-0,2",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 11,
+              "expression": "-7,5 - (-0,25)",
+              "answer": "-7,25",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 12,
+              "expression": "1,2 - (-1,8)",
+              "answer": "3",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 13,
+              "expression": "-18,8 - 7,7",
+              "answer": "-26,5",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 14,
+              "expression": "22,4 - (-3,5)",
+              "answer": "25,9",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 15,
+              "expression": "-31,6 - (-19,1)",
+              "answer": "-12,5",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 16,
+              "expression": "44 - 36",
+              "answer": "8",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 17,
+              "expression": "-80 - (-17)",
+              "answer": "-63",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 18,
+              "expression": "12,12 - (-2,03)",
+              "answer": "14,15",
+              "status": "ready",
+              "skill": "subtract_as_opposite",
+              "type": "drill",
+              "difficulty": "base"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 11,
+      "title": "Дополнительная серия: десятичные суммы",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Вычислите:",
+          "micro_skill": "decimal_add_subtract",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "60,88 - 14,9 - 11,205",
+              "answer": "34,775",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard",
+              "hint": "Сначала сделай прикидку, затем считай точно."
+            },
+            {
+              "id": 2,
+              "expression": "-0,95 + 1,55 - 4,8",
+              "answer": "-4,2",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard",
+              "hint": "Сначала сделай прикидку, затем считай точно."
+            },
+            {
+              "id": 3,
+              "expression": "-10,28 + 9,2 - 2,92",
+              "answer": "-4",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 4,
+              "expression": "14,801 - 8,51 + 0,7",
+              "answer": "6,991",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 5,
+              "expression": "88,3 - 46,64 - 12,26",
+              "answer": "29,4",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 6,
+              "expression": "1,1 - 9,97 + 9,92",
+              "answer": "1,05",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 7,
+              "expression": "53,84 + 6,76 - 22,7",
+              "answer": "37,9",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 8,
+              "expression": "-3,45 - 5,95 + 7,2",
+              "answer": "-2,2",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 9,
+              "expression": "12,6 - 8,206 - 1,94",
+              "answer": "2,454",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 10,
+              "expression": "70,52 - 9,47 - 29,4",
+              "answer": "31,65",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 11,
+              "expression": "37,1 - 9,34 + 3,45 - 12,4",
+              "answer": "18,81",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 12,
+              "expression": "80,5 - 48,84 + 19,1 + 21,25",
+              "answer": "72,01",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 13,
+              "expression": "11,9 - 12,25 + 3,1",
+              "answer": "2,75",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 14,
+              "expression": "4,53 + 17,3 - 9,625",
+              "answer": "12,205",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 15,
+              "expression": "-8,2 + 8,75 - 5,1",
+              "answer": "-4,55",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 16,
+              "expression": "42 - 17,25 - 10,3",
+              "answer": "14,45",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 17,
+              "expression": "0,06 + 2,907 - 5,4",
+              "answer": "-2,433",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 18,
+              "expression": "99,5 - 41,18 + 3,7 - 19,49",
+              "answer": "42,53",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 19,
+              "expression": "6,65 - 4,3 + 11,506",
+              "answer": "13,856",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 20,
+              "expression": "-23,9 + 5,05 + 8,8",
+              "answer": "-10,05",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 21,
+              "expression": "62,58 - 16,2 - 12,505",
+              "answer": "33,875",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 22,
+              "expression": "0,75 + 3,25 - 6,1",
+              "answer": "-2,1",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 23,
+              "expression": "-11,58 + 10,9 - 4,22",
+              "answer": "-4,9",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            },
+            {
+              "id": 24,
+              "expression": "16,501 - 9,81 + 2,4",
+              "answer": "9,091",
+              "status": "ready",
+              "skill": "decimal_add_subtract",
+              "type": "drill",
+              "difficulty": "standard"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "title": "Дополнительная серия: порядок действий",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Вычислите:",
+          "micro_skill": "operation_order",
+          "tasks": [
+            {
+              "id": 1,
+              "expression": "6 - 2 \\cdot 4 - 3",
+              "answer": "-5",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 2,
+              "expression": "(6 - 2) \\cdot 4 - 3",
+              "answer": "13",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 3,
+              "expression": "18 : 3 \\cdot 2 - 3",
+              "answer": "9",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 4,
+              "expression": "18 : (3 \\cdot 2) - 3",
+              "answer": "0",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "intro"
+            },
+            {
+              "id": 5,
+              "expression": "5 - 3 \\cdot (4 - 7) - 3",
+              "answer": "11",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 6,
+              "expression": "24 : 6 + 3 \\cdot 5 - 3",
+              "answer": "16",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 7,
+              "expression": "30 - 18 : 3 \\cdot 2 - 3",
+              "answer": "15",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 8,
+              "expression": "(30 - 18) : 3 \\cdot 2 - 3",
+              "answer": "5",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 9,
+              "expression": "7 \\cdot (2 - 5) + 4 - 3",
+              "answer": "-20",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 10,
+              "expression": "40 : 5 : 2 - 3",
+              "answer": "1",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 11,
+              "expression": "40 : (5 : 2) - 3",
+              "answer": "13",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 12,
+              "expression": "3 - 4 \\cdot 5 + 18 - 3",
+              "answer": "-2",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 13,
+              "expression": "2,5 \\cdot (8 - 12) - 3",
+              "answer": "-13",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 14,
+              "expression": "12,6 : 0,3 - 15 - 3",
+              "answer": "24",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 15,
+              "expression": "4 \\cdot (-3 + 8) - 7 - 3",
+              "answer": "10",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            },
+            {
+              "id": 16,
+              "expression": "-6 + 2 \\cdot (9 - 14) - 3",
+              "answer": "-19",
+              "status": "ready",
+              "skill": "operation_order",
+              "type": "drill",
+              "difficulty": "base"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "homework_sets": [
+    {
+      "id": "hw_00_arithmetic_diagnostic",
+      "title": "Арифметическая база: знаки, дроби, порядок действий",
+      "target_minutes": 35,
+      "tasks_count": 20,
+      "tasks": [
+        {
+          "id": 1,
+          "expression": "-8 + 6",
+          "answer": "-2",
+          "status": "ready",
+          "skill": "add_different_signs",
+          "type": "concept",
+          "difficulty": "intro",
+          "prompt": "Вычисли и объясни через долг или температуру: -8 + 6."
+        },
+        {
+          "id": 2,
+          "expression": "-8 + (-6)",
+          "answer": "-14",
+          "status": "ready",
+          "skill": "negative_number_meaning",
+          "type": "concept",
+          "difficulty": "intro",
+          "prompt": "Вычисли: -8 + (-6). Чем этот пример отличается от -8 + 6?"
+        },
+        {
+          "id": 3,
+          "expression": "9 + (-14)",
+          "answer": "-5",
+          "status": "ready",
+          "skill": "add_different_signs",
+          "type": "drill",
+          "difficulty": "base",
+          "prompt": "Вычисли: 9 + (-14)."
+        },
+        {
+          "id": 4,
+          "expression": "-15 + 22",
+          "answer": "7",
+          "status": "ready",
+          "skill": "add_different_signs",
+          "type": "drill",
+          "difficulty": "base",
+          "prompt": "Вычисли: -15 + 22."
+        },
+        {
+          "id": 5,
+          "expression": "7 - 10",
+          "answer": "-3",
+          "status": "ready",
+          "skill": "subtract_as_opposite",
+          "type": "drill",
+          "difficulty": "base",
+          "prompt": "Вычисли: 7 - 10."
+        },
+        {
+          "id": 6,
+          "expression": "-6 - (-11)",
+          "answer": "5",
+          "status": "ready",
+          "skill": "subtract_as_opposite",
+          "type": "drill",
+          "difficulty": "base",
+          "prompt": "Вычисли: -6 - (-11)."
+        },
+        {
+          "id": 7,
+          "expression": "37,6 - 5,84 + 3,95 - 8,9",
+          "answer": "26,81",
+          "status": "ready",
+          "skill": "decimal_add_subtract",
+          "type": "drill",
+          "difficulty": "standard",
+          "hint": "Сделай прикидку: около 27.",
+          "prompt": "Вычисли: 37,6 - 5,84 + 3,95 - 8,9."
+        },
+        {
+          "id": 8,
+          "expression": "81 - 45,34 + 19,6 + 21,75",
+          "answer": "77,01",
+          "status": "ready",
+          "skill": "decimal_add_subtract",
+          "type": "drill",
+          "difficulty": "standard",
+          "prompt": "Вычисли: 81 - 45,34 + 19,6 + 21,75."
+        },
+        {
+          "id": 9,
+          "expression": "17,1 \\cdot 3,8 : 4,5 \\cdot 0,5",
+          "answer": "7,22",
+          "status": "ready",
+          "skill": "decimal_multiply_divide",
+          "type": "drill",
+          "difficulty": "standard",
+          "prompt": "Вычисли: 17,1 \\cdot 3,8 : 4,5 \\cdot 0,5."
+        },
+        {
+          "id": 10,
+          "expression": "81,9 : 4,5 : 0,28 \\cdot 1,2",
+          "answer": "78",
+          "status": "ready",
+          "skill": "decimal_multiply_divide",
+          "type": "drill",
+          "difficulty": "standard",
+          "prompt": "Вычисли: 81,9 : 4,5 : 0,28 \\cdot 1,2."
+        },
+        {
+          "id": 11,
+          "expression": "6 - 2 \\cdot 4",
+          "answer": "-2",
+          "status": "ready",
+          "skill": "operation_order",
+          "type": "drill",
+          "difficulty": "base",
+          "prompt": "Вычисли: 6 - 2 \\cdot 4."
+        },
+        {
+          "id": 12,
+          "expression": "(6 - 2) \\cdot 4",
+          "answer": "16",
+          "status": "ready",
+          "skill": "operation_order",
+          "type": "drill",
+          "difficulty": "base",
+          "prompt": "Вычисли: (6 - 2) \\cdot 4."
+        },
+        {
+          "id": 13,
+          "expression": "18 : 3 \\cdot 2",
+          "answer": "12",
+          "status": "ready",
+          "skill": "operation_order",
+          "type": "drill",
+          "difficulty": "base",
+          "prompt": "Вычисли: 18 : 3 \\cdot 2."
+        },
+        {
+          "id": 14,
+          "expression": "18 : (3 \\cdot 2)",
+          "answer": "3",
+          "status": "ready",
+          "skill": "operation_order",
+          "type": "drill",
+          "difficulty": "base",
+          "prompt": "Вычисли: 18 : (3 \\cdot 2)."
+        },
+        {
+          "id": 15,
+          "expression": "49,8 - 21,3 + 10,1",
+          "answer": "38,6",
+          "status": "ready",
+          "skill": "estimate_and_error_check",
+          "type": "guided",
+          "difficulty": "base",
+          "prompt": "Вычисли: 49,8 - 21,3 + 10,1."
+        },
+        {
+          "id": 16,
+          "expression": "-19,7 + 8,9",
+          "answer": "-10,8",
+          "status": "ready",
+          "skill": "estimate_and_error_check",
+          "type": "guided",
+          "difficulty": "base",
+          "prompt": "Вычисли: -19,7 + 8,9."
+        },
+        {
+          "id": 17,
+          "expression": "Температура была -8 °C, затем повысилась на 6 °C. Какая стала температура?",
+          "answer": "-2 °C",
+          "status": "ready",
+          "skill": "negative_number_meaning",
+          "type": "real_context",
+          "difficulty": "intro",
+          "prompt": "Вычисли: Температура была -8 °C, затем повысилась на 6 °C. Какая стала температура?."
+        },
+        {
+          "id": 18,
+          "expression": "На карте счета было 1200 рублей. Списали 1580 рублей. Какой баланс стал на счете?",
+          "answer": "-380 рублей",
+          "status": "ready",
+          "skill": "negative_number_meaning",
+          "type": "real_context",
+          "difficulty": "base",
+          "prompt": "Вычисли: На карте счета было 1200 рублей. Списали 1580 рублей. Какой баланс стал на счете?."
+        },
+        {
+          "id": 19,
+          "expression": "Ученик написал: -8 + 6 = -14. Найди ошибку и объясни правильно.",
+          "answer": "-8 + 6 = -2. При разных знаках нужно вычесть модули, а не сложить.",
+          "status": "ready",
+          "skill": "estimate_and_error_check",
+          "type": "error_analysis",
+          "difficulty": "base",
+          "prompt": "Вычисли: Ученик написал: -8 + 6 = -14. Найди ошибку и объясни правильно.."
+        },
+        {
+          "id": 20,
+          "expression": "Ученик написал: 18 : 3 \\cdot 2 = 3. Найди ошибку.",
+          "answer": "18 : 3 \\cdot 2 = 12. Умножение и деление выполняются слева направо.",
+          "status": "ready",
+          "skill": "operation_order",
+          "type": "error_analysis",
+          "difficulty": "base",
+          "prompt": "Вычисли: Ученик написал: 18 : 3 \\cdot 2 = 3. Найди ошибку.."
+        }
+      ]
+    }
+  ]
+}
