@@ -6,7 +6,9 @@ use App\Http\Controllers\Pwa\EgeStudentController;
 use App\Http\Controllers\Pwa\ManifestController;
 use App\Http\Controllers\Pwa\PracticeController;
 use App\Http\Controllers\Pwa\StudentController;
+use App\Http\Controllers\Pwa\StudentLessonController;
 use App\Http\Controllers\Pwa\TeacherController;
+use App\Http\Controllers\Pwa\TeacherLessonController;
 use App\Http\Controllers\Pwa\VprController;
 use Illuminate\Support\Facades\Route;
 
@@ -61,6 +63,12 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
         Route::get('/homework', [StudentController::class, 'studentHomework'])->name('pwa.student.homework');
         Route::get('/homework/{assignment}', [StudentController::class, 'showTopicHomework'])->name('pwa.student.homework.topic');
         Route::post('/homework/{assignment}/tasks/{homeworkTask}', [StudentController::class, 'submitTopicHomeworkTask'])->name('pwa.student.homework.topic.submit');
+
+        // Lesson endpoints (для polling в dashboard и страницы урока)
+        Route::get('/lessons/active',          [StudentLessonController::class, 'active'])->name('pwa.student.lessons.active');
+        Route::get('/lessons/{id}/state',      [StudentLessonController::class, 'state'])->name('pwa.student.lessons.state')->whereNumber('id');
+        Route::post('/lessons/{id}/answer',    [StudentLessonController::class, 'answer'])->name('pwa.student.lessons.answer')->whereNumber('id');
+
         Route::get('/tutor', [StudentController::class, 'tutor'])->name('pwa.student.tutor');
         Route::prefix('practice')->name('pwa.student.practice.')->group(function () {
             Route::get('/', [PracticeController::class, 'index'])->name('index');
@@ -127,6 +135,16 @@ Route::domain('teacher.' . config('app.base_domain'))->group(function () {
         Route::get('/homework', [TeacherController::class, 'homework'])->name('pwa.teacher.homework');
         Route::get('/homework/topic-tasks/{topicNumber}', [TeacherController::class, 'topicTasks'])->name('pwa.teacher.homework.topic-tasks')->whereNumber('topicNumber');
         Route::post('/homework/assign', [TeacherController::class, 'assignHomework'])->name('pwa.teacher.homework.assign');
+
+        // Lessons API (lesson_session lifecycle)
+        Route::post('/lessons',                              [TeacherLessonController::class, 'create'])->name('pwa.teacher.lessons.create');
+        Route::get('/lessons/{id}',                          [TeacherLessonController::class, 'show'])->name('pwa.teacher.lessons.show')->whereNumber('id');
+        Route::get('/lessons/{id}/state',                    [TeacherLessonController::class, 'state'])->name('pwa.teacher.lessons.state')->whereNumber('id');
+        Route::post('/lessons/{id}/tasks',                   [TeacherLessonController::class, 'addTask'])->name('pwa.teacher.lessons.add-task')->whereNumber('id');
+        Route::delete('/lessons/{id}/tasks/{taskId}',        [TeacherLessonController::class, 'removeTask'])->name('pwa.teacher.lessons.remove-task')->whereNumber('id')->whereNumber('taskId');
+        Route::post('/lessons/{id}/start',                   [TeacherLessonController::class, 'start'])->name('pwa.teacher.lessons.start')->whereNumber('id');
+        Route::post('/lessons/{id}/end',                     [TeacherLessonController::class, 'end'])->name('pwa.teacher.lessons.end')->whereNumber('id');
+
         Route::get('/variants', [TeacherController::class, 'variants'])->name('pwa.teacher.variants');
         Route::get('/referrals', [TeacherController::class, 'referrals'])->name('pwa.teacher.referrals');
     });

@@ -26,11 +26,28 @@
 @endpush
 
 @section('body')
-<div class="page">
+<div class="page" x-data="{ creating: false }">
   <div class="topbar">
     <a href="{{ route('pwa.teacher.dashboard') }}" class="back-btn">‹</a>
     <div class="topbar-title">Уроки сегодня</div>
   </div>
+
+  <button :disabled="creating"
+          style="background: var(--accent); color: white; border: none; border-radius: 12px; padding: 14px; font-weight: 800; font-size: 14px; cursor: pointer;"
+          @click="
+            creating = true;
+            const r = await fetch('/lessons', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content },
+              credentials: 'include',
+            });
+            const d = await r.json();
+            if (d.session) window.location = '/lessons/' + d.session.id;
+            else { alert('Ошибка создания'); creating = false; }
+          ">
+    <span x-show="!creating">🎯 Начать новый урок</span>
+    <span x-show="creating" x-cloak>создаём…</span>
+  </button>
 
   <div class="note">
     Слоты на {{ $todayLabel }}. Статусы:
