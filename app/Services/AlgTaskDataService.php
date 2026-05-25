@@ -109,4 +109,119 @@ class AlgTaskDataService
         }
         return ['blocks' => count($blocks), 'tasks' => $total, 'total_tasks' => $total];
     }
+
+    /**
+     * Полный бандл «банка навыков» (skills.json) для класса.
+     * Структура: { groups: [...], levels: [...], skills: [...] }.
+     * Используется страницами /alg-skills/{grade}.
+     */
+    public function getSkillsBundle(): array
+    {
+        $cacheKey = "alg_g{$this->grade}_skills_bundle";
+
+        return Cache::remember($cacheKey, 3600, function () {
+            $path = "{$this->basePath}/skills.json";
+            if (!File::exists($path)) {
+                return [];
+            }
+            return json_decode(File::get($path), true) ?? [];
+        });
+    }
+
+    public function getSkillBySlug(string $slug): ?array
+    {
+        foreach ($this->getSkillsBundle()['skills'] ?? [] as $skill) {
+            if (($skill['slug'] ?? null) === $slug) {
+                return $skill;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Возвращает «представительные» задания уровня — без повторов
+     * шаблона выражения. Логика воспроизводит JS-генератор
+     * scripts/build-grade7-skill-pages.mjs (representativeTasks),
+     * чтобы вкладка «Типы примеров» совпадала со статичной версией.
+     *
+     * @param  array<int, array<string, mixed>>  $tasks
+     * @return array<int, array<string, mixed>>
+     */
+    public static function representativeTasks(array $tasks, int $limit = 12): array
+    {
+        $seen = [];
+        $picked = [];
+
+        foreach ($tasks as $task) {
+            $expression = (string) ($task['expression'] ?? '');
+            $signature = self::taskFeatureKey($expression) . '::' . self::taskSignature($expression);
+            if (isset($seen[$signature])) {
+                continue;
+            }
+            $seen[$signature] = true;
+            $task['id'] = count($picked) + 1;
+            $picked[] = $task;
+            if (count($picked) >= $limit) {
+                break;
+            }
+        }
+
+        return $picked ?: array_slice($tasks, 0, min(count($tasks), $limit));
+    }
+
+    /**
+     * Готовит выражение для рендера KaTeX:
+     * - чисто математический текст (без кириллицы) оборачивается целиком в $...$
+     * - смешанный — оборачиваются только числовые фрагменты с операциями
+     *
+     * Возвращает уже HTML-escape'нутую строку (для безопасной вставки в Blade {!! !!}).
+     */
+    public static function mathText(string $value): string
+    {
+        $text = trim(preg_replace('/\s+/u', ' ', $value));
+        $escaped = htmlspecialchars($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        if (!preg_match('/[А-Яа-яЁё]/u', $text)) {
+            return '$' . $escaped . '$';
+        }
+
+        $pattern = '/(?<![A-Za-zА-Яа-яЁё])(-?\d+(?:,\d+)?(?:\s*(?:\\\\cdot|[:=+\-])\s*-?\d+(?:,\d+)?|\s*[+\-]\s*\(-?\d+(?:,\d+)?\)|\s*[:=+\-]\s*\([^)]*\)|\s*\\\\cdot\s*\([^)]*\)|\s*\^\d+)*)/u';
+
+        return preg_replace_callback($pattern, function (array $m) {
+            $fragment = trim($m[1]);
+            return ($fragment !== '' && preg_match('/\d/u', $fragment)) ? '$' . $fragment . '$' : $m[0];
+        }, $escaped);
+    }
+
+    private static function taskSignature(string $expression): string
+    {
+        $s = preg_replace('/\\\\frac\{[^}]+\}\{[^}]+\}/u', '\\\\frac{n}{n}', $expression);
+        $s = preg_replace('/-?\d+(?:,\d+)?/u', 'n', $s);
+        $s = preg_replace('/\s+/u', ' ', $s);
+        return trim((string) $s);
+    }
+
+    private static function taskFeatureKey(string $expression): string
+    {
+        $features = [];
+        if (str_contains($expression, '\\frac')) {
+            $features[] = 'fractions';
+        }
+        if (preg_match('/\([xyz]\s*[-+]\s*\d+\)/u', $expression)) {
+            $features[] = 'shifted-variable';
+        }
+        if (preg_match('/=\s*-?\d+[xyz]\b/u', $expression)) {
+            $features[] = 'variable-right';
+        }
+        if (str_contains($expression, 'z')) {
+            $features[] = 'three-vars';
+        }
+        if (preg_match_all('/\\\\\\\\/', $expression) >= 2) {
+            $features[] = 'three-equations';
+        }
+        if (preg_match_all('/\(/', $expression) >= 2) {
+            $features[] = 'nested-parentheses';
+        }
+        return $features ? implode('|', $features) : 'plain';
+    }
 }
