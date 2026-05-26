@@ -63,6 +63,7 @@ class DeployController extends Controller
         'variants:backfill-slots',
         'user:flush-sessions',
         'redesign:backup-puzzles',
+        'logs:tail',
     ];
 
     /**
