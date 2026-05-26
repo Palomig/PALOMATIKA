@@ -131,13 +131,19 @@ class TaskBankResolver
         throw new DomainException("Task #{$taskId} not found in zadanie #{$zadanieNumber}");
     }
 
+    private const IMAGE_LIKE_TYPES = [
+        'matching', 'matching_signs', 'matching_4', 'matching_full',
+        'graph_statements', 'statements',
+    ];
+
     /**
-     * Нормализует задачу к {expression, type, answer, options?, source_label, raw}.
+     * Нормализует задачу к {expression, type, answer, options?, image_svg?, source_label, raw}.
      * Throws DomainException, если тип не поддержан в v1.
      */
     private function normalize(array $task, array $zadanieContext, string $sourceLabel, ?string $forceType = null): array
     {
-        $type = $forceType ?? $this->normalizeType($task['task_type'] ?? $zadanieContext['type'] ?? null, $task);
+        $rawType = strtolower(trim((string) ($task['task_type'] ?? $zadanieContext['type'] ?? '')));
+        $type = $forceType ?? $this->normalizeType($rawType, $task);
 
         if (!in_array($type, self::SUPPORTED_TYPES, true)) {
             throw new DomainException("Task type '{$type}' not supported in v1 (only expression/choice)");
@@ -168,23 +174,40 @@ class TaskBankResolver
             ));
         }
 
+        // Картинка/SVG, если есть. Используется для matching и подобных задач:
+        // ученик видит график и вводит ответ свободным текстом.
+        $svg = (string) ($task['svg'] ?? '');
+        if ($svg !== '') {
+            $result['image_svg'] = $svg;
+        }
+        $imageUrl = (string) ($task['image'] ?? '');
+        if ($imageUrl !== '') {
+            $result['image_url'] = $imageUrl;
+        }
+
         return $result;
     }
 
     /**
      * Приводит «сырой» тип к 'expression' | 'choice' | оригинальное имя.
-     * Если у задачи есть options, относим к choice независимо от метки.
+     * Если у задачи есть options и тип не matching-like — относим к choice.
+     * Matching / graph_statements / statements нормализуем к 'expression':
+     * ученик увидит картинку + поле ввода (ответ '312' и т.п. сверяется auto-check'ом).
      */
     private function normalizeType(?string $rawType, array $task): string
     {
+        $rawType = strtolower(trim((string) $rawType));
+
+        if (in_array($rawType, self::IMAGE_LIKE_TYPES, true)) {
+            return 'expression';
+        }
         if (!empty($task['options'])) {
             return 'choice';
         }
-        $rawType = strtolower(trim((string) $rawType));
         return match (true) {
-            $rawType === '' || $rawType === 'expression'        => 'expression',
-            str_contains($rawType, 'choice')                    => 'choice',
-            default                                              => $rawType,
+            $rawType === '' || $rawType === 'expression' => 'expression',
+            str_contains($rawType, 'choice')             => 'choice',
+            default                                       => $rawType,
         };
     }
 

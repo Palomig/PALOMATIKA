@@ -14,6 +14,8 @@
   .lesson-task-num { font-family: var(--display); font-size: 18px; color: var(--accent); }
   .lesson-task-expr { font-size: 18px; color: var(--text); word-break: break-word; min-height: 24px; }
   .lesson-task-expr .katex { font-size: 1.08em; }
+  .lesson-task-image { width: 100%; display: flex; justify-content: center; background: var(--surface2); border-radius: 10px; padding: 12px; overflow: hidden; }
+  .lesson-task-image svg, .lesson-task-image img { max-width: 100%; height: auto; max-height: 320px; }
   .lesson-answer-row { display: flex; gap: 8px; align-items: center; }
   .lesson-answer-input { flex: 1; background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 10px; padding: 12px 14px; font-size: 16px; font-family: ui-monospace, monospace; }
   .lesson-answer-input:focus { outline: 2px solid var(--accent); border-color: var(--accent); }
@@ -47,6 +49,10 @@
              x-text="task.my_answer ? '✓ отправлено' : 'жду ответ'"></div>
       </div>
 
+      <div class="lesson-task-image" x-show="task.payload.image_svg" x-html="task.payload.image_svg"></div>
+      <template x-if="!task.payload.image_svg && task.payload.image_url">
+        <div class="lesson-task-image"><img :src="task.payload.image_url" alt=""></div>
+      </template>
       <div class="lesson-task-expr" x-html="renderMath(task.payload.expression)"></div>
 
       {{-- Choice type --}}

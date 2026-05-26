@@ -132,11 +132,16 @@ class LessonTaskPickerService
                 $groupLabel = $instruction !== '' ? "№{$number} · {$instruction}" : "№{$number}";
                 foreach ($this->supportedTasks($z) as $t) {
                     $taskId = $t['id'] ?? '';
+                    $expression = (string) ($t['expression'] ?? $t['prompt'] ?? $t['question'] ?? '');
+                    if ($expression === '') {
+                        $expression = (string) ($z['instruction'] ?? '');
+                    }
                     $result[] = [
                         'uid'            => "{$blockNumber}.{$number}.{$taskId}",
                         'id'             => $taskId,
-                        'expression'     => (string) ($t['expression'] ?? $t['prompt'] ?? $t['question'] ?? ''),
+                        'expression'     => $expression,
                         'answer'         => (string) ($t['answer'] ?? ''),
+                        'image_svg'      => (string) ($t['svg'] ?? ''),
                         'group_key'      => $number,
                         'group_label'    => $groupLabel,
                         'zadanie_number' => $number,
@@ -167,6 +172,7 @@ class LessonTaskPickerService
                     'id'          => $taskId,
                     'expression'  => (string) ($t['expression'] ?? ''),
                     'answer'      => (string) ($t['answer'] ?? ''),
+                    'image_svg'   => (string) ($t['svg'] ?? ''),
                     'group_key'   => $levelId,
                     'group_label' => $levelTitle,
                     'level_id'    => $levelId,
@@ -194,24 +200,34 @@ class LessonTaskPickerService
         };
     }
 
+    private const IMAGE_LIKE_TYPES = [
+        'matching', 'matching_signs', 'matching_4', 'matching_full',
+        'graph_statements', 'statements',
+    ];
+
     private function supportedTasks(array $zadanie): array
     {
         $zadanieType = strtolower(trim((string) ($zadanie['type'] ?? '')));
+        $instruction = (string) ($zadanie['instruction'] ?? '');
         $result = [];
         foreach ($zadanie['tasks'] ?? [] as $task) {
             $type = strtolower(trim((string) ($task['task_type'] ?? $zadanieType)));
             $expression = (string) ($task['expression'] ?? $task['prompt'] ?? $task['question'] ?? '');
             $hasAnswer  = (string) ($task['answer'] ?? '') !== '';
+            $hasImage   = (string) ($task['svg'] ?? '') !== '' || (string) ($task['image'] ?? '') !== '';
 
-            // Только два типа поддержаны в уроке: expression и (simple) choice.
-            // matching / matching_signs / matching_4 / graph_statements / statements /
-            // geometry / grid / word_problem пока требуют отдельного UI у ученика
-            // и не имеют expression — отсекаем.
+            // Поддерживаются:
+            //   expression: формула + ответ (auto-check).
+            //   choice-like: выбор из вариантов (есть expression/prompt).
+            //   matching/graph_statements/statements: есть картинка + ответ ⇒
+            //     ученик увидит SVG и впишет ответ свободным текстом.
             $isExpression = ($type === '' || $type === 'expression') && $expression !== '' && $hasAnswer;
             $isChoiceLike = in_array($type, ['choice', 'simple_choice', 'fraction_choice', 'interval_choice'], true)
                 && $expression !== '';
+            $isImageLike = in_array($type, self::IMAGE_LIKE_TYPES, true)
+                && $hasImage && $hasAnswer && ($expression !== '' || $instruction !== '');
 
-            if ($isExpression || $isChoiceLike) {
+            if ($isExpression || $isChoiceLike || $isImageLike) {
                 $result[] = $task;
             }
         }
