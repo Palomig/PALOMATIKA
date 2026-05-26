@@ -102,7 +102,16 @@ class LessonTaskPickerService
     }
 
     /**
-     * @return array<int, array{id:string|int, expression:string, answer:string}>
+     * Все задачи темы / навыка одним списком, сгруппированные через group_key/group_label.
+     *
+     * Для не-alg-skill: group_key = zadanie_number, group_label = "№N · instruction".
+     * Для alg-skill:    group_key = level_id,       group_label = level title.
+     *
+     * @return array<int, array{
+     *   id:string|int, expression:string, answer:string,
+     *   group_key:string|int, group_label:string,
+     *   zadanie_number?:int, level_id?:string
+     * }>
      */
     public function tasks(string $bank, array $refs): array
     {
@@ -110,42 +119,56 @@ class LessonTaskPickerService
             return $this->algSkillTasks($refs);
         }
 
-        $zadanieNumber = (int) ($refs['zadanie_number'] ?? 0);
-        if (!$zadanieNumber) return [];
+        if (empty($refs['topic_id'])) return [];
 
         $blocks = $this->resolveBlocks($bank, $refs);
+        $result = [];
         foreach ($blocks as $block) {
             foreach ($block['zadaniya'] ?? [] as $z) {
-                if ((int) ($z['number'] ?? 0) !== $zadanieNumber) continue;
-                return array_values(array_map(fn ($t) => [
-                    'id'         => $t['id'] ?? '',
-                    'expression' => $this->shorten((string) ($t['expression'] ?? $t['prompt'] ?? $t['question'] ?? ''), 120),
-                    'answer'     => (string) ($t['answer'] ?? ''),
-                ], $this->supportedTasks($z)));
+                $number = (int) ($z['number'] ?? 0);
+                if (!$number) continue;
+                $instruction = $this->shorten((string) ($z['instruction'] ?? ''), 80);
+                $groupLabel = $instruction !== '' ? "№{$number} · {$instruction}" : "№{$number}";
+                foreach ($this->supportedTasks($z) as $t) {
+                    $result[] = [
+                        'id'             => $t['id'] ?? '',
+                        'expression'     => $this->shorten((string) ($t['expression'] ?? $t['prompt'] ?? $t['question'] ?? ''), 120),
+                        'answer'         => (string) ($t['answer'] ?? ''),
+                        'group_key'      => $number,
+                        'group_label'    => $groupLabel,
+                        'zadanie_number' => $number,
+                    ];
+                }
             }
         }
-        return [];
+        return $result;
     }
 
     private function algSkillTasks(array $refs): array
     {
         $grade = (int) ($refs['grade'] ?? 0);
         $slug  = (string) ($refs['skill_slug'] ?? '');
-        $level = (string) ($refs['level_id'] ?? '');
-        if (!$grade || !$slug || !$level) return [];
+        if (!$grade || !$slug) return [];
 
         $skill = (new AlgTaskDataService($grade))->getSkillBySlug($slug);
         if (!$skill) return [];
 
+        $result = [];
         foreach ($skill['levels'] ?? [] as $lvl) {
-            if ((string) ($lvl['id'] ?? '') !== $level) continue;
-            return array_values(array_map(fn ($t) => [
-                'id'         => $t['id'] ?? '',
-                'expression' => $this->shorten((string) ($t['expression'] ?? ''), 120),
-                'answer'     => (string) ($t['answer'] ?? ''),
-            ], $lvl['tasks'] ?? []));
+            $levelId    = (string) ($lvl['id'] ?? '');
+            $levelTitle = (string) ($lvl['title'] ?? $levelId);
+            foreach ($lvl['tasks'] ?? [] as $t) {
+                $result[] = [
+                    'id'          => $t['id'] ?? '',
+                    'expression'  => $this->shorten((string) ($t['expression'] ?? ''), 120),
+                    'answer'      => (string) ($t['answer'] ?? ''),
+                    'group_key'   => $levelId,
+                    'group_label' => $levelTitle,
+                    'level_id'    => $levelId,
+                ];
+            }
         }
-        return [];
+        return $result;
     }
 
     private function resolveBlocks(string $bank, array $refs): array

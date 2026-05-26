@@ -69,9 +69,6 @@ class TeacherLessonController extends Controller
                 $response['skills'] = $picker->skills((int) $refs['grade']);
             }
             if (!empty($refs['grade']) && !empty($refs['skill_slug'])) {
-                $response['levels'] = $picker->levels((int) $refs['grade'], (string) $refs['skill_slug']);
-            }
-            if (!empty($refs['grade']) && !empty($refs['skill_slug']) && !empty($refs['level_id'])) {
                 $response['tasks'] = $picker->tasks($bank, $refs);
             }
         } else {
@@ -81,9 +78,6 @@ class TeacherLessonController extends Controller
                 $response['topics'] = $picker->topics($bank, $refs['grade'] ?? null);
             }
             if ($gradeReady && !empty($refs['topic_id'])) {
-                $response['zadaniya'] = $picker->zadaniya($bank, $refs);
-            }
-            if ($gradeReady && !empty($refs['topic_id']) && !empty($refs['zadanie_number'])) {
                 $response['tasks'] = $picker->tasks($bank, $refs);
             }
         }
