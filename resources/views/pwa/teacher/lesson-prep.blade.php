@@ -11,6 +11,14 @@
   .lesson-task-answer { font-family: ui-monospace, monospace; color: var(--green); font-weight: 700; font-size: 13px; }
   .picker-row { display: flex; gap: 8px; flex-wrap: wrap; }
   .picker-row select, .picker-row input { background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px 10px; font-size: 13px; min-width: 90px; }
+  .picker-group-label { font-size: 11px; color: var(--muted); margin: 12px 0 6px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .picker-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+  .picker-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 10px; cursor: pointer; user-select: none; display: flex; flex-direction: column; gap: 6px; transition: border-color .12s, background .12s; }
+  .picker-card:hover { border-color: var(--accent-bd); }
+  .picker-card.active { background: var(--accent-bg); border-color: var(--accent); }
+  .picker-card-expr { font-size: 13px; color: var(--text); word-break: break-word; line-height: 1.3; }
+  .picker-card-meta { font-size: 11px; color: var(--muted); display: flex; justify-content: space-between; gap: 8px; }
+  .picker-card-answer { font-family: ui-monospace, monospace; color: var(--green); font-weight: 700; }
   .invite-block { background: var(--accent-bg); border: 1px solid var(--accent-bd); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
   .invite-link { font-family: ui-monospace, monospace; font-size: 12px; word-break: break-all; color: var(--text); }
   .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -108,65 +116,57 @@
         </select>
       </div>
 
-      {{-- alg-skill: навык + уровень --}}
+      {{-- alg-skill: выбор навыка --}}
       <template x-if="picker.bank === 'alg-skill'">
-        <div style="display: flex; flex-direction: column; gap: 8px;">
-          <div class="picker-row" x-show="picker.options.skills">
-            <select x-model="picker.refs.skill_slug" @change="onSkillChange()" style="flex:1;min-width:240px;">
-              <option value="">— навык —</option>
-              <template x-for="s in (picker.options.skills || [])" :key="s.slug">
-                <option :value="s.slug" x-text="`${s.id}. ${s.title}`"></option>
-              </template>
-            </select>
-          </div>
-          <div class="picker-row" x-show="picker.refs.skill_slug && (picker.options.levels || []).length">
-            <select x-model="picker.refs.level_id" @change="onLevelChange()">
-              <option value="">— уровень —</option>
-              <template x-for="l in (picker.options.levels || [])" :key="l.id">
-                <option :value="l.id" x-text="l.title || l.id"></option>
-              </template>
-            </select>
-          </div>
+        <div class="picker-row" x-show="picker.options.skills">
+          <select x-model="picker.refs.skill_slug" @change="onSkillChange()" style="flex:1;min-width:240px;">
+            <option value="">— навык —</option>
+            <template x-for="s in (picker.options.skills || [])" :key="s.slug">
+              <option :value="s.slug" x-text="`${s.id}. ${s.title}`"></option>
+            </template>
+          </select>
         </div>
       </template>
 
-      {{-- остальные банки: тема + задание --}}
+      {{-- остальные банки: выбор темы --}}
       <template x-if="picker.bank !== 'alg-skill'">
-        <div style="display: flex; flex-direction: column; gap: 8px;">
-          <div class="picker-row" x-show="picker.options.topics">
-            <select x-model="picker.refs.topic_id" @change="onTopicChange()" style="flex:1;min-width:240px;">
-              <option value="">— тема —</option>
-              <template x-for="t in (picker.options.topics || [])" :key="t.id">
-                <option :value="t.id" x-text="`${t.id}. ${t.title}`"></option>
-              </template>
-            </select>
-          </div>
-          <div class="picker-row" x-show="picker.refs.topic_id && (picker.options.zadaniya || []).length">
-            <select x-model.number="picker.refs.zadanie_number" @change="onZadanieChange()" style="flex:1;min-width:240px;">
-              <option value="">— задание —</option>
-              <template x-for="z in (picker.options.zadaniya || [])" :key="z.number">
-                <option :value="z.number" x-text="`№${z.number}${z.instruction ? ' · ' + z.instruction : ''} (${z.task_count})`"></option>
-              </template>
-            </select>
-          </div>
+        <div class="picker-row" x-show="picker.options.topics">
+          <select x-model="picker.refs.topic_id" @change="onTopicChange()" style="flex:1;min-width:240px;">
+            <option value="">— тема —</option>
+            <template x-for="t in (picker.options.topics || [])" :key="t.id">
+              <option :value="t.id" x-text="`${t.id}. ${t.title}`"></option>
+            </template>
+          </select>
         </div>
       </template>
-
-      {{-- задача (общее для всех банков) --}}
-      <div class="picker-row" x-show="(picker.options.tasks || []).length">
-        <select x-model="picker.refs.task_id" style="flex:1;min-width:240px;">
-          <option value="">— задача —</option>
-          <template x-for="t in (picker.options.tasks || [])" :key="t.id">
-            <option :value="t.id" x-text="`#${t.id}: ${t.expression || ''}${t.answer ? ' = ' + t.answer : ''}`"></option>
-          </template>
-        </select>
-      </div>
 
       <div x-show="picker.loading" style="font-size: 12px; color: var(--muted);">загружаем…</div>
+
+      {{-- Карточки задач (мультивыбор по клику) --}}
+      <template x-for="group in taskGroups" :key="group.key">
+        <div>
+          <div class="picker-group-label" x-text="group.label"></div>
+          <div class="picker-cards">
+            <template x-for="t in group.tasks" :key="taskCardKey(t)">
+              <div class="picker-card"
+                   :class="isCardSelected(t) ? 'active' : ''"
+                   @click="toggleCard(t)">
+                <div class="picker-card-expr" x-text="t.expression || '(без формулы)'"></div>
+                <div class="picker-card-meta">
+                  <span x-text="`#${t.id}`"></span>
+                  <span class="picker-card-answer" x-show="t.answer" x-text="t.answer"></span>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </template>
     </div>
 
     <div class="btn-row">
-      <button class="btn btn-primary" @click="addTask" :disabled="!picker.refs.task_id">Добавить</button>
+      <button class="btn btn-primary" @click="addSelectedTasks" :disabled="!selectedCount || picker.loading">
+        <span x-text="selectedCount ? `Добавить (${selectedCount})` : 'Добавить'"></span>
+      </button>
       <button class="btn" @click="pickerOpen = false">Отмена</button>
     </div>
     <div x-show="picker.error" style="color: var(--red); font-size: 12px;" x-text="picker.error"></div>
@@ -255,10 +255,11 @@
       picker: {
         bank: 'oge',
         refs: emptyRefs(),
-        options: { grades: [], topics: [], zadaniya: [], skills: [], levels: [], tasks: [] },
+        options: { grades: [], topics: [], skills: [], tasks: [] },
         loading: false,
         error: '',
       },
+      selectedTasks: [],
       pollTimer: null,
       copiedAt: null,
 
@@ -301,12 +302,10 @@
           }
           const d = await r.json();
           this.picker.options = {
-            grades:    d.grades    || [],
-            topics:    d.topics    || null,
-            zadaniya:  d.zadaniya  || [],
-            skills:    d.skills    || null,
-            levels:    d.levels    || [],
-            tasks:     d.tasks     || [],
+            grades: d.grades || [],
+            topics: d.topics || null,
+            skills: d.skills || null,
+            tasks:  d.tasks  || [],
           };
         } catch (e) {
           this.picker.error = String(e);
@@ -318,7 +317,8 @@
       async selectBank(bank) {
         this.picker.bank = bank;
         this.picker.refs = emptyRefs();
-        this.picker.options = { grades: [], topics: null, zadaniya: [], skills: null, levels: [], tasks: [] };
+        this.picker.options = { grades: [], topics: null, skills: null, tasks: [] };
+        this.selectedTasks = [];
         this.picker.error = '';
         await this.fetchPickerOptions();
         const grades = this.picker.options.grades || [];
@@ -330,33 +330,103 @@
 
       async onGradeChange() {
         this.picker.refs.topic_id = '';
-        this.picker.refs.zadanie_number = '';
-        this.picker.refs.task_id = '';
         this.picker.refs.skill_slug = '';
-        this.picker.refs.level_id = '';
+        this.selectedTasks = [];
         await this.fetchPickerOptions();
       },
 
       async onTopicChange() {
-        this.picker.refs.zadanie_number = '';
-        this.picker.refs.task_id = '';
-        await this.fetchPickerOptions();
-      },
-
-      async onZadanieChange() {
-        this.picker.refs.task_id = '';
+        this.selectedTasks = [];
         await this.fetchPickerOptions();
       },
 
       async onSkillChange() {
-        this.picker.refs.level_id = '';
-        this.picker.refs.task_id = '';
+        this.selectedTasks = [];
         await this.fetchPickerOptions();
       },
 
-      async onLevelChange() {
-        this.picker.refs.task_id = '';
-        await this.fetchPickerOptions();
+      taskCardKey(t) {
+        return `${this.picker.bank}|${t.group_key ?? ''}|${t.id}`;
+      },
+
+      isCardSelected(t) {
+        const k = this.taskCardKey(t);
+        return this.selectedTasks.some(s => s._key === k);
+      },
+
+      toggleCard(t) {
+        const k = this.taskCardKey(t);
+        const i = this.selectedTasks.findIndex(s => s._key === k);
+        if (i >= 0) {
+          this.selectedTasks.splice(i, 1);
+        } else {
+          this.selectedTasks.push({ ...t, _key: k });
+        }
+      },
+
+      get selectedCount() {
+        return this.selectedTasks.length;
+      },
+
+      get taskGroups() {
+        const out = [];
+        const byKey = new Map();
+        for (const t of (this.picker.options.tasks || [])) {
+          const k = String(t.group_key ?? '');
+          if (!byKey.has(k)) {
+            byKey.set(k, { key: k, label: t.group_label || '', tasks: [] });
+            out.push(byKey.get(k));
+          }
+          byKey.get(k).tasks.push(t);
+        }
+        return out;
+      },
+
+      taskRefs(t) {
+        const refs = { ...this.picker.refs };
+        if (t.zadanie_number) refs.zadanie_number = t.zadanie_number;
+        if (t.level_id)       refs.level_id       = t.level_id;
+        refs.task_id = t.id;
+        // strip empty
+        for (const k of Object.keys(refs)) {
+          if (refs[k] === '' || refs[k] === null || refs[k] === undefined) delete refs[k];
+        }
+        return refs;
+      },
+
+      async addSelectedTasks() {
+        if (!this.selectedTasks.length) return;
+        this.picker.error = '';
+        this.picker.loading = true;
+        let added = 0;
+        try {
+          for (const t of this.selectedTasks) {
+            const refs = this.taskRefs(t);
+            const r = await fetch(`/lessons/${this.sessionId}/tasks`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content, 'Accept': 'application/json' },
+              credentials: 'include',
+              body: JSON.stringify({ bank: this.picker.bank, refs }),
+            });
+            if (!r.ok) {
+              const err = await r.json().catch(() => ({}));
+              this.picker.error = `Задача #${t.id}: ${err.error || r.statusText}`;
+              break;
+            }
+            added++;
+          }
+        } catch (e) {
+          this.picker.error = String(e);
+        } finally {
+          this.picker.loading = false;
+        }
+        if (added > 0) {
+          this.selectedTasks = [];
+          await this.refreshState();
+          if (!this.picker.error) {
+            this.pickerOpen = false;
+          }
+        }
       },
 
       async refreshState() {
@@ -377,33 +447,6 @@
             if (document.hidden) return;
             this.refreshState();
           }, 4000);
-        }
-      },
-
-      async addTask() {
-        this.picker.error = '';
-        try {
-          const refs = {};
-          for (const k of Object.keys(this.picker.refs)) {
-            const v = this.picker.refs[k];
-            if (v === '' || v === null) continue;
-            refs[k] = isNaN(v) || ['skill_slug', 'level_id', 'topic_id'].includes(k) ? v : Number(v);
-          }
-          const r = await fetch(`/lessons/${this.sessionId}/tasks`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content, 'Accept': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify({ bank: this.picker.bank, refs }),
-          });
-          if (!r.ok) {
-            const err = await r.json();
-            this.picker.error = err.error || JSON.stringify(err);
-            return;
-          }
-          this.pickerOpen = false;
-          await this.refreshState();
-        } catch (e) {
-          this.picker.error = String(e);
         }
       },
 
