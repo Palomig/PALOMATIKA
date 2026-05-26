@@ -57,7 +57,7 @@
             <article class="lesson-slot-student">
               <div>
                 <strong>{{ $student['student_name'] }}</strong>
-                <span>{{ $student['student_full_name'] ?: $student['evrium_name'] }} · {{ $student['risk_label'] }}</span>
+                <span>{{ $student['student_full_name'] ?: $student['evrium_name'] }}</span>
               </div>
               <div class="lesson-slot-actions">
                 @if($student['student_id'])
