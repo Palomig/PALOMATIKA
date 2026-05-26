@@ -25,6 +25,8 @@
   .picker-card-expr { font-size: 13px; color: var(--text); word-break: break-word; line-height: 1.3; }
   .picker-card-meta { font-size: 11px; color: var(--muted); display: flex; justify-content: space-between; gap: 8px; }
   .picker-card-answer { font-family: ui-monospace, monospace; color: var(--green); font-weight: 700; }
+  .picker-card-image { width: 100%; max-height: 140px; display: flex; align-items: center; justify-content: center; background: var(--surface); border-radius: 6px; overflow: hidden; }
+  .picker-card-image svg { max-width: 100%; max-height: 140px; height: auto; }
   .invite-block { background: var(--accent-bg); border: 1px solid var(--accent-bd); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
   .invite-link { font-family: ui-monospace, monospace; font-size: 12px; word-break: break-all; color: var(--text); }
   .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -162,6 +164,7 @@
               <div class="picker-card"
                    :class="isCardSelected(t) ? 'active' : ''"
                    @click="toggleCard(t)">
+                <div class="picker-card-image" x-show="t.image_svg" x-html="t.image_svg"></div>
                 <div class="picker-card-expr" x-html="renderLatex(t.expression) || '(без формулы)'"></div>
                 <div class="picker-card-meta">
                   <span x-text="`#${t.id}`"></span>
