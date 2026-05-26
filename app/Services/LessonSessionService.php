@@ -41,9 +41,10 @@ class LessonSessionService
 
         return DB::transaction(function () use ($slot) {
             $session = LessonSession::create([
-                'teacher_id'  => $slot->teacher_id,
-                'schedule_id' => $slot->id,
-                'status'      => LessonSession::STATUS_DRAFT,
+                'teacher_id'   => $slot->teacher_id,
+                'schedule_id'  => $slot->id,
+                'status'       => LessonSession::STATUS_DRAFT,
+                'invite_token' => $this->generateInviteToken(),
             ]);
             LessonSessionParticipant::create([
                 'lesson_session_id' => $session->id,

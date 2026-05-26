@@ -19,6 +19,11 @@ class Kernel extends ConsoleKernel
                  ->yearlyOn(6, 1, '03:00')
                  ->withoutOverlapping()
                  ->runInBackground();
+
+        // Каждые 15 минут — закрывать забытые live lesson-сессии (live > 3ч)
+        $schedule->command('lesson-sessions:auto-close')
+                 ->everyFifteenMinutes()
+                 ->withoutOverlapping();
     }
 
     /**
