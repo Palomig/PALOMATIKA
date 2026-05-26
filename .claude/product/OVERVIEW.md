@@ -94,6 +94,9 @@ DB: `oge_variants` (~161), `oge_variant_pool` (~139), `oge_variant_pool_tasks` (
 ### 4. Домашка (Homework) — **в активной разработке**
 Активные типы: `topic_photo_practice` (фото-решений) и `full_variant` (mini-variant). На проде: 2 ДЗ, 10 photo-practice задач, 0 сабмишнов. Подробности → [modules/homework.md](modules/homework.md).
 
+### 4b. Живой урок (Lessons) — **на проде, v1**
+Учитель собирает пул задач из любого банка → ученики решают одновременно → учитель видит ответы + ✓/✗ в реальном времени (polling 4 сек). Большая зелёная кнопка «УРОК» появляется в student PWA только когда идёт live-сессия. Off-schedule инвайт через ссылку `palomatika.ru/lesson/join/{token}`. Сессии auto-close через 3ч (`lesson-sessions:auto-close` cron каждые 15 мин). Подробности → [modules/lessons.md](modules/lessons.md).
+
 ### 5. Practice / Mini-Games
 Мини-игры (уравнения, графики) с лидербордом. Лидерборд имеет разрезы **Все / Школа / Класс / Группа** (без лиг/бейджей/стриков). DB: `practice_game_runs` (~56), сервисы `PracticeGameService`, `PracticeGraphRenderer`, `PracticeLeaderboardService`. Контроллер `Pwa/PracticeController`.
 
