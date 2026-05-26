@@ -1,6 +1,12 @@
 @extends('layouts.pwa')
 @section('title', 'Урок — palomatika')
 
+@push('katex')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js"></script>
+@endpush
+
 @push('styles')
   .lesson-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 16px; display: flex; flex-direction: column; gap: 10px; }
   .lesson-task { display: flex; gap: 10px; align-items: flex-start; padding: 10px; background: var(--surface2); border-radius: 10px; }
@@ -77,7 +83,7 @@
       <div class="lesson-task">
         <div class="lesson-task-num" x-text="task.position + ')'"></div>
         <div class="lesson-task-body">
-          <div class="lesson-task-expr" x-text="task.task_payload.expression"></div>
+          <div class="lesson-task-expr" x-html="renderLatex(task.task_payload.expression)"></div>
           <div class="lesson-task-meta">
             <span x-text="task.bank"></span>
             · Ответ: <span class="lesson-task-answer" x-text="task.correct_answer"></span>
@@ -147,11 +153,11 @@
         <div>
           <div class="picker-group-label" x-text="group.label"></div>
           <div class="picker-cards">
-            <template x-for="t in group.tasks" :key="taskCardKey(t)">
+            <template x-for="t in group.tasks" :key="t.uid">
               <div class="picker-card"
                    :class="isCardSelected(t) ? 'active' : ''"
                    @click="toggleCard(t)">
-                <div class="picker-card-expr" x-text="t.expression || '(без формулы)'"></div>
+                <div class="picker-card-expr" x-html="renderLatex(t.expression) || '(без формулы)'"></div>
                 <div class="picker-card-meta">
                   <span x-text="`#${t.id}`"></span>
                   <span class="picker-card-answer" x-show="t.answer" x-text="t.answer"></span>
@@ -193,7 +199,7 @@
             <template x-for="t in tasks" :key="t.id">
               <th>
                 <div style="font-weight: 800;" x-text="t.position + ')'"></div>
-                <div style="font-family: ui-monospace, monospace; font-size: 11px; color: var(--text);" x-text="t.task_payload.expression.slice(0,30)"></div>
+                <div style="font-size: 11px; color: var(--text);" x-html="renderLatex(String(t.task_payload.expression || '').slice(0,40))"></div>
                 <div style="color: var(--green); font-family: monospace;" x-text="t.correct_answer"></div>
               </th>
             </template>
@@ -262,11 +268,23 @@
       selectedTasks: [],
       pollTimer: null,
       copiedAt: null,
+      katexReady: false,
 
       async init() {
         await this.refreshState();
         this.startPollingIfLive();
         await this.selectBank(this.picker.bank);
+        this.waitForKatex();
+      },
+
+      waitForKatex() {
+        if (window.katex) { this.katexReady = true; return; }
+        const t0 = Date.now();
+        const tick = () => {
+          if (window.katex) { this.katexReady = true; return; }
+          if (Date.now() - t0 < 8000) setTimeout(tick, 80);
+        };
+        tick();
       },
 
       get inviteLink() {
@@ -345,22 +363,32 @@
         await this.fetchPickerOptions();
       },
 
-      taskCardKey(t) {
-        return `${this.picker.bank}|${t.group_key ?? ''}|${t.id}`;
+      renderLatex(expr) {
+        if (!expr) return '';
+        // referencing katexReady makes this Alpine-reactive when KaTeX finishes loading
+        const ready = this.katexReady;
+        if (ready && window.katex) {
+          try {
+            return window.katex.renderToString(String(expr), { throwOnError: false, output: 'html' });
+          } catch (e) { /* fallthrough */ }
+        }
+        return this.escapeHtml(expr);
+      },
+
+      escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
       },
 
       isCardSelected(t) {
-        const k = this.taskCardKey(t);
-        return this.selectedTasks.some(s => s._key === k);
+        return this.selectedTasks.some(s => s.uid === t.uid);
       },
 
       toggleCard(t) {
-        const k = this.taskCardKey(t);
-        const i = this.selectedTasks.findIndex(s => s._key === k);
+        const i = this.selectedTasks.findIndex(s => s.uid === t.uid);
         if (i >= 0) {
           this.selectedTasks.splice(i, 1);
         } else {
-          this.selectedTasks.push({ ...t, _key: k });
+          this.selectedTasks.push({ ...t });
         }
       },
 
