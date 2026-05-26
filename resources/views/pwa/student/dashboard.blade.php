@@ -189,6 +189,9 @@
 @section('body')
 <div class="page" x-data="dashboardPage()">
 
+  {{-- LESSON TILE (видна только когда идёт live-сессия с этим student) --}}
+  @include('pwa.student.partials.lesson-tile')
+
   {{-- VPR toggle for grade 8 --}}
   @if((int)($user->grade_num ?? 0) === 8)
   <a href="{{ route('pwa.student.vpr.home') }}"

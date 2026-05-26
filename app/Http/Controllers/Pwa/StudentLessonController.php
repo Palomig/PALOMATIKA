@@ -24,6 +24,20 @@ class StudentLessonController extends Controller
     }
 
     /**
+     * GET /lessons/{id} — страница урока (рендерится в student PWA).
+     * Возвращает HTML с задачами и формами ввода ответа.
+     */
+    public function show(Request $request, int $id)
+    {
+        $session = $this->loadSessionForStudent($request, $id);
+        $session->load('tasks');
+
+        return view('pwa.student.lesson', [
+            'session' => $session,
+        ]);
+    }
+
+    /**
      * GET /lessons/active — есть ли сейчас live-сессия, где этот student участник.
      * Возвращает первую активную или null.
      */
