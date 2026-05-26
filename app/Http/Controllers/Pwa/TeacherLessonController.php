@@ -7,6 +7,7 @@ use App\Models\LessonSchedule;
 use App\Models\LessonSession;
 use App\Models\LessonSessionTask;
 use App\Services\LessonSessionService;
+use App\Services\LessonTaskPickerService;
 use DomainException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -36,13 +37,58 @@ class TeacherLessonController extends Controller
         $session = $this->loadOwnSession($request, $id);
         $session->load(['tasks', 'participants.student']);
 
-        // Preload alg-skill 7 bundle для picker'а (v1 — только grade 7)
-        $algSkillsBundle = (new \App\Services\AlgTaskDataService(7))->getSkillsBundle();
-
         return view('pwa.teacher.lesson-prep', [
-            'session'           => $session,
-            'algSkillsBundle7'  => $algSkillsBundle,
+            'session' => $session,
         ]);
+    }
+
+    /**
+     * GET /lessons/picker-options?bank=oge&grade=7&topic_id=06&zadanie_number=1&skill_slug=...&level_id=...
+     * Возвращает каскадные опции для выбранных refs.
+     */
+    public function pickerOptions(Request $request, LessonTaskPickerService $picker): JsonResponse
+    {
+        $bank = (string) $request->query('bank', '');
+        if (!in_array($bank, ['oge', 'ege', 'vpr', 'alg-topic', 'alg-skill'], true)) {
+            return response()->json(['error' => 'Unknown bank'], 422);
+        }
+
+        $refs = [
+            'grade'           => $request->query('grade')           !== null ? (int) $request->query('grade') : null,
+            'topic_id'        => $request->query('topic_id')        ?: null,
+            'skill_slug'      => $request->query('skill_slug')      ?: null,
+            'level_id'        => $request->query('level_id')        ?: null,
+            'zadanie_number'  => $request->query('zadanie_number')  !== null ? (int) $request->query('zadanie_number') : null,
+        ];
+        $refs = array_filter($refs, fn ($v) => $v !== null && $v !== '');
+
+        $response = ['grades' => $picker->grades($bank)];
+
+        if ($bank === 'alg-skill') {
+            if (!empty($refs['grade'])) {
+                $response['skills'] = $picker->skills((int) $refs['grade']);
+            }
+            if (!empty($refs['grade']) && !empty($refs['skill_slug'])) {
+                $response['levels'] = $picker->levels((int) $refs['grade'], (string) $refs['skill_slug']);
+            }
+            if (!empty($refs['grade']) && !empty($refs['skill_slug']) && !empty($refs['level_id'])) {
+                $response['tasks'] = $picker->tasks($bank, $refs);
+            }
+        } else {
+            $needsGrade = in_array($bank, ['vpr', 'alg-topic'], true);
+            $gradeReady = !$needsGrade || !empty($refs['grade']);
+            if ($gradeReady) {
+                $response['topics'] = $picker->topics($bank, $refs['grade'] ?? null);
+            }
+            if ($gradeReady && !empty($refs['topic_id'])) {
+                $response['zadaniya'] = $picker->zadaniya($bank, $refs);
+            }
+            if ($gradeReady && !empty($refs['topic_id']) && !empty($refs['zadanie_number'])) {
+                $response['tasks'] = $picker->tasks($bank, $refs);
+            }
+        }
+
+        return response()->json($response);
     }
 
     /**
