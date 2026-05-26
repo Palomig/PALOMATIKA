@@ -76,17 +76,5 @@
       <div class="note">Пока нет решённых вариантов.</div>
     @endforelse
   </div>
-
-  <div class="sec-label">Последние варианты</div>
-  <div class="list">
-    @forelse($recentVariants as $variant)
-      <div class="list-item">
-        <div class="list-title">{{ $variant->title ?: ('Вариант ' . $variant->hash) }}</div>
-        <div class="list-meta">{{ $variant->created_at?->format('d.m.Y H:i') }} · {{ $variant->is_curated ? 'Кураторский' : 'Генератор' }}</div>
-      </div>
-    @empty
-      <div class="note">Пока нет вариантов.</div>
-    @endforelse
-  </div>
 </div>
 @endsection

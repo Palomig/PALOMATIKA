@@ -47,11 +47,6 @@ class TeacherController extends Controller
         $variantsCount = OgeVariant::where('owner_teacher_id', $teacherId)->count();
         $curatedCount = OgeVariant::where('owner_teacher_id', $teacherId)->where('is_curated', true)->count();
 
-        $recentVariants = OgeVariant::where('owner_teacher_id', $teacherId)
-            ->orderByDesc('created_at')
-            ->limit(8)
-            ->get(['id', 'hash', 'title', 'mode', 'is_curated', 'created_at']);
-
         $myStudentIds = TeacherStudent::where('teacher_id', $teacherId)->pluck('student_id');
         $aliasMap = TeacherStudent::where('teacher_id', $teacherId)->whereNotNull('student_alias')->where('student_alias', '!=', '')->pluck('student_alias', 'student_id');
 
@@ -90,7 +85,6 @@ class TeacherController extends Controller
             'aliasedCount' => $aliasedCount,
             'variantsCount' => $variantsCount,
             'curatedCount' => $curatedCount,
-            'recentVariants' => $recentVariants,
             'recentAttempts' => $recentAttempts,
         ]);
     }
