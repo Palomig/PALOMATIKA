@@ -148,6 +148,11 @@
 
       <div x-show="picker.loading" style="font-size: 12px; color: var(--muted);">загружаем…</div>
 
+      {{-- Сообщение, если в выбранной теме/навыке нет задач, которые сейчас поддерживаются в уроках --}}
+      <div x-show="!picker.loading && shouldShowEmptyHint" style="font-size: 12px; color: var(--muted); padding: 8px 0; line-height: 1.4;">
+        В этой теме пока нет задач, которые можно вставить в урок: matching / графики / геометрия требуют отдельного интерфейса у ученика и здесь не показываются. Возьмите задачи из других тем или другого банка.
+      </div>
+
       {{-- Карточки задач (мультивыбор по клику) --}}
       <template x-for="group in taskGroups" :key="group.key">
         <div>
@@ -394,6 +399,15 @@
 
       get selectedCount() {
         return this.selectedTasks.length;
+      },
+
+      get shouldShowEmptyHint() {
+        if (this.picker.bank === 'alg-skill') {
+          if (!this.picker.refs.skill_slug) return false;
+        } else {
+          if (!this.picker.refs.topic_id) return false;
+        }
+        return (this.picker.options.tasks || []).length === 0;
       },
 
       get taskGroups() {

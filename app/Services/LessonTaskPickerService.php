@@ -200,11 +200,18 @@ class LessonTaskPickerService
         $result = [];
         foreach ($zadanie['tasks'] ?? [] as $task) {
             $type = strtolower(trim((string) ($task['task_type'] ?? $zadanieType)));
-            $hasOptions = !empty($task['options']);
+            $expression = (string) ($task['expression'] ?? $task['prompt'] ?? $task['question'] ?? '');
             $hasAnswer  = (string) ($task['answer'] ?? '') !== '';
-            $isExpression = $type === '' || $type === 'expression';
-            $isChoice = $hasOptions || str_contains($type, 'choice');
-            if ((($isExpression && $hasAnswer) || $isChoice)) {
+
+            // Только два типа поддержаны в уроке: expression и (simple) choice.
+            // matching / matching_signs / matching_4 / graph_statements / statements /
+            // geometry / grid / word_problem пока требуют отдельного UI у ученика
+            // и не имеют expression — отсекаем.
+            $isExpression = ($type === '' || $type === 'expression') && $expression !== '' && $hasAnswer;
+            $isChoiceLike = in_array($type, ['choice', 'simple_choice', 'fraction_choice', 'interval_choice'], true)
+                && $expression !== '';
+
+            if ($isExpression || $isChoiceLike) {
                 $result[] = $task;
             }
         }
