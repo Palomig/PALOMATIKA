@@ -41,11 +41,19 @@
   {{-- Invite block (only when live + invite_token exists) --}}
   <template x-if="status === 'live' && inviteToken">
     <div class="invite-block">
-      <div style="font-size: 12px; font-weight: 700; color: var(--text);">Ссылка для приглашения</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="font-size: 13px; font-weight: 800; color: var(--text);">🔗 Ссылка для приглашения</div>
+        <div style="font-size: 11px; color: var(--muted);" x-text="`${participants.length} в уроке`"></div>
+      </div>
       <div class="invite-link" x-text="inviteLink"></div>
       <div class="btn-row">
-        <button class="btn btn-icon" @click="copyInvite">📋 Скопировать</button>
-        <a class="btn btn-icon" :href="`https://wa.me/?text=${encodeURIComponent('Заходи на урок: ' + inviteLink)}`" target="_blank">WhatsApp</a>
+        <button class="btn btn-icon" @click="copyInvite" x-text="copiedAt ? '✓ Скопировано' : '📋 Скопировать'"
+                :style="copiedAt ? 'background:var(--green-bg);color:var(--green);border-color:var(--green-bd);' : ''"></button>
+        <a class="btn btn-icon" :href="waLink" target="_blank" rel="noopener">📱 WhatsApp</a>
+        <a class="btn btn-icon" :href="tgLink" target="_blank" rel="noopener">✈ Telegram</a>
+      </div>
+      <div style="font-size: 11px; color: var(--muted); line-height: 1.5;">
+        Отправь ссылку ученикам. Когда они откроют — увидят кнопку «УРОК» и попадут в эту сессию.
       </div>
     </div>
   </template>
@@ -144,9 +152,13 @@
     <button class="btn btn-danger" x-show="status === 'live'" @click="endLesson">■ Завершить</button>
   </div>
 
-  {{-- Live grid (Task 7 — basic version здесь) --}}
+  {{-- Live grid + summary --}}
   <div class="lesson-card" x-show="status === 'live' && tasks.length">
-    <div style="font-size: 14px; font-weight: 700;">Ответы (обновляется каждые 4 сек)</div>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div style="font-size: 14px; font-weight: 700;">Ответы</div>
+      <div style="font-size: 11px; color: var(--muted);">обновляется каждые 4 сек</div>
+    </div>
+
     <div style="overflow-x: auto;">
       <table class="live-grid">
         <thead>
@@ -170,9 +182,24 @@
               </template>
             </tr>
           </template>
+          {{-- Summary row: % правильных по задаче --}}
+          <tr style="background: var(--surface2);">
+            <td style="font-weight: 700; color: var(--muted);">% верно</td>
+            <template x-for="t in tasks" :key="'sum-' + t.id">
+              <td :style="`color: ${taskCorrectPct(t.id) >= 70 ? 'var(--green)' : (taskCorrectPct(t.id) >= 40 ? 'var(--yellow)' : 'var(--red)')}; font-weight: 700;`"
+                  x-text="taskAnsweredCount(t.id) ? `${taskCorrectPct(t.id)}% (${taskCorrectCount(t.id)}/${taskAnsweredCount(t.id)})` : '—'"></td>
+            </template>
+          </tr>
         </tbody>
       </table>
     </div>
+
+    {{-- Кто не ответил вообще ни на одну задачу --}}
+    <template x-if="silentStudents.length">
+      <div style="font-size: 12px; color: var(--muted); padding-top: 8px; border-top: 1px solid var(--border);">
+        Не отвечают: <span style="color: var(--red); font-weight: 700;" x-text="silentStudents.map(p => p.name || '#'+p.id).join(', ')"></span>
+      </div>
+    </template>
   </div>
 </div>
 
@@ -196,6 +223,7 @@
       availableSkills: [],
       availableTasks: [],
       pollTimer: null,
+      copiedAt: null,
 
       async init() {
         await this.refreshState();
@@ -204,6 +232,14 @@
 
       get inviteLink() {
         return this.inviteToken ? `https://palomatika.ru/lesson/join/${this.inviteToken}` : '';
+      },
+
+      get waLink() {
+        return `https://wa.me/?text=${encodeURIComponent('Заходи на урок: ' + this.inviteLink)}`;
+      },
+
+      get tgLink() {
+        return `https://t.me/share/url?url=${encodeURIComponent(this.inviteLink)}&text=${encodeURIComponent('Заходи на урок')}`;
       },
 
       statusLabel(s) {
@@ -308,7 +344,10 @@
       },
 
       copyInvite() {
-        navigator.clipboard.writeText(this.inviteLink).then(() => alert('Скопировано'));
+        navigator.clipboard.writeText(this.inviteLink).then(() => {
+          this.copiedAt = Date.now();
+          setTimeout(() => { if (Date.now() - this.copiedAt >= 1900) this.copiedAt = null; }, 2000);
+        });
       },
 
       cellLabel(studentId, taskId) {
@@ -322,6 +361,35 @@
         const a = this.grid[studentId]?.[taskId];
         if (!a) return 'live-cell-empty';
         return a.is_correct ? 'live-cell-ok' : 'live-cell-bad';
+      },
+
+      // Summary helpers
+      taskAnsweredCount(taskId) {
+        let n = 0;
+        for (const p of this.participants) {
+          if (this.grid[p.id]?.[taskId]) n++;
+        }
+        return n;
+      },
+
+      taskCorrectCount(taskId) {
+        let n = 0;
+        for (const p of this.participants) {
+          if (this.grid[p.id]?.[taskId]?.is_correct === true) n++;
+        }
+        return n;
+      },
+
+      taskCorrectPct(taskId) {
+        const a = this.taskAnsweredCount(taskId);
+        return a === 0 ? 0 : Math.round((this.taskCorrectCount(taskId) / a) * 100);
+      },
+
+      get silentStudents() {
+        return this.participants.filter(p => {
+          const myRow = this.grid[p.id];
+          return !myRow || Object.keys(myRow).length === 0;
+        });
       },
     };
   }
