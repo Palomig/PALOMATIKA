@@ -124,15 +124,18 @@ class LessonTaskPickerService
         $blocks = $this->resolveBlocks($bank, $refs);
         $result = [];
         foreach ($blocks as $block) {
+            $blockNumber = (int) ($block['number'] ?? 0);
             foreach ($block['zadaniya'] ?? [] as $z) {
                 $number = (int) ($z['number'] ?? 0);
                 if (!$number) continue;
                 $instruction = $this->shorten((string) ($z['instruction'] ?? ''), 80);
                 $groupLabel = $instruction !== '' ? "№{$number} · {$instruction}" : "№{$number}";
                 foreach ($this->supportedTasks($z) as $t) {
+                    $taskId = $t['id'] ?? '';
                     $result[] = [
-                        'id'             => $t['id'] ?? '',
-                        'expression'     => $this->shorten((string) ($t['expression'] ?? $t['prompt'] ?? $t['question'] ?? ''), 120),
+                        'uid'            => "{$blockNumber}.{$number}.{$taskId}",
+                        'id'             => $taskId,
+                        'expression'     => (string) ($t['expression'] ?? $t['prompt'] ?? $t['question'] ?? ''),
                         'answer'         => (string) ($t['answer'] ?? ''),
                         'group_key'      => $number,
                         'group_label'    => $groupLabel,
@@ -158,9 +161,11 @@ class LessonTaskPickerService
             $levelId    = (string) ($lvl['id'] ?? '');
             $levelTitle = (string) ($lvl['title'] ?? $levelId);
             foreach ($lvl['tasks'] ?? [] as $t) {
+                $taskId = $t['id'] ?? '';
                 $result[] = [
-                    'id'          => $t['id'] ?? '',
-                    'expression'  => $this->shorten((string) ($t['expression'] ?? ''), 120),
+                    'uid'         => "{$levelId}.{$taskId}",
+                    'id'          => $taskId,
+                    'expression'  => (string) ($t['expression'] ?? ''),
                     'answer'      => (string) ($t['answer'] ?? ''),
                     'group_key'   => $levelId,
                     'group_label' => $levelTitle,
