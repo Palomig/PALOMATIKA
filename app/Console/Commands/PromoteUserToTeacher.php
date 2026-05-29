@@ -45,9 +45,12 @@ class PromoteUserToTeacher extends Command
         }
 
         $user->role = 'teacher';
+        if ($user->evrium_teacher_id === null) {
+            $user->evrium_teacher_id = User::nextEvriumTeacherId();
+        }
         $user->save();
 
-        $this->info("Role updated successfully: user #{$user->id} is now teacher.");
+        $this->info("Role updated successfully: user #{$user->id} is now teacher (Evrium teacher_id={$user->evrium_teacher_id}).");
         return self::SUCCESS;
     }
 

@@ -44,6 +44,7 @@ class User extends Authenticatable
         'school_number',
         'city',
         'onboarding_completed_at',
+        'evrium_teacher_id',
     ];
 
     protected $hidden = [
@@ -60,7 +61,16 @@ class User extends Authenticatable
         'tg_premium_until' => 'datetime',
         'tg_trial_used' => 'boolean',
         'name_unverified' => 'boolean',
+        'evrium_teacher_id' => 'integer',
     ];
+
+    /**
+     * Следующий свободный teacher_id в Evrium (выдаётся по порядку регистрации).
+     */
+    public static function nextEvriumTeacherId(): int
+    {
+        return (int) (static::max('evrium_teacher_id') ?? 0) + 1;
+    }
 
     // Relationships
 

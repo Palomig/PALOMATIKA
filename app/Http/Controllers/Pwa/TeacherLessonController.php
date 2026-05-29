@@ -112,6 +112,36 @@ class TeacherLessonController extends Controller
     }
 
     /**
+     * POST /lessons/from-slot   body: { starts_at, ends_at?, student_ids?[] }
+     *
+     * Создаёт/открывает draft-сессию для слота расписания Evrium (по времени).
+     * Используется кликом по карточке урока на экране /lessons, чтобы заранее
+     * подготовить задания. Идемпотентно — повторный клик вернёт тот же черновик.
+     */
+    public function fromSlot(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'starts_at'     => 'required|date',
+            'ends_at'       => 'nullable|date',
+            'student_ids'   => 'nullable|array',
+            'student_ids.*' => 'integer',
+        ]);
+
+        try {
+            $session = $this->sessions->createFromEvriumSlot(
+                $request->user(),
+                $data['starts_at'],
+                $data['ends_at'] ?? null,
+                $data['student_ids'] ?? [],
+            );
+        } catch (DomainException $e) {
+            return response()->json(['error' => $e->getMessage()], 422);
+        }
+
+        return response()->json(['session' => $this->serializeSession($session)], 201);
+    }
+
+    /**
      * POST /lessons/{id}/tasks   body: { bank: string, refs: object }
      */
     public function addTask(Request $request, int $id): JsonResponse
