@@ -123,6 +123,14 @@ class TaskBankResolver
         if (!$z) {
             throw new DomainException("Zadanie #{$zadanieNumber} not found");
         }
+        // statements: задание само по себе одна задача (нет массива tasks).
+        if (($z['type'] ?? '') === 'statements' && empty($z['tasks'])) {
+            $synth = self::synthesizeStatementsTask($z);
+            if ((string) $synth['id'] === (string) $taskId) {
+                return [$z, $synth];
+            }
+            throw new DomainException("Task #{$taskId} not found in statements zadanie #{$zadanieNumber}");
+        }
         foreach ($z['tasks'] ?? [] as $task) {
             if ((string) ($task['id'] ?? '') === (string) $taskId) {
                 return [$z, $task];
@@ -134,7 +142,41 @@ class TaskBankResolver
     private const IMAGE_LIKE_TYPES = [
         'matching', 'matching_signs', 'matching_4', 'matching_full',
         'graph_statements', 'statements',
+        'geometry', 'grid_image', 'grid_image_with_question',
     ];
+
+    /** Текстовые типы без картинки: условие в text/instruction + числовой ответ. */
+    private const TEXT_EXPRESSION_TYPES = ['word_problem'];
+
+    /**
+     * Для задания типа statements (нет массива tasks) синтезирует одну псевдо-задачу:
+     * условие = инструкция + перечень утверждений, ответ = номера верных по возрастанию.
+     * Используется и picker'ом, и резолвером, чтобы их представление совпадало.
+     *
+     * @return array{id:int,task_type:string,text:string,answer:string,statements:array}
+     */
+    public static function synthesizeStatementsTask(array $zadanie): array
+    {
+        $lines = [];
+        $trueIds = [];
+        foreach ($zadanie['statements'] ?? [] as $s) {
+            $id = $s['id'] ?? null;
+            $lines[] = ($id !== null ? "{$id}) " : '') . (string) ($s['text'] ?? '');
+            if (!empty($s['is_true']) && $id !== null) {
+                $trueIds[] = (int) $id;
+            }
+        }
+        sort($trueIds);
+        $text = trim((string) ($zadanie['instruction'] ?? '') . "\n" . implode("\n", $lines));
+
+        return [
+            'id'         => 1,
+            'task_type'  => 'statements',
+            'text'       => $text,
+            'answer'     => implode('', array_map('strval', $trueIds)),
+            'statements' => $zadanie['statements'] ?? [],
+        ];
+    }
 
     /**
      * Нормализует задачу к {expression, type, answer, options?, image_svg?, source_label, raw}.
@@ -149,7 +191,7 @@ class TaskBankResolver
             throw new DomainException("Task type '{$type}' not supported in v1 (only expression/choice)");
         }
 
-        $expression = (string) ($task['expression'] ?? $task['prompt'] ?? $task['question'] ?? '');
+        $expression = (string) ($task['expression'] ?? $task['prompt'] ?? $task['question'] ?? $task['text'] ?? '');
         if ($expression === '' && isset($zadanieContext['instruction'])) {
             $expression = (string) $zadanieContext['instruction'];
         }
@@ -199,6 +241,9 @@ class TaskBankResolver
         $rawType = strtolower(trim((string) $rawType));
 
         if (in_array($rawType, self::IMAGE_LIKE_TYPES, true)) {
+            return 'expression';
+        }
+        if (in_array($rawType, self::TEXT_EXPRESSION_TYPES, true)) {
             return 'expression';
         }
         if (!empty($task['options'])) {

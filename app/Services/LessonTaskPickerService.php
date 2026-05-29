@@ -132,7 +132,7 @@ class LessonTaskPickerService
                 $groupLabel = $instruction !== '' ? "№{$number} · {$instruction}" : "№{$number}";
                 foreach ($this->supportedTasks($z) as $t) {
                     $taskId = $t['id'] ?? '';
-                    $expression = (string) ($t['expression'] ?? $t['prompt'] ?? $t['question'] ?? '');
+                    $expression = (string) ($t['expression'] ?? $t['prompt'] ?? $t['question'] ?? $t['text'] ?? '');
                     if ($expression === '') {
                         $expression = (string) ($z['instruction'] ?? '');
                     }
@@ -203,27 +203,44 @@ class LessonTaskPickerService
     private const IMAGE_LIKE_TYPES = [
         'matching', 'matching_signs', 'matching_4', 'matching_full',
         'graph_statements', 'statements',
+        'geometry', 'grid_image', 'grid_image_with_question',
     ];
+
+    /** Текстовые типы без картинки: условие в text/instruction + ответ. */
+    private const TEXT_EXPRESSION_TYPES = ['word_problem'];
 
     private function supportedTasks(array $zadanie): array
     {
         $zadanieType = strtolower(trim((string) ($zadanie['type'] ?? '')));
         $instruction = (string) ($zadanie['instruction'] ?? '');
+
+        // statements: задание целиком — одна задача (нет массива tasks).
+        if ($zadanieType === 'statements' && empty($zadanie['tasks'])) {
+            $synth = TaskBankResolver::synthesizeStatementsTask($zadanie);
+            return $synth['answer'] !== '' ? [$synth] : [];
+        }
+
         $result = [];
         foreach ($zadanie['tasks'] ?? [] as $task) {
             $type = strtolower(trim((string) ($task['task_type'] ?? $zadanieType)));
-            $expression = (string) ($task['expression'] ?? $task['prompt'] ?? $task['question'] ?? '');
+            $expression = (string) ($task['expression'] ?? $task['prompt'] ?? $task['question'] ?? $task['text'] ?? '');
             $hasAnswer  = (string) ($task['answer'] ?? '') !== '';
             $hasImage   = (string) ($task['svg'] ?? '') !== '' || (string) ($task['image'] ?? '') !== '';
 
             // Поддерживаются:
-            //   expression: формула + ответ (auto-check).
+            //   expression / word_problem: условие (формула или текст) + ответ (auto-check).
             //   choice-like: выбор из вариантов (есть expression/prompt).
-            //   matching/graph_statements/statements: есть картинка + ответ ⇒
-            //     ученик увидит SVG и впишет ответ свободным текстом.
-            $isExpression = ($type === '' || $type === 'expression') && $expression !== '' && $hasAnswer;
+            //   image-like (matching/geometry/grid_image/statements/…): картинка + ответ ⇒
+            //     ученик видит SVG и вписывает ответ свободным текстом.
+            // Любой поддерживаемый тип с текстом условия + ответом считаем «текстовым»
+            // (в т.ч. геометрия без рисунка: текст + числовой ответ).
+            $isExpression = ($type === '' || $type === 'expression'
+                    || in_array($type, self::TEXT_EXPRESSION_TYPES, true)
+                    || in_array($type, self::IMAGE_LIKE_TYPES, true))
+                && $expression !== '' && $hasAnswer;
             $isChoiceLike = in_array($type, ['choice', 'simple_choice', 'fraction_choice', 'interval_choice'], true)
                 && $expression !== '';
+            // Картинка + ответ без текста (matching/grid_image): условие берётся из instruction.
             $isImageLike = in_array($type, self::IMAGE_LIKE_TYPES, true)
                 && $hasImage && $hasAnswer && ($expression !== '' || $instruction !== '');
 
