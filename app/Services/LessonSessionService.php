@@ -7,8 +7,10 @@ use App\Models\LessonSession;
 use App\Models\LessonSessionAttempt;
 use App\Models\LessonSessionParticipant;
 use App\Models\LessonSessionTask;
+use App\Models\TeacherStudent;
 use App\Models\User;
 use DomainException;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -51,6 +53,59 @@ class LessonSessionService
                 'student_id'        => $slot->student_id,
                 'source'            => LessonSessionParticipant::SOURCE_SCHEDULE,
             ]);
+            return $session;
+        });
+    }
+
+    /**
+     * Создаёт/возвращает draft-сессию для слота расписания Evrium.
+     *
+     * Слоты Evrium приходят из внешней CRM и не имеют локального id, поэтому
+     * идемпотентность строится на (teacher_id + starts_at): если для этого
+     * времени уже есть draft/live сессия — возвращаем её, иначе создаём черновик
+     * и переносим привязанных учеников в participants. Это позволяет учителю
+     * заранее (в режиме draft) набрать задания/темы для будущего урока.
+     *
+     * @param  array<int>  $studentIds  id учеников из слота (будут отфильтрованы по teacher_students)
+     */
+    public function createFromEvriumSlot(User $teacher, string $startsAt, ?string $endsAt, array $studentIds): LessonSession
+    {
+        $startsAt = Carbon::parse($startsAt);
+        $endsAt   = $endsAt ? Carbon::parse($endsAt) : null;
+
+        $existing = LessonSession::where('teacher_id', $teacher->id)
+            ->whereIn('status', [LessonSession::STATUS_DRAFT, LessonSession::STATUS_LIVE])
+            ->where('starts_at', $startsAt)
+            ->first();
+        if ($existing) {
+            return $existing;
+        }
+
+        // В участники берём только реальных учеников этого учителя.
+        $allowed = TeacherStudent::where('teacher_id', $teacher->id)
+            ->pluck('student_id')
+            ->map(fn ($id) => (int) $id)
+            ->all();
+        $studentIds = array_values(array_unique(array_intersect(
+            array_map('intval', $studentIds),
+            $allowed
+        )));
+
+        return DB::transaction(function () use ($teacher, $startsAt, $endsAt, $studentIds) {
+            $session = LessonSession::create([
+                'teacher_id'   => $teacher->id,
+                'status'       => LessonSession::STATUS_DRAFT,
+                'starts_at'    => $startsAt,
+                'ends_at'      => $endsAt,
+                'invite_token' => $this->generateInviteToken(),
+            ]);
+            foreach ($studentIds as $sid) {
+                LessonSessionParticipant::create([
+                    'lesson_session_id' => $session->id,
+                    'student_id'        => $sid,
+                    'source'            => LessonSessionParticipant::SOURCE_SCHEDULE,
+                ]);
+            }
             return $session;
         });
     }

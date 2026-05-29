@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\LessonSchedule;
 use App\Models\LessonSession;
 use App\Models\LessonSessionTask;
+use App\Models\TeacherStudent;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -59,6 +60,83 @@ class TeacherLessonControllerTest extends TestCase
         $this->assertDatabaseHas('lesson_session_participants', [
             'lesson_session_id' => $sessionId, 'student_id' => $student->id,
         ]);
+    }
+
+    public function test_lessons_page_renders_for_teacher(): void
+    {
+        // В testing fetchEvriumSchedule() возвращает [], поэтому проверяем
+        // только что страница компилируется и отдаёт каркас (кнопка + пустое состояние).
+        $resp = $this->actingAs($this->teacher())
+            ->get(self::BASE . '/lessons')
+            ->assertOk();
+
+        $html = $resp->getContent();
+        $this->assertStringContainsString('Начать новый урок', $html);
+        $this->assertStringContainsString('lessonsBoard', $html);
+    }
+
+    public function test_from_slot_creates_draft_with_linked_participants(): void
+    {
+        $teacher = $this->teacher();
+        $student = $this->student();
+        TeacherStudent::create(['teacher_id' => $teacher->id, 'student_id' => $student->id, 'evrium_name' => 'Вася']);
+
+        $resp = $this->actingAs($teacher)
+            ->postJson(self::BASE . '/lessons/from-slot', [
+                'starts_at'   => '2026-05-29 14:00:00',
+                'ends_at'     => '2026-05-29 15:00:00',
+                'student_ids' => [$student->id],
+            ])
+            ->assertCreated();
+
+        $sessionId = $resp->json('session.id');
+        $this->assertSame('draft', $resp->json('session.status'));
+        $this->assertDatabaseHas('lesson_sessions', [
+            'id' => $sessionId, 'teacher_id' => $teacher->id, 'starts_at' => '2026-05-29 14:00:00',
+        ]);
+        $this->assertDatabaseHas('lesson_session_participants', [
+            'lesson_session_id' => $sessionId, 'student_id' => $student->id,
+        ]);
+    }
+
+    public function test_from_slot_is_idempotent_per_start_time(): void
+    {
+        $teacher = $this->teacher();
+
+        $first = $this->actingAs($teacher)
+            ->postJson(self::BASE . '/lessons/from-slot', ['starts_at' => '2026-05-29 14:00:00'])
+            ->assertCreated()->json('session.id');
+
+        $second = $this->actingAs($teacher)
+            ->postJson(self::BASE . '/lessons/from-slot', ['starts_at' => '2026-05-29 14:00:00'])
+            ->assertCreated()->json('session.id');
+
+        $this->assertSame($first, $second);
+        $this->assertSame(1, LessonSession::where('teacher_id', $teacher->id)->count());
+    }
+
+    public function test_from_slot_ignores_students_not_linked_to_teacher(): void
+    {
+        $teacher = $this->teacher();
+        $stranger = $this->student();
+
+        $sessionId = $this->actingAs($teacher)
+            ->postJson(self::BASE . '/lessons/from-slot', [
+                'starts_at'   => '2026-05-29 14:00:00',
+                'student_ids' => [$stranger->id],
+            ])
+            ->assertCreated()->json('session.id');
+
+        $this->assertDatabaseMissing('lesson_session_participants', [
+            'lesson_session_id' => $sessionId, 'student_id' => $stranger->id,
+        ]);
+    }
+
+    public function test_from_slot_requires_starts_at(): void
+    {
+        $this->actingAs($this->teacher())
+            ->postJson(self::BASE . '/lessons/from-slot', [])
+            ->assertStatus(422);
     }
 
     public function test_other_teacher_cannot_use_others_slot(): void

@@ -26,6 +26,7 @@
   <div class="topbar">
     <a href="/" class="back-btn">‹</a>
     <div class="topbar-title">Кабинет учителя</div>
+    <div class="topbar-account-id" style="margin-left:auto; font-size:12px; color:var(--muted);">ID: {{ auth()->id() }}</div>
   </div>
 
 
