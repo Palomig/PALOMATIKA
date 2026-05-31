@@ -25,11 +25,13 @@
   .sol-body ul { margin: 0 0 12px; padding-left: 20px; }
   .sol-body li { margin-bottom: 6px; }
   .sol-body .formula { display: block; text-align: center; margin: 12px 0; overflow-x: auto; }
+  /* Чертёж во всю ширину страницы: выходим за 16px padding .page по краям. */
   .sol-body .sol-figure {
-    display: block; margin: 16px auto; max-width: 360px;
-    background: #0a1628; border: 1px solid #1e3a5f; border-radius: 12px; padding: 10px;
+    display: block; width: calc(100% + 32px); margin: 18px -16px;
+    background: #0a1628; border-top: 1px solid #1e3a5f; border-bottom: 1px solid #1e3a5f;
+    border-radius: 0; padding: 14px 12px;
   }
-  .sol-body .sol-figure svg { display: block; width: 100%; height: auto; }
+  .sol-body .sol-figure svg { display: block; width: 100%; max-width: 100%; height: auto; }
   .sol-body .answer {
     margin-top: 16px; padding: 12px 14px; border-radius: 12px;
     background: rgba(34,197,94,.12); border: 1px solid rgba(34,197,94,.4);
