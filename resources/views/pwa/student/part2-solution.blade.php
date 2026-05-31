@@ -27,7 +27,7 @@
   .sol-body .formula { display: block; text-align: center; margin: 12px 0; overflow-x: auto; }
   .sol-body .sol-figure {
     display: block; margin: 16px auto; max-width: 360px;
-    background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 10px;
+    background: #0a1628; border: 1px solid #1e3a5f; border-radius: 12px; padding: 10px;
   }
   .sol-body .sol-figure svg { display: block; width: 100%; height: auto; }
   .sol-body .answer {
