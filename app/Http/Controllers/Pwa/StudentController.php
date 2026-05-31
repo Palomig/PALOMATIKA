@@ -365,6 +365,9 @@ class StudentController extends Controller
             $selected = '20';
         }
 
+        $user = $request->user();
+        $isTeacher = $user && ($user->isTeacher() || $user->isAdmin());
+
         $data = $this->taskData->getTopicData($selected);
         $zadaniya = [];
         $shortLabels = $this->part2ShortLabels()[$selected] ?? [];
@@ -388,12 +391,15 @@ class StudentController extends Controller
                     $num = (int) ($zadanie['number'] ?? 0);
                     $title = $section !== '' ? $section : ($instruction !== '' ? "Задание {$num}. {$instruction}" : "Задание {$num}");
                     $short = $shortLabels[$num] ?? null;
+                    // Решение видно только учителям/админам; его текст НЕ отдаётся ученику.
+                    $hasSolution = $isTeacher && trim((string) ($zadanie['solution'] ?? '')) !== '';
                     $zadaniya[] = [
-                        'number'   => $num,
-                        'title'    => $short['title'] ?? $title,
-                        'subtitle' => $short['subtitle'] ?? null,
-                        'hint'     => $zadanie['answer_hint'] ?? null,
-                        'tasks'    => $tasks,
+                        'number'       => $num,
+                        'title'        => $short['title'] ?? $title,
+                        'subtitle'     => $short['subtitle'] ?? null,
+                        'hint'         => $zadanie['answer_hint'] ?? null,
+                        'tasks'        => $tasks,
+                        'has_solution' => $hasSolution,
                     ];
                 }
             }
@@ -404,8 +410,50 @@ class StudentController extends Controller
             'topics'        => $topics,
             'selectedTopic' => $selected,
             'zadaniya'      => $zadaniya,
+            'isTeacher'     => $isTeacher,
             'isPremium'     => true, // No billing gate in PWA
             'trialUsed'     => true,  // No trial UI in PWA
+        ]);
+    }
+
+    /**
+     * Подробное решение задания части 2 — ТОЛЬКО для учителей/админов
+     * (роут защищён middleware role:teacher,admin). Текст решения и SVG живут
+     * в поле `solution` соответствующего zadanie в topic_{N}.json.
+     */
+    public function part2Solution(Request $request, string $topic, int $number)
+    {
+        $allowed = ['25']; // расширяемый allow-list (позже: '23' и т.д.)
+        if (!in_array($topic, $allowed, true)) {
+            abort(404);
+        }
+
+        $data = $this->taskData->getTopicData($topic);
+        $found = null;
+        foreach (($data['blocks'] ?? []) as $block) {
+            foreach (($block['zadaniya'] ?? []) as $zadanie) {
+                if ((int) ($zadanie['number'] ?? 0) === $number) {
+                    $found = $zadanie;
+                    break 2;
+                }
+            }
+        }
+
+        $solution = trim((string) ($found['solution'] ?? ''));
+        if ($found === null || $solution === '') {
+            abort(404);
+        }
+
+        $short = $this->part2ShortLabels()[$topic][$number] ?? null;
+        $instruction = trim((string) ($found['instruction'] ?? ''));
+
+        return view('pwa.student.part2-solution', [
+            'topic'       => $topic,
+            'number'      => $number,
+            'title'       => $short['title'] ?? "Задание {$number}",
+            'subtitle'    => $short['subtitle'] ?? null,
+            'instruction' => $instruction,
+            'solution'    => $solution,
         ]);
     }
 
