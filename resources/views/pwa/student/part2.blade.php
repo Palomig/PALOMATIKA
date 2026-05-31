@@ -6,6 +6,19 @@
 @endpush
 
 @push('styles')
+  .teacher-solution-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-bottom: 12px; padding: 9px 14px; border-radius: 10px;
+    background: linear-gradient(135deg, #1e3a5f, #2a4d7a);
+    border: 1px solid #3a6098; color: #dbe9ff;
+    font-family: var(--display); font-size: 14px; font-weight: 600;
+    text-decoration: none; transition: all .15s ease;
+  }
+  .teacher-solution-btn:active { transform: scale(.97); }
+  .teacher-solution-tag {
+    font-size: 11px; font-weight: 500; opacity: .7;
+    padding: 2px 7px; border-radius: 6px; background: rgba(255,255,255,.12);
+  }
   .topics-row {
     display: grid; grid-auto-flow: column; grid-auto-columns: 1fr;
     gap: 6px; padding-bottom: 2px;
@@ -179,6 +192,12 @@
           <span class="spoiler-chevron">›</span>
         </summary>
         <div class="spoiler-body">
+          @if($isTeacher && !empty($group['has_solution']))
+            <a class="teacher-solution-btn"
+               href="{{ route('pwa.student.part2.solution', ['topic' => $selectedTopic, 'number' => $group['number']]) }}">
+              📖 Подробнее <span class="teacher-solution-tag">для учителя</span>
+            </a>
+          @endif
           @if($group['hint'])
             <div class="hint-box">{{ $group['hint'] }}</div>
           @endif

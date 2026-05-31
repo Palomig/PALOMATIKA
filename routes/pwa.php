@@ -51,6 +51,11 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
         Route::get('/mini', [StudentController::class, 'mini'])->name('pwa.student.mini');
         Route::get('/new-tasks', [StudentController::class, 'newTasks'])->name('pwa.student.new-tasks');
         Route::get('/part2', [StudentController::class, 'part2'])->name('pwa.student.part2');
+        // Подробное решение — только учителя/админы (ученикам 403 через role middleware)
+        Route::get('/part2/solution/{topic}/{number}', [StudentController::class, 'part2Solution'])
+            ->whereNumber('number')
+            ->middleware('role:teacher,admin')
+            ->name('pwa.student.part2.solution');
         Route::get('/tasks-part1', [StudentController::class, 'tasksPart1'])->name('pwa.student.tasks-part1');
         Route::post('/mini/start', [StudentController::class, 'startMini'])->name('pwa.student.mini.start');
         Route::post('/full/start', [StudentController::class, 'startFull'])->name('pwa.student.full.start');
