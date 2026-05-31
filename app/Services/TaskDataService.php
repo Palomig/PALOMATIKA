@@ -123,6 +123,12 @@ class TaskDataService
             'color' => 'sky',
             'icon' => 'compass',
         ],
+        '25' => [
+            'title' => 'Геометрическая задача повышенной сложности',
+            'description' => 'Трапеции, параллелограммы, треугольники и окружности (часть 2)',
+            'color' => 'slate',
+            'icon' => 'compass',
+        ],
     ];
 
     public function __construct()
