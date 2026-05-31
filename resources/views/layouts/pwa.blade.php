@@ -49,7 +49,11 @@
     --purple: #8b6be0; --purple-bg: rgba(139,107,224,0.08); --purple-bd: rgba(139,107,224,0.18);
     --accent-bg: rgba(79,142,247,0.08); --accent-bd: rgba(79,142,247,0.18);
   }
-  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: var(--body); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  html { height: 100%; background: var(--bg); overflow-x: hidden; }
+  /* body grows with content (min-height, not height) so it never becomes a second
+     scroll container — fixes the double vertical scrollbar (overflow-x:hidden
+     promotes overflow-y to auto on both html and body). */
+  body { min-height: 100%; background: var(--bg); color: var(--text); font-family: var(--body); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
   .page { max-width: 480px; margin: 0 auto; padding: calc(16px + var(--safe-top)) 16px calc(32px + var(--safe-bottom)); display: flex; flex-direction: column; gap: 14px; min-height: 100vh; }
   .topbar { display: flex; align-items: center; gap: 12px; opacity: 0; animation: fadeDown 0.3s ease 0s forwards; }
   .back-btn { width: 36px; height: 36px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--muted); cursor: pointer; flex-shrink: 0; transition: background 0.15s; text-decoration: none; }
