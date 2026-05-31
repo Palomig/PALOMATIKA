@@ -312,6 +312,17 @@ Route::middleware(['auth', 'role:teacher,admin'])->prefix('alg-topics')->name('a
     Route::get('/{grade}/{id}', [\App\Http\Controllers\AlgTopicController::class, 'show'])->name('show')->where(['grade' => '[5-8]', 'id' => '[0-9]+']);
 });
 
+// Алгебра — Банк навыков (skills.json, перенесено с прототипа 78.17.28.40/alg-skills/)
+Route::middleware(['auth', 'role:teacher,admin'])->prefix('alg-skills')->name('alg-skills.')->group(function () {
+    Route::get('/{grade}', [\App\Http\Controllers\AlgSkillController::class, 'index'])->name('index')->where('grade', '[5-8]');
+    Route::get('/{grade}/{slug}', [\App\Http\Controllers\AlgSkillController::class, 'show'])->name('show')->where(['grade' => '[5-8]', 'slug' => '[a-z0-9-]+']);
+});
+
+// Lesson invite join (public — гость редиректится на login, после joinByToken идёт в student PWA)
+Route::get('/lesson/join/{token}', [\App\Http\Controllers\LessonJoinController::class, 'join'])
+    ->name('lesson.join')
+    ->where('token', '[a-z0-9]{16}');
+
 // Геометрия — База заданий (7–9 классы), скелет под наполнение
 Route::middleware(['auth', 'role:teacher,admin'])->prefix('geom-topics')->name('geom-topics.')->group(function () {
     Route::get('/', [\App\Http\Controllers\GeomTopicController::class, 'index'])->name('index');

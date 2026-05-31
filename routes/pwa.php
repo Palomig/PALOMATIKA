@@ -144,6 +144,8 @@ Route::domain('teacher.' . config('app.base_domain'))->group(function () {
 
         // Lessons API (lesson_session lifecycle)
         Route::post('/lessons',                              [TeacherLessonController::class, 'create'])->name('pwa.teacher.lessons.create');
+        Route::post('/lessons/from-slot',                    [TeacherLessonController::class, 'fromSlot'])->name('pwa.teacher.lessons.from-slot');
+        Route::get('/lessons/picker-options',                [TeacherLessonController::class, 'pickerOptions'])->name('pwa.teacher.lessons.picker-options');
         Route::get('/lessons/{id}',                          [TeacherLessonController::class, 'show'])->name('pwa.teacher.lessons.show')->whereNumber('id');
         Route::get('/lessons/{id}/state',                    [TeacherLessonController::class, 'state'])->name('pwa.teacher.lessons.state')->whereNumber('id');
         Route::post('/lessons/{id}/tasks',                   [TeacherLessonController::class, 'addTask'])->name('pwa.teacher.lessons.add-task')->whereNumber('id');

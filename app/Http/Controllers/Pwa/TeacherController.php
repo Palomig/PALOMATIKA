@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pwa;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\MiniAppHelpers;
 use App\Models\HomeworkAssignment;
+use App\Models\LessonSession;
 use App\Models\OgeAttempt;
 use App\Models\OgeAttemptScoring;
 use App\Models\OgeVariant;
@@ -92,11 +93,9 @@ class TeacherController extends Controller
     public function lessons(Request $request)
     {
         $user = $request->user();
-        $scheduleData = $this->collectTeacherScheduleData($user);
 
         return view('pwa.teacher.lessons', [
-            'todayLabel' => $scheduleData['todayLabel'],
-            'todayLessons' => $scheduleData['todayLessons'],
+            'days' => $this->buildUpcomingLessonDays($user),
         ]);
     }
 
@@ -123,7 +122,7 @@ class TeacherController extends Controller
         }
 
         $relations = TeacherStudent::where('teacher_id', $teacherId)->with('student:id,name,last_active_at')->get();
-        $evriumSlots = $this->fetchEvriumSchedule($teacherId);
+        $evriumSlots = $this->fetchEvriumSchedule($user->evrium_teacher_id);
         $daySlots = array_filter($evriumSlots, fn($s) => ($s['day'] ?? 0) === $selectedDay);
         $scheduledStudents = $this->resolveEvriumSlots($daySlots, $relations);
         $scheduledStudentIds = collect($scheduledStudents)
@@ -773,9 +772,15 @@ class TeacherController extends Controller
 
     // ---- Schedule helpers (copied from MiniAppTeacherController) ----
 
-    protected function fetchEvriumSchedule(int $teacherId, int $evriumTeacherId = 1): array
+    /**
+     * Расписание учителя из Evrium. teacher_id берётся из users.evrium_teacher_id —
+     * каждый учитель видит ТОЛЬКО своё расписание. Не привязанный к Evrium учитель
+     * (evrium_teacher_id = null) получает пустой список, а не чужие уроки.
+     */
+    protected function fetchEvriumSchedule(?int $evriumTeacherId): array
     {
         if (app()->environment('testing')) return [];
+        if (empty($evriumTeacherId)) return [];
 
         $apiUrl = 'https://xn--b1ammoq0d.xn--p1ai/zarplata/api/external.php';
         $apiKey = '15da8c6b7eed43fd5f3afae70a9f792516fb49957127e2ae';
@@ -882,6 +887,89 @@ class TeacherController extends Controller
         return ['key' => 'past', 'label' => 'прошёл'];
     }
 
+    /**
+     * Расписание уроков на сегодня + ближайшие дни (по недельным слотам Evrium),
+     * спроецированное на календарные даты. Каждый слот получает starts_at/ends_at
+     * и, если для этого времени уже есть draft/live сессия, её id+status —
+     * чтобы карточка вела прямо в подготовленный урок.
+     *
+     * Дни без слотов пропускаются. Возвращает по одному вхождению на каждый
+     * день в окне [сегодня; сегодня+$daysAhead].
+     *
+     * @return array<int, array{date:string,label:string,is_today:bool,slots:array}>
+     */
+    protected function buildUpcomingLessonDays(User $user, int $daysAhead = 6): array
+    {
+        $dayNames = [1 => 'Пн', 2 => 'Вт', 3 => 'Ср', 4 => 'Чт', 5 => 'Пт', 6 => 'Сб', 7 => 'Вс'];
+
+        $relations   = TeacherStudent::where('teacher_id', $user->id)->with('student:id,name,last_active_at')->get();
+        $evriumSlots = $this->fetchEvriumSchedule($user->evrium_teacher_id);
+
+        // Уже существующие черновики/идущие уроки в окне — для прямой ссылки из карточки.
+        $sessionsByStart = LessonSession::where('teacher_id', $user->id)
+            ->whereIn('status', [LessonSession::STATUS_DRAFT, LessonSession::STATUS_LIVE])
+            ->whereNotNull('starts_at')
+            ->whereBetween('starts_at', [now()->startOfDay(), now()->copy()->addDays($daysAhead)->endOfDay()])
+            ->get()
+            ->keyBy(fn ($s) => $s->starts_at->format('Y-m-d H:i'));
+
+        $days = [];
+        for ($offset = 0; $offset <= $daysAhead; $offset++) {
+            $date    = now()->copy()->addDays($offset)->startOfDay();
+            $dow     = (int) $date->format('N');
+            $isToday = $offset === 0;
+
+            $daySlots = array_values(array_filter($evriumSlots, fn ($s) => ($s['day'] ?? 0) === $dow));
+            if (empty($daySlots)) {
+                continue;
+            }
+
+            $slots = [];
+            foreach ($this->buildTodayLessonSlots($daySlots, $relations) as $slot) {
+                $timeStart  = (string) $slot['time_start'];
+                $timeEnd    = (string) $slot['time_end'];
+                $startsAt   = $timeStart !== '' ? $date->copy()->setTimeFromTimeString($timeStart) : null;
+                $endsAt     = ($timeEnd !== '' && $startsAt) ? $date->copy()->setTimeFromTimeString($timeEnd) : null;
+                $studentIds = collect($slot['students'])
+                    ->flatMap(fn ($s) => $s['student_ids'] ?? [])
+                    ->filter()
+                    ->map(fn ($id) => (int) $id)
+                    ->unique()
+                    ->values()
+                    ->all();
+
+                // Для будущих дней статус всегда «будет»; для сегодня — реальный (прошёл/идёт/будет).
+                $status  = $isToday ? ['key' => $slot['status_key'], 'label' => $slot['status_label']] : ['key' => 'upcoming', 'label' => 'будет'];
+                $session = $startsAt ? $sessionsByStart->get($startsAt->format('Y-m-d H:i')) : null;
+
+                $slots[] = [
+                    'time_start'     => $timeStart,
+                    'time_end'       => $timeEnd,
+                    'status_key'     => $status['key'],
+                    'status_label'   => $status['label'],
+                    'students'       => $slot['students'],
+                    'student_ids'    => $studentIds,
+                    'starts_at'      => $startsAt?->format('Y-m-d H:i:s'),
+                    'ends_at'        => $endsAt?->format('Y-m-d H:i:s'),
+                    'session_id'     => $session?->id,
+                    'session_status' => $session?->status,
+                ];
+            }
+
+            $prefix = $isToday ? 'Сегодня' : ($offset === 1 ? 'Завтра' : null);
+            $label  = trim(($prefix ? $prefix . ' · ' : '') . $dayNames[$dow] . ' ' . $date->format('d.m'));
+
+            $days[] = [
+                'date'     => $date->toDateString(),
+                'label'    => $label,
+                'is_today' => $isToday,
+                'slots'    => $slots,
+            ];
+        }
+
+        return $days;
+    }
+
     protected function collectTeacherScheduleData(User $user): array
     {
         $dow = (int) now()->format('N');
@@ -889,7 +977,7 @@ class TeacherController extends Controller
         $todayDate = now()->toDateString();
 
         $relations = TeacherStudent::where('teacher_id', $user->id)->with('student:id,name,last_active_at')->get();
-        $evriumSlots = $this->fetchEvriumSchedule($user->id);
+        $evriumSlots = $this->fetchEvriumSchedule($user->evrium_teacher_id);
         $todayEvrium = array_filter($evriumSlots, fn($s) => ($s['day'] ?? 0) === $dow);
         $todayLessons = $this->buildTodayLessonSlots($todayEvrium, $relations);
         $currentStudents = $this->resolveEvriumSlots($todayEvrium, $relations, $todayDate);

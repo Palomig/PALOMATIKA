@@ -26,6 +26,7 @@
   <div class="topbar">
     <a href="/" class="back-btn">‹</a>
     <div class="topbar-title">Кабинет учителя</div>
+    <div class="topbar-account-id" style="margin-left:auto; font-size:12px; color:var(--muted);">ID: {{ auth()->id() }}</div>
   </div>
 
 
@@ -50,11 +51,7 @@
 
   <a class="btn btn-accent" href="/students">Ученики и алиасы</a>
   <a class="btn btn-accent" href="/homework">Домашка</a>
-  <a class="btn btn-surface" href="/variants">Мои варианты</a>
-  <a class="btn btn-surface" href="/variants">Создать вариант</a>
-  @if($user->isAdmin())
-    <a class="btn btn-surface" href="/referrals">Рефералы</a>
-  @endif
+  <a class="btn btn-accent" href="/lessons">Урок</a>
 
   <div class="sec-label">Недавние попытки учеников</div>
   <div class="list">
