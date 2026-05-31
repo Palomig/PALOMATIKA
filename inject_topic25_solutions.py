@@ -14,24 +14,35 @@
 import json
 import os
 
-# ── SVG helpers ─────────────────────────────────────────────────────────────
-SVG_OPEN = '<svg viewBox="0 0 340 240" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">'
-L = 'stroke="#222" stroke-width="2" fill="none"'          # основные линии
-AUX = 'stroke="#2563eb" stroke-width="1.6" fill="none"'   # углы/вспомогательные
-DASH = 'stroke="#666" stroke-width="1.4" fill="none" stroke-dasharray="4 3"'
+# ── SVG helpers — стиль паломатики (как GeometrySvgRenderer, тёмная тема) ─────
+# Палитра: bg #0a1628, стороны #c8dce8, вспом./окружности #5a9fcf,
+# известные значения и дуги углов #d4a855, вершины-крестики #7eb8da,
+# подписи 'Times New Roman' italic #c8dce8.
+SVG_OPEN = ('<svg viewBox="0 0 340 240" xmlns="http://www.w3.org/2000/svg" '
+            'class="w-full max-w-[350px] h-auto mx-auto" '
+            'font-family="\'Times New Roman\', serif">')
+BG = '<rect width="100%" height="100%" fill="#0a1628"/>'
+L = 'stroke="#c8dce8" stroke-width="2" fill="none"'         # основные линии (стороны)
+AUX = 'stroke="#5a9fcf" stroke-width="1.6" fill="none"'     # вспомогательные / углы
+DASH = 'stroke="#5a9fcf" stroke-width="1.4" fill="none" stroke-dasharray="6 4"'  # пунктир
+CIRC = 'stroke="#5a9fcf" stroke-width="1.6" fill="none"'    # окружности задачи
 
 
 def fig(svg_inner):
-    return f'<div class="sol-figure">{SVG_OPEN}{svg_inner}</svg></div>'
+    return f'<div class="sol-figure">{SVG_OPEN}{BG}{svg_inner}</svg></div>'
 
 
 def vtx(x, y, name, dx=-12, dy=-6):
-    return (f'<circle cx="{x}" cy="{y}" r="2.5" fill="#111"/>'
-            f'<text x="{x + dx}" y="{y + dy}" font-size="14" font-style="italic" fill="#111">{name}</text>')
+    # крестик-маркер вершины #7eb8da + подпись #c8dce8 (как в GeometrySvgRenderer)
+    return (f'<g transform="translate({x}, {y})">'
+            f'<line x1="-5" y1="0" x2="5" y2="0" stroke="#7eb8da" stroke-width="1"/>'
+            f'<line x1="0" y1="-5" x2="0" y2="5" stroke="#7eb8da" stroke-width="1"/>'
+            f'<circle cx="0" cy="0" r="2" fill="none" stroke="#7eb8da" stroke-width="0.8"/></g>'
+            f'<text x="{x + dx}" y="{y + dy}" font-size="14" font-style="italic" fill="#c8dce8">{name}</text>')
 
 
 def val(x, y, t):
-    return f'<text x="{x}" y="{y}" font-size="13" font-weight="bold" fill="#d4501e">{t}</text>'
+    return f'<text x="{x}" y="{y}" font-size="13" font-weight="bold" fill="#d4a855">{t}</text>'
 
 
 SOL = {}
@@ -482,12 +493,21 @@ SOL[15] = (
 path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                     "storage", "app", "tasks", "topic_25.json")
 data = json.load(open(path, encoding="utf-8"))
+def palomatika_palette(html: str) -> str:
+    # Перекрашиваем оставшиеся инлайновые цвета вторичных точек/градусов
+    # в палитру паломатики (тёмная тема).
+    return (html
+            .replace('fill="#111"', 'fill="#c8dce8"')   # вторичные точки и их подписи
+            .replace('fill="#2563eb"', 'fill="#d4a855"')  # подписи углов (градусы)
+            .replace('stroke="#2563eb"', 'stroke="#d4a855"'))
+
+
 patched = 0
 for block in data["blocks"]:
     for z in block["zadaniya"]:
         n = int(z["number"])
         if n in SOL:
-            z["solution"] = SOL[n]
+            z["solution"] = palomatika_palette(SOL[n])
             patched += 1
 with open(path, "w", encoding="utf-8") as f:
     json.dump(data, f, ensure_ascii=False, indent=2)
