@@ -37,6 +37,13 @@ jobs:
 
           git push origin main
 
+          # Keep the source branch in sync with main to prevent drift.
+          # main now contains the branch tip (via the merge commit), so updating
+          # the branch to main is a fast-forward — no force, no conflicts next time.
+          # Best-effort: never fail the pipeline if the branch moved concurrently.
+          git push origin main:"$BRANCH_NAME" \
+            || echo "::warning::Could not fast-forward $BRANCH_NAME to main (concurrent update?)"
+
   deploy:
     needs: auto-merge
     # Run after auto-merge on claude/** push, OR directly on main push
