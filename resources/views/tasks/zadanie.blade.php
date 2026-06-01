@@ -37,7 +37,7 @@
                 @endif
             </h3>
             <div class="flex items-center gap-2 shrink-0">
-                @if(!empty($zadanie['illustration']))
+                @if(!empty($zadanie['illustration']) && (string)($topicId) !== '25')
                     @php $illModalId = 'ill-' . $topicId . '-' . $block['number'] . '-' . $zadanie['number']; @endphp
                     <button type="button"
                             onclick="showZadanieIllustration('{{ $illModalId }}')"
@@ -86,6 +86,15 @@
             <p class="text-slate-400 text-sm mt-2 italic">💡 {{ $zadanie['answer_hint'] }}</p>
         @endif
     </div>
+
+    {{-- Чертёж серии: всегда виден под заголовком (тема 25) --}}
+    @if(!empty($zadanie['illustration']) && (string)($topicId) === '25')
+        <div class="mb-6 flex justify-center">
+            <div class="rounded-xl overflow-hidden bg-[#0a1628] border border-slate-700 p-3 w-full max-w-[380px]">
+                {!! $zadanie['illustration'] !!}
+            </div>
+        </div>
+    @endif
 
     {{-- Задачи по типу --}}
     @switch($type)
