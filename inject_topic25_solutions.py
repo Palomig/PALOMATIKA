@@ -45,6 +45,134 @@ def val(x, y, t):
     return f'<text x="{x}" y="{y}" font-size="13" font-weight="bold" fill="#d4a855">{t}</text>'
 
 
+# ── Геометрия: вычисляемые точки, чтобы топология была корректной ────────────
+import math as _m
+
+
+def _R(p):
+    return (round(p[0], 1), round(p[1], 1))
+
+
+def mid(a, b):
+    return ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2)
+
+
+def lerp(a, b, t):
+    return (a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t)
+
+
+def _len(a, b):
+    return _m.hypot(a[0] - b[0], a[1] - b[1])
+
+
+def _unit(p, q):
+    dx, dy = q[0] - p[0], q[1] - p[1]
+    d = _m.hypot(dx, dy) or 1
+    return (dx / d, dy / d)
+
+
+def xline(a, b, c, d):
+    """Точка пересечения прямых ab и cd."""
+    x1, y1 = a; x2, y2 = b; x3, y3 = c; x4, y4 = d
+    den = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
+    px = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / den
+    py = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / den
+    return (px, py)
+
+
+def foot(p, a, b):
+    """Основание перпендикуляра из p на прямую ab."""
+    ax, ay = a; bx, by = b; px, py = p
+    dx, dy = bx - ax, by - ay
+    t = ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy)
+    return (ax + t * dx, ay + t * dy)
+
+
+def ln(a, b, style=None):
+    a, b = _R(a), _R(b)
+    return f'<line x1="{a[0]}" y1="{a[1]}" x2="{b[0]}" y2="{b[1]}" {style or L}/>'
+
+
+def circ(c, r, style=None):
+    c = _R(c)
+    return f'<circle cx="{c[0]}" cy="{c[1]}" r="{round(r, 1)}" {style or CIRC}/>'
+
+
+def vtxP(p, name, dx=-13, dy=-6):
+    p = _R(p)
+    return vtx(p[0], p[1], name, dx, dy)
+
+
+def dotP(p, name=None, dx=-15, dy=4):
+    p = _R(p)
+    s = f'<circle cx="{p[0]}" cy="{p[1]}" r="2.5" fill="#c8dce8"/>'
+    if name:
+        s += (f'<text x="{p[0] + dx}" y="{p[1] + dy}" font-size="13" '
+              f'font-style="italic" fill="#c8dce8">{name}</text>')
+    return s
+
+
+def valAt(p, t, dx=0, dy=0):
+    p = _R(p)
+    return val(p[0] + dx, p[1] + dy, t)
+
+
+def rightangle(corner, a, b, size=12):
+    """Маркер прямого угла в вершине corner между лучами на a и b."""
+    def u(q):
+        dx, dy = q[0] - corner[0], q[1] - corner[1]
+        d = _m.hypot(dx, dy) or 1
+        return (dx / d, dy / d)
+    ua, ub = u(a), u(b)
+    p1 = _R((corner[0] + ua[0] * size, corner[1] + ua[1] * size))
+    p2 = _R((corner[0] + (ua[0] + ub[0]) * size, corner[1] + (ua[1] + ub[1]) * size))
+    p3 = _R((corner[0] + ub[0] * size, corner[1] + ub[1] * size))
+    return f'<path d="M{p1[0]},{p1[1]} L{p2[0]},{p2[1]} L{p3[0]},{p3[1]}" {AUX}/>'
+
+
+def circle_2pt_tangent(P1, P2, La, Lb):
+    """Окружность через P1,P2, касающаяся прямой La-Lb. -> (центр, радиус, точка касания)."""
+    mP = mid(P1, P2)
+    nP = _unit((0, 0), (-(P2[1] - P1[1]), P2[0] - P1[0]))
+    nL = _unit((0, 0), (-(Lb[1] - La[1]), Lb[0] - La[0]))
+    p = (mP[0] - La[0]) * nL[0] + (mP[1] - La[1]) * nL[1]
+    q = nP[0] * nL[0] + nP[1] * nL[1]
+    R0 = _len(mP, P1)
+    aa = q * q - 1; bb = 2 * p * q; cc = p * p - R0 * R0
+    disc = max(0.0, bb * bb - 4 * aa * cc)
+    cand = [(-bb + _m.sqrt(disc)) / (2 * aa), (-bb - _m.sqrt(disc)) / (2 * aa)]
+    dd = _len(La, Lb) ** 2 or 1
+    best = None
+    for s in cand:
+        O = (mP[0] + s * nP[0], mP[1] + s * nP[1])
+        E = foot(O, La, Lb)
+        r = _len(O, P1)
+        t = ((E[0] - La[0]) * (Lb[0] - La[0]) + (E[1] - La[1]) * (Lb[1] - La[1])) / dd
+        if best is None:
+            best = (O, r, E)
+        if -0.25 <= t <= 1.25:
+            return (O, r, E)
+    return best
+
+
+def arc(center, a, b, r):
+    """Дужка угла в center от направления на a до направления на b (золото)."""
+    def ang(q):
+        return _m.atan2(q[1] - center[1], q[0] - center[0])
+    a0, a1 = ang(a), ang(b)
+    p0 = _R((center[0] + r * _m.cos(a0), center[1] + r * _m.sin(a0)))
+    p1 = _R((center[0] + r * _m.cos(a1), center[1] + r * _m.sin(a1)))
+    d = a1 - a0
+    while d <= -_m.pi:
+        d += 2 * _m.pi
+    while d > _m.pi:
+        d -= 2 * _m.pi
+    large = 1 if abs(d) > _m.pi else 0
+    sweep = 1 if d > 0 else 0
+    return (f'<path d="M{p0[0]},{p0[1]} A{round(r,1)},{round(r,1)} 0 {large} {sweep} '
+            f'{p1[0]},{p1[1]}" stroke="#d4a855" stroke-width="1.4" fill="none"/>')
+
+
 SOL = {}
 
 # ══ Серия 1 — прототип 25.3 (#57256). Трапеция AB=12, CD=13, BC=4 → S=78 ══════
@@ -84,20 +212,22 @@ SOL[1] = (
 )
 
 # ══ Серия 2 — прототип 25.4 (#105312). Углы 47°,43°, отрезки 16,14 → 30;2 ═════
+_A = (45, 200); _D = (295, 200); _B = (120, 75); _C = (190, 75)
+_P = xline(_A, _B, _D, _C); _M = mid(_B, _C); _N = mid(_A, _D)
+_K = mid(_A, _B); _L = mid(_C, _D)
 _svg2 = (
-    '<line x1="40" y1="180" x2="300" y2="180" ' + L + '/>'      # A..D
-    '<line x1="110" y1="60" x2="210" y2="60" ' + L + '/>'       # B..C
-    '<line x1="40" y1="180" x2="110" y2="60" ' + L + '/>'       # A..B (->P)
-    '<line x1="300" y1="180" x2="210" y2="60" ' + L + '/>'      # D..C (->P)
-    '<line x1="110" y1="60" x2="160" y2="20" ' + DASH + '/>'    # B..P
-    '<line x1="210" y1="60" x2="160" y2="20" ' + DASH + '/>'    # C..P
-    '<line x1="160" y1="20" x2="170" y2="180" ' + AUX + '/>'    # P..N (через M)
-    + vtx(160, 20, 'P', -4, -6) + vtx(110, 60, 'B', -14, 0) + vtx(210, 60, 'C', 6, 0)
-    + vtx(40, 180, 'A', -14, 6) + vtx(300, 180, 'D', 6, 6)
-    + '<circle cx="160" cy="60" r="2.5" fill="#111"/><text x="150" y="52" font-size="13" font-style="italic" fill="#111">M</text>'
-    + '<circle cx="170" cy="180" r="2.5" fill="#111"/><text x="166" y="198" font-size="13" font-style="italic" fill="#111">N</text>'
-    + '<text x="60" y="172" font-size="12" fill="#2563eb">47°</text>'
-    + '<text x="262" y="172" font-size="12" fill="#2563eb">43°</text>'
+    ln(_A, _B) + ln(_B, _C) + ln(_C, _D) + ln(_D, _A)       # трапеция
+    + ln(_B, _P, DASH) + ln(_C, _P, DASH)                  # боковые до вершины P
+    + ln(_P, _N, AUX)                                       # прямая P–M–N
+    + ln(_K, _L, AUX)                                       # средняя линия
+    + rightangle(_P, _A, _D, 11)                            # прямой угол при P
+    + arc(_A, _B, _D, 20) + arc(_D, _C, _A, 20)             # углы 47°, 43°
+    + vtxP(_A, 'A', -15, 6) + vtxP(_B, 'B', -14, -2) + vtxP(_C, 'C', 6, -2)
+    + vtxP(_D, 'D', 6, 6) + vtxP(_P, 'P', -4, -8)
+    + dotP(_M, 'M', 7, -4) + dotP(_N, 'N', -4, 16)
+    + dotP(_K, 'K', -14, 2) + dotP(_L, 'L', 8, 2)
+    + valAt(_A, '47°', 18, -4) + valAt(_D, '43°', -34, -4)
+    + valAt(mid(_M, _N), '14', 7, 0) + valAt(mid(_K, _L), '16', -6, -8)
 )
 SOL[2] = (
     '<p>Пусть угол <i>BAD&nbsp;=&nbsp;47°</i>, угол <i>CDA&nbsp;=&nbsp;43°</i>; <i>M</i> — середина <i>BC</i>, '
@@ -113,20 +243,20 @@ SOL[2] = (
 )
 
 # ══ Серия 3 — прототип 25.6 (#56380). Равноб. трапеция P=40, S=80 → 1,6 ═══════
+_B = (110, 70); _C = (230, 70); _A = (55, 195); _D = (285, 195)   # равноб. трапеция
+_O = xline(_A, _C, _B, _D)                                        # пересечение диагоналей
+_cen = (170, 70 + (195 - 70) / 2); _r = (195 - 70) / 2            # вписанная окружность
+_K = (round(_O[0], 1), 70); _H = (round(_O[0], 1), 195)           # вертикаль через O
 _svg3 = (
-    '<line x1="110" y1="60" x2="230" y2="60" ' + L + '/>'      # B..C верх
-    '<line x1="60" y1="190" x2="280" y2="190" ' + L + '/>'    # A..D низ
-    '<line x1="110" y1="60" x2="60" y2="190" ' + L + '/>'     # B..A
-    '<line x1="230" y1="60" x2="280" y2="190" ' + L + '/>'    # C..D
-    '<line x1="60" y1="190" x2="230" y2="60" ' + L + '/>'     # A..C диаг
-    '<line x1="280" y1="190" x2="110" y2="60" ' + L + '/>'    # D..B диаг
-    '<line x1="170" y1="60" x2="170" y2="190" ' + DASH + '/>' # K..H высота через O
-    '<circle cx="170" cy="125" r="2.5" fill="#111"/><text x="176" y="124" font-size="13" font-style="italic" fill="#111">O</text>'
-    + vtx(110, 60, 'B', -12, -2) + vtx(230, 60, 'C', 6, -2)
-    + vtx(60, 190, 'A', -14, 6) + vtx(280, 190, 'D', 6, 6)
-    + '<circle cx="170" cy="60" r="2.5" fill="#111"/><text x="158" y="54" font-size="13" font-style="italic" fill="#111">K</text>'
-    + '<circle cx="170" cy="190" r="2.5" fill="#111"/><text x="158" y="206" font-size="13" font-style="italic" fill="#111">H</text>'
-    + val(206, 96, '8') + val(238, 110, '10')
+    circ(_cen, _r)                                                # вписанная окружность
+    + ln(_B, _C) + ln(_C, _D) + ln(_D, _A) + ln(_A, _B)           # трапеция
+    + ln(_A, _C, AUX) + ln(_B, _D, AUX)                           # диагонали
+    + ln(_K, _H, DASH)                                            # высота через O
+    + rightangle(_H, _A, _K, 10)
+    + vtxP(_B, 'B', -12, -2) + vtxP(_C, 'C', 6, -2)
+    + vtxP(_A, 'A', -14, 6) + vtxP(_D, 'D', 6, 6)
+    + dotP(_O, 'O', 8, 0) + dotP(_K, 'K', -4, -6) + dotP(_H, 'H', -4, 16)
+    + valAt(mid(_O, _K), 'x', -12, 0)
 )
 SOL[3] = (
     '<p>Пусть <i>AD&nbsp;&gt;&nbsp;BC</i> — основания, <i>O&nbsp;=&nbsp;AC∩BD</i>. Трапеция описанная, поэтому '
@@ -143,22 +273,23 @@ SOL[3] = (
 )
 
 # ══ Серия 4 — прототип 25.15 (#50267). Параллелограмм, OA=25,OH=15,OK=7 → 924 ══
+_A = (45, 205); _B = (105, 70); _C = (295, 70)
+_D = (_A[0] + _C[0] - _B[0], _A[1] + _C[1] - _B[1])              # параллелограмм
+_la = _len(_B, _C); _lb = _len(_C, _A); _lc = _len(_A, _B)
+_O = ((_la * _A[0] + _lb * _B[0] + _lc * _C[0]) / (_la + _lb + _lc),
+      (_la * _A[1] + _lb * _B[1] + _lc * _C[1]) / (_la + _lb + _lc))  # инцентр ABC
+_H = foot(_O, _A, _D); _K = foot(_O, _A, _C); _M = foot(_O, _B, _C)
+_r = _len(_O, foot(_O, _A, _B))
 _svg4 = (
-    '<line x1="60" y1="60" x2="240" y2="60" ' + DASH + '/>'    # B..M..C верх (прод.)
-    '<line x1="40" y1="200" x2="290" y2="200" ' + L + '/>'    # A..H..D низ
-    '<line x1="60" y1="60" x2="40" y2="200" ' + L + '/>'      # B..A
-    '<line x1="240" y1="60" x2="290" y2="200" ' + DASH + '/>' # C..D
-    '<line x1="40" y1="200" x2="240" y2="60" ' + L + '/>'     # A..C диаг
-    '<circle cx="150" cy="130" r="42" ' + AUX + '/>'         # вписанная окр.
-    '<circle cx="150" cy="130" r="2.5" fill="#111"/><text x="156" y="128" font-size="13" font-style="italic" fill="#111">O</text>'
-    '<line x1="150" y1="130" x2="150" y2="200" ' + AUX + '/>' # O..H
-    '<line x1="150" y1="130" x2="150" y2="88" ' + AUX + '/>'  # O..M
-    + vtx(60, 60, 'B', -14, 0) + vtx(240, 60, 'C', 6, 0)
-    + vtx(40, 200, 'A', -14, 6) + vtx(290, 200, 'D', 6, 6)
-    + '<circle cx="150" cy="88" r="2.5" fill="#111"/><text x="150" y="80" font-size="13" font-style="italic" fill="#111">M</text>'
-    + '<circle cx="150" cy="200" r="2.5" fill="#111"/><text x="150" y="216" font-size="13" font-style="italic" fill="#111">H</text>'
-    + '<circle cx="183" cy="158" r="2.5" fill="#111"/><text x="188" y="160" font-size="13" font-style="italic" fill="#111">K</text>'
-    + val(86, 150, '24') + val(120, 175, '15') + val(168, 140, '7')
+    ln(_A, _B) + ln(_B, _C) + ln(_C, _D) + ln(_D, _A)           # параллелограмм
+    + ln(_A, _C, AUX)                                           # диагональ AC
+    + circ(_O, _r)                                              # вписанная окружность △ABC
+    + ln(_O, _H, AUX) + ln(_O, _K, AUX) + ln(_O, _M, AUX)       # перпендикуляры
+    + ln(_O, _A, DASH)                                          # OA
+    + rightangle(_H, _A, _O, 8) + rightangle(_K, _A, _O, 8) + rightangle(_M, _B, _O, 8)
+    + vtxP(_A, 'A', -14, 8) + vtxP(_B, 'B', -12, -2) + vtxP(_C, 'C', 6, -2) + vtxP(_D, 'D', 6, 8)
+    + dotP(_O, 'O', 8, -2) + dotP(_H, 'H', -4, 16) + dotP(_K, 'K', 6, 4) + dotP(_M, 'M', -4, -6)
+    + valAt(mid(_O, _A), '25', -16, 0) + valAt(mid(_O, _H), '15', 6, 0) + valAt(mid(_O, _K), '7', 5, -4)
 )
 SOL[4] = (
     '<p>Вписанная в △<i>ABC</i> окружность касается <i>AC, AB, BC</i> в точках <i>K, P, M</i>. '
@@ -175,22 +306,21 @@ SOL[4] = (
 )
 
 # ══ Серия 5 — прототип 25.2 (#56382). Параллелограмм, BC=2, KH=1 → 4 ══════════
+_A = (55, 200); _B = (100, 65); _C = (270, 65)
+_D = (_A[0] + _C[0] - _B[0], _A[1] + _C[1] - _B[1])             # параллелограмм
+_bA = (_A[0] + _unit(_A, _B)[0] + _unit(_A, _D)[0], _A[1] + _unit(_A, _B)[1] + _unit(_A, _D)[1])
+_bB = (_B[0] + _unit(_B, _A)[0] + _unit(_B, _C)[0], _B[1] + _unit(_B, _A)[1] + _unit(_B, _C)[1])
+_K = xline(_A, _bA, _B, _bB)                                    # точка пересечения биссектрис
+_N = foot(_K, _A, _D); _M = foot(_K, _B, _C); _H = foot(_K, _A, _B)
 _svg5 = (
-    '<line x1="70" y1="50" x2="250" y2="50" ' + L + '/>'      # B..M..C
-    '<line x1="40" y1="190" x2="220" y2="190" ' + L + '/>'    # A..N..D
-    '<line x1="70" y1="50" x2="40" y2="190" ' + L + '/>'      # B..A
-    '<line x1="250" y1="50" x2="220" y2="190" ' + L + '/>'    # C..D
-    '<line x1="40" y1="190" x2="150" y2="120" ' + AUX + '/>'  # бис A -> K
-    '<line x1="70" y1="50" x2="150" y2="120" ' + AUX + '/>'   # бис B -> K
-    '<line x1="150" y1="50" x2="150" y2="190" ' + DASH + '/>' # M..K..N высота
-    '<line x1="55" y1="120" x2="150" y2="120" ' + AUX + '/>'  # H..K (=1)
-    '<circle cx="150" cy="120" r="2.5" fill="#111"/><text x="156" y="118" font-size="13" font-style="italic" fill="#111">K</text>'
-    + vtx(70, 50, 'B', -14, 0) + vtx(250, 50, 'C', 6, 0)
-    + vtx(40, 190, 'A', -14, 6) + vtx(220, 190, 'D', 6, 6)
-    + '<circle cx="150" cy="50" r="2.5" fill="#111"/><text x="148" y="42" font-size="13" font-style="italic" fill="#111">M</text>'
-    + '<circle cx="150" cy="190" r="2.5" fill="#111"/><text x="148" y="206" font-size="13" font-style="italic" fill="#111">N</text>'
-    + '<circle cx="55" cy="120" r="2.5" fill="#111"/><text x="40" y="118" font-size="13" font-style="italic" fill="#111">H</text>'
-    + val(150, 44, '2') + val(95, 114, '1')
+    ln(_A, _B) + ln(_B, _C) + ln(_C, _D) + ln(_D, _A)          # параллелограмм
+    + ln(_A, _K, AUX) + ln(_B, _K, AUX)                        # биссектрисы A и B
+    + ln(_M, _N, DASH)                                         # высота через K
+    + ln(_H, _K, AUX)                                          # KH ⊥ AB
+    + rightangle(_H, _A, _K, 8) + rightangle(_N, _A, _K, 8)
+    + vtxP(_A, 'A', -14, 8) + vtxP(_B, 'B', -12, -2) + vtxP(_C, 'C', 6, -2) + vtxP(_D, 'D', 6, 8)
+    + dotP(_K, 'K', 8, 2) + dotP(_M, 'M', -4, -6) + dotP(_N, 'N', -4, 16) + dotP(_H, 'H', -16, 2)
+    + valAt(mid(_B, _C), '2', 0, -6) + valAt(mid(_H, _K), '1', 0, -4)
 )
 SOL[5] = (
     '<p>Опустим из <i>K</i> перпендикуляр <i>KH&nbsp;=&nbsp;1</i> на <i>AB</i> и проведём высоту <i>MN</i> к <i>BC</i> через <i>K</i>.</p>'
@@ -204,18 +334,20 @@ SOL[5] = (
 )
 
 # ══ Серия 6 — прототип 25.1 (#105137). Бис.=медиана⊥, =32 → 8√13;16√13;24√5 ════
+# координаты построены так, что AB=BD и медиана AD ⟂ биссектрисе BE (как в задаче)
+_A = (150, 90); _B = (80, 130); _C = (220, 210)
+_D = mid(_B, _C)                                  # середина BC (медиана AD)
+_E = xline(_A, _C, _B, (_B[0] + 10, _B[1]))        # BE через B, пересечение с AC
+_O = xline(_A, _D, _B, _E)
 _svg6 = (
-    '<line x1="50" y1="190" x2="290" y2="190" ' + L + '/>'    # A..E..C
-    '<line x1="50" y1="190" x2="110" y2="40" ' + L + '/>'     # A..B
-    '<line x1="110" y1="40" x2="290" y2="190" ' + L + '/>'    # B..C
-    '<line x1="110" y1="40" x2="160" y2="190" ' + L + '/>'    # B..E (бис)
-    '<line x1="50" y1="190" x2="210" y2="115" ' + L + '/>'    # A..D (медиана)
-    '<rect x="118" y="120" width="11" height="11" ' + AUX + ' transform="rotate(20 123 125)"/>'
-    + vtx(110, 40, 'B', -4, -8) + vtx(50, 190, 'A', -14, 6)
-    + vtx(290, 190, 'C', 6, 6) + vtx(160, 190, 'E', -4, 18)
-    + '<circle cx="210" cy="115" r="2.5" fill="#111"/><text x="216" y="114" font-size="13" font-style="italic" fill="#111">D</text>'
-    + '<circle cx="124" cy="125" r="2.5" fill="#111"/><text x="106" y="124" font-size="13" font-style="italic" fill="#111">O</text>'
-    + val(124, 90, '24') + val(78, 130, '16') + val(140, 145, '16') + val(150, 165, '8')
+    ln(_A, _B) + ln(_B, _C) + ln(_C, _A)          # треугольник
+    + ln(_A, _D, AUX)                             # медиана AD
+    + ln(_B, _E, AUX)                             # биссектриса BE
+    + rightangle(_O, _A, _B, 9)                   # прямой угол при O
+    + vtxP(_A, 'A', -14, 4) + vtxP(_B, 'B', -14, 0) + vtxP(_C, 'C', 6, 6)
+    + dotP(_D, 'D', 7, 2) + dotP(_E, 'E', 7, -2) + dotP(_O, 'O', -14, -4)
+    + valAt(mid(_B, _O), '24', 0, -6) + valAt(mid(_A, _O), '16', -16, 0)
+    + valAt(mid(_O, _D), '16', 6, 0) + valAt(mid(_O, _E), '8', 0, 14)
 )
 SOL[6] = (
     '<p>Пусть <i>O&nbsp;=&nbsp;BE∩AD</i>. В △<i>ABD</i> отрезок <i>BO</i> — биссектриса и высота '
@@ -234,18 +366,20 @@ SOL[6] = (
 )
 
 # ══ Серия 7 — прототип 25.13 (#105612). Бис. делит высоту 25:24, BC=14 → 25 ════
+_A = (45, 205); _C = (305, 205); _B = (150, 55)
+_H = foot(_B, _A, _C)                              # основание высоты BH
+_AB = _len(_A, _B); _AC = _len(_A, _C)
+_E = lerp(_B, _C, _AB / (_AB + _AC))               # AE — биссектриса, E на BC
+_F = xline(_A, _E, _B, _H)                          # F = AE ∩ BH
 _svg7 = (
-    '<line x1="40" y1="200" x2="300" y2="200" ' + L + '/>'    # A..H..C
-    '<line x1="40" y1="200" x2="150" y2="40" ' + L + '/>'     # A..B
-    '<line x1="150" y1="40" x2="300" y2="200" ' + L + '/>'    # B..C
-    '<line x1="150" y1="40" x2="150" y2="200" ' + L + '/>'    # B..H высота
-    '<line x1="40" y1="200" x2="210" y2="95" ' + L + '/>'     # A..E бис
-    '<rect x="139" y="189" width="11" height="11" ' + AUX + '/>'
-    + vtx(150, 40, 'B', -4, -8) + vtx(40, 200, 'A', -14, 6) + vtx(300, 200, 'C', 6, 6)
-    + '<circle cx="150" cy="200" r="2.5" fill="#111"/><text x="138" y="216" font-size="13" font-style="italic" fill="#111">H</text>'
-    + '<circle cx="210" cy="95" r="2.5" fill="#111"/><text x="216" y="94" font-size="13" font-style="italic" fill="#111">E</text>'
-    + '<circle cx="150" cy="120" r="2.5" fill="#111"/><text x="132" y="120" font-size="13" font-style="italic" fill="#111">F</text>'
-    + val(90, 110, '25y') + val(156, 90, '25x') + val(156, 165, '24x') + val(95, 196, '24y')
+    ln(_A, _B) + ln(_B, _C) + ln(_C, _A)          # треугольник
+    + ln(_B, _H, AUX)                             # высота BH
+    + ln(_A, _E, AUX)                             # биссектриса AE
+    + rightangle(_H, _A, _B, 9)                   # прямой угол при H
+    + vtxP(_B, 'B', -4, -8) + vtxP(_A, 'A', -14, 6) + vtxP(_C, 'C', 6, 6)
+    + dotP(_H, 'H', -4, 16) + dotP(_E, 'E', 7, -2) + dotP(_F, 'F', -16, 0)
+    + valAt(mid(_A, _B), '25y', -20, -2) + valAt(mid(_A, _H), '24y', -8, 16)
+    + valAt(mid(_B, _F), '25x', 7, 0) + valAt(mid(_F, _H), '24x', 7, 0)
 )
 SOL[7] = (
     '<p>Пусть <i>AE</i> — биссектриса ∠<i>BAC</i>, <i>BH</i> — высота, <i>F&nbsp;=&nbsp;AE∩BH</i>, причём <i>BF:FH&nbsp;=&nbsp;25:24</i>.</p>'
@@ -260,17 +394,22 @@ SOL[7] = (
 )
 
 # ══ Серия 8 — прототип 25.14 (#54132). Трапеция AD=34,BC=2, AB=24 → 13,5 ══════
+# BC ≪ AD (как в прототипе), поэтому B близко к вершине P; окружность помещается
+_P = (168, 40); _th = _m.radians(38)
+_dirA = (-_m.sin(_th), _m.cos(_th)); _dirD = (_m.cos(_th), _m.sin(_th))   # PA ⟂ PD
+_A = (_P[0] + _dirA[0] * 150, _P[1] + _dirA[1] * 150)
+_D = (_P[0] + _dirD[0] * 150, _P[1] + _dirD[1] * 150)
+_B = lerp(_P, _A, 0.16); _C = lerp(_P, _D, 0.16)               # BC ∥ AD
+_O, _r, _E = circle_2pt_tangent(_A, _B, _C, _D)               # окр. через A,B кас. CD в E
 _svg8 = (
-    '<line x1="60" y1="170" x2="290" y2="170" ' + L + '/>'    # A..D
-    '<line x1="100" y1="100" x2="170" y2="100" ' + L + '/>'   # B..C
-    '<line x1="60" y1="170" x2="150" y2="40" ' + L + '/>'     # A..B..P
-    '<line x1="290" y1="170" x2="150" y2="40" ' + L + '/>'    # D..C..P
-    '<rect x="139" y="48" width="11" height="11" ' + AUX + ' transform="rotate(35 144 53)"/>'
-    '<circle cx="195" cy="135" r="62" ' + DASH + '/>'        # окружность через A,B кас. CD
-    + vtx(150, 40, 'P', -4, -6) + vtx(100, 100, 'B', -14, 0) + vtx(170, 100, 'C', 6, 0)
-    + vtx(60, 170, 'A', -14, 6) + vtx(290, 170, 'D', 6, 6)
-    + '<circle cx="205" cy="118" r="2.5" fill="#111"/><text x="210" y="116" font-size="13" font-style="italic" fill="#111">E</text>'
-    + val(96, 145, '24')
+    circ(_O, _r, DASH)                                        # окружность через A,B кас. CD
+    + ln(_A, _B) + ln(_B, _C) + ln(_C, _D) + ln(_D, _A)       # трапеция
+    + ln(_B, _P, DASH) + ln(_C, _P, DASH)                     # боковые до вершины P
+    + rightangle(_P, _A, _D, 11)                              # прямой угол при P
+    + vtxP(_P, 'P', -4, -8) + vtxP(_B, 'B', -14, -2) + vtxP(_C, 'C', 6, -2)
+    + vtxP(_A, 'A', -14, 8) + vtxP(_D, 'D', 7, 4)
+    + dotP(_E, 'E', 7, 2)
+    + valAt(mid(_A, _B), '24', -16, 0)
 )
 SOL[8] = (
     '<p>Пусть <i>P&nbsp;=&nbsp;AB∩CD</i>. Так как сумма углов при <i>AD</i> равна 90°, то ∠<i>APD&nbsp;=&nbsp;90°</i>. '
@@ -286,21 +425,17 @@ SOL[8] = (
 )
 
 # ══ Серия 9 — прототип 25.7 (#55905). Трапеция AB⊥BC, AD=4,BC=2 → 2√2 ═════════
+_B = (88, 54); _C = (150, 54); _A = (88, 178); _D = (242, 178)   # прямоуг. трапеция, AB верт.
+_O9, _r9, _E = circle_2pt_tangent(_C, _D, _A, _B)               # окр. через C,D кас. AB в E
+_H = foot(_E, _C, _D)
 _svg9 = (
-    '<line x1="70" y1="60" x2="140" y2="60" ' + L + '/>'      # B..C
-    '<line x1="70" y1="60" x2="70" y2="200" ' + L + '/>'      # B..A (AB верт)
-    '<line x1="70" y1="200" x2="250" y2="200" ' + L + '/>'    # A..D
-    '<line x1="140" y1="60" x2="250" y2="200" ' + L + '/>'    # C..D
-    '<circle cx="160" cy="135" r="78" ' + DASH + '/>'        # окр. через C,D кас. AB
-    '<line x1="70" y1="135" x2="140" y2="60" ' + AUX + '/>'   # E..C
-    '<line x1="70" y1="135" x2="250" y2="200" ' + AUX + '/>'  # E..D
-    '<line x1="70" y1="135" x2="118" y2="103" ' + AUX + '/>'  # E..H (⊥CD)
-    '<rect x="62" y="64" width="9" height="9" ' + AUX + '/>'  # прямой угол при B
-    '<rect x="62" y="190" width="9" height="9" ' + AUX + '/>' # прямой угол при A
-    + vtx(70, 60, 'B', -14, 0) + vtx(140, 60, 'C', 2, -6)
-    + vtx(70, 200, 'A', -14, 8) + vtx(250, 200, 'D', 6, 8)
-    + '<circle cx="70" cy="135" r="2.5" fill="#111"/><text x="54" y="135" font-size="13" font-style="italic" fill="#111">E</text>'
-    + '<circle cx="118" cy="103" r="2.5" fill="#111"/><text x="122" y="100" font-size="13" font-style="italic" fill="#111">H</text>'
+    circ(_O9, _r9, DASH)                                        # окружность через C,D
+    + ln(_B, _C) + ln(_B, _A) + ln(_A, _D) + ln(_C, _D)         # трапеция
+    + ln(_E, _C, AUX) + ln(_E, _D, AUX) + ln(_E, _H, AUX)       # EC, ED, EH⊥CD
+    + rightangle(_B, _A, _C, 9) + rightangle(_A, _B, _D, 9)
+    + vtxP(_B, 'B', -14, 0) + vtxP(_C, 'C', 3, -6)
+    + vtxP(_A, 'A', -14, 8) + vtxP(_D, 'D', 6, 8)
+    + dotP(_E, 'E', -16, 4) + dotP(_H, 'H', 5, -2)
 )
 SOL[9] = (
     '<p>Проведём <i>EH&nbsp;⊥&nbsp;CD</i> — искомое расстояние. Так как <i>AB&nbsp;⊥&nbsp;BC</i>, трапеция '
@@ -315,23 +450,25 @@ SOL[9] = (
 )
 
 # ══ Серия 10 — прототип 25.10 (#105374). Окружности 45,55 → 99 ════════════════
+# радиусы намеренно усилены (30:60) для наглядности (концепт-схема), числа — подписи
+_O1 = (150, 135); _r1 = 30; _O2 = (240, 135); _r2 = 60
+_nx = (_r2 - _r1) / (_r1 + _r2); _ny = _m.sqrt(1 - _nx * _nx)
+_nU = (_nx, -_ny); _nD = (_nx, _ny)
+_Apt = (_O1[0] + _r1 * _nU[0], _O1[1] + _r1 * _nU[1])
+_Cpt = (_O2[0] + _r2 * _nU[0], _O2[1] + _r2 * _nU[1])
+_Bpt = (_O1[0] + _r1 * _nD[0], _O1[1] + _r1 * _nD[1])
+_Dpt = (_O2[0] + _r2 * _nD[0], _O2[1] + _r2 * _nD[1])
+_Ept = xline(_Apt, _Cpt, _Bpt, _Dpt)                            # вершина касательных
+_Nn = (round(_Apt[0], 1), 135); _Kk = (round(_Cpt[0], 1), 135)
 _svg10 = (
-    '<circle cx="120" cy="130" r="48" ' + L + '/>'
-    '<circle cx="232" cy="130" r="58" ' + L + '/>'
-    '<line x1="30" y1="130" x2="300" y2="130" ' + DASH + '/>'  # линия центров E..
-    '<line x1="40" y1="130" x2="110" y2="86" ' + L + '/>'      # E..A касат верх
-    '<line x1="40" y1="130" x2="110" y2="174" ' + L + '/>'     # E..B касат низ
-    '<line x1="110" y1="86" x2="206" y2="78" ' + L + '/>'      # A..C
-    '<line x1="110" y1="174" x2="206" y2="182" ' + L + '/>'    # B..D
-    '<line x1="110" y1="86" x2="110" y2="174" ' + AUX + '/>'   # AB
-    '<line x1="206" y1="78" x2="206" y2="182" ' + AUX + '/>'   # CD
-    + '<circle cx="120" cy="130" r="2.5" fill="#111"/><text x="112" y="126" font-size="12" font-style="italic" fill="#111">O</text>'
-    + '<circle cx="232" cy="130" r="2.5" fill="#111"/><text x="236" y="126" font-size="12" font-style="italic" fill="#111">Q</text>'
-    + '<circle cx="110" cy="86" r="2.5" fill="#111"/><text x="100" y="80" font-size="12" font-style="italic" fill="#111">A</text>'
-    + '<circle cx="110" cy="174" r="2.5" fill="#111"/><text x="100" y="190" font-size="12" font-style="italic" fill="#111">B</text>'
-    + '<circle cx="206" cy="78" r="2.5" fill="#111"/><text x="210" y="74" font-size="12" font-style="italic" fill="#111">C</text>'
-    + '<circle cx="206" cy="182" r="2.5" fill="#111"/><text x="210" y="196" font-size="12" font-style="italic" fill="#111">D</text>'
-    + val(96, 150, '45') + val(238, 165, '55')
+    circ(_O1, _r1) + circ(_O2, _r2)                             # две окружности
+    + ln(_Ept, _O2, DASH)                                       # линия центров
+    + ln(_Ept, _Cpt) + ln(_Ept, _Dpt)                          # общие касательные AC, BD
+    + ln(_Apt, _Bpt, AUX) + ln(_Cpt, _Dpt, AUX)               # хорды AB, CD
+    + dotP(_O1, 'O', -4, -6) + dotP(_O2, 'Q', 6, -6) + dotP(_Ept, 'E', -15, 2)
+    + vtxP(_Apt, 'A', -14, -2) + vtxP(_Bpt, 'B', -14, 10)
+    + vtxP(_Cpt, 'C', 6, -2) + vtxP(_Dpt, 'D', 6, 12)
+    + valAt(_O1, '45', -8, 2) + valAt(_O2, '55', -8, 2)
 )
 SOL[10] = (
     '<p>Пусть <i>O, Q</i> — центры (радиусы 45 и 55), <i>E</i> — точка пересечения касательных <i>AC</i> и <i>BD</i>, '
@@ -348,20 +485,25 @@ SOL[10] = (
 )
 
 # ══ Серия 11 — прототип 25.8 (#55284). AB=36,AC=54, O центр опис. → CD=30 ══════
+_O = (175, 135); _Rr = 96
+
+
+def _on11(a):
+    return (_O[0] + _Rr * _m.cos(_m.radians(a)), _O[1] + _Rr * _m.sin(_m.radians(a)))
+
+
+_A = _on11(203); _B = _on11(305); _C = _on11(35); _E = _on11(23)   # AE — диаметр
+_K = foot(_B, _A, _O)                                              # K = BD ∩ AO, BD⟂AO
+_D = xline(_B, _K, _A, _C)                                         # D на AC
 _svg11 = (
-    '<circle cx="170" cy="125" r="95" ' + L + '/>'
-    '<line x1="80" y1="155" x2="262" y2="155" ' + L + '/>'    # A..D..C
-    '<line x1="80" y1="155" x2="150" y2="42" ' + L + '/>'     # A..B
-    '<line x1="150" y1="42" x2="262" y2="155" ' + L + '/>'    # B..C
-    '<line x1="150" y1="42" x2="150" y2="155" ' + L + '/>'    # B..D
-    '<line x1="80" y1="155" x2="170" y2="125" ' + AUX + '/>'  # A..O..E
-    '<line x1="170" y1="125" x2="258" y2="95" ' + AUX + '/>'
-    '<rect x="144" y="144" width="11" height="11" ' + AUX + '/>'
-    + '<circle cx="170" cy="125" r="2.5" fill="#111"/><text x="176" y="124" font-size="12" font-style="italic" fill="#111">O</text>'
-    + vtx(80, 155, 'A', -14, 6) + vtx(150, 42, 'B', -4, -8) + vtx(262, 155, 'C', 6, 6)
-    + '<circle cx="150" cy="155" r="2.5" fill="#111"/><text x="140" y="172" font-size="12" font-style="italic" fill="#111">D</text>'
-    + '<circle cx="258" cy="95" r="2.5" fill="#111"/><text x="262" y="92" font-size="12" font-style="italic" fill="#111">E</text>'
-    + val(96, 110, '36') + val(190, 170, '54')
+    circ(_O, _Rr)                                                  # описанная окружность
+    + ln(_A, _B) + ln(_B, _C) + ln(_C, _A)                        # треугольник
+    + ln(_B, _D)                                                  # BD
+    + ln(_A, _E, AUX)                                            # прямая AO (диаметр AE)
+    + rightangle(_K, _A, _B, 9)                                   # BD ⟂ AO
+    + vtxP(_A, 'A', -15, 4) + vtxP(_B, 'B', -4, -8) + vtxP(_C, 'C', 6, 4)
+    + dotP(_O, 'O', 6, -4) + dotP(_K, 'K', -6, -8) + dotP(_D, 'D', -4, 16) + dotP(_E, 'E', 7, 2)
+    + valAt(mid(_A, _B), '36', -16, 0) + valAt(mid(_A, _C), '54', 0, 16)
 )
 SOL[11] = (
     '<p>Продлим <i>AO</i> до пересечения с описанной окружностью в точке <i>E</i> (<i>AE</i> — диаметр). '
@@ -375,21 +517,24 @@ SOL[11] = (
 )
 
 # ══ Серия 12 — прототип 25.9 (#55906). AD=15, MD=12 → AH=5,4 ══════════════════
+_B = (88, 138); _C = (252, 138); _O = mid(_B, _C); _Rr = _len(_B, _C) / 2  # окр. с диам. BC
+_A = (150, 50)
+_D = foot(_A, _B, _C)                                            # высота AD
+# M, P — пересечения вертикали AD с окружностью
+_dy = _m.sqrt(max(0.0, _Rr * _Rr - (_D[0] - _O[0]) ** 2))
+_M = (_D[0], _O[1] - _dy); _P = (_D[0], _O[1] + _dy)
+_N = foot(_B, _A, _C)                                            # высота BN
+_H = xline(_A, _D, _B, _N)                                       # ортоцентр
 _svg12 = (
-    '<circle cx="170" cy="150" r="92" ' + L + '/>'
-    '<line x1="78" y1="150" x2="262" y2="150" ' + L + '/>'    # B..D..O..C
-    '<line x1="150" y1="62" x2="78" y2="150" ' + L + '/>'     # A..B
-    '<line x1="150" y1="62" x2="262" y2="150" ' + L + '/>'    # A..C
-    '<line x1="150" y1="62" x2="150" y2="242" ' + L + '/>'    # A..D..P высота
-    '<line x1="78" y1="150" x2="220" y2="98" ' + L + '/>'     # B..N высота
-    '<rect x="144" y="139" width="11" height="11" ' + AUX + '/>'
-    + vtx(150, 62, 'A', -4, -8) + vtx(78, 150, 'B', -16, 4) + vtx(262, 150, 'C', 6, 6)
-    + '<circle cx="150" cy="150" r="2.5" fill="#111"/><text x="138" y="166" font-size="12" font-style="italic" fill="#111">D</text>'
-    + '<circle cx="150" cy="112" r="2.5" fill="#111"/><text x="156" y="110" font-size="12" font-style="italic" fill="#111">M</text>'
-    + '<circle cx="150" cy="135" r="2.5" fill="#111"/><text x="130" y="133" font-size="12" font-style="italic" fill="#111">H</text>'
-    + '<circle cx="220" cy="98" r="2.5" fill="#111"/><text x="224" y="96" font-size="12" font-style="italic" fill="#111">N</text>'
-    + '<circle cx="150" cy="242" r="2.5" fill="#111"/><text x="150" y="258" font-size="12" font-style="italic" fill="#111">P</text>'
-    + val(156, 92, '3') + val(156, 200, '12')
+    circ(_O, _Rr)                                                # окружность (диаметр BC)
+    + ln(_B, _C) + ln(_A, _B) + ln(_A, _C)                      # треугольник
+    + ln(_A, _P)                                                # высота AD (до P)
+    + ln(_B, _N)                                                # высота BN
+    + rightangle(_D, _A, _C, 9)
+    + vtxP(_A, 'A', -4, -8) + vtxP(_B, 'B', -16, 4) + vtxP(_C, 'C', 6, 4)
+    + dotP(_D, 'D', -14, 14) + dotP(_M, 'M', 6, -2) + dotP(_N, 'N', 6, -2)
+    + dotP(_H, 'H', -15, 2) + dotP(_O, 'O', 4, 14) + dotP(_P, 'P', 4, 16)
+    + valAt(mid(_A, _M), '3', 7, 0) + valAt(mid(_M, _D), '12', 7, 0)
 )
 SOL[12] = (
     '<p>Достроим полуокружность до окружности с центром <i>O</i> на <i>BC</i>. <i>BN</i> — высота '
@@ -404,20 +549,27 @@ SOL[12] = (
 )
 
 # ══ Серия 13 — прототип 25.5 (#56386). Серед. равноуд., BC=12, ∠B=115,∠C=95 → 8√3 ═
+_M = (175, 132); _Rr = 94
+
+
+def _on13(a):
+    return (_M[0] + _Rr * _m.cos(_m.radians(a)), _M[1] + _Rr * _m.sin(_m.radians(a)))
+
+
+_A = _on13(180); _D = _on13(0)              # AD — диаметр
+_B = _on13(214); _C = _on13(326)            # B, C сверху (симметрично)
+_H = mid(_B, _C)                            # основание высоты MH к BC
 _svg13 = (
-    '<circle cx="175" cy="130" r="92" ' + L + '/>'
-    '<line x1="83" y1="130" x2="267" y2="130" ' + L + '/>'    # A..M..D
-    '<line x1="83" y1="130" x2="120" y2="55" ' + L + '/>'     # A..B
-    '<line x1="120" y1="55" x2="235" y2="58" ' + L + '/>'     # B..C
-    '<line x1="235" y1="58" x2="267" y2="130" ' + L + '/>'    # C..D
-    '<line x1="175" y1="130" x2="120" y2="55" ' + AUX + '/>'  # M..B (R)
-    '<line x1="175" y1="130" x2="235" y2="58" ' + AUX + '/>'  # M..C (R)
-    '<line x1="175" y1="130" x2="177" y2="56" ' + DASH + '/>' # M..H высота
-    + '<circle cx="175" cy="130" r="2.5" fill="#111"/><text x="170" y="146" font-size="12" font-style="italic" fill="#111">M</text>'
-    + vtx(83, 130, 'A', -14, 6) + vtx(120, 55, 'B', -14, -2) + vtx(235, 58, 'C', 6, -2) + vtx(267, 130, 'D', 6, 6)
-    + '<circle cx="177" cy="57" r="2.5" fill="#111"/><text x="180" y="52" font-size="12" font-style="italic" fill="#111">H</text>'
-    + val(140, 100, 'R') + val(205, 100, 'R') + val(120, 122, 'R') + val(220, 122, 'R')
-    + val(140, 52, '6') + val(195, 52, '6')
+    circ(_M, _Rr)                           # окружность с центром M
+    + ln(_A, _B) + ln(_B, _C) + ln(_C, _D) + ln(_D, _A)   # четырёхугольник (AD — диаметр)
+    + ln(_M, _B, AUX) + ln(_M, _C, AUX)     # радиусы MB, MC
+    + ln(_M, _H, DASH)                       # высота MH ⟂ BC
+    + rightangle(_H, _B, _M, 9)
+    + vtxP(_A, 'A', -15, 4) + vtxP(_B, 'B', -14, -2) + vtxP(_C, 'C', 6, -2) + vtxP(_D, 'D', 6, 4)
+    + dotP(_M, 'M', -4, 16) + dotP(_H, 'H', -2, -6)
+    + valAt(mid(_M, _A), 'R', 0, -5) + valAt(mid(_M, _D), 'R', 0, -5)
+    + valAt(mid(_M, _B), 'R', -10, 0) + valAt(mid(_M, _C), 'R', 6, 0)
+    + valAt(mid(_B, _H), '6', 0, -5) + valAt(mid(_H, _C), '6', 0, -5)
 )
 SOL[13] = (
     '<p>Точки <i>A, B, C, D</i> равноудалены от <i>M</i>, значит лежат на окружности с центром <i>M</i> '
@@ -434,20 +586,29 @@ SOL[13] = (
 )
 
 # ══ Серия 14 — прототип 25.11 (#105602). Вписанный AB=39,CD=12,∠AKB=60 → 3√79 ══
+_O = (178, 135); _Rr = 96
+
+
+def _on14(a):
+    return (_O[0] + _Rr * _m.cos(_m.radians(a)), _O[1] + _Rr * _m.sin(_m.radians(a)))
+
+
+_A = _on14(248); _B = _on14(335); _C = _on14(40); _D = _on14(158)
+_K = xline(_A, _C, _B, _D)                                  # пересечение диагоналей
+# M на окружности: DM ∥ AC (вторая точка пересечения прямой через D с окружностью)
+_u = _unit(_A, _C)
+_tM = -2 * ((_D[0] - _O[0]) * _u[0] + (_D[1] - _O[1]) * _u[1])
+_M = (_D[0] + _tM * _u[0], _D[1] + _tM * _u[1])
 _svg14 = (
-    '<circle cx="175" cy="135" r="98" ' + L + '/>'
-    '<line x1="150" y1="40" x2="262" y2="95" ' + L + '/>'     # A..B
-    '<line x1="262" y1="95" x2="225" y2="225" ' + L + '/>'    # B..C
-    '<line x1="225" y1="225" x2="110" y2="200" ' + L + '/>'   # C..D
-    '<line x1="110" y1="200" x2="150" y2="40" ' + L + '/>'    # D..A
-    '<line x1="150" y1="40" x2="225" y2="225" ' + AUX + '/>'  # A..C
-    '<line x1="262" y1="95" x2="110" y2="200" ' + AUX + '/>'  # B..D
-    '<line x1="150" y1="40" x2="90" y2="100" ' + DASH + '/>'  # A..M (DM∥AC)
-    '<line x1="90" y1="100" x2="110" y2="200" ' + DASH + '/>'
-    + vtx(150, 40, 'A', -2, -8) + vtx(262, 95, 'B', 6, 0) + vtx(225, 225, 'C', 6, 10) + vtx(110, 200, 'D', -16, 8)
-    + '<circle cx="90" cy="100" r="2.5" fill="#111"/><text x="74" y="100" font-size="12" font-style="italic" fill="#111">M</text>'
-    + '<text x="172" y="150" font-size="11" fill="#2563eb">60°</text>'
-    + val(200, 60, '39') + val(150, 215, '12')
+    circ(_O, _Rr)                                          # описанная окружность
+    + ln(_A, _B) + ln(_B, _C) + ln(_C, _D) + ln(_D, _A)   # четырёхугольник
+    + ln(_A, _C, AUX) + ln(_B, _D, AUX)                  # диагонали
+    + ln(_D, _M, DASH) + ln(_A, _M, DASH)                # DM ∥ AC, AM
+    + arc(_K, _A, _B, 16)                                  # угол 60° при K
+    + vtxP(_A, 'A', -2, -8) + vtxP(_B, 'B', 6, 0) + vtxP(_C, 'C', 6, 10) + vtxP(_D, 'D', -16, 6)
+    + dotP(_K, 'K', 6, 4) + dotP(_M, 'M', -15, 2)
+    + valAt(_K, '60°', 8, -6)
+    + valAt(mid(_A, _B), '39', 4, -4) + valAt(mid(_C, _D), '12', 0, 16)
 )
 SOL[14] = (
     '<p>Проведём <i>DM&nbsp;∥&nbsp;AC</i> (<i>M</i> на окружности). Тогда ∠<i>BMD&nbsp;=&nbsp;∠AKB&nbsp;=&nbsp;60°</i> '
@@ -464,19 +625,18 @@ SOL[14] = (
 )
 
 # ══ Серия 15 — прототип 25.12 (#105706). AM=4,AN=15, cos=√15/4 → R=8 ══════════
+_A = (64, 116); _C = (274, 116)                              # AC — горизонтально
+_uB = _unit((0, 0), (_m.cos(_m.radians(-15)), _m.sin(_m.radians(-15))))  # луч AB под малым углом
+_B = (_A[0] + 135 * _uB[0], _A[1] + 135 * _uB[1])
+_M = lerp(_A, _C, 4.0 / 26); _N = lerp(_A, _C, 15.0 / 26)    # AM=4, AN=15 (масштаб)
+_O15, _r15, _K = circle_2pt_tangent(_M, _N, _A, _B)          # окр. через M,N кас. AB в K
 _svg15 = (
-    '<line x1="40" y1="180" x2="300" y2="180" ' + L + '/>'    # A..M..N..C
-    '<line x1="40" y1="180" x2="210" y2="60" ' + L + '/>'     # A..K..B луч AB
-    '<line x1="130" y1="120" x2="100" y2="180" ' + AUX + '/>' # K..M
-    '<line x1="130" y1="120" x2="235" y2="180" ' + AUX + '/>' # K..N
-    '<circle cx="167" cy="160" r="55" ' + DASH + '/>'        # окружность через M,N кас. AB в K
-    + vtx(40, 180, 'A', -14, 6)
-    + '<circle cx="100" cy="180" r="2.5" fill="#111"/><text x="92" y="196" font-size="12" font-style="italic" fill="#111">M</text>'
-    + '<circle cx="235" cy="180" r="2.5" fill="#111"/><text x="230" y="196" font-size="12" font-style="italic" fill="#111">N</text>'
-    + vtx(300, 180, 'C', 6, 6)
-    + '<circle cx="130" cy="120" r="2.5" fill="#111"/><text x="120" y="114" font-size="12" font-style="italic" fill="#111">K</text>'
-    + vtx(210, 60, 'B', 4, -4)
-    + val(64, 174, '4') + val(160, 174, '11')
+    circ(_O15, _r15, DASH)                                   # окружность через M, N
+    + ln(_A, _C) + ln(_A, _B)                               # AC и луч AB
+    + ln(_K, _M, AUX) + ln(_K, _N, AUX)                    # KM, KN
+    + vtxP(_A, 'A', -15, 4) + vtxP(_C, 'C', 6, 4) + vtxP(_B, 'B', 5, -2)
+    + dotP(_M, 'M', -4, 16) + dotP(_N, 'N', -4, 16) + dotP(_K, 'K', -14, -2)
+    + valAt(mid(_A, _M), '4', 0, 16) + valAt(mid(_M, _N), '11', 0, 16)
 )
 SOL[15] = (
     '<p>Пусть <i>K</i> — точка касания окружности и луча <i>AB</i>. По теореме о касательной и секущей '
