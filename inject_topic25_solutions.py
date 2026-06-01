@@ -664,12 +664,17 @@ def palomatika_palette(html: str) -> str:
             .replace('stroke="#2563eb"', 'stroke="#d4a855"'))
 
 
+# Чертёж серии как самостоятельный SVG — для поля illustration (страница темы /topics/25)
+FIG = {1: _svg1, 2: _svg2, 3: _svg3, 4: _svg4, 5: _svg5, 6: _svg6, 7: _svg7, 8: _svg8,
+       9: _svg9, 10: _svg10, 11: _svg11, 12: _svg12, 13: _svg13, 14: _svg14, 15: _svg15}
+
 patched = 0
 for block in data["blocks"]:
     for z in block["zadaniya"]:
         n = int(z["number"])
         if n in SOL:
             z["solution"] = palomatika_palette(SOL[n])
+            z["illustration"] = palomatika_palette(SVG_OPEN + BG + FIG[n] + "</svg>")
             patched += 1
 with open(path, "w", encoding="utf-8") as f:
     json.dump(data, f, ensure_ascii=False, indent=2)
