@@ -24,12 +24,13 @@ import os
 TOPIC_ID = "24"
 OUT = os.path.join(os.path.dirname(__file__), "storage", "app", "tasks", f"topic_{TOPIC_ID}.json")
 
-# ── палитра (как в solution-фигурах №25) ──────────────────────────────────
-SIDE = "#222222"      # стороны / основные отрезки
-AUX = "#10b981"       # вспомогательные построения (пунктир)
-KNOWN = "#d4501e"     # известные величины и буквенные пометки
-ANG = "#2563eb"       # прямые углы и дуги углов
-DOT = "#111111"
+# ── палитра геометрии проекта (GEOMETRY_SPEC, видна на тёмном фоне) ────────
+SIDE = "#dc2626"      # стороны / основные линии и окружности (красный)
+AUX = "#10b981"       # вспомогательные: диагонали, биссектрисы, высоты, радиусы (зелёный)
+KNOWN = "#f59e0b"     # известные величины и буквенные пометки (янтарный)
+MARK = "#3b82f6"      # маркеры равенства и дуги углов (синий)
+RIGHT = "#666666"     # прямой угол (серый)
+PT = "#60a5fa"        # подписи вершин (голубой)
 
 
 def _u(ax, ay, bx, by):
@@ -48,8 +49,8 @@ def circle(cx, cy, r, c=SIDE, w=2):
 
 
 def vtx(x, y, label, dx=-12, dy=5, dot=True, size=14):
-    s = f'<circle cx="{x:.1f}" cy="{y:.1f}" r="2.4" fill="{DOT}"/>' if dot else ''
-    s += f'<text x="{x + dx:.1f}" y="{y + dy:.1f}" font-size="{size}" font-style="italic" fill="{DOT}">{label}</text>'
+    s = f'<circle cx="{x:.1f}" cy="{y:.1f}" r="2.4" fill="{PT}"/>' if dot else ''
+    s += f'<text x="{x + dx:.1f}" y="{y + dy:.1f}" font-size="{size}" font-style="italic" fill="{PT}">{label}</text>'
     return s
 
 
@@ -57,7 +58,7 @@ def lbl(x, y, t, c=KNOWN, size=13, weight="bold"):
     return f'<text x="{x:.1f}" y="{y:.1f}" font-size="{size}" font-weight="{weight}" fill="{c}">{t}</text>'
 
 
-def tick(x1, y1, x2, y2, n=1, c=SIDE, size=5, gap=4, frac=0.5):
+def tick(x1, y1, x2, y2, n=1, c=MARK, size=5, gap=4, frac=0.5):
     mx, my = x1 + (x2 - x1) * frac, y1 + (y2 - y1) * frac
     ux, uy = _u(x1, y1, x2, y2)
     px, py = -uy, ux
@@ -69,7 +70,7 @@ def tick(x1, y1, x2, y2, n=1, c=SIDE, size=5, gap=4, frac=0.5):
     return "".join(out)
 
 
-def rangle(vx, vy, ax, ay, bx, by, size=11, c=ANG):
+def rangle(vx, vy, ax, ay, bx, by, size=11, c=RIGHT):
     uax, uay = _u(vx, vy, ax, ay)
     ubx, uby = _u(vx, vy, bx, by)
     p1 = (vx + uax * size, vy + uay * size)
@@ -78,7 +79,7 @@ def rangle(vx, vy, ax, ay, bx, by, size=11, c=ANG):
     return f'<polyline points="{p1[0]:.1f},{p1[1]:.1f} {p2[0]:.1f},{p2[1]:.1f} {p3[0]:.1f},{p3[1]:.1f}" stroke="{c}" stroke-width="1.4" fill="none"/>'
 
 
-def arc(vx, vy, ax, ay, bx, by, r=20, c=ANG, n=1, gap=4):
+def arc(vx, vy, ax, ay, bx, by, r=20, c=MARK, n=1, gap=4):
     a1 = math.atan2(ay - vy, ax - vx)
     a2 = math.atan2(by - vy, bx - vx)
     d = a2 - a1
@@ -119,7 +120,7 @@ def fig_line_through_O():  # прототип 24.2 — CL = AN
     L = (150, 45)
     N = (185, 200)
     b = [line(*A, *B), line(*B, *C), line(*C, *D), line(*D, *A),
-         line(*A, *C, w=1.3), line(*B, *D, w=1.3), line(*L, *N, w=1.6)]
+         line(*A, *C, c=AUX, w=1.3), line(*B, *D, c=AUX, w=1.3), line(*L, *N, c=AUX, w=1.6)]
     b.append(tick(*C, *L, n=2))
     b.append(tick(*A, *N, n=2))
     b.append(arc(*A, *C, *N, r=24))
@@ -134,7 +135,7 @@ def fig_line_through_O():  # прототип 24.2 — CL = AN
 def fig_double_side():  # прототип 24.4 — BM биссектриса
     A, B, C, D = (45, 200), (110, 55), (310, 55), (245, 200)
     M = (145, 200)
-    b = [line(*A, *B), line(*B, *C), line(*C, *D), line(*D, *A), line(*B, *M, w=1.6)]
+    b = [line(*A, *B), line(*B, *C), line(*C, *D), line(*D, *A), line(*B, *M, c=AUX, w=1.6)]
     b.append(tick(*A, *B, n=1))
     b.append(tick(*A, *M, n=1))
     b.append(tick(*M, *D, n=1))
@@ -154,7 +155,7 @@ def fig_bis_parallelogram():  # прототип 24.3 — L середина AB
     A, B, C, D = (40, 200), (90, 50), (290, 50), (240, 200)
     L = (65, 125)
     b = [line(*A, *B), line(*B, *C), line(*C, *D), line(*D, *A),
-         line(*C, *L, w=1.6), line(*D, *L, w=1.6)]
+         line(*C, *L, c=AUX, w=1.6), line(*D, *L, c=AUX, w=1.6)]
     b.append(tick(*B, *C, n=1))
     b.append(tick(*B, *L, n=1))
     b.append(tick(*A, *D, n=2))
@@ -174,7 +175,7 @@ def fig_bis_quad_equidist():  # прототип 24.5 — O равноудале
     O = (180, 205)
     Lf, Mf, Nf = (66, 110), (170, 65), (290, 142)
     b = [line(*A, *B), line(*B, *C), line(*C, *D), line(*D, *A),
-         line(*O, *B, w=1.4), line(*O, *C, w=1.4)]
+         line(*O, *B, c=AUX, w=1.4), line(*O, *C, c=AUX, w=1.4)]
     b += [line(*O, *Lf, c=AUX, w=1.4, dash=True),
           line(*O, *Mf, c=AUX, w=1.4, dash=True),
           line(*O, *Nf, c=AUX, w=1.4, dash=True)]
@@ -198,7 +199,7 @@ def fig_point_in_parallelogram():  # прототип 24.7 — S(BFC)+S(AFD)=½S
     K = (150, 65)
     Lf = (150, 205)
     b = [line(*A, *B), line(*B, *C), line(*C, *D), line(*D, *A),
-         line(*F, *A, w=1.3), line(*F, *B, w=1.3), line(*F, *C, w=1.3), line(*F, *D, w=1.3),
+         line(*F, *A, c=AUX, w=1.3), line(*F, *B, c=AUX, w=1.3), line(*F, *C, c=AUX, w=1.3), line(*F, *D, c=AUX, w=1.3),
          line(*K, *Lf, c=AUX, w=1.4, dash=True)]
     b.append(rangle(*K, *B, *F, size=9))
     b.append(rangle(*Lf, *A, *F, size=9))
@@ -218,7 +219,7 @@ def fig_trap_diag_equal():  # прототип 24.9 — S(APB)=S(CPD)
     P = (172, 110)
     H, T = (95, 200), (245, 200)
     b = [line(*A, *B), line(*B, *C), line(*C, *D), line(*D, *A),
-         line(*A, *C, w=1.3), line(*B, *D, w=1.3),
+         line(*A, *C, c=AUX, w=1.3), line(*B, *D, c=AUX, w=1.3),
          line(*B, *H, c=AUX, w=1.4, dash=True), line(*C, *T, c=AUX, w=1.4, dash=True)]
     b.append(rangle(*H, *A, *B, size=9))
     b.append(rangle(*T, *A, *C, size=9))
@@ -235,7 +236,7 @@ def fig_mid_lateral():  # прототип 24.8 — E середина AB, S(ECD
     K = (80, 55)
     Lf = (80, 205)
     b = [line(*A, *B), line(*B, *C), line(*C, *D), line(*D, *A),
-         line(*E, *C, w=1.4), line(*E, *D, w=1.4),
+         line(*E, *C, c=AUX, w=1.4), line(*E, *D, c=AUX, w=1.4),
          line(*K, *Lf, c=AUX, w=1.4, dash=True)]
     b.append(tick(*A, *E, n=1))
     b.append(tick(*E, *B, n=1))
@@ -258,8 +259,8 @@ def fig_midline_point():  # прототип 24.6 — точка E на сред
     E = (175, 130)
     K, Lf = (175, 55), (175, 205)
     b = [line(*A, *B), line(*B, *C), line(*C, *D), line(*D, *A),
-         line(*M, *N, w=1.4), line(*K, *Lf, c=AUX, w=1.4, dash=True),
-         line(*E, *B, w=1.3), line(*E, *C, w=1.3), line(*E, *A, w=1.3), line(*E, *D, w=1.3)]
+         line(*M, *N, c=AUX, w=1.4), line(*K, *Lf, c=AUX, w=1.4, dash=True),
+         line(*E, *B, c=AUX, w=1.3), line(*E, *C, c=AUX, w=1.3), line(*E, *A, c=AUX, w=1.3), line(*E, *D, c=AUX, w=1.3)]
     b.append(tick(*A, *M, n=1))
     b.append(tick(*M, *B, n=1))
     b.append(tick(*D, *N, n=1))
@@ -279,7 +280,7 @@ def fig_midline_point():  # прототип 24.6 — точка E на сред
 
 def fig_trap_similar():  # прототип 24.1 — CBD ~ BDA
     A, B, C, D = (40, 200), (110, 60), (220, 60), (300, 200)
-    b = [line(*A, *B), line(*B, *C), line(*C, *D), line(*D, *A), line(*B, *D, w=1.5)]
+    b = [line(*A, *B), line(*B, *C), line(*C, *D), line(*D, *A), line(*B, *D, c=AUX, w=1.5)]
     b.append(arc(*B, *D, *C, r=22))
     b.append(arc(*D, *B, *A, r=22))
     b.append(lbl(160, 52, '8'))
@@ -320,7 +321,7 @@ def fig_obtuse_similar():  # прототип 24.13 — AB₁C₁ ~ ABC (туп�
     b = [circle(*cen, r, w=1.4),
          line(*B1, *C, w=1.6), line(*A, *B, w=1.6), line(*B, *C, w=1.6),
          line(*A, *C1, c=AUX, w=1.3, dash=True),
-         line(*B, *B1, w=1.4), line(*C, *C1, w=1.4)]
+         line(*B, *B1, c=AUX, w=1.4), line(*C, *C1, c=AUX, w=1.4)]
     b.append(rangle(*B1, *C, *B, size=9))
     b.append(rangle(*C1, *B, *C, size=9))
     b.append(arc(*B1, *A, *C1, r=15))
@@ -340,7 +341,7 @@ def fig_acute_equal_angles():  # прототип 24.12 — ∠CC₁B₁ = ∠CB
     cen, r = (170, 200), 125
     b = [circle(*cen, r, w=1.3),
          line(*A, *B, w=1.6), line(*B, *C, w=1.6), line(*C, *A, w=1.6),
-         line(*B, *B1, w=1.4), line(*C, *C1, w=1.4), line(*B1, *C1, w=1.4)]
+         line(*B, *B1, c=AUX, w=1.4), line(*C, *C1, c=AUX, w=1.4), line(*B1, *C1, c=AUX, w=1.4)]
     b.append(rangle(*B1, *A, *B, size=9))
     b.append(rangle(*C1, *A, *C, size=9))
     b.append(arc(*C1, *C, *B1, r=15))
@@ -363,7 +364,7 @@ def fig_convex_quad():  # прототип 24.11 — ∠DAC = ∠DBC ⇒ ∠CDB 
     D = P(140)
     b = [circle(*cen, r, w=1.4),
          line(*A, *B, w=1.5), line(*B, *C, w=1.5), line(*C, *D, w=1.5), line(*D, *A, w=1.5),
-         line(*A, *C, w=1.3), line(*B, *D, w=1.3)]
+         line(*A, *C, c=AUX, w=1.3), line(*B, *D, c=AUX, w=1.3)]
     b.append(arc(*A, *D, *C, r=18))
     b.append(arc(*B, *D, *C, r=18))
     b.append(arc(*D, *C, *B, r=26, n=1))
@@ -383,9 +384,9 @@ def fig_two_circles_perp():  # прототип 24.14 — AB ⊥ IJ
     rI = math.hypot(215 - 120, 75 - 135)
     rJ = math.hypot(215 - 180, 75 - 135)
     b = [circle(*I, rI, w=1.4), circle(*J, rJ, w=1.4),
-         line(*A, *B, w=1.6), line(*I, *H, w=1.4),
-         line(*I, *A, w=1.4), line(*I, *B, w=1.4),
-         line(*J, *A, w=1.4), line(*J, *B, w=1.4)]
+         line(*A, *B, w=1.6), line(*I, *H, c=AUX, w=1.4),
+         line(*I, *A, c=AUX, w=1.4), line(*I, *B, c=AUX, w=1.4),
+         line(*J, *A, c=AUX, w=1.4), line(*J, *B, c=AUX, w=1.4)]
     b.append(rangle(*H, *I, *A, size=9))
     b.append(tick(*I, *A, n=1))
     b.append(tick(*I, *B, n=1))
@@ -405,8 +406,8 @@ def fig_tangent_ratio():  # прототип 24.15 — d₁ : d₂ = a : b
     B = (236.9, 112.4)
     rP, rQ = 55, 33
     b = [circle(*P, rP, w=1.5), circle(*Q, rQ, w=1.5),
-         line(*P, *Q, w=1.4), line(*A, *B, w=1.6),
-         line(*P, *A, w=1.4), line(*Q, *B, w=1.4)]
+         line(*P, *Q, c=AUX, w=1.4), line(*A, *B, w=1.6),
+         line(*P, *A, c=AUX, w=1.4), line(*Q, *B, c=AUX, w=1.4)]
     b.append(rangle(*A, *P, *K, size=9))
     b.append(rangle(*B, *Q, *K, size=9))
     b.append(arc(*K, *P, *A, r=16))
