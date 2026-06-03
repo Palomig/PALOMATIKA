@@ -24,13 +24,14 @@ import os
 TOPIC_ID = "24"
 OUT = os.path.join(os.path.dirname(__file__), "storage", "app", "tasks", f"topic_{TOPIC_ID}.json")
 
-# ── палитра геометрии проекта (GEOMETRY_SPEC, видна на тёмном фоне) ────────
-SIDE = "#dc2626"      # стороны / основные линии и окружности (красный)
-AUX = "#10b981"       # вспомогательные: диагонали, биссектрисы, высоты, радиусы (зелёный)
-KNOWN = "#f59e0b"     # известные величины и буквенные пометки (янтарный)
-MARK = "#3b82f6"      # маркеры равенства и дуги углов (синий)
-RIGHT = "#666666"     # прямой угол (серый)
-PT = "#60a5fa"        # подписи вершин (голубой)
+# ── палитра GeometrySvgRenderer (фигуры тем 15–18, тёмный фон) ─────────────
+BG = "#0a1628"        # фон фигуры
+SIDE = "#c8dce8"      # основные линии / стороны
+CIRC = "#5a9fcf"      # окружности
+AUX = "#5a9fcf"       # вспомогательные: диагонали, биссектрисы, высоты, радиусы
+KNOWN = "#d4a855"     # известные величины и буквенные пометки (золотой)
+MARK = "#7eb8da"      # маркеры: прямой угол, штрихи равенства, дуги углов
+PT = "#c8dce8"        # подписи вершин
 
 
 def _u(ax, ay, bx, by):
@@ -44,12 +45,12 @@ def line(x1, y1, x2, y2, c=SIDE, w=2, dash=False):
     return f'<line x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" stroke="{c}" stroke-width="{w}" fill="none"{d}/>'
 
 
-def circle(cx, cy, r, c=SIDE, w=2):
+def circle(cx, cy, r, c=CIRC, w=2):
     return f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r:.1f}" stroke="{c}" stroke-width="{w}" fill="none"/>'
 
 
 def vtx(x, y, label, dx=-12, dy=5, dot=True, size=14):
-    s = f'<circle cx="{x:.1f}" cy="{y:.1f}" r="2.4" fill="{PT}"/>' if dot else ''
+    s = f'<circle cx="{x:.1f}" cy="{y:.1f}" r="2.4" fill="{MARK}"/>' if dot else ''
     s += f'<text x="{x + dx:.1f}" y="{y + dy:.1f}" font-size="{size}" font-style="italic" fill="{PT}">{label}</text>'
     return s
 
@@ -70,7 +71,7 @@ def tick(x1, y1, x2, y2, n=1, c=MARK, size=5, gap=4, frac=0.5):
     return "".join(out)
 
 
-def rangle(vx, vy, ax, ay, bx, by, size=11, c=RIGHT):
+def rangle(vx, vy, ax, ay, bx, by, size=11, c=MARK):
     uax, uay = _u(vx, vy, ax, ay)
     ubx, uby = _u(vx, vy, bx, by)
     p1 = (vx + uax * size, vy + uay * size)
@@ -100,8 +101,9 @@ def arc(vx, vy, ax, ay, bx, by, r=20, c=MARK, n=1, gap=4):
 
 
 def svg(body, w=340, h=235):
+    bg = f'<rect x="0" y="0" width="{w}" height="{h}" rx="10" fill="{BG}"/>'
     return (f'<svg viewBox="0 0 {w} {h}" xmlns="http://www.w3.org/2000/svg" '
-            f'font-family="Georgia, serif">' + body + '</svg>')
+            f'font-family="Georgia, serif">' + bg + body + '</svg>')
 
 
 def figure(svg_str):
