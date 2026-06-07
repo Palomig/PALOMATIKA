@@ -423,7 +423,7 @@ class StudentController extends Controller
      */
     public function part2Solution(Request $request, string $topic, int $number)
     {
-        $allowed = ['25']; // расширяемый allow-list (позже: '23' и т.д.)
+        $allowed = ['21', '25']; // расширяемый allow-list (позже: '23' и т.д.)
         if (!in_array($topic, $allowed, true)) {
             abort(404);
         }
