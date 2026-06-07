@@ -1,0 +1,538 @@
+{
+  "topic_id": "24",
+  "meta": {
+    "title": "Геометрическая задача на доказательство",
+    "description": "Доказательства: параллелограммы, трапеции, треугольники и окружности (часть 2)",
+    "color": "stone",
+    "icon": "compass"
+  },
+  "exported_at": "2026-06-03T00:00:00+00:00",
+  "blocks": [
+    {
+      "number": 1,
+      "title": "ФИПИ",
+      "zadaniya": [
+        {
+          "number": 1,
+          "instruction": "Прямая через точку пересечения диагоналей параллелограмма отсекает равные отрезки на противоположных сторонах",
+          "type": "geometry",
+          "solution": "<p>Противоположные стороны параллелограмма параллельны, в частности <i>BC&nbsp;∥&nbsp;AD</i>.</p><div class=\"sol-figure\"><svg viewBox=\"0 0 340 235\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"Georgia, serif\"><rect x=\"0\" y=\"0\" width=\"340\" height=\"235\" rx=\"10\" fill=\"#0a1628\"/><line x1=\"40.0\" y1=\"200.0\" x2=\"95.0\" y2=\"45.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"95.0\" y1=\"45.0\" x2=\"295.0\" y2=\"45.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"295.0\" y1=\"45.0\" x2=\"240.0\" y2=\"200.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"240.0\" y1=\"200.0\" x2=\"40.0\" y2=\"200.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"40.0\" y1=\"200.0\" x2=\"295.0\" y2=\"45.0\" stroke=\"#5a9fcf\" stroke-width=\"1.3\" fill=\"none\"/><line x1=\"95.0\" y1=\"45.0\" x2=\"240.0\" y2=\"200.0\" stroke=\"#5a9fcf\" stroke-width=\"1.3\" fill=\"none\"/><line x1=\"150.0\" y1=\"45.0\" x2=\"185.0\" y2=\"200.0\" stroke=\"#5a9fcf\" stroke-width=\"1.6\" fill=\"none\"/><line x1=\"224.5\" y1=\"50.0\" x2=\"224.5\" y2=\"40.0\" stroke=\"#7eb8da\" stroke-width=\"1.5\"/><line x1=\"220.5\" y1=\"50.0\" x2=\"220.5\" y2=\"40.0\" stroke=\"#7eb8da\" stroke-width=\"1.5\"/><line x1=\"110.5\" y1=\"195.0\" x2=\"110.5\" y2=\"205.0\" stroke=\"#7eb8da\" stroke-width=\"1.5\"/><line x1=\"114.5\" y1=\"195.0\" x2=\"114.5\" y2=\"205.0\" stroke=\"#7eb8da\" stroke-width=\"1.5\"/><path d=\"M 60.5 187.5 A 24.0 24.0 0 0 1 64.0 200.0\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><path d=\"M 274.5 57.5 A 24.0 24.0 0 0 1 271.0 45.0\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><circle cx=\"40.0\" cy=\"200.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"26.0\" y=\"206.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">A</text><circle cx=\"95.0\" cy=\"45.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"89.0\" y=\"39.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">B</text><circle cx=\"295.0\" cy=\"45.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"301.0\" y=\"39.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">C</text><circle cx=\"240.0\" cy=\"200.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"246.0\" y=\"208.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">D</text><circle cx=\"150.0\" cy=\"45.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"146.0\" y=\"38.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">L</text><circle cx=\"185.0\" cy=\"200.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"181.0\" y=\"216.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">N</text><circle cx=\"167.5\" cy=\"122.5\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"174.5\" y=\"126.5\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">O</text></svg></div><p>Рассмотрим треугольники <i>OLC</i> и <i>ONA</i>:</p><ul><li><i>CO&nbsp;=&nbsp;AO</i> — диагонали параллелограмма точкой пересечения делятся пополам;</li><li>∠<i>COL</i>&nbsp;=&nbsp;∠<i>AON</i> как вертикальные;</li><li>∠<i>OCL</i>&nbsp;=&nbsp;∠<i>OAN</i> как накрест лежащие при <i>BC&nbsp;∥&nbsp;AD</i> и секущей <i>AC</i>.</li></ul><p>Значит, треугольники равны по стороне и двум прилежащим углам, откуда <i>CL&nbsp;=&nbsp;AN</i> как соответственные элементы равных треугольников.</p><div class=\"answer\">Что и требовалось доказать. <span class=\"step-note\">В остальных задачах серии обозначения букв переставлены — рассуждение дословно повторяется.</span></div>",
+          "tasks": [
+            {
+              "id": 1,
+              "src_key": "24.1.1",
+              "text": "Через точку O пересечения диагоналей параллелограмма ABCD проведена прямая, пересекающая стороны AB и CD в точках E и F соответственно. Докажите, что отрезки AE и CF равны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 2,
+              "src_key": "24.1.2",
+              "text": "Через точку O пересечения диагоналей параллелограмма ABCD проведена прямая, пересекающая стороны AB и CD в точках P и Q соответственно. Докажите, что отрезки BP и DQ равны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 3,
+              "src_key": "24.1.3",
+              "text": "Через точку O пересечения диагоналей параллелограмма ABCD проведена прямая, пересекающая стороны BC и AD в точках K и M соответственно. Докажите, что отрезки BK и DM равны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 4,
+              "src_key": "24.1.4",
+              "text": "Через точку O пересечения диагоналей параллелограмма ABCD проведена прямая, пересекающая стороны BC и AD в точках L и N соответственно. Докажите, что отрезки CL и AN равны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            }
+          ]
+        },
+        {
+          "number": 2,
+          "instruction": "Сторона параллелограмма вдвое больше смежной; отрезок к середине большей стороны — биссектриса угла",
+          "type": "geometry",
+          "solution": "<p>(Разберём прототип: <i>AD&nbsp;=&nbsp;2·AB</i>, <i>M</i> — середина <i>AD</i>, и докажем, что <i>BM</i> — биссектриса угла <i>ABC</i>.)</p><p>Пусть <i>AB&nbsp;=&nbsp;x</i>. Тогда <i>AD&nbsp;=&nbsp;2x</i>, а так как <i>M</i> — середина <i>AD</i>, то</p><div class=\"formula\">$$AM = MD = \\tfrac{1}{2}AD = x = AB.$$</div><div class=\"sol-figure\"><svg viewBox=\"0 0 340 235\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"Georgia, serif\"><rect x=\"0\" y=\"0\" width=\"340\" height=\"235\" rx=\"10\" fill=\"#0a1628\"/><line x1=\"45.0\" y1=\"200.0\" x2=\"110.0\" y2=\"55.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"110.0\" y1=\"55.0\" x2=\"310.0\" y2=\"55.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"310.0\" y1=\"55.0\" x2=\"245.0\" y2=\"200.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"245.0\" y1=\"200.0\" x2=\"45.0\" y2=\"200.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"110.0\" y1=\"55.0\" x2=\"145.0\" y2=\"200.0\" stroke=\"#5a9fcf\" stroke-width=\"1.6\" fill=\"none\"/><line x1=\"72.9\" y1=\"125.5\" x2=\"82.1\" y2=\"129.5\" stroke=\"#7eb8da\" stroke-width=\"1.5\"/><line x1=\"95.0\" y1=\"195.0\" x2=\"95.0\" y2=\"205.0\" stroke=\"#7eb8da\" stroke-width=\"1.5\"/><line x1=\"195.0\" y1=\"195.0\" x2=\"195.0\" y2=\"205.0\" stroke=\"#7eb8da\" stroke-width=\"1.5\"/><path d=\"M 101.0 75.1 A 22.0 22.0 0 0 0 115.2 76.4\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><path d=\"M 115.2 76.4 A 22.0 22.0 0 0 0 132.0 55.0\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><path d=\"M 140.8 182.5 A 18.0 18.0 0 0 0 127.0 200.0\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><text x=\"70.0\" y=\"122.0\" font-size=\"13\" font-weight=\"bold\" fill=\"#d4a855\">x</text><text x=\"92.0\" y=\"214.0\" font-size=\"13\" font-weight=\"bold\" fill=\"#d4a855\">x</text><text x=\"192.0\" y=\"214.0\" font-size=\"13\" font-weight=\"bold\" fill=\"#d4a855\">x</text><circle cx=\"45.0\" cy=\"200.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"31.0\" y=\"206.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">A</text><circle cx=\"110.0\" cy=\"55.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"104.0\" y=\"49.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">B</text><circle cx=\"310.0\" cy=\"55.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"316.0\" y=\"49.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">C</text><circle cx=\"245.0\" cy=\"200.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"251.0\" y=\"208.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">D</text><circle cx=\"145.0\" cy=\"200.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"141.0\" y=\"216.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">M</text></svg></div><p>Треугольник <i>ABM</i> равнобедренный (<i>AB&nbsp;=&nbsp;AM&nbsp;=&nbsp;x</i>), поэтому углы при основании равны: ∠<i>ABM</i>&nbsp;=&nbsp;∠<i>AMB</i>.</p><p>Так как <i>BC&nbsp;∥&nbsp;AD</i>, то ∠<i>AMB</i>&nbsp;=&nbsp;∠<i>MBC</i> как накрест лежащие при секущей <i>BM</i>. Следовательно,</p><div class=\"formula\">$$\\angle ABM = \\angle AMB = \\angle MBC.$$</div><p>Значит, <i>BM</i> делит угол <i>ABC</i> пополам — это биссектриса.</p><div class=\"answer\">Что и требовалось доказать. <span class=\"step-note\">В остальных задачах серии обозначения букв переставлены — рассуждение дословно повторяется.</span></div>",
+          "tasks": [
+            {
+              "id": 5,
+              "src_key": "24.1.5",
+              "text": "Сторона AD параллелограмма ABCD вдвое больше стороны CD. Точка M – середина стороны AD. Докажите, что CM – биссектриса угла BCD.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 6,
+              "src_key": "24.1.6",
+              "text": "Сторона BC параллелограмма ABCD вдвое больше стороны AB. Точка K – середина стороны BC. Докажите, что AK – биссектриса угла BAD.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 7,
+              "src_key": "24.1.7",
+              "text": "Сторона AB параллелограмма ABCD вдвое больше стороны AD. Точка L – середина стороны AB. Докажите, что DL – биссектриса угла ADC.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 8,
+              "src_key": "24.1.8",
+              "text": "Сторона CD параллелограмма ABCD вдвое больше стороны BC. Точка N – середина стороны CD. Докажите, что BN – биссектриса угла ABC.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            }
+          ]
+        },
+        {
+          "number": 3,
+          "instruction": "Биссектрисы двух соседних углов параллелограмма пересекаются в середине противоположной стороны",
+          "type": "geometry",
+          "solution": "<p>(Прототип: биссектрисы углов <i>C</i> и <i>D</i> пересекаются в точке <i>L</i> на <i>AB</i>.) У параллелограмма <i>BC&nbsp;=&nbsp;AD</i> и <i>AB&nbsp;∥&nbsp;CD</i>.</p><div class=\"sol-figure\"><svg viewBox=\"0 0 340 235\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"Georgia, serif\"><rect x=\"0\" y=\"0\" width=\"340\" height=\"235\" rx=\"10\" fill=\"#0a1628\"/><line x1=\"40.0\" y1=\"200.0\" x2=\"90.0\" y2=\"50.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"90.0\" y1=\"50.0\" x2=\"290.0\" y2=\"50.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"290.0\" y1=\"50.0\" x2=\"240.0\" y2=\"200.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"240.0\" y1=\"200.0\" x2=\"40.0\" y2=\"200.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"290.0\" y1=\"50.0\" x2=\"65.0\" y2=\"125.0\" stroke=\"#5a9fcf\" stroke-width=\"1.6\" fill=\"none\"/><line x1=\"240.0\" y1=\"200.0\" x2=\"65.0\" y2=\"125.0\" stroke=\"#5a9fcf\" stroke-width=\"1.6\" fill=\"none\"/><line x1=\"190.0\" y1=\"45.0\" x2=\"190.0\" y2=\"55.0\" stroke=\"#7eb8da\" stroke-width=\"1.5\"/><line x1=\"82.2\" y1=\"89.1\" x2=\"72.8\" y2=\"85.9\" stroke=\"#7eb8da\" stroke-width=\"1.5\"/><line x1=\"138.0\" y1=\"195.0\" x2=\"138.0\" y2=\"205.0\" stroke=\"#7eb8da\" stroke-width=\"1.5\"/><line x1=\"142.0\" y1=\"195.0\" x2=\"142.0\" y2=\"205.0\" stroke=\"#7eb8da\" stroke-width=\"1.5\"/><line x1=\"47.1\" y1=\"162.8\" x2=\"56.6\" y2=\"166.0\" stroke=\"#7eb8da\" stroke-width=\"1.5\"/><line x1=\"48.4\" y1=\"159.0\" x2=\"57.9\" y2=\"162.2\" stroke=\"#7eb8da\" stroke-width=\"1.5\"/><path d=\"M 268.0 50.0 A 22.0 22.0 0 0 0 269.1 57.0\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><path d=\"M 269.1 57.0 A 22.0 22.0 0 0 0 283.0 70.9\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><path d=\"M 218.0 200.0 A 22.0 22.0 0 0 1 219.8 191.3\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><path d=\"M 219.8 191.3 A 22.0 22.0 0 0 1 247.0 179.1\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><circle cx=\"40.0\" cy=\"200.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"26.0\" y=\"206.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">A</text><circle cx=\"90.0\" cy=\"50.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"84.0\" y=\"44.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">B</text><circle cx=\"290.0\" cy=\"50.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"296.0\" y=\"44.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">C</text><circle cx=\"240.0\" cy=\"200.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"246.0\" y=\"208.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">D</text><circle cx=\"65.0\" cy=\"125.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"49.0\" y=\"129.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">L</text></svg></div><p>Так как <i>CL</i> — биссектриса, ∠<i>BCL</i>&nbsp;=&nbsp;∠<i>LCD</i>. При этом ∠<i>LCD</i>&nbsp;=&nbsp;∠<i>BLC</i> как накрест лежащие при <i>CD&nbsp;∥&nbsp;AB</i> и секущей <i>CL</i>. Значит, ∠<i>BCL</i>&nbsp;=&nbsp;∠<i>BLC</i>, и треугольник <i>CBL</i> равнобедренный: <i>BL&nbsp;=&nbsp;BC</i>.</p><p>Аналогично из биссектрисы <i>DL</i> получаем ∠<i>ADL</i>&nbsp;=&nbsp;∠<i>ALD</i>, то есть треугольник <i>DAL</i> равнобедренный: <i>AL&nbsp;=&nbsp;AD</i>.</p><p>Поскольку <i>BC&nbsp;=&nbsp;AD</i>, то <i>BL&nbsp;=&nbsp;AL</i>, а значит <i>L</i> — середина стороны <i>AB</i>.</p><div class=\"answer\">Что и требовалось доказать. <span class=\"step-note\">В остальных задачах серии обозначения букв переставлены — рассуждение дословно повторяется.</span></div>",
+          "tasks": [
+            {
+              "id": 9,
+              "src_key": "24.1.9",
+              "text": "Биссектрисы углов A и B параллелограмма ABCD пересекаются в точке M, лежащей на стороне CD. Докажите, что M – середина CD.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 10,
+              "src_key": "24.1.10",
+              "text": "Биссектрисы углов C и D параллелограмма ABCD пересекаются в точке L, лежащей на стороне AB. Докажите, что L – середина AB.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 11,
+              "src_key": "24.1.11",
+              "text": "Биссектрисы углов B и C параллелограмма ABCD пересекаются в точке M, лежащей на стороне AD. Докажите, что M – середина AD.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 12,
+              "src_key": "24.1.12",
+              "text": "Биссектрисы углов A и D параллелограмма ABCD пересекаются в точке K, лежащей на стороне BC. Докажите, что K – середина BC.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            }
+          ]
+        },
+        {
+          "number": 4,
+          "instruction": "Биссектрисы двух углов четырёхугольника пересекаются на стороне; точка пересечения равноудалена от трёх прямых",
+          "type": "geometry",
+          "solution": "<p>Расстояние от точки до прямой — длина перпендикуляра. (Прототип: биссектрисы углов <i>B</i> и <i>C</i> пересекаются в точке <i>O</i> на <i>AD</i>; докажем равноудалённость от <i>AB</i>, <i>BC</i>, <i>CD</i>.) Опустим <i>OL&nbsp;⊥&nbsp;AB</i>, <i>OM&nbsp;⊥&nbsp;BC</i>, <i>ON&nbsp;⊥&nbsp;CD</i>.</p><div class=\"sol-figure\"><svg viewBox=\"0 0 340 235\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"Georgia, serif\"><rect x=\"0\" y=\"0\" width=\"340\" height=\"235\" rx=\"10\" fill=\"#0a1628\"/><line x1=\"35.0\" y1=\"205.0\" x2=\"80.0\" y2=\"60.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"80.0\" y1=\"60.0\" x2=\"255.0\" y2=\"70.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"255.0\" y1=\"70.0\" x2=\"320.0\" y2=\"205.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"320.0\" y1=\"205.0\" x2=\"35.0\" y2=\"205.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"180.0\" y1=\"205.0\" x2=\"80.0\" y2=\"60.0\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\"/><line x1=\"180.0\" y1=\"205.0\" x2=\"255.0\" y2=\"70.0\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\"/><line x1=\"180.0\" y1=\"205.0\" x2=\"66.0\" y2=\"110.0\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\" stroke-dasharray=\"4 4\"/><line x1=\"180.0\" y1=\"205.0\" x2=\"170.0\" y2=\"65.0\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\" stroke-dasharray=\"4 4\"/><line x1=\"180.0\" y1=\"205.0\" x2=\"290.0\" y2=\"142.0\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\" stroke-dasharray=\"4 4\"/><path d=\"M 74.1 79.1 A 20.0 20.0 0 0 0 91.4 76.5\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><path d=\"M 91.4 76.5 A 20.0 20.0 0 0 0 100.0 61.1\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><path d=\"M 235.0 68.9 A 20.0 20.0 0 0 0 245.3 87.5\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><path d=\"M 245.3 87.5 A 20.0 20.0 0 0 0 263.7 88.0\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><polyline points=\"63.2,118.6 70.1,124.3 72.9,115.8\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><polyline points=\"161.0,64.5 161.7,73.5 170.6,74.0\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><polyline points=\"286.1,133.9 278.3,138.4 282.2,146.5\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><circle cx=\"35.0\" cy=\"205.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"21.0\" y=\"211.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">A</text><circle cx=\"80.0\" cy=\"60.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"70.0\" y=\"56.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">B</text><circle cx=\"255.0\" cy=\"70.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"259.0\" y=\"64.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">C</text><circle cx=\"320.0\" cy=\"205.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"326.0\" y=\"213.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">D</text><circle cx=\"180.0\" cy=\"205.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"176.0\" y=\"223.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">O</text><circle cx=\"66.0\" cy=\"110.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"52.0\" y=\"112.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">L</text><circle cx=\"170.0\" cy=\"65.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"167.0\" y=\"58.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">M</text><circle cx=\"290.0\" cy=\"142.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"296.0\" y=\"144.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">N</text></svg></div><p>В прямоугольных треугольниках <i>OMB</i> и <i>OLB</i> гипотенуза <i>OB</i> общая, а ∠<i>OBM</i>&nbsp;=&nbsp;∠<i>OBL</i> (<i>BO</i> — биссектриса угла <i>B</i>). Значит, они равны по гипотенузе и острому углу, откуда <i>OM&nbsp;=&nbsp;OL</i>.</p><p>Аналогично в треугольниках <i>OMC</i> и <i>ONC</i> гипотенуза <i>OC</i> общая, ∠<i>OCM</i>&nbsp;=&nbsp;∠<i>OCN</i> (<i>CO</i> — биссектриса угла <i>C</i>), поэтому <i>OM&nbsp;=&nbsp;ON</i>.</p><div class=\"formula\">$$OL = OM = ON.$$</div><p>Значит, точка <i>O</i> равноудалена от прямых <i>AB</i>, <i>BC</i> и <i>CD</i>.</p><div class=\"answer\">Что и требовалось доказать. <span class=\"step-note\">В остальных задачах серии обозначения букв переставлены — рассуждение дословно повторяется.</span></div>",
+          "tasks": [
+            {
+              "id": 13,
+              "src_key": "24.1.13",
+              "text": "Биссектрисы углов A и D четырехугольника ABCD пересекаются в точке M, лежащей на стороне BC. Докажите, что точка M равноудалена от прямых AB, AD и CD.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 14,
+              "src_key": "24.1.14",
+              "text": "Биссектрисы углов A и B четырехугольника ABCD пересекаются в точке K, лежащей на стороне CD. Докажите, что точка K равноудалена от прямых AB, BC и AD.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 15,
+              "src_key": "24.1.15",
+              "text": "Биссектрисы углов C и D четырехугольника ABCD пересекаются в точке P, лежащей на стороне AB. Докажите, что точка P равноудалена от прямых BC, CD и AD.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 16,
+              "src_key": "24.1.16",
+              "text": "Биссектрисы углов B и C четырехугольника ABCD пересекаются в точке O, лежащей на стороне AD. Докажите, что точка O равноудалена от прямых AB, BC и CD.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            }
+          ]
+        },
+        {
+          "number": 5,
+          "instruction": "Точка внутри параллелограмма: сумма площадей пары «противоположных» треугольников равна половине площади параллелограмма",
+          "type": "geometry",
+          "solution": "<p>(Прототип: точка <i>F</i>, треугольники <i>BFC</i> и <i>AFD</i>.) Проведём через <i>F</i> высоту <i>KL</i> параллелограмма (<i>K</i> на <i>BC</i>, <i>L</i> на <i>AD</i>); тогда <i>KL&nbsp;⊥&nbsp;BC</i> и <i>KL&nbsp;⊥&nbsp;AD</i>. Пусть <i>BC&nbsp;=&nbsp;AD&nbsp;=&nbsp;a</i>, <i>KL&nbsp;=&nbsp;h</i>, <i>KF&nbsp;=&nbsp;x</i>, тогда <i>FL&nbsp;=&nbsp;h&nbsp;−&nbsp;x</i>.</p><div class=\"sol-figure\"><svg viewBox=\"0 0 340 235\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"Georgia, serif\"><rect x=\"0\" y=\"0\" width=\"340\" height=\"235\" rx=\"10\" fill=\"#0a1628\"/><line x1=\"40.0\" y1=\"205.0\" x2=\"95.0\" y2=\"65.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"95.0\" y1=\"65.0\" x2=\"300.0\" y2=\"65.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"300.0\" y1=\"65.0\" x2=\"245.0\" y2=\"205.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"245.0\" y1=\"205.0\" x2=\"40.0\" y2=\"205.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"150.0\" y1=\"130.0\" x2=\"40.0\" y2=\"205.0\" stroke=\"#5a9fcf\" stroke-width=\"1.3\" fill=\"none\"/><line x1=\"150.0\" y1=\"130.0\" x2=\"95.0\" y2=\"65.0\" stroke=\"#5a9fcf\" stroke-width=\"1.3\" fill=\"none\"/><line x1=\"150.0\" y1=\"130.0\" x2=\"300.0\" y2=\"65.0\" stroke=\"#5a9fcf\" stroke-width=\"1.3\" fill=\"none\"/><line x1=\"150.0\" y1=\"130.0\" x2=\"245.0\" y2=\"205.0\" stroke=\"#5a9fcf\" stroke-width=\"1.3\" fill=\"none\"/><line x1=\"150.0\" y1=\"65.0\" x2=\"150.0\" y2=\"205.0\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\" stroke-dasharray=\"4 4\"/><polyline points=\"141.0,65.0 141.0,74.0 150.0,74.0\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><polyline points=\"141.0,205.0 141.0,196.0 150.0,196.0\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><text x=\"156.0\" y=\"100.0\" font-size=\"13\" font-weight=\"bold\" fill=\"#d4a855\">x</text><text x=\"156.0\" y=\"172.0\" font-size=\"13\" font-weight=\"bold\" fill=\"#d4a855\">h−x</text><text x=\"200.0\" y=\"60.0\" font-size=\"13\" font-weight=\"bold\" fill=\"#d4a855\">a</text><text x=\"200.0\" y=\"220.0\" font-size=\"13\" font-weight=\"bold\" fill=\"#d4a855\">a</text><circle cx=\"40.0\" cy=\"205.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"26.0\" y=\"211.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">A</text><circle cx=\"95.0\" cy=\"65.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"89.0\" y=\"59.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">B</text><circle cx=\"300.0\" cy=\"65.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"306.0\" y=\"59.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">C</text><circle cx=\"245.0\" cy=\"205.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"251.0\" y=\"213.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">D</text><circle cx=\"150.0\" cy=\"130.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"134.0\" y=\"134.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">F</text><circle cx=\"150.0\" cy=\"65.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"146.0\" y=\"58.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">K</text><circle cx=\"150.0\" cy=\"205.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"146.0\" y=\"222.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">L</text></svg></div><p>Отрезки <i>FK</i> и <i>FL</i> — высоты треугольников <i>BFC</i> и <i>AFD</i> к основаниям <i>BC</i> и <i>AD</i>:</p><div class=\"formula\">$$S_{BFC}=\\tfrac12\\,BC\\cdot FK=\\tfrac12 ax,\\qquad S_{AFD}=\\tfrac12\\,AD\\cdot FL=\\tfrac12 a(h-x).$$</div><div class=\"formula\">$$S_{BFC}+S_{AFD}=\\tfrac12 ax+\\tfrac12 a(h-x)=\\tfrac{a}{2}\\,(x+h-x)=\\tfrac{ah}{2}.$$</div><p>С другой стороны, <i>S</i><sub>ABCD</sub>&nbsp;=&nbsp;<i>AD·KL</i>&nbsp;=&nbsp;<i>ah</i>. Поэтому</p><div class=\"formula\">$$S_{BFC}+S_{AFD}=\\tfrac{ah}{2}=\\tfrac12 S_{ABCD}.$$</div><div class=\"answer\">Что и требовалось доказать. <span class=\"step-note\">В остальных задачах серии обозначения букв переставлены — рассуждение дословно повторяется.</span></div>",
+          "tasks": [
+            {
+              "id": 17,
+              "src_key": "24.1.17",
+              "text": "Внутри параллелограмма ABCD выбрали произвольную точку E. Докажите, что сумма площадей треугольников BEC и AED равна половине площади параллелограмма.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 18,
+              "src_key": "24.1.18",
+              "text": "Внутри параллелограмма ABCD выбрали произвольную точку F. Докажите, что сумма площадей треугольников BFC и AFD равна половине площади параллелограмма.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 19,
+              "src_key": "24.1.19",
+              "text": "Внутри параллелограмма ABCD выбрали произвольную точку E. Докажите, что сумма площадей треугольников AEB и CED равна половине площади параллелограмма.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 20,
+              "src_key": "24.1.20",
+              "text": "Внутри параллелограмма ABCD выбрали произвольную точку F. Докажите, что сумма площадей треугольников AFB и CFD равна половине площади параллелограмма.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            }
+          ]
+        },
+        {
+          "number": 6,
+          "instruction": "В трапеции диагонали пересекаются в точке: площади двух треугольников, прилежащих к боковым сторонам, равны",
+          "type": "geometry",
+          "solution": "<p>(Прототип: точка пересечения диагоналей — <i>P</i>.) Опустим высоты <i>BH</i> и <i>CT</i> трапеции на основание <i>AD</i>.</p><div class=\"sol-figure\"><svg viewBox=\"0 0 340 235\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"Georgia, serif\"><rect x=\"0\" y=\"0\" width=\"340\" height=\"235\" rx=\"10\" fill=\"#0a1628\"/><line x1=\"40.0\" y1=\"200.0\" x2=\"95.0\" y2=\"60.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"95.0\" y1=\"60.0\" x2=\"245.0\" y2=\"60.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"245.0\" y1=\"60.0\" x2=\"310.0\" y2=\"200.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"310.0\" y1=\"200.0\" x2=\"40.0\" y2=\"200.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"40.0\" y1=\"200.0\" x2=\"245.0\" y2=\"60.0\" stroke=\"#5a9fcf\" stroke-width=\"1.3\" fill=\"none\"/><line x1=\"95.0\" y1=\"60.0\" x2=\"310.0\" y2=\"200.0\" stroke=\"#5a9fcf\" stroke-width=\"1.3\" fill=\"none\"/><line x1=\"95.0\" y1=\"60.0\" x2=\"95.0\" y2=\"200.0\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\" stroke-dasharray=\"4 4\"/><line x1=\"245.0\" y1=\"60.0\" x2=\"245.0\" y2=\"200.0\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\" stroke-dasharray=\"4 4\"/><polyline points=\"86.0,200.0 86.0,191.0 95.0,191.0\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><polyline points=\"236.0,200.0 236.0,191.0 245.0,191.0\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><circle cx=\"40.0\" cy=\"200.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"26.0\" y=\"206.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">A</text><circle cx=\"95.0\" cy=\"60.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"89.0\" y=\"54.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">B</text><circle cx=\"245.0\" cy=\"60.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"251.0\" y=\"54.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">C</text><circle cx=\"310.0\" cy=\"200.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"316.0\" y=\"208.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">D</text><circle cx=\"172.0\" cy=\"110.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"177.0\" y=\"106.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">P</text><circle cx=\"95.0\" cy=\"200.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"91.0\" y=\"217.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">H</text><circle cx=\"245.0\" cy=\"200.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"241.0\" y=\"217.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">T</text></svg></div><p>Рассмотрим треугольники <i>ABD</i> и <i>ACD</i> с общим основанием <i>AD</i>:</p><div class=\"formula\">$$S_{ABD}=\\tfrac12\\,AD\\cdot BH,\\qquad S_{ACD}=\\tfrac12\\,AD\\cdot CT.$$</div><p>Высоты <i>BH</i> и <i>CT</i> равны как расстояния между параллельными прямыми <i>BC</i> и <i>AD</i>, поэтому <i>S</i><sub>ABD</sub>&nbsp;=&nbsp;<i>S</i><sub>ACD</sub>. Вычтем из обеих площадей общий треугольник <i>APD</i>:</p><div class=\"formula\">$$S_{APB}=S_{ABD}-S_{APD}=S_{ACD}-S_{APD}=S_{CPD}.$$</div><div class=\"answer\">Что и требовалось доказать. <span class=\"step-note\">В остальных задачах серии обозначения букв переставлены — рассуждение дословно повторяется.</span></div>",
+          "tasks": [
+            {
+              "id": 21,
+              "src_key": "24.1.21",
+              "text": "В трапеции ABCD с основаниями AD и BC диагонали пересекаются в точке O. Докажите, что площади треугольников AOB и COD равны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 22,
+              "src_key": "24.1.22",
+              "text": "В трапеции ABCD с основаниями AD и BC диагонали пересекаются в точке P. Докажите, что площади треугольников APB и CPD равны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            }
+          ]
+        },
+        {
+          "number": 7,
+          "instruction": "Точка — середина боковой стороны трапеции: площадь треугольника с вершиной в этой точке равна половине площади трапеции",
+          "type": "geometry",
+          "solution": "<p>(Прототип: <i>E</i> — середина боковой стороны <i>AB</i>.) Проведём через <i>E</i> прямую <i>KL&nbsp;⊥</i> основаниям (<i>K</i> на прямой <i>BC</i>, <i>L</i> на <i>AD</i>). Так как <i>E</i> — середина <i>AB</i>, то <i>AE&nbsp;=&nbsp;EB</i>.</p><div class=\"sol-figure\"><svg viewBox=\"0 0 340 235\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"Georgia, serif\"><rect x=\"0\" y=\"0\" width=\"340\" height=\"235\" rx=\"10\" fill=\"#0a1628\"/><line x1=\"60.0\" y1=\"205.0\" x2=\"100.0\" y2=\"55.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"100.0\" y1=\"55.0\" x2=\"265.0\" y2=\"55.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"265.0\" y1=\"55.0\" x2=\"310.0\" y2=\"205.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"310.0\" y1=\"205.0\" x2=\"60.0\" y2=\"205.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"80.0\" y1=\"130.0\" x2=\"265.0\" y2=\"55.0\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\"/><line x1=\"80.0\" y1=\"130.0\" x2=\"310.0\" y2=\"205.0\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\"/><line x1=\"80.0\" y1=\"55.0\" x2=\"80.0\" y2=\"205.0\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\" stroke-dasharray=\"4 4\"/><line x1=\"65.2\" y1=\"166.2\" x2=\"74.8\" y2=\"168.8\" stroke=\"#7eb8da\" stroke-width=\"1.5\"/><line x1=\"85.2\" y1=\"91.2\" x2=\"94.8\" y2=\"93.8\" stroke=\"#7eb8da\" stroke-width=\"1.5\"/><polyline points=\"89.0,55.0 89.0,64.0 80.0,64.0\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><polyline points=\"71.0,205.0 71.0,196.0 80.0,196.0\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><text x=\"88.0\" y=\"95.0\" font-size=\"13\" font-weight=\"bold\" fill=\"#d4a855\">h</text><text x=\"88.0\" y=\"172.0\" font-size=\"13\" font-weight=\"bold\" fill=\"#d4a855\">h</text><text x=\"178.0\" y=\"50.0\" font-size=\"13\" font-weight=\"bold\" fill=\"#d4a855\">a</text><text x=\"190.0\" y=\"220.0\" font-size=\"13\" font-weight=\"bold\" fill=\"#d4a855\">b</text><circle cx=\"60.0\" cy=\"205.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"46.0\" y=\"211.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">A</text><circle cx=\"100.0\" cy=\"55.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"104.0\" y=\"51.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">B</text><circle cx=\"265.0\" cy=\"55.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"270.0\" y=\"49.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">C</text><circle cx=\"310.0\" cy=\"205.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"316.0\" y=\"213.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">D</text><circle cx=\"80.0\" cy=\"130.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"64.0\" y=\"134.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">E</text><circle cx=\"80.0\" cy=\"55.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"66.0\" y=\"55.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">K</text><circle cx=\"80.0\" cy=\"205.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"76.0\" y=\"222.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">L</text></svg></div><p>Прямоугольные треугольники <i>AEL</i> и <i>BEK</i> равны (по гипотенузе <i>AE&nbsp;=&nbsp;BE</i> и вертикальным углам ∠<i>AEL</i>&nbsp;=&nbsp;∠<i>BEK</i>), поэтому <i>EL&nbsp;=&nbsp;EK&nbsp;=&nbsp;h</i> и <i>KL&nbsp;=&nbsp;2h</i>. Пусть <i>BC&nbsp;=&nbsp;a</i>, <i>AD&nbsp;=&nbsp;b</i>. Тогда</p><div class=\"formula\">$$S_{ABCD}=\\frac{a+b}{2}\\cdot 2h=(a+b)h.$$</div><p>Треугольники <i>BEC</i> и <i>AED</i> имеют высоты <i>EK</i> и <i>EL</i>:</p><div class=\"formula\">$$S_{BEC}+S_{AED}=\\tfrac12 ah+\\tfrac12 bh=\\tfrac{a+b}{2}\\,h=\\tfrac12 S_{ABCD}.$$</div><p>Площадь треугольника <i>ECD</i> — это площадь трапеции без этих двух треугольников:</p><div class=\"formula\">$$S_{ECD}=S_{ABCD}-\\tfrac12 S_{ABCD}=\\tfrac12 S_{ABCD}.$$</div><div class=\"answer\">Что и требовалось доказать. <span class=\"step-note\">В остальных задачах серии обозначения букв переставлены — рассуждение дословно повторяется.</span></div>",
+          "tasks": [
+            {
+              "id": 23,
+              "src_key": "24.1.23",
+              "text": "Точка E – середина боковой стороны AB трапеции ABCD. Докажите, что площадь треугольника ECD равна половине площади трапеции.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 24,
+              "src_key": "24.1.24",
+              "text": "Точка K – середина боковой стороны CD трапеции ABCD. Докажите, что площадь треугольника KAB равна половине площади трапеции.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            }
+          ]
+        },
+        {
+          "number": 8,
+          "instruction": "На средней линии трапеции выбрана произвольная точка: сумма площадей двух треугольников, опирающихся на основания, равна половине площади трапеции",
+          "type": "geometry",
+          "solution": "<p>Пусть <i>M</i> и <i>N</i> — середины боковых сторон <i>AB</i> и <i>CD</i>; <i>MN</i> — средняя линия, <i>MN&nbsp;∥&nbsp;AD&nbsp;∥&nbsp;BC</i>, точка <i>E</i> лежит на <i>MN</i>. Проведём через <i>E</i> высоту <i>KL</i> трапеции.</p><div class=\"sol-figure\"><svg viewBox=\"0 0 340 235\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"Georgia, serif\"><rect x=\"0\" y=\"0\" width=\"340\" height=\"235\" rx=\"10\" fill=\"#0a1628\"/><line x1=\"45.0\" y1=\"205.0\" x2=\"95.0\" y2=\"55.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"95.0\" y1=\"55.0\" x2=\"255.0\" y2=\"55.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"255.0\" y1=\"55.0\" x2=\"305.0\" y2=\"205.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"305.0\" y1=\"205.0\" x2=\"45.0\" y2=\"205.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"70.0\" y1=\"130.0\" x2=\"280.0\" y2=\"130.0\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\"/><line x1=\"175.0\" y1=\"55.0\" x2=\"175.0\" y2=\"205.0\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\" stroke-dasharray=\"4 4\"/><line x1=\"175.0\" y1=\"130.0\" x2=\"95.0\" y2=\"55.0\" stroke=\"#5a9fcf\" stroke-width=\"1.3\" fill=\"none\"/><line x1=\"175.0\" y1=\"130.0\" x2=\"255.0\" y2=\"55.0\" stroke=\"#5a9fcf\" stroke-width=\"1.3\" fill=\"none\"/><line x1=\"175.0\" y1=\"130.0\" x2=\"45.0\" y2=\"205.0\" stroke=\"#5a9fcf\" stroke-width=\"1.3\" fill=\"none\"/><line x1=\"175.0\" y1=\"130.0\" x2=\"305.0\" y2=\"205.0\" stroke=\"#5a9fcf\" stroke-width=\"1.3\" fill=\"none\"/><line x1=\"52.8\" y1=\"165.9\" x2=\"62.2\" y2=\"169.1\" stroke=\"#7eb8da\" stroke-width=\"1.5\"/><line x1=\"77.8\" y1=\"90.9\" x2=\"87.2\" y2=\"94.1\" stroke=\"#7eb8da\" stroke-width=\"1.5\"/><line x1=\"287.8\" y1=\"169.1\" x2=\"297.2\" y2=\"165.9\" stroke=\"#7eb8da\" stroke-width=\"1.5\"/><line x1=\"262.8\" y1=\"94.1\" x2=\"272.2\" y2=\"90.9\" stroke=\"#7eb8da\" stroke-width=\"1.5\"/><polyline points=\"166.0,55.0 166.0,64.0 175.0,64.0\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><polyline points=\"166.0,205.0 166.0,196.0 175.0,196.0\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><text x=\"181.0\" y=\"98.0\" font-size=\"13\" font-weight=\"bold\" fill=\"#d4a855\">h</text><text x=\"181.0\" y=\"172.0\" font-size=\"13\" font-weight=\"bold\" fill=\"#d4a855\">h</text><text x=\"165.0\" y=\"50.0\" font-size=\"13\" font-weight=\"bold\" fill=\"#d4a855\">a</text><text x=\"168.0\" y=\"220.0\" font-size=\"13\" font-weight=\"bold\" fill=\"#d4a855\">b</text><circle cx=\"45.0\" cy=\"205.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"31.0\" y=\"211.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">A</text><circle cx=\"95.0\" cy=\"55.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"89.0\" y=\"49.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">B</text><circle cx=\"255.0\" cy=\"55.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"261.0\" y=\"49.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">C</text><circle cx=\"305.0\" cy=\"205.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"311.0\" y=\"213.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">D</text><circle cx=\"70.0\" cy=\"130.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"54.0\" y=\"134.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">M</text><circle cx=\"280.0\" cy=\"130.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"286.0\" y=\"134.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">N</text><circle cx=\"175.0\" cy=\"130.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"161.0\" y=\"126.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">E</text><circle cx=\"175.0\" cy=\"55.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"171.0\" y=\"48.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">K</text><circle cx=\"175.0\" cy=\"205.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"171.0\" y=\"222.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">L</text></svg></div><p>По теореме Фалеса для параллельных прямых <i>BC</i>, <i>MN</i>, <i>AD</i> средняя линия делит высоту пополам:</p><div class=\"formula\">$$KE=EL=\\tfrac12 KL=h.$$</div><p>Пусть <i>BC&nbsp;=&nbsp;a</i>, <i>AD&nbsp;=&nbsp;b</i>, тогда <i>KL&nbsp;=&nbsp;2h</i> и <i>S</i><sub>ABCD</sub>&nbsp;=&nbsp;<i>(a+b)h</i>. Высоты треугольников <i>BEC</i> и <i>AED</i> равны <i>EL&nbsp;=&nbsp;h</i> и <i>EK&nbsp;=&nbsp;h</i>:</p><div class=\"formula\">$$S_{BEC}+S_{AED}=\\tfrac12 ah+\\tfrac12 bh=\\tfrac{a+b}{2}\\,h=\\tfrac12 S_{ABCD}.$$</div><div class=\"answer\">Что и требовалось доказать. <span class=\"step-note\">В остальных задачах серии обозначения букв переставлены — рассуждение дословно повторяется.</span></div>",
+          "tasks": [
+            {
+              "id": 25,
+              "src_key": "24.1.25",
+              "text": "На средней линии трапеции ABCD с основаниями AD и BC выбрали произвольную точку E. Докажите, что сумма площадей треугольников BEC и AED равна половине площади трапеции.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 26,
+              "src_key": "24.1.26",
+              "text": "На средней линии трапеции ABCD с основаниями AD и BC выбрали произвольную точку K. Докажите, что сумма площадей треугольников BKC и AKD равна половине площади трапеции.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 27,
+              "src_key": "24.1.27",
+              "text": "На средней линии трапеции ABCD с основаниями AD и BC выбрали произвольную точку F. Докажите, что сумма площадей треугольников BFC и AFD равна половине площади трапеции.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 28,
+              "src_key": "24.1.28",
+              "text": "На средней линии трапеции ABCD с основаниями AD и BC выбрали произвольную точку M. Докажите, что сумма площадей треугольников BMC и AMD равна половине площади трапеции.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            }
+          ]
+        },
+        {
+          "number": 9,
+          "instruction": "Даны основания трапеции и её диагональ: треугольники, образованные диагональю, подобны",
+          "type": "geometry",
+          "solution": "<p>(Числа взяты из первого прототипа: <i>BC&nbsp;=&nbsp;8</i>, <i>AD&nbsp;=&nbsp;32</i>, <i>BD&nbsp;=&nbsp;16</i>.) Так как <i>BC</i> и <i>AD</i> — основания трапеции, то <i>BC&nbsp;∥&nbsp;AD</i>.</p><div class=\"sol-figure\"><svg viewBox=\"0 0 340 235\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"Georgia, serif\"><rect x=\"0\" y=\"0\" width=\"340\" height=\"235\" rx=\"10\" fill=\"#0a1628\"/><line x1=\"40.0\" y1=\"200.0\" x2=\"110.0\" y2=\"60.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"110.0\" y1=\"60.0\" x2=\"220.0\" y2=\"60.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"220.0\" y1=\"60.0\" x2=\"300.0\" y2=\"200.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"300.0\" y1=\"200.0\" x2=\"40.0\" y2=\"200.0\" stroke=\"#c8dce8\" stroke-width=\"2\" fill=\"none\"/><line x1=\"110.0\" y1=\"60.0\" x2=\"300.0\" y2=\"200.0\" stroke=\"#5a9fcf\" stroke-width=\"1.5\" fill=\"none\"/><path d=\"M 127.7 73.1 A 22.0 22.0 0 0 0 132.0 60.0\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><path d=\"M 282.3 186.9 A 22.0 22.0 0 0 0 278.0 200.0\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><text x=\"160.0\" y=\"52.0\" font-size=\"13\" font-weight=\"bold\" fill=\"#d4a855\">8</text><text x=\"165.0\" y=\"215.0\" font-size=\"13\" font-weight=\"bold\" fill=\"#d4a855\">32</text><text x=\"210.0\" y=\"118.0\" font-size=\"13\" font-weight=\"bold\" fill=\"#d4a855\">16</text><circle cx=\"40.0\" cy=\"200.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"26.0\" y=\"206.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">A</text><circle cx=\"110.0\" cy=\"60.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"104.0\" y=\"54.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">B</text><circle cx=\"220.0\" cy=\"60.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"226.0\" y=\"54.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">C</text><circle cx=\"300.0\" cy=\"200.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"306.0\" y=\"208.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">D</text></svg></div><p>В треугольниках <i>CBD</i> и <i>BDA</i>:</p><ul><li>∠<i>CBD</i>&nbsp;=&nbsp;∠<i>BDA</i> — накрест лежащие углы при <i>BC&nbsp;∥&nbsp;AD</i> и секущей <i>BD</i>;</li><li>стороны, прилежащие к этим углам, пропорциональны:</li></ul><div class=\"formula\">$$\\frac{BC}{BD}=\\frac{8}{16}=\\frac12,\\qquad \\frac{BD}{AD}=\\frac{16}{32}=\\frac12,\\quad\\text{поэтому}\\ \\frac{BC}{BD}=\\frac{BD}{AD}.$$</div><p>Значит, треугольники <i>CBD</i> и <i>BDA</i> подобны по двум пропорциональным сторонам и углу между ними.</p><div class=\"answer\">Что и требовалось доказать. <span class=\"step-note\">В остальных задачах серии обозначения букв переставлены — рассуждение дословно повторяется.</span></div>",
+          "tasks": [
+            {
+              "id": 29,
+              "src_key": "24.1.29",
+              "text": "Основания BC и AD трапеции ABCD равны соответственно 4 и 64, BD = 16. Докажите, что треугольники CBD и BDA подобны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 30,
+              "src_key": "24.1.30",
+              "text": "Основания BC и AD трапеции ABCD равны соответственно 7 и 28, BD = 14. Докажите, что треугольники CBD и BDA подобны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 31,
+              "src_key": "24.1.31",
+              "text": "Основания BC и AD трапеции ABCD равны соответственно 5 и 45, BD = 15. Докажите, что треугольники CBD и BDA подобны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 32,
+              "src_key": "24.1.32",
+              "text": "Основания BC и AD трапеции ABCD равны соответственно 2 и 32, BD = 8. Докажите, что треугольники CBD и BDA подобны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            }
+          ]
+        },
+        {
+          "number": 10,
+          "instruction": "Около четырёхугольника описана окружность, продолжения противоположных сторон пересекаются: образующиеся треугольники подобны",
+          "type": "geometry",
+          "solution": "<p>(Прототип: продолжения <i>AB</i> и <i>CD</i> пересекаются в точке <i>M</i>.) Так как <i>ABCD</i> вписан в окружность, сумма противоположных углов равна 180°:</p><div class=\"formula\">$$\\angle ABC+\\angle ADC=180^\\circ\\ \\Rightarrow\\ \\angle ADC=180^\\circ-\\angle ABC.$$</div><div class=\"sol-figure\"><svg viewBox=\"0 0 340 210\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"Georgia, serif\"><rect x=\"0\" y=\"0\" width=\"340\" height=\"210\" rx=\"10\" fill=\"#0a1628\"/><circle cx=\"185.0\" cy=\"136.1\" r=\"72.5\" stroke=\"#5a9fcf\" stroke-width=\"1.6\" fill=\"none\"/><line x1=\"185.0\" y1=\"30.0\" x2=\"118.0\" y2=\"164.0\" stroke=\"#c8dce8\" stroke-width=\"1.6\" fill=\"none\"/><line x1=\"185.0\" y1=\"30.0\" x2=\"252.0\" y2=\"164.0\" stroke=\"#c8dce8\" stroke-width=\"1.6\" fill=\"none\"/><line x1=\"167.1\" y1=\"65.8\" x2=\"202.9\" y2=\"65.8\" stroke=\"#c8dce8\" stroke-width=\"1.6\" fill=\"none\"/><line x1=\"118.0\" y1=\"164.0\" x2=\"252.0\" y2=\"164.0\" stroke=\"#c8dce8\" stroke-width=\"1.6\" fill=\"none\"/><path d=\"M 176.1 47.9 A 20.0 20.0 0 0 0 193.9 47.9\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><path d=\"M 174.3 51.5 A 16.0 16.0 0 0 1 183.1 65.8\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><path d=\"M 236.0 164.0 A 16.0 16.0 0 0 1 244.8 149.7\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><circle cx=\"185.0\" cy=\"30.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"181.0\" y=\"24.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">M</text><circle cx=\"118.0\" cy=\"164.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"104.0\" y=\"168.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">A</text><circle cx=\"167.1\" cy=\"65.8\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"153.1\" y=\"65.8\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">B</text><circle cx=\"202.9\" cy=\"65.8\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"208.9\" y=\"65.8\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">C</text><circle cx=\"252.0\" cy=\"164.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"258.0\" y=\"168.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">D</text></svg></div><p>Углы <i>ABC</i> и <i>MBC</i> смежные, поэтому ∠<i>MBC</i>&nbsp;=&nbsp;180°&nbsp;−&nbsp;∠<i>ABC</i>&nbsp;=&nbsp;∠<i>ADC</i>. Значит, ∠<i>MBC</i>&nbsp;=&nbsp;∠<i>MDA</i>.</p><p>В треугольниках <i>MBC</i> и <i>MDA</i> угол <i>M</i> общий и ∠<i>MBC</i>&nbsp;=&nbsp;∠<i>MDA</i>, поэтому они подобны по двум углам.</p><div class=\"answer\">Что и требовалось доказать. <span class=\"step-note\">В остальных задачах серии обозначения букв переставлены — рассуждение дословно повторяется.</span></div>",
+          "tasks": [
+            {
+              "id": 33,
+              "src_key": "24.1.33",
+              "text": "Известно, что около четырёхугольника ABCD можно описать окружность и что продолжения сторон AD и BC четырёхугольника пересекаются в точке K. Докажите, что треугольники KAB и KCD подобны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 34,
+              "src_key": "24.1.34",
+              "text": "Известно, что около четырёхугольника ABCD можно описать окружность и что продолжения сторон AB и CD четырёхугольника пересекаются в точке M. Докажите, что треугольники MBC и MDA подобны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            }
+          ]
+        },
+        {
+          "number": 11,
+          "instruction": "В треугольнике с тупым углом проведены две высоты: треугольник, образованный их основаниями, подобен исходному",
+          "type": "geometry",
+          "solution": "<p>(Прототип: тупой угол <i>BAC</i>, высоты <i>BB</i><sub>1</sub> и <i>CC</i><sub>1</sub>.) Так как это высоты, ∠<i>CB</i><sub>1</sub><i>B</i>&nbsp;=&nbsp;90°&nbsp;=&nbsp;∠<i>CC</i><sub>1</sub><i>B</i>.</p><div class=\"sol-figure\"><svg viewBox=\"0 0 340 235\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"Georgia, serif\"><rect x=\"0\" y=\"0\" width=\"340\" height=\"235\" rx=\"10\" fill=\"#0a1628\"/><circle cx=\"172.5\" cy=\"80.0\" r=\"78.1\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\"/><line x1=\"113.3\" y1=\"131.0\" x2=\"250.0\" y2=\"90.0\" stroke=\"#c8dce8\" stroke-width=\"1.6\" fill=\"none\"/><line x1=\"150.0\" y1=\"120.0\" x2=\"95.0\" y2=\"70.0\" stroke=\"#c8dce8\" stroke-width=\"1.6\" fill=\"none\"/><line x1=\"95.0\" y1=\"70.0\" x2=\"250.0\" y2=\"90.0\" stroke=\"#c8dce8\" stroke-width=\"1.6\" fill=\"none\"/><line x1=\"150.0\" y1=\"120.0\" x2=\"189.8\" y2=\"156.2\" stroke=\"#5a9fcf\" stroke-width=\"1.3\" fill=\"none\" stroke-dasharray=\"4 4\"/><line x1=\"95.0\" y1=\"70.0\" x2=\"113.3\" y2=\"131.0\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\"/><line x1=\"250.0\" y1=\"90.0\" x2=\"189.8\" y2=\"156.2\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\"/><polyline points=\"121.9,128.4 119.3,119.8 110.7,122.4\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><polyline points=\"183.1,150.1 189.2,143.5 195.9,149.5\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><path d=\"M 127.7 126.7 A 15.0 15.0 0 0 1 127.5 135.7\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><path d=\"M 109.8 83.5 A 20.0 20.0 0 0 1 100.7 89.2\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><circle cx=\"150.0\" cy=\"120.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"146.0\" y=\"114.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">A</text><circle cx=\"95.0\" cy=\"70.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"81.0\" y=\"70.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">B</text><circle cx=\"250.0\" cy=\"90.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"256.0\" y=\"94.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">C</text><circle cx=\"113.3\" cy=\"131.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"91.3\" y=\"137.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">B<tspan baseline-shift=\"sub\" font-size=\"9\">1</tspan></text><circle cx=\"189.8\" cy=\"156.2\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"191.8\" y=\"170.2\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">C<tspan baseline-shift=\"sub\" font-size=\"9\">1</tspan></text></svg></div><p>Углы <i>CB</i><sub>1</sub><i>B</i> и <i>CC</i><sub>1</sub><i>B</i> опираются на отрезок <i>BC</i>, значит около четырёхугольника <i>BCC</i><sub>1</sub><i>B</i><sub>1</sub> можно описать окружность. Тогда ∠<i>BC</i><sub>1</sub><i>B</i><sub>1</sub>&nbsp;=&nbsp;∠<i>BCB</i><sub>1</sub> как вписанные, опирающиеся на одну дугу <i>BB</i><sub>1</sub>.</p><p>Углы <i>B</i><sub>1</sub><i>AC</i><sub>1</sub> и <i>BAC</i> равны как вертикальные. Поэтому треугольники <i>AB</i><sub>1</sub><i>C</i><sub>1</sub> и <i>ABC</i> подобны по двум углам.</p><div class=\"answer\">Что и требовалось доказать. <span class=\"step-note\">В остальных задачах серии обозначения букв переставлены — рассуждение дословно повторяется.</span></div>",
+          "tasks": [
+            {
+              "id": 35,
+              "src_key": "24.1.35",
+              "text": "В треугольнике ABC с тупым углом ACB проведены высоты AA₁ и BB₁. Докажите, что треугольники A₁B₁C и ABC подобны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 36,
+              "src_key": "24.1.36",
+              "text": "В треугольнике ABC с тупым углом ABC проведены высоты AA₁ и CC₁. Докажите, что треугольники A₁BC₁ и ABC подобны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 37,
+              "src_key": "24.1.37",
+              "text": "В треугольнике ABC с тупым углом BAC проведены высоты BB₁ и CC₁. Докажите, что треугольники AB₁C₁ и ABC подобны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            }
+          ]
+        },
+        {
+          "number": 12,
+          "instruction": "В остроугольном треугольнике проведены две высоты: соответствующие углы равны",
+          "type": "geometry",
+          "solution": "<p>(Прототип: высоты <i>BB</i><sub>1</sub> и <i>CC</i><sub>1</sub>, докажем ∠<i>CC</i><sub>1</sub><i>B</i><sub>1</sub>&nbsp;=&nbsp;∠<i>CBB</i><sub>1</sub>.) Так как это высоты, ∠<i>BB</i><sub>1</sub><i>C</i>&nbsp;=&nbsp;90°&nbsp;=&nbsp;∠<i>BC</i><sub>1</sub><i>C</i>.</p><div class=\"sol-figure\"><svg viewBox=\"0 0 340 235\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"Georgia, serif\"><rect x=\"0\" y=\"0\" width=\"340\" height=\"235\" rx=\"10\" fill=\"#0a1628\"/><circle cx=\"170.0\" cy=\"200.0\" r=\"125.0\" stroke=\"#5a9fcf\" stroke-width=\"1.3\" fill=\"none\"/><line x1=\"120.0\" y1=\"40.0\" x2=\"45.0\" y2=\"200.0\" stroke=\"#c8dce8\" stroke-width=\"1.6\" fill=\"none\"/><line x1=\"45.0\" y1=\"200.0\" x2=\"295.0\" y2=\"200.0\" stroke=\"#c8dce8\" stroke-width=\"1.6\" fill=\"none\"/><line x1=\"295.0\" y1=\"200.0\" x2=\"120.0\" y2=\"40.0\" stroke=\"#c8dce8\" stroke-width=\"1.6\" fill=\"none\"/><line x1=\"45.0\" y1=\"200.0\" x2=\"158.8\" y2=\"75.5\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\"/><line x1=\"295.0\" y1=\"200.0\" x2=\"90.0\" y2=\"103.9\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\"/><line x1=\"158.8\" y1=\"75.5\" x2=\"90.0\" y2=\"103.9\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\"/><polyline points=\"152.2,69.4 146.1,76.1 152.7,82.1\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><polyline points=\"93.8,95.8 102.0,99.6 98.1,107.7\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><path d=\"M 103.6 110.3 A 15.0 15.0 0 0 0 103.9 98.2\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><path d=\"M 57.1 186.7 A 18.0 18.0 0 0 1 63.0 200.0\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><circle cx=\"120.0\" cy=\"40.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"116.0\" y=\"34.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">A</text><circle cx=\"45.0\" cy=\"200.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"31.0\" y=\"204.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">B</text><circle cx=\"295.0\" cy=\"200.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"301.0\" y=\"204.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">C</text><circle cx=\"158.8\" cy=\"75.5\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"162.8\" y=\"71.5\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">B<tspan baseline-shift=\"sub\" font-size=\"9\">1</tspan></text><circle cx=\"90.0\" cy=\"103.9\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"66.0\" y=\"105.9\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">C<tspan baseline-shift=\"sub\" font-size=\"9\">1</tspan></text></svg></div><p>Эти углы опираются на отрезок <i>BC</i>, поэтому около четырёхугольника <i>BCB</i><sub>1</sub><i>C</i><sub>1</sub> можно описать окружность.</p><p>Тогда ∠<i>CC</i><sub>1</sub><i>B</i><sub>1</sub>&nbsp;=&nbsp;∠<i>CBB</i><sub>1</sub> как вписанные углы, опирающиеся на одну и ту же дугу <i>CB</i><sub>1</sub>.</p><div class=\"answer\">Что и требовалось доказать. <span class=\"step-note\">В остальных задачах серии обозначения букв переставлены — рассуждение дословно повторяется.</span></div>",
+          "tasks": [
+            {
+              "id": 38,
+              "src_key": "24.1.38",
+              "text": "В остроугольном треугольнике ABC проведены высоты AA₁ и BB₁. Докажите, что углы AA₁B₁ и ABB₁ равны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 39,
+              "src_key": "24.1.39",
+              "text": "В остроугольном треугольнике ABC проведены высоты AA₁ и CC₁. Докажите, что углы CC₁A₁ и CAA₁ равны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 40,
+              "src_key": "24.1.40",
+              "text": "В остроугольном треугольнике ABC проведены высоты BB₁ и CC₁. Докажите, что углы BB₁C₁ и BCC₁ равны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            }
+          ]
+        },
+        {
+          "number": 13,
+          "instruction": "В выпуклом четырёхугольнике равны два угла, опирающихся на одну сторону: равна и другая пара углов",
+          "type": "geometry",
+          "solution": "<p>(Прототип: ∠<i>DAC</i>&nbsp;=&nbsp;∠<i>DBC</i>, докажем ∠<i>CDB</i>&nbsp;=&nbsp;∠<i>CAB</i>.) Точки <i>A</i> и <i>B</i> лежат по одну сторону от прямой <i>CD</i>, а равные углы <i>DAC</i> и <i>DBC</i> опираются на отрезок <i>CD</i>.</p><div class=\"sol-figure\"><svg viewBox=\"0 0 340 235\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"Georgia, serif\"><rect x=\"0\" y=\"0\" width=\"340\" height=\"235\" rx=\"10\" fill=\"#0a1628\"/><circle cx=\"180.0\" cy=\"125.0\" r=\"80.0\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\"/><line x1=\"110.7\" y1=\"85.0\" x2=\"220.0\" y2=\"55.7\" stroke=\"#c8dce8\" stroke-width=\"1.5\" fill=\"none\"/><line x1=\"220.0\" y1=\"55.7\" x2=\"255.2\" y2=\"152.4\" stroke=\"#c8dce8\" stroke-width=\"1.5\" fill=\"none\"/><line x1=\"255.2\" y1=\"152.4\" x2=\"118.7\" y2=\"176.4\" stroke=\"#c8dce8\" stroke-width=\"1.5\" fill=\"none\"/><line x1=\"118.7\" y1=\"176.4\" x2=\"110.7\" y2=\"85.0\" stroke=\"#c8dce8\" stroke-width=\"1.5\" fill=\"none\"/><line x1=\"110.7\" y1=\"85.0\" x2=\"255.2\" y2=\"152.4\" stroke=\"#5a9fcf\" stroke-width=\"1.3\" fill=\"none\"/><line x1=\"220.0\" y1=\"55.7\" x2=\"118.7\" y2=\"176.4\" stroke=\"#5a9fcf\" stroke-width=\"1.3\" fill=\"none\"/><path d=\"M 112.3 102.9 A 18.0 18.0 0 0 0 127.0 92.6\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><path d=\"M 208.4 69.5 A 18.0 18.0 0 0 0 226.2 72.6\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><path d=\"M 144.3 171.9 A 26.0 26.0 0 0 0 135.4 156.5\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><path d=\"M 137.9 97.7 A 30.0 30.0 0 0 0 139.7 77.2\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><circle cx=\"110.7\" cy=\"85.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"94.7\" y=\"89.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">A</text><circle cx=\"220.0\" cy=\"55.7\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"214.0\" y=\"49.7\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">B</text><circle cx=\"255.2\" cy=\"152.4\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"261.2\" y=\"152.4\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">C</text><circle cx=\"118.7\" cy=\"176.4\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"102.7\" y=\"180.4\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">D</text></svg></div><p>Значит, точки <i>A</i> и <i>B</i> видят отрезок <i>CD</i> под одним углом, и около четырёхугольника <i>ABCD</i> можно описать окружность (вершины лежат на одной окружности).</p><p>Тогда углы <i>CDB</i> и <i>CAB</i> — вписанные, опирающиеся на одну и ту же дугу <i>CB</i>, поэтому ∠<i>CDB</i>&nbsp;=&nbsp;∠<i>CAB</i>.</p><div class=\"answer\">Что и требовалось доказать. <span class=\"step-note\">В остальных задачах серии обозначения букв переставлены — рассуждение дословно повторяется.</span></div>",
+          "tasks": [
+            {
+              "id": 41,
+              "src_key": "24.1.41",
+              "text": "В выпуклом четырёхугольнике ABCD углы DAC и DBC равны. Докажите, что углы CDB и CAB также равны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 42,
+              "src_key": "24.1.42",
+              "text": "В выпуклом четырёхугольнике ABCD углы BCA и BDA равны. Докажите, что углы ABD и ACD также равны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 43,
+              "src_key": "24.1.43",
+              "text": "В выпуклом четырёхугольнике ABCD углы CDB и CAB равны. Докажите, что углы BCA и BDA также равны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 44,
+              "src_key": "24.1.44",
+              "text": "В выпуклом четырёхугольнике ABCD углы ABD и ACD равны. Докажите, что углы DAC и DBC также равны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            }
+          ]
+        },
+        {
+          "number": 14,
+          "instruction": "Две окружности пересекаются в двух точках, центры лежат по одну сторону от общей хорды: линия центров и хорда перпендикулярны",
+          "type": "geometry",
+          "solution": "<p>(Прототип: центры <i>I</i> и <i>J</i>, общие точки <i>A</i> и <i>B</i>.) Проведём отрезки <i>IA</i>, <i>IB</i>, <i>JA</i>, <i>JB</i>.</p><div class=\"sol-figure\"><svg viewBox=\"0 0 340 235\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"Georgia, serif\"><rect x=\"0\" y=\"0\" width=\"340\" height=\"235\" rx=\"10\" fill=\"#0a1628\"/><circle cx=\"120.0\" cy=\"135.0\" r=\"112.4\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\"/><circle cx=\"180.0\" cy=\"135.0\" r=\"69.5\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\"/><line x1=\"215.0\" y1=\"75.0\" x2=\"215.0\" y2=\"195.0\" stroke=\"#c8dce8\" stroke-width=\"1.6\" fill=\"none\"/><line x1=\"120.0\" y1=\"135.0\" x2=\"215.0\" y2=\"135.0\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\"/><line x1=\"120.0\" y1=\"135.0\" x2=\"215.0\" y2=\"75.0\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\"/><line x1=\"120.0\" y1=\"135.0\" x2=\"215.0\" y2=\"195.0\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\"/><line x1=\"180.0\" y1=\"135.0\" x2=\"215.0\" y2=\"75.0\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\"/><line x1=\"180.0\" y1=\"135.0\" x2=\"215.0\" y2=\"195.0\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\"/><polyline points=\"206.0,135.0 206.0,126.0 215.0,126.0\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><line x1=\"164.8\" y1=\"100.8\" x2=\"170.2\" y2=\"109.2\" stroke=\"#7eb8da\" stroke-width=\"1.5\"/><line x1=\"170.2\" y1=\"160.8\" x2=\"164.8\" y2=\"169.2\" stroke=\"#7eb8da\" stroke-width=\"1.5\"/><line x1=\"192.2\" y1=\"104.2\" x2=\"200.8\" y2=\"109.2\" stroke=\"#7eb8da\" stroke-width=\"1.5\"/><line x1=\"194.2\" y1=\"100.8\" x2=\"202.8\" y2=\"105.8\" stroke=\"#7eb8da\" stroke-width=\"1.5\"/><line x1=\"200.8\" y1=\"160.8\" x2=\"192.2\" y2=\"165.8\" stroke=\"#7eb8da\" stroke-width=\"1.5\"/><line x1=\"202.8\" y1=\"164.2\" x2=\"194.2\" y2=\"169.2\" stroke=\"#7eb8da\" stroke-width=\"1.5\"/><circle cx=\"120.0\" cy=\"135.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"106.0\" y=\"139.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">I</text><circle cx=\"180.0\" cy=\"135.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"178.0\" y=\"151.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">J</text><circle cx=\"215.0\" cy=\"75.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"221.0\" y=\"75.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">A</text><circle cx=\"215.0\" cy=\"195.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"221.0\" y=\"201.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">B</text><circle cx=\"215.0\" cy=\"135.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"221.0\" y=\"132.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">H</text></svg></div><p><i>IA&nbsp;=&nbsp;IB</i> как радиусы первой окружности, <i>JA&nbsp;=&nbsp;JB</i> как радиусы второй. В треугольниках <i>AIJ</i> и <i>BIJ</i> сторона <i>IJ</i> общая, поэтому они равны по трём сторонам, и ∠<i>AIJ</i>&nbsp;=&nbsp;∠<i>BIJ</i>. Значит, <i>IJ</i> — биссектриса угла <i>AIB</i>.</p><p>Пусть <i>IJ</i> пересекает <i>AB</i> в точке <i>H</i>. В равнобедренном треугольнике <i>AIB</i> (<i>IA&nbsp;=&nbsp;IB</i>) биссектриса <i>IH</i>, проведённая к основанию, является и высотой. Следовательно, <i>IJ&nbsp;⊥&nbsp;AB</i>.</p><div class=\"answer\">Что и требовалось доказать. <span class=\"step-note\">В остальных задачах серии обозначения букв переставлены — рассуждение дословно повторяется.</span></div>",
+          "tasks": [
+            {
+              "id": 45,
+              "src_key": "24.1.45",
+              "text": "Окружности с центрами в точках P и Q пересекаются в точках K и L, причём точки P и Q лежат по одну сторону от прямой KL. Докажите, что прямые PQ и KL перпендикулярны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 46,
+              "src_key": "24.1.46",
+              "text": "Окружности с центрами в точках E и F пересекаются в точках C и D, причём точки E и F лежат по одну сторону от прямой CD. Докажите, что CD и EF перпендикулярны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 47,
+              "src_key": "24.1.47",
+              "text": "Окружности с центрами в точках I и J пересекаются в точках A и B, причём точки I и J лежат по одну сторону от прямой AB. Докажите, что прямые AB и IJ перпендикулярны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 48,
+              "src_key": "24.1.48",
+              "text": "Окружности с центрами в точках M и N пересекаются в точках S и T, причём точки M и N лежат по одну сторону от прямой ST. Докажите, что прямые MN и ST перпендикулярны.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            }
+          ]
+        },
+        {
+          "number": 15,
+          "instruction": "Внутренняя общая касательная двух непересекающихся окружностей делит линию центров в данном отношении: в том же отношении относятся диаметры",
+          "type": "geometry",
+          "solution": "<p>Пусть <i>A</i> и <i>B</i> — точки касания общей внутренней касательной с первой и второй окружностями, <i>K</i> — точка пересечения <i>PQ</i> и <i>AB</i>, причём <i>PK&nbsp;:&nbsp;KQ&nbsp;=&nbsp;a&nbsp;:&nbsp;b</i>. Радиус в точку касания перпендикулярен касательной, поэтому ∠<i>PAK</i>&nbsp;=&nbsp;90°&nbsp;=&nbsp;∠<i>QBK</i>.</p><div class=\"sol-figure\"><svg viewBox=\"0 0 340 215\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"Georgia, serif\"><rect x=\"0\" y=\"0\" width=\"340\" height=\"215\" rx=\"10\" fill=\"#0a1628\"/><circle cx=\"95.0\" cy=\"140.0\" r=\"55.0\" stroke=\"#5a9fcf\" stroke-width=\"1.5\" fill=\"none\"/><circle cx=\"255.0\" cy=\"140.0\" r=\"33.0\" stroke=\"#5a9fcf\" stroke-width=\"1.5\" fill=\"none\"/><line x1=\"95.0\" y1=\"140.0\" x2=\"255.0\" y2=\"140.0\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\"/><line x1=\"125.3\" y1=\"185.9\" x2=\"236.9\" y2=\"112.4\" stroke=\"#c8dce8\" stroke-width=\"1.6\" fill=\"none\"/><line x1=\"95.0\" y1=\"140.0\" x2=\"125.3\" y2=\"185.9\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\"/><line x1=\"255.0\" y1=\"140.0\" x2=\"236.9\" y2=\"112.4\" stroke=\"#5a9fcf\" stroke-width=\"1.4\" fill=\"none\"/><polyline points=\"120.3,178.4 127.9,173.4 132.8,181.0\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><polyline points=\"241.8,119.9 234.3,124.9 229.4,117.4\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><path d=\"M 179.0 140.0 A 16.0 16.0 0 0 0 181.6 148.8\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><path d=\"M 211.0 140.0 A 16.0 16.0 0 0 0 208.4 131.2\" stroke=\"#7eb8da\" stroke-width=\"1.4\" fill=\"none\"/><text x=\"140.0\" y=\"134.0\" font-size=\"13\" font-weight=\"bold\" fill=\"#d4a855\">ax</text><text x=\"212.0\" y=\"134.0\" font-size=\"13\" font-weight=\"bold\" fill=\"#d4a855\">bx</text><circle cx=\"95.0\" cy=\"140.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"81.0\" y=\"144.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">P</text><circle cx=\"255.0\" cy=\"140.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"261.0\" y=\"144.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">Q</text><circle cx=\"195.0\" cy=\"140.0\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"191.0\" y=\"133.0\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">K</text><circle cx=\"125.3\" cy=\"185.9\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"119.3\" y=\"201.9\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">A</text><circle cx=\"236.9\" cy=\"112.4\" r=\"2.4\" fill=\"#7eb8da\"/><text x=\"240.9\" y=\"106.4\" font-size=\"14\" font-style=\"italic\" fill=\"#c8dce8\">B</text></svg></div><p>Углы <i>PKA</i> и <i>QKB</i> равны как вертикальные, поэтому треугольники <i>PKA</i> и <i>QKB</i> подобны:</p><div class=\"formula\">$$\\frac{PA}{QB}=\\frac{PK}{KQ}=\\frac{a}{b}.$$</div><p>Диаметры равны удвоенным радиусам: <i>d</i><sub>1</sub>&nbsp;=&nbsp;2<i>PA</i>, <i>d</i><sub>2</sub>&nbsp;=&nbsp;2<i>QB</i>. Тогда</p><div class=\"formula\">$$\\frac{d_1}{d_2}=\\frac{2PA}{2QB}=\\frac{PA}{QB}=\\frac{a}{b}.$$</div><div class=\"answer\">Что и требовалось доказать. <span class=\"step-note\">В остальных задачах серии обозначения букв переставлены — рассуждение дословно повторяется.</span></div>",
+          "tasks": [
+            {
+              "id": 49,
+              "src_key": "24.1.49",
+              "text": "Окружности с центрами в точках P и Q не имеют общих точек, и ни одна из них не лежит внутри другой. Внутренняя общая касательная к этим окружностям делит отрезок, соединяющий их центры, в отношении a:b. Докажите, что диаметры этих окружностей относятся как a:b.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            },
+            {
+              "id": 50,
+              "src_key": "24.1.50",
+              "text": "Окружности с центрами в точках I и J не имеют общих точек, и ни одна из них не лежит внутри другой. Внутренняя общая касательная к этим окружностям делит отрезок, соединяющий их центры, в отношении m:n. Докажите, что диаметры этих окружностей относятся как m:n.",
+              "answer": "",
+              "type": "geometry",
+              "status": "draft"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
