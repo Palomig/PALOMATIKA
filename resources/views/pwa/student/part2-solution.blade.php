@@ -38,6 +38,16 @@
     color: var(--text); font-weight: 600; font-size: 16px;
   }
   .sol-body .step-note { color: var(--text-muted); }
+  .sol-body .sol-table {
+    width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px;
+    background: var(--surface); border-radius: 10px; overflow: hidden;
+  }
+  .sol-body .sol-table th, .sol-body .sol-table td {
+    border: 1px solid var(--border); padding: 7px 6px; text-align: center; vertical-align: middle;
+  }
+  .sol-body .sol-table th { background: rgba(58,96,152,.18); color: var(--text-muted); font-weight: 600; font-size: 12px; }
+  .sol-body .sol-table td:first-child, .sol-body .sol-table th:first-child { text-align: left; }
+  .sol-body .sol-table .katex { font-size: 1em; }
 @endpush
 
 @section('body')
