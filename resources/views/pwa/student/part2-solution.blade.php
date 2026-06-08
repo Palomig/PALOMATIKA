@@ -24,7 +24,7 @@
   .sol-body p { margin: 0 0 12px; }
   .sol-body ul { margin: 0 0 12px; padding-left: 20px; }
   .sol-body li { margin-bottom: 6px; }
-  .sol-body .formula { display: block; text-align: center; margin: 12px 0; overflow-x: auto; }
+  .sol-body .formula { display: block; text-align: center; margin: 22px 0; overflow-x: auto; }
   /* Чертёж во всю ширину страницы: выходим за 16px padding .page по краям. */
   .sol-body .sol-figure {
     display: block; width: calc(100% + 32px); margin: 18px -16px;
