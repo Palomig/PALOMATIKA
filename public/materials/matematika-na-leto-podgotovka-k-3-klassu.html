@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Математика на лето: восстановление фундамента и подготовка к 3 классу</title>
+<meta name="description" content="Летний план для ученика, который закончил 2 класс с двойкой и не считает 2+7 и 10+3. Диагностика, 12-недельный план, методы, игры и печатные материалы.">
+<style>
+  :root{
+    --bg:#f6f1e7; --paper:#fffdf8; --ink:#23303a; --muted:#5f6f7b;
+    --line:#e4dccb; --accent:#e0612f; --accent-soft:#fbe3d2;
+    --green:#1f9d6b; --green-soft:#dff3ea; --blue:#2f6fb0; --blue-soft:#e1edf8;
+    --amber:#e0962f; --amber-soft:#fbeccd; --red:#cf4f3e;
+    --shadow:0 16px 44px rgba(70,48,24,.10); --radius:18px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; color:var(--ink); background:var(--bg); line-height:1.65;
+    font-family:"Inter","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+    background-image:radial-gradient(circle at 12% 0%,rgba(224,97,47,.07),transparent 32%),
+                     radial-gradient(circle at 95% 8%,rgba(47,111,176,.07),transparent 30%);
+  }
+  .wrap{max-width:980px;margin:0 auto;padding:28px 20px 80px}
+  a{color:var(--accent)}
+  h1,h2,h3{line-height:1.25;color:#1a2530}
+  /* HERO */
+  .hero{
+    background:linear-gradient(135deg,#fff 0%,#fff7ef 100%);
+    border:1px solid var(--line);border-radius:var(--radius);
+    padding:34px 30px;box-shadow:var(--shadow);position:relative;overflow:hidden;
+  }
+  .hero:before{content:"➗✏️🧮";position:absolute;right:-6px;top:-10px;font-size:64px;opacity:.10;letter-spacing:6px}
+  .kicker{display:inline-block;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--accent);background:var(--accent-soft);padding:5px 12px;border-radius:999px;margin-bottom:14px}
+  .hero h1{font-size:clamp(26px,4.2vw,40px);margin:.1em 0 .3em}
+  .hero p.lead{font-size:18px;color:var(--muted);max-width:62ch;margin:.2em 0 0}
+  .meta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+  .pill{font-size:13px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 13px;color:var(--muted)}
+  .pill b{color:var(--ink)}
+  /* NAV */
+  nav.toc{position:sticky;top:0;z-index:20;background:rgba(246,241,231,.92);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);margin:26px -20px 0;padding:10px 20px}
+  nav.toc ul{list-style:none;display:flex;gap:8px;overflow-x:auto;margin:0;padding:0}
+  nav.toc a{white-space:nowrap;font-size:13px;font-weight:600;text-decoration:none;color:var(--muted);
+    padding:6px 12px;border-radius:999px;border:1px solid transparent}
+  nav.toc a:hover{color:var(--accent);background:#fff;border-color:var(--line)}
+  /* SECTIONS */
+  section{margin-top:34px}
+  section>h2{font-size:24px;display:flex;align-items:center;gap:10px;margin:0 0 4px}
+  .num{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;flex:none;
+    background:var(--ink);color:#fff;border-radius:11px;font-size:16px;font-weight:700}
+  .sub{color:var(--muted);margin:.2em 0 16px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px 24px;box-shadow:0 8px 22px rgba(70,48,24,.05);margin:14px 0}
+  .card h3{margin:.1em 0 .5em;font-size:18px}
+  .grid{display:grid;gap:16px}
+  @media(min-width:680px){.grid.two{grid-template-columns:1fr 1fr}.grid.three{grid-template-columns:1fr 1fr 1fr}}
+  ul.clean{padding-left:0;list-style:none}
+  ul.clean li{position:relative;padding-left:26px;margin:9px 0}
+  ul.clean li:before{content:"";position:absolute;left:4px;top:9px;width:8px;height:8px;border-radius:3px;background:var(--accent)}
+  .callout{border-left:4px solid var(--green);background:var(--green-soft);border-radius:0 12px 12px 0;padding:13px 16px;margin:14px 0}
+  .callout.warn{border-color:var(--red);background:#fbe7e3}
+  .callout.tip{border-color:var(--blue);background:var(--blue-soft)}
+  .callout.amber{border-color:var(--amber);background:var(--amber-soft)}
+  .callout b{display:block;margin-bottom:2px}
+  /* DIAGNOSIS */
+  .diag{display:grid;gap:12px}
+  @media(min-width:680px){.diag{grid-template-columns:1fr 1fr}}
+  .diag .box{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+  .diag .box .t{font-weight:700;font-size:15px;margin-bottom:6px}
+  .arrow{color:var(--accent);font-weight:700}
+  /* TIMELINE */
+  .week{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;padding:16px 0;border-bottom:1px dashed var(--line)}
+  .week:last-child{border-bottom:0}
+  .week .when{min-width:118px}
+  .week .tag{display:inline-block;font-size:12px;font-weight:700;color:#fff;background:var(--blue);
+    padding:3px 10px;border-radius:8px;margin-bottom:6px}
+  .week .tag.a{background:#7c5cff}.week .tag.b{background:var(--accent)}.week .tag.c{background:var(--green)}
+  .week .tag.d{background:var(--blue)}.week .tag.e{background:var(--amber)}.week .tag.f{background:#c0497e}.week .tag.g{background:#0f8a8a}
+  .week .when .dates{font-size:12px;color:var(--muted)}
+  .week h4{margin:0 0 4px;font-size:17px}
+  .goal{font-size:14px;color:var(--muted);margin:6px 0 0}
+  .goal b{color:var(--ink)}
+  /* DAY ROUTINE */
+  .routine{counter-reset:step;display:grid;gap:10px}
+  .routine .r{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;
+    background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 16px}
+  .routine .r:before{counter-increment:step;content:counter(step);width:30px;height:30px;flex:none;
+    display:flex;align-items:center;justify-content:center;background:var(--accent-soft);color:var(--accent);
+    border-radius:50%;font-weight:700}
+  .routine .r .min{font-size:13px;color:var(--muted);white-space:nowrap}
+  /* METHODS TABLE */
+  table{width:100%;border-collapse:collapse;font-size:14.5px}
+  table th,table td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  table th{background:#faf4ea;font-size:13px;text-transform:uppercase;letter-spacing:.03em;color:var(--muted)}
+  table tr:last-child td{border-bottom:0}
+  /* GAMES */
+  .games{display:grid;gap:14px}
+  @media(min-width:680px){.games{grid-template-columns:1fr 1fr}}
+  .game{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;position:relative}
+  .game .emoji{font-size:26px}
+  .game h4{margin:6px 0 4px;font-size:16px}
+  .game p{margin:0;font-size:14px;color:var(--muted)}
+  .skill-tag{font-size:11px;font-weight:700;color:var(--green);background:var(--green-soft);padding:2px 8px;border-radius:6px}
+  /* CHECKLIST */
+  .check li{list-style:none;padding:8px 0;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:flex-start}
+  .check li:before{content:"";width:20px;height:20px;flex:none;border:2px solid var(--accent);border-radius:6px;margin-top:2px}
+  .check{padding-left:0;margin:0}
+  /* PRINTABLES */
+  .print-block{background:#fff;border:1px dashed #b9ad95;border-radius:14px;padding:20px;margin:14px 0;text-align:center}
+  .print-block svg{max-width:100%;height:auto}
+  .houses{display:flex;flex-wrap:wrap;gap:18px;justify-content:center}
+  .label-print{font-size:12px;color:var(--muted);margin-top:8px}
+  .btn-print{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:#fff;text-decoration:none;
+    font-weight:600;font-size:14px;padding:10px 18px;border-radius:10px;border:0;cursor:pointer}
+  footer.pg{margin-top:46px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:13.5px;text-align:center}
+  .heart{color:var(--accent)}
+  @media print{
+    nav.toc,.btn-print{display:none}
+    body{background:#fff;background-image:none}
+    .card,.hero,.print-block{box-shadow:none;break-inside:avoid}
+    .week{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <span class="kicker">Методичка для репетитора · 1–3 класс</span>
+    <h1>Математика на лето: собираем фундамент заново</h1>
+    <p class="lead">План работы с учеником, который закончил 2 класс с двойкой и пока не считает <b>2 + 7</b> и <b>10 + 3</b>. За лето восстанавливаем базу и спокойно входим в 3 класс — без зубрёжки, через предметы, модели и игру.</p>
+    <div class="meta-row">
+      <span class="pill">⏱️ <b>15–20 мин</b> в день</span>
+      <span class="pill">📅 <b>12 недель</b> (июнь–август)</span>
+      <span class="pill">🎯 Цель: <b>фундамент 1 класса → мост в 3 класс</b></span>
+      <span class="pill">🧩 Подход: <b>предмет → модель → запись</b></span>
+    </div>
+    <p style="margin-top:18px"><button class="btn-print" onclick="window.print()">🖨️ Распечатать методичку</button></p>
+  </header>
+
+  <nav class="toc">
+    <ul>
+      <li><a href="#diag">Диагноз</a></li>
+      <li><a href="#principy">Принципы</a></li>
+      <li><a href="#plan">План на 12 недель</a></li>
+      <li><a href="#den">День занятия</a></li>
+      <li><a href="#metody">Методы и приёмы</a></li>
+      <li><a href="#igry">Банк игр</a></li>
+      <li><a href="#oshibki">Чего не делать</a></li>
+      <li><a href="#checklist">Чек-лист навыков</a></li>
+      <li><a href="#pechat">Печатные материалы</a></li>
+    </ul>
+  </nav>
+
+  <!-- 1. DIAGNOSIS -->
+  <section id="diag">
+    <h2><span class="num">1</span> Что на самом деле происходит</h2>
+    <p class="sub">Двойка по математике во 2 классе — это почти всегда не «лень», а <b>дыра в фундаменте 1 класса</b>. Два ваших симптома точно показывают, где она.</p>
+    <div class="diag">
+      <div class="box">
+        <div class="t">❌ Не может «2 + 7»</div>
+        Не доведён до автоматизма <span class="arrow">состав числа</span> в пределах 10. Ребёнок каждый раз пересчитывает по одному (часто на пальцах) и сбивается. <b>Это корневой навык всей началки.</b>
+      </div>
+      <div class="box">
+        <div class="t">❌ Не может «10 + 3»</div>
+        Нет понимания <span class="arrow">десятка как единицы</span> и разрядного состава: что 13 — это «1 десяток и 3 единицы». Без этого рушатся числа до 100, столбик и весь 3 класс.
+      </div>
+    </div>
+    <div class="callout amber">
+      <b>Главное правило лета</b>
+      Не гонимся за программой 3 класса (умножение в столбик, большие числа). Сначала закрываем дыру 1 класса. Дайте ребёнку уверенно считать до 20 — и 3 класс «поедет» сам.
+    </div>
+    <div class="card">
+      <h3>Стартовая диагностика (первые 2–3 дня)</h3>
+      <p class="sub">Не оценка, а разведка. Спокойно, как игра. Отметьте, что уже есть, а что проваливается.</p>
+      <ul class="clean">
+        <li>Счёт вперёд и <b>назад</b> от 1 до 20 (назад — слабое место почти у всех).</li>
+        <li>«Соседи числа»: назови предыдущее и следующее для 7, 13, 19.</li>
+        <li>Состав числа: «5 — это сколько и сколько?», то же для 10.</li>
+        <li>Узнаёт и пишет цифры и числа 11–20 (не путает 12 и 21).</li>
+        <li>Понимает «больше/меньше», сравнивает 8 и 12.</li>
+        <li>Раскладывает 13 предметов на «десяток и ещё».</li>
+      </ul>
+      <div class="callout tip"><b>Зачем</b>Результат диагностики покажет, с какого блока плана реально стартовать. Если проваливается даже счёт назад — начинаем с Блока A и не стесняемся.</div>
+    </div>
+  </section>
+
+  <!-- 2. PRINCIPLES -->
+  <section id="principy">
+    <h2><span class="num">2</span> 6 принципов, на которых всё держится</h2>
+    <div class="grid two">
+      <div class="card"><h3>① От предмета к записи</h3><p class="sub" style="margin:0">Любая новая идея проходит 3 ступени: <b>реальные предметы</b> (палочки, пуговицы) → <b>модель</b> (рамка, числовая прямая) → <b>цифры</b>. Не перепрыгивать.</p></div>
+      <div class="card"><h3>② Каждый день понемногу</h3><p class="sub" style="margin:0">15–20 минут ежедневно работают лучше, чем час раз в неделю. Регулярность важнее длительности. Пропустили — не наверстываем «двойной дозой».</p></div>
+      <div class="card"><h3>③ Не дальше, пока не автоматом</h3><p class="sub" style="margin:0">Новую тему даём, только когда предыдущая стала быстрой и без пальцев. Состав числа — фундамент, на нём не экономим время.</p></div>
+      <div class="card"><h3>④ Постоянный успех</h3><p class="sub" style="margin:0">Задания — чуть ниже потолка, чтобы почти всё получалось. Ребёнок с двойкой боится математики; нам нужна цепочка маленьких побед.</p></div>
+      <div class="card"><h3>⑤ Проговаривать вслух</h3><p class="sub" style="margin:0">«8 это 8, добавляю 2 — стало 10, и ещё 3 — будет 13». Речь закрепляет приём лучше, чем молчаливый счёт.</p></div>
+      <div class="card"><h3>⑥ Игра вместо зубрёжки</h3><p class="sub" style="margin:0">Кости, домино, карты, «магазин». Через игру состав числа заходит сам и без сопротивления.</p></div>
+    </div>
+  </section>
+
+  <!-- 3. 12-WEEK PLAN -->
+  <section id="plan">
+    <h2><span class="num">3</span> План на лето: 12 недель</h2>
+    <p class="sub">Ориентир — старт 8 июня, финиш к 1 сентября. Темп подстраивайте под ребёнка: если блок не закрылся — задержитесь, это нормально и правильно.</p>
+
+    <div class="card" style="padding:8px 24px">
+      <div class="week">
+        <div class="when"><span class="tag a">Блок A</span><div class="dates">Нед. 1–2 · июнь</div></div>
+        <div><h4>Числовой ряд 0–20 и состав чисел 2–5</h4>
+          <p class="goal">Счёт вперёд/назад, соседи числа, «на 1 больше / на 1 меньше». Раскладываем 2, 3, 4, 5 на части (домики). <b>Результат:</b> уверенно движется по числовой прямой и знает состав до 5.</p></div>
+      </div>
+      <div class="week">
+        <div class="when"><span class="tag b">Блок B</span><div class="dates">Нед. 3–4 · июнь</div></div>
+        <div><h4>Состав чисел 6–10 — ядро всего</h4>
+          <p class="goal">Домики чисел 6, 7, 8, 9, 10. Десятка-рамка с фишками. Доводим до автоматизма: «7 — это 5 и 2, 6 и 1, 4 и 3…». <b>Результат:</b> состав 10 — мгновенно, без пальцев.</p></div>
+      </div>
+      <div class="week">
+        <div class="when"><span class="tag c">Блок C</span><div class="dates">Нед. 5–6 · июль</div></div>
+        <div><h4>Сложение и вычитание в пределах 10</h4>
+          <p class="goal">Опора на состав числа, а не пересчёт. Связь «+ и −» (если 3+4=7, то 7−4=3). Переместительный закон (2+7 = 7+2). <b>Результат:</b> решает любые примеры до 10 в уме. Симптом «2+7» закрыт.</p></div>
+      </div>
+      <div class="week">
+        <div class="when"><span class="tag d">Блок D</span><div class="dates">Нед. 7–8 · июль</div></div>
+        <div><h4>Десяток как единица. Числа 11–20</h4>
+          <p class="goal">Пучки-десятки из палочек. Разрядный состав: 13 = 10 + 3, 17 = 10 + 7. Сложение/вычитание без перехода (13+2, 17−4). <b>Результат:</b> «10+3» очевидно. Второй симптом закрыт.</p></div>
+      </div>
+      <div class="week">
+        <div class="when"><span class="tag e">Блок E</span><div class="dates">Нед. 9–10 · август</div></div>
+        <div><h4>Переход через десяток (8+5, 13−5)</h4>
+          <p class="goal">Главный приём — «дополнение до 10»: 8+5 = 8+2+3 = 10+3 = 13. Вычитание с переходом через рамку. <b>Результат:</b> считает в пределах 20 с переходом — это ключ к 3 классу.</p></div>
+      </div>
+      <div class="week">
+        <div class="when"><span class="tag f">Блок F</span><div class="dates">Нед. 11 · август</div></div>
+        <div><h4>Знакомство с числами до 100</h4>
+          <p class="goal">Разряды десятков и единиц. Круглые десятки (40+30), десятки+единицы (40+5), простые случаи. <b>Результат:</b> читает и складывает двузначные в простых случаях.</p></div>
+      </div>
+      <div class="week">
+        <div class="when"><span class="tag g">Блок G</span><div class="dates">Нед. 12 · август</div></div>
+        <div><h4>Мост в 3 класс + повторение</h4>
+          <p class="goal">Умножение как сложение одинаковых: 2+2+2 = 2·3. Смысл деления на предметах (раздать поровну). Итоговая диагностика и повторение слабых мест. <b>Результат:</b> готов к программе 3 класса.</p></div>
+      </div>
+    </div>
+    <div class="callout"><b>Как понять, что блок закрыт</b>Ребёнок решает задания блока <b>быстро, в уме и без пальцев</b> два занятия подряд. Медленно и с пересчётом = ещё не закрыт, остаёмся.</div>
+  </section>
+
+  <!-- 4. DAY -->
+  <section id="den">
+    <h2><span class="num">4</span> Как устроено одно занятие (15–20 мин)</h2>
+    <p class="sub">Одна и та же структура каждый день — ребёнку спокойнее, когда понятно, что будет дальше.</p>
+    <div class="routine">
+      <div class="r"><div><b>Разминка — устный счёт</b><div class="sub" style="margin:0;font-size:13.5px">Счёт вперёд/назад, соседи числа, быстрый состав. Бодро, как зарядка.</div></div><span class="min">2–3 мин</span></div>
+      <div class="r"><div><b>Главное — новая тема</b><div class="sub" style="margin:0;font-size:13.5px">На предметах → на модели → запись. Обязательно проговариваем вслух.</div></div><span class="min">7–8 мин</span></div>
+      <div class="r"><div><b>Игра — закрепление</b><div class="sub" style="margin:0;font-size:13.5px">Кости, домино, карты или «магазин» на сегодняшний навык.</div></div><span class="min">5 мин</span></div>
+      <div class="r"><div><b>Маленькая победа</b><div class="sub" style="margin:0;font-size:13.5px">«Смотри, как ты сегодня сам собрал 10!» — назвать конкретный успех.</div></div><span class="min">1–2 мин</span></div>
+    </div>
+  </section>
+
+  <!-- 5. METHODS -->
+  <section id="metody">
+    <h2><span class="num">5</span> Методы и приёмы — чем учить</h2>
+    <p class="sub">Проверенные инструменты началки (CPA / сингапурский подход, Петерсон, «Школа России»). Все — наглядные и доступные.</p>
+    <div class="card" style="padding:0;overflow:hidden">
+      <table>
+        <thead><tr><th>Инструмент</th><th>Для чего</th><th>Как использовать</th></tr></thead>
+        <tbody>
+          <tr><td><b>Числовые домики</b></td><td>Состав числа</td><td>Крыша — число, два окна — части. Закрываем одно окно, ребёнок называет второе.</td></tr>
+          <tr><td><b>Десятка-рамка</b><br>(2×5 + фишки)</td><td>Состав 10, переход через десяток</td><td>Заполняем фишками: видно «8 — это полная пятёрка и ещё 3», и сколько не хватает до 10.</td></tr>
+          <tr><td><b>Числовая прямая</b></td><td>Сложение/вычитание как «прыжки»</td><td>8+5 — прыгаем вправо на 5; 13−5 — влево. Видно движение и переход через 10.</td></tr>
+          <tr><td><b>Счётные палочки + пучки</b></td><td>Десяток как единица, разряды</td><td>10 палочек связали резинкой = 1 десяток. 13 = пучок и 3 палочки.</td></tr>
+          <tr><td><b>Приём «дополни до 10»</b></td><td>Переход через десяток</td><td>8+5: сначала добираем 8 до 10 (взяли 2 из 5), осталось 3 → 10+3=13.</td></tr>
+          <tr><td><b>Деньги (1, 5, 10 ₽)</b></td><td>Разряды и счёт</td><td>Монета 10 = десяток. «Магазин»: дай 13 рублей — одна десятка и три рубля.</td></tr>
+          <tr><td><b>Пальцы</b></td><td>Опора на старте</td><td>На этом этапе — нормальный инструмент, не стыд. Убираем сами, когда состав станет автоматом.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout tip"><b>Ключевой приём всего лета — «дополнение до 10»</b>Именно он превращает страшный «переход через десяток» в два лёгких шага. Отрабатывайте его на рамке и палочках, пока ребёнок не начнёт делать это в уме: <b>8+5 → 8+2+3 → 10+3 → 13</b>.</div>
+  </section>
+
+  <!-- 6. GAMES -->
+  <section id="igry">
+    <h2><span class="num">6</span> Банк игр на 5 минут</h2>
+    <p class="sub">Состав числа и счёт лучше всего «прилипают» в игре. Берите по одной на занятие под нужный навык.</p>
+    <div class="games">
+      <div class="game"><div class="emoji">🎲</div><h4>Бросок и сумма</h4><p>Два кубика — сложи. Кто быстрее назвал сумму, забирает фишку. <span class="skill-tag">состав · сложение до 12</span></p></div>
+      <div class="game"><div class="emoji">🁫</div><h4>Домино-десятка</h4><p>Ищем кости, где две половинки вместе дают 10 (или заданное число). <span class="skill-tag">состав числа</span></p></div>
+      <div class="game"><div class="emoji">🃏</div><h4>Карты «Война на сумму»</h4><p>Каждый кладёт по карте, складываем; у кого больше — забирает обе. <span class="skill-tag">сложение в уме</span></p></div>
+      <div class="game"><div class="emoji">🛒</div><h4>Магазин</h4><p>Ценники до 20 ₽, платим монетами 1/5/10. Считаем сдачу. <span class="skill-tag">разряды · вычитание</span></p></div>
+      <div class="game"><div class="emoji">🏠</div><h4>Домик-молчанка</h4><p>Закрываем одно окошко домика — ребёнок называет жильца, который спрятался. <span class="skill-tag">состав числа</span></p></div>
+      <div class="game"><div class="emoji">🔟</div><h4>Сколько до 10</h4><p>Называете число — ребёнок мгновенно говорит, сколько добавить до 10. <span class="skill-tag">дополнение до 10</span></p></div>
+      <div class="game"><div class="emoji">🐍</div><h4>Числовая дорожка</h4><p>Настолка-ходилка: бросок кубика — двигай фишку, называя числа вслух. <span class="skill-tag">счёт · числовой ряд</span></p></div>
+      <div class="game"><div class="emoji">👫</div><h4>Соседи числа</h4><p>Называете число — ребёнок быстро говорит предыдущее и следующее. <span class="skill-tag">числовой ряд</span></p></div>
+    </div>
+  </section>
+
+  <!-- 7. DON'TS -->
+  <section id="oshibki">
+    <h2><span class="num">7</span> Чего делать нельзя</h2>
+    <div class="grid two">
+      <div class="callout warn"><b>Не ругать за ошибку</b>Ошибка — это информация, где дыра, а не повод для упрёка. Ребёнок с двойкой уже боится математики; страх блокирует счёт.</div>
+      <div class="callout warn"><b>Не гнать программу 3 класса</b>Никакого столбика и больших чисел, пока не готов фундамент до 20. Иначе — снова провал и «я тупой».</div>
+      <div class="callout warn"><b>Не запрещать пальцы и палочки</b>Это законные опоры, а не «костыли стыда». Уйдут сами, когда состав числа станет автоматическим.</div>
+      <div class="callout warn"><b>Не давить и не торопить</b>Не идёт тема — спокойно вернитесь на шаг назад. Темп ребёнка — это и есть правильный темп.</div>
+      <div class="callout warn"><b>Не хвалить «ты умный»</b>Хвалите усилие и конкретное действие: «ты сам собрал десятку». Так растёт вера «я могу научиться».</div>
+      <div class="callout warn"><b>Не превращать в долгий урок</b>15–20 минут с интересом полезнее часа через силу. Лучше закончить, пока ребёнку ещё хочется.</div>
+    </div>
+  </section>
+
+  <!-- 8. CHECKLIST -->
+  <section id="checklist">
+    <h2><span class="num">8</span> Чек-лист навыков к 1 сентября</h2>
+    <p class="sub">Отмечайте по мере освоения. Все галочки = ребёнок готов к 3 классу. Распечатайте и держите на виду.</p>
+    <div class="card">
+      <ul class="check">
+        <li>Считает вперёд и назад в пределах 20, называет соседей числа.</li>
+        <li>Мгновенно знает состав чисел до 10 (особенно состав 10).</li>
+        <li>Складывает и вычитает в пределах 10 в уме, без пальцев.</li>
+        <li>Понимает «10+3=13» и разрядный состав чисел 11–20.</li>
+        <li>Считает с переходом через десяток (8+5, 13−5) приёмом «до 10».</li>
+        <li>Читает двузначные числа, складывает круглые десятки (40+30).</li>
+        <li>Понимает умножение как сложение одинаковых (2+2+2 = 2·3).</li>
+        <li>Спокойно относится к математике, верит, что у него получается.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 9. PRINTABLES -->
+  <section id="pechat">
+    <h2><span class="num">9</span> Печатные материалы</h2>
+    <p class="sub">Распечатайте и используйте на занятиях. Кнопка «Распечатать» вверху выведет всю методичку, включая эти заготовки.</p>
+
+    <div class="print-block">
+      <h3 style="margin-top:0">Числовые домики (состав чисел 6–10)</h3>
+      <div class="houses">
+        <!-- house template generated for 6..10 -->
+        <svg width="150" height="180" viewBox="0 0 150 180" role="img" aria-label="Домик состава числа">
+          <polygon points="75,8 142,60 8,60" fill="#fbe3d2" stroke="#e0612f" stroke-width="2"/>
+          <text x="75" y="48" text-anchor="middle" font-size="30" font-weight="700" fill="#e0612f">6</text>
+          <rect x="12" y="60" width="126" height="112" fill="#fffdf8" stroke="#e0612f" stroke-width="2"/>
+          <line x1="75" y1="60" x2="75" y2="172" stroke="#e4dccb" stroke-width="2"/>
+          <line x1="12" y1="88" x2="138" y2="88" stroke="#e4dccb" stroke-width="1.5"/>
+          <line x1="12" y1="116" x2="138" y2="116" stroke="#e4dccb" stroke-width="1.5"/>
+          <line x1="12" y1="144" x2="138" y2="144" stroke="#e4dccb" stroke-width="1.5"/>
+        </svg>
+        <svg width="150" height="180" viewBox="0 0 150 180" role="img" aria-label="Домик состава числа">
+          <polygon points="75,8 142,60 8,60" fill="#dff3ea" stroke="#1f9d6b" stroke-width="2"/>
+          <text x="75" y="48" text-anchor="middle" font-size="30" font-weight="700" fill="#1f9d6b">7</text>
+          <rect x="12" y="60" width="126" height="112" fill="#fffdf8" stroke="#1f9d6b" stroke-width="2"/>
+          <line x1="75" y1="60" x2="75" y2="172" stroke="#e4dccb" stroke-width="2"/>
+          <line x1="12" y1="88" x2="138" y2="88" stroke="#e4dccb" stroke-width="1.5"/>
+          <line x1="12" y1="116" x2="138" y2="116" stroke="#e4dccb" stroke-width="1.5"/>
+          <line x1="12" y1="144" x2="138" y2="144" stroke="#e4dccb" stroke-width="1.5"/>
+        </svg>
+        <svg width="150" height="180" viewBox="0 0 150 180" role="img" aria-label="Домик состава числа">
+          <polygon points="75,8 142,60 8,60" fill="#e1edf8" stroke="#2f6fb0" stroke-width="2"/>
+          <text x="75" y="48" text-anchor="middle" font-size="30" font-weight="700" fill="#2f6fb0">8</text>
+          <rect x="12" y="60" width="126" height="112" fill="#fffdf8" stroke="#2f6fb0" stroke-width="2"/>
+          <line x1="75" y1="60" x2="75" y2="172" stroke="#e4dccb" stroke-width="2"/>
+          <line x1="12" y1="88" x2="138" y2="88" stroke="#e4dccb" stroke-width="1.5"/>
+          <line x1="12" y1="116" x2="138" y2="116" stroke="#e4dccb" stroke-width="1.5"/>
+          <line x1="12" y1="144" x2="138" y2="144" stroke="#e4dccb" stroke-width="1.5"/>
+        </svg>
+        <svg width="150" height="180" viewBox="0 0 150 180" role="img" aria-label="Домик состава числа">
+          <polygon points="75,8 142,60 8,60" fill="#fbeccd" stroke="#e0962f" stroke-width="2"/>
+          <text x="75" y="48" text-anchor="middle" font-size="30" font-weight="700" fill="#e0962f">9</text>
+          <rect x="12" y="60" width="126" height="112" fill="#fffdf8" stroke="#e0962f" stroke-width="2"/>
+          <line x1="75" y1="60" x2="75" y2="172" stroke="#e4dccb" stroke-width="2"/>
+          <line x1="12" y1="88" x2="138" y2="88" stroke="#e4dccb" stroke-width="1.5"/>
+          <line x1="12" y1="116" x2="138" y2="116" stroke="#e4dccb" stroke-width="1.5"/>
+          <line x1="12" y1="144" x2="138" y2="144" stroke="#e4dccb" stroke-width="1.5"/>
+        </svg>
+        <svg width="150" height="180" viewBox="0 0 150 180" role="img" aria-label="Домик состава числа">
+          <polygon points="75,8 142,60 8,60" fill="#efe7ff" stroke="#7c5cff" stroke-width="2"/>
+          <text x="75" y="48" text-anchor="middle" font-size="30" font-weight="700" fill="#7c5cff">10</text>
+          <rect x="12" y="60" width="126" height="112" fill="#fffdf8" stroke="#7c5cff" stroke-width="2"/>
+          <line x1="75" y1="60" x2="75" y2="172" stroke="#e4dccb" stroke-width="2"/>
+          <line x1="12" y1="88" x2="138" y2="88" stroke="#e4dccb" stroke-width="1.5"/>
+          <line x1="12" y1="116" x2="138" y2="116" stroke="#e4dccb" stroke-width="1.5"/>
+          <line x1="12" y1="144" x2="138" y2="144" stroke="#e4dccb" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <p class="label-print">Крыша — число, столбики — пары «жильцов». Ребёнок вписывает пары, дающие это число (например, для 7: 1 и 6, 2 и 5, 3 и 4…).</p>
+    </div>
+
+    <div class="print-block">
+      <h3 style="margin-top:0">Десятка-рамка (ten-frame)</h3>
+      <svg width="420" height="120" viewBox="0 0 420 120" role="img" aria-label="Пустая десятка-рамка">
+        <g fill="#fffdf8" stroke="#23303a" stroke-width="2">
+          <rect x="10" y="14" width="80" height="44"/><rect x="90" y="14" width="80" height="44"/>
+          <rect x="170" y="14" width="80" height="44"/><rect x="250" y="14" width="80" height="44"/><rect x="330" y="14" width="80" height="44"/>
+          <rect x="10" y="58" width="80" height="44"/><rect x="90" y="58" width="80" height="44"/>
+          <rect x="170" y="58" width="80" height="44"/><rect x="250" y="58" width="80" height="44"/><rect x="330" y="58" width="80" height="44"/>
+        </g>
+      </svg>
+      <p class="label-print">Кладите пуговицы или рисуйте кружки. Верхний ряд = 5; видно, сколько в числе и сколько не хватает до 10.</p>
+    </div>
+
+    <div class="print-block">
+      <h3 style="margin-top:0">Числовая прямая 0–20</h3>
+      <svg width="760" height="70" viewBox="0 0 760 70" role="img" aria-label="Числовая прямая от 0 до 20">
+        <line x1="20" y1="40" x2="740" y2="40" stroke="#23303a" stroke-width="2"/>
+        <polygon points="740,40 730,35 730,45" fill="#23303a"/>
+        <g font-size="13" fill="#23303a" text-anchor="middle" font-family="Inter,Arial,sans-serif">
+          <!-- 21 ticks 0..20 -->
+          <g id="ticks"></g>
+        </g>
+      </svg>
+      <p class="label-print">Для «прыжков»: сложение — вправо, вычитание — влево. Хорошо видно переход через 10.</p>
+    </div>
+  </section>
+
+  <footer class="pg">
+    Методичка собрана для летней работы с учеником 2→3 класс · фундамент 1 класса · подход «предмет → модель → запись».<br>
+    Сделано с <span class="heart">♥</span> на Паломатике.
+  </footer>
+
+</div>
+
+<script>
+  // draw number line ticks 0..20
+  (function(){
+    var g=document.getElementById('ticks'); if(!g) return;
+    var x0=30, x1=730, n=20;
+    for(var i=0;i<=n;i++){
+      var x=x0+(x1-x0)*i/n;
+      var tick=document.createElementNS('http://www.w3.org/2000/svg','line');
+      tick.setAttribute('x1',x);tick.setAttribute('x2',x);
+      tick.setAttribute('y1', i%5===0?30:34);tick.setAttribute('y2', i%5===0?50:46);
+      tick.setAttribute('stroke','#23303a');tick.setAttribute('stroke-width', i%5===0?2:1);
+      g.appendChild(tick);
+      var t=document.createElementNS('http://www.w3.org/2000/svg','text');
+      t.setAttribute('x',x);t.setAttribute('y',66);t.textContent=i;
+      if(i===10){t.setAttribute('fill','#e0612f');t.setAttribute('font-weight','700');}
+      g.appendChild(t);
+    }
+  })();
+</script>
+</body>
+</html>
