@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\AuditLogger;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -20,11 +19,6 @@ class SocialAuthController extends Controller
      */
     public function redirect(string $provider)
     {
-        if ($provider === 'telegram') {
-            // Telegram uses widget, not redirect
-            abort(400, 'Use Telegram Login Widget');
-        }
-
         if (!in_array($provider, ['vkontakte'])) {
             abort(404, 'Provider not supported');
         }
@@ -77,90 +71,6 @@ class SocialAuthController extends Controller
     }
 
     /**
-     * Handle Telegram Login Widget callback
-     */
-    public function telegramCallback(Request $request)
-    {
-        \Log::info('Telegram callback received', $request->all());
-
-        $authData = $request->only([
-            'id', 'first_name', 'last_name', 'username',
-            'photo_url', 'auth_date', 'hash'
-        ]);
-
-        \Log::info('Telegram auth data', $authData);
-
-        if (!$this->verifyTelegramAuth($authData)) {
-            \Log::error('Telegram auth verification failed');
-            $this->auditLogger->log([
-                'event_type' => 'telegram_login_failed',
-                'category' => 'auth',
-                'severity' => 'warning',
-                'subject_type' => 'provider',
-                'subject_id' => 'telegram',
-                'ip' => $request->ip(),
-                'user_agent' => $request->userAgent(),
-            ]);
-            return redirect()->route('login')
-                ->with('error', 'Ошибка авторизации Telegram.');
-        }
-
-        \Log::info('Telegram auth verified successfully');
-
-        $user = $this->findOrCreateTelegramUser($authData);
-
-        \Log::info('User found/created', ['user_id' => $user->id]);
-
-        Auth::login($user, true);
-
-        $this->auditLogger->log([
-            'event_type' => 'telegram_login_success',
-            'category' => 'auth',
-            'severity' => 'info',
-            'actor_user_id' => $user->id,
-            'actor_role' => $user->role,
-            'subject_type' => 'provider',
-            'subject_id' => 'telegram',
-            'ip' => $request->ip(),
-            'user_agent' => $request->userAgent(),
-        ]);
-
-        return redirect()->intended('/dashboard');
-    }
-
-    /**
-     * Verify Telegram auth data
-     */
-    private function verifyTelegramAuth(array $authData): bool
-    {
-        if (!isset($authData['hash'])) {
-            return false;
-        }
-
-        $checkHash = $authData['hash'];
-        unset($authData['hash']);
-
-        // Check auth_date (not older than 1 day)
-        if (time() - $authData['auth_date'] > 86400) {
-            return false;
-        }
-
-        $dataCheckArr = [];
-        foreach ($authData as $key => $value) {
-            if ($value !== null) {
-                $dataCheckArr[] = $key . '=' . $value;
-            }
-        }
-        sort($dataCheckArr);
-        $dataCheckString = implode("\n", $dataCheckArr);
-
-        $secretKey = hash('sha256', config('services.telegram.bot_token'), true);
-        $hash = hash_hmac('sha256', $dataCheckString, $secretKey);
-
-        return hash_equals($hash, $checkHash);
-    }
-
-    /**
      * Find or create user from OAuth data
      */
     private function findOrCreateUser($socialUser, string $provider): User
@@ -200,39 +110,6 @@ class SocialAuthController extends Controller
             'oauth_id' => $socialUser->getId(),
             'avatar' => $socialUser->getAvatar(),
             'email_verified_at' => $socialUser->getEmail() ? now() : null,
-            'trial_ends_at' => now()->addDays(7),
-        ]);
-    }
-
-    /**
-     * Find or create user from Telegram data
-     */
-    private function findOrCreateTelegramUser(array $authData): User
-    {
-        // Check if user exists with this Telegram ID
-        $user = User::where('oauth_provider', 'telegram')
-            ->where('oauth_id', $authData['id'])
-            ->first();
-
-        if ($user) {
-            // Update avatar if changed
-            if (isset($authData['photo_url']) && $user->avatar !== $authData['photo_url']) {
-                $user->update(['avatar' => $authData['photo_url']]);
-            }
-            return $user;
-        }
-
-        // Create new user
-        $name = trim(($authData['first_name'] ?? '') . ' ' . ($authData['last_name'] ?? ''));
-        if (empty($name)) {
-            $name = $authData['username'] ?? 'User';
-        }
-
-        return User::create([
-            'name' => $name,
-            'oauth_provider' => 'telegram',
-            'oauth_id' => $authData['id'],
-            'avatar' => $authData['photo_url'] ?? null,
             'trial_ends_at' => now()->addDays(7),
         ]);
     }

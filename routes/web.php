@@ -63,10 +63,6 @@ Route::get('/materials/{slug}', [JarvisMaterialPageController::class, 'show'])->
 Route::post('/telegram/webhook', [TelegramBotAuthController::class, 'webhook'])
     ->name('telegram.webhook');
 
-// Telegram login via token (performs actual login with session)
-Route::get('/auth/telegram/login/{token}', [TelegramBotAuthController::class, 'login'])
-    ->name('telegram.login');
-
 // Telegram Mini App instant auth (session-backed JSON endpoint)
 // No 'guest' middleware — Mini App may re-auth even if session exists
 Route::post('/api/auth/telegram/webapp-login', [TelegramBotAuthController::class, 'webAppLogin'])
