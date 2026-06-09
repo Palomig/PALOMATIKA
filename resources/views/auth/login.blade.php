@@ -139,6 +139,15 @@
 
             {{-- Social login buttons --}}
             <div class="space-y-3">
+                {{-- Telegram (основной способ, OIDC redirect) --}}
+                <a href="https://{{ config('app.base_domain') }}/auth/telegram/redirect?origin=main"
+                   class="flex items-center justify-center w-full px-4 py-3 bg-[#229ED9] border border-[#229ED9] rounded-button hover:bg-[#1b89bf] transition font-semibold">
+                    <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="white">
+                        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-2.04 9.613c-.154.683-.554.85-1.123.528l-3.1-2.285-1.496 1.44c-.165.165-.305.305-.625.305l.223-3.168 5.77-5.213c.25-.222-.055-.346-.39-.124L7.19 14.447l-3.04-.952c-.662-.207-.674-.662.138-.979l11.87-4.576c.552-.2 1.035.134.404.308z"/>
+                    </svg>
+                    <span class="text-white">Войти через Telegram</span>
+                </a>
+
                 @if(config('services.telegram.bot_username'))
                 <div x-data="telegramAuth()">
                     <button
