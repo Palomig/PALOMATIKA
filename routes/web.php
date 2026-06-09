@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\Auth\TelegramBotAuthController;
+use App\Http\Controllers\Auth\TelegramOidcController;
 use App\Http\Controllers\ParentAppController;
 use App\Http\Controllers\ParentAuthController;
 use App\Http\Controllers\BoardController;
@@ -152,9 +153,12 @@ Route::middleware('guest')->group(function () {
     })->name('register');
 });
 
-// OAuth - Telegram callback MUST be before generic {provider} routes
-Route::get('/auth/telegram/callback', [SocialAuthController::class, 'telegramCallback'])
-    ->name('auth.telegram.callback');
+// Telegram OIDC (OAuth 2.0 / OpenID Connect) — redirect + central callback.
+// MUST be before generic {provider} routes.
+Route::get('/auth/telegram/redirect', [TelegramOidcController::class, 'redirect'])
+    ->name('auth.telegram.oidc.redirect');
+Route::get('/auth/telegram/callback', [TelegramOidcController::class, 'callback'])
+    ->name('auth.telegram.oidc.callback');
 
 Route::get('/auth/{provider}', [SocialAuthController::class, 'redirect'])
     ->name('auth.social.redirect');
