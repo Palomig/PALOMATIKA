@@ -1,0 +1,1207 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PALOMATIKA — концепт идеи домашки</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            display: ['"Manrope"', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+          },
+          colors: {
+            ink: {
+              950: '#070914',
+              900: '#0d1020',
+              800: '#151935',
+              700: '#1f244a',
+              600: '#2b3160',
+            },
+          },
+          boxShadow: {
+            'glow': '0 0 40px -8px rgba(99,102,241,.6)',
+            'glow-amber': '0 0 40px -8px rgba(251,191,36,.55)',
+            'glow-emerald': '0 0 40px -8px rgba(16,185,129,.55)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {
+            delimiters: [
+              { left: '$$', right: '$$', display: true },
+              { left: '$', right: '$', display: false }
+            ],
+            throwOnError: false
+          });"></script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      background:
+        radial-gradient(1100px 600px at 15% -10%, rgba(99,102,241,.20), transparent 60%),
+        radial-gradient(900px 600px at 100% 5%, rgba(168,85,247,.14), transparent 60%),
+        radial-gradient(800px 700px at 50% 100%, rgba(251,191,36,.07), transparent 60%),
+        #070914;
+      font-feature-settings: "ss01" on, "cv11" on;
+    }
+    .grid-bg {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(99,102,241,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99,102,241,.05) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+    }
+
+    .accent-text {
+      background: linear-gradient(135deg, #c7d2fe 0%, #f0abfc 50%, #fde68a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(21,25,53,.7) 0%, rgba(13,16,32,.7) 100%);
+      border: 1px solid rgba(99,102,241,.18);
+      border-radius: 18px;
+      backdrop-filter: blur(8px);
+    }
+
+    /* ── block / node ── */
+    .node {
+      position: relative;
+      background: rgba(13,16,32,.7);
+      border: 1.5px solid rgba(148,163,184,.18);
+      border-radius: 14px;
+      padding: 14px 18px;
+      transition: all .45s cubic-bezier(.4,0,.2,1);
+      color: #94a3b8;
+    }
+    .node .node-title {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      color: #cbd5e1;
+      transition: color .45s;
+    }
+    .node .node-sub {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 2px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      font-weight: 600;
+      transition: color .45s;
+    }
+    .node.is-active {
+      border-color: rgba(129,140,248,.85);
+      background: linear-gradient(180deg, rgba(67,56,202,.35), rgba(99,102,241,.15));
+      box-shadow: 0 0 32px -4px rgba(99,102,241,.7), inset 0 0 0 1px rgba(255,255,255,.04);
+      color: #f1f5f9;
+      transform: scale(1.02);
+    }
+    .node.is-active .node-title { color: #ffffff; }
+    .node.is-active .node-sub { color: #c7d2fe; }
+    .node.is-dim {
+      opacity: .35;
+      filter: saturate(.5);
+    }
+    .node.is-locked {
+      opacity: .4;
+      filter: saturate(.4);
+    }
+    .node.is-locked::after {
+      content: "🔒";
+      position: absolute;
+      top: 50%; right: 14px;
+      transform: translateY(-50%);
+      font-size: 18px;
+      opacity: .9;
+    }
+
+    /* ── source node (pulsing left node) ── */
+    .source-node {
+      background: linear-gradient(135deg, #4338ca, #6d28d9);
+      border: 1.5px solid rgba(139,92,246,.6);
+      border-radius: 14px;
+      padding: 18px 22px;
+      color: white;
+      box-shadow: 0 0 32px -6px rgba(99,102,241,.5);
+      position: relative;
+    }
+    .source-node::before {
+      content: ""; position: absolute; inset: -3px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(99,102,241,.4), rgba(168,85,247,.4));
+      filter: blur(12px); z-index: -1; opacity: .8;
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: .5; }
+      50%      { opacity: 1; }
+    }
+
+    /* ── connectors (svg lines) ── */
+    .connector {
+      stroke: rgba(148,163,184,.25);
+      stroke-width: 1.5;
+      fill: none;
+      transition: stroke .45s, stroke-width .45s, filter .45s;
+    }
+    .connector.is-active {
+      stroke: #818cf8;
+      stroke-width: 2.5;
+      filter: drop-shadow(0 0 6px rgba(129,140,248,.7));
+    }
+
+    /* ── moving dot along the active connector ── */
+    .pulse-dot {
+      fill: #c7d2fe;
+      filter: drop-shadow(0 0 6px rgba(199,210,254,.9));
+    }
+
+    /* ── skill list inside skills node ── */
+    .skill-list { list-style: none; padding: 0; margin: 0; }
+    .skill-list li {
+      padding: 6px 0;
+      font-size: 13px;
+      color: #94a3b8;
+      border-bottom: 1px dashed rgba(148,163,184,.12);
+      display: flex; align-items: center; gap: 8px;
+      transition: all .35s;
+    }
+    .skill-list li:last-child { border-bottom: none; }
+    .skill-list li::before {
+      content: "·";
+      color: #6366f1;
+      font-weight: 900;
+      font-size: 16px;
+    }
+    .skill-list li.is-on {
+      color: #f1f5f9;
+    }
+    .skill-list li.is-on::before { color: #fde68a; }
+
+    /* ── chips ── */
+    .chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 10px; border-radius: 999px;
+      font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+    }
+    .chip-indigo  { background: rgba(99,102,241,.14); color: #c7d2fe; border: 1px solid rgba(99,102,241,.35); }
+    .chip-amber   { background: rgba(251,191,36,.12); color: #fcd34d; border: 1px solid rgba(251,191,36,.35); }
+    .chip-emerald { background: rgba(16,185,129,.12); color: #6ee7b7; border: 1px solid rgba(16,185,129,.35); }
+    .chip-rose    { background: rgba(244,63,94,.12);  color: #fda4af; border: 1px solid rgba(244,63,94,.35); }
+    .chip-slate   { background: rgba(148,163,184,.10); color: #cbd5e1; border: 1px solid rgba(148,163,184,.25); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1, #818cf8);
+      color: white; font-weight: 700;
+      padding: 11px 18px; border-radius: 12px;
+      box-shadow: 0 8px 24px -8px rgba(99,102,241,.7);
+      transition: all .15s;
+    }
+    .btn-primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
+    .btn-primary:disabled { background: #2b3160; color: #475569; cursor: not-allowed; box-shadow: none; transform: none; filter: none; }
+
+    .scroll-hint { animation: bob 2.2s ease-in-out infinite; }
+    @keyframes bob {
+      0%, 100% { transform: translateY(0); opacity: .6; }
+      50%      { transform: translateY(6px); opacity: 1; }
+    }
+
+    /* student stage — vertical blocks */
+    .stage-block {
+      position: relative;
+      background: rgba(13,16,32,.65);
+      border: 1.5px solid rgba(148,163,184,.18);
+      border-radius: 16px;
+      padding: 22px 24px;
+      transition: all .55s cubic-bezier(.4,0,.2,1);
+    }
+    .stage-block .stage-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 30px; height: 30px; border-radius: 999px;
+      background: rgba(99,102,241,.15);
+      color: #c7d2fe; font-family: Manrope, sans-serif; font-weight: 800;
+      font-size: 14px;
+      transition: all .55s;
+    }
+    .stage-block .stage-title {
+      font-family: Manrope, sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      color: #cbd5e1;
+      margin-top: 8px;
+      transition: color .55s;
+    }
+    .stage-block .stage-body {
+      color: #64748b;
+      font-size: 13.5px;
+      margin-top: 6px;
+      line-height: 1.55;
+      transition: color .55s;
+    }
+
+    .stage-block.is-active {
+      border-color: rgba(129,140,248,.85);
+      background: linear-gradient(135deg, rgba(67,56,202,.30), rgba(99,102,241,.12));
+      box-shadow: 0 0 40px -6px rgba(99,102,241,.7), inset 0 0 0 1px rgba(255,255,255,.05);
+      transform: scale(1.015);
+    }
+    .stage-block.is-active .stage-num {
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      color: white;
+      box-shadow: 0 4px 14px -2px rgba(99,102,241,.6);
+    }
+    .stage-block.is-active .stage-title { color: #ffffff; }
+    .stage-block.is-active .stage-body { color: #cbd5e1; }
+
+    .stage-block.is-locked {
+      opacity: .35;
+      filter: saturate(.4);
+    }
+    .stage-block.is-locked::after {
+      content: "🔒";
+      position: absolute;
+      top: 22px; right: 22px;
+      font-size: 24px;
+      opacity: .85;
+    }
+
+    .stage-conn {
+      width: 2px;
+      height: 24px;
+      margin: 0 auto;
+      background: linear-gradient(180deg, rgba(99,102,241,.4), rgba(99,102,241,.1));
+      border-radius: 1px;
+    }
+
+    /* answer demo */
+    .ans-input {
+      width: 100%;
+      background: rgba(7,9,20,.6);
+      border: 1.5px solid rgba(148,163,184,.25);
+      border-radius: 12px;
+      padding: 12px 14px;
+      color: #f1f5f9;
+      font-size: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .ans-input:focus { outline: none; border-color: #818cf8; box-shadow: 0 0 0 4px rgba(129,140,248,.18); }
+    .ans-input.is-ok {
+      border-color: #34d399;
+      box-shadow: 0 0 0 4px rgba(52,211,153,.18);
+      background: rgba(16,185,129,.10);
+    }
+    .ans-input.is-err {
+      border-color: #fb7185;
+      box-shadow: 0 0 0 4px rgba(251,113,133,.18);
+      background: rgba(244,63,94,.08);
+    }
+
+    .feedback {
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.45;
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .feedback-ok    { background: rgba(16,185,129,.12); border: 1px solid rgba(16,185,129,.35); color: #6ee7b7; }
+    .feedback-retry { background: rgba(244,63,94,.10);  border: 1px solid rgba(244,63,94,.35);  color: #fda4af; }
+    .feedback-final { background: rgba(251,191,36,.10); border: 1px solid rgba(251,191,36,.35); color: #fcd34d; }
+
+    .hide { display: none !important; }
+    .fade-in { animation: fadeIn .3s ease-out; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .attempt-pip {
+      display: inline-block; width: 8px; height: 8px; border-radius: 999px;
+      background: rgba(148,163,184,.25);
+      margin-right: 4px;
+    }
+    .attempt-pip.used-ok    { background: #34d399; box-shadow: 0 0 8px rgba(52,211,153,.6); }
+    .attempt-pip.used-err   { background: #fb7185; box-shadow: 0 0 8px rgba(251,113,133,.6); }
+
+    /* phone-frame */
+    .device-frame {
+      background: #0a0d1e;
+      border: 1px solid rgba(148,163,184,.25);
+      border-radius: 28px;
+      padding: 14px 10px;
+      box-shadow: 0 30px 80px -20px rgba(0,0,0,.8), inset 0 0 0 1px rgba(255,255,255,.03);
+    }
+    .device-screen {
+      background: #0b0f24;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(99,102,241,.15);
+    }
+    .device-notch {
+      width: 80px; height: 5px; margin: 0 auto 10px;
+      background: rgba(148,163,184,.2); border-radius: 999px;
+    }
+
+    /* methodic colour-bars */
+    .methodic-amber   { background: linear-gradient(180deg, rgba(251,191,36,.10), rgba(251,191,36,.05));  border-left: 3px solid #fbbf24; }
+    .methodic-indigo  { background: linear-gradient(180deg, rgba(99,102,241,.10), rgba(99,102,241,.05));  border-left: 3px solid #6366f1; }
+    .methodic-emerald { background: linear-gradient(180deg, rgba(16,185,129,.10), rgba(16,185,129,.05));  border-left: 3px solid #10b981; }
+    .methodic-rose    { background: linear-gradient(180deg, rgba(244,63,94,.10),  rgba(244,63,94,.05));   border-left: 3px solid #f43f5e; }
+
+    /* photo upload */
+    .photo-label {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 14px; border-radius: 12px;
+      background: rgba(15,18,40,.6);
+      border: 1px dashed rgba(148,163,184,.35);
+      color: #94a3b8;
+      font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all .15s;
+    }
+    .photo-label:hover { border-color: rgba(99,102,241,.5); color: #c7d2fe; }
+    .photo-label.has-file {
+      border-style: solid;
+      background: rgba(16,185,129,.10);
+      border-color: rgba(16,185,129,.55);
+      color: #6ee7b7;
+    }
+
+    .btn-ghost {
+      border: 1px solid rgba(148,163,184,.35);
+      color: #cbd5e1; font-weight: 600;
+      padding: 10px 16px; border-radius: 12px;
+      background: transparent;
+      transition: all .15s;
+    }
+    .btn-ghost:hover { border-color: rgba(99,102,241,.6); color: #c7d2fe; }
+
+    .demo-label {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: 12px;
+      color: #c7d2fe;
+    }
+    .demo-label .demo-step {
+      display: inline-grid; place-items: center;
+      width: 26px; height: 26px; border-radius: 999px;
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      color: white; font-size: 12px;
+      box-shadow: 0 4px 12px -2px rgba(99,102,241,.6);
+    }
+
+    .demo-caption {
+      color: #94a3b8;
+      font-size: 14.5px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+
+<body class="text-slate-100 font-sans antialiased">
+
+<!-- ─────────────────────── NAV ─────────────────────── -->
+<nav class="sticky top-0 z-40 backdrop-blur-xl bg-ink-950/70 border-b border-white/5">
+  <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+    <a href="#hero" class="flex items-center gap-2 font-display font-bold text-lg">
+      <span class="inline-block w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-fuchsia-500 grid place-items-center text-sm">π</span>
+      <span>palomatika</span>
+      <span class="hidden sm:inline text-slate-500 font-medium">· концепт ДЗ</span>
+    </a>
+    <a href="http://78.17.28.40/proto/" target="_blank" rel="noopener"
+       class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full bg-indigo-500/15 border border-indigo-500/40 text-indigo-200 hover:bg-indigo-500/25 transition">
+      Открыть прототип →
+    </a>
+  </div>
+</nav>
+
+
+<!-- ─────────────────────── HERO ─────────────────────── -->
+<section id="hero" class="relative overflow-hidden">
+  <div class="grid-bg"></div>
+  <div class="max-w-6xl mx-auto px-6 pt-24 pb-32 md:pt-32 md:pb-40 relative">
+    <h1 class="font-display font-extrabold tracking-tight text-5xl md:text-7xl lg:text-8xl leading-[1] uppercase">
+      <span class="block">PALOMATIKA</span>
+      <span class="block accent-text mt-1">концепт идеи домашки</span>
+    </h1>
+
+    <p class="mt-10 text-xl md:text-2xl text-slate-300 max-w-4xl leading-relaxed">
+      Домашка, в которой ученик не может проскочить теорию. Перед задачами — методичка,
+      которую он <strong class="text-white">обязан переписать в тетрадь</strong>, потому что
+      вернуться к ней потом будет нельзя. А отправить решение — только с фото, где видно
+      и переписанную теорию, и сами задачи.
+    </p>
+  </div>
+  <div class="scroll-hint absolute bottom-6 left-1/2 -translate-x-1/2 text-slate-500 text-xs tracking-widest">↓ SCROLL ↓</div>
+</section>
+
+
+<!-- ─────────────────────── 1. ASSIGN — teacher → topics → skills ─────────────────────── -->
+<section id="assign" class="py-24 border-t border-white/5">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex items-center gap-3 mb-3">
+      <span class="chip chip-indigo">01</span>
+      <span class="text-slate-500 uppercase text-xs tracking-wider font-semibold">учитель</span>
+    </div>
+    <h2 class="font-display font-bold text-3xl md:text-5xl tracking-tight">
+      Учитель назначает <span class="accent-text">домашку из банка заданий</span>
+    </h2>
+    <p class="text-slate-400 text-lg max-w-3xl mt-4">
+      Можно выбрать любую тему банка и любые скиллы внутри неё.
+    </p>
+
+    <!-- Diagram -->
+    <div class="card mt-12 p-6 md:p-10 overflow-hidden">
+      <div class="grid grid-cols-12 gap-4 md:gap-8 items-center relative" id="assignGrid">
+
+        <!-- Left: source node -->
+        <div class="col-span-12 md:col-span-3 flex md:block justify-center">
+          <div class="source-node text-center md:text-left">
+            <div class="text-[10px] uppercase tracking-widest text-indigo-200/80 font-bold">шаг 0</div>
+            <div class="font-display font-extrabold text-lg md:text-xl mt-1">Отправить ДЗ</div>
+            <div class="text-xs text-indigo-200/70 mt-1">из банка заданий</div>
+          </div>
+        </div>
+
+        <!-- Middle: 3 topic nodes -->
+        <div class="col-span-12 md:col-span-5">
+          <div class="flex flex-col gap-3">
+            <div class="node is-active" data-topic="0">
+              <div class="node-sub">тема</div>
+              <div class="node-title">Окружность</div>
+            </div>
+            <div class="node is-dim" data-topic="1">
+              <div class="node-sub">тема</div>
+              <div class="node-title">Уравнения</div>
+            </div>
+            <div class="node is-dim" data-topic="2">
+              <div class="node-sub">тема</div>
+              <div class="node-title">Теория вероятностей</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: skills node -->
+        <div class="col-span-12 md:col-span-4">
+          <div class="node" style="background: rgba(13,16,32,.85); border-color: rgba(251,191,36,.4);">
+            <div class="node-sub" style="color:#fcd34d;">скиллы темы</div>
+            <ul class="skill-list mt-2" id="skillList">
+              <!-- populated by JS -->
+            </ul>
+          </div>
+        </div>
+
+        <!-- SVG connectors overlay -->
+        <svg class="absolute inset-0 w-full h-full pointer-events-none hidden md:block" preserveAspectRatio="none" viewBox="0 0 1000 360" id="assignSvg">
+          <!-- source (~x=210, y=180) → topics col x=400 -->
+          <!-- topic Y positions roughly: 80, 180, 280 -->
+          <path class="connector" id="c-0-in" d="M 210 180 C 300 180, 320 80, 400 80"/>
+          <path class="connector" id="c-1-in" d="M 210 180 L 400 180"/>
+          <path class="connector" id="c-2-in" d="M 210 180 C 300 180, 320 280, 400 280"/>
+
+          <!-- topics (~x=620) → skills (~x=720, y=180) -->
+          <path class="connector" id="c-0-out" d="M 620 80  C 700 80, 700 180, 770 180"/>
+          <path class="connector" id="c-1-out" d="M 620 180 L 770 180"/>
+          <path class="connector" id="c-2-out" d="M 620 280 C 700 280, 700 180, 770 180"/>
+
+          <circle class="pulse-dot hide" id="pulseDot" r="4"/>
+        </svg>
+      </div>
+
+      <!-- legend -->
+      <div class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-xs text-slate-500">
+        <span class="flex items-center gap-2">
+          <span class="inline-block w-3 h-3 rounded bg-gradient-to-br from-indigo-500 to-fuchsia-500"></span>
+          сейчас активная тема
+        </span>
+        <span class="flex items-center gap-2">
+          <span class="inline-block w-3 h-3 rounded border border-slate-600 opacity-40"></span>
+          доступна, но не выбрана
+        </span>
+        <span class="flex items-center gap-2">
+          <span class="text-amber-300">·</span>
+          скиллы темы заполняются автоматически
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─────────────────────── 2. STUDENT — 3 stages with locks ─────────────────────── -->
+<section id="student" class="py-24 border-t border-white/5">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex items-center gap-3 mb-3">
+      <span class="chip chip-amber">02</span>
+      <span class="text-slate-500 uppercase text-xs tracking-wider font-semibold">ученик</span>
+    </div>
+    <h2 class="font-display font-bold text-3xl md:text-5xl tracking-tight">
+      Ученик открывает ДЗ — и идёт по этапам <span class="accent-text">в одну сторону</span>
+    </h2>
+    <p class="text-slate-400 text-lg max-w-3xl mt-4">
+      Пока не закончил текущий — следующий заблокирован. А назад вернуться уже нельзя.
+    </p>
+
+    <div class="grid lg:grid-cols-12 gap-8 mt-12 items-start">
+
+      <!-- LEFT: 3 stage blocks -->
+      <div class="lg:col-span-7">
+        <div class="space-y-3" id="studentStages">
+
+          <div class="stage-block is-active" data-stage="0">
+            <span class="stage-num">1</span>
+            <div class="stage-title">Справочный материал</div>
+            <div class="stage-body">
+              Короткая методичка темы: определение, формула, пример. Ученик переписывает её в тетрадь.
+            </div>
+          </div>
+
+          <div class="stage-conn"></div>
+
+          <div class="stage-block is-locked" data-stage="1">
+            <span class="stage-num">2</span>
+            <div class="stage-title">Задания</div>
+            <div class="stage-body">
+              Открывается только после методички. Решение — в тетради, ответы — в приложение.
+            </div>
+          </div>
+
+          <div class="stage-conn"></div>
+
+          <div class="stage-block is-locked" data-stage="2">
+            <span class="stage-num">3</span>
+            <div class="stage-title">Отправка результатов</div>
+            <div class="stage-body">
+              Фото тетради с переписанной методичкой и решениями. Без фото отправить нельзя.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- RIGHT: state explainer that changes with the active stage (desktop only) -->
+      <aside class="hidden lg:block lg:col-span-5 lg:sticky lg:top-24">
+        <div class="card p-6">
+          <div class="chip chip-indigo mb-3" id="stateChip">шаг 1 из 3</div>
+          <h3 class="font-display font-bold text-xl" id="stateTitle">Сейчас — методичка</h3>
+          <p class="text-slate-300 leading-relaxed mt-3" id="stateBody">
+            Ученик читает справочный материал и переписывает его в тетрадь. Задания и отправка
+            пока заблокированы — их откроет только подтверждение «методичку переписал».
+          </p>
+          <div class="mt-5 pt-5 border-t border-white/5 text-sm text-slate-400 leading-relaxed" id="stateRule">
+            <span class="text-amber-300 font-semibold">Правило:</span>
+            движение только вперёд. Открыл следующий шаг — предыдущий закрылся навсегда.
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+
+<!-- ─────────────────────── 3. DEMO — methodichka / tasks / submit ─────────────────────── -->
+<section id="demo" class="py-24 border-t border-white/5">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex items-center gap-3 mb-3">
+      <span class="chip chip-emerald">03</span>
+      <span class="text-slate-500 uppercase text-xs tracking-wider font-semibold">демонстрация</span>
+    </div>
+    <h2 class="font-display font-bold text-3xl md:text-5xl tracking-tight">
+      Концепт — как это <span class="accent-text">будет выглядеть в приложении</span>
+    </h2>
+
+
+    <!-- ───── Demo 1: METHODICHKA ───── -->
+    <div class="mt-16">
+      <div class="demo-label mb-5"><span class="demo-step">1</span> Методичка</div>
+
+      <div class="grid lg:grid-cols-12 gap-8 items-start">
+        <div class="lg:col-span-8">
+          <div class="device-frame">
+            <div class="device-notch"></div>
+            <div class="device-screen p-5 md:p-7">
+
+              <div class="methodic-amber rounded-r-lg px-4 py-3 mb-5">
+                <div class="text-amber-200 text-xs font-semibold tracking-wider uppercase">Геометрия · ДЗ от 2026-05-23</div>
+                <div class="text-amber-100 text-sm mt-1 leading-relaxed">
+                  Прочитай и <strong>перепиши в тетрадь</strong>. После «Начать» вернуться к этой методичке нельзя.
+                </div>
+              </div>
+
+              <p class="text-xs uppercase tracking-wider text-slate-500">Методичка темы</p>
+              <h3 class="font-display font-bold text-2xl mt-1 mb-1">Вписанный и центральный углы</h3>
+              <p class="text-sm text-slate-400">Окружность · теорема, формула, типовая ошибка</p>
+
+              <div class="methodic-indigo rounded-r-lg px-4 py-3 mt-6">
+                <div class="text-indigo-200 text-xs font-bold uppercase tracking-wider mb-1">Определение</div>
+                <ul class="text-sm text-slate-200 space-y-1">
+                  <li>· <strong>Центральный угол</strong> — угол с вершиной в центре окружности.</li>
+                  <li>· <strong>Вписанный угол</strong> — угол с вершиной на окружности, его стороны — хорды.</li>
+                </ul>
+              </div>
+
+              <div class="mt-5 rounded-xl border border-white/10 bg-ink-900/60 p-5">
+                <div class="text-xs font-bold uppercase tracking-wider text-fuchsia-200/80 mb-2">Теорема</div>
+                <p class="text-slate-200 text-sm leading-relaxed">
+                  Вписанный угол равен половине центрального угла, опирающегося на ту же дугу.
+                </p>
+
+                <div class="mt-4 flex flex-col md:flex-row items-center gap-5">
+                  <svg viewBox="0 0 220 200" class="w-full max-w-[230px]" aria-label="Вписанный и центральный угол">
+                    <circle cx="110" cy="110" r="70" fill="none" stroke="#64748b" stroke-width="1.5"/>
+                    <circle cx="110" cy="110" r="3" fill="#60a5fa"/>
+                    <text x="100" y="124" font-size="12" font-weight="700" fill="#60a5fa">O</text>
+                    <line x1="110" y1="40" x2="56" y2="155" stroke="#dc2626" stroke-width="2"/>
+                    <line x1="110" y1="40" x2="164" y2="155" stroke="#dc2626" stroke-width="2"/>
+                    <line x1="110" y1="110" x2="56" y2="155" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4 3"/>
+                    <line x1="110" y1="110" x2="164" y2="155" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4 3"/>
+                    <path d="M 56 155 A 70 70 0 0 0 164 155" fill="none" stroke="#f59e0b" stroke-width="3" opacity="0.85"/>
+                    <path d="M 100 65 A 18 18 0 0 1 120 65" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+                    <path d="M 96 125 A 16 16 0 0 0 124 125" fill="none" stroke="#10b981" stroke-width="1.5"/>
+                    <circle cx="56"  cy="155" r="3" fill="#60a5fa"/>
+                    <circle cx="164" cy="155" r="3" fill="#60a5fa"/>
+                    <circle cx="110" cy="40"  r="3" fill="#60a5fa"/>
+                    <text x="40"  y="170" font-size="13" font-weight="700" fill="#60a5fa">A</text>
+                    <text x="170" y="170" font-size="13" font-weight="700" fill="#60a5fa">B</text>
+                    <text x="103" y="30"  font-size="13" font-weight="700" fill="#60a5fa">C</text>
+                    <text x="92"  y="85"  font-size="11" font-weight="700" fill="#f87171">∠ACB</text>
+                    <text x="83"  y="142" font-size="11" font-weight="700" fill="#34d399">∠AOB</text>
+                  </svg>
+
+                  <div class="text-slate-100 flex-1">
+                    $$\angle ACB \;=\; \tfrac{1}{2}\,\angle AOB$$
+                    <p class="text-slate-400 text-xs mt-3">
+                      <span class="inline-block w-2.5 h-2.5 rounded-full bg-[#dc2626] align-middle mr-1"></span> хорды
+                      &nbsp;
+                      <span class="inline-block w-2.5 h-2.5 rounded-full bg-[#10b981] align-middle mr-1"></span> радиусы
+                      &nbsp;
+                      <span class="inline-block w-2.5 h-2.5 rounded-full bg-[#f59e0b] align-middle mr-1"></span> общая дуга
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="methodic-emerald rounded-r-lg px-4 py-3 mt-5">
+                <div class="text-emerald-200 text-xs font-bold uppercase tracking-wider mb-1">Следствия</div>
+                <ul class="text-sm text-slate-200 space-y-1">
+                  <li>· Вписанные углы, опирающиеся на одну дугу, <strong>равны</strong> между собой.</li>
+                  <li>· Вписанный угол, опирающийся на <strong>диаметр</strong>, всегда равен $90°$.</li>
+                </ul>
+              </div>
+
+              <div class="mt-5 rounded-xl border border-white/10 bg-ink-900/60 p-5">
+                <div class="text-xs font-bold uppercase tracking-wider text-indigo-200 mb-2">Пример</div>
+                <p class="text-sm text-slate-300 mb-2">Дано: $\angle AOB = 80°$. Найти $\angle ACB$.</p>
+                <p class="text-sm text-slate-300">Решение: вписанный угол вдвое меньше центрального → $\angle ACB = 80° / 2 = 40°$.</p>
+              </div>
+
+              <div class="mt-7 pt-5 border-t border-white/5 flex flex-col sm:flex-row sm:items-center gap-3">
+                <button onclick="openConfirm()" class="btn-primary w-full sm:w-auto">
+                  Начать решать задачи →
+                </button>
+                <span class="text-xs text-slate-500">После нажатия методичку открыть нельзя.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="lg:col-span-4 lg:pt-2">
+          <p class="demo-caption">
+            Жёсткая структура: <strong class="text-slate-200">определение → теорема → следствия → пример → ошибки</strong>.
+            Один экран, одна тема. Внизу — кнопка «Начать», после которой методичка закроется навсегда.
+          </p>
+          <p class="demo-caption mt-4 text-xs text-slate-500">
+            Жми «Начать решать задачи» — появится подтверждение.
+          </p>
+        </aside>
+      </div>
+    </div>
+
+
+    <!-- ───── Demo 2: TASKS with 2-attempt mechanic ───── -->
+    <div class="mt-24">
+      <div class="demo-label mb-5"><span class="demo-step">2</span> Задания · 2 попытки на ответ</div>
+
+      <div class="grid lg:grid-cols-12 gap-8 items-start">
+        <div class="lg:col-span-8">
+          <div class="device-frame">
+            <div class="device-notch"></div>
+            <div class="device-screen p-5 md:p-7">
+
+              <div class="flex items-center justify-between mb-5">
+                <div>
+                  <div class="text-xs uppercase tracking-wider text-slate-500">Домашка · задача 1 из 3</div>
+                  <div class="font-display font-bold text-lg">Окружность · вписанные углы</div>
+                </div>
+                <div class="flex items-center gap-1">
+                  <span class="text-xs text-slate-500 mr-2">попытки:</span>
+                  <span class="attempt-pip" id="pip-1"></span>
+                  <span class="attempt-pip" id="pip-2"></span>
+                </div>
+              </div>
+
+              <div class="rounded-xl border border-white/10 bg-ink-900/60 p-5">
+                <div class="flex gap-4 items-center">
+                  <svg viewBox="0 0 200 180" class="w-[150px] shrink-0">
+                    <circle cx="100" cy="100" r="60" fill="none" stroke="#64748b" stroke-width="1.4"/>
+                    <circle cx="100" cy="100" r="2.5" fill="#60a5fa"/>
+                    <text x="92"  y="113" font-size="11" font-weight="700" fill="#60a5fa">O</text>
+                    <line x1="100" y1="40" x2="54"  y2="139" stroke="#dc2626" stroke-width="2"/>
+                    <line x1="100" y1="40" x2="146" y2="139" stroke="#dc2626" stroke-width="2"/>
+                    <line x1="100" y1="100" x2="54"  y2="139" stroke="#10b981" stroke-width="1.4" stroke-dasharray="3 3"/>
+                    <line x1="100" y1="100" x2="146" y2="139" stroke="#10b981" stroke-width="1.4" stroke-dasharray="3 3"/>
+                    <path d="M 88 116 A 14 14 0 0 0 112 116" fill="none" stroke="#f59e0b" stroke-width="1.6"/>
+                    <text x="91" y="135" font-size="11" font-weight="700" fill="#f59e0b">60°</text>
+                    <circle cx="54"  cy="139" r="2.5" fill="#60a5fa"/>
+                    <circle cx="146" cy="139" r="2.5" fill="#60a5fa"/>
+                    <circle cx="100" cy="40"  r="2.5" fill="#60a5fa"/>
+                    <text x="38"  y="154" font-size="12" font-weight="700" fill="#60a5fa">A</text>
+                    <text x="151" y="154" font-size="12" font-weight="700" fill="#60a5fa">B</text>
+                    <text x="93"  y="32"  font-size="12" font-weight="700" fill="#60a5fa">C</text>
+                  </svg>
+                  <p class="text-slate-200 text-base leading-relaxed">
+                    $\angle AOB = 60°$ — центральный угол.<br>
+                    Найдите вписанный $\angle ACB$ (в градусах).
+                  </p>
+                </div>
+
+                <div class="mt-5">
+                  <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2">Ваш ответ</label>
+                  <div class="flex gap-2">
+                    <input type="text" id="ansInput" class="ans-input" placeholder="введи число и нажми Enter" autocomplete="off">
+                    <button id="ansBtn" class="btn-primary" onclick="checkAnswer()">Ответить</button>
+                  </div>
+                </div>
+
+                <div id="feedback" class="mt-4 hide"></div>
+              </div>
+
+              <div class="mt-4 pt-4 border-t border-white/5 flex items-center justify-between text-xs text-slate-500">
+                <span>правильный ответ: <code class="font-mono text-slate-400">30</code> · попробуй другой, чтобы увидеть все состояния</span>
+                <button onclick="resetAnswer()" class="text-indigo-300 hover:text-indigo-200 underline">сбросить</button>
+              </div>
+
+              <!-- 2 next tasks shown faded -->
+              <div class="mt-5 grid grid-cols-2 gap-3 opacity-50">
+                <div class="rounded-lg border border-white/10 bg-ink-900/40 p-3 text-xs text-slate-500">
+                  Задача 2 · откроется после ответа
+                </div>
+                <div class="rounded-lg border border-white/10 bg-ink-900/40 p-3 text-xs text-slate-500">
+                  Задача 3 · откроется после ответа
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="lg:col-span-4 lg:pt-2 space-y-3">
+          <div class="card p-4 flex gap-3 items-start">
+            <div class="w-9 h-9 rounded-lg bg-emerald-500/20 border border-emerald-500/40 grid place-items-center text-lg shrink-0">✓</div>
+            <div>
+              <div class="font-display font-bold text-emerald-200 text-sm">Верно</div>
+              <div class="text-xs text-slate-400 mt-0.5">Поле зелёным, ответ зачтён.</div>
+            </div>
+          </div>
+          <div class="card p-4 flex gap-3 items-start">
+            <div class="w-9 h-9 rounded-lg bg-rose-500/20 border border-rose-500/40 grid place-items-center text-lg shrink-0">↻</div>
+            <div>
+              <div class="font-display font-bold text-rose-200 text-sm">Ошибся — вторая попытка</div>
+              <div class="text-xs text-slate-400 mt-0.5">«У вас есть ещё одна попытка ввести ответ.»</div>
+            </div>
+          </div>
+          <div class="card p-4 flex gap-3 items-start">
+            <div class="w-9 h-9 rounded-lg bg-amber-500/20 border border-amber-500/40 grid place-items-center text-lg shrink-0">→</div>
+            <div>
+              <div class="font-display font-bold text-amber-200 text-sm">Дважды ошибся — на урок</div>
+              <div class="text-xs text-slate-400 mt-0.5">«Иди дальше, на уроке разберём это.»</div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+
+    <!-- ───── Demo 3: SUBMIT — photos of notebook pages ───── -->
+    <div class="mt-24">
+      <div class="demo-label mb-5"><span class="demo-step">3</span> Отправка фотографий · завершение домашки</div>
+
+      <div class="grid lg:grid-cols-12 gap-8 items-start">
+        <div class="lg:col-span-8">
+          <div class="device-frame">
+            <div class="device-notch"></div>
+            <div class="device-screen p-5 md:p-7">
+
+              <div class="flex items-center justify-between mb-5">
+                <div>
+                  <div class="text-xs uppercase tracking-wider text-slate-500">Завершение домашки</div>
+                  <div class="font-display font-bold text-lg">Окружность · фото тетради</div>
+                </div>
+                <span class="chip chip-slate" id="photoCounter">0 фото</span>
+              </div>
+
+              <div class="methodic-amber rounded-r-lg px-4 py-3 mb-5">
+                <div class="text-amber-100 text-sm leading-relaxed">
+                  Сфотографируй страницы тетради так, чтобы было видно
+                  <strong>и переписанную методичку, и решения всех задач</strong>.
+                  Сколько фото — на твоё усмотрение, главное чтобы всё было читаемо.
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="photoGrid">
+                <!-- attached photo thumbnails are injected here -->
+                <button id="addPhotoBtn" type="button" onclick="addPhoto()"
+                        class="aspect-[3/4] rounded-xl border-2 border-dashed border-slate-600/60 bg-ink-900/40
+                               flex flex-col items-center justify-center gap-2 text-slate-400
+                               hover:border-indigo-400/70 hover:text-indigo-200 hover:bg-indigo-500/5 transition">
+                  <span class="text-3xl">+</span>
+                  <span class="text-xs font-semibold uppercase tracking-wider">добавить фото</span>
+                </button>
+              </div>
+
+              <button id="submitBtn" disabled class="btn-primary w-full mt-6">
+                Завершить ДЗ
+              </button>
+              <p id="submitHint" class="text-center text-xs text-rose-300/80 mt-3">
+                Без фото решения домашняя работа не принимается.
+              </p>
+              <p id="submitOk" class="text-center text-xs text-emerald-300 mt-3 hide">
+                ✅ Готово к отправке. Учитель увидит ответы и фото тетради.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <aside class="lg:col-span-4 lg:pt-2">
+          <p class="demo-caption">
+            Жми «+ добавить фото» — появится новая страница тетради. Можно прикрепить
+            одну, две, пять — сколько нужно, чтобы поместились все решения и методичка.
+          </p>
+          <p class="demo-caption mt-4 text-xs text-slate-500">
+            Кнопка «Завершить ДЗ» разблокируется, как только прикреплено хотя бы одно фото.
+          </p>
+        </aside>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ─────────────────────── CONFIRM MODAL (functional) ─────────────────────── -->
+<div id="confirmModal" class="hide fixed inset-0 z-50 grid place-items-center p-6">
+  <div class="absolute inset-0 bg-ink-950/80 backdrop-blur-md" onclick="closeConfirm()"></div>
+  <div class="relative card p-7 max-w-md w-full shadow-glow fade-in">
+    <div class="text-5xl mb-3 text-center">📓</div>
+    <h3 class="font-display font-bold text-xl text-center">Переписали методичку в тетрадь?</h3>
+    <p class="text-sm text-slate-400 text-center mt-3 leading-relaxed">
+      После «Да, начать» вернуться к этой методичке будет <strong class="text-rose-300">нельзя</strong>.
+      При решении задач открыть её на телефоне не получится — надо пользоваться тетрадью.
+    </p>
+    <div class="grid grid-cols-2 gap-3 mt-6">
+      <button class="btn-ghost" onclick="closeConfirm()">Отмена</button>
+      <button class="btn-primary" onclick="confirmStart()">Да, начать</button>
+    </div>
+    <p class="text-center text-xs text-slate-500 mt-4">это демо — на проде тут будет переход к домашке</p>
+  </div>
+</div>
+
+
+<!-- ─────────────────────── FOOTER ─────────────────────── -->
+<footer class="py-12 border-t border-white/5">
+  <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-3 text-sm text-slate-500">
+    <div>palomatika · 2026 · концепт домашки</div>
+    <div class="flex items-center gap-4">
+      <a href="https://palomatika.ru" target="_blank" class="hover:text-slate-300 transition">palomatika.ru</a>
+      <span>·</span>
+      <a href="http://78.17.28.40/proto/" target="_blank" class="hover:text-slate-300 transition">прототип</a>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  // ─────────────── 1. TOPIC ROTATOR (assign section) ───────────────
+  const topics = [
+    {
+      title: 'Окружность',
+      skills: ['Центральный угол', 'Вписанный угол', 'Угол, опирающийся на диаметр', 'Хорда и касательная'],
+    },
+    {
+      title: 'Уравнения',
+      skills: ['Линейные уравнения', 'Квадратные уравнения', 'Дробно-рациональные', 'Системы уравнений'],
+    },
+    {
+      title: 'Теория вероятностей',
+      skills: ['Простые события', 'Сумма событий', 'Произведение независимых', 'Условная вероятность'],
+    },
+  ];
+
+  const skillList = document.getElementById('skillList');
+  const topicNodes = document.querySelectorAll('[data-topic]');
+  let topicIdx = 0;
+
+  function renderSkills(idx) {
+    skillList.innerHTML = topics[idx].skills
+      .map((s, i) => `<li class="${i < 2 ? 'is-on' : ''}">${s}</li>`)
+      .join('');
+  }
+
+  function setActiveTopic(idx) {
+    topicIdx = idx;
+    topicNodes.forEach((n, i) => {
+      n.classList.toggle('is-active', i === idx);
+      n.classList.toggle('is-dim',    i !== idx);
+    });
+    // connector lines
+    [0, 1, 2].forEach(i => {
+      const inLine  = document.getElementById(`c-${i}-in`);
+      const outLine = document.getElementById(`c-${i}-out`);
+      if (inLine)  inLine.classList.toggle('is-active', i === idx);
+      if (outLine) outLine.classList.toggle('is-active', i === idx);
+    });
+    renderSkills(idx);
+  }
+
+  renderSkills(0);
+
+  let topicTimer = setInterval(() => {
+    setActiveTopic((topicIdx + 1) % topics.length);
+  }, 2400);
+
+  // also clickable
+  topicNodes.forEach((n, i) => {
+    n.addEventListener('click', () => {
+      clearInterval(topicTimer);
+      setActiveTopic(i);
+      // restart cycle after pause
+      topicTimer = setInterval(() => setActiveTopic((topicIdx + 1) % topics.length), 2400);
+    });
+    n.style.cursor = 'pointer';
+  });
+
+
+  // ─────────────── 2. STUDENT STAGE ROTATOR ───────────────
+  const stages = document.querySelectorAll('[data-stage]');
+  const stateChip  = document.getElementById('stateChip');
+  const stateTitle = document.getElementById('stateTitle');
+  const stateBody  = document.getElementById('stateBody');
+  const stateRule  = document.getElementById('stateRule');
+  let stageIdx = 0;
+
+  const stageInfo = [
+    {
+      chip: 'шаг 1 из 3',
+      title: 'Сейчас — методичка',
+      body: 'Ученик читает справочный материал и переписывает его в тетрадь. Задания и отправка пока заблокированы — их откроет только подтверждение «методичку переписал».',
+      rule: '<span class="text-amber-300 font-semibold">Правило:</span> движение только вперёд. Открыл следующий шаг — предыдущий закрылся навсегда.',
+    },
+    {
+      chip: 'шаг 2 из 3',
+      title: 'Сейчас — задания',
+      body: 'Методичка осталась позади и больше не откроется. Решение — в тетради, с опорой на переписанную теорию. В приложение вбивается только ответ.',
+      rule: '<span class="text-rose-300 font-semibold">Назад нельзя:</span> методичка закрыта. Загляни в тетрадь — всё уже там.',
+    },
+    {
+      chip: 'шаг 3 из 3',
+      title: 'Сейчас — отправка результатов',
+      body: 'Финальный шаг. Ученик прикрепляет фото тетради, где видно и переписанную методичку, и сами решения. Без фото отправить нельзя.',
+      rule: '<span class="text-emerald-300 font-semibold">Контракт:</span> фото с тетрадью — единственный способ закрыть ДЗ.',
+    },
+  ];
+
+  function setStage(idx) {
+    stageIdx = idx;
+    stages.forEach((s, i) => {
+      s.classList.toggle('is-active', i === idx);
+      s.classList.toggle('is-locked', i !== idx);
+    });
+    const info = stageInfo[idx];
+    stateChip.textContent  = info.chip;
+    stateTitle.textContent = info.title;
+    stateBody.textContent  = info.body;
+    stateRule.innerHTML    = info.rule;
+  }
+
+  let stageTimer = setInterval(() => setStage((stageIdx + 1) % stages.length), 3000);
+
+  stages.forEach((s, i) => {
+    s.addEventListener('click', () => {
+      clearInterval(stageTimer);
+      setStage(i);
+      stageTimer = setInterval(() => setStage((stageIdx + 1) % stages.length), 3000);
+    });
+    s.style.cursor = 'pointer';
+  });
+
+
+  // ─────────────── 3. ANSWER MECHANIC ───────────────
+  const CORRECT = '30';
+  let attempts = 0; // 0, 1, 2
+  let locked = false;
+
+  const ansInput = document.getElementById('ansInput');
+  const ansBtn   = document.getElementById('ansBtn');
+  const feedback = document.getElementById('feedback');
+  const pip1 = document.getElementById('pip-1');
+  const pip2 = document.getElementById('pip-2');
+
+  function showFeedback(kind, text) {
+    feedback.className = 'mt-4 feedback fade-in';
+    if (kind === 'ok')    feedback.classList.add('feedback-ok');
+    if (kind === 'retry') feedback.classList.add('feedback-retry');
+    if (kind === 'final') feedback.classList.add('feedback-final');
+    feedback.innerHTML = text;
+  }
+
+  function normalize(s) {
+    return (s || '').toString().trim().replace(',', '.').toLowerCase();
+  }
+
+  function checkAnswer() {
+    if (locked) return;
+    const val = normalize(ansInput.value);
+    if (!val) {
+      ansInput.focus();
+      return;
+    }
+    const ok = (val === CORRECT);
+    if (ok) {
+      ansInput.classList.remove('is-err'); ansInput.classList.add('is-ok');
+      showFeedback('ok', '<span>✅</span><div><strong>Верно!</strong> Ответ зачтён. Идём дальше.</div>');
+      // mark current attempt slot as ok
+      (attempts === 0 ? pip1 : pip2).classList.add('used-ok');
+      locked = true;
+      ansBtn.disabled = true;
+      return;
+    }
+    // wrong
+    attempts += 1;
+    ansInput.classList.remove('is-ok'); ansInput.classList.add('is-err');
+    (attempts === 1 ? pip1 : pip2).classList.add('used-err');
+
+    if (attempts === 1) {
+      showFeedback('retry',
+        '<span>↻</span><div><strong>Не сошлось.</strong> У вас есть ещё одна попытка ввести ответ.</div>');
+      setTimeout(() => {
+        ansInput.classList.remove('is-err');
+        ansInput.value = '';
+        ansInput.focus();
+      }, 700);
+    } else {
+      showFeedback('final',
+        '<span>→</span><div><strong>Иди дальше.</strong> На уроке разберём это вместе с учителем.</div>');
+      locked = true;
+      ansBtn.disabled = true;
+    }
+  }
+
+  function resetAnswer() {
+    attempts = 0;
+    locked = false;
+    ansInput.value = '';
+    ansInput.classList.remove('is-ok', 'is-err');
+    ansBtn.disabled = false;
+    feedback.className = 'mt-4 hide';
+    feedback.innerHTML = '';
+    pip1.className = 'attempt-pip'; pip1.id = 'pip-1';
+    pip2.className = 'attempt-pip'; pip2.id = 'pip-2';
+    ansInput.focus();
+  }
+
+  ansInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); checkAnswer(); }
+  });
+
+
+  // ─────────────── 4. CONFIRM MODAL (methodichka → задания) ───────────────
+  const modal = document.getElementById('confirmModal');
+  function openConfirm() { modal.classList.remove('hide'); document.body.style.overflow = 'hidden'; }
+  function closeConfirm() { modal.classList.add('hide'); document.body.style.overflow = ''; }
+  function confirmStart() {
+    closeConfirm();
+    // scroll to the tasks demo
+    const target = document.querySelector('#demo .demo-label .demo-step');
+    // find the 2nd demo-label
+    const demoLabels = document.querySelectorAll('#demo .demo-label');
+    if (demoLabels[1]) demoLabels[1].scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeConfirm(); });
+
+
+  // ─────────────── 5. PHOTO UPLOAD MOCK (notebook pages) ───────────────
+  let photoCount = 0;
+  const photoGrid = document.getElementById('photoGrid');
+  const addPhotoBtn = document.getElementById('addPhotoBtn');
+  const photoCounter = document.getElementById('photoCounter');
+  const submitBtn = document.getElementById('submitBtn');
+  const submitHint = document.getElementById('submitHint');
+  const submitOk = document.getElementById('submitOk');
+
+  function addPhoto() {
+    photoCount += 1;
+    const tile = document.createElement('div');
+    tile.className = 'photo-tile relative aspect-[3/4] rounded-xl overflow-hidden border border-emerald-500/40 bg-gradient-to-br from-slate-700 via-slate-800 to-slate-900 fade-in';
+    tile.innerHTML = `
+      <div class="absolute inset-0 grid place-items-center text-slate-400">
+        <div class="text-center">
+          <div class="text-4xl">📄</div>
+          <div class="text-xs mt-1 font-mono">стр. ${photoCount}</div>
+        </div>
+      </div>
+      <button type="button" onclick="removePhoto(this)" aria-label="убрать фото"
+              class="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-ink-950/80 border border-white/15
+                     text-slate-300 text-xs grid place-items-center hover:bg-rose-500/30 hover:text-rose-200 transition">✕</button>
+    `;
+    photoGrid.insertBefore(tile, addPhotoBtn);
+    updateSubmit();
+  }
+
+  function removePhoto(btn) {
+    btn.closest('.photo-tile').remove();
+    // re-number remaining tiles
+    const tiles = photoGrid.querySelectorAll('.photo-tile');
+    photoCount = tiles.length;
+    tiles.forEach((t, i) => {
+      const lbl = t.querySelector('.font-mono');
+      if (lbl) lbl.textContent = `стр. ${i + 1}`;
+    });
+    updateSubmit();
+  }
+
+  function updateSubmit() {
+    photoCounter.textContent = photoCount === 0
+      ? '0 фото'
+      : photoCount + ' фото';
+    const ready = photoCount >= 1;
+    submitBtn.disabled = !ready;
+    if (ready) { submitHint.classList.add('hide'); submitOk.classList.remove('hide'); }
+    else       { submitHint.classList.remove('hide'); submitOk.classList.add('hide'); }
+  }
+</script>
+
+</body>
+</html>
