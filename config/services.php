@@ -72,6 +72,16 @@ return [
         'parent_bot_token' => env('TELEGRAM_PARENT_BOT_TOKEN'),
         // Chat ID для уведомлений об ошибках (баг-репорты)
         'admin_chat_id' => env('TELEGRAM_ADMIN_CHAT_ID', '245710727'),
+        // Telegram OAuth 2.0 / OpenID Connect (новый веб-логин)
+        'oidc' => [
+            'client_id'     => env('TELEGRAM_OIDC_CLIENT_ID', '8047450650'),
+            'client_secret' => env('TELEGRAM_OIDC_CLIENT_SECRET'),
+            'redirect'      => env('TELEGRAM_OIDC_REDIRECT', 'https://palomatika.ru/auth/telegram/callback'),
+            'authorize_url' => 'https://oauth.telegram.org/auth',
+            'token_url'     => 'https://oauth.telegram.org/token',
+            'jwks_url'      => 'https://oauth.telegram.org/.well-known/jwks.json',
+            'issuer'        => 'https://oauth.telegram.org',
+        ],
     ],
 
     /*
