@@ -30,6 +30,7 @@ yarn-error.log
 *.zip
 
 # Local tooling and scratch artifacts
+/.codex
 /.codex/
 /.codex-tmp/
 /.venv/
@@ -38,3 +39,25 @@ yarn-error.log
 /public/debug-*.php
 /scripts/__pycache__/
 public/qa-report.html
+
+# Large local source dump / extraction scratch (not for repo)
+/chekhov-src/
+
+# Playwright / test runner artifacts
+/test-results/
+
+# Local QA screenshot reports (generated, not source)
+/public/class-mini-report.html
+/public/class-mini-report-assets/
+/public/proxy/class-mini-report.html
+/public/proxy/class-mini-report-assets/
+/public/qa-reports/class-mini-report.html
+/public/qa-reports/class-mini-report-assets/
+/public/qa-reports/prod-smoke.html
+/public/qa-reports/prod-smoke.json
+
+# Generated report JSONs from scripts (классификационные *-classification.json — оставляем)
+/scripts/gen-ab-report.json
+/scripts/minimax-test-report.json
+/scripts/minimax-vision-report.json
+/scripts/minimax-vlm-report.json
