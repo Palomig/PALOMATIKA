@@ -21,6 +21,7 @@ use App\Services\OgeAttemptService;
 use App\Services\StudentExamAccessService;
 use App\Services\OgeVariantBuilderService;
 use App\Services\OgeVariantPoolService;
+use App\Services\TaskAnswerResolver;
 use App\Services\TaskDataService;
 use App\Services\VariantTaskNumberResolver;
 use App\Services\VprTaskDataService;
@@ -44,6 +45,7 @@ class StudentController extends Controller
         private readonly TaskDataService $taskData,
         private readonly MiniAppTaskCanonicalizer $taskCanonicalizer,
         private readonly MiniAppTaskSanitizer $taskSanitizer,
+        private readonly TaskAnswerResolver $answerResolver,
     ) {}
 
     private function base(): string
@@ -964,7 +966,10 @@ class StudentController extends Controller
             ->orderByDesc('submitted_at')
             ->limit(50);
 
-        if ($viewer?->role === 'student') {
+        // История = прошлые попытки. Свою историю ученик видит всегда, независимо
+        // от текущего класса (иначе после grades:promote 9→10/11→12 вся история
+        // прячется через access-scope). Гейтим только просмотр ЧУЖОЙ истории.
+        if ($viewer?->role === 'student' && (int) $viewer->id !== (int) $student->id) {
             $this->examAccess->applyAttemptAccessScope($attemptsQuery, $viewer);
         }
 
@@ -1005,7 +1010,9 @@ class StudentController extends Controller
             ])
             ->when($studentId !== null, fn ($query) => $query->where('student_id', $studentId));
 
-        if ($viewer?->role === 'student') {
+        // Свою попытку ученик открывает всегда (см. buildHistoryListForStudent):
+        // access-scope не должен прятать историю после перевода в следующий класс.
+        if ($viewer?->role === 'student' && $studentId !== null && (int) $studentId !== (int) $viewer->id) {
             $this->examAccess->applyAttemptAccessScope($query, $viewer);
         }
 
@@ -1258,9 +1265,9 @@ class StudentController extends Controller
 
     private function homeworkAnswerMatches(?string $correctAnswer, string $answer): bool
     {
-        $normalize = static fn (?string $value): string => preg_replace('/\s+/u', '', mb_strtolower(trim((string) $value)));
-
-        return $normalize($correctAnswer) === $normalize($answer);
+        // Единая нормализация ответов (запятая↔точка, дроби, целые с нулями и т.п.),
+        // как в основном скоринге попыток — иначе «0,9» не совпадает с «0.9».
+        return $this->answerResolver->isCorrect($answer, $correctAnswer) === true;
     }
 
     private function refreshTopicHomeworkProgress(HomeworkAssignment $assignment): void
@@ -1299,6 +1306,8 @@ class StudentController extends Controller
             'referralCount' => $referralCount,
             'isPremium'     => true,
             'trialUsed'     => true,
+            // Выплаты (teacher_payouts) дропнуты в #44/#49 — pending-заявок не бывает.
+            'pendingPayout' => false,
         ]);
     }
 

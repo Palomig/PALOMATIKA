@@ -571,37 +571,60 @@ class TeacherController extends Controller
             return back()->with('success', 'ДЗ выдано!');
         }
 
-        // mini_variant
-        $studentId = (int) $studentIds->first();
-        $student = User::findOrFail($studentId);
+        // mini_variant: каждый ученик получает свой вариант — мини-ВПР подбирается
+        // по классу ученика, а getOrCreateVariant генерирует вариант per-student,
+        // поэтому на каждого выбранного создаём отдельный Homework + assignment.
+        $students = User::whereIn('id', $studentIds)->get()->keyBy('id');
+        $assignedCount = 0;
+        $failed = [];
 
-        try {
-            if ($this->isVprGrade($student)) {
-                $grade = (int) $student->grade_num;
-                $pool = $this->buildVprPool($grade);
-                $variant = $pool->getOrCreateVariant($student, 'mixed');
-                $title = "Мини-ВПР {$grade} класс";
-                $success = "Мини-ВПР {$grade} класс выдан!";
-            } else {
-                $variant = $this->poolService->getOrCreateVariant($student, 'mixed');
-                $title = 'Мини-вариант ОГЭ';
-                $success = 'Мини-вариант выдан!';
+        foreach ($studentIds as $studentId) {
+            $student = $students->get($studentId);
+            if (!$student) {
+                continue;
             }
-        } catch (\RuntimeException $e) {
-            return back()->with('error', 'Не удалось создать мини-вариант: ' . $e->getMessage());
+
+            try {
+                if ($this->isVprGrade($student)) {
+                    $grade = (int) $student->grade_num;
+                    $pool = $this->buildVprPool($grade);
+                    $variant = $pool->getOrCreateVariant($student, 'mixed');
+                    $title = "Мини-ВПР {$grade} класс";
+                } else {
+                    $variant = $this->poolService->getOrCreateVariant($student, 'mixed');
+                    $title = 'Мини-вариант ОГЭ';
+                }
+            } catch (\RuntimeException $e) {
+                $failed[] = $student->name;
+                continue;
+            }
+
+            $homework = new \App\Models\Homework();
+            $homework->teacher_id = $user->id;
+            $homework->homework_type = 'full_variant';
+            $homework->variant_hash = $variant->hash;
+            $homework->title = $title;
+            $homework->assigned_at = now();
+            $homework->save();
+
+            \App\Models\HomeworkAssignment::create([
+                'homework_id' => $homework->id,
+                'student_id' => $studentId,
+                'status' => 'assigned',
+            ]);
+            $assignedCount++;
         }
 
-        $homework = new \App\Models\Homework();
-        $homework->teacher_id = $user->id;
-        $homework->homework_type = 'full_variant';
-        $homework->variant_hash = $variant->hash;
-        $homework->title = $title;
-        $homework->assigned_at = now();
-        $homework->save();
+        if ($assignedCount === 0) {
+            return back()->with('error', 'Не удалось создать мини-вариант' . ($failed ? ': ' . implode(', ', $failed) : '.'));
+        }
 
-        \App\Models\HomeworkAssignment::create(['homework_id' => $homework->id, 'student_id' => $studentId, 'status' => 'assigned']);
+        $message = $assignedCount === 1 ? 'Мини-вариант выдан!' : "Мини-вариант выдан ({$assignedCount}).";
+        if ($failed) {
+            $message .= ' Не удалось для: ' . implode(', ', $failed) . '.';
+        }
 
-        return back()->with('success', $success);
+        return back()->with('success', $message);
     }
 
     private function isVprGrade(User $student): bool
