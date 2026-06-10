@@ -52,8 +52,15 @@ class TelegramOidcService
 
         $cfg = config('services.telegram.oidc');
 
+        $clientId     = (string) ($cfg['client_id'] ?? '');
+        $clientSecret = (string) ($cfg['client_secret'] ?? '');
+        if ($clientSecret === '') {
+            // Защита от TypeError и понятный диагноз: секрет не прокинут в конфиг на сервере.
+            throw new TelegramOidcException('OIDC client_secret missing on server (проверь .env + config:clear)');
+        }
+
         $resp = Http::asForm()
-            ->withBasicAuth($cfg['client_id'], $cfg['client_secret'])
+            ->withBasicAuth($clientId, $clientSecret)
             ->post($cfg['token_url'], [
                 'grant_type'    => 'authorization_code',
                 'code'          => $code,
@@ -62,7 +69,8 @@ class TelegramOidcService
             ]);
 
         if (!$resp->ok() || !$resp->json('id_token')) {
-            throw new TelegramOidcException('Token endpoint error: ' . $resp->status());
+            // В reason кладём статус + тело ответа Telegram (invalid_client / invalid_grant и т.п.).
+            throw new TelegramOidcException('Token endpoint error: ' . $resp->status() . ' ' . mb_substr((string) $resp->body(), 0, 160));
         }
         $idToken = (string) $resp->json('id_token');
 
