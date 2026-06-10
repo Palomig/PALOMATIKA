@@ -40,16 +40,23 @@ class TelegramOidcController extends Controller
                 (string) session('tg_oidc.verifier'),
                 (string) session('tg_oidc.nonce'),
             );
+
+            $user = $this->resolver->resolve([
+                'id'       => $claims['sub'],
+                'username' => $claims['preferred_username'] ?? null,
+                'name'     => $claims['name'] ?? null,
+                'photo'    => $claims['picture'] ?? null,
+            ]);
         } catch (TelegramOidcException $e) {
             return $this->fail($request, $e->getMessage());
+        } catch (\Throwable $e) {
+            // Любая неожиданная ошибка — не отдаём 500, логируем класс+сообщение и мягко возвращаем.
+            \Illuminate\Support\Facades\Log::error('Telegram OIDC callback failed', [
+                'exception' => get_class($e),
+                'message'   => $e->getMessage(),
+            ]);
+            return $this->fail($request, 'unexpected:' . class_basename($e));
         }
-
-        $user = $this->resolver->resolve([
-            'id'       => $claims['sub'],
-            'username' => $claims['preferred_username'] ?? null,
-            'name'     => $claims['name'] ?? null,
-            'photo'    => $claims['picture'] ?? null,
-        ]);
 
         $origin = session('tg_oidc.origin', 'main');
         $request->session()->forget(['tg_oidc.state', 'tg_oidc.nonce', 'tg_oidc.verifier', 'tg_oidc.origin']);

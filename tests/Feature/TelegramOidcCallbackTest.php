@@ -63,6 +63,24 @@ class TelegramOidcCallbackTest extends TestCase
         $this->assertSame('testov', $claims['preferred_username']);
     }
 
+    public function test_skips_unsupported_jwks_keys_and_still_verifies_rsa(): void
+    {
+        // JWKS Telegram содержит ключи разных алгоритмов. Неподдерживаемый/битый ключ
+        // не должен ронять весь набор (на проде это давало 500) — он пропускается,
+        // а RS256-ключ всё равно используется для проверки подписи.
+        $jwks = $this->rsa['jwks'];
+        array_unshift($jwks['keys'], ['kty' => 'OKP', 'crv' => 'Ed25519', 'kid' => 'bad-eddsa', 'alg' => 'EdDSA', 'x' => '!!!not-valid-base64!!!']);
+        $jwks['keys'][] = ['kty' => 'WEIRD', 'kid' => 'unknown-kty', 'alg' => 'XX256'];
+
+        Http::fake([
+            'oauth.telegram.org/token' => Http::response(['id_token' => $this->makeIdToken()], 200),
+            'oauth.telegram.org/.well-known/jwks.json' => Http::response($jwks, 200),
+        ]);
+
+        $claims = app(TelegramOidcService::class)->exchangeAndVerify('the-code', 'v', 'NONCE');
+        $this->assertSame('424242', (string) $claims['sub']);
+    }
+
     public function test_rejects_wrong_nonce(): void
     {
         Http::fake([
