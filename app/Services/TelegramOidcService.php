@@ -108,6 +108,37 @@ class TelegramOidcService
             }
             return $r->json();
         });
-        return JWK::parseKeySet($raw);
+
+        // JWKS Telegram содержит ключи разных алгоритмов (RS256, ES256, EdDSA, ES256K).
+        // Парсим КАЖДЫЙ ключ отдельно и пропускаем те, что среда не поддерживает
+        // (например EdDSA/secp256k1 без ext-sodium), иначе один неподдерживаемый ключ
+        // ронял бы весь набор и давал 500. id_token подписан RS256-ключом (oidc-1).
+        $keys = [];
+        foreach (($raw['keys'] ?? []) as $jwk) {
+            $kid = $jwk['kid'] ?? null;
+            if ($kid === null) {
+                continue;
+            }
+            try {
+                if (method_exists(JWK::class, 'parseKey')) {
+                    $key = JWK::parseKey($jwk, $jwk['alg'] ?? null);
+                    if ($key !== null) {
+                        $keys[$kid] = $key;
+                    }
+                } elseif (($jwk['kty'] ?? null) === 'RSA') {
+                    // Старые версии firebase/php-jwt без parseKey() — только RSA.
+                    $keys += JWK::parseKeySet(['keys' => [$jwk]]);
+                }
+            } catch (\Throwable $e) {
+                // Неподдерживаемый/битый ключ — пропускаем, остальные используем.
+                continue;
+            }
+        }
+
+        if ($keys === []) {
+            throw new TelegramOidcException('No usable JWKS keys');
+        }
+
+        return $keys;
     }
 }
