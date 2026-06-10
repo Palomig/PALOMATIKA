@@ -172,57 +172,11 @@ class TelegramMiniAppAuthService
      */
     public function findOrCreateUser(array $telegramUser): User
     {
-        $telegramId = (string) ($telegramUser['id'] ?? '');
-        if ($telegramId === '') {
-            throw new \InvalidArgumentException('Missing Telegram user id');
-        }
-
-        $user = User::where('oauth_provider', 'telegram')
-            ->where('oauth_id', $telegramId)
-            ->first();
-
-        $tgUsername = $this->normalizeTelegramUsername($telegramUser['username'] ?? null);
-        $avatar = $this->normalizeAvatarUrl($telegramUser['photo_url'] ?? null);
-
-        if ($user) {
-            $updates = [];
-            if ($tgUsername !== null && $user->tg_username !== $tgUsername) {
-                $updates['tg_username'] = $tgUsername;
-            }
-            if ($updates !== []) {
-                $user->update($updates);
-            }
-            return $user;
-        }
-
-        $legacyUser = User::whereNull('oauth_provider')
-            ->where('oauth_id', $telegramId)
-            ->orderBy('id')
-            ->first();
-
-        if ($legacyUser) {
-            $updates = ['oauth_provider' => 'telegram'];
-            if ($tgUsername !== null && $legacyUser->tg_username !== $tgUsername) {
-                $updates['tg_username'] = $tgUsername;
-            }
-            if ($avatar !== null && $legacyUser->avatar !== $avatar) {
-                $updates['avatar'] = $avatar;
-            }
-
-            $legacyUser->update($updates);
-
-            return $legacyUser;
-        }
-
-        $name = $this->normalizeDisplayName($telegramUser);
-
-        return User::create([
-            'name' => $name,
-            'oauth_provider' => 'telegram',
-            'oauth_id' => $telegramId,
-            'tg_username' => $tgUsername,
-            'avatar' => $avatar,
-            'trial_ends_at' => now()->addDays(7),
+        return app(\App\Services\TelegramIdentityResolver::class)->resolve([
+            'id'       => $telegramUser['id'] ?? '',
+            'username' => $telegramUser['username'] ?? null,
+            'name'     => $this->normalizeDisplayName($telegramUser),
+            'photo'    => $telegramUser['photo_url'] ?? null,
         ]);
     }
 

@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class TelegramBotAuthController extends Controller
 {
@@ -67,118 +66,6 @@ class TelegramBotAuthController extends Controller
         private readonly OgeVariantPoolService $variantPool,
         private readonly TelegramMiniAppAuthService $tgMiniAuth,
     ) {
-    }
-
-    /**
-     * Generate a new auth token and return deep link
-     */
-    public function generateToken(Request $request)
-    {
-        $traceId = trim((string) $request->input('trace_id', ''));
-        if ($traceId === '') {
-            $traceId = trim((string) $request->query('trace_id', ''));
-        }
-
-        $startParam = trim((string) $request->input('startParam', ''));
-        if ($startParam === '' && $request->hasSession()) {
-            $startParam = trim((string) $request->session()->get('telegram_start_param', ''));
-        }
-
-        // Clean up expired tokens
-        TelegramAuthToken::where('expires_at', '<', now())->delete();
-
-        // Generate unique token
-        $token = Str::random(32);
-
-        TelegramAuthToken::create([
-            'token' => $token,
-            'status' => 'pending',
-            'expires_at' => now()->addMinutes(5),
-        ]);
-
-        if ($startParam !== '') {
-            Cache::put($this->startParamCacheKey($token), $startParam, now()->addMinutes(10));
-        }
-
-        // PWA context: store redirect subdomain so login() knows where to send the user
-        $pwaRedirect = trim((string) $request->input('pwa_redirect', ''));
-        if (in_array($pwaRedirect, ['student', 'teacher'], true)) {
-            Cache::put('tg_auth_pwa_redirect:' . $token, $pwaRedirect, now()->addMinutes(10));
-        }
-
-        $botUsername = config('services.telegram.bot_username');
-        $deepLink = "https://t.me/{$botUsername}?start={$token}";
-
-        Log::info('tg_auth_fallback_token_created', [
-            'trace_id' => $traceId !== '' ? $traceId : null,
-            'token' => $token,
-            'ip' => $request->ip(),
-            'ua' => $request->userAgent(),
-            'has_startParam' => $startParam !== '',
-        ]);
-
-        return response()->json([
-            'token' => $token,
-            'deep_link' => $deepLink,
-            'expires_in' => 300, // 5 minutes
-            'trace_id' => $traceId !== '' ? $traceId : null,
-        ]);
-    }
-
-    /**
-     * Check auth token status (API - just returns status, no login)
-     */
-    public function checkToken(Request $request, string $token)
-    {
-        $traceId = trim((string) $request->query('trace_id', ''));
-
-        $authToken = TelegramAuthToken::where('token', $token)->first();
-
-        if (!$authToken) {
-            Log::warning('tg_auth_check_not_found', [
-                'trace_id' => $traceId !== '' ? $traceId : null,
-                'token' => $token,
-                'ip' => $request->ip(),
-            ]);
-            return response()->json(['status' => 'not_found']);
-        }
-
-        if ($authToken->isExpired()) {
-            Log::warning('tg_auth_check_expired', [
-                'trace_id' => $traceId !== '' ? $traceId : null,
-                'token' => $token,
-                'ip' => $request->ip(),
-            ]);
-            return response()->json(['status' => 'expired']);
-        }
-
-        if ($authToken->isAuthenticated()) {
-            // Return authenticated status with login URL
-            // Frontend will redirect to this URL for actual login
-            $loginUrl = route('telegram.login', ['token' => $token]);
-            $startParam = Cache::get($this->startParamCacheKey($token));
-            if (is_string($startParam) && $startParam !== '') {
-                $separator = str_contains($loginUrl, '?') ? '&' : '?';
-                $loginUrl .= $separator . 'startapp=' . rawurlencode($startParam);
-            }
-            if ($traceId !== '') {
-                $separator = str_contains($loginUrl, '?') ? '&' : '?';
-                $loginUrl .= $separator . 'trace_id=' . rawurlencode($traceId);
-            }
-
-            Log::info('tg_auth_check_authenticated', [
-                'trace_id' => $traceId !== '' ? $traceId : null,
-                'token' => $token,
-                'ip' => $request->ip(),
-            ]);
-
-            return response()->json([
-                'status' => 'authenticated',
-                'login_url' => $loginUrl,
-            ]);
-        }
-
-        return response()->json(['status' => 'pending']);
     }
 
     /**
@@ -337,100 +224,6 @@ class TelegramBotAuthController extends Controller
             'user_id' => $user->id,
             'trace_id' => $traceId !== '' ? $traceId : null,
         ]);
-    }
-
-    /**
-     * Perform actual login (Web route with session)
-     */
-    public function login(Request $request, string $token)
-    {
-        $traceId = trim((string) $request->query('trace_id', ''));
-
-        $authToken = TelegramAuthToken::where('token', $token)
-            ->where('status', 'authenticated')
-            ->first();
-
-        if (!$authToken || $authToken->isExpired()) {
-            // Determine specific failure reason for diagnostics
-            $failureReason = match (true) {
-                $authToken === null => 'not_found',
-                $authToken->isExpired() => 'expired',
-                default => 'invalid_status',
-            };
-
-            Log::warning('tg_token_login_failed', [
-                'trace_id' => $traceId !== '' ? $traceId : null,
-                'token' => $token,
-                'reason' => $failureReason,
-                'ip' => $request->ip(),
-                'ua' => $request->userAgent(),
-            ]);
-
-            $this->auditLogger->log([
-                'event_type' => 'telegram_token_login_failed',
-                'category' => 'auth',
-                'severity' => 'warning',
-                'subject_type' => 'telegram_token',
-                'subject_id' => $token,
-                'ip' => request()->ip(),
-                'user_agent' => request()->userAgent(),
-                'payload_json' => ['reason' => $failureReason, 'trace_id' => $traceId !== '' ? $traceId : null],
-            ]);
-            return redirect()->to('/tg')
-                ->with('error', 'Сессия авторизации истекла. Попробуйте снова.');
-        }
-
-        // Create or find user
-        $user = $this->findOrCreateUser($authToken);
-
-        // Mark token as used
-        $authToken->update(['status' => 'used']);
-
-        // Log in the user with session
-        Auth::login($user, true);
-
-        $startParam = trim((string) request()->query('startapp', ''));
-        if ($startParam === '') {
-            $cachedStartParam = Cache::get($this->startParamCacheKey($token));
-            if (is_string($cachedStartParam)) {
-                $startParam = trim($cachedStartParam);
-            }
-        }
-        if ($startParam === '') {
-            $startParam = trim((string) request()->session()->get('telegram_start_param', ''));
-        }
-
-        Cache::forget($this->startParamCacheKey($token));
-        request()->session()->forget('telegram_start_param');
-
-        // Auto-link referrals (sets referred_by_user_id + teacher_students when applicable)
-        $this->tgMiniAuth->linkReferralFromStartParam($user, $startParam);
-
-        $this->auditLogger->log([
-            'event_type' => 'telegram_token_login_success',
-            'category' => 'auth',
-            'severity' => 'info',
-            'actor_user_id' => $user->id,
-            'actor_role' => $user->role,
-            'subject_type' => 'telegram_token',
-            'subject_id' => $token,
-            'ip' => request()->ip(),
-            'user_agent' => request()->userAgent(),
-        ]);
-
-        // Drop any stale pwa redirect context — unified Mini App always lands on PWA subdomain.
-        Cache::forget('tg_auth_pwa_redirect:' . $token);
-
-        $fallbackRedirect = $this->tgMiniAuth->pwaLandingUrl($user, $startParam !== '' ? $startParam : null);
-
-        Log::info('tg_token_login_success', [
-            'trace_id' => $traceId !== '' ? $traceId : null,
-            'token' => $token,
-            'user_id' => $user->id,
-            'redirect_to' => $fallbackRedirect,
-        ]);
-
-        return redirect()->to($fallbackRedirect);
     }
 
     /**
@@ -759,20 +552,6 @@ class TelegramBotAuthController extends Controller
                 'error' => $e->getMessage(),
             ]);
         }
-    }
-
-    /**
-     * Find or create user from auth token data
-     */
-    private function findOrCreateUser(TelegramAuthToken $authToken): User
-    {
-        return $this->findOrCreateTelegramUserFromProfile([
-            'id' => $authToken->telegram_id,
-            'first_name' => $authToken->first_name,
-            'last_name' => $authToken->last_name,
-            'username' => $authToken->username,
-            'photo_url' => $authToken->photo_url,
-        ]);
     }
 
     /**

@@ -191,18 +191,6 @@ class TelegramWebAppAuthTest extends TestCase
         $this->assertGuest();
     }
 
-    public function test_generate_token_fallback_flow_is_unaffected(): void
-    {
-        $response = $this->postJson('/api/telegram/generate-token');
-
-        $response
-            ->assertOk()
-            ->assertJsonStructure(['token', 'deep_link', 'expires_in'])
-            ->assertJsonPath('expires_in', 300);
-
-        $this->assertStringStartsWith('https://t.me/palomatika_test_bot?start=', (string) $response->json('deep_link'));
-    }
-
     private function makeSignedInitData(array $payload): string
     {
         $normalized = [];

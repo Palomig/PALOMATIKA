@@ -20,9 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/register', [AuthController::class, 'register']);
 
-// Telegram Bot Auth (deep link flow)
-Route::post('/telegram/generate-token', [TelegramBotAuthController::class, 'generateToken']);
-Route::get('/telegram/check-token/{token}', [TelegramBotAuthController::class, 'checkToken']);
+// Telegram Bot Auth
 Route::get('/telegram/session-check', [TelegramBotAuthController::class, 'sessionCheck'])->middleware('web');
 Route::post('/telegram/diag', [TelegramBotAuthController::class, 'diag']);
 

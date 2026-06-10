@@ -19,6 +19,14 @@
     <div class="sec-label" style="margin-bottom:16px;">Войти через</div>
     <div style="display:flex;flex-direction:column;gap:10px;">
 
+      {{-- Telegram (основной способ, OIDC redirect) --}}
+      <a href="https://{{ config('app.base_domain') }}/auth/telegram/redirect?origin={{ $context }}"
+        class="btn btn-left"
+        style="background:#229ED9;border-color:#229ED9;color:#fff;font-weight:600;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248-2.04 9.613c-.154.683-.554.85-1.123.528l-3.1-2.285-1.496 1.44c-.165.165-.305.305-.625.305l.223-3.168 5.77-5.213c.25-.222-.055-.346-.39-.124L7.19 14.447l-3.04-.952c-.662-.207-.674-.662.138-.979l11.87-4.576c.552-.2 1.035.134.404.308z"/></svg>
+        Войти через Telegram
+      </a>
+
       {{-- Yandex --}}
       <a href="/auth/yandex" class="btn btn-surface btn-left">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="#FC3F1D"><path d="M2.04 12c0-5.523 4.476-10 9.998-10C17.522 2 22 6.477 22 12s-4.478 10-9.962 10C6.516 22 2.04 17.523 2.04 12zm11.07 4.888V7.07h1.41c1.547 0 2.434.81 2.434 2.212 0 1.017-.51 1.742-1.412 2.04l1.951 5.566h-1.68l-1.74-5.13h-.644v5.13h-1.32z"/></svg>
