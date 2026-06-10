@@ -38,3 +38,15 @@ yarn-error.log
 /public/debug-*.php
 /scripts/__pycache__/
 public/qa-report.html
+
+# Скретч/одноразовые артефакты разработки (не коммитить в корень)
+/*.py
+/qa-runner*.mjs
+/duo-dialog-*/
+/SmartCart/
+/CLAUDE_PLAN*.md
+/BUGFIX_SPEC.md
+/DUO_SHARED_AUTH.md
+/MODEL_DIALOG_AUTH*.md
+/tmp_*.md
+/topic*_preview.html
