@@ -81,6 +81,14 @@ class TelegramOidcCallbackTest extends TestCase
         $this->assertSame('424242', (string) $claims['sub']);
     }
 
+    public function test_missing_client_secret_throws_clear_error(): void
+    {
+        config()->set('services.telegram.oidc.client_secret', '');
+        $this->expectException(\App\Services\TelegramOidcException::class);
+        $this->expectExceptionMessageMatches('/client_secret missing/');
+        app(TelegramOidcService::class)->exchangeAndVerify('c', 'v', 'NONCE');
+    }
+
     public function test_rejects_wrong_nonce(): void
     {
         Http::fake([
