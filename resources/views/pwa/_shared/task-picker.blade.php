@@ -26,8 +26,9 @@
     <template x-for="s in strips" :key="s.slug || s.id">
       <button class="strip" @click="chooseStrip(s)">
         <span class="strip-title" x-text="(s.id ? s.id + '. ' : '') + s.title"></span>
-        <span class="strip-preview" x-show="s.preview" x-html="renderLatex(s.preview)"></span>
-        <span class="strip-preview" x-show="!s.preview && s.preview_svg" x-html="s.preview_svg"></span>
+        {{-- Пример-формула только для навыков (7/8). У тем ОГЭ примеры — длинные текстовые задачи, показываем только номер + название. --}}
+        <span class="strip-preview" x-show="bank === 'alg-skill' && s.preview" x-html="renderLatex(s.preview)"></span>
+        <span class="strip-preview" x-show="bank === 'alg-skill' && !s.preview && s.preview_svg" x-html="s.preview_svg"></span>
       </button>
     </template>
     <div x-show="!strips.length" class="picker-group-label">Скоро</div>
