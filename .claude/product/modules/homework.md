@@ -112,8 +112,20 @@ homeworks
    - На попытке #2 (даже если неверно) → `accepted_at=now()` (учитель проверяет по фото)
 7. **`refreshTopicHomeworkProgress`** обновляет статус assignment (`completed` если все принято)
 
+## Выбор задач — общий drill-down picker
+
+С 2026-06-21 задачи в ДЗ (тип `topic_photo_practice`) можно набирать через **общий drill-down picker** — тот же компонент, что и на уроке.
+
+- **Партиал:** `resources/views/pwa/_shared/task-picker.blade.php` (Alpine-фабрика `taskPicker({ onAdd, existingUids })`). Шаги: класс → полоски (навыки/темы, с «1 примером») → уровень сложности / блок → карточки задач. Банк скрыт за таблицей `PICKER_CLASSES` (7/8 → `alg-skill`, 9 ОГЭ → `oge`).
+- **Бэкенд опций:** `GET /lessons/picker-options` (`LessonTaskPickerService`); полоски несут поле `preview` (+ `preview_svg`).
+- **Сохранение ДЗ:** вью шлёт скрытое поле `picker_tasks` = JSON-массив `[{bank, refs}]`; `TeacherController::assignFromPicker()` резолвит каждый через `TaskBankResolver::resolve()` в `homework_topic_tasks` (`task_payload` + `correct_answer`), недоступные пропускает. Легаси-путь `task_indices`/`topic_number` сохранён (additive).
+- **`topic_number` для alg-skill:** колонка NOT NULL, темы у навыка нет → пишется `0` (нейтрально: используется только для пути к картинкам ОГЭ/ВПР, а alg-skill задачи формульные/SVG-inline).
+- **Follow-up:** дедуп `existingUids` пока no-op (picker `uid` ≠ сохранённый идентификатор); KaTeX на странице ДЗ не подключён — формулы рендерятся как текст.
+
 ## Связки и зависимости
 
+- **TaskBankResolver** — резолвит выбранные picker'ом `{bank, refs}` в снапшот задачи при сохранении ДЗ
+- **LessonTaskPickerService** — каскадные опции picker'а (классы/полоски с preview/задачи)
 - **TaskDataService** — источник данных топика для `topicTasks` picker'а и для рендера задач в `homework-topic-practice.blade.php`
 - **OgeVariantBuilderService / VprVariantBuilderService** — для `full_variant` mini-variant ДЗ
 - **TeacherStudent** — проверка что ученик привязан к учителю (`linkedStudentIds`)
