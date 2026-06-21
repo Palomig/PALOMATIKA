@@ -51,11 +51,31 @@ class LessonTaskPickerService
     public function skills(int $grade): array
     {
         $bundle = (new AlgTaskDataService($grade))->getSkillsBundle();
-        return array_values(array_map(fn ($s) => [
-            'slug'  => (string) ($s['slug'] ?? ''),
-            'id'    => (string) ($s['id']   ?? ''),
-            'title' => (string) ($s['title'] ?? ''),
-        ], $bundle['skills'] ?? []));
+        return array_values(array_map(function ($s) {
+            $ex = $this->firstSkillExample($s);
+            return [
+                'slug'        => (string) ($s['slug']  ?? ''),
+                'id'          => (string) ($s['id']    ?? ''),
+                'title'       => (string) ($s['title'] ?? ''),
+                'preview'     => $ex['expression'],
+                'preview_svg' => $ex['image_svg'],
+            ];
+        }, $bundle['skills'] ?? []));
+    }
+
+    /** Первый непустой пример навыка: expression или svg из первой задачи первого уровня. */
+    private function firstSkillExample(array $skill): array
+    {
+        foreach ($skill['levels'] ?? [] as $lvl) {
+            foreach ($lvl['tasks'] ?? [] as $t) {
+                $expr = (string) ($t['expression'] ?? '');
+                $svg  = (string) ($t['svg'] ?? '');
+                if ($expr !== '' || $svg !== '') {
+                    return ['expression' => $expr, 'image_svg' => $svg];
+                }
+            }
+        }
+        return ['expression' => '', 'image_svg' => ''];
     }
 
     /**
