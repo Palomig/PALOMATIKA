@@ -74,7 +74,9 @@
     padding:12px 14px; cursor:pointer; text-align:left; transition:border-color .12s; }
   .strip:hover { border-color:var(--accent); }
   .strip-title { font-size:13px; color:var(--text); }
-  .strip-preview { font-size:13px; color:var(--muted); white-space:nowrap; }
+  /* Формула-пример — тот же шрифт, что в банке заданий (2 часть, .expr) */
+  .strip-preview { font-family:"KaTeX_Main","Times New Roman",serif; font-size:18px; font-weight:650; color:#f8fafc; white-space:nowrap; }
+  .strip-preview .katex { font-size:1.08em; }
   .strip-preview svg { max-height:32px; width:auto; }
   .bucket { display:flex; gap:4px; align-items:center; }
   .picker-card.is-existing { opacity:.5; cursor:default; }
