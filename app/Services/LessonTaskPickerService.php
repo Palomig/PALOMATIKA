@@ -36,13 +36,31 @@ class LessonTaskPickerService
      */
     public function topics(string $bank, ?int $grade = null): array
     {
-        return match ($bank) {
+        $topics = match ($bank) {
             'oge'       => $this->ogeTopics(),
             'ege'       => $this->egeTopics(),
             'vpr'       => $grade ? $this->vprTopics($grade) : [],
             'alg-topic' => $grade ? $this->algTopics($grade) : [],
             default     => [],
         };
+
+        foreach ($topics as &$t) {
+            $ex = $this->firstTopicExample($bank, (string) $t['id'], $grade);
+            $t['preview']     = $ex['expression'];
+            $t['preview_svg'] = $ex['image_svg'];
+        }
+        return $topics;
+    }
+
+    /** Первый пример темы — берём первую поддерживаемую задачу через существующий tasks(). */
+    private function firstTopicExample(string $bank, string $id, ?int $grade): array
+    {
+        $refs = array_filter(['topic_id' => $id, 'grade' => $grade], fn ($v) => $v !== null && $v !== '');
+        $first = $this->tasks($bank, $refs)[0] ?? null;
+        return [
+            'expression' => (string) ($first['expression'] ?? ''),
+            'image_svg'  => (string) ($first['image_svg'] ?? ''),
+        ];
     }
 
     /**
