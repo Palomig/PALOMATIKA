@@ -27,7 +27,7 @@
         </a>
 
         <div class="flex gap-1.5 flex-wrap justify-center">
-            @foreach(['06','07','08','09','10','11','12','13','14','15','16','17','18','19'] as $tid)
+            @foreach(['06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25'] as $tid)
                 @if($tid === $topicId)
                     <span class="px-2.5 py-1 rounded-lg bg-{{ $topicMeta['color'] ?? 'blue' }}-500 text-white font-bold text-xs">{{ $tid }}</span>
                 @else
