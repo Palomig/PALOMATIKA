@@ -490,9 +490,12 @@ class TeacherController extends Controller
             'student_ids' => 'nullable|array',
             'student_ids.*' => 'exists:users,id',
             'type' => 'required|in:mini_variant,topic_photo_practice',
-            'topic_number' => 'required_if:type,topic_photo_practice|nullable|integer',
+            'topic_number' => 'nullable|integer',
             'task_indices' => 'nullable|array|max:60',
             'task_indices.*' => 'integer|min:0',
+            // Drill-down picker: JSON-массив выбранных задач [{ bank, refs }].
+            // Альтернатива task_indices/topic_number для topic_photo_practice.
+            'picker_tasks' => 'nullable|string',
         ]);
 
         $studentIds = collect($data['student_ids'] ?? [])
@@ -517,6 +520,12 @@ class TeacherController extends Controller
         }
 
         if ($data['type'] === 'topic_photo_practice') {
+            // Новый путь: задачи выбраны через общий drill-down picker (массив { bank, refs }).
+            $pickerTasks = $this->decodePickerTasks($data['picker_tasks'] ?? null);
+            if (!empty($pickerTasks)) {
+                return $this->assignFromPicker($request, $user, $studentIds, $pickerTasks);
+            }
+
             $topicNumber = (int) ($data['topic_number'] ?? 0);
             if ($topicNumber < 1) {
                 return back()->with('error', 'Выберите тему.');
@@ -622,6 +631,120 @@ class TeacherController extends Controller
         $message = $assignedCount === 1 ? 'Мини-вариант выдан!' : "Мини-вариант выдан ({$assignedCount}).";
         if ($failed) {
             $message .= ' Не удалось для: ' . implode(', ', $failed) . '.';
+        }
+
+        return back()->with('success', $message);
+    }
+
+    /**
+     * Парсит JSON-массив выбранных picker'ом задач [{ bank, refs }].
+     *
+     * @return array<int, array{bank:string, refs:array<string,mixed>}>
+     */
+    private function decodePickerTasks($raw): array
+    {
+        if (!is_string($raw) || trim($raw) === '') {
+            return [];
+        }
+        $decoded = json_decode($raw, true);
+        if (!is_array($decoded)) {
+            return [];
+        }
+        $out = [];
+        foreach ($decoded as $item) {
+            if (!is_array($item)) {
+                continue;
+            }
+            $bank = (string) ($item['bank'] ?? '');
+            $refs = $item['refs'] ?? [];
+            if ($bank === '' || !is_array($refs)) {
+                continue;
+            }
+            $out[] = ['bank' => $bank, 'refs' => $refs];
+        }
+        return $out;
+    }
+
+    /**
+     * Создаёт ДЗ типа topic_photo_practice из задач, выбранных drill-down picker'ом.
+     * Каждый { bank, refs } резолвится через TaskBankResolver; недоступные пропускаются.
+     */
+    private function assignFromPicker(Request $request, User $user, $studentIds, array $pickerTasks)
+    {
+        $resolver = app(\App\Services\TaskBankResolver::class);
+
+        $resolved = [];
+        $skipped = 0;
+        foreach ($pickerTasks as $picked) {
+            try {
+                $r = $resolver->resolve($picked['bank'], $picked['refs']);
+            } catch (\DomainException | \InvalidArgumentException $e) {
+                $skipped++;
+                continue;
+            }
+
+            $answer = trim((string) ($r['answer'] ?? ''));
+            if ($answer === '') {
+                $skipped++;
+                continue;
+            }
+
+            // topic_number: колонка NOT NULL (unsignedTinyInteger). У alg-skill темы нет —
+            // берём topic_id из refs, если он есть и числовой, иначе 0 (нейтрально для рендера,
+            // который использует topic_number только для пути к картинкам ОГЭ/ВПР).
+            $topicNumber = (int) ($picked['refs']['topic_id'] ?? 0);
+
+            $payload = ($r['raw'] ?? []);
+            $payload['expression'] = (string) ($r['expression'] ?? ($payload['expression'] ?? ''));
+            $payload['source_label'] = (string) ($r['source_label'] ?? '');
+            if (!empty($r['image_svg'])) {
+                $payload['svg'] = (string) $r['image_svg'];
+            }
+
+            $resolved[] = [
+                'topic_number' => $topicNumber,
+                'payload' => $payload,
+                'answer' => $answer,
+            ];
+        }
+
+        if (empty($resolved)) {
+            return back()->with('error', 'Не удалось добавить ни одной задачи (все недоступны).');
+        }
+
+        $tasksCount = count($resolved);
+
+        $homework = new \App\Models\Homework();
+        $homework->teacher_id = $user->id;
+        $homework->homework_type = 'topic_photo_practice';
+        $homework->topic_number = $resolved[0]['topic_number'];
+        $homework->tasks_count = $tasksCount;
+        $homework->title = "Практика: {$tasksCount} " . $this->pluralizeTasks($tasksCount) . ' с фото решения';
+        $homework->assigned_at = now();
+        $homework->save();
+
+        foreach ($resolved as $index => $task) {
+            \App\Models\HomeworkTopicTask::create([
+                'homework_id' => $homework->id,
+                'topic_number' => $task['topic_number'],
+                'task_order' => $index + 1,
+                'task_payload' => $task['payload'],
+                'correct_answer' => $task['answer'],
+            ]);
+        }
+
+        foreach ($studentIds as $studentId) {
+            \App\Models\HomeworkAssignment::create([
+                'homework_id' => $homework->id,
+                'student_id' => $studentId,
+                'status' => 'assigned',
+                'tasks_total' => $tasksCount,
+            ]);
+        }
+
+        $message = 'ДЗ выдано!';
+        if ($skipped > 0) {
+            $message .= " Пропущено недоступных задач: {$skipped}.";
         }
 
         return back()->with('success', $message);
