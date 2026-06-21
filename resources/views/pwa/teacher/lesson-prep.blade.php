@@ -226,7 +226,8 @@
           if (!r.ok) { alert('Не удалось добавить задачу'); break; }
         }
         await this.refreshState();
-        this.pickerOpen = false;
+        // Picker остаётся открытым; он сам сбрасывается на выбор класса (reset в confirmAdd),
+        // чтобы можно было сразу добрать задачи из другого класса. Закрытие — кнопкой «Отмена».
       },
 
       renderLatex(expr) {
