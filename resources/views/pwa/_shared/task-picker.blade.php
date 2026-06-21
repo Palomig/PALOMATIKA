@@ -79,7 +79,8 @@
   .strip-preview { font-family:"KaTeX_Main","Times New Roman",serif; font-size:18px; font-weight:650; color:#f8fafc; white-space:nowrap; }
   .strip-preview .katex { font-size:1.08em; }
   .strip-preview svg { max-height:32px; width:auto; }
-  .bucket { display:flex; gap:4px; align-items:center; }
+  /* Кнопки блоков/заданий — не жирные (вдвое тоньше дефолтных .btn 700) */
+  .bucket { display:flex; gap:4px; align-items:center; font-weight:400; }
   .picker-card.is-existing { opacity:.5; cursor:default; }
 </style>
 
