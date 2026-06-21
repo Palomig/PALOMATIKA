@@ -187,11 +187,20 @@ function taskPicker(config) {
       for (const k of Object.keys(refs)) if (refs[k] === '' || refs[k] == null) delete refs[k];
       return { bank: this.bank, refs };
     },
+    // Возврат в начало мастера (к выбору класса).
+    reset() {
+      this.step = 'class';
+      this.cls = null;
+      this.refs = { grade: '', topic_id: '', skill_slug: '' };
+      this.strips = []; this.tasks = []; this.bucketKey = null;
+      this.selected = []; this.error = '';
+    },
     async confirmAdd() {
       if (!this.selected.length) return;
       const payload = this.selected.map(t => this.taskRefs(t));
       await this.onAdd(payload);
-      this.selected = [];
+      // После добавления возвращаемся к выбору класса, а не остаёмся на списке задач.
+      this.reset();
     },
 
     renderLatex(expr) {
