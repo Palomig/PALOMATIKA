@@ -450,6 +450,31 @@
             </div>
           </div>
 
+          {{-- Общий drill-down picker (класс → навык/тема → уровень/блок → задачи). --}}
+          <input type="hidden" name="picker_tasks" :value="JSON.stringify(draftTasks)">
+          <div x-show="selectedType === 'topic_photo_practice'" x-cloak style="margin-top:16px; border-top:1px solid var(--border); padding-top:12px;">
+            <label style="display:block; font-size:12px; color:var(--muted); margin-bottom:6px;">
+              Или выберите задачи через мастер
+              <span x-show="draftTasks.length" x-text="'(выбрано: ' + draftTasks.length + ')'" style="color:var(--accent);"></span>
+            </label>
+            <div x-data="taskPicker({
+                  onAdd: (items) => draftTasks.push(...items),
+                  existingUids: () => draftTasks.map(t => t.refs.task_id),
+                })">
+              @include('pwa._shared.task-picker')
+            </div>
+            <template x-if="draftTasks.length">
+              <div style="margin-top:10px;">
+                <template x-for="(t, i) in draftTasks" :key="i">
+                  <div style="display:flex; justify-content:space-between; gap:8px; align-items:center; font-size:12px; padding:4px 0;">
+                    <span x-text="(t.bank || '') + ' · задача ' + (t.refs.task_id ?? '')" style="color:var(--text);"></span>
+                    <button type="button" class="link-btn" style="padding:2px 6px; color:var(--red);" @click="draftTasks.splice(i, 1)">убрать</button>
+                  </div>
+                </template>
+              </div>
+            </template>
+          </div>
+
           <div x-show="selectedType === 'topic_photo_practice'" x-cloak style="margin-top:12px;">
             <label style="display:block; font-size:12px; color:var(--muted); margin-bottom:6px;">Ученики</label>
             <div class="student-pick-list">
@@ -539,6 +564,7 @@ function teacherHw() {
     topicTasksLoading: false,
     topicTasksError: '',
     selectedTaskIndices: [],
+    draftTasks: [],
     studentGrades: @json($studentGrades ?? (object) []),
 
     assignStudentGrade() {
@@ -587,6 +613,7 @@ function teacherHw() {
       this.topicTasks = [];
       this.topicTasksError = '';
       this.selectedTaskIndices = [];
+      this.draftTasks = [];
     },
 
     async onTopicChange() {
@@ -642,9 +669,13 @@ function teacherHw() {
 
     handleAssignSubmit(event) {
       if (this.selectedType === 'topic_photo_practice') {
+        // Путь через drill-down мастер: достаточно draftTasks, тема/индексы не нужны.
+        if (this.draftTasks.length > 0) {
+          return;
+        }
         if (!this.selectedTopic) {
           event.preventDefault();
-          alert('Выберите тему.');
+          alert('Выберите тему или задачи через мастер.');
           return;
         }
         if (this.selectedTaskIndices.length === 0) {
