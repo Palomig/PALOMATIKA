@@ -9,6 +9,11 @@
 
 @push('styles')
   .lesson-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  /* Picker как отдельный полноэкранный экран — не видно уже добавленных задач */
+  .picker-overlay { position: fixed; inset: 0; z-index: 1000; background: var(--bg); overflow-y: auto; padding: 16px calc(16px + var(--safe-right, 0px)) calc(24px + var(--safe-bottom, 0px)) calc(16px + var(--safe-left, 0px)); }
+  .picker-overlay-inner { max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+  .picker-overlay-head { position: sticky; top: -16px; z-index: 1; background: var(--bg); padding: 8px 0; margin: -8px 0 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--border); }
+  .picker-overlay-head .title { font-size: 16px; font-weight: 700; color: var(--text); }
   .lesson-task { display: flex; gap: 10px; align-items: flex-start; padding: 10px; background: var(--surface2); border-radius: 10px; }
   .lesson-task-num { font-weight: 800; color: var(--accent); width: 24px; flex-shrink: 0; }
   .lesson-task-body { flex: 1; min-width: 0; }
@@ -100,15 +105,20 @@
     </div>
   </div>
 
-  {{-- Task picker (общий drill-down партиал) --}}
-  <div class="lesson-card" x-show="pickerOpen" x-cloak>
-    <div x-data="taskPicker({
-          onAdd: (items) => $dispatch('picker-add', { items }),
-          existingUids: () => tasks.map(t => t.uid).filter(Boolean),
-        })">
-      @include('pwa._shared.task-picker')
+  {{-- Task picker — отдельный полноэкранный экран выбора задач --}}
+  <div class="picker-overlay" x-show="pickerOpen" x-cloak>
+    <div class="picker-overlay-inner">
+      <div class="picker-overlay-head">
+        <span class="title">Выбор задач</span>
+        <button class="btn" @click="pickerOpen = false">✕ Закрыть</button>
+      </div>
+      <div x-data="taskPicker({
+            onAdd: (items) => $dispatch('picker-add', { items }),
+            existingUids: () => tasks.map(t => t.uid).filter(Boolean),
+          })">
+        @include('pwa._shared.task-picker')
+      </div>
     </div>
-    <button class="btn" @click="pickerOpen = false">Отмена</button>
   </div>
 
   {{-- Action buttons --}}
