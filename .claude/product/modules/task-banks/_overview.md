@@ -10,6 +10,8 @@
 4. **`*_geometry.json`** — это **источник** для геометрии. `topic_XX.json` со встроенными SVG **генерируется** через `php artisan svg:bake {id}` (или `svg:bake-ege`). Вручную `topic_XX.json` для геометрических задач **не редактируем**.
 5. **TaskDataService / EgeTaskDataService / VprTaskDataService** — единственный путь чтения банков из кода.
 
+> **Выбор задач в урок/ДЗ** — единая точка входа: общий drill-down picker `resources/views/pwa/_shared/task-picker.blade.php` (класс → полоски навыков/тем с «1 примером» → уровень/блок → задачи). Опции отдаёт `LessonTaskPickerService` (`/lessons/picker-options`), выбранные `{bank, refs}` резолвит `TaskBankResolver`. Банк скрыт за классом (7/8 → `alg-skill`, 9 ОГЭ → `oge`).
+
 ## ОГЭ — `storage/app/tasks/`
 
 **18 файлов** (17 с заданиями + 1 пустой), 4 геометрических `*_geometry.json`. Топики 1–5 не существуют (это устные задания в реальном ОГЭ, которые мы не покрываем).
