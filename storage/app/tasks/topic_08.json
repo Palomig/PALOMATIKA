@@ -643,37 +643,37 @@
                         {
                             "id": 13,
                             "expression": "(\\sqrt{19} - 7)^2 + 14\\sqrt{19}",
-                            "answer": "151.334313734",
+                            "answer": "68",
                             "status": "draft"
                         },
                         {
                             "id": 14,
                             "expression": "(\\sqrt{13} - 3)^2 + 6\\sqrt{13}",
-                            "answer": "63.9722436227",
+                            "answer": "22",
                             "status": "draft"
                         },
                         {
                             "id": 15,
                             "expression": "(\\sqrt{11} - 7)^2 + 14\\sqrt{11}",
-                            "answer": "156.8838777254",
+                            "answer": "60",
                             "status": "draft"
                         },
                         {
                             "id": 16,
                             "expression": "(\\sqrt{5} + 9)^2 - 18\\sqrt{5}",
-                            "answer": "-55.9868443825",
+                            "answer": "86",
                             "status": "draft"
                         },
                         {
                             "id": 17,
                             "expression": "(\\sqrt{17} + 2)^2 - 4\\sqrt{17}",
-                            "answer": "-6.6306831231",
+                            "answer": "21",
                             "status": "draft"
                         },
                         {
                             "id": 18,
                             "expression": "(\\sqrt{3} + 8)^2 - 16\\sqrt{3}",
-                            "answer": "-67.0192378865",
+                            "answer": "67",
                             "status": "draft"
                         }
                     ]
