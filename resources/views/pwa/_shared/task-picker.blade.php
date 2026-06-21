@@ -15,9 +15,9 @@
   <div x-show="error" style="color:var(--red);font-size:12px" x-text="error"></div>
 
   {{-- Шаг 1: класс --}}
-  <div class="picker-row" x-show="step === 'class'">
+  <div class="buckets" x-show="step === 'class'">
     <template x-for="c in PICKER_CLASSES" :key="c.id">
-      <button class="btn btn-icon" @click="chooseClass(c)" x-text="c.label"></button>
+      <button class="btn bucket" @click="chooseClass(c)" x-text="c.label"></button>
     </template>
   </div>
 
@@ -35,9 +35,9 @@
   </div>
 
   {{-- Шаг 3: уровни/блоки --}}
-  <div class="picker-row" x-show="step === 'buckets' && !loading">
+  <div class="buckets" x-show="step === 'buckets' && !loading">
     <template x-for="b in buckets" :key="b.key">
-      <button class="btn btn-icon bucket" @click="chooseBucket(b.key)">
+      <button class="btn bucket" @click="chooseBucket(b.key)">
         <span x-text="b.label"></span> · <span x-text="b.count + ' зад'"></span>
       </button>
     </template>
@@ -79,8 +79,10 @@
   .strip-preview { font-family:"KaTeX_Main","Times New Roman",serif; font-size:18px; font-weight:650; color:#f8fafc; white-space:nowrap; }
   .strip-preview .katex { font-size:1.08em; }
   .strip-preview svg { max-height:32px; width:auto; }
+  /* Блоки/задания — в столбик, по одной кнопке в строке */
+  .buckets { display:flex; flex-direction:column; gap:6px; }
   /* Кнопки блоков/заданий — не жирные (вдвое тоньше дефолтных .btn 700) */
-  .bucket { display:flex; gap:4px; align-items:center; font-weight:400; }
+  .bucket { display:flex; gap:4px; align-items:center; justify-content:flex-start; width:100%; text-align:left; font-weight:400; }
   .picker-card.is-existing { opacity:.5; cursor:default; }
 </style>
 
