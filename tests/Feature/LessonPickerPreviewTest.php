@@ -19,4 +19,17 @@ class LessonPickerPreviewTest extends TestCase
             $this->assertTrue($hasPreview, "Навык {$s['slug']} без примера");
         }
     }
+
+    public function test_oge_topics_carry_preview(): void
+    {
+        $picker = new LessonTaskPickerService();
+        $topics = $picker->topics('oge');
+
+        $this->assertNotEmpty($topics, 'ОГЭ не отдал ни одной темы');
+        foreach ($topics as $t) {
+            $this->assertArrayHasKey('preview', $t);
+        }
+        $withExpr = array_filter($topics, fn ($t) => ($t['preview'] ?? '') !== '' || ($t['preview_svg'] ?? '') !== '');
+        $this->assertNotEmpty($withExpr, 'Ни у одной темы ОГЭ нет примера');
+    }
 }
