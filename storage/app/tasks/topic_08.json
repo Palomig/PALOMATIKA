@@ -1422,110 +1422,110 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "expression": "\\sqrt{9} \\cdot \\sqrt{54}",
-                            "answer": "22.045407685",
+                            "expression": "\\sqrt{9 \\cdot 5^4}",
+                            "answer": "75",
                             "status": "draft"
                         },
                         {
                             "id": 2,
-                            "expression": "\\sqrt{25} \\cdot \\sqrt{72}",
-                            "answer": "42.4264068712",
+                            "expression": "\\sqrt{25 \\cdot 7^2}",
+                            "answer": "35",
                             "status": "draft"
                         },
                         {
                             "id": 3,
-                            "expression": "\\sqrt{9} \\cdot \\sqrt{82}",
-                            "answer": "27.1661554144",
+                            "expression": "\\sqrt{9 \\cdot 8^2}",
+                            "answer": "24",
                             "status": "draft"
                         },
                         {
                             "id": 4,
-                            "expression": "\\sqrt{4} \\cdot \\sqrt{36}",
-                            "answer": "12",
+                            "expression": "\\sqrt{4 \\cdot 3^6}",
+                            "answer": "54",
                             "status": "draft"
                         },
                         {
                             "id": 5,
-                            "expression": "\\sqrt{16} \\cdot \\sqrt{34}",
-                            "answer": "23.3238075794",
+                            "expression": "\\sqrt{16 \\cdot 3^4}",
+                            "answer": "36",
                             "status": "draft"
                         },
                         {
                             "id": 6,
-                            "expression": "\\sqrt{25} \\cdot \\sqrt{26}",
-                            "answer": "25.495097568",
+                            "expression": "\\sqrt{25 \\cdot 2^6}",
+                            "answer": "40",
                             "status": "draft"
                         },
                         {
                             "id": 7,
-                            "expression": "\\sqrt{3} \\cdot \\sqrt{72} - \\sqrt{3} \\cdot \\sqrt{24}",
-                            "answer": "6.2116570825",
+                            "expression": "\\sqrt{3 \\cdot 7^2} \\cdot \\sqrt{3 \\cdot 2^4}",
+                            "answer": "84",
                             "status": "draft"
                         },
                         {
                             "id": 8,
-                            "expression": "\\sqrt{7} \\cdot \\sqrt{34} - \\sqrt{7} \\cdot \\sqrt{22}",
-                            "answer": "3.0175749746",
+                            "expression": "\\sqrt{7 \\cdot 3^4} \\cdot \\sqrt{7 \\cdot 2^2}",
+                            "answer": "126",
                             "status": "draft"
                         },
                         {
                             "id": 9,
-                            "expression": "\\sqrt{11} \\cdot \\sqrt{36} - \\sqrt{11} \\cdot \\sqrt{22}",
-                            "answer": "4.343399556",
+                            "expression": "\\sqrt{11 \\cdot 3^6} \\cdot \\sqrt{11 \\cdot 2^2}",
+                            "answer": "594",
                             "status": "draft"
                         },
                         {
                             "id": 10,
-                            "expression": "\\sqrt{2} \\cdot \\sqrt{492} - \\sqrt{2} \\cdot \\sqrt{54}",
-                            "answer": "20.9764694373",
+                            "expression": "\\sqrt{2 \\cdot 49^2} \\cdot \\sqrt{2 \\cdot 5^4}",
+                            "answer": "2450",
                             "status": "draft"
                         },
                         {
                             "id": 11,
-                            "expression": "\\sqrt{17} \\cdot \\sqrt{54} - \\sqrt{17} \\cdot \\sqrt{22}",
-                            "answer": "10.9594352093",
+                            "expression": "\\sqrt{17 \\cdot 5^4} \\cdot \\sqrt{17 \\cdot 2^2}",
+                            "answer": "850",
                             "status": "draft"
                         },
                         {
                             "id": 12,
-                            "expression": "\\sqrt{13} \\cdot \\sqrt{54} - \\sqrt{13} \\cdot \\sqrt{62}",
-                            "answer": "-1.8948565342",
+                            "expression": "\\sqrt{13 \\cdot 5^4} \\cdot \\sqrt{13 \\cdot 6^2}",
+                            "answer": "1950",
                             "status": "draft"
                         },
                         {
                             "id": 13,
-                            "expression": "\\sqrt{26} \\cdot \\sqrt{72} - \\sqrt{102}",
-                            "answer": "33.1671103672",
+                            "expression": "\\sqrt{2^6 \\cdot 7^2 \\cdot 10^2}",
+                            "answer": "560",
                             "status": "draft"
                         },
                         {
                             "id": 14,
-                            "expression": "\\sqrt{54} \\cdot \\sqrt{62} - \\sqrt{132}",
-                            "answer": "46.3727792729",
+                            "expression": "\\sqrt{5^4 \\cdot 6^2 \\cdot 13^2}",
+                            "answer": "1950",
                             "status": "draft"
                         },
                         {
                             "id": 15,
-                            "expression": "\\sqrt{22} \\cdot \\sqrt{54} - \\sqrt{492}",
-                            "answer": "12.2863028664",
+                            "expression": "\\sqrt{2^2 \\cdot 5^4 \\cdot 49^2}",
+                            "answer": "2450",
                             "status": "draft"
                         },
                         {
                             "id": 16,
-                            "expression": "\\sqrt{26} \\cdot \\sqrt{32} - \\sqrt{52}",
-                            "answer": "21.6333076528",
+                            "expression": "\\sqrt{2^6 \\cdot 3^2 \\cdot 5^2}",
+                            "answer": "120",
                             "status": "draft"
                         },
                         {
                             "id": 17,
-                            "expression": "\\sqrt{34} \\cdot \\sqrt{42} - \\sqrt{22}",
-                            "answer": "33.0984714956",
+                            "expression": "\\sqrt{3^4 \\cdot 4^2 \\cdot 2^2}",
+                            "answer": "72",
                             "status": "draft"
                         },
                         {
                             "id": 18,
-                            "expression": "\\sqrt{54} \\cdot \\sqrt{82} - \\sqrt{212}",
-                            "answer": "51.9829992599",
+                            "expression": "\\sqrt{5^4 \\cdot 8^2 \\cdot 21^2}",
+                            "answer": "4200",
                             "status": "draft"
                         }
                     ]
@@ -1800,8 +1800,8 @@
                         },
                         {
                             "id": 8,
-                            "expression": "\\frac{8^{15}}{27^6}",
-                            "answer": "90817.0142979506",
+                            "expression": "\\frac{81^5}{27^6}",
+                            "answer": "9",
                             "status": "draft"
                         },
                         {
