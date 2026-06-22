@@ -817,25 +817,25 @@
                         {
                             "id": 9,
                             "expression": "\\frac{(a^4)^5}{a^{18}} \\text{ при } a = 6",
-                            "answer": "нет в базе",
+                            "answer": "36",
                             "status": "draft"
                         },
                         {
                             "id": 10,
                             "expression": "\\frac{(a^8)^2}{a^{11}} \\text{ при } a = 2",
-                            "answer": "нет в базе",
+                            "answer": "32",
                             "status": "draft"
                         },
                         {
                             "id": 11,
                             "expression": "\\frac{(a^8)^2}{a^{13}} \\text{ при } a = 5",
-                            "answer": "нет в базе",
+                            "answer": "125",
                             "status": "draft"
                         },
                         {
                             "id": 12,
                             "expression": "\\frac{(a^3)^5}{a^{11}} \\text{ при } a = 3",
-                            "answer": "нет в базе",
+                            "answer": "81",
                             "status": "draft"
                         }
                     ]
@@ -1219,37 +1219,37 @@
                         {
                             "id": 7,
                             "expression": "\\frac{(8^3)^{-7}}{8^{-23}}",
-                            "answer": "нет в базе",
+                            "answer": "64",
                             "status": "draft"
                         },
                         {
                             "id": 8,
                             "expression": "\\frac{(3^7)^{-2}}{3^{-16}}",
-                            "answer": "нет в базе",
+                            "answer": "9",
                             "status": "draft"
                         },
                         {
                             "id": 9,
                             "expression": "\\frac{(2^9)^{-3}}{2^{-29}}",
-                            "answer": "нет в базе",
+                            "answer": "4",
                             "status": "draft"
                         },
                         {
                             "id": 10,
                             "expression": "\\frac{(5^2)^{-8}}{5^{-18}}",
-                            "answer": "нет в базе",
+                            "answer": "25",
                             "status": "draft"
                         },
                         {
                             "id": 11,
                             "expression": "\\frac{(7^7)^{-3}}{7^{-23}}",
-                            "answer": "нет в базе",
+                            "answer": "49",
                             "status": "draft"
                         },
                         {
                             "id": 12,
                             "expression": "\\frac{(6^2)^{-9}}{6^{-20}}",
-                            "answer": "нет в базе",
+                            "answer": "36",
                             "status": "draft"
                         },
                         {
