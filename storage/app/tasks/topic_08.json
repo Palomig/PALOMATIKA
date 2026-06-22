@@ -2233,31 +2233,31 @@
                         {
                             "id": 1,
                             "expression": "a^{-11} \\cdot (a^5)^2 \\text{ при } a = 5",
-                            "answer": "нет в базе",
+                            "answer": "0.2",
                             "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "b^{16} \\cdot (b^3)^{-5} \\text{ при } b = 7",
-                            "answer": "нет в базе",
+                            "answer": "7",
                             "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "c^{-4} \\cdot (c^3)^2 \\text{ при } c = 9",
-                            "answer": "нет в базе",
+                            "answer": "81",
                             "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "d^4 \\cdot (d^2)^{-3} \\text{ при } d = 2",
-                            "answer": "нет в базе",
+                            "answer": "0.25",
                             "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "m^{-10} \\cdot (m^4)^2 \\text{ при } m = 10",
-                            "answer": "нет в базе",
+                            "answer": "0.01",
                             "status": "draft"
                         },
                         {
@@ -2269,31 +2269,31 @@
                         {
                             "id": 7,
                             "expression": "\\frac{(x^4)^{-6}}{x^{-28}} \\text{ при } x = 3",
-                            "answer": "нет в базе",
+                            "answer": "81",
                             "status": "draft"
                         },
                         {
                             "id": 8,
                             "expression": "\\frac{(y^4)^{-5}}{y^{-19}} \\text{ при } y = 10",
-                            "answer": "нет в базе",
+                            "answer": "0.1",
                             "status": "draft"
                         },
                         {
                             "id": 9,
                             "expression": "\\frac{(a^{-2})^{-3}}{a^{-1}} \\text{ при } a = 2",
-                            "answer": "нет в базе",
+                            "answer": "128",
                             "status": "draft"
                         },
                         {
                             "id": 10,
                             "expression": "\\frac{(b^3)^{-4}}{b^{-11}} \\text{ при } b = 5",
-                            "answer": "нет в базе",
+                            "answer": "0.2",
                             "status": "draft"
                         },
                         {
                             "id": 11,
                             "expression": "\\frac{(p^{-2})^{-1}}{p^{-3}} \\text{ при } p = 2",
-                            "answer": "нет в базе",
+                            "answer": "32",
                             "status": "draft"
                         },
                         {
