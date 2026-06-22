@@ -2353,73 +2353,73 @@
                         {
                             "id": 1,
                             "expression": "\\frac{(x^2)^4 \\cdot x^5}{x^7} \\text{ при } x = 2",
-                            "answer": "нет в базе",
+                            "answer": "64",
                             "status": "draft"
                         },
                         {
                             "id": 2,
                             "expression": "\\frac{(y^5)^7 \\cdot y^2}{y^{36}} \\text{ при } y = 7",
-                            "answer": "нет в базе",
+                            "answer": "7",
                             "status": "draft"
                         },
                         {
                             "id": 3,
                             "expression": "\\frac{(a^4)^5 \\cdot a^7}{a^{29}} \\text{ при } a = 5",
-                            "answer": "нет в базе",
+                            "answer": "0.04",
                             "status": "draft"
                         },
                         {
                             "id": 4,
                             "expression": "\\frac{(b^2)^7 \\cdot b^3}{b^{18}} \\text{ при } b = 4",
-                            "answer": "нет в базе",
+                            "answer": "0.25",
                             "status": "draft"
                         },
                         {
                             "id": 5,
                             "expression": "\\frac{(c^6)^3 \\cdot c^4}{c^{20}} \\text{ при } c = 9",
-                            "answer": "нет в базе",
+                            "answer": "81",
                             "status": "draft"
                         },
                         {
                             "id": 6,
                             "expression": "\\frac{(z^2)^6 \\cdot z^4}{z^{19}} \\text{ при } z = 10",
-                            "answer": "нет в базе",
+                            "answer": "0.001",
                             "status": "draft"
                         },
                         {
                             "id": 7,
                             "expression": "\\frac{m^{15} \\cdot (n^6)^3}{(mn)^{17}} \\text{ при } m = 5, n = 15",
-                            "answer": "нет в базе",
+                            "answer": "0.6",
                             "status": "draft"
                         },
                         {
                             "id": 8,
                             "expression": "\\frac{x^{14} \\cdot (y^3)^5}{(xy)^{13}} \\text{ при } x = 10, y = 7",
-                            "answer": "нет в базе",
+                            "answer": "490",
                             "status": "draft"
                         },
                         {
                             "id": 9,
                             "expression": "\\frac{a^{16} \\cdot (b^7)^3}{(ab)^{18}} \\text{ при } a = 2, b = 6",
-                            "answer": "нет в базе",
+                            "answer": "54",
                             "status": "draft"
                         },
                         {
                             "id": 10,
                             "expression": "\\frac{(p^3)^9 \\cdot q^{24}}{(pq)^{23}} \\text{ при } p = 2, q = 4",
-                            "answer": "нет в базе",
+                            "answer": "64",
                             "status": "draft"
                         },
                         {
                             "id": 11,
                             "expression": "\\frac{(c^5)^4 \\cdot d^{16}}{(cd)^{19}} \\text{ при } c = 20, d = 10",
-                            "answer": "нет в базе",
+                            "answer": "0.02",
                             "status": "draft"
                         },
                         {
                             "id": 12,
                             "expression": "\\frac{(z^4)^7 \\cdot t^{29}}{(zt)^{26}} \\text{ при } z = 10, t = 3",
-                            "answer": "нет в базе",
+                            "answer": "2700",
                             "status": "draft"
                         }
                     ]
