@@ -2106,38 +2106,38 @@
                     "tasks": [
                         {
                             "id": 1,
-                            "expression": "\\frac{9\\sqrt{a^8b}}{12\\sqrt{ab}} \\text{ при } a = 11, b = 8",
-                            "answer": "3310.8206969723",
+                            "expression": "\\frac{9\\sqrt{a} \\cdot 8\\sqrt{b}}{12\\sqrt{ab}} \\text{ при } a = 11, b = 8",
+                            "answer": "6",
                             "status": "draft"
                         },
                         {
                             "id": 2,
-                            "expression": "\\frac{15\\sqrt{x^{16}y}}{10\\sqrt{xy}} \\text{ при } x = 13, y = 3",
-                            "answer": "339364493.2542357445",
+                            "expression": "\\frac{15\\sqrt{x} \\cdot 16\\sqrt{y}}{10\\sqrt{xy}} \\text{ при } x = 13, y = 3",
+                            "answer": "24",
                             "status": "draft"
                         },
                         {
                             "id": 3,
-                            "expression": "\\frac{25\\sqrt{a^{12}b}}{15\\sqrt{ab}} \\text{ при } a = 6, b = 7",
-                            "answer": "31745.38706647",
+                            "expression": "\\frac{25\\sqrt{a} \\cdot 12\\sqrt{b}}{15\\sqrt{ab}} \\text{ при } a = 6, b = 7",
+                            "answer": "20",
                             "status": "draft"
                         },
                         {
                             "id": 4,
-                            "expression": "\\frac{6\\sqrt{x \\cdot 21y}}{14\\sqrt{xy}} \\text{ при } x = 3, y = 10",
-                            "answer": "1.9639610121",
+                            "expression": "\\frac{6\\sqrt{x} \\cdot 21\\sqrt{y}}{14\\sqrt{xy}} \\text{ при } x = 3, y = 10",
+                            "answer": "9",
                             "status": "draft"
                         },
                         {
                             "id": 5,
-                            "expression": "\\frac{49\\sqrt{a \\cdot 9b}}{21\\sqrt{ab}} \\text{ при } a = 4, b = 15",
-                            "answer": "7",
+                            "expression": "\\frac{49\\sqrt{a} \\cdot 9\\sqrt{b}}{21\\sqrt{ab}} \\text{ при } a = 4, b = 15",
+                            "answer": "21",
                             "status": "draft"
                         },
                         {
                             "id": 6,
-                            "expression": "\\frac{12\\sqrt{x \\cdot 25y}}{20\\sqrt{xy}} \\text{ при } x = 6, y = 12",
-                            "answer": "3",
+                            "expression": "\\frac{12\\sqrt{x} \\cdot 25\\sqrt{y}}{20\\sqrt{xy}} \\text{ при } x = 6, y = 12",
+                            "answer": "15",
                             "status": "draft"
                         }
                     ]
