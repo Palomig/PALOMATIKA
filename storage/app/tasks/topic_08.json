@@ -1716,38 +1716,38 @@
                         },
                         {
                             "id": 13,
-                            "expression": "(3\\sqrt{2} - 5)^2 + 3\\sqrt{2}",
-                            "answer": "729.124891681",
+                            "expression": "\\sqrt{(3\\sqrt{2} - 5)^2} + 3\\sqrt{2}",
+                            "answer": "5",
                             "status": "draft"
                         },
                         {
                             "id": 14,
-                            "expression": "(5\\sqrt{2} - 8)^2 + 5\\sqrt{2}",
-                            "answer": "1936.2081528017",
+                            "expression": "\\sqrt{(5\\sqrt{2} - 8)^2} + 5\\sqrt{2}",
+                            "answer": "8",
                             "status": "draft"
                         },
                         {
                             "id": 15,
-                            "expression": "(4\\sqrt{2} - 7)^2 + 4\\sqrt{2}",
-                            "answer": "1225.752308679",
+                            "expression": "\\sqrt{(4\\sqrt{2} - 7)^2} + 4\\sqrt{2}",
+                            "answer": "7",
                             "status": "draft"
                         },
                         {
                             "id": 16,
-                            "expression": "(6\\sqrt{3} - 11)^2 + 6\\sqrt{3}",
-                            "answer": "2635.4730299493",
+                            "expression": "\\sqrt{(6\\sqrt{3} - 11)^2} + 6\\sqrt{3}",
+                            "answer": "11",
                             "status": "draft"
                         },
                         {
                             "id": 17,
-                            "expression": "(2\\sqrt{3} - 5)^2 + 2\\sqrt{3}",
-                            "answer": "301.6935750346",
+                            "expression": "\\sqrt{(2\\sqrt{3} - 5)^2} + 2\\sqrt{3}",
+                            "answer": "5",
                             "status": "draft"
                         },
                         {
                             "id": 18,
-                            "expression": "(5\\sqrt{3} - 9)^2 + 5\\sqrt{3}",
-                            "answer": "1877.7602170282",
+                            "expression": "\\sqrt{(5\\sqrt{3} - 9)^2} + 5\\sqrt{3}",
+                            "answer": "9",
                             "status": "draft"
                         }
                     ]
