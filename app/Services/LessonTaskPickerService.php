@@ -19,6 +19,31 @@ class LessonTaskPickerService
 {
     public const TASK_TYPE_FALLBACK = 'expression';
 
+    /** Разделы ОГЭ. У прочих банков разделов нет. */
+    public const OGE_SECTIONS = [
+        'part1' => ['title' => '1я часть',      'topics' => ['06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19']],
+        'part2' => ['title' => '2я часть',      'topics' => ['20', '21', '23', '24', '25']],
+        'new'   => ['title' => 'Новые задания', 'topics' => ['09', '10', '15', '16', '17']],
+    ];
+
+    /** Метка задания «Новые задания» внутри topic_XX.json (zadanie.label). */
+    public const NEW_ZADANIE_LABEL = 'Новые задания';
+
+    /**
+     * @return array<int, array{id:string, title:string}>
+     */
+    public function sections(string $bank): array
+    {
+        if ($bank !== 'oge') {
+            return [];
+        }
+        $out = [];
+        foreach (self::OGE_SECTIONS as $id => $s) {
+            $out[] = ['id' => $id, 'title' => $s['title']];
+        }
+        return $out;
+    }
+
     public function grades(string $bank): array
     {
         return match ($bank) {
@@ -34,7 +59,7 @@ class LessonTaskPickerService
     /**
      * @return array<int, array{id:string, title:string}>
      */
-    public function topics(string $bank, ?int $grade = null): array
+    public function topics(string $bank, ?int $grade = null, ?string $section = null): array
     {
         $topics = match ($bank) {
             'oge'       => $this->ogeTopics(),
@@ -43,6 +68,16 @@ class LessonTaskPickerService
             'alg-topic' => $grade ? $this->algTopics($grade) : [],
             default     => [],
         };
+
+        if ($bank === 'oge' && $section !== null && isset(self::OGE_SECTIONS[$section])) {
+            $byId = array_column($topics, null, 'id');
+            $topics = [];
+            foreach (self::OGE_SECTIONS[$section]['topics'] as $id) {
+                if (isset($byId[$id])) {
+                    $topics[] = $byId[$id];
+                }
+            }
+        }
 
         foreach ($topics as &$t) {
             $ex = $this->firstTopicExample($bank, (string) $t['id'], $grade);
@@ -145,13 +180,17 @@ class LessonTaskPickerService
      * Для не-alg-skill: group_key = zadanie_number, group_label = "№N · instruction".
      * Для alg-skill:    group_key = level_id,       group_label = level title.
      *
+     * Для bank='oge' поддерживается $section (ключ self::OGE_SECTIONS):
+     * 'new' — только задания с label 'Новые задания' (в JSON это zadanie number 0),
+     * 'part1'/'part2' — все остальные. Без $section — легаси-поведение (без «новых»).
+     *
      * @return array<int, array{
-     *   id:string|int, expression:string, answer:string,
-     *   group_key:string|int, group_label:string,
+     *   id:string|int, expression:string, text?:string, image?:string, answer:string,
+     *   group_key:string|int, group_label:string, section?:string|null,
      *   zadanie_number?:int, level_id?:string
      * }>
      */
-    public function tasks(string $bank, array $refs): array
+    public function tasks(string $bank, array $refs, ?string $section = null): array
     {
         if ($bank === 'alg-skill') {
             return $this->algSkillTasks($refs);
@@ -159,15 +198,26 @@ class LessonTaskPickerService
 
         if (empty($refs['topic_id'])) return [];
 
+        $filterBySection = $bank === 'oge' && $section !== null;
+
         $blocks = $this->resolveBlocks($bank, $refs);
         $result = [];
         foreach ($blocks as $block) {
             $blockNumber = (int) ($block['number'] ?? 0);
             foreach ($block['zadaniya'] ?? [] as $z) {
+                $isNewZadanie = (string) ($z['label'] ?? '') === self::NEW_ZADANIE_LABEL;
+                if ($filterBySection && ($section === 'new') !== $isNewZadanie) {
+                    // 'new' — только задания с label 'Новые задания';
+                    // part1/part2 — наоборот, без них (чтобы «новые» не дублировались).
+                    continue;
+                }
                 $number = (int) ($z['number'] ?? 0);
-                if (!$number) continue;
+                // «Новые задания» живут в zadanie с number 0 — для раздела 'new' это валидно.
+                if (!$number && !($isNewZadanie && $section === 'new')) continue;
                 $instruction = $this->shorten((string) ($z['instruction'] ?? ''), 80);
-                $groupLabel = $instruction !== '' ? "№{$number} · {$instruction}" : "№{$number}";
+                $groupLabel = $isNewZadanie
+                    ? self::NEW_ZADANIE_LABEL
+                    : ($instruction !== '' ? "№{$number} · {$instruction}" : "№{$number}");
                 foreach ($this->supportedTasks($z) as $t) {
                     $taskId = $t['id'] ?? '';
                     $expression = (string) ($t['expression'] ?? $t['prompt'] ?? $t['question'] ?? $t['text'] ?? '');
@@ -178,11 +228,14 @@ class LessonTaskPickerService
                         'uid'            => "{$blockNumber}.{$number}.{$taskId}",
                         'id'             => $taskId,
                         'expression'     => $expression,
+                        'text'           => (string) ($t['text'] ?? ''),
+                        'image'          => (string) ($t['image'] ?? ''),
                         'answer'         => (string) ($t['answer'] ?? ''),
                         'image_svg'      => (string) ($t['svg'] ?? ''),
                         'group_key'      => $number,
                         'group_label'    => $groupLabel,
                         'zadanie_number' => $number,
+                        'section'        => $section,
                     ];
                 }
             }
