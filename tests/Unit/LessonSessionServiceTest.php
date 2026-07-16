@@ -10,6 +10,7 @@ use App\Services\LessonSessionService;
 use App\Services\TaskAnswerResolver;
 use App\Services\TaskBankResolver;
 use DomainException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -55,6 +56,15 @@ class LessonSessionServiceTest extends TestCase
             'end_time'    => '11:00',
             'is_active'   => true,
         ]);
+    }
+
+    /** Хелпер: live-сессия с одной задачей (createAdhoc + addTask + start). */
+    private function makeLiveSession(LessonSessionService $svc, ?User $teacher = null): LessonSession
+    {
+        $session = $svc->createAdhoc($teacher ?? $this->makeTeacher());
+        $svc->addTask($session, 'alg-skill', ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1]);
+        $svc->start($session);
+        return $session->fresh();
     }
 
     public function test_create_from_schedule_no_longer_autoadds_participants(): void
@@ -168,12 +178,96 @@ class LessonSessionServiceTest extends TestCase
 
         $p = $joined->participants()->where('student_id', $student->id)->first();
         $this->assertSame('code', $p->source);
-        // TODO(Task C2): assert locked_until ≈ now()+60min после миграции полей лока.
+        // Лок ставится на LOCK_MINUTES (60) от момента входа.
+        $this->assertNotNull($p->locked_until);
+        $this->assertTrue($p->locked_until->between(
+            now()->addMinutes(LessonSessionService::LOCK_MINUTES - 1),
+            now()->addMinutes(LessonSessionService::LOCK_MINUTES + 1),
+        ));
 
-        // Повторный вход идемпотентен.
+        // Повторный вход идемпотентен и НЕ продлевает лок.
+        $lockedUntilBefore = $p->locked_until;
         $svc->start($session);
+        $this->travel(5)->minutes();
         $svc->joinByCode($session->join_code, $student);
         $this->assertSame(1, $joined->participants()->where('student_id', $student->id)->count());
+        $this->assertTrue($p->fresh()->locked_until->equalTo($lockedUntilBefore));
+    }
+
+    // --- activeLockFor / release (Task C2) ---
+
+    public function test_active_lock_found_after_join_by_code(): void
+    {
+        $svc = $this->service();
+        $session = $this->makeLiveSession($svc);
+        $student = $this->makeStudent();
+        $svc->joinByCode($session->join_code, $student);
+
+        $lock = $svc->activeLockFor($student);
+        $this->assertNotNull($lock);
+        $this->assertSame($session->id, $lock->lesson_session_id);
+        $this->assertSame($student->id, $lock->student_id);
+        $this->assertTrue($lock->hasActiveLock());
+    }
+
+    public function test_active_lock_gone_after_release(): void
+    {
+        $svc = $this->service();
+        $teacher = $this->makeTeacher();
+        $session = $this->makeLiveSession($svc, $teacher);
+        $student = $this->makeStudent();
+        $svc->joinByCode($session->join_code, $student);
+
+        $svc->release($session, $student->id, $teacher);
+
+        $this->assertNull($svc->activeLockFor($student));
+        $p = $session->participants()->where('student_id', $student->id)->first();
+        $this->assertNotNull($p->released_at);
+        $this->assertSame($teacher->id, $p->released_by);
+        $this->assertFalse($p->hasActiveLock());
+    }
+
+    public function test_active_lock_gone_after_session_end(): void
+    {
+        $svc = $this->service();
+        $session = $this->makeLiveSession($svc);
+        $student = $this->makeStudent();
+        $svc->joinByCode($session->join_code, $student);
+        $svc->end($session);
+
+        $this->assertNull($svc->activeLockFor($student));
+        $p = $session->participants()->where('student_id', $student->id)->first();
+        $this->assertFalse($p->hasActiveLock());
+    }
+
+    public function test_active_lock_expires_after_lock_minutes(): void
+    {
+        $svc = $this->service();
+        $session = $this->makeLiveSession($svc);
+        $student = $this->makeStudent();
+        $svc->joinByCode($session->join_code, $student);
+
+        $this->travel(61)->minutes();
+
+        $this->assertNull($svc->activeLockFor($student));
+        $p = $session->participants()->where('student_id', $student->id)->first();
+        $this->assertFalse($p->hasActiveLock());
+    }
+
+    public function test_active_lock_null_for_student_without_lesson(): void
+    {
+        $this->assertNull($this->service()->activeLockFor($this->makeStudent()));
+    }
+
+    public function test_release_unknown_participant_throws(): void
+    {
+        $svc = $this->service();
+        $teacher = $this->makeTeacher();
+        $session = $this->makeLiveSession($svc, $teacher);
+        $outsider = $this->makeStudent();
+
+        $this->expectException(ModelNotFoundException::class);
+        $svc->release($session, $outsider->id, $teacher);
     }
 
     public function test_join_by_wrong_code_throws(): void

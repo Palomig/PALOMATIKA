@@ -21,6 +21,9 @@ class LessonSessionService
     /** Статусы, в которых сессия занимает join_code и доступна для входа по коду. */
     public const JOIN_CODE_STATUSES = [LessonSession::STATUS_DRAFT, LessonSession::STATUS_LIVE];
 
+    /** На сколько минут ученик локается на странице урока после входа по коду. */
+    public const LOCK_MINUTES = 60;
+
     public function __construct(
         private readonly TaskBankResolver $bankResolver,
         private readonly TaskAnswerResolver $answerResolver,
@@ -178,12 +181,37 @@ class LessonSessionService
                 'student_id'        => $student->id,
             ],
             [
-                'source' => LessonSessionParticipant::SOURCE_CODE,
-                // TODO(Task C2): 'locked_until' => now()->addMinutes(self::LOCK_MINUTES)
+                'source'       => LessonSessionParticipant::SOURCE_CODE,
+                // Лок ставится только при создании участия: повторный вход НЕ продлевает.
+                'locked_until' => now()->addMinutes(self::LOCK_MINUTES),
             ]
         );
 
         return $session;
+    }
+
+    /**
+     * Участие ученика с активным локом (урок не завершён, не отпущен, время не вышло).
+     */
+    public function activeLockFor(User $student): ?LessonSessionParticipant
+    {
+        return LessonSessionParticipant::where('student_id', $student->id)
+            ->whereNull('released_at')
+            ->where('locked_until', '>', now())
+            ->whereHas('session', fn ($q) => $q->whereIn('status', self::JOIN_CODE_STATUSES))
+            ->latest('joined_at')
+            ->first();
+    }
+
+    /**
+     * Учитель вручную отпускает ученика с урока (снимает лок).
+     */
+    public function release(LessonSession $session, int $studentId, User $teacher): void
+    {
+        $p = LessonSessionParticipant::where('lesson_session_id', $session->id)
+            ->where('student_id', $studentId)
+            ->firstOrFail();
+        $p->update(['released_at' => now(), 'released_by' => $teacher->id]);
     }
 
     /**
