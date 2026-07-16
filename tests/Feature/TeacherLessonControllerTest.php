@@ -234,7 +234,9 @@ class TeacherLessonControllerTest extends TestCase
         $html = $resp->getContent();
         $this->assertStringContainsString('Урок #' . $session->id, $html);
         $this->assertStringContainsString('lessonPrep', $html, 'Alpine wrapper present');
-        $this->assertStringContainsString('signed-add', $html, 'alg-skills bundle inlined for picker');
+        // Бандл навыков больше не инлайнится — picker грузит опции через
+        // GET /lessons/picker-options; проверяем сам компонент picker'а.
+        $this->assertStringContainsString('taskPicker(', $html, 'task picker component present');
     }
 
     public function test_prep_view_forbidden_for_other_teacher(): void
@@ -246,6 +248,28 @@ class TeacherLessonControllerTest extends TestCase
         $this->actingAs($intruder)
             ->get(self::BASE . "/lessons/{$session->id}")
             ->assertForbidden();
+    }
+
+    public function test_picker_options_returns_sections_and_filters_topics(): void
+    {
+        $teacher = $this->teacher();
+
+        $r = $this->actingAs($teacher)
+            ->getJson(self::BASE . '/lessons/picker-options?bank=oge');
+        $r->assertOk()->assertJsonPath('sections.0.id', 'part1');
+
+        $r2 = $this->actingAs($teacher)
+            ->getJson(self::BASE . '/lessons/picker-options?bank=oge&section=part2');
+        $ids = array_column($r2->json('topics'), 'id');
+        $this->assertSame(['20', '21', '23', '24', '25'], $ids);
+    }
+
+    public function test_picker_options_rejects_unknown_section(): void
+    {
+        $this->actingAs($this->teacher())
+            ->getJson(self::BASE . '/lessons/picker-options?bank=oge&section=part9')
+            ->assertStatus(422)
+            ->assertJsonPath('error', 'Unknown section');
     }
 
     public function test_remove_task_from_another_session_404(): void

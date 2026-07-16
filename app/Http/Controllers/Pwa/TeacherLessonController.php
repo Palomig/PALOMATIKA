@@ -53,6 +53,11 @@ class TeacherLessonController extends Controller
             return response()->json(['error' => 'Unknown bank'], 422);
         }
 
+        $section = $request->query('section') ?: null;
+        if ($section !== null && !array_key_exists($section, LessonTaskPickerService::OGE_SECTIONS)) {
+            return response()->json(['error' => 'Unknown section'], 422);
+        }
+
         $refs = [
             'grade'           => $request->query('grade')           !== null ? (int) $request->query('grade') : null,
             'topic_id'        => $request->query('topic_id')        ?: null,
@@ -62,7 +67,10 @@ class TeacherLessonController extends Controller
         ];
         $refs = array_filter($refs, fn ($v) => $v !== null && $v !== '');
 
-        $response = ['grades' => $picker->grades($bank)];
+        $response = [
+            'grades'   => $picker->grades($bank),
+            'sections' => $picker->sections($bank),
+        ];
 
         if ($bank === 'alg-skill') {
             if (!empty($refs['grade'])) {
@@ -75,10 +83,10 @@ class TeacherLessonController extends Controller
             $needsGrade = in_array($bank, ['vpr', 'alg-topic'], true);
             $gradeReady = !$needsGrade || !empty($refs['grade']);
             if ($gradeReady) {
-                $response['topics'] = $picker->topics($bank, $refs['grade'] ?? null);
+                $response['topics'] = $picker->topics($bank, $refs['grade'] ?? null, $section);
             }
             if ($gradeReady && !empty($refs['topic_id'])) {
-                $response['tasks'] = $picker->tasks($bank, $refs);
+                $response['tasks'] = $picker->tasks($bank, $refs, $section);
             }
         }
 
