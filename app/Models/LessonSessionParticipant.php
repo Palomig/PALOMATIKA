@@ -9,6 +9,7 @@ class LessonSessionParticipant extends Model
 {
     public const SOURCE_SCHEDULE = 'schedule';
     public const SOURCE_INVITE   = 'invite';
+    public const SOURCE_CODE     = 'code';
 
     public $timestamps = false;
 
