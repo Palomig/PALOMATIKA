@@ -218,7 +218,9 @@ class LessonTaskPickerService
                 $groupLabel = $isNewZadanie
                     ? self::NEW_ZADANIE_LABEL
                     : ($instruction !== '' ? "№{$number} · {$instruction}" : "№{$number}");
-                foreach ($this->supportedTasks($z) as $t) {
+                // part2: задачи без эталонного ответа (тема 24 — доказательства)
+                // тоже попадают на урок — учитель видит ответ ученика без ✓/✗.
+                foreach ($this->supportedTasks($z, allowMissingAnswer: $section === 'part2') as $t) {
                     $taskId = $t['id'] ?? '';
                     $expression = (string) ($t['expression'] ?? $t['prompt'] ?? $t['question'] ?? $t['text'] ?? '');
                     if ($expression === '') {
@@ -300,7 +302,12 @@ class LessonTaskPickerService
     /** Текстовые типы без картинки: условие в text/instruction + ответ. */
     private const TEXT_EXPRESSION_TYPES = ['word_problem'];
 
-    private function supportedTasks(array $zadanie): array
+    /**
+     * @param bool $allowMissingAnswer Ослабляет требование непустого answer для
+     *   текстовых/geometry задач (раздел part2: тема 24 — доказательства без эталона).
+     *   Условие с текстом остаётся обязательным.
+     */
+    private function supportedTasks(array $zadanie, bool $allowMissingAnswer = false): array
     {
         $zadanieType = strtolower(trim((string) ($zadanie['type'] ?? '')));
         $instruction = (string) ($zadanie['instruction'] ?? '');
@@ -328,7 +335,7 @@ class LessonTaskPickerService
             $isExpression = ($type === '' || $type === 'expression'
                     || in_array($type, self::TEXT_EXPRESSION_TYPES, true)
                     || in_array($type, self::IMAGE_LIKE_TYPES, true))
-                && $expression !== '' && $hasAnswer;
+                && $expression !== '' && ($hasAnswer || $allowMissingAnswer);
             $isChoiceLike = in_array($type, ['choice', 'simple_choice', 'fraction_choice', 'interval_choice'], true)
                 && $expression !== '';
             // Картинка + ответ без текста (matching/grid_image): условие берётся из instruction.

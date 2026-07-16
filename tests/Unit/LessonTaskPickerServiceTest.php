@@ -87,6 +87,24 @@ class LessonTaskPickerServiceTest extends TestCase
         $this->assertArrayHasKey('image', $tasks[0]);
     }
 
+    public function test_part2_includes_topic_24_tasks_without_answer(): void
+    {
+        $tasks = $this->picker->tasks('oge', ['topic_id' => '24'], 'part2');
+        $this->assertNotEmpty($tasks);
+        foreach ($tasks as $t) {
+            $this->assertSame('', $t['answer']);
+            $this->assertNotSame('', $t['expression']);
+        }
+    }
+
+    public function test_legacy_call_without_section_still_filters_tasks_without_answer(): void
+    {
+        // Обратная совместимость: старый picker-флоу (без section) и другие банки
+        // по-прежнему НЕ отдают задачи без эталонного ответа. У темы 24 все
+        // задачи без answer — легаси-вызов обязан вернуть пустой список.
+        $this->assertSame([], $this->picker->tasks('oge', ['topic_id' => '24']));
+    }
+
     public function test_section_null_keeps_legacy_behaviour(): void
     {
         // Без section — как раньше (все темы ОГЭ)
