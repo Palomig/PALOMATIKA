@@ -266,7 +266,7 @@ class TeacherLessonController extends Controller
             'schedule_id'  => $s->schedule_id,
             'starts_at'    => $s->starts_at?->toIso8601String(),
             'ends_at'      => $s->ends_at?->toIso8601String(),
-            'invite_token' => $s->invite_token,
+            'join_code'    => $s->join_code,
         ];
     }
 

@@ -33,7 +33,7 @@ class StudentLessonControllerTest extends TestCase
         ]);
     }
 
-    /** Хелпер: создать сессию с одной alg-skill задачей и стартовать */
+    /** Хелпер: создать сессию с одной alg-skill задачей, стартовать и завести ученика по коду */
     private function makeLiveSessionWithTask(User $teacher, User $student): array
     {
         $svc = app(LessonSessionService::class);
@@ -46,7 +46,9 @@ class StudentLessonControllerTest extends TestCase
             'grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1,
         ]);
         $svc->start($session);
-        return [$session->fresh(), $task];
+        $session->refresh();
+        $svc->joinByCode($session->join_code, $student);
+        return [$session, $task];
     }
 
     public function test_active_returns_null_when_no_live_session(): void
@@ -139,54 +141,59 @@ class StudentLessonControllerTest extends TestCase
             ])->assertForbidden();
     }
 
-    // --- LessonJoinController (main domain) ---
+    // --- POST /lessons/join (вход по 4-значному коду) ---
 
-    public function test_join_guest_redirects_to_student_login(): void
-    {
-        $session = LessonSession::create(['teacher_id' => $this->teacher()->id, 'status' => 'live', 'invite_token' => str_repeat('a', 16)]);
-
-        $resp = $this->get(self::MAIN_BASE . "/lesson/join/{$session->invite_token}")
-            ->assertRedirect();
-
-        $this->assertStringContainsString('student.palomatika.ru/login', $resp->headers->get('Location'));
-    }
-
-    public function test_join_teacher_gets_403(): void
-    {
-        $session = LessonSession::create(['teacher_id' => $this->teacher()->id, 'status' => 'live', 'invite_token' => str_repeat('b', 16)]);
-
-        $this->actingAs($this->teacher())
-            ->get(self::MAIN_BASE . "/lesson/join/{$session->invite_token}")
-            ->assertForbidden();
-    }
-
-    public function test_join_unknown_token_404(): void
-    {
-        $this->actingAs($this->student())
-            ->get(self::MAIN_BASE . '/lesson/join/' . str_repeat('z', 16))
-            ->assertNotFound();
-    }
-
-    public function test_join_student_redirects_to_lesson_page(): void
+    public function test_join_by_code_success_returns_lesson_id_and_creates_participant(): void
     {
         $teacher = $this->teacher();
         $session = app(LessonSessionService::class)->createAdhoc($teacher);
-        app(LessonSessionService::class)->addTask($session, 'alg-skill', [
-            'grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1,
-        ]);
-        app(LessonSessionService::class)->start($session);
-        $session->refresh();
-
         $student = $this->student();
-        $resp = $this->actingAs($student)
-            ->get(self::MAIN_BASE . "/lesson/join/{$session->invite_token}")
-            ->assertRedirect();
 
-        $this->assertStringContainsString("student.palomatika.ru/lessons/{$session->id}", $resp->headers->get('Location'));
+        $this->actingAs($student)
+            ->postJson(self::STUDENT_BASE . '/lessons/join', ['code' => $session->join_code])
+            ->assertOk()
+            ->assertJson(['lesson_id' => $session->id]);
+
         $this->assertDatabaseHas('lesson_session_participants', [
             'lesson_session_id' => $session->id,
             'student_id'        => $student->id,
-            'source'            => 'invite',
+            'source'            => 'code',
         ]);
+    }
+
+    public function test_join_by_wrong_code_returns_422(): void
+    {
+        $this->actingAs($this->student())
+            ->postJson(self::STUDENT_BASE . '/lessons/join', ['code' => '0000'])
+            ->assertStatus(422)
+            ->assertJsonStructure(['error']);
+    }
+
+    public function test_join_by_non_digit_code_fails_validation(): void
+    {
+        $this->actingAs($this->student())
+            ->postJson(self::STUDENT_BASE . '/lessons/join', ['code' => 'abc1'])
+            ->assertStatus(422);
+    }
+
+    public function test_join_by_code_then_lesson_page_opens(): void
+    {
+        $teacher = $this->teacher();
+        $svc = app(LessonSessionService::class);
+        $session = $svc->createAdhoc($teacher);
+        $svc->addTask($session, 'alg-skill', [
+            'grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1,
+        ]);
+        $svc->start($session);
+        $session->refresh();
+
+        $student = $this->student();
+        $this->actingAs($student)
+            ->postJson(self::STUDENT_BASE . '/lessons/join', ['code' => $session->join_code])
+            ->assertOk();
+
+        $this->actingAs($student)
+            ->get(self::STUDENT_BASE . "/lessons/{$session->id}")
+            ->assertOk();
     }
 }

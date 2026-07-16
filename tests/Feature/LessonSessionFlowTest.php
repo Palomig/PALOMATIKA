@@ -11,8 +11,8 @@ use Illuminate\Support\Carbon;
 use Tests\TestCase;
 
 /**
- * End-to-end сценарий: teacher собирает урок → 2 ученика отвечают →
- * teacher видит грид → завершение → submit после end → 422.
+ * End-to-end сценарий: teacher собирает урок → 2 ученика входят по коду
+ * и отвечают → teacher видит грид → завершение → submit после end → 422.
  *
  * Также проверяет команду lesson-sessions:auto-close.
  */
@@ -22,7 +22,6 @@ class LessonSessionFlowTest extends TestCase
 
     private const TEACHER_BASE = 'http://teacher.palomatika.ru';
     private const STUDENT_BASE = 'http://student.palomatika.ru';
-    private const MAIN_BASE    = 'http://palomatika.ru';
 
     public function test_complete_lesson_flow_through_all_api_layers(): void
     {
@@ -71,16 +70,21 @@ class LessonSessionFlowTest extends TestCase
             ->assertJsonPath('session.status', 'live')
             ->json('session');
 
-        // 4. Bob присоединяется по invite-токену (off-schedule)
-        $inviteToken = $session['invite_token'];
-        $this->assertIsString($inviteToken);
+        // 4. Alice и Bob входят по 4-значному коду (автоучастников из расписания нет)
+        $joinCode = $session['join_code'];
+        $this->assertMatchesRegularExpression('/^\d{4}$/', $joinCode);
 
-        $joinResp = $this->actingAs($bob)
-            ->get(self::MAIN_BASE . "/lesson/join/{$inviteToken}")
-            ->assertRedirect();
-        $this->assertStringContainsString("student.palomatika.ru/lessons/{$sessionId}", $joinResp->headers->get('Location'));
+        $this->actingAs($alice)
+            ->postJson(self::STUDENT_BASE . '/lessons/join', ['code' => $joinCode])
+            ->assertOk()
+            ->assertJson(['lesson_id' => $sessionId]);
 
-        // 5. Alice (active endpoint видит её участником из schedule)
+        $this->actingAs($bob)
+            ->postJson(self::STUDENT_BASE . '/lessons/join', ['code' => $joinCode])
+            ->assertOk()
+            ->assertJson(['lesson_id' => $sessionId]);
+
+        // 5. Alice: active endpoint видит её участником
         $this->actingAs($alice)
             ->getJson(self::STUDENT_BASE . '/lessons/active')
             ->assertOk()

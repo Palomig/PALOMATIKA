@@ -27,23 +27,25 @@ class TeacherLessonControllerTest extends TestCase
     {
         return User::create([
             'name' => 'S', 'email' => 's+' . uniqid() . '@t.t', 'password' => 'x', 'role' => 'student',
+            'onboarding_completed_at' => now(), // для middleware pwa.onboarding
         ]);
     }
 
-    public function test_create_adhoc_session_returns_invite_token(): void
+    public function test_create_adhoc_session_returns_join_code(): void
     {
         $resp = $this->actingAs($this->teacher())
             ->postJson(self::BASE . '/lessons');
 
         $resp->assertCreated()
-            ->assertJsonStructure(['session' => ['id', 'status', 'invite_token']]);
+            ->assertJsonStructure(['session' => ['id', 'status', 'join_code']]);
 
-        $this->assertNotNull($resp->json('session.invite_token'));
+        $this->assertMatchesRegularExpression('/^\d{4}$/', $resp->json('session.join_code'));
         $this->assertSame('draft', $resp->json('session.status'));
     }
 
-    public function test_create_session_from_schedule_includes_student(): void
+    public function test_create_session_from_schedule_creates_no_participants(): void
     {
+        // Автоучастники упразднены — ученики входят сами по коду.
         $teacher = $this->teacher();
         $student = $this->student();
         $slot = LessonSchedule::create([
@@ -57,9 +59,10 @@ class TeacherLessonControllerTest extends TestCase
             ->assertCreated();
 
         $sessionId = $resp->json('session.id');
-        $this->assertDatabaseHas('lesson_session_participants', [
-            'lesson_session_id' => $sessionId, 'student_id' => $student->id,
+        $this->assertDatabaseMissing('lesson_session_participants', [
+            'lesson_session_id' => $sessionId,
         ]);
+        $this->assertMatchesRegularExpression('/^\d{4}$/', $resp->json('session.join_code'));
     }
 
     public function test_lessons_page_renders_for_teacher(): void
@@ -75,8 +78,9 @@ class TeacherLessonControllerTest extends TestCase
         $this->assertStringContainsString('lessonsBoard', $html);
     }
 
-    public function test_from_slot_creates_draft_with_linked_participants(): void
+    public function test_from_slot_creates_draft_without_participants(): void
     {
+        // Автоучастники упразднены — ученики входят сами по коду.
         $teacher = $this->teacher();
         $student = $this->student();
         TeacherStudent::create(['teacher_id' => $teacher->id, 'student_id' => $student->id, 'evrium_name' => 'Вася']);
@@ -94,8 +98,8 @@ class TeacherLessonControllerTest extends TestCase
         $this->assertDatabaseHas('lesson_sessions', [
             'id' => $sessionId, 'teacher_id' => $teacher->id, 'starts_at' => '2026-05-29 14:00:00',
         ]);
-        $this->assertDatabaseHas('lesson_session_participants', [
-            'lesson_session_id' => $sessionId, 'student_id' => $student->id,
+        $this->assertDatabaseMissing('lesson_session_participants', [
+            'lesson_session_id' => $sessionId,
         ]);
     }
 
@@ -113,23 +117,6 @@ class TeacherLessonControllerTest extends TestCase
 
         $this->assertSame($first, $second);
         $this->assertSame(1, LessonSession::where('teacher_id', $teacher->id)->count());
-    }
-
-    public function test_from_slot_ignores_students_not_linked_to_teacher(): void
-    {
-        $teacher = $this->teacher();
-        $stranger = $this->student();
-
-        $sessionId = $this->actingAs($teacher)
-            ->postJson(self::BASE . '/lessons/from-slot', [
-                'starts_at'   => '2026-05-29 14:00:00',
-                'student_ids' => [$stranger->id],
-            ])
-            ->assertCreated()->json('session.id');
-
-        $this->assertDatabaseMissing('lesson_session_participants', [
-            'lesson_session_id' => $sessionId, 'student_id' => $stranger->id,
-        ]);
     }
 
     public function test_from_slot_requires_starts_at(): void
@@ -175,10 +162,16 @@ class TeacherLessonControllerTest extends TestCase
         $this->assertSame('-2', $taskResp->json('task.correct_answer'));
         $this->assertSame('-8 + 6', $taskResp->json('task.task_payload.expression'));
 
-        $this->actingAs($teacher)
+        $startResp = $this->actingAs($teacher)
             ->postJson(self::BASE . "/lessons/{$sessionId}/start")
             ->assertOk()
             ->assertJsonPath('session.status', 'live');
+
+        // Ученик входит по коду (автоучастников из расписания больше нет)
+        $this->actingAs($student)
+            ->postJson('http://student.palomatika.ru/lessons/join', [
+                'code' => $startResp->json('session.join_code'),
+            ])->assertOk();
 
         $state = $this->actingAs($teacher)
             ->getJson(self::BASE . "/lessons/{$sessionId}/state")
@@ -225,7 +218,7 @@ class TeacherLessonControllerTest extends TestCase
     public function test_prep_view_renders_for_owner(): void
     {
         $teacher = $this->teacher();
-        $session = LessonSession::create(['teacher_id' => $teacher->id, 'status' => 'draft', 'invite_token' => str_repeat('a', 16)]);
+        $session = LessonSession::create(['teacher_id' => $teacher->id, 'status' => 'draft', 'join_code' => '1234']);
 
         $resp = $this->actingAs($teacher)
             ->get(self::BASE . "/lessons/{$session->id}")

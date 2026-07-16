@@ -63,6 +63,22 @@ class StudentLessonController extends Controller
     }
 
     /**
+     * POST /lessons/join   body: { code } — вход по 4-значному коду урока.
+     */
+    public function join(Request $request): JsonResponse
+    {
+        $data = $request->validate(['code' => 'required|digits:4']);
+
+        try {
+            $session = $this->sessions->joinByCode($data['code'], $request->user());
+        } catch (DomainException $e) {
+            return response()->json(['error' => $e->getMessage()], 422);
+        }
+
+        return response()->json(['lesson_id' => $session->id]);
+    }
+
+    /**
      * GET /lessons/{id}/state — задачи + ТОЛЬКО свои ответы (без correct_answer).
      */
     public function state(Request $request, int $id): JsonResponse
