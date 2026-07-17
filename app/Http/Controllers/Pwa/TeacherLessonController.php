@@ -220,6 +220,18 @@ class TeacherLessonController extends Controller
     }
 
     /**
+     * POST /lessons/{id}/participants/{studentId}/release — вручную отпустить
+     * ученика с урока (снять лок навигации).
+     */
+    public function release(Request $request, int $id, int $studentId): JsonResponse
+    {
+        $session = $this->loadOwnSession($request, $id);
+        $this->sessions->release($session, $studentId, $request->user());
+
+        return response()->json(['ok' => true]);
+    }
+
+    /**
      * GET /lessons/{id}/state — полный снапшот для polling.
      * Возвращает session + tasks (с correct_answer) + participants + grid ответов.
      */
@@ -244,6 +256,7 @@ class TeacherLessonController extends Controller
                 'id'     => $p->student_id,
                 'name'   => $p->student?->name,
                 'source' => $p->source,
+                'locked' => $p->hasActiveLock(),
             ])->all(),
             'grid'         => $grid,
         ]);

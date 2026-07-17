@@ -153,6 +153,7 @@ Route::domain('teacher.' . config('app.base_domain'))->group(function () {
         Route::delete('/lessons/{id}/tasks/{taskId}',        [TeacherLessonController::class, 'removeTask'])->name('pwa.teacher.lessons.remove-task')->whereNumber('id')->whereNumber('taskId');
         Route::post('/lessons/{id}/start',                   [TeacherLessonController::class, 'start'])->name('pwa.teacher.lessons.start')->whereNumber('id');
         Route::post('/lessons/{id}/end',                     [TeacherLessonController::class, 'end'])->name('pwa.teacher.lessons.end')->whereNumber('id');
+        Route::post('/lessons/{id}/participants/{studentId}/release', [TeacherLessonController::class, 'release'])->name('pwa.teacher.lessons.release')->whereNumber('id')->whereNumber('studentId');
 
         Route::get('/variants', [TeacherController::class, 'variants'])->name('pwa.teacher.variants');
         Route::get('/referrals', [TeacherController::class, 'referrals'])->name('pwa.teacher.referrals');

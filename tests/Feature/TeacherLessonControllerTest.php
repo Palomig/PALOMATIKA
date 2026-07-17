@@ -279,4 +279,75 @@ class TeacherLessonControllerTest extends TestCase
             ->deleteJson(self::BASE . "/lessons/{$sessionA->id}/tasks/{$taskInB->id}")
             ->assertNotFound();
     }
+
+    // --- release (Task C4) ---
+
+    /** Live-сессия с задачей + ученик вошёл по коду (лок активен). */
+    private function makeLockedLesson(User $teacher, User $student): LessonSession
+    {
+        $svc = app(\App\Services\LessonSessionService::class);
+        $session = $svc->createAdhoc($teacher);
+        $svc->addTask($session, 'alg-skill', ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1]);
+        $svc->start($session);
+        $svc->joinByCode($session->fresh()->join_code, $student);
+        return $session->fresh();
+    }
+
+    public function test_release_unlocks_participant(): void
+    {
+        $teacher = $this->teacher();
+        $student = $this->student();
+        $session = $this->makeLockedLesson($teacher, $student);
+
+        $this->actingAs($teacher)
+            ->postJson(self::BASE . "/lessons/{$session->id}/participants/{$student->id}/release")
+            ->assertOk()
+            ->assertJson(['ok' => true]);
+
+        $p = $session->participants()->where('student_id', $student->id)->first();
+        $this->assertNotNull($p->released_at);
+        $this->assertSame($teacher->id, $p->released_by);
+    }
+
+    public function test_release_foreign_session_403(): void
+    {
+        $teacher = $this->teacher();
+        $student = $this->student();
+        $session = $this->makeLockedLesson($teacher, $student);
+
+        $this->actingAs($this->teacher())
+            ->postJson(self::BASE . "/lessons/{$session->id}/participants/{$student->id}/release")
+            ->assertForbidden();
+    }
+
+    public function test_release_unknown_participant_404(): void
+    {
+        $teacher = $this->teacher();
+        $session = $this->makeLockedLesson($teacher, $this->student());
+
+        $this->actingAs($teacher)
+            ->postJson(self::BASE . "/lessons/{$session->id}/participants/999999/release")
+            ->assertNotFound();
+    }
+
+    public function test_state_participants_include_locked_flag(): void
+    {
+        $teacher = $this->teacher();
+        $student = $this->student();
+        $session = $this->makeLockedLesson($teacher, $student);
+
+        $resp = $this->actingAs($teacher)
+            ->getJson(self::BASE . "/lessons/{$session->id}/state")
+            ->assertOk();
+
+        $participant = collect($resp->json('participants'))->firstWhere('id', $student->id);
+        $this->assertTrue($participant['locked']);
+
+        app(\App\Services\LessonSessionService::class)->release($session, $student->id, $teacher);
+
+        $resp = $this->actingAs($teacher)
+            ->getJson(self::BASE . "/lessons/{$session->id}/state");
+        $participant = collect($resp->json('participants'))->firstWhere('id', $student->id);
+        $this->assertFalse($participant['locked']);
+    }
 }
