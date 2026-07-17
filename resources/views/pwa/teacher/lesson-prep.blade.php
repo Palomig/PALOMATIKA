@@ -285,9 +285,11 @@
       renderLatex(expr) {
         if (!expr) return '';
         const s = String(expr);
-        // Текст с inline-формулами ($...$) — не math целиком: экранируем,
-        // формулы дорендерит auto-render (typeset) по делимитерам, как в базе.
-        if (s.includes('$')) { this.typeset(); return this.escapeHtml(s); }
+        // Проза (кириллица) или текст с $...$ — НЕ math целиком: KaTeX в math-режиме
+        // съел бы пробелы и не переносил бы строку. Экранируем как текст, формулы
+        // внутри $...$ дорендерит auto-render (typeset). Чистая формула (без кириллицы
+        // и без $, напр. alg-skill) идёт в KaTeX целиком.
+        if (s.includes('$') || /[а-яё]/i.test(s)) { this.typeset(); return this.escapeHtml(s); }
         // referencing katexReady makes this Alpine-reactive when KaTeX finishes loading
         const ready = this.katexReady;
         if (ready && window.katex) {
@@ -302,7 +304,8 @@
       // (в узкой ячейке НЕ рендерим формулы), bare-latex рендерим как раньше.
       headerHtml(expr) {
         const s = String(expr || '');
-        if (s.includes('$')) return this.escapeHtml(s.replace(/\$/g, '').slice(0, 40));
+        // В узкой ячейке грида формулы не рендерим — только компактный текст.
+        if (s.includes('$') || /[а-яё]/i.test(s)) return this.escapeHtml(s.replace(/\$/g, '').slice(0, 40));
         return this.renderLatex(s.slice(0, 40));
       },
 
