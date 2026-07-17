@@ -120,7 +120,8 @@ homeworks
 - **Бэкенд опций:** `GET /lessons/picker-options` (`LessonTaskPickerService`); полоски несут поле `preview` (+ `preview_svg`).
 - **Сохранение ДЗ:** вью шлёт скрытое поле `picker_tasks` = JSON-массив `[{bank, refs}]`; `TeacherController::assignFromPicker()` резолвит каждый через `TaskBankResolver::resolve()` в `homework_topic_tasks` (`task_payload` + `correct_answer`), недоступные пропускает. Легаси-путь `task_indices`/`topic_number` сохранён (additive).
 - **`topic_number` для alg-skill:** колонка NOT NULL, темы у навыка нет → пишется `0` (нейтрально: используется только для пути к картинкам ОГЭ/ВПР, а alg-skill задачи формульные/SVG-inline).
-- **Follow-up:** дедуп `existingUids` пока no-op (picker `uid` ≠ сохранённый идентификатор); KaTeX на странице ДЗ не подключён — формулы рендерятся как текст.
+- **Follow-up:** дедуп `existingUids` пока no-op (picker `uid` ≠ сохранённый идентификатор). KaTeX на учительской странице ДЗ подключён (@push('katex')).
+- **Picker v2 (2026-07-16, ветка `claude/lesson-v2`):** общий партиал переписан под интерфейс «как база заданий» — класс (7/8/9 ОГЭ, 9 по умолчанию) → разделы (1я/2я часть/Новые задания) → пилюли тем → спойлеры-задания с кнопкой «Выбрать блок» → карточки; глобальная корзина переживает навигацию. Контракт `taskPicker({onAdd, existingUids})` не менялся — ДЗ работает без правок своей стороны. Детали — в модуле [lessons](lessons.md).
 
 ## Связки и зависимости
 
