@@ -108,6 +108,8 @@
 
 <script>
   function studentLesson(sessionId, initialStatus) {
+    let tasksJson = ''; // вне reactive: снапшот последних серверных tasks
+
     return {
       sessionId,
       status: initialStatus,
@@ -151,8 +153,14 @@
         const d = await r.json();
         this.status = d.session.status;
         this.lock = d.lock || null;
-        // Merge tasks, preserving in-progress sending state
-        this.tasks = d.tasks;
+        // tasks заменяем только при реальном изменении и не во время ввода:
+        // иначе :value каждые 5с переприменяется и стирает недопечатанный ответ.
+        const typing = document.activeElement?.classList?.contains('lesson-answer-input');
+        const tj = JSON.stringify(d.tasks);
+        if (tj !== tasksJson && !typing) {
+          tasksJson = tj;
+          this.tasks = d.tasks;
+        }
         // Re-render KaTeX after data update (next tick)
         this.$nextTick(() => {
           if (window.renderMathInElement) window.renderMathInElement(document.body, { delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}], throwOnError: false });
