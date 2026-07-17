@@ -27,7 +27,7 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
     Route::post('/bug-report', [BugReportController::class, 'store'])->name('pwa.student.bug-report');
 
     // ОГЭ-дашборд для 8-классников (без редиректа на VPR)
-    Route::get('/oge', [StudentController::class, 'ogeDashboard'])->middleware(['auth', 'pwa.onboarding'])->name('pwa.student.oge-dashboard');
+    Route::get('/oge', [StudentController::class, 'ogeDashboard'])->middleware(['auth', 'pwa.onboarding', 'pwa.lesson-lock'])->name('pwa.student.oge-dashboard');
 
     // Auth
     Route::get('/login', [AuthController::class, 'showLogin'])->name('pwa.student.login');
@@ -46,7 +46,7 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
     Route::get('/migrate', [AuthController::class, 'migrateFromTelegram'])->name('pwa.student.migrate');
 
     // Protected student routes
-    Route::middleware(['auth', 'pwa.onboarding'])->group(function () {
+    Route::middleware(['auth', 'pwa.onboarding', 'pwa.lesson-lock'])->group(function () {
         Route::get('/', [StudentController::class, 'dashboard'])->name('pwa.student.dashboard');
         Route::get('/mini', [StudentController::class, 'mini'])->name('pwa.student.mini');
         Route::get('/new-tasks', [StudentController::class, 'newTasks'])->name('pwa.student.new-tasks');
@@ -71,6 +71,7 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
 
         // Lesson endpoints (для polling в dashboard и страницы урока)
         Route::get('/lessons/active',          [StudentLessonController::class, 'active'])->name('pwa.student.lessons.active');
+        Route::post('/lessons/join',           [StudentLessonController::class, 'join'])->name('pwa.student.lessons.join');
         Route::get('/lessons/{id}',            [StudentLessonController::class, 'show'])->name('pwa.student.lessons.show')->whereNumber('id');
         Route::get('/lessons/{id}/state',      [StudentLessonController::class, 'state'])->name('pwa.student.lessons.state')->whereNumber('id');
         Route::post('/lessons/{id}/answer',    [StudentLessonController::class, 'answer'])->name('pwa.student.lessons.answer')->whereNumber('id');
@@ -152,6 +153,7 @@ Route::domain('teacher.' . config('app.base_domain'))->group(function () {
         Route::delete('/lessons/{id}/tasks/{taskId}',        [TeacherLessonController::class, 'removeTask'])->name('pwa.teacher.lessons.remove-task')->whereNumber('id')->whereNumber('taskId');
         Route::post('/lessons/{id}/start',                   [TeacherLessonController::class, 'start'])->name('pwa.teacher.lessons.start')->whereNumber('id');
         Route::post('/lessons/{id}/end',                     [TeacherLessonController::class, 'end'])->name('pwa.teacher.lessons.end')->whereNumber('id');
+        Route::post('/lessons/{id}/participants/{studentId}/release', [TeacherLessonController::class, 'release'])->name('pwa.teacher.lessons.release')->whereNumber('id')->whereNumber('studentId');
 
         Route::get('/variants', [TeacherController::class, 'variants'])->name('pwa.teacher.variants');
         Route::get('/referrals', [TeacherController::class, 'referrals'])->name('pwa.teacher.referrals');

@@ -10,6 +10,7 @@ use App\Services\LessonSessionService;
 use App\Services\TaskAnswerResolver;
 use App\Services\TaskBankResolver;
 use DomainException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -57,7 +58,16 @@ class LessonSessionServiceTest extends TestCase
         ]);
     }
 
-    public function test_create_from_schedule_adds_student_as_participant(): void
+    /** Хелпер: live-сессия с одной задачей (createAdhoc + addTask + start). */
+    private function makeLiveSession(LessonSessionService $svc, ?User $teacher = null): LessonSession
+    {
+        $session = $svc->createAdhoc($teacher ?? $this->makeTeacher());
+        $svc->addTask($session, 'alg-skill', ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1]);
+        $svc->start($session);
+        return $session->fresh();
+    }
+
+    public function test_create_from_schedule_no_longer_autoadds_participants(): void
     {
         $svc = $this->service();
         $teacher = $this->makeTeacher();
@@ -69,7 +79,8 @@ class LessonSessionServiceTest extends TestCase
         $this->assertSame(LessonSession::STATUS_DRAFT, $session->status);
         $this->assertSame($teacher->id, $session->teacher_id);
         $this->assertSame($slot->id, $session->schedule_id);
-        $this->assertTrue($svc->isParticipant($session, $student));
+        // Урок v2: участники входят только по коду, автодобавления из слота нет.
+        $this->assertSame(0, $session->participants()->count());
     }
 
     public function test_create_from_schedule_is_idempotent_within_same_day(): void
@@ -83,13 +94,27 @@ class LessonSessionServiceTest extends TestCase
         $this->assertSame($s1->id, $s2->id);
     }
 
-    public function test_create_adhoc_generates_invite_token(): void
+    public function test_create_generates_unique_4_digit_join_code(): void
     {
-        $session = $this->service()->createAdhoc($this->makeTeacher());
+        $svc = $this->service();
+        $s1 = $svc->createAdhoc($this->makeTeacher());
+        $s2 = $svc->createAdhoc($this->makeTeacher());
 
-        $this->assertNull($session->schedule_id);
-        $this->assertNotNull($session->invite_token);
-        $this->assertSame(16, strlen($session->invite_token));
+        $this->assertNull($s1->schedule_id);
+        $this->assertMatchesRegularExpression('/^\d{4}$/', $s1->join_code);
+        $this->assertMatchesRegularExpression('/^\d{4}$/', $s2->join_code);
+        $this->assertNotSame($s1->join_code, $s2->join_code);
+        // invite_token упразднён — больше не заполняется.
+        $this->assertNull($s1->invite_token);
+    }
+
+    public function test_create_from_schedule_generates_join_code(): void
+    {
+        $svc = $this->service();
+        $slot = $this->makeSlot($this->makeTeacher(), $this->makeStudent());
+        $session = $svc->createFromSchedule($slot);
+
+        $this->assertMatchesRegularExpression('/^\d{4}$/', $session->join_code);
     }
 
     public function test_add_task_resolves_from_bank_and_caches_payload(): void
@@ -139,25 +164,129 @@ class LessonSessionServiceTest extends TestCase
         $svc->start($session);
     }
 
-    public function test_join_by_token_works_only_when_live(): void
+    public function test_join_by_code_adds_participant_in_draft_and_live(): void
     {
         $svc = $this->service();
         $session = $svc->createAdhoc($this->makeTeacher());
         $svc->addTask($session, 'alg-skill', ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1]);
         $student = $this->makeStudent();
 
-        try {
-            $svc->joinByToken($session->invite_token, $student);
-            $this->fail('expected DomainException for draft session');
-        } catch (DomainException) {
-            // expected
-        }
-
-        $svc->start($session);
-        $joined = $svc->joinByToken($session->invite_token, $student);
-
+        // Вход разрешён уже в draft (ученик ждёт старта; submitAnswer всё равно требует live).
+        $joined = $svc->joinByCode($session->join_code, $student);
         $this->assertSame($session->id, $joined->id);
         $this->assertTrue($svc->isParticipant($joined, $student));
+
+        $p = $joined->participants()->where('student_id', $student->id)->first();
+        $this->assertSame('code', $p->source);
+        // Лок ставится на LOCK_MINUTES (60) от момента входа.
+        $this->assertNotNull($p->locked_until);
+        $this->assertTrue($p->locked_until->between(
+            now()->addMinutes(LessonSessionService::LOCK_MINUTES - 1),
+            now()->addMinutes(LessonSessionService::LOCK_MINUTES + 1),
+        ));
+
+        // Повторный вход идемпотентен и НЕ продлевает лок.
+        $lockedUntilBefore = $p->locked_until;
+        $svc->start($session);
+        $this->travel(5)->minutes();
+        $svc->joinByCode($session->join_code, $student);
+        $this->assertSame(1, $joined->participants()->where('student_id', $student->id)->count());
+        $this->assertTrue($p->fresh()->locked_until->equalTo($lockedUntilBefore));
+    }
+
+    // --- activeLockFor / release (Task C2) ---
+
+    public function test_active_lock_found_after_join_by_code(): void
+    {
+        $svc = $this->service();
+        $session = $this->makeLiveSession($svc);
+        $student = $this->makeStudent();
+        $svc->joinByCode($session->join_code, $student);
+
+        $lock = $svc->activeLockFor($student);
+        $this->assertNotNull($lock);
+        $this->assertSame($session->id, $lock->lesson_session_id);
+        $this->assertSame($student->id, $lock->student_id);
+        $this->assertTrue($lock->hasActiveLock());
+    }
+
+    public function test_active_lock_gone_after_release(): void
+    {
+        $svc = $this->service();
+        $teacher = $this->makeTeacher();
+        $session = $this->makeLiveSession($svc, $teacher);
+        $student = $this->makeStudent();
+        $svc->joinByCode($session->join_code, $student);
+
+        $svc->release($session, $student->id, $teacher);
+
+        $this->assertNull($svc->activeLockFor($student));
+        $p = $session->participants()->where('student_id', $student->id)->first();
+        $this->assertNotNull($p->released_at);
+        $this->assertSame($teacher->id, $p->released_by);
+        $this->assertFalse($p->hasActiveLock());
+    }
+
+    public function test_active_lock_gone_after_session_end(): void
+    {
+        $svc = $this->service();
+        $session = $this->makeLiveSession($svc);
+        $student = $this->makeStudent();
+        $svc->joinByCode($session->join_code, $student);
+        $svc->end($session);
+
+        $this->assertNull($svc->activeLockFor($student));
+        $p = $session->participants()->where('student_id', $student->id)->first();
+        $this->assertFalse($p->hasActiveLock());
+    }
+
+    public function test_active_lock_expires_after_lock_minutes(): void
+    {
+        $svc = $this->service();
+        $session = $this->makeLiveSession($svc);
+        $student = $this->makeStudent();
+        $svc->joinByCode($session->join_code, $student);
+
+        $this->travel(61)->minutes();
+
+        $this->assertNull($svc->activeLockFor($student));
+        $p = $session->participants()->where('student_id', $student->id)->first();
+        $this->assertFalse($p->hasActiveLock());
+    }
+
+    public function test_active_lock_null_for_student_without_lesson(): void
+    {
+        $this->assertNull($this->service()->activeLockFor($this->makeStudent()));
+    }
+
+    public function test_release_unknown_participant_throws(): void
+    {
+        $svc = $this->service();
+        $teacher = $this->makeTeacher();
+        $session = $this->makeLiveSession($svc, $teacher);
+        $outsider = $this->makeStudent();
+
+        $this->expectException(ModelNotFoundException::class);
+        $svc->release($session, $outsider->id, $teacher);
+    }
+
+    public function test_join_by_wrong_code_throws(): void
+    {
+        $this->expectException(DomainException::class);
+        $this->service()->joinByCode('0000', $this->makeStudent());
+    }
+
+    public function test_join_by_code_of_ended_session_throws(): void
+    {
+        $svc = $this->service();
+        $session = $svc->createAdhoc($this->makeTeacher());
+        $svc->addTask($session, 'alg-skill', ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1]);
+        $code = $session->join_code;
+        $svc->start($session);
+        $svc->end($session);
+
+        $this->expectException(DomainException::class);
+        $svc->joinByCode($code, $this->makeStudent());
     }
 
     public function test_submit_answer_auto_checks_correctness(): void
@@ -170,6 +299,7 @@ class LessonSessionServiceTest extends TestCase
         $session = $svc->createFromSchedule($slot);
         $task = $svc->addTask($session, 'alg-skill', ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1]);
         $svc->start($session);
+        $svc->joinByCode($session->join_code, $student);
 
         $correct = $svc->submitAnswer($session, $student, $task, '-2');
         $this->assertTrue($correct->is_correct);
@@ -200,6 +330,7 @@ class LessonSessionServiceTest extends TestCase
         $session = $svc->createFromSchedule($slot);
         $task = $svc->addTask($session, 'alg-skill', ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1]);
         $svc->start($session);
+        $svc->joinByCode($session->join_code, $student);
         $svc->end($session);
 
         $this->expectException(DomainException::class);

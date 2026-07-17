@@ -7,12 +7,9 @@ use App\Models\LessonSession;
 use App\Models\LessonSessionAttempt;
 use App\Models\LessonSessionParticipant;
 use App\Models\LessonSessionTask;
-use App\Models\TeacherStudent;
 use App\Models\User;
 use DomainException;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 /**
  * Бизнес-логика жизненного цикла lesson_session.
@@ -21,6 +18,12 @@ use Illuminate\Support\Str;
  */
 class LessonSessionService
 {
+    /** Статусы, в которых сессия занимает join_code и доступна для входа по коду. */
+    public const JOIN_CODE_STATUSES = [LessonSession::STATUS_DRAFT, LessonSession::STATUS_LIVE];
+
+    /** На сколько минут ученик локается на странице урока после входа по коду. */
+    public const LOCK_MINUTES = 60;
+
     public function __construct(
         private readonly TaskBankResolver $bankResolver,
         private readonly TaskAnswerResolver $answerResolver,
@@ -28,7 +31,7 @@ class LessonSessionService
     }
 
     /**
-     * Создаёт draft-сессию из слота расписания + переносит student в participants.
+     * Создаёт draft-сессию из слота расписания (ученики входят сами по коду).
      * Идемпотентно: если для этого слота сегодня уже есть live/draft — возвращает её.
      */
     public function createFromSchedule(LessonSchedule $slot): LessonSession
@@ -41,20 +44,13 @@ class LessonSessionService
             return $existing;
         }
 
-        return DB::transaction(function () use ($slot) {
-            $session = LessonSession::create([
-                'teacher_id'   => $slot->teacher_id,
-                'schedule_id'  => $slot->id,
-                'status'       => LessonSession::STATUS_DRAFT,
-                'invite_token' => $this->generateInviteToken(),
-            ]);
-            LessonSessionParticipant::create([
-                'lesson_session_id' => $session->id,
-                'student_id'        => $slot->student_id,
-                'source'            => LessonSessionParticipant::SOURCE_SCHEDULE,
-            ]);
-            return $session;
-        });
+        // Урок v2: участники входят только по коду — автодобавления из слота нет.
+        return LessonSession::create([
+            'teacher_id'  => $slot->teacher_id,
+            'schedule_id' => $slot->id,
+            'status'      => LessonSession::STATUS_DRAFT,
+            'join_code'   => $this->generateJoinCode(),
+        ]);
     }
 
     /**
@@ -62,11 +58,10 @@ class LessonSessionService
      *
      * Слоты Evrium приходят из внешней CRM и не имеют локального id, поэтому
      * идемпотентность строится на (teacher_id + starts_at): если для этого
-     * времени уже есть draft/live сессия — возвращаем её, иначе создаём черновик
-     * и переносим привязанных учеников в participants. Это позволяет учителю
-     * заранее (в режиме draft) набрать задания/темы для будущего урока.
+     * времени уже есть draft/live сессия — возвращаем её, иначе создаём черновик.
+     * Это позволяет учителю заранее (в режиме draft) набрать задания для урока.
      *
-     * @param  array<int>  $studentIds  id учеников из слота (будут отфильтрованы по teacher_students)
+     * @param  array<int>  $studentIds  сохранён для совместимости вызова; участники входят по коду
      */
     public function createFromEvriumSlot(User $teacher, string $startsAt, ?string $endsAt, array $studentIds): LessonSession
     {
@@ -74,51 +69,33 @@ class LessonSessionService
         $endsAt   = $endsAt ? Carbon::parse($endsAt) : null;
 
         $existing = LessonSession::where('teacher_id', $teacher->id)
-            ->whereIn('status', [LessonSession::STATUS_DRAFT, LessonSession::STATUS_LIVE])
+            ->whereIn('status', self::JOIN_CODE_STATUSES)
             ->where('starts_at', $startsAt)
             ->first();
         if ($existing) {
             return $existing;
         }
 
-        // В участники берём только реальных учеников этого учителя.
-        $allowed = TeacherStudent::where('teacher_id', $teacher->id)
-            ->pluck('student_id')
-            ->map(fn ($id) => (int) $id)
-            ->all();
-        $studentIds = array_values(array_unique(array_intersect(
-            array_map('intval', $studentIds),
-            $allowed
-        )));
-
-        return DB::transaction(function () use ($teacher, $startsAt, $endsAt, $studentIds) {
-            $session = LessonSession::create([
-                'teacher_id'   => $teacher->id,
-                'status'       => LessonSession::STATUS_DRAFT,
-                'starts_at'    => $startsAt,
-                'ends_at'      => $endsAt,
-                'invite_token' => $this->generateInviteToken(),
-            ]);
-            foreach ($studentIds as $sid) {
-                LessonSessionParticipant::create([
-                    'lesson_session_id' => $session->id,
-                    'student_id'        => $sid,
-                    'source'            => LessonSessionParticipant::SOURCE_SCHEDULE,
-                ]);
-            }
-            return $session;
-        });
+        // Урок v2: участники входят только по коду — $studentIds сохранён в сигнатуре
+        // для совместимости вызова из fromSlot, но автодобавления больше нет.
+        return LessonSession::create([
+            'teacher_id' => $teacher->id,
+            'status'     => LessonSession::STATUS_DRAFT,
+            'starts_at'  => $startsAt,
+            'ends_at'    => $endsAt,
+            'join_code'  => $this->generateJoinCode(),
+        ]);
     }
 
     /**
-     * Создаёт ad-hoc сессию без расписания, с инвайт-токеном.
+     * Создаёт ad-hoc сессию без расписания, с кодом входа.
      */
     public function createAdhoc(User $teacher): LessonSession
     {
         return LessonSession::create([
-            'teacher_id'   => $teacher->id,
-            'status'       => LessonSession::STATUS_DRAFT,
-            'invite_token' => $this->generateInviteToken(),
+            'teacher_id' => $teacher->id,
+            'status'     => LessonSession::STATUS_DRAFT,
+            'join_code'  => $this->generateJoinCode(),
         ]);
     }
 
@@ -185,16 +162,17 @@ class LessonSessionService
     }
 
     /**
-     * Присоединяет ученика по инвайт-токену. Сессия должна быть live.
+     * Присоединяет ученика по 4-значному коду урока.
+     * Вход разрешён в draft и live: ученик может зайти до старта и ждать;
+     * submitAnswer всё равно требует live-статус.
      */
-    public function joinByToken(string $token, User $student): LessonSession
+    public function joinByCode(string $code, User $student): LessonSession
     {
-        $session = LessonSession::where('invite_token', $token)->first();
+        $session = LessonSession::whereIn('status', self::JOIN_CODE_STATUSES)
+            ->where('join_code', $code)
+            ->first();
         if (!$session) {
-            throw new DomainException('Урок не найден');
-        }
-        if (!$session->isLive()) {
-            throw new DomainException('Урок не активен');
+            throw new DomainException('Урок с таким кодом не найден');
         }
 
         LessonSessionParticipant::firstOrCreate(
@@ -202,10 +180,38 @@ class LessonSessionService
                 'lesson_session_id' => $session->id,
                 'student_id'        => $student->id,
             ],
-            ['source' => LessonSessionParticipant::SOURCE_INVITE]
+            [
+                'source'       => LessonSessionParticipant::SOURCE_CODE,
+                // Лок ставится только при создании участия: повторный вход НЕ продлевает.
+                'locked_until' => now()->addMinutes(self::LOCK_MINUTES),
+            ]
         );
 
         return $session;
+    }
+
+    /**
+     * Участие ученика с активным локом (урок не завершён, не отпущен, время не вышло).
+     */
+    public function activeLockFor(User $student): ?LessonSessionParticipant
+    {
+        return LessonSessionParticipant::where('student_id', $student->id)
+            ->whereNull('released_at')
+            ->where('locked_until', '>', now())
+            ->whereHas('session', fn ($q) => $q->whereIn('status', self::JOIN_CODE_STATUSES))
+            ->latest('joined_at')
+            ->first();
+    }
+
+    /**
+     * Учитель вручную отпускает ученика с урока (снимает лок).
+     */
+    public function release(LessonSession $session, int $studentId, User $teacher): void
+    {
+        $p = LessonSessionParticipant::where('lesson_session_id', $session->id)
+            ->where('student_id', $studentId)
+            ->firstOrFail();
+        $p->update(['released_at' => now(), 'released_by' => $teacher->id]);
     }
 
     /**
@@ -253,12 +259,14 @@ class LessonSessionService
             ->exists();
     }
 
-    private function generateInviteToken(): string
+    /** 4-значный код, уникальный среди draft/live сессий (после ended код освобождается). */
+    private function generateJoinCode(): string
     {
         do {
-            $token = Str::lower(Str::random(16));
-        } while (LessonSession::where('invite_token', $token)->exists());
-        return $token;
+            $code = str_pad((string) random_int(0, 9999), 4, '0', STR_PAD_LEFT);
+        } while (LessonSession::whereIn('status', self::JOIN_CODE_STATUSES)
+            ->where('join_code', $code)->exists());
+        return $code;
     }
 
     private function serializeRefs(array $refs): string

@@ -63,6 +63,22 @@ class StudentLessonController extends Controller
     }
 
     /**
+     * POST /lessons/join   body: { code } — вход по 4-значному коду урока.
+     */
+    public function join(Request $request): JsonResponse
+    {
+        $data = $request->validate(['code' => 'required|digits:4']);
+
+        try {
+            $session = $this->sessions->joinByCode($data['code'], $request->user());
+        } catch (DomainException $e) {
+            return response()->json(['error' => $e->getMessage()], 422);
+        }
+
+        return response()->json(['lesson_id' => $session->id]);
+    }
+
+    /**
      * GET /lessons/{id}/state — задачи + ТОЛЬКО свои ответы (без correct_answer).
      */
     public function state(Request $request, int $id): JsonResponse
@@ -76,11 +92,19 @@ class StudentLessonController extends Controller
             ->get()
             ->keyBy('lesson_session_task_id');
 
+        // Свой participant — для таймера лока на странице урока.
+        $me = $session->participants()->where('student_id', $student->id)->first();
+
         return response()->json([
             'session' => [
                 'id'        => $session->id,
                 'status'    => $session->status,
                 'starts_at' => $session->starts_at?->toIso8601String(),
+            ],
+            'lock' => [
+                'locked_until' => $me?->locked_until?->toIso8601String(),
+                'released_at'  => $me?->released_at?->toIso8601String(),
+                'active'       => (bool) $me?->hasActiveLock(),
             ],
             'tasks' => $session->tasks->map(fn ($t) => $this->serializeTaskForStudent($t, $myAttempts->get($t->id)))->all(),
         ]);

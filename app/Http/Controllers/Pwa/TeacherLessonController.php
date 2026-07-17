@@ -53,6 +53,11 @@ class TeacherLessonController extends Controller
             return response()->json(['error' => 'Unknown bank'], 422);
         }
 
+        $section = $request->query('section') ?: null;
+        if ($section !== null && !array_key_exists($section, LessonTaskPickerService::OGE_SECTIONS)) {
+            return response()->json(['error' => 'Unknown section'], 422);
+        }
+
         $refs = [
             'grade'           => $request->query('grade')           !== null ? (int) $request->query('grade') : null,
             'topic_id'        => $request->query('topic_id')        ?: null,
@@ -62,7 +67,10 @@ class TeacherLessonController extends Controller
         ];
         $refs = array_filter($refs, fn ($v) => $v !== null && $v !== '');
 
-        $response = ['grades' => $picker->grades($bank)];
+        $response = [
+            'grades'   => $picker->grades($bank),
+            'sections' => $picker->sections($bank),
+        ];
 
         if ($bank === 'alg-skill') {
             if (!empty($refs['grade'])) {
@@ -75,10 +83,10 @@ class TeacherLessonController extends Controller
             $needsGrade = in_array($bank, ['vpr', 'alg-topic'], true);
             $gradeReady = !$needsGrade || !empty($refs['grade']);
             if ($gradeReady) {
-                $response['topics'] = $picker->topics($bank, $refs['grade'] ?? null);
+                $response['topics'] = $picker->topics($bank, $refs['grade'] ?? null, $section);
             }
             if ($gradeReady && !empty($refs['topic_id'])) {
-                $response['tasks'] = $picker->tasks($bank, $refs);
+                $response['tasks'] = $picker->tasks($bank, $refs, $section);
             }
         }
 
@@ -212,6 +220,18 @@ class TeacherLessonController extends Controller
     }
 
     /**
+     * POST /lessons/{id}/participants/{studentId}/release — вручную отпустить
+     * ученика с урока (снять лок навигации).
+     */
+    public function release(Request $request, int $id, int $studentId): JsonResponse
+    {
+        $session = $this->loadOwnSession($request, $id);
+        $this->sessions->release($session, $studentId, $request->user());
+
+        return response()->json(['ok' => true]);
+    }
+
+    /**
      * GET /lessons/{id}/state — полный снапшот для polling.
      * Возвращает session + tasks (с correct_answer) + participants + grid ответов.
      */
@@ -236,6 +256,7 @@ class TeacherLessonController extends Controller
                 'id'     => $p->student_id,
                 'name'   => $p->student?->name,
                 'source' => $p->source,
+                'locked' => $p->hasActiveLock(),
             ])->all(),
             'grid'         => $grid,
         ]);
@@ -258,7 +279,7 @@ class TeacherLessonController extends Controller
             'schedule_id'  => $s->schedule_id,
             'starts_at'    => $s->starts_at?->toIso8601String(),
             'ends_at'      => $s->ends_at?->toIso8601String(),
-            'invite_token' => $s->invite_token,
+            'join_code'    => $s->join_code,
         ];
     }
 

@@ -19,6 +19,7 @@ class LessonSession extends Model
         'starts_at',
         'ends_at',
         'invite_token',
+        'join_code',
     ];
 
     protected $casts = [
