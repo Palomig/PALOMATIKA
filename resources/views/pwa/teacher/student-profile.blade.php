@@ -34,6 +34,13 @@
   .score-good { color: #86efac; }
   .score-mid { color: #fde68a; }
   .score-bad { color: #fca5a5; }
+  .note-item { padding:10px 0; border-bottom:1px dashed var(--border); }
+  .note-item:last-child { border-bottom:none; }
+  .note-head { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:4px; }
+  .note-badge { font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px; background:var(--surface2); border:1px solid var(--border); white-space:nowrap; }
+  .note-tag { font-size:11px; font-weight:600; color:var(--muted); background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:2px 6px; }
+  .note-date { font-size:11px; color:var(--muted); margin-left:auto; }
+  .note-body { font-size:13px; color:var(--text); line-height:1.4; }
 @endpush
 
 @section('body')
@@ -109,6 +116,34 @@
     @empty
       <div class="muted">Пока нет данных по оценке.</div>
     @endforelse
+  </div>
+
+  <div class="card">
+    <div style="font-weight:700;margin-bottom:8px;">Наблюдения</div>
+    @if(!empty($notes) && count($notes))
+      @php
+        $kindMeta = [
+          'weakness' => '🔴 западает',
+          'strength' => '🟢 сильная',
+          'todo'     => '📌 todo',
+          'general'  => '💬 общее',
+        ];
+      @endphp
+      @foreach($notes as $note)
+        <div class="note-item">
+          <div class="note-head">
+            <span class="note-badge">{{ $kindMeta[$note->kind] ?? '💬 общее' }}</span>
+            @if($note->topic_tag)
+              <span class="note-tag">{{ $note->topic_tag }}</span>
+            @endif
+            <span class="note-date">{{ optional($note->created_at)->format('d.m.Y') }}</span>
+          </div>
+          <div class="note-body">{{ $note->body }}</div>
+        </div>
+      @endforeach
+    @else
+      <div class="muted">Записей пока нет.</div>
+    @endif
   </div>
 
 </div>
