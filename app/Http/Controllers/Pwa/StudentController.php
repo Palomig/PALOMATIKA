@@ -184,9 +184,11 @@ class StudentController extends Controller
         }
 
         $hasTeacher = TeacherStudent::where('student_id', $user->id)->exists();
+        // Плитка «УРОК»: прикреплённым ученикам и админу (превью интерфейса ученика).
+        $showLessonTile = $hasTeacher || $user->isAdmin();
 
         return view('pwa.student.dashboard', compact(
-            'user', 'weakTopics', 'newFipiCount', 'activeAttemptsList', 'hasTeacher'
+            'user', 'weakTopics', 'newFipiCount', 'activeAttemptsList', 'hasTeacher', 'showLessonTile'
         ));
     }
 
@@ -244,9 +246,11 @@ class StudentController extends Controller
         }
 
         $hasTeacher = TeacherStudent::where('student_id', $user->id)->exists();
+        // Плитка «УРОК»: прикреплённым ученикам и админу (превью интерфейса ученика).
+        $showLessonTile = $hasTeacher || $user->isAdmin();
 
         return view('pwa.student.dashboard', compact(
-            'user', 'weakTopics', 'newFipiCount', 'activeAttemptsList', 'hasTeacher'
+            'user', 'weakTopics', 'newFipiCount', 'activeAttemptsList', 'hasTeacher', 'showLessonTile'
         ));
     }
 

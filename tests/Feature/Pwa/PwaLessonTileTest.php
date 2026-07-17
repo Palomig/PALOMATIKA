@@ -45,4 +45,42 @@ class PwaLessonTileTest extends TestCase
             ->assertOk()
             ->assertDontSee('lessonTile(', false);
     }
+
+    public function test_admin_sees_lesson_tile_in_student_view(): void
+    {
+        // Супер-админ смотрит интерфейс ученика — плитка нужна для превью урока.
+        $admin = User::create([
+            'name' => 'A', 'email' => 'a+' . uniqid() . '@t.t', 'password' => 'x',
+            'role' => 'admin', 'onboarding_completed_at' => now(),
+        ]);
+
+        $this->actingAs($admin)
+            ->get(self::BASE . '/')
+            ->assertOk()
+            ->assertSee('lessonTile(', false);
+    }
+
+    public function test_admin_can_join_lesson_by_code(): void
+    {
+        $teacher = User::create([
+            'name' => 'T', 'email' => 't+' . uniqid() . '@t.t', 'password' => 'x', 'role' => 'teacher',
+        ]);
+        $admin = User::create([
+            'name' => 'A', 'email' => 'a+' . uniqid() . '@t.t', 'password' => 'x',
+            'role' => 'admin', 'onboarding_completed_at' => now(),
+        ]);
+        $svc = app(\App\Services\LessonSessionService::class);
+        $session = $svc->createAdhoc($teacher);
+        $svc->addTask($session, 'alg-skill', ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1]);
+        $svc->start($session);
+
+        $this->actingAs($admin)
+            ->postJson(self::BASE . '/lessons/join', ['code' => $session->fresh()->join_code])
+            ->assertOk()
+            ->assertJson(['lesson_id' => $session->id]);
+
+        $this->actingAs($admin)
+            ->get(self::BASE . "/lessons/{$session->id}")
+            ->assertOk();
+    }
 }
