@@ -153,7 +153,7 @@
             <template x-for="t in tasks" :key="t.id">
               <th>
                 <div style="font-weight: 800;" x-text="t.position + ')'"></div>
-                <div style="font-size: 11px; color: var(--text);" x-html="renderLatex(String(t.task_payload.expression || '').slice(0,40))"></div>
+                <div style="font-size: 11px; color: var(--text);" x-html="headerHtml(t.task_payload.expression)"></div>
                 <div style="color: var(--green); font-family: monospace;" x-text="t.correct_answer"></div>
               </th>
             </template>
@@ -191,6 +191,10 @@
 
 <script>
   function lessonPrep(sessionId, initialStatus) {
+    // Вне reactive-состояния (запись во время рендера не должна триггерить эффекты)
+    let typesetTimer = null;
+    let tasksJson = '';
+
     return {
       sessionId,
       status: initialStatus,
@@ -240,14 +244,49 @@
 
       renderLatex(expr) {
         if (!expr) return '';
+        const s = String(expr);
+        // Текст с inline-формулами ($...$) — не math целиком: экранируем,
+        // формулы дорендерит auto-render (typeset) по делимитерам, как в базе.
+        if (s.includes('$')) { this.typeset(); return this.escapeHtml(s); }
         // referencing katexReady makes this Alpine-reactive when KaTeX finishes loading
         const ready = this.katexReady;
         if (ready && window.katex) {
           try {
-            return window.katex.renderToString(String(expr), { throwOnError: false, output: 'html' });
+            return window.katex.renderToString(s, { throwOnError: false, output: 'html' });
           } catch (e) { /* fallthrough */ }
         }
-        return this.escapeHtml(expr);
+        return this.escapeHtml(s);
+      },
+
+      // Компактный заголовок колонки грида: из $-текстов маркеры убираем и режем
+      // (в узкой ячейке НЕ рендерим формулы), bare-latex рендерим как раньше.
+      headerHtml(expr) {
+        const s = String(expr || '');
+        if (s.includes('$')) return this.escapeHtml(s.replace(/\$/g, '').slice(0, 40));
+        return this.renderLatex(s.slice(0, 40));
+      },
+
+      // Прогон KaTeX auto-render по странице (тексты задач 2й части с $...$).
+      typeset() {
+        if (typesetTimer) return;
+        const t0 = Date.now();
+        const run = () => {
+          typesetTimer = null;
+          if (!window.renderMathInElement) {
+            if (Date.now() - t0 < 8000) typesetTimer = setTimeout(run, 150);
+            return;
+          }
+          window.renderMathInElement(this.$root, {
+            delimiters: [
+              { left: '$$', right: '$$', display: true },
+              { left: '$', right: '$', display: false },
+              { left: '\\(', right: '\\)', display: false },
+              { left: '\\[', right: '\\]', display: true },
+            ],
+            throwOnError: false,
+          });
+        };
+        typesetTimer = setTimeout(run, 60);
       },
 
       escapeHtml(s) {
@@ -260,7 +299,10 @@
         const d = await r.json();
         this.status = d.session.status;
         this.joinCode = d.session.join_code;
-        this.tasks = d.tasks;
+        // tasks заменяем только при реальном изменении: иначе x-html при каждом
+        // poll пересоздаёт DOM и сбрасывает дорендеренные KaTeX-формулы (мигание).
+        const tj = JSON.stringify(d.tasks);
+        if (tj !== tasksJson) { tasksJson = tj; this.tasks = d.tasks; }
         this.participants = d.participants;
         this.grid = d.grid || {};
       },

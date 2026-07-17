@@ -252,6 +252,10 @@ window.PICKER_CLASSES = window.PICKER_CLASSES || [
 ];
 
 function taskPicker(config) {
+  // Не в reactive-состоянии: запись из renderLatex во время рендера не должна
+  // триггерить Alpine-эффекты (риск цикла).
+  let typesetTimer = null;
+
   return {
     onAdd: config.onAdd,                 // (Array<{bank, refs}>) => Promise|void
     existingUids: config.existingUids || (() => []), // дедуп с уже добавленными
@@ -316,6 +320,7 @@ function taskPicker(config) {
       this.tasks = [];
       const d = await this.fetchOptions();
       if (d) this.tasks = d.tasks || [];
+      this.typeset();
     },
     async chooseStrip(s) {
       this.refs.skill_slug = s.slug;
@@ -324,7 +329,7 @@ function taskPicker(config) {
       const d = await this.fetchOptions();
       if (d) this.tasks = d.tasks || [];
     },
-    chooseBucket(key) { this.bucketKey = String(key); this.step = 'tasks'; },
+    chooseBucket(key) { this.bucketKey = String(key); this.step = 'tasks'; this.typeset(); },
     goTo(step) { this.step = step; this.error = ''; },
 
     // --- данные ---
@@ -441,12 +446,42 @@ function taskPicker(config) {
 
     renderLatex(expr) {
       if (!expr) return '';
+      const s = String(expr);
+      const escaped = s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      // Текст с inline-формулами ($...$) — не math целиком: экранируем,
+      // формулы дорендерит auto-render (typeset) по делимитерам, как в базе.
+      if (s.includes('$')) { this.typeset(); return escaped; }
       // Обращение к katexReady делает вывод реактивным, когда KaTeX догрузится.
       const ready = this.katexReady;
       if (ready && window.katex) {
-        try { return window.katex.renderToString(String(expr), { throwOnError: false, output: 'html' }); } catch (e) {}
+        try { return window.katex.renderToString(s, { throwOnError: false, output: 'html' }); } catch (e) {}
       }
-      return String(expr).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      return escaped;
+    },
+
+    // Прогон KaTeX auto-render по DOM picker'а (тексты задач с $...$).
+    // Дебаунс + ожидание догрузки deferred-скрипта contrib/auto-render.
+    typeset() {
+      if (typesetTimer) return;
+      const root = this.$root;
+      const t0 = Date.now();
+      const run = () => {
+        typesetTimer = null;
+        if (!window.renderMathInElement) {
+          if (Date.now() - t0 < 8000) typesetTimer = setTimeout(run, 150);
+          return;
+        }
+        window.renderMathInElement(root, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false },
+            { left: '\\(', right: '\\)', display: false },
+            { left: '\\[', right: '\\]', display: true },
+          ],
+          throwOnError: false,
+        });
+      };
+      typesetTimer = setTimeout(run, 60);
     },
   };
 }
