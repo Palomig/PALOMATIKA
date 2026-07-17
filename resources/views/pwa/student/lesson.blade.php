@@ -80,14 +80,16 @@
       {{-- Expression type --}}
       <template x-if="task.payload.type !== 'choice'">
         <div class="lesson-answer-row">
+          {{-- !!(…): Alpine 3.15 в клонах template при undefined СТАВИТ boolean-атрибут,
+               а не снимает — выражение обязано возвращать строго boolean --}}
           <input type="text" inputmode="text" class="lesson-answer-input"
                  :value="task.my_answer || ''"
-                 :disabled="status === 'ended' || sending[task.id]"
+                 :disabled="!!(status === 'ended' || sending[task.id])"
                  :placeholder="task.my_answer ? '' : 'Твой ответ'"
                  @keydown.enter.prevent="submitAnswer(task.id, $event.target.value)"
                  @blur="if($event.target.value && $event.target.value !== (task.my_answer||'')) submitAnswer(task.id, $event.target.value)">
           <button class="lesson-submit-btn"
-                  :disabled="status === 'ended' || sending[task.id]"
+                  :disabled="!!(status === 'ended' || sending[task.id])"
                   @click="submitAnswer(task.id, $event.target.previousElementSibling.value)">
             <span x-show="!sending[task.id]" x-text="task.my_answer ? '↻' : '→'"></span>
             <span x-show="sending[task.id]" x-cloak>…</span>
