@@ -65,6 +65,23 @@
   .live-cell-ok { background: var(--green-bg); color: var(--green); }
   .live-cell-bad { background: var(--red-bg); color: var(--red); }
   .live-cell-empty { color: var(--muted); }
+  /* 🤖 Ассистент */
+  .assistant-log { display: flex; flex-direction: column; gap: 8px; max-height: 240px; overflow-y: auto; padding: 4px 2px; }
+  .assistant-msg { display: flex; }
+  .assistant-msg-teacher { justify-content: flex-end; }
+  .assistant-msg-assistant { justify-content: flex-start; }
+  .assistant-msg-bubble { max-width: 85%; padding: 8px 11px; border-radius: 12px; font-size: 13px; line-height: 1.45; white-space: pre-wrap; word-break: break-word; }
+  .assistant-msg-teacher .assistant-msg-bubble { background: var(--accent); color: #fff; border-bottom-right-radius: 4px; }
+  .assistant-msg-assistant .assistant-msg-bubble { background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-bottom-left-radius: 4px; }
+  .assistant-input-row { display: flex; gap: 8px; align-items: flex-end; }
+  .assistant-input-row .note-input { flex: 1; min-height: 40px; }
+  /* «не понимает» в live-гриде */
+  .du-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); border-radius: 6px; font-size: 10px; padding: 2px 6px; cursor: pointer; font-weight: 700; white-space: nowrap; }
+  .du-btn:hover { color: var(--red); border-color: var(--red-bd); }
+  .du-pick { position: absolute; top: 100%; left: 0; z-index: 20; margin-top: 3px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 4px; display: flex; flex-direction: column; gap: 2px; min-width: 120px; box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+  .du-pick-item { background: none; border: none; color: var(--text); text-align: left; font-size: 12px; padding: 6px 8px; border-radius: 6px; cursor: pointer; white-space: nowrap; }
+  .du-pick-item:hover { background: var(--accent-bg); }
+  .du-done { font-size: 10px; color: var(--green); font-weight: 700; margin-top: 3px; }
 @endpush
 
 @section('body')
@@ -103,14 +120,29 @@
     </div>
   </template>
 
-  {{-- Заметка учителя (ученики не видят) --}}
+  {{-- 🤖 Ассистент учителя (ученики не видят) --}}
   <div class="lesson-card">
     <div style="display:flex;justify-content:space-between;align-items:center;">
-      <div style="font-size: 14px; font-weight: 700;">📝 Заметка</div>
-      <div style="font-size: 11px; color: var(--muted);" x-show="noteSaved" x-cloak>сохранено ✓</div>
+      <div style="font-size: 14px; font-weight: 700;">🤖 Ассистент</div>
+      <div style="font-size: 11px; color: var(--green);" x-show="assistantToast" x-cloak x-text="assistantToast"></div>
     </div>
-    <textarea class="note-input" rows="2" placeholder="Заметка для себя — ученики её не видят"
-              x-model="note" @blur="saveNote()"></textarea>
+    <div class="assistant-log" x-show="assistantMessages.length" x-cloak>
+      <template x-for="(m, mi) in assistantMessages" :key="'am-' + mi">
+        <div class="assistant-msg" :class="m.role === 'teacher' ? 'assistant-msg-teacher' : 'assistant-msg-assistant'">
+          <div class="assistant-msg-bubble" x-text="m.content"></div>
+        </div>
+      </template>
+    </div>
+    <div x-show="!assistantMessages.length" style="color: var(--muted); font-size: 12px; line-height: 1.5;">
+      Расскажи ассистенту о наблюдениях за учениками — он сам сохранит их в записи.
+    </div>
+    <div class="assistant-input-row">
+      <textarea class="note-input" rows="1" placeholder="Напиши наблюдение… (Enter — отправить, Shift+Enter — перенос)"
+                x-model="assistantInput" :disabled="!!assistantSending"
+                @keydown.enter="if (!$event.shiftKey) { $event.preventDefault(); sendToAssistant(); }"></textarea>
+      <button class="btn btn-primary" @click="sendToAssistant()" :disabled="!!assistantSending"
+              x-text="assistantSending ? '…' : 'Отправить'"></button>
+    </div>
   </div>
 
   {{-- Tasks list --}}
@@ -207,6 +239,19 @@
                 <div style="color: var(--green); font-family: monospace;" x-text="t.correct_answer"></div>
                 <div class="personal-badge" x-show="t.assigned_student_id"
                      x-text="'для ' + (t.assigned_name || '#' + t.assigned_student_id)"></div>
+                {{-- «не понимает» — только в live: раскрывает выбор ученика под кнопкой --}}
+                <div x-show="status === 'live'" style="position: relative; margin-top: 4px; font-weight: 400;">
+                  <button type="button" class="du-btn" @click="toggleDu(t.id)"
+                          x-text="duFor === t.id ? '✕ отмена' : 'не понимает'"></button>
+                  <div class="du-pick" x-show="duFor === t.id" x-cloak>
+                    <template x-for="p in participants" :key="'du-' + t.id + '-' + p.id">
+                      <button type="button" class="du-pick-item" @click="dontUnderstand(t.id, p.id)"
+                              x-text="p.name || ('#' + p.id)"></button>
+                    </template>
+                    <div x-show="!participants.length" style="color: var(--muted); font-size: 11px; padding: 4px;">нет учеников</div>
+                  </div>
+                  <div class="du-done" x-show="duDone === (t.id + '-done')" x-cloak>записано ✓</div>
+                </div>
               </th>
             </template>
           </tr>
@@ -266,9 +311,18 @@
       note: '',
       noteSaved: false,
       creatingNext: false,
+      // 🤖 Ассистент
+      assistantMessages: [],
+      assistantInput: '',
+      assistantSending: false,
+      assistantToast: '',
+      // «не понимает» в live-гриде
+      duFor: null,
+      duDone: null,
 
       async init() {
         await this.refreshState();
+        this.loadAssistant();
         this.startPolling();
         this.waitForKatex();
       },
@@ -398,6 +452,76 @@
           this.noteSaved = true;
           setTimeout(() => { this.noteSaved = false; }, 2000);
         }
+      },
+
+      // --- 🤖 Ассистент ---
+      scrollAssistantLog() {
+        const el = this.$root.querySelector('.assistant-log');
+        if (el) el.scrollTop = el.scrollHeight;
+      },
+
+      async loadAssistant() {
+        try {
+          const r = await fetch(`/lessons/${this.sessionId}/assistant`, {
+            headers: { 'Accept': 'application/json' }, credentials: 'include',
+          });
+          if (!r.ok) return;
+          const d = await r.json();
+          this.assistantMessages = d.messages || [];
+          this.$nextTick(() => this.scrollAssistantLog());
+        } catch (e) { /* сеть — просто без истории */ }
+      },
+
+      async sendToAssistant() {
+        const msg = this.assistantInput.trim();
+        if (!msg || this.assistantSending) return;
+        this.assistantSending = true;
+        this.assistantMessages.push({ role: 'teacher', content: msg });
+        this.assistantInput = '';
+        this.$nextTick(() => this.scrollAssistantLog());
+        try {
+          const r = await fetch(`/lessons/${this.sessionId}/assistant`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content, 'Accept': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ message: msg }),
+          });
+          if (!r.ok) { alert('Ассистент не ответил'); this.assistantSending = false; return; }
+          const d = await r.json();
+          this.assistantMessages.push({ role: 'assistant', content: d.reply || '' });
+          this.$nextTick(() => this.scrollAssistantLog());
+          if (Array.isArray(d.notes) && d.notes.length) {
+            this.assistantToast = `записей: ${d.notes.length}`;
+            setTimeout(() => { this.assistantToast = ''; }, 2500);
+            await this.refreshState(); // задачи/иное могли подтянуться
+          }
+        } catch (e) {
+          alert('Ошибка сети');
+        }
+        this.assistantSending = false;
+      },
+
+      // --- «не понимает» на задаче ---
+      toggleDu(taskId) {
+        this.duFor = this.duFor === taskId ? null : taskId;
+      },
+
+      async dontUnderstand(taskId, studentId) {
+        try {
+          const r = await fetch(`/lessons/${this.sessionId}/dont-understand`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content, 'Accept': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ student_id: studentId, task_id: taskId }),
+          });
+          if (!r.ok) { alert('Не удалось записать'); return; }
+          this.duFor = null;
+          const mark = taskId + '-done';
+          this.duDone = mark;
+          setTimeout(() => { if (this.duDone === mark) this.duDone = null; }, 2000);
+        } catch (e) { alert('Ошибка сети'); }
       },
 
       async createNextLesson() {
