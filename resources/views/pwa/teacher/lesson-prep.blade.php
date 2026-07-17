@@ -18,6 +18,10 @@
   .lesson-task-num { font-weight: 800; color: var(--accent); width: 24px; flex-shrink: 0; }
   .lesson-task-body { flex: 1; min-width: 0; }
   .lesson-task-expr { font-size: 15px; color: var(--text); margin-bottom: 4px; word-break: break-word; }
+  .lesson-task-image { display: flex; justify-content: center; background: var(--surface); border-radius: 8px; padding: 8px; margin-bottom: 8px; }
+  .lesson-task-image svg, .lesson-task-image img { max-width: 250px; width: 100%; height: auto; max-height: 220px; }
+  .lesson-task-options { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+  .lesson-task-option { padding: 3px 9px; border: 1px solid var(--border); border-radius: 8px; font-size: 12px; color: var(--muted); }
   .lesson-task-meta { font-size: 11px; color: var(--muted); }
   .lesson-task-answer { font-family: ui-monospace, monospace; color: var(--green); font-weight: 700; font-size: 13px; }
   .picker-row { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -109,14 +113,26 @@
       <button class="btn btn-icon" @click="pickerOpen = !pickerOpen" x-show="status !== 'ended'">+ Добавить</button>
     </div>
 
+    {{-- Полный вид задания — как у ученика: картинка + текст + варианты --}}
     <template x-for="task in tasks" :key="task.id">
       <div class="lesson-task">
         <div class="lesson-task-num" x-text="task.position + ')'"></div>
         <div class="lesson-task-body">
+          <div class="lesson-task-image" x-show="task.task_payload.image_svg" x-html="task.task_payload.image_svg"></div>
+          <template x-if="!task.task_payload.image_svg && task.task_payload.image_url">
+            <div class="lesson-task-image"><img :src="task.task_payload.image_url" alt=""></div>
+          </template>
           <div class="lesson-task-expr" x-html="renderLatex(task.task_payload.expression)"></div>
+          <template x-if="task.task_payload.type === 'choice'">
+            <div class="lesson-task-options">
+              <template x-for="(opt, oi) in task.task_payload.options" :key="opt.id">
+                <span class="lesson-task-option" x-html="renderLatex(opt.label)"></span>
+              </template>
+            </div>
+          </template>
           <div class="lesson-task-meta">
             <span x-text="task.bank"></span>
-            · Ответ: <span class="lesson-task-answer" x-text="task.correct_answer"></span>
+            · Ответ: <span class="lesson-task-answer" x-text="task.correct_answer || '(без автопроверки)'"></span>
           </div>
         </div>
         <button class="btn btn-icon btn-danger" x-show="status === 'draft'" @click="removeTask(task.id)">×</button>
