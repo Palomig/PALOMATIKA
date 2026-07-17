@@ -157,6 +157,7 @@ Route::domain('teacher.' . config('app.base_domain'))->group(function () {
         Route::post('/lessons/{id}/participants/{studentId}/release', [TeacherLessonController::class, 'release'])->name('pwa.teacher.lessons.release')->whereNumber('id')->whereNumber('studentId');
         Route::post('/lessons/{id}/next',                    [TeacherLessonController::class, 'next'])->name('pwa.teacher.lessons.next')->whereNumber('id');
         Route::post('/lessons/{id}/note',                    [TeacherLessonController::class, 'note'])->name('pwa.teacher.lessons.note')->whereNumber('id');
+        Route::post('/lessons/{id}/dont-understand',         [TeacherLessonController::class, 'dontUnderstand'])->name('pwa.teacher.lessons.dont-understand')->whereNumber('id');
 
         Route::get('/variants', [TeacherController::class, 'variants'])->name('pwa.teacher.variants');
         Route::get('/referrals', [TeacherController::class, 'referrals'])->name('pwa.teacher.referrals');

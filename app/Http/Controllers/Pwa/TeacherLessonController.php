@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\LessonSchedule;
 use App\Models\LessonSession;
 use App\Models\LessonSessionTask;
+use App\Models\User;
 use App\Services\LessonSessionService;
 use App\Services\LessonTaskPickerService;
 use DomainException;
@@ -301,6 +302,41 @@ class TeacherLessonController extends Controller
             ])->all(),
             'grid'         => $grid,
         ]);
+    }
+
+    /**
+     * POST /lessons/{id}/dont-understand   body: { student_id, task_id }
+     * Кнопка «не понимает» — фиксирует слабое место ученика по задаче (без LLM).
+     */
+    public function dontUnderstand(Request $request, int $id): JsonResponse
+    {
+        $session = $this->loadOwnSession($request, $id);
+
+        $data = $request->validate([
+            'student_id' => 'required|integer',
+            'task_id'    => 'required|integer',
+        ]);
+
+        if (!$this->sessions->isParticipantId($session, (int) $data['student_id'])) {
+            return response()->json(['error' => 'Ученик не участник урока'], 422);
+        }
+
+        $task = LessonSessionTask::where('lesson_session_id', $session->id)
+            ->findOrFail($data['task_id']);
+        $student = User::findOrFail($data['student_id']);
+
+        $note = $this->sessions->recordDontUnderstand($session, $request->user(), $student, $task);
+
+        return response()->json([
+            'note' => [
+                'id'        => $note->id,
+                'kind'      => $note->kind,
+                'source'    => $note->source,
+                'topic_tag' => $note->topic_tag,
+                'task_ref'  => $note->task_ref,
+                'body'      => $note->body,
+            ],
+        ], 201);
     }
 
     private function loadOwnSession(Request $request, int $id): LessonSession

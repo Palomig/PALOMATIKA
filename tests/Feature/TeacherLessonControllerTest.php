@@ -504,4 +504,67 @@ class TeacherLessonControllerTest extends TestCase
         $participant = collect($resp->json('participants'))->firstWhere('id', $student->id);
         $this->assertFalse($participant['locked']);
     }
+
+    // --- «не понимает» (Task A3) ---
+
+    public function test_dont_understand_records_note_for_participant(): void
+    {
+        $teacher = $this->teacher();
+        $student = $this->student();
+        $svc = app(\App\Services\LessonSessionService::class);
+        $session = $svc->createAdhoc($teacher);
+        $svc->joinByCode($session->join_code, $student);
+        $task = $svc->addTask($session, 'alg-skill', ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1]);
+
+        $resp = $this->actingAs($teacher)
+            ->postJson(self::BASE . "/lessons/{$session->id}/dont-understand", [
+                'student_id' => $student->id,
+                'task_id'    => $task->id,
+            ])
+            ->assertCreated();
+
+        $this->assertSame('weakness', $resp->json('note.kind'));
+        $this->assertSame('lesson_button', $resp->json('note.source'));
+        $this->assertDatabaseHas('student_notes', [
+            'student_id'        => $student->id,
+            'teacher_id'        => $teacher->id,
+            'lesson_session_id' => $session->id,
+            'kind'              => 'weakness',
+            'source'            => 'lesson_button',
+            'topic_tag'         => 'signed-add',
+        ]);
+    }
+
+    public function test_dont_understand_rejects_non_participant(): void
+    {
+        $teacher = $this->teacher();
+        $stranger = $this->student();
+        $svc = app(\App\Services\LessonSessionService::class);
+        $session = $svc->createAdhoc($teacher);
+        $task = $svc->addTask($session, 'alg-skill', ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1]);
+
+        $this->actingAs($teacher)
+            ->postJson(self::BASE . "/lessons/{$session->id}/dont-understand", [
+                'student_id' => $stranger->id,
+                'task_id'    => $task->id,
+            ])
+            ->assertStatus(422);
+    }
+
+    public function test_dont_understand_forbidden_for_other_teacher(): void
+    {
+        $owner = $this->teacher();
+        $student = $this->student();
+        $svc = app(\App\Services\LessonSessionService::class);
+        $session = $svc->createAdhoc($owner);
+        $svc->joinByCode($session->join_code, $student);
+        $task = $svc->addTask($session, 'alg-skill', ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1]);
+
+        $this->actingAs($this->teacher())
+            ->postJson(self::BASE . "/lessons/{$session->id}/dont-understand", [
+                'student_id' => $student->id,
+                'task_id'    => $task->id,
+            ])
+            ->assertForbidden();
+    }
 }

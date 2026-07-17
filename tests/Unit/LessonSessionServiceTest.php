@@ -532,4 +532,36 @@ class LessonSessionServiceTest extends TestCase
         $this->expectException(DomainException::class);
         $svc->submitAnswer($session, $student, $task, '-2');
     }
+
+    // --- «не понимает»: запись наблюдения без LLM (Task A3) ---
+
+    public function test_record_dont_understand_creates_weakness_note(): void
+    {
+        $svc = $this->service();
+        $teacher = $this->makeTeacher();
+        $student = $this->makeStudent();
+        $session = $svc->createAdhoc($teacher);
+        $svc->joinByCode($session->join_code, $student);
+        // alg-skill: topic_id = null, skill_slug задан → topic_tag берётся из skill_slug.
+        $task = $svc->addTask($session, 'alg-skill', ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1]);
+
+        $note = $svc->recordDontUnderstand($session, $teacher, $student, $task);
+
+        $this->assertSame('lesson_button', $note->source);
+        $this->assertSame('weakness', $note->kind);
+        $this->assertSame($student->id, $note->student_id);
+        $this->assertSame($teacher->id, $note->teacher_id);
+        $this->assertSame($session->id, $note->lesson_session_id);
+        $this->assertSame($task->task_ref, $note->task_ref);
+        $this->assertSame('signed-add', $note->topic_tag);
+        $this->assertStringStartsWith('Не понимает:', $note->body);
+
+        $this->assertDatabaseHas('student_notes', [
+            'id'         => $note->id,
+            'student_id' => $student->id,
+            'source'     => 'lesson_button',
+            'kind'       => 'weakness',
+            'topic_tag'  => 'signed-add',
+        ]);
+    }
 }
