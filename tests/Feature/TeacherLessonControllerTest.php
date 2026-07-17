@@ -344,6 +344,59 @@ class TeacherLessonControllerTest extends TestCase
         $this->assertNull($session->fresh()->note);
     }
 
+    public function test_add_personal_task_for_participant(): void
+    {
+        $teacher = $this->teacher();
+        $student = $this->student();
+        $svc = app(\App\Services\LessonSessionService::class);
+        $session = $svc->createAdhoc($teacher);
+        $svc->joinByCode($session->join_code, $student);
+
+        $resp = $this->actingAs($teacher)
+            ->postJson(self::BASE . "/lessons/{$session->id}/tasks", [
+                'bank' => 'alg-skill',
+                'refs' => ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1],
+                'assigned_student_id' => $student->id,
+            ])
+            ->assertCreated();
+
+        $this->assertSame($student->id, $resp->json('task.assigned_student_id'));
+        $this->assertDatabaseHas('lesson_session_tasks', [
+            'lesson_session_id'   => $session->id,
+            'assigned_student_id' => $student->id,
+        ]);
+    }
+
+    public function test_add_personal_task_rejects_non_participant(): void
+    {
+        $teacher = $this->teacher();
+        $stranger = $this->student();
+        $svc = app(\App\Services\LessonSessionService::class);
+        $session = $svc->createAdhoc($teacher);
+
+        $this->actingAs($teacher)
+            ->postJson(self::BASE . "/lessons/{$session->id}/tasks", [
+                'bank' => 'alg-skill',
+                'refs' => ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1],
+                'assigned_student_id' => $stranger->id,
+            ])
+            ->assertStatus(422);
+    }
+
+    public function test_state_task_includes_assigned_name(): void
+    {
+        $teacher = $this->teacher();
+        $student = $this->student();
+        $svc = app(\App\Services\LessonSessionService::class);
+        $session = $svc->createAdhoc($teacher);
+        $svc->joinByCode($session->join_code, $student);
+        $svc->addTask($session, 'alg-skill', ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1], $student->id);
+
+        $task = collect($this->actingAs($teacher)->getJson(self::BASE . "/lessons/{$session->id}/state")->json('tasks'))->first();
+        $this->assertSame($student->id, $task['assigned_student_id']);
+        $this->assertSame($student->name, $task['assigned_name']);
+    }
+
     public function test_state_participants_include_activity(): void
     {
         $teacher = $this->teacher();

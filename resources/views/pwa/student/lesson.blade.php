@@ -30,6 +30,7 @@
   .lesson-end-banner { background: var(--red-bg); border: 1px solid var(--red-bd); border-radius: 14px; padding: 16px; color: var(--red); font-weight: 700; text-align: center; }
   .lesson-released-banner { background: var(--green-bg); border: 1px solid var(--green-bd); border-radius: 14px; padding: 16px; color: var(--green); font-weight: 700; text-align: center; }
   .lock-timer { margin-left: auto; font-family: ui-monospace, monospace; font-size: 13px; font-weight: 700; color: var(--muted); }
+  .personal-badge { font-size: 10px; font-weight: 800; padding: 1px 8px; border-radius: 6px; background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-bd); white-space: nowrap; }
 @endpush
 
 @section('body')
@@ -52,8 +53,11 @@
     <div class="lesson-task-card" :class="task.my_answer ? 'is-answered' : ''">
       <div style="display:flex;justify-content:space-between;align-items:center;">
         <div class="lesson-task-num" x-text="task.position + ')'"></div>
-        <div class="lesson-status-line" :class="task.my_answer ? 'is-sent' : ''"
-             x-text="task.my_answer ? '✓ отправлено' : 'жду ответ'"></div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="personal-badge" x-show="task.personal" x-cloak>персональная</span>
+          <div class="lesson-status-line" :class="task.my_answer ? 'is-sent' : ''"
+               x-text="task.my_answer ? '✓ отправлено' : 'жду ответ'"></div>
+        </div>
       </div>
 
       <div class="lesson-task-image" x-show="task.payload.image_svg" x-html="task.payload.image_svg"></div>

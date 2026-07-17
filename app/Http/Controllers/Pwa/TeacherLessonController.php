@@ -35,7 +35,7 @@ class TeacherLessonController extends Controller
     public function show(Request $request, int $id)
     {
         $session = $this->loadOwnSession($request, $id);
-        $session->load(['tasks', 'participants.student']);
+        $session->load(['tasks.assignedStudent', 'participants.student']);
 
         return view('pwa.teacher.lesson-prep', [
             'session' => $session,
@@ -179,19 +179,26 @@ class TeacherLessonController extends Controller
     }
 
     /**
-     * POST /lessons/{id}/tasks   body: { bank: string, refs: object }
+     * POST /lessons/{id}/tasks   body: { bank, refs, assigned_student_id? }
+     * assigned_student_id — персональная задача конкретному участнику (null = всем).
      */
     public function addTask(Request $request, int $id): JsonResponse
     {
         $session = $this->loadOwnSession($request, $id);
 
         $data = $request->validate([
-            'bank' => 'required|string|in:oge,ege,vpr,alg-topic,alg-skill',
-            'refs' => 'required|array',
+            'bank'                => 'required|string|in:oge,ege,vpr,alg-topic,alg-skill',
+            'refs'                => 'required|array',
+            'assigned_student_id' => 'nullable|integer',
         ]);
 
+        $assigned = $data['assigned_student_id'] ?? null;
+        if ($assigned !== null && !$this->sessions->isParticipantId($session, (int) $assigned)) {
+            return response()->json(['error' => 'Ученик не участник урока'], 422);
+        }
+
         try {
-            $task = $this->sessions->addTask($session, $data['bank'], $data['refs']);
+            $task = $this->sessions->addTask($session, $data['bank'], $data['refs'], $assigned ? (int) $assigned : null);
         } catch (DomainException $e) {
             return response()->json(['error' => $e->getMessage()], 422);
         }
@@ -267,7 +274,7 @@ class TeacherLessonController extends Controller
     public function state(Request $request, int $id): JsonResponse
     {
         $session = $this->loadOwnSession($request, $id);
-        $session->load(['tasks', 'participants.student', 'attempts']);
+        $session->load(['tasks.assignedStudent', 'participants.student', 'attempts']);
 
         $activity = $this->sessions->activitySummary($session);
 
@@ -321,14 +328,16 @@ class TeacherLessonController extends Controller
     private function serializeTask(LessonSessionTask $t): array
     {
         return [
-            'id'             => $t->id,
-            'position'       => $t->position,
-            'bank'           => $t->bank,
-            'grade'          => $t->grade,
-            'topic_id'       => $t->topic_id,
-            'skill_slug'     => $t->skill_slug,
-            'task_payload'   => $t->task_payload,
-            'correct_answer' => $t->correct_answer,
+            'id'                  => $t->id,
+            'position'            => $t->position,
+            'bank'                => $t->bank,
+            'grade'               => $t->grade,
+            'topic_id'            => $t->topic_id,
+            'skill_slug'          => $t->skill_slug,
+            'task_payload'        => $t->task_payload,
+            'correct_answer'      => $t->correct_answer,
+            'assigned_student_id' => $t->assigned_student_id,
+            'assigned_name'       => $t->relationLoaded('assignedStudent') ? $t->assignedStudent?->name : null,
         ];
     }
 }

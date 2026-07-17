@@ -68,6 +68,54 @@ class LessonSessionServiceTest extends TestCase
         return $session->fresh();
     }
 
+    // --- персональные задания ---
+
+    public function test_add_task_stores_assigned_student(): void
+    {
+        $svc = $this->service();
+        $session = $svc->createAdhoc($this->makeTeacher());
+        $student = $this->makeStudent();
+        $svc->joinByCode($session->join_code, $student);
+
+        $common = $svc->addTask($session, 'alg-skill', ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1]);
+        $personal = $svc->addTask($session, 'alg-skill', ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 2], $student->id);
+
+        $this->assertNull($common->assigned_student_id);
+        $this->assertSame($student->id, $personal->assigned_student_id);
+        $this->assertTrue($common->visibleTo($student->id));
+        $this->assertTrue($personal->visibleTo($student->id));
+        $this->assertFalse($personal->visibleTo($student->id + 999));
+    }
+
+    public function test_submit_answer_rejects_others_personal_task(): void
+    {
+        $svc = $this->service();
+        $session = $svc->createAdhoc($this->makeTeacher());
+        $alice = $this->makeStudent();
+        $bob = $this->makeStudent();
+        $svc->joinByCode($session->join_code, $alice);
+        $svc->joinByCode($session->join_code, $bob);
+        $task = $svc->addTask($session, 'alg-skill', ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1], $alice->id);
+        $svc->start($session);
+
+        // Боб не может ответить на персональную задачу Алисы.
+        $this->expectException(DomainException::class);
+        $svc->submitAnswer($session, $bob, $task, '-2');
+    }
+
+    public function test_submit_answer_allows_own_personal_task(): void
+    {
+        $svc = $this->service();
+        $session = $svc->createAdhoc($this->makeTeacher());
+        $alice = $this->makeStudent();
+        $svc->joinByCode($session->join_code, $alice);
+        $task = $svc->addTask($session, 'alg-skill', ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1], $alice->id);
+        $svc->start($session);
+
+        $attempt = $svc->submitAnswer($session, $alice, $task, '-2');
+        $this->assertTrue($attempt->is_correct);
+    }
+
     // --- активность ученика на уроке ---
 
     public function test_record_activity_opens_present_then_toggles_away_and_back(): void
