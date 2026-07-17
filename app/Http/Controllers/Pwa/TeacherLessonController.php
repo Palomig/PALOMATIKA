@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Pwa;
 
 use App\Http\Controllers\Controller;
+use App\Models\LessonAssistantMessage;
 use App\Models\LessonSchedule;
 use App\Models\LessonSession;
 use App\Models\LessonSessionTask;
 use App\Models\User;
+use App\Services\AssistantService;
 use App\Services\LessonSessionService;
 use App\Services\LessonTaskPickerService;
 use DomainException;
@@ -337,6 +339,50 @@ class TeacherLessonController extends Controller
                 'body'      => $note->body,
             ],
         ], 201);
+    }
+
+    /**
+     * POST /lessons/{id}/assistant   body: { message }
+     * Реплика учителя ассистенту: LLM разбирает её в записи student_notes.
+     */
+    public function assistant(Request $request, int $id): JsonResponse
+    {
+        $session = $this->loadOwnSession($request, $id);
+
+        $data = $request->validate(['message' => 'required|string|max:2000']);
+
+        $result = app(AssistantService::class)->handleMessage($session, $request->user(), $data['message']);
+
+        return response()->json([
+            'reply' => $result['reply'],
+            'notes' => collect($result['notes'])->map(fn ($n) => [
+                'id'         => $n->id,
+                'body'       => $n->body,
+                'kind'       => $n->kind,
+                'topic_tag'  => $n->topic_tag,
+                'student_id' => $n->student_id,
+            ])->all(),
+        ]);
+    }
+
+    /**
+     * GET /lessons/{id}/assistant — история переписки с ассистентом по порядку.
+     */
+    public function assistantHistory(Request $request, int $id): JsonResponse
+    {
+        $session = $this->loadOwnSession($request, $id);
+
+        return response()->json([
+            'messages' => LessonAssistantMessage::where('lesson_session_id', $session->id)
+                ->orderBy('created_at')
+                ->orderBy('id')
+                ->get()
+                ->map(fn ($m) => [
+                    'role'    => $m->role,
+                    'content' => $m->content,
+                    'at'      => $m->created_at?->toIso8601String(),
+                ])->all(),
+        ]);
     }
 
     private function loadOwnSession(Request $request, int $id): LessonSession

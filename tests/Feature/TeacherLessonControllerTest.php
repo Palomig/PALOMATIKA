@@ -5,9 +5,11 @@ namespace Tests\Feature;
 use App\Models\LessonSchedule;
 use App\Models\LessonSession;
 use App\Models\LessonSessionTask;
+use App\Models\LessonAssistantMessage;
 use App\Models\TeacherStudent;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 class TeacherLessonControllerTest extends TestCase
@@ -565,6 +567,116 @@ class TeacherLessonControllerTest extends TestCase
                 'student_id' => $student->id,
                 'task_id'    => $task->id,
             ])
+            ->assertForbidden();
+    }
+
+    // --- ассистент (Task B3) ---
+
+    private function fakeRecordObservation(): void
+    {
+        config()->set('services.deepseek.api_key', 'test-key');
+        config()->set('services.deepseek.base_url', 'https://api.deepseek.com');
+        config()->set('services.deepseek.model', 'deepseek-chat');
+
+        Http::fake([
+            '*/chat/completions' => Http::response([
+                'choices' => [[
+                    'message' => [
+                        'content' => null,
+                        'tool_calls' => [[
+                            'id' => 'c1',
+                            'type' => 'function',
+                            'function' => [
+                                'name' => 'record_observation',
+                                'arguments' => json_encode([
+                                    'participant_ref' => 'P1',
+                                    'kind' => 'weakness',
+                                    'topic_tag' => 'геометрия: подобие',
+                                    'body' => 'путает признаки подобия',
+                                ]),
+                            ],
+                        ]],
+                    ],
+                ]],
+            ]),
+        ]);
+    }
+
+    public function test_assistant_returns_reply_and_notes(): void
+    {
+        $this->fakeRecordObservation();
+
+        $teacher = $this->teacher();
+        $petya = User::create([
+            'name' => 'Петя', 'email' => 's+' . uniqid() . '@t.t', 'password' => 'x',
+            'role' => 'student', 'onboarding_completed_at' => now(),
+        ]);
+        $svc = app(\App\Services\LessonSessionService::class);
+        $session = $svc->createAdhoc($teacher);
+        $svc->joinByCode($session->join_code, $petya);
+
+        $resp = $this->actingAs($teacher)
+            ->postJson(self::BASE . "/lessons/{$session->id}/assistant", ['message' => 'Петя путает подобие'])
+            ->assertOk()
+            ->assertJsonStructure(['reply', 'notes' => [['id', 'body', 'kind', 'topic_tag', 'student_id']]]);
+
+        $this->assertNotEmpty($resp->json('reply'));
+        $this->assertCount(1, $resp->json('notes'));
+        $this->assertSame($petya->id, $resp->json('notes.0.student_id'));
+        $this->assertSame('weakness', $resp->json('notes.0.kind'));
+    }
+
+    public function test_assistant_rejects_empty_message(): void
+    {
+        $teacher = $this->teacher();
+        $session = app(\App\Services\LessonSessionService::class)->createAdhoc($teacher);
+
+        $this->actingAs($teacher)
+            ->postJson(self::BASE . "/lessons/{$session->id}/assistant", ['message' => ''])
+            ->assertStatus(422);
+    }
+
+    public function test_assistant_forbidden_for_other_teacher(): void
+    {
+        $owner = $this->teacher();
+        $session = app(\App\Services\LessonSessionService::class)->createAdhoc($owner);
+
+        $this->actingAs($this->teacher())
+            ->postJson(self::BASE . "/lessons/{$session->id}/assistant", ['message' => 'привет'])
+            ->assertForbidden();
+    }
+
+    public function test_assistant_history_returns_messages_in_order(): void
+    {
+        $teacher = $this->teacher();
+        $session = app(\App\Services\LessonSessionService::class)->createAdhoc($teacher);
+
+        LessonAssistantMessage::create([
+            'lesson_session_id' => $session->id, 'role' => 'teacher', 'content' => 'первое',
+        ]);
+        LessonAssistantMessage::create([
+            'lesson_session_id' => $session->id, 'role' => 'assistant', 'content' => 'второе',
+        ]);
+
+        $resp = $this->actingAs($teacher)
+            ->getJson(self::BASE . "/lessons/{$session->id}/assistant")
+            ->assertOk()
+            ->assertJsonStructure(['messages' => [['role', 'content', 'at']]]);
+
+        $messages = $resp->json('messages');
+        $this->assertCount(2, $messages);
+        $this->assertSame('первое', $messages[0]['content']);
+        $this->assertSame('teacher', $messages[0]['role']);
+        $this->assertSame('второе', $messages[1]['content']);
+    }
+
+    public function test_assistant_history_forbidden_for_other_teacher(): void
+    {
+        $owner = $this->teacher();
+        $session = app(\App\Services\LessonSessionService::class)->createAdhoc($owner);
+
+        $this->actingAs($this->teacher())
+            ->getJson(self::BASE . "/lessons/{$session->id}/assistant")
             ->assertForbidden();
     }
 }
