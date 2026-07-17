@@ -13,9 +13,12 @@ return new class extends Migration
             $table->foreignId('lesson_session_id')->constrained('lesson_sessions')->cascadeOnDelete();
             $table->foreignId('student_id')->constrained('users')->cascadeOnDelete();
             $table->enum('kind', ['present', 'away']);
-            $table->timestamp('started_at');
-            $table->timestamp('ended_at')->nullable();
-            $table->timestamp('updated_at')->nullable();
+            // DATETIME (не TIMESTAMP): на MySQL с explicit_defaults_for_timestamp=OFF
+            // первый TIMESTAMP-столбец неявно получает ON UPDATE CURRENT_TIMESTAMP,
+            // из-за чего started_at затирается при UPDATE. DATETIME от этого свободен.
+            $table->dateTime('started_at');
+            $table->dateTime('ended_at')->nullable();
+            $table->dateTime('updated_at')->nullable();
 
             $table->index(['lesson_session_id', 'student_id', 'started_at'], 'lai_session_student_started');
         });
