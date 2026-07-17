@@ -32,8 +32,12 @@
   .picker-card-answer { font-family: ui-monospace, monospace; color: var(--green); font-weight: 700; }
   .picker-card-image { width: 100%; max-height: 140px; display: flex; align-items: center; justify-content: center; background: var(--surface); border-radius: 6px; overflow: hidden; }
   .picker-card-image svg { max-width: 100%; max-height: 140px; height: auto; }
-  .invite-block { background: var(--accent-bg); border: 1px solid var(--accent-bd); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
-  .invite-link { font-family: ui-monospace, monospace; font-size: 12px; word-break: break-all; color: var(--text); }
+  .code-block { background: var(--accent-bg); border: 1px solid var(--accent-bd); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+  .join-code { font-family: ui-monospace, monospace; font-size: 48px; letter-spacing: 8px; font-weight: 800; color: var(--text); text-align: center; user-select: all; }
+  .participant-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .participant-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 4px 8px; font-size: 12px; color: var(--text); }
+  .chip-release { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 11px; padding: 0 2px; }
+  .chip-release:hover { color: var(--red); }
   .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
   .btn { padding: 10px 14px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; border: 1px solid var(--border); background: var(--surface2); color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
   .btn-primary { background: var(--accent); border-color: var(--accent); color: white; }
@@ -59,23 +63,30 @@
     <span :class="'status-badge-' + status" x-text="statusLabel(status)" class="status-badge-{{ $session->status }}">{{ $session->status }}</span>
   </div>
 
-  {{-- Invite block (only when live + invite_token exists) --}}
-  <template x-if="status === 'live' && inviteToken">
-    <div class="invite-block">
+  {{-- Код входа (draft и live) --}}
+  <template x-if="status !== 'ended' && joinCode">
+    <div class="code-block">
       <div style="display:flex;justify-content:space-between;align-items:center;">
-        <div style="font-size: 13px; font-weight: 800; color: var(--text);">🔗 Ссылка для приглашения</div>
+        <div style="font-size: 13px; font-weight: 800; color: var(--text);">🔑 Код урока</div>
         <div style="font-size: 11px; color: var(--muted);" x-text="`${participants.length} в уроке`"></div>
       </div>
-      <div class="invite-link" x-text="inviteLink"></div>
-      <div class="btn-row">
-        <button class="btn btn-icon" @click="copyInvite" x-text="copiedAt ? '✓ Скопировано' : '📋 Скопировать'"
-                :style="copiedAt ? 'background:var(--green-bg);color:var(--green);border-color:var(--green-bd);' : ''"></button>
-        <a class="btn btn-icon" :href="waLink" target="_blank" rel="noopener">📱 WhatsApp</a>
-        <a class="btn btn-icon" :href="tgLink" target="_blank" rel="noopener">✈ Telegram</a>
-      </div>
+      <div class="join-code" x-text="joinCode"></div>
       <div style="font-size: 11px; color: var(--muted); line-height: 1.5;">
-        Отправь ссылку ученикам. Когда они откроют — увидят кнопку «УРОК» и попадут в эту сессию.
+        Продиктуй код ученикам: они вводят его на своей странице «Урок» и попадают сюда.
+        После входа ученик остаётся на странице урока 60 минут — отпустить раньше можно кнопкой ✕ у имени.
       </div>
+      <template x-if="participants.length">
+        <div class="participant-chips">
+          <template x-for="p in participants" :key="'chip-' + p.id">
+            <span class="participant-chip">
+              <span x-text="p.name || ('#' + p.id)"></span>
+              <span x-show="p.locked" title="Лок активен">🔒</span>
+              <button type="button" class="chip-release" x-show="p.locked"
+                      @click="releaseStudent(p.id)" title="Отпустить с урока">✕ отпустить</button>
+            </span>
+          </template>
+        </div>
+      </template>
     </div>
   </template>
 
@@ -183,18 +194,17 @@
     return {
       sessionId,
       status: initialStatus,
-      inviteToken: null,
+      joinCode: null,
       tasks: [],
       participants: [],
       grid: {},
       pickerOpen: false,
       pollTimer: null,
-      copiedAt: null,
       katexReady: false,
 
       async init() {
         await this.refreshState();
-        this.startPollingIfLive();
+        this.startPolling();
         this.waitForKatex();
       },
 
@@ -206,18 +216,6 @@
           if (Date.now() - t0 < 8000) setTimeout(tick, 80);
         };
         tick();
-      },
-
-      get inviteLink() {
-        return this.inviteToken ? `https://palomatika.ru/lesson/join/${this.inviteToken}` : '';
-      },
-
-      get waLink() {
-        return `https://wa.me/?text=${encodeURIComponent('Заходи на урок: ' + this.inviteLink)}`;
-      },
-
-      get tgLink() {
-        return `https://t.me/share/url?url=${encodeURIComponent(this.inviteLink)}&text=${encodeURIComponent('Заходи на урок')}`;
       },
 
       statusLabel(s) {
@@ -261,20 +259,33 @@
         if (!r.ok) return;
         const d = await r.json();
         this.status = d.session.status;
-        this.inviteToken = d.session.invite_token;
+        this.joinCode = d.session.join_code;
         this.tasks = d.tasks;
         this.participants = d.participants;
         this.grid = d.grid || {};
       },
 
-      startPollingIfLive() {
+      // Поллим и в draft (видно, кто вошёл по коду до старта), и в live.
+      startPolling() {
         if (this.pollTimer) clearInterval(this.pollTimer);
-        if (this.status === 'live') {
+        if (this.status !== 'ended') {
           this.pollTimer = setInterval(() => {
             if (document.hidden) return;
             this.refreshState();
+            if (this.status === 'ended' && this.pollTimer) clearInterval(this.pollTimer);
           }, 4000);
         }
+      },
+
+      async releaseStudent(studentId) {
+        if (!confirm('Отпустить ученика с урока?')) return;
+        const r = await fetch(`/lessons/${this.sessionId}/participants/${studentId}/release`, {
+          method: 'POST',
+          headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content, 'Accept': 'application/json' },
+          credentials: 'include',
+        });
+        if (!r.ok) { alert('Не удалось отпустить'); return; }
+        await this.refreshState();
       },
 
       async removeTask(taskId) {
@@ -295,7 +306,7 @@
         });
         if (!r.ok) { alert('Не удалось запустить'); return; }
         await this.refreshState();
-        this.startPollingIfLive();
+        this.startPolling();
       },
 
       async endLesson() {
@@ -307,13 +318,6 @@
         });
         await this.refreshState();
         if (this.pollTimer) clearInterval(this.pollTimer);
-      },
-
-      copyInvite() {
-        navigator.clipboard.writeText(this.inviteLink).then(() => {
-          this.copiedAt = Date.now();
-          setTimeout(() => { if (Date.now() - this.copiedAt >= 1900) this.copiedAt = null; }, 2000);
-        });
       },
 
       cellLabel(studentId, taskId) {

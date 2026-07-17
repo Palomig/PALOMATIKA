@@ -28,6 +28,8 @@
   .lesson-choice-option.is-selected { background: var(--accent-bg); border-color: var(--accent); }
   .lesson-choice-option input[type="radio"] { accent-color: var(--accent); }
   .lesson-end-banner { background: var(--red-bg); border: 1px solid var(--red-bd); border-radius: 14px; padding: 16px; color: var(--red); font-weight: 700; text-align: center; }
+  .lesson-released-banner { background: var(--green-bg); border: 1px solid var(--green-bd); border-radius: 14px; padding: 16px; color: var(--green); font-weight: 700; text-align: center; }
+  .lock-timer { margin-left: auto; font-family: ui-monospace, monospace; font-size: 13px; font-weight: 700; color: var(--muted); }
 @endpush
 
 @section('body')
@@ -35,10 +37,15 @@
   <div class="topbar">
     <a href="{{ route('pwa.student.dashboard') }}" class="back-btn">‹</a>
     <div class="topbar-title">Урок</div>
+    <span class="lock-timer" x-show="lockActive" x-cloak>🔒 <span x-text="lockLeft"></span></span>
   </div>
 
   <template x-if="status === 'ended'">
     <div class="lesson-end-banner">Урок завершён. Ответы больше не принимаются.</div>
+  </template>
+
+  <template x-if="released">
+    <div class="lesson-released-banner">Учитель отпустил тебя — можно выходить 👋</div>
   </template>
 
   <template x-for="task in tasks" :key="task.id">
@@ -105,6 +112,8 @@
       tasks: [],
       sending: {},
       pollTimer: null,
+      lock: null,          // {locked_until, released_at, active} из state
+      nowTick: Date.now(), // обновляется раз в секунду для реактивности таймера
 
       async init() {
         await this.refreshState();
@@ -112,6 +121,26 @@
           if (document.hidden) return;
           this.refreshState();
         }, 5000);
+        setInterval(() => { this.nowTick = Date.now(); }, 1000);
+      },
+
+      get lockActive() {
+        if (!this.lock?.active || !this.lock.locked_until) return false;
+        return new Date(this.lock.locked_until).getTime() > this.nowTick;
+      },
+
+      get released() {
+        return !!this.lock?.released_at && this.status !== 'ended';
+      },
+
+      get lockLeft() {
+        if (!this.lock?.locked_until) return '';
+        const ms = new Date(this.lock.locked_until).getTime() - this.nowTick;
+        if (ms <= 0) return '0:00';
+        const totalSec = Math.floor(ms / 1000);
+        const m = Math.floor(totalSec / 60);
+        const s = totalSec % 60;
+        return `${m}:${String(s).padStart(2, '0')}`;
       },
 
       async refreshState() {
@@ -119,6 +148,7 @@
         if (!r.ok) return;
         const d = await r.json();
         this.status = d.session.status;
+        this.lock = d.lock || null;
         // Merge tasks, preserving in-progress sending state
         this.tasks = d.tasks;
         // Re-render KaTeX after data update (next tick)

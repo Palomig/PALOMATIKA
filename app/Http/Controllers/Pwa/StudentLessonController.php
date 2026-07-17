@@ -92,11 +92,19 @@ class StudentLessonController extends Controller
             ->get()
             ->keyBy('lesson_session_task_id');
 
+        // Свой participant — для таймера лока на странице урока.
+        $me = $session->participants()->where('student_id', $student->id)->first();
+
         return response()->json([
             'session' => [
                 'id'        => $session->id,
                 'status'    => $session->status,
                 'starts_at' => $session->starts_at?->toIso8601String(),
+            ],
+            'lock' => [
+                'locked_until' => $me?->locked_until?->toIso8601String(),
+                'released_at'  => $me?->released_at?->toIso8601String(),
+                'active'       => (bool) $me?->hasActiveLock(),
             ],
             'tasks' => $session->tasks->map(fn ($t) => $this->serializeTaskForStudent($t, $myAttempts->get($t->id)))->all(),
         ]);
