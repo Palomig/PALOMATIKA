@@ -89,14 +89,43 @@ class LessonSessionService
 
     /**
      * Создаёт ad-hoc сессию без расписания, с кодом входа.
+     * $startsAt — планируемое время урока (для отображения в списке уроков);
+     * без него время проставится фактическое при старте.
      */
-    public function createAdhoc(User $teacher): LessonSession
+    public function createAdhoc(User $teacher, ?Carbon $startsAt = null): LessonSession
     {
         return LessonSession::create([
             'teacher_id' => $teacher->id,
             'status'     => LessonSession::STATUS_DRAFT,
+            'starts_at'  => $startsAt,
             'join_code'  => $this->generateJoinCode(),
         ]);
+    }
+
+    /**
+     * «Следующий урок»: черновик на то же время через неделю.
+     * Идемпотентно по (teacher, starts_at) — повторный клик вернёт тот же черновик.
+     * Заметку и задания учитель добавляет в новый урок сам.
+     */
+    public function createFollowUp(LessonSession $session): LessonSession
+    {
+        $startsAt = ($session->starts_at ?? now())->copy()->addWeek();
+        $endsAt   = $session->ends_at?->copy()->addWeek();
+
+        return $this->createFromEvriumSlot(
+            $session->teacher,
+            $startsAt->toDateTimeString(),
+            $endsAt?->toDateTimeString(),
+            []
+        );
+    }
+
+    /**
+     * Заметка учителя к уроку (ученикам не отдаётся).
+     */
+    public function updateNote(LessonSession $session, ?string $note): void
+    {
+        $session->update(['note' => ($note !== null && trim($note) !== '') ? $note : null]);
     }
 
     /**

@@ -280,6 +280,85 @@ class TeacherLessonControllerTest extends TestCase
             ->assertNotFound();
     }
 
+    // --- планируемое время, «следующий урок», заметка ---
+
+    public function test_create_adhoc_with_starts_at(): void
+    {
+        $at = now()->addDay()->setTime(16, 0)->setSeconds(0);
+
+        $resp = $this->actingAs($this->teacher())
+            ->postJson(self::BASE . '/lessons', ['starts_at' => $at->format('Y-m-d H:i')])
+            ->assertCreated();
+
+        $session = LessonSession::findOrFail($resp->json('session.id'));
+        $this->assertTrue($session->starts_at->equalTo($at->copy()->setSeconds(0)));
+    }
+
+    public function test_create_adhoc_rejects_invalid_starts_at(): void
+    {
+        $this->actingAs($this->teacher())
+            ->postJson(self::BASE . '/lessons', ['starts_at' => 'не дата'])
+            ->assertStatus(422);
+    }
+
+    public function test_next_creates_follow_up_week_later(): void
+    {
+        $teacher = $this->teacher();
+        $at = now()->setTime(15, 0)->setSeconds(0)->setMicroseconds(0);
+        $svc = app(\App\Services\LessonSessionService::class);
+        $session = $svc->createAdhoc($teacher, $at);
+
+        $resp = $this->actingAs($teacher)
+            ->postJson(self::BASE . "/lessons/{$session->id}/next")
+            ->assertCreated();
+
+        $next = LessonSession::findOrFail($resp->json('session.id'));
+        $this->assertTrue($next->starts_at->equalTo($at->copy()->addWeek()));
+        $this->assertSame('draft', $next->status);
+
+        // Чужой урок — 403.
+        $this->actingAs($this->teacher())
+            ->postJson(self::BASE . "/lessons/{$session->id}/next")
+            ->assertForbidden();
+    }
+
+    public function test_note_saved_and_returned_in_state(): void
+    {
+        $teacher = $this->teacher();
+        $session = app(\App\Services\LessonSessionService::class)->createAdhoc($teacher);
+
+        $this->actingAs($teacher)
+            ->postJson(self::BASE . "/lessons/{$session->id}/note", ['note' => 'спросить про контрольную'])
+            ->assertOk()
+            ->assertJson(['ok' => true]);
+
+        $this->actingAs($teacher)
+            ->getJson(self::BASE . "/lessons/{$session->id}/state")
+            ->assertOk()
+            ->assertJsonPath('session.note', 'спросить про контрольную');
+
+        // Пустая заметка стирается в null.
+        $this->actingAs($teacher)
+            ->postJson(self::BASE . "/lessons/{$session->id}/note", ['note' => '  '])
+            ->assertOk();
+        $this->assertNull($session->fresh()->note);
+    }
+
+    public function test_lessons_page_shows_adhoc_session_with_note(): void
+    {
+        $teacher = $this->teacher();
+        $svc = app(\App\Services\LessonSessionService::class);
+        $session = $svc->createAdhoc($teacher, now()->addDay()->setTime(17, 45));
+        $svc->updateNote($session, 'Повторить теорему Виета');
+
+        $this->actingAs($teacher)
+            ->get(self::BASE . '/lessons')
+            ->assertOk()
+            ->assertSee('17:45')
+            ->assertSee('внеплановый урок')
+            ->assertSee('Повторить теорему Виета');
+    }
+
     // --- release (Task C4) ---
 
     /** Live-сессия с задачей + ученик вошёл по коду (лок активен). */

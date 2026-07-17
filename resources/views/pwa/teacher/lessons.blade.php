@@ -32,6 +32,16 @@
   .status-tag.green { color: var(--green); background: var(--green-bg); border: 1px solid var(--green-bd); }
   .status-tag.accent { color: var(--accent); background: var(--accent-bg); border: 1px solid var(--accent-bd); }
   .status-tag.yellow { color: var(--yellow); background: var(--yellow-bg); border: 1px solid var(--yellow-bd); }
+  .nl-overlay { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,.55); backdrop-filter: blur(4px); display: flex; align-items: flex-end; justify-content: center; }
+  .nl-sheet { background: var(--bg); border-radius: 20px 20px 0 0; width: 100%; max-width: 420px; padding: 24px 20px 32px; }
+  .nl-handle { width: 36px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 16px; }
+  .nl-title { font-size: 20px; font-weight: 800; color: var(--text); text-align: center; margin-bottom: 8px; }
+  .nl-desc { font-size: 13px; color: var(--muted); text-align: center; line-height: 1.5; margin-bottom: 16px; }
+  .nl-row { display: flex; gap: 8px; margin-bottom: 14px; }
+  .nl-input { flex: 1; min-width: 0; padding: 12px; font-size: 15px; background: var(--surface); color: var(--text); border: 1px solid var(--border); border-radius: 12px; color-scheme: dark; }
+  .nl-btn { display: block; width: 100%; padding: 15px; border: none; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; text-align: center; margin-bottom: 10px; background: var(--accent); color: #fff; }
+  .nl-btn:disabled { opacity: .5; cursor: default; }
+  .nl-cancel { display: block; width: 100%; padding: 14px; background: none; border: none; color: var(--muted); font-size: 14px; font-weight: 700; cursor: pointer; }
 @endpush
 
 @section('body')
@@ -43,10 +53,28 @@
 
   <button :disabled="creating"
           style="background: var(--accent); color: white; border: none; border-radius: 12px; padding: 14px; font-weight: 800; font-size: 14px; cursor: pointer;"
-          @click="createAdhoc()">
+          @click="openCreateModal()">
     <span x-show="!creating">🎯 Начать новый урок</span>
     <span x-show="creating" x-cloak>создаём…</span>
   </button>
+
+  {{-- Модал: день и время нового урока (по умолчанию — сегодня, сейчас) --}}
+  <template x-if="createOpen">
+    <div class="nl-overlay" @click.self="createOpen = false">
+      <div class="nl-sheet">
+        <div class="nl-handle"></div>
+        <div class="nl-title">Новый урок</div>
+        <div class="nl-desc">Когда пройдёт урок? Он появится в списке в этот день.</div>
+        <div class="nl-row">
+          <input type="date" class="nl-input" x-model="newDate">
+          <input type="time" class="nl-input" x-model="newTime">
+        </div>
+        <button class="nl-btn" :disabled="creating || !newDate || !newTime" @click="createAdhoc()"
+                x-text="creating ? 'Создаём…' : 'Создать урок'"></button>
+        <button class="nl-cancel" type="button" @click="createOpen = false">Отмена</button>
+      </div>
+    </div>
+  </template>
 
   <div class="note">
     Нажмите на урок, чтобы зайти внутрь и заранее собрать список заданий и тем. Статусы:
@@ -81,7 +109,14 @@
           <div class="lesson-slot-head">
             <div>
               <div class="lesson-slot-title">{{ $slot['time_start'] }}{{ $slot['time_end'] ? ' - ' . $slot['time_end'] : '' }}</div>
-              <div class="lesson-slot-subtitle">{{ count($slot['students']) }} ученик{{ count($slot['students']) === 1 ? '' : (count($slot['students']) >= 2 && count($slot['students']) <= 4 ? 'а' : 'ов') }} в слоте</div>
+              @if(!empty($slot['is_adhoc']))
+                <div class="lesson-slot-subtitle">внеплановый урок{{ count($slot['students']) ? ' · ' . count($slot['students']) . ' в уроке' : '' }}</div>
+                @if(!empty($slot['note']))
+                  <div class="lesson-slot-subtitle">📝 {{ \Illuminate\Support\Str::limit($slot['note'], 80) }}</div>
+                @endif
+              @else
+                <div class="lesson-slot-subtitle">{{ count($slot['students']) }} ученик{{ count($slot['students']) === 1 ? '' : (count($slot['students']) >= 2 && count($slot['students']) <= 4 ? 'а' : 'ов') }} в слоте</div>
+              @endif
             </div>
             <div class="lesson-slot-meta">
               @if($slot['session_status'] === 'draft')
@@ -126,9 +161,20 @@
     return {
       creating: false,
       opening: null,
+      createOpen: false,
+      newDate: '',
+      newTime: '',
 
       csrf() {
         return document.querySelector('meta[name=csrf-token]').content;
+      },
+
+      openCreateModal() {
+        const now = new Date();
+        const pad = n => String(n).padStart(2, '0');
+        this.newDate = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+        this.newTime = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+        this.createOpen = true;
       },
 
       async createAdhoc() {
@@ -139,6 +185,7 @@
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-CSRF-TOKEN': this.csrf() },
             credentials: 'include',
+            body: JSON.stringify({ starts_at: `${this.newDate} ${this.newTime}` }),
           });
           const d = await r.json();
           if (d.session) { window.location = '/lessons/' + d.session.id; }
