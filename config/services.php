@@ -111,4 +111,20 @@ return [
         'webhook_secret' => env('DEPLOY_WEBHOOK_SECRET'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | DeepSeek (AI-ассистент учителя)
+    |--------------------------------------------------------------------------
+    |
+    | OpenAI-совместимый Chat Completions API. Провайдер меняется на Kimi и др.
+    | через env (base_url + model), ключ — DEEPSEEK_API_KEY.
+    |
+    */
+
+    'deepseek' => [
+        'api_key'  => env('DEEPSEEK_API_KEY'),
+        'base_url' => env('DEEPSEEK_BASE_URL', 'https://api.deepseek.com'),
+        'model'    => env('DEEPSEEK_MODEL', 'deepseek-chat'),
+    ],
+
 ];
