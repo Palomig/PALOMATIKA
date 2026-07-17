@@ -189,8 +189,10 @@
 @section('body')
 <div class="page" x-data="dashboardPage()">
 
-  {{-- LESSON TILE (видна только когда идёт live-сессия с этим student) --}}
-  @include('pwa.student.partials.lesson-tile')
+  {{-- LESSON TILE — только ученикам, прикреплённым к учителю --}}
+  @if(!empty($hasTeacher))
+    @include('pwa.student.partials.lesson-tile')
+  @endif
 
   {{-- VPR toggle for grade 8 --}}
   @if((int)($user->grade_num ?? 0) === 8)

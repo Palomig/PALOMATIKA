@@ -1,5 +1,6 @@
-{{-- Lesson tile: всегда видна. Если есть live-сессия ученика — зелёная «УРОК идёт»,
-     иначе — вход по 4-значному коду (модал). Polling /lessons/active каждые 30 сек. --}}
+{{-- Lesson tile «УРОК». Включается родителем только для учеников, прикреплённых
+     к учителю (teacher_students). Есть live-сессия — зелёная, ведёт на урок;
+     иначе — открывает модал ввода 4-значного кода. Polling /lessons/active 30 сек. --}}
 <div x-data="lessonTile()" x-init="init()">
   {{-- Идёт урок — открыть --}}
   <a x-show="session" x-cloak :href="`/lessons/${session?.id}`"
@@ -8,9 +9,7 @@
             color:white;background:var(--green);border:1px solid var(--green);
             box-shadow: 0 4px 12px rgba(52,208,126,0.3);
             position:relative;overflow:hidden;">
-    <div style="font-size:11px;letter-spacing:0.1em;opacity:0.85;text-transform:uppercase;">Сейчас идёт</div>
     <div style="font-size:28px;font-weight:800;letter-spacing:0.04em;">УРОК</div>
-    <div style="font-size:12px;opacity:0.9;">нажми, чтобы открыть →</div>
     <span style="position:absolute;top:10px;right:12px;width:8px;height:8px;background:white;border-radius:999px;animation: pulse 1.4s ease-in-out infinite;"></span>
   </a>
 
@@ -19,9 +18,7 @@
      style="display:flex;flex-direction:column;align-items:center;gap:6px;width:100%;cursor:pointer;
             padding:20px;border-radius:16px;font-family:var(--display);
             color:var(--text);background:var(--surface);border:1px dashed var(--border);">
-    <div style="font-size:11px;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;">Учитель дал код?</div>
     <div style="font-size:28px;font-weight:800;letter-spacing:0.04em;">УРОК</div>
-    <div style="font-size:12px;color:var(--muted);">войти по коду →</div>
   </button>
 
   {{-- Модал ввода кода --}}
