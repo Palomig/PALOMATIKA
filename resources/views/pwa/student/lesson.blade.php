@@ -126,6 +126,40 @@
           this.refreshState();
         }, 5000);
         setInterval(() => { this.nowTick = Date.now(); }, 1000);
+        this.initActivityTracking();
+      },
+
+      // Отслеживание присутствия: сервер строит таймлайн present/away.
+      initActivityTracking() {
+        this.sendActivity(document.visibilityState === 'visible');
+        document.addEventListener('visibilitychange', () => {
+          this.sendActivity(document.visibilityState === 'visible');
+        });
+        // Heartbeat: пока вкладка видима — продлеваем present (детект молчаливого ухода).
+        setInterval(() => {
+          if (document.visibilityState === 'visible') this.sendActivity(true);
+        }, 10000);
+        // Закрытие вкладки/сворачивание приложения — надёжно через sendBeacon.
+        window.addEventListener('pagehide', () => this.beaconActivity(false));
+      },
+
+      sendActivity(visible) {
+        fetch(`/lessons/${this.sessionId}/activity`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content },
+          credentials: 'include',
+          body: JSON.stringify({ visible }),
+          keepalive: true,
+        }).catch(() => {});
+      },
+
+      beaconActivity(visible) {
+        try {
+          const blob = new Blob([JSON.stringify({ visible, _token: document.querySelector('meta[name=csrf-token]').content })],
+            { type: 'application/json' });
+          navigator.sendBeacon(`/lessons/${this.sessionId}/activity`, blob);
+        } catch (e) { /* ignore */ }
       },
 
       get lockActive() {

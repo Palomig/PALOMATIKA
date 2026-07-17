@@ -138,6 +138,21 @@ class StudentLessonController extends Controller
         ]);
     }
 
+    /**
+     * POST /lessons/{id}/activity   body: { visible: bool }
+     * Ученик сообщает, на странице ли он (present) или свернул (away).
+     * Также принимается через navigator.sendBeacon при закрытии вкладки.
+     */
+    public function activity(Request $request, int $id): JsonResponse
+    {
+        $session = $this->loadSessionForStudent($request, $id);
+        $data = $request->validate(['visible' => 'required|boolean']);
+
+        $this->sessions->recordActivity($session, $request->user(), (bool) $data['visible']);
+
+        return response()->json(['ok' => true]);
+    }
+
     private function loadSessionForStudent(Request $request, int $id): LessonSession
     {
         $session = LessonSession::findOrFail($id);

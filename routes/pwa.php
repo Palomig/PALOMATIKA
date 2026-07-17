@@ -72,6 +72,7 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
         // Lesson endpoints (для polling в dashboard и страницы урока)
         Route::get('/lessons/active',          [StudentLessonController::class, 'active'])->name('pwa.student.lessons.active');
         Route::post('/lessons/join',           [StudentLessonController::class, 'join'])->name('pwa.student.lessons.join');
+        Route::post('/lessons/{id}/activity',  [StudentLessonController::class, 'activity'])->name('pwa.student.lessons.activity')->whereNumber('id');
         Route::get('/lessons/{id}',            [StudentLessonController::class, 'show'])->name('pwa.student.lessons.show')->whereNumber('id');
         Route::get('/lessons/{id}/state',      [StudentLessonController::class, 'state'])->name('pwa.student.lessons.state')->whereNumber('id');
         Route::post('/lessons/{id}/answer',    [StudentLessonController::class, 'answer'])->name('pwa.student.lessons.answer')->whereNumber('id');
