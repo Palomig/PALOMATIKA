@@ -2,6 +2,10 @@
 
 namespace App\Services;
 
+use App\Models\LessonAssistantMessage;
+use App\Models\LessonSession;
+use App\Models\StudentNote;
+use App\Models\User;
 use Illuminate\Support\Facades\Http;
 use RuntimeException;
 
@@ -144,6 +148,266 @@ class AssistantService
         return [
             'content' => $message['content'] ?? null,
             'tool_calls' => $this->parseToolCalls($message['tool_calls'] ?? []),
+        ];
+    }
+
+    /**
+     * Оркестрация реплики учителя: анонимизирует сообщение, зовёт DeepSeek
+     * с набором инструментов и исполняет tool_calls.
+     *
+     * - record_observation  → StudentNote(kind, topic_tag, source=chat) для ученика
+     * - add_lesson_note     → append к lesson_sessions.note (не затирая)
+     * - answer_about_student→ подгружает записи ученика и делает ВТОРОЙ вызов chat
+     *
+     * Обе реплики (учитель + ассистент) пишутся в lesson_assistant_messages.
+     * При падении API — fallback: реплики сохраняются, notes пуст, reply — извинение.
+     * (Бесхозный student_note создать нельзя: student_id NOT NULL, некого привязать.)
+     *
+     * @return array{reply:string,notes:array<int,StudentNote>}
+     */
+    public function handleMessage(LessonSession $session, User $teacher, string $message): array
+    {
+        $participants = $this->sessionParticipants($session);
+        [$clean, $map] = $this->anonymize($message, $participants);
+
+        $notes = [];
+
+        try {
+            $res = $this->chat(
+                [
+                    ['role' => 'system', 'content' => $this->systemPrompt()],
+                    ['role' => 'user', 'content' => $clean],
+                ],
+                $this->toolDefinitions(),
+            );
+
+            $reply = null;
+
+            foreach ($res['tool_calls'] as $call) {
+                switch ($call['name']) {
+                    case 'record_observation':
+                        if ($note = $this->applyRecordObservation($call['arguments'], $map, $session, $teacher)) {
+                            $notes[] = $note;
+                        }
+                        break;
+
+                    case 'add_lesson_note':
+                        $this->applyAddLessonNote($call['arguments'], $session);
+                        break;
+
+                    case 'answer_about_student':
+                        $reply = $this->answerAboutStudent(
+                            $call, $map, $participants, $teacher, $clean
+                        );
+                        break;
+                }
+            }
+
+            // Нет follow-up от answer_about_student → берём контент первого ответа.
+            $reply ??= (string) ($res['content'] ?? '');
+            $reply = $this->deanonymize($reply, $this->nameMap($map, $participants));
+
+            if (trim($reply) === '') {
+                // Инструмент сработал, но модель не дала текста — короткое подтверждение.
+                $reply = $notes !== [] ? 'Записал.' : 'Готово.';
+            }
+        } catch (RuntimeException) {
+            $reply = 'Не смог разобрать (ассистент недоступен), попробуйте ещё раз или запишите вручную';
+            $notes = [];
+        }
+
+        $this->saveMessages($session, $message, $reply);
+
+        return ['reply' => $reply, 'notes' => $notes];
+    }
+
+    /**
+     * Участники сессии в формате для anonymize/nameMap (только с непустым именем).
+     *
+     * @return array<int,array{id:int,name:string}>
+     */
+    private function sessionParticipants(LessonSession $session): array
+    {
+        return $session->participants()->with('student')->get()
+            ->map(fn ($p) => ['id' => $p->student_id, 'name' => (string) ($p->student?->name ?? '')])
+            ->filter(fn ($p) => trim($p['name']) !== '')
+            ->values()
+            ->all();
+    }
+
+    /** Создаёт StudentNote по tool-call record_observation (или null, если ученик не распознан). */
+    private function applyRecordObservation(array $args, array $map, LessonSession $session, User $teacher): ?StudentNote
+    {
+        $ref = $args['participant_ref'] ?? null;
+        $studentId = $ref !== null ? ($map[$ref] ?? null) : null;
+        if ($studentId === null) {
+            return null; // placeholder вне сессии — пропускаем
+        }
+
+        $kind = $args['kind'] ?? 'general';
+        if (! in_array($kind, ['weakness', 'strength', 'todo', 'general'], true)) {
+            $kind = 'general';
+        }
+
+        return StudentNote::create([
+            'student_id'        => $studentId,
+            'teacher_id'        => $teacher->id,
+            'lesson_session_id' => $session->id,
+            'topic_tag'         => $args['topic_tag'] ?? null,
+            'kind'              => $kind,
+            'source'            => 'chat',
+            'body'              => (string) ($args['body'] ?? ''),
+        ]);
+    }
+
+    /** Дописывает общую заметку об уроке в lesson_sessions.note (append). */
+    private function applyAddLessonNote(array $args, LessonSession $session): void
+    {
+        $body = trim((string) ($args['body'] ?? ''));
+        if ($body === '') {
+            return;
+        }
+        $existing = trim((string) ($session->note ?? ''));
+        $session->update(['note' => $existing === '' ? $body : $existing . "\n" . $body]);
+    }
+
+    /**
+     * Отвечает на вопрос об ученике: подгружает его записи, кладёт их результатом
+     * tool-call и делает второй вызов chat за финальным текстом.
+     *
+     * @param  array{id:?string,name:string,arguments:array<string,mixed>}  $call
+     * @param  array<string,int>  $map
+     * @param  array<int,array{id:int,name:string}>  $participants
+     */
+    private function answerAboutStudent(array $call, array $map, array $participants, User $teacher, string $userText): string
+    {
+        $ref = $call['arguments']['participant_ref'] ?? null;
+        $studentId = $ref !== null ? ($map[$ref] ?? null) : null;
+
+        $recordsText = 'Записей об ученике нет.';
+        if ($studentId !== null) {
+            $records = StudentNote::where('student_id', $studentId)
+                ->where('teacher_id', $teacher->id)
+                ->latest('created_at')
+                ->limit(50)
+                ->get();
+
+            if ($records->isNotEmpty()) {
+                $lines = $records->map(function (StudentNote $n) use ($participants, $ref) {
+                    // Тело записи тоже анонимизируем — вдруг там имена участников.
+                    [$body] = $this->anonymize((string) $n->body, $participants);
+                    $tag = $n->topic_tag ? " [{$n->topic_tag}]" : '';
+                    return "- {$ref} ({$n->kind}){$tag}: {$body}";
+                })->all();
+                $recordsText = implode("\n", $lines);
+            }
+        }
+
+        $callId = $call['id'] ?? 'call_1';
+
+        $second = $this->chat([
+            ['role' => 'system', 'content' => $this->systemPrompt()],
+            ['role' => 'user', 'content' => $userText],
+            [
+                'role' => 'assistant',
+                'content' => null,
+                'tool_calls' => [[
+                    'id' => $callId,
+                    'type' => 'function',
+                    'function' => [
+                        'name' => 'answer_about_student',
+                        'arguments' => json_encode($call['arguments'], JSON_UNESCAPED_UNICODE),
+                    ],
+                ]],
+            ],
+            [
+                'role' => 'tool',
+                'tool_call_id' => $callId,
+                'content' => $recordsText,
+            ],
+        ], []);
+
+        return (string) ($second['content'] ?? '');
+    }
+
+    /** Пишет обе реплики (учитель + ассистент) в историю сессии. */
+    private function saveMessages(LessonSession $session, string $teacherText, string $assistantText): void
+    {
+        LessonAssistantMessage::create([
+            'lesson_session_id' => $session->id,
+            'role'              => 'teacher',
+            'content'           => $teacherText,
+        ]);
+        LessonAssistantMessage::create([
+            'lesson_session_id' => $session->id,
+            'role'              => 'assistant',
+            'content'           => $assistantText,
+        ]);
+    }
+
+    /** Системный промпт (RU) для ассистента учителя математики. */
+    private function systemPrompt(): string
+    {
+        return 'Ты помощник учителя математики. Учитель фиксирует наблюдения об учениках '
+            . '(обозначены P1, P2 и т.д.). Вызывай record_observation для наблюдения о конкретном '
+            . 'ученике, add_lesson_note для общей заметки об уроке, answer_about_student чтобы '
+            . 'ответить на вопрос об ученике. kind: weakness (западает) / strength (силён) / '
+            . 'todo (надо сделать) / general (прочее). topic_tag — тема или навык ОГЭ. Отвечай кратко по-русски.';
+    }
+
+    /**
+     * Определения инструментов в OpenAI-формате function calling.
+     *
+     * @return array<int,array<string,mixed>>
+     */
+    private function toolDefinitions(): array
+    {
+        return [
+            [
+                'type' => 'function',
+                'function' => [
+                    'name' => 'record_observation',
+                    'description' => 'Зафиксировать наблюдение о конкретном ученике.',
+                    'parameters' => [
+                        'type' => 'object',
+                        'properties' => [
+                            'participant_ref' => ['type' => 'string', 'description' => 'Плейсхолдер ученика: P1, P2, ...'],
+                            'kind' => ['type' => 'string', 'enum' => ['weakness', 'strength', 'todo', 'general']],
+                            'topic_tag' => ['type' => 'string', 'description' => 'Тема или навык ОГЭ'],
+                            'body' => ['type' => 'string', 'description' => 'Суть наблюдения'],
+                        ],
+                        'required' => ['participant_ref', 'kind', 'body'],
+                    ],
+                ],
+            ],
+            [
+                'type' => 'function',
+                'function' => [
+                    'name' => 'add_lesson_note',
+                    'description' => 'Добавить общую заметку об уроке (не про конкретного ученика).',
+                    'parameters' => [
+                        'type' => 'object',
+                        'properties' => [
+                            'body' => ['type' => 'string', 'description' => 'Текст заметки'],
+                        ],
+                        'required' => ['body'],
+                    ],
+                ],
+            ],
+            [
+                'type' => 'function',
+                'function' => [
+                    'name' => 'answer_about_student',
+                    'description' => 'Ответить на вопрос учителя об ученике по накопленным записям.',
+                    'parameters' => [
+                        'type' => 'object',
+                        'properties' => [
+                            'participant_ref' => ['type' => 'string', 'description' => 'Плейсхолдер ученика: P1, P2, ...'],
+                        ],
+                        'required' => ['participant_ref'],
+                    ],
+                ],
+            ],
         ];
     }
 
