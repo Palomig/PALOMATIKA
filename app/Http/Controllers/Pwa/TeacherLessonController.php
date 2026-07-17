@@ -94,12 +94,14 @@ class TeacherLessonController extends Controller
     }
 
     /**
-     * POST /lessons   body: { schedule_id?: int }
+     * POST /lessons   body: { schedule_id?: int, starts_at?: 'Y-m-d H:i' }
+     * starts_at — планируемые день и время урока (для списка уроков).
      */
     public function create(Request $request): JsonResponse
     {
         $data = $request->validate([
             'schedule_id' => 'nullable|integer|exists:lesson_schedule,id',
+            'starts_at'   => 'nullable|date',
         ]);
 
         try {
@@ -110,13 +112,40 @@ class TeacherLessonController extends Controller
                 }
                 $session = $this->sessions->createFromSchedule($slot);
             } else {
-                $session = $this->sessions->createAdhoc($request->user());
+                $startsAt = !empty($data['starts_at'])
+                    ? \Illuminate\Support\Carbon::parse($data['starts_at'])->setSeconds(0)
+                    : null;
+                $session = $this->sessions->createAdhoc($request->user(), $startsAt);
             }
         } catch (DomainException $e) {
             return response()->json(['error' => $e->getMessage()], 422);
         }
 
         return response()->json(['session' => $this->serializeSession($session)], 201);
+    }
+
+    /**
+     * POST /lessons/{id}/next — «следующий урок»: черновик на то же время
+     * через неделю (идемпотентно). Заметку/задания учитель добавляет в нём сам.
+     */
+    public function next(Request $request, int $id): JsonResponse
+    {
+        $session = $this->loadOwnSession($request, $id);
+        $next = $this->sessions->createFollowUp($session);
+
+        return response()->json(['session' => $this->serializeSession($next)], 201);
+    }
+
+    /**
+     * POST /lessons/{id}/note   body: { note?: string }
+     */
+    public function note(Request $request, int $id): JsonResponse
+    {
+        $session = $this->loadOwnSession($request, $id);
+        $data = $request->validate(['note' => 'nullable|string|max:2000']);
+        $this->sessions->updateNote($session, $data['note'] ?? null);
+
+        return response()->json(['ok' => true]);
     }
 
     /**
@@ -280,6 +309,7 @@ class TeacherLessonController extends Controller
             'starts_at'    => $s->starts_at?->toIso8601String(),
             'ends_at'      => $s->ends_at?->toIso8601String(),
             'join_code'    => $s->join_code,
+            'note'         => $s->note,
         ];
     }
 

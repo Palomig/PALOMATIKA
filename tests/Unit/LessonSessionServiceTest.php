@@ -94,6 +94,61 @@ class LessonSessionServiceTest extends TestCase
         $this->assertSame($s1->id, $s2->id);
     }
 
+    public function test_create_adhoc_accepts_planned_starts_at(): void
+    {
+        $svc = $this->service();
+        $at = now()->addDay()->setTime(15, 30);
+
+        $session = $svc->createAdhoc($this->makeTeacher(), $at);
+
+        $this->assertTrue($session->starts_at->equalTo($at));
+        // Без указания времени starts_at остаётся пустым (проставится при старте).
+        $this->assertNull($svc->createAdhoc($this->makeTeacher())->starts_at);
+    }
+
+    public function test_create_follow_up_next_week_same_time_idempotent(): void
+    {
+        $svc = $this->service();
+        $teacher = $this->makeTeacher();
+        $at = now()->setTime(15, 0)->setSeconds(0)->setMicroseconds(0);
+        $session = $svc->createAdhoc($teacher, $at);
+
+        $next = $svc->createFollowUp($session);
+
+        $this->assertTrue($next->starts_at->equalTo($at->copy()->addWeek()));
+        $this->assertSame(LessonSession::STATUS_DRAFT, $next->status);
+        $this->assertNotSame($session->id, $next->id);
+        $this->assertMatchesRegularExpression('/^\d{4}$/', $next->join_code);
+
+        // Повторный вызов возвращает тот же урок, а не плодит новые.
+        $this->assertSame($next->id, $svc->createFollowUp($session)->id);
+    }
+
+    public function test_create_follow_up_without_starts_at_uses_now_plus_week(): void
+    {
+        $svc = $this->service();
+        $session = $svc->createAdhoc($this->makeTeacher());
+
+        $next = $svc->createFollowUp($session);
+
+        $this->assertTrue($next->starts_at->between(
+            now()->addWeek()->subMinute(),
+            now()->addWeek()->addMinute(),
+        ));
+    }
+
+    public function test_update_note(): void
+    {
+        $svc = $this->service();
+        $session = $svc->createAdhoc($this->makeTeacher());
+
+        $svc->updateNote($session, 'Повторить дроби, спросить про ДЗ');
+        $this->assertSame('Повторить дроби, спросить про ДЗ', $session->fresh()->note);
+
+        $svc->updateNote($session, null);
+        $this->assertNull($session->fresh()->note);
+    }
+
     public function test_create_generates_unique_4_digit_join_code(): void
     {
         $svc = $this->service();

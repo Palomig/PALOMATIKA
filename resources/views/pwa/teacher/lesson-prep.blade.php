@@ -38,6 +38,8 @@
   .participant-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 4px 8px; font-size: 12px; color: var(--text); }
   .chip-release { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 11px; padding: 0 2px; }
   .chip-release:hover { color: var(--red); }
+  .note-input { width: 100%; resize: vertical; min-height: 48px; padding: 10px 12px; font-size: 13px; line-height: 1.5; font-family: inherit; background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-radius: 10px; }
+  .note-input:focus { outline: none; border-color: var(--accent-bd); }
   .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
   .btn { padding: 10px 14px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; border: 1px solid var(--border); background: var(--surface2); color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
   .btn-primary { background: var(--accent); border-color: var(--accent); color: white; }
@@ -90,6 +92,16 @@
     </div>
   </template>
 
+  {{-- Заметка учителя (ученики не видят) --}}
+  <div class="lesson-card">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size: 14px; font-weight: 700;">📝 Заметка</div>
+      <div style="font-size: 11px; color: var(--muted);" x-show="noteSaved" x-cloak>сохранено ✓</div>
+    </div>
+    <textarea class="note-input" rows="2" placeholder="Заметка для себя — ученики её не видят"
+              x-model="note" @blur="saveNote()"></textarea>
+  </div>
+
   {{-- Tasks list --}}
   <div class="lesson-card">
     <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -136,6 +148,9 @@
   <div class="btn-row">
     <button class="btn btn-primary" x-show="status === 'draft'" @click="startLesson" :disabled="tasks.length === 0">▶ Запустить</button>
     <button class="btn btn-danger" x-show="status === 'live'" @click="endLesson">■ Завершить</button>
+    <button class="btn" :disabled="creatingNext" @click="createNextLesson"
+            x-text="creatingNext ? 'создаём…' : '📅 Следующий урок'"
+            title="Черновик на то же время через неделю — с заметкой и заданиями заранее"></button>
   </div>
 
   {{-- Live grid + summary --}}
@@ -194,6 +209,7 @@
     // Вне reactive-состояния (запись во время рендера не должна триггерить эффекты)
     let typesetTimer = null;
     let tasksJson = '';
+    let noteLoaded = false; // заметку берём из state один раз, чтобы poll не затирал ввод
 
     return {
       sessionId,
@@ -205,6 +221,9 @@
       pickerOpen: false,
       pollTimer: null,
       katexReady: false,
+      note: '',
+      noteSaved: false,
+      creatingNext: false,
 
       async init() {
         await this.refreshState();
@@ -299,6 +318,7 @@
         const d = await r.json();
         this.status = d.session.status;
         this.joinCode = d.session.join_code;
+        if (!noteLoaded) { this.note = d.session.note || ''; noteLoaded = true; }
         // tasks заменяем только при реальном изменении: иначе x-html при каждом
         // poll пересоздаёт DOM и сбрасывает дорендеренные KaTeX-формулы (мигание).
         const tj = JSON.stringify(d.tasks);
@@ -317,6 +337,37 @@
             if (this.status === 'ended' && this.pollTimer) clearInterval(this.pollTimer);
           }, 4000);
         }
+      },
+
+      async saveNote() {
+        const r = await fetch(`/lessons/${this.sessionId}/note`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content, 'Accept': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ note: this.note }),
+        });
+        if (r.ok) {
+          this.noteSaved = true;
+          setTimeout(() => { this.noteSaved = false; }, 2000);
+        }
+      },
+
+      async createNextLesson() {
+        if (this.creatingNext) return;
+        if (!confirm('Создать урок на то же время через неделю?')) return;
+        this.creatingNext = true;
+        try {
+          const r = await fetch(`/lessons/${this.sessionId}/next`, {
+            method: 'POST',
+            headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content, 'Accept': 'application/json' },
+            credentials: 'include',
+          });
+          const d = await r.json();
+          if (r.ok && d.session) { window.location = `/lessons/${d.session.id}`; return; }
+          alert(d.error || 'Не удалось создать');
+        } catch (e) { alert('Ошибка сети'); }
+        this.creatingNext = false;
       },
 
       async releaseStudent(studentId) {

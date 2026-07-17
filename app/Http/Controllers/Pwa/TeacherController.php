@@ -1052,12 +1052,14 @@ class TeacherController extends Controller
         $evriumSlots = $this->fetchEvriumSchedule($user->evrium_teacher_id);
 
         // Уже существующие черновики/идущие уроки в окне — для прямой ссылки из карточки.
-        $sessionsByStart = LessonSession::where('teacher_id', $user->id)
+        $windowSessions = LessonSession::where('teacher_id', $user->id)
             ->whereIn('status', [LessonSession::STATUS_DRAFT, LessonSession::STATUS_LIVE])
             ->whereNotNull('starts_at')
             ->whereBetween('starts_at', [now()->startOfDay(), now()->copy()->addDays($daysAhead)->endOfDay()])
-            ->get()
-            ->keyBy(fn ($s) => $s->starts_at->format('Y-m-d H:i'));
+            ->with('participants.student:id,name')
+            ->get();
+        $sessionsByStart = $windowSessions->keyBy(fn ($s) => $s->starts_at->format('Y-m-d H:i'));
+        $matchedSessionIds = [];
 
         $days = [];
         for ($offset = 0; $offset <= $daysAhead; $offset++) {
@@ -1065,8 +1067,9 @@ class TeacherController extends Controller
             $dow     = (int) $date->format('N');
             $isToday = $offset === 0;
 
-            $daySlots = array_values(array_filter($evriumSlots, fn ($s) => ($s['day'] ?? 0) === $dow));
-            if (empty($daySlots)) {
+            $daySlots     = array_values(array_filter($evriumSlots, fn ($s) => ($s['day'] ?? 0) === $dow));
+            $daySessions  = $windowSessions->filter(fn ($s) => $s->starts_at->isSameDay($date));
+            if (empty($daySlots) && $daySessions->isEmpty()) {
                 continue;
             }
 
@@ -1087,6 +1090,9 @@ class TeacherController extends Controller
                 // Для будущих дней статус всегда «будет»; для сегодня — реальный (прошёл/идёт/будет).
                 $status  = $isToday ? ['key' => $slot['status_key'], 'label' => $slot['status_label']] : ['key' => 'upcoming', 'label' => 'будет'];
                 $session = $startsAt ? $sessionsByStart->get($startsAt->format('Y-m-d H:i')) : null;
+                if ($session) {
+                    $matchedSessionIds[] = $session->id;
+                }
 
                 $slots[] = [
                     'time_start'     => $timeStart,
@@ -1099,8 +1105,39 @@ class TeacherController extends Controller
                     'ends_at'        => $endsAt?->format('Y-m-d H:i:s'),
                     'session_id'     => $session?->id,
                     'session_status' => $session?->status,
+                    'is_adhoc'       => false,
+                    'note'           => null,
                 ];
             }
+
+            // Внеплановые уроки (созданные «Начать новый урок» / «Следующий урок»),
+            // не совпавшие по времени ни с одним Evrium-слотом.
+            foreach ($daySessions as $s) {
+                if (in_array($s->id, $matchedSessionIds, true)) {
+                    continue;
+                }
+                $slots[] = [
+                    'time_start'     => $s->starts_at->format('H:i'),
+                    'time_end'       => $s->ends_at?->format('H:i') ?? '',
+                    'status_key'     => $s->status === LessonSession::STATUS_LIVE ? 'current' : 'upcoming',
+                    'status_label'   => $s->status === LessonSession::STATUS_LIVE ? 'идёт' : 'будет',
+                    'students'       => $s->participants->map(fn ($p) => [
+                        'student_id'        => $p->student_id,
+                        'student_name'      => $p->student?->name ?? ('#' . $p->student_id),
+                        'student_full_name' => '',
+                        'evrium_name'       => '',
+                    ])->values()->all(),
+                    'student_ids'    => [],
+                    'starts_at'      => $s->starts_at->format('Y-m-d H:i:s'),
+                    'ends_at'        => $s->ends_at?->format('Y-m-d H:i:s'),
+                    'session_id'     => $s->id,
+                    'session_status' => $s->status,
+                    'is_adhoc'       => true,
+                    'note'           => $s->note,
+                ];
+            }
+
+            usort($slots, fn ($a, $b) => strcmp($a['time_start'], $b['time_start']));
 
             $prefix = $isToday ? 'Сегодня' : ($offset === 1 ? 'Завтра' : null);
             $label  = trim(($prefix ? $prefix . ' · ' : '') . $dayNames[$dow] . ' ' . $date->format('d.m'));
