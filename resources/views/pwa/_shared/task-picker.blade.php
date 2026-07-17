@@ -448,9 +448,9 @@ function taskPicker(config) {
       if (!expr) return '';
       const s = String(expr);
       const escaped = s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-      // Текст с inline-формулами ($...$) — не math целиком: экранируем,
-      // формулы дорендерит auto-render (typeset) по делимитерам, как в базе.
-      if (s.includes('$')) { this.typeset(); return escaped; }
+      // Проза (кириллица) или текст с $...$ — рендерим как текст (иначе KaTeX в
+      // math-режиме съедает пробелы и не переносит строку); формулы дорисует auto-render.
+      if (s.includes('$') || /[а-яё]/i.test(s)) { this.typeset(); return escaped; }
       // Обращение к katexReady делает вывод реактивным, когда KaTeX догрузится.
       const ready = this.katexReady;
       if (ready && window.katex) {
