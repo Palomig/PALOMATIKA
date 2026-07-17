@@ -106,7 +106,13 @@ class StudentLessonController extends Controller
                 'released_at'  => $me?->released_at?->toIso8601String(),
                 'active'       => (bool) $me?->hasActiveLock(),
             ],
-            'tasks' => $session->tasks->map(fn ($t) => $this->serializeTaskForStudent($t, $myAttempts->get($t->id)))->all(),
+            // Только общие задачи + персональные этого ученика (чужие персональные скрыты).
+            // Нумеруем последовательно (position у отфильтрованного списка может иметь дыры).
+            'tasks' => $session->tasks
+                ->filter(fn ($t) => $t->visibleTo($student->id))
+                ->values()
+                ->map(fn ($t, $i) => $this->serializeTaskForStudent($t, $myAttempts->get($t->id), $i + 1))
+                ->all(),
         ]);
     }
 
@@ -162,18 +168,19 @@ class StudentLessonController extends Controller
         return $session;
     }
 
-    private function serializeTaskForStudent(LessonSessionTask $t, $myAttempt): array
+    private function serializeTaskForStudent(LessonSessionTask $t, $myAttempt, int $displayNo): array
     {
         $payload = $t->task_payload;
         // Скрываем answer из payload (он же в correct_answer, но в payload его тоже сохранили)
         unset($payload['answer'], $payload['raw']);
 
         return [
-            'id'         => $t->id,
-            'position'   => $t->position,
-            'payload'    => $payload,
-            'my_answer'  => $myAttempt?->answer_raw,
-            'answered_at'=> $myAttempt?->answered_at?->toIso8601String(),
+            'id'          => $t->id,
+            'position'    => $displayNo,
+            'personal'    => $t->assigned_student_id !== null,
+            'payload'     => $payload,
+            'my_answer'   => $myAttempt?->answer_raw,
+            'answered_at' => $myAttempt?->answered_at?->toIso8601String(),
         ];
     }
 }

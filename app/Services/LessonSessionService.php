@@ -136,8 +136,12 @@ class LessonSessionService
      * Добавляет задачу в сессию (резолвит из банка, кэширует payload).
      * Доступно только для draft и live (учитель может донабрать задач по ходу).
      */
-    public function addTask(LessonSession $session, string $bank, array $refs): LessonSessionTask
-    {
+    public function addTask(
+        LessonSession $session,
+        string $bank,
+        array $refs,
+        ?int $assignedStudentId = null
+    ): LessonSessionTask {
         if ($session->status === LessonSession::STATUS_ENDED) {
             throw new DomainException('Нельзя добавить задачу в завершённую сессию');
         }
@@ -147,15 +151,16 @@ class LessonSessionService
         $position = (int) ($session->tasks()->max('position') ?? 0) + 1;
 
         return LessonSessionTask::create([
-            'lesson_session_id' => $session->id,
-            'position'          => $position,
-            'bank'              => $bank,
-            'grade'             => $refs['grade']      ?? null,
-            'topic_id'          => $refs['topic_id']   ?? null,
-            'skill_slug'        => $refs['skill_slug'] ?? null,
-            'task_ref'          => $this->serializeRefs($refs),
-            'task_payload'      => $resolved,
-            'correct_answer'    => $resolved['answer'],
+            'lesson_session_id'   => $session->id,
+            'assigned_student_id' => $assignedStudentId,
+            'position'            => $position,
+            'bank'                => $bank,
+            'grade'               => $refs['grade']      ?? null,
+            'topic_id'            => $refs['topic_id']   ?? null,
+            'skill_slug'          => $refs['skill_slug'] ?? null,
+            'task_ref'            => $this->serializeRefs($refs),
+            'task_payload'        => $resolved,
+            'correct_answer'      => $resolved['answer'],
         ]);
     }
 
@@ -359,6 +364,9 @@ class LessonSessionService
         if (!$this->isParticipant($session, $student)) {
             throw new DomainException('Ученик не участник этой сессии');
         }
+        if (!$task->visibleTo($student->id)) {
+            throw new DomainException('Эта задача назначена другому ученику');
+        }
 
         $isCorrect = $task->correct_answer !== ''
             ? $this->answerResolver->isCorrect($answer, $task->correct_answer)
@@ -380,8 +388,13 @@ class LessonSessionService
 
     public function isParticipant(LessonSession $session, User $student): bool
     {
+        return $this->isParticipantId($session, $student->id);
+    }
+
+    public function isParticipantId(LessonSession $session, int $studentId): bool
+    {
         return LessonSessionParticipant::where('lesson_session_id', $session->id)
-            ->where('student_id', $student->id)
+            ->where('student_id', $studentId)
             ->exists();
     }
 

@@ -45,6 +45,11 @@
   .note-input { width: 100%; resize: vertical; min-height: 48px; padding: 10px 12px; font-size: 13px; line-height: 1.5; font-family: inherit; background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-radius: 10px; }
   .note-input:focus { outline: none; border-color: var(--accent-bd); }
   .activity-meta { font-size: 10px; color: var(--muted); margin-top: 3px; white-space: nowrap; }
+  .assign-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .assign-label { font-size: 12px; font-weight: 700; color: var(--muted); }
+  .assign-select { flex: 1; padding: 9px 10px; font-size: 13px; background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-radius: 8px; }
+  .personal-badge { display: inline-block; margin-top: 3px; font-size: 10px; font-weight: 800; padding: 1px 7px; border-radius: 6px; background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-bd); white-space: nowrap; }
+  .live-cell-na { background: var(--surface2); color: var(--muted); text-align: center; }
   .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
   .btn { padding: 10px 14px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; border: 1px solid var(--border); background: var(--surface2); color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
   .btn-primary { background: var(--accent); border-color: var(--accent); color: white; }
@@ -135,6 +140,8 @@
           <div class="lesson-task-meta">
             <span x-text="task.bank"></span>
             · Ответ: <span class="lesson-task-answer" x-text="task.correct_answer || '(без автопроверки)'"></span>
+            <span class="personal-badge" x-show="task.assigned_student_id"
+                  x-text="'для ' + (task.assigned_name || '#' + task.assigned_student_id)"></span>
           </div>
         </div>
         <button class="btn btn-icon btn-danger" x-show="status === 'draft'" @click="removeTask(task.id)">×</button>
@@ -152,6 +159,16 @@
       <div class="picker-overlay-head">
         <span class="title">Выбор задач</span>
         <button class="btn" @click="pickerOpen = false">✕ Закрыть</button>
+      </div>
+      {{-- Кому добавляем: всем или персонально участнику --}}
+      <div class="assign-row" x-show="participants.length">
+        <span class="assign-label">Кому:</span>
+        <select class="assign-select" x-model="assignTo">
+          <option value="">Всем классу</option>
+          <template x-for="p in participants" :key="'assign-' + p.id">
+            <option :value="p.id" x-text="p.name || ('#' + p.id)"></option>
+          </template>
+        </select>
       </div>
       <div x-data="taskPicker({
             onAdd: (items) => $dispatch('picker-add', { items }),
@@ -188,6 +205,8 @@
                 <div style="font-weight: 800;" x-text="t.position + ')'"></div>
                 <div style="font-size: 11px; color: var(--text);" x-html="headerHtml(t.task_payload.expression)"></div>
                 <div style="color: var(--green); font-family: monospace;" x-text="t.correct_answer"></div>
+                <div class="personal-badge" x-show="t.assigned_student_id"
+                     x-text="'для ' + (t.assigned_name || '#' + t.assigned_student_id)"></div>
               </th>
             </template>
           </tr>
@@ -202,6 +221,7 @@
               <template x-for="t in tasks" :key="t.id">
                 <td :class="cellClass(p.id, t.id)" x-text="cellLabel(p.id, t.id)"></td>
               </template>
+              {{-- см. cellClass/cellLabel: персональная задача не для этого ученика → серый «·» --}}
             </tr>
           </template>
           {{-- Summary row: % правильных по задаче --}}
@@ -240,6 +260,7 @@
       participants: [],
       grid: {},
       pickerOpen: false,
+      assignTo: '',        // '' = всем; id участника = персональная задача
       pollTimer: null,
       katexReady: false,
       note: '',
@@ -267,13 +288,15 @@
       },
 
       async onPickerAdd(items) {
+        // assignTo пусто = всем; иначе персонально выбранному участнику.
+        const assigned = this.assignTo ? Number(this.assignTo) : null;
         for (const it of items) {
           const r = await fetch(`/lessons/${this.sessionId}/tasks`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json',
               'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content, Accept: 'application/json' },
             credentials: 'include',
-            body: JSON.stringify(it),
+            body: JSON.stringify({ ...it, assigned_student_id: assigned }),
           });
           if (!r.ok) { alert('Не удалось добавить задачу'); break; }
         }
@@ -464,7 +487,14 @@
         if (this.pollTimer) clearInterval(this.pollTimer);
       },
 
+      // Персональная задача не для этого ученика — ячейка неприменима.
+      cellNotForStudent(studentId, taskId) {
+        const t = this.tasks.find(x => x.id === taskId);
+        return t && t.assigned_student_id && t.assigned_student_id !== studentId;
+      },
+
       cellLabel(studentId, taskId) {
+        if (this.cellNotForStudent(studentId, taskId)) return '·';
         const a = this.grid[studentId]?.[taskId];
         if (!a) return '—';
         const mark = a.is_correct === true ? '✓ ' : (a.is_correct === false ? '✗ ' : '');
@@ -472,6 +502,7 @@
       },
 
       cellClass(studentId, taskId) {
+        if (this.cellNotForStudent(studentId, taskId)) return 'live-cell-na';
         const a = this.grid[studentId]?.[taskId];
         if (!a) return 'live-cell-empty';
         return a.is_correct ? 'live-cell-ok' : 'live-cell-bad';

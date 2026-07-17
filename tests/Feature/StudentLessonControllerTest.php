@@ -197,6 +197,30 @@ class StudentLessonControllerTest extends TestCase
             ->assertOk();
     }
 
+    public function test_state_hides_other_students_personal_tasks(): void
+    {
+        $teacher = $this->teacher();
+        $alice = $this->student();
+        $bob = $this->student();
+        $svc = app(LessonSessionService::class);
+        $session = $svc->createAdhoc($teacher);
+        $svc->addTask($session, 'alg-skill', ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1]); // общая
+        $svc->addTask($session, 'alg-skill', ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 2], $alice->id); // персональная Алисе
+        $svc->start($session);
+        $svc->joinByCode($session->fresh()->join_code, $alice);
+        $svc->joinByCode($session->fresh()->join_code, $bob);
+
+        // Алиса видит обе (общую + свою персональную).
+        $aliceTasks = $this->actingAs($alice)->getJson(self::STUDENT_BASE . "/lessons/{$session->id}/state")->assertOk()->json('tasks');
+        $this->assertCount(2, $aliceTasks);
+        $this->assertTrue(collect($aliceTasks)->contains('personal', true));
+
+        // Боб видит только общую.
+        $bobTasks = $this->actingAs($bob)->getJson(self::STUDENT_BASE . "/lessons/{$session->id}/state")->assertOk()->json('tasks');
+        $this->assertCount(1, $bobTasks);
+        $this->assertFalse((bool) $bobTasks[0]['personal']);
+    }
+
     public function test_activity_records_for_participant(): void
     {
         $teacher = $this->teacher();
