@@ -68,5 +68,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'role' => \App\Http\Middleware\EnsureUserRole::class,
         'pwa.onboarding' => \App\Http\Middleware\EnsurePwaOnboardingComplete::class,
+        'pwa.lesson-lock' => \App\Http\Middleware\EnforceLessonLock::class,
     ];
 }
