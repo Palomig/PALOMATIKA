@@ -21,6 +21,16 @@
     <p style="font-size:14px;color:var(--muted);font-weight:600;">{{ $grade }} класс · 20 заданий</p>
   </div>
 
+  {{-- Тумблер на ОГЭ (повторение) для 10–11 классов --}}
+  @if(in_array((int)($user->grade_num ?? 0), [10, 11], true))
+  <a href="{{ route('pwa.student.oge-dashboard') }}"
+     style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:20px;
+            padding:11px;border-radius:12px;text-decoration:none;font-size:13px;font-weight:700;
+            color:var(--accent);background:var(--accent-bg);border:1px solid var(--accent);">
+    Переключиться на ОГЭ (повторение) →
+  </a>
+  @endif
+
   {{-- Незавершённые попытки --}}
   @foreach($activeList as $att)
   <a href="{{ route('pwa.student.ege.test', $att['id']) }}"
