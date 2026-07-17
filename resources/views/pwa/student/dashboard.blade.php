@@ -189,8 +189,8 @@
 @section('body')
 <div class="page" x-data="dashboardPage()">
 
-  {{-- LESSON TILE — только ученикам, прикреплённым к учителю --}}
-  @if(!empty($hasTeacher))
+  {{-- LESSON TILE — прикреплённым ученикам и админу (превью) --}}
+  @if(!empty($showLessonTile))
     @include('pwa.student.partials.lesson-tile')
   @endif
 
