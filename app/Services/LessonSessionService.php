@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\LessonActivityInterval;
 use App\Models\LessonSchedule;
 use App\Models\LessonSession;
 use App\Models\LessonSessionAttempt;
@@ -23,6 +24,9 @@ class LessonSessionService
 
     /** На сколько минут ученик локается на странице урока после входа по коду. */
     public const LOCK_MINUTES = 60;
+
+    /** Present-интервал без heartbeat дольше этого — считаем, что ученик молча ушёл. */
+    public const ACTIVITY_STALE_SECONDS = 25;
 
     public function __construct(
         private readonly TaskBankResolver $bankResolver,
@@ -241,6 +245,99 @@ class LessonSessionService
             ->where('student_id', $studentId)
             ->firstOrFail();
         $p->update(['released_at' => now(), 'released_by' => $teacher->id]);
+    }
+
+    /**
+     * Пишет активность ученика на странице урока непрерывным таймлайном
+     * present/away. Сервер ставит время сам (клиенту не доверяем).
+     * $visible=true — на странице, false — свернул/ушёл.
+     */
+    public function recordActivity(LessonSession $session, User $student, bool $visible): void
+    {
+        $desired = $visible ? LessonActivityInterval::KIND_PRESENT : LessonActivityInterval::KIND_AWAY;
+        $now = now();
+
+        $open = LessonActivityInterval::where('lesson_session_id', $session->id)
+            ->where('student_id', $student->id)
+            ->whereNull('ended_at')
+            ->latest('started_at')
+            ->first();
+
+        // Состояние не изменилось → heartbeat (только бампаем updated_at у present).
+        if ($open && $open->kind === $desired) {
+            $open->update(['updated_at' => $now]);
+            return;
+        }
+
+        // Смена состояния → закрываем текущий, открываем новый.
+        if ($open) {
+            $open->update(['ended_at' => $now]);
+        }
+
+        LessonActivityInterval::create([
+            'lesson_session_id' => $session->id,
+            'student_id'        => $student->id,
+            'kind'              => $desired,
+            'started_at'        => $now,
+            'updated_at'        => $now,
+        ]);
+    }
+
+    /**
+     * Агрегаты активности по каждому участнику: текущее состояние, число отлучек,
+     * время вне страницы и на странице (в секундах).
+     *
+     * @return array<int, array{state:string, away_count:int, away_seconds:int, present_seconds:int}>
+     */
+    public function activitySummary(LessonSession $session): array
+    {
+        $nowRef = $session->status === LessonSession::STATUS_ENDED && $session->ends_at
+            ? $session->ends_at
+            : now();
+        $staleBefore = now()->copy()->subSeconds(self::ACTIVITY_STALE_SECONDS);
+
+        $byStudent = LessonActivityInterval::where('lesson_session_id', $session->id)
+            ->orderBy('started_at')
+            ->get()
+            ->groupBy('student_id');
+
+        $out = [];
+        foreach ($byStudent as $studentId => $intervals) {
+            $presentSec = 0;
+            $awaySec = 0;
+            $awayCount = 0;
+            $state = 'gone';
+
+            foreach ($intervals as $iv) {
+                $open = $iv->ended_at === null;
+
+                if ($iv->kind === LessonActivityInterval::KIND_AWAY) {
+                    $awayCount++;
+                    $end = $iv->ended_at ?? $nowRef;
+                    $awaySec += max(0, $iv->started_at->diffInSeconds($end, false));
+                    if ($open) {
+                        $state = 'away';
+                    }
+                } else { // present
+                    // Молчащий present (нет heartbeat) — ученик ушёл, обрезаем по updated_at.
+                    $stale = $open && $iv->updated_at && $iv->updated_at->lessThan($staleBefore);
+                    $end = $iv->ended_at ?? ($stale ? $iv->updated_at : $nowRef);
+                    $presentSec += max(0, $iv->started_at->diffInSeconds($end, false));
+                    if ($open) {
+                        $state = $stale ? 'away' : 'present';
+                    }
+                }
+            }
+
+            $out[(int) $studentId] = [
+                'state'           => $state,
+                'away_count'      => $awayCount,
+                'away_seconds'    => (int) $awaySec,
+                'present_seconds' => (int) $presentSec,
+            ];
+        }
+
+        return $out;
     }
 
     /**

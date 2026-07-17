@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\LessonActivityInterval;
 use App\Models\LessonSchedule;
 use App\Models\LessonSession;
 use App\Models\LessonSessionTask;
@@ -65,6 +66,98 @@ class LessonSessionServiceTest extends TestCase
         $svc->addTask($session, 'alg-skill', ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1]);
         $svc->start($session);
         return $session->fresh();
+    }
+
+    // --- активность ученика на уроке ---
+
+    public function test_record_activity_opens_present_then_toggles_away_and_back(): void
+    {
+        $svc = $this->service();
+        $session = $this->makeLiveSession($svc);
+        $student = $this->makeStudent();
+        $svc->joinByCode($session->join_code, $student);
+
+        // Вход на страницу → present.
+        $svc->recordActivity($session, $student, true);
+        $intervals = LessonActivityInterval::where('student_id', $student->id)->orderBy('id')->get();
+        $this->assertCount(1, $intervals);
+        $this->assertSame('present', $intervals[0]->kind);
+        $this->assertNull($intervals[0]->ended_at);
+
+        // Свернул → present закрыт, away открыт.
+        $this->travel(30)->seconds();
+        $svc->recordActivity($session, $student, false);
+        $intervals = LessonActivityInterval::where('student_id', $student->id)->orderBy('id')->get();
+        $this->assertCount(2, $intervals);
+        $this->assertNotNull($intervals[0]->ended_at);
+        $this->assertSame('away', $intervals[1]->kind);
+        $this->assertNull($intervals[1]->ended_at);
+
+        // Вернулся → away закрыт, present открыт.
+        $this->travel(20)->seconds();
+        $svc->recordActivity($session, $student, true);
+        $intervals = LessonActivityInterval::where('student_id', $student->id)->orderBy('id')->get();
+        $this->assertCount(3, $intervals);
+        $this->assertNotNull($intervals[1]->ended_at);
+        $this->assertSame('present', $intervals[2]->kind);
+        $this->assertNull($intervals[2]->ended_at);
+    }
+
+    public function test_record_activity_heartbeat_does_not_create_new_interval(): void
+    {
+        $svc = $this->service();
+        $session = $this->makeLiveSession($svc);
+        $student = $this->makeStudent();
+        $svc->joinByCode($session->join_code, $student);
+
+        $svc->recordActivity($session, $student, true);
+        $this->travel(10)->seconds();
+        $svc->recordActivity($session, $student, true); // heartbeat
+        $this->travel(10)->seconds();
+        $svc->recordActivity($session, $student, true); // heartbeat
+
+        $intervals = LessonActivityInterval::where('student_id', $student->id)->get();
+        $this->assertCount(1, $intervals);
+        // updated_at продлился до последнего heartbeat.
+        $this->assertTrue($intervals[0]->updated_at->greaterThan($intervals[0]->started_at));
+    }
+
+    public function test_activity_summary_counts_present_away_and_state(): void
+    {
+        $svc = $this->service();
+        $session = $this->makeLiveSession($svc);
+        $student = $this->makeStudent();
+        $svc->joinByCode($session->join_code, $student);
+
+        $svc->recordActivity($session, $student, true);   // present 0s
+        $this->travel(60)->seconds();
+        $svc->recordActivity($session, $student, false);  // → away @60s
+        $this->travel(30)->seconds();
+        $svc->recordActivity($session, $student, true);   // away 30s → present @90s
+        $this->travel(20)->seconds();                     // present idet, +20s
+
+        $summary = $svc->activitySummary($session);
+        $this->assertArrayHasKey($student->id, $summary);
+        $a = $summary[$student->id];
+
+        $this->assertSame('present', $a['state']);
+        $this->assertSame(1, $a['away_count']);
+        $this->assertEqualsWithDelta(30, $a['away_seconds'], 2);
+        $this->assertEqualsWithDelta(80, $a['present_seconds'], 2); // 60 + 20
+    }
+
+    public function test_activity_summary_stale_present_counts_as_away_now(): void
+    {
+        $svc = $this->service();
+        $session = $this->makeLiveSession($svc);
+        $student = $this->makeStudent();
+        $svc->joinByCode($session->join_code, $student);
+
+        $svc->recordActivity($session, $student, true); // present, updated_at = now
+        $this->travel(40)->seconds();                    // heartbeat молчит >25с
+
+        $a = $svc->activitySummary($session)[$student->id];
+        $this->assertSame('away', $a['state']); // молча закрыл вкладку
     }
 
     public function test_create_from_schedule_no_longer_autoadds_participants(): void

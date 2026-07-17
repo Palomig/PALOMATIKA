@@ -196,4 +196,44 @@ class StudentLessonControllerTest extends TestCase
             ->get(self::STUDENT_BASE . "/lessons/{$session->id}")
             ->assertOk();
     }
+
+    public function test_activity_records_for_participant(): void
+    {
+        $teacher = $this->teacher();
+        $student = $this->student();
+        [$session] = $this->makeLiveSessionWithTask($teacher, $student);
+
+        $this->actingAs($student)
+            ->postJson(self::STUDENT_BASE . "/lessons/{$session->id}/activity", ['visible' => true])
+            ->assertOk()
+            ->assertJson(['ok' => true]);
+
+        $this->assertDatabaseHas('lesson_activity_intervals', [
+            'lesson_session_id' => $session->id,
+            'student_id'        => $student->id,
+            'kind'              => 'present',
+            'ended_at'          => null,
+        ]);
+    }
+
+    public function test_activity_rejects_non_participant(): void
+    {
+        $teacher = $this->teacher();
+        [$session] = $this->makeLiveSessionWithTask($teacher, $this->student());
+
+        $this->actingAs($this->student())
+            ->postJson(self::STUDENT_BASE . "/lessons/{$session->id}/activity", ['visible' => true])
+            ->assertForbidden();
+    }
+
+    public function test_activity_requires_visible_boolean(): void
+    {
+        $teacher = $this->teacher();
+        $student = $this->student();
+        [$session] = $this->makeLiveSessionWithTask($teacher, $student);
+
+        $this->actingAs($student)
+            ->postJson(self::STUDENT_BASE . "/lessons/{$session->id}/activity", [])
+            ->assertStatus(422);
+    }
 }

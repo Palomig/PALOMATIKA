@@ -269,6 +269,8 @@ class TeacherLessonController extends Controller
         $session = $this->loadOwnSession($request, $id);
         $session->load(['tasks', 'participants.student', 'attempts']);
 
+        $activity = $this->sessions->activitySummary($session);
+
         $grid = [];
         foreach ($session->attempts as $a) {
             $grid[$a->student_id][$a->lesson_session_task_id] = [
@@ -282,10 +284,13 @@ class TeacherLessonController extends Controller
             'session'      => $this->serializeSession($session),
             'tasks'        => $session->tasks->map(fn ($t) => $this->serializeTask($t))->all(),
             'participants' => $session->participants->map(fn ($p) => [
-                'id'     => $p->student_id,
-                'name'   => $p->student?->name,
-                'source' => $p->source,
-                'locked' => $p->hasActiveLock(),
+                'id'       => $p->student_id,
+                'name'     => $p->student?->name,
+                'source'   => $p->source,
+                'locked'   => $p->hasActiveLock(),
+                'activity' => $activity[$p->student_id] ?? [
+                    'state' => 'gone', 'away_count' => 0, 'away_seconds' => 0, 'present_seconds' => 0,
+                ],
             ])->all(),
             'grid'         => $grid,
         ]);

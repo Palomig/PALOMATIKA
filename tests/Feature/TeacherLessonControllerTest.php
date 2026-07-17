@@ -344,6 +344,28 @@ class TeacherLessonControllerTest extends TestCase
         $this->assertNull($session->fresh()->note);
     }
 
+    public function test_state_participants_include_activity(): void
+    {
+        $teacher = $this->teacher();
+        $student = $this->student();
+        $svc = app(\App\Services\LessonSessionService::class);
+        $session = $svc->createAdhoc($teacher);
+        $svc->addTask($session, 'alg-skill', ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1]);
+        $svc->start($session);
+        $svc->joinByCode($session->fresh()->join_code, $student);
+        $svc->recordActivity($session, $student, true);
+
+        $resp = $this->actingAs($teacher)
+            ->getJson(self::BASE . "/lessons/{$session->id}/state")
+            ->assertOk();
+
+        $p = collect($resp->json('participants'))->firstWhere('id', $student->id);
+        $this->assertSame('present', $p['activity']['state']);
+        $this->assertArrayHasKey('away_count', $p['activity']);
+        $this->assertArrayHasKey('away_seconds', $p['activity']);
+        $this->assertArrayHasKey('present_seconds', $p['activity']);
+    }
+
     public function test_lessons_page_shows_adhoc_session_with_note(): void
     {
         $teacher = $this->teacher();

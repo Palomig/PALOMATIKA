@@ -44,6 +44,7 @@
   .chip-release:hover { color: var(--red); }
   .note-input { width: 100%; resize: vertical; min-height: 48px; padding: 10px 12px; font-size: 13px; line-height: 1.5; font-family: inherit; background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-radius: 10px; }
   .note-input:focus { outline: none; border-color: var(--accent-bd); }
+  .activity-meta { font-size: 10px; color: var(--muted); margin-top: 3px; white-space: nowrap; }
   .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
   .btn { padding: 10px 14px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; border: 1px solid var(--border); background: var(--surface2); color: var(--text); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
   .btn-primary { background: var(--accent); border-color: var(--accent); color: white; }
@@ -85,6 +86,7 @@
         <div class="participant-chips">
           <template x-for="p in participants" :key="'chip-' + p.id">
             <span class="participant-chip">
+              <span x-text="activityDot(p)" :title="activityTitle(p)"></span>
               <span x-text="p.name || ('#' + p.id)"></span>
               <span x-show="p.locked" title="Лок активен">🔒</span>
               <button type="button" class="chip-release" x-show="p.locked"
@@ -193,7 +195,10 @@
         <tbody>
           <template x-for="p in participants" :key="p.id">
             <tr>
-              <td x-text="p.name || ('#' + p.id)"></td>
+              <td>
+                <div><span x-text="activityDot(p)"></span> <span x-text="p.name || ('#' + p.id)"></span></div>
+                <div class="activity-meta" x-show="p.activity" x-text="activityMeta(p)"></div>
+              </td>
               <template x-for="t in tasks" :key="t.id">
                 <td :class="cellClass(p.id, t.id)" x-text="cellLabel(p.id, t.id)"></td>
               </template>
@@ -384,6 +389,33 @@
           alert(d.error || 'Не удалось создать');
         } catch (e) { alert('Ошибка сети'); }
         this.creatingNext = false;
+      },
+
+      // --- активность ученика ---
+      activityDot(p) {
+        const s = p.activity?.state;
+        if (s === 'present') return '🟢';
+        if (s === 'away') return '🔴';
+        return '⚪';
+      },
+      activityTitle(p) {
+        const s = p.activity?.state;
+        return s === 'present' ? 'На странице урока' : (s === 'away' ? 'Отошёл / свернул' : 'Не заходил');
+      },
+      fmtMin(sec) {
+        sec = Math.max(0, Math.round(sec || 0));
+        if (sec < 60) return sec + ' сек';
+        const m = Math.floor(sec / 60), s = sec % 60;
+        return s ? `${m} мин ${s} сек` : `${m} мин`;
+      },
+      activityMeta(p) {
+        const a = p.activity;
+        if (!a) return '';
+        const parts = [];
+        if (a.away_count > 0) parts.push(`отходил ${a.away_count}×`);
+        if (a.away_seconds > 0) parts.push(`вне ${this.fmtMin(a.away_seconds)}`);
+        parts.push(`на странице ${this.fmtMin(a.present_seconds)}`);
+        return parts.join(' · ');
       },
 
       async releaseStudent(studentId) {
