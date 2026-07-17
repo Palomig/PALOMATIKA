@@ -34,7 +34,8 @@ class StudentExamAccessService
             7 => [OgeVariant::EXAM_VPR7],
             8 => [OgeVariant::EXAM_VPR8, OgeVariant::EXAM_OGE],
             9 => [OgeVariant::EXAM_OGE],
-            10, 11 => [OgeVariant::EXAM_EGE],
+            // 10–11: ЕГЭ по умолчанию + ОГЭ для повторения (тумблер на дашборде)
+            10, 11 => [OgeVariant::EXAM_EGE, OgeVariant::EXAM_OGE],
             default => [],
         };
     }

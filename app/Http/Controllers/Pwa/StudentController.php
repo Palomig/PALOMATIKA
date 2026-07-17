@@ -193,15 +193,15 @@ class StudentController extends Controller
     }
 
     /**
-     * OGE dashboard for grade 8 students (no VPR redirect).
+     * OGE dashboard для 8 класса (тумблер ВПР) и 10–11 (тумблер ЕГЭ) — повторение ОГЭ.
      */
     public function ogeDashboard(Request $request)
     {
         $user  = Auth::user();
         $grade = (int) ($user->grade_num ?? 9);
 
-        // Only grade 8 needs this route; others go to their default dashboard
-        if ($grade !== 8) {
+        // Доступен 8, 10, 11 классам (у 9 ОГЭ — дефолт на «/»); остальные — на свой дашборд.
+        if (!in_array($grade, [8, 10, 11], true)) {
             return redirect()->route('pwa.student.dashboard');
         }
 

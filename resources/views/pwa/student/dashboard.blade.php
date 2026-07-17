@@ -204,6 +204,16 @@
   </a>
   @endif
 
+  {{-- EGE toggle for grade 10–11 (ОГЭ-повторение → назад на ЕГЭ) --}}
+  @if(in_array((int)($user->grade_num ?? 0), [10, 11], true))
+  <a href="{{ route('pwa.student.ege.home') }}"
+     style="display:flex;align-items:center;justify-content:center;gap:8px;
+            padding:11px;border-radius:12px;text-decoration:none;font-size:13px;font-weight:700;
+            color:var(--accent);background:var(--accent-bg);border:1px solid var(--accent-bd);">
+    ← Переключиться на ЕГЭ
+  </a>
+  @endif
+
   {{-- GREETING + COUNTDOWN --}}
   <div class="greeting">
     <div class="greeting-name">Привет, {{ $user->name ?? 'ученик' }}!</div>
