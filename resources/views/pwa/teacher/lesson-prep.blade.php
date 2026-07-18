@@ -66,14 +66,19 @@
   .live-cell-bad { background: var(--red-bg); color: var(--red); }
   .live-cell-empty { color: var(--muted); }
   /* 📝 Заметки — шторка снизу */
-  .ns-overlay { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,.55); backdrop-filter: blur(4px); display: flex; align-items: flex-end; justify-content: center; }
-  .ns-sheet { background: var(--bg); border-radius: 20px 20px 0 0; width: 100%; max-width: 460px; padding: 20px 18px calc(28px + var(--safe-bottom, 0px)); max-height: 88vh; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
-  .ns-handle { width: 36px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 4px; flex-shrink: 0; }
-  .ns-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-  .ns-title { font-size: 17px; font-weight: 800; color: var(--text); }
+  /* Попап заметок — на весь экран */
+  .ns-overlay { position: fixed; inset: 0; z-index: 1000; background: var(--bg); display: flex; align-items: stretch; justify-content: center; }
+  .ns-sheet { background: var(--bg); width: 100%; max-width: 560px; height: 100%; max-height: 100dvh; padding: calc(16px + var(--safe-top, 0px)) calc(18px + var(--safe-right, 0px)) calc(24px + var(--safe-bottom, 0px)) calc(18px + var(--safe-left, 0px)); overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+  .ns-handle { display: none; }
+  .ns-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; position: sticky; top: calc(-16px - var(--safe-top, 0px)); background: var(--bg); padding: 4px 0 8px; margin-top: -4px; border-bottom: 1px solid var(--border); }
+  .ns-title { font-size: 19px; font-weight: 800; color: var(--text); }
+  .ns-close { background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 10px; font-size: 16px; line-height: 1; padding: 8px 12px; cursor: pointer; flex-shrink: 0; }
+  .ns-close:hover { border-color: var(--accent-bd); }
   .ns-toggle-all { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); border-radius: 8px; font-size: 12px; font-weight: 700; padding: 6px 10px; cursor: pointer; }
   .ns-toggle-all:hover { color: var(--text); border-color: var(--accent-bd); }
+  .ns-sub { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 12px; font-weight: 700; color: var(--muted); }
   .ns-students { display: flex; flex-direction: column; gap: 6px; }
+  .ns-actions { margin-top: auto; display: flex; flex-direction: column; gap: 6px; position: sticky; bottom: 0; background: var(--bg); padding-top: 8px; }
   .ns-student { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; user-select: none; transition: border-color .12s, background .12s; }
   .ns-student.active { background: var(--accent-bg); border-color: var(--accent); }
   .ns-student input[type=checkbox] { width: 18px; height: 18px; flex-shrink: 0; accent-color: var(--accent); cursor: pointer; }
@@ -133,12 +138,16 @@
   {{-- 📝 Заметки об учениках (ученики не видят) --}}
   <button class="btn btn-primary" @click="openNotes()" style="align-self: flex-start;">📝 Заметки</button>
 
-  {{-- Шторка снизу: заметка об учениках --}}
-  <div class="ns-overlay" x-show="notesOpen" x-cloak @click.self="notesOpen = false">
-    <div class="ns-sheet" @click.stop>
-      <div class="ns-handle"></div>
+  {{-- Полноэкранный попап: заметка об учениках --}}
+  <div class="ns-overlay" x-show="notesOpen" x-cloak>
+    <div class="ns-sheet">
       <div class="ns-head">
-        <span class="ns-title">Заметка об учениках</span>
+        <span class="ns-title">📝 Заметка об учениках</span>
+        <button type="button" class="ns-close" @click="notesOpen = false" aria-label="Закрыть">✕</button>
+      </div>
+
+      <div class="ns-sub">
+        <span x-text="'Выбрано: ' + noteStudentIds.length"></span>
         <button type="button" class="ns-toggle-all" @click="toggleAllNoteStudents()"
                 x-text="noteStudentIds.length === participants.length && participants.length ? 'Снять всех' : 'Выбрать всех'"></button>
       </div>
@@ -158,10 +167,12 @@
       <textarea class="ns-textarea" x-model="noteText"
                 placeholder="Что заметил? Например: путается в раскрытии скобок, но хорошо считает в уме."></textarea>
 
-      <button class="ns-btn" @click="submitNote()"
-              :disabled="!!(!noteStudentIds.length || !noteText.trim() || noteSending)"
-              x-text="noteSending ? 'Сохраняю…' : 'Отправить'"></button>
-      <button type="button" class="ns-cancel" @click="notesOpen = false">Отмена</button>
+      <div class="ns-actions">
+        <button class="ns-btn" @click="submitNote()"
+                :disabled="!!(!noteStudentIds.length || !noteText.trim() || noteSending)"
+                x-text="noteSending ? 'Сохраняю…' : 'Отправить'"></button>
+        <button type="button" class="ns-cancel" @click="notesOpen = false">Отмена</button>
+      </div>
     </div>
   </div>
 
