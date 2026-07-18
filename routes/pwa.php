@@ -159,8 +159,7 @@ Route::domain('teacher.' . config('app.base_domain'))->group(function () {
         Route::post('/lessons/{id}/next',                    [TeacherLessonController::class, 'next'])->name('pwa.teacher.lessons.next')->whereNumber('id');
         Route::post('/lessons/{id}/note',                    [TeacherLessonController::class, 'note'])->name('pwa.teacher.lessons.note')->whereNumber('id');
         Route::post('/lessons/{id}/dont-understand',         [TeacherLessonController::class, 'dontUnderstand'])->name('pwa.teacher.lessons.dont-understand')->whereNumber('id');
-        Route::post('/lessons/{id}/assistant',               [TeacherLessonController::class, 'assistant'])->name('pwa.teacher.lessons.assistant')->whereNumber('id');
-        Route::get('/lessons/{id}/assistant',                [TeacherLessonController::class, 'assistantHistory'])->name('pwa.teacher.lessons.assistant-history')->whereNumber('id');
+        Route::post('/lessons/{id}/notes',                   [TeacherLessonController::class, 'notes'])->name('pwa.teacher.lessons.notes')->whereNumber('id');
 
         // Записи об ученике (student_notes) — правка/удаление без LLM
         Route::patch('/student-notes/{id}',  [StudentNoteController::class, 'update'])->name('pwa.teacher.student-notes.update')->whereNumber('id');

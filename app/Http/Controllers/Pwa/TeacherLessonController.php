@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Pwa;
 
 use App\Http\Controllers\Controller;
-use App\Models\LessonAssistantMessage;
 use App\Models\LessonSchedule;
 use App\Models\LessonSession;
 use App\Models\LessonSessionTask;
@@ -342,46 +341,39 @@ class TeacherLessonController extends Controller
     }
 
     /**
-     * POST /lessons/{id}/assistant   body: { message }
-     * Реплика учителя ассистенту: LLM разбирает её в записи student_notes.
+     * POST /lessons/{id}/notes   body: { student_ids: int[], text: string }
+     * Форма быстрой записи: учитель ЯВНО выбрал учеников и написал текст,
+     * DeepSeek только вытаскивает теги {kind, topic_tag}. Одна запись на ученика.
      */
-    public function assistant(Request $request, int $id): JsonResponse
+    public function notes(Request $request, int $id): JsonResponse
     {
         $session = $this->loadOwnSession($request, $id);
 
-        $data = $request->validate(['message' => 'required|string|max:2000']);
+        $data = $request->validate([
+            'student_ids'   => 'required|array|min:1',
+            'student_ids.*' => 'integer',
+            'text'          => 'required|string|max:2000',
+        ]);
 
-        $result = app(AssistantService::class)->handleMessage($session, $request->user(), $data['message']);
+        foreach ($data['student_ids'] as $sid) {
+            if (!$this->sessions->isParticipantId($session, (int) $sid)) {
+                return response()->json(['error' => 'Ученик не участник урока'], 422);
+            }
+        }
+
+        $result = app(AssistantService::class)
+            ->recordNote($session, $request->user(), $data['student_ids'], $data['text']);
 
         return response()->json([
-            'reply' => $result['reply'],
-            'notes' => collect($result['notes'])->map(fn ($n) => [
+            'kind'      => $result['kind'],
+            'topic_tag' => $result['topic_tag'],
+            'notes'     => $result['notes']->map(fn ($n) => [
                 'id'         => $n->id,
                 'body'       => $n->body,
                 'kind'       => $n->kind,
                 'topic_tag'  => $n->topic_tag,
                 'student_id' => $n->student_id,
             ])->all(),
-        ]);
-    }
-
-    /**
-     * GET /lessons/{id}/assistant — история переписки с ассистентом по порядку.
-     */
-    public function assistantHistory(Request $request, int $id): JsonResponse
-    {
-        $session = $this->loadOwnSession($request, $id);
-
-        return response()->json([
-            'messages' => LessonAssistantMessage::where('lesson_session_id', $session->id)
-                ->orderBy('created_at')
-                ->orderBy('id')
-                ->get()
-                ->map(fn ($m) => [
-                    'role'    => $m->role,
-                    'content' => $m->content,
-                    'at'      => $m->created_at?->toIso8601String(),
-                ])->all(),
         ]);
     }
 

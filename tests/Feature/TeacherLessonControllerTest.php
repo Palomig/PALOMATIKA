@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Models\LessonSchedule;
 use App\Models\LessonSession;
 use App\Models\LessonSessionTask;
-use App\Models\LessonAssistantMessage;
 use App\Models\TeacherStudent;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -570,9 +569,9 @@ class TeacherLessonControllerTest extends TestCase
             ->assertForbidden();
     }
 
-    // --- ассистент (Task B3) ---
+    // --- форма заметок (явный выбор учеников + DeepSeek-тегирование) ---
 
-    private function fakeRecordObservation(): void
+    private function fakeTagNote(): void
     {
         config()->set('services.deepseek.api_key', 'test-key');
         config()->set('services.deepseek.base_url', 'https://api.deepseek.com');
@@ -587,12 +586,10 @@ class TeacherLessonControllerTest extends TestCase
                             'id' => 'c1',
                             'type' => 'function',
                             'function' => [
-                                'name' => 'record_observation',
+                                'name' => 'tag_note',
                                 'arguments' => json_encode([
-                                    'participant_ref' => 'P1',
                                     'kind' => 'weakness',
                                     'topic_tag' => 'геометрия: подобие',
-                                    'body' => 'путает признаки подобия',
                                 ]),
                             ],
                         ]],
@@ -602,81 +599,101 @@ class TeacherLessonControllerTest extends TestCase
         ]);
     }
 
-    public function test_assistant_returns_reply_and_notes(): void
+    public function test_notes_creates_note_for_each_selected_student(): void
     {
-        $this->fakeRecordObservation();
+        $this->fakeTagNote();
 
         $teacher = $this->teacher();
-        $petya = User::create([
-            'name' => 'Петя', 'email' => 's+' . uniqid() . '@t.t', 'password' => 'x',
-            'role' => 'student', 'onboarding_completed_at' => now(),
-        ]);
+        $petya = $this->student();
+        $vasya = $this->student();
         $svc = app(\App\Services\LessonSessionService::class);
         $session = $svc->createAdhoc($teacher);
         $svc->joinByCode($session->join_code, $petya);
+        $svc->joinByCode($session->join_code, $vasya);
 
         $resp = $this->actingAs($teacher)
-            ->postJson(self::BASE . "/lessons/{$session->id}/assistant", ['message' => 'Петя путает подобие'])
+            ->postJson(self::BASE . "/lessons/{$session->id}/notes", [
+                'student_ids' => [$petya->id, $vasya->id],
+                'text'        => 'путают признаки подобия',
+            ])
             ->assertOk()
-            ->assertJsonStructure(['reply', 'notes' => [['id', 'body', 'kind', 'topic_tag', 'student_id']]]);
+            ->assertJsonStructure(['kind', 'topic_tag', 'notes' => [['id', 'body', 'kind', 'topic_tag', 'student_id']]]);
 
-        $this->assertNotEmpty($resp->json('reply'));
-        $this->assertCount(1, $resp->json('notes'));
-        $this->assertSame($petya->id, $resp->json('notes.0.student_id'));
-        $this->assertSame('weakness', $resp->json('notes.0.kind'));
+        $this->assertSame('weakness', $resp->json('kind'));
+        $this->assertSame('геометрия: подобие', $resp->json('topic_tag'));
+        $this->assertCount(2, $resp->json('notes'));
+
+        foreach ([$petya, $vasya] as $student) {
+            $this->assertDatabaseHas('student_notes', [
+                'student_id'        => $student->id,
+                'teacher_id'        => $teacher->id,
+                'lesson_session_id' => $session->id,
+                'kind'              => 'weakness',
+                'topic_tag'         => 'геометрия: подобие',
+                'source'            => 'chat',
+                'body'              => 'путают признаки подобия',
+            ]);
+        }
     }
 
-    public function test_assistant_rejects_empty_message(): void
+    public function test_notes_rejects_non_participant(): void
+    {
+        $this->fakeTagNote();
+
+        $teacher = $this->teacher();
+        $stranger = $this->student();
+        $svc = app(\App\Services\LessonSessionService::class);
+        $session = $svc->createAdhoc($teacher);
+
+        $this->actingAs($teacher)
+            ->postJson(self::BASE . "/lessons/{$session->id}/notes", [
+                'student_ids' => [$stranger->id],
+                'text'        => 'что-то',
+            ])
+            ->assertStatus(422);
+
+        $this->assertDatabaseCount('student_notes', 0);
+    }
+
+    public function test_notes_rejects_empty_text(): void
+    {
+        $teacher = $this->teacher();
+        $student = $this->student();
+        $svc = app(\App\Services\LessonSessionService::class);
+        $session = $svc->createAdhoc($teacher);
+        $svc->joinByCode($session->join_code, $student);
+
+        $this->actingAs($teacher)
+            ->postJson(self::BASE . "/lessons/{$session->id}/notes", [
+                'student_ids' => [$student->id],
+                'text'        => '',
+            ])
+            ->assertStatus(422);
+    }
+
+    public function test_notes_rejects_empty_student_ids(): void
     {
         $teacher = $this->teacher();
         $session = app(\App\Services\LessonSessionService::class)->createAdhoc($teacher);
 
         $this->actingAs($teacher)
-            ->postJson(self::BASE . "/lessons/{$session->id}/assistant", ['message' => ''])
+            ->postJson(self::BASE . "/lessons/{$session->id}/notes", [
+                'student_ids' => [],
+                'text'        => 'что-то',
+            ])
             ->assertStatus(422);
     }
 
-    public function test_assistant_forbidden_for_other_teacher(): void
+    public function test_notes_forbidden_for_other_teacher(): void
     {
         $owner = $this->teacher();
         $session = app(\App\Services\LessonSessionService::class)->createAdhoc($owner);
 
         $this->actingAs($this->teacher())
-            ->postJson(self::BASE . "/lessons/{$session->id}/assistant", ['message' => 'привет'])
-            ->assertForbidden();
-    }
-
-    public function test_assistant_history_returns_messages_in_order(): void
-    {
-        $teacher = $this->teacher();
-        $session = app(\App\Services\LessonSessionService::class)->createAdhoc($teacher);
-
-        LessonAssistantMessage::create([
-            'lesson_session_id' => $session->id, 'role' => 'teacher', 'content' => 'первое',
-        ]);
-        LessonAssistantMessage::create([
-            'lesson_session_id' => $session->id, 'role' => 'assistant', 'content' => 'второе',
-        ]);
-
-        $resp = $this->actingAs($teacher)
-            ->getJson(self::BASE . "/lessons/{$session->id}/assistant")
-            ->assertOk()
-            ->assertJsonStructure(['messages' => [['role', 'content', 'at']]]);
-
-        $messages = $resp->json('messages');
-        $this->assertCount(2, $messages);
-        $this->assertSame('первое', $messages[0]['content']);
-        $this->assertSame('teacher', $messages[0]['role']);
-        $this->assertSame('второе', $messages[1]['content']);
-    }
-
-    public function test_assistant_history_forbidden_for_other_teacher(): void
-    {
-        $owner = $this->teacher();
-        $session = app(\App\Services\LessonSessionService::class)->createAdhoc($owner);
-
-        $this->actingAs($this->teacher())
-            ->getJson(self::BASE . "/lessons/{$session->id}/assistant")
+            ->postJson(self::BASE . "/lessons/{$session->id}/notes", [
+                'student_ids' => [1],
+                'text'        => 'привет',
+            ])
             ->assertForbidden();
     }
 }
