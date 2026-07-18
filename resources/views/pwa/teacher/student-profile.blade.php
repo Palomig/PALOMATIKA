@@ -34,6 +34,38 @@
   .score-good { color: #86efac; }
   .score-mid { color: #fde68a; }
   .score-bad { color: #fca5a5; }
+  .note-item { padding:10px 0; border-bottom:1px dashed var(--border); }
+  .note-item:last-child { border-bottom:none; }
+  .note-head { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:4px; }
+  .note-badge { font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px; background:var(--surface2); border:1px solid var(--border); white-space:nowrap; }
+  .note-tag { font-size:11px; font-weight:600; color:var(--muted); background:var(--surface2); border:1px solid var(--border); border-radius:6px; padding:2px 6px; }
+  .note-date { font-size:11px; color:var(--muted); margin-left:auto; }
+  .note-body { font-size:13px; color:var(--text); line-height:1.4; white-space:pre-wrap; }
+  .note-filters { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
+  .note-pill {
+    font-size:12px; font-weight:700; padding:5px 12px; border-radius:999px;
+    background:var(--surface2); border:1px solid var(--border); color:var(--muted);
+    cursor:pointer; line-height:1;
+  }
+  .note-pill.active { background:var(--accent-bg); border-color:var(--accent-bd); color:var(--text); }
+  .note-actions { display:flex; gap:8px; margin-top:6px; }
+  .note-btn {
+    font-size:12px; font-weight:700; padding:4px 10px; border-radius:8px;
+    background:var(--surface2); border:1px solid var(--border); color:var(--text); cursor:pointer;
+  }
+  .note-btn-danger { color:#fca5a5; }
+  .note-btn-primary { background:var(--accent-bg); border-color:var(--accent-bd); }
+  .note-edit { display:flex; flex-direction:column; gap:8px; }
+  .note-edit-body {
+    width:100%; font-family:inherit; font-size:13px; line-height:1.4; resize:vertical;
+    background:var(--surface2); border:1px solid var(--border); border-radius:8px;
+    color:var(--text); padding:8px;
+  }
+  .note-edit-kind {
+    align-self:flex-start; font-family:inherit; font-size:12px; font-weight:700;
+    background:var(--surface2); border:1px solid var(--border); border-radius:8px;
+    color:var(--text); padding:6px 8px;
+  }
 @endpush
 
 @section('body')
@@ -111,5 +143,178 @@
     @endforelse
   </div>
 
+  <div class="card" x-data="notesSection(@js($notes->map(fn($n) => [
+        'id'         => $n->id,
+        'body'       => $n->body,
+        'kind'       => $n->kind,
+        'topic_tag'  => $n->topic_tag,
+        'created_at' => $n->created_at?->format('d.m.Y'),
+      ])))">
+    <div style="font-weight:700;margin-bottom:8px;">Наблюдения</div>
+
+    <div class="note-filters">
+      <button type="button" class="note-pill" :class="{ active: filterKind === '' }" @click="filterKind = ''">Все</button>
+      <button type="button" class="note-pill" :class="{ active: filterKind === 'weakness' }" @click="filterKind = 'weakness'" title="западает">🔴</button>
+      <button type="button" class="note-pill" :class="{ active: filterKind === 'strength' }" @click="filterKind = 'strength'" title="сильная">🟢</button>
+      <button type="button" class="note-pill" :class="{ active: filterKind === 'todo' }" @click="filterKind = 'todo'" title="todo">📌</button>
+      <button type="button" class="note-pill" :class="{ active: filterKind === 'general' }" @click="filterKind = 'general'" title="общее">💬</button>
+    </div>
+
+    <template x-for="note in filtered" :key="note.id">
+      <div class="note-item">
+        <template x-if="editingId !== note.id">
+          <div>
+            <div class="note-head">
+              <span class="note-badge" x-text="badge(note.kind)"></span>
+              <template x-if="note.topic_tag">
+                <span class="note-tag" x-text="note.topic_tag"></span>
+              </template>
+              <span class="note-date" x-text="note.created_at"></span>
+            </div>
+            <div class="note-body" x-text="note.body"></div>
+            <div class="note-actions">
+              <button type="button" class="note-btn" @click="startEdit(note)">править</button>
+              <button type="button" class="note-btn note-btn-danger" @click="deleteNote(note.id)">удалить</button>
+            </div>
+          </div>
+        </template>
+        <template x-if="editingId === note.id">
+          <div class="note-edit">
+            <textarea class="note-edit-body" rows="3" x-model="editBody"></textarea>
+            <select class="note-edit-kind" x-model="editKind">
+              <option value="weakness">🔴 западает</option>
+              <option value="strength">🟢 сильная</option>
+              <option value="todo">📌 todo</option>
+              <option value="general">💬 общее</option>
+            </select>
+            <div class="note-actions">
+              <button type="button" class="note-btn note-btn-primary" @click="saveNote(note.id, editBody, editKind)">сохранить</button>
+              <button type="button" class="note-btn" @click="cancelEdit()">отмена</button>
+            </div>
+          </div>
+        </template>
+      </div>
+    </template>
+
+    <template x-if="!filtered.length">
+      <div class="muted" x-text="notes.length ? 'Нет записей этого типа.' : 'Записей пока нет.'"></div>
+    </template>
+
+    {{-- Fallback без JS: серверный рендер, чтобы записи были видны и без Alpine --}}
+    <noscript>
+      @php
+        $kindMeta = [
+          'weakness' => '🔴 западает',
+          'strength' => '🟢 сильная',
+          'todo'     => '📌 todo',
+          'general'  => '💬 общее',
+        ];
+      @endphp
+      @forelse($notes as $note)
+        <div class="note-item">
+          <div class="note-head">
+            <span class="note-badge">{{ $kindMeta[$note->kind] ?? '💬 общее' }}</span>
+            @if($note->topic_tag)
+              <span class="note-tag">{{ $note->topic_tag }}</span>
+            @endif
+            <span class="note-date">{{ optional($note->created_at)->format('d.m.Y') }}</span>
+          </div>
+          <div class="note-body">{{ $note->body }}</div>
+        </div>
+      @empty
+        <div class="muted">Записей пока нет.</div>
+      @endforelse
+    </noscript>
+  </div>
+
 </div>
+
+@push('scripts')
+<script>
+  function notesSection(initial) {
+    const KIND_META = {
+      weakness: '🔴 западает',
+      strength: '🟢 сильная',
+      todo:     '📌 todo',
+      general:  '💬 общее',
+    };
+    const csrf = () => document.querySelector('meta[name=csrf-token]').content;
+
+    return {
+      notes: Array.isArray(initial) ? initial : [],
+      filterKind: '',
+      editingId: null,
+      editBody: '',
+      editKind: '',
+
+      get filtered() {
+        if (!this.filterKind) return this.notes;
+        return this.notes.filter(n => n.kind === this.filterKind);
+      },
+
+      badge(kind) {
+        return KIND_META[kind] || KIND_META.general;
+      },
+
+      startEdit(note) {
+        this.editingId = note.id;
+        this.editBody = note.body || '';
+        this.editKind = note.kind || 'general';
+      },
+
+      cancelEdit() {
+        this.editingId = null;
+        this.editBody = '';
+        this.editKind = '';
+      },
+
+      async saveNote(id, body, kind) {
+        const text = (body || '').trim();
+        if (!text) return;
+        try {
+          const res = await fetch('/student-notes/' + id, {
+            method: 'PATCH',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'X-CSRF-TOKEN': csrf(),
+            },
+            body: JSON.stringify({ body: text, kind: kind }),
+          });
+          if (!res.ok) return;
+          const data = await res.json();
+          const note = data.note || {};
+          const idx = this.notes.findIndex(n => n.id === id);
+          if (idx !== -1) {
+            this.notes[idx] = Object.assign({}, this.notes[idx], {
+              body: note.body != null ? note.body : text,
+              kind: note.kind != null ? note.kind : kind,
+              topic_tag: note.topic_tag != null ? note.topic_tag : this.notes[idx].topic_tag,
+            });
+          }
+          this.cancelEdit();
+        } catch (e) { /* сеть недоступна — оставляем режим правки */ }
+      },
+
+      async deleteNote(id) {
+        if (!confirm('Удалить запись?')) return;
+        try {
+          const res = await fetch('/student-notes/' + id, {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+              'Accept': 'application/json',
+              'X-CSRF-TOKEN': csrf(),
+            },
+          });
+          if (!res.ok) return;
+          this.notes = this.notes.filter(n => n.id !== id);
+          if (this.editingId === id) this.cancelEdit();
+        } catch (e) { /* сеть недоступна */ }
+      },
+    };
+  }
+</script>
+@endpush
 @endsection

@@ -8,6 +8,7 @@ use App\Models\LessonSession;
 use App\Models\LessonSessionAttempt;
 use App\Models\LessonSessionParticipant;
 use App\Models\LessonSessionTask;
+use App\Models\StudentNote;
 use App\Models\User;
 use DomainException;
 use Illuminate\Support\Carbon;
@@ -384,6 +385,33 @@ class LessonSessionService
                 'answered_at' => now(),
             ]
         );
+    }
+
+    /**
+     * Кнопка «не понимает» на уроке: фиксирует слабое место ученика по задаче
+     * (без LLM). Пишет student_notes(kind=weakness, source=lesson_button).
+     *
+     * alg-skill задачи имеют topic_id=null, но заданный skill_slug — берём его.
+     */
+    public function recordDontUnderstand(
+        LessonSession $s,
+        User $teacher,
+        User $student,
+        LessonSessionTask $task
+    ): StudentNote {
+        $topic = $task->topic_id ?: ($task->skill_slug ?: null);
+        $expr = (string) ($task->task_payload['expression'] ?? '');
+
+        return StudentNote::create([
+            'student_id'        => $student->id,
+            'teacher_id'        => $teacher->id,
+            'lesson_session_id' => $s->id,
+            'task_ref'          => $task->task_ref,
+            'topic_tag'         => $topic,
+            'kind'              => 'weakness',
+            'source'            => 'lesson_button',
+            'body'              => 'Не понимает: ' . mb_substr($expr !== '' ? $expr : ('задача ' . $task->position), 0, 200),
+        ]);
     }
 
     public function isParticipant(LessonSession $session, User $student): bool

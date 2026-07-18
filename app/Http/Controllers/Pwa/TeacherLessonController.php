@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Pwa;
 
 use App\Http\Controllers\Controller;
+use App\Models\LessonAssistantMessage;
 use App\Models\LessonSchedule;
 use App\Models\LessonSession;
 use App\Models\LessonSessionTask;
+use App\Models\User;
+use App\Services\AssistantService;
 use App\Services\LessonSessionService;
 use App\Services\LessonTaskPickerService;
 use DomainException;
@@ -300,6 +303,85 @@ class TeacherLessonController extends Controller
                 ],
             ])->all(),
             'grid'         => $grid,
+        ]);
+    }
+
+    /**
+     * POST /lessons/{id}/dont-understand   body: { student_id, task_id }
+     * Кнопка «не понимает» — фиксирует слабое место ученика по задаче (без LLM).
+     */
+    public function dontUnderstand(Request $request, int $id): JsonResponse
+    {
+        $session = $this->loadOwnSession($request, $id);
+
+        $data = $request->validate([
+            'student_id' => 'required|integer',
+            'task_id'    => 'required|integer',
+        ]);
+
+        if (!$this->sessions->isParticipantId($session, (int) $data['student_id'])) {
+            return response()->json(['error' => 'Ученик не участник урока'], 422);
+        }
+
+        $task = LessonSessionTask::where('lesson_session_id', $session->id)
+            ->findOrFail($data['task_id']);
+        $student = User::findOrFail($data['student_id']);
+
+        $note = $this->sessions->recordDontUnderstand($session, $request->user(), $student, $task);
+
+        return response()->json([
+            'note' => [
+                'id'        => $note->id,
+                'kind'      => $note->kind,
+                'source'    => $note->source,
+                'topic_tag' => $note->topic_tag,
+                'task_ref'  => $note->task_ref,
+                'body'      => $note->body,
+            ],
+        ], 201);
+    }
+
+    /**
+     * POST /lessons/{id}/assistant   body: { message }
+     * Реплика учителя ассистенту: LLM разбирает её в записи student_notes.
+     */
+    public function assistant(Request $request, int $id): JsonResponse
+    {
+        $session = $this->loadOwnSession($request, $id);
+
+        $data = $request->validate(['message' => 'required|string|max:2000']);
+
+        $result = app(AssistantService::class)->handleMessage($session, $request->user(), $data['message']);
+
+        return response()->json([
+            'reply' => $result['reply'],
+            'notes' => collect($result['notes'])->map(fn ($n) => [
+                'id'         => $n->id,
+                'body'       => $n->body,
+                'kind'       => $n->kind,
+                'topic_tag'  => $n->topic_tag,
+                'student_id' => $n->student_id,
+            ])->all(),
+        ]);
+    }
+
+    /**
+     * GET /lessons/{id}/assistant — история переписки с ассистентом по порядку.
+     */
+    public function assistantHistory(Request $request, int $id): JsonResponse
+    {
+        $session = $this->loadOwnSession($request, $id);
+
+        return response()->json([
+            'messages' => LessonAssistantMessage::where('lesson_session_id', $session->id)
+                ->orderBy('created_at')
+                ->orderBy('id')
+                ->get()
+                ->map(fn ($m) => [
+                    'role'    => $m->role,
+                    'content' => $m->content,
+                    'at'      => $m->created_at?->toIso8601String(),
+                ])->all(),
         ]);
     }
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\Pwa\ManifestController;
 use App\Http\Controllers\Pwa\PracticeController;
 use App\Http\Controllers\Pwa\StudentController;
 use App\Http\Controllers\Pwa\StudentLessonController;
+use App\Http\Controllers\Pwa\StudentNoteController;
 use App\Http\Controllers\Pwa\TeacherController;
 use App\Http\Controllers\Pwa\TeacherLessonController;
 use App\Http\Controllers\Pwa\VprController;
@@ -157,6 +158,13 @@ Route::domain('teacher.' . config('app.base_domain'))->group(function () {
         Route::post('/lessons/{id}/participants/{studentId}/release', [TeacherLessonController::class, 'release'])->name('pwa.teacher.lessons.release')->whereNumber('id')->whereNumber('studentId');
         Route::post('/lessons/{id}/next',                    [TeacherLessonController::class, 'next'])->name('pwa.teacher.lessons.next')->whereNumber('id');
         Route::post('/lessons/{id}/note',                    [TeacherLessonController::class, 'note'])->name('pwa.teacher.lessons.note')->whereNumber('id');
+        Route::post('/lessons/{id}/dont-understand',         [TeacherLessonController::class, 'dontUnderstand'])->name('pwa.teacher.lessons.dont-understand')->whereNumber('id');
+        Route::post('/lessons/{id}/assistant',               [TeacherLessonController::class, 'assistant'])->name('pwa.teacher.lessons.assistant')->whereNumber('id');
+        Route::get('/lessons/{id}/assistant',                [TeacherLessonController::class, 'assistantHistory'])->name('pwa.teacher.lessons.assistant-history')->whereNumber('id');
+
+        // Записи об ученике (student_notes) — правка/удаление без LLM
+        Route::patch('/student-notes/{id}',  [StudentNoteController::class, 'update'])->name('pwa.teacher.student-notes.update')->whereNumber('id');
+        Route::delete('/student-notes/{id}', [StudentNoteController::class, 'destroy'])->name('pwa.teacher.student-notes.destroy')->whereNumber('id');
 
         Route::get('/variants', [TeacherController::class, 'variants'])->name('pwa.teacher.variants');
         Route::get('/referrals', [TeacherController::class, 'referrals'])->name('pwa.teacher.referrals');

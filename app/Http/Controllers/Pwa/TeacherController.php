@@ -338,11 +338,17 @@ class TeacherController extends Controller
                 });
         }
 
+        $notes = \App\Models\StudentNote::where('student_id', $student->id)
+            ->where('teacher_id', $teacher->id)
+            ->orderByDesc('created_at')
+            ->get();
+
         return view('pwa.teacher.student-profile', [
             'student' => $student, 'teacherRelation' => $teacherRelation, 'attempts' => $attempts,
             'topicStats' => $topicStats, 'weakTopics' => $weakTopics, 'correctTotal' => $correctTotal,
             'scoredTotal' => $scoredTotal, 'accuracy' => $scoredTotal > 0 ? (int) round(($correctTotal / $scoredTotal) * 100) : null,
             'historyList' => $historyList, 'homeworkHistory' => $homeworkHistory,
+            'notes' => $notes,
         ]);
     }
 
