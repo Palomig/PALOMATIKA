@@ -65,16 +65,26 @@
   .live-cell-ok { background: var(--green-bg); color: var(--green); }
   .live-cell-bad { background: var(--red-bg); color: var(--red); }
   .live-cell-empty { color: var(--muted); }
-  /* 🤖 Ассистент */
-  .assistant-log { display: flex; flex-direction: column; gap: 8px; max-height: 240px; overflow-y: auto; padding: 4px 2px; }
-  .assistant-msg { display: flex; }
-  .assistant-msg-teacher { justify-content: flex-end; }
-  .assistant-msg-assistant { justify-content: flex-start; }
-  .assistant-msg-bubble { max-width: 85%; padding: 8px 11px; border-radius: 12px; font-size: 13px; line-height: 1.45; white-space: pre-wrap; word-break: break-word; }
-  .assistant-msg-teacher .assistant-msg-bubble { background: var(--accent); color: #fff; border-bottom-right-radius: 4px; }
-  .assistant-msg-assistant .assistant-msg-bubble { background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-bottom-left-radius: 4px; }
-  .assistant-input-row { display: flex; gap: 8px; align-items: flex-end; }
-  .assistant-input-row .note-input { flex: 1; min-height: 40px; }
+  /* 📝 Заметки — шторка снизу */
+  .ns-overlay { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,.55); backdrop-filter: blur(4px); display: flex; align-items: flex-end; justify-content: center; }
+  .ns-sheet { background: var(--bg); border-radius: 20px 20px 0 0; width: 100%; max-width: 460px; padding: 20px 18px calc(28px + var(--safe-bottom, 0px)); max-height: 88vh; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+  .ns-handle { width: 36px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 4px; flex-shrink: 0; }
+  .ns-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .ns-title { font-size: 17px; font-weight: 800; color: var(--text); }
+  .ns-toggle-all { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); border-radius: 8px; font-size: 12px; font-weight: 700; padding: 6px 10px; cursor: pointer; }
+  .ns-toggle-all:hover { color: var(--text); border-color: var(--accent-bd); }
+  .ns-students { display: flex; flex-direction: column; gap: 6px; }
+  .ns-student { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; user-select: none; transition: border-color .12s, background .12s; }
+  .ns-student.active { background: var(--accent-bg); border-color: var(--accent); }
+  .ns-student input[type=checkbox] { width: 18px; height: 18px; flex-shrink: 0; accent-color: var(--accent); cursor: pointer; }
+  .ns-student-name { font-size: 14px; color: var(--text); }
+  .ns-empty { font-size: 13px; color: var(--muted); padding: 8px 4px; }
+  .ns-textarea { width: 100%; resize: vertical; min-height: 96px; padding: 12px; font-size: 14px; line-height: 1.5; font-family: inherit; background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-radius: 12px; }
+  .ns-textarea:focus { outline: none; border-color: var(--accent-bd); }
+  .ns-btn { display: block; width: 100%; padding: 14px; border: none; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; text-align: center; background: var(--accent); color: #fff; }
+  .ns-btn:disabled { opacity: .5; cursor: default; }
+  .ns-cancel { display: block; width: 100%; padding: 12px; background: none; border: none; color: var(--muted); font-size: 14px; font-weight: 700; cursor: pointer; }
+  .notes-toast { position: fixed; left: 50%; bottom: calc(20px + var(--safe-bottom, 0px)); transform: translateX(-50%); z-index: 200; background: var(--surface); border: 1px solid var(--green-bd); color: var(--green); padding: 10px 16px; border-radius: 12px; font-size: 13px; font-weight: 700; box-shadow: 0 4px 20px rgba(0,0,0,.4); max-width: 90vw; text-align: center; }
   /* «не понимает» в live-гриде */
   .du-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); border-radius: 6px; font-size: 10px; padding: 2px 6px; cursor: pointer; font-weight: 700; white-space: nowrap; }
   .du-btn:hover { color: var(--red); border-color: var(--red-bd); }
@@ -120,30 +130,43 @@
     </div>
   </template>
 
-  {{-- 🤖 Ассистент учителя (ученики не видят) --}}
-  <div class="lesson-card">
-    <div style="display:flex;justify-content:space-between;align-items:center;">
-      <div style="font-size: 14px; font-weight: 700;">🤖 Ассистент</div>
-      <div style="font-size: 11px; color: var(--green);" x-show="assistantToast" x-cloak x-text="assistantToast"></div>
-    </div>
-    <div class="assistant-log" x-show="assistantMessages.length" x-cloak>
-      <template x-for="(m, mi) in assistantMessages" :key="'am-' + mi">
-        <div class="assistant-msg" :class="m.role === 'teacher' ? 'assistant-msg-teacher' : 'assistant-msg-assistant'">
-          <div class="assistant-msg-bubble" x-text="m.content"></div>
+  {{-- 📝 Заметки об учениках (ученики не видят) --}}
+  <button class="btn btn-primary" @click="openNotes()" style="align-self: flex-start;">📝 Заметки</button>
+
+  {{-- Шторка снизу: заметка об учениках --}}
+  <div class="ns-overlay" x-show="notesOpen" x-cloak @click.self="notesOpen = false">
+    <div class="ns-sheet" @click.stop>
+      <div class="ns-handle"></div>
+      <div class="ns-head">
+        <span class="ns-title">Заметка об учениках</span>
+        <button type="button" class="ns-toggle-all" @click="toggleAllNoteStudents()"
+                x-text="noteStudentIds.length === participants.length && participants.length ? 'Снять всех' : 'Выбрать всех'"></button>
+      </div>
+
+      <template x-if="participants.length">
+        <div class="ns-students">
+          <template x-for="p in participants" :key="'note-' + p.id">
+            <label class="ns-student" :class="isNoteStudentSelected(p.id) ? 'active' : ''">
+              <input type="checkbox" :checked="!!isNoteStudentSelected(p.id)" @change="toggleNoteStudent(p.id)">
+              <span class="ns-student-name" x-text="p.name || ('#' + p.id)"></span>
+            </label>
+          </template>
         </div>
       </template>
-    </div>
-    <div x-show="!assistantMessages.length" style="color: var(--muted); font-size: 12px; line-height: 1.5;">
-      Расскажи ассистенту о наблюдениях за учениками — он сам сохранит их в записи.
-    </div>
-    <div class="assistant-input-row">
-      <textarea class="note-input" rows="1" placeholder="Напиши наблюдение… (Enter — отправить, Shift+Enter — перенос)"
-                x-model="assistantInput" :disabled="!!assistantSending"
-                @keydown.enter="if (!$event.shiftKey) { $event.preventDefault(); sendToAssistant(); }"></textarea>
-      <button class="btn btn-primary" @click="sendToAssistant()" :disabled="!!assistantSending"
-              x-text="assistantSending ? '…' : 'Отправить'"></button>
+      <div class="ns-empty" x-show="!participants.length">В уроке пока нет учеников.</div>
+
+      <textarea class="ns-textarea" x-model="noteText"
+                placeholder="Что заметил? Например: путается в раскрытии скобок, но хорошо считает в уме."></textarea>
+
+      <button class="ns-btn" @click="submitNote()"
+              :disabled="!!(!noteStudentIds.length || !noteText.trim() || noteSending)"
+              x-text="noteSending ? 'Сохраняю…' : 'Отправить'"></button>
+      <button type="button" class="ns-cancel" @click="notesOpen = false">Отмена</button>
     </div>
   </div>
+
+  {{-- Тост после сохранения заметки --}}
+  <div class="notes-toast" x-show="noteToast" x-cloak x-text="noteToast"></div>
 
   {{-- Tasks list --}}
   <div class="lesson-card">
@@ -311,18 +334,18 @@
       note: '',
       noteSaved: false,
       creatingNext: false,
-      // 🤖 Ассистент
-      assistantMessages: [],
-      assistantInput: '',
-      assistantSending: false,
-      assistantToast: '',
+      // 📝 Заметки об учениках
+      notesOpen: false,
+      noteText: '',
+      noteStudentIds: [],
+      noteSending: false,
+      noteToast: '',
       // «не понимает» в live-гриде
       duFor: null,
       duDone: null,
 
       async init() {
         await this.refreshState();
-        this.loadAssistant();
         this.startPolling();
         this.waitForKatex();
       },
@@ -454,52 +477,62 @@
         }
       },
 
-      // --- 🤖 Ассистент ---
-      scrollAssistantLog() {
-        const el = this.$root.querySelector('.assistant-log');
-        if (el) el.scrollTop = el.scrollHeight;
+      // --- 📝 Заметки об учениках ---
+      openNotes() {
+        this.noteStudentIds = [];
+        this.noteText = '';
+        this.notesOpen = true;
       },
 
-      async loadAssistant() {
-        try {
-          const r = await fetch(`/lessons/${this.sessionId}/assistant`, {
-            headers: { 'Accept': 'application/json' }, credentials: 'include',
-          });
-          if (!r.ok) return;
-          const d = await r.json();
-          this.assistantMessages = d.messages || [];
-          this.$nextTick(() => this.scrollAssistantLog());
-        } catch (e) { /* сеть — просто без истории */ }
+      isNoteStudentSelected(id) {
+        return this.noteStudentIds.includes(id);
       },
 
-      async sendToAssistant() {
-        const msg = this.assistantInput.trim();
-        if (!msg || this.assistantSending) return;
-        this.assistantSending = true;
-        this.assistantMessages.push({ role: 'teacher', content: msg });
-        this.assistantInput = '';
-        this.$nextTick(() => this.scrollAssistantLog());
+      toggleNoteStudent(id) {
+        const i = this.noteStudentIds.indexOf(id);
+        if (i === -1) this.noteStudentIds.push(id);
+        else this.noteStudentIds.splice(i, 1);
+      },
+
+      toggleAllNoteStudents() {
+        if (this.noteStudentIds.length === this.participants.length) {
+          this.noteStudentIds = [];
+        } else {
+          this.noteStudentIds = this.participants.map(p => p.id);
+        }
+      },
+
+      async submitNote() {
+        const text = this.noteText.trim();
+        if (!this.noteStudentIds.length || !text || this.noteSending) return;
+        this.noteSending = true;
         try {
-          const r = await fetch(`/lessons/${this.sessionId}/assistant`, {
+          const r = await fetch(`/lessons/${this.sessionId}/notes`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json',
               'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content, 'Accept': 'application/json' },
             credentials: 'include',
-            body: JSON.stringify({ message: msg }),
+            body: JSON.stringify({ student_ids: this.noteStudentIds, text }),
           });
-          if (!r.ok) { alert('Ассистент не ответил'); this.assistantSending = false; return; }
-          const d = await r.json();
-          this.assistantMessages.push({ role: 'assistant', content: d.reply || '' });
-          this.$nextTick(() => this.scrollAssistantLog());
-          if (Array.isArray(d.notes) && d.notes.length) {
-            this.assistantToast = `записей: ${d.notes.length}`;
-            setTimeout(() => { this.assistantToast = ''; }, 2500);
-            await this.refreshState(); // задачи/иное могли подтянуться
+          if (!r.ok) {
+            let msg = 'Не удалось сохранить';
+            try { const e = await r.json(); if (e && e.error) msg = e.error; } catch (_) {}
+            alert(msg);
+            this.noteSending = false;
+            return;
           }
+          const d = await r.json();
+          const kindRu = { weakness: 'западает', strength: 'сильная сторона', todo: 'todo', general: 'общее' }[d.kind] || (d.kind || '—');
+          const n = Array.isArray(d.notes) ? d.notes.length : this.noteStudentIds.length;
+          this.notesOpen = false;
+          this.noteStudentIds = [];
+          this.noteText = '';
+          this.noteToast = `Записал ${n} ученикам: ${d.topic_tag || '—'} · ${kindRu}`;
+          setTimeout(() => { this.noteToast = ''; }, 3000);
         } catch (e) {
-          alert('Ошибка сети');
+          alert('Не удалось сохранить');
         }
-        this.assistantSending = false;
+        this.noteSending = false;
       },
 
       // --- «не понимает» на задаче ---

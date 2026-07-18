@@ -4,7 +4,7 @@
 
 ## Статус
 
-**Реализован v1** (ветка `claude/lesson-v2`). Роль: **запись + память** — учитель на уроке фиксирует наблюдения об учениках, DeepSeek через function-calling тегирует их в `student_notes`; плюс кнопка «не понимает» и просмотр/правка записей в карточке ученика. На прод не задеплоено на момент написания (нужен `DEEPSEEK_API_KEY` в прод-env).
+**Реализован v1, на проде** (2026-07-17). Роль: **запись + память**. UX v2 (переделан по просьбе Стаса): на уроке — кнопка «📝 Заметки» → шторка с явным мультивыбором учеников + текст → DeepSeek вытаскивает только теги {kind, topic_tag}, на каждого выбранного создаётся `student_note`. Плюс кнопка «не понимает» на задаче и просмотр/правка записей в карточке ученика. Чат-диалог убран; recall — в карточке ученика.
 
 ## Данные
 
@@ -28,11 +28,9 @@ DeepSeek (`config/services.php` → `deepseek`: `api_key`=`DEEPSEEK_API_KEY`, `b
 | `resources/views/pwa/teacher/lesson-prep.blade.php` | Чат-блок (заменил «Заметку») + кнопка «не понимает» в live-гриде |
 | `resources/views/pwa/teacher/student-profile.blade.php` | Секция «Наблюдения» (фильтр/правка/удаление, +`<noscript>`-фолбэк) |
 
-## Tools (function-calling)
+## Механизм
 
-- `record_observation(participant_ref, kind, topic_tag, body)` → `StudentNote`.
-- `add_lesson_note(body)` → append к `lesson_sessions.note`.
-- `answer_about_student(participant_ref)` → сервер подкладывает записи ученика во второй вызов chat → бот отвечает (recall).
+`AssistantService::recordNote(session, teacher, studentIds[], text)` — один вызов DeepSeek с tool `tag_note(kind, topic_tag)` только ради тегов (ученики выбраны явно, резолвить некого); на каждого studentId создаётся `StudentNote` (одинаковые kind/topic/body). Текст перед отправкой анонимизируется, в БД пишется оригинал. Fallback: API упал → записи всё равно создаются (kind=general) — ученики известны явно, ничего не теряется. Чат-оркестрация (handleMessage/record_observation/answer_about_student) удалена.
 
 ## Приватность
 
@@ -40,8 +38,7 @@ DeepSeek (`config/services.php` → `deepseek`: `api_key`=`DEEPSEEK_API_KEY`, `b
 
 ## Эндпоинты (teacher.palomatika.ru, auth+role:teacher,admin)
 
-- `POST /lessons/{id}/assistant {message}` → `{reply, notes[]}`
-- `GET /lessons/{id}/assistant` → `{messages[]}`
+- `POST /lessons/{id}/notes {student_ids[], text}` → `{kind, topic_tag, notes[]}` (не-участник → 422)
 - `POST /lessons/{id}/dont-understand {student_id, task_id}` → запись без LLM (201)
 - `PATCH/DELETE /student-notes/{id}` → правка/удаление (guard teacher_id)
 
