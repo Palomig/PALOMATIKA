@@ -78,13 +78,13 @@
   .ns-toggle-all:hover { color: var(--text); border-color: var(--accent-bd); }
   .ns-sub { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 12px; font-weight: 700; color: var(--muted); }
   .ns-students { display: flex; flex-direction: column; gap: 6px; }
-  .ns-actions { margin-top: auto; display: flex; flex-direction: column; gap: 6px; position: sticky; bottom: 0; background: var(--bg); padding-top: 8px; }
+  .ns-actions { display: flex; flex-direction: column; gap: 6px; position: sticky; bottom: 0; background: var(--bg); padding-top: 8px; }
   .ns-student { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; user-select: none; transition: border-color .12s, background .12s; }
   .ns-student.active { background: var(--accent-bg); border-color: var(--accent); }
   .ns-student input[type=checkbox] { width: 18px; height: 18px; flex-shrink: 0; accent-color: var(--accent); cursor: pointer; }
   .ns-student-name { font-size: 14px; color: var(--text); }
   .ns-empty { font-size: 13px; color: var(--muted); padding: 8px 4px; }
-  .ns-textarea { width: 100%; resize: vertical; min-height: 96px; padding: 12px; font-size: 14px; line-height: 1.5; font-family: inherit; background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-radius: 12px; }
+  .ns-textarea { width: 100%; flex: 1 1 auto; resize: vertical; min-height: 240px; padding: 14px; font-size: 15px; line-height: 1.55; font-family: inherit; background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-radius: 12px; }
   .ns-textarea:focus { outline: none; border-color: var(--accent-bd); }
   .ns-btn { display: block; width: 100%; padding: 14px; border: none; border-radius: 14px; font-size: 15px; font-weight: 800; cursor: pointer; text-align: center; background: var(--accent); color: #fff; }
   .ns-btn:disabled { opacity: .5; cursor: default; }
