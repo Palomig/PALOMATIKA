@@ -159,6 +159,40 @@ class StudentLessonController extends Controller
         return response()->json(['ok' => true]);
     }
 
+    /**
+     * POST /lessons/{id}/event   body: { kind, task_id?, meta? }
+     * Поведенческие сигналы: copy_task / paste_answer / resume.
+     */
+    public function event(Request $request, int $id): JsonResponse
+    {
+        $session = $this->loadSessionForStudent($request, $id);
+
+        $data = $request->validate([
+            'kind'              => 'required|string|in:copy_task,paste_answer,resume',
+            'task_id'           => 'nullable|integer',
+            'meta'              => 'nullable|array',
+            'meta.length'       => 'nullable|integer|min:0',
+            'meta.away_seconds' => 'nullable|integer|min:0',
+        ]);
+
+        $task = null;
+        if (!empty($data['task_id'])) {
+            $task = LessonSessionTask::where('lesson_session_id', $session->id)
+                ->find($data['task_id']);
+            // Чужой/удалённый task_id не валим запросом — пишем событие без привязки.
+        }
+
+        $this->sessions->recordBehaviorEvent(
+            $session,
+            $request->user(),
+            $data['kind'],
+            $task,
+            $data['meta'] ?? []
+        );
+
+        return response()->json(['ok' => true]);
+    }
+
     private function loadSessionForStudent(Request $request, int $id): LessonSession
     {
         $session = LessonSession::findOrFail($id);

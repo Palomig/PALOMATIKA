@@ -420,6 +420,33 @@ class TeacherLessonControllerTest extends TestCase
         $this->assertArrayHasKey('present_seconds', $p['activity']);
     }
 
+    public function test_state_includes_behavior_counts_and_grid_flags(): void
+    {
+        $teacher = $this->teacher();
+        $student = $this->student();
+        $svc = app(\App\Services\LessonSessionService::class);
+        $session = $svc->createAdhoc($teacher);
+        $task = $svc->addTask($session, 'alg-skill', ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1]);
+        $svc->start($session);
+        $svc->joinByCode($session->fresh()->join_code, $student);
+
+        $svc->recordBehaviorEvent($session, $student, 'copy_task', $task, ['length' => 30]);
+        $svc->recordBehaviorEvent($session, $student, 'paste_answer', $task, ['length' => 4]);
+        $svc->submitAnswer($session, $student, $task, '-2');
+
+        $resp = $this->actingAs($teacher)
+            ->getJson(self::BASE . "/lessons/{$session->id}/state")
+            ->assertOk();
+
+        $p = collect($resp->json('participants'))->firstWhere('id', $student->id);
+        $this->assertSame(1, $p['behavior']['copy_count']);
+        $this->assertSame(1, $p['behavior']['paste_count']);
+
+        $cell = $resp->json("grid.{$student->id}.{$task->id}");
+        $this->assertTrue($cell['pasted']);
+        $this->assertArrayHasKey('quick_after_away', $cell);
+    }
+
     public function test_lessons_page_shows_adhoc_session_with_note(): void
     {
         $teacher = $this->teacher();

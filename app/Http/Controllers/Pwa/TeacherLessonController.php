@@ -279,13 +279,18 @@ class TeacherLessonController extends Controller
         $session->load(['tasks.assignedStudent', 'participants.student', 'attempts']);
 
         $activity = $this->sessions->activitySummary($session);
+        $behavior = $this->sessions->behaviorSummary($session);
 
         $grid = [];
         foreach ($session->attempts as $a) {
+            $b = $behavior[$a->student_id] ?? null;
             $grid[$a->student_id][$a->lesson_session_task_id] = [
                 'answer'      => $a->answer_raw,
                 'is_correct'  => $a->is_correct,
                 'answered_at' => $a->answered_at?->toIso8601String(),
+                // Сигналы списывания: ответ вставлен из буфера / дан сразу после отлучки
+                'pasted'      => $b && in_array($a->lesson_session_task_id, $b['pasted_tasks'], true),
+                'quick_after_away' => $b && in_array($a->lesson_session_task_id, $b['quick_after_away_tasks'], true),
             ];
         }
 
@@ -299,6 +304,10 @@ class TeacherLessonController extends Controller
                 'locked'   => $p->hasActiveLock(),
                 'activity' => $activity[$p->student_id] ?? [
                     'state' => 'gone', 'away_count' => 0, 'away_seconds' => 0, 'present_seconds' => 0,
+                ],
+                'behavior' => [
+                    'copy_count'  => $behavior[$p->student_id]['copy_count'] ?? 0,
+                    'paste_count' => $behavior[$p->student_id]['paste_count'] ?? 0,
                 ],
             ])->all(),
             'grid'         => $grid,

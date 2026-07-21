@@ -30,6 +30,11 @@
   .lesson-end-banner { background: var(--red-bg); border: 1px solid var(--red-bd); border-radius: 14px; padding: 16px; color: var(--red); font-weight: 700; text-align: center; }
   .lesson-released-banner { background: var(--green-bg); border: 1px solid var(--green-bd); border-radius: 14px; padding: 16px; color: var(--green); font-weight: 700; text-align: center; }
   .lock-timer { margin-left: auto; font-family: ui-monospace, monospace; font-size: 13px; font-weight: 700; color: var(--muted); }
+  .resume-overlay { position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.72); display: flex; align-items: center; justify-content: center; padding: 24px; }
+  .resume-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 24px; max-width: 320px; width: 100%; text-align: center; display: flex; flex-direction: column; gap: 14px; }
+  .resume-title { font-family: var(--display); font-size: 18px; color: var(--text); }
+  .resume-sub { font-size: 13px; color: var(--muted); }
+  .resume-btn { background: var(--accent); color: white; border: none; border-radius: 10px; padding: 14px 18px; font-weight: 800; font-size: 15px; cursor: pointer; }
   .personal-badge { font-size: 10px; font-weight: 800; padding: 1px 8px; border-radius: 6px; background: var(--accent-bg); color: var(--accent); border: 1px solid var(--accent-bd); white-space: nowrap; }
 @endpush
 
@@ -45,12 +50,21 @@
     <div class="lesson-end-banner">Урок завершён. Ответы больше не принимаются.</div>
   </template>
 
+  {{-- Пауза после отлучки: страница закрыта оверлеем, пока ученик не нажмёт «Продолжить» --}}
+  <div class="resume-overlay" x-show="resumeVisible" x-cloak>
+    <div class="resume-card">
+      <div class="resume-title">Ты отходил 👀</div>
+      <div class="resume-sub" x-text="'Тебя не было ' + resumeAwayLabel + '. Вернись к задачам!'"></div>
+      <button type="button" class="resume-btn" @click="confirmResume()">Продолжить урок</button>
+    </div>
+  </div>
+
   <template x-if="released">
     <div class="lesson-released-banner">Учитель отпустил тебя — можно выходить 👋</div>
   </template>
 
   <template x-for="task in tasks" :key="task.id">
-    <div class="lesson-task-card" :class="task.my_answer ? 'is-answered' : ''">
+    <div class="lesson-task-card" :class="task.my_answer ? 'is-answered' : ''" :data-task-id="task.id">
       <div style="display:flex;justify-content:space-between;align-items:center;">
         <div class="lesson-task-num" x-text="task.position + ')'"></div>
         <div style="display:flex;align-items:center;gap:8px;">
@@ -91,6 +105,7 @@
                  :disabled="!!(status === 'ended' || sending[task.id])"
                  :placeholder="task.my_answer ? '' : 'Твой ответ'"
                  @keydown.enter.prevent="submitAnswer(task.id, $event.target.value)"
+                 @paste="onAnswerPaste(task.id, $event)"
                  @blur="if($event.target.value && $event.target.value !== (task.my_answer||'')) submitAnswer(task.id, $event.target.value)">
           <button class="lesson-submit-btn"
                   :disabled="!!(status === 'ended' || sending[task.id])"
@@ -122,6 +137,9 @@
       pollTimer: null,
       lock: null,          // {locked_until, released_at, active} из state
       nowTick: Date.now(), // обновляется раз в секунду для реактивности таймера
+      hiddenAt: null,      // когда вкладка ушла в hidden (для оверлея «Продолжить»)
+      resumeVisible: false,
+      resumeAwaySec: 0,
 
       async init() {
         await this.refreshState();
@@ -131,6 +149,7 @@
         }, 5000);
         setInterval(() => { this.nowTick = Date.now(); }, 1000);
         this.initActivityTracking();
+        this.initBehaviorTracking();
       },
 
       // Отслеживание присутствия: сервер строит таймлайн present/away.
@@ -154,6 +173,71 @@
             'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content },
           credentials: 'include',
           body: JSON.stringify({ visible }),
+          keepalive: true,
+        }).catch(() => {});
+      },
+
+      // Поведенческие сигналы: копирование условия, вставка ответа,
+      // пауза «Продолжить» после отлучки. Всё уходит в /event, учитель видит сводку.
+      initBehaviorTracking() {
+        // Отлучка ≥ 10 сек → по возврату оверлей, задачи закрыты до клика.
+        const RESUME_MIN_AWAY = 10;
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'hidden') {
+            this.hiddenAt = Date.now();
+            return;
+          }
+          if (!this.hiddenAt || this.status === 'ended') return;
+          const away = Math.round((Date.now() - this.hiddenAt) / 1000);
+          this.hiddenAt = null;
+          if (away >= RESUME_MIN_AWAY) {
+            this.resumeAwaySec = away;
+            this.resumeVisible = true;
+          }
+        });
+
+        // Скопировал текст внутри карточки задачи (не свой ответ из инпута).
+        document.addEventListener('copy', () => {
+          if (this.status === 'ended') return;
+          if (document.activeElement?.classList?.contains('lesson-answer-input')) return;
+          const sel = window.getSelection();
+          if (!sel || sel.isCollapsed) return;
+          let node = sel.anchorNode;
+          if (node && node.nodeType === Node.TEXT_NODE) node = node.parentElement;
+          const card = node?.closest?.('.lesson-task-card');
+          if (!card) return;
+          this.sendEvent('copy_task', Number(card.dataset.taskId) || null,
+            { length: String(sel).length });
+        });
+      },
+
+      confirmResume() {
+        this.resumeVisible = false;
+        this.sendEvent('resume', null, { away_seconds: this.resumeAwaySec });
+        this.resumeAwaySec = 0;
+      },
+
+      get resumeAwayLabel() {
+        const s = this.resumeAwaySec;
+        if (s < 60) return s + ' сек';
+        const m = Math.floor(s / 60);
+        return m + ' мин ' + (s % 60) + ' сек';
+      },
+
+      onAnswerPaste(taskId, e) {
+        if (this.status === 'ended') return;
+        const text = e.clipboardData?.getData('text') || '';
+        if (!text.trim()) return;
+        this.sendEvent('paste_answer', taskId, { length: text.length });
+      },
+
+      sendEvent(kind, taskId, meta) {
+        fetch(`/lessons/${this.sessionId}/event`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content },
+          credentials: 'include',
+          body: JSON.stringify({ kind, task_id: taskId, meta: meta || {} }),
           keepalive: true,
         }).catch(() => {});
       },

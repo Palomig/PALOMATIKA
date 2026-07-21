@@ -315,6 +315,13 @@
       </table>
     </div>
 
+    {{-- Легенда сигналов списывания (видна только когда есть флаги) --}}
+    <template x-if="hasBehaviorFlags">
+      <div style="font-size: 11px; color: var(--muted); padding-top: 6px;">
+        📥 — вставил ответ из буфера · ⚡ — ответил в первые секунды после возврата на страницу
+      </div>
+    </template>
+
     {{-- Кто не ответил вообще ни на одну задачу --}}
     <template x-if="silentStudents.length">
       <div style="font-size: 12px; color: var(--muted); padding-top: 8px; border-top: 1px solid var(--border);">
@@ -609,6 +616,9 @@
         if (a.away_count > 0) parts.push(`отходил ${a.away_count}×`);
         if (a.away_seconds > 0) parts.push(`вне ${this.fmtMin(a.away_seconds)}`);
         parts.push(`на странице ${this.fmtMin(a.present_seconds)}`);
+        const b = p.behavior;
+        if (b?.copy_count > 0) parts.push(`📋 копировал условие ${b.copy_count}×`);
+        if (b?.paste_count > 0) parts.push(`📥 вставлял ответ ${b.paste_count}×`);
         return parts.join(' · ');
       },
 
@@ -666,7 +676,9 @@
         const a = this.grid[studentId]?.[taskId];
         if (!a) return '—';
         const mark = a.is_correct === true ? '✓ ' : (a.is_correct === false ? '✗ ' : '');
-        return mark + a.answer;
+        // 📥 ответ вставлен из буфера, ⚡ дан в первые секунды после возврата
+        const flags = (a.pasted ? ' 📥' : '') + (a.quick_after_away ? ' ⚡' : '');
+        return mark + a.answer + flags;
       },
 
       cellClass(studentId, taskId) {
@@ -696,6 +708,15 @@
       taskCorrectPct(taskId) {
         const a = this.taskAnsweredCount(taskId);
         return a === 0 ? 0 : Math.round((this.taskCorrectCount(taskId) / a) * 100);
+      },
+
+      get hasBehaviorFlags() {
+        for (const row of Object.values(this.grid)) {
+          for (const cell of Object.values(row)) {
+            if (cell.pasted || cell.quick_after_away) return true;
+          }
+        }
+        return false;
       },
 
       get silentStudents() {

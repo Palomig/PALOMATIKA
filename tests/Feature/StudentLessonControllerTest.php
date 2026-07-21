@@ -260,4 +260,67 @@ class StudentLessonControllerTest extends TestCase
             ->postJson(self::STUDENT_BASE . "/lessons/{$session->id}/activity", [])
             ->assertStatus(422);
     }
+
+    public function test_event_records_paste_answer_with_task(): void
+    {
+        $teacher = $this->teacher();
+        $student = $this->student();
+        [$session, $task] = $this->makeLiveSessionWithTask($teacher, $student);
+
+        $this->actingAs($student)
+            ->postJson(self::STUDENT_BASE . "/lessons/{$session->id}/event", [
+                'kind' => 'paste_answer', 'task_id' => $task->id, 'meta' => ['length' => 7],
+            ])
+            ->assertOk()
+            ->assertJson(['ok' => true]);
+
+        $this->assertDatabaseHas('lesson_behavior_events', [
+            'lesson_session_id'      => $session->id,
+            'student_id'             => $student->id,
+            'lesson_session_task_id' => $task->id,
+            'kind'                   => 'paste_answer',
+        ]);
+    }
+
+    public function test_event_with_foreign_task_id_stores_without_task_link(): void
+    {
+        $teacher = $this->teacher();
+        $student = $this->student();
+        [$session] = $this->makeLiveSessionWithTask($teacher, $student);
+        [, $foreignTask] = $this->makeLiveSessionWithTask($this->teacher(), $this->student());
+
+        $this->actingAs($student)
+            ->postJson(self::STUDENT_BASE . "/lessons/{$session->id}/event", [
+                'kind' => 'copy_task', 'task_id' => $foreignTask->id,
+            ])
+            ->assertOk();
+
+        $this->assertDatabaseHas('lesson_behavior_events', [
+            'lesson_session_id'      => $session->id,
+            'student_id'             => $student->id,
+            'lesson_session_task_id' => null,
+            'kind'                   => 'copy_task',
+        ]);
+    }
+
+    public function test_event_rejects_unknown_kind(): void
+    {
+        $teacher = $this->teacher();
+        $student = $this->student();
+        [$session] = $this->makeLiveSessionWithTask($teacher, $student);
+
+        $this->actingAs($student)
+            ->postJson(self::STUDENT_BASE . "/lessons/{$session->id}/event", ['kind' => 'clipboard_dump'])
+            ->assertStatus(422);
+    }
+
+    public function test_event_rejects_non_participant(): void
+    {
+        $teacher = $this->teacher();
+        [$session] = $this->makeLiveSessionWithTask($teacher, $this->student());
+
+        $this->actingAs($this->student())
+            ->postJson(self::STUDENT_BASE . "/lessons/{$session->id}/event", ['kind' => 'resume'])
+            ->assertForbidden();
+    }
 }

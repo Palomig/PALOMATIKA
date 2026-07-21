@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\LessonActivityInterval;
+use App\Models\LessonBehaviorEvent;
 use App\Models\LessonSchedule;
 use App\Models\LessonSession;
 use App\Models\LessonSessionAttempt;
@@ -28,6 +29,9 @@ class LessonSessionService
 
     /** Present-интервал без heartbeat дольше этого — считаем, что ученик молча ушёл. */
     public const ACTIVITY_STALE_SECONDS = 25;
+
+    /** Ответ в течение этого окна после возврата из away — подозрение на списывание. */
+    public const QUICK_AFTER_AWAY_SECONDS = 20;
 
     public function __construct(
         private readonly TaskBankResolver $bankResolver,
@@ -341,6 +345,99 @@ class LessonSessionService
                 'away_seconds'    => (int) $awaySec,
                 'present_seconds' => (int) $presentSec,
             ];
+        }
+
+        return $out;
+    }
+
+    /**
+     * Пишет поведенческое событие ученика (сигнал списывания): copy_task /
+     * paste_answer / resume. Время ставит сервер, meta — только whitelisted-ключи.
+     */
+    public function recordBehaviorEvent(
+        LessonSession $session,
+        User $student,
+        string $kind,
+        ?LessonSessionTask $task = null,
+        array $meta = []
+    ): LessonBehaviorEvent {
+        if (!in_array($kind, LessonBehaviorEvent::KINDS, true)) {
+            throw new DomainException('Неизвестный тип события');
+        }
+        if ($task && $task->lesson_session_id !== $session->id) {
+            throw new DomainException('Задача не относится к этой сессии');
+        }
+
+        $clean = array_intersect_key($meta, array_flip(['length', 'away_seconds']));
+        $clean = array_map(fn ($v) => max(0, (int) $v), $clean);
+
+        return LessonBehaviorEvent::create([
+            'lesson_session_id'      => $session->id,
+            'student_id'             => $student->id,
+            'lesson_session_task_id' => $task?->id,
+            'kind'                   => $kind,
+            'meta'                   => $clean ?: null,
+            'occurred_at'            => now(),
+        ]);
+    }
+
+    /**
+     * Сводка поведенческих сигналов по каждому участнику:
+     * счётчики copy/paste, задачи со вставленным ответом и задачи,
+     * отвеченные в течение QUICK_AFTER_AWAY_SECONDS после возврата из away.
+     *
+     * @return array<int, array{copy_count:int, paste_count:int, pasted_tasks:int[], quick_after_away_tasks:int[]}>
+     */
+    public function behaviorSummary(LessonSession $session): array
+    {
+        $out = [];
+        $entry = fn () => [
+            'copy_count'             => 0,
+            'paste_count'            => 0,
+            'pasted_tasks'           => [],
+            'quick_after_away_tasks' => [],
+        ];
+
+        $events = LessonBehaviorEvent::where('lesson_session_id', $session->id)->get();
+        foreach ($events as $e) {
+            $sid = (int) $e->student_id;
+            $out[$sid] ??= $entry();
+            if ($e->kind === LessonBehaviorEvent::KIND_COPY_TASK) {
+                $out[$sid]['copy_count']++;
+            } elseif ($e->kind === LessonBehaviorEvent::KIND_PASTE_ANSWER) {
+                $out[$sid]['paste_count']++;
+                if ($e->lesson_session_task_id) {
+                    $out[$sid]['pasted_tasks'][] = (int) $e->lesson_session_task_id;
+                }
+            }
+        }
+
+        // «Ответил сразу после возврата»: answered_at попадает в окно после конца away.
+        $awayEnds = LessonActivityInterval::where('lesson_session_id', $session->id)
+            ->where('kind', LessonActivityInterval::KIND_AWAY)
+            ->whereNotNull('ended_at')
+            ->get()
+            ->groupBy('student_id');
+
+        $attempts = LessonSessionAttempt::where('lesson_session_id', $session->id)
+            ->whereNotNull('answered_at')
+            ->get();
+
+        foreach ($attempts as $a) {
+            foreach ($awayEnds->get($a->student_id, collect()) as $iv) {
+                $delta = $iv->ended_at->diffInSeconds($a->answered_at, false);
+                if ($delta >= 0 && $delta <= self::QUICK_AFTER_AWAY_SECONDS) {
+                    $sid = (int) $a->student_id;
+                    $out[$sid] ??= $entry();
+                    $out[$sid]['quick_after_away_tasks'][] = (int) $a->lesson_session_task_id;
+                    break;
+                }
+            }
+        }
+
+        foreach ($out as &$row) {
+            $row['pasted_tasks'] = array_values(array_unique($row['pasted_tasks']));
+            $row['quick_after_away_tasks'] = array_values(array_unique($row['quick_after_away_tasks']));
         }
 
         return $out;
