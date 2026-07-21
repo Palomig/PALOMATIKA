@@ -22,6 +22,7 @@ class EnforceLessonLock
         'pwa.student.lessons.active',
         'pwa.student.lessons.join',
         'pwa.student.lessons.activity',
+        'pwa.student.lessons.event',
         'pwa.student.logout',
         'pwa.student.bug-report',
     ];

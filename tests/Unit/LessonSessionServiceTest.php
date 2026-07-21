@@ -564,4 +564,101 @@ class LessonSessionServiceTest extends TestCase
             'topic_tag'  => 'signed-add',
         ]);
     }
+
+    // --- поведенческие сигналы (списывание) ---
+
+    public function test_record_behavior_event_whitelists_meta_and_sets_server_time(): void
+    {
+        $svc = $this->service();
+        $session = $this->makeLiveSession($svc);
+        $student = $this->makeStudent();
+        $svc->joinByCode($session->join_code, $student);
+        $task = $session->tasks()->first();
+
+        $e = $svc->recordBehaviorEvent($session, $student, 'paste_answer', $task, [
+            'length' => 12, 'away_seconds' => 5, 'evil' => 'drop table',
+        ]);
+
+        $this->assertSame(['length' => 12, 'away_seconds' => 5], $e->meta);
+        $this->assertNotNull($e->occurred_at);
+        $this->assertSame($task->id, $e->lesson_session_task_id);
+    }
+
+    public function test_record_behavior_event_rejects_unknown_kind_and_foreign_task(): void
+    {
+        $svc = $this->service();
+        $session = $this->makeLiveSession($svc);
+        $student = $this->makeStudent();
+        $svc->joinByCode($session->join_code, $student);
+
+        try {
+            $svc->recordBehaviorEvent($session, $student, 'clipboard_dump');
+            $this->fail('Ожидался DomainException для неизвестного kind');
+        } catch (DomainException $e) {
+            $this->assertStringContainsString('тип события', $e->getMessage());
+        }
+
+        $other = $this->makeLiveSession($svc);
+        $foreignTask = $other->tasks()->first();
+        $this->expectException(DomainException::class);
+        $svc->recordBehaviorEvent($session, $student, 'copy_task', $foreignTask);
+    }
+
+    public function test_behavior_summary_counts_and_flags_pasted_tasks(): void
+    {
+        $svc = $this->service();
+        $session = $this->makeLiveSession($svc);
+        $student = $this->makeStudent();
+        $svc->joinByCode($session->join_code, $student);
+        $task = $session->tasks()->first();
+
+        $svc->recordBehaviorEvent($session, $student, 'copy_task', $task, ['length' => 40]);
+        $svc->recordBehaviorEvent($session, $student, 'copy_task', $task, ['length' => 15]);
+        $svc->recordBehaviorEvent($session, $student, 'paste_answer', $task, ['length' => 3]);
+        $svc->recordBehaviorEvent($session, $student, 'resume', null, ['away_seconds' => 42]);
+
+        $summary = $svc->behaviorSummary($session);
+        $b = $summary[$student->id];
+
+        $this->assertSame(2, $b['copy_count']);
+        $this->assertSame(1, $b['paste_count']);
+        $this->assertSame([$task->id], $b['pasted_tasks']);
+    }
+
+    public function test_behavior_summary_flags_answer_right_after_return_from_away(): void
+    {
+        $svc = $this->service();
+        $session = $this->makeLiveSession($svc);
+        $student = $this->makeStudent();
+        $svc->joinByCode($session->join_code, $student);
+        $task = $session->tasks()->first();
+
+        // Свернулся, вернулся через 40с и через 5с прислал ответ.
+        $svc->recordActivity($session, $student, false);
+        $this->travel(40)->seconds();
+        $svc->recordActivity($session, $student, true);
+        $this->travel(5)->seconds();
+        $svc->submitAnswer($session, $student, $task, '-2');
+
+        $summary = $svc->behaviorSummary($session);
+        $this->assertSame([$task->id], $summary[$student->id]['quick_after_away_tasks']);
+    }
+
+    public function test_behavior_summary_does_not_flag_slow_answer_after_away(): void
+    {
+        $svc = $this->service();
+        $session = $this->makeLiveSession($svc);
+        $student = $this->makeStudent();
+        $svc->joinByCode($session->join_code, $student);
+        $task = $session->tasks()->first();
+
+        $svc->recordActivity($session, $student, false);
+        $this->travel(40)->seconds();
+        $svc->recordActivity($session, $student, true);
+        $this->travel(LessonSessionService::QUICK_AFTER_AWAY_SECONDS + 30)->seconds();
+        $svc->submitAnswer($session, $student, $task, '-2');
+
+        $summary = $svc->behaviorSummary($session);
+        $this->assertSame([], $summary[$student->id]['quick_after_away_tasks'] ?? []);
+    }
 }
