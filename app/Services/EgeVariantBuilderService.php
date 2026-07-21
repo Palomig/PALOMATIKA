@@ -10,7 +10,8 @@ class EgeVariantBuilderService
 
     public function __construct(private readonly EgeTaskDataService $taskData) {}
 
-    public function build(string $hash): array
+    /** @param array<string, array<int,int>> $excludeByTopic анти-повтор: topic_id => решённые task_ids */
+    public function build(string $hash, array $excludeByTopic = []): array
     {
         $seed = crc32($hash);
         mt_srand($seed);
@@ -19,7 +20,7 @@ class EgeVariantBuilderService
         $tasks = [];
 
         foreach ($this->allTopics as $topicId) {
-            $item = $this->taskData->getRandomTaskFromTopic($topicId, 'production');
+            $item = $this->taskData->getRandomTaskFromTopic($topicId, 'production', $excludeByTopic[$topicId] ?? []);
             if (!$item) continue;
 
             $tasks[] = array_merge($item['task'], [

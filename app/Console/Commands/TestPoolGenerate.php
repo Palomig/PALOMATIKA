@@ -69,10 +69,10 @@ class TestPoolGenerate extends Command
 
     private function testFullFlow(OgeVariantPoolService $poolService, string $type): int
     {
-        $this->info("Testing FULL generateNewPoolVariant('{$type}') with DB writes...");
+        $this->info("Testing FULL generateVariant('{$type}') with DB writes...");
 
         try {
-            $ref = new \ReflectionMethod($poolService, 'generateNewPoolVariant');
+            $ref = new \ReflectionMethod($poolService, 'generateVariant');
             $ref->setAccessible(true);
             $variant = $ref->invoke($poolService, $type);
 

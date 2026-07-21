@@ -34,11 +34,6 @@ class OgeVariantPoolServiceTest extends TestCase
                 };
             }
 
-            protected function getUsedTaskIdsByTopic(): array
-            {
-                return [];
-            }
-
             protected function pickTaskForTopic(string $topicId, ?string $status, array $excludeTaskIds): ?array
             {
                 if (in_array($topicId, ['08', '17'], true)) {
@@ -89,11 +84,6 @@ class OgeVariantPoolServiceTest extends TestCase
             protected function pickRandomTopics(array $topics, int $count): array
             {
                 return array_slice($topics, 0, $count);
-            }
-
-            protected function getUsedTaskIdsByTopic(): array
-            {
-                return [];
             }
 
             protected function pickTaskForTopic(string $topicId, ?string $status, array $excludeTaskIds): ?array

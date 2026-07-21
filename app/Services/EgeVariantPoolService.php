@@ -1,13 +1,9 @@
 <?php
 namespace App\Services;
 
-use App\Models\OgeAttempt;
 use App\Models\OgeVariant;
-use App\Models\OgeVariantPoolEntry;
-use App\Models\OgeVariantPoolTask;
 use App\Models\User;
-use App\Support\VariantPoolSchema;
-use Illuminate\Support\Facades\DB;
+use App\Support\StudentSolvedTasks;
 use Illuminate\Support\Str;
 
 class EgeVariantPoolService
@@ -17,88 +13,29 @@ class EgeVariantPoolService
         private readonly EgeVariantBuilderService $builder,
     ) {}
 
+    /**
+     * Каждый старт — свежий рандомный вариант (пул выпилен).
+     * Анти-повтор: решённые учеником задачи исключаются, пока банк темы не исчерпан.
+     */
     public function getOrCreateVariant(User $user): OgeVariant
     {
-        $attempted = OgeAttempt::where('student_id', $user->id)->pluck('variant_id');
+        $exclude = StudentSolvedTasks::mapByTopic($user, OgeVariant::EXAM_EGE);
+        $built = $this->builder->build(Str::random(12), $exclude);
 
-        $poolQuery = OgeVariantPoolEntry::active()
-            ->whereHas('variant', fn ($q) => $q->where('exam_type', OgeVariant::EXAM_EGE))
-            ->whereNotIn('variant_id', $attempted)
-            ->inRandomOrder();
+        if (empty($built['tasks'])) throw new \RuntimeException('No EGE production tasks');
 
-        if (VariantPoolSchema::hasExamTypeColumn()) {
-            $poolQuery->forExamType(OgeVariant::EXAM_EGE);
+        $hash = strtolower(Str::random(6));
+        while (OgeVariant::where('hash', $hash)->exists()) {
+            $hash = strtolower(Str::random(6));
         }
 
-        $poolEntry = $poolQuery->first();
-
-        if ($poolEntry) return $poolEntry->variant;
-
-        return $this->generateNewVariant();
-    }
-
-    protected function generateNewVariant(int $maxRetries = 8): OgeVariant
-    {
-        for ($i = 0; $i < $maxRetries; $i++) {
-            $built = $this->builder->build(Str::random(12));
-            if (empty($built['tasks'])) throw new \RuntimeException('No EGE production tasks');
-
-            $fingerprint = md5(json_encode(
-                array_map(fn($t) => $t['topic_id'] . '_' . ($t['id'] ?? ''), $built['tasks'])
-            ));
-
-            $duplicateQuery = OgeVariantPoolEntry::query()->where('task_fingerprint', $fingerprint);
-            if (VariantPoolSchema::hasExamTypeColumn()) {
-                $duplicateQuery->where('exam_type', OgeVariant::EXAM_EGE);
-            } else {
-                $duplicateQuery->whereHas('variant', fn ($q) => $q->where('exam_type', OgeVariant::EXAM_EGE));
-            }
-
-            if ($duplicateQuery->exists()) continue;
-
-            return DB::transaction(function () use ($built, $fingerprint) {
-                $hash = strtolower(Str::random(6));
-                while (OgeVariant::where('hash', $hash)->exists()) {
-                    $hash = strtolower(Str::random(6));
-                }
-
-                $variant = OgeVariant::create([
-                    'hash'        => $hash,
-                    'exam_type'   => OgeVariant::EXAM_EGE,
-                    'title'       => 'Вариант ЕГЭ',
-                    'mode'        => OgeVariant::MODE_FULL,
-                    'source'      => OgeVariant::SOURCE_MINIAPP,
-                    'config_json' => ['tasks' => $built['tasks']],
-                ]);
-
-                $poolEntryPayload = [
-                    'variant_id'       => $variant->id,
-                    'type'             => 'full',
-                    'status'           => 'active',
-                    'task_fingerprint' => $fingerprint,
-                    'created_at'       => now(),
-                ];
-
-                if (VariantPoolSchema::hasExamTypeColumn()) {
-                    $poolEntryPayload['exam_type'] = OgeVariant::EXAM_EGE;
-                }
-
-                $poolEntry = OgeVariantPoolEntry::create($poolEntryPayload);
-
-                foreach ($built['tasks'] as $idx => $task) {
-                    OgeVariantPoolTask::create([
-                        'pool_id'        => $poolEntry->id,
-                        'topic_id'       => $task['topic_id'],
-                        'block_number'   => $task['block_number'] ?? 1,
-                        'zadanie_number' => $task['zadanie_number'] ?? 1,
-                        'task_id'        => $task['id'] ?? 0,
-                        'sort_order'     => $idx + 1,
-                    ]);
-                }
-
-                return $variant;
-            });
-        }
-        throw new \RuntimeException('Could not generate unique EGE variant');
+        return OgeVariant::create([
+            'hash'        => $hash,
+            'exam_type'   => OgeVariant::EXAM_EGE,
+            'title'       => 'Вариант ЕГЭ',
+            'mode'        => OgeVariant::MODE_FULL,
+            'source'      => OgeVariant::SOURCE_MINIAPP,
+            'config_json' => ['tasks' => $built['tasks']],
+        ]);
     }
 }

@@ -2,13 +2,11 @@
 
 namespace App\Services;
 
-use App\Models\OgeAttempt;
 use App\Models\OgeVariant;
 use App\Models\OgeVariantPoolEntry;
 use App\Models\OgeVariantPoolTask;
 use App\Models\User;
-use App\Support\VariantPoolSchema;
-use Illuminate\Support\Facades\DB;
+use App\Support\StudentSolvedTasks;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -32,19 +30,13 @@ class OgeVariantPoolService
     }
 
     /**
-     * Get an existing unresolved variant from the pool, or create a new one.
+     * Каждый старт — свежий рандомный вариант (пул вариантов больше не читается
+     * и не пополняется). Анти-повтор: задачи из прошлых попыток ученика
+     * исключаются, пока банк темы не исчерпан.
      */
     public function getOrCreateVariant(User $user, string $type): OgeVariant
     {
-        // 1. Try to find an active pool variant the user hasn't attempted
-        $poolEntry = $this->findUnsolvedVariant($user, $type);
-
-        if ($poolEntry) {
-            return $poolEntry->variant;
-        }
-
-        // 2. No unsolved variants — generate a new one
-        return $this->generateNewPoolVariant($type);
+        return $this->generateVariant($type, StudentSolvedTasks::mapByTopic($user, self::EXAM_TYPE));
     }
 
     /**
@@ -52,7 +44,7 @@ class OgeVariantPoolService
      */
     public function createBattleVariant(string $type): OgeVariant
     {
-        $variant = $this->generateNewPoolVariant($type);
+        $variant = $this->generateVariant($type);
 
         // Mark as battle variant so leaderboard is shown on results page
         $config = $variant->config_json ?? [];
@@ -64,127 +56,55 @@ class OgeVariantPoolService
     }
 
     /**
-     * Find an active pool variant the user hasn't attempted yet.
+     * Generate a fresh random variant (no pool persistence).
+     *
+     * @param array<string, array<int,int>> $excludeByTopic topic_id => task_ids анти-повтора
      */
-    protected function findUnsolvedVariant(User $user, string $type): ?OgeVariantPoolEntry
+    protected function generateVariant(string $type, array $excludeByTopic = []): OgeVariant
     {
-        $attemptedVariantIds = OgeAttempt::where('student_id', $user->id)
-            ->pluck('variant_id');
+        $tasks = $this->generateVariantTasks($type, $excludeByTopic);
 
-        $query = OgeVariantPoolEntry::active()
-            ->ofType($type)
-            ->whereHas('variant', fn ($q) => $q->where('exam_type', self::EXAM_TYPE))
-            ->whereNotIn('variant_id', $attemptedVariantIds)
-            ->inRandomOrder();
-
-        if (VariantPoolSchema::hasExamTypeColumn()) {
-            $query->forExamType(self::EXAM_TYPE);
+        if (empty($tasks)) {
+            throw new \RuntimeException("No production tasks available for variant type: {$type}");
         }
 
-        return $query->first();
-    }
+        $modeMap = [
+            'geometry' => OgeVariant::MODE_MINI_GEOMETRY,
+            'algebra' => OgeVariant::MODE_MINI_ALGEBRA,
+            'mixed' => OgeVariant::MODE_MINI_MIXED,
+            'full' => OgeVariant::MODE_FULL,
+            'full_with_part2' => OgeVariant::MODE_FULL_WITH_PART2,
+            'part2' => OgeVariant::MODE_MINI_PART2,
+        ];
 
-    /**
-     * Generate a new variant, add it to the pool, and return the OgeVariant.
-     */
-    protected function generateNewPoolVariant(string $type, int $maxRetries = 8): OgeVariant
-    {
-        for ($attempt = 0; $attempt < $maxRetries; $attempt++) {
-            $tasks = $this->generateVariantTasks($type);
+        $titleMap = [
+            'geometry' => 'Мини-ОГЭ: Геометрия',
+            'algebra' => 'Мини-ОГЭ: Алгебра',
+            'mixed' => 'Мини-ОГЭ: Смешанное',
+            'full' => 'Полный вариант ОГЭ',
+            'full_with_part2' => 'Полный вариант ОГЭ (1+2 часть)',
+            'part2' => 'Мини-ОГЭ: 2-я часть',
+        ];
 
-            if (empty($tasks)) {
-                throw new \RuntimeException("No production tasks available for variant type: {$type}");
-            }
-
-            // Build task references for fingerprint and pool_tasks
-            $taskRefs = $this->extractTaskRefs($tasks);
-            $fingerprint = $this->computeFingerprint($taskRefs);
-
-            // Check uniqueness of full variant composition
-            $duplicateQuery = OgeVariantPoolEntry::query()->where('task_fingerprint', $fingerprint);
-            if (VariantPoolSchema::hasExamTypeColumn()) {
-                $duplicateQuery->where('exam_type', self::EXAM_TYPE);
-            } else {
-                $duplicateQuery->whereHas('variant', fn ($q) => $q->where('exam_type', self::EXAM_TYPE));
-            }
-
-            if ($duplicateQuery->exists()) {
-                continue; // Duplicate — retry with different random selection
-            }
-
-            return DB::transaction(function () use ($type, $tasks, $taskRefs, $fingerprint) {
-                $hash = $this->generateUniqueHash();
-
-                $modeMap = [
-                    'geometry' => OgeVariant::MODE_MINI_GEOMETRY,
-                    'algebra' => OgeVariant::MODE_MINI_ALGEBRA,
-                    'mixed' => OgeVariant::MODE_MINI_MIXED,
-                    'full' => OgeVariant::MODE_FULL,
-                    'full_with_part2' => OgeVariant::MODE_FULL_WITH_PART2,
-                    'part2' => OgeVariant::MODE_MINI_PART2,
-                ];
-
-                $titleMap = [
-                    'geometry' => 'Мини-ОГЭ: Геометрия',
-                    'algebra' => 'Мини-ОГЭ: Алгебра',
-                    'mixed' => 'Мини-ОГЭ: Смешанное',
-                    'full' => 'Полный вариант ОГЭ',
-                    'full_with_part2' => 'Полный вариант ОГЭ (1+2 часть)',
-                    'part2' => 'Мини-ОГЭ: 2-я часть',
-                ];
-
-                // Create the OgeVariant
-                $variant = OgeVariant::create([
-                    'hash' => $hash,
-                    'exam_type' => self::EXAM_TYPE,
-                    'title' => $titleMap[$type] ?? 'Вариант ОГЭ',
-                    'mode' => $modeMap[$type] ?? null,
-                    'source' => OgeVariant::SOURCE_MINIAPP,
-                    'config_json' => ['tasks' => $tasks, 'mode' => $type],
-                ]);
-
-                // Create pool entry
-                $poolEntryPayload = [
-                    'variant_id' => $variant->id,
-                    'type' => $type,
-                    'status' => 'active',
-                    'task_fingerprint' => $fingerprint,
-                    'created_at' => now(),
-                ];
-
-                if (VariantPoolSchema::hasExamTypeColumn()) {
-                    $poolEntryPayload['exam_type'] = self::EXAM_TYPE;
-                }
-
-                $poolEntry = OgeVariantPoolEntry::create($poolEntryPayload);
-
-                // Create pool task records
-                foreach ($taskRefs as $index => $ref) {
-                    OgeVariantPoolTask::create([
-                        'pool_id' => $poolEntry->id,
-                        'topic_id' => $ref['topic_id'],
-                        'block_number' => $ref['block_number'],
-                        'zadanie_number' => $ref['zadanie_number'],
-                        'task_id' => $ref['task_id'],
-                        'sort_order' => $index + 1,
-                    ]);
-                }
-
-                return $variant;
-            });
-        }
-
-        throw new \RuntimeException("Could not generate unique variant after {$maxRetries} retries for type: {$type}");
+        return OgeVariant::create([
+            'hash' => $this->generateUniqueHash(),
+            'exam_type' => self::EXAM_TYPE,
+            'title' => $titleMap[$type] ?? 'Вариант ОГЭ',
+            'mode' => $modeMap[$type] ?? null,
+            'source' => OgeVariant::SOURCE_MINIAPP,
+            'config_json' => ['tasks' => $tasks, 'mode' => $type],
+        ]);
     }
 
     /**
      * Generate tasks for a variant type using only production tasks.
      *
-     * Rule: if a variant repeats the same topic/task-number slot,
-     * it should avoid reusing the exact same example (task_id) already present
-     * in existing variants in the DB pool when alternatives exist.
+     * Rule: prefer examples the student hasn't seen yet ($excludeByTopic);
+     * when a topic's bank is exhausted, fall back to any production task.
+     *
+     * @param array<string, array<int,int>> $excludeByTopic
      */
-    protected function generateVariantTasks(string $type): array
+    protected function generateVariantTasks(string $type, array $excludeByTopic = []): array
     {
         $topicIds = [];
         $fallbackTopicIds = [];
@@ -227,12 +147,11 @@ class OgeVariantPoolService
                 throw new \InvalidArgumentException("Unknown variant type: {$type}");
         }
 
-        $usedByTopic = $this->getUsedTaskIdsByTopic();
         $result = [];
 
-        $tryPickForTopic = function (string $topicId) use (&$usedByTopic): ?array {
-            // 1) Prefer task examples not used in existing pool variants
-            $picked = $this->pickTaskForTopic($topicId, 'production', $usedByTopic[$topicId] ?? []);
+        $tryPickForTopic = function (string $topicId) use ($excludeByTopic): ?array {
+            // 1) Prefer task examples the student hasn't solved yet
+            $picked = $this->pickTaskForTopic($topicId, 'production', $excludeByTopic[$topicId] ?? []);
 
             // 2) Fallback: any production task
             if ($picked === null) {
@@ -608,37 +527,6 @@ class OgeVariantPoolService
             unset($s['_original_index']);
             return $s;
         }, $picked, array_keys($picked)));
-    }
-
-    /**
-     * Gather already used task_ids by topic from pool DB.
-     *
-     * @return array<string, array<int,int>>
-     */
-    protected function getUsedTaskIdsByTopic(): array
-    {
-        $rows = OgeVariantPoolTask::query()
-            ->select('topic_id', 'task_id')
-            ->where('task_id', '>', 0)
-            ->get();
-
-        $map = [];
-        foreach ($rows as $row) {
-            $topic = str_pad((string) $row->topic_id, 2, '0', STR_PAD_LEFT);
-            $taskId = (int) $row->task_id;
-            if ($taskId <= 0) {
-                continue;
-            }
-            $map[$topic] ??= [];
-            $map[$topic][$taskId] = $taskId;
-        }
-
-        // Convert set maps to plain arrays
-        foreach ($map as $topic => $set) {
-            $map[$topic] = array_values($set);
-        }
-
-        return $map;
     }
 
     /**

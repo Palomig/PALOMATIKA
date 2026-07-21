@@ -16,9 +16,9 @@ class VprVariantBuilderService
      *
      * @return array{tasks: array, variantNumber: int}
      */
-    public function build(string $hash): array
+    public function build(string $hash, array $excludeByTopic = []): array
     {
-        return $this->buildFromTopics($hash, $this->allTopics);
+        return $this->buildFromTopics($hash, $this->allTopics, $excludeByTopic);
     }
 
     /**
@@ -26,7 +26,7 @@ class VprVariantBuilderService
      *
      * @return array{tasks: array, variantNumber: int}
      */
-    public function buildMini(string $hash, int $taskCount = 5): array
+    public function buildMini(string $hash, int $taskCount = 5, array $excludeByTopic = []): array
     {
         $availableTopics = array_values(array_filter(
             $this->allTopics,
@@ -45,14 +45,15 @@ class VprVariantBuilderService
         $selectedTopics = array_slice($availableTopics, 0, max(1, min($taskCount, count($availableTopics))));
         usort($selectedTopics, fn (string $left, string $right) => (int) $left <=> (int) $right);
 
-        return $this->buildFromTopics($hash, $selectedTopics);
+        return $this->buildFromTopics($hash, $selectedTopics, $excludeByTopic);
     }
 
     /**
      * @param array<int, string> $topics
+     * @param array<string, array<int,int>> $excludeByTopic анти-повтор: topic_id => решённые task_ids
      * @return array{tasks: array, variantNumber: int}
      */
-    private function buildFromTopics(string $hash, array $topics): array
+    private function buildFromTopics(string $hash, array $topics, array $excludeByTopic = []): array
     {
         $seed = crc32($hash);
         mt_srand($seed);
@@ -61,7 +62,7 @@ class VprVariantBuilderService
         $tasks = [];
 
         foreach ($topics as $topicId) {
-            $item = $this->taskData->getRandomTaskFromTopic($topicId, 'production');
+            $item = $this->taskData->getRandomTaskFromTopic($topicId, 'production', $excludeByTopic[$topicId] ?? []);
             if (!$item) {
                 continue;
             }

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\OgeAttempt;
 use App\Models\OgeVariant;
 use App\Models\OgeVariantPoolEntry;
 use App\Models\User;
@@ -11,9 +12,14 @@ use App\Services\TaskDataService;
 use App\Services\VprTaskDataService;
 use App\Services\VprVariantBuilderService;
 use App\Services\VprVariantPoolService;
+use App\Support\StudentSolvedTasks;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
+/**
+ * Пул вариантов выпилен: каждый старт генерирует свежий рандомный вариант,
+ * в пул ничего не пишется, старые пул-записи не переиспользуются.
+ */
 class VariantPoolExamIsolationTest extends TestCase
 {
     use RefreshDatabase;
@@ -58,47 +64,73 @@ class VariantPoolExamIsolationTest extends TestCase
         ]);
     }
 
-    public function test_oge_mixed_pool_does_not_reuse_vpr_mixed_variant(): void
+    private function ogeService(): OgeVariantPoolService
     {
-        $student = $this->makeStudent(9);
-        $vprVariant = $this->makeVariant('vprmixed1', OgeVariant::EXAM_VPR5, OgeVariant::MODE_MINI_MIXED);
-        $this->addPoolEntry($vprVariant, 'mixed');
-
-        $service = new OgeVariantPoolService(
+        return new OgeVariantPoolService(
             app(TaskDataService::class),
             app(MiniAppTaskCanonicalizer::class),
         );
-
-        $picked = $service->getOrCreateVariant($student, 'mixed');
-
-        $this->assertSame(OgeVariant::EXAM_OGE, $picked->exam_type);
-        $this->assertNotSame($vprVariant->id, $picked->id);
     }
 
-    public function test_oge_full_pool_does_not_reuse_vpr_full_variant(): void
+    public function test_oge_generates_fresh_variant_and_ignores_pool(): void
     {
         $student = $this->makeStudent(9);
-        $vprVariant = $this->makeVariant('vprfull11', OgeVariant::EXAM_VPR5, OgeVariant::MODE_FULL);
-        $this->addPoolEntry($vprVariant, 'full');
+        // Живая пул-запись подходящего типа — раньше вернулась бы она.
+        $pooled = $this->makeVariant('ogemixed1', OgeVariant::EXAM_OGE, OgeVariant::MODE_MINI_MIXED);
+        $this->addPoolEntry($pooled, 'mixed');
+        $poolCountBefore = OgeVariantPoolEntry::count();
 
-        $service = new OgeVariantPoolService(
-            app(TaskDataService::class),
-            app(MiniAppTaskCanonicalizer::class),
-        );
+        $service = $this->ogeService();
+        $first = $service->getOrCreateVariant($student, 'mixed');
+        $second = $service->getOrCreateVariant($student, 'mixed');
 
-        $picked = $service->getOrCreateVariant($student, 'full');
-
-        $this->assertSame(OgeVariant::EXAM_OGE, $picked->exam_type);
-        $this->assertNotSame($vprVariant->id, $picked->id);
+        $this->assertSame(OgeVariant::EXAM_OGE, $first->exam_type);
+        $this->assertNotSame($pooled->id, $first->id);
+        // Каждый старт — новый вариант.
+        $this->assertNotSame($first->id, $second->id);
+        // В пул больше не пишем.
+        $this->assertSame($poolCountBefore, OgeVariantPoolEntry::count());
     }
 
-    public function test_vpr_pool_reuses_only_matching_grade_variants(): void
+    public function test_oge_full_generation_excludes_tasks_from_past_attempts(): void
+    {
+        $student = $this->makeStudent(9);
+        $service = $this->ogeService();
+
+        // Первый полный вариант — запоминаем задачи через попытку.
+        $first = $service->getOrCreateVariant($student, 'full');
+        OgeAttempt::create([
+            'variant_id' => $first->id,
+            'student_id' => $student->id,
+            'status' => 'scored',
+            'started_at' => now(),
+        ]);
+
+        $solved = StudentSolvedTasks::mapByTopic($student, OgeVariant::EXAM_OGE);
+        $this->assertNotEmpty($solved);
+
+        // Второй вариант не должен повторить ни один решённый пример
+        // (банк каждой темы больше одного примера).
+        $second = $service->getOrCreateVariant($student, 'full');
+        foreach ($second->config_json['tasks'] as $task) {
+            $topicId = str_pad((string) $task['topic_id'], 2, '0', STR_PAD_LEFT);
+            $taskId = (int) ($task['task']['id'] ?? $task['task_id'] ?? 0);
+            if ($taskId > 0 && isset($solved[$topicId])) {
+                $this->assertNotContains(
+                    $taskId,
+                    $solved[$topicId],
+                    "Тема {$topicId}: задача {$taskId} повторилась, хотя уже решена"
+                );
+            }
+        }
+    }
+
+    public function test_vpr_generates_fresh_variant_even_when_pool_has_matching_grade(): void
     {
         $student = $this->makeStudent(6);
-        $gradeFive = $this->makeVariant('vpr5full1', OgeVariant::EXAM_VPR5, OgeVariant::MODE_FULL);
         $gradeSix = $this->makeVariant('vpr6full1', OgeVariant::EXAM_VPR6, OgeVariant::MODE_FULL);
-        $this->addPoolEntry($gradeFive, 'full');
         $this->addPoolEntry($gradeSix, 'full');
+        $poolCountBefore = OgeVariantPoolEntry::count();
 
         $service = new VprVariantPoolService(
             new VprTaskDataService(6),
@@ -108,6 +140,7 @@ class VariantPoolExamIsolationTest extends TestCase
         $picked = $service->getOrCreateVariant($student, 'full');
 
         $this->assertSame(OgeVariant::EXAM_VPR6, $picked->exam_type);
-        $this->assertSame($gradeSix->id, $picked->id);
+        $this->assertNotSame($gradeSix->id, $picked->id);
+        $this->assertSame($poolCountBefore, OgeVariantPoolEntry::count());
     }
 }

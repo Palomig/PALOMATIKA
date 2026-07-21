@@ -921,8 +921,12 @@ class PwaVprDashboardTest extends TestCase
         $attempt = OgeAttempt::latest('id')->first();
 
         $this->assertNotNull($attempt);
-        $this->assertSame($cleanVariant->id, $attempt->variant_id);
+        // Пул выпилен: старт всегда генерирует свежий вариант, легаси-записи
+        // пула (включая base64-мусор) не переиспользуются вовсе.
         $this->assertNotSame($dirtyVariant->id, $attempt->variant_id);
+        $this->assertNotSame($cleanVariant->id, $attempt->variant_id);
+        $servedConfig = json_encode($attempt->variant->config_json);
+        $this->assertStringNotContainsString('base64,', $servedConfig);
     }
 
     public function test_grade_5_vpr_bank_contains_explicit_question_for_task_1_and_structured_tables_for_topic_14(): void
