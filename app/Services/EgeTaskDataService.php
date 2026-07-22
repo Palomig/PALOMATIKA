@@ -335,7 +335,7 @@ class EgeTaskDataService
      * Выбрать случайную задачу из топика (статус production).
      * Возвращает структуру, совместимую с EgeVariantBuilderService.
      */
-    public function getRandomTaskFromTopic(string $topicId, ?string $status = 'production'): ?array
+    public function getRandomTaskFromTopic(string $topicId, ?string $status = 'production', array $excludeTaskIds = []): ?array
     {
         $data = $this->getTopicData($topicId);
         $candidates = [];
@@ -358,6 +358,16 @@ class EgeTaskDataService
         }
 
         if (empty($candidates)) return null;
+
+        // Анти-повтор: предпочитаем нерешённые примеры; если банк исчерпан — любой.
+        if ($excludeTaskIds !== []) {
+            $fresh = array_values(array_filter(
+                $candidates,
+                fn ($c) => !in_array((int) ($c['task']['id'] ?? 0), $excludeTaskIds, true)
+            ));
+            if ($fresh !== []) $candidates = $fresh;
+        }
+
         return $candidates[array_rand($candidates)];
     }
 

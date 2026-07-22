@@ -254,11 +254,11 @@
             title="Черновик на то же время через неделю — с заметкой и заданиями заранее"></button>
   </div>
 
-  {{-- Live grid + summary --}}
-  <div class="lesson-card" x-show="status === 'live' && tasks.length">
+  {{-- Live grid + summary (после завершения остаётся как итоги урока) --}}
+  <div class="lesson-card" x-show="(status === 'live' || status === 'ended') && tasks.length">
     <div style="display: flex; justify-content: space-between; align-items: center;">
-      <div style="font-size: 14px; font-weight: 700;">Ответы</div>
-      <div style="font-size: 11px; color: var(--muted);">обновляется каждые 4 сек</div>
+      <div style="font-size: 14px; font-weight: 700;" x-text="status === 'ended' ? 'Итоги урока' : 'Ответы'"></div>
+      <div style="font-size: 11px; color: var(--muted);" x-show="status === 'live'">обновляется каждые 4 сек</div>
     </div>
 
     <div style="overflow-x: auto;">
