@@ -13,6 +13,7 @@ use App\Models\StudentNote;
 use App\Models\User;
 use DomainException;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Бизнес-логика жизненного цикла lesson_session.
@@ -197,10 +198,15 @@ class LessonSessionService
         if ($session->status !== LessonSession::STATUS_LIVE) {
             throw new DomainException("Сессия в статусе {$session->status}, завершить нельзя");
         }
+        $endsAt = now();
         $session->update([
             'status'  => LessonSession::STATUS_ENDED,
-            'ends_at' => now(),
+            'ends_at' => $endsAt,
         ]);
+        // Открытые интервалы активности не должны переживать урок.
+        LessonActivityInterval::where('lesson_session_id', $session->id)
+            ->whereNull('ended_at')
+            ->update(['ended_at' => $endsAt]);
         return $session->fresh();
     }
 
@@ -265,32 +271,48 @@ class LessonSessionService
     public function recordActivity(LessonSession $session, User $student, bool $visible): void
     {
         $desired = $visible ? LessonActivityInterval::KIND_PRESENT : LessonActivityInterval::KIND_AWAY;
-        $now = now();
 
-        $open = LessonActivityInterval::where('lesson_session_id', $session->id)
-            ->where('student_id', $student->id)
-            ->whereNull('ended_at')
-            ->latest('started_at')
-            ->first();
+        // Heartbeat и visibilitychange часто приходят одновременно; без мьютекса
+        // конкурирующие запросы плодили дубли открытых интервалов, которые никогда
+        // не закрывались и раздували away на часы.
+        DB::transaction(function () use ($session, $student, $desired) {
+            $now = now();
 
-        // Состояние не изменилось → heartbeat (только бампаем updated_at у present).
-        if ($open && $open->kind === $desired) {
-            $open->update(['updated_at' => $now]);
-            return;
-        }
+            LessonSessionParticipant::where('lesson_session_id', $session->id)
+                ->where('student_id', $student->id)
+                ->lockForUpdate()
+                ->first();
 
-        // Смена состояния → закрываем текущий, открываем новый.
-        if ($open) {
-            $open->update(['ended_at' => $now]);
-        }
+            $open = LessonActivityInterval::where('lesson_session_id', $session->id)
+                ->where('student_id', $student->id)
+                ->whereNull('ended_at')
+                ->orderByDesc('started_at')
+                ->get();
 
-        LessonActivityInterval::create([
-            'lesson_session_id' => $session->id,
-            'student_id'        => $student->id,
-            'kind'              => $desired,
-            'started_at'        => $now,
-            'updated_at'        => $now,
-        ]);
+            $keep = null;
+            foreach ($open as $iv) {
+                if ($keep === null && $iv->kind === $desired) {
+                    $keep = $iv;
+                    continue;
+                }
+                // Закрывает и смену состояния, и осиротевшие дубли прошлых гонок.
+                $iv->update(['ended_at' => $now]);
+            }
+
+            // Состояние не изменилось → heartbeat (только бампаем updated_at).
+            if ($keep) {
+                $keep->update(['updated_at' => $now]);
+                return;
+            }
+
+            LessonActivityInterval::create([
+                'lesson_session_id' => $session->id,
+                'student_id'        => $student->id,
+                'kind'              => $desired,
+                'started_at'        => $now,
+                'updated_at'        => $now,
+            ]);
+        });
     }
 
     /**
@@ -313,29 +335,50 @@ class LessonSessionService
 
         $out = [];
         foreach ($byStudent as $studentId => $intervals) {
+            $list = $intervals->values();
+            $n = $list->count();
             $presentSec = 0;
             $awaySec = 0;
             $awayCount = 0;
-            $state = 'gone';
 
-            foreach ($intervals as $iv) {
+            foreach ($list as $i => $iv) {
                 $open = $iv->ended_at === null;
 
                 if ($iv->kind === LessonActivityInterval::KIND_AWAY) {
-                    $awayCount++;
                     $end = $iv->ended_at ?? $nowRef;
-                    $awaySec += max(0, $iv->started_at->diffInSeconds($end, false));
-                    if ($open) {
-                        $state = 'away';
-                    }
-                } else { // present
+                } else {
                     // Молчащий present (нет heartbeat) — ученик ушёл, обрезаем по updated_at.
                     $stale = $open && $iv->updated_at && $iv->updated_at->lessThan($staleBefore);
                     $end = $iv->ended_at ?? ($stale ? $iv->updated_at : $nowRef);
-                    $presentSec += max(0, $iv->started_at->diffInSeconds($end, false));
-                    if ($open) {
-                        $state = $stale ? 'away' : 'present';
+                }
+
+                // Интервал не может тянуться дальше начала следующего: осиротевшие
+                // открытые дубли (гонка до фикса 07.2026) иначе раздувают сумму на часы.
+                if ($i + 1 < $n && $end->greaterThan($list[$i + 1]->started_at)) {
+                    $end = $list[$i + 1]->started_at;
+                }
+
+                $sec = max(0, $iv->started_at->diffInSeconds($end, false));
+                if ($iv->kind === LessonActivityInterval::KIND_AWAY) {
+                    $awaySec += $sec;
+                    // Схлопнутые в ноль дубли — не отлучки.
+                    if ($sec >= 1) {
+                        $awayCount++;
                     }
+                } else {
+                    $presentSec += $sec;
+                }
+            }
+
+            // Текущее состояние — по последнему интервалу.
+            $lastIv = $list->last();
+            $state = 'gone';
+            if ($lastIv && $lastIv->ended_at === null) {
+                if ($lastIv->kind === LessonActivityInterval::KIND_AWAY) {
+                    $state = 'away';
+                } else {
+                    $stale = $lastIv->updated_at && $lastIv->updated_at->lessThan($staleBefore);
+                    $state = $stale ? 'away' : 'present';
                 }
             }
 

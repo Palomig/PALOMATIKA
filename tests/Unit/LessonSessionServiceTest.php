@@ -208,6 +208,71 @@ class LessonSessionServiceTest extends TestCase
         $this->assertSame('away', $a['state']); // молча закрыл вкладку
     }
 
+    public function test_record_activity_closes_orphaned_duplicate_open_intervals(): void
+    {
+        $svc = $this->service();
+        $session = $this->makeLiveSession($svc);
+        $student = $this->makeStudent();
+        $svc->joinByCode($session->join_code, $student);
+
+        // Дубль-сирота от гонки до фикса: два открытых away с одним started_at.
+        foreach ([1, 2] as $_) {
+            LessonActivityInterval::create([
+                'lesson_session_id' => $session->id,
+                'student_id'        => $student->id,
+                'kind'              => LessonActivityInterval::KIND_AWAY,
+                'started_at'        => now(),
+                'updated_at'        => now(),
+            ]);
+        }
+
+        $this->travel(15)->seconds();
+        $svc->recordActivity($session, $student, true); // вернулся
+
+        $open = LessonActivityInterval::where('student_id', $student->id)
+            ->whereNull('ended_at')->get();
+        $this->assertCount(1, $open); // оба сироты закрыты, открыт только новый present
+        $this->assertSame('present', $open[0]->kind);
+    }
+
+    public function test_activity_summary_clips_orphan_open_interval_to_next_start(): void
+    {
+        $svc = $this->service();
+        $session = $this->makeLiveSession($svc);
+        $student = $this->makeStudent();
+        $svc->joinByCode($session->join_code, $student);
+
+        // Сирота: открытый away, за которым через 10с идёт нормальный present.
+        LessonActivityInterval::create([
+            'lesson_session_id' => $session->id,
+            'student_id'        => $student->id,
+            'kind'              => LessonActivityInterval::KIND_AWAY,
+            'started_at'        => now(),
+            'updated_at'        => now(),
+        ]);
+        $this->travel(10)->seconds();
+        $svc->recordActivity($session, $student, true);
+        $this->travel(3600)->seconds(); // час спустя — сирота не должен накопить час away
+
+        $a = $svc->activitySummary($session)[$student->id];
+        $this->assertEqualsWithDelta(10, $a['away_seconds'], 2); // обрезан по началу present
+    }
+
+    public function test_end_closes_open_activity_intervals(): void
+    {
+        $svc = $this->service();
+        $session = $this->makeLiveSession($svc);
+        $student = $this->makeStudent();
+        $svc->joinByCode($session->join_code, $student);
+
+        $svc->recordActivity($session, $student, true);
+        $this->travel(30)->seconds();
+        $svc->end($session);
+
+        $this->assertSame(0, LessonActivityInterval::where('lesson_session_id', $session->id)
+            ->whereNull('ended_at')->count());
+    }
+
     public function test_create_from_schedule_no_longer_autoadds_participants(): void
     {
         $svc = $this->service();
