@@ -18,15 +18,11 @@
 
   <div class="e10-intro">
     <div class="e10-intro-title">№{{ $info['number'] }}. {{ $info['title'] }}</div>
-    <div class="e10-intro-sub">
-      {{ $generatable
-          ? 'Задачи из вариантов и бесконечные аналоги (те же типы, другие числа). Ответ и решение — по кнопке.'
-          : 'Задачи из вариантов. Ответ и решение — по кнопке.' }}
-    </div>
+    <div class="e10-intro-sub">{{ count($tasks) }} задач для отработки. Ответ и решение — по кнопке.</div>
   </div>
 
   {{-- Переключатель номеров --}}
-  <div class="e10-num-grid" style="grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:8px;">
+  <div class="e10-num-grid" style="grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px;">
     @foreach($numbers as $num)
       <a href="{{ route('pwa.student.practice.entrance10.bank', $num['number']) }}"
          class="e10-num-cell {{ $num['number'] === $info['number'] ? 'is-active' : '' }}"
@@ -36,19 +32,9 @@
     @endforeach
   </div>
 
-  @if($generatable)
-    <button type="button" id="e10-gen" class="e10-gen-btn"
-            data-url="{{ route('pwa.student.practice.entrance10.generate', $info['number']) }}">
-      ✨ Сгенерировать ещё аналог
-    </button>
-  @endif
-  <div id="e10-gen-slot"></div>
-
-  <div class="e10-section-title" style="margin-top:6px;">Из вариантов</div>
-  @forelse($staticTasks as $task)
+  @foreach($tasks as $i => $task)
+    <div class="e10-task-index">{{ $i + 1 }}</div>
     @include('pwa.student.entrance10._task', ['task' => $task])
-  @empty
-    <p class="e10-card-desc">Для этого номера пока нет задач.</p>
-  @endforelse
+  @endforeach
 </div>
 @endsection

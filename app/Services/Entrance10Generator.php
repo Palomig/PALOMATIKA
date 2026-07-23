@@ -308,10 +308,10 @@ class Entrance10Generator
 
     private function gen6(): array
     {
-        // Точная копия задачи со скрина, меняется только число k:
+        // Точная копия задачи со скрина, меняется только число k (и буква параметра):
         // x² − (param + k)x + k·param = (x − k)(x − param). Формулировки — как в оригинале.
-        $k = random_int(1, 5);
-        $param = ['a', 'b'][random_int(0, 1)];
+        $k = random_int(1, 9);
+        $param = ['a', 'b', 'c', 'p', 't', 'm', 'n', 'q'][random_int(0, 7)];
         $lin = "({$param} + {$k})";
         $prod = $k === 1 ? $param : "{$k}{$param}";
         $eq = "x^2-{$lin}x+{$prod}=0";

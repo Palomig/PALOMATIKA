@@ -26,6 +26,8 @@ class Entrance10Service
 
     private ?array $data = null;
 
+    private ?array $bank = null;
+
     public function __construct(private readonly Entrance10Generator $generator)
     {
     }
@@ -126,13 +128,31 @@ class Entrance10Service
     }
 
     /**
-     * Сгенерированная задача номера, подготовленная для показа.
+     * Полный список базы заданий по номеру: 2 оригинала из вариантов + заранее
+     * сгенерированные аналоги (для генерируемых номеров — их 18, итого 20).
+     * Задачи подготовлены к показу (ответы за токеном).
      */
-    public function generatedTaskForView(int $number): array
+    public function bankTasksForNumber(int $number): array
     {
-        $task = $this->generator->generate($number);
-        $task['source'] = 'Сгенерировано';
-        return $this->prepareTask($task, 'gen');
+        $out = $this->staticTasksForNumber($number);
+        foreach ($this->bankAnalogs()[(string) $number] ?? [] as $task) {
+            $task['source'] = 'Аналог';
+            $task['number'] = $number;
+            $out[] = $this->prepareTask($task, 'bank');
+        }
+        return $out;
+    }
+
+    /** @return array<string, array> заранее сгенерированные аналоги по номерам */
+    private function bankAnalogs(): array
+    {
+        if ($this->bank === null) {
+            $path = storage_path('app/tasks/entrance10/bank.json');
+            $raw = @file_get_contents($path);
+            $decoded = $raw === false ? [] : json_decode($raw, true);
+            $this->bank = is_array($decoded) ? $decoded : [];
+        }
+        return $this->bank;
     }
 
     public function isGeneratable(int $number): bool

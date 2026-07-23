@@ -95,7 +95,6 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
                 Route::get('/', [Entrance10Controller::class, 'index'])->name('index');
                 // База заданий по номерам
                 Route::get('/bank/{number}', [Entrance10Controller::class, 'bank'])->whereNumber('number')->name('bank');
-                Route::post('/api/generate/{number}', [Entrance10Controller::class, 'generate'])->whereNumber('number')->name('generate');
                 Route::post('/api/check', [Entrance10Controller::class, 'check'])->name('check');
                 // Полный вариант
                 Route::post('/start', [Entrance10Controller::class, 'start'])->name('start');
