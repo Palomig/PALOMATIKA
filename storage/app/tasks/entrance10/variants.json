@@ -1,0 +1,526 @@
+{
+    "meta": {
+        "title": "Вступительная работа для поступления в 10 математический класс",
+        "subtitle": "Подмосковье · РЦМО «Вектор»",
+        "duration_min": 80,
+        "max_score": 30,
+        "task_count": 8,
+        "rules": [
+            "На выполнение работы даётся 80 минут.",
+            "Все задания требуют развёрнутого и обоснованного ответа.",
+            "Пункты а), б) и в) оцениваются отдельно.",
+            "Главная цель — набрать как можно больше баллов."
+        ]
+    },
+    "numbers": {
+        "1": {
+            "title": "Упрощение выражения",
+            "icon": "√",
+            "generatable": true
+        },
+        "2": {
+            "title": "Наибольшее натуральное число",
+            "icon": "≤",
+            "generatable": true
+        },
+        "3": {
+            "title": "Суммы и комбинаторика",
+            "icon": "Σ",
+            "generatable": true
+        },
+        "4": {
+            "title": "Уравнения",
+            "icon": "𝑥",
+            "generatable": true
+        },
+        "5": {
+            "title": "График функции с модулями",
+            "icon": "📈",
+            "generatable": false
+        },
+        "6": {
+            "title": "Уравнение с параметром",
+            "icon": "ⓑ",
+            "generatable": true
+        },
+        "7": {
+            "title": "Треугольник (высоты, радиусы)",
+            "icon": "📐",
+            "generatable": false
+        },
+        "8": {
+            "title": "Ромб в прямоугольнике",
+            "icon": "◇",
+            "generatable": false
+        },
+        "9": {
+            "title": "Шашки (чётность партий)",
+            "icon": "⛃",
+            "generatable": true
+        }
+    },
+    "variants": [
+        {
+            "number": 1,
+            "title": "Вариант 1",
+            "tasks": [
+                {
+                    "number": 1,
+                    "title": "Упростите выражение",
+                    "generatable": true,
+                    "parts": [
+                        {
+                            "label": null,
+                            "points": 2,
+                            "text": "Упростите выражение $\\dfrac{(\\sqrt{15}+\\sqrt6)\\sqrt3}{3}-\\dfrac{3}{\\sqrt5-\\sqrt2}$.",
+                            "check": "number",
+                            "answer": "0",
+                            "answer_display": "$0$",
+                            "solution": "$\\dfrac{(\\sqrt{15}+\\sqrt6)\\sqrt3}{3}=\\dfrac{\\sqrt{45}+\\sqrt{18}}{3}=\\dfrac{3\\sqrt5+3\\sqrt2}{3}=\\sqrt5+\\sqrt2$. Дробь $\\dfrac{3}{\\sqrt5-\\sqrt2}=\\dfrac{3(\\sqrt5+\\sqrt2)}{5-2}=\\sqrt5+\\sqrt2$. Разность равна $0$."
+                        }
+                    ]
+                },
+                {
+                    "number": 2,
+                    "title": "Наибольшее натуральное число",
+                    "generatable": true,
+                    "parts": [
+                        {
+                            "label": null,
+                            "points": 2,
+                            "text": "Найдите наибольшее натуральное число, не превосходящее числа $(1-\\sqrt3)^2+\\sqrt{7+4\\sqrt3}$.",
+                            "check": "number",
+                            "answer": "4",
+                            "answer_display": "$4$",
+                            "solution": "$(1-\\sqrt3)^2=4-2\\sqrt3$; $\\sqrt{7+4\\sqrt3}=\\sqrt{(2+\\sqrt3)^2}=2+\\sqrt3$. Сумма $=6-\\sqrt3\\approx4{,}27$. Наибольшее натуральное — $4$."
+                        }
+                    ]
+                },
+                {
+                    "number": 3,
+                    "title": "Суммы и комбинаторика",
+                    "generatable": true,
+                    "parts": [
+                        {
+                            "label": "а",
+                            "points": 2,
+                            "text": "Найдите сумму всех натуральных чисел, кратных трём, расположенных между 152 и 721.",
+                            "check": "number",
+                            "answer": "82935",
+                            "answer_display": "$82\\,935$",
+                            "solution": "Числа $153,156,\\dots,720$ — арифметическая прогрессия, $190$ членов. Сумма $=\\dfrac{153+720}{2}\\cdot190=82\\,935$."
+                        },
+                        {
+                            "label": "б",
+                            "points": 2,
+                            "text": "Сколько существует четырёхзначных чисел, у которых в десятичной записи присутствует хотя бы одна чётная цифра?",
+                            "check": "number",
+                            "answer": "8375",
+                            "answer_display": "$8375$",
+                            "solution": "Всего четырёхзначных $9000$. Без чётных цифр (все нечётные): $5^4=625$. Ответ $9000-625=8375$."
+                        }
+                    ]
+                },
+                {
+                    "number": 4,
+                    "title": "Решите уравнения",
+                    "generatable": true,
+                    "parts": [
+                        {
+                            "label": "а",
+                            "points": 2,
+                            "text": "$x^3-12+2x^2-6x=0$",
+                            "check": "number_set",
+                            "answer": "-2;√6;-√6",
+                            "answer_display": "$x=-2;\\ x=\\sqrt6;\\ x=-\\sqrt6$",
+                            "solution": "$x^3+2x^2-6x-12=x^2(x+2)-6(x+2)=(x+2)(x^2-6)=0$. Корни $x=-2$ и $x=\\pm\\sqrt6$."
+                        },
+                        {
+                            "label": "б",
+                            "points": 2,
+                            "text": "$(x^2-2x+1)^2-5(x-1)^2+4=0$",
+                            "check": "number_set",
+                            "answer": "-1;0;2;3",
+                            "answer_display": "$x=-1;\\ 0;\\ 2;\\ 3$",
+                            "solution": "Пусть $t=(x-1)^2$. Тогда $t^2-5t+4=0$, $t=1$ или $t=4$. Отсюда $x-1=\\pm1$ ($x=0;2$) и $x-1=\\pm2$ ($x=3;-1$)."
+                        }
+                    ]
+                },
+                {
+                    "number": 5,
+                    "title": "График функции",
+                    "generatable": false,
+                    "parts": [
+                        {
+                            "label": "а",
+                            "points": 2,
+                            "text": "Постройте график функции $y=-\\dfrac{2}{5}|x-3|+|x-2|$.",
+                            "check": "display",
+                            "answer": "",
+                            "answer_display": "Кусочно-линейная ломаная с изломами в точках $x=2$ и $x=3$.",
+                            "solution": "Раскрываем модули на промежутках $x<2$, $2\\le x<3$, $x\\ge3$: соответственно $y=-\\dfrac35x+\\dfrac{16}{5}$, $y=\\dfrac75x-\\dfrac{16}{5}$, $y=\\dfrac35x-\\dfrac{4}{5}$."
+                        },
+                        {
+                            "label": "б",
+                            "points": 1,
+                            "text": "Найдите точки пересечения графика с осями координат.",
+                            "check": "display",
+                            "answer": "",
+                            "answer_display": "С $Oy$: $(0;\\,0{,}8)$. С $Ox$: $\\left(\\tfrac43;0\\right)$ и $\\left(\\tfrac{16}{7};0\\right)$.",
+                            "solution": "При $x=0$: $y=0{,}8$. Уравнение $y=0$ даёт $|x-2|=\\tfrac25|x-3|$: корни $x=\\tfrac43$ и $x=\\tfrac{16}{7}$."
+                        }
+                    ]
+                },
+                {
+                    "number": 6,
+                    "title": "Уравнение с параметром",
+                    "generatable": true,
+                    "parts": [
+                        {
+                            "label": "а",
+                            "points": 2,
+                            "text": "При каких значениях параметра $b$ уравнение $x^2-(b+1)x+b=0$ имеет ровно два корня?",
+                            "check": "param_condition",
+                            "answer": "b≠1",
+                            "answer_display": "$b\\ne1$",
+                            "solution": "$x^2-(b+1)x+b=(x-1)(x-b)$, корни $1$ и $b$. Два различных корня — при $b\\ne1$."
+                        },
+                        {
+                            "label": "б",
+                            "points": 1,
+                            "text": "При каких значениях параметра $b$ уравнение $x^2-(b+1)x+b=0$ имеет ровно два различных положительных корня?",
+                            "check": "param_condition",
+                            "answer": "b>0,b≠1",
+                            "answer_display": "$b>0,\\ b\\ne1$",
+                            "solution": "Корни $1$ и $b$; оба положительны и различны при $b>0$ и $b\\ne1$."
+                        }
+                    ]
+                },
+                {
+                    "number": 7,
+                    "title": "Равнобедренный треугольник",
+                    "generatable": false,
+                    "parts": [
+                        {
+                            "label": "а",
+                            "points": 2,
+                            "text": "В равнобедренном треугольнике с боковой стороной 5 и основанием 8 найдите высоту, опущенную на основание.",
+                            "check": "number",
+                            "answer": "3",
+                            "answer_display": "$3$",
+                            "solution": "Высота к основанию делит его пополам: $h=\\sqrt{5^2-4^2}=\\sqrt{9}=3$."
+                        },
+                        {
+                            "label": "б",
+                            "points": 2,
+                            "text": "В том же треугольнике найдите высоту, опущенную на боковую сторону.",
+                            "check": "number",
+                            "answer": "4.8",
+                            "answer_display": "$4{,}8$",
+                            "solution": "Площадь $S=\\tfrac12\\cdot8\\cdot3=12$. Высота к боковой: $h_b=\\dfrac{2S}{5}=\\dfrac{24}{5}=4{,}8$."
+                        },
+                        {
+                            "label": "в",
+                            "points": 2,
+                            "text": "В том же треугольнике найдите радиус вписанной окружности.",
+                            "check": "number",
+                            "answer": "4\/3",
+                            "answer_display": "$\\dfrac43$",
+                            "solution": "Полупериметр $p=\\tfrac{5+5+8}{2}=9$. $r=\\dfrac{S}{p}=\\dfrac{12}{9}=\\dfrac43$."
+                        }
+                    ]
+                },
+                {
+                    "number": 8,
+                    "title": "Ромб в прямоугольнике",
+                    "generatable": false,
+                    "parts": [
+                        {
+                            "label": "а",
+                            "points": 1,
+                            "text": "На сторонах $AB$ и $CD$ прямоугольника $ABCD$ взяты точки $K$ и $M$ так, что $AKCM$ — ромб. Диагональ $AC$ образует со стороной $AB$ угол $30^\\circ$, $AB=3$. Найдите длину $BC$.",
+                            "check": "number",
+                            "answer": "√3",
+                            "answer_display": "$\\sqrt3$",
+                            "solution": "$BC=AB\\cdot\\tan30^\\circ=3\\cdot\\dfrac{1}{\\sqrt3}=\\sqrt3$."
+                        },
+                        {
+                            "label": "б",
+                            "points": 2,
+                            "text": "В тех же условиях найдите сторону ромба $AKCM$.",
+                            "check": "number",
+                            "answer": "2",
+                            "answer_display": "$2$",
+                            "solution": "Пусть $AK=s$. Из $AKCM$ ромб: $s=\\sqrt{(AB-s)^2+BC^2}$. При $AB=3,\\ BC=\\sqrt3$: $s^2=(3-s)^2+3\\Rightarrow s=2$."
+                        }
+                    ]
+                },
+                {
+                    "number": 9,
+                    "title": "Шашки",
+                    "generatable": true,
+                    "parts": [
+                        {
+                            "label": "а",
+                            "points": 1,
+                            "text": "Трое друзей играли в шашки. Один сыграл 40 партий, другой — 26. Мог ли третий сыграть 24 партии?",
+                            "check": "yesno",
+                            "answer": "да",
+                            "answer_display": "Да",
+                            "solution": "Пусть партий между парами $a,b,c$: $a+b=40$, $a+c=26$. Тогда третий сыграл $b+c$. Значение $24$ достижимо (например $a=21,b=19,c=5$)."
+                        },
+                        {
+                            "label": "б",
+                            "points": 1,
+                            "text": "…Мог ли третий сыграть 25 партий?",
+                            "check": "yesno",
+                            "answer": "нет",
+                            "answer_display": "Нет",
+                            "solution": "Сумма партий всех троих чётна: $40+26+x$ чётно $\\Rightarrow x$ чётно. $25$ — нечётно, невозможно."
+                        },
+                        {
+                            "label": "в",
+                            "points": 1,
+                            "text": "…Мог ли третий сыграть 68 партий?",
+                            "check": "yesno",
+                            "answer": "нет",
+                            "answer_display": "Нет",
+                            "solution": "Третий сыграл $b+c\\le a+b+a+c-2a$; максимум $=40+26=66<68$. Невозможно."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "number": 2,
+            "title": "Вариант 2",
+            "tasks": [
+                {
+                    "number": 1,
+                    "title": "Упростите выражение",
+                    "generatable": true,
+                    "parts": [
+                        {
+                            "label": null,
+                            "points": 2,
+                            "text": "Упростите выражение $\\dfrac{(\\sqrt{15}-\\sqrt6)\\sqrt3}{3}-\\dfrac{3}{\\sqrt5+\\sqrt2}$.",
+                            "check": "number",
+                            "answer": "0",
+                            "answer_display": "$0$",
+                            "solution": "$\\dfrac{(\\sqrt{15}-\\sqrt6)\\sqrt3}{3}=\\sqrt5-\\sqrt2$; $\\dfrac{3}{\\sqrt5+\\sqrt2}=\\sqrt5-\\sqrt2$. Разность равна $0$."
+                        }
+                    ]
+                },
+                {
+                    "number": 2,
+                    "title": "Наибольшее натуральное число",
+                    "generatable": true,
+                    "parts": [
+                        {
+                            "label": null,
+                            "points": 2,
+                            "text": "Найдите наибольшее натуральное число, не превосходящее числа $(1+\\sqrt3)^2+\\sqrt{7-4\\sqrt3}$.",
+                            "check": "number",
+                            "answer": "7",
+                            "answer_display": "$7$",
+                            "solution": "$(1+\\sqrt3)^2=4+2\\sqrt3$; $\\sqrt{7-4\\sqrt3}=\\sqrt{(2-\\sqrt3)^2}=2-\\sqrt3$. Сумма $=6+\\sqrt3\\approx7{,}73$. Наибольшее натуральное — $7$."
+                        }
+                    ]
+                },
+                {
+                    "number": 3,
+                    "title": "Суммы и комбинаторика",
+                    "generatable": true,
+                    "parts": [
+                        {
+                            "label": "а",
+                            "points": 2,
+                            "text": "Найдите сумму всех натуральных трёхзначных чисел, делящихся на 7, расположенных между числами 153 и 776.",
+                            "check": "number",
+                            "answer": "41118",
+                            "answer_display": "$41\\,118$",
+                            "solution": "Числа $154,161,\\dots,770$ — прогрессия, $89$ членов. Сумма $=\\dfrac{154+770}{2}\\cdot89=41\\,118$."
+                        },
+                        {
+                            "label": "б",
+                            "points": 2,
+                            "text": "Сколько существует четырёхзначных чисел, у которых в десятичной записи присутствует хотя бы одна цифра, кратная 3?",
+                            "check": "number",
+                            "answer": "7704",
+                            "answer_display": "$7704$",
+                            "solution": "Цифры, кратные 3: $0,3,6,9$. Без таких цифр: первая из $6$ вариантов, остальные по $6$: $6^4=1296$. Ответ $9000-1296=7704$."
+                        }
+                    ]
+                },
+                {
+                    "number": 4,
+                    "title": "Решите уравнения",
+                    "generatable": true,
+                    "parts": [
+                        {
+                            "label": "а",
+                            "points": 2,
+                            "text": "$x^3-2x^2+x-2=0$",
+                            "check": "number_set",
+                            "answer": "2",
+                            "answer_display": "$x=2$",
+                            "solution": "$x^2(x-2)+(x-2)=(x-2)(x^2+1)=0$. Так как $x^2+1>0$, единственный корень $x=2$."
+                        },
+                        {
+                            "label": "б",
+                            "points": 2,
+                            "text": "$(x^2-1)^2-4|x^2-1|+3=0$",
+                            "check": "number_set",
+                            "answer": "-2;-√2;0;√2;2",
+                            "answer_display": "$x=-2;\\ -\\sqrt2;\\ 0;\\ \\sqrt2;\\ 2$",
+                            "solution": "Пусть $u=|x^2-1|\\ge0$: $u^2-4u+3=0$, $u=1$ или $u=3$. $|x^2-1|=1\\Rightarrow x^2=2$ ($x=\\pm\\sqrt2$) или $x^2=0$ ($x=0$). $|x^2-1|=3\\Rightarrow x^2=4$ ($x=\\pm2$)."
+                        }
+                    ]
+                },
+                {
+                    "number": 5,
+                    "title": "График функции",
+                    "generatable": false,
+                    "parts": [
+                        {
+                            "label": "а",
+                            "points": 2,
+                            "text": "Постройте график функции $y=|2x-1|-|2x+1|$.",
+                            "check": "display",
+                            "answer": "",
+                            "answer_display": "Ломаная: $y=2$ при $x\\le-\\tfrac12$, $y=-4x$ при $-\\tfrac12\\le x\\le\\tfrac12$, $y=-2$ при $x\\ge\\tfrac12$.",
+                            "solution": "Раскрываем модули на промежутках $x<-\\tfrac12$, $-\\tfrac12\\le x<\\tfrac12$, $x\\ge\\tfrac12$."
+                        },
+                        {
+                            "label": "б",
+                            "points": 1,
+                            "text": "Найдите наибольшее и наименьшее значения функции.",
+                            "check": "display",
+                            "answer": "",
+                            "answer_display": "Наибольшее $=2$, наименьшее $=-2$.",
+                            "solution": "На среднем участке функция убывает от $2$ до $-2$, вне — постоянна. Значит $\\max=2$, $\\min=-2$."
+                        }
+                    ]
+                },
+                {
+                    "number": 6,
+                    "title": "Уравнение с параметром",
+                    "generatable": true,
+                    "parts": [
+                        {
+                            "label": "а",
+                            "points": 2,
+                            "text": "При каких значениях параметра $a$ уравнение $x^2-(a+2)x+2a=0$ имеет ровно два корня?",
+                            "check": "param_condition",
+                            "answer": "a≠2",
+                            "answer_display": "$a\\ne2$",
+                            "solution": "$x^2-(a+2)x+2a=(x-2)(x-a)$, корни $2$ и $a$. Два различных корня — при $a\\ne2$."
+                        },
+                        {
+                            "label": "б",
+                            "points": 1,
+                            "text": "При каких значениях параметра $a$ уравнение $x^2-(a+2)x+2a=0$ имеет ровно два различных положительных корня?",
+                            "check": "param_condition",
+                            "answer": "a>0,a≠2",
+                            "answer_display": "$a>0,\\ a\\ne2$",
+                            "solution": "Корни $2$ и $a$; оба положительны и различны при $a>0$ и $a\\ne2$."
+                        }
+                    ]
+                },
+                {
+                    "number": 7,
+                    "title": "Треугольник со сторонами 24, 7 и 25",
+                    "generatable": false,
+                    "parts": [
+                        {
+                            "label": "а",
+                            "points": 2,
+                            "text": "Дан треугольник со сторонами 24, 7 и 25 см. Найдите высоту треугольника, проведённую к большей стороне.",
+                            "check": "number",
+                            "answer": "6.72",
+                            "answer_display": "$6{,}72$",
+                            "solution": "Треугольник прямоугольный ($7^2+24^2=25^2$), $S=\\tfrac12\\cdot7\\cdot24=84$. Высота к гипотенузе $=\\dfrac{2S}{25}=\\dfrac{168}{25}=6{,}72$."
+                        },
+                        {
+                            "label": "б",
+                            "points": 2,
+                            "text": "В том же треугольнике найдите радиус описанной окружности.",
+                            "check": "number",
+                            "answer": "12.5",
+                            "answer_display": "$12{,}5$",
+                            "solution": "Для прямоугольного треугольника $R=\\dfrac{\\text{гипотенуза}}{2}=\\dfrac{25}{2}=12{,}5$."
+                        },
+                        {
+                            "label": "в",
+                            "points": 2,
+                            "text": "В том же треугольнике найдите радиус вписанной окружности.",
+                            "check": "number",
+                            "answer": "3",
+                            "answer_display": "$3$",
+                            "solution": "$r=\\dfrac{a+b-c}{2}=\\dfrac{7+24-25}{2}=3$."
+                        }
+                    ]
+                },
+                {
+                    "number": 8,
+                    "title": "Ромб в прямоугольнике",
+                    "generatable": false,
+                    "parts": [
+                        {
+                            "label": "а",
+                            "points": 1,
+                            "text": "На сторонах $AB$ и $CD$ прямоугольника $ABCD$ взяты точки $K$ и $M$ так, что $AKCM$ — ромб. Диагональ $AC$ образует со стороной $AB$ угол $30^\\circ$, $AB=6$. Найдите сторону $BC$.",
+                            "check": "number",
+                            "answer": "2√3",
+                            "answer_display": "$2\\sqrt3$",
+                            "solution": "$BC=AB\\cdot\\tan30^\\circ=6\\cdot\\dfrac{1}{\\sqrt3}=2\\sqrt3$."
+                        },
+                        {
+                            "label": "б",
+                            "points": 2,
+                            "text": "В тех же условиях найдите сторону ромба $AKCM$.",
+                            "check": "number",
+                            "answer": "4",
+                            "answer_display": "$4$",
+                            "solution": "При $AB=6,\\ BC=2\\sqrt3$: $s=\\sqrt{(6-s)^2+12}\\Rightarrow s=4$."
+                        }
+                    ]
+                },
+                {
+                    "number": 9,
+                    "title": "Шашки",
+                    "generatable": true,
+                    "parts": [
+                        {
+                            "label": "а",
+                            "points": 1,
+                            "text": "Трое друзей играли в шашки. Один сыграл 32 партии, другой — 24. Мог ли третий сыграть 22 партии?",
+                            "check": "yesno",
+                            "answer": "да",
+                            "answer_display": "Да",
+                            "solution": "Третий сыграл $b+c$, где $a+b=32$, $a+c=24$. $22$ достижимо (например $a=17,b=15,c=7$)."
+                        },
+                        {
+                            "label": "б",
+                            "points": 1,
+                            "text": "…Мог ли третий сыграть 23 партии?",
+                            "check": "yesno",
+                            "answer": "нет",
+                            "answer_display": "Нет",
+                            "solution": "Сумма $32+24+x$ чётна $\\Rightarrow x$ чётно. $23$ нечётно — невозможно."
+                        },
+                        {
+                            "label": "в",
+                            "points": 1,
+                            "text": "…Мог ли третий сыграть 58 партий?",
+                            "check": "yesno",
+                            "answer": "нет",
+                            "answer_display": "Нет",
+                            "solution": "Максимум третьего $=32+24=56<58$. Невозможно."
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

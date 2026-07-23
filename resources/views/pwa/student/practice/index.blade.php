@@ -25,6 +25,13 @@
   </div>
 
   <div class="practice-categories">
+    <a href="{{ route('pwa.student.practice.entrance10.index') }}" class="practice-category">
+      <div class="practice-category-icon">🎓</div>
+      <div>
+        <div class="practice-category-title">Контрольные для 10 класса</div>
+        <div class="practice-category-desc">Вступительная работа в матшколу: полные варианты и отработка по номерам</div>
+      </div>
+    </a>
     @foreach($categories as $category)
       <a href="{{ route('pwa.student.practice.category', $category['slug']) }}" class="practice-category">
         <div class="practice-category-icon">{{ $category['icon'] ?? '🎮' }}</div>
