@@ -28,6 +28,7 @@ class OgeVariant extends Model
     public const EXAM_VPR7 = 'vpr_7';
     public const EXAM_VPR8 = 'vpr_8';
     public const EXAM_EGE  = 'ege';
+    public const EXAM_ENTRANCE10 = 'entrance10';
 
     protected $fillable = [
         'hash',

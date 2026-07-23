@@ -90,40 +90,27 @@ class Entrance10Generator
 
     private function gen1(): array
     {
-        $family = ['conj', 'square', 'zero'][random_int(0, 2)];
+        // Точная копия задачи со скрина, меняются только числа:
+        // (√(pq) ± √(pr))·√p / p − p/(√q ∓ √r), где p = q − r ⇒ выражение = 0.
         $r = random_int(2, 6);
-        $q = $r + random_int(1, 6);
-
-        if ($family === 'conj') {
-            $ans = $q - $r;
-            return $this->task(1, 'Упростите выражение', [
-                $this->part(null, 2,
-                    "Упростите выражение \$(\\sqrt{{$q}}+\\sqrt{{$r}})(\\sqrt{{$q}}-\\sqrt{{$r}})\$.",
-                    'number', (string) $ans, "\${$ans}\$",
-                    "Произведение сопряжённых: \$(\\sqrt{{$q}})^2-(\\sqrt{{$r}})^2={$q}-{$r}={$ans}\$."),
-            ]);
-        }
-
-        if ($family === 'square') {
-            $ans = $q + $r;
-            $qr = $q * $r;
-            return $this->task(1, 'Упростите выражение', [
-                $this->part(null, 2,
-                    "Упростите выражение \$(\\sqrt{{$q}}+\\sqrt{{$r}})^2-2\\sqrt{{$qr}}\$.",
-                    'number', (string) $ans, "\${$ans}\$",
-                    "\$(\\sqrt{{$q}}+\\sqrt{{$r}})^2={$q}+{$r}+2\\sqrt{{$qr}}\$, вычитаем \$2\\sqrt{{$qr}}\$, остаётся \${$ans}\$."),
-            ]);
-        }
-
-        // zero: (√(pq)+√(pr))√p/p − p/(√q−√r), где p=q−r ⇒ выражение = 0
+        $q = $r + random_int(2, 6);   // q > r, чтобы p = q − r ≥ 2
         $p = $q - $r;
         $pq = $p * $q;
         $pr = $p * $r;
+        $minus = random_int(0, 1) === 1; // знак как в вар.1 (−) или вар.2 (+)
+
+        if ($minus) {
+            $expr = "\\dfrac{(\\sqrt{{$pq}}+\\sqrt{{$pr}})\\sqrt{{$p}}}{{$p}}-\\dfrac{{$p}}{\\sqrt{{$q}}-\\sqrt{{$r}}}";
+            $sol = "Первая дробь \$=\\sqrt{{$q}}+\\sqrt{{$r}}\$; вторая после умножения на сопряжённое \$=\\dfrac{{$p}(\\sqrt{{$q}}+\\sqrt{{$r}})}{{$q}-{$r}}=\\sqrt{{$q}}+\\sqrt{{$r}}\$. Разность равна \$0\$.";
+        } else {
+            $expr = "\\dfrac{(\\sqrt{{$pq}}-\\sqrt{{$pr}})\\sqrt{{$p}}}{{$p}}-\\dfrac{{$p}}{\\sqrt{{$q}}+\\sqrt{{$r}}}";
+            $sol = "Первая дробь \$=\\sqrt{{$q}}-\\sqrt{{$r}}\$; вторая после умножения на сопряжённое \$=\\dfrac{{$p}(\\sqrt{{$q}}-\\sqrt{{$r}})}{{$q}-{$r}}=\\sqrt{{$q}}-\\sqrt{{$r}}\$. Разность равна \$0\$.";
+        }
+
         return $this->task(1, 'Упростите выражение', [
             $this->part(null, 2,
-                "Упростите выражение \$\\dfrac{(\\sqrt{{$pq}}+\\sqrt{{$pr}})\\sqrt{{$p}}}{{$p}}-\\dfrac{{$p}}{\\sqrt{{$q}}-\\sqrt{{$r}}}\$.",
-                'number', '0', '$0$',
-                "Первая дробь \$=\\sqrt{{$q}}+\\sqrt{{$r}}\$, вторая после умножения на сопряжённое тоже \$\\sqrt{{$q}}+\\sqrt{{$r}}\$. Разность равна \$0\$."),
+                "Упростите выражение \${$expr}\$.",
+                'number', '0', '$0$', $sol),
         ]);
     }
 
@@ -234,7 +221,15 @@ class Entrance10Generator
             'number_set', implode(';', $tokens), $disp,
             "Группировка: \$x^2(x" . ($p >= 0 ? '+' . $p : (string) $p) . ")-{$m}(x" . ($p >= 0 ? '+' . $p : (string) $p) . ")=(x" . ($p >= 0 ? '+' . $p : (string) $p) . ")(x^2-{$m})=0\$.");
 
-        // б) замена t=(x−h)^2: t^2 − S t + P = 0 с корнями g1^2, g2^2 (целые корни x)
+        // б) квартика заменой — одна из двух семей оригиналов
+        $partB = random_int(0, 1) === 0 ? $this->gen4bSquare() : $this->gen4bAbs();
+
+        return $this->task(4, 'Решите уравнения', [$partA, $partB]);
+    }
+
+    /** №4б, семья вар.1: (x²−2hx+h²)² − S(x−h)² + P = 0, замена t=(x−h)², целые корни. */
+    private function gen4bSquare(): array
+    {
         $h = random_int(1, 3);
         $g = [1, 2, 3];
         shuffle($g);
@@ -245,7 +240,6 @@ class Entrance10Generator
         $P = $t1 * $t2;
         $h2 = $h * $h;
         $twoH = 2 * $h;
-        // (x^2 − 2h x + h^2)^2 − S(x − h)^2 + P = 0
         $trinom = "x^2-{$twoH}x+{$h2}";
         $roots = [];
         foreach ([$g1, $g2] as $gg) {
@@ -253,22 +247,69 @@ class Entrance10Generator
             $roots[] = $h + $gg;
         }
         sort($roots);
-        $tokensB = array_map('strval', $roots);
-        $dispB = '$x=' . implode(';\\ ', $tokensB) . '$';
-        $partB = $this->part('б', 2,
+        $tokens = array_map('strval', $roots);
+        return $this->part('б', 2,
             "\$({$trinom})^2-{$S}(x-{$h})^2+{$P}=0\$",
-            'number_set', implode(';', $tokensB), $dispB,
+            'number_set', implode(';', $tokens), '$x=' . implode(';\\ ', $tokens) . '$',
             "Замена \$t=(x-{$h})^2\$: \$t^2-{$S}t+{$P}=0\$, \$t={$t1}\$ или \$t={$t2}\$. Тогда \$x-{$h}=\\pm{$g1}\$ и \$x-{$h}=\\pm{$g2}\$.");
+    }
 
-        return $this->task(4, 'Решите уравнения', [$partA, $partB]);
+    /** №4б, семья вар.2: (x²−c)² − S|x²−c| + P = 0, замена u=|x²−c|, u=u1,u2>0. */
+    private function gen4bAbs(): array
+    {
+        $c = random_int(1, 4);
+        $u = [1, 2, 3, 4];
+        shuffle($u);
+        [$u1, $u2] = [$u[0], $u[1]];
+        $S = $u1 + $u2;
+        $P = $u1 * $u2;
+
+        // x² = c ± u для каждого u (берём только неотрицательные)
+        $squares = [];
+        foreach ([$u1, $u2] as $uu) {
+            $squares[] = $c + $uu;
+            if ($c - $uu >= 0) {
+                $squares[] = $c - $uu;
+            }
+        }
+        $squares = array_values(array_unique($squares));
+
+        $tokens = [];
+        $disp = [];
+        foreach ($squares as $v) {
+            [$t, $d] = $this->rootTokensForSquare($v);
+            $tokens = array_merge($tokens, $t);
+            $disp = array_merge($disp, $d);
+        }
+
+        return $this->part('б', 2,
+            "\$(x^2-{$c})^2-{$S}|x^2-{$c}|+{$P}=0\$",
+            'number_set', implode(';', $tokens), '$x=' . implode(';\\ ', $disp) . '$',
+            "Замена \$u=|x^2-{$c}|\\ge0\$: \$u^2-{$S}u+{$P}=0\$, \$u={$u1}\$ или \$u={$u2}\$. Отсюда \$x^2={$c}\\pm u\$ (берём \$x^2\\ge0\$).");
+    }
+
+    /**
+     * Корни уравнения x² = v (v ≥ 0): каноничные токены и части для показа.
+     * @return array{0: array<int,string>, 1: array<int,string>}
+     */
+    private function rootTokensForSquare(int $v): array
+    {
+        if ($v === 0) {
+            return [['0'], ['0']];
+        }
+        [$isSq, $s] = $this->isPerfectSquare($v);
+        if ($isSq) {
+            return [[(string) $s, (string) (-$s)], ["\\pm{$s}"]];
+        }
+        return [["√{$v}", "-√{$v}"], ["\\pm\\sqrt{{$v}}"]];
     }
 
     // ---------------------------------------------------------------- №6
 
     private function gen6(): array
     {
-        // Генерация переформулирована под однозначно проверяемый числовой ответ
-        // (без интервалов): уравнение (x−k)(x−param)=0, корни k и param.
+        // Точная копия задачи со скрина, меняется только число k:
+        // x² − (param + k)x + k·param = (x − k)(x − param). Формулировки — как в оригинале.
         $k = random_int(1, 5);
         $param = ['a', 'b'][random_int(0, 1)];
         $lin = "({$param} + {$k})";
@@ -277,13 +318,13 @@ class Entrance10Generator
 
         return $this->task(6, 'Уравнение с параметром', [
             $this->part('а', 2,
-                "При каком значении параметра \${$param}\$ уравнение \${$eq}\$ имеет единственный корень?",
-                'number', (string) $k, "\${$param}={$k}\$",
-                "\${$eq}\\Leftrightarrow(x-{$k})(x-{$param})=0\$, корни \${$k}\$ и \${$param}\$. Они совпадают (единственный корень) при \${$param}={$k}\$."),
+                "При каких значениях параметра \${$param}\$ уравнение \${$eq}\$ имеет ровно два корня?",
+                'param_condition', "{$param}≠{$k}", "\${$param}\\ne{$k}\$",
+                "\${$eq}\\Leftrightarrow(x-{$k})(x-{$param})=0\$, корни \${$k}\$ и \${$param}\$. Два различных корня — при \${$param}\\ne{$k}\$."),
             $this->part('б', 1,
-                "При каком значении параметра \${$param}\$ один из корней уравнения \${$eq}\$ равен нулю?",
-                'number', '0', "\${$param}=0\$",
-                "Произведение корней равно свободному члену \${$k}\\cdot{$param}\$. Корень \$0\$ возможен, когда \${$k}{$param}=0\$, то есть при \${$param}=0\$."),
+                "При каких значениях параметра \${$param}\$ уравнение \${$eq}\$ имеет ровно два различных положительных корня?",
+                'param_condition', "{$param}>0,{$param}≠{$k}", "\${$param}>0,\\ {$param}\\ne{$k}\$",
+                "Корни \${$k}\$ и \${$param}\$; оба положительны и различны при \${$param}>0\$ и \${$param}\\ne{$k}\$."),
         ]);
     }
 

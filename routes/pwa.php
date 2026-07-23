@@ -93,10 +93,16 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
             // Контрольные для поступления в 10 класс
             Route::prefix('entrance10')->name('entrance10.')->group(function () {
                 Route::get('/', [Entrance10Controller::class, 'index'])->name('index');
-                Route::get('/variant/{variant}', [Entrance10Controller::class, 'variant'])->whereNumber('variant')->name('variant');
-                Route::get('/number/{number}', [Entrance10Controller::class, 'number'])->whereNumber('number')->name('number');
+                // База заданий по номерам
+                Route::get('/bank/{number}', [Entrance10Controller::class, 'bank'])->whereNumber('number')->name('bank');
                 Route::post('/api/generate/{number}', [Entrance10Controller::class, 'generate'])->whereNumber('number')->name('generate');
                 Route::post('/api/check', [Entrance10Controller::class, 'check'])->name('check');
+                // Полный вариант
+                Route::post('/start', [Entrance10Controller::class, 'start'])->name('start');
+                Route::get('/exam/{attempt}', [Entrance10Controller::class, 'exam'])->whereNumber('attempt')->name('exam');
+                Route::post('/exam/{attempt}/answer', [Entrance10Controller::class, 'answer'])->whereNumber('attempt')->name('answer');
+                Route::post('/exam/{attempt}/submit', [Entrance10Controller::class, 'submit'])->whereNumber('attempt')->name('submit');
+                Route::get('/results/{attempt}', [Entrance10Controller::class, 'results'])->whereNumber('attempt')->name('results');
             });
         });
 
