@@ -44,6 +44,7 @@ class User extends Authenticatable
         'school_number',
         'city',
         'onboarding_completed_at',
+        'homework_popup_shown_on',
         'evrium_teacher_id',
     ];
 
@@ -59,6 +60,7 @@ class User extends Authenticatable
         'last_active_at' => 'datetime',
         'onboarding_completed_at' => 'datetime',
         'tg_premium_until' => 'datetime',
+        'homework_popup_shown_on' => 'date',
         'tg_trial_used' => 'boolean',
         'name_unverified' => 'boolean',
         'evrium_teacher_id' => 'integer',

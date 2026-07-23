@@ -505,6 +505,7 @@ class TeacherController extends Controller
             // «Домашка по уроку»: привязка к уроку + своё название (оба опциональны).
             'lesson_session_id' => 'nullable|integer|exists:lesson_sessions,id',
             'title' => 'nullable|string|max:160',
+            'deadline' => 'nullable|date',
         ]);
 
         $studentIds = collect($data['student_ids'] ?? [])
@@ -751,6 +752,9 @@ class TeacherController extends Controller
         if ($customTitle = trim((string) $request->input('title', ''))) {
             $homework->title = mb_substr($customTitle, 0, 160);
         }
+        if ($deadline = $request->input('deadline')) {
+            $homework->deadline_at = $deadline;
+        }
 
         $homework->assigned_at = now();
         $homework->save();
@@ -765,8 +769,9 @@ class TeacherController extends Controller
             ]);
         }
 
+        $assignments = [];
         foreach ($studentIds as $studentId) {
-            \App\Models\HomeworkAssignment::create([
+            $assignments[] = \App\Models\HomeworkAssignment::create([
                 'homework_id' => $homework->id,
                 'student_id' => $studentId,
                 'status' => 'assigned',
@@ -774,12 +779,42 @@ class TeacherController extends Controller
             ]);
         }
 
+        $this->notifyNewHomework($homework, $assignments);
+
         $message = 'ДЗ выдано!';
         if ($skipped > 0) {
             $message .= " Пропущено недоступных задач: {$skipped}.";
         }
 
         return back()->with('success', $message);
+    }
+
+    /**
+     * Уведомляет учеников о новом ДЗ (телеграм-канал; in-app покрывает поп-ап).
+     * Ставит notified_at по попытке, чтобы не слать повторно.
+     *
+     * @param  array<int, \App\Models\HomeworkAssignment>  $assignments
+     */
+    private function notifyNewHomework(\App\Models\Homework $homework, array $assignments): void
+    {
+        $notifier = app(\App\Services\StudentNotifier::class);
+        $homeworkUrl = 'https://student.' . config('app.base_domain') . '/homework';
+        $tasksCount = (int) $homework->tasks_count;
+        $deadline = $homework->deadline_at ? ' Срок: ' . $homework->deadline_at->format('d.m') . '.' : '';
+
+        foreach ($assignments as $assignment) {
+            if ($assignment->notified_at !== null) {
+                continue;
+            }
+            $student = $assignment->student()->first();
+            if (!$student) {
+                continue;
+            }
+            $text = '📚 Тебе задали домашку: <b>' . e($homework->title) . '</b> — '
+                . $tasksCount . ' ' . $this->pluralizeTasks($tasksCount) . '.' . $deadline;
+            $notifier->notify($student, $text, $homeworkUrl);
+            $assignment->update(['notified_at' => now()]);
+        }
     }
 
     private function isVprGrade(User $student): bool

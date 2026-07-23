@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -29,5 +30,8 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment('production')) {
             URL::forceScheme('https');
         }
+
+        // Поп-ап о невыполненном ДЗ раз в день — на любой студенческой странице.
+        View::composer('layouts.pwa', \App\Http\View\Composers\HomeworkPopupComposer::class);
     }
 }
