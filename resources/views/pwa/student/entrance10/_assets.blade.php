@@ -40,6 +40,7 @@
   .e10-num-tag { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; }
   .e10-num-tag.gen { color: #16a34a; } .e10-num-tag.stat { color: var(--muted); }
 
+  .e10-task-index { font-size: 11px; font-weight: 800; color: var(--muted); margin: 2px 4px -6px; }
   .e10-task { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 16px; margin-bottom: 14px; }
   .e10-task-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
   .e10-num { display: inline-flex; align-items: center; justify-content: center; min-width: 40px; height: 34px; padding: 0 8px;
@@ -79,10 +80,6 @@
   .e10-result-solution { color: var(--text); opacity: .92; }
   .e10-result-solution b { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .03em; color: var(--muted); margin-bottom: 2px; }
 
-  .e10-gen-btn { width: 100%; border: 1.5px dashed var(--accent-bd); border-radius: 16px; padding: 14px;
-    background: var(--accent-bg); color: var(--accent); font-weight: 800; font-size: 14px; cursor: pointer; margin-bottom: 16px; }
-  .e10-gen-btn:disabled { opacity: .6; }
-  #e10-gen-slot:empty { display: none; }
 @endpush
 
 @push('scripts')
@@ -107,39 +104,6 @@
         ]});
       } catch (e) {}
     }
-  }
-
-  // Разметка одной части — совпадает с _task.blade.php
-  function partHtml(p) {
-    const hint = p.check === 'number_set'
-      ? '<div class="e10-hint">Несколько ответов — через «;» или пробел. Корень: пишите √6 или sqrt6.</div>'
-      : (p.check === 'param_condition'
-        ? '<div class="e10-hint">Например: <code>b ≠ 1</code> или <code>b &gt; 0, b ≠ 1</code>.</div>' : '');
-    const inputRow = p.check === 'display' ? '' :
-      '<div class="e10-input-row">' +
-        '<input type="text" class="e10-input" placeholder="Ответ" autocomplete="off" autocapitalize="off" spellcheck="false">' +
-        '<button type="button" class="e10-btn e10-check">Проверить</button>' +
-      '</div>' + hint;
-    const revealLabel = p.check === 'display' ? 'Показать ответ и решение' : 'Показать ответ';
-    return '<div class="e10-part" data-token="' + esc(p.token) + '" data-check="' + esc(p.check) + '">' +
-        '<div class="e10-part-head">' +
-          (p.label ? '<span class="e10-label">' + esc(p.label) + ')</span>' : '') +
-          '<span class="e10-points">' + p.points + ' ' + ballWord(p.points) + '</span>' +
-        '</div>' +
-        '<div class="e10-text">' + p.text + '</div>' +
-        '<div class="e10-answer">' + inputRow +
-          '<button type="button" class="e10-btn-ghost e10-reveal">' + revealLabel + '</button>' +
-          '<div class="e10-result" hidden></div>' +
-        '</div>' +
-      '</div>';
-  }
-  function taskHtml(t) {
-    const src = t.source ? '<div class="e10-task-source ' + (t.generated ? 'is-gen' : '') + '">' + esc(t.source) + '</div>' : '';
-    return '<div class="e10-task" data-number="' + t.number + '">' +
-        '<div class="e10-task-head"><span class="e10-num">№' + t.number + '</span>' +
-          '<div class="e10-task-titles"><div class="e10-task-title">' + esc(t.title) + '</div>' + src + '</div></div>' +
-        t.parts.map(partHtml).join('') +
-      '</div>';
   }
 
   function showResult(partEl, data, wasReveal) {
@@ -198,28 +162,6 @@
       handleCheck(e.target.closest('.e10-part'), false);
     }
   });
-
-  // Генерация похожей задачи
-  const genBtn = document.getElementById('e10-gen');
-  if (genBtn) {
-    genBtn.addEventListener('click', function () {
-      genBtn.disabled = true;
-      const label = genBtn.textContent;
-      genBtn.textContent = 'Генерирую…';
-      post(genBtn.getAttribute('data-url'), {})
-        .then(data => {
-          if (data && data.task) {
-            const slot = document.getElementById('e10-gen-slot');
-            const wrap = document.createElement('div');
-            wrap.innerHTML = taskHtml(data.task);
-            const node = wrap.firstElementChild;
-            slot.insertBefore(node, slot.firstChild);
-            renderMath(node);
-          }
-        })
-        .finally(() => { genBtn.disabled = false; genBtn.textContent = label; });
-    });
-  }
 })();
 </script>
 @endpush

@@ -48,7 +48,7 @@
         <span class="e10-num-badge">{{ $num['number'] }}</span>
         <span class="e10-num-label">{{ $num['title'] }}</span>
         <span class="e10-num-tag {{ $num['generatable'] ? 'gen' : 'stat' }}">
-          {{ $num['generatable'] ? '∞ аналоги' : 'из вариантов' }}
+          {{ $num['generatable'] ? '20 задач' : '2 задачи' }}
         </span>
       </a>
     @endforeach

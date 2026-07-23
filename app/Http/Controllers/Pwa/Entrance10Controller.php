@@ -51,21 +51,8 @@ class Entrance10Controller extends Controller
             'meta' => $this->service->meta(),
             'info' => $info,
             'numbers' => $this->service->numbers(),
-            'staticTasks' => $this->service->staticTasksForNumber($number),
-            'generatable' => $this->service->isGeneratable($number),
+            'tasks' => $this->service->bankTasksForNumber($number),
         ]);
-    }
-
-    public function generate(int $number): JsonResponse
-    {
-        if (!$this->service->isGeneratable($number)) {
-            return response()->json(['error' => 'not_generatable'], 422);
-        }
-        try {
-            return response()->json(['task' => $this->service->generatedTaskForView($number)]);
-        } catch (InvalidArgumentException) {
-            return response()->json(['error' => 'unknown_number'], 404);
-        }
     }
 
     public function check(Request $request): JsonResponse
