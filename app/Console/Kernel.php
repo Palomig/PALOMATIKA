@@ -24,6 +24,11 @@ class Kernel extends ConsoleKernel
         $schedule->command('lesson-sessions:auto-close')
                  ->everyFifteenMinutes()
                  ->withoutOverlapping();
+
+        // Раз в день утром — напоминания о ДЗ со сроком сегодня/завтра
+        $schedule->command('homework:remind-deadlines')
+                 ->dailyAt('08:00')
+                 ->withoutOverlapping();
     }
 
     /**
