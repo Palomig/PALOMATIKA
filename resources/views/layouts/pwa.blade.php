@@ -362,6 +362,7 @@
 @stack('scripts')
 
 @include('pwa.shared.bug-report')
+@include('pwa.shared.homework-popup')
 
 </body>
 </html>
