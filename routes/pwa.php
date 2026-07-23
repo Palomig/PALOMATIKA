@@ -3,6 +3,7 @@
 use App\Http\Controllers\Pwa\AuthController;
 use App\Http\Controllers\Pwa\BugReportController;
 use App\Http\Controllers\Pwa\EgeStudentController;
+use App\Http\Controllers\Pwa\Entrance10Controller;
 use App\Http\Controllers\Pwa\ManifestController;
 use App\Http\Controllers\Pwa\PracticeController;
 use App\Http\Controllers\Pwa\StudentController;
@@ -88,6 +89,15 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
             Route::post('/api/mini-games/{slug}/start', [PracticeController::class, 'startRun'])->name('mini-games.start');
             Route::post('/api/mini-games/{slug}/answer', [PracticeController::class, 'answerRun'])->name('mini-games.answer');
             Route::post('/api/mini-games/{slug}/timeout', [PracticeController::class, 'timeoutRun'])->name('mini-games.timeout');
+
+            // Контрольные для поступления в 10 класс
+            Route::prefix('entrance10')->name('entrance10.')->group(function () {
+                Route::get('/', [Entrance10Controller::class, 'index'])->name('index');
+                Route::get('/variant/{variant}', [Entrance10Controller::class, 'variant'])->whereNumber('variant')->name('variant');
+                Route::get('/number/{number}', [Entrance10Controller::class, 'number'])->whereNumber('number')->name('number');
+                Route::post('/api/generate/{number}', [Entrance10Controller::class, 'generate'])->whereNumber('number')->name('generate');
+                Route::post('/api/check', [Entrance10Controller::class, 'check'])->name('check');
+            });
         });
 
         // ЕГЭ (10–11 класс)

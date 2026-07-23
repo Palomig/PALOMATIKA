@@ -2,6 +2,8 @@
 !public/
 !tasks/
 !tasks/*.json
+!tasks/entrance10/
+!tasks/entrance10/*.json
 !tasks/ege/
 !tasks/ege/*.json
 !tasks/vpr/
