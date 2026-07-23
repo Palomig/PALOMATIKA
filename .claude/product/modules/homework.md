@@ -2,6 +2,16 @@
 
 > Дата скана: 2026-05-07 (после редизайна #44). Активный модуль в разработке. Источник истины — код, эта карта — навигация.
 
+## Уведомления ученику о ДЗ — Фаза 1 (2026-07-23)
+
+- **`StudentNotifier`** (`app/Services/StudentNotifier.php`) — `notify(User, text, url)`; телеграм-канал (только `oauth_provider='telegram'`, chat_id=`oauth_id`), `Http` фасад (fakeable). Web push — Фаза 2 (заглушка).
+- **Новое ДЗ** → `TeacherController::notifyNewHomework()` после назначений; дедуп `homework_assignments.notified_at`.
+- **Напоминание о сроке** → команда `homework:remind-deadlines` (планировщик `dailyAt 08:00`), ДЗ со сроком сегодня/завтра, `status != completed`, дедуп `reminded_at`.
+- **In-app поп-ап** (раз в день) → `HomeworkPopupComposer` на `layouts.pwa`, партиал `pwa/shared/homework-popup.blade.php`; частота через `users.homework_popup_shown_on`; скип на homework/lesson-страницах.
+- Новые поля: `homework_assignments.notified_at`/`reminded_at`, `users.homework_popup_shown_on` (миграция `2026_07_23_000002`).
+- Предусловие: `assignFromPicker` сохраняет `deadline` → `homeworks.deadline_at`.
+- Тесты: `StudentNotifierTest`, `HomeworkPopupTest`, `RemindHomeworkDeadlinesTest`, `PwaHomeworkPhotoPracticeTest::test_assign_notifies_*`.
+
 ## Домашка по итогам урока (2026-07-23, ветка `claude/lesson-v2`)
 
 Кнопка «📚 Домашка по уроку» на учительской странице урока (`lesson-prep.blade.php`)
