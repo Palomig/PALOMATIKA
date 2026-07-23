@@ -18,13 +18,23 @@
     </div>
   </div>
 
+  @if(!empty($task['stem']))
+    <div class="e10-stem">{!! $task['stem']['instruction'] !!}</div>
+    @if(!empty($task['stem']['expression']))<div class="e10-expr">{!! $task['stem']['expression'] !!}</div>@endif
+  @endif
+
   @foreach($task['parts'] as $part)
     <div class="e10-part" data-token="{{ $part['token'] }}" data-check="{{ $part['check'] }}">
       <div class="e10-part-head">
         @if(!empty($part['label']))<span class="e10-label">{{ $part['label'] }})</span>@endif
         <span class="e10-points">{{ $part['points'] }} {{ $ballWord((int) $part['points']) }}</span>
       </div>
-      <div class="e10-text">{!! $part['text'] !!}</div>
+      @if(!empty($part['instruction']))
+        <div class="e10-text">{!! $part['instruction'] !!}</div>
+        @if(!empty($part['expression']))<div class="e10-expr">{!! $part['expression'] !!}</div>@endif
+      @else
+        <div class="e10-text">{!! $part['text'] !!}</div>
+      @endif
       <div class="e10-answer">
         @if($part['check'] !== 'display')
           <div class="e10-input-row">

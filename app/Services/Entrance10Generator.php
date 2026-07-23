@@ -41,17 +41,27 @@ class Entrance10Generator
 
     // ---------------------------------------------------------------- helpers
 
-    private function task(int $number, string $title, array $parts): array
+    private function task(int $number, string $title, array $parts, ?array $stem = null): array
     {
-        return ['number' => $number, 'title' => $title, 'parts' => $parts, 'generated' => true];
+        $task = ['number' => $number, 'title' => $title, 'parts' => $parts, 'generated' => true];
+        if ($stem !== null) {
+            $task['stem'] = $stem;
+        }
+        return $task;
     }
 
-    private function part(?string $label, int $points, string $text, string $check, string $answer, string $answerDisplay, string $solution): array
+    /**
+     * $instruction/$expression — для показа условия и «примера» на разных строках
+     * (первая строка — текст, вторая — формула). $text остаётся полным (для истории).
+     */
+    private function part(?string $label, int $points, string $text, string $check, string $answer, string $answerDisplay, string $solution, ?string $instruction = null, ?string $expression = null): array
     {
         return [
             'label' => $label,
             'points' => $points,
             'text' => $text,
+            'instruction' => $instruction,
+            'expression' => $expression,
             'check' => $check,
             'answer' => $answer,
             'answer_display' => $answerDisplay,
@@ -110,7 +120,8 @@ class Entrance10Generator
         return $this->task(1, 'Упростите выражение', [
             $this->part(null, 2,
                 "Упростите выражение \${$expr}\$.",
-                'number', '0', '$0$', $sol),
+                'number', '0', '$0$', $sol,
+                'Упростите выражение', "\${$expr}\$"),
         ]);
     }
 
@@ -145,7 +156,8 @@ class Entrance10Generator
         return $this->task(2, 'Наибольшее натуральное число', [
             $this->part(null, 2,
                 "Найдите наибольшее натуральное число, не превосходящее числа \${$head}+\\sqrt{{$inner}}\$.",
-                'number', (string) $ans, "\${$ans}\$", $sol),
+                'number', (string) $ans, "\${$ans}\$", $sol,
+                'Найдите наибольшее натуральное число, не превосходящее числа', "\${$head}+\\sqrt{{$inner}}\$"),
         ]);
     }
 
@@ -315,17 +327,23 @@ class Entrance10Generator
         $lin = "({$param} + {$k})";
         $prod = $k === 1 ? $param : "{$k}{$param}";
         $eq = "x^2-{$lin}x+{$prod}=0";
+        $stem = [
+            'instruction' => "При каких значениях параметра \${$param}\$ уравнение",
+            'expression' => "\${$eq}\$",
+        ];
 
         return $this->task(6, 'Уравнение с параметром', [
             $this->part('а', 2,
                 "При каких значениях параметра \${$param}\$ уравнение \${$eq}\$ имеет ровно два корня?",
                 'param_condition', "{$param}≠{$k}", "\${$param}\\ne{$k}\$",
-                "\${$eq}\\Leftrightarrow(x-{$k})(x-{$param})=0\$, корни \${$k}\$ и \${$param}\$. Два различных корня — при \${$param}\\ne{$k}\$."),
+                "\${$eq}\\Leftrightarrow(x-{$k})(x-{$param})=0\$, корни \${$k}\$ и \${$param}\$. Два различных корня — при \${$param}\\ne{$k}\$.",
+                'имеет ровно два корня?'),
             $this->part('б', 1,
                 "При каких значениях параметра \${$param}\$ уравнение \${$eq}\$ имеет ровно два различных положительных корня?",
                 'param_condition', "{$param}>0,{$param}≠{$k}", "\${$param}>0,\\ {$param}\\ne{$k}\$",
-                "Корни \${$k}\$ и \${$param}\$; оба положительны и различны при \${$param}>0\$ и \${$param}\\ne{$k}\$."),
-        ]);
+                "Корни \${$k}\$ и \${$param}\$; оба положительны и различны при \${$param}>0\$ и \${$param}\\ne{$k}\$.",
+                'имеет ровно два различных положительных корня?'),
+        ], $stem);
     }
 
     // ---------------------------------------------------------------- №9

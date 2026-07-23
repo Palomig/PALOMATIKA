@@ -179,6 +179,8 @@ class Entrance10Service
                 'label' => $p['label'] ?? null,
                 'points' => (int) ($p['points'] ?? 0),
                 'text' => (string) ($p['text'] ?? ''),
+                'instruction' => $p['instruction'] ?? null,
+                'expression' => $p['expression'] ?? null,
                 'check' => (string) ($p['check'] ?? 'display'),
                 'token' => $token,
             ];
@@ -187,6 +189,7 @@ class Entrance10Service
         return [
             'number' => (int) $task['number'],
             'title' => (string) ($task['title'] ?? ''),
+            'stem' => $task['stem'] ?? null,
             'source' => $task['source'] ?? null,
             'generated' => (bool) ($task['generated'] ?? false),
             'parts' => $parts,
@@ -431,6 +434,7 @@ class Entrance10Service
     private function slotsForTask(array $task): array
     {
         $number = (int) $task['number'];
+        $stem = $task['stem'] ?? null;
         $slots = [];
         foreach (($task['parts'] ?? []) as $part) {
             $label = $part['label'] ?? null;
@@ -444,6 +448,10 @@ class Entrance10Service
                 'display_label' => $number . ($label ?? ''),
                 'points' => (int) ($part['points'] ?? 0),
                 'text' => (string) ($part['text'] ?? ''),
+                'instruction' => $part['instruction'] ?? null,
+                'expression' => $part['expression'] ?? null,
+                'stem_instruction' => $stem['instruction'] ?? null,
+                'stem_expression' => $stem['expression'] ?? null,
                 'check' => $check,
                 'manual' => $check === 'display',
                 'answer' => (string) ($part['answer'] ?? ''),
@@ -596,9 +604,17 @@ class Entrance10Service
             }
             $n = (int) $t['number'];
             if (!isset($groups[$n])) {
+                $stem = null;
+                if (!empty($t['stem_instruction']) || !empty($t['stem_expression'])) {
+                    $stem = [
+                        'instruction' => (string) ($t['stem_instruction'] ?? ''),
+                        'expression' => (string) ($t['stem_expression'] ?? ''),
+                    ];
+                }
                 $groups[$n] = [
                     'number' => $n,
                     'title' => $numbers[$n]['title'] ?? ('Задание ' . $n),
+                    'stem' => $stem,
                     'parts' => [],
                 ];
             }
@@ -608,6 +624,8 @@ class Entrance10Service
                 'display_label' => $t['display_label'] ?? ($n . ($t['label'] ?? '')),
                 'points' => (int) ($t['points'] ?? 0),
                 'text' => (string) ($t['text'] ?? ''),
+                'instruction' => $t['instruction'] ?? null,
+                'expression' => $t['expression'] ?? null,
                 'check' => (string) ($t['check'] ?? 'display'),
                 'manual' => (bool) ($t['manual'] ?? false),
             ];
