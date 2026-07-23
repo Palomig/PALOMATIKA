@@ -2,6 +2,9 @@
 @section('title', 'Урок — palomatika')
 
 @push('katex')
+{{-- SDK Телеграма: на обычной странице безвреден, в мини-аппе даёт события
+     activated/deactivated — без них свёрнутый вебвью выглядит как «на уроке». --}}
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js"
@@ -140,6 +143,10 @@
       hiddenAt: null,      // когда вкладка ушла в hidden (для оверлея «Продолжить»)
       resumeVisible: false,
       resumeAwaySec: 0,
+      inTelegram: false,   // страница открыта в вебвью Telegram mini app
+      tgActive: true,      // мини-апп не свёрнут (activated/deactivated)
+      lastSentVisible: null, // дедуп: visibilitychange и tg-события могут дублироваться
+      lastInteraction: Date.now(),
 
       async init() {
         await this.refreshState();
@@ -153,17 +160,68 @@
       },
 
       // Отслеживание присутствия: сервер строит таймлайн present/away.
+      // В вебвью Telegram mini app сворачивание НЕ переводит документ в hidden
+      // и не даёт pagehide — страница живёт в фоне. Поэтому: события
+      // activated/deactivated из Telegram WebApp API (Bot API 8.0+), а для
+      // старых клиентов страховка — без взаимодействий heartbeat не продлевает
+      // present, и сервер обрезает интервал по stale (25 сек).
       initActivityTracking() {
-        this.sendActivity(document.visibilityState === 'visible');
-        document.addEventListener('visibilitychange', () => {
-          this.sendActivity(document.visibilityState === 'visible');
-        });
-        // Heartbeat: пока вкладка видима — продлеваем present (детект молчаливого ухода).
+        const INACTIVITY_MAX_MS = 180000; // 3 мин без тача/клавиатуры в Телеграме = не на уроке
+        const tg = window.Telegram && window.Telegram.WebApp;
+        this.inTelegram = !!(window.TelegramWebviewProxy || (tg && (tg.initData || tg.platform !== 'unknown')));
+
+        if (this.inTelegram && tg && tg.onEvent) {
+          try {
+            if (tg.isActive === false) this.tgActive = false;
+            tg.onEvent('deactivated', () => { this.tgActive = false; this.onVisibilityChanged(); });
+            tg.onEvent('activated', () => {
+              this.tgActive = true;
+              this.lastInteraction = Date.now();
+              this.onVisibilityChanged();
+            });
+          } catch (e) { /* старый клиент без этих событий */ }
+        }
+
+        ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach((ev) =>
+          document.addEventListener(ev, () => { this.lastInteraction = Date.now(); },
+            { passive: true, capture: true }));
+
+        this.lastSentVisible = this.isOnPage();
+        this.sendActivity(this.lastSentVisible);
+        document.addEventListener('visibilitychange', () => this.onVisibilityChanged());
+        // Heartbeat: пока страница «на уроке» — продлеваем present (детект молчаливого ухода).
         setInterval(() => {
-          if (document.visibilityState === 'visible') this.sendActivity(true);
+          if (!this.isOnPage()) return;
+          if (this.inTelegram && Date.now() - this.lastInteraction > INACTIVITY_MAX_MS) return;
+          this.sendActivity(true);
         }, 10000);
         // Закрытие вкладки/сворачивание приложения — надёжно через sendBeacon.
         window.addEventListener('pagehide', () => this.beaconActivity(false));
+      },
+
+      isOnPage() {
+        return document.visibilityState === 'visible' && this.tgActive;
+      },
+
+      // Единая точка смены видимости (DOM + Telegram): presence и оверлей «Продолжить».
+      onVisibilityChanged() {
+        const RESUME_MIN_AWAY = 10; // сек отлучки → по возврату оверлей
+        const visible = this.isOnPage();
+        if (visible === this.lastSentVisible) return;
+        this.lastSentVisible = visible;
+        this.sendActivity(visible);
+
+        if (!visible) {
+          if (!this.hiddenAt) this.hiddenAt = Date.now();
+          return;
+        }
+        if (!this.hiddenAt) return;
+        const away = Math.round((Date.now() - this.hiddenAt) / 1000);
+        this.hiddenAt = null;
+        if (this.status !== 'ended' && away >= RESUME_MIN_AWAY) {
+          this.resumeAwaySec = away;
+          this.resumeVisible = true;
+        }
       },
 
       sendActivity(visible) {
@@ -177,25 +235,9 @@
         }).catch(() => {});
       },
 
-      // Поведенческие сигналы: копирование условия, вставка ответа,
-      // пауза «Продолжить» после отлучки. Всё уходит в /event, учитель видит сводку.
+      // Поведенческие сигналы: копирование условия, вставка ответа.
+      // Пауза «Продолжить» после отлучки — в onVisibilityChanged().
       initBehaviorTracking() {
-        // Отлучка ≥ 10 сек → по возврату оверлей, задачи закрыты до клика.
-        const RESUME_MIN_AWAY = 10;
-        document.addEventListener('visibilitychange', () => {
-          if (document.visibilityState === 'hidden') {
-            this.hiddenAt = Date.now();
-            return;
-          }
-          if (!this.hiddenAt || this.status === 'ended') return;
-          const away = Math.round((Date.now() - this.hiddenAt) / 1000);
-          this.hiddenAt = null;
-          if (away >= RESUME_MIN_AWAY) {
-            this.resumeAwaySec = away;
-            this.resumeVisible = true;
-          }
-        });
-
         // Скопировал текст внутри карточки задачи (не свой ответ из инпута).
         document.addEventListener('copy', () => {
           if (this.status === 'ended') return;
