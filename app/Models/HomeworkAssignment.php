@@ -19,12 +19,16 @@ class HomeworkAssignment extends Model
         'tasks_correct',
         'started_at',
         'completed_at',
+        'notified_at',
+        'reminded_at',
     ];
 
     protected $casts = [
         'started_at' => 'datetime',
         'completed_at' => 'datetime',
         'created_at' => 'datetime',
+        'notified_at' => 'datetime',
+        'reminded_at' => 'datetime',
     ];
 
     public function homework(): BelongsTo
