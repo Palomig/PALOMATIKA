@@ -406,4 +406,56 @@ class PwaHomeworkPhotoPracticeTest extends TestCase
             ->assertOk()
             ->assertSee('/images/tasks/10/p-05-new.jpg', false);
     }
+
+    public function test_assign_from_picker_links_lesson_and_custom_title(): void
+    {
+        $teacher = User::factory()->create(['role' => 'teacher', 'onboarding_completed_at' => now()]);
+        $student = User::factory()->create(['role' => 'student', 'grade_num' => 7, 'onboarding_completed_at' => now()]);
+        TeacherStudent::create(['teacher_id' => $teacher->id, 'student_id' => $student->id, 'source' => 'manual']);
+
+        $lesson = \App\Models\LessonSession::create(['teacher_id' => $teacher->id, 'status' => 'ended']);
+
+        $pickerTasks = json_encode([[
+            'bank' => 'alg-skill',
+            'refs' => ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 3],
+        ]]);
+
+        $this->actingAs($teacher)->post('http://teacher.palomatika.ru/homework/assign', [
+            'type' => 'topic_photo_practice',
+            'student_ids' => [$student->id],
+            'picker_tasks' => $pickerTasks,
+            'lesson_session_id' => $lesson->id,
+            'title' => 'ДЗ по уроку 22.07',
+        ])->assertRedirect()->assertSessionHasNoErrors();
+
+        $homework = Homework::query()->latest('id')->firstOrFail();
+        $this->assertSame($lesson->id, $homework->lesson_session_id);
+        $this->assertSame('ДЗ по уроку 22.07', $homework->title);
+    }
+
+    public function test_assign_from_picker_ignores_foreign_lesson_id(): void
+    {
+        $teacher = User::factory()->create(['role' => 'teacher', 'onboarding_completed_at' => now()]);
+        $other = User::factory()->create(['role' => 'teacher', 'onboarding_completed_at' => now()]);
+        $student = User::factory()->create(['role' => 'student', 'grade_num' => 7, 'onboarding_completed_at' => now()]);
+        TeacherStudent::create(['teacher_id' => $teacher->id, 'student_id' => $student->id, 'source' => 'manual']);
+
+        $foreignLesson = \App\Models\LessonSession::create(['teacher_id' => $other->id, 'status' => 'ended']);
+
+        $pickerTasks = json_encode([[
+            'bank' => 'alg-skill',
+            'refs' => ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 3],
+        ]]);
+
+        $this->actingAs($teacher)->post('http://teacher.palomatika.ru/homework/assign', [
+            'type' => 'topic_photo_practice',
+            'student_ids' => [$student->id],
+            'picker_tasks' => $pickerTasks,
+            'lesson_session_id' => $foreignLesson->id,
+        ])->assertRedirect()->assertSessionHasNoErrors();
+
+        $homework = Homework::query()->latest('id')->firstOrFail();
+        // Чужой урок не привязывается (мягко игнорируем, ДЗ всё равно создаётся).
+        $this->assertNull($homework->lesson_session_id);
+    }
 }
