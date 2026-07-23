@@ -2,6 +2,18 @@
 
 > Дата скана: 2026-05-07 (после редизайна #44). Активный модуль в разработке. Источник истины — код, эта карта — навигация.
 
+## Домашка по итогам урока (2026-07-23, ветка `claude/lesson-v2`)
+
+Кнопка «📚 Домашка по уроку» на учительской странице урока (`lesson-prep.blade.php`)
+предлагает аналоги разобранных задач; учитель отмечает нужные и отправляет участникам.
+
+- **`homeworks.lesson_session_id`** (nullable FK на `lesson_sessions`, миграция `2026_07_23_000001`) — связь ДЗ с уроком, для плашки «уже отправлялось».
+- **`LessonHomeworkSuggestionService::suggestionsFor()`** — группирует задачи урока по заданию (`oge/ege/vpr/alg-topic`: тема+номер; `alg-skill`: навык+уровень), подбирает неиспользованные аналоги из JSON-банка, превью через `TaskBankResolver`. Флаг `no_analogs`, счётчик `solved`.
+- **`GET /lessons/{id}/homework-suggestions`** (`TeacherLessonController::homeworkSuggestions`) → `{groups, participants, other_students, prior_homeworks}`. Владелец урока только (403 чужому).
+- **Отправка** — через существующий `POST /homework/assign` (`assignFromPicker`): `picker_tasks` + `student_ids` + новые `lesson_session_id` (только свой урок) и `title`. Участники своего урока авторизованы как получатели даже без `TeacherStudent` (вошли по коду).
+- Тип ДЗ — `topic_photo_practice`, ученический флоу без изменений.
+- Тесты: `LessonHomeworkSuggestionServiceTest`, `TeacherLessonControllerTest::test_homework_suggestions_*`, `PwaHomeworkPhotoPracticeTest::test_assign_from_*`.
+
 ## Статус
 
 **На проде, в самом начале использования.** Текущие данные:
