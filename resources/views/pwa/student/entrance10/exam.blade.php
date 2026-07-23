@@ -23,6 +23,9 @@
   .ex-lab { font-weight:800; color:var(--accent); font-size:15px; }
   .ex-pts { font-size:10.5px; font-weight:700; color:var(--muted); background:var(--accent-bg); border-radius:999px; padding:2px 8px; }
   .ex-text { font-size:14.5px; line-height:1.5; margin-bottom:10px; }
+  .ex-qstem { margin-bottom:4px; }
+  .ex-expr { font-size:17px; text-align:center; margin:2px 0 12px; overflow-x:auto; }
+  .ex-expr .katex { font-size:1.12em; }
   .ex-input { width:100%; border:1.5px solid var(--border); border-radius:12px; padding:11px 12px; font-size:16px; background:var(--bg); color:var(--text); }
   .ex-input:focus { outline:none; border-color:var(--accent); }
   .ex-manual { font-size:12.5px; font-weight:600; color:var(--muted); background:var(--accent-bg); border:1px dashed var(--accent-bd); border-radius:12px; padding:10px 12px; }
@@ -65,13 +68,27 @@
       <span class="ex-stem-num" x-text="'№' + currentGroup.number"></span>
       <div class="ex-stem-title" x-text="currentGroup.title"></div>
     </div>
+    <template x-if="currentGroup.stem">
+      <div class="ex-qstem">
+        <div class="ex-text" x-html="currentGroup.stem.instruction"></div>
+        <template x-if="currentGroup.stem.expression"><div class="ex-expr" x-html="currentGroup.stem.expression"></div></template>
+      </div>
+    </template>
     <template x-for="part in currentGroup.parts" :key="part.slot">
       <div class="ex-part">
         <div class="ex-part-head">
           <template x-if="part.label"><span class="ex-lab" x-text="part.label + ')'"></span></template>
           <span class="ex-pts" x-text="part.points + ' ' + ballWord(part.points)"></span>
         </div>
-        <div class="ex-text" x-html="part.text"></div>
+        <template x-if="part.instruction">
+          <div>
+            <div class="ex-text" x-html="part.instruction"></div>
+            <template x-if="part.expression"><div class="ex-expr" x-html="part.expression"></div></template>
+          </div>
+        </template>
+        <template x-if="!part.instruction">
+          <div class="ex-text" x-html="part.text"></div>
+        </template>
         <template x-if="part.manual">
           <div class="ex-manual">✍️ Построй график на бумаге — этот пункт проверяется вручную.</div>
         </template>

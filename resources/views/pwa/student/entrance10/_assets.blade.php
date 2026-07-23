@@ -56,6 +56,9 @@
   .e10-points { font-size: 10.5px; font-weight: 700; color: var(--muted); background: var(--accent-bg); border-radius: 999px; padding: 2px 8px; }
   .e10-text { font-size: 14.5px; line-height: 1.5; margin-bottom: 10px; }
   .e10-text .katex { font-size: 1.02em; }
+  .e10-stem { font-size: 14.5px; line-height: 1.5; margin-bottom: 6px; }
+  .e10-expr { font-size: 16px; text-align: center; margin: 4px 0 12px; overflow-x: auto; }
+  .e10-expr .katex { font-size: 1.1em; }
 
   .e10-input-row { display: flex; gap: 8px; }
   .e10-input { flex: 1; min-width: 0; border: 1.5px solid var(--border); border-radius: 12px; padding: 10px 12px;
