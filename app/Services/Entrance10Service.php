@@ -455,7 +455,8 @@ class Entrance10Service
         $meta = $this->meta();
 
         return OgeVariant::create([
-            'hash' => 'e10_' . bin2hex(random_bytes(12)),
+            // Колонка hash — varchar(16). Префикс e10 + 12 hex = 15 символов.
+            'hash' => 'e10' . bin2hex(random_bytes(6)),
             'exam_type' => OgeVariant::EXAM_ENTRANCE10,
             'source' => 'entrance10',
             'created_via' => 'entrance10',
