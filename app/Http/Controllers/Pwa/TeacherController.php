@@ -505,6 +505,7 @@ class TeacherController extends Controller
             // «Домашка по уроку»: привязка к уроку + своё название (оба опциональны).
             'lesson_session_id' => 'nullable|integer|exists:lesson_sessions,id',
             'title' => 'nullable|string|max:160',
+            'deadline' => 'nullable|date',
         ]);
 
         $studentIds = collect($data['student_ids'] ?? [])
@@ -750,6 +751,9 @@ class TeacherController extends Controller
         }
         if ($customTitle = trim((string) $request->input('title', ''))) {
             $homework->title = mb_substr($customTitle, 0, 160);
+        }
+        if ($deadline = $request->input('deadline')) {
+            $homework->deadline_at = $deadline;
         }
 
         $homework->assigned_at = now();

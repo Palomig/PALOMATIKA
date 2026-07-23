@@ -433,6 +433,28 @@ class PwaHomeworkPhotoPracticeTest extends TestCase
         $this->assertSame('ДЗ по уроку 22.07', $homework->title);
     }
 
+    public function test_assign_from_picker_saves_deadline(): void
+    {
+        $teacher = User::factory()->create(['role' => 'teacher', 'onboarding_completed_at' => now()]);
+        $student = User::factory()->create(['role' => 'student', 'grade_num' => 7, 'onboarding_completed_at' => now()]);
+        TeacherStudent::create(['teacher_id' => $teacher->id, 'student_id' => $student->id, 'source' => 'manual']);
+
+        $pickerTasks = json_encode([[
+            'bank' => 'alg-skill',
+            'refs' => ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 3],
+        ]]);
+
+        $this->actingAs($teacher)->post('http://teacher.palomatika.ru/homework/assign', [
+            'type' => 'topic_photo_practice',
+            'student_ids' => [$student->id],
+            'picker_tasks' => $pickerTasks,
+            'deadline' => '2026-08-01',
+        ])->assertRedirect()->assertSessionHasNoErrors();
+
+        $homework = Homework::query()->latest('id')->firstOrFail();
+        $this->assertSame('2026-08-01', $homework->deadline_at?->format('Y-m-d'));
+    }
+
     public function test_assign_from_lesson_authorizes_unlinked_participant(): void
     {
         $teacher = User::factory()->create(['role' => 'teacher', 'onboarding_completed_at' => now()]);
