@@ -433,6 +433,37 @@ class PwaHomeworkPhotoPracticeTest extends TestCase
         $this->assertSame('ДЗ по уроку 22.07', $homework->title);
     }
 
+    public function test_assign_notifies_telegram_student_and_marks_notified(): void
+    {
+        \Illuminate\Support\Facades\Http::fake(['api.telegram.org/*' => \Illuminate\Support\Facades\Http::response(['ok' => true], 200)]);
+        config(['services.telegram.bot_token' => 'TESTTOKEN']);
+
+        $teacher = User::factory()->create(['role' => 'teacher', 'onboarding_completed_at' => now()]);
+        $student = User::factory()->create([
+            'role' => 'student', 'grade_num' => 7, 'onboarding_completed_at' => now(),
+            'oauth_provider' => 'telegram', 'oauth_id' => '770001',
+        ]);
+        TeacherStudent::create(['teacher_id' => $teacher->id, 'student_id' => $student->id, 'source' => 'manual']);
+
+        $pickerTasks = json_encode([[
+            'bank' => 'alg-skill',
+            'refs' => ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 3],
+        ]]);
+
+        $this->actingAs($teacher)->post('http://teacher.palomatika.ru/homework/assign', [
+            'type' => 'topic_photo_practice',
+            'student_ids' => [$student->id],
+            'picker_tasks' => $pickerTasks,
+        ])->assertRedirect()->assertSessionHasNoErrors();
+
+        \Illuminate\Support\Facades\Http::assertSent(fn ($r) => $r['chat_id'] === '770001'
+            && str_contains($r['text'], 'домашк'));
+
+        $this->assertDatabaseMissing('homework_assignments', [
+            'student_id' => $student->id, 'notified_at' => null,
+        ]);
+    }
+
     public function test_assign_from_picker_saves_deadline(): void
     {
         $teacher = User::factory()->create(['role' => 'teacher', 'onboarding_completed_at' => now()]);
