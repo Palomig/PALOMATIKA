@@ -433,6 +433,38 @@ class PwaHomeworkPhotoPracticeTest extends TestCase
         $this->assertSame('ДЗ по уроку 22.07', $homework->title);
     }
 
+    public function test_assign_from_lesson_authorizes_unlinked_participant(): void
+    {
+        $teacher = User::factory()->create(['role' => 'teacher', 'onboarding_completed_at' => now()]);
+        // Ученик вошёл в урок по коду, но НЕ в списке учеников учителя (нет TeacherStudent).
+        $student = User::factory()->create(['role' => 'student', 'grade_num' => 7, 'onboarding_completed_at' => now()]);
+
+        $lesson = \App\Models\LessonSession::create(['teacher_id' => $teacher->id, 'status' => 'ended']);
+        \App\Models\LessonSessionParticipant::create([
+            'lesson_session_id' => $lesson->id,
+            'student_id' => $student->id,
+            'source' => 'code',
+        ]);
+
+        $pickerTasks = json_encode([[
+            'bank' => 'alg-skill',
+            'refs' => ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 3],
+        ]]);
+
+        $this->actingAs($teacher)->post('http://teacher.palomatika.ru/homework/assign', [
+            'type' => 'topic_photo_practice',
+            'student_ids' => [$student->id],
+            'picker_tasks' => $pickerTasks,
+            'lesson_session_id' => $lesson->id,
+        ])->assertRedirect()->assertSessionHasNoErrors();
+
+        $homework = Homework::query()->latest('id')->firstOrFail();
+        $this->assertDatabaseHas('homework_assignments', [
+            'homework_id' => $homework->id,
+            'student_id' => $student->id,
+        ]);
+    }
+
     public function test_assign_from_picker_ignores_foreign_lesson_id(): void
     {
         $teacher = User::factory()->create(['role' => 'teacher', 'onboarding_completed_at' => now()]);

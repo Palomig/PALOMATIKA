@@ -518,13 +518,25 @@ class TeacherController extends Controller
             return back()->with('error', 'Выберите ученика.');
         }
 
-        $linkedStudentIds = TeacherStudent::where('teacher_id', $user->id)
+        $authorizedIds = TeacherStudent::where('teacher_id', $user->id)
             ->whereIn('student_id', $studentIds)
             ->pluck('student_id')
-            ->map(fn ($id) => (int) $id)
-            ->values();
+            ->map(fn ($id) => (int) $id);
 
-        if ($linkedStudentIds->count() !== $studentIds->count()) {
+        // «Домашка по уроку»: участники своего урока — тоже законные получатели
+        // (вошли по коду и могут ещё не быть в списке учеников).
+        $lessonSessionId = (int) $request->input('lesson_session_id', 0);
+        if ($lessonSessionId > 0
+            && \App\Models\LessonSession::where('id', $lessonSessionId)->where('teacher_id', $user->id)->exists()) {
+            $participantIds = \App\Models\LessonSessionParticipant::where('lesson_session_id', $lessonSessionId)
+                ->whereIn('student_id', $studentIds)
+                ->pluck('student_id')
+                ->map(fn ($id) => (int) $id);
+            $authorizedIds = $authorizedIds->merge($participantIds);
+        }
+        $authorizedIds = $authorizedIds->unique()->values();
+
+        if ($authorizedIds->count() !== $studentIds->count()) {
             return back()->with('error', 'Один из учеников не найден.');
         }
 
