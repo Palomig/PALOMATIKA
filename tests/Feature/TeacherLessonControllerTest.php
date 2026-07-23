@@ -195,6 +195,40 @@ class TeacherLessonControllerTest extends TestCase
             ->assertNotFound();
     }
 
+    public function test_homework_suggestions_returns_groups_participants_and_prior(): void
+    {
+        $teacher = $this->teacher();
+        $sessionId = $this->actingAs($teacher)
+            ->postJson(self::BASE . '/lessons')
+            ->assertCreated()->json('session.id');
+
+        $this->actingAs($teacher)->postJson(self::BASE . "/lessons/{$sessionId}/tasks", [
+            'bank' => 'alg-skill',
+            'refs' => ['grade' => 7, 'skill_slug' => 'signed-add', 'level_id' => 'simple', 'task_id' => 1],
+        ])->assertCreated();
+
+        $resp = $this->actingAs($teacher)
+            ->getJson(self::BASE . "/lessons/{$sessionId}/homework-suggestions")
+            ->assertOk();
+
+        $this->assertCount(1, $resp->json('groups'));
+        $this->assertFalse($resp->json('groups.0.no_analogs'));
+        $this->assertNotEmpty($resp->json('groups.0.suggestions'));
+        $this->assertIsArray($resp->json('participants'));
+        $this->assertSame([], $resp->json('prior_homeworks'));
+    }
+
+    public function test_homework_suggestions_forbidden_for_other_teacher(): void
+    {
+        $owner = $this->teacher();
+        $intruder = $this->teacher();
+        $session = LessonSession::create(['teacher_id' => $owner->id, 'status' => 'draft']);
+
+        $this->actingAs($intruder)
+            ->getJson(self::BASE . "/lessons/{$session->id}/homework-suggestions")
+            ->assertForbidden();
+    }
+
     public function test_other_teacher_cannot_read_state(): void
     {
         $owner = $this->teacher();

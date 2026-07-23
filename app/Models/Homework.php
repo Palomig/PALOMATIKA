@@ -14,6 +14,7 @@ class Homework extends Model
 
     protected $fillable = [
         'teacher_id',
+        'lesson_session_id',
         'title',
         'homework_type',
         'tasks_count',

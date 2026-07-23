@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\LessonSchedule;
 use App\Models\LessonSession;
 use App\Models\LessonSessionTask;
+use App\Models\Homework;
+use App\Models\TeacherStudent;
 use App\Models\User;
 use App\Services\AssistantService;
+use App\Services\LessonHomeworkSuggestionService;
 use App\Services\LessonSessionService;
 use App\Services\LessonTaskPickerService;
 use DomainException;
@@ -311,6 +314,53 @@ class TeacherLessonController extends Controller
                 ],
             ])->all(),
             'grid'         => $grid,
+        ]);
+    }
+
+    /**
+     * GET /lessons/{id}/homework-suggestions
+     * Аналоги разобранных на уроке задач для «домашки по уроку» + участники + ранее
+     * отправленные по этому уроку ДЗ.
+     */
+    public function homeworkSuggestions(Request $request, int $id): JsonResponse
+    {
+        $session = $this->loadOwnSession($request, $id);
+        $session->load('participants.student');
+
+        $groups = app(LessonHomeworkSuggestionService::class)->suggestionsFor($session);
+
+        $participantIds = $session->participants->pluck('student_id')->all();
+        $participants = $session->participants->map(fn ($p) => [
+            'id'   => $p->student_id,
+            'name' => $p->student?->name,
+        ])->values()->all();
+
+        // Остальные привязанные ученики учителя (можно доотметить в модале).
+        $others = TeacherStudent::where('teacher_id', $session->teacher_id)
+            ->whereNotIn('student_id', $participantIds)
+            ->with('student:id,name')
+            ->get()
+            ->map(fn ($r) => [
+                'id'   => (int) $r->student_id,
+                'name' => $r->student_alias ?: $r->student?->name,
+            ])
+            ->filter(fn ($s) => $s['name'] !== null)
+            ->values()->all();
+
+        $prior = Homework::where('lesson_session_id', $session->id)
+            ->orderByDesc('assigned_at')
+            ->get(['id', 'title', 'assigned_at'])
+            ->map(fn ($h) => [
+                'id'    => $h->id,
+                'title' => $h->title,
+                'date'  => $h->assigned_at?->format('d.m.Y H:i'),
+            ])->all();
+
+        return response()->json([
+            'groups'          => $groups,
+            'participants'    => $participants,
+            'other_students'  => $others,
+            'prior_homeworks' => $prior,
         ]);
     }
 

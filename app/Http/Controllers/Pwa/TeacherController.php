@@ -502,6 +502,9 @@ class TeacherController extends Controller
             // Drill-down picker: JSON-массив выбранных задач [{ bank, refs }].
             // Альтернатива task_indices/topic_number для topic_photo_practice.
             'picker_tasks' => 'nullable|string',
+            // «Домашка по уроку»: привязка к уроку + своё название (оба опциональны).
+            'lesson_session_id' => 'nullable|integer|exists:lesson_sessions,id',
+            'title' => 'nullable|string|max:160',
         ]);
 
         $studentIds = collect($data['student_ids'] ?? [])
@@ -515,13 +518,25 @@ class TeacherController extends Controller
             return back()->with('error', 'Выберите ученика.');
         }
 
-        $linkedStudentIds = TeacherStudent::where('teacher_id', $user->id)
+        $authorizedIds = TeacherStudent::where('teacher_id', $user->id)
             ->whereIn('student_id', $studentIds)
             ->pluck('student_id')
-            ->map(fn ($id) => (int) $id)
-            ->values();
+            ->map(fn ($id) => (int) $id);
 
-        if ($linkedStudentIds->count() !== $studentIds->count()) {
+        // «Домашка по уроку»: участники своего урока — тоже законные получатели
+        // (вошли по коду и могут ещё не быть в списке учеников).
+        $lessonSessionId = (int) $request->input('lesson_session_id', 0);
+        if ($lessonSessionId > 0
+            && \App\Models\LessonSession::where('id', $lessonSessionId)->where('teacher_id', $user->id)->exists()) {
+            $participantIds = \App\Models\LessonSessionParticipant::where('lesson_session_id', $lessonSessionId)
+                ->whereIn('student_id', $studentIds)
+                ->pluck('student_id')
+                ->map(fn ($id) => (int) $id);
+            $authorizedIds = $authorizedIds->merge($participantIds);
+        }
+        $authorizedIds = $authorizedIds->unique()->values();
+
+        if ($authorizedIds->count() !== $studentIds->count()) {
             return back()->with('error', 'Один из учеников не найден.');
         }
 
@@ -726,6 +741,17 @@ class TeacherController extends Controller
         $homework->topic_number = $resolved[0]['topic_number'];
         $homework->tasks_count = $tasksCount;
         $homework->title = "Практика: {$tasksCount} " . $this->pluralizeTasks($tasksCount) . ' с фото решения';
+
+        // «Домашка по уроку»: привязка к своему уроку + переданное название.
+        $lessonSessionId = (int) $request->input('lesson_session_id', 0);
+        if ($lessonSessionId > 0
+            && \App\Models\LessonSession::where('id', $lessonSessionId)->where('teacher_id', $user->id)->exists()) {
+            $homework->lesson_session_id = $lessonSessionId;
+        }
+        if ($customTitle = trim((string) $request->input('title', ''))) {
+            $homework->title = mb_substr($customTitle, 0, 160);
+        }
+
         $homework->assigned_at = now();
         $homework->save();
 

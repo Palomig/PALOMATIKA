@@ -97,6 +97,22 @@
   .du-pick-item { background: none; border: none; color: var(--text); text-align: left; font-size: 12px; padding: 6px 8px; border-radius: 6px; cursor: pointer; white-space: nowrap; }
   .du-pick-item:hover { background: var(--accent-bg); }
   .du-done { font-size: 10px; color: var(--green); font-weight: 700; margin-top: 3px; }
+  /* 📚 Домашка по уроку */
+  .hw-muted { color: var(--muted); font-size: 12px; font-weight: 700; }
+  .hw-prior { background: var(--accent-bg); border: 1px solid var(--accent-bd); border-radius: 10px; padding: 10px 12px; font-size: 13px; color: var(--text); display: flex; flex-direction: column; gap: 4px; }
+  .hw-group { border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px; }
+  .hw-group-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .hw-group-label { font-size: 14px; font-weight: 800; color: var(--text); }
+  .hw-cards { display: flex; flex-direction: column; gap: 6px; }
+  .hw-card { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; transition: border-color .12s, background .12s; }
+  .hw-card.active { background: var(--accent-bg); border-color: var(--accent); }
+  .hw-card input[type=checkbox] { width: 18px; height: 18px; flex-shrink: 0; margin-top: 2px; accent-color: var(--accent); cursor: pointer; }
+  .hw-card-body { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .hw-card-svg { display: block; max-width: 160px; }
+  .hw-card-svg :is(svg, img) { max-width: 100%; height: auto; }
+  .hw-card-text { font-size: 14px; color: var(--text); word-break: break-word; }
+  .hw-deadline { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); font-weight: 700; margin-top: 10px; }
+  .hw-deadline input { background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px 10px; font-size: 14px; }
 @endpush
 
 @section('body')
@@ -249,9 +265,100 @@
   <div class="btn-row">
     <button class="btn btn-primary" x-show="status === 'draft'" @click="startLesson" :disabled="tasks.length === 0">▶ Запустить</button>
     <button class="btn btn-danger" x-show="status === 'live'" @click="endLesson">■ Завершить</button>
+    <button class="btn" @click="openHomework()" :disabled="tasks.length === 0"
+            title="Предложить ученикам аналогичные задачи как домашку">📚 Домашка по уроку</button>
     <button class="btn" :disabled="creatingNext" @click="createNextLesson"
             x-text="creatingNext ? 'создаём…' : '📅 Следующий урок'"
             title="Черновик на то же время через неделю — с заметкой и заданиями заранее"></button>
+  </div>
+
+  {{-- 📚 Домашка по итогам урока — аналоги разобранных задач --}}
+  <div class="ns-overlay" x-show="hwOpen" x-cloak>
+    <form method="POST" action="{{ route('pwa.teacher.homework.assign') }}" class="ns-sheet" @submit="hwSubmitting = true">
+      @csrf
+      <input type="hidden" name="type" value="topic_photo_practice">
+      <input type="hidden" name="lesson_session_id" :value="sessionId">
+      <input type="hidden" name="title" :value="hwTitle()">
+      <input type="hidden" name="picker_tasks" :value="hwPickerTasksJson()">
+      <template x-for="sid in hwSelectedStudents" :key="'hw-sid-' + sid">
+        <input type="hidden" name="student_ids[]" :value="sid">
+      </template>
+
+      <div class="ns-head">
+        <span class="ns-title">📚 Домашка по уроку</span>
+        <button type="button" class="ns-close" @click="hwOpen = false" aria-label="Закрыть">✕</button>
+      </div>
+
+      <div class="hw-prior" x-show="hwPrior.length" x-cloak>
+        <template x-for="h in hwPrior" :key="'prior-' + h.id">
+          <div>По этому уроку уже отправлялось ДЗ: <b x-text="h.title"></b> <span class="hw-muted" x-text="h.date"></span></div>
+        </template>
+      </div>
+
+      <div x-show="hwLoading" class="hw-muted" style="padding: 12px 0;">Подбираю аналоги…</div>
+
+      <template x-if="!hwLoading">
+        <div>
+          <div class="ns-sub">
+            <span x-text="'Выбрано задач: ' + hwSelectedCount()"></span>
+            <span style="display: flex; gap: 8px;">
+              <button type="button" class="ns-toggle-all" @click="hwPickTwoEach()">По 2 в каждой</button>
+              <button type="button" class="ns-toggle-all" @click="hwClear()">Снять всё</button>
+            </span>
+          </div>
+
+          <div x-show="!hwGroups.length" class="hw-muted" style="padding: 12px 0;">
+            Для задач этого урока аналогов не нашлось.
+          </div>
+
+          <template x-for="g in hwGroups" :key="g.key">
+            <div class="hw-group">
+              <div class="hw-group-head">
+                <span class="hw-group-label" x-text="g.label"></span>
+                <span class="hw-muted" x-text="'на уроке: ' + g.lesson_stats.task_count + ', решено ' + g.lesson_stats.solved"></span>
+              </div>
+              <div x-show="g.no_analogs" class="hw-muted">аналогов нет</div>
+              <div class="hw-cards" x-show="!g.no_analogs">
+                <template x-for="(s, si) in g.suggestions" :key="g.key + '-' + si">
+                  <label class="hw-card" :class="hwIsSelected(s) ? 'active' : ''">
+                    <input type="checkbox" :checked="hwIsSelected(s)" @change="hwToggle(s)">
+                    <span class="hw-card-body">
+                      <span x-show="s.preview_svg" x-html="s.preview_svg" class="hw-card-svg"></span>
+                      <span class="hw-card-text" x-html="renderLatex(s.preview_text)"></span>
+                    </span>
+                  </label>
+                </template>
+              </div>
+            </div>
+          </template>
+
+          <div class="ns-sub" style="margin-top: 8px;">
+            <span x-text="'Кому: ' + hwSelectedStudents.length"></span>
+          </div>
+          <div class="ns-students">
+            <template x-for="p in hwStudents" :key="'hw-st-' + p.id">
+              <label class="ns-student" :class="hwSelectedStudents.includes(p.id) ? 'active' : ''">
+                <input type="checkbox" :checked="hwSelectedStudents.includes(p.id)" @change="hwToggleStudent(p.id)">
+                <span class="ns-student-name" x-text="(p.name || ('#' + p.id)) + (p.participant ? '' : ' · вне урока')"></span>
+              </label>
+            </template>
+          </div>
+          <div class="hw-muted" x-show="!hwStudents.length" style="padding: 8px 0;">Нет учеников для назначения.</div>
+
+          <label class="hw-deadline">
+            Срок (необязательно):
+            <input type="date" name="deadline" x-model="hwDeadline">
+          </label>
+        </div>
+      </template>
+
+      <div class="ns-actions">
+        <button type="submit" class="ns-btn"
+                :disabled="hwSubmitting || hwSelectedCount() === 0 || hwSelectedStudents.length === 0"
+                x-text="hwSubmitting ? 'Отправляю…' : 'Отправить домашку'"></button>
+        <button type="button" class="ns-cancel" @click="hwOpen = false">Отмена</button>
+      </div>
+    </form>
   </div>
 
   {{-- Live grid + summary (после завершения остаётся как итоги урока) --}}
@@ -361,6 +468,16 @@
       // «не понимает» в live-гриде
       duFor: null,
       duDone: null,
+      // 📚 Домашка по уроку
+      hwOpen: false,
+      hwLoading: false,
+      hwSubmitting: false,
+      hwGroups: [],
+      hwStudents: [],           // [{id, name, participant}]
+      hwPrior: [],
+      hwSelectedKeys: [],       // ключи выбранных задач-аналогов
+      hwSelectedStudents: [],   // id выбранных учеников
+      hwDeadline: '',
 
       async init() {
         await this.refreshState();
@@ -452,6 +569,87 @@
 
       escapeHtml(s) {
         return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      },
+
+      // --- 📚 Домашка по уроку ---
+
+      // Уникальный ключ задачи-аналога (bank + refs) для чекбоксов.
+      hwKey(s) {
+        return s.bank + '|' + JSON.stringify(s.refs);
+      },
+      hwIsSelected(s) {
+        return this.hwSelectedKeys.includes(this.hwKey(s));
+      },
+      hwToggle(s) {
+        const k = this.hwKey(s);
+        const i = this.hwSelectedKeys.indexOf(k);
+        if (i === -1) this.hwSelectedKeys.push(k);
+        else this.hwSelectedKeys.splice(i, 1);
+      },
+      hwSelectedCount() {
+        return this.hwSelectedKeys.length;
+      },
+      hwClear() {
+        this.hwSelectedKeys = [];
+      },
+      hwPickTwoEach() {
+        const keys = [];
+        for (const g of this.hwGroups) {
+          for (const s of (g.suggestions || []).slice(0, 2)) keys.push(this.hwKey(s));
+        }
+        this.hwSelectedKeys = keys;
+      },
+      hwToggleStudent(id) {
+        const i = this.hwSelectedStudents.indexOf(id);
+        if (i === -1) this.hwSelectedStudents.push(id);
+        else this.hwSelectedStudents.splice(i, 1);
+      },
+      hwTitle() {
+        const topics = [];
+        for (const g of this.hwGroups) {
+          const m = String(g.label).match(/Тема\s+([^\s·]+)/);
+          if (m && !topics.includes(m[1])) topics.push(m[1]);
+        }
+        const d = new Date();
+        const dm = String(d.getDate()).padStart(2, '0') + '.' + String(d.getMonth() + 1).padStart(2, '0');
+        return topics.length ? `ДЗ по уроку ${dm} — темы ${topics.join(', ')}` : `ДЗ по уроку ${dm}`;
+      },
+      // Собирает [{bank, refs}] по выбранным ключам из всех групп.
+      hwPickerTasksJson() {
+        const picked = [];
+        for (const g of this.hwGroups) {
+          for (const s of (g.suggestions || [])) {
+            if (this.hwSelectedKeys.includes(this.hwKey(s))) picked.push({ bank: s.bank, refs: s.refs });
+          }
+        }
+        return JSON.stringify(picked);
+      },
+
+      async openHomework() {
+        this.hwOpen = true;
+        this.hwLoading = true;
+        this.hwGroups = [];
+        this.hwSelectedKeys = [];
+        this.hwSubmitting = false;
+        try {
+          const r = await fetch(`/lessons/${this.sessionId}/homework-suggestions`,
+            { headers: { 'Accept': 'application/json' }, credentials: 'include' });
+          if (!r.ok) throw new Error('load failed');
+          const data = await r.json();
+          this.hwGroups = data.groups || [];
+          this.hwPrior = data.prior_homeworks || [];
+          const parts = (data.participants || []).map(p => ({ id: p.id, name: p.name, participant: true }));
+          const others = (data.other_students || []).map(p => ({ id: p.id, name: p.name, participant: false }));
+          this.hwStudents = [...parts, ...others];
+          // Предотмечены участники урока.
+          this.hwSelectedStudents = parts.map(p => p.id);
+        } catch (e) {
+          alert('Не удалось загрузить предложения для домашки');
+          this.hwOpen = false;
+        } finally {
+          this.hwLoading = false;
+          this.typeset();
+        }
       },
 
       async refreshState() {
