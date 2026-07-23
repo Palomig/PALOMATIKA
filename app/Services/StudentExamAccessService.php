@@ -25,6 +25,7 @@ class StudentExamAccessService
                 OgeVariant::EXAM_VPR7,
                 OgeVariant::EXAM_VPR8,
                 OgeVariant::EXAM_EGE,
+                OgeVariant::EXAM_ENTRANCE10,
             ];
         }
 
@@ -32,8 +33,9 @@ class StudentExamAccessService
             5 => [OgeVariant::EXAM_VPR5],
             6 => [OgeVariant::EXAM_VPR6],
             7 => [OgeVariant::EXAM_VPR7],
-            8 => [OgeVariant::EXAM_VPR8, OgeVariant::EXAM_OGE],
-            9 => [OgeVariant::EXAM_OGE],
+            // Вступительная в 10 класс — для готовящихся к поступлению (8–9 классы)
+            8 => [OgeVariant::EXAM_VPR8, OgeVariant::EXAM_OGE, OgeVariant::EXAM_ENTRANCE10],
+            9 => [OgeVariant::EXAM_OGE, OgeVariant::EXAM_ENTRANCE10],
             // 10–11: ЕГЭ по умолчанию + ОГЭ для повторения (тумблер на дашборде)
             10, 11 => [OgeVariant::EXAM_EGE, OgeVariant::EXAM_OGE],
             default => [],

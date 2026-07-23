@@ -1,5 +1,5 @@
 @extends('layouts.pwa')
-@section('title', 'Задание ' . $info['number'] . ' — palomatika')
+@section('title', 'Задание ' . $info['number'] . ' — база — palomatika')
 
 @include('pwa.student.entrance10._assets')
 
@@ -13,22 +13,22 @@
 <div class="page">
   <div class="topbar">
     <a href="{{ route('pwa.student.practice.entrance10.index') }}" class="back-btn">‹</a>
-    <div class="topbar-title">Задание {{ $info['number'] }}</div>
+    <div class="topbar-title">База · Задание {{ $info['number'] }}</div>
   </div>
 
   <div class="e10-intro">
     <div class="e10-intro-title">№{{ $info['number'] }}. {{ $info['title'] }}</div>
     <div class="e10-intro-sub">
       {{ $generatable
-          ? 'Задачи из вариантов и бесконечная генерация похожих. Вводите ответ и проверяйте.'
-          : 'Задачи из вариантов. Введите ответ и проверьте, при затруднении — смотрите разбор.' }}
+          ? 'Задачи из вариантов и бесконечные аналоги (те же типы, другие числа). Ответ и решение — по кнопке.'
+          : 'Задачи из вариантов. Ответ и решение — по кнопке.' }}
     </div>
   </div>
 
   {{-- Переключатель номеров --}}
   <div class="e10-num-grid" style="grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:8px;">
     @foreach($numbers as $num)
-      <a href="{{ route('pwa.student.practice.entrance10.number', $num['number']) }}"
+      <a href="{{ route('pwa.student.practice.entrance10.bank', $num['number']) }}"
          class="e10-num-cell {{ $num['number'] === $info['number'] ? 'is-active' : '' }}"
          style="min-height:auto;align-items:center;padding:10px 6px;">
         <span class="e10-num-badge">{{ $num['number'] }}</span>
@@ -39,7 +39,7 @@
   @if($generatable)
     <button type="button" id="e10-gen" class="e10-gen-btn"
             data-url="{{ route('pwa.student.practice.entrance10.generate', $info['number']) }}">
-      ✨ Сгенерировать похожую задачу
+      ✨ Сгенерировать ещё аналог
     </button>
   @endif
   <div id="e10-gen-slot"></div>
