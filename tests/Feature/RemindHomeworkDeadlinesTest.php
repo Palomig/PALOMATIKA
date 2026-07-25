@@ -24,6 +24,7 @@ class RemindHomeworkDeadlinesTest extends TestCase
     {
         return User::factory()->create([
             'role' => 'student', 'oauth_provider' => 'telegram', 'oauth_id' => $tgId,
+            'telegram_chat_id' => (int) $tgId,
         ]);
     }
 

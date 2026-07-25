@@ -26,10 +26,11 @@ class StudentLessonControllerTest extends TestCase
 
     private function student(): User
     {
-        // onboarding_completed_at нужно для middleware pwa.onboarding (если есть)
+        // onboarding_completed_at нужно для middleware pwa.onboarding,
+        // telegram_chat_id — для pwa.telegram-link (ученик без привязки уходит на /link-telegram)
         return User::create([
             'name' => 'S', 'email' => 's+' . uniqid() . '@t.t', 'password' => 'x', 'role' => 'student',
-            'onboarding_completed_at' => now(),
+            'onboarding_completed_at' => now(), 'telegram_chat_id' => random_int(100000000, 999999999),
         ]);
     }
 

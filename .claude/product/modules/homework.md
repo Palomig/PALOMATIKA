@@ -4,13 +4,33 @@
 
 ## Уведомления ученику о ДЗ — Фаза 1 (2026-07-23)
 
-- **`StudentNotifier`** (`app/Services/StudentNotifier.php`) — `notify(User, text, url)`; телеграм-канал (только `oauth_provider='telegram'`, chat_id=`oauth_id`), `Http` фасад (fakeable). Web push — Фаза 2 (заглушка).
-- **Новое ДЗ** → `TeacherController::notifyNewHomework()` после назначений; дедуп `homework_assignments.notified_at`.
+- **`StudentNotifier`** (`app/Services/StudentNotifier.php`) — `notify(User, text, url)`; телеграм-канал (нужен `users.telegram_chat_id`), `Http` фасад (fakeable). Web push — Фаза 2 (заглушка).
+- **Новое ДЗ** → `TeacherController::notifyNewHomework()` во ВСЕХ трёх ветках `assignHomework` (picker, тема без picker, мини-вариант); `notified_at` ставится только при успешной доставке, 403 помечает `users.telegram_blocked_at`.
 - **Напоминание о сроке** → команда `homework:remind-deadlines` (планировщик `dailyAt 08:00`), ДЗ со сроком сегодня/завтра, `status != completed`, дедуп `reminded_at`.
 - **In-app поп-ап** (раз в день) → `HomeworkPopupComposer` на `layouts.pwa`, партиал `pwa/shared/homework-popup.blade.php`; частота через `users.homework_popup_shown_on`; скип на homework/lesson-страницах.
 - Новые поля: `homework_assignments.notified_at`/`reminded_at`, `users.homework_popup_shown_on` (миграция `2026_07_23_000002`).
 - Предусловие: `assignFromPicker` сохраняет `deadline` → `homeworks.deadline_at`.
-- Тесты: `StudentNotifierTest`, `HomeworkPopupTest`, `RemindHomeworkDeadlinesTest`, `PwaHomeworkPhotoPracticeTest::test_assign_notifies_*`.
+- Тесты: `StudentNotifierTest`, `HomeworkPopupTest`, `RemindHomeworkDeadlinesTest`, `PwaHomeworkPhotoPracticeTest::test_assign_notifies_*`, `HomeworkNotificationDeliveryTest`.
+
+## Привязка телеграма и склейка аккаунтов (2026-07-25)
+
+Уведомления упирались в идентичность: OIDC-вход («Войти через Telegram») кладёт в
+`oauth_id` псевдоним `sub` (19–20 цифр), а не chat_id, — бот такому аккаунту писать не может.
+
+- **Разделение ключей:** `users.telegram_chat_id` (настоящий id, только из initData мини-аппа
+  и `/start` в боте) и `users.telegram_oidc_sub` (псевдоним, только для узнавания при входе).
+  Миграция `2026_07_25_000001` + бэкфилл по длине старого `oauth_id`.
+- **`TelegramIdentityResolver`**: `resolveByChatId()` для мини-аппа/бота, `resolveBySub()` для OIDC.
+- **Привязка** (`TelegramLinkService` + `Pwa\TelegramLinkController`, экран `/link-telegram`):
+  веб-сессия выдаёт одноразовый код → `t.me/<bot>?start=link_<code>` → вебхук бота знает
+  и код, и настоящий id. Ученикам без chat_id экран обязателен — middleware `pwa.telegram-link`.
+- **Склейка:** если chat_id уже принадлежит другой записи — это один человек, `AccountMergeService`
+  переносит данные по 29 таблицам, донор получает `merged_into_id`. Канонический — по роли,
+  при равных ролях по возрасту записи. Вручную: `php artisan users:merge {from} {into} [--dry-run]`.
+- Сводка охвата: `php artisan users:telegram-status [--unlinked]`.
+- Со страницы входа PWA убрана старая кнопка «Telegram» (бот-Start) — её роуты
+  (`/api/telegram/generate-token`) удалены ещё раньше, кнопка вела в 404.
+- Тесты: `TelegramIdentityResolverTest`, `TelegramUnifiedIdentityTest`, `TelegramLinkGateTest`.
 
 ## Домашка по итогам урока (2026-07-23, ветка `claude/lesson-v2`)
 

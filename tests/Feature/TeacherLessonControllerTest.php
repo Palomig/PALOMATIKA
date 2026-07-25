@@ -29,6 +29,7 @@ class TeacherLessonControllerTest extends TestCase
         return User::create([
             'name' => 'S', 'email' => 's+' . uniqid() . '@t.t', 'password' => 'x', 'role' => 'student',
             'onboarding_completed_at' => now(), // для middleware pwa.onboarding
+            'telegram_chat_id' => random_int(100000000, 999999999), // для pwa.telegram-link
         ]);
     }
 

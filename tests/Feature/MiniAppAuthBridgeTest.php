@@ -57,7 +57,13 @@ class MiniAppAuthBridgeTest extends TestCase
             $table->timestamp('tg_premium_until')->nullable();
             $table->integer('star_balance')->default(0);
             $table->timestamps();
-        });
+                    $table->unsignedBigInteger('telegram_chat_id')->nullable();
+            $table->string('telegram_oidc_sub', 64)->nullable();
+            $table->dateTime('telegram_linked_at')->nullable();
+            $table->dateTime('telegram_blocked_at')->nullable();
+            $table->unsignedBigInteger('merged_into_id')->nullable();
+            $table->dateTime('merged_at')->nullable();
+});
     }
 
     // --- Auth Bridge: Happy Path ---

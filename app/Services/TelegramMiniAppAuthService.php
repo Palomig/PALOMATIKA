@@ -71,9 +71,8 @@ class TelegramMiniAppAuthService
         if (preg_match('/^ref_(\d+)$/', $startParam, $m)) {
             $referrerId = (int) $m[1];
         } elseif (preg_match('/^ref_tg_(\d+)$/', $startParam, $m)) {
-            $referrerId = User::where('oauth_provider', 'telegram')
-                ->where('oauth_id', $m[1])
-                ->value('id');
+            $referrerId = User::where('telegram_chat_id', (int) $m[1])->value('id')
+                ?? User::where('oauth_provider', 'telegram')->where('oauth_id', $m[1])->value('id');
         }
 
         if (!$referrerId || $referrerId === $user->id) {
@@ -172,7 +171,7 @@ class TelegramMiniAppAuthService
      */
     public function findOrCreateUser(array $telegramUser): User
     {
-        return app(\App\Services\TelegramIdentityResolver::class)->resolve([
+        return app(\App\Services\TelegramIdentityResolver::class)->resolveByChatId([
             'id'       => $telegramUser['id'] ?? '',
             'username' => $telegramUser['username'] ?? null,
             'name'     => $this->normalizeDisplayName($telegramUser),

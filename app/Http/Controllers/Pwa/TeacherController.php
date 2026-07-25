@@ -590,14 +590,17 @@ class TeacherController extends Controller
                 ]);
             }
 
+            $assignments = [];
             foreach ($studentIds as $studentId) {
-                \App\Models\HomeworkAssignment::create([
+                $assignments[] = \App\Models\HomeworkAssignment::create([
                     'homework_id' => $homework->id,
                     'student_id' => $studentId,
                     'status' => 'assigned',
                     'tasks_total' => $tasksCount,
                 ]);
             }
+
+            $this->notifyNewHomework($homework, $assignments);
 
             return back()->with('success', 'ДЗ выдано!');
         }
@@ -638,11 +641,13 @@ class TeacherController extends Controller
             $homework->assigned_at = now();
             $homework->save();
 
-            \App\Models\HomeworkAssignment::create([
+            $assignment = \App\Models\HomeworkAssignment::create([
                 'homework_id' => $homework->id,
                 'student_id' => $studentId,
                 'status' => 'assigned',
             ]);
+            // Мини-вариант у каждого свой, поэтому уведомляем сразу по ученику.
+            $this->notifyNewHomework($homework, [$assignment]);
             $assignedCount++;
         }
 
@@ -791,7 +796,9 @@ class TeacherController extends Controller
 
     /**
      * Уведомляет учеников о новом ДЗ (телеграм-канал; in-app покрывает поп-ап).
-     * Ставит notified_at по попытке, чтобы не слать повторно.
+     *
+     * `notified_at` ставим ТОЛЬКО при успешной доставке: иначе недоставленное
+     * уведомление выглядит отправленным и никогда не повторяется.
      *
      * @param  array<int, \App\Models\HomeworkAssignment>  $assignments
      */
@@ -801,6 +808,10 @@ class TeacherController extends Controller
         $homeworkUrl = 'https://student.' . config('app.base_domain') . '/homework';
         $tasksCount = (int) $homework->tasks_count;
         $deadline = $homework->deadline_at ? ' Срок: ' . $homework->deadline_at->format('d.m') . '.' : '';
+        // У мини-варианта tasks_count не заполняется — тогда без «— N задач».
+        $countPart = $tasksCount > 0
+            ? ' — ' . $tasksCount . ' ' . $this->pluralizeTasks($tasksCount) . '.'
+            : '.';
 
         foreach ($assignments as $assignment) {
             if ($assignment->notified_at !== null) {
@@ -810,10 +821,11 @@ class TeacherController extends Controller
             if (!$student) {
                 continue;
             }
-            $text = '📚 Тебе задали домашку: <b>' . e($homework->title) . '</b> — '
-                . $tasksCount . ' ' . $this->pluralizeTasks($tasksCount) . '.' . $deadline;
-            $notifier->notify($student, $text, $homeworkUrl);
-            $assignment->update(['notified_at' => now()]);
+            $text = '📚 Тебе задали домашку: <b>' . e($homework->title) . '</b>' . $countPart . $deadline;
+
+            if ($notifier->notify($student, $text, $homeworkUrl)) {
+                $assignment->update(['notified_at' => now()]);
+            }
         }
     }
 

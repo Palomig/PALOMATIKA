@@ -8,6 +8,8 @@ use App\Models\TelegramAuthToken;
 use App\Models\User;
 use App\Services\AuditLogger;
 use App\Services\OgeVariantPoolService;
+use App\Services\TelegramIdentityResolver;
+use App\Services\TelegramLinkService;
 use App\Services\TelegramMiniAppAuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -272,6 +274,9 @@ class TelegramBotAuthController extends Controller
                 // Variant/battle deep links should open mini-app, not auth-token flow
                 if (preg_match('/^oge_variant_hash_[a-z0-9]{8,32}$/i', $param) || preg_match('/^oge_variant_[a-z0-9]{8,32}$/i', $param)) {
                     $this->sendMiniAppOpenMessage($from, $param);
+                // Привязка уведомлений: код выдан веб-сессией, id отправителя — настоящий
+                } elseif (preg_match('/^link_([a-z0-9]{16,64})$/i', $param, $linkMatch)) {
+                    $this->handleLinkCommand($linkMatch[1], $from);
                 // Skip referral links — don't treat them as auth tokens
                 } elseif (str_starts_with($param, 'ref_')) {
                     $this->sendWelcomeMessage($from);
@@ -286,6 +291,34 @@ class TelegramBotAuthController extends Controller
         }
 
         return response()->json(['ok' => true]);
+    }
+
+    /**
+     * `/start link_<code>` — ученик подключает уведомления из веб-сессии.
+     */
+    private function handleLinkCommand(string $code, ?array $from): void
+    {
+        if (!$from || empty($from['id'])) {
+            return;
+        }
+
+        $result = app(TelegramLinkService::class)->completeLink($code, $from);
+
+        if (!$result) {
+            $this->sendTelegramMessage(
+                (string) $from['id'],
+                "❌ Ссылка привязки устарела.\n\nВернитесь в приложение и нажмите «Подключить уведомления» ещё раз."
+            );
+            return;
+        }
+
+        $name = $from['first_name'] ?? 'ученик';
+        $text = "✅ Готово, {$name}! Теперь уведомления о домашке приходят сюда.";
+        if ($result['merged']) {
+            $text .= "\n\n🔗 Твои аккаунты объединены — прогресс и домашка теперь в одном месте.";
+        }
+
+        $this->sendTelegramMessage((string) $from['id'], $text);
     }
 
     /**
@@ -567,39 +600,17 @@ class TelegramBotAuthController extends Controller
      */
     private function findOrCreateTelegramUserFromProfile(array $telegramUser): User
     {
-        $telegramId = (string) ($telegramUser['id'] ?? '');
-        if ($telegramId === '') {
-            throw new \InvalidArgumentException('Missing Telegram user id');
-        }
-
-        $user = User::where('oauth_provider', 'telegram')
-            ->where('oauth_id', $telegramId)
-            ->first();
-
-        $tgUsername = isset($telegramUser['username']) && $telegramUser['username'] !== ''
-            ? (string) $telegramUser['username']
-            : null;
-
-        if ($user) {
-            // Update username on every login (users can change it)
-            if ($tgUsername !== null && $user->tg_username !== $tgUsername) {
-                $user->update(['tg_username' => $tgUsername]);
-            }
-            return $user;
-        }
-
         $name = trim(((string) ($telegramUser['first_name'] ?? '')) . ' ' . ((string) ($telegramUser['last_name'] ?? '')));
         if ($name === '') {
             $name = (string) ($telegramUser['username'] ?? 'User');
         }
 
-        return User::create([
-            'name' => $name,
-            'oauth_provider' => 'telegram',
-            'oauth_id' => $telegramId,
-            'tg_username' => $tgUsername,
-            'avatar' => $telegramUser['photo_url'] ?? null,
-            'trial_ends_at' => now()->addDays(7),
+        // Бот и мини-апп ходят через один резолвер: оба знают настоящий chat_id.
+        return app(TelegramIdentityResolver::class)->resolveByChatId([
+            'id'       => $telegramUser['id'] ?? '',
+            'username' => $telegramUser['username'] ?? null,
+            'name'     => $name,
+            'photo'    => $telegramUser['photo_url'] ?? null,
         ]);
     }
 

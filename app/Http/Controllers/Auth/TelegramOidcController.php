@@ -41,8 +41,10 @@ class TelegramOidcController extends Controller
                 (string) session('tg_oidc.nonce'),
             );
 
-            $user = $this->resolver->resolve([
-                'id'       => $claims['sub'],
+            // OIDC отдаёт псевдоним, а не telegram id: писать боту по нему нельзя,
+            // chat_id доедет отдельной привязкой через бота.
+            $user = $this->resolver->resolveBySub([
+                'sub'      => $claims['sub'],
                 'username' => $claims['preferred_username'] ?? null,
                 'name'     => $claims['name'] ?? null,
                 'photo'    => $claims['picture'] ?? null,

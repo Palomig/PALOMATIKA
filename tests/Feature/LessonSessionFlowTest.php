@@ -26,8 +26,8 @@ class LessonSessionFlowTest extends TestCase
     public function test_complete_lesson_flow_through_all_api_layers(): void
     {
         $teacher = User::create(['name' => 'Mrs. Ivanova', 'email' => 't' . uniqid() . '@t.t', 'password' => 'x', 'role' => 'teacher']);
-        $alice   = User::create(['name' => 'Alice',       'email' => 'a' . uniqid() . '@t.t', 'password' => 'x', 'role' => 'student', 'onboarding_completed_at' => now()]);
-        $bob     = User::create(['name' => 'Bob',         'email' => 'b' . uniqid() . '@t.t', 'password' => 'x', 'role' => 'student', 'onboarding_completed_at' => now()]);
+        $alice   = User::create(['name' => 'Alice',       'email' => 'a' . uniqid() . '@t.t', 'password' => 'x', 'role' => 'student', 'onboarding_completed_at' => now(), 'telegram_chat_id' => random_int(100000000, 999999999)]);
+        $bob     = User::create(['name' => 'Bob',         'email' => 'b' . uniqid() . '@t.t', 'password' => 'x', 'role' => 'student', 'onboarding_completed_at' => now(), 'telegram_chat_id' => random_int(100000000, 999999999)]);
 
         // 1. Teacher создаёт сессию из расписания (Alice в слоте)
         $slot = LessonSchedule::create([

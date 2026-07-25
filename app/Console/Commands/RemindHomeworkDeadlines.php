@@ -38,9 +38,11 @@ class RemindHomeworkDeadlines extends Command
             $deadline = $a->homework->deadline_at?->format('d.m');
             $text = '⏰ Напоминание: домашка <b>' . e($a->homework->title) . '</b>'
                 . ($deadline ? " — до {$deadline}." : '.');
-            $notifier->notify($a->student, $text, $homeworkUrl);
+            // reminded_at ставим всегда: это дедуп «не чаще раза в день», иначе
+            // недоставляемый ученик будет пересчитываться на каждом прогоне.
+            $delivered = $notifier->notify($a->student, $text, $homeworkUrl);
             $a->update(['reminded_at' => now()]);
-            $sent++;
+            $sent += $delivered ? 1 : 0;
         }
 
         $this->info("Reminders sent: {$sent}/{$assignments->count()}.");
