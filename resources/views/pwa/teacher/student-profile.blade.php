@@ -7,6 +7,13 @@
   .topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom: 12px; }
   .back { color: var(--text); text-decoration:none; font-size: 18px; padding:6px 8px; border:1px solid var(--border); border-radius:10px; }
   .card { background: var(--surface); border:1px solid var(--border); border-radius:14px; padding:12px; margin-bottom:12px; }
+  /* Сворачиваемые блоки — на нативном <details>, чтобы состояние не зависело от JS */
+  .fold > .fold-head { font-weight:700; cursor:pointer; list-style:none; display:flex; align-items:center; gap:8px; user-select:none; }
+  .fold > .fold-head::-webkit-details-marker { display:none; }
+  .fold > .fold-head::before { content:'▾'; color: var(--muted); font-size:12px; transition: transform .15s; }
+  .fold:not([open]) > .fold-head::before { transform: rotate(-90deg); }
+  .fold[open] > .fold-head { margin-bottom:8px; }
+  .fold-count { font-weight:600; font-size:12px; color: var(--muted); }
   .name { font-size:18px; font-weight:800; }
   .muted { color: var(--muted); font-size:12px; }
   .stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:10px; }
@@ -103,8 +110,8 @@
     </div>
   </div>
 
-  <div class="card">
-    <div style="font-weight:700;margin-bottom:8px;">История вариантов</div>
+  <details class="card fold" open>
+    <summary class="fold-head">История вариантов <span class="fold-count">{{ count($historyList) }}</span></summary>
     @forelse($historyList as $h)
       @php
         $pct = $h['total'] > 0 ? round(($h['correct'] / $h['total']) * 100) : 0;
@@ -127,10 +134,10 @@
     @empty
       <div class="muted">Пока нет завершённых попыток.</div>
     @endforelse
-  </div>
+  </details>
 
-  <div class="card">
-    <div style="font-weight:700;margin-bottom:4px;">Темы/задания: точность</div>
+  <details class="card fold" open>
+    <summary class="fold-head">Темы/задания: точность <span class="fold-count">{{ count($topicStats) }}</span></summary>
     <div class="muted" style="margin-bottom:8px;">Формат X/Y: верно из числа попыток, где это задание реально встречалось у ученика.</div>
     @forelse($topicStats as $ts)
       @php $p = $ts['total'] > 0 ? (int) round(($ts['correct']/$ts['total'])*100) : 0; @endphp
@@ -141,7 +148,7 @@
     @empty
       <div class="muted">Пока нет данных по оценке.</div>
     @endforelse
-  </div>
+  </details>
 
   <div class="card" x-data="notesSection(@js($notes->map(fn($n) => [
         'id'         => $n->id,

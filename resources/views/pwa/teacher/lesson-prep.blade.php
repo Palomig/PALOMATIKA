@@ -42,6 +42,17 @@
   .participant-chip { display: inline-flex; align-items: center; gap: 6px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 4px 8px; font-size: 12px; color: var(--text); }
   .chip-release { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 11px; padding: 0 2px; }
   .chip-release:hover { color: var(--red); }
+  .chip-name { display: inline-flex; align-items: center; gap: 4px; background: none; border: none; padding: 0; font: inherit; color: var(--text); cursor: pointer; }
+  .chip-name:hover { color: var(--accent); }
+  .chip-notes { font-size: 10px; color: var(--muted); }
+  /* Просмотр заметок ученика */
+  .sn-item { padding: 10px 12px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; }
+  .sn-item.current { border-color: var(--accent-bd); }
+  .sn-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+  .sn-tag { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1px 6px; }
+  .sn-now { color: var(--accent); font-weight: 700; }
+  .sn-body { font-size: 14px; line-height: 1.5; color: var(--text); white-space: pre-wrap; }
+  .sn-list { display: flex; flex-direction: column; gap: 8px; flex: 1 1 auto; }
   .note-input { width: 100%; resize: vertical; min-height: 48px; padding: 10px 12px; font-size: 13px; line-height: 1.5; font-family: inherit; background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-radius: 10px; }
   .note-input:focus { outline: none; border-color: var(--accent-bd); }
   .activity-meta { font-size: 10px; color: var(--muted); margin-top: 3px; white-space: nowrap; }
@@ -140,7 +151,11 @@
           <template x-for="p in participants" :key="'chip-' + p.id">
             <span class="participant-chip">
               <span x-text="activityDot(p)" :title="activityTitle(p)"></span>
-              <span x-text="p.name || ('#' + p.id)"></span>
+              <button type="button" class="chip-name" @click="openStudentNotes(p)"
+                      :title="'Заметки: ' + (p.name || ('#' + p.id))">
+                <span x-text="p.name || ('#' + p.id)"></span>
+                <span class="chip-notes" x-show="p.notes_count" x-text="'📝' + p.notes_count"></span>
+              </button>
               <span x-show="p.locked" title="Лок активен">🔒</span>
               <button type="button" class="chip-release" x-show="p.locked"
                       @click="releaseStudent(p.id)" title="Отпустить с урока">✕ отпустить</button>
@@ -188,6 +203,42 @@
                 :disabled="!!(!noteStudentIds.length || !noteText.trim() || noteSending)"
                 x-text="noteSending ? 'Сохраняю…' : 'Отправить'"></button>
         <button type="button" class="ns-cancel" @click="notesOpen = false">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  {{-- Просмотр заметок конкретного ученика (тап по имени в чипе) --}}
+  <div class="ns-overlay" x-show="viewOpen" x-cloak>
+    <div class="ns-sheet">
+      <div class="ns-head">
+        <span class="ns-title" x-text="'📝 ' + (viewStudent ? viewStudent.name : '')"></span>
+        <button type="button" class="ns-close" @click="viewOpen = false" aria-label="Закрыть">✕</button>
+      </div>
+
+      <div class="ns-empty" x-show="viewLoading">Загружаю…</div>
+      <div class="ns-empty" x-show="viewError" x-cloak style="color: var(--red);" x-text="viewError"></div>
+      <div class="ns-empty" x-show="!viewLoading && !viewError && !viewNotes.length">Заметок пока нет.</div>
+
+      <div class="sn-list" x-show="!viewLoading && viewNotes.length">
+        <template x-for="n in viewNotes" :key="'sn-' + n.id">
+          <div class="sn-item" :class="n.is_current_lesson ? 'current' : ''">
+            <div class="sn-meta">
+              <span x-text="noteBadge(n.kind)" :title="n.kind"></span>
+              <span x-text="n.created_at"></span>
+              <span x-show="n.is_current_lesson" class="sn-now">этот урок</span>
+              <template x-if="n.topic_tag">
+                <span class="sn-tag" x-text="n.topic_tag"></span>
+              </template>
+            </div>
+            <div class="sn-body" x-text="n.body"></div>
+          </div>
+        </template>
+      </div>
+
+      <div class="ns-actions">
+        <button class="ns-btn" @click="addNoteForViewed()"
+                x-text="'＋ Заметка про ' + (viewStudent ? viewStudent.name.split(' ')[0] : '')"></button>
+        <button type="button" class="ns-cancel" @click="viewOpen = false">Закрыть</button>
       </div>
     </div>
   </div>
@@ -461,6 +512,12 @@
       creatingNext: false,
       // 📝 Заметки об учениках
       notesOpen: false,
+      // Просмотр истории заметок одного ученика
+      viewOpen: false,
+      viewStudent: null,
+      viewNotes: [],
+      viewLoading: false,
+      viewError: '',
       noteText: '',
       noteStudentIds: [],
       noteSending: false,
@@ -694,6 +751,41 @@
       },
 
       // --- 📝 Заметки об учениках ---
+      // Бейджи те же, что в карточке ученика: один kind не должен выглядеть
+      // по-разному на двух экранах.
+      noteBadge(kind) {
+        return { weakness: '🔴', strength: '🟢', todo: '📌', general: '💬' }[kind] || '💬';
+      },
+
+      async openStudentNotes(p) {
+        this.viewStudent = { id: p.id, name: p.name || ('#' + p.id) };
+        this.viewNotes = [];
+        this.viewError = '';
+        this.viewLoading = true;
+        this.viewOpen = true;
+        try {
+          const r = await fetch(`/lessons/${this.sessionId}/students/${p.id}/notes`, {
+            headers: { 'Accept': 'application/json' },
+            credentials: 'include',
+          });
+          if (!r.ok) throw new Error('bad status');
+          const d = await r.json();
+          this.viewNotes = Array.isArray(d.notes) ? d.notes : [];
+          if (d.student && d.student.name) this.viewStudent.name = d.student.name;
+        } catch (e) {
+          this.viewError = 'Не удалось загрузить заметки';
+        }
+        this.viewLoading = false;
+      },
+
+      // Из просмотра сразу в запись — с уже отмеченным этим учеником.
+      addNoteForViewed() {
+        const id = this.viewStudent ? this.viewStudent.id : null;
+        this.viewOpen = false;
+        this.openNotes();
+        if (id !== null) this.noteStudentIds = [id];
+      },
+
       openNotes() {
         this.noteStudentIds = [];
         this.noteText = '';

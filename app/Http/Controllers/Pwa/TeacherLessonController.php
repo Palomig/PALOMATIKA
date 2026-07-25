@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\LessonSchedule;
 use App\Models\LessonSession;
 use App\Models\LessonSessionTask;
+use App\Models\StudentNote;
 use App\Models\Homework;
 use App\Models\TeacherStudent;
 use App\Models\User;
@@ -283,6 +284,7 @@ class TeacherLessonController extends Controller
 
         $activity = $this->sessions->activitySummary($session);
         $behavior = $this->sessions->behaviorSummary($session);
+        $noteCounts = $this->noteCounts($request->user()->id, $session->participants->pluck('student_id')->all());
 
         $grid = [];
         foreach ($session->attempts as $a) {
@@ -312,6 +314,8 @@ class TeacherLessonController extends Controller
                     'copy_count'  => $behavior[$p->student_id]['copy_count'] ?? 0,
                     'paste_count' => $behavior[$p->student_id]['paste_count'] ?? 0,
                 ],
+                // Счётчик для чипа: сколько моих заметок об этом ученике всего.
+                'notes_count' => $noteCounts[$p->student_id] ?? 0,
             ])->all(),
             'grid'         => $grid,
         ]);
@@ -434,6 +438,64 @@ class TeacherLessonController extends Controller
                 'student_id' => $n->student_id,
             ])->all(),
         ]);
+    }
+
+    /**
+     * GET /lessons/{id}/students/{studentId}/notes
+     * Вся история моих заметок об ученике — чтобы смотреть их прямо на уроке,
+     * не уходя в карточку ученика. Чужие заметки об этом же ученике не отдаём.
+     */
+    public function studentNotes(Request $request, int $id, int $studentId): JsonResponse
+    {
+        $session = $this->loadOwnSession($request, $id);
+
+        if (!$this->sessions->isParticipantId($session, $studentId)) {
+            return response()->json(['error' => 'Ученик не участник урока'], 422);
+        }
+
+        $student = User::findOrFail($studentId);
+
+        $notes = StudentNote::where('student_id', $studentId)
+            ->where('teacher_id', $request->user()->id)
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
+            ->limit(50)
+            ->get();
+
+        return response()->json([
+            'student' => ['id' => $student->id, 'name' => $student->name],
+            'notes'   => $notes->map(fn (StudentNote $n) => [
+                'id'                => $n->id,
+                'body'              => $n->body,
+                'kind'              => $n->kind,
+                'topic_tag'         => $n->topic_tag,
+                'task_ref'          => $n->task_ref,
+                'source'            => $n->source,
+                'created_at'        => $n->created_at?->format('d.m.Y'),
+                'is_current_lesson' => (int) $n->lesson_session_id === $session->id,
+            ])->all(),
+        ]);
+    }
+
+    /**
+     * Сколько моих заметок по каждому из учеников: одним запросом на весь урок.
+     *
+     * @param  array<int,int>  $studentIds
+     * @return array<int,int>  student_id => count
+     */
+    private function noteCounts(int $teacherId, array $studentIds): array
+    {
+        if ($studentIds === []) {
+            return [];
+        }
+
+        return StudentNote::where('teacher_id', $teacherId)
+            ->whereIn('student_id', $studentIds)
+            ->selectRaw('student_id, COUNT(*) as c')
+            ->groupBy('student_id')
+            ->pluck('c', 'student_id')
+            ->map(fn ($c) => (int) $c)
+            ->all();
     }
 
     private function loadOwnSession(Request $request, int $id): LessonSession
