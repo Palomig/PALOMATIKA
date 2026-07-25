@@ -9,7 +9,7 @@
   </div>
 
   <div class="card anim-up" style="animation-delay:0.05s;">
-    <div class="sec-label" style="margin-bottom:12px;">Последний шаг</div>
+    <div class="sec-label" style="margin-bottom:12px;">Уведомления о домашке</div>
 
     <p style="font-size:14px;line-height:1.5;margin:0 0 8px;">
       Подключи Telegram — туда придёт уведомление, когда учитель задаст домашку,
@@ -30,6 +30,11 @@
       Ждём «Start» в боте @{{ $botUsername }}…
     </p>
     <p x-show="error" x-text="error" x-cloak style="font-size:12px;color:var(--red);text-align:center;margin:12px 0 0;"></p>
+
+    <form method="POST" action="/link-telegram/snooze" style="margin-top:12px;">
+      @csrf
+      <button type="submit" class="btn btn-surface" style="width:100%;">Напомнить позже</button>
+    </form>
   </div>
 
   <form method="POST" action="/logout" style="margin-top:16px;text-align:center;">
