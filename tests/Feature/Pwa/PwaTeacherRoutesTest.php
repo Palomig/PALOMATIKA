@@ -46,7 +46,13 @@ class PwaTeacherRoutesTest extends TestCase
             $table->timestamp('last_active_at')->nullable();
             $table->timestamp('onboarding_completed_at')->nullable();
             $table->timestamps();
-        });
+                    $table->unsignedBigInteger('telegram_chat_id')->nullable();
+            $table->string('telegram_oidc_sub', 64)->nullable();
+            $table->dateTime('telegram_linked_at')->nullable();
+            $table->dateTime('telegram_blocked_at')->nullable();
+            $table->unsignedBigInteger('merged_into_id')->nullable();
+            $table->dateTime('merged_at')->nullable();
+});
 
         Schema::create('teacher_students', function (Blueprint $table) {
             $table->id();

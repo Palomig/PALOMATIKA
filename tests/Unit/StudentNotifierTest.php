@@ -24,7 +24,7 @@ class StudentNotifierTest extends TestCase
 
         $student = User::create([
             'name' => 'TG', 'email' => 'tg@t.t', 'password' => 'x', 'role' => 'student',
-            'oauth_provider' => 'telegram', 'oauth_id' => '555001',
+            'oauth_provider' => 'telegram', 'oauth_id' => '555001', 'telegram_chat_id' => 555001,
         ]);
 
         $ok = app(StudentNotifier::class)->notify($student, 'Привет', 'https://student.palomatika.ru/homework');
@@ -56,7 +56,7 @@ class StudentNotifierTest extends TestCase
         Http::fake(['api.telegram.org/*' => Http::response(['ok' => false, 'error_code' => 403], 403)]);
         $student = User::create([
             'name' => 'TG', 'email' => 'tg2@t.t', 'password' => 'x', 'role' => 'student',
-            'oauth_provider' => 'telegram', 'oauth_id' => '555002',
+            'oauth_provider' => 'telegram', 'oauth_id' => '555002', 'telegram_chat_id' => 555002,
         ]);
 
         $ok = app(StudentNotifier::class)->notify($student, 'Привет', null);

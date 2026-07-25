@@ -62,6 +62,8 @@ class DeployController extends Controller
         'variants:flush-miniapp',
         'variants:backfill-slots',
         'user:flush-sessions',
+        'users:merge',
+        'users:telegram-status',
         'redesign:backup-puzzles',
         'logs:tail',
     ];

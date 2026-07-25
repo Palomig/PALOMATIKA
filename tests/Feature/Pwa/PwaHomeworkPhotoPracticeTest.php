@@ -441,7 +441,7 @@ class PwaHomeworkPhotoPracticeTest extends TestCase
         $teacher = User::factory()->create(['role' => 'teacher', 'onboarding_completed_at' => now()]);
         $student = User::factory()->create([
             'role' => 'student', 'grade_num' => 7, 'onboarding_completed_at' => now(),
-            'oauth_provider' => 'telegram', 'oauth_id' => '770001',
+            'oauth_provider' => 'telegram', 'oauth_id' => '770001', 'telegram_chat_id' => 770001,
         ]);
         TeacherStudent::create(['teacher_id' => $teacher->id, 'student_id' => $student->id, 'source' => 'manual']);
 

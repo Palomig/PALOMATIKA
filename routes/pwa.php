@@ -9,6 +9,7 @@ use App\Http\Controllers\Pwa\PracticeController;
 use App\Http\Controllers\Pwa\StudentController;
 use App\Http\Controllers\Pwa\StudentLessonController;
 use App\Http\Controllers\Pwa\StudentNoteController;
+use App\Http\Controllers\Pwa\TelegramLinkController;
 use App\Http\Controllers\Pwa\TeacherController;
 use App\Http\Controllers\Pwa\TeacherLessonController;
 use App\Http\Controllers\Pwa\VprController;
@@ -29,7 +30,7 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
     Route::post('/bug-report', [BugReportController::class, 'store'])->name('pwa.student.bug-report');
 
     // ОГЭ-дашборд для 8-классников (без редиректа на VPR)
-    Route::get('/oge', [StudentController::class, 'ogeDashboard'])->middleware(['auth', 'pwa.onboarding', 'pwa.lesson-lock'])->name('pwa.student.oge-dashboard');
+    Route::get('/oge', [StudentController::class, 'ogeDashboard'])->middleware(['auth', 'pwa.onboarding', 'pwa.telegram-link', 'pwa.lesson-lock'])->name('pwa.student.oge-dashboard');
 
     // Auth
     Route::get('/login', [AuthController::class, 'showLogin'])->name('pwa.student.login');
@@ -47,8 +48,16 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
     // Migration from Telegram
     Route::get('/migrate', [AuthController::class, 'migrateFromTelegram'])->name('pwa.student.migrate');
 
+    // Привязка телеграма (обязательный шаг для учеников без chat_id).
+    // Сам экран под 'auth', но БЕЗ гейта — иначе редирект зациклится.
+    Route::middleware('auth')->group(function () {
+        Route::get('/link-telegram', [TelegramLinkController::class, 'show'])->name('pwa.student.link-telegram');
+        Route::post('/link-telegram/start', [TelegramLinkController::class, 'start'])->name('pwa.student.link-telegram.start');
+        Route::get('/link-telegram/status', [TelegramLinkController::class, 'status'])->name('pwa.student.link-telegram.status');
+    });
+
     // Protected student routes
-    Route::middleware(['auth', 'pwa.onboarding', 'pwa.lesson-lock'])->group(function () {
+    Route::middleware(['auth', 'pwa.onboarding', 'pwa.telegram-link', 'pwa.lesson-lock'])->group(function () {
         Route::get('/', [StudentController::class, 'dashboard'])->name('pwa.student.dashboard');
         Route::get('/mini', [StudentController::class, 'mini'])->name('pwa.student.mini');
         Route::get('/new-tasks', [StudentController::class, 'newTasks'])->name('pwa.student.new-tasks');

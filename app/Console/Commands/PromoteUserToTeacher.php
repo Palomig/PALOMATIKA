@@ -58,10 +58,13 @@ class PromoteUserToTeacher extends Command
     {
         $telegramId = $this->option('telegram-id');
         if (!empty($telegramId)) {
-            return User::query()
-                ->where('oauth_provider', 'telegram')
-                ->where('oauth_id', (string) $telegramId)
-                ->first();
+            // После разделения ключей настоящий id живёт в telegram_chat_id,
+            // но у части записей он ещё и в oauth_id — ищем по обоим.
+            return User::query()->where('telegram_chat_id', (int) $telegramId)->first()
+                ?? User::query()
+                    ->where('oauth_provider', 'telegram')
+                    ->where('oauth_id', (string) $telegramId)
+                    ->first();
         }
 
         $identifier = $this->argument('identifier');
@@ -80,10 +83,11 @@ class PromoteUserToTeacher extends Command
             }
         }
 
-        return User::query()
-            ->where('oauth_provider', 'telegram')
-            ->where('oauth_id', (string) $identifier)
-            ->first();
+        return User::query()->where('telegram_chat_id', (int) $identifier)->first()
+            ?? User::query()
+                ->where('oauth_provider', 'telegram')
+                ->where('oauth_id', (string) $identifier)
+                ->first();
     }
 }
 

@@ -21,6 +21,7 @@ class PwaLessonTileTest extends TestCase
         return User::create([
             'name' => 'S', 'email' => 's+' . uniqid() . '@t.t', 'password' => 'x',
             'role' => 'student', 'grade_num' => 9, 'onboarding_completed_at' => now(),
+            'telegram_chat_id' => random_int(100000000, 999999999),
         ]);
     }
 

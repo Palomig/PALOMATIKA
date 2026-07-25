@@ -39,24 +39,6 @@
         Google
       </a>
 
-      {{-- Telegram --}}
-      @if(config('services.telegram.bot_username'))
-      <div x-data="pwaTelegramAuth('{{ $context }}')" x-init="init()" style="display:flex;flex-direction:column;gap:6px;">
-        <button @click="start()" :disabled="loading || waiting"
-          class="btn btn-surface btn-left"
-          :style="(loading || waiting) ? 'opacity:0.6' : 'opacity:1'">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="#26a5e4"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
-          <span x-show="!loading && !waiting">Telegram</span>
-          <span x-show="loading" style="display:none">Подготовка...</span>
-          <span x-show="waiting" style="display:none">Ожидание в боте...</span>
-        </button>
-        <p x-show="waiting" x-cloak style="font-size:11px;color:var(--muted);text-align:center;margin:0;">
-          Откройте Telegram и нажмите «Start» в боте
-        </p>
-        <p x-show="error" x-text="error" x-cloak style="font-size:11px;color:var(--red);text-align:center;margin:0;"></p>
-      </div>
-      @endif
-
     </div>
   </div>
 
@@ -68,101 +50,6 @@
   </button>
 </div>
 
-<script>
-function pwaTelegramAuth(context) {
-  return {
-    loading: false,
-    waiting: false,
-    error: '',
-    pollInterval: null,
-
-    init() {
-      // Restore pending token after mobile navigation (iOS kills poller when deep_link opens)
-      try {
-        const pendingToken = sessionStorage.getItem('tg_pending_token');
-        if (pendingToken) {
-          this.waiting = true;
-          this.poll(pendingToken);
-        }
-      } catch (_) {}
-
-      // Resume poller when user returns to tab after opening Telegram
-      document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible' && this.waiting && !this.pollInterval) {
-          try {
-            const token = sessionStorage.getItem('tg_pending_token');
-            if (token) this.poll(token);
-          } catch (_) {}
-        }
-      });
-    },
-
-    async start() {
-      this.loading = true;
-      this.error = '';
-      this.waiting = false;
-
-      try {
-        const res = await fetch('/api/telegram/generate-token', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-          },
-          body: JSON.stringify({ pwa_redirect: context === 'teacher' ? 'teacher' : 'student' }),
-        });
-
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message || 'Ошибка');
-
-        this.loading = false;
-        this.waiting = true;
-
-        // Store token so poller can be restored if page is reloaded on mobile
-        try { sessionStorage.setItem('tg_pending_token', data.token); } catch (_) {}
-
-        // Always open in new tab/app so this page stays alive with the poller
-        window.open(data.deep_link, '_blank');
-
-        this.poll(data.token);
-      } catch (e) {
-        this.loading = false;
-        this.error = e.message;
-      }
-    },
-
-    poll(token) {
-      if (this.pollInterval) clearInterval(this.pollInterval);
-      let attempts = 0;
-      this.pollInterval = setInterval(async () => {
-        if (++attempts > 150) {
-          clearInterval(this.pollInterval);
-          this.pollInterval = null;
-          this.waiting = false;
-          try { sessionStorage.removeItem('tg_pending_token'); } catch (_) {}
-          this.error = 'Время ожидания истекло. Попробуйте снова.';
-          return;
-        }
-        try {
-          const res = await fetch('/api/telegram/check-token/' + token);
-          const data = await res.json();
-          if (data.status === 'authenticated') {
-            clearInterval(this.pollInterval);
-            this.pollInterval = null;
-            try { sessionStorage.removeItem('tg_pending_token'); } catch (_) {}
-            window.location.href = data.login_url;
-          } else if (data.status === 'expired' || data.status === 'not_found') {
-            clearInterval(this.pollInterval);
-            this.pollInterval = null;
-            try { sessionStorage.removeItem('tg_pending_token'); } catch (_) {}
-            this.waiting = false;
-            this.error = 'Сессия истекла. Попробуйте снова.';
-          }
-        } catch {}
-      }, 2000);
-    },
-  };
-}
-</script>
+{{-- Бот-логин со страницы входа убран: вход через Telegram идёт OIDC-редиректом,
+     а привязка чата для уведомлений живёт на /link-telegram. --}}
 @endsection
