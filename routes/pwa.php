@@ -54,6 +54,7 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
         Route::get('/link-telegram', [TelegramLinkController::class, 'show'])->name('pwa.student.link-telegram');
         Route::post('/link-telegram/start', [TelegramLinkController::class, 'start'])->name('pwa.student.link-telegram.start');
         Route::get('/link-telegram/status', [TelegramLinkController::class, 'status'])->name('pwa.student.link-telegram.status');
+        Route::post('/link-telegram/snooze', [TelegramLinkController::class, 'snooze'])->name('pwa.student.link-telegram.snooze');
     });
 
     // Protected student routes

@@ -23,7 +23,9 @@
 - **`TelegramIdentityResolver`**: `resolveByChatId()` для мини-аппа/бота, `resolveBySub()` для OIDC.
 - **Привязка** (`TelegramLinkService` + `Pwa\TelegramLinkController`, экран `/link-telegram`):
   веб-сессия выдаёт одноразовый код → `t.me/<bot>?start=link_<code>` → вебхук бота знает
-  и код, и настоящий id. Ученикам без chat_id экран обязателен — middleware `pwa.telegram-link`.
+  и код, и настоящий id. Ученикам без chat_id экран показывается middleware `pwa.telegram-link`,
+  но это не блок: кнопка «Напомнить позже» ставит `users.telegram_link_snoozed_until` на сутки,
+  а JSON-ручки и не-GET запросы не редиректятся вообще (миграция `2026_07_25_000002`).
 - **Склейка:** если chat_id уже принадлежит другой записи — это один человек, `AccountMergeService`
   переносит данные по 29 таблицам, донор получает `merged_into_id`. Канонический — по роли,
   при равных ролях по возрасту записи. Вручную: `php artisan users:merge {from} {into} [--dry-run]`.

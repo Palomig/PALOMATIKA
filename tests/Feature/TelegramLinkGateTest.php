@@ -32,7 +32,7 @@ class TelegramLinkGateTest extends TestCase
         ], $attributes));
     }
 
-    public function test_student_without_chat_id_is_sent_to_link_page(): void
+    public function test_student_without_chat_id_is_reminded(): void
     {
         $student = $this->unlinkedStudent(['oauth_provider' => 'yandex', 'oauth_id' => '977353831']);
 
@@ -95,6 +95,44 @@ class TelegramLinkGateTest extends TestCase
             ->getJson('https://' . $this->studentHost() . '/link-telegram/status?code=' . $code)
             ->assertOk()
             ->assertJson(['linked' => false]);
+    }
+
+    public function test_snooze_stops_reminder_for_a_day(): void
+    {
+        $student = $this->unlinkedStudent(['oauth_provider' => 'yandex', 'oauth_id' => '3']);
+
+        $this->actingAs($student)
+            ->post('https://' . $this->studentHost() . '/link-telegram/snooze')
+            ->assertRedirect('https://' . $this->studentHost() . '/');
+
+        $this->assertNotNull($student->fresh()->telegram_link_snoozed_until);
+
+        // Сутки экран не всплывает — привязка остаётся просьбой, а не блоком.
+        $this->actingAs($student)
+            ->get('https://' . $this->studentHost() . '/homework')
+            ->assertOk();
+    }
+
+    public function test_reminder_returns_after_snooze_expires(): void
+    {
+        $student = $this->unlinkedStudent([
+            'oauth_provider' => 'yandex', 'oauth_id' => '4',
+            'telegram_link_snoozed_until' => now()->subMinute(),
+        ]);
+
+        $this->actingAs($student)
+            ->get('https://' . $this->studentHost() . '/homework')
+            ->assertRedirect('https://' . $this->studentHost() . '/link-telegram');
+    }
+
+    public function test_json_requests_are_never_redirected(): void
+    {
+        $student = $this->unlinkedStudent(['oauth_provider' => 'google', 'oauth_id' => '5']);
+
+        // Фоновые ручки не должны ломаться из-за непривязанного телеграма.
+        $this->actingAs($student)
+            ->getJson('https://' . $this->studentHost() . '/lessons/active')
+            ->assertOk();
     }
 
     public function test_teacher_is_not_gated(): void

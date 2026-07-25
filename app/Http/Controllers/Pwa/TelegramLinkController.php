@@ -39,6 +39,14 @@ class TelegramLinkController extends Controller
         return response()->json($this->links->issueCode($request->user()));
     }
 
+    /** «Напомнить позже» — сутки не показываем экран. */
+    public function snooze(Request $request)
+    {
+        $request->user()->update(['telegram_link_snoozed_until' => now()->addDay()]);
+
+        return redirect('https://' . $request->getHost() . '/');
+    }
+
     /**
      * Опрос со страницы: бот уже получил /start?
      *
