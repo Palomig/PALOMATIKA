@@ -37,11 +37,19 @@
       @endif
       <div class="e10-answer">
         @if($part['check'] !== 'display')
+          @php
+            // Панель символов: корень для числовых ответов, знаки сравнения —
+            // для условий на параметр. Для «да/нет» она не нужна.
+            $pad = match ($part['check']) {
+                'number_set' => 'full',
+                'number' => 'roots',
+                'param_condition' => 'compare',
+                default => null,
+            };
+          @endphp
           <div class="e10-input-row" data-mathpad-anchor>
             <input type="text" class="e10-input" placeholder="Ответ" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="text"
-                   @if(in_array($part['check'], ['number', 'number_set'], true))
-                     data-mathpad="{{ $part['check'] === 'number_set' ? 'full' : 'roots' }}"
-                   @endif>
+                   @if($pad) data-mathpad="{{ $pad }}" @endif>
             <button type="button" class="e10-btn e10-check">Проверить</button>
           </div>
           @if($part['check'] === 'number_set')

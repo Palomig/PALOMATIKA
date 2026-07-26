@@ -71,4 +71,36 @@ class Entrance10AnswerCheckTest extends TestCase
         $this->assertTrue($this->service->isCorrect('yesno', 'да', 'Да'));
         $this->assertFalse($this->service->isCorrect('yesno', 'да', 'нет'));
     }
+
+    /**
+     * Условия на параметр набираются панелью символов, которая вставляет
+     * «≠ ≥ ≤» — сервер должен принимать их наравне с ASCII-записью.
+     *
+     * @dataProvider conditionAnswers
+     */
+    public function test_param_condition_accepts_pad_symbols(string $canonical, string $user, bool $want): void
+    {
+        $this->assertSame(
+            $want,
+            $this->service->isCorrect('param_condition', $canonical, $user),
+            "«{$user}» ↔ «{$canonical}»",
+        );
+    }
+
+    /** @return array<string, array{0:string,1:string,2:bool}> */
+    public static function conditionAnswers(): array
+    {
+        return [
+            'символ с панели' => ['p ≠ 9', 'p ≠ 9', true],
+            'ascii-запись' => ['p ≠ 9', 'p != 9', true],
+            'другая переменная' => ['p ≠ 9', 'b ≠ 9', true],
+            'два условия' => ['p > 0, p ≠ 9', 'p > 0, p ≠ 9', true],
+            'два условия в другом порядке' => ['p > 0, p ≠ 9', 'p ≠ 9, p > 0', true],
+            'нестрогий знак с панели' => ['p ≥ 0', 'p ≥ 0', true],
+            'нестрогий знак ascii' => ['p ≥ 0', 'p >= 0', true],
+            'строгий вместо нестрогого' => ['p ≥ 0', 'p > 0', false],
+            'потеряно условие' => ['p > 0, p ≠ 9', 'p > 0', false],
+            'другое число' => ['p ≠ 9', 'p ≠ 8', false],
+        ];
+    }
 }
