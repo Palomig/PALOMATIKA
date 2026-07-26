@@ -8,6 +8,13 @@ class TaskAnswerResolver
 {
     public const UNKNOWN_ANSWER = 'нет в базе';
 
+    private MathAnswerParser $mathParser;
+
+    public function __construct(?MathAnswerParser $mathParser = null)
+    {
+        $this->mathParser = $mathParser ?? new MathAnswerParser();
+    }
+
     public function resolveFromVariantTask(array $taskData): ?string
     {
         if (isset($taskData['canonical_answer']) && $taskData['canonical_answer'] !== null && $taskData['canonical_answer'] !== '') {
@@ -111,6 +118,19 @@ class TaskAnswerResolver
         $userRaw = (string) ($userAnswer ?? '');
         $user = $this->normalize($userRaw);
 
+        // Ответы с радикалом — только вторая часть ОГЭ (№20, 23). Строкой их
+        // не сверить: «12sqrt(6)», «12√6» и «sqrt(864)» — одно и то же число.
+        // Ветка включается по эталону, поэтому первой части не касается.
+        if ($this->mathParser->hasRadical($correctAnswer)) {
+            if ($this->isDecimalApproximationOfIrrational($userRaw, (string) $correctAnswer)) {
+                return false;
+            }
+            $match = $this->mathParser->answersMatch((string) $correctAnswer, $userRaw);
+            if ($match !== null) {
+                return $match;
+            }
+        }
+
         if (preg_match('/^\d+$/', $correct)) {
             $trimmedRaw = preg_replace('/\s+/', '', $userRaw) ?? '';
             if (preg_match('/^\d+$/', $trimmedRaw)) {
@@ -140,6 +160,31 @@ class TaskAnswerResolver
         }
 
         return $user !== '' && $user === $correct;
+    }
+
+    /**
+     * Ученик записал иррациональный ответ десятичной дробью: «4,65» вместо
+     * «-4+√7». Численно это совпадёт с эталоном, но на экзамене такой ответ
+     * не засчитывают — нужен точный.
+     */
+    private function isDecimalApproximationOfIrrational(string $userRaw, string $correctAnswer): bool
+    {
+        if (!$this->mathParser->looksLikeDecimalApproximation($userRaw)) {
+            return false;
+        }
+        if ($this->mathParser->hasRadical($userRaw)) {
+            return false;
+        }
+
+        $correctValue = $this->mathParser->value($correctAnswer);
+
+        // Эталон-множество или промежуток — десятичная дробь ему заведомо не равна.
+        if ($correctValue === null) {
+            return true;
+        }
+
+        // √4 = 2: рационален, десятичная запись законна.
+        return abs($correctValue - round($correctValue)) > 1e-9;
     }
 
     public function normalize(string $value): string

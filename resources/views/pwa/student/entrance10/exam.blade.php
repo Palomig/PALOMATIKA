@@ -96,6 +96,7 @@
           <div>
             <input class="ex-input" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false"
                    placeholder="Ответ"
+                   :data-mathpad="part.check === 'number_set' ? 'full' : (part.check === 'number' ? 'roots' : null)"
                    x-model="answers[part.slot]"
                    @input.debounce.700ms="save(part.slot)"
                    @blur="save(part.slot)">

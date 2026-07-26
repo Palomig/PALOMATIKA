@@ -37,8 +37,11 @@
       @endif
       <div class="e10-answer">
         @if($part['check'] !== 'display')
-          <div class="e10-input-row">
-            <input type="text" class="e10-input" placeholder="Ответ" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="text">
+          <div class="e10-input-row" data-mathpad-anchor>
+            <input type="text" class="e10-input" placeholder="Ответ" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="text"
+                   @if(in_array($part['check'], ['number', 'number_set'], true))
+                     data-mathpad="{{ $part['check'] === 'number_set' ? 'full' : 'roots' }}"
+                   @endif>
             <button type="button" class="e10-btn e10-check">Проверить</button>
           </div>
           @if($part['check'] === 'number_set')

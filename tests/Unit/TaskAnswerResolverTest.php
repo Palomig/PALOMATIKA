@@ -93,4 +93,63 @@ class TaskAnswerResolverTest extends TestCase
 
         $this->assertNull($answer);
     }
+
+    /**
+     * Вторая часть, №23: эталон «12sqrt(6)» принимает любую равносильную запись.
+     */
+    public function test_radical_answer_accepts_equivalent_notations(): void
+    {
+        $resolver = new TaskAnswerResolver();
+
+        foreach (['12sqrt(6)', '12√6', '12*sqrt(6)', 'sqrt(864)', '12√6 см'] as $user) {
+            $this->assertTrue($resolver->isCorrect($user, '12sqrt(6)'), $user);
+        }
+        $this->assertFalse($resolver->isCorrect('12√5', '12sqrt(6)'));
+    }
+
+    /** Иррациональный ответ десятичной дробью не засчитывается. */
+    public function test_radical_answer_rejects_decimal_approximation(): void
+    {
+        $resolver = new TaskAnswerResolver();
+
+        $this->assertFalse($resolver->isCorrect('29.39', '12sqrt(6)'));
+        $this->assertFalse($resolver->isCorrect('29,393876', '12sqrt(6)'));
+    }
+
+    /** №20: множество корней сверяется без учёта порядка. */
+    public function test_radical_root_set_is_order_independent(): void
+    {
+        $resolver = new TaskAnswerResolver();
+        $correct = '-4 - sqrt(7); -4 + sqrt(7)';
+
+        $this->assertTrue($resolver->isCorrect('-4 + √7; -4 - √7', $correct));
+        $this->assertTrue($resolver->isCorrect('-4±√7', $correct));
+        $this->assertFalse($resolver->isCorrect('-4 - √7', $correct));
+    }
+
+    /** №20, неравенство: промежуток сверяется вместе с типом скобок. */
+    public function test_radical_interval_answer(): void
+    {
+        $resolver = new TaskAnswerResolver();
+        $correct = '(1; 1 + \sqrt{2})';
+
+        $this->assertTrue($resolver->isCorrect('(1; 1+√2)', $correct));
+        $this->assertFalse($resolver->isCorrect('[1; 1+√2]', $correct));
+    }
+
+    /**
+     * Первая часть не должна измениться: там ответ — целое число или
+     * последовательность цифр, и ветка радикалов не включается.
+     */
+    public function test_plain_answers_are_unaffected(): void
+    {
+        $resolver = new TaskAnswerResolver();
+
+        $this->assertTrue($resolver->isCorrect('17', '17'));
+        $this->assertTrue($resolver->isCorrect(' 17 ', '17'));
+        $this->assertFalse($resolver->isCorrect('18', '17'));
+        $this->assertTrue($resolver->isCorrect('0.5', '1/2'));
+        $this->assertTrue($resolver->isCorrect('231', '231'));
+        $this->assertFalse($resolver->isCorrect('2.45', '17'));
+    }
 }
