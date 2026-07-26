@@ -3,6 +3,8 @@
   @include('partials.head-katex')
 @endpush
 
+@include('partials.math-answer-pad')
+
 @push('styles')
   .e10-intro {
     background: linear-gradient(180deg, rgba(79,142,247,.10), transparent), var(--surface);

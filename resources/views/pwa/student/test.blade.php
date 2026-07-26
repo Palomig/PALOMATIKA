@@ -5,6 +5,8 @@
 @include('partials.head-katex')
 @endpush
 
+@include('partials.math-answer-pad')
+
 @push('head')
 <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin>
@@ -793,7 +795,7 @@
           </template>
 
           {{-- Input type (expression, geometry, word_problem, etc.) --}}
-          <template x-if="normalizedOptions(currentTask).length === 0 && currentTask.type !== 'matching' && currentTask.type !== 'matching_signs'">
+          <template x-if="normalizedOptions(currentTask).length === 0 && currentTask.type !== 'matching' && currentTask.type !== 'matching_signs' && !hasRadicalAnswer(currentTask)">
             <div>
               <div class="answer-label">Введи ответ</div>
               <input class="answer-input"
@@ -804,6 +806,26 @@
                      x-model="answers[taskKey(currentTask)]"
                      x-ref="answerInput">
               <div class="answer-hint">Введи число и переходи дальше</div>
+            </div>
+          </template>
+
+          {{-- Вторая часть, №20 и №23: в ответе бывает корень, поэтому поле
+               с панелью символов (√ нет на клавиатуре телефона) и предпросмотром. --}}
+          <template x-if="normalizedOptions(currentTask).length === 0 && currentTask.type !== 'matching' && currentTask.type !== 'matching_signs' && hasRadicalAnswer(currentTask)">
+            <div>
+              <div class="answer-label">Введи ответ</div>
+              <input class="answer-input"
+                     type="text"
+                     inputmode="text"
+                     placeholder="Ответ"
+                     autocomplete="off"
+                     :data-mathpad="displayTaskNumber(currentTask) === 20 ? 'full' : 'roots'"
+                     x-model="answers[taskKey(currentTask)]"
+                     x-ref="answerInput">
+              <div class="answer-hint"
+                   x-text="displayTaskNumber(currentTask) === 20
+                     ? 'Несколько корней — через «;», промежуток — со скобками. Ответ точный, не десятичный.'
+                     : 'Корень пиши как √6 или sqrt(6). Ответ точный, не десятичный.'"></div>
             </div>
           </template>
 
@@ -1194,6 +1216,13 @@
       displayTaskNumber(task) {
         const raw = Number(task?.display_task_number ?? task?.task_number ?? this.taskKey(task));
         return Number.isFinite(raw) && raw > 0 ? raw : this.taskKey(task);
+      },
+
+      // Номера второй части, где в ответе встречается подкоренное выражение:
+      // №20 (уравнения и неравенства) и №23 (геометрия на вычисление).
+      // Признак по номеру, а не по эталону: эталон ученику не отдаётся.
+      hasRadicalAnswer(task) {
+        return [20, 23].includes(Number(this.displayTaskNumber(task)));
       },
 
       taskLocator(t) {

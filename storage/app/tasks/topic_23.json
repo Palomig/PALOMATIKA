@@ -540,7 +540,7 @@
               "id": 57,
               "src_key": "23.57",
               "text": "Найдите боковую сторону AB трапеции ABCD, если углы ABC и BCD равны соответственно 60° и 135°, а CD = 36.",
-              "answer": "12√6",
+              "answer": "12sqrt(6)",
               "type": "geometry",
               "status": "active"
             },
@@ -548,7 +548,7 @@
               "id": 58,
               "src_key": "23.58",
               "text": "Найдите боковую сторону AB трапеции ABCD, если углы ABC и BCD равны соответственно 60° и 135°, а CD = 24.",
-              "answer": "8√6",
+              "answer": "8sqrt(6)",
               "type": "geometry",
               "status": "active"
             },
@@ -556,7 +556,7 @@
               "id": 59,
               "src_key": "23.59",
               "text": "Найдите боковую сторону AB трапеции ABCD, если углы ABC и BCD равны соответственно 60° и 150°, а CD = 33.",
-              "answer": "11√3",
+              "answer": "11sqrt(3)",
               "type": "geometry",
               "status": "active"
             },
@@ -564,7 +564,7 @@
               "id": 60,
               "src_key": "23.60",
               "text": "Найдите боковую сторону AB трапеции ABCD, если углы ABC и BCD равны соответственно 60° и 150°, а CD = 45.",
-              "answer": "15√3",
+              "answer": "15sqrt(3)",
               "type": "geometry",
               "status": "active"
             },
@@ -572,7 +572,7 @@
               "id": 61,
               "src_key": "23.61",
               "text": "Найдите боковую сторону AB трапеции ABCD, если углы ABC и BCD равны соответственно 45° и 120°, а CD = 34.",
-              "answer": "17√6",
+              "answer": "17sqrt(6)",
               "type": "geometry",
               "status": "active"
             },
@@ -580,7 +580,7 @@
               "id": 62,
               "src_key": "23.62",
               "text": "Найдите боковую сторону AB трапеции ABCD, если углы ABC и BCD равны соответственно 45° и 120°, а CD = 40.",
-              "answer": "20√6",
+              "answer": "20sqrt(6)",
               "type": "geometry",
               "status": "active"
             },
@@ -588,7 +588,7 @@
               "id": 63,
               "src_key": "23.63",
               "text": "Найдите боковую сторону AB трапеции ABCD, если углы ABC и BCD равны соответственно 30° и 120°, а CD = 25.",
-              "answer": "25√3",
+              "answer": "25sqrt(3)",
               "type": "geometry",
               "status": "active"
             },
@@ -596,7 +596,7 @@
               "id": 64,
               "src_key": "23.64",
               "text": "Найдите боковую сторону AB трапеции ABCD, если углы ABC и BCD равны соответственно 30° и 120°, а CD = 18.",
-              "answer": "18√3",
+              "answer": "18sqrt(3)",
               "type": "geometry",
               "status": "active"
             },
@@ -604,7 +604,7 @@
               "id": 65,
               "src_key": "23.65",
               "text": "Найдите боковую сторону AB трапеции ABCD, если углы ABC и BCD равны соответственно 30° и 135°, а CD = 17.",
-              "answer": "17√2",
+              "answer": "17sqrt(2)",
               "type": "geometry",
               "status": "active"
             },
@@ -612,7 +612,7 @@
               "id": 66,
               "src_key": "23.66",
               "text": "Найдите боковую сторону AB трапеции ABCD, если углы ABC и BCD равны соответственно 30° и 135°, а CD = 29.",
-              "answer": "29√2",
+              "answer": "29sqrt(2)",
               "type": "geometry",
               "status": "active"
             },
@@ -620,7 +620,7 @@
               "id": 67,
               "src_key": "23.67",
               "text": "Найдите боковую сторону AB трапеции ABCD, если углы ABC и BCD равны соответственно 45° и 150°, а CD = 26.",
-              "answer": "13√2",
+              "answer": "13sqrt(2)",
               "type": "geometry",
               "status": "active"
             },
@@ -628,7 +628,7 @@
               "id": 68,
               "src_key": "23.68",
               "text": "Найдите боковую сторону AB трапеции ABCD, если углы ABC и BCD равны соответственно 45° и 150°, а CD = 32.",
-              "answer": "16√2",
+              "answer": "16sqrt(2)",
               "type": "geometry",
               "status": "active"
             }

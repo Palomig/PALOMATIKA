@@ -424,6 +424,68 @@ class StudentController extends Controller
     }
 
     /**
+     * Проверка ответа к заданию второй части в разделе «2я часть ОГЭ».
+     * Ответ ученика сверяется на сервере, чтобы работал общий разбор
+     * выражений с корнями (TaskAnswerResolver → MathAnswerParser).
+     */
+    public function part2Check(Request $request)
+    {
+        $data = $request->validate([
+            'topic' => 'required|string|max:2',
+            'zadanie' => 'required|integer|min:1',
+            'task_id' => 'required|integer|min:1',
+            'answer' => 'nullable|string|max:255',
+            'reveal' => 'nullable|boolean',
+        ]);
+
+        $correct = $this->part2TaskAnswer($data['topic'], (int) $data['zadanie'], (int) $data['task_id']);
+        if ($correct === null) {
+            return response()->json(['error' => 'not_found'], 404);
+        }
+
+        if (!empty($data['reveal'])) {
+            return response()->json(['status' => 'revealed', 'answer' => $correct]);
+        }
+
+        $answer = trim((string) ($data['answer'] ?? ''));
+        if ($answer === '') {
+            return response()->json(['error' => 'empty_answer'], 422);
+        }
+
+        return response()->json([
+            'status' => 'checked',
+            'correct' => (bool) $this->answerResolver->isCorrect($answer, $correct),
+        ]);
+    }
+
+    /** Эталонный ответ конкретной задачи второй части или null, если её нет. */
+    private function part2TaskAnswer(string $topic, int $zadanieNumber, int $taskId): ?string
+    {
+        if (!in_array($topic, ['20', '21', '23', '24', '25'], true)) {
+            return null;
+        }
+
+        $data = $this->taskData->getTopicData($topic);
+        foreach (($data['blocks'] ?? []) as $block) {
+            foreach (($block['zadaniya'] ?? []) as $zadanie) {
+                if ((int) ($zadanie['number'] ?? 0) !== $zadanieNumber) {
+                    continue;
+                }
+                foreach (($zadanie['tasks'] ?? []) as $task) {
+                    if ((int) ($task['id'] ?? 0) !== $taskId) {
+                        continue;
+                    }
+                    $answer = trim((string) ($task['answer'] ?? ''));
+
+                    return $answer === '' ? null : $answer;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Подробное решение задания части 2 — ТОЛЬКО для учителей/админов
      * (роут защищён middleware role:teacher,admin). Текст решения и SVG живут
      * в поле `solution` соответствующего zadanie в topic_{N}.json.

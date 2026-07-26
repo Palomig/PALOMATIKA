@@ -1,6 +1,8 @@
 @extends('layouts.pwa')
 @section('title', '2я часть ОГЭ — palomatika')
 
+@include('partials.math-answer-pad')
+
 @push('katex')
 @include('partials.head-katex')
 @endpush
@@ -123,6 +125,22 @@
   .answer-blur { filter: blur(6px); user-select: none; pointer-events: none; color: var(--text); font-family: var(--display); font-size: 14px; }
   .premium-cta { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: var(--purple); cursor: pointer; white-space: nowrap; }
 
+  .p2-answer { margin-top: 10px; }
+  .p2-input-row { display: flex; gap: 8px; }
+  .p2-input { flex: 1; min-width: 0; border: 1.5px solid var(--border); border-radius: 10px; padding: 9px 11px;
+    font-size: 14px; background: var(--bg); color: var(--text); }
+  .p2-input:focus { outline: none; border-color: var(--accent); }
+  .p2-btn { flex-shrink: 0; border: none; border-radius: 10px; padding: 9px 14px; font-weight: 800; font-size: 13px;
+    background: var(--accent); color: #fff; cursor: pointer; }
+  .p2-btn:disabled { opacity: .5; }
+  .p2-hint { font-size: 10.5px; color: var(--muted); margin-top: 6px; line-height: 1.4; }
+  .p2-reveal { display: inline-block; margin-top: 8px; border: none; background: none; padding: 2px 0;
+    color: var(--muted); font-weight: 700; font-size: 12px; cursor: pointer; text-decoration: underline; }
+  .p2-result { margin-top: 9px; border-radius: 10px; padding: 9px 11px; font-size: 13px; line-height: 1.45; }
+  .p2-result.ok { background: rgba(22,163,74,.10); border: 1px solid rgba(22,163,74,.35); color: var(--green); font-weight: 700; }
+  .p2-result.bad { background: rgba(220,38,38,.08); border: 1px solid rgba(220,38,38,.3); color: #dc2626; font-weight: 700; }
+  .p2-result.neutral { background: var(--accent-bg); border: 1px solid var(--accent-bd); color: var(--text); }
+
   .pm-overlay { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,.55); backdrop-filter: blur(4px); display: flex; align-items: flex-end; justify-content: center; }
   .pm-sheet { background: var(--bg); border-radius: 20px 20px 0 0; width: 100%; max-width: 420px; padding: 24px 20px 32px; }
   .pm-handle { width: 36px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 16px; }
@@ -209,15 +227,31 @@
               @endif
               <div class="task-item-text">{{ $task['text'] }}</div>
               @if(!empty($task['answer']))
-                <div class="answer-row">
-                  <span class="answer-label">Ответ:</span>
-                  @if($isPremium)
+                @if($isTeacher)
+                  {{-- Учителю ответ нужен как справка — показываем сразу. --}}
+                  <div class="answer-row">
+                    <span class="answer-label">Ответ:</span>
                     <span class="answer-value">{{ $task['answer'] }}</span>
-                  @else
-                    <span class="answer-blur">{{ $task['answer'] }}</span>
-                    <span class="premium-cta" @click="showPremium = true">Premium</span>
-                  @endif
-                </div>
+                  </div>
+                @else
+                  <div class="p2-answer" data-zadanie="{{ $group['number'] }}" data-task="{{ $task['id'] }}">
+                    <div class="p2-input-row" data-mathpad-anchor>
+                      <input type="text" class="p2-input" placeholder="Твой ответ"
+                             autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="text"
+                             @if(in_array($selectedTopic, ['20', '23'], true))
+                               data-mathpad="{{ $selectedTopic === '20' ? 'full' : 'roots' }}"
+                             @endif>
+                      <button type="button" class="p2-btn p2-check">Проверить</button>
+                    </div>
+                    @if($selectedTopic === '20')
+                      <div class="p2-hint">Несколько корней — через «;». Промежуток — со скобками: (1; 1+√2).</div>
+                    @elseif($selectedTopic === '23')
+                      <div class="p2-hint">Корень пиши как √6 или sqrt(6). Ответ нужен точный, не десятичный.</div>
+                    @endif
+                    <div class="p2-result" hidden></div>
+                    <button type="button" class="p2-reveal">Показать ответ</button>
+                  </div>
+                @endif
               @endif
               @if(!empty($task['id']))
                 <div class="task-item-meta">{{ $task['id'] }}</div>
@@ -287,5 +321,64 @@
       },
     };
   }
+
+  // Проверка ответа к заданию второй части. Сверка на сервере — там общий
+  // разбор выражений с корнями, свой в JS дублировать нельзя.
+  (function () {
+    const TOPIC = @json($selectedTopic);
+    const URL = @json(route('pwa.student.part2.check'));
+    const CSRF = document.querySelector('meta[name="csrf-token"]')?.content;
+
+    function show(box, cls, text) {
+      box.className = 'p2-result ' + cls;
+      box.textContent = text;
+      box.hidden = false;
+    }
+
+    async function run(wrap, reveal) {
+      const input = wrap.querySelector('.p2-input');
+      const box = wrap.querySelector('.p2-result');
+      const answer = input ? input.value.trim() : '';
+      if (!reveal && answer === '') { input?.focus(); return; }
+
+      const btn = wrap.querySelector(reveal ? '.p2-reveal' : '.p2-check');
+      if (btn) btn.disabled = true;
+      try {
+        const res = await fetch(URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF, 'Accept': 'application/json' },
+          body: JSON.stringify({
+            topic: TOPIC,
+            zadanie: Number(wrap.dataset.zadanie),
+            task_id: Number(wrap.dataset.task),
+            answer,
+            reveal: !!reveal,
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) { show(box, 'neutral', 'Не удалось проверить, попробуй ещё раз'); return; }
+        if (data.status === 'revealed') show(box, 'neutral', 'Ответ: ' + data.answer);
+        else if (data.correct) show(box, 'ok', '✓ Верно!');
+        else show(box, 'bad', '✗ Неверно, попробуй ещё раз');
+      } catch (e) {
+        show(box, 'neutral', 'Нет связи с сервером');
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    }
+
+    document.addEventListener('click', function (e) {
+      const check = e.target.closest('.p2-check');
+      if (check) { run(check.closest('.p2-answer'), false); return; }
+      const reveal = e.target.closest('.p2-reveal');
+      if (reveal) { run(reveal.closest('.p2-answer'), true); }
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && e.target.classList?.contains('p2-input')) {
+        e.preventDefault();
+        run(e.target.closest('.p2-answer'), false);
+      }
+    });
+  })();
 </script>
 @endpush

@@ -63,6 +63,7 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
         Route::get('/mini', [StudentController::class, 'mini'])->name('pwa.student.mini');
         Route::get('/new-tasks', [StudentController::class, 'newTasks'])->name('pwa.student.new-tasks');
         Route::get('/part2', [StudentController::class, 'part2'])->name('pwa.student.part2');
+        Route::post('/part2/check', [StudentController::class, 'part2Check'])->name('pwa.student.part2.check');
         // Подробное решение — только учителя/админы (ученикам 403 через role middleware)
         Route::get('/part2/solution/{topic}/{number}', [StudentController::class, 'part2Solution'])
             ->whereNumber('number')

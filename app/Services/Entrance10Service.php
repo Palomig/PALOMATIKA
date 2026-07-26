@@ -28,8 +28,10 @@ class Entrance10Service
 
     private ?array $bank = null;
 
-    public function __construct(private readonly Entrance10Generator $generator)
-    {
+    public function __construct(
+        private readonly Entrance10Generator $generator,
+        private readonly MathAnswerParser $math = new MathAnswerParser(),
+    ) {
     }
 
     // ---------------------------------------------------------------- данные
@@ -257,84 +259,28 @@ class Entrance10Service
         };
     }
 
+    /**
+     * Числа и множества чисел, в том числе с корнями. Разбор общий со второй
+     * частью ОГЭ (MathAnswerParser): принимает «√6», «sqrt6», «корень из 6»,
+     * «2√3», «(3+√5)/2», «±√6» и промежутки.
+     */
     private function checkNumberSet(string $canonical, string $user): bool
     {
-        $expected = $this->parseNumericSet($canonical);
-        $got = $this->parseNumericSet($user);
-        if ($expected === null || $got === null) {
-            // запасной вариант — строгое строковое сравнение
-            return $this->normalizeString($canonical) === $this->normalizeString($user) && $this->normalizeString($user) !== '';
-        }
-        if (count($expected) !== count($got)) {
+        // Иррациональный ответ десятичной дробью не засчитываем — нужен точный.
+        if ($this->math->hasRadical($canonical)
+            && $this->math->looksLikeDecimalApproximation($user)
+            && !$this->math->hasRadical($user)
+        ) {
             return false;
         }
-        foreach ($expected as $i => $v) {
-            if (abs($v - $got[$i]) > 1e-6) {
-                return false;
-            }
-        }
-        return true;
-    }
 
-    /** @return array<int, float>|null отсортированный список значений или null при неудаче */
-    private function parseNumericSet(string $s): ?array
-    {
-        $s = trim($s);
-        if ($s === '') {
-            return null;
-        }
-        // разделители: ; , пробелы, «и»
-        $s = str_ireplace([' и ', ' и', 'и '], ';', $s);
-        $parts = preg_split('/[;,\s]+/u', $s, -1, PREG_SPLIT_NO_EMPTY);
-        $values = [];
-        foreach ($parts as $token) {
-            $v = $this->parseNumericToken($token);
-            if ($v === null) {
-                return null;
-            }
-            $values[] = $v;
-        }
-        if (empty($values)) {
-            return null;
-        }
-        sort($values);
-        return $values;
-    }
-
-    private function parseNumericToken(string $token): ?float
-    {
-        $t = mb_strtolower(trim($token));
-        $t = str_replace(['−', '–', '—'], '-', $t);
-        $t = str_replace(',', '.', $t);
-        $t = str_replace(' ', '', $t);
-        // sqrt(6) | sqrt6 | корень6 -> √6
-        $t = preg_replace('/sqrt\(([0-9.]+)\)/u', '√$1', $t) ?? $t;
-        $t = str_replace(['sqrt', 'корень', 'root', '\\sqrt'], '√', $t);
-        $t = str_replace(['(', ')', '{', '}'], '', $t);
-        if ($t === '' || $t === '-') {
-            return null;
+        $match = $this->math->answersMatch($canonical, $user);
+        if ($match !== null) {
+            return $match;
         }
 
-        // ±coef√rad  (coef может отсутствовать => 1)
-        if (preg_match('/^(-?)(\d+(?:\.\d+)?)?\*?√(\d+(?:\.\d+)?)$/u', $t, $m)) {
-            $sign = $m[1] === '-' ? -1.0 : 1.0;
-            $coef = ($m[2] === '' || $m[2] === null) ? 1.0 : (float) $m[2];
-            $rad = (float) $m[3];
-            return $sign * $coef * sqrt($rad);
-        }
-        // дробь a/b
-        if (preg_match('/^(-?\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)$/u', $t, $m)) {
-            $den = (float) $m[2];
-            if (abs($den) < 1e-12) {
-                return null;
-            }
-            return (float) $m[1] / $den;
-        }
-        // обычное число
-        if (preg_match('/^-?\d+(?:\.\d+)?$/u', $t)) {
-            return (float) $t;
-        }
-        return null;
+        // запасной вариант — строгое строковое сравнение
+        return $this->normalizeString($canonical) === $this->normalizeString($user) && $this->normalizeString($user) !== '';
     }
 
     private function checkParamCondition(string $canonical, string $user): bool
