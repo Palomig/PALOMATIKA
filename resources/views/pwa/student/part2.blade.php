@@ -13,6 +13,11 @@
      но в PWA Tailwind не подключён — он живёт в head-config, а тут своя тема.
      Без этих правил SVG с одним viewBox схлопывается в нулевую высоту, и
      ученик видит условие без рисунка. */
+  .fipi-drawing {
+    margin: 0 0 10px; padding: 8px; border: 1px solid var(--border);
+    border-radius: 10px; background: #0a1628;
+  }
+  .fipi-drawing svg { width: 100%; height: auto; display: block; margin: 0 auto; max-width: 460px; }
   .fipi-html svg { width: 100%; height: auto; display: block; margin: 0 auto; max-width: 350px; }
   .fipi-html svg[class*="max-w-[250px]"] { max-width: 250px; }
   .fipi-html svg[class*="max-w-[280px]"] { max-width: 280px; }
@@ -248,6 +253,10 @@
                 <img src="{{ asset('images/tasks/' . $selectedTopic . '/' . ltrim($task['image'], '/')) }}"
                      alt="" style="display:block;max-width:100%;height:auto;margin-bottom:10px;border:1px solid var(--border);border-radius:10px;background:#fff;padding:4px;" loading="lazy">
               @endif
+              @if(!empty($task['drawing']))
+                <div class="fipi-drawing">{!! $task['drawing'] !!}</div>
+              @endif
+
               @if(!empty($task['html']))
                 {{-- Банк ФИПИ: разметка уже готова (KaTeX + инлайновые SVG) --}}
                 <div class="task-item-text fipi-html">{!! $task['html'] !!}</div>

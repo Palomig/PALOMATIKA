@@ -30,6 +30,12 @@
      но в PWA Tailwind не подключён — он живёт в head-config, а тут своя тема.
      Без этих правил SVG с одним viewBox схлопывается в нулевую высоту, и
      ученик видит условие без рисунка. */
+  /* Вынесенный чертёж: во всю ширину карточки, над условием. */
+  .fipi-drawing {
+    margin: 0 0 10px; padding: 8px; border: 1px solid var(--border);
+    border-radius: 10px; background: #0a1628;
+  }
+  .fipi-drawing svg { width: 100%; height: auto; display: block; margin: 0 auto; max-width: 460px; }
   .fipi-html svg { width: 100%; height: auto; display: block; margin: 0 auto; max-width: 350px; }
   .fipi-html svg[class*="max-w-[250px]"] { max-width: 250px; }
   .fipi-html svg[class*="max-w-[280px]"] { max-width: 280px; }
@@ -152,7 +158,7 @@
 
   <div class="hero" style="opacity:0; animation: fadeUp 0.3s ease 0.04s forwards;">
     <div class="hero-title">1я часть ОГЭ</div>
-    <div class="hero-sub">задания 6–19 · {{ $taskCount }} заданий</div>
+    <div class="hero-sub">задания 1–19 · {{ $taskCount }} заданий</div>
   </div>
 
   <div class="sec-label">Выбери задание</div>
@@ -191,6 +197,11 @@
 
               @if(!empty($task['question']))
                 <div class="task-item-text" style="margin-bottom:6px; color:var(--muted); font-size:12px;">{{ $task['question'] }}</div>
+              @endif
+
+              @if(!empty($task['drawing']))
+                {{-- Чертёж вынесен из таблицы условия и показан крупно сверху --}}
+                <div class="fipi-drawing">{!! $task['drawing'] !!}</div>
               @endif
 
               @if(!empty($task['html']))

@@ -387,9 +387,11 @@ class StudentController extends Controller
                     $text = trim((string) ($t['text'] ?? ''));
                     $html = trim((string) ($t['html'] ?? ''));   // условие из банка ФИПИ
                     if ($text === '' && $html === '') continue;
+                    [$drawing, $htmlRest] = $this->extractSingleDrawing($html);
                     $tasks[] = [
-                        'id'     => $t['id'] ?? null,
-                        'html'   => $html !== '' ? $html : null,
+                        'id'      => $t['id'] ?? null,
+                        'drawing' => $drawing,
+                        'html'    => $htmlRest !== '' ? $htmlRest : null,
                         'text'   => $text,
                         'image'  => $t['image'] ?? null,
                         'answer' => $t['answer'] ?? null,
@@ -620,6 +622,34 @@ class StudentController extends Controller
     /**
      * OGE Part 1 tasks (topics 06-19, production status only).
      */
+
+    /**
+     * Вынести единственный чертёж из разметки условия.
+     *
+     * У банка ФИПИ условие и рисунок лежат в соседних ячейках таблицы, и
+     * ячейка зажимает чертёж в узкую полоску. Если рисунок в задании один,
+     * показываем его отдельным блоком над текстом — крупно и во всю ширину
+     * карточки. Задания с несколькими рисунками (соответствия темы 11, где
+     * график привязан к своему номеру) не трогаем: там место рисунка значащее.
+     *
+     * @return array{0: ?string, 1: string}  [чертёж, оставшаяся разметка]
+     */
+    private function extractSingleDrawing(string $html): array
+    {
+        if (substr_count($html, '<svg') !== 1) {
+            return [null, $html];
+        }
+        if (!preg_match('/<svg\b.*?<\/svg>/is', $html, $m)) {
+            return [null, $html];
+        }
+
+        $rest = str_replace($m[0], '', $html);
+        // Пустые обёртки, оставшиеся от вынутого рисунка.
+        $rest = preg_replace('/<p>\s*<\/p>|<td>\s*<\/td>/i', '', $rest) ?? $rest;
+
+        return [$m[0], $rest];
+    }
+
     public function tasksPart1(Request $request)
     {
         // Задания 1–5 (практико-ориентированный блок) появились вместе с
@@ -689,9 +719,12 @@ class StudentController extends Controller
                         }, $rawOptions);
                     }
 
+                    [$drawing, $htmlRest] = $this->extractSingleDrawing($html);
+
                     $tasks[] = [
                         'id'         => $t['id'] ?? null,
-                        'html'       => $html !== '' ? $html : null,
+                        'drawing'    => $drawing,
+                        'html'       => $htmlRest !== '' ? $htmlRest : null,
                         'text'       => $text,
                         'expression' => $expression !== '' ? $expression : null,
                         'svg'        => $t['svg'] ?? null,
