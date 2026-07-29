@@ -5,10 +5,12 @@ namespace App\Console\Commands;
 use App\Models\Task;
 use App\Models\TaskGroup;
 use App\Models\TaskTopic;
+use App\Services\FipiTaskTaxonomy;
 use App\Services\TaskBankRepository;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use InvalidArgumentException;
 
 /**
  * Импорт банка открытого банка ФИПИ (`bank_katex.json`) в ОГЭ.
@@ -91,16 +93,31 @@ class ImportFipiBank extends Command
         $tasks = $bank['tasks'];
         usort($tasks, static fn (array $a, array $b) => [$a['topic'], ...$a['order']] <=> [$b['topic'], ...$b['order']]);
 
-        $groups = [];
+        $topics = [];
         foreach ($tasks as $task) {
             $topic = str_pad((string) $task['topic'], 2, '0', STR_PAD_LEFT);
-            $groups[$topic][$task['subtype_id'] ?? 1][] = $task;
+            $topics[$topic][] = $task;
+        }
+
+        try {
+            $groups = [];
+            foreach ($topics as $topic => $items) {
+                $taxonomy = FipiTaskTaxonomy::forTopic($topic);
+                $groups[$topic] = $taxonomy
+                    ? $taxonomy->group($items)
+                    : $this->sourceGroups($items);
+            }
+        } catch (InvalidArgumentException $e) {
+            $this->error($e->getMessage());
+
+            return self::FAILURE;
         }
 
         $counts = ['topics' => 0, 'groups' => 0, 'tasks' => 0, 'no_answer' => 0];
-        foreach ($groups as $topic => $subtypes) {
+        foreach ($groups as $definitions) {
             $counts['topics']++;
-            foreach ($subtypes as $items) {
+            foreach ($definitions as $definition) {
+                $items = $definition['items'];
                 $counts['groups']++;
                 $counts['tasks'] += count($items);
                 $counts['no_answer'] += count(array_filter($items, static fn ($t) => self::missingAnswer($t)));
@@ -120,11 +137,11 @@ class ImportFipiBank extends Command
             // задания Паломатики: они различаются по `source`.
             TaskGroup::query()->where('bank', 'oge')->where('source', 'fipi')->delete();
 
-            foreach ($groups as $topic => $subtypes) {
+            foreach ($groups as $topic => $definitions) {
                 $this->upsertTopic($topic, $bank);
                 $position = 0;
-                foreach ($subtypes as $subtypeId => $items) {
-                    $this->createGroup($topic, (int) $subtypeId, $items, $position++);
+                foreach ($definitions as $definition) {
+                    $this->createGroup($topic, $definition, $position++);
                 }
             }
 
@@ -166,30 +183,64 @@ class ImportFipiBank extends Command
         ]);
     }
 
-    /** @param array<int, array<string, mixed>> $items */
-    private function createGroup(string $topic, int $subtypeId, array $items, int $position): void
+    /**
+     * Исходная группировка ФИПИ для тем без курируемой учебной карты.
+     *
+     * @param array<int, array<string, mixed>> $items
+     * @return array<int, array<string, mixed>>
+     */
+    private function sourceGroups(array $items): array
     {
+        $subtypes = [];
+        foreach ($items as $task) {
+            $subtypes[$task['subtype_id'] ?? 1][] = $task;
+        }
+
+        $groups = [];
+        foreach ($subtypes as $subtypeId => $tasks) {
+            $groups[] = [
+                'block_number' => 1,
+                'block_title' => 'ФИПИ',
+                'number' => (int) $subtypeId,
+                'key' => null,
+                'title' => $tasks[0]['subtype_title'] ?? null,
+                'items' => $tasks,
+            ];
+        }
+
+        return $groups;
+    }
+
+    /** @param array<string, mixed> $definition */
+    private function createGroup(string $topic, array $definition, int $position): void
+    {
+        $items = $definition['items'];
+        $payload = [
+            'part2' => (bool) ($items[0]['part2'] ?? false),
+            'instruction' => $definition['title'] ?? null,
+            'type' => 'fipi',
+            'status' => 'production',
+        ];
+        if (!empty($definition['key'])) {
+            $payload['taxonomy_key'] = $definition['key'];
+        }
+
         $group = TaskGroup::create([
             'bank' => 'oge',
             'grade' => null,
             'topic' => $topic,
-            'block_number' => 1,
-            'block_title' => 'ФИПИ',
-            'zadanie_number' => $subtypeId,
+            'block_number' => $definition['block_number'],
+            'block_title' => $definition['block_title'],
+            'zadanie_number' => $definition['number'],
             'position' => $position,
-            'instruction' => $items[0]['subtype_title'] ?? null,
+            'instruction' => $definition['title'] ?? null,
             'type' => 'fipi',
             // Всё, что нужно интерфейсу, обязано лежать в payload: структуру
             // репозиторий собирает именно из него, а колонки существуют ради
             // запросов и индексов. Без `instruction` падал сбор варианта,
             // без `type` задание уходило в шаблон по умолчанию, без `status`
             // фильтр «production» отсекал банк целиком.
-            'payload' => [
-                'part2' => (bool) ($items[0]['part2'] ?? false),
-                'instruction' => $items[0]['subtype_title'] ?? null,
-                'type' => 'fipi',
-                'status' => 'production',
-            ],
+            'payload' => $payload,
             'status' => 'production',
             'source' => 'fipi',
         ]);

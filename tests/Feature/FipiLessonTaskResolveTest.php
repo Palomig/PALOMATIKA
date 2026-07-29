@@ -192,4 +192,52 @@ class FipiLessonTaskResolveTest extends TestCase
         $this->assertStringContainsString('1)', $resolved['expression']);
         $this->assertStringContainsString('2)', $resolved['expression']);
     }
+
+    public function test_teacher_can_add_tasks_from_split_and_merged_topic_16_groups(): void
+    {
+        $teacher = User::create([
+            'name' => 'Taxonomy teacher',
+            'email' => 'taxonomy-lesson@example.test',
+            'password' => 'x',
+            'role' => 'teacher',
+        ]);
+        $session = LessonSession::create([
+            'teacher_id' => $teacher->id,
+            'status' => LessonSession::STATUS_DRAFT,
+            'join_code' => '1616',
+        ]);
+
+        $representativeGuids = [
+            // Исходный subtype 11 разделён: описанный четырёхугольник → группа 12.
+            '23DB227D40FFBF0F4A51F13E4FE84C4E',
+            // Исходные subtype 12 и 18 объединены общей формулой r = a√3/6.
+            '00975F104F1792504C505CDEFABB3563',
+            '0369CB6A6A6BBEA44B84323F497738DD',
+        ];
+
+        foreach ($representativeGuids as $guid) {
+            $source = Task::query()->with('group')->where('fipi_guid', $guid)->firstOrFail();
+
+            $response = $this->actingAs($teacher)->postJson(
+                self::TEACHER_BASE . "/lessons/{$session->id}/tasks",
+                [
+                    'bank' => 'oge',
+                    'refs' => [
+                        'topic_id' => '16',
+                        'zadanie_number' => $source->group->zadanie_number,
+                        'task_id' => $source->payload['id'],
+                    ],
+                ],
+            );
+
+            $response->assertCreated();
+            $response->assertJsonPath('task.task_payload.type', 'expression');
+            $this->assertNotSame('', trim((string) $response->json('task.task_payload.expression')));
+            $this->assertNotSame('', trim((string) $response->json('task.correct_answer')));
+            $this->assertStringContainsString(
+                '<svg',
+                (string) $response->json('task.task_payload.image_svg'),
+            );
+        }
+    }
 }
