@@ -25,6 +25,15 @@
     color: var(--purple);
   }
 
+  /* Условия из банка ФИПИ приходят готовой разметкой: инлайновые SVG со
+     своими классами, таблицы соответствий темы 11, абзацы. Здесь только то,
+     без чего вёрстка расползается на узком экране. */
+  .fipi-html svg, .fipi-html img { max-width: 100%; height: auto; }
+  .fipi-html p { margin: 0 0 8px; }
+  .fipi-html p:last-child { margin-bottom: 0; }
+  .fipi-html table { border-collapse: collapse; max-width: 100%; }
+  .fipi-html td { vertical-align: top; padding: 2px 6px; }
+  .fipi-html { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .spoiler {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -170,16 +179,27 @@
                 <div class="task-item-text" style="margin-bottom:6px; color:var(--muted); font-size:12px;">{{ $task['question'] }}</div>
               @endif
 
-              @if($task['text'] !== '')
+              @if(!empty($task['html']))
+                {{-- Банк ФИПИ: условие уже свёрстано — формулы в KaTeX,
+                     чертежи инлайновыми SVG. Экранировать нельзя. --}}
+                <div class="task-item-text fipi-html">{!! $task['html'] !!}</div>
+              @elseif($task['text'] !== '')
                 <div class="task-item-text">{!! nl2br(e($task['text'])) !!}</div>
               @elseif(!empty($task['expression']))
                 <div class="task-item-text" style="font-size:15px;">$${{ $task['expression'] }}$$</div>
               @endif
 
               @if(!empty($task['options']) && is_array($task['options']))
-                <div style="margin-top:8px; display:flex; flex-wrap:wrap; gap:6px;">
+                <div style="margin-top:8px; display:flex; flex-direction:column; gap:6px;">
                   @foreach($task['options'] as $opt)
-                    <span style="padding:4px 10px; border:1px solid var(--border); border-radius:8px; font-size:12px; color:var(--muted);">{{ \App\Support\OptionLabelFormatter::optionLabel($opt, $loop->index) }}. {{ \App\Support\OptionLabelFormatter::optionText($opt) }}</span>
+                    @if(is_array($opt) && isset($opt['html']))
+                      <div style="display:flex; gap:8px; align-items:flex-start;">
+                        <span style="color:var(--muted); font-size:12px; flex:0 0 auto;">{{ $opt['n'] ?? $loop->iteration }})</span>
+                        <div class="fipi-html" style="min-width:0;">{!! $opt['html'] !!}</div>
+                      </div>
+                    @else
+                      <span style="padding:4px 10px; border:1px solid var(--border); border-radius:8px; font-size:12px; color:var(--muted);">{{ \App\Support\OptionLabelFormatter::optionLabel($opt, $loop->index) }}. {{ \App\Support\OptionLabelFormatter::optionText($opt) }}</span>
+                    @endif
                   @endforeach
                 </div>
               @endif
