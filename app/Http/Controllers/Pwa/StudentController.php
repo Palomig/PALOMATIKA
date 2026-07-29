@@ -707,6 +707,14 @@ class StudentController extends Controller
                     $rawOptions = $t['options'] ?? null;
                     if (is_array($rawOptions)) {
                         $rawOptions = array_map(function ($o) {
+                            // Варианты банка ФИПИ уже свёрстаны. Прогонять их
+                            // через latexToUnicode нельзя: он выбрасывает
+                            // фигурные скобки, и $\dfrac{45}{19}$ становится
+                            // $\dfrac4519$ — на экране «45/19» превращается
+                            // в «4/5 19».
+                            if (is_array($o) && isset($o['html'])) {
+                                return $o;
+                            }
                             if (is_array($o)) {
                                 foreach (['label', 'text', 'value'] as $k) {
                                     if (isset($o[$k])) {

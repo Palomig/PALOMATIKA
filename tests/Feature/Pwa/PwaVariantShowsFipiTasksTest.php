@@ -99,6 +99,31 @@ class PwaVariantShowsFipiTasksTest extends TestCase
             'условие из разметки не помечено — заголовок останется дублем');
     }
 
+    public function test_fraction_options_keep_their_braces(): void
+    {
+        // latexToUnicode выбрасывает фигурные скобки: $\dfrac{45}{19}$
+        // превращался в $\dfrac4519$, и KaTeX рисовал «4/5» и отдельно «19».
+        $canonicalizer = new MiniAppTaskCanonicalizer();
+
+        $healed = $canonicalizer->normalizeForUi([
+            'type' => 'fipi',
+            'task' => ['html' => '<p>условие</p>', 'answer' => '1'],
+            // Подписи уже испорчены прошлой нормализацией — так выглядит
+            // сохранённый вариант, собранный до правки.
+            'options' => [[
+                'n' => 1,
+                'html' => '<p>$\dfrac{45}{19}$</p>',
+                'label' => '$\dfrac4519$',
+                'text' => '$\dfrac4519$',
+                'value' => 'x',
+                'id' => 'a',
+            ]],
+        ]);
+
+        $this->assertStringContainsString('\dfrac{45}{19}', $healed['options'][0]['label']);
+        $this->assertSame('1', (string) $healed['options'][0]['id']);
+    }
+
     public function test_options_are_not_empty_buttons(): void
     {
         $canonicalizer = new MiniAppTaskCanonicalizer();

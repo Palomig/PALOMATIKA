@@ -224,6 +224,9 @@ class LessonTaskPickerService
                     $taskId = $t['id'] ?? '';
                     $expression = (string) ($t['expression'] ?? $t['prompt'] ?? $t['question'] ?? $t['text'] ?? '');
                     if ($expression === '') {
+                        $expression = self::conditionFromHtml((string) ($t['html'] ?? ''));
+                    }
+                    if ($expression === '') {
                         $expression = (string) ($z['instruction'] ?? '');
                     }
                     $result[] = [
@@ -233,7 +236,7 @@ class LessonTaskPickerService
                         'text'           => (string) ($t['text'] ?? ''),
                         'image'          => (string) ($t['image'] ?? ''),
                         'answer'         => (string) ($t['answer'] ?? ''),
-                        'image_svg'      => (string) ($t['svg'] ?? ''),
+                        'image_svg'      => (string) ($t['svg'] ?? self::drawingFromHtml((string) ($t['html'] ?? ''))),
                         'group_key'      => $number,
                         'group_label'    => $groupLabel,
                         'zadanie_number' => $number,
@@ -300,13 +303,37 @@ class LessonTaskPickerService
     ];
 
     /** Текстовые типы без картинки: условие в text/instruction + ответ. */
-    private const TEXT_EXPRESSION_TYPES = ['word_problem'];
+    private const TEXT_EXPRESSION_TYPES = ['word_problem', 'fipi'];
 
     /**
      * @param bool $allowMissingAnswer Ослабляет требование непустого answer для
      *   текстовых/geometry задач (раздел part2: тема 24 — доказательства без эталона).
      *   Условие с текстом остаётся обязательным.
      */
+    /** Короткий текст условия из размеченного `html` банка ФИПИ. */
+    private static function conditionFromHtml(string $html): string
+    {
+        if ($html === '') {
+            return '';
+        }
+        $text = preg_replace('/<svg\\b.*?<\\/svg>/is', '', $html) ?? $html;
+        $text = strip_tags(str_replace(['</p>', '</td>'], ' ', $text));
+        $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        return trim(preg_replace('/\\s+/u', ' ', $text) ?? $text);
+    }
+
+    /** Единственный чертёж из размеченного условия — для превью в списке. */
+    private static function drawingFromHtml(string $html): string
+    {
+        if (substr_count($html, '<svg') !== 1
+            || !preg_match('/<svg\\b.*?<\\/svg>/is', $html, $m)) {
+            return '';
+        }
+
+        return $m[0];
+    }
+
     private function supportedTasks(array $zadanie, bool $allowMissingAnswer = false): array
     {
         $zadanieType = strtolower(trim((string) ($zadanie['type'] ?? '')));
@@ -322,8 +349,14 @@ class LessonTaskPickerService
         foreach ($zadanie['tasks'] ?? [] as $task) {
             $type = strtolower(trim((string) ($task['task_type'] ?? $zadanieType)));
             $expression = (string) ($task['expression'] ?? $task['prompt'] ?? $task['question'] ?? $task['text'] ?? '');
+            // Банк ФИПИ: условие приходит размеченным. Для списка выбора
+            // нужен короткий текст, поэтому разметку сводим к простому тексту.
+            if ($expression === '') {
+                $expression = self::conditionFromHtml((string) ($task['html'] ?? ''));
+            }
             $hasAnswer  = (string) ($task['answer'] ?? '') !== '';
-            $hasImage   = (string) ($task['svg'] ?? '') !== '' || (string) ($task['image'] ?? '') !== '';
+            $hasImage   = (string) ($task['svg'] ?? '') !== '' || (string) ($task['image'] ?? '') !== ''
+                || str_contains((string) ($task['html'] ?? ''), '<svg');
 
             // Поддерживаются:
             //   expression / word_problem: условие (формула или текст) + ответ (auto-check).
