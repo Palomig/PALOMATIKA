@@ -48,6 +48,15 @@ class ImportFipiBank extends Command
         return !isset($task['answer']) || $task['answer'] === '' || $task['answer'] === null;
     }
 
+    /** Задание с несколькими верными вариантами. */
+    private static function isMultiSelect(array $task): bool
+    {
+        $answer = (string) ($task['answer'] ?? '');
+
+        return !empty($task['options'])
+            && preg_match('/^[1-9][0-9]+$/', $answer) === 1;
+    }
+
     public function handle(): int
     {
         // На проде файла нет: storage/app целиком в .gitignore, и деплой его
@@ -203,6 +212,12 @@ class ImportFipiBank extends Command
                     'svg_style' => $task['svg_style'] ?? null,
                     'answer' => $task['answer'] ?? null,
                     'status' => self::missingAnswer($task) ? 'draft' : 'production',
+                    // Задание 19 бывает двух видов: «Какое из утверждений
+                    // является истинным» — один ответ, «Какие … являются» —
+                    // несколько. Признак берём по длине ответа: в банке это
+                    // совпадает с формулировкой один в один (88 одиночных
+                    // против 62 множественных).
+                    'multi_select' => self::isMultiSelect($task) ?: null,
                 ], static fn ($v) => $v !== null && $v !== []),
                 'answer' => $task['answer'] ?? null,
                 'answer_src' => $task['answer_src'] ?? null,

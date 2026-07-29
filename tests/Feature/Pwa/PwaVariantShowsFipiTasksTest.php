@@ -56,6 +56,49 @@ class PwaVariantShowsFipiTasksTest extends TestCase
         }
     }
 
+    public function test_multi_answer_statements_are_marked(): void
+    {
+        // Задание 19 бывает двух видов: «Какое из утверждений является
+        // истинным» — один ответ, «Какие … являются» — несколько. Без
+        // признака ученик мог выбрать только один вариант и терял балл.
+        $canonicalizer = new MiniAppTaskCanonicalizer();
+        $tasks = (new TaskDataService())->getRandomTasks('19', 40, 'production');
+
+        $multi = $single = 0;
+        foreach ($tasks as $raw) {
+            $task = $canonicalizer->normalizeForUi($raw);
+            $answer = (string) ($raw['task']['answer'] ?? '');
+            if ($answer === '') {
+                continue;
+            }
+
+            if (strlen($answer) > 1) {
+                $multi++;
+                $this->assertTrue($task['multi_select'],
+                    "ответ «{$answer}» требует нескольких вариантов, но задание помечено как одиночное");
+            } else {
+                $single++;
+                $this->assertFalse($task['multi_select'],
+                    "ответ «{$answer}» одиночный, а задание помечено как множественное");
+            }
+        }
+
+        $this->assertGreaterThan(0, $multi, 'не нашлось заданий с несколькими верными');
+        $this->assertGreaterThan(0, $single, 'не нашлось заданий с одним верным');
+    }
+
+    public function test_heading_is_not_duplicated_above_the_condition(): void
+    {
+        // Заголовком задания служит его формулировка, и она же приходит
+        // в условии — над текстом она повторялась дословно.
+        $task = (new MiniAppTaskCanonicalizer())->normalizeForUi(
+            (new TaskDataService())->getRandomTasks('16', 1, 'production')[0]
+        );
+
+        $this->assertTrue($task['html_condition'] ?? false,
+            'условие из разметки не помечено — заголовок останется дублем');
+    }
+
     public function test_options_are_not_empty_buttons(): void
     {
         $canonicalizer = new MiniAppTaskCanonicalizer();

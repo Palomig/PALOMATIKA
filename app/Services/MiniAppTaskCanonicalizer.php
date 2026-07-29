@@ -43,7 +43,14 @@ class MiniAppTaskCanonicalizer
             [$drawing, $rest] = $this->splitSingleDrawing($html);
             $task['svg'] = $task['svg'] ?? $drawing;
             $task['text'] = $task['text'] ?? ($rest !== '' ? $rest : null);
+            // Условие уже содержит формулировку целиком, поэтому заголовок
+            // задания над ним не нужен — он её дословно повторял.
+            $task['html_condition'] = true;
         }
+
+        // «Какие из следующих утверждений являются истинными» — верных
+        // вариантов несколько, и выбрать нужно все.
+        $task['multi_select'] = (bool) ($task['multi_select'] ?? $inner['multi_select'] ?? false);
 
         $task['text'] = $task['text'] ?? ($inner['text'] ?? null);
         $task['expression'] = $task['expression'] ?? ($inner['expression'] ?? null);
