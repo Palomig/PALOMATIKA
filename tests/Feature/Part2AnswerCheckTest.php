@@ -140,14 +140,15 @@ class Part2AnswerCheckTest extends TestCase
             ->assertSee('data-mathpad="full"', false);
     }
 
-    /** SVG-контур знака корня должен явно наследовать цвет формулы в WebView. */
-    public function test_topic_20_radical_svg_path_has_visible_color_fallback(): void
+    /** Стили чертежей ФИПИ не должны схлопывать SVG-знак корня KaTeX. */
+    public function test_topic_20_katex_svg_keeps_its_intrinsic_height(): void
     {
         $this->actingAs($this->student())
             ->get(self::BASE . '/part2?topic=20')
             ->assertOk()
-            ->assertSee('.task-item-text .katex svg path', false)
-            ->assertSee('fill: currentColor !important', false);
+            ->assertSee('.fipi-html .katex svg', false)
+            ->assertSee('height: inherit', false)
+            ->assertSee('max-width: none', false);
     }
 
     /** №21 — ответ всегда обычное число, панель не нужна. */
