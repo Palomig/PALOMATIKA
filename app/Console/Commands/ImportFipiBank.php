@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Task;
 use App\Models\TaskGroup;
 use App\Models\TaskTopic;
+use App\Services\TaskBankRepository;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -31,6 +32,8 @@ class ImportFipiBank extends Command
 {
     protected $signature = 'tasks:import-fipi
         {--file= : путь к bank_katex.json, по умолчанию storage/app/imports/bank_katex.json}
+        {--url= : скачать выгрузку по адресу вместо чтения файла}
+        {--and-retire : сразу отключить прежний банк ОГЭ, в одной транзакции}
         {--dry-run : только посчитать, в базу не писать}';
 
     protected $description = 'Импортировать банк заданий ФИПИ в банк ОГЭ';
@@ -47,7 +50,23 @@ class ImportFipiBank extends Command
 
     public function handle(): int
     {
-        $path = $this->option('file') ?: storage_path('app/imports/bank_katex.json');
+        // На проде файла нет: storage/app целиком в .gitignore, и деплой его
+        // не привозит. Выгрузка опубликована на нашем же VPS, поэтому проще
+        // скачать её, чем городить отдельную заливку.
+        if ($url = $this->option('url')) {
+            $this->line("  скачиваю выгрузку: {$url}");
+            $body = @file_get_contents($url);
+            if ($body === false) {
+                $this->error("не удалось скачать выгрузку: {$url}");
+                return self::FAILURE;
+            }
+            $path = storage_path('app/imports/bank_katex.json');
+            File::ensureDirectoryExists(dirname($path));
+            File::put($path, $body);
+        } else {
+            $path = $this->option('file') ?: storage_path('app/imports/bank_katex.json');
+        }
+
         if (!File::exists($path)) {
             $this->error("не найден файл банка: {$path}");
             return self::FAILURE;
@@ -98,6 +117,18 @@ class ImportFipiBank extends Command
                 foreach ($subtypes as $subtypeId => $items) {
                     $this->createGroup($topic, (int) $subtypeId, $items, $position++);
                 }
+            }
+
+            // В одной транзакции с импортом: иначе между заливкой ФИПИ и
+            // отключением старого банка тема показывала бы оба сразу.
+            if ($this->option('and-retire')) {
+                Task::query()
+                    ->whereIn('task_group_id', TaskGroup::query()
+                        ->where('bank', 'oge')->where('source', 'palomatika')->select('id'))
+                    ->where('source', 'palomatika')
+                    ->update(['source' => TaskBankRepository::RETIRED]);
+                TaskGroup::query()->where('bank', 'oge')->where('source', 'palomatika')
+                    ->update(['source' => TaskBankRepository::RETIRED]);
             }
         });
 

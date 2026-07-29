@@ -90,6 +90,21 @@ class FipiBankImportTest extends TestCase
         $this->assertNotEmpty($after['blocks'], 'после отключения тема осталась пустой');
     }
 
+    public function test_and_retire_switches_banks_without_a_window(): void
+    {
+        // Импорт и отключение в одной транзакции: иначе между ними тема
+        // показывала бы оба банка сразу.
+        Artisan::call('tasks:import-fipi', ['--and-retire' => true]);
+
+        $live = TaskGroup::query()
+            ->where('bank', 'oge')
+            ->where('source', '!=', TaskBankRepository::RETIRED)
+            ->pluck('source')->unique()->values()->all();
+
+        $this->assertSame(['fipi'], $live);
+        $this->assertSame(2624, Task::query()->where('source', TaskBankRepository::RETIRED)->count());
+    }
+
     public function test_retiring_refuses_without_a_replacement(): void
     {
         Artisan::call('tasks:retire-legacy');           // ФИПИ на месте — сработает
