@@ -18,6 +18,29 @@ class FipiBankImportTest extends TestCase
 {
     use RefreshDatabase;
 
+    private const CURATED_TOPIC_TASKS = [
+        '06' => 81,
+        '07' => 171,
+        '08' => 321,
+        '09' => 111,
+        '10' => 211,
+        '11' => 101,
+        '12' => 175,
+        '13' => 141,
+        '14' => 110,
+        '15' => 252,
+        '16' => 322,
+        '17' => 316,
+        '18' => 154,
+        '19' => 150,
+        '20' => 200,
+        '21' => 190,
+        '22' => 157,
+        '23' => 172,
+        '24' => 60,
+        '25' => 130,
+    ];
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -163,7 +186,7 @@ class FipiBankImportTest extends TestCase
         ], array_column($groups, 'instruction'));
     }
 
-    public function test_topic_16_taxonomy_is_idempotent_and_other_topics_keep_fipi_grouping(): void
+    public function test_all_curated_taxonomies_are_idempotent(): void
     {
         Artisan::call('tasks:import-fipi', ['--and-retire' => true]);
         Artisan::call('tasks:import-fipi', ['--and-retire' => true]);
@@ -181,8 +204,44 @@ class FipiBankImportTest extends TestCase
             )),
             $topic16,
         )));
-        $this->assertCount(1, $topic15);
-        $this->assertSame('ФИПИ', $topic15[0]['title']);
+        $this->assertCount(5, $topic15);
+        $this->assertSame('Углы в треугольнике', $topic15[0]['title']);
+        $this->assertNotContains('ФИПИ', array_column($topic15, 'title'));
+    }
+
+    public function test_topics_06_through_25_have_complete_curated_groups(): void
+    {
+        Artisan::call('tasks:import-fipi', ['--and-retire' => true]);
+        Cache::flush();
+
+        $service = new TaskDataService();
+        foreach (self::CURATED_TOPIC_TASKS as $topic => $expectedTasks) {
+            $blocks = $service->getBlocks($topic);
+            $groups = array_merge(...array_column($blocks, 'zadaniya'));
+            $tasks = array_sum(array_map(
+                static fn (array $group): int => count($group['tasks'] ?? []),
+                $groups,
+            ));
+
+            $this->assertSame($expectedTasks, $tasks, "тема {$topic}");
+            $this->assertSame(range(1, count($groups)), array_column($groups, 'number'), "тема {$topic}");
+            $this->assertNotContains('', array_column($blocks, 'title'), "тема {$topic}");
+            $this->assertNotContains(null, array_column($groups, 'taxonomy_key'), "тема {$topic}");
+            foreach (array_column($groups, 'instruction') as $instruction) {
+                $this->assertDoesNotMatchRegularExpression(
+                    '/^Задание\s+\d+/u',
+                    (string) $instruction,
+                    "тема {$topic}",
+                );
+            }
+        }
+    }
+
+    public function test_dry_run_reports_complete_curated_range(): void
+    {
+        $this->artisan('tasks:import-fipi', ['--dry-run' => true])
+            ->expectsOutputToContain('КУРАТОРСКИЕ ТЕМЫ 06–25: тем 20, задач 3525')
+            ->assertSuccessful();
     }
 
     public function test_proofs_without_answers_stay_out_of_production(): void

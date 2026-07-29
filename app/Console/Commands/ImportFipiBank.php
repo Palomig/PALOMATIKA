@@ -114,15 +114,29 @@ class ImportFipiBank extends Command
         }
 
         $counts = ['topics' => 0, 'groups' => 0, 'tasks' => 0, 'no_answer' => 0];
-        foreach ($groups as $definitions) {
+        $curated = ['topics' => 0, 'tasks' => 0];
+        foreach ($groups as $topic => $definitions) {
             $counts['topics']++;
+            $isCuratedOgeRange = (int) $topic >= 6 && (int) $topic <= 25;
+            if ($isCuratedOgeRange) {
+                $curated['topics']++;
+            }
             foreach ($definitions as $definition) {
                 $items = $definition['items'];
                 $counts['groups']++;
                 $counts['tasks'] += count($items);
                 $counts['no_answer'] += count(array_filter($items, static fn ($t) => self::missingAnswer($t)));
+                if ($isCuratedOgeRange) {
+                    $curated['tasks'] += count($items);
+                }
             }
         }
+
+        $this->line(sprintf(
+            'КУРАТОРСКИЕ ТЕМЫ 06–25: тем %d, задач %d',
+            $curated['topics'],
+            $curated['tasks'],
+        ));
 
         if ($this->option('dry-run')) {
             $this->info(sprintf(
