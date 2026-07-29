@@ -140,6 +140,16 @@ class Part2AnswerCheckTest extends TestCase
             ->assertSee('data-mathpad="full"', false);
     }
 
+    /** SVG-контур знака корня должен явно наследовать цвет формулы в WebView. */
+    public function test_topic_20_radical_svg_path_has_visible_color_fallback(): void
+    {
+        $this->actingAs($this->student())
+            ->get(self::BASE . '/part2?topic=20')
+            ->assertOk()
+            ->assertSee('.task-item-text .katex svg path', false)
+            ->assertSee('fill: currentColor !important', false);
+    }
+
     /** №21 — ответ всегда обычное число, панель не нужна. */
     public function test_plain_topic_has_input_without_pad(): void
     {
