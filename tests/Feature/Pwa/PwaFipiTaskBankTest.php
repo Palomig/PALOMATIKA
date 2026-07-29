@@ -89,6 +89,36 @@ class PwaFipiTaskBankTest extends TestCase
         );
     }
 
+    public function test_single_drawing_is_lifted_above_the_text(): void
+    {
+        // У банка ФИПИ условие и чертёж лежат в соседних ячейках таблицы,
+        // и ячейка зажимает рисунок в узкую полоску. Единственный чертёж
+        // выносим отдельным блоком над условием.
+        $html = $this->actingAs($this->student)
+            ->get(route('pwa.student.tasks-part1', ['topic' => '15']))
+            ->getContent();
+
+        $this->assertStringContainsString('fipi-drawing', $html, 'чертёж не вынесен');
+
+        $drawing = strpos($html, 'class="fipi-drawing"');
+        $condition = strpos($html, 'fipi-html', $drawing);
+        $this->assertNotFalse($condition);
+        $this->assertLessThan($condition, $drawing, 'чертёж оказался ниже условия');
+    }
+
+    public function test_multi_drawing_tasks_keep_their_layout(): void
+    {
+        // Тема 11 — соответствие: график привязан к своему номеру, и
+        // выносить его из ячейки нельзя.
+        $html = $this->actingAs($this->student)
+            ->get(route('pwa.student.tasks-part1', ['topic' => '11']))
+            ->getContent();
+
+        $this->assertStringContainsString('<svg', $html);
+        $this->assertStringNotContainsString('class="fipi-drawing"', $html,
+            'у заданий с несколькими чертежами разметку трогать нельзя');
+    }
+
     public function test_condition_markup_is_not_escaped(): void
     {
         // Если разметку экранировать, ученик увидит теги и доллары вместо
