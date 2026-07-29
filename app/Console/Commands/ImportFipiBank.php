@@ -170,7 +170,13 @@ class ImportFipiBank extends Command
             'position' => $position,
             'instruction' => $items[0]['subtype_title'] ?? null,
             'type' => 'fipi',
-            'payload' => ['part2' => (bool) ($items[0]['part2'] ?? false)],
+            // `status` обязан лежать в payload, а не только в колонке:
+            // структуру для интерфейса репозиторий собирает именно из payload,
+            // и без этого ключа фильтр «production» отсекает задание целиком.
+            'payload' => [
+                'part2' => (bool) ($items[0]['part2'] ?? false),
+                'status' => 'production',
+            ],
             'status' => 'production',
             'source' => 'fipi',
         ]);
@@ -191,6 +197,8 @@ class ImportFipiBank extends Command
                     ) ?: null,
                     'images' => $task['images'] ?? null,
                     'svg_style' => $task['svg_style'] ?? null,
+                    'answer' => $task['answer'] ?? null,
+                    'status' => self::missingAnswer($task) ? 'draft' : 'production',
                 ], static fn ($v) => $v !== null && $v !== []),
                 'answer' => $task['answer'] ?? null,
                 'answer_src' => $task['answer_src'] ?? null,
