@@ -131,6 +131,11 @@
             @include('tasks.types.word-problem', compact('zadanie', 'block', 'topicId'))
             @break
 
+        {{-- Банк ФИПИ: условие уже свёрстано, формулы в KaTeX, чертежи в SVG --}}
+        @case('fipi')
+            @include('tasks.types.fipi', compact('zadanie', 'block', 'topicId'))
+            @break
+
         @case('matching')
         @case('matching_signs')
         @case('matching_4')
