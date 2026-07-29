@@ -118,10 +118,12 @@ class TaskAnswerResolver
         $userRaw = (string) ($userAnswer ?? '');
         $user = $this->normalize($userRaw);
 
-        // Ответы с радикалом — только вторая часть ОГЭ (№20, 23). Строкой их
-        // не сверить: «12sqrt(6)», «12√6» и «sqrt(864)» — одно и то же число.
-        // Ветка включается по эталону, поэтому первой части не касается.
-        if ($this->mathParser->hasRadical($correctAnswer)) {
+        // Ответы-множества и промежутки — вторая часть ОГЭ (№20, 22, 23, 25).
+        // Строкой их не сверить: «12sqrt(6)», «12√6» и «sqrt(864)» — одно
+        // число; «[3;5]∪[-6;-4]» и «[-6;-4]∪[3;5]» — один ответ; порядок
+        // корней в «-4;-3;3» на экзамене не важен. Ветка включается по форме
+        // ЭТАЛОНА, поэтому первой части (число или цепочка цифр) не касается.
+        if ($this->mathParser->needsNumericComparison($correctAnswer)) {
             if ($this->isDecimalApproximationOfIrrational($userRaw, (string) $correctAnswer)) {
                 return false;
             }
