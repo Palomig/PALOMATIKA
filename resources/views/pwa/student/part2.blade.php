@@ -19,6 +19,9 @@
   }
   .fipi-drawing svg { width: 100%; height: auto; display: block; margin: 0 auto; max-width: 460px; }
   .fipi-html svg { width: 100%; height: auto; display: block; margin: 0 auto; max-width: 350px; }
+  /* KaTeX draws radicals with an SVG whose height must follow its wrapper.
+     Restore KaTeX sizing after the broader FIPI illustration rule above. */
+  .fipi-html .katex svg { height: inherit; max-width: none; }
   .fipi-html svg[class*="max-w-[250px]"] { max-width: 250px; }
   .fipi-html svg[class*="max-w-[280px]"] { max-width: 280px; }
   .fipi-html svg[class*="max-w-[320px]"] { max-width: 320px; }
@@ -146,9 +149,6 @@
     padding: 12px 14px;
   }
   .task-item-text { font-size: 13px; line-height: 1.45; color: var(--text); }
-  /* Some embedded WebViews do not propagate currentColor from KaTeX's SVG to
-     the path, leaving only a blank space where the radical should be. */
-  .task-item-text .katex svg path { fill: currentColor !important; }
   .task-item-meta { margin-top: 6px; font-size: 10px; color: var(--muted); font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
 
   .hint-box {
