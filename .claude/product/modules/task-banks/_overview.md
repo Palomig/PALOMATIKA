@@ -1,10 +1,10 @@
 # Банки заданий — карта всех 3 направлений
 
-> Дата скана: 2026-05-03. Цифры по объёму получены прохождением по `storage/app/tasks/`.
+> Обновлено: 2026-07-29. Актуальный ОГЭ-банк хранится в БД; таблицы ниже про JSON сохранены как описание legacy/fallback-банка.
 
 ## Принципы (общие для всех 3 направлений)
 
-1. **Источник истины** — JSON в `storage/app/tasks/`. Никаких захардкоженных данных в контроллерах.
+1. **Источник истины** — таблицы `task_topics` / `task_groups` / `tasks`. `TaskDataService` читает их через `TaskBankRepository`; JSON в `storage/app/tasks/` остаётся fallback для банков/тем, ещё не перенесённых в БД.
 2. **Номера = номера в PDF.** Нельзя менять для красоты.
 3. **SVG, не PNG.** PDF-изображения в `docs/oge_data/images/` и `docs/ege_data/images/` — только референс.
 4. **`*_geometry.json`** — это **источник** для геометрии. `topic_XX.json` со встроенными SVG **генерируется** через `php artisan svg:bake {id}` (или `svg:bake-ege`). Вручную `topic_XX.json` для геометрических задач **не редактируем**.
@@ -12,9 +12,43 @@
 
 > **Выбор задач в урок/ДЗ** — единая точка входа: общий drill-down picker `resources/views/pwa/_shared/task-picker.blade.php` (класс → полоски навыков/тем с «1 примером» → уровень/блок → задачи). Опции отдаёт `LessonTaskPickerService` (`/lessons/picker-options`), выбранные `{bank, refs}` резолвит `TaskBankResolver`. Банк скрыт за классом (7/8 → `alg-skill`, 9 ОГЭ → `oge`).
 
-## ОГЭ — `storage/app/tasks/`
+## ОГЭ — актуальный банк ФИПИ в БД
 
-**18 файлов** (17 с заданиями + 1 пустой), 4 геометрических `*_geometry.json`. Топики 1–5 не существуют (это устные задания в реальном ОГЭ, которые мы не покрываем).
+На production активен источник `fipi`: 3884 задачи тем 1–25. Прежний
+JSON-банк помечен `palomatika_legacy` и не участвует в выдаче. Импорт:
+
+```bash
+php artisan tasks:import-fipi \
+  --url=https://palomig.ru/fipi-bank-export/bank_katex.json \
+  --and-retire
+```
+
+Темы 6–25 (3525 задач) имеют курируемые GUID-карты
+`resources/task-taxonomies/oge-topic-NN.php`: крупный учебный раздел →
+группа по методу решения → задачи. `FipiTaskTaxonomy` требует точного
+покрытия: неизвестный, пропавший или повторный GUID останавливает импорт до
+записи в БД. Тема 16 — утверждённый эталон: 322 задачи, 4 раздела, 23 группы.
+
+Учебный порядок редактируется в
+`resources/task-taxonomies/oge-topics-06-25-curriculum.php`, затем карты
+воспроизводимо пересобираются:
+
+```bash
+php scripts/build-oge-taxonomies.php \
+  /path/to/bank_katex.json \
+  resources/task-taxonomies/oge-topics-06-25-curriculum.php \
+  --topics=06-25
+```
+
+В PWA заголовок группы показывает отдельный номер без слова «Задание»,
+краткое название метода и количество задач. Вторая часть сохраняет
+учительскую кнопку разбора/рисунков, добавляя учебные разделы.
+
+## ОГЭ — legacy JSON `storage/app/tasks/`
+
+**Историческое состояние:** 18 файлов (17 с заданиями + 1 пустой), 4
+геометрических `*_geometry.json`. Эти цифры не описывают активный
+production-банк.
 
 | Topic | Tasks | Type(s) | Геометрия | Заметки |
 |---|---|---|---|---|
@@ -150,10 +184,10 @@ php artisan svg:bake-ege {id}    # для ЕГЭ
 
 ## Связь с DB
 
-JSON-банк — источник для **runtime**. В DB сохраняются:
-- `tasks` (6163) — материализованные «пазловые» задачи (с навыками, мастерством)
+DB — источник для **runtime**. В ней сохраняются:
+- `task_topics`, `task_groups`, `tasks` — деревья банков и payload задач;
 - `task_skills`, `task_steps`, `step_blocks` — для пазл-механики
-- В вариантах (`oge_variants`, `oge_variant_pool_tasks`) ссылка на JSON через `topic_id` + `zadaniya number` + `task id`
+- В вариантах (`oge_variants`, `oge_variant_pool_tasks`) сохраняются ссылки/снапшоты выбранных задач.
 
 ## Когда хочешь подробности
 
