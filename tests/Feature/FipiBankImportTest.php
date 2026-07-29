@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Task;
 use App\Models\TaskGroup;
+use App\Models\TaskStatus;
 use App\Services\TaskBankRepository;
 use App\Services\TaskDataService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -135,6 +136,31 @@ class FipiBankImportTest extends TestCase
 
         $this->assertSame(322, $count($all));
         $this->assertSame(322, $count($production), 'фильтр production потерял задания');
+    }
+
+    public function test_legacy_positional_status_does_not_hide_a_regrouped_fipi_task(): void
+    {
+        Artisan::call('tasks:import-fipi', ['--and-retire' => true]);
+
+        // Этот адрес относился к другой задаче до педагогической перегруппировки.
+        // После неё позиционный ключ больше не идентифицирует задание ФИПИ:
+        // стабильный идентификатор находится в tasks.fipi_guid.
+        TaskStatus::create([
+            'topic_id' => '06',
+            'task_key' => 'topic_06_block_2_zadanie_3_task_1',
+            'status' => 'draft',
+        ]);
+        Cache::flush();
+
+        $blocks = (new TaskDataService())->getBlocks('06', 'production');
+        $groups = array_merge(...array_column($blocks, 'zadaniya'));
+        $tasks = array_sum(array_map(
+            static fn (array $group): int => count($group['tasks'] ?? []),
+            $groups,
+        ));
+
+        $this->assertCount(3, $groups);
+        $this->assertSame(81, $tasks);
     }
 
     public function test_topic_16_uses_the_pedagogical_taxonomy(): void

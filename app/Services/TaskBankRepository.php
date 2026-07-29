@@ -91,7 +91,20 @@ class TaskBankRepository
         // Инструкция, тип и статус лежат и в колонках, и в payload; берём из
         // payload, чтобы не дописать ключ, которого в исходнике не было.
         $zadanie = array_merge(['number' => $group->zadanie_number], $group->payload ?? []);
-        $zadanie['tasks'] = $group->tasks->map(fn (Task $task) => $task->payload ?? [])->all();
+        $zadanie['tasks'] = $group->tasks->map(function (Task $task): array {
+            $payload = $task->payload ?? [];
+
+            // Позиционные task_statuses относятся к прежнему JSON-банку.
+            // У ФИПИ стабильная идентичность — GUID: после педагогической
+            // перегруппировки тот же block/zadanie/task может означать уже
+            // другую задачу. Маркер позволяет фильтру статусов не применять
+            // к ней устаревшую позиционную запись.
+            if ($task->source === 'fipi' && $task->fipi_guid !== null) {
+                $payload['fipi_guid'] = $task->fipi_guid;
+            }
+
+            return $payload;
+        })->all();
 
         return $zadanie;
     }
