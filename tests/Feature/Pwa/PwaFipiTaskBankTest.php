@@ -3,6 +3,7 @@
 namespace Tests\Feature\Pwa;
 
 use App\Models\User;
+use App\Support\OptionLabelFormatter;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
@@ -117,6 +118,21 @@ class PwaFipiTaskBankTest extends TestCase
         $this->assertStringContainsString('<svg', $html);
         $this->assertStringNotContainsString('class="fipi-drawing"', $html,
             'у заданий с несколькими чертежами разметку трогать нельзя');
+    }
+
+    public function test_answers_stay_numeric_for_fipi_options(): void
+    {
+        // В ОГЭ буквенных ответов не бывает. Варианты банка ФИПИ пронумерованы
+        // полем `n` и без `id`, и форматтер подставлял букву по порядковому
+        // номеру: ответ «3» показывался как «В».
+        $fipi = [['n' => 1, 'html' => 'a'], ['n' => 2, 'html' => 'b'], ['n' => 3, 'html' => 'c']];
+
+        $this->assertSame('3', OptionLabelFormatter::formatAnswer('3', $fipi));
+        $this->assertSame('3', OptionLabelFormatter::optionLabel($fipi[2], 2));
+
+        // Варианты Паломатики с буквенными id ведут себя как раньше.
+        $pal = [['id' => 'a', 'label' => 'x'], ['id' => 'b', 'label' => 'y'], ['id' => 'c', 'label' => 'z']];
+        $this->assertSame('В', OptionLabelFormatter::formatAnswer('c', $pal));
     }
 
     public function test_condition_markup_is_not_escaped(): void

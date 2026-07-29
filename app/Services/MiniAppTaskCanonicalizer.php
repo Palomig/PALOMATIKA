@@ -6,11 +6,44 @@ use Illuminate\Support\Facades\Log;
 
 class MiniAppTaskCanonicalizer
 {
+    /**
+     * Отделить единственный чертёж от разметки условия.
+     *
+     * У банка ФИПИ условие и рисунок лежат в соседних ячейках таблицы. В
+     * варианте чертёж показывается отдельным блоком, поэтому вынимаем его —
+     * но только если он один: в соответствиях темы 11 график привязан к
+     * своему номеру, и там место рисунка значащее.
+     *
+     * @return array{0: ?string, 1: string}
+     */
+    private function splitSingleDrawing(string $html): array
+    {
+        if (substr_count($html, '<svg') !== 1
+            || !preg_match('/<svg\\b.*?<\\/svg>/is', $html, $m)) {
+            return [null, $html];
+        }
+
+        $rest = str_replace($m[0], '', $html);
+        $rest = preg_replace('/<p>\\s*<\\/p>|<td>\\s*<\\/td>/i', '', $rest) ?? $rest;
+
+        return [$m[0], trim($rest)];
+    }
+
     public function normalizeForUi(array $task): array
     {
         $inner = is_array($task['task'] ?? null) ? $task['task'] : [];
 
         $task = $this->ensureSelectedStatements($task, $inner);
+
+        // Банк ФИПИ несёт условие готовой разметкой в `html`: ни `text`, ни
+        // `expression`, ни `svg` у таких задач нет, и без этой ветки вариант
+        // показывал пустое задание — только поле ответа или пустые варианты.
+        $html = trim((string) ($inner['html'] ?? $task['html'] ?? ''));
+        if ($html !== '') {
+            [$drawing, $rest] = $this->splitSingleDrawing($html);
+            $task['svg'] = $task['svg'] ?? $drawing;
+            $task['text'] = $task['text'] ?? ($rest !== '' ? $rest : null);
+        }
 
         $task['text'] = $task['text'] ?? ($inner['text'] ?? null);
         $task['expression'] = $task['expression'] ?? ($inner['expression'] ?? null);
@@ -266,6 +299,22 @@ class MiniAppTaskCanonicalizer
             $defaultId = $this->optionIdByIndex($index);
 
             if (is_array($option)) {
+                // Вариант банка ФИПИ: номер в `n`, содержимое размеченным
+                // `html`. Ни label, ни text, ни value у него нет — без этой
+                // ветки в варианте показывались пустые кнопки «А Б В Г».
+                // Идентификатором служит номер: ответы банка — числа, и в
+                // PWA `optionAnswerValue()` вернёт именно его.
+                if (isset($option['html']) && !isset($option['label'], $option['text'], $option['value'])) {
+                    $number = (string) ($option['n'] ?? $index + 1);
+                    $normalized[] = array_merge($option, [
+                        'id' => $number,
+                        'label' => $option['html'],
+                        'text' => $option['html'],
+                        'value' => $number,
+                    ]);
+                    continue;
+                }
+
                 $id = isset($option['id']) && $option['id'] !== '' ? (string) $option['id'] : $defaultId;
                 $label = self::latexToUnicode((string) ($option['label'] ?? $option['text'] ?? $option['value'] ?? ''));
 
