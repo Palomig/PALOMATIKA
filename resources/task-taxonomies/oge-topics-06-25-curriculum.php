@@ -399,4 +399,250 @@ return [
             ],
         ],
     ],
+    '15' => [
+        'sections' => [
+            [
+                'title' => 'Углы в треугольнике',
+                'groups' => [
+                    [
+                        'key' => 'triangle-angle-sum-and-exterior',
+                        'title' => 'Сумма углов и внешний угол треугольника',
+                        'subtypes' => [5, 6],
+                    ],
+                    [
+                        'key' => 'isosceles-triangle-angles',
+                        'title' => 'Углы при основании равнобедренного треугольника',
+                        'subtypes' => [7],
+                    ],
+                    [
+                        'key' => 'right-triangle-acute-angles',
+                        'title' => 'Острые углы прямоугольного треугольника',
+                        'subtypes' => [8, 9],
+                    ],
+                    [
+                        'key' => 'angles-with-bisector-or-median',
+                        'title' => 'Углы при биссектрисе или медиане',
+                        'subtypes' => [1, 2, 3],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Отрезки и подобие',
+                'groups' => [
+                    [
+                        'key' => 'median-halves-side',
+                        'title' => 'Медиана делит сторону пополам',
+                        'subtypes' => [4],
+                    ],
+                    [
+                        'key' => 'triangle-midline',
+                        'title' => 'Средняя линия и подобие треугольников',
+                        'subtypes' => [12],
+                    ],
+                    [
+                        'key' => 'pythagorean-theorem',
+                        'title' => 'Теорема Пифагора: найти гипотенузу или катет',
+                        'subtypes' => [13, 14],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Равносторонний треугольник',
+                'groups' => [
+                    [
+                        'key' => 'equilateral-altitude-median-bisector',
+                        'title' => 'Высота, медиана и биссектриса равностороннего треугольника',
+                        'subtypes' => [15, 16, 17, 18, 19, 20],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Тригонометрия прямоугольного треугольника',
+                'groups' => [
+                    [
+                        'key' => 'trig-ratio-from-sides',
+                        'title' => 'Найти синус, косинус или тангенс по сторонам',
+                        'subtypes' => [21, 22, 23],
+                    ],
+                    [
+                        'key' => 'side-from-trig-ratio',
+                        'title' => 'Найти сторону по синусу, косинусу или тангенсу',
+                        'subtypes' => [24, 25, 26],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Площадь треугольника',
+                'groups' => [
+                    [
+                        'key' => 'triangle-area-base-height',
+                        'title' => 'Половина произведения основания на высоту',
+                        'subtypes' => [10, 11],
+                    ],
+                    [
+                        'key' => 'triangle-area-two-sides-sine',
+                        'title' => 'Половина произведения двух сторон на синус угла',
+                        'subtypes' => [27],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    '17' => [
+        'sections' => [
+            [
+                'title' => 'Параллелограмм',
+                'groups' => [
+                    [
+                        'key' => 'parallelogram-angles',
+                        'title' => 'Соседние углы и биссектриса параллелограмма',
+                        'subtypes' => [6, 7, 8],
+                    ],
+                    [
+                        'key' => 'parallelogram-diagonals',
+                        'title' => 'Диагонали параллелограмма делятся пополам',
+                        'subtypes' => [9],
+                    ],
+                    [
+                        'key' => 'parallelogram-area',
+                        'title' => 'Площадь параллелограмма и его высоты',
+                        'subtypes' => [23, 24],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Прямоугольник и квадрат',
+                'groups' => [
+                    [
+                        'key' => 'rectangle-diagonal-angles',
+                        'title' => 'Угол между диагоналями прямоугольника',
+                        'subtypes' => [19],
+                    ],
+                    [
+                        'key' => 'square-diagonal',
+                        'title' => 'Диагональ квадрата через его сторону',
+                        'subtypes' => [29],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Ромб',
+                'groups' => [
+                    [
+                        'key' => 'rhombus-angle-bisectors',
+                        'title' => 'Диагонали ромба делят его углы пополам',
+                        'subtypes' => [2, 3, 5, 20, 21],
+                    ],
+                    [
+                        'key' => 'rhombus-height',
+                        'title' => 'Высота ромба через сторону и угол',
+                        'subtypes' => [22],
+                    ],
+                    [
+                        'key' => 'rhombus-area',
+                        'title' => 'Площадь ромба через диагонали, сторону или угол',
+                        'subtypes' => [27, 28],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Трапеция',
+                'groups' => [
+                    [
+                        'key' => 'trapezoid-angles',
+                        'title' => 'Углы равнобедренной и прямоугольной трапеции',
+                        'subtypes' => [1, 4, 10, 11, 12, 13, 14],
+                    ],
+                    [
+                        'key' => 'isosceles-trapezoid-base-height',
+                        'title' => 'Основания и высота равнобедренной трапеции',
+                        'subtypes' => [15, 16, 17, 18],
+                    ],
+                    [
+                        'key' => 'trapezoid-midline',
+                        'title' => 'Средняя линия трапеции и её части',
+                        'subtypes' => [30],
+                    ],
+                    [
+                        'key' => 'trapezoid-area',
+                        'title' => 'Площадь трапеции',
+                        'subtypes' => [25, 26],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    '18' => [
+        'sections' => [
+            [
+                'title' => 'Длины на клетчатой бумаге',
+                'groups' => [
+                    [
+                        'key' => 'count-grid-length',
+                        'title' => 'Определить длину по клеткам',
+                        'subtypes' => [1, 2],
+                    ],
+                    [
+                        'key' => 'segment-ratio-on-grid',
+                        'title' => 'Сравнить длины отрезков',
+                        'subtypes' => [3, 4],
+                    ],
+                    [
+                        'key' => 'pythagorean-distance-on-grid',
+                        'title' => 'Наклонный отрезок: применить теорему Пифагора',
+                        'subtypes' => [5, 7, 8],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Средняя линия',
+                'groups' => [
+                    [
+                        'key' => 'midline-on-grid',
+                        'title' => 'Средняя линия треугольника или трапеции',
+                        'subtypes' => [6, 9],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Площади на клетчатой бумаге',
+                'groups' => [
+                    [
+                        'key' => 'polygon-area-on-grid',
+                        'title' => 'Площадь треугольника или четырёхугольника',
+                        'subtypes' => [11, 12, 13, 14],
+                    ],
+                    [
+                        'key' => 'circle-area-ratio',
+                        'title' => 'Отношение площадей кругов через радиусы',
+                        'subtypes' => [10],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    '19' => [
+        'sections' => [
+            [
+                'title' => 'Одно верное утверждение',
+                'groups' => [
+                    [
+                        'key' => 'single-true-geometry-statement',
+                        'title' => 'Проверить утверждения и выбрать единственное верное',
+                        'subtypes' => [1],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Несколько верных утверждений',
+                'groups' => [
+                    [
+                        'key' => 'multiple-true-geometry-statements',
+                        'title' => 'Проверить каждое утверждение и записать все верные',
+                        'subtypes' => [2],
+                    ],
+                ],
+            ],
+        ],
+    ],
 ];
