@@ -8,12 +8,29 @@
 @endpush
 
 @push('styles')
-  /* Условия банка ФИПИ приходят свёрстанными: формулы в KaTeX, чертежи
-     инлайновыми SVG. Ограничиваем ширину, чтобы на телефоне не расползались. */
-  .fipi-html svg, .fipi-html img { max-width: 100%; height: auto; }
+  /* Условия банка ФИПИ приходят готовой разметкой: формулы в KaTeX, чертежи
+     инлайновыми SVG. Ширину чертежа задают Tailwind-классы (`max-w-[350px]`),
+     но в PWA Tailwind не подключён — он живёт в head-config, а тут своя тема.
+     Без этих правил SVG с одним viewBox схлопывается в нулевую высоту, и
+     ученик видит условие без рисунка. */
+  .fipi-html svg { width: 100%; height: auto; display: block; margin: 0 auto; max-width: 350px; }
+  .fipi-html svg[class*="max-w-[250px]"] { max-width: 250px; }
+  .fipi-html svg[class*="max-w-[280px]"] { max-width: 280px; }
+  .fipi-html svg[class*="max-w-[320px]"] { max-width: 320px; }
+  .fipi-html svg[class*="max-w-[420px]"] { max-width: 420px; }
+  .fipi-html svg[class*="max-w-[1200px]"] { max-width: 100%; }
+  .fipi-html img { max-width: 100%; height: auto; }
   .fipi-html p { margin: 0 0 8px; }
   .fipi-html p:last-child { margin-bottom: 0; }
-  .fipi-html { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .fipi-html table { border-collapse: collapse; max-width: 100%; }
+  .fipi-html td { vertical-align: top; padding: 2px 6px; }
+  /* Условие и чертёж лежат в соседних ячейках таблицы — на телефоне они
+     не помещаются рядом, поэтому раскладываем в столбик. */
+  @media (max-width: 640px) {
+    .fipi-html table, .fipi-html tbody, .fipi-html tr, .fipi-html td {
+      display: block; width: 100%; padding-left: 0; padding-right: 0;
+    }
+  }
   .teacher-solution-btn {
     display: inline-flex; align-items: center; gap: 8px;
     margin-bottom: 12px; padding: 9px 14px; border-radius: 10px;

@@ -71,6 +71,24 @@ class PwaFipiTaskBankTest extends TestCase
             ->sum(fn ($z) => count($z['tasks'] ?? [])) > 0);
     }
 
+    public function test_drawings_get_an_explicit_size(): void
+    {
+        // В PWA нет Tailwind (он в head-config, который сюда не подключается),
+        // поэтому классы `max-w-[350px]` на инлайновых SVG не работают. Без
+        // собственных правил чертёж схлопывается в нулевую высоту, и на
+        // экране остаётся условие без рисунка.
+        $html = $this->actingAs($this->student)
+            ->get(route('pwa.student.tasks-part1', ['topic' => '15']))
+            ->getContent();
+
+        $this->assertStringContainsString('<svg', $html);
+        $this->assertMatchesRegularExpression(
+            '/\.fipi-html svg\s*\{[^}]*width:\s*100%/',
+            $html,
+            'у чертежей нет собственного правила ширины'
+        );
+    }
+
     public function test_condition_markup_is_not_escaped(): void
     {
         // Если разметку экранировать, ученик увидит теги и доллары вместо
