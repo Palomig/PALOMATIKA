@@ -1,0 +1,168 @@
+<?php
+
+/**
+ * Курируемая учебная группировка темы 11 ОГЭ.
+ * Сгенерировано из актуального банка ФИПИ; порядок задаёт учебный план.
+ */
+return array (
+  'topic' => '11',
+  'expected_tasks' => 101,
+  'blocks' => 
+  array (
+    0 => 
+    array (
+      'number' => 1,
+      'title' => 'Формула и вид графика',
+      'groups' => 
+      array (
+        0 => 
+        array (
+          'key' => 'match-function-and-graph',
+          'number' => 1,
+          'title' => 'Сопоставить формулу функции с её графиком',
+          'expected_tasks' => 49,
+          'guids' => 
+          array (
+            0 => 'D0EFEBD97AB3982B44C60F7430F5ACF1',
+            1 => '3583A7DF4A6680EF4D2C8CC4997C8357',
+            2 => '5CEAAAD60ADCBAAA47D0B976AD5720C0',
+            3 => 'E8FC85F32D78B63040D9431F5716CE39',
+            4 => 'AAA97AACDF2785CE481314B3758A5FC2',
+            5 => '56FE3F690143A85E4C187A4C2049A1F6',
+            6 => '170D39A51499978B4BDC0B8C38C7746D',
+            7 => '26E202ADE22EBB4D4581B3799B3C72B2',
+            8 => '30AC3358F7D282D743EB33961B54023C',
+            9 => 'E561AAEB8F6F825F4679507D4E369CE0',
+            10 => '6097FFC4905AB9D245AFFECB7476BB07',
+            11 => '0D20ED59BF5594FA4B13C627D78E4D0B',
+            12 => 'EF78B2D0CB53B2C64F7AAC017867DD0D',
+            13 => 'C04C575A0E80940648B2393EE22BEDCC',
+            14 => '9868771D66AE8C03418AF94E2A4E6ACC',
+            15 => 'C69F5BA02C5FBF1A419D0121CE55E746',
+            16 => '1F98D39D5720923B4CB81ADA3619ABCA',
+            17 => 'EAC3C7035AF59FB0450768D250131B98',
+            18 => 'ECF15A4D374E9FD14CAD93A9C6E1D088',
+            19 => '4566435450AB94B74B436AAD9BB14F88',
+            20 => 'ED57E38543D4BBA6497B0E1FA6EE89BB',
+            21 => 'BA3DAE6472C7A3D041EC5B2173FE5265',
+            22 => '2920C29B291786514467994AE615E4E0',
+            23 => '3B6AD83AA2D7805648601E3F60E698AF',
+            24 => '38B8CC9667D48D2D4018ACE4A26902B9',
+            25 => 'B952B03E6F659C66419B0E211D426002',
+            26 => '80ED299306A6924D4708F394F1D1FE6A',
+            27 => 'F08E270879D9921043B15216242F7365',
+            28 => 'F3838CEB64AA9DA24D8DBAB2996355C9',
+            29 => '019961A36C0EA21D43630E3CE4099D4D',
+            30 => '658BB87CECF3939740F93AD09409E9CB',
+            31 => '8F3AAAA7B69591214EF3FCA9BB8431CE',
+            32 => '9BECFDB3407CB8F1454A13AAB2F5E5D4',
+            33 => 'DF0CB2715B49BBE94E020912B2885CEA',
+            34 => 'CE6257487C7F8304487CE104C745F9CA',
+            35 => '346EE1012734A6D5410227267B73EE49',
+            36 => '860EF5C4296995374C6F1E43BC6CEFAA',
+            37 => '4C42339CA3108DBC4893BEDA0203F022',
+            38 => '149C398C150CA3F943970FE20D6FA81B',
+            39 => '3B06962D201CBAA5444598E77F3A69AF',
+            40 => '693B4387BFB98B28405E4A114C4ACBD3',
+            41 => '0A4C513C7B66871F482EA0003B8FCFC6',
+            42 => '2F0510E984CE98294E41AC08DDD13B76',
+            43 => '90C13444313DA43C4ADB7FDB6D8A2954',
+            44 => 'E554550D7E40875F4EB37D2FC3A3BD17',
+            45 => '707EAA23A514A7A34CCF4F9A30734823',
+            46 => '68015516655A817A4D15A94D00339622',
+            47 => '9590258E7404B4C643DFE703FDC0B007',
+            48 => '108B796F49248B92404FE371118E72C4',
+          ),
+        ),
+      ),
+    ),
+    1 => 
+    array (
+      'number' => 2,
+      'title' => 'Линейная функция',
+      'groups' => 
+      array (
+        0 => 
+        array (
+          'key' => 'linear-coefficient-signs',
+          'number' => 2,
+          'title' => 'Определить знаки k и b по прямой',
+          'expected_tasks' => 26,
+          'guids' => 
+          array (
+            0 => 'D48AF230EC058102498D44A5D9EF2C5B',
+            1 => 'B5AD716D84B58629424F326FCA71D703',
+            2 => 'B7D6DB6BE031B4DA461D4BABE1D8D857',
+            3 => 'D2B539C35A73962D49C19E82E8C5F264',
+            4 => '40679D7D7251A20D41ACDE38CA199FCB',
+            5 => 'DD45D70235EF9CA642FD979D8A1E127D',
+            6 => '25D6882B1546BE604155EF438BC32862',
+            7 => 'FB206EFC46D484754D6BB16882D9D3D6',
+            8 => '5D660A717C0CBECD4EEEDE9283940A53',
+            9 => 'A355D357484A95974021073304312074',
+            10 => '79E0968375F8BFDF467D73E1E6A751D6',
+            11 => '3A951AE8C13085704D543CB7510B4B58',
+            12 => '8932A983B3E692D74CD01E618CE15C26',
+            13 => '9C4E8379EA0BBD9D480E879B54922648',
+            14 => '0CF745355A67A77446731AE48E14E803',
+            15 => '2EB292341679A3E14ED6E36607656239',
+            16 => '4C1A502DDD719AFE44CE5CF2300690DB',
+            17 => '942C690DFAEDA2D54434D85803FF2929',
+            18 => 'D9F6E30E336AAB9D4D6A54A3CDFDCC97',
+            19 => '0F66A6931F28907341BA1FD230FD1E3B',
+            20 => '212C3D1657C4ACC24CF80A0525AC89CA',
+            21 => '9AD8B4015E6F835C42F62B91C45D8197',
+            22 => '90202522606BBFAD4CB9309F500C1046',
+            23 => '3DFEDA2C88A282EA4857674F2057F7EF',
+            24 => '9F3EAE8D642287E14920B90A3E96AE93',
+            25 => '569A15DF78BBBE46448C2E63BA31B5FA',
+          ),
+        ),
+      ),
+    ),
+    2 => 
+    array (
+      'number' => 3,
+      'title' => 'Квадратичная функция',
+      'groups' => 
+      array (
+        0 => 
+        array (
+          'key' => 'quadratic-coefficient-signs',
+          'number' => 3,
+          'title' => 'Определить знаки a и c по параболе',
+          'expected_tasks' => 26,
+          'guids' => 
+          array (
+            0 => 'DDED08B1A3C28926481797BB82C72F41',
+            1 => 'E9E933B2818AA10C43DE70D593F546FD',
+            2 => '55C3AD93CFAEB001497FD3AB8FA92E13',
+            3 => '61FA0A99BDD5B08440BCAA8477455614',
+            4 => '84C6786B4CBBB069455B4C5E5D8108D9',
+            5 => '2EB6AF6B9720B6CD4910E604549839C6',
+            6 => 'FB58C0A5ECF8B3064FE4A88371231ED1',
+            7 => 'C905842632DAAD414C8DDF5B8EE61331',
+            8 => '0264AFF385C6AD6B40F704459E23DB39',
+            9 => 'CBAFFE7534FCA57444A21AB83B5C5ED4',
+            10 => 'F5EC987DD0F9A41045C555D8EA1A5A2C',
+            11 => '5ACEE4E77CE2940641FC35A21C7F28AB',
+            12 => '6D0980E0DB42813B4F6AB56527B74A91',
+            13 => '337F77DF4399A0F24E8B372DBF117A12',
+            14 => '7BC7048C26ED89B84B492E4E2A31B1AB',
+            15 => 'BB65BABF98EE821C49E1B60F2E070B44',
+            16 => '4FB500D687158A924002372BDE2C94EA',
+            17 => 'A7B3C9ED9724AA6A42FD4FAFA0094D75',
+            18 => 'C080555E9A368DCE4FF95C8BE5B068BE',
+            19 => 'EA0A475647EAA425462A7B4DF9AA88BF',
+            20 => '014794ADBD339EF74FDB5D5DB1F789D6',
+            21 => 'A1846259E0F0AAE94426F148929E0FD7',
+            22 => 'F2CE6CD3505DA7C348B4D4C1668BF219',
+            23 => '5B418969C270AEFE4AC5AD1C676687B8',
+            24 => '5FA950DAD6FE89CC43130886EA8ABDCD',
+            25 => 'C06FED30E868AFA747C22CE7A510E4B8',
+          ),
+        ),
+      ),
+    ),
+  ),
+);
