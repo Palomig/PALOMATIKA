@@ -687,9 +687,12 @@ class StudentController extends Controller
                         $section = trim((string) ($zadanie['section'] ?? ''));
                         $instruction = trim((string) ($zadanie['instruction'] ?? ''));
                         $label = trim((string) ($zadanie['label'] ?? ''));
-                        $num = $zadanie['number'] ?? '';
-                        $title = $label !== '' ? $label : ($section !== '' ? $section : ($instruction !== '' ? "Задание {$num}. {$instruction}" : "Задание {$num}"));
+                        $num = (int) ($zadanie['number'] ?? count($zadaniya) + 1);
+                        $title = $label !== ''
+                            ? $label
+                            : ($section !== '' ? $section : ($instruction !== '' ? $instruction : "Группа {$num}"));
                         $zadaniya[] = [
+                            'number' => $num,
                             'section' => $blockSection,
                             'title' => $title,
                             'tasks' => $tasks,
@@ -754,9 +757,12 @@ class StudentController extends Controller
                     $section = trim((string) ($zadanie['section'] ?? ''));
                     $instruction = trim((string) ($zadanie['instruction'] ?? ''));
                     $label = trim((string) ($zadanie['label'] ?? ''));
-                    $num = $zadanie['number'] ?? '';
-                    $title = $label !== '' ? $label : ($section !== '' ? $section : ($instruction !== '' ? "Задание {$num}. {$instruction}" : "Задание {$num}"));
+                    $num = (int) ($zadanie['number'] ?? count($zadaniya) + 1);
+                    $title = $label !== ''
+                        ? $label
+                        : ($section !== '' ? $section : ($instruction !== '' ? $instruction : "Группа {$num}"));
                     $zadaniya[] = [
+                        'number' => $num,
                         'section' => $blockSection,
                         'title' => $title,
                         'tasks' => $tasks,

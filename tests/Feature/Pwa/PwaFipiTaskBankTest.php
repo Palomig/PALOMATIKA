@@ -50,6 +50,28 @@ class PwaFipiTaskBankTest extends TestCase
         $response->assertViewHas('taskCount', fn ($count) => $count > 300);
     }
 
+    public function test_part_one_uses_a_number_only_group_header(): void
+    {
+        $response = $this->actingAs($this->student)
+            ->get(route('pwa.student.tasks-part1', ['topic' => '06']))
+            ->assertOk();
+
+        $response->assertViewHas('zadaniya', static function (array $groups): bool {
+            return isset($groups[0]['number'], $groups[0]['title'], $groups[0]['section'])
+                && $groups[0]['number'] === 1;
+        });
+
+        $html = $response->getContent();
+        $this->assertStringContainsString('class="spoiler-num">1</span>', $html);
+        $this->assertStringNotContainsString('class="spoiler-num">01</span>', $html);
+        $this->assertStringContainsString('class="spoiler-subtitle">40 заданий</span>', $html);
+        $this->assertStringContainsString('class="spoiler-chevron">›</span>', $html);
+        $this->assertDoesNotMatchRegularExpression(
+            '/spoiler-title[^>]*>\s*Задание\s+\d+/u',
+            $html,
+        );
+    }
+
     public function test_topic_16_shows_pedagogical_sections_without_technical_fipi_heading(): void
     {
         $html = $this->actingAs($this->student)
