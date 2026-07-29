@@ -361,6 +361,7 @@ class StudentController extends Controller
         $topicsMeta = [
             '20' => ['title' => 'Уравнения', 'icon' => '🔢'],
             '21' => ['title' => 'Текстовые задачи', 'icon' => '🚗'],
+            '22' => ['title' => 'Графики функций', 'icon' => '📈'],
             '23' => ['title' => 'Геометрия (вычисление)', 'icon' => '📐'],
             '24' => ['title' => 'Геометрия (доказательство)', 'icon' => '✏️'],
             '25' => ['title' => 'Геометрия (повышенной сложности)', 'icon' => '🧭'],
@@ -384,9 +385,11 @@ class StudentController extends Controller
                 $tasks = [];
                 foreach (($zadanie['tasks'] ?? []) as $t) {
                     $text = trim((string) ($t['text'] ?? ''));
-                    if ($text === '') continue;
+                    $html = trim((string) ($t['html'] ?? ''));   // условие из банка ФИПИ
+                    if ($text === '' && $html === '') continue;
                     $tasks[] = [
                         'id'     => $t['id'] ?? null,
+                        'html'   => $html !== '' ? $html : null,
                         'text'   => $text,
                         'image'  => $t['image'] ?? null,
                         'answer' => $t['answer'] ?? null,
@@ -619,7 +622,10 @@ class StudentController extends Controller
      */
     public function tasksPart1(Request $request)
     {
-        $topicIds = ['06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19'];
+        // Задания 1–5 (практико-ориентированный блок) появились вместе с
+        // банком ФИПИ: раньше их в банке просто не было.
+        $topicIds = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10',
+                     '11', '12', '13', '14', '15', '16', '17', '18', '19'];
         $selected = str_pad((string) $request->query('topic', '6'), 2, '0', STR_PAD_LEFT);
         if (!in_array($selected, $topicIds, true)) {
             $selected = '06';
@@ -659,8 +665,12 @@ class StudentController extends Controller
                     $text = trim((string) ($t['text'] ?? ''));
                     $expression = trim((string) ($t['expression'] ?? ''));
                     $question = trim((string) ($t['question'] ?? ''));
+                    // Банк ФИПИ несёт условие готовой разметкой: формулы уже
+                    // в KaTeX, чертежи инлайновыми SVG. Ни text, ни expression
+                    // у таких задач нет, и без этой ветки они отсеивались.
+                    $html = trim((string) ($t['html'] ?? ''));
 
-                    if ($text === '' && $expression === '' && empty($t['svg']) && empty($t['image']) && $question === '') {
+                    if ($html === '' && $text === '' && $expression === '' && empty($t['svg']) && empty($t['image']) && $question === '') {
                         continue;
                     }
 
@@ -681,6 +691,7 @@ class StudentController extends Controller
 
                     $tasks[] = [
                         'id'         => $t['id'] ?? null,
+                        'html'       => $html !== '' ? $html : null,
                         'text'       => $text,
                         'expression' => $expression !== '' ? $expression : null,
                         'svg'        => $t['svg'] ?? null,

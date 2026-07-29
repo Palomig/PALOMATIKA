@@ -8,6 +8,12 @@
 @endpush
 
 @push('styles')
+  /* Условия банка ФИПИ приходят свёрстанными: формулы в KaTeX, чертежи
+     инлайновыми SVG. Ограничиваем ширину, чтобы на телефоне не расползались. */
+  .fipi-html svg, .fipi-html img { max-width: 100%; height: auto; }
+  .fipi-html p { margin: 0 0 8px; }
+  .fipi-html p:last-child { margin-bottom: 0; }
+  .fipi-html { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   .teacher-solution-btn {
     display: inline-flex; align-items: center; gap: 8px;
     margin-bottom: 12px; padding: 9px 14px; border-radius: 10px;
@@ -225,7 +231,12 @@
                 <img src="{{ asset('images/tasks/' . $selectedTopic . '/' . ltrim($task['image'], '/')) }}"
                      alt="" style="display:block;max-width:100%;height:auto;margin-bottom:10px;border:1px solid var(--border);border-radius:10px;background:#fff;padding:4px;" loading="lazy">
               @endif
-              <div class="task-item-text">{{ $task['text'] }}</div>
+              @if(!empty($task['html']))
+                {{-- Банк ФИПИ: разметка уже готова (KaTeX + инлайновые SVG) --}}
+                <div class="task-item-text fipi-html">{!! $task['html'] !!}</div>
+              @else
+                <div class="task-item-text">{{ $task['text'] }}</div>
+              @endif
               @if(!empty($task['answer']))
                 @if($isTeacher)
                   {{-- Учителю ответ нужен как справка — показываем сразу. --}}
