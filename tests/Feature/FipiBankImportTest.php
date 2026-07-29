@@ -114,6 +114,77 @@ class FipiBankImportTest extends TestCase
         $this->assertSame(322, $count($production), 'фильтр production потерял задания');
     }
 
+    public function test_topic_16_uses_the_pedagogical_taxonomy(): void
+    {
+        Artisan::call('tasks:import-fipi', ['--and-retire' => true]);
+        Cache::flush();
+
+        $blocks = (new TaskDataService())->getBlocks('16');
+        $groups = array_merge(...array_column($blocks, 'zadaniya'));
+
+        $this->assertSame([
+            'Углы в окружности',
+            'Вписанные четырёхугольники',
+            'Вписанная окружность',
+            'Описанная окружность',
+        ], array_column($blocks, 'title'));
+        $this->assertCount(23, $groups);
+        $this->assertSame(range(1, 23), array_column($groups, 'number'));
+        $this->assertSame([
+            10, 20, 10, 1, 10,
+            20, 10, 20,
+            10, 10, 30, 20, 10, 10, 30, 10,
+            10, 20, 20, 10, 9, 10, 12,
+        ], array_map(static fn (array $group): int => count($group['tasks']), $groups));
+        $this->assertSame([
+            'Центральный и вписанный углы: вписанный угол вдвое меньше',
+            'Два диаметра: связь центрального и вписанного углов',
+            'Угол, опирающийся на диаметр: 90°',
+            'Две касательные: углы и радиусы',
+            'Центр окружности лежит на стороне треугольника: найти угол',
+            'Противоположные углы вписанного четырёхугольника',
+            'Углы при параллельных основаниях трапеции',
+            'Вписанный четырёхугольник: равные вписанные углы и сумма 180°',
+            'Квадрат: найти радиус по стороне',
+            'Квадрат: найти площадь по радиусу',
+            'Трапеция: высота равна диаметру вписанной окружности',
+            'Описанный четырёхугольник: суммы противоположных сторон',
+            'Квадрат: найти диагональ по радиусу вписанной окружности',
+            'Площадь треугольника по формуле S = pr',
+            'Равносторонний треугольник и вписанная окружность: сторона ↔ радиус',
+            'Ромб: радиус через диагональ и тангенс угла',
+            'Прямоугольный треугольник: R = c / 2',
+            'Квадрат и описанная окружность: сторона ↔ радиус',
+            'Равносторонний треугольник и описанная окружность: сторона ↔ радиус',
+            'Центр на гипотенузе: найти сторону по теореме Пифагора',
+            'Расширенная теорема синусов',
+            'Прямоугольник: площадь через диагональ и синус угла',
+            'Квадрат и окружность с центром на середине стороны: теорема Пифагора',
+        ], array_column($groups, 'instruction'));
+    }
+
+    public function test_topic_16_taxonomy_is_idempotent_and_other_topics_keep_fipi_grouping(): void
+    {
+        Artisan::call('tasks:import-fipi', ['--and-retire' => true]);
+        Artisan::call('tasks:import-fipi', ['--and-retire' => true]);
+        Cache::flush();
+
+        $service = new TaskDataService();
+        $topic16 = $service->getBlocks('16');
+        $topic15 = $service->getBlocks('15');
+
+        $this->assertCount(4, $topic16);
+        $this->assertSame(322, array_sum(array_map(
+            static fn (array $block): int => array_sum(array_map(
+                static fn (array $group): int => count($group['tasks']),
+                $block['zadaniya'],
+            )),
+            $topic16,
+        )));
+        $this->assertCount(1, $topic15);
+        $this->assertSame('ФИПИ', $topic15[0]['title']);
+    }
+
     public function test_proofs_without_answers_stay_out_of_production(): void
     {
         Artisan::call('tasks:import-fipi', ['--and-retire' => true]);
