@@ -311,7 +311,13 @@ class MiniAppTaskCanonicalizer
                 // ветки в варианте показывались пустые кнопки «А Б В Г».
                 // Идентификатором служит номер: ответы банка — числа, и в
                 // PWA `optionAnswerValue()` вернёт именно его.
-                if (isset($option['html']) && !isset($option['label'], $option['text'], $option['value'])) {
+                // Признак — наличие `html`; у вариантов Паломатики его нет.
+                // Проверять «label/text/value ещё не заданы» нельзя: варианты
+                // сохранённого варианта уже проходили нормализацию, и их
+                // подписи успел испортить latexToUnicode, который выбрасывает
+                // фигурные скобки ($\dfrac{45}{19}$ → $\dfrac4519$). Разметка
+                // из `html` — единственный неиспорченный источник.
+                if (isset($option['html']) && $option['html'] !== '') {
                     $number = (string) ($option['n'] ?? $index + 1);
                     $normalized[] = array_merge($option, [
                         'id' => $number,
