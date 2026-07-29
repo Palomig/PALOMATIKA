@@ -692,11 +692,13 @@
 
         {{-- Instruction text --}}
         <div class="q-text q-anim" :style="'animation-delay: 0.05s; margin-top: 16px'"
+             x-show="!currentTask.html_condition"
              x-html="formatRichText(currentTask.instruction || currentTask.text || '')"></div>
 
         {{-- Task text (when instruction is a generic heading and task body is separate) --}}
         <template x-if="currentTask.instruction && currentTask.text && currentTask.text !== currentTask.instruction">
-          <div class="q-text q-anim" :style="'animation-delay: 0.07s; margin-top: 10px; font-size: 15px; font-weight: 600'"
+          <div class="q-text q-anim"
+               :style="'animation-delay: 0.07s; margin-top: 10px; font-size: 15px; font-weight: ' + (currentTask.html_condition ? '400' : '600')"
                x-html="formatRichText(currentTask.text)"></div>
         </template>
 
@@ -751,11 +753,11 @@
           {{-- Choice/options type (for any task that carries options) --}}
           <template x-if="currentTask.type !== 'matching' && currentTask.type !== 'matching_signs' && normalizedOptions(currentTask).length > 0">
             <div>
-              <div class="answer-label">Выбери ответ</div>
+              <div class="answer-label" x-text="isMultiSelect(currentTask) ? 'Выбери все верные' : 'Выбери ответ'"></div>
               <div class="test-options">
                 <template x-for="(opt, oi) in normalizedOptions(currentTask)" :key="oi">
                   <div class="test-option"
-                       :class="{ 'selected': answers[taskKey(currentTask)] === optionAnswerValue(opt, oi) }"
+                       :class="{ 'selected': isOptionSelected(opt, oi) }"
                        @click="selectOption(opt, oi)">
                     <div class="test-option-letter" x-text="optionDisplayLabel(opt, oi)"></div>
                     <div class="test-option-text" x-html="optionHtml(opt)"></div>
@@ -1372,9 +1374,40 @@
       },
 
       // Answer handling
+      // Задание 19 бывает с несколькими верными утверждениями («Какие из
+      // следующих утверждений являются истинными»). Ответ там — цифры выбранных
+      // вариантов по возрастанию, как на самом экзамене.
+      isMultiSelect(task) {
+        return !!(task && (task.multi_select || (task.task && task.task.multi_select)));
+      },
+
+      isOptionSelected(opt, idx) {
+        const current = String(this.answers[this.taskKey(this.currentTask)] ?? '');
+        const value = String(this.optionAnswerValue(opt, idx));
+        if (!this.isMultiSelect(this.currentTask)) {
+          return current === value;
+        }
+        return current.split('').includes(value);
+      },
+
       selectOption(opt, idx) {
         const tn = this.taskKey(this.currentTask);
-        this.answers[tn] = this.optionAnswerValue(opt, idx);
+        const value = String(this.optionAnswerValue(opt, idx));
+
+        if (!this.isMultiSelect(this.currentTask)) {
+          this.answers[tn] = value;
+          return;
+        }
+
+        const chosen = String(this.answers[tn] ?? '').split('').filter(Boolean);
+        const at = chosen.indexOf(value);
+        if (at === -1) {
+          chosen.push(value);
+        } else {
+          chosen.splice(at, 1);
+        }
+        chosen.sort();
+        this.answers[tn] = chosen.join('');
       },
 
       // Submit test — sends all answers in one request. Per-task commits via $watch are
