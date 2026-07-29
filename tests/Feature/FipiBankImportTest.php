@@ -90,6 +90,47 @@ class FipiBankImportTest extends TestCase
         $this->assertNotEmpty($after['blocks'], 'после отключения тема осталась пустой');
     }
 
+    public function test_status_reaches_the_interface_through_payload(): void
+    {
+        // Структуру для интерфейса репозиторий собирает из payload, а не из
+        // колонок. Пока `status` лежал только в колонке, фильтр «production»
+        // отсекал почти весь банк: тема 16 показывала 8 задач из 322.
+        $service = new TaskDataService();
+        Artisan::call('tasks:import-fipi', ['--and-retire' => true]);
+        Cache::flush();
+
+        $all = $service->getBlocks('16');
+        $production = $service->getBlocks('16', 'production');
+
+        $count = static fn (array $blocks) => array_sum(array_map(
+            static fn (array $b) => array_sum(array_map(
+                static fn (array $z) => count($z['tasks'] ?? []),
+                $b['zadaniya'] ?? []
+            )),
+            $blocks
+        ));
+
+        $this->assertSame(322, $count($all));
+        $this->assertSame(322, $count($production), 'фильтр production потерял задания');
+    }
+
+    public function test_proofs_without_answers_stay_out_of_production(): void
+    {
+        Artisan::call('tasks:import-fipi', ['--and-retire' => true]);
+        Cache::flush();
+
+        $production = (new TaskDataService())->getBlocks('24', 'production');
+        $tasks = array_sum(array_map(
+            static fn (array $b) => array_sum(array_map(
+                static fn (array $z) => count($z['tasks'] ?? []),
+                $b['zadaniya'] ?? []
+            )),
+            $production
+        ));
+
+        $this->assertSame(0, $tasks, 'доказательства темы 24 без ответов не должны идти в выдачу');
+    }
+
     public function test_and_retire_switches_banks_without_a_window(): void
     {
         // Импорт и отключение в одной транзакции: иначе между ними тема
