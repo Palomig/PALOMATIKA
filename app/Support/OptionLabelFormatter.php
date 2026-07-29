@@ -17,6 +17,14 @@ class OptionLabelFormatter
 
     public static function optionLabel(mixed $option, ?int $fallbackIndex = null): string
     {
+        // Варианты банка ФИПИ пронумерованы полем `n` и не имеют `id`. Без
+        // этой ветки метка бралась по порядковому номеру из букв, и ответ «3»
+        // показывался как «В» — а в ОГЭ буквенных ответов не бывает.
+        if (is_array($option) && isset($option['n'])
+            && preg_match('/^[1-9][0-9]*$/', (string) $option['n']) === 1) {
+            return (string) $option['n'];
+        }
+
         $id = is_array($option) ? (string) ($option['id'] ?? '') : '';
 
         return self::labelFromId($id, $fallbackIndex);

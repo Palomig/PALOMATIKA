@@ -170,11 +170,15 @@ class ImportFipiBank extends Command
             'position' => $position,
             'instruction' => $items[0]['subtype_title'] ?? null,
             'type' => 'fipi',
-            // `status` обязан лежать в payload, а не только в колонке:
-            // структуру для интерфейса репозиторий собирает именно из payload,
-            // и без этого ключа фильтр «production» отсекает задание целиком.
+            // Всё, что нужно интерфейсу, обязано лежать в payload: структуру
+            // репозиторий собирает именно из него, а колонки существуют ради
+            // запросов и индексов. Без `instruction` падал сбор варианта,
+            // без `type` задание уходило в шаблон по умолчанию, без `status`
+            // фильтр «production» отсекал банк целиком.
             'payload' => [
                 'part2' => (bool) ($items[0]['part2'] ?? false),
+                'instruction' => $items[0]['subtype_title'] ?? null,
+                'type' => 'fipi',
                 'status' => 'production',
             ],
             'status' => 'production',
