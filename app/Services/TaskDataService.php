@@ -181,14 +181,10 @@ class TaskDataService
         $cacheKey = "topic_data_{$topicId}";
 
         return Cache::remember($cacheKey, 3600, function () use ($topicId) {
-            $filePath = "{$this->basePath}/topic_{$topicId}.json";
-
-            if (!File::exists($filePath)) {
+            $data = $this->readTopic($topicId);
+            if ($data === []) {
                 return [];
             }
-
-            $content = File::get($filePath);
-            $data = json_decode($content, true) ?? [];
 
             $data = app(OptionRenderModePolicy::class)->normalizeTopicData($topicId, $data);
 
@@ -198,6 +194,28 @@ class TaskDataService
 
             return $data;
         });
+    }
+
+    /**
+     * Тема из базы, а при её отсутствии — из JSON-файла, как раньше.
+     *
+     * Откат на файл нужен, чтобы выкладка кода и переезд данных были
+     * независимы: миграции на проде запускаются отдельной командой, и до
+     * этого момента сервис обязан работать по-старому.
+     */
+    protected function readTopic(string $topicId): array
+    {
+        $repository = app(TaskBankRepository::class);
+        if ($repository->hasData('oge', $topicId)) {
+            return $repository->topicData('oge', $topicId);
+        }
+
+        $filePath = "{$this->basePath}/topic_{$topicId}.json";
+        if (!File::exists($filePath)) {
+            return [];
+        }
+
+        return json_decode(File::get($filePath), true) ?? [];
     }
 
     /**
