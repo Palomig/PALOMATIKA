@@ -381,6 +381,7 @@ class StudentController extends Controller
         $shortLabels = $this->part2ShortLabels()[$selected] ?? [];
 
         foreach (($data['blocks'] ?? []) as $block) {
+            $blockSection = trim((string) ($block['title'] ?? ''));
             foreach (($block['zadaniya'] ?? []) as $zadanie) {
                 $tasks = [];
                 foreach (($zadanie['tasks'] ?? []) as $t) {
@@ -403,12 +404,18 @@ class StudentController extends Controller
                     $num = (int) ($zadanie['number'] ?? 0);
                     $title = $section !== '' ? $section : ($instruction !== '' ? "Задание {$num}. {$instruction}" : "Задание {$num}");
                     $short = $shortLabels[$num] ?? null;
+                    $isCurated = trim((string) ($zadanie['taxonomy_key'] ?? '')) !== '';
                     // Решение видно только учителям/админам; его текст НЕ отдаётся ученику.
                     $hasSolution = $isTeacher && trim((string) ($zadanie['solution'] ?? '')) !== '';
                     $zadaniya[] = [
                         'number'       => $num,
-                        'title'        => $short['title'] ?? $title,
-                        'subtitle'     => $short['subtitle'] ?? null,
+                        'section'      => $isCurated ? $blockSection : '',
+                        'title'        => $isCurated
+                            ? ($instruction !== '' ? $instruction : "Группа {$num}")
+                            : ($short['title'] ?? $title),
+                        'subtitle'     => $isCurated
+                            ? count($tasks) . ' заданий'
+                            : ($short['subtitle'] ?? null),
                         'hint'         => $zadanie['answer_hint'] ?? null,
                         'tasks'        => $tasks,
                         'has_solution' => $hasSolution,
