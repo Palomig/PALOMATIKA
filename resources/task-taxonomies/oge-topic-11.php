@@ -7,21 +7,21 @@
 return array (
   'topic' => '11',
   'expected_tasks' => 101,
-  'blocks' => 
+  'blocks' =>
   array (
-    0 => 
+    0 =>
     array (
       'number' => 1,
       'title' => 'Формула и вид графика',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'match-function-and-graph',
           'number' => 1,
           'title' => 'Сопоставить формулу функции с её графиком',
           'expected_tasks' => 49,
-          'guids' => 
+          'guids' =>
           array (
             0 => 'D0EFEBD97AB3982B44C60F7430F5ACF1',
             1 => '3583A7DF4A6680EF4D2C8CC4997C8357',
@@ -76,19 +76,19 @@ return array (
         ),
       ),
     ),
-    1 => 
+    1 =>
     array (
       'number' => 2,
       'title' => 'Линейная функция',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'linear-coefficient-signs',
           'number' => 2,
           'title' => 'Определить знаки k и b по прямой',
           'expected_tasks' => 26,
-          'guids' => 
+          'guids' =>
           array (
             0 => 'D48AF230EC058102498D44A5D9EF2C5B',
             1 => 'B5AD716D84B58629424F326FCA71D703',
@@ -120,19 +120,19 @@ return array (
         ),
       ),
     ),
-    2 => 
+    2 =>
     array (
       'number' => 3,
       'title' => 'Квадратичная функция',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'quadratic-coefficient-signs',
           'number' => 3,
           'title' => 'Определить знаки a и c по параболе',
           'expected_tasks' => 26,
-          'guids' => 
+          'guids' =>
           array (
             0 => 'DDED08B1A3C28926481797BB82C72F41',
             1 => 'E9E933B2818AA10C43DE70D593F546FD',

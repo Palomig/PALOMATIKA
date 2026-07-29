@@ -7,21 +7,21 @@
 return array (
   'topic' => '08',
   'expected_tasks' => 321,
-  'blocks' => 
+  'blocks' =>
   array (
-    0 => 
+    0 =>
     array (
       'number' => 1,
       'title' => 'Квадратный корень',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'square-root-after-substitution',
           'number' => 1,
           'title' => 'Подставить значения и извлечь квадратный корень',
           'expected_tasks' => 60,
-          'guids' => 
+          'guids' =>
           array (
             0 => '0925DB2BFDD98F3A483FF8507893C30D',
             1 => '25076D69DCD7A98F4B3B7D5F36BE48F1',
@@ -85,13 +85,13 @@ return array (
             59 => 'C0107AD7ED759CBF432F8748B0249EA8',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'multiply-and-divide-radicals',
           'number' => 2,
           'title' => 'Умножение и деление квадратных корней',
           'expected_tasks' => 50,
-          'guids' => 
+          'guids' =>
           array (
             0 => 'F147257480C584FC4562CB4FAB323663',
             1 => '85BE7F92A9AF95734145DCE6036CA47D',
@@ -145,13 +145,13 @@ return array (
             49 => 'E78BD4803AB38582448025D18530C34D',
           ),
         ),
-        2 => 
+        2 =>
         array (
           'key' => 'square-root-of-even-power',
           'number' => 3,
           'title' => 'Квадратный корень из чётной степени',
           'expected_tasks' => 30,
-          'guids' => 
+          'guids' =>
           array (
             0 => '22A9E562764A983742462C37B4A5038F',
             1 => '12CFEC741133A9454622631051E49ED6',
@@ -185,13 +185,13 @@ return array (
             29 => 'F2E9D02C424DBA5E47B32FA92F428B69',
           ),
         ),
-        3 => 
+        3 =>
         array (
           'key' => 'conjugate-radical-expressions',
           'number' => 4,
           'title' => 'Сопряжённые выражения и разность квадратов',
           'expected_tasks' => 31,
-          'guids' => 
+          'guids' =>
           array (
             0 => '9642C22F7F02B7284333C7B4093C98A6',
             1 => 'D402782A0B57B33D4FF8B42BF62EBFE8',
@@ -228,19 +228,19 @@ return array (
         ),
       ),
     ),
-    1 => 
+    1 =>
     array (
       'number' => 2,
       'title' => 'Свойства степеней',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'same-base-power-rules',
           'number' => 5,
           'title' => 'Умножение и деление степеней с одинаковым основанием',
           'expected_tasks' => 30,
-          'guids' => 
+          'guids' =>
           array (
             0 => '031A55E0656581B845F67C86F3EAC297',
             1 => '5B249623A3F78E06482D80056160F31D',
@@ -274,13 +274,13 @@ return array (
             29 => '92FD2F1E7E27A5D14D2B9295B61E4A91',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'power-of-a-power-and-product',
           'number' => 6,
           'title' => 'Степень степени и степень произведения',
           'expected_tasks' => 20,
-          'guids' => 
+          'guids' =>
           array (
             0 => '39ED476A8655AEEC49F2D3D8F482A304',
             1 => '4471F22977D1ADFD42A71063141980F9',
@@ -304,13 +304,13 @@ return array (
             19 => 'EBEA9BAAD69BBD0444F9C44D432070D2',
           ),
         ),
-        2 => 
+        2 =>
         array (
           'key' => 'factorized-numeric-powers',
           'number' => 7,
           'title' => 'Разложить основания на множители и сократить степени',
           'expected_tasks' => 30,
-          'guids' => 
+          'guids' =>
           array (
             0 => '1E1B3F13702FB4D1468FAB58CDD60879',
             1 => '4764EF4770C88DE04C6127D2CC1CA757',
@@ -344,13 +344,13 @@ return array (
             29 => 'FDCBC4B581DFB9EF4778ECB95B77E35F',
           ),
         ),
-        3 => 
+        3 =>
         array (
           'key' => 'negative-integer-powers',
           'number' => 8,
           'title' => 'Отрицательные показатели степени',
           'expected_tasks' => 70,
-          'guids' => 
+          'guids' =>
           array (
             0 => 'EBAB9F9A5A2FA1554D8DEF76369E6295',
             1 => '387B06B562FCB0D24FB32B41C68ACF33',

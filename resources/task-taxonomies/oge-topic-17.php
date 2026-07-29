@@ -7,21 +7,21 @@
 return array (
   'topic' => '17',
   'expected_tasks' => 316,
-  'blocks' => 
+  'blocks' =>
   array (
-    0 => 
+    0 =>
     array (
       'number' => 1,
       'title' => 'Параллелограмм',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'parallelogram-angles',
           'number' => 1,
           'title' => 'Соседние углы и биссектриса параллелограмма',
           'expected_tasks' => 31,
-          'guids' => 
+          'guids' =>
           array (
             0 => 'C42326033B898F184EC011AFCA56324C',
             1 => 'E05FF0FB3F55B818431234F95467610F',
@@ -56,13 +56,13 @@ return array (
             30 => 'F4181CD2711188F642B582741E806705',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'parallelogram-diagonals',
           'number' => 2,
           'title' => 'Диагонали параллелограмма делятся пополам',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => 'D6BEC008E08BB1DC4ABB7676013DAB02',
             1 => '5F8E710F09178D0B4910E46E649C7E64',
@@ -76,13 +76,13 @@ return array (
             9 => 'FB21B59345F79FA145120CDD8C02B646',
           ),
         ),
-        2 => 
+        2 =>
         array (
           'key' => 'parallelogram-area',
           'number' => 3,
           'title' => 'Площадь параллелограмма и его высоты',
           'expected_tasks' => 18,
-          'guids' => 
+          'guids' =>
           array (
             0 => '34BF2B4D18F6A83445CAAD5969DA4DB5',
             1 => '489C9493404EB04B42881886078909A8',
@@ -106,19 +106,19 @@ return array (
         ),
       ),
     ),
-    1 => 
+    1 =>
     array (
       'number' => 2,
       'title' => 'Прямоугольник и квадрат',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'rectangle-diagonal-angles',
           'number' => 4,
           'title' => 'Угол между диагоналями прямоугольника',
           'expected_tasks' => 20,
-          'guids' => 
+          'guids' =>
           array (
             0 => '1BD0AEB9AEB783F84265C54B24AC84D6',
             1 => 'F207D932802DA68D4539A658647F2A48',
@@ -142,13 +142,13 @@ return array (
             19 => 'EDA3CFEF716A89384340505765E62BBF',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'square-diagonal',
           'number' => 5,
           'title' => 'Диагональ квадрата через его сторону',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '7067214FABE9B48E42E078F9CF24A86A',
             1 => '01A59B7F5AE1B6E24A5D11079A2F1C12',
@@ -164,19 +164,19 @@ return array (
         ),
       ),
     ),
-    2 => 
+    2 =>
     array (
       'number' => 3,
       'title' => 'Ромб',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'rhombus-angle-bisectors',
           'number' => 6,
           'title' => 'Диагонали ромба делят его углы пополам',
           'expected_tasks' => 52,
-          'guids' => 
+          'guids' =>
           array (
             0 => '371BF4E8EB9B9ACA4883A40D9ED77FFC',
             1 => '4856ACC76C5C96724FA7B9266F974729',
@@ -232,13 +232,13 @@ return array (
             51 => 'A4A425E283E09AE2444DC7A9C0F0C5F7',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'rhombus-height',
           'number' => 7,
           'title' => 'Высота ромба через сторону и угол',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '54E02BC23675927D4D3E12CECBF48E99',
             1 => '63EBA5F50A258DEE43BA5F8FBAE52485',
@@ -252,13 +252,13 @@ return array (
             9 => '642491F06310AAB544D87D4ED7FC1117',
           ),
         ),
-        2 => 
+        2 =>
         array (
           'key' => 'rhombus-area',
           'number' => 8,
           'title' => 'Площадь ромба через диагонали, сторону или угол',
           'expected_tasks' => 20,
-          'guids' => 
+          'guids' =>
           array (
             0 => '79C8CF6B3D28920446991C280C4A31E1',
             1 => '00F8D702E4A3A5AD4822EC0319A5D104',
@@ -284,19 +284,19 @@ return array (
         ),
       ),
     ),
-    3 => 
+    3 =>
     array (
       'number' => 4,
       'title' => 'Трапеция',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'trapezoid-angles',
           'number' => 9,
           'title' => 'Углы равнобедренной и прямоугольной трапеции',
           'expected_tasks' => 73,
-          'guids' => 
+          'guids' =>
           array (
             0 => 'A33F6800A82FB62C436E19D892AD89A6',
             1 => '9972752500099E25457FDA162CDA4241',
@@ -373,13 +373,13 @@ return array (
             72 => '9370CF7EEF9CBE8E46C02310054237AD',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'isosceles-trapezoid-base-height',
           'number' => 10,
           'title' => 'Основания и высота равнобедренной трапеции',
           'expected_tasks' => 37,
-          'guids' => 
+          'guids' =>
           array (
             0 => '3814578EBC9D8DBE43A466CB419FC95A',
             1 => 'C04910819AC1B4AE4F8144EC4F14B9EB',
@@ -420,13 +420,13 @@ return array (
             36 => 'DF6B6BDA0C8C9D74485C71174C164AF4',
           ),
         ),
-        2 => 
+        2 =>
         array (
           'key' => 'trapezoid-midline',
           'number' => 11,
           'title' => 'Средняя линия трапеции и её части',
           'expected_tasks' => 20,
-          'guids' => 
+          'guids' =>
           array (
             0 => 'A5B8A3343C808E6A48C114DB67AD7389',
             1 => 'B8FAC7ECEF6E8BC24BFD70C06DA12B81',
@@ -450,13 +450,13 @@ return array (
             19 => 'CF931A73664CBB504D9C8440DF12294E',
           ),
         ),
-        3 => 
+        3 =>
         array (
           'key' => 'trapezoid-area',
           'number' => 12,
           'title' => 'Площадь трапеции',
           'expected_tasks' => 15,
-          'guids' => 
+          'guids' =>
           array (
             0 => '9E52C89344DDB96E455D55612C6FF1B0',
             1 => '21223ED2AA29BFC045E42C81CC081F5A',

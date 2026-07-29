@@ -7,21 +7,21 @@
 return array (
   'topic' => '18',
   'expected_tasks' => 154,
-  'blocks' => 
+  'blocks' =>
   array (
-    0 => 
+    0 =>
     array (
       'number' => 1,
       'title' => 'Длины на клетчатой бумаге',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'count-grid-length',
           'number' => 1,
           'title' => 'Определить длину по клеткам',
           'expected_tasks' => 24,
-          'guids' => 
+          'guids' =>
           array (
             0 => '069740327DA2A57540ABE757418FFC3E',
             1 => '2CC571265CE6919345BA9D2DB69DBA65',
@@ -49,13 +49,13 @@ return array (
             23 => 'FD1277F302CB88014EDA3462BC26E036',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'segment-ratio-on-grid',
           'number' => 2,
           'title' => 'Сравнить длины отрезков',
           'expected_tasks' => 8,
-          'guids' => 
+          'guids' =>
           array (
             0 => '12071676073687BC425F355F15B0FE9E',
             1 => '32CE8C0B7A9FB6F14625D3FE97042013',
@@ -67,13 +67,13 @@ return array (
             7 => 'C82D857871F8AC104886923E7D183C23',
           ),
         ),
-        2 => 
+        2 =>
         array (
           'key' => 'pythagorean-distance-on-grid',
           'number' => 3,
           'title' => 'Наклонный отрезок: применить теорему Пифагора',
           'expected_tasks' => 35,
-          'guids' => 
+          'guids' =>
           array (
             0 => '31E81287EB2CA9B34B2426FFF0E6E0E8',
             1 => '3A40CCF266BAA0804D9BC0E9AA71E551',
@@ -114,19 +114,19 @@ return array (
         ),
       ),
     ),
-    1 => 
+    1 =>
     array (
       'number' => 2,
       'title' => 'Средняя линия',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'midline-on-grid',
           'number' => 4,
           'title' => 'Средняя линия треугольника или трапеции',
           'expected_tasks' => 24,
-          'guids' => 
+          'guids' =>
           array (
             0 => '07476B41C43DA6214B2AEADC39796C80',
             1 => '1D4DFC79DB509305468B41DF5E36DF14',
@@ -156,19 +156,19 @@ return array (
         ),
       ),
     ),
-    2 => 
+    2 =>
     array (
       'number' => 3,
       'title' => 'Площади на клетчатой бумаге',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'polygon-area-on-grid',
           'number' => 5,
           'title' => 'Площадь треугольника или четырёхугольника',
           'expected_tasks' => 48,
-          'guids' => 
+          'guids' =>
           array (
             0 => '0EDEFAA810A09F3740FA5C59468D0740',
             1 => '10C330783AF38B1F4CD2A3721FA4B80F',
@@ -220,13 +220,13 @@ return array (
             47 => 'FE5391D58BBAAA4C4337E19ECE859442',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'circle-area-ratio',
           'number' => 6,
           'title' => 'Отношение площадей кругов через радиусы',
           'expected_tasks' => 15,
-          'guids' => 
+          'guids' =>
           array (
             0 => '0196A1D19E0F9DEF45CE15137B1A45B9',
             1 => '1D4FF011588B8F8E453D616A2AE75529',

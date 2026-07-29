@@ -7,21 +7,21 @@
 return array (
   'topic' => '07',
   'expected_tasks' => 171,
-  'blocks' => 
+  'blocks' =>
   array (
-    0 => 
+    0 =>
     array (
       'number' => 1,
       'title' => 'Чтение координатной прямой',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'number-position-and-sign',
           'number' => 1,
           'title' => 'Положение числа относительно нуля',
           'expected_tasks' => 13,
-          'guids' => 
+          'guids' =>
           array (
             0 => '19CB3DDB09BE9ABE41619138002D285D',
             1 => '2F389C5F8F198A3949FCB93CFACC8FB5',
@@ -38,13 +38,13 @@ return array (
             12 => '008E84293C5AB98E47539B211B8DC443',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'difference-sign-by-point-order',
           'number' => 2,
           'title' => 'Знак разности по порядку точек',
           'expected_tasks' => 12,
-          'guids' => 
+          'guids' =>
           array (
             0 => '89C2334AA5398B7A45736C774A99DFC9',
             1 => '5D94F5F6E0E287C34FB1E5E8FFB2C2D7',
@@ -62,19 +62,19 @@ return array (
         ),
       ),
     ),
-    1 => 
+    1 =>
     array (
       'number' => 2,
       'title' => 'Рациональные числа на прямой',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'locate-fraction-or-decimal',
           'number' => 3,
           'title' => 'Найти дробь или десятичное число среди отмеченных точек',
           'expected_tasks' => 49,
-          'guids' => 
+          'guids' =>
           array (
             0 => '8740172207A39E8045B702D291F587AD',
             1 => '96936AACCDB1ACC2463C37E7EA6FFDCF',
@@ -127,13 +127,13 @@ return array (
             48 => 'F7872B813A7AB0694DD78A8B10616289',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'integer-bounds-for-fraction',
           'number' => 4,
           'title' => 'Оценить дробь между соседними целыми числами',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '2F6D1F1959218DDF4F5B3618EC45F081',
             1 => '9D5F04D2BDDE97104BFA0B03D45526C4',
@@ -147,13 +147,13 @@ return array (
             9 => '80577D7DE0A386FA4477D86D69AAAE17',
           ),
         ),
-        2 => 
+        2 =>
         array (
           'key' => 'compare-fractions',
           'number' => 5,
           'title' => 'Сравнить дроби и выбрать число между ними',
           'expected_tasks' => 13,
-          'guids' => 
+          'guids' =>
           array (
             0 => '0BC4F26E205495C547189DCF58C57ABA',
             1 => '108B7CB6B689B9D6472395FA21F5DE63',
@@ -170,13 +170,13 @@ return array (
             12 => 'B636DD8D4348844043B2158E1E75080D',
           ),
         ),
-        3 => 
+        3 =>
         array (
           'key' => 'number-in-interval',
           'number' => 6,
           'title' => 'Определить принадлежность числовому промежутку',
           'expected_tasks' => 22,
-          'guids' => 
+          'guids' =>
           array (
             0 => '0387EE6DF200BDDC42EA381CE85E7ABA',
             1 => '2B6E83A73089B9EC40158CE3DA051069',
@@ -204,19 +204,19 @@ return array (
         ),
       ),
     ),
-    2 => 
+    2 =>
     array (
       'number' => 3,
       'title' => 'Приближённая оценка квадратного корня',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'locate-square-root',
           'number' => 7,
           'title' => 'Найти квадратный корень среди точек',
           'expected_tasks' => 25,
-          'guids' => 
+          'guids' =>
           array (
             0 => '0B7A71F73392AE724B0AE92C9930CF79',
             1 => '1AF863DBFFFEBC4640FEA296D47D8819',
@@ -245,13 +245,13 @@ return array (
             24 => 'E5F290C4F83980ED4371273FE80CC5E1',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'integer-bounds-for-square-root',
           'number' => 8,
           'title' => 'Оценить корень между соседними целыми числами',
           'expected_tasks' => 15,
-          'guids' => 
+          'guids' =>
           array (
             0 => '288DB491898E9D814B8C08C0C5155173',
             1 => '938556867A2FBB974FAB608F919F118E',
@@ -270,13 +270,13 @@ return array (
             14 => 'E9A4B58C07819B1949D90F3F57E3F611',
           ),
         ),
-        2 => 
+        2 =>
         array (
           'key' => 'square-root-in-interval',
           'number' => 9,
           'title' => 'Выбрать корень из заданного промежутка',
           'expected_tasks' => 12,
-          'guids' => 
+          'guids' =>
           array (
             0 => '1B862BCDCD5FADB1470E319612075258',
             1 => '2DC65EF5929194144BFD1FFCC328E67B',

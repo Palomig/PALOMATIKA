@@ -7,21 +7,21 @@
 return array (
   'topic' => '23',
   'expected_tasks' => 172,
-  'blocks' => 
+  'blocks' =>
   array (
-    0 => 
+    0 =>
     array (
       'number' => 1,
       'title' => 'Треугольники',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'right-triangle-altitude',
           'number' => 1,
           'title' => 'Высота к гипотенузе и подобие треугольников',
           'expected_tasks' => 20,
-          'guids' => 
+          'guids' =>
           array (
             0 => '9D3356CFBF8DADD74DE62DFEE32BF715',
             1 => '562DF0A79BFFBBC143DB283B17D030EB',
@@ -45,13 +45,13 @@ return array (
             19 => 'FC980A3500F4A6EC4756979A8AE2642F',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'parallel-lines-similarity',
           'number' => 2,
           'title' => 'Подобие при параллельных прямых',
           'expected_tasks' => 20,
-          'guids' => 
+          'guids' =>
           array (
             0 => 'A3A201445B8FAD67492DD3456DB4E055',
             1 => 'B8B5B92773C2B7EE46E8822007391891',
@@ -77,19 +77,19 @@ return array (
         ),
       ),
     ),
-    1 => 
+    1 =>
     array (
       'number' => 2,
       'title' => 'Параллелограмм и ромб',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'parallelogram-angle-bisector',
           'number' => 3,
           'title' => 'Биссектриса угла параллелограмма и равнобедренный треугольник',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => 'D97434BD2472B56C416D6914F90345A5',
             1 => '818E56AF1C0291CD4E555BCB62526452',
@@ -103,13 +103,13 @@ return array (
             9 => 'DE4D1A1C646E91B24DA2A71DCF88ADD2',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'rhombus-diagonals-height',
           'number' => 4,
           'title' => 'Диагонали и высота ромба',
           'expected_tasks' => 20,
-          'guids' => 
+          'guids' =>
           array (
             0 => 'A79CBDECA43D88B3491E4535614FCFD8',
             1 => '4715211F2B778ECA4914EF6763B18BA4',
@@ -135,19 +135,19 @@ return array (
         ),
       ),
     ),
-    2 => 
+    2 =>
     array (
       'number' => 3,
       'title' => 'Трапеция',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'trapezoid-bisectors',
           'number' => 5,
           'title' => 'Биссектрисы углов трапеции',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '08369A648917AA9A428F120253463F9C',
             1 => '099645D0C7C8B53E44EF14716DB175F6',
@@ -161,13 +161,13 @@ return array (
             9 => 'D569C6A96B6C9F1848B608A8B4654807',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'trapezoid-side-by-angles',
           'number' => 6,
           'title' => 'Боковая сторона через высоту и углы',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '0DBEF155792F9F1842E8EFF01C0128E4',
             1 => 'B116E626B2BA908A4EEF73D39E9B1FAA',
@@ -181,13 +181,13 @@ return array (
             9 => '1595AAF8EBD6B0A644A474BF440F937A',
           ),
         ),
-        2 => 
+        2 =>
         array (
           'key' => 'trapezoid-parallel-section',
           'number' => 7,
           'title' => 'Параллельное сечение трапеции и пропорциональные отрезки',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '088A84C33D80902546B78767F0756D7F',
             1 => '479CA6951DA987994945C702E90CB615',
@@ -203,19 +203,19 @@ return array (
         ),
       ),
     ),
-    3 => 
+    3 =>
     array (
       'number' => 4,
       'title' => 'Окружность',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'circle-chords-distance',
           'number' => 8,
           'title' => 'Хорды и расстояния от центра',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '8AADB96FB3AC9772460E0D1A34E47D21',
             1 => 'A5950772EE2DA0C64C4DA086ED8CF881',
@@ -229,13 +229,13 @@ return array (
             9 => 'F77D109D9F21A93B4290D25CD06D1FC3',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'circle-in-right-triangle',
           'number' => 9,
           'title' => 'Окружность и высота прямоугольного треугольника',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => 'B1CBAD9B99EE88F243DBE0408CF1D42E',
             1 => '26972CD39272B4A1407D04D9351C5162',
@@ -249,13 +249,13 @@ return array (
             9 => 'F9EEF13A6DEE8D5241820CFA162DF4D2',
           ),
         ),
-        2 => 
+        2 =>
         array (
           'key' => 'cyclic-triangle-similarity',
           'number' => 10,
           'title' => 'Подобие треугольников при секущих окружности',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => 'ABD69A13F1E989EE491A596AA79B7002',
             1 => 'A9A57A8BD35EA18B424AF43CD8D00A03',
@@ -269,13 +269,13 @@ return array (
             9 => '165C3641B33B9A68485BD8FD1D213AFC',
           ),
         ),
-        3 => 
+        3 =>
         array (
           'key' => 'tangent-circle-radius',
           'number' => 11,
           'title' => 'Радиус к точке касания и прямоугольный треугольник',
           'expected_tasks' => 22,
-          'guids' => 
+          'guids' =>
           array (
             0 => '4AB5B5F06511A63046E7937A55FC2CE8',
             1 => 'D524B4DA7987893A45BC4D487BE0F777',
@@ -301,13 +301,13 @@ return array (
             21 => 'EE7AD0BEF6B18FF4409D496AF273067E',
           ),
         ),
-        4 => 
+        4 =>
         array (
           'key' => 'circumcircle-sine-theorem',
           'number' => 12,
           'title' => 'Описанная окружность и расширенная теорема синусов',
           'expected_tasks' => 20,
-          'guids' => 
+          'guids' =>
           array (
             0 => 'B7D6AE1FBA2AB50648725E995E03D826',
             1 => 'DC098FB381B3B6A7428AA8B80DADD395',

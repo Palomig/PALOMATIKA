@@ -7,21 +7,21 @@
 return array (
   'topic' => '13',
   'expected_tasks' => 141,
-  'blocks' => 
+  'blocks' =>
   array (
-    0 => 
+    0 =>
     array (
       'number' => 1,
       'title' => 'Сравнение чисел',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'inequality-from-number-line',
           'number' => 1,
           'title' => 'Определить верное неравенство по положению точек',
           'expected_tasks' => 11,
-          'guids' => 
+          'guids' =>
           array (
             0 => '549B819BC0F2AE7A403F2D25D23C164A',
             1 => 'F551E146497595FC47026621824F850A',
@@ -38,19 +38,19 @@ return array (
         ),
       ),
     ),
-    1 => 
+    1 =>
     array (
       'number' => 2,
       'title' => 'Линейные неравенства',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'linear-inequality',
           'number' => 2,
           'title' => 'Перенести слагаемые и учесть знак коэффициента',
           'expected_tasks' => 40,
-          'guids' => 
+          'guids' =>
           array (
             0 => '132463DAE858A524472C9214E1D4A7D9',
             1 => '54570069EDD4BD664BDE26AA84533F3A',
@@ -94,13 +94,13 @@ return array (
             39 => 'DB06408EBD39A2A345FFAAB74637362B',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'linear-inequality-system',
           'number' => 3,
           'title' => 'Пересечь решения системы неравенств',
           'expected_tasks' => 40,
-          'guids' => 
+          'guids' =>
           array (
             0 => '317B24BDC9C790D84A01E6FA9D13562A',
             1 => '358CB470EC8FA8B64F945E1A984C1468',
@@ -144,13 +144,13 @@ return array (
             39 => 'CA5740F93116A63B4C7DB83553CD046A',
           ),
         ),
-        2 => 
+        2 =>
         array (
           'key' => 'inequality-by-solution-graph',
           'number' => 4,
           'title' => 'Восстановить неравенство по изображённому решению',
           'expected_tasks' => 20,
-          'guids' => 
+          'guids' =>
           array (
             0 => '10831B8108119E1845CF7B0186560F95',
             1 => '13A218BF13228CC1434E334D57451CDA',
@@ -176,19 +176,19 @@ return array (
         ),
       ),
     ),
-    2 => 
+    2 =>
     array (
       'number' => 3,
       'title' => 'Квадратные неравенства',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'factorized-quadratic-inequality',
           'number' => 5,
           'title' => 'Разложить на множители и определить знаки промежутков',
           'expected_tasks' => 30,
-          'guids' => 
+          'guids' =>
           array (
             0 => '6DE4C2CA4FF4886740C684246B33D00F',
             1 => '72743033CFC0889B4FD2FE589D6687AC',

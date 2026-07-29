@@ -7,21 +7,21 @@
 return array (
   'topic' => '15',
   'expected_tasks' => 252,
-  'blocks' => 
+  'blocks' =>
   array (
-    0 => 
+    0 =>
     array (
       'number' => 1,
       'title' => 'Углы в треугольнике',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'triangle-angle-sum-and-exterior',
           'number' => 1,
           'title' => 'Сумма углов и внешний угол треугольника',
           'expected_tasks' => 22,
-          'guids' => 
+          'guids' =>
           array (
             0 => '1E3463CF9EF3A1F34C0B2BE485EF607B',
             1 => '39100577119BA8874E70480DDAFF1D59',
@@ -47,13 +47,13 @@ return array (
             21 => 'E88CEA6D7BD491604EF29FC37A1AB0A0',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'isosceles-triangle-angles',
           'number' => 2,
           'title' => 'Углы при основании равнобедренного треугольника',
           'expected_tasks' => 12,
-          'guids' => 
+          'guids' =>
           array (
             0 => '0DC90A73B8CEB4514D5A97324E078CF6',
             1 => '174B40E175ADABF04138FCD441DCD35D',
@@ -69,13 +69,13 @@ return array (
             11 => 'EAA87DC7D4D1943D4DE51AF5E896310A',
           ),
         ),
-        2 => 
+        2 =>
         array (
           'key' => 'right-triangle-acute-angles',
           'number' => 3,
           'title' => 'Острые углы прямоугольного треугольника',
           'expected_tasks' => 22,
-          'guids' => 
+          'guids' =>
           array (
             0 => '1721007ECF8D9B9840546F3247E87A0C',
             1 => '403887EEAC03AAE04C8737823AB41DF2',
@@ -101,13 +101,13 @@ return array (
             21 => 'E896AB28F852B24E4D69AC81287F7F87',
           ),
         ),
-        3 => 
+        3 =>
         array (
           'key' => 'angles-with-bisector-or-median',
           'number' => 4,
           'title' => 'Углы при биссектрисе или медиане',
           'expected_tasks' => 32,
-          'guids' => 
+          'guids' =>
           array (
             0 => '6416FEE8A07D929D4ECD9FDB68E45248',
             1 => '6986A13D70B0866148947580D5445BC2',
@@ -145,19 +145,19 @@ return array (
         ),
       ),
     ),
-    1 => 
+    1 =>
     array (
       'number' => 2,
       'title' => 'Отрезки и подобие',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'median-halves-side',
           'number' => 5,
           'title' => 'Медиана делит сторону пополам',
           'expected_tasks' => 12,
-          'guids' => 
+          'guids' =>
           array (
             0 => '2ABB115FAC2AAA414192CDF2F27388D8',
             1 => '30125562CF27B02544426C59955DE4AB',
@@ -173,13 +173,13 @@ return array (
             11 => 'DD0C3E16BF67B7244CC8A2134A671B38',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'triangle-midline',
           'number' => 6,
           'title' => 'Средняя линия и подобие треугольников',
           'expected_tasks' => 12,
-          'guids' => 
+          'guids' =>
           array (
             0 => '65DB700FEBF6AE3C4505EF143BD8FE57',
             1 => '4B9A325021F1B104463CD742337D2583',
@@ -195,13 +195,13 @@ return array (
             11 => 'F7D061D7402996D043E9D7E14AC0BDD3',
           ),
         ),
-        2 => 
+        2 =>
         array (
           'key' => 'pythagorean-theorem',
           'number' => 7,
           'title' => 'Теорема Пифагора: найти гипотенузу или катет',
           'expected_tasks' => 24,
-          'guids' => 
+          'guids' =>
           array (
             0 => 'B3D14EAABA8DBB654A6D324523682063',
             1 => '0342DC07538489044E5ABE0A66DC4858',
@@ -231,19 +231,19 @@ return array (
         ),
       ),
     ),
-    2 => 
+    2 =>
     array (
       'number' => 3,
       'title' => 'Равносторонний треугольник',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'equilateral-altitude-median-bisector',
           'number' => 8,
           'title' => 'Высота, медиана и биссектриса равностороннего треугольника',
           'expected_tasks' => 24,
-          'guids' => 
+          'guids' =>
           array (
             0 => '38CA6455E294B68647E57374B8908A01',
             1 => '3FD33B51C12191F04B44CBF9F34DD963',
@@ -273,19 +273,19 @@ return array (
         ),
       ),
     ),
-    3 => 
+    3 =>
     array (
       'number' => 4,
       'title' => 'Тригонометрия прямоугольного треугольника',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'trig-ratio-from-sides',
           'number' => 9,
           'title' => 'Найти синус, косинус или тангенс по сторонам',
           'expected_tasks' => 30,
-          'guids' => 
+          'guids' =>
           array (
             0 => '11F75EA6599DB4DE4CCD0CC6CAC33A5B',
             1 => '2D29738ACB39B11D49BCC3CB4D21FA68',
@@ -319,13 +319,13 @@ return array (
             29 => 'F1901B5E47A9805547DD965AB24E2770',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'side-from-trig-ratio',
           'number' => 10,
           'title' => 'Найти сторону по синусу, косинусу или тангенсу',
           'expected_tasks' => 30,
-          'guids' => 
+          'guids' =>
           array (
             0 => '611FDF5C1EBBAD8249175AF3101BE7CE',
             1 => '172BFEE7D349AA3B4AA257BF48B300C8',
@@ -361,19 +361,19 @@ return array (
         ),
       ),
     ),
-    4 => 
+    4 =>
     array (
       'number' => 5,
       'title' => 'Площадь треугольника',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'triangle-area-base-height',
           'number' => 11,
           'title' => 'Половина произведения основания на высоту',
           'expected_tasks' => 22,
-          'guids' => 
+          'guids' =>
           array (
             0 => '2164D03257779F7141134F2B1E3ADE25',
             1 => 'F6B52CBC490FBE3B4450FF7CB4F1E8A7',
@@ -399,13 +399,13 @@ return array (
             21 => 'CF6F86A1F90E8A204B5D99E660706409',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'triangle-area-two-sides-sine',
           'number' => 12,
           'title' => 'Половина произведения двух сторон на синус угла',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '33823BF7DF2099E5474EF3C49ECC535E',
             1 => '1F81DB9824BA8D8943DCD9D2FCDEDD95',

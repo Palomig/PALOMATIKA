@@ -7,21 +7,21 @@
 return array (
   'topic' => '25',
   'expected_tasks' => 130,
-  'blocks' => 
+  'blocks' =>
   array (
-    0 => 
+    0 =>
     array (
       'number' => 1,
       'title' => 'Треугольники и их центры',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'bisector-splits-altitude',
           'number' => 1,
           'title' => 'Биссектриса делит высоту: найти радиус описанной окружности',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '0A3F51612CFEA3134EB05F9DEA7E0A32',
             1 => '2AC7A719B0C5BA21459027D4E1FD1DAD',
@@ -35,13 +35,13 @@ return array (
             9 => 'DF340B297C24A22645D4BE860ADCE3B8',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'circumcenter-perpendicular-construction',
           'number' => 2,
           'title' => 'Центр описанной окружности и перпендикуляр к радиусу',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '35242B58A69DBF494D8F0BBB24C5D163',
             1 => '44E0F0BAF48DA80D4343E64A757A608B',
@@ -55,13 +55,13 @@ return array (
             9 => 'F5DF20CEB45198F44959B4820E9ACBF5',
           ),
         ),
-        2 => 
+        2 =>
         array (
           'key' => 'semicircle-and-orthocenter',
           'number' => 3,
           'title' => 'Полуокружность на стороне и точка пересечения высот',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '061DDF2744FCB3DB43C1E003DE93B309',
             1 => '0E233180C21B835C4F4B19DD27FB7CFA',
@@ -75,13 +75,13 @@ return array (
             9 => 'D2D14CAAB2C3B93344A0CC1B64E41AE8',
           ),
         ),
-        3 => 
+        3 =>
         array (
           'key' => 'perpendicular-bisector-and-median',
           'number' => 4,
           'title' => 'Перпендикулярные биссектриса и медиана',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '0B70B9079111B0DE41A835E5CF2E7F63',
             1 => '3B4B4BF6005A8ED84B219AE32021CDF1',
@@ -97,19 +97,19 @@ return array (
         ),
       ),
     ),
-    1 => 
+    1 =>
     array (
       'number' => 2,
       'title' => 'Параллелограмм',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'parallelogram-bisectors-area',
           'number' => 5,
           'title' => 'Пересечение биссектрис и площадь параллелограмма',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '09C83BCDC043910944083A15791F3AD3',
             1 => '1C3B23E5CBCA8CBC4AE097838AE2B39C',
@@ -123,13 +123,13 @@ return array (
             9 => 'ED18322138A1813D4B6310090D106049',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'parallelogram-triangle-incenter',
           'number' => 6,
           'title' => 'Инцентр треугольника внутри параллелограмма',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '53152C528F998CC747DE642CB729D0E6',
             1 => '69C50BB32407AC3740F12877E55B5717',
@@ -145,19 +145,19 @@ return array (
         ),
       ),
     ),
-    2 => 
+    2 =>
     array (
       'number' => 3,
       'title' => 'Трапеция',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'trapezoid-tangent-circle',
           'number' => 7,
           'title' => 'Касающаяся окружность в прямоугольной трапеции',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '06C7D560697DB6FE42DDB7766467B59C',
             1 => '173E287A49E7BE5F47D14C200CA4FBA0',
@@ -171,13 +171,13 @@ return array (
             9 => 'DA41D8BADE3C937A4B661A39D8D2D5D5',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'trapezoid-right-angle-sum-circle',
           'number' => 8,
           'title' => 'Сумма углов 90° и радиус окружности',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '40457742F7D4A96B4E583A089A5015AC',
             1 => '6FF0A91FC5D7B9934202E1FB98CF3895',
@@ -191,13 +191,13 @@ return array (
             9 => 'F9C069C2F4AE9BC14D0AA8E757915D37',
           ),
         ),
-        2 => 
+        2 =>
         array (
           'key' => 'trapezoid-bisector-area',
           'number' => 9,
           'title' => 'Биссектриса через середину стороны и площадь',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '2FEB7C8D92FC934740ED6131F1169D1B',
             1 => '42869EA3EE88BC0147F49793CA553F31',
@@ -211,13 +211,13 @@ return array (
             9 => 'F77AB79D8B7487F941BDEE3C1AE74CCE',
           ),
         ),
-        3 => 
+        3 =>
         array (
           'key' => 'tangential-isosceles-trapezoid',
           'number' => 10,
           'title' => 'Вписанная окружность и диагонали равнобедренной трапеции',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '08E95E11E220A29A41EFF9401B6B155C',
             1 => '19CE9B913512872E4F8F0550492743C4',
@@ -231,13 +231,13 @@ return array (
             9 => 'E65CED20FD5ABBAD45E6F2F761106503',
           ),
         ),
-        4 => 
+        4 =>
         array (
           'key' => 'trapezoid-midpoint-segments',
           'number' => 11,
           'title' => 'Отрезки между серединами сторон и основания трапеции',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '1BD8458EB4F6803E45159D9D785F503E',
             1 => '3DEC646A6533B3C944FD3923C1B4B128',
@@ -253,19 +253,19 @@ return array (
         ),
       ),
     ),
-    3 => 
+    3 =>
     array (
       'number' => 4,
       'title' => 'Окружности и четырёхугольники',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'equidistant-midpoint-circumcircle',
           'number' => 12,
           'title' => 'Равноудалённая середина как центр окружности',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '74257A242DB49F2F4018EEEC8CE6C934',
             1 => '8A6169809D35B962450745B7B6F6A257',
@@ -279,13 +279,13 @@ return array (
             9 => 'FEA071A5FA989CD246C04C482E6302DF',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'two-circles-common-tangents',
           'number' => 13,
           'title' => 'Две касающиеся окружности и общие касательные',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '1456C245D4F184784F22714BBF3C6036',
             1 => '51C84E7D6C77A10F46FA9221B96AD191',

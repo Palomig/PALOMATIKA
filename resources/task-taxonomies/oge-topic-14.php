@@ -7,21 +7,21 @@
 return array (
   'topic' => '14',
   'expected_tasks' => 110,
-  'blocks' => 
+  'blocks' =>
   array (
-    0 => 
+    0 =>
     array (
       'number' => 1,
       'title' => 'Арифметическая прогрессия',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'arithmetic-progression-term',
           'number' => 1,
           'title' => 'Найти член прогрессии по первому члену и разности',
           'expected_tasks' => 20,
-          'guids' => 
+          'guids' =>
           array (
             0 => '9D1BF7F77B4AB3E244E3F826C67E47A2',
             1 => '08B515B2B898BB264AC28EE8E139E01F',
@@ -45,13 +45,13 @@ return array (
             19 => '38AB1CAF52F788584D0B0F6B8E326AA6',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'arithmetic-progression-term-from-two-known',
           'number' => 2,
           'title' => 'Восстановить разность по двум известным членам',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => 'C6ECFDFA97199BDB4A13E4FB140FD091',
             1 => '59D4638D15848A9C4815A75AE3892296',
@@ -65,13 +65,13 @@ return array (
             9 => 'DB252A487122AD514B3650939927C085',
           ),
         ),
-        2 => 
+        2 =>
         array (
           'key' => 'arithmetic-progression-sum',
           'number' => 3,
           'title' => 'Найти сумму первых членов прогрессии',
           'expected_tasks' => 50,
-          'guids' => 
+          'guids' =>
           array (
             0 => '0D8D853F668BA50047739639824F02AC',
             1 => '1607F7EF9FFA95C94820684810DE2D2E',
@@ -127,19 +127,19 @@ return array (
         ),
       ),
     ),
-    1 => 
+    1 =>
     array (
       'number' => 2,
       'title' => 'Геометрическая прогрессия',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'geometric-decay',
           'number' => 4,
           'title' => 'Повторное уменьшение в одно и то же число раз',
           'expected_tasks' => 20,
-          'guids' => 
+          'guids' =>
           array (
             0 => '0E82569537629CE54FCCC6D8DD78E213',
             1 => '3E5B5EF73D0FA3FF48870B3D96109C7C',
@@ -163,13 +163,13 @@ return array (
             19 => 'F126D533D5DEBE5C4B667B9D0EFF6608',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'geometric-growth',
           'number' => 5,
           'title' => 'Повторное увеличение в одно и то же число раз',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '098CE64F416EAB00437C8C955BD361A9',
             1 => '0FDACDC336B7BB2A485641D6A1ECA479',

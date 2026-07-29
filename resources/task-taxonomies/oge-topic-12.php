@@ -7,21 +7,21 @@
 return array (
   'topic' => '12',
   'expected_tasks' => 175,
-  'blocks' => 
+  'blocks' =>
   array (
-    0 => 
+    0 =>
     array (
       'number' => 1,
       'title' => 'Линейные формулы',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'linear-formula-substitution',
           'number' => 1,
           'title' => 'Подставить значение в линейную формулу',
           'expected_tasks' => 28,
-          'guids' => 
+          'guids' =>
           array (
             0 => '02009753B03AA9804EC79379195166B9',
             1 => '1FE1DAF84725B83C4FCBB52265F64972',
@@ -53,13 +53,13 @@ return array (
             27 => '621051BE6C6B977944D537CF80907123',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'linear-formula-inverse',
           'number' => 2,
           'title' => 'Выразить неизвестную из линейной формулы',
           'expected_tasks' => 24,
-          'guids' => 
+          'guids' =>
           array (
             0 => '02F5026F38D4B51C4CFFD8887FD9D1C8',
             1 => '89966FF6674AAEB642C66539C50C1463',
@@ -89,19 +89,19 @@ return array (
         ),
       ),
     ),
-    1 => 
+    1 =>
     array (
       'number' => 2,
       'title' => 'Формулы с произведением величин',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'product-formula',
           'number' => 3,
           'title' => 'Найти множитель из формулы произведения',
           'expected_tasks' => 58,
-          'guids' => 
+          'guids' =>
           array (
             0 => '00370EE4D97A943F42D49A4A77FFA20E',
             1 => '048E7370FA6FB27B4BD9BF65CAC6AB78',
@@ -165,19 +165,19 @@ return array (
         ),
       ),
     ),
-    2 => 
+    2 =>
     array (
       'number' => 3,
       'title' => 'Формулы с квадратом величины',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'square-variable-formula',
           'number' => 4,
           'title' => 'Выразить величину и извлечь квадратный корень',
           'expected_tasks' => 65,
-          'guids' => 
+          'guids' =>
           array (
             0 => '00764A12F92694DC4363F46067BBD111',
             1 => '2CD403263B5295CB420260FD02BB9E7E',

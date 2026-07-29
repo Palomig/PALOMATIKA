@@ -7,21 +7,21 @@
 return array (
   'topic' => '10',
   'expected_tasks' => 211,
-  'blocks' => 
+  'blocks' =>
   array (
-    0 => 
+    0 =>
     array (
       'number' => 1,
       'title' => 'Определение вероятности',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'favourable-over-all-outcomes',
           'number' => 1,
           'title' => 'Число благоприятных исходов разделить на число всех исходов',
           'expected_tasks' => 75,
-          'guids' => 
+          'guids' =>
           array (
             0 => '4B11F61021678EE64D3751102BD131CD',
             1 => '60570375EA96B88B4A1F704D7DB70228',
@@ -100,13 +100,13 @@ return array (
             74 => 'D10ED39C1216AB4B45C38A7C0B5243D5',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'empirical-probability',
           'number' => 2,
           'title' => 'Оценить вероятность по статистической частоте',
           'expected_tasks' => 8,
-          'guids' => 
+          'guids' =>
           array (
             0 => 'C66CB19C14CF8777499560B4E004E047',
             1 => 'D40753DAC13FA87C45EF9400EEF5AF73',
@@ -120,19 +120,19 @@ return array (
         ),
       ),
     ),
-    1 => 
+    1 =>
     array (
       'number' => 2,
       'title' => 'Простые случайные события',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'single-random-choice',
           'number' => 3,
           'title' => 'Один случайный выбор из предметов разных видов',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '312E1C41298684334980AAFF6D4815F5',
             1 => '34EC95BE5B378FA84064868E37DA2A6F',
@@ -146,13 +146,13 @@ return array (
             9 => 'F8042E270E43BDAA406C3032A87D708B',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'conditional-second-choice',
           'number' => 4,
           'title' => 'Второй выбор при известном результате первого',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '13F2035A7690B8E2423DD3ED3E52891F',
             1 => '329551CC623586B9472E2F0FD0539ED2',
@@ -166,13 +166,13 @@ return array (
             9 => 'FC6610396298A0BE45F29E021559AF7C',
           ),
         ),
-        2 => 
+        2 =>
         array (
           'key' => 'complementary-event',
           'number' => 5,
           'title' => 'Противоположное событие: 1 − P',
           'expected_tasks' => 58,
-          'guids' => 
+          'guids' =>
           array (
             0 => '06E74286F0F78F8F4F4213B221D24C42',
             1 => '8FCEC87CB4F3BF134C950FE4B8BDE41F',
@@ -236,19 +236,19 @@ return array (
         ),
       ),
     ),
-    2 => 
+    2 =>
     array (
       'number' => 3,
       'title' => 'Сочетание событий',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'euler-diagram-events',
           'number' => 6,
           'title' => 'Диаграмма Эйлера: объединение и пересечение событий',
           'expected_tasks' => 50,
-          'guids' => 
+          'guids' =>
           array (
             0 => '3B556ADA2BDF88D449D2040713AA390A',
             1 => '559A14AF106EB14A4F37FE24B333180B',

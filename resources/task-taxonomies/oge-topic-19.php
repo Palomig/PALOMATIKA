@@ -7,21 +7,21 @@
 return array (
   'topic' => '19',
   'expected_tasks' => 150,
-  'blocks' => 
+  'blocks' =>
   array (
-    0 => 
+    0 =>
     array (
       'number' => 1,
       'title' => 'Одно верное утверждение',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'single-true-geometry-statement',
           'number' => 1,
           'title' => 'Проверить утверждения и выбрать единственное верное',
           'expected_tasks' => 88,
-          'guids' => 
+          'guids' =>
           array (
             0 => '00048BBEB81FA06F4CD9D713B8A500DE',
             1 => '002D6D7DB3E2A89A4205399B29F533B2',
@@ -115,19 +115,19 @@ return array (
         ),
       ),
     ),
-    1 => 
+    1 =>
     array (
       'number' => 2,
       'title' => 'Несколько верных утверждений',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'multiple-true-geometry-statements',
           'number' => 2,
           'title' => 'Проверить каждое утверждение и записать все верные',
           'expected_tasks' => 62,
-          'guids' => 
+          'guids' =>
           array (
             0 => '0583205FB67DA49244F1DACC0137277E',
             1 => '05B0558E56E290224C976ABF5B94AC8C',

@@ -7,21 +7,21 @@
 return array (
   'topic' => '09',
   'expected_tasks' => 111,
-  'blocks' => 
+  'blocks' =>
   array (
-    0 => 
+    0 =>
     array (
       'number' => 1,
       'title' => 'Линейные уравнения',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'linear-equation',
           'number' => 1,
           'title' => 'Перенести слагаемые и привести подобные',
           'expected_tasks' => 70,
-          'guids' => 
+          'guids' =>
           array (
             0 => 'AAB12FB71FCA93D241A50A28C88FA760',
             1 => '8217C1B43F4ABD164676AC8E5E0F79F5',
@@ -97,19 +97,19 @@ return array (
         ),
       ),
     ),
-    1 => 
+    1 =>
     array (
       'number' => 2,
       'title' => 'Неполные квадратные уравнения',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'square-equals-number',
           'number' => 2,
           'title' => 'Уравнение вида x² = a',
           'expected_tasks' => 26,
-          'guids' => 
+          'guids' =>
           array (
             0 => '0D0CBA3793638075482CB3FD4E2D13FE',
             1 => '0FD24CA790DFAC3C401F0423588144E6',
@@ -139,13 +139,13 @@ return array (
             25 => '7AF5AE3AB4EA9C7545B650167271245C',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'factor-out-variable',
           'number' => 3,
           'title' => 'Вынести x за скобки и применить правило нулевого произведения',
           'expected_tasks' => 4,
-          'guids' => 
+          'guids' =>
           array (
             0 => '1B7EB339CEAAB9E6425FE4AC1FFA8BCC',
             1 => '1654360390CAA02C4DC9003DE4CF2720',
@@ -155,19 +155,19 @@ return array (
         ),
       ),
     ),
-    2 => 
+    2 =>
     array (
       'number' => 3,
       'title' => 'Полные квадратные уравнения',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'quadratic-equation-two-roots',
           'number' => 4,
           'title' => 'Найти корни и выбрать требуемый',
           'expected_tasks' => 11,
-          'guids' => 
+          'guids' =>
           array (
             0 => '0E7E202771FCA1614F98014F969A8AD6',
             1 => '0CD0920739D48D284E5BD9BC22EA3EAB',

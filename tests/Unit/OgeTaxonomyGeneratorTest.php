@@ -41,6 +41,10 @@ class OgeTaxonomyGeneratorTest extends TestCase
         $this->assertSame(['A-1', 'A-2'], $groups[0]['guids']);
         $this->assertSame(3, $topic06['expected_tasks']);
         $this->assertStringContainsString('ИТОГО: тем 2, задач 4', $process->getOutput());
+        $this->assertDoesNotMatchRegularExpression(
+            '/[ \t]+$/m',
+            (string) file_get_contents($this->outputDir . '/oge-topic-06.php'),
+        );
     }
 
     public function test_it_rejects_a_source_subtype_missing_from_curriculum(): void

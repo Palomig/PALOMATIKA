@@ -7,21 +7,21 @@
 return array (
   'topic' => '22',
   'expected_tasks' => 157,
-  'blocks' => 
+  'blocks' =>
   array (
-    0 => 
+    0 =>
     array (
       'number' => 1,
       'title' => 'Рациональные функции и выколотые точки',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'rational-cancellation-hole',
           'number' => 1,
           'title' => 'Сократить дробь и сохранить выколотую точку',
           'expected_tasks' => 30,
-          'guids' => 
+          'guids' =>
           array (
             0 => '2A6BDDD2128CBFB148A9F42C8BDE865C',
             1 => '2DACF42644D3867943B3A772FDAF2FF4',
@@ -57,19 +57,19 @@ return array (
         ),
       ),
     ),
-    1 => 
+    1 =>
     array (
       'number' => 2,
       'title' => 'Функции с модулем',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'absolute-value-rational-function',
           'number' => 2,
           'title' => 'Раскрыть модуль по знаку x и упростить дробь',
           'expected_tasks' => 60,
-          'guids' => 
+          'guids' =>
           array (
             0 => '354F8ADA0AC7B7A7474C668212775EB8',
             1 => '40333EC01971ACCB485E7EB68E5F0A76',
@@ -133,13 +133,13 @@ return array (
             59 => '84828E3C2FFDA9D54C47B67D40BB5C42',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'absolute-value-parabola',
           'number' => 3,
           'title' => 'Построить ветви параболы после раскрытия модуля',
           'expected_tasks' => 49,
-          'guids' => 
+          'guids' =>
           array (
             0 => '112FB9DCC96F8DF54FDF310FDC085116',
             1 => '19DF84C1160AA70D43290A6DB3876352',
@@ -194,19 +194,19 @@ return array (
         ),
       ),
     ),
-    2 => 
+    2 =>
     array (
       'number' => 3,
       'title' => 'Кусочно заданные функции',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'piecewise-function-graph',
           'number' => 4,
           'title' => 'Построить каждую ветвь на своём промежутке',
           'expected_tasks' => 18,
-          'guids' => 
+          'guids' =>
           array (
             0 => 'A00B6DB24C018912495E1F384ED713DA',
             1 => '1579E8231F9792F545DD9785BCD3A5DB',

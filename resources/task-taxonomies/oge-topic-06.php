@@ -7,21 +7,21 @@
 return array (
   'topic' => '06',
   'expected_tasks' => 81,
-  'blocks' => 
+  'blocks' =>
   array (
-    0 => 
+    0 =>
     array (
       'number' => 1,
       'title' => 'Десятичные дроби',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'decimal-fraction-arithmetic',
           'number' => 1,
           'title' => 'Действия с десятичными дробями',
           'expected_tasks' => 40,
-          'guids' => 
+          'guids' =>
           array (
             0 => '2F71E012D033840D4700DA2D818860F7',
             1 => '194EF2AE88D98AB14E5F091C798365A2',
@@ -67,19 +67,19 @@ return array (
         ),
       ),
     ),
-    1 => 
+    1 =>
     array (
       'number' => 2,
       'title' => 'Обыкновенные дроби',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'common-fraction-arithmetic',
           'number' => 2,
           'title' => 'Умножение, деление, сложение и вычитание дробей',
           'expected_tasks' => 40,
-          'guids' => 
+          'guids' =>
           array (
             0 => 'A620DA44E77CAFE3443E07FDBF1BD976',
             1 => '606F5C3B1B28A3C249A03C9270A82BF5',
@@ -123,13 +123,13 @@ return array (
             39 => 'CB0E43F2F9E791694D4FA0420A35AC29',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'compound-fraction',
           'number' => 3,
           'title' => 'Составная дробь: сначала вычислить знаменатель',
           'expected_tasks' => 1,
-          'guids' => 
+          'guids' =>
           array (
             0 => '178BE4280773AF2E403F7ACB80EBD34C',
           ),

@@ -244,7 +244,8 @@ foreach (selectedTopics($arguments) as $topic) {
         . " * Сгенерировано из актуального банка ФИПИ; порядок задаёт учебный план.\n"
         . " */\nreturn ";
     $path = "{$outputDir}/oge-topic-{$topic}.php";
-    file_put_contents($path, $header . var_export($manifest, true) . ";\n");
+    $export = preg_replace('/[ \t]+$/m', '', var_export($manifest, true));
+    file_put_contents($path, $header . $export . ";\n");
 
     printf(
         "%s: разделов %d, групп %d, задач %d\n",

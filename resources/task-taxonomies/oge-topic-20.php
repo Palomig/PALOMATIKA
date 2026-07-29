@@ -7,21 +7,21 @@
 return array (
   'topic' => '20',
   'expected_tasks' => 200,
-  'blocks' => 
+  'blocks' =>
   array (
-    0 => 
+    0 =>
     array (
       'number' => 1,
       'title' => 'Алгебраические преобразования',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'expression-from-given-ratio',
           'number' => 1,
           'title' => 'Выразить нужную комбинацию из заданного отношения',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '1C4D278980279EA243499524C1B91BB8',
             1 => '2636348993A9B20448DEEE18295898DB',
@@ -37,19 +37,19 @@ return array (
         ),
       ),
     ),
-    1 => 
+    1 =>
     array (
       'number' => 2,
       'title' => 'Уравнения',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'factor-by-grouping',
           'number' => 2,
           'title' => 'Разложить многочлен на множители группировкой',
           'expected_tasks' => 20,
-          'guids' => 
+          'guids' =>
           array (
             0 => '0FA99F32BE65B4EE4B05AF2D1647B57F',
             1 => 'FBB7F0185CD7812D415509CB203FEC62',
@@ -73,13 +73,13 @@ return array (
             19 => 'E9E2DF160512AB174382E590FC37DFF5',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'cancel-identical-radicals',
           'number' => 3,
           'title' => 'Сократить одинаковые радикалы и решить квадратное уравнение',
           'expected_tasks' => 14,
-          'guids' => 
+          'guids' =>
           array (
             0 => 'E18DD6DAF3CFA38841E26D7533063B8C',
             1 => '51592F0A669EB1894A0A2E2EF2559E7F',
@@ -97,13 +97,13 @@ return array (
             13 => 'CA875407DF5189824EB654EDD4C75825',
           ),
         ),
-        2 => 
+        2 =>
         array (
           'key' => 'factorized-polynomial-equation',
           'number' => 4,
           'title' => 'Раскрыть структуру произведения и разложить на множители',
           'expected_tasks' => 16,
-          'guids' => 
+          'guids' =>
           array (
             0 => '38F50C0DC9338F1947FA1BA7DE0F6320',
             1 => 'CE2004394286920E42C394249A733A26',
@@ -123,13 +123,13 @@ return array (
             15 => 'C692CC65A859B0954C1E0EBF0697B840',
           ),
         ),
-        3 => 
+        3 =>
         array (
           'key' => 'reciprocal-substitution',
           'number' => 5,
           'title' => 'Замена переменной для 1/x',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '43AE92FA0082B2764651FA3A580AAE1E',
             1 => '83010BA1BA57BDF54BF5D9EBDF6DB57C',
@@ -143,13 +143,13 @@ return array (
             9 => 'F6ABB39C9DCD82CB4CC9DF2E49624210',
           ),
         ),
-        4 => 
+        4 =>
         array (
           'key' => 'even-power-substitution',
           'number' => 6,
           'title' => 'Замена переменной для квадратов и четвёртых степеней',
           'expected_tasks' => 20,
-          'guids' => 
+          'guids' =>
           array (
             0 => 'D6A432495A578B87472B56353693C00A',
             1 => 'E51089CA4D6C84A5451808A4828C6AF0',
@@ -175,19 +175,19 @@ return array (
         ),
       ),
     ),
-    2 => 
+    2 =>
     array (
       'number' => 3,
       'title' => 'Системы уравнений',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'substitution-in-system',
           'number' => 7,
           'title' => 'Приравнять два выражения для одной переменной',
           'expected_tasks' => 22,
-          'guids' => 
+          'guids' =>
           array (
             0 => '30B35C5B08C69BFD4A066FD7F4E918F3',
             1 => '3AFE3AF74981B8554CB664AC6411A454',
@@ -213,13 +213,13 @@ return array (
             21 => 'F64BCFD7A258829E41C6E093CFBAA769',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'quadratic-system-elimination',
           'number' => 8,
           'title' => 'Исключить сумму квадратов из системы',
           'expected_tasks' => 8,
-          'guids' => 
+          'guids' =>
           array (
             0 => '611B25061A22BBE34481BF3D7EC21C06',
             1 => '7F2359AE572894C34CEBDE72DF272B0D',
@@ -233,19 +233,19 @@ return array (
         ),
       ),
     ),
-    3 => 
+    3 =>
     array (
       'number' => 4,
       'title' => 'Неравенства',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'quadratic-inequality-after-shift',
           'number' => 9,
           'title' => 'Замена выражения и квадратное неравенство',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '171162259C0E93A24C34C742254791CE',
             1 => '17BB914AB79A9A55400359BCD745D531',
@@ -259,13 +259,13 @@ return array (
             9 => 'E308EC5C50DD940F41696B2B360492DD',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'polynomial-interval-method',
           'number' => 10,
           'title' => 'Разложение на множители и метод интервалов',
           'expected_tasks' => 60,
-          'guids' => 
+          'guids' =>
           array (
             0 => '01B98FD3FD15957D4CE88AAED0C1CADE',
             1 => '056DD121E615812D428A159FEBDF3BC4',
@@ -329,13 +329,13 @@ return array (
             59 => 'FFFF35FF06979FA644E64E07672E294E',
           ),
         ),
-        2 => 
+        2 =>
         array (
           'key' => 'rational-inequality-domain',
           'number' => 11,
           'title' => 'Рациональное неравенство с учётом области допустимых значений',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '0AF6D7395C378E0B4B1E9F92CAC3B467',
             1 => '1E5F1F49EBFBA5B7458117DD7E916BE4',

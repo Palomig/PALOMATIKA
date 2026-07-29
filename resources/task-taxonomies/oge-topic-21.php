@@ -7,21 +7,21 @@
 return array (
   'topic' => '21',
   'expected_tasks' => 190,
-  'blocks' => 
+  'blocks' =>
   array (
-    0 => 
+    0 =>
     array (
       'number' => 1,
       'title' => 'Движение по прямой',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'motion-time-difference',
           'number' => 1,
           'title' => 'Скорость и разность времени в пути',
           'expected_tasks' => 50,
-          'guids' => 
+          'guids' =>
           array (
             0 => '2DBAF5680319867644CF810C91B57834',
             1 => '15759516748F9A014954074088CA82BA',
@@ -75,13 +75,13 @@ return array (
             49 => '25D2EEBBF707ABD94BA203833DA4BB5E',
           ),
         ),
-        1 => 
+        1 =>
         array (
           'key' => 'circular-track-motion',
           'number' => 2,
           'title' => 'Движение по круговой трассе',
           'expected_tasks' => 10,
-          'guids' => 
+          'guids' =>
           array (
             0 => '0529AA685C9380FA4E663BA694E14193',
             1 => '69BC64EB81879F3047476A4CCAFEF421',
@@ -95,13 +95,13 @@ return array (
             9 => '91FFC1AAA8DF8ED24E754720A46932DB',
           ),
         ),
-        2 => 
+        2 =>
         array (
           'key' => 'average-speed',
           'number' => 3,
           'title' => 'Средняя скорость: весь путь разделить на всё время',
           'expected_tasks' => 20,
-          'guids' => 
+          'guids' =>
           array (
             0 => 'BB657AA143E491224F9D2D1602E54A4D',
             1 => 'CF9F4987A50F8296447B1875351F6EF2',
@@ -125,13 +125,13 @@ return array (
             19 => 'FF5333D83C2D98754A4BDA5E2AC7A4E6',
           ),
         ),
-        3 => 
+        3 =>
         array (
           'key' => 'train-relative-motion',
           'number' => 4,
           'title' => 'Длина поезда и относительная скорость',
           'expected_tasks' => 20,
-          'guids' => 
+          'guids' =>
           array (
             0 => '6D3C22AB677496414DE3E8D8CCBC1557',
             1 => '932DE619026B8A57403D3878B5DB74D3',
@@ -157,19 +157,19 @@ return array (
         ),
       ),
     ),
-    1 => 
+    1 =>
     array (
       'number' => 2,
       'title' => 'Движение по воде',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'river-current-motion',
           'number' => 5,
           'title' => 'Скорости по течению и против течения',
           'expected_tasks' => 40,
-          'guids' => 
+          'guids' =>
           array (
             0 => '06CC9419373087924B4F8BDA69E84567',
             1 => '27223126D906BB2343C80440DB879323',
@@ -215,19 +215,19 @@ return array (
         ),
       ),
     ),
-    2 => 
+    2 =>
     array (
       'number' => 3,
       'title' => 'Работа и производительность',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'work-rate-equation',
           'number' => 6,
           'title' => 'Производительность рабочих или труб',
           'expected_tasks' => 20,
-          'guids' => 
+          'guids' =>
           array (
             0 => '6A91DF7764728D50443803250C11B38B',
             1 => '308A04DC6F5B94EA498EF5BD5DB24414',
@@ -253,19 +253,19 @@ return array (
         ),
       ),
     ),
-    3 => 
+    3 =>
     array (
       'number' => 4,
       'title' => 'Смеси и концентрации',
-      'groups' => 
+      'groups' =>
       array (
-        0 => 
+        0 =>
         array (
           'key' => 'mixture-mass-balance',
           'number' => 7,
           'title' => 'Сохранение массы сухого вещества или кислоты',
           'expected_tasks' => 30,
-          'guids' => 
+          'guids' =>
           array (
             0 => '4B9B30D32975B1C042D767316677641F',
             1 => '53BF90EE2CDF98C04869E848418E73B7',
