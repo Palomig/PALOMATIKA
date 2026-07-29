@@ -187,15 +187,56 @@ class MathAnswerParser
         return $this->setsMatch($expected, $actual);
     }
 
-    /** Похоже ли на запись промежутка: «(a; b)», «[a; b)», «(-∞; 2)∪(3; +∞)». */
+    /**
+     * Нужна ли этому эталону численная сверка вместо сравнения строк.
+     *
+     * Раньше признаком был только радикал, и одна и та же по смыслу задача
+     * вела себя по-разному: «4−√7; 4+√7» принимался в любом порядке, а
+     * «−4; −3; 3» из соседнего варианта — только в том, что записан в банке.
+     * Промежутки без корня вообще сверялись дословно, поэтому «[3;5]∪[−6;−4]»
+     * и латинская «U» вместо «∪» считались ошибкой.
+     */
+    public function needsNumericComparison(?string $raw): bool
+    {
+        return $this->hasRadical($raw)
+            || $this->looksLikeInterval($raw)
+            || $this->looksLikeValueList($raw);
+    }
+
+    /**
+     * Похоже ли на запись промежутка или объединения: «(a; b)», «[a; b)»,
+     * «(-∞; 2)∪(3; +∞)», «(-∞;-5]∪{4}», «{-2}∪(-1;6)».
+     */
     public function looksLikeInterval(?string $raw): bool
     {
         $s = trim((string) $raw);
+        if ($s === '') {
+            return false;
+        }
 
-        return $s !== ''
-            && (str_starts_with($s, '(') || str_starts_with($s, '['))
-            && (str_ends_with($s, ')') || str_ends_with($s, ']'))
-            && (str_contains($s, ';') || str_contains($s, '∞'));
+        $opens = str_starts_with($s, '(') || str_starts_with($s, '[') || str_starts_with($s, '{');
+        $closes = str_ends_with($s, ')') || str_ends_with($s, ']') || str_ends_with($s, '}');
+
+        return $opens && $closes && (str_contains($s, ';') || str_contains($s, '∞'));
+    }
+
+    /**
+     * Перечисление значений: «-4;-3;3», «60;120», «-1/6;1/2».
+     * Скобки исключены — они означают промежуток, а не список.
+     */
+    public function looksLikeValueList(?string $raw): bool
+    {
+        $s = trim((string) $raw);
+        if ($s === '' || !str_contains($s, ';')) {
+            return false;
+        }
+        if (preg_match('/[()\[\]{}∪∞]/u', $s)) {
+            return false;
+        }
+
+        $values = $this->valueSet($s);
+
+        return $values !== null && count($values) > 1;
     }
 
     /**
@@ -259,6 +300,13 @@ class MathAnswerParser
 
         $intervals = [];
         foreach ($parts as $part) {
+            $points = $this->parseFinitePart(trim($part));
+            if ($points !== null) {
+                foreach ($points as $point) {
+                    $intervals[] = ['left' => '[', 'from' => $point, 'to' => $point, 'right' => ']'];
+                }
+                continue;
+            }
             $interval = $this->parseInterval(trim($part));
             if ($interval === null) {
                 return null;
@@ -269,6 +317,40 @@ class MathAnswerParser
         usort($intervals, fn (array $a, array $b) => $a['from'] <=> $b['from']);
 
         return $intervals;
+    }
+
+    /**
+     * Изолированные точки объединения: «{4}», «{-2; 3}», а также голое число —
+     * ученики пишут «(-∞;-5]∪4» вместо «∪{4}». Внутри сравнения такая точка
+     * живёт как вырожденный отрезок [a; a].
+     *
+     * @return array<int, float>|null  null, если это не перечисление точек
+     */
+    private function parseFinitePart(string $s): ?array
+    {
+        $braced = str_starts_with($s, '{') && str_ends_with($s, '}');
+        $inner = $s;
+        if ($braced) {
+            $inner = mb_substr($s, 1, mb_strlen($s) - 2);
+        } elseif (preg_match('/[()\[\]{}]/u', $s)) {
+            return null;
+        } elseif (str_contains($s, ';') || str_contains($s, ',')) {
+            // Перечисление без фигурных скобок — это не член объединения, а
+            // ответ-множество целиком: «1; 1+√2» вместо «(1; 1+√2)». Разбирать
+            // его здесь нельзя, иначе промежуток молча превратится в две точки.
+            return null;
+        }
+
+        $values = [];
+        foreach (preg_split('/[;,]+/u', trim($inner), -1, PREG_SPLIT_NO_EMPTY) ?: [] as $item) {
+            $value = $this->value($item);
+            if ($value === null) {
+                return null;
+            }
+            $values[] = $value;
+        }
+
+        return $values === [] ? null : $values;
     }
 
     /** @return array{left:string, from:float, to:float, right:string}|null */
