@@ -21,6 +21,12 @@ use Illuminate\Support\Facades\Schema;
  */
 class TaskBankRepository
 {
+    /**
+     * Отключённый банк. Старые задания ОГЭ не удаляются, а помечаются: по ним
+     * остаётся читаемой история попыток, но в выдачу они не попадают.
+     */
+    public const RETIRED = 'palomatika_legacy';
+
     private static ?bool $tablesExist = null;
 
     /** Заполнена ли тема в базе. */
@@ -30,11 +36,7 @@ class TaskBankRepository
             return false;
         }
 
-        return TaskGroup::query()
-            ->where('bank', $bank)
-            ->where('grade', $grade)
-            ->where('topic', $topic)
-            ->exists();
+        return $this->groups($bank, $topic, $grade)->exists();
     }
 
     /**
@@ -47,13 +49,7 @@ class TaskBankRepository
             ->where('bank', $bank)->where('grade', $grade)->where('topic', $topic)
             ->value('payload') ?? [];
 
-        $groups = TaskGroup::query()
-            ->with('tasks')
-            ->where('bank', $bank)
-            ->where('grade', $grade)
-            ->where('topic', $topic)
-            ->orderBy('position')
-            ->get();
+        $groups = $this->groups($bank, $topic, $grade)->with('tasks')->orderBy('position')->get();
 
         // Задания идут подряд и уже упорядочены; блок начинается там, где
         // сменился его номер. Порядок блоков в файле кураторский, и
@@ -78,6 +74,16 @@ class TaskBankRepository
         }
 
         return array_merge($meta, ['blocks' => $blocks]);
+    }
+
+    /** Задания темы без отключённого банка. */
+    private function groups(string $bank, string $topic, ?int $grade)
+    {
+        return TaskGroup::query()
+            ->where('bank', $bank)
+            ->where('grade', $grade)
+            ->where('topic', $topic)
+            ->where('source', '!=', self::RETIRED);
     }
 
     private function zadanie(TaskGroup $group): array
