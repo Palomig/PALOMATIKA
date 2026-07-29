@@ -77,6 +77,54 @@ class OgeTaxonomyGeneratorTest extends TestCase
         $this->assertStringContainsString('подтип 99 отсутствует в банке', $process->getErrorOutput());
     }
 
+    public function test_it_can_split_one_source_subtype_by_condition_pattern(): void
+    {
+        $curriculum = [
+            '06' => [
+                'sections' => [[
+                    'title' => 'Раздел',
+                    'groups' => [
+                        [
+                            'key' => 'other-fraction',
+                            'title' => 'Другая дробь',
+                            'rules' => [[
+                                'subtype' => 2,
+                                'pattern' => '/другую/u',
+                            ]],
+                        ],
+                        [
+                            'key' => 'first-fraction',
+                            'title' => 'Первая дробь',
+                            'rules' => [[
+                                'subtype' => 2,
+                                'pattern' => '/^(?!.*другую).*дробь/us',
+                            ]],
+                        ],
+                        [
+                            'key' => 'decimals',
+                            'title' => 'Десятичные дроби',
+                            'subtypes' => [1],
+                        ],
+                    ],
+                ]],
+            ],
+        ];
+        $path = $this->outputDir . '/split.php';
+        file_put_contents($path, '<?php return ' . var_export($curriculum, true) . ';');
+
+        $process = $this->runGenerator(
+            base_path('tests/fixtures/fipi-taxonomy-small.json'),
+            $path,
+            '06',
+        );
+
+        $this->assertSame(0, $process->getExitCode(), $process->getErrorOutput());
+        $manifest = require $this->outputDir . '/oge-topic-06.php';
+        $groups = $manifest['blocks'][0]['groups'];
+        $this->assertSame(['A-1'], $groups[0]['guids']);
+        $this->assertSame(['A-2'], $groups[1]['guids']);
+    }
+
     private function runGenerator(string $bank, string $curriculum, string $topics): Process
     {
         $process = new Process([

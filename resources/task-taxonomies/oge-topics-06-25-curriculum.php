@@ -645,4 +645,448 @@ return [
             ],
         ],
     ],
+    '20' => [
+        'sections' => [
+            [
+                'title' => 'Алгебраические преобразования',
+                'groups' => [
+                    [
+                        'key' => 'expression-from-given-ratio',
+                        'title' => 'Выразить нужную комбинацию из заданного отношения',
+                        'subtypes' => [1],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Уравнения',
+                'groups' => [
+                    [
+                        'key' => 'factor-by-grouping',
+                        'title' => 'Разложить многочлен на множители группировкой',
+                        'subtypes' => [2],
+                    ],
+                    [
+                        'key' => 'cancel-identical-radicals',
+                        'title' => 'Сократить одинаковые радикалы и решить квадратное уравнение',
+                        'subtypes' => [3],
+                    ],
+                    [
+                        'key' => 'factorized-polynomial-equation',
+                        'title' => 'Раскрыть структуру произведения и разложить на множители',
+                        'subtypes' => [4],
+                    ],
+                    [
+                        'key' => 'reciprocal-substitution',
+                        'title' => 'Замена переменной для 1/x',
+                        'subtypes' => [5],
+                    ],
+                    [
+                        'key' => 'even-power-substitution',
+                        'title' => 'Замена переменной для квадратов и четвёртых степеней',
+                        'subtypes' => [6, 7],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Системы уравнений',
+                'groups' => [
+                    [
+                        'key' => 'substitution-in-system',
+                        'title' => 'Приравнять два выражения для одной переменной',
+                        'subtypes' => [8, 9],
+                    ],
+                    [
+                        'key' => 'quadratic-system-elimination',
+                        'title' => 'Исключить сумму квадратов из системы',
+                        'subtypes' => [10, 11],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Неравенства',
+                'groups' => [
+                    [
+                        'key' => 'quadratic-inequality-after-shift',
+                        'title' => 'Замена выражения и квадратное неравенство',
+                        'subtypes' => [12],
+                    ],
+                    [
+                        'key' => 'polynomial-interval-method',
+                        'title' => 'Разложение на множители и метод интервалов',
+                        'subtypes' => [13],
+                    ],
+                    [
+                        'key' => 'rational-inequality-domain',
+                        'title' => 'Рациональное неравенство с учётом области допустимых значений',
+                        'subtypes' => [14],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    '21' => [
+        'sections' => [
+            [
+                'title' => 'Движение по прямой',
+                'groups' => [
+                    [
+                        'key' => 'motion-time-difference',
+                        'title' => 'Скорость и разность времени в пути',
+                        'subtypes' => [1, 2, 3],
+                        'rules' => [[
+                            'subtype' => 10,
+                            'pattern' => '/(велосипед|автомоб|бегун|поезд|город)/ui',
+                        ]],
+                    ],
+                    [
+                        'key' => 'circular-track-motion',
+                        'title' => 'Движение по круговой трассе',
+                        'subtypes' => [4, 5],
+                    ],
+                    [
+                        'key' => 'average-speed',
+                        'title' => 'Средняя скорость: весь путь разделить на всё время',
+                        'subtypes' => [6, 7],
+                    ],
+                    [
+                        'key' => 'train-relative-motion',
+                        'title' => 'Длина поезда и относительная скорость',
+                        'subtypes' => [8],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Движение по воде',
+                'groups' => [
+                    [
+                        'key' => 'river-current-motion',
+                        'title' => 'Скорости по течению и против течения',
+                        'subtypes' => [9, 11, 12],
+                        'rules' => [[
+                            'subtype' => 10,
+                            'pattern' => '/(лодк|теплоход|барж|течени|пристан)/ui',
+                        ]],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Работа и производительность',
+                'groups' => [
+                    [
+                        'key' => 'work-rate-equation',
+                        'title' => 'Производительность рабочих или труб',
+                        'subtypes' => [13],
+                        'rules' => [[
+                            'subtype' => 10,
+                            'pattern' => '/(рабоч|труб|резервуар|детал)/ui',
+                        ]],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Смеси и концентрации',
+                'groups' => [
+                    [
+                        'key' => 'mixture-mass-balance',
+                        'title' => 'Сохранение массы сухого вещества или кислоты',
+                        'rules' => [[
+                            'subtype' => 10,
+                            'pattern' => '/(фрукт|раствор|кислот|смес|сплав)/ui',
+                        ]],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    '22' => [
+        'sections' => [
+            [
+                'title' => 'Рациональные функции и выколотые точки',
+                'groups' => [
+                    [
+                        'key' => 'rational-cancellation-hole',
+                        'title' => 'Сократить дробь и сохранить выколотую точку',
+                        'subtypes' => [1, 4, 7],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Функции с модулем',
+                'groups' => [
+                    [
+                        'key' => 'absolute-value-rational-function',
+                        'title' => 'Раскрыть модуль по знаку x и упростить дробь',
+                        'subtypes' => [3, 5, 6, 8, 9],
+                    ],
+                    [
+                        'key' => 'absolute-value-parabola',
+                        'title' => 'Построить ветви параболы после раскрытия модуля',
+                        'subtypes' => [2, 10, 11, 12, 13, 17, 18],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Кусочно заданные функции',
+                'groups' => [
+                    [
+                        'key' => 'piecewise-function-graph',
+                        'title' => 'Построить каждую ветвь на своём промежутке',
+                        'subtypes' => [14, 15, 16],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    '23' => [
+        'sections' => [
+            [
+                'title' => 'Треугольники',
+                'groups' => [
+                    [
+                        'key' => 'right-triangle-altitude',
+                        'title' => 'Высота к гипотенузе и подобие треугольников',
+                        'subtypes' => [4, 8],
+                    ],
+                    [
+                        'key' => 'parallel-lines-similarity',
+                        'title' => 'Подобие при параллельных прямых',
+                        'subtypes' => [6, 7],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Параллелограмм и ромб',
+                'groups' => [
+                    [
+                        'key' => 'parallelogram-angle-bisector',
+                        'title' => 'Биссектриса угла параллелограмма и равнобедренный треугольник',
+                        'subtypes' => [1],
+                    ],
+                    [
+                        'key' => 'rhombus-diagonals-height',
+                        'title' => 'Диагонали и высота ромба',
+                        'subtypes' => [2, 3],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Трапеция',
+                'groups' => [
+                    [
+                        'key' => 'trapezoid-bisectors',
+                        'title' => 'Биссектрисы углов трапеции',
+                        'subtypes' => [5],
+                    ],
+                    [
+                        'key' => 'trapezoid-side-by-angles',
+                        'title' => 'Боковая сторона через высоту и углы',
+                        'subtypes' => [9],
+                    ],
+                    [
+                        'key' => 'trapezoid-parallel-section',
+                        'title' => 'Параллельное сечение трапеции и пропорциональные отрезки',
+                        'subtypes' => [10],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Окружность',
+                'groups' => [
+                    [
+                        'key' => 'circle-chords-distance',
+                        'title' => 'Хорды и расстояния от центра',
+                        'subtypes' => [11, 12],
+                    ],
+                    [
+                        'key' => 'circle-in-right-triangle',
+                        'title' => 'Окружность и высота прямоугольного треугольника',
+                        'subtypes' => [13],
+                    ],
+                    [
+                        'key' => 'cyclic-triangle-similarity',
+                        'title' => 'Подобие треугольников при секущих окружности',
+                        'subtypes' => [14],
+                    ],
+                    [
+                        'key' => 'tangent-circle-radius',
+                        'title' => 'Радиус к точке касания и прямоугольный треугольник',
+                        'subtypes' => [15, 16, 19],
+                    ],
+                    [
+                        'key' => 'circumcircle-sine-theorem',
+                        'title' => 'Описанная окружность и расширенная теорема синусов',
+                        'subtypes' => [17, 18],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    '24' => [
+        'sections' => [
+            [
+                'title' => 'Параллелограмм',
+                'groups' => [
+                    [
+                        'key' => 'parallelogram-central-symmetry',
+                        'title' => 'Центральная симметрия относительно пересечения диагоналей',
+                        'subtypes' => [1],
+                    ],
+                    [
+                        'key' => 'parallelogram-angle-bisectors',
+                        'title' => 'Биссектрисы и равнобедренные треугольники',
+                        'subtypes' => [2, 3, 4, 5],
+                    ],
+                    [
+                        'key' => 'parallelogram-opposite-triangle-areas',
+                        'title' => 'Сумма площадей противоположных треугольников',
+                        'subtypes' => [6],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Трапеция',
+                'groups' => [
+                    [
+                        'key' => 'trapezoid-diagonal-areas',
+                        'title' => 'Равные площади треугольников при диагоналях',
+                        'subtypes' => [7],
+                    ],
+                    [
+                        'key' => 'trapezoid-half-area',
+                        'title' => 'Половина площади через середину стороны или среднюю линию',
+                        'subtypes' => [8, 9],
+                    ],
+                    [
+                        'key' => 'trapezoid-diagonal-similarity',
+                        'title' => 'Подобие треугольников, образованных диагональю',
+                        'subtypes' => [10],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Подобие и вписанные углы',
+                'groups' => [
+                    [
+                        'key' => 'cyclic-quadrilateral-similarity',
+                        'title' => 'Подобие при продолжении сторон вписанного четырёхугольника',
+                        'subtypes' => [11],
+                    ],
+                    [
+                        'key' => 'triangle-altitudes-similarity',
+                        'title' => 'Подобие и равные углы при высотах треугольника',
+                        'subtypes' => [12, 13],
+                    ],
+                    [
+                        'key' => 'equal-inscribed-angles',
+                        'title' => 'Равные углы, опирающиеся на одну хорду',
+                        'subtypes' => [14],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Две окружности',
+                'groups' => [
+                    [
+                        'key' => 'centers-line-perpendicular-chord',
+                        'title' => 'Линия центров перпендикулярна общей хорде',
+                        'subtypes' => [15, 16],
+                    ],
+                    [
+                        'key' => 'common-tangent-similarity',
+                        'title' => 'Общая касательная и отношение радиусов',
+                        'subtypes' => [17],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    '25' => [
+        'sections' => [
+            [
+                'title' => 'Треугольники и их центры',
+                'groups' => [
+                    [
+                        'key' => 'bisector-splits-altitude',
+                        'title' => 'Биссектриса делит высоту: найти радиус описанной окружности',
+                        'subtypes' => [2],
+                    ],
+                    [
+                        'key' => 'circumcenter-perpendicular-construction',
+                        'title' => 'Центр описанной окружности и перпендикуляр к радиусу',
+                        'subtypes' => [3],
+                    ],
+                    [
+                        'key' => 'semicircle-and-orthocenter',
+                        'title' => 'Полуокружность на стороне и точка пересечения высот',
+                        'subtypes' => [6],
+                    ],
+                    [
+                        'key' => 'perpendicular-bisector-and-median',
+                        'title' => 'Перпендикулярные биссектриса и медиана',
+                        'subtypes' => [11],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Параллелограмм',
+                'groups' => [
+                    [
+                        'key' => 'parallelogram-bisectors-area',
+                        'title' => 'Пересечение биссектрис и площадь параллелограмма',
+                        'subtypes' => [1],
+                    ],
+                    [
+                        'key' => 'parallelogram-triangle-incenter',
+                        'title' => 'Инцентр треугольника внутри параллелограмма',
+                        'subtypes' => [9],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Трапеция',
+                'groups' => [
+                    [
+                        'key' => 'trapezoid-tangent-circle',
+                        'title' => 'Касающаяся окружность в прямоугольной трапеции',
+                        'subtypes' => [4],
+                    ],
+                    [
+                        'key' => 'trapezoid-right-angle-sum-circle',
+                        'title' => 'Сумма углов 90° и радиус окружности',
+                        'subtypes' => [5],
+                    ],
+                    [
+                        'key' => 'trapezoid-bisector-area',
+                        'title' => 'Биссектриса через середину стороны и площадь',
+                        'subtypes' => [8],
+                    ],
+                    [
+                        'key' => 'tangential-isosceles-trapezoid',
+                        'title' => 'Вписанная окружность и диагонали равнобедренной трапеции',
+                        'subtypes' => [10],
+                    ],
+                    [
+                        'key' => 'trapezoid-midpoint-segments',
+                        'title' => 'Отрезки между серединами сторон и основания трапеции',
+                        'subtypes' => [13],
+                    ],
+                ],
+            ],
+            [
+                'title' => 'Окружности и четырёхугольники',
+                'groups' => [
+                    [
+                        'key' => 'equidistant-midpoint-circumcircle',
+                        'title' => 'Равноудалённая середина как центр окружности',
+                        'subtypes' => [7],
+                    ],
+                    [
+                        'key' => 'two-circles-common-tangents',
+                        'title' => 'Две касающиеся окружности и общие касательные',
+                        'subtypes' => [12],
+                    ],
+                ],
+            ],
+        ],
+    ],
 ];

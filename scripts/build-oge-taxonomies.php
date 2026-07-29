@@ -137,7 +137,7 @@ foreach (selectedTopics($arguments) as $topic) {
         $sourceSubtypes[$subtype][] = $task;
     }
 
-    $usedSubtypes = [];
+    $usedGuids = [];
     $blocks = [];
     $groupNumber = 1;
     foreach (array_values($topicCurriculum['sections'] ?? []) as $blockIndex => $section) {
@@ -151,7 +151,8 @@ foreach (selectedTopics($arguments) as $topic) {
             $key = trim((string) ($group['key'] ?? ''));
             $title = trim((string) ($group['title'] ?? ''));
             $subtypes = array_map('intval', array_values($group['subtypes'] ?? []));
-            if ($key === '' || $title === '' || $subtypes === []) {
+            $rules = array_values($group['rules'] ?? []);
+            if ($key === '' || $title === '' || ($subtypes === [] && $rules === [])) {
                 fail("Тема {$topic}: неполное описание группы {$groupNumber}");
             }
 
@@ -160,11 +161,42 @@ foreach (selectedTopics($arguments) as $topic) {
                 if (!isset($sourceSubtypes[$subtype])) {
                     fail("Тема {$topic}: подтип {$subtype} отсутствует в банке");
                 }
-                if (isset($usedSubtypes[$subtype])) {
-                    fail("Тема {$topic}: подтип {$subtype} повторяется в учебном плане");
+                foreach ($sourceSubtypes[$subtype] as $task) {
+                    $guid = (string) ($task['guid'] ?? '');
+                    if (isset($usedGuids[$guid])) {
+                        fail("Тема {$topic}: GUID {$guid} повторяется в учебном плане");
+                    }
+                    $usedGuids[$guid] = true;
+                    $groupTasks[] = $task;
                 }
-                $usedSubtypes[$subtype] = true;
-                array_push($groupTasks, ...$sourceSubtypes[$subtype]);
+            }
+
+            foreach ($rules as $rule) {
+                $subtype = (int) ($rule['subtype'] ?? 0);
+                $pattern = (string) ($rule['pattern'] ?? '');
+                if (!isset($sourceSubtypes[$subtype])) {
+                    fail("Тема {$topic}: подтип {$subtype} отсутствует в банке");
+                }
+                if ($pattern === '' || @preg_match($pattern, '') === false) {
+                    fail("Тема {$topic}: некорректный шаблон группы {$key}");
+                }
+
+                $matches = 0;
+                foreach ($sourceSubtypes[$subtype] as $task) {
+                    if (preg_match($pattern, (string) ($task['html'] ?? '')) !== 1) {
+                        continue;
+                    }
+                    $guid = (string) ($task['guid'] ?? '');
+                    if (isset($usedGuids[$guid])) {
+                        fail("Тема {$topic}: GUID {$guid} повторяется в учебном плане");
+                    }
+                    $usedGuids[$guid] = true;
+                    $groupTasks[] = $task;
+                    $matches++;
+                }
+                if ($matches === 0) {
+                    fail("Тема {$topic}: шаблон группы {$key} не нашёл задач");
+                }
             }
 
             usort(
@@ -191,9 +223,12 @@ foreach (selectedTopics($arguments) as $topic) {
         ];
     }
 
-    foreach (array_keys($sourceSubtypes) as $subtype) {
-        if (!isset($usedSubtypes[$subtype])) {
-            fail("Тема {$topic}: подтип {$subtype} отсутствует в учебном плане");
+    foreach ($sourceSubtypes as $subtype => $sourceTasks) {
+        foreach ($sourceTasks as $task) {
+            $guid = (string) ($task['guid'] ?? '');
+            if (!isset($usedGuids[$guid])) {
+                fail("Тема {$topic}: подтип {$subtype} отсутствует в учебном плане (GUID {$guid})");
+            }
         }
     }
 
