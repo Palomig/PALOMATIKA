@@ -300,10 +300,11 @@ class TaskDataService
                     unset($statement);
                 } elseif (!empty($zadanie['tasks'])) {
                     foreach ($zadanie['tasks'] as &$task) {
-                        $task['status'] = $this->resolveItemStatus(
-                            $topicId, $blockNumber, $zadanieNumber,
-                            'task', (int) ($task['id'] ?? 0),
-                            (string) ($task['status'] ?? 'draft')
+                        $task['status'] = $this->resolveTaskStatus(
+                            $topicId,
+                            $blockNumber,
+                            $zadanieNumber,
+                            $task,
                         );
                     }
                     unset($task);
@@ -353,13 +354,11 @@ class TaskDataService
                     // Filter tasks by status
                     $filteredTasks = array_values(array_filter(
                         $zadanie['tasks'] ?? [],
-                        fn ($t) => $this->resolveItemStatus(
+                        fn ($t) => $this->resolveTaskStatus(
                             $topicId,
                             $blockNumber,
                             $zadanieNumber,
-                            'task',
-                            (int) ($t['id'] ?? 0),
-                            (string) ($t['status'] ?? 'draft')
+                            $t,
                         ) === $status
                     ));
 
@@ -377,6 +376,34 @@ class TaskDataService
         }
 
         return $filtered;
+    }
+
+    /**
+     * Статус задачи ФИПИ хранится в строке tasks и приходит в payload.
+     *
+     * Таблица task_statuses адресует прежний JSON-банк по позиции. После
+     * перегруппировки ФИПИ такой адрес может указывать уже на другую задачу,
+     * поэтому для задач со стабильным GUID позиционный override неприменим.
+     */
+    protected function resolveTaskStatus(
+        string $topicId,
+        int $blockNumber,
+        int $zadanieNumber,
+        array $task,
+    ): string {
+        $fallback = (string) ($task['status'] ?? 'draft');
+        if (!empty($task['fipi_guid'])) {
+            return $fallback;
+        }
+
+        return $this->resolveItemStatus(
+            $topicId,
+            $blockNumber,
+            $zadanieNumber,
+            'task',
+            (int) ($task['id'] ?? 0),
+            $fallback,
+        );
     }
 
     protected function resolveItemStatus(
