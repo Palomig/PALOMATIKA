@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Task;
 use App\Models\TaskGroup;
+use App\Models\TaskTopic;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -149,7 +150,20 @@ class ImportTasksFromJson extends Command
             return ['groups' => $groups, 'tasks' => $tasks];
         }
 
-        DB::transaction(function () use ($bank, $grade, $topic, $rows) {
+        $topicPayload = $this->rest($data, ['blocks']);
+
+        DB::transaction(function () use ($bank, $grade, $topic, $rows, $topicPayload) {
+            // Данные темы вне blocks: meta, exam_type, curriculum и прочее.
+            TaskTopic::query()
+                ->where('bank', $bank)->where('grade', $grade)->where('topic', $topic)
+                ->delete();
+            TaskTopic::create([
+                'bank' => $bank,
+                'grade' => $grade,
+                'topic' => $topic,
+                'payload' => $topicPayload,
+            ]);
+
             // Тема пересобирается целиком — иначе повторный прогон оставит
             // задачи, которых в файле уже нет.
             TaskGroup::query()
@@ -170,9 +184,13 @@ class ImportTasksFromJson extends Command
                     'instruction' => $zadanie['instruction'] ?? null,
                     'type' => $zadanie['type'] ?? 'expression',
                     'svg_type' => $zadanie['svg_type'] ?? null,
-                    'payload' => $this->rest($zadanie, [
-                        'number', 'instruction', 'type', 'svg_type', 'tasks', 'status',
-                    ]),
+                    // Из payload убираются только те ключи, которые точно
+                    // восстановятся: номер задания и сам список задач.
+                    // Инструкция, тип и статус продублированы в колонках ради
+                    // запросов, но остаются и здесь — иначе восстановленная
+                    // структура обзаведётся ключами, которых в файле не было
+                    // (например, `status` там сплошь и рядом отсутствует).
+                    'payload' => $this->rest($zadanie, ['number', 'tasks']),
                     'status' => $zadanie['status'] ?? 'draft',
                     'source' => 'palomatika',
                 ]);
@@ -182,7 +200,7 @@ class ImportTasksFromJson extends Command
                         'task_group_id' => $group->id,
                         'position' => $index,
                         'type' => $task['type'] ?? null,
-                        'payload' => $this->rest($task, ['type', 'answer', 'status']),
+                        'payload' => $task === [] ? null : $task,
                         'answer' => $this->answer($task['answer'] ?? null),
                         'answer_src' => null,
                         'status' => $task['status'] ?? 'draft',

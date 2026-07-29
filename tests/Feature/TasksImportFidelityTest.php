@@ -125,24 +125,8 @@ class TasksImportFidelityTest extends TestCase
             ->get();
 
         return $groups->map(function (TaskGroup $group) {
-            $zadanie = array_merge($group->payload ?? [], array_filter([
-                'number' => $group->zadanie_number,
-                'instruction' => $group->instruction,
-                'type' => $group->type,
-                'svg_type' => $group->svg_type,
-                'status' => $group->status,
-            ], static fn ($v) => $v !== null));
-
-            $zadanie['tasks'] = $group->tasks->map(function ($task) {
-                $row = array_merge($task->payload ?? [], array_filter([
-                    'type' => $task->type,
-                    'answer' => $task->answer,
-                    'status' => $task->status,
-                ], static fn ($v) => $v !== null));
-                ksort($row);
-                return $row;
-            })->all();
-
+            $zadanie = array_merge(['number' => $group->zadanie_number], $group->payload ?? []);
+            $zadanie['tasks'] = $group->tasks->map(static fn ($task) => $task->payload ?? [])->all();
             ksort($zadanie);
             return [
                 'block' => $group->block_number,
@@ -157,28 +141,9 @@ class TasksImportFidelityTest extends TestCase
         $out = [];
         foreach ($blocks as $block) {
             foreach ($block['zadaniya'] ?? [] as $zadanie) {
-                $tasks = [];
-                foreach (array_values($zadanie['tasks'] ?? []) as $task) {
-                    $row = $task;
-                    if (array_key_exists('answer', $row)) {
-                        $row['answer'] = is_array($row['answer'])
-                            ? json_encode($row['answer'], JSON_UNESCAPED_UNICODE)
-                            : ($row['answer'] === null || $row['answer'] === '' ? null : (string) $row['answer']);
-                        if ($row['answer'] === null) {
-                            unset($row['answer']);
-                        }
-                    }
-                    $row['status'] ??= 'draft';
-                    ksort($row);
-                    $tasks[] = $row;
-                }
-
+                $tasks = array_values($zadanie['tasks'] ?? []);
                 $copy = $zadanie;
-                unset($copy['tasks']);
                 $copy['number'] = (int) ($copy['number'] ?? 1);
-                $copy['type'] ??= 'expression';
-                $copy['status'] ??= 'draft';
-                $copy = array_filter($copy, static fn ($v) => $v !== null);
                 $copy['tasks'] = $tasks;
                 ksort($copy);
 
