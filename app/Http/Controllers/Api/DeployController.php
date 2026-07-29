@@ -52,6 +52,7 @@ class DeployController extends Controller
         'tasks:import-fipi',
         'tasks:dump-json',
         'tasks:retire-legacy',
+        'tasks:attach-legacy-solutions',
         'task-statuses:import',
         'audit:prune',
         'materials:backfill',
