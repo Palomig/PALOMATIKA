@@ -146,6 +146,9 @@
     padding: 12px 14px;
   }
   .task-item-text { font-size: 13px; line-height: 1.45; color: var(--text); }
+  /* Some embedded WebViews do not propagate currentColor from KaTeX's SVG to
+     the path, leaving only a blank space where the radical should be. */
+  .task-item-text .katex svg path { fill: currentColor !important; }
   .task-item-meta { margin-top: 6px; font-size: 10px; color: var(--muted); font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
 
   .hint-box {
