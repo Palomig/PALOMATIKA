@@ -192,8 +192,22 @@ class TaskBankResolver
         }
 
         $expression = (string) ($task['expression'] ?? $task['prompt'] ?? $task['question'] ?? $task['text'] ?? '');
+        if ($expression === '' && $rawType === 'fipi') {
+            $expression = self::textFromHtml((string) ($task['html'] ?? ''));
+        }
         if ($expression === '' && isset($zadanieContext['instruction'])) {
             $expression = (string) $zadanieContext['instruction'];
+        }
+        if ($rawType === 'fipi' && !empty($task['multi_select'])) {
+            $statements = array_map(
+                static fn (array $option): string => sprintf(
+                    '%s) %s',
+                    (string) ($option['n'] ?? ''),
+                    self::textFromHtml((string) ($option['html'] ?? ''))
+                ),
+                $task['options'] ?? []
+            );
+            $expression = trim($expression . "\n" . implode("\n", $statements));
         }
 
         $answer = (string) ($task['answer'] ?? '');
@@ -208,10 +222,17 @@ class TaskBankResolver
 
         if ($type === 'choice') {
             $result['options'] = array_values(array_map(
-                fn ($o) => [
-                    'id'    => (string) ($o['id'] ?? ''),
-                    'label' => (string) ($o['label'] ?? $o['text'] ?? $o['value'] ?? ''),
-                ],
+                static function (array $option): array {
+                    $label = (string) ($option['label'] ?? $option['text'] ?? $option['value'] ?? '');
+                    if ($label === '') {
+                        $label = self::textFromHtml((string) ($option['html'] ?? ''));
+                    }
+
+                    return [
+                        'id' => (string) ($option['id'] ?? $option['n'] ?? ''),
+                        'label' => $label,
+                    ];
+                },
                 $task['options'] ?? []
             ));
         }
@@ -219,6 +240,9 @@ class TaskBankResolver
         // Картинка/SVG, если есть. Используется для matching и подобных задач:
         // ученик видит график и вводит ответ свободным текстом.
         $svg = (string) ($task['svg'] ?? '');
+        if ($svg === '' && $rawType === 'fipi') {
+            $svg = self::singleSvgFromHtml((string) ($task['html'] ?? ''));
+        }
         if ($svg !== '') {
             $result['image_svg'] = $svg;
         }
@@ -240,6 +264,11 @@ class TaskBankResolver
     {
         $rawType = strtolower(trim((string) $rawType));
 
+        if ($rawType === 'fipi') {
+            return !empty($task['options']) && empty($task['multi_select'])
+                ? 'choice'
+                : 'expression';
+        }
         if (in_array($rawType, self::IMAGE_LIKE_TYPES, true)) {
             return 'expression';
         }
@@ -254,6 +283,34 @@ class TaskBankResolver
             str_contains($rawType, 'choice')             => 'choice',
             default                                       => $rawType,
         };
+    }
+
+    /** Текст условия или варианта из доверенной HTML-разметки импорта ФИПИ. */
+    private static function textFromHtml(string $html): string
+    {
+        if ($html === '') {
+            return '';
+        }
+
+        $html = preg_replace('/<svg\b.*?<\/svg>/is', '', $html) ?? $html;
+        $html = preg_replace('/<br\s*\/?>|<\/(?:p|div|td|tr|li)>/i', "\n", $html) ?? $html;
+        $text = html_entity_decode(strip_tags($html), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $text = preg_replace('/[ \t]+/u', ' ', $text) ?? $text;
+        $text = preg_replace('/[ \t]*\n[ \t]*/u', "\n", $text) ?? $text;
+        $text = preg_replace('/\n{2,}/u', "\n", $text) ?? $text;
+
+        return trim($text);
+    }
+
+    /** Единственный встроенный SVG условия; несколько рисунков не склеиваем. */
+    private static function singleSvgFromHtml(string $html): string
+    {
+        if (substr_count($html, '<svg') !== 1
+            || !preg_match('/<svg\b.*?<\/svg>/is', $html, $match)) {
+            return '';
+        }
+
+        return $match[0];
     }
 
     private function requireRefs(array $refs, array $required): void
