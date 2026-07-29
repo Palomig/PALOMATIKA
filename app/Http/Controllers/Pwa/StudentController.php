@@ -665,6 +665,10 @@ class StudentController extends Controller
 
         $zadaniya = [];
         foreach ($blocks as $block) {
+            $blockSection = trim((string) ($block['title'] ?? ''));
+            if ($blockSection === 'ФИПИ') {
+                $blockSection = '';
+            }
             foreach (($block['zadaniya'] ?? []) as $zadanie) {
                 $zadanieType = $zadanie['type'] ?? '';
 
@@ -685,7 +689,11 @@ class StudentController extends Controller
                         $label = trim((string) ($zadanie['label'] ?? ''));
                         $num = $zadanie['number'] ?? '';
                         $title = $label !== '' ? $label : ($section !== '' ? $section : ($instruction !== '' ? "Задание {$num}. {$instruction}" : "Задание {$num}"));
-                        $zadaniya[] = ['title' => $title, 'tasks' => $tasks];
+                        $zadaniya[] = [
+                            'section' => $blockSection,
+                            'title' => $title,
+                            'tasks' => $tasks,
+                        ];
                     }
                     continue;
                 }
@@ -748,7 +756,11 @@ class StudentController extends Controller
                     $label = trim((string) ($zadanie['label'] ?? ''));
                     $num = $zadanie['number'] ?? '';
                     $title = $label !== '' ? $label : ($section !== '' ? $section : ($instruction !== '' ? "Задание {$num}. {$instruction}" : "Задание {$num}"));
-                    $zadaniya[] = ['title' => $title, 'tasks' => $tasks];
+                    $zadaniya[] = [
+                        'section' => $blockSection,
+                        'title' => $title,
+                        'tasks' => $tasks,
+                    ];
                 }
             }
         }

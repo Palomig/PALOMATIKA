@@ -50,6 +50,35 @@ class PwaFipiTaskBankTest extends TestCase
         $response->assertViewHas('taskCount', fn ($count) => $count > 300);
     }
 
+    public function test_topic_16_shows_pedagogical_sections_without_technical_fipi_heading(): void
+    {
+        $html = $this->actingAs($this->student)
+            ->get(route('pwa.student.tasks-part1', ['topic' => '16']))
+            ->assertOk()
+            ->getContent();
+
+        $headings = [
+            'Углы в окружности',
+            'Вписанные четырёхугольники',
+            'Вписанная окружность',
+            'Описанная окружность',
+        ];
+        $previous = -1;
+        foreach ($headings as $heading) {
+            $this->assertSame(1, substr_count($html, "bank-section-title\">{$heading}<"));
+            $position = strpos($html, "bank-section-title\">{$heading}<");
+            $this->assertGreaterThan($previous, $position);
+            $previous = $position;
+        }
+
+        $topic15 = $this->actingAs($this->student)
+            ->get(route('pwa.student.tasks-part1', ['topic' => '15']))
+            ->assertOk()
+            ->getContent();
+
+        $this->assertStringNotContainsString('bank-section-title">ФИПИ<', $topic15);
+    }
+
     public function test_practical_block_is_reachable(): void
     {
         // Заданий 1–5 в банке Паломатики не было вовсе: раздел появился

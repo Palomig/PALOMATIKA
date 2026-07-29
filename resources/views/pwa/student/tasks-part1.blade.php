@@ -79,6 +79,12 @@
     display: flex; flex-direction: column; gap: 8px;
     opacity: 0; animation: fadeUp 0.3s ease 0.12s forwards;
   }
+  .bank-section-title {
+    margin: 12px 2px 2px;
+    font-family: var(--display); font-size: 14px; font-weight: 700;
+    color: var(--text);
+  }
+  .bank-section-title:first-child { margin-top: 0; }
   .task-item {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -174,7 +180,16 @@
   <div class="sec-label" style="margin-top:14px;">Задание {{ (int)$selectedTopic }}</div>
 
   <div class="task-list">
+    @php
+      $lastSection = null;
+    @endphp
     @forelse($zadaniya as $group)
+      @if(($group['section'] ?? '') !== '' && $group['section'] !== $lastSection)
+        <div class="bank-section-title">{{ $group['section'] }}</div>
+        @php
+          $lastSection = $group['section'];
+        @endphp
+      @endif
       <details class="spoiler">
         <summary>{{ $group['title'] }} <span style="font-size:11px;color:var(--muted);font-weight:400;">({{ count($group['tasks']) }})</span></summary>
         <div class="spoiler-body">
