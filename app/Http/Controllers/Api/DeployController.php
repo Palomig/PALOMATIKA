@@ -46,6 +46,12 @@ class DeployController extends Controller
         'oge:abandon-stale',
         'tasks:add-status',
         'tasks:set-status',
+        // Перенос банков заданий в БД: наполнение, обратная выгрузка,
+        // импорт банка ФИПИ и отключение прежнего банка ОГЭ.
+        'tasks:import-json',
+        'tasks:import-fipi',
+        'tasks:dump-json',
+        'tasks:retire-legacy',
         'task-statuses:import',
         'audit:prune',
         'materials:backfill',
