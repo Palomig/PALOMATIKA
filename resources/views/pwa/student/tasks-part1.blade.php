@@ -62,16 +62,45 @@
   }
   .spoiler summary {
     list-style: none; cursor: pointer;
-    padding: 12px 14px;
-    font-family: var(--display); font-size: 13px; color: var(--text);
-    display: flex; justify-content: space-between; align-items: center; gap: 8px;
+    padding: 14px 16px;
+    font-family: var(--display); color: var(--text);
+    display: flex; align-items: center; gap: 14px;
   }
   .spoiler summary::-webkit-details-marker { display: none; }
-  .spoiler summary::after {
-    content: '▾'; color: var(--muted);
-    transition: transform .15s ease; flex-shrink: 0;
+  .spoiler-num {
+    flex-shrink: 0;
+    min-width: 28px;
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--muted);
+    text-align: left;
+    font-variant-numeric: tabular-nums;
   }
-  .spoiler[open] summary::after { transform: rotate(180deg); }
+  .spoiler-body-text {
+    flex: 1; min-width: 0;
+    display: flex; flex-direction: column; gap: 3px;
+  }
+  .spoiler-title {
+    font-size: 14px;
+    line-height: 1.3;
+    color: var(--text);
+  }
+  .spoiler-subtitle {
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    line-height: 1.3;
+  }
+  .spoiler-chevron {
+    flex-shrink: 0;
+    font-size: 20px;
+    color: var(--muted);
+    line-height: 1;
+    transition: transform .15s ease;
+  }
+  .spoiler[open] .spoiler-chevron { transform: rotate(90deg); }
   .spoiler-body { padding: 0 10px 10px; display: flex; flex-direction: column; gap: 8px; }
 
   .task-list {
@@ -191,7 +220,14 @@
         @endphp
       @endif
       <details class="spoiler">
-        <summary>{{ $group['title'] }} <span style="font-size:11px;color:var(--muted);font-weight:400;">({{ count($group['tasks']) }})</span></summary>
+        <summary>
+          <span class="spoiler-num">{{ (int)($group['number'] ?? $loop->iteration) }}</span>
+          <span class="spoiler-body-text">
+            <span class="spoiler-title">{{ $group['title'] }}</span>
+            <span class="spoiler-subtitle">{{ count($group['tasks']) }} заданий</span>
+          </span>
+          <span class="spoiler-chevron">›</span>
+        </summary>
         <div class="spoiler-body">
           @foreach($group['tasks'] as $task)
             <div class="task-item">

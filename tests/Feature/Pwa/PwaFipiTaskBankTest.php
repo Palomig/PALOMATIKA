@@ -50,6 +50,28 @@ class PwaFipiTaskBankTest extends TestCase
         $response->assertViewHas('taskCount', fn ($count) => $count > 300);
     }
 
+    public function test_part_one_uses_a_number_only_group_header(): void
+    {
+        $response = $this->actingAs($this->student)
+            ->get(route('pwa.student.tasks-part1', ['topic' => '06']))
+            ->assertOk();
+
+        $response->assertViewHas('zadaniya', static function (array $groups): bool {
+            return isset($groups[0]['number'], $groups[0]['title'], $groups[0]['section'])
+                && $groups[0]['number'] === 1;
+        });
+
+        $html = $response->getContent();
+        $this->assertStringContainsString('class="spoiler-num">1</span>', $html);
+        $this->assertStringNotContainsString('class="spoiler-num">01</span>', $html);
+        $this->assertStringContainsString('class="spoiler-subtitle">40 заданий</span>', $html);
+        $this->assertStringContainsString('class="spoiler-chevron">›</span>', $html);
+        $this->assertDoesNotMatchRegularExpression(
+            '/spoiler-title[^>]*>\s*Задание\s+\d+/u',
+            $html,
+        );
+    }
+
     public function test_topic_16_shows_pedagogical_sections_without_technical_fipi_heading(): void
     {
         $html = $this->actingAs($this->student)
@@ -99,6 +121,40 @@ class PwaFipiTaskBankTest extends TestCase
         $response->assertOk();
         $response->assertViewHas('zadaniya', fn ($zadaniya) => collect($zadaniya)
             ->sum(fn ($z) => count($z['tasks'] ?? [])) > 0);
+    }
+
+    public function test_part_two_uses_curated_sections_and_concise_titles(): void
+    {
+        $response = $this->actingAs($this->student)
+            ->get(route('pwa.student.part2', ['topic' => '22']))
+            ->assertOk();
+
+        $response->assertViewHas('zadaniya', static function (array $groups): bool {
+            return isset($groups[0]['section'], $groups[0]['number'], $groups[0]['title'])
+                && $groups[0]['section'] === 'Рациональные функции и выколотые точки'
+                && $groups[0]['title'] === 'Сократить дробь и сохранить выколотую точку';
+        });
+
+        $html = $response->getContent();
+        $headings = [
+            'Рациональные функции и выколотые точки',
+            'Функции с модулем',
+            'Кусочно заданные функции',
+        ];
+        $previous = -1;
+        foreach ($headings as $heading) {
+            $this->assertSame(1, substr_count($html, "bank-section-title\">{$heading}<"));
+            $position = strpos($html, "bank-section-title\">{$heading}<");
+            $this->assertGreaterThan($previous, $position);
+            $previous = $position;
+        }
+
+        $this->assertStringContainsString('class="spoiler-num">1</span>', $html);
+        $this->assertStringNotContainsString('class="spoiler-num">01</span>', $html);
+        $this->assertDoesNotMatchRegularExpression(
+            '/spoiler-title[^>]*>\s*Задание\s+\d+/u',
+            $html,
+        );
     }
 
     public function test_drawings_get_an_explicit_size(): void

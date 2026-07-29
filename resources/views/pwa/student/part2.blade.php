@@ -94,12 +94,12 @@
   .spoiler summary::-webkit-details-marker { display: none; }
   .spoiler-num {
     flex-shrink: 0;
-    font-size: 11px;
-    font-weight: 700;
+    font-size: 16px;
+    font-weight: 800;
     color: var(--muted);
-    letter-spacing: .04em;
-    min-width: 18px;
+    min-width: 28px;
     text-align: left;
+    line-height: 1;
     font-variant-numeric: tabular-nums;
   }
   .spoiler-body-text {
@@ -114,7 +114,7 @@
     text-overflow: ellipsis;
   }
   .spoiler-subtitle {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: inherit;
     font-size: 11px;
     color: var(--muted);
     line-height: 1.3;
@@ -133,6 +133,12 @@
     display: flex; flex-direction: column; gap: 8px;
     opacity: 0; animation: fadeUp 0.3s ease 0.12s forwards;
   }
+  .bank-section-title {
+    margin: 12px 2px 2px;
+    font-family: var(--display); font-size: 14px; font-weight: 700;
+    color: var(--text);
+  }
+  .bank-section-title:first-child { margin-top: 0; }
   .task-item {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -225,10 +231,19 @@
   </div>
 
   <div class="task-list">
+    @php
+      $lastSection = null;
+    @endphp
     @forelse($zadaniya as $group)
+      @if(($group['section'] ?? '') !== '' && $group['section'] !== $lastSection)
+        <div class="bank-section-title">{{ $group['section'] }}</div>
+        @php
+          $lastSection = $group['section'];
+        @endphp
+      @endif
       <details class="spoiler">
         <summary>
-          <span class="spoiler-num">{{ str_pad((string)($group['number'] ?? $loop->iteration), 2, '0', STR_PAD_LEFT) }}</span>
+          <span class="spoiler-num">{{ (int)($group['number'] ?? $loop->iteration) }}</span>
           <span class="spoiler-body-text">
             <span class="spoiler-title">{{ $group['title'] }}</span>
             @if(!empty($group['subtitle']))

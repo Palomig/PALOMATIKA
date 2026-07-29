@@ -93,6 +93,54 @@ class FipiTaskTaxonomyTest extends TestCase
         ]);
     }
 
+    public function test_it_rejects_duplicate_block_numbers(): void
+    {
+        $manifest = $this->manifest();
+        $manifest['blocks'][] = [
+            'number' => 1,
+            'title' => 'Повтор',
+            'groups' => [],
+        ];
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('раздел 1');
+
+        (new FipiTaskTaxonomy($manifest))->validateManifest();
+    }
+
+    public function test_it_rejects_a_gap_in_group_numbers(): void
+    {
+        $manifest = $this->manifest();
+        $manifest['blocks'][0]['groups'][0]['number'] = 2;
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('группа 2');
+
+        (new FipiTaskTaxonomy($manifest))->validateManifest();
+    }
+
+    public function test_it_rejects_an_empty_group_key(): void
+    {
+        $manifest = $this->manifest();
+        $manifest['blocks'][0]['groups'][0]['key'] = '';
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('группа 1');
+
+        (new FipiTaskTaxonomy($manifest))->validateManifest();
+    }
+
+    public function test_it_rejects_an_empty_group_title(): void
+    {
+        $manifest = $this->manifest();
+        $manifest['blocks'][0]['groups'][0]['title'] = ' ';
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('группа 1');
+
+        (new FipiTaskTaxonomy($manifest))->validateManifest();
+    }
+
     /** @return array<string, mixed> */
     private function manifest(): array
     {

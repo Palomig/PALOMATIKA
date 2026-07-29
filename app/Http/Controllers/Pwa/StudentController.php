@@ -381,6 +381,7 @@ class StudentController extends Controller
         $shortLabels = $this->part2ShortLabels()[$selected] ?? [];
 
         foreach (($data['blocks'] ?? []) as $block) {
+            $blockSection = trim((string) ($block['title'] ?? ''));
             foreach (($block['zadaniya'] ?? []) as $zadanie) {
                 $tasks = [];
                 foreach (($zadanie['tasks'] ?? []) as $t) {
@@ -403,12 +404,18 @@ class StudentController extends Controller
                     $num = (int) ($zadanie['number'] ?? 0);
                     $title = $section !== '' ? $section : ($instruction !== '' ? "Задание {$num}. {$instruction}" : "Задание {$num}");
                     $short = $shortLabels[$num] ?? null;
+                    $isCurated = trim((string) ($zadanie['taxonomy_key'] ?? '')) !== '';
                     // Решение видно только учителям/админам; его текст НЕ отдаётся ученику.
                     $hasSolution = $isTeacher && trim((string) ($zadanie['solution'] ?? '')) !== '';
                     $zadaniya[] = [
                         'number'       => $num,
-                        'title'        => $short['title'] ?? $title,
-                        'subtitle'     => $short['subtitle'] ?? null,
+                        'section'      => $isCurated ? $blockSection : '',
+                        'title'        => $isCurated
+                            ? ($instruction !== '' ? $instruction : "Группа {$num}")
+                            : ($short['title'] ?? $title),
+                        'subtitle'     => $isCurated
+                            ? count($tasks) . ' заданий'
+                            : ($short['subtitle'] ?? null),
                         'hint'         => $zadanie['answer_hint'] ?? null,
                         'tasks'        => $tasks,
                         'has_solution' => $hasSolution,
@@ -687,9 +694,12 @@ class StudentController extends Controller
                         $section = trim((string) ($zadanie['section'] ?? ''));
                         $instruction = trim((string) ($zadanie['instruction'] ?? ''));
                         $label = trim((string) ($zadanie['label'] ?? ''));
-                        $num = $zadanie['number'] ?? '';
-                        $title = $label !== '' ? $label : ($section !== '' ? $section : ($instruction !== '' ? "Задание {$num}. {$instruction}" : "Задание {$num}"));
+                        $num = (int) ($zadanie['number'] ?? count($zadaniya) + 1);
+                        $title = $label !== ''
+                            ? $label
+                            : ($section !== '' ? $section : ($instruction !== '' ? $instruction : "Группа {$num}"));
                         $zadaniya[] = [
+                            'number' => $num,
                             'section' => $blockSection,
                             'title' => $title,
                             'tasks' => $tasks,
@@ -754,9 +764,12 @@ class StudentController extends Controller
                     $section = trim((string) ($zadanie['section'] ?? ''));
                     $instruction = trim((string) ($zadanie['instruction'] ?? ''));
                     $label = trim((string) ($zadanie['label'] ?? ''));
-                    $num = $zadanie['number'] ?? '';
-                    $title = $label !== '' ? $label : ($section !== '' ? $section : ($instruction !== '' ? "Задание {$num}. {$instruction}" : "Задание {$num}"));
+                    $num = (int) ($zadanie['number'] ?? count($zadaniya) + 1);
+                    $title = $label !== ''
+                        ? $label
+                        : ($section !== '' ? $section : ($instruction !== '' ? $instruction : "Группа {$num}"));
                     $zadaniya[] = [
+                        'number' => $num,
                         'section' => $blockSection,
                         'title' => $title,
                         'tasks' => $tasks,

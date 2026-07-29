@@ -1,0 +1,355 @@
+<?php
+
+/**
+ * Курируемая учебная группировка темы 20 ОГЭ.
+ * Сгенерировано из актуального банка ФИПИ; порядок задаёт учебный план.
+ */
+return array (
+  'topic' => '20',
+  'expected_tasks' => 200,
+  'blocks' =>
+  array (
+    0 =>
+    array (
+      'number' => 1,
+      'title' => 'Алгебраические преобразования',
+      'groups' =>
+      array (
+        0 =>
+        array (
+          'key' => 'expression-from-given-ratio',
+          'number' => 1,
+          'title' => 'Выразить нужную комбинацию из заданного отношения',
+          'expected_tasks' => 10,
+          'guids' =>
+          array (
+            0 => '1C4D278980279EA243499524C1B91BB8',
+            1 => '2636348993A9B20448DEEE18295898DB',
+            2 => '67B4D369F30E987A4DA4E54E516DF935',
+            3 => '75086ADE6E129D8F49F13B19991C83C8',
+            4 => '85A264F67EA69F62498180D58A8FA990',
+            5 => '8CFF58FB93DB94D34CCA8DA6F57D20D6',
+            6 => '95BF97BD1115B85D4E9EE4E56D66DBBF',
+            7 => 'F130D9757BE0BD2B4598E87BC9832E41',
+            8 => '35B821094018A73F4919132989698937',
+            9 => '2A4435472900902E427FE77EC773A918',
+          ),
+        ),
+      ),
+    ),
+    1 =>
+    array (
+      'number' => 2,
+      'title' => 'Уравнения',
+      'groups' =>
+      array (
+        0 =>
+        array (
+          'key' => 'factor-by-grouping',
+          'number' => 2,
+          'title' => 'Разложить многочлен на множители группировкой',
+          'expected_tasks' => 20,
+          'guids' =>
+          array (
+            0 => '0FA99F32BE65B4EE4B05AF2D1647B57F',
+            1 => 'FBB7F0185CD7812D415509CB203FEC62',
+            2 => 'BF3C77C38C81944449A7DE3DDBAD5538',
+            3 => '0ABC2A0705E39CA14AC7A4F7DA66DACC',
+            4 => '16A62106A01BAFE34B95F482D7405385',
+            5 => '10C3182FDE08A873433E50A827CED077',
+            6 => 'EE968E3DE04197A84CC0301AEED46EED',
+            7 => 'C12A00FA68E89C1F43CB74888C415D0D',
+            8 => '38999C2584589E934949FECEC46FA43E',
+            9 => '5F2042A5FD249C684F4AB0D8042567D2',
+            10 => '0E2371CA1894B3454FA940D9499F5016',
+            11 => 'D90D2AFFAEB2AD0F4A183A87C511DF39',
+            12 => 'D3D2817D1F4790B34831E61A16E79016',
+            13 => '00719645B16BA2174A13D2F7EFAAE761',
+            14 => '2BA8557C5597AE7D47234CF2A80A6555',
+            15 => 'BBB738DAE76A88BD4FF0F2883A242957',
+            16 => 'FA2DB07277A383C64D85626DFF53989D',
+            17 => '18DA69CFAD13A0454E29177B25BF8257',
+            18 => '4557127A92C7939F434EDA523D03907C',
+            19 => 'E9E2DF160512AB174382E590FC37DFF5',
+          ),
+        ),
+        1 =>
+        array (
+          'key' => 'cancel-identical-radicals',
+          'number' => 3,
+          'title' => 'Сократить одинаковые радикалы и решить квадратное уравнение',
+          'expected_tasks' => 14,
+          'guids' =>
+          array (
+            0 => 'E18DD6DAF3CFA38841E26D7533063B8C',
+            1 => '51592F0A669EB1894A0A2E2EF2559E7F',
+            2 => '495BD4E928C4887140453FD12B260DC4',
+            3 => '6DE623D9EAAA834B4622E8B116988A70',
+            4 => '8ABAF478397FB5FE451F08F8131BC7F1',
+            5 => 'F7FDAF2C3376A3A341F2CDAD4D4B2E6F',
+            6 => '107A495CCD8AA003488A760A3674BFAA',
+            7 => '110AA8A0E352A107414F16F4E724C99D',
+            8 => '6B60F777F804A9374F7E661B4A99BA08',
+            9 => '0F641B8BCFCCA6FE4ACDDF23FA732921',
+            10 => 'B51D3CDD1C6E9B454F70B86D350E7869',
+            11 => '36743214E9FE96524CB4978618C87CAA',
+            12 => 'C11FE768A80F84D8486F5918BC651A92',
+            13 => 'CA875407DF5189824EB654EDD4C75825',
+          ),
+        ),
+        2 =>
+        array (
+          'key' => 'factorized-polynomial-equation',
+          'number' => 4,
+          'title' => 'Раскрыть структуру произведения и разложить на множители',
+          'expected_tasks' => 16,
+          'guids' =>
+          array (
+            0 => '38F50C0DC9338F1947FA1BA7DE0F6320',
+            1 => 'CE2004394286920E42C394249A733A26',
+            2 => '69A814C29F5F948A4355593CCCFB7222',
+            3 => '5AFED270ACAD8AD240F56D5D3B96378E',
+            4 => '1B50B3E0EDABA878406AAD867FFE0C21',
+            5 => 'F20A7FD7F25A9CD747ED7076336DFA0C',
+            6 => '55CC5AA7F9AAAE9143903C67553D5C84',
+            7 => '50B9A606A62DB972497E9AFDDECB8796',
+            8 => 'EE6981C33994B5C04CE80FB320C20276',
+            9 => 'F82E7A83E22383CC413A1C8AE3C290CA',
+            10 => '5D85F4D1B8AB80F14107258242E4C22C',
+            11 => '54B1E6FE4BA0A7184CE11179CFFDEACB',
+            12 => '2793D360CADFA94F49705D93907E3DFF',
+            13 => 'AE9AA734C82A93B04C4E66892A97904D',
+            14 => 'EA393231383A8D6E453341A9714CB759',
+            15 => 'C692CC65A859B0954C1E0EBF0697B840',
+          ),
+        ),
+        3 =>
+        array (
+          'key' => 'reciprocal-substitution',
+          'number' => 5,
+          'title' => 'Замена переменной для 1/x',
+          'expected_tasks' => 10,
+          'guids' =>
+          array (
+            0 => '43AE92FA0082B2764651FA3A580AAE1E',
+            1 => '83010BA1BA57BDF54BF5D9EBDF6DB57C',
+            2 => 'FC1E85DD8EC582C04DD67FFCDBEBE1AC',
+            3 => 'A39E2E305322BF174B3A0D37B444FF91',
+            4 => '57F5988B571398C74B6D26B81D396BE6',
+            5 => '538F8682179D8CA74630760B054533FE',
+            6 => 'CDC82CEF682F99C2492776DECCEAB372',
+            7 => 'BA1E25D2CF1D9D094B75B5FBB3F1629C',
+            8 => 'CD815BFD0EC28C324DF925466C73B65A',
+            9 => 'F6ABB39C9DCD82CB4CC9DF2E49624210',
+          ),
+        ),
+        4 =>
+        array (
+          'key' => 'even-power-substitution',
+          'number' => 6,
+          'title' => 'Замена переменной для квадратов и четвёртых степеней',
+          'expected_tasks' => 20,
+          'guids' =>
+          array (
+            0 => 'D6A432495A578B87472B56353693C00A',
+            1 => 'E51089CA4D6C84A5451808A4828C6AF0',
+            2 => '1A35A545F63CA69B492CE5B04A98C7C9',
+            3 => 'AF60B58B16618AAA4AEE9FC650C1BF45',
+            4 => 'FBC2EB13379AA079469BB802056FC7E3',
+            5 => 'C8677723386DBE1448D69CD47D9F13B1',
+            6 => '6B62ABFD4C439DC04AEE84937118E691',
+            7 => '22A1D34DF592A64C45A339CB57FABC23',
+            8 => '68D535673380B13E4F258EDDFFCEFF35',
+            9 => 'EC117438D168B9A94768C37188ED0231',
+            10 => 'C4B69E97497C87F74B0AE94C5DEAA4C9',
+            11 => 'BB6901D5073A840E4F52674112272674',
+            12 => 'A0B0695337B48EC348023C94E82E1CAF',
+            13 => 'D3D362515F46BBDB4874FFC58EA20F9A',
+            14 => '72DD62CDC2B6A1A040A7D40DE524FA13',
+            15 => '95B4475D095D9B6B4B02613816C14F1B',
+            16 => 'B07412A002C1A7A74A8026E359769425',
+            17 => '65BEB03393F681EB4B9F38EA4DC9818E',
+            18 => '00FF35E94C189A3A46271DA3C4D5C9A7',
+            19 => 'D04A7C64A9A59EE1448CE783F943276D',
+          ),
+        ),
+      ),
+    ),
+    2 =>
+    array (
+      'number' => 3,
+      'title' => 'Системы уравнений',
+      'groups' =>
+      array (
+        0 =>
+        array (
+          'key' => 'substitution-in-system',
+          'number' => 7,
+          'title' => 'Приравнять два выражения для одной переменной',
+          'expected_tasks' => 22,
+          'guids' =>
+          array (
+            0 => '30B35C5B08C69BFD4A066FD7F4E918F3',
+            1 => '3AFE3AF74981B8554CB664AC6411A454',
+            2 => '4CADA913C1ACA6E646AE832AD8803780',
+            3 => '6992111D9639965348E149E5920104D1',
+            4 => '9FBDC1B7180B8F394B3E57BB757F8651',
+            5 => 'A819CB3DEDF1A8734E83EE6B70EC1BB6',
+            6 => 'DE19A3257370B0D845C570DF784E0683',
+            7 => 'DF95244195FCBE224C6F013492505B33',
+            8 => 'F1009D6D6C61AA2B4151B2F5415204D8',
+            9 => 'F0444C56AB19A4AB45635CDBF1DC53B3',
+            10 => '550D55E0347F8B9E4BB682E88C5182B2',
+            11 => 'C81D01A8C6A9A56C42892EC503791BE8',
+            12 => '1334A6968F6B82D8433C5E1856C388B4',
+            13 => 'D4CA865905A8AC3447CAA514AEB9D31C',
+            14 => '1E05CA36B835AA8948A8A13742FDA79D',
+            15 => '4CFC836EF732B3C6415F9B2B086A79FB',
+            16 => '4D244540D32F8FAA4BBD7FFE1CDC2BC9',
+            17 => '8602B52A966BACBE474B7F453B2148B8',
+            18 => '97E72DB17FFFBE634D516778F969BEF6',
+            19 => 'E19E635A8C2A8FD448DA1661F48E90E3',
+            20 => 'E5FB0B73801BB84E4420EE22F9198A4F',
+            21 => 'F64BCFD7A258829E41C6E093CFBAA769',
+          ),
+        ),
+        1 =>
+        array (
+          'key' => 'quadratic-system-elimination',
+          'number' => 8,
+          'title' => 'Исключить сумму квадратов из системы',
+          'expected_tasks' => 8,
+          'guids' =>
+          array (
+            0 => '611B25061A22BBE34481BF3D7EC21C06',
+            1 => '7F2359AE572894C34CEBDE72DF272B0D',
+            2 => '9146F575FF70A17F4E35A641F4F0A8CC',
+            3 => 'ABF256214D38878D40389BF0F18B5B08',
+            4 => 'B8B92A0EEEF2B15A45A5D7B2B8A27829',
+            5 => '18CB973E45698647471FD93C8461CD5E',
+            6 => '26DE83B039B5B2434D7F856B2EDE34C0',
+            7 => '351D5DBE3BFFB0F849242E5D0F791613',
+          ),
+        ),
+      ),
+    ),
+    3 =>
+    array (
+      'number' => 4,
+      'title' => 'Неравенства',
+      'groups' =>
+      array (
+        0 =>
+        array (
+          'key' => 'quadratic-inequality-after-shift',
+          'number' => 9,
+          'title' => 'Замена выражения и квадратное неравенство',
+          'expected_tasks' => 10,
+          'guids' =>
+          array (
+            0 => '171162259C0E93A24C34C742254791CE',
+            1 => '17BB914AB79A9A55400359BCD745D531',
+            2 => '264A9D93BBD79BD444BDD4EAAC43AF9A',
+            3 => '341DF702B98B803E4F23154199AA3AA1',
+            4 => '6E305362F8DABADB4016EBF160C37E2E',
+            5 => '6EE792C61967A14C465CE70EA80DDCFE',
+            6 => '75D2BA5EA284B3CF451B2D09D083E29D',
+            7 => 'B7E0694B88C2B4F34E7D0DF44219F85F',
+            8 => 'B84DEC2C58A48064429935C266ECFB45',
+            9 => 'E308EC5C50DD940F41696B2B360492DD',
+          ),
+        ),
+        1 =>
+        array (
+          'key' => 'polynomial-interval-method',
+          'number' => 10,
+          'title' => 'Разложение на множители и метод интервалов',
+          'expected_tasks' => 60,
+          'guids' =>
+          array (
+            0 => '01B98FD3FD15957D4CE88AAED0C1CADE',
+            1 => '056DD121E615812D428A159FEBDF3BC4',
+            2 => '069294FD06A4A6534AA5B62F62B8B3EA',
+            3 => '13CF88B73E9DAC604AA294A7121F57BC',
+            4 => '17D0F623E7F487F642955B80BC4CAFF5',
+            5 => '190165716DCDB39C457F73A5E939CF95',
+            6 => '19E984217153A992420FA771CD32BE4F',
+            7 => '1A8A7FCD7F82A26E4311EB434CF84467',
+            8 => '1D811B84AD42B2474F8215FE27C4C899',
+            9 => '1DCF342F19A988074D9476D5ACFC8A65',
+            10 => '2ABA3A446719A8AC4EDC1E0C1A45CF45',
+            11 => '33A77E3F5FA2B452493B6954D0C9A37B',
+            12 => '3C75E124EF67A2304D3E068159D6C084',
+            13 => '3F0AA84A6DF5924D44A4176C7888DF3E',
+            14 => '41B82CB13C6BBB264F624CDB355EFB78',
+            15 => '4D281D6934F3A73B4841E676B6A7088A',
+            16 => '52E9057B50B2A0974A913B569A8002B9',
+            17 => '5DDCAD19F5DAB879464E4C7E86860F4A',
+            18 => '62484EEE794096194E0BC8C5CB339CF8',
+            19 => '624D458DF7429EEC49FAF509BE6BF4AC',
+            20 => '636DE08708CA931D4C877A90C5F7E201',
+            21 => '6ADE27074B61826E46BB5B30EB867467',
+            22 => '6D3A540F8D7D86334F192FE3D7426244',
+            23 => '71FAB0FAA6C8AFE3481E696BAC7D4B08',
+            24 => '72B483E31ED7857743F872A864C907C6',
+            25 => '739E453D09128205453D9130048E91C0',
+            26 => '74BB89B2554DBCB0496CA98F059DFB66',
+            27 => '753251F1857D987A419BA751924D648E',
+            28 => '79D582BF3CDD94974231551880600C3A',
+            29 => '7FB5CE230EAC9FC7466462856B723144',
+            30 => '83F9F27DD2008CAC420AACA9A443ADDE',
+            31 => '84EAAD35346FB9B84389DA3528D5A53F',
+            32 => '8988158CD71CAAC0400BCAE6FFDEB1D0',
+            33 => '8D23CB545BCD97FA4C0207B159DEB6DC',
+            34 => '8D3B38FE3D21BEDD4A3108990E6FA882',
+            35 => '9F1C2FC54A54A9464628094BB7ED6B2E',
+            36 => 'A22FB69DF9699AE041B73C209B00D4FF',
+            37 => 'AE2C85BAF178BFDD447FF1A1EE8EC848',
+            38 => 'B4D6D9561113B7CD4D1DFB38E820ABEF',
+            39 => 'B761B84537EF949F4B4A2EE00DCB6E12',
+            40 => 'BDE05A81A06CA7914DF48A0B12448E5A',
+            41 => 'C22475D9938597EB4DFCA5010CDD614F',
+            42 => 'C9E67B7074B39FB640C96C5BCD32C8CB',
+            43 => 'CBB6EB29F4798C2F44E1823F21035D13',
+            44 => 'CCBA8FACE18682B5485A992AD583CD15',
+            45 => 'D295D2AA01FFB43245D9E98B2417DE56',
+            46 => 'D36F6D5E9F399F5348A07F13171EABD7',
+            47 => 'DB8BB552C5DB93F446C7558C2E42AD2A',
+            48 => 'DF8CE4273EF5BFE54B126AF6C4C177B6',
+            49 => 'E6386550DF0AA4634EC67B97F71FF9C7',
+            50 => 'EAA33E0F23E5AE304FADE836154C8601',
+            51 => 'EC1A350E735183504504BD8492D27EEE',
+            52 => 'EC8F5A7F5CDBBC1F443CF6C04BF0EC93',
+            53 => 'EFAFFE8A35EB85944D9FCB107B942BB4',
+            54 => 'EFB828B6FE2AB3A0466021AD6829BC0F',
+            55 => 'F5E5582D42D7ADE144A1520E13369DA2',
+            56 => 'F6DC14C11F609FF94DA358F323EF0F94',
+            57 => 'F6DF033AFD92A4A346E8070A76F40A78',
+            58 => 'F74F23CFC0378C554BD3A4D019219D3A',
+            59 => 'FFFF35FF06979FA644E64E07672E294E',
+          ),
+        ),
+        2 =>
+        array (
+          'key' => 'rational-inequality-domain',
+          'number' => 11,
+          'title' => 'Рациональное неравенство с учётом области допустимых значений',
+          'expected_tasks' => 10,
+          'guids' =>
+          array (
+            0 => '0AF6D7395C378E0B4B1E9F92CAC3B467',
+            1 => '1E5F1F49EBFBA5B7458117DD7E916BE4',
+            2 => '1FBAA1C4C9DBA536425A08110E20A086',
+            3 => '30275BE54DE48B4F417B2F139608DEDB',
+            4 => '3863562119F195064BB58DDCEC2CE2FC',
+            5 => '41707E8BB94BB4954055F9F7DBE59996',
+            6 => '7545EC70A050B3674BB22962A7D182BC',
+            7 => 'CD7CA45AE477A47F464D4BE2260DF201',
+            8 => 'E070F49C596AB23C4CE0AD8DB8571457',
+            9 => 'F6DE7DF07EDAA8FB46DB14954AF677F7',
+          ),
+        ),
+      ),
+    ),
+  ),
+);

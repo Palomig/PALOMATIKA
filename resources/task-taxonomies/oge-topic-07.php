@@ -1,0 +1,298 @@
+<?php
+
+/**
+ * Курируемая учебная группировка темы 07 ОГЭ.
+ * Сгенерировано из актуального банка ФИПИ; порядок задаёт учебный план.
+ */
+return array (
+  'topic' => '07',
+  'expected_tasks' => 171,
+  'blocks' =>
+  array (
+    0 =>
+    array (
+      'number' => 1,
+      'title' => 'Чтение координатной прямой',
+      'groups' =>
+      array (
+        0 =>
+        array (
+          'key' => 'number-position-and-sign',
+          'number' => 1,
+          'title' => 'Положение числа относительно нуля',
+          'expected_tasks' => 13,
+          'guids' =>
+          array (
+            0 => '19CB3DDB09BE9ABE41619138002D285D',
+            1 => '2F389C5F8F198A3949FCB93CFACC8FB5',
+            2 => '34E44D97AC8AB15A47CBF20DF561A15A',
+            3 => '39D0218A5B9CA71C4418DCF232E52758',
+            4 => '61E4B66A42F38F504631983AF5DA09F3',
+            5 => '6407EE757D8CAA9641DFA6CF0B1146B6',
+            6 => '6BF47A4A6C7896464C6D1B297B217AE6',
+            7 => '7A294373D57F86CB48D8028298F2D470',
+            8 => 'AF07B944BB56A5FB4E49AAFF4926B57E',
+            9 => 'AF2717FF3B5BA36E4CEAD1562CABF620',
+            10 => 'B30E108DA5CB9AA14CD2FACFC2D2C9CF',
+            11 => 'F4F53BEF53C8B98D4EB1CEFCC96C9F27',
+            12 => '008E84293C5AB98E47539B211B8DC443',
+          ),
+        ),
+        1 =>
+        array (
+          'key' => 'difference-sign-by-point-order',
+          'number' => 2,
+          'title' => 'Знак разности по порядку точек',
+          'expected_tasks' => 12,
+          'guids' =>
+          array (
+            0 => '89C2334AA5398B7A45736C774A99DFC9',
+            1 => '5D94F5F6E0E287C34FB1E5E8FFB2C2D7',
+            2 => '617FE44D915397124796DB4A30F93084',
+            3 => 'BB6EBEBF3AC294604A6EF2699EA642CA',
+            4 => '57FA25208DF08F3C46368A23DB3C6CE7',
+            5 => 'F18B9B86FC0D9762412042F4E39DB52D',
+            6 => '6FE2ACE248EBAAF44ACF3722BA27140A',
+            7 => 'A76C4FE898C9B8AC4911F1F6E5AD6527',
+            8 => '3E7A9ADF4E94AC9A49757BDA5381189B',
+            9 => '622A538324ACB27F48D3FB3E72678E8F',
+            10 => 'EF7BB54074B5A90140C9DBD4455FDF63',
+            11 => 'AECD2B5180B8A540465FF8D2AACFCA96',
+          ),
+        ),
+      ),
+    ),
+    1 =>
+    array (
+      'number' => 2,
+      'title' => 'Рациональные числа на прямой',
+      'groups' =>
+      array (
+        0 =>
+        array (
+          'key' => 'locate-fraction-or-decimal',
+          'number' => 3,
+          'title' => 'Найти дробь или десятичное число среди отмеченных точек',
+          'expected_tasks' => 49,
+          'guids' =>
+          array (
+            0 => '8740172207A39E8045B702D291F587AD',
+            1 => '96936AACCDB1ACC2463C37E7EA6FFDCF',
+            2 => 'A51875D88221B92A46A6944239FB821D',
+            3 => '5EF16D106DCAB9A7492055DDFEA2260B',
+            4 => '6774C539BB0681474084A1BF189CD147',
+            5 => '6BBE31251592942C42436630371D7468',
+            6 => '6CE09CF0448CB7944E51B76FEDAE138A',
+            7 => '8CDA60CAF21CA59E47A7D08F1261A49E',
+            8 => 'A927BF41C165AB3942813508F4B4A141',
+            9 => 'BC5766987ED8BE1C40939CC6030338B3',
+            10 => '368DA5E4D6D1AC024C1312572AB8CE21',
+            11 => 'BE20ED551FA5A27A4B06E2DD422674BA',
+            12 => '2B6EF033816485FC4DCA46EB15224C0B',
+            13 => '44939D7673F3A1514873931DFE481472',
+            14 => '4C370E421F2F8D004EE943DDA2BF6450',
+            15 => '543D991FD53B8C5346679AF290A18032',
+            16 => '67CE662D2241A5694F12413FCE079561',
+            17 => '83205A6D527A9F684BA1662C7A55D483',
+            18 => 'A1B036C14D84814845AD7ED22E25E899',
+            19 => 'B4C871C21B7B82434A29AA282BE93760',
+            20 => 'C75827F696818A3D402176B69D30C3A0',
+            21 => 'CCAFA2489BCD88304756C9AE4027F822',
+            22 => 'DEE1302E22489F794B3C0CD5F4303D34',
+            23 => 'E68BA3729FEF821746024F3556A36AB0',
+            24 => '01515F4C6DAF8157434E1F297DA43343',
+            25 => '0333ABB681F48DE2439AB36FE8256BB1',
+            26 => '0FA57D6A64A4A79644E0FBD8D03D5AFB',
+            27 => '170EAF2C7865B9154370AC7A43579003',
+            28 => '1CF4180B5AB1A4914897ED778DFF7FA7',
+            29 => '3BAAF7D0918491844272A53657B13CD5',
+            30 => '8D64BB89744BB8D341F20048EA282AB7',
+            31 => 'BBA7375E64CF822F4C7F8DAAB7E33468',
+            32 => 'D9ACC64B11E0859B4B2B00520E78A0F1',
+            33 => 'E3C8918E464B8C7F467A7ECA2D1171B2',
+            34 => 'F36EA35015E9933546E543332F5708AA',
+            35 => 'FDB7296A37FDABAA4AE7561E3B83F72D',
+            36 => '0EBEB36BC382BF9143CA13E83D5FF253',
+            37 => '115566C9E236B2834743228F6BC6CE2B',
+            38 => '1D3F91FC285EA2B74D641E612C31CD80',
+            39 => '23327F19B58CA40A404CAC25FAEC52E0',
+            40 => '2FAE91C37C5BBC5A4A11A9996CF2C427',
+            41 => '32CCD452AA94969746351FD428C21F03',
+            42 => '4E4F735572B199784F382C4E7112CF6C',
+            43 => '76CB2B63C904A8204BAE9ABB59403FF4',
+            44 => '89B1D1909622BA4C4095A869039B329D',
+            45 => '9A749D9CB79BB1964100E8E19DAF01C2',
+            46 => 'CEF85C204E49B20742D5924332DEF8F4',
+            47 => 'CFFB499388D7A5EF47EEE4843AF87C4F',
+            48 => 'F7872B813A7AB0694DD78A8B10616289',
+          ),
+        ),
+        1 =>
+        array (
+          'key' => 'integer-bounds-for-fraction',
+          'number' => 4,
+          'title' => 'Оценить дробь между соседними целыми числами',
+          'expected_tasks' => 10,
+          'guids' =>
+          array (
+            0 => '2F6D1F1959218DDF4F5B3618EC45F081',
+            1 => '9D5F04D2BDDE97104BFA0B03D45526C4',
+            2 => '51E90C0B4EAE967E421933C100176672',
+            3 => '2E0003263C23AC634B8D168FC1633D02',
+            4 => '01EA6191332490744212705B3791FB1C',
+            5 => '1BE35BBEE346A0454BEF3014A2BE3AB1',
+            6 => '0E743D5F2B87B3E6418FBED38F1B0D32',
+            7 => '7450D90D895FA250450652DD91139330',
+            8 => '76AA12A8E5C498874CACA839257F51DD',
+            9 => '80577D7DE0A386FA4477D86D69AAAE17',
+          ),
+        ),
+        2 =>
+        array (
+          'key' => 'compare-fractions',
+          'number' => 5,
+          'title' => 'Сравнить дроби и выбрать число между ними',
+          'expected_tasks' => 13,
+          'guids' =>
+          array (
+            0 => '0BC4F26E205495C547189DCF58C57ABA',
+            1 => '108B7CB6B689B9D6472395FA21F5DE63',
+            2 => '3A9FE37B34FCAF374FCF25C73CA432B2',
+            3 => '51E2FBA79639A2EC455F4EF9AF609691',
+            4 => '55BF44FCA92294D9400814B21CC22BCB',
+            5 => '63A9DD58BEB186214F3E01405DCE058B',
+            6 => '65DE2E5B6413A47F4DAFBFBB1F3E8D93',
+            7 => '6B09D5D6E5848AFA4E591EE57CF763BD',
+            8 => '77760340238189664B05CF3C62BCC385',
+            9 => '8026E818235697CE46250805410C319A',
+            10 => '8DA3B89F971792D242AEB45308BFEEE6',
+            11 => 'AF3424242355B36E4D6A6B83326ABAA4',
+            12 => 'B636DD8D4348844043B2158E1E75080D',
+          ),
+        ),
+        3 =>
+        array (
+          'key' => 'number-in-interval',
+          'number' => 6,
+          'title' => 'Определить принадлежность числовому промежутку',
+          'expected_tasks' => 22,
+          'guids' =>
+          array (
+            0 => '0387EE6DF200BDDC42EA381CE85E7ABA',
+            1 => '2B6E83A73089B9EC40158CE3DA051069',
+            2 => '47E22CAF60FC8BD046D8FDDE0CF55F75',
+            3 => '48D85BA8961A9EDB4E48D1806208CABB',
+            4 => '5B297EAE2EC08FE84BF42F987B6A2896',
+            5 => '67C977A2DA3FBD244D9F9170D177EEBB',
+            6 => '9256187EB23995A5451698EF5CCFDA7A',
+            7 => 'AEBFAA6A6BF08F8E4EA9E7962CF25790',
+            8 => 'B25C385875D0806C4A90E2283CF1DCF2',
+            9 => 'B3063FE983B792264651A0B138FF4106',
+            10 => 'AF6FE76DAFBD951F4C55D37411CD8B88',
+            11 => 'EA46C5000079B3E24AC3D624CA2EA70B',
+            12 => '5631ACC0256A81A9430D83FF40DB98CB',
+            13 => '18AB0EA2C2FDAB464DADDB4C39A1988D',
+            14 => '12E1626818D9B8F74BF59456A21D7FB9',
+            15 => '3446C7428D32AE2F4996CC9B661F1C6E',
+            16 => '780DC3BB5BBA88B14A2978196F7844BF',
+            17 => '7BFB92A52F4287374B94F0724D102C76',
+            18 => '7CC17C6E0604AD8E4CD07AB19A4D883F',
+            19 => '84D021EE41B0AA054788E6F161D003D8',
+            20 => '852348120632BFEC4FE29EB935253201',
+            21 => 'A115F4283F988DD9446E84F058178695',
+          ),
+        ),
+      ),
+    ),
+    2 =>
+    array (
+      'number' => 3,
+      'title' => 'Приближённая оценка квадратного корня',
+      'groups' =>
+      array (
+        0 =>
+        array (
+          'key' => 'locate-square-root',
+          'number' => 7,
+          'title' => 'Найти квадратный корень среди точек',
+          'expected_tasks' => 25,
+          'guids' =>
+          array (
+            0 => '0B7A71F73392AE724B0AE92C9930CF79',
+            1 => '1AF863DBFFFEBC4640FEA296D47D8819',
+            2 => '24822C7E4E92AF524B93D882B45FA918',
+            3 => '5DB9E79D06E8B17344B5B9B1B4433041',
+            4 => '98B70DF7AE65BE3A4DD32F6ED65052A6',
+            5 => '9D91497D62D9AF1E46F37B6E94CD7EC1',
+            6 => 'ACEE8A1AD99289A943B621B10C84D7F3',
+            7 => 'AEEED732BC63AAAD4511222CF3E3508B',
+            8 => 'AF20BC14E4D7A77443CD576EA33EEA04',
+            9 => 'B29AA976471DBBF14D9ED6C39EEE647D',
+            10 => 'BD95347AF6F792F44BF286AC57BCD099',
+            11 => 'C545A1224921B8B44451977DF9BE8A28',
+            12 => 'D1D94A805F0CAE0C4AAFF9DACAE629C5',
+            13 => 'D20FF942E6B483094B9D4ED3AC3C7770',
+            14 => 'D55F13539D62B2BB4965FDBDF2435816',
+            15 => '4B9000D4BE8F82544C270C2EB71BFD55',
+            16 => '8E4683B0284C92F7456C505E88404B53',
+            17 => '94390522650A88F843D0CD2FBEBE2A62',
+            18 => 'A69645149FD7B466450F9281D715C662',
+            19 => 'B25299530E42BB6C4F9D05809FAE4239',
+            20 => 'B6CDE4FC5E91ACCC45350ECB3BD44B4D',
+            21 => 'BBF40C6C0FA3849C404FD3333FCAD030',
+            22 => 'C22EF8E0D5D0AE4243177636672FD334',
+            23 => 'C4BAC225EFDCBC1E4226CD43AFBD1B10',
+            24 => 'E5F290C4F83980ED4371273FE80CC5E1',
+          ),
+        ),
+        1 =>
+        array (
+          'key' => 'integer-bounds-for-square-root',
+          'number' => 8,
+          'title' => 'Оценить корень между соседними целыми числами',
+          'expected_tasks' => 15,
+          'guids' =>
+          array (
+            0 => '288DB491898E9D814B8C08C0C5155173',
+            1 => '938556867A2FBB974FAB608F919F118E',
+            2 => '64A5A111C265BEB646FC78C9C5D05E43',
+            3 => '0C30E2F118FAB8B948D8F1647C74EF10',
+            4 => 'EC32CDD8183484154E5FAB783C8EF2F5',
+            5 => 'ABEEA5E27AEE80674D13D40FFE16429F',
+            6 => '1C991AF927A1B6FD463CCE818B9CBE95',
+            7 => '3243F129A08F905840E43D42FBCD0EDD',
+            8 => '3AA018F2DB339D0B4863EA195631CDEB',
+            9 => '51C22BB316F997EE444B01617FA800A8',
+            10 => 'ADFF777D1B3F9A3848BC5061C15A638A',
+            11 => 'B736455ED85EA33E4EB432DE5C302441',
+            12 => 'CEF8295E5BEAA6D54DFF72F8C492B042',
+            13 => 'D1E096881E898D244D0361C5C055D8AB',
+            14 => 'E9A4B58C07819B1949D90F3F57E3F611',
+          ),
+        ),
+        2 =>
+        array (
+          'key' => 'square-root-in-interval',
+          'number' => 9,
+          'title' => 'Выбрать корень из заданного промежутка',
+          'expected_tasks' => 12,
+          'guids' =>
+          array (
+            0 => '1B862BCDCD5FADB1470E319612075258',
+            1 => '2DC65EF5929194144BFD1FFCC328E67B',
+            2 => '33383D957A2FB24344F0044B739D7FC2',
+            3 => '875E6F992A159CB24671CC50F37622E4',
+            4 => '992FC790128B987F4E50731129D6628F',
+            5 => 'A198E7A152C28DC543909EFB16054337',
+            6 => 'A52BF3F9FD10935047E5F727F5171831',
+            7 => 'A96EF29C83BAA0F74D0334621FF1DE1F',
+            8 => 'AFA010AAACDDB3AA40F63C9142422ED0',
+            9 => 'B4BE0E5D9463B19F4777617D192CFAAC',
+            10 => 'C057646C480EA6A446900F9A568D84B0',
+            11 => 'D80E95CFA4759DDD4977B4BEC7BBA73F',
+          ),
+        ),
+      ),
+    ),
+  ),
+);
