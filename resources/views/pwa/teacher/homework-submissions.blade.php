@@ -113,9 +113,10 @@
         @endif
       </div>
 
-      @if($submission && $submission->solution_photo_path)
+      @if($submission && ($submission->solution_photo_path || $submission->solution_photo_remote_id))
+        {{-- В превью тянем миниатюру: на мобильном учительском интернете это ощутимо. --}}
         <a class="photo-link" href="{{ route('pwa.teacher.homework.submission-photo', $submission) }}" target="_blank" rel="noopener">
-          <img src="{{ route('pwa.teacher.homework.submission-photo', $submission) }}" alt="Фото решения" loading="lazy">
+          <img src="{{ route('pwa.teacher.homework.submission-photo', [$submission, 'w' => 800]) }}" alt="Фото решения" loading="lazy">
         </a>
         <div class="photo-hint">Фото последней попытки · {{ $submission->updated_at?->format('d.m.Y H:i') }} · нажми, чтобы открыть целиком</div>
       @elseif($submission)

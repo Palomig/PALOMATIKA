@@ -15,6 +15,7 @@ class HomeworkTopicTaskSubmission extends Model
         'second_answer',
         'is_correct',
         'solution_photo_path',
+        'solution_photo_remote_id',
         'accepted_at',
     ];
 

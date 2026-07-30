@@ -14,6 +14,7 @@ use App\Models\HomeworkAssignment;
 use App\Models\HomeworkTopicTask;
 use App\Models\HomeworkTopicTaskSubmission;
 use App\Models\User;
+use App\Services\HomeworkPhotoStore;
 use App\Services\MiniAppTaskCanonicalizer;
 use App\Services\MiniAppTaskSanitizer;
 use App\Services\MiniVariantService;
@@ -47,6 +48,7 @@ class StudentController extends Controller
         private readonly MiniAppTaskCanonicalizer $taskCanonicalizer,
         private readonly MiniAppTaskSanitizer $taskSanitizer,
         private readonly TaskAnswerResolver $answerResolver,
+        private readonly HomeworkPhotoStore $photoStore,
     ) {}
 
     private function base(): string
@@ -1354,6 +1356,31 @@ class StudentController extends Controller
         ]);
     }
 
+    /**
+     * Тикет на прямую загрузку фото в hw-photos (сервис на VPS).
+     *
+     * Токен короткоживущий и выдаётся по факту прав на задачу: у ученика в
+     * браузере не появляется ничего, чем можно грузить в чужую домашку.
+     */
+    public function homeworkPhotoTicket(Request $request, HomeworkAssignment $assignment, HomeworkTopicTask $homeworkTask)
+    {
+        $user = $request->user();
+        abort_unless((int) $assignment->student_id === (int) $user->id, 403);
+
+        $assignment->load('homework');
+        abort_unless($assignment->homework?->homework_type === 'topic_photo_practice', 404);
+        abort_unless((int) $homeworkTask->homework_id === (int) $assignment->homework_id, 404);
+
+        $ticket = $this->photoStore->uploadTicket($assignment, $homeworkTask, (int) $user->id);
+
+        if ($ticket === null) {
+            // Хранилище не настроено — страница молча уйдёт на обычную отправку файла.
+            return response()->json(['enabled' => false], 200);
+        }
+
+        return response()->json($ticket + ['enabled' => true]);
+    }
+
     public function submitTopicHomeworkTask(Request $request, HomeworkAssignment $assignment, HomeworkTopicTask $homeworkTask)
     {
         $user = $request->user();
@@ -1363,17 +1390,20 @@ class StudentController extends Controller
         abort_unless($assignment->homework?->homework_type === 'topic_photo_practice', 404);
         abort_unless((int) $homeworkTask->homework_id === (int) $assignment->homework_id, 404);
 
-        // Фото тетради с телефона — это 3–20 МБ (браузер ужимает его перед отправкой,
-        // но на старых устройствах сжатие может не сработать). Лимит держим на уровне
-        // того, что реально пропускает хостинг, иначе ученик просто не может сдать ДЗ.
+        // Обычный путь: браузер уже загрузил снимок в сервис hw-photos и присылает
+        // только `photo_id`. Фолбэк (сервис недоступен, старый клиент, no-JS) —
+        // файл приходит сюда как раньше: фото тетради с телефона это 3–20 МБ,
+        // лимит держим на уровне того, что реально пропускает хостинг.
         // HEIC/HEIF — формат камеры iPhone, правило `image` его не пропускает.
         $validator = Validator::make($request->all(), [
             'answer' => 'required|string|max:255',
-            'solution_photo' => 'required|file|max:20480|mimes:jpg,jpeg,png,webp,heic,heif,gif,bmp',
+            'photo_id' => 'required_without:solution_photo|nullable|string|max:512',
+            'solution_photo' => 'required_without:photo_id|nullable|file|max:20480|mimes:jpg,jpeg,png,webp,heic,heif,gif,bmp',
         ], [
             'answer.required' => 'Впиши ответ.',
             'answer.max' => 'Ответ слишком длинный.',
-            'solution_photo.required' => 'Прикрепи фото решения.',
+            'photo_id.required_without' => 'Прикрепи фото решения.',
+            'solution_photo.required_without' => 'Прикрепи фото решения.',
             'solution_photo.max' => 'Фото слишком тяжёлое (больше 20 МБ). Сфотографируй ещё раз или уменьши качество съёмки.',
             'solution_photo.mimes' => 'Нужно фото (jpg, png, heic или webp), а не другой файл.',
             'solution_photo.file' => 'Не получилось загрузить фото. Попробуй ещё раз.',
@@ -1403,26 +1433,48 @@ class StudentController extends Controller
         $answer = trim((string) $validated['answer']);
         $attemptsCount = min(((int) $submission->attempts_count) + 1, 2);
 
-        try {
-            $path = $request->file('solution_photo')->store("homework_solutions/{$assignment->id}", 'public');
-        } catch (\Throwable $e) {
-            // Иначе ученик видит белый экран 500 и не понимает, что попытка не сохранилась.
-            Log::error('Homework photo store failed', [
-                'assignment' => $assignment->id,
-                'task' => $homeworkTask->id,
-                'error' => $e->getMessage(),
-            ]);
+        $remoteId = trim((string) ($validated['photo_id'] ?? ''));
+        $path = null;
 
-            return back()
-                ->withInput()
-                ->with('answer_task_id', $homeworkTask->id)
-                ->with('error', "Задача {$homeworkTask->task_order}: не удалось сохранить фото. Попробуй отправить ещё раз — попытка не потрачена.");
+        if ($remoteId !== '') {
+            // Подпись сервиса подтверждает, что фото загружено именно для этой
+            // задачи этим учеником — чужой photo_id не подставить.
+            if (!$this->photoStore->verifyPhotoId($remoteId, $assignment, $homeworkTask, (int) $user->id)) {
+                Log::warning('Homework photo_id rejected', [
+                    'assignment' => $assignment->id,
+                    'task' => $homeworkTask->id,
+                    'student' => $user->id,
+                ]);
+
+                return back()
+                    ->withInput()
+                    ->with('answer_task_id', $homeworkTask->id)
+                    ->with('error', "Задача {$homeworkTask->task_order}: фото не подтвердилось хранилищем. Прикрепи его заново — попытка не потрачена.");
+            }
+        } else {
+            try {
+                $path = $request->file('solution_photo')->store("homework_solutions/{$assignment->id}", 'public');
+            } catch (\Throwable $e) {
+                // Иначе ученик видит белый экран 500 и не понимает, что попытка не сохранилась.
+                Log::error('Homework photo store failed', [
+                    'assignment' => $assignment->id,
+                    'task' => $homeworkTask->id,
+                    'error' => $e->getMessage(),
+                ]);
+
+                return back()
+                    ->withInput()
+                    ->with('answer_task_id', $homeworkTask->id)
+                    ->with('error', "Задача {$homeworkTask->task_order}: не удалось сохранить фото. Попробуй отправить ещё раз — попытка не потрачена.");
+            }
         }
 
         $isCorrect = $this->homeworkAnswerMatches($homeworkTask->correct_answer, $answer);
 
         $submission->attempts_count = $attemptsCount;
+        // Пишем ровно одно из двух: откуда фото читать, видно по заполненному полю.
         $submission->solution_photo_path = $path;
+        $submission->solution_photo_remote_id = $remoteId !== '' ? $remoteId : null;
         $submission->is_correct = $isCorrect;
 
         if ($attemptsCount === 1) {

@@ -13,6 +13,7 @@ use App\Models\OgeVariant;
 use App\Models\TeacherStudent;
 use App\Models\User;
 use App\Services\AuditLogger;
+use App\Services\HomeworkPhotoStore;
 use App\Services\OgeVariantPoolService;
 use App\Services\TaskDataService;
 use App\Services\VariantTaskNumberResolver;
@@ -32,6 +33,7 @@ class TeacherController extends Controller
     public function __construct(
         private readonly TaskDataService $taskData,
         private readonly OgeVariantPoolService $poolService,
+        private readonly HomeworkPhotoStore $photoStore,
     ) {}
 
     private function base(): string
@@ -686,10 +688,11 @@ class TeacherController extends Controller
     }
 
     /**
-     * Отдаёт фото решения ученика.
+     * Отдаёт фото решения ученика — единственная точка доступа к тетрадям.
      *
-     * Через `/storage/...` фото недоступны (на хостинге public/storage — не симлинк),
-     * да и тетради учеников не должны лежать по угадываемым публичным ссылкам.
+     * Новые фото лежат в сервисе hw-photos на VPS: туда уходит редирект на
+     * короткоживущую подписанную ссылку. Старые (фолбэк-путь) читаются с диска
+     * хостинга — через `/storage/...` они недоступны, там public/storage не симлинк.
      */
     public function homeworkSolutionPhoto(Request $request, HomeworkTopicTaskSubmission $submission)
     {
@@ -699,6 +702,16 @@ class TeacherController extends Controller
         $assignment = $submission->assignment;
         abort_unless($assignment && $assignment->homework, 404);
         abort_unless($this->canReviewHomework($user, $assignment), 403);
+
+        $width = in_array((int) $request->query('w'), [400, 800, 1600], true) ? (int) $request->query('w') : null;
+        $remoteId = (string) $submission->solution_photo_remote_id;
+
+        if ($remoteId !== '') {
+            $url = $this->photoStore->readUrl($remoteId, $width);
+            abort_if($url === null, 404);
+
+            return redirect()->away($url);
+        }
 
         $path = (string) $submission->solution_photo_path;
         abort_if($path === '' || !Storage::disk('public')->exists($path), 404);
