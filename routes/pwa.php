@@ -171,6 +171,8 @@ Route::domain('teacher.' . config('app.base_domain'))->group(function () {
         Route::get('/homework', [TeacherController::class, 'homework'])->name('pwa.teacher.homework');
         Route::get('/homework/topic-tasks/{topicNumber}', [TeacherController::class, 'topicTasks'])->name('pwa.teacher.homework.topic-tasks')->whereNumber('topicNumber');
         Route::post('/homework/assign', [TeacherController::class, 'assignHomework'])->name('pwa.teacher.homework.assign');
+        Route::get('/homework/assignment/{assignment}', [TeacherController::class, 'homeworkSubmissions'])->name('pwa.teacher.homework.submissions');
+        Route::get('/homework/submission/{submission}/photo', [TeacherController::class, 'homeworkSolutionPhoto'])->name('pwa.teacher.homework.submission-photo');
 
         // Lessons API (lesson_session lifecycle)
         Route::post('/lessons',                              [TeacherLessonController::class, 'create'])->name('pwa.teacher.lessons.create');

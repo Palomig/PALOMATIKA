@@ -107,7 +107,8 @@
   @if(session('error'))
     <div class="notice notice-error">{{ session('error') }}</div>
   @endif
-  @if($errors->any())
+  {{-- Ошибки отправки приходят готовой плашкой в session('error') — здесь только остальные. --}}
+  @if($errors->any() && !session('error'))
     <div class="notice notice-error">{{ $errors->first() }}</div>
   @endif
 
@@ -124,7 +125,9 @@
       $needsRetry = $submission && !$submission->accepted_at && (int) $submission->attempts_count === 1;
       $stateClass = $accepted ? 'state-done' : ($needsRetry ? 'state-retry' : 'state-open');
       $stateLabel = $accepted ? 'Принято' : ($needsRetry ? 'Повторить' : 'Открыто');
-      $text = $payload['text_html'] ?? $payload['text'] ?? $payload['question'] ?? $payload['expression'] ?? 'Задача';
+      // `html` — условие из банка ФИПИ (задачи, выбранные по теме); без него у ученика
+      // вместо задачи оставалось только слово «Задача».
+      $text = $payload['text_html'] ?? $payload['text'] ?? $payload['html'] ?? $payload['question'] ?? $payload['expression'] ?? 'Задача';
       $svg = $payload['svg'] ?? null;
       $image = $payload['image'] ?? null;
       $hasInlineSvg = is_string($svg) && str_contains($svg, '<svg');
@@ -157,18 +160,21 @@
 
       @if(!$accepted)
         <form class="task-form" method="POST" action="{{ route('pwa.student.homework.topic.submit', [$assignment, $task]) }}" enctype="multipart/form-data"
-              x-data="{ hasFile: false }" @submit="onTaskFormSubmit($event, $data)">
+              x-data="{ hasFile: false, preparing: false, busy: false }" @submit="onTaskFormSubmit($event, $data)">
           @csrf
-          <input class="task-input" type="text" name="answer" placeholder="Ответ" value="{{ old('answer') }}" required>
+          {{-- Ответ возвращаем только той задаче, из которой пришла ошибка. --}}
+          <input class="task-input" type="text" name="answer" placeholder="Ответ" required
+                 value="{{ (int) session('answer_task_id') === (int) $task->id ? old('answer') : '' }}">
           <div class="photo-slot">
             <label class="photo-label" :class="hasFile && 'has-file'">
               <span class="photo-label-icon">📷</span>
-              <span x-text="hasFile ? 'Фото решения прикреплено' : 'Прикрепить фото решения'"></span>
-              <input type="file" name="solution_photo" accept="image/*" capture="environment"
-                     @change="hasFile = $event.target.files && $event.target.files.length > 0">
+              <span x-text="preparing ? 'Готовим фото…' : (hasFile ? 'Фото решения прикреплено' : 'Прикрепить фото решения')"></span>
+              <input type="file" name="solution_photo" accept="image/*"
+                     @change="pickPhoto($event, $data)">
             </label>
           </div>
-          <button class="submit-btn" type="submit">{{ $needsRetry ? 'Отправить вторую попытку' : 'Отправить' }}</button>
+          <button class="submit-btn" type="submit" :disabled="busy || preparing"
+                  x-text="busy ? 'Отправляем…' : '{{ $needsRetry ? 'Отправить вторую попытку' : 'Отправить' }}'"></button>
         </form>
       @endif
     </div>
@@ -189,14 +195,98 @@
 
 @push('scripts')
 <script>
+// Фото тетради с телефона весит 3–20 МБ: на мобильном интернете такая отправка
+// долгая и часто рвётся. Поэтому перед отправкой ужимаем снимок в браузере до
+// ~1600px/JPEG. Если сжатие невозможно (например, HEIC, который браузер не умеет
+// декодировать) — отправляем оригинал, сервер его тоже принимает.
+const HW_PHOTO_MAX_SIDE = 1600;
+const HW_PHOTO_SKIP_BELOW = 900 * 1024;
+
 function hwTopicPractice() {
   return {
     showPhotoModal: false,
+
+    async pickPhoto(event, scope) {
+      const input = event.target;
+      const file = input.files && input.files[0];
+      scope.hasFile = !!file;
+
+      if (!file) return;
+
+      scope.preparing = true;
+      try {
+        const compressed = await this.compressPhoto(file);
+        if (compressed !== file && typeof DataTransfer !== 'undefined') {
+          const dt = new DataTransfer();
+          dt.items.add(compressed);
+          input.files = dt.files;
+        }
+      } catch (e) {
+        // остаётся оригинальный файл
+      } finally {
+        scope.preparing = false;
+        scope.hasFile = !!(input.files && input.files.length);
+      }
+    },
+
+    async compressPhoto(file) {
+      if (!file.type.startsWith('image/') || file.size <= HW_PHOTO_SKIP_BELOW) return file;
+
+      const source = await this.decodeImage(file);
+      if (!source) return file;
+
+      const scale = Math.min(1, HW_PHOTO_MAX_SIDE / Math.max(source.width, source.height));
+      const width = Math.round(source.width * scale);
+      const height = Math.round(source.height * scale);
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      canvas.getContext('2d').drawImage(source, 0, 0, width, height);
+
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.82));
+      if (!blob || blob.size >= file.size) return file;
+
+      const base = file.name.replace(/\.[^.]+$/, '') || 'solution';
+      return new File([blob], base + '.jpg', { type: 'image/jpeg' });
+    },
+
+    async decodeImage(file) {
+      if (window.createImageBitmap) {
+        try {
+          return await createImageBitmap(file, { imageOrientation: 'from-image' });
+        } catch (e) {
+          // Safari/старые движки — падаем на <img>
+        }
+      }
+
+      const url = URL.createObjectURL(file);
+      try {
+        return await new Promise((resolve, reject) => {
+          const img = new Image();
+          img.onload = () => resolve(img);
+          img.onerror = reject;
+          img.src = url;
+        });
+      } catch (e) {
+        return null;
+      } finally {
+        URL.revokeObjectURL(url);
+      }
+    },
+
     onTaskFormSubmit(event, scope) {
+      if (scope.preparing) {
+        event.preventDefault();
+        return;
+      }
       if (!scope.hasFile) {
         event.preventDefault();
         this.showPhotoModal = true;
+        return;
       }
+      // Отправка большого фото занимает секунды — блокируем повторные тапы.
+      scope.busy = true;
     },
   };
 }

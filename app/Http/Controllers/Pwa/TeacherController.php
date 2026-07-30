@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Pwa;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\MiniAppHelpers;
 use App\Models\HomeworkAssignment;
+use App\Models\HomeworkTopicTaskSubmission;
 use App\Models\LessonSession;
 use App\Models\OgeAttempt;
 use App\Models\OgeAttemptScoring;
@@ -22,6 +23,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class TeacherController extends Controller
 {
@@ -661,6 +663,63 @@ class TeacherController extends Controller
         }
 
         return back()->with('success', $message);
+    }
+
+    /**
+     * Проверка ответов фото-практики: ответы ученика и фото его решения.
+     */
+    public function homeworkSubmissions(Request $request, HomeworkAssignment $assignment)
+    {
+        $user = $request->user();
+        $assignment->load(['homework.topicTasks', 'topicTaskSubmissions', 'student:id,name']);
+
+        abort_unless($assignment->homework !== null, 404);
+        abort_unless($this->canReviewHomework($user, $assignment), 403);
+        abort_unless($assignment->homework->homework_type === 'topic_photo_practice', 404);
+
+        return view('pwa.teacher.homework-submissions', [
+            'user' => $user,
+            'assignment' => $assignment,
+            'homework' => $assignment->homework,
+            'submissions' => $assignment->topicTaskSubmissions->keyBy('homework_topic_task_id'),
+        ]);
+    }
+
+    /**
+     * Отдаёт фото решения ученика.
+     *
+     * Через `/storage/...` фото недоступны (на хостинге public/storage — не симлинк),
+     * да и тетради учеников не должны лежать по угадываемым публичным ссылкам.
+     */
+    public function homeworkSolutionPhoto(Request $request, HomeworkTopicTaskSubmission $submission)
+    {
+        $user = $request->user();
+        $submission->load('assignment.homework');
+
+        $assignment = $submission->assignment;
+        abort_unless($assignment && $assignment->homework, 404);
+        abort_unless($this->canReviewHomework($user, $assignment), 403);
+
+        $path = (string) $submission->solution_photo_path;
+        abort_if($path === '' || !Storage::disk('public')->exists($path), 404);
+
+        return response()->file(Storage::disk('public')->path($path));
+    }
+
+    private function canReviewHomework(User $user, HomeworkAssignment $assignment): bool
+    {
+        if ($user->isAdmin()) {
+            return true;
+        }
+
+        if ((int) $assignment->homework->teacher_id === (int) $user->id) {
+            return true;
+        }
+
+        // ДЗ мог выдать другой учитель того же ученика (подмена/замещение).
+        return TeacherStudent::where('teacher_id', $user->id)
+            ->where('student_id', $assignment->student_id)
+            ->exists();
     }
 
     /**

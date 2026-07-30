@@ -30,6 +30,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
@@ -1362,10 +1363,33 @@ class StudentController extends Controller
         abort_unless($assignment->homework?->homework_type === 'topic_photo_practice', 404);
         abort_unless((int) $homeworkTask->homework_id === (int) $assignment->homework_id, 404);
 
-        $validated = $request->validate([
+        // Фото тетради с телефона — это 3–20 МБ (браузер ужимает его перед отправкой,
+        // но на старых устройствах сжатие может не сработать). Лимит держим на уровне
+        // того, что реально пропускает хостинг, иначе ученик просто не может сдать ДЗ.
+        // HEIC/HEIF — формат камеры iPhone, правило `image` его не пропускает.
+        $validator = Validator::make($request->all(), [
             'answer' => 'required|string|max:255',
-            'solution_photo' => 'required|image|max:5120',
+            'solution_photo' => 'required|file|max:20480|mimes:jpg,jpeg,png,webp,heic,heif,gif,bmp',
+        ], [
+            'answer.required' => 'Впиши ответ.',
+            'answer.max' => 'Ответ слишком длинный.',
+            'solution_photo.required' => 'Прикрепи фото решения.',
+            'solution_photo.max' => 'Фото слишком тяжёлое (больше 20 МБ). Сфотографируй ещё раз или уменьши качество съёмки.',
+            'solution_photo.mimes' => 'Нужно фото (jpg, png, heic или webp), а не другой файл.',
+            'solution_photo.file' => 'Не получилось загрузить фото. Попробуй ещё раз.',
         ]);
+
+        if ($validator->fails()) {
+            // Ответ и id задачи возвращаем на страницу, чтобы ученик не вбивал его заново,
+            // а плашка с ошибкой была видна именно у своей задачи.
+            return back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('answer_task_id', $homeworkTask->id)
+                ->with('error', "Задача {$homeworkTask->task_order}: " . $validator->errors()->first());
+        }
+
+        $validated = $validator->validated();
 
         $submission = HomeworkTopicTaskSubmission::firstOrNew([
             'homework_assignment_id' => $assignment->id,
@@ -1378,7 +1402,23 @@ class StudentController extends Controller
 
         $answer = trim((string) $validated['answer']);
         $attemptsCount = min(((int) $submission->attempts_count) + 1, 2);
-        $path = $request->file('solution_photo')->store("homework_solutions/{$assignment->id}", 'public');
+
+        try {
+            $path = $request->file('solution_photo')->store("homework_solutions/{$assignment->id}", 'public');
+        } catch (\Throwable $e) {
+            // Иначе ученик видит белый экран 500 и не понимает, что попытка не сохранилась.
+            Log::error('Homework photo store failed', [
+                'assignment' => $assignment->id,
+                'task' => $homeworkTask->id,
+                'error' => $e->getMessage(),
+            ]);
+
+            return back()
+                ->withInput()
+                ->with('answer_task_id', $homeworkTask->id)
+                ->with('error', "Задача {$homeworkTask->task_order}: не удалось сохранить фото. Попробуй отправить ещё раз — попытка не потрачена.");
+        }
+
         $isCorrect = $this->homeworkAnswerMatches($homeworkTask->correct_answer, $answer);
 
         $submission->attempts_count = $attemptsCount;
@@ -1400,10 +1440,12 @@ class StudentController extends Controller
         $this->refreshTopicHomeworkProgress($assignment);
 
         if (!$isCorrect && $attemptsCount === 1) {
-            return back()->with('error', 'Ответ не совпал с правильным. Попробуй ещё раз, фото решения нужно прикрепить снова.');
+            return back()->with('error', "Задача {$homeworkTask->task_order}: ответ не совпал с правильным. Попробуй ещё раз, фото решения нужно прикрепить снова.");
         }
 
-        return back()->with('success', $isCorrect ? 'Задача принята: ответ верный.' : 'Вторая попытка принята. Учитель посмотрит решение по фото.');
+        return back()->with('success', $isCorrect
+            ? "Задача {$homeworkTask->task_order} принята: ответ верный."
+            : "Задача {$homeworkTask->task_order}: вторая попытка принята. Учитель посмотрит решение по фото.");
     }
 
     private function homeworkAnswerMatches(?string $correctAnswer, string $answer): bool
