@@ -124,6 +124,8 @@ homeworks
 | GET | `/homework` | `TeacherController::homework` — список ДЗ + назначения |
 | GET | `/homework/topic-tasks/{topicNumber}` | `TeacherController::topicTasks` — JSON: задачи топика для picker'а |
 | POST | `/homework/assign` | `TeacherController::assignHomework` — создание ДЗ + назначения |
+| GET | `/homework/assignment/{assignment}` | `TeacherController::homeworkSubmissions` — ответы ученика + фото решений |
+| GET | `/homework/submission/{submission}/photo` | `TeacherController::homeworkSolutionPhoto` — отдаёт фото решения (с проверкой доступа) |
 
 ### Student PWA (`student.palomatika.ru`)
 | Method | Path | Controller |
@@ -138,6 +140,7 @@ homeworks
 ## Views
 
 - `resources/views/pwa/teacher/homework.blade.php` — учительский экран ДЗ
+- `resources/views/pwa/teacher/homework-submissions.blade.php` — проверка: ответы ученика по попыткам + фото решения
 - `resources/views/pwa/student/student-homework.blade.php` — список ДЗ ученика
 - `resources/views/pwa/student/homework-topic-practice.blade.php` — экран решения photo-practice
 
@@ -150,7 +153,9 @@ homeworks
 5. **Ученик открывает ДЗ** (`showTopicHomework`) — assignment переходит в `started`
 6. **Ученик отправляет ответ + фото** (`submitTopicHomeworkTask`):
    - Ответ нормализуется (lowercase, whitespace removed) и сравнивается с `correct_answer`
+   - Фото: браузер ужимает снимок до ~1600px/JPEG перед отправкой (см. `hwTopicPractice()` во вью); сервер принимает до 20 МБ, форматы jpg/png/webp/heic/heif/gif/bmp — **HEIC обязателен, это формат камеры iPhone**
    - Фото сохраняется в `storage/app/public/homework_solutions/{assignment_id}/`
+   - При ошибке валидации ответ и `answer_task_id` возвращаются на страницу (плашка по-русски, попытка не тратится)
    - Если ответ верный → `is_correct=true`, `accepted_at=now()`
    - Если неверный, попытка #1 → можно попробовать ещё раз (фото нужно прикреплять снова)
    - На попытке #2 (даже если неверно) → `accepted_at=now()` (учитель проверяет по фото)
@@ -176,22 +181,25 @@ homeworks
 - **TeacherStudent** — проверка что ученик привязан к учителю (`linkedStudentIds`)
 - **Evrium schedule API** — на teacher-странице ДЗ показывается расписание уроков с разбивкой по «текущим/прошлым» ученикам (см. `collectTeacherScheduleData`)
 - **`StudentExamAccessService`** — определяет какой экзамен видит ученик (oge/vpr/ege) — влияет на mini-variant homework
-- **storage public disk** — фото решений хранятся в `homework_solutions/{assignment_id}/`
+- **storage public disk** — фото решений хранятся в `homework_solutions/{assignment_id}/`. ⚠️ На проде `public/storage` — **не симлинк**, а обычная папка-копия, поэтому по `/storage/...` фото отдаётся 404. Фото учителю отдаёт `homeworkSolutionPhoto` через `response()->file()` с проверкой прав — публичных ссылок на тетради учеников нет и быть не должно.
 
 ## Тесты
 
 - `tests/Feature/Pwa/PwaHomeworkPhotoPracticeTest.php` — feature-тесты photo-practice flow
+- `tests/Feature/HomeworkPhotoSubmitTest.php` — сдача фото (тяжёлый снимок с телефона, HEIC, отказ не-картинки, экран учителя и доступ к фото)
 
 ## Известные неровности
 
 - **Дублирование типов:** ENUM содержит и legacy-значения (`specific_tasks`, `topic_random`, `weak_skills`, `topic_practice`) от старой пазловой схемы. Сами таблицы дропнуты в #44/#46, но ENUM остался — стоит почистить отдельной миграцией.
 - **`homework.homework_type` vs `assignHomework` request type** — UI шлёт `mini_variant`, а в DB пишется `full_variant`. Это маппинг внутри контроллера — стоит проверять при изменениях.
 - **`tasks_count`** в `homeworks` денормализован: для photo-practice = количество задач, для mini-variant = nullable (берётся из варианта).
-- **`accepted_at`** ставится после 2-й попытки даже если ответ неверный — учитель должен проверить по фото вручную, но **UI учителя для модерации сабмишнов пока не реализован** (или не нашёл — стоит свериться при работе).
+- **`accepted_at`** ставится после 2-й попытки даже если ответ неверный — учитель проверяет по фото на экране `/homework/assignment/{assignment}` (с 2026-07-30). Отдельной «модерации» (пересдача/комментарий учителя) по-прежнему нет.
+- **Вторая попытка перезаписывает `solution_photo_path`** — фото первой попытки остаётся в storage, но в БД теряется: учитель видит только последнее. Колонка одна; если нужны оба фото — потребуется миграция.
+- **`task_payload` из банка ФИПИ хранит условие в `html`**, из curated-банка — в `text`. Вью читают цепочку `text_html ?? text ?? html ?? question ?? expression` — при добавлении новых банков сверяться с ней, иначе ученик увидит только слово «Задача» (так и было до 2026-07-30).
 
 ## При работе
 
 - **Меняешь миграции homework** — учитывай что есть 3 миграции в порядке: `2026_01_02_000006`, `2026_03_12_100100`, `2026_04_23_000001`. Не ломай порядок.
 - **Меняешь типы (ENUM)** — нужна новая миграция с `DB::statement("ALTER TABLE homeworks MODIFY homework_type ENUM(...)")` (см. `2026_04_23_000001`). SQLite-ветка пропускается.
-- **Тестируешь UI photo-practice** — нужен учитель + ученик + связь `teacher_students`. Фото можно подставлять любое (validation: image, max 5MB).
+- **Тестируешь UI photo-practice** — нужен учитель + ученик + связь `teacher_students`. Фото любое (validation: `file|max:20480|mimes:jpg,jpeg,png,webp,heic,heif,gif,bmp`). Ученику нужны `onboarding_completed_at` и `telegram_chat_id`, иначе middleware уводит с страницы ДЗ.
 - **На dev-среде (этот сервер)** работаем без push в прод — пользователь явно сказал что фича разрабатывается локально перед деплоем.

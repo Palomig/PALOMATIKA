@@ -378,9 +378,13 @@
       <div class="hw-title">{{ $hw->title }}</div>
       <div class="hw-meta">{{ $hw->assigned_at?->format('d.m.Y H:i') }}</div>
       @foreach($hw->assignments as $a)
-        <div style="margin-top: 4px; font-size: 12px; color: var(--text);">
+        <div style="margin-top: 4px; font-size: 12px; color: var(--text); display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
           {{ $a->student?->name ?? '?' }}
           <span class="hw-status-badge {{ 'badge-' . $a->status }}">{{ $a->status }}</span>
+          @if($hw->homework_type === 'topic_photo_practice')
+            <a href="{{ route('pwa.teacher.homework.submissions', $a) }}"
+               style="color: var(--accent); font-weight: 800; text-decoration: none;">решения →</a>
+          @endif
         </div>
       @endforeach
     </div>
