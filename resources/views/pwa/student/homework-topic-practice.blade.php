@@ -60,6 +60,23 @@
   .photo-label input { display: none; }
   .photo-label-icon { font-size: 18px; }
 
+  .page-list { display: grid; gap: 6px; }
+  .page-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 10px; border-radius: 9px;
+    background: var(--surface2); border: 1px solid var(--border);
+    font-size: 12px; font-weight: 700; color: var(--text);
+  }
+  .page-num { color: var(--muted); white-space: nowrap; }
+  .page-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .page-state { color: var(--muted); font-size: 11px; white-space: nowrap; }
+  .page-drop {
+    border: none; background: none; color: var(--muted);
+    font-size: 14px; cursor: pointer; padding: 0 2px;
+  }
+  .page-drop:active { opacity: .6; }
+  .photo-hint { font-size: 11px; color: var(--muted); font-weight: 700; }
+
   .hw-modal-overlay {
     position: fixed; inset: 0; z-index: 250;
     background: rgba(0,0,0,.6); backdrop-filter: blur(4px);
@@ -160,23 +177,38 @@
 
       @if(!$accepted)
         <form class="task-form" method="POST" action="{{ route('pwa.student.homework.topic.submit', [$assignment, $task]) }}" enctype="multipart/form-data"
-              x-data="{ hasFile: false, preparing: false, busy: false, photoId: '', uploaded: false,
-                        ticketUrl: '{{ route('pwa.student.homework.topic.photo-ticket', [$assignment, $task]) }}' }"
+              x-data="taskPhotos('{{ route('pwa.student.homework.topic.photo-ticket', [$assignment, $task]) }}')"
               @submit="onTaskFormSubmit($event, $data)">
           @csrf
           {{-- Ответ возвращаем только той задаче, из которой пришла ошибка. --}}
           <input class="task-input" type="text" name="answer" placeholder="Ответ" required
                  value="{{ (int) session('answer_task_id') === (int) $task->id ? old('answer') : '' }}">
-          {{-- Заполняется, если фото уже уехало в хранилище: тогда файл на сервер не отправляем. --}}
-          <input type="hidden" name="photo_id" :value="photoId">
+          {{-- Сюда JS складывает id уже загруженных страниц; тогда файлы на сервер не идут. --}}
+          <div x-ref="photoIds" hidden></div>
+
+          <template x-if="pages.length">
+            <div class="page-list">
+              <template x-for="(page, index) in pages" :key="page.key">
+                <div class="page-row">
+                  <span class="page-num" x-text="'Стр. ' + (index + 1)"></span>
+                  <span class="page-name" x-text="page.name"></span>
+                  <span class="page-state" x-text="pageState(page)"></span>
+                  <button type="button" class="page-drop" @click="removePage(index)" aria-label="Убрать страницу">✕</button>
+                </div>
+              </template>
+            </div>
+          </template>
+
           <div class="photo-slot">
-            <label class="photo-label" :class="hasFile && 'has-file'">
+            <label class="photo-label" :class="pages.length && 'has-file'">
               <span class="photo-label-icon">📷</span>
-              <span x-text="photoLabel($data)"></span>
-              <input type="file" name="solution_photo" accept="image/*"
-                     @change="pickPhoto($event, $data)">
+              <span x-text="photoLabel()"></span>
+              <input type="file" name="solution_photos[]" accept="image/*" multiple
+                     @change="pickPhotos($event)">
             </label>
           </div>
+          <div class="photo-hint" x-text="hintText()"></div>
+
           <button class="submit-btn" type="submit" :disabled="busy || preparing"
                   x-text="busy ? 'Отправляем…' : '{{ $needsRetry ? 'Отправить вторую попытку' : 'Отправить' }}'"></button>
         </form>
@@ -201,67 +233,132 @@
 <script>
 // Фото тетради с телефона весит 3–20 МБ: на мобильном интернете такая отправка
 // долгая и часто рвётся. Поэтому перед отправкой ужимаем снимок в браузере до
-// ~1600px/JPEG. Если сжатие невозможно (например, HEIC, который браузер не умеет
-// декодировать) — отправляем оригинал, сервер его тоже принимает.
+// ~1600px/JPEG и сразу увозим в хранилище. Если сжатие невозможно (например,
+// HEIC, который браузер не умеет декодировать) — отправляем оригинал,
+// сервер его тоже принимает.
 const HW_PHOTO_MAX_SIDE = 1600;
 const HW_PHOTO_SKIP_BELOW = 900 * 1024;
+const HW_PHOTO_MAX_PAGES = {{ \App\Models\HomeworkSolutionPhoto::MAX_PER_ATTEMPT }};
 
-function hwTopicPractice() {
+/**
+ * Страницы решения одной задачи. Каждая страница — либо уже загруженная в
+ * хранилище (есть remoteId), либо файл, который уйдёт на сервер обычной
+ * отправкой. Смешивать нельзя: если хоть одна страница не загрузилась,
+ * отправляем файлами всё — так учитель точно увидит решение целиком.
+ */
+function taskPhotos(ticketUrl) {
   return {
-    showPhotoModal: false,
+    ticketUrl,
+    pages: [],
+    preparing: false,
+    busy: false,
+    nextKey: 1,
 
-    photoLabel(scope) {
-      if (scope.preparing) return 'Загружаем фото…';
-      if (scope.uploaded) return 'Фото решения загружено';
-      if (scope.hasFile) return 'Фото решения прикреплено';
-      return 'Прикрепить фото решения';
+    get allUploaded() {
+      return this.pages.length > 0 && this.pages.every(p => !!p.remoteId);
     },
 
-    async pickPhoto(event, scope) {
+    photoLabel() {
+      if (this.preparing) return 'Загружаем страницы…';
+      if (!this.pages.length) return 'Прикрепить фото решения';
+      if (this.pages.length >= HW_PHOTO_MAX_PAGES) return 'Больше страниц не влезет';
+      return 'Добавить ещё страницу';
+    },
+
+    hintText() {
+      if (!this.pages.length) {
+        return 'Если решение на нескольких страницах — прикрепи их все, до ' + HW_PHOTO_MAX_PAGES + '.';
+      }
+      const left = HW_PHOTO_MAX_PAGES - this.pages.length;
+      const base = 'Страниц: ' + this.pages.length + (left > 0 ? ', можно добавить ещё ' + left : ', это максимум');
+      return this.allUploaded ? base + '. Все загружены.' : base + '.';
+    },
+
+    pageState(page) {
+      if (page.uploading) return 'загружаем…';
+      return page.remoteId ? 'загружено' : 'уйдёт с формой';
+    },
+
+    async pickPhotos(event) {
       const input = event.target;
-      const file = input.files && input.files[0];
+      const picked = Array.from(input.files || []);
+      // Инпут — только способ выбрать: файлы держим у себя, иначе повторный
+      // выбор затирает уже набранные страницы.
+      input.value = '';
 
-      scope.photoId = '';
-      scope.uploaded = false;
-      scope.hasFile = !!file;
+      if (!picked.length) return;
 
-      if (!file) return;
+      const room = HW_PHOTO_MAX_PAGES - this.pages.length;
+      if (room <= 0) return;
 
-      scope.preparing = true;
+      this.preparing = true;
       try {
-        let prepared = file;
-        try {
-          prepared = await this.compressPhoto(file);
-        } catch (e) {
-          prepared = file;
-        }
+        for (const file of picked.slice(0, room)) {
+          const page = {
+            key: this.nextKey++,
+            name: file.name || 'страница',
+            file,
+            remoteId: null,
+            uploading: true,
+          };
+          this.pages.push(page);
 
-        if (prepared !== file && typeof DataTransfer !== 'undefined') {
-          const dt = new DataTransfer();
-          dt.items.add(prepared);
-          input.files = dt.files;
-        }
-
-        // Пробуем сразу увезти фото в хранилище. Не получилось — не беда:
-        // файл остаётся в форме и уйдёт на сервер обычной отправкой.
-        const photoId = await this.uploadToStore(prepared, scope);
-        if (photoId) {
-          scope.photoId = photoId;
-          scope.uploaded = true;
-          if (typeof DataTransfer !== 'undefined') {
-            input.files = new DataTransfer().files;   // не гнать те же байты второй раз
+          try {
+            page.file = await this.compressPhoto(file);
+          } catch (e) {
+            page.file = file;
           }
+
+          page.remoteId = await this.uploadToStore(page.file);
+          page.uploading = false;
         }
       } finally {
-        scope.preparing = false;
-        scope.hasFile = scope.uploaded || !!(input.files && input.files.length);
+        this.preparing = false;
+        this.syncForm();
+      }
+    },
+
+    removePage(index) {
+      this.pages.splice(index, 1);
+      this.syncForm();
+    },
+
+    /**
+     * Приводит форму в соответствие набранным страницам: либо скрытые photo_ids
+     * (всё уже в хранилище), либо файлы в инпуте (фолбэк).
+     */
+    syncForm() {
+      const holder = this.$refs.photoIds;
+      const input = this.$el.querySelector('input[type=file]');
+      holder.replaceChildren();
+
+      if (this.allUploaded) {
+        for (const page of this.pages) {
+          const hidden = document.createElement('input');
+          hidden.type = 'hidden';
+          hidden.name = 'photo_ids[]';
+          hidden.value = page.remoteId;
+          holder.appendChild(hidden);
+        }
+        if (typeof DataTransfer !== 'undefined') {
+          input.files = new DataTransfer().files;   // не гнать те же байты второй раз
+        }
+        return;
+      }
+
+      if (typeof DataTransfer !== 'undefined') {
+        const dt = new DataTransfer();
+        for (const page of this.pages) {
+          if (page.file) dt.items.add(page.file);
+        }
+        input.files = dt.files;
       }
     },
 
     /** @returns {Promise<string|null>} photo_id или null, если нужно уйти на фолбэк */
-    async uploadToStore(file, scope) {
+    async uploadToStore(file) {
       try {
-        const ticketResponse = await window.fetchPost(scope.ticketUrl);
+        const ticketResponse = await window.fetchPost(this.ticketUrl);
         if (!ticketResponse.ok) return null;
 
         const ticket = await ticketResponse.json();
@@ -302,7 +399,7 @@ function hwTopicPractice() {
       const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.82));
       if (!blob || blob.size >= file.size) return file;
 
-      const base = file.name.replace(/\.[^.]+$/, '') || 'solution';
+      const base = (file.name || 'solution').replace(/\.[^.]+$/, '') || 'solution';
       return new File([blob], base + '.jpg', { type: 'image/jpeg' });
     },
 
@@ -329,18 +426,24 @@ function hwTopicPractice() {
         URL.revokeObjectURL(url);
       }
     },
+  };
+}
+
+function hwTopicPractice() {
+  return {
+    showPhotoModal: false,
 
     onTaskFormSubmit(event, scope) {
       if (scope.preparing) {
         event.preventDefault();
         return;
       }
-      if (!scope.hasFile) {
+      if (!scope.pages.length) {
         event.preventDefault();
         this.showPhotoModal = true;
         return;
       }
-      // Отправка большого фото занимает секунды — блокируем повторные тапы.
+      // Отправка занимает секунды — блокируем повторные тапы.
       scope.busy = true;
     },
   };

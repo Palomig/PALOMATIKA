@@ -2,6 +2,8 @@
 @section('title', 'Домашка — palomatika')
 
 @push('styles')
+  .hw-item.is-debt { border-color: rgba(234,179,8,.45); }
+  .hw-debt { color: #fcd34d; font-weight: 800; }
   .topbar {
     display: flex; align-items: center; justify-content: space-between;
     margin-bottom: 12px;
@@ -68,20 +70,26 @@
           'started' => 'Начато',
           default => 'Назначено',
       };
+      // Долг — работа, которую не доделали к моменту выдачи новой. Висит, пока не сдана.
+      $isDebt = !empty($hw['is_debt']);
     @endphp
     @if($variantHash)
-    <div class="hw-item" style="--i:{{ $i }}; cursor:pointer;" onclick="startHomeworkVariant('{{ $variantHash }}', this)">
+    <div class="hw-item {{ $isDebt ? 'is-debt' : '' }}" style="--i:{{ $i }}; cursor:pointer;" onclick="startHomeworkVariant('{{ $variantHash }}', this)">
       <div class="hw-left">
         <div class="hw-label">{{ $hw['title'] }}</div>
-        <div class="hw-meta">{{ $hw['assigned_at']?->format('d.m.Y') }}</div>
+        <div class="hw-meta">
+          {{ $hw['assigned_at']?->format('d.m.Y') }}@if($isDebt) · <span class="hw-debt">долг</span>@endif
+        </div>
       </div>
       <div class="hw-status status-{{ $hw['status'] }}">{{ $statusLabel }}</div>
     </div>
     @else
-    <a href="{{ $href }}" class="hw-item" style="--i:{{ $i }}">
+    <a href="{{ $href }}" class="hw-item {{ $isDebt ? 'is-debt' : '' }}" style="--i:{{ $i }}">
       <div class="hw-left">
         <div class="hw-label">{{ $hw['title'] }}</div>
-        <div class="hw-meta">{{ $hw['assigned_at']?->format('d.m.Y') }}</div>
+        <div class="hw-meta">
+          {{ $hw['assigned_at']?->format('d.m.Y') }}@if($isDebt) · <span class="hw-debt">долг</span>@endif
+        </div>
       </div>
       <div class="hw-status status-{{ $hw['status'] }}">{{ $statusLabel }}</div>
     </a>

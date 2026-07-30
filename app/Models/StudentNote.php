@@ -11,6 +11,7 @@ class StudentNote extends Model
         'student_id',
         'teacher_id',
         'lesson_session_id',
+        'homework_assignment_id',
         'task_ref',
         'topic_tag',
         'kind',
@@ -37,5 +38,10 @@ class StudentNote extends Model
     public function session(): BelongsTo
     {
         return $this->belongsTo(LessonSession::class, 'lesson_session_id');
+    }
+
+    public function homeworkAssignment(): BelongsTo
+    {
+        return $this->belongsTo(HomeworkAssignment::class, 'homework_assignment_id');
     }
 }
