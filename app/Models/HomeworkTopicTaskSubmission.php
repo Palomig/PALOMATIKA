@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class HomeworkTopicTaskSubmission extends Model
 {
@@ -32,5 +33,13 @@ class HomeworkTopicTaskSubmission extends Model
     public function homeworkTopicTask(): BelongsTo
     {
         return $this->belongsTo(HomeworkTopicTask::class);
+    }
+
+    /** Страницы решения по всем попыткам. */
+    public function photos(): HasMany
+    {
+        return $this->hasMany(HomeworkSolutionPhoto::class, 'submission_id')
+            ->orderBy('attempt_no')
+            ->orderBy('position');
     }
 }

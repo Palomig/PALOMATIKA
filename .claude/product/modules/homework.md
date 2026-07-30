@@ -93,12 +93,18 @@ homeworks
         ├── task_payload JSON      ← снимок задачи на момент назначения
         └── correct_answer         ← денормализованный эталон
   └── homework_assignments (FK homework_id)
+        ├── reviewed_at / reviewed_by   ← «проверено» учителем
+        ├── debt_since                  ← работа стала долгом
         └── homework_topic_task_submissions
               ├── attempts_count (0..2)
               ├── first_answer / second_answer
-              ├── solution_photo_path
               ├── is_correct
-              └── accepted_at      ← null = не принято
+              ├── accepted_at      ← null = не принято
+              └── homework_solution_photos   ← страницы решения, до 10 на попытку
+                    ├── attempt_no (1..2) / position
+                    └── remote_id (hw-photos) ИЛИ path (фолбэк на хостинге)
+
+student_notes.homework_assignment_id   ← заметки учителя по этой домашке
 ```
 
 **Почему `task_payload` денормализованный** — чтобы ДЗ не сломалось если задача в JSON-банке поменяется/удалится.
@@ -154,13 +160,23 @@ homeworks
 5. **Ученик открывает ДЗ** (`showTopicHomework`) — assignment переходит в `started`
 6. **Ученик отправляет ответ + фото** (`submitTopicHomeworkTask`):
    - Ответ нормализуется (lowercase, whitespace removed) и сравнивается с `correct_answer`
-   - Фото: браузер ужимает снимок до ~1600px/JPEG и **грузит его напрямую в сервис hw-photos на VPS** (см. `hwTopicPractice()` во вью). В форму уходит только `photo_id`, файл через хостинг не идёт
-   - Фолбэк (сервис недоступен / нет JS): файл приходит в Laravel как раньше и сохраняется в `storage/app/public/homework_solutions/{assignment_id}/`. Принимаем до 20 МБ, форматы jpg/png/webp/heic/heif/gif/bmp — **HEIC обязателен, это формат камеры iPhone**
+   - Решение может занимать несколько страниц: принимаем **до 10 фото на попытку** (`HomeworkSolutionPhoto::MAX_PER_ATTEMPT`)
+   - Фото: браузер ужимает каждый снимок до ~1600px/JPEG и **грузит напрямую в сервис hw-photos на VPS** (см. `taskPhotos()` во вью). В форму уходят только `photo_ids[]`, файлы через хостинг не идут
+   - Фолбэк (сервис недоступен / нет JS): файлы приходят в Laravel как раньше и сохраняются в `storage/app/public/homework_solutions/{assignment_id}/`. Принимаем до 20 МБ каждый, форматы jpg/png/webp/heic/heif/gif/bmp — **HEIC обязателен, это формат камеры iPhone**
+   - Смешанного режима нет: если хоть одна страница не загрузилась в сервис, вся задача уходит файлами — иначе учитель увидит решение кусками
    - При ошибке валидации ответ и `answer_task_id` возвращаются на страницу (плашка по-русски, попытка не тратится)
    - Если ответ верный → `is_correct=true`, `accepted_at=now()`
    - Если неверный, попытка #1 → можно попробовать ещё раз (фото нужно прикреплять снова)
    - На попытке #2 (даже если неверно) → `accepted_at=now()` (учитель проверяет по фото)
-7. **`refreshTopicHomeworkProgress`** обновляет статус assignment (`completed` если все принято)
+7. **`refreshTopicHomeworkProgress`** обновляет статус assignment (`completed` если все принято) и снимает долг, когда работу довели до конца
+
+## Проверка учителем (с 2026-07-30)
+
+Экран `/homework/assignment/{assignment}` — ответы по попыткам, страницы решения плитками (превью `?w=400`, клик — оригинал), заметки.
+
+- **Заметки** пишутся в ту же таблицу `student_notes`, что и заметки с урока (`source='homework'`, `homework_assignment_id`, `task_ref` = «Задача N»), поэтому сразу видны в карточке ученика. Вид заметки выбирается руками (`weakness`/`todo`/`strength`/`general`) — без LLM-классификации, в отличие от чата на уроке.
+- **«Проверено»** — `reviewed_at` + `reviewed_by`, переключается кнопкой.
+- **Долг.** Когда учитель выдаёт ученику новое ДЗ, все его незавершённые работы получают `debt_since` (`TeacherController::carryOverUnfinished`, вызывается из `afterHomeworkAssigned` — единая точка для всех трёх путей выдачи). Долг висит у ученика первым в списке с плашкой, снимается автоматически при выполнении или вручную кнопкой у учителя.
 
 ## Выбор задач — общий drill-down picker
 
@@ -190,6 +206,8 @@ homeworks
 - `tests/Feature/Pwa/PwaHomeworkPhotoPracticeTest.php` — feature-тесты photo-practice flow
 - `tests/Feature/HomeworkPhotoSubmitTest.php` — сдача фото (тяжёлый снимок с телефона, HEIC, отказ не-картинки, экран учителя и доступ к фото)
 - `tests/Feature/HomeworkPhotoStoreTest.php` — внешнее хранилище: тикет, приём `photo_id`, отказ подделки и чужой задачи, фолбэк, подписанные ссылки
+- `tests/Feature/HomeworkMultiPageSubmitTest.php` — многостраничные решения: порядок страниц, лимит 10, сохранность страниц первой попытки, доступ учителя
+- `tests/Feature/HomeworkReviewAndDebtTest.php` — заметки, «проверено», долги (появление, снятие, чужих учеников не задевает)
 - `services/hw-photos/test/smoke.mjs` — сам сервис (15 проверок: загрузка, подписи, миниатюры, отказы). Гоняется по живому сервису: `node test/smoke.mjs [base_url]`
 
 ## Известные неровности
@@ -199,7 +217,7 @@ homeworks
 - **`tasks_count`** в `homeworks` денормализован: для photo-practice = количество задач, для mini-variant = nullable (берётся из варианта).
 - **`accepted_at`** ставится после 2-й попытки даже если ответ неверный — учитель проверяет по фото на экране `/homework/assignment/{assignment}` (с 2026-07-30). Отдельной «модерации» (пересдача/комментарий учителя) по-прежнему нет.
 - **Два хранилища одновременно:** у сабмишна заполнено либо `solution_photo_remote_id` (hw-photos), либо `solution_photo_path` (фолбэк на хостинге). Обратной синхронизации нет — фолбэк-фото так и остаётся на хостинге.
-- **Вторая попытка перезаписывает `solution_photo_path`/`solution_photo_remote_id`** — фото первой попытки остаётся в storage, но в БД теряется: учитель видит только последнее. Колонка одна; если нужны оба фото — потребуется миграция.
+- **Колонки `solution_photo_path` / `solution_photo_remote_id` в сабмишне мертвы** с 2026-07-30 — страницы решения переехали в `homework_solution_photos`. На проде живых сабмишнов не было, бэкфила не делали; колонки стоит снести отдельной миграцией.
 - **`task_payload` из банка ФИПИ хранит условие в `html`**, из curated-банка — в `text`. Вью читают цепочку `text_html ?? text ?? html ?? question ?? expression` — при добавлении новых банков сверяться с ней, иначе ученик увидит только слово «Задача» (так и было до 2026-07-30).
 
 ## При работе

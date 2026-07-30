@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Pwa;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\MiniAppHelpers;
 use App\Models\HomeworkAssignment;
+use App\Models\HomeworkSolutionPhoto;
 use App\Models\HomeworkTopicTaskSubmission;
 use App\Models\LessonSession;
 use App\Models\OgeAttempt;
 use App\Models\OgeAttemptScoring;
 use App\Models\OgeVariant;
+use App\Models\StudentNote;
 use App\Models\TeacherStudent;
 use App\Models\User;
 use App\Services\AuditLogger;
@@ -604,7 +606,7 @@ class TeacherController extends Controller
                 ]);
             }
 
-            $this->notifyNewHomework($homework, $assignments);
+            $this->afterHomeworkAssigned($homework, $assignments);
 
             return back()->with('success', 'ДЗ выдано!');
         }
@@ -651,7 +653,7 @@ class TeacherController extends Controller
                 'status' => 'assigned',
             ]);
             // Мини-вариант у каждого свой, поэтому уведомляем сразу по ученику.
-            $this->notifyNewHomework($homework, [$assignment]);
+            $this->afterHomeworkAssigned($homework, [$assignment]);
             $assignedCount++;
         }
 
@@ -673,50 +675,127 @@ class TeacherController extends Controller
     public function homeworkSubmissions(Request $request, HomeworkAssignment $assignment)
     {
         $user = $request->user();
-        $assignment->load(['homework.topicTasks', 'topicTaskSubmissions', 'student:id,name']);
+        $assignment->load(['homework.topicTasks', 'topicTaskSubmissions.photos', 'student:id,name']);
 
         abort_unless($assignment->homework !== null, 404);
         abort_unless($this->canReviewHomework($user, $assignment), 403);
         abort_unless($assignment->homework->homework_type === 'topic_photo_practice', 404);
+
+        // Заметки об ученике — только свои: чужие записи об этом же ученике не показываем.
+        $notes = StudentNote::where('student_id', $assignment->student_id)
+            ->where('teacher_id', $user->id)
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
+            ->limit(30)
+            ->get();
 
         return view('pwa.teacher.homework-submissions', [
             'user' => $user,
             'assignment' => $assignment,
             'homework' => $assignment->homework,
             'submissions' => $assignment->topicTaskSubmissions->keyBy('homework_topic_task_id'),
+            'notes' => $notes,
         ]);
     }
 
     /**
-     * Отдаёт фото решения ученика — единственная точка доступа к тетрадям.
+     * Отдаёт страницу решения — единственная точка доступа к тетрадям учеников.
      *
-     * Новые фото лежат в сервисе hw-photos на VPS: туда уходит редирект на
-     * короткоживущую подписанную ссылку. Старые (фолбэк-путь) читаются с диска
-     * хостинга — через `/storage/...` они недоступны, там public/storage не симлинк.
+     * Обычно фото лежит в сервисе hw-photos на VPS: туда уходит редирект на
+     * короткоживущую подписанную ссылку. Фолбэк-фото читается с диска хостинга —
+     * через `/storage/...` оно недоступно, там public/storage не симлинк.
      */
-    public function homeworkSolutionPhoto(Request $request, HomeworkTopicTaskSubmission $submission)
+    public function homeworkSolutionPhoto(Request $request, HomeworkSolutionPhoto $photo)
     {
         $user = $request->user();
-        $submission->load('assignment.homework');
+        $photo->load('submission.assignment.homework');
 
-        $assignment = $submission->assignment;
+        $assignment = $photo->submission?->assignment;
         abort_unless($assignment && $assignment->homework, 404);
         abort_unless($this->canReviewHomework($user, $assignment), 403);
 
         $width = in_array((int) $request->query('w'), [400, 800, 1600], true) ? (int) $request->query('w') : null;
-        $remoteId = (string) $submission->solution_photo_remote_id;
 
-        if ($remoteId !== '') {
-            $url = $this->photoStore->readUrl($remoteId, $width);
+        if ($photo->isRemote()) {
+            $url = $this->photoStore->readUrl((string) $photo->remote_id, $width);
             abort_if($url === null, 404);
 
             return redirect()->away($url);
         }
 
-        $path = (string) $submission->solution_photo_path;
+        $path = (string) $photo->path;
         abort_if($path === '' || !Storage::disk('public')->exists($path), 404);
 
         return response()->file(Storage::disk('public')->path($path));
+    }
+
+    /**
+     * Заметка по домашке — та же копилка, что и заметки с урока, поэтому она
+     * сразу видна в карточке ученика.
+     */
+    public function homeworkNote(Request $request, HomeworkAssignment $assignment)
+    {
+        $user = $request->user();
+        $assignment->load('homework');
+        abort_unless($assignment->homework !== null, 404);
+        abort_unless($this->canReviewHomework($user, $assignment), 403);
+
+        $data = $request->validate([
+            'body' => 'required|string|max:2000',
+            'kind' => 'nullable|in:weakness,strength,todo,general',
+            'task_ref' => 'nullable|string|max:120',
+        ]);
+
+        $note = StudentNote::create([
+            'student_id' => $assignment->student_id,
+            'teacher_id' => $user->id,
+            'homework_assignment_id' => $assignment->id,
+            'task_ref' => $data['task_ref'] ?? null,
+            'kind' => $data['kind'] ?? 'weakness',
+            'source' => 'homework',
+            'body' => $data['body'],
+        ]);
+
+        if ($request->expectsJson()) {
+            return response()->json(['note' => $note]);
+        }
+
+        return back()->with('success', 'Заметка сохранена.');
+    }
+
+    /** Отметка «проверено» (и снятие её же). */
+    public function homeworkReviewed(Request $request, HomeworkAssignment $assignment)
+    {
+        $user = $request->user();
+        $assignment->load('homework');
+        abort_unless($assignment->homework !== null, 404);
+        abort_unless($this->canReviewHomework($user, $assignment), 403);
+
+        $reviewed = $assignment->reviewed_at === null;
+
+        $assignment->update([
+            'reviewed_at' => $reviewed ? now() : null,
+            'reviewed_by' => $reviewed ? $user->id : null,
+        ]);
+
+        return back()->with('success', $reviewed ? 'Отмечено как проверенное.' : 'Отметка «проверено» снята.');
+    }
+
+    /**
+     * Снять или вернуть долг вручную: тему прошли/забыли — работа перестаёт
+     * висеть у ученика, хотя так и не сдана.
+     */
+    public function homeworkDebt(Request $request, HomeworkAssignment $assignment)
+    {
+        $user = $request->user();
+        $assignment->load('homework');
+        abort_unless($assignment->homework !== null, 404);
+        abort_unless($this->canReviewHomework($user, $assignment), 403);
+
+        $isDebt = $assignment->debt_since === null;
+        $assignment->update(['debt_since' => $isDebt ? now() : null]);
+
+        return back()->with('success', $isDebt ? 'Работа помечена долгом.' : 'Долг снят.');
     }
 
     private function canReviewHomework(User $user, HomeworkAssignment $assignment): bool
@@ -856,7 +935,7 @@ class TeacherController extends Controller
             ]);
         }
 
-        $this->notifyNewHomework($homework, $assignments);
+        $this->afterHomeworkAssigned($homework, $assignments);
 
         $message = 'ДЗ выдано!';
         if ($skipped > 0) {
@@ -864,6 +943,40 @@ class TeacherController extends Controller
         }
 
         return back()->with('success', $message);
+    }
+
+    /**
+     * Что происходит после выдачи ДЗ: старая несданная работа превращается в долг,
+     * ученикам уходит уведомление.
+     *
+     * @param  array<int, \App\Models\HomeworkAssignment>  $assignments
+     */
+    private function afterHomeworkAssigned(\App\Models\Homework $homework, array $assignments): void
+    {
+        $this->carryOverUnfinished($assignments);
+        $this->notifyNewHomework($homework, $assignments);
+    }
+
+    /**
+     * Незаконченную работу не выбрасываем: ученику выдали новую, а прежняя
+     * остаётся долгом и продолжает висеть в списке, пока он её не сдаст.
+     *
+     * @param  array<int, \App\Models\HomeworkAssignment>  $assignments  только что выданные
+     */
+    private function carryOverUnfinished(array $assignments): void
+    {
+        $studentIds = collect($assignments)->pluck('student_id')->filter()->unique()->values();
+        $freshIds = collect($assignments)->pluck('id')->filter()->values();
+
+        if ($studentIds->isEmpty()) {
+            return;
+        }
+
+        HomeworkAssignment::whereIn('student_id', $studentIds)
+            ->whereNotIn('id', $freshIds)
+            ->where('status', '!=', 'completed')
+            ->whereNull('debt_since')
+            ->update(['debt_since' => now()]);
     }
 
     /**

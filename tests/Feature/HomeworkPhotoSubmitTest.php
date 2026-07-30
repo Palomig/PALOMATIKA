@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Homework;
 use App\Models\HomeworkAssignment;
 use App\Models\HomeworkTopicTask;
+use App\Models\HomeworkSolutionPhoto;
 use App\Models\HomeworkTopicTaskSubmission;
 use App\Models\TeacherStudent;
 use App\Models\User;
@@ -100,7 +101,7 @@ class HomeworkPhotoSubmitTest extends TestCase
         $photo = UploadedFile::fake()->create('IMG_0042.jpg', 8 * 1024, 'image/jpeg');
 
         $this->actingAs($this->student)
-            ->post($this->submitUrl(), ['answer' => '12', 'solution_photo' => $photo])
+            ->post($this->submitUrl(), ['answer' => '12', 'solution_photos' => [$photo]])
             ->assertRedirect()
             ->assertSessionHas('success');
 
@@ -109,7 +110,8 @@ class HomeworkPhotoSubmitTest extends TestCase
         $this->assertSame('12', $submission->first_answer);
         $this->assertTrue($submission->is_correct);
         $this->assertNotNull($submission->accepted_at);
-        Storage::disk('public')->assertExists($submission->solution_photo_path);
+        $this->assertCount(1, $submission->photos);
+        Storage::disk('public')->assertExists($submission->photos->first()->path);
     }
 
     public function test_heic_photo_from_iphone_is_accepted(): void
@@ -117,7 +119,7 @@ class HomeworkPhotoSubmitTest extends TestCase
         $photo = UploadedFile::fake()->create('IMG_0043.heic', 3 * 1024, 'image/heic');
 
         $this->actingAs($this->student)
-            ->post($this->submitUrl(), ['answer' => '12', 'solution_photo' => $photo])
+            ->post($this->submitUrl(), ['answer' => '12', 'solution_photos' => [$photo]])
             ->assertRedirect()
             ->assertSessionHas('success');
 
@@ -129,7 +131,7 @@ class HomeworkPhotoSubmitTest extends TestCase
         $photo = UploadedFile::fake()->create('huge.jpg', 25 * 1024, 'image/jpeg');
 
         $response = $this->actingAs($this->student)
-            ->post($this->submitUrl(), ['answer' => '12', 'solution_photo' => $photo]);
+            ->post($this->submitUrl(), ['answer' => '12', 'solution_photos' => [$photo]]);
 
         $response->assertRedirect()->assertSessionHas('answer_task_id', $this->task->id);
         $this->assertStringContainsString('тяжёлое', session('error'));
@@ -142,7 +144,7 @@ class HomeworkPhotoSubmitTest extends TestCase
         $file = UploadedFile::fake()->create('solution.pdf', 200, 'application/pdf');
 
         $this->actingAs($this->student)
-            ->post($this->submitUrl(), ['answer' => '12', 'solution_photo' => $file])
+            ->post($this->submitUrl(), ['answer' => '12', 'solution_photos' => [$file]])
             ->assertRedirect();
 
         $this->assertNull(HomeworkTopicTaskSubmission::first());
@@ -151,7 +153,7 @@ class HomeworkPhotoSubmitTest extends TestCase
     public function test_teacher_sees_answers_and_photo(): void
     {
         $photo = UploadedFile::fake()->create('IMG_0042.jpg', 6 * 1024, 'image/jpeg');
-        $this->actingAs($this->student)->post($this->submitUrl(), ['answer' => '11', 'solution_photo' => $photo]);
+        $this->actingAs($this->student)->post($this->submitUrl(), ['answer' => '11', 'solution_photos' => [$photo]]);
 
         $submission = HomeworkTopicTaskSubmission::first();
         $this->assertSame('11', $submission->first_answer);
@@ -165,16 +167,16 @@ class HomeworkPhotoSubmitTest extends TestCase
             ->assertSee('Катеты прямоугольного треугольника', false);
 
         $this->actingAs($this->teacher)
-            ->get($base . "/homework/submission/{$submission->id}/photo")
+            ->get($base . '/homework/solution-photo/' . $submission->photos->first()->id)
             ->assertOk();
     }
 
     public function test_other_teacher_cannot_see_photo(): void
     {
         $photo = UploadedFile::fake()->create('IMG_0042.jpg', 1024, 'image/jpeg');
-        $this->actingAs($this->student)->post($this->submitUrl(), ['answer' => '12', 'solution_photo' => $photo]);
+        $this->actingAs($this->student)->post($this->submitUrl(), ['answer' => '12', 'solution_photos' => [$photo]]);
 
-        $submission = HomeworkTopicTaskSubmission::first();
+        $photo = HomeworkSolutionPhoto::first();
         $stranger = User::factory()->create(['role' => 'teacher']);
 
         $base = 'https://teacher.' . config('app.base_domain');
@@ -184,7 +186,7 @@ class HomeworkPhotoSubmitTest extends TestCase
             ->assertForbidden();
 
         $this->actingAs($stranger)
-            ->get($base . "/homework/submission/{$submission->id}/photo")
+            ->get($base . '/homework/solution-photo/' . $photo->id)
             ->assertForbidden();
     }
 }

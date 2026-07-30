@@ -21,6 +21,9 @@ class HomeworkAssignment extends Model
         'completed_at',
         'notified_at',
         'reminded_at',
+        'reviewed_at',
+        'reviewed_by',
+        'debt_since',
     ];
 
     protected $casts = [
@@ -29,6 +32,8 @@ class HomeworkAssignment extends Model
         'created_at' => 'datetime',
         'notified_at' => 'datetime',
         'reminded_at' => 'datetime',
+        'reviewed_at' => 'datetime',
+        'debt_since' => 'datetime',
     ];
 
     public function homework(): BelongsTo
@@ -44,6 +49,18 @@ class HomeworkAssignment extends Model
     public function topicTaskSubmissions(): HasMany
     {
         return $this->hasMany(HomeworkTopicTaskSubmission::class);
+    }
+
+    /** Заметки учителя, написанные по этой домашке (та же копилка, что и с урока). */
+    public function notes(): HasMany
+    {
+        return $this->hasMany(StudentNote::class, 'homework_assignment_id');
+    }
+
+    /** Долг — незавершённая работа, которую не закрыли к моменту выдачи новой. */
+    public function isDebt(): bool
+    {
+        return $this->debt_since !== null && $this->status !== 'completed';
     }
 
     public function getProgressPercentAttribute(): float

@@ -93,6 +93,8 @@
   .badge-assigned { background: rgba(59,130,246,.2); color: #93bbfd; }
   .badge-started { background: rgba(234,179,8,.2); color: #fcd34d; }
   .badge-completed { background: rgba(34,197,94,.2); color: #86efac; }
+  .badge-debt { background: rgba(234,179,8,.2); color: #fcd34d; }
+  .badge-reviewed { background: rgba(34,197,94,.14); color: #86efac; }
 
   .toast {
     position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
@@ -381,6 +383,12 @@
         <div style="margin-top: 4px; font-size: 12px; color: var(--text); display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
           {{ $a->student?->name ?? '?' }}
           <span class="hw-status-badge {{ 'badge-' . $a->status }}">{{ $a->status }}</span>
+          @if($a->isDebt())
+            <span class="hw-status-badge badge-debt">долг</span>
+          @endif
+          @if($a->reviewed_at)
+            <span class="hw-status-badge badge-reviewed">проверено</span>
+          @endif
           @if($hw->homework_type === 'topic_photo_practice')
             <a href="{{ route('pwa.teacher.homework.submissions', $a) }}"
                style="color: var(--accent); font-weight: 800; text-decoration: none;">решения →</a>

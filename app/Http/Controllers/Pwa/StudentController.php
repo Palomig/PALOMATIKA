@@ -11,6 +11,7 @@ use App\Models\OgeVariant;
 use App\Models\StarTransaction;
 use App\Models\TeacherStudent;
 use App\Models\HomeworkAssignment;
+use App\Models\HomeworkSolutionPhoto;
 use App\Models\HomeworkTopicTask;
 use App\Models\HomeworkTopicTaskSubmission;
 use App\Models\User;
@@ -1326,8 +1327,16 @@ class StudentController extends Controller
                 'status' => $a->status,
                 'assigned_at' => $hw->assigned_at,
                 'completed_at' => $a->completed_at,
+                'is_debt' => $a->isDebt(),
+                'reviewed' => $a->reviewed_at !== null,
             ];
         }
+
+        // Долги — наверх: их надо сдать в первую очередь, даже если задали новое.
+        $list = collect($list)
+            ->sortByDesc(fn (array $item) => $item['is_debt'] ? 1 : 0)
+            ->values()
+            ->all();
 
         return view('pwa.student.student-homework', compact('user', 'list'));
     }
@@ -1390,23 +1399,29 @@ class StudentController extends Controller
         abort_unless($assignment->homework?->homework_type === 'topic_photo_practice', 404);
         abort_unless((int) $homeworkTask->homework_id === (int) $assignment->homework_id, 404);
 
-        // Обычный путь: браузер уже загрузил снимок в сервис hw-photos и присылает
-        // только `photo_id`. Фолбэк (сервис недоступен, старый клиент, no-JS) —
-        // файл приходит сюда как раньше: фото тетради с телефона это 3–20 МБ,
-        // лимит держим на уровне того, что реально пропускает хостинг.
+        // Решение может занимать несколько страниц — принимаем до 10 фото на попытку.
+        // Обычный путь: браузер уже загрузил снимки в сервис hw-photos и присылает
+        // только их `photo_ids`. Фолбэк (сервис недоступен, старый клиент, no-JS) —
+        // файлы приходят сюда: фото тетради с телефона это 3–20 МБ, лимит держим
+        // на уровне того, что реально пропускает хостинг.
         // HEIC/HEIF — формат камеры iPhone, правило `image` его не пропускает.
+        $max = HomeworkSolutionPhoto::MAX_PER_ATTEMPT;
         $validator = Validator::make($request->all(), [
             'answer' => 'required|string|max:255',
-            'photo_id' => 'required_without:solution_photo|nullable|string|max:512',
-            'solution_photo' => 'required_without:photo_id|nullable|file|max:20480|mimes:jpg,jpeg,png,webp,heic,heif,gif,bmp',
+            'photo_ids' => "required_without:solution_photos|nullable|array|max:{$max}",
+            'photo_ids.*' => 'string|max:512',
+            'solution_photos' => "required_without:photo_ids|nullable|array|max:{$max}",
+            'solution_photos.*' => 'file|max:20480|mimes:jpg,jpeg,png,webp,heic,heif,gif,bmp',
         ], [
             'answer.required' => 'Впиши ответ.',
             'answer.max' => 'Ответ слишком длинный.',
-            'photo_id.required_without' => 'Прикрепи фото решения.',
-            'solution_photo.required_without' => 'Прикрепи фото решения.',
-            'solution_photo.max' => 'Фото слишком тяжёлое (больше 20 МБ). Сфотографируй ещё раз или уменьши качество съёмки.',
-            'solution_photo.mimes' => 'Нужно фото (jpg, png, heic или webp), а не другой файл.',
-            'solution_photo.file' => 'Не получилось загрузить фото. Попробуй ещё раз.',
+            'photo_ids.required_without' => 'Прикрепи фото решения.',
+            'solution_photos.required_without' => 'Прикрепи фото решения.',
+            'photo_ids.max' => "Больше {$max} страниц решения на одну задачу не принимаем.",
+            'solution_photos.max' => "Больше {$max} страниц решения на одну задачу не принимаем.",
+            'solution_photos.*.max' => 'Одно из фото слишком тяжёлое (больше 20 МБ). Сфотографируй ещё раз или уменьши качество съёмки.',
+            'solution_photos.*.mimes' => 'Нужно фото (jpg, png, heic или webp), а не другой файл.',
+            'solution_photos.*.file' => 'Не получилось загрузить фото. Попробуй ещё раз.',
         ]);
 
         if ($validator->fails()) {
@@ -1433,27 +1448,36 @@ class StudentController extends Controller
         $answer = trim((string) $validated['answer']);
         $attemptsCount = min(((int) $submission->attempts_count) + 1, 2);
 
-        $remoteId = trim((string) ($validated['photo_id'] ?? ''));
-        $path = null;
+        $remoteIds = collect($validated['photo_ids'] ?? [])
+            ->map(fn ($id) => trim((string) $id))
+            ->filter()
+            ->take($max)
+            ->values();
 
-        if ($remoteId !== '') {
+        $paths = [];
+
+        if ($remoteIds->isNotEmpty()) {
             // Подпись сервиса подтверждает, что фото загружено именно для этой
             // задачи этим учеником — чужой photo_id не подставить.
-            if (!$this->photoStore->verifyPhotoId($remoteId, $assignment, $homeworkTask, (int) $user->id)) {
-                Log::warning('Homework photo_id rejected', [
-                    'assignment' => $assignment->id,
-                    'task' => $homeworkTask->id,
-                    'student' => $user->id,
-                ]);
+            foreach ($remoteIds as $id) {
+                if (!$this->photoStore->verifyPhotoId($id, $assignment, $homeworkTask, (int) $user->id)) {
+                    Log::warning('Homework photo_id rejected', [
+                        'assignment' => $assignment->id,
+                        'task' => $homeworkTask->id,
+                        'student' => $user->id,
+                    ]);
 
-                return back()
-                    ->withInput()
-                    ->with('answer_task_id', $homeworkTask->id)
-                    ->with('error', "Задача {$homeworkTask->task_order}: фото не подтвердилось хранилищем. Прикрепи его заново — попытка не потрачена.");
+                    return back()
+                        ->withInput()
+                        ->with('answer_task_id', $homeworkTask->id)
+                        ->with('error', "Задача {$homeworkTask->task_order}: фото не подтвердилось хранилищем. Прикрепи его заново — попытка не потрачена.");
+                }
             }
         } else {
             try {
-                $path = $request->file('solution_photo')->store("homework_solutions/{$assignment->id}", 'public');
+                foreach (array_slice($request->file('solution_photos', []), 0, $max) as $file) {
+                    $paths[] = $file->store("homework_solutions/{$assignment->id}", 'public');
+                }
             } catch (\Throwable $e) {
                 // Иначе ученик видит белый экран 500 и не понимает, что попытка не сохранилась.
                 Log::error('Homework photo store failed', [
@@ -1472,9 +1496,6 @@ class StudentController extends Controller
         $isCorrect = $this->homeworkAnswerMatches($homeworkTask->correct_answer, $answer);
 
         $submission->attempts_count = $attemptsCount;
-        // Пишем ровно одно из двух: откуда фото читать, видно по заполненному полю.
-        $submission->solution_photo_path = $path;
-        $submission->solution_photo_remote_id = $remoteId !== '' ? $remoteId : null;
         $submission->is_correct = $isCorrect;
 
         if ($attemptsCount === 1) {
@@ -1488,6 +1509,24 @@ class StudentController extends Controller
         }
 
         $submission->save();
+
+        // Страницы решения храним отдельно и по попыткам: фото первой попытки
+        // остаётся у учителя, даже если ученик переснял решение во второй.
+        $position = 0;
+        foreach ($remoteIds as $id) {
+            $submission->photos()->create([
+                'attempt_no' => $attemptsCount,
+                'position' => ++$position,
+                'remote_id' => $id,
+            ]);
+        }
+        foreach ($paths as $storedPath) {
+            $submission->photos()->create([
+                'attempt_no' => $attemptsCount,
+                'position' => ++$position,
+                'path' => $storedPath,
+            ]);
+        }
 
         $this->refreshTopicHomeworkProgress($assignment);
 
@@ -1514,12 +1553,16 @@ class StudentController extends Controller
             ->get();
         $total = (int) ($assignment->tasks_total ?: $assignment->homework?->tasks_count ?: $assignment->homework?->topicTasks()->count() ?: 0);
 
+        $isCompleted = $total > 0 && $accepted->count() >= $total;
+
         $assignment->update([
-            'status' => $total > 0 && $accepted->count() >= $total ? 'completed' : 'started',
+            'status' => $isCompleted ? 'completed' : 'started',
             'tasks_completed' => $accepted->count(),
             'tasks_correct' => $accepted->where('is_correct', true)->count(),
             'started_at' => $assignment->started_at ?: now(),
-            'completed_at' => $total > 0 && $accepted->count() >= $total ? now() : null,
+            'completed_at' => $isCompleted ? now() : null,
+            // Долг закрывается сам, как только работу довели до конца.
+            'debt_since' => $isCompleted ? null : $assignment->debt_since,
         ]);
     }
 

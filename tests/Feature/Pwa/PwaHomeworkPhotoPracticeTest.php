@@ -274,12 +274,12 @@ class PwaHomeworkPhotoPracticeTest extends TestCase
             ->post("http://student.palomatika.ru/homework/{$assignment->id}/tasks/{$homeworkTask->id}", [
                 'answer' => '3',
             ])
-            ->assertSessionHasErrors('solution_photo');
+            ->assertSessionHasErrors('solution_photos');
 
         $firstAttempt = $this->actingAs($student)
             ->post("http://student.palomatika.ru/homework/{$assignment->id}/tasks/{$homeworkTask->id}", [
                 'answer' => '3',
-                'solution_photo' => UploadedFile::fake()->image('solution-1.jpg'),
+                'solution_photos' => [UploadedFile::fake()->image('solution-1.jpg')],
             ]);
 
         $firstAttempt->assertRedirect();
@@ -295,7 +295,7 @@ class PwaHomeworkPhotoPracticeTest extends TestCase
         $secondAttempt = $this->actingAs($student)
             ->post("http://student.palomatika.ru/homework/{$assignment->id}/tasks/{$homeworkTask->id}", [
                 'answer' => '5',
-                'solution_photo' => UploadedFile::fake()->image('solution-2.jpg'),
+                'solution_photos' => [UploadedFile::fake()->image('solution-2.jpg')],
             ]);
 
         $secondAttempt->assertRedirect();

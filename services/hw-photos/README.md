@@ -29,6 +29,8 @@ Timeweb в передаче файла не участвует вовсе.
 | POST | `/v1/photos` | `Authorization: Bearer <upload-токен>`, multipart-поле `photo` → `{photo_id, bytes, width, height, stored_as}` |
 | GET | `/v1/photo/<photo_id>?exp=&sig=[&w=400\|800\|1600]` | отдать фото или миниатюру |
 
+Одно решение — до 10 страниц: ученик грузит каждую отдельным запросом и получает свой `photo_id`.
+
 Что делает при загрузке: проверяет магические байты (переименованный PDF не пройдёт),
 пережимает в JPEG с поворотом по EXIF и ужимает до 2000px по большой стороне,
 режет вес (11 МБ → ~1.8 МБ). Если декодировать не удалось — кладёт оригинал:
@@ -48,6 +50,7 @@ node test/smoke.mjs https://palomig.ru/hw-photos   # то же через Apache
   `HW_PHOTOS_DATA`). Тот же секрет — в `.env` прода Laravel (`HW_PHOTOS_SECRET`, `HW_PHOTOS_URL`).
 - **Данные:** `/home/dev/hw-photos-data/<assignment_id>/`, вне DocumentRoot.
 - **Бэкап:** `backup.sh` по крону в 04:17, 7 суточных архивов в `/home/dev/backups/hw-photos/`.
+- **Сторож:** `healthcheck.sh` по крону каждые 5 минут — дёргает `/healthz`, при отказе сам перезапускает юнит и пишет в телегу (@my_claude_stas_bot). Сообщение уходит только при СМЕНЕ состояния, иначе за ночь набежит полсотни одинаковых. Лог — `healthcheck.log`, состояние — `.health-state`.
 - **Apache:** `ProxyPass /hw-photos/` в `/etc/apache2/sites-available/palomig-le-ssl.conf`.
 
 ## Синхронизация с репозиторием
