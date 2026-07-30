@@ -132,7 +132,8 @@ homeworks
 |---|---|---|
 | GET | `/homework` | `StudentController::studentHomework` — список assignments ученика |
 | GET | `/homework/{assignment}` | `StudentController::showTopicHomework` — открыть photo-practice ДЗ |
-| POST | `/homework/{assignment}/tasks/{homeworkTask}` | `StudentController::submitTopicHomeworkTask` — отправить ответ + фото |
+| POST | `/homework/{assignment}/tasks/{homeworkTask}` | `StudentController::submitTopicHomeworkTask` — отправить ответ + `photo_id` (или файл, фолбэк) |
+| POST | `/homework/{assignment}/tasks/{homeworkTask}/photo-ticket` | `StudentController::homeworkPhotoTicket` — тикет на прямую загрузку фото в hw-photos |
 
 ### Parent
 - `parent/child-homework.blade.php` — родитель видит ДЗ ребёнка (детали — в `ParentAppController`)
@@ -153,8 +154,8 @@ homeworks
 5. **Ученик открывает ДЗ** (`showTopicHomework`) — assignment переходит в `started`
 6. **Ученик отправляет ответ + фото** (`submitTopicHomeworkTask`):
    - Ответ нормализуется (lowercase, whitespace removed) и сравнивается с `correct_answer`
-   - Фото: браузер ужимает снимок до ~1600px/JPEG перед отправкой (см. `hwTopicPractice()` во вью); сервер принимает до 20 МБ, форматы jpg/png/webp/heic/heif/gif/bmp — **HEIC обязателен, это формат камеры iPhone**
-   - Фото сохраняется в `storage/app/public/homework_solutions/{assignment_id}/`
+   - Фото: браузер ужимает снимок до ~1600px/JPEG и **грузит его напрямую в сервис hw-photos на VPS** (см. `hwTopicPractice()` во вью). В форму уходит только `photo_id`, файл через хостинг не идёт
+   - Фолбэк (сервис недоступен / нет JS): файл приходит в Laravel как раньше и сохраняется в `storage/app/public/homework_solutions/{assignment_id}/`. Принимаем до 20 МБ, форматы jpg/png/webp/heic/heif/gif/bmp — **HEIC обязателен, это формат камеры iPhone**
    - При ошибке валидации ответ и `answer_task_id` возвращаются на страницу (плашка по-русски, попытка не тратится)
    - Если ответ верный → `is_correct=true`, `accepted_at=now()`
    - Если неверный, попытка #1 → можно попробовать ещё раз (фото нужно прикреплять снова)
@@ -181,12 +182,15 @@ homeworks
 - **TeacherStudent** — проверка что ученик привязан к учителю (`linkedStudentIds`)
 - **Evrium schedule API** — на teacher-странице ДЗ показывается расписание уроков с разбивкой по «текущим/прошлым» ученикам (см. `collectTeacherScheduleData`)
 - **`StudentExamAccessService`** — определяет какой экзамен видит ученик (oge/vpr/ege) — влияет на mini-variant homework
-- **storage public disk** — фото решений хранятся в `homework_solutions/{assignment_id}/`. ⚠️ На проде `public/storage` — **не симлинк**, а обычная папка-копия, поэтому по `/storage/...` фото отдаётся 404. Фото учителю отдаёт `homeworkSolutionPhoto` через `response()->file()` с проверкой прав — публичных ссылок на тетради учеников нет и быть не должно.
+- **hw-photos (сервис на dev-VPS)** — основное хранилище фото решений: `services/hw-photos/` в этом репозитории, рантайм `/home/dev/hw-photos`, публично `https://palomig.ru/hw-photos/`. Мост — `App\Services\HomeworkPhotoStore` на общем секрете `HW_PHOTOS_SECRET` (три подписи: upload-токен наш → проверяет сервис; `photo_id` его → проверяем мы; read-ссылка наша → проверяет сервис). Сетевых вызовов Laravel↔сервис нет. Подробности и эксплуатация — в `services/hw-photos/README.md`.
+- **storage public disk** — фолбэк-хранилище: фото ложится в `homework_solutions/{assignment_id}/`, если сервис недоступен. ⚠️ На проде `public/storage` — **не симлинк**, а обычная папка-копия, поэтому по `/storage/...` фото отдаётся 404. Оба варианта учителю отдаёт `homeworkSolutionPhoto` (для внешних — редирект на подписанную ссылку, для локальных — `response()->file()`), всегда с проверкой прав: публичных ссылок на тетради учеников нет и быть не должно.
 
 ## Тесты
 
 - `tests/Feature/Pwa/PwaHomeworkPhotoPracticeTest.php` — feature-тесты photo-practice flow
 - `tests/Feature/HomeworkPhotoSubmitTest.php` — сдача фото (тяжёлый снимок с телефона, HEIC, отказ не-картинки, экран учителя и доступ к фото)
+- `tests/Feature/HomeworkPhotoStoreTest.php` — внешнее хранилище: тикет, приём `photo_id`, отказ подделки и чужой задачи, фолбэк, подписанные ссылки
+- `services/hw-photos/test/smoke.mjs` — сам сервис (15 проверок: загрузка, подписи, миниатюры, отказы). Гоняется по живому сервису: `node test/smoke.mjs [base_url]`
 
 ## Известные неровности
 
@@ -194,7 +198,8 @@ homeworks
 - **`homework.homework_type` vs `assignHomework` request type** — UI шлёт `mini_variant`, а в DB пишется `full_variant`. Это маппинг внутри контроллера — стоит проверять при изменениях.
 - **`tasks_count`** в `homeworks` денормализован: для photo-practice = количество задач, для mini-variant = nullable (берётся из варианта).
 - **`accepted_at`** ставится после 2-й попытки даже если ответ неверный — учитель проверяет по фото на экране `/homework/assignment/{assignment}` (с 2026-07-30). Отдельной «модерации» (пересдача/комментарий учителя) по-прежнему нет.
-- **Вторая попытка перезаписывает `solution_photo_path`** — фото первой попытки остаётся в storage, но в БД теряется: учитель видит только последнее. Колонка одна; если нужны оба фото — потребуется миграция.
+- **Два хранилища одновременно:** у сабмишна заполнено либо `solution_photo_remote_id` (hw-photos), либо `solution_photo_path` (фолбэк на хостинге). Обратной синхронизации нет — фолбэк-фото так и остаётся на хостинге.
+- **Вторая попытка перезаписывает `solution_photo_path`/`solution_photo_remote_id`** — фото первой попытки остаётся в storage, но в БД теряется: учитель видит только последнее. Колонка одна; если нужны оба фото — потребуется миграция.
 - **`task_payload` из банка ФИПИ хранит условие в `html`**, из curated-банка — в `text`. Вью читают цепочку `text_html ?? text ?? html ?? question ?? expression` — при добавлении новых банков сверяться с ней, иначе ученик увидит только слово «Задача» (так и было до 2026-07-30).
 
 ## При работе

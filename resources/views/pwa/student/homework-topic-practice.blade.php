@@ -160,15 +160,19 @@
 
       @if(!$accepted)
         <form class="task-form" method="POST" action="{{ route('pwa.student.homework.topic.submit', [$assignment, $task]) }}" enctype="multipart/form-data"
-              x-data="{ hasFile: false, preparing: false, busy: false }" @submit="onTaskFormSubmit($event, $data)">
+              x-data="{ hasFile: false, preparing: false, busy: false, photoId: '', uploaded: false,
+                        ticketUrl: '{{ route('pwa.student.homework.topic.photo-ticket', [$assignment, $task]) }}' }"
+              @submit="onTaskFormSubmit($event, $data)">
           @csrf
           {{-- Ответ возвращаем только той задаче, из которой пришла ошибка. --}}
           <input class="task-input" type="text" name="answer" placeholder="Ответ" required
                  value="{{ (int) session('answer_task_id') === (int) $task->id ? old('answer') : '' }}">
+          {{-- Заполняется, если фото уже уехало в хранилище: тогда файл на сервер не отправляем. --}}
+          <input type="hidden" name="photo_id" :value="photoId">
           <div class="photo-slot">
             <label class="photo-label" :class="hasFile && 'has-file'">
               <span class="photo-label-icon">📷</span>
-              <span x-text="preparing ? 'Готовим фото…' : (hasFile ? 'Фото решения прикреплено' : 'Прикрепить фото решения')"></span>
+              <span x-text="photoLabel($data)"></span>
               <input type="file" name="solution_photo" accept="image/*"
                      @change="pickPhoto($event, $data)">
             </label>
@@ -206,26 +210,77 @@ function hwTopicPractice() {
   return {
     showPhotoModal: false,
 
+    photoLabel(scope) {
+      if (scope.preparing) return 'Загружаем фото…';
+      if (scope.uploaded) return 'Фото решения загружено';
+      if (scope.hasFile) return 'Фото решения прикреплено';
+      return 'Прикрепить фото решения';
+    },
+
     async pickPhoto(event, scope) {
       const input = event.target;
       const file = input.files && input.files[0];
+
+      scope.photoId = '';
+      scope.uploaded = false;
       scope.hasFile = !!file;
 
       if (!file) return;
 
       scope.preparing = true;
       try {
-        const compressed = await this.compressPhoto(file);
-        if (compressed !== file && typeof DataTransfer !== 'undefined') {
+        let prepared = file;
+        try {
+          prepared = await this.compressPhoto(file);
+        } catch (e) {
+          prepared = file;
+        }
+
+        if (prepared !== file && typeof DataTransfer !== 'undefined') {
           const dt = new DataTransfer();
-          dt.items.add(compressed);
+          dt.items.add(prepared);
           input.files = dt.files;
         }
-      } catch (e) {
-        // остаётся оригинальный файл
+
+        // Пробуем сразу увезти фото в хранилище. Не получилось — не беда:
+        // файл остаётся в форме и уйдёт на сервер обычной отправкой.
+        const photoId = await this.uploadToStore(prepared, scope);
+        if (photoId) {
+          scope.photoId = photoId;
+          scope.uploaded = true;
+          if (typeof DataTransfer !== 'undefined') {
+            input.files = new DataTransfer().files;   // не гнать те же байты второй раз
+          }
+        }
       } finally {
         scope.preparing = false;
-        scope.hasFile = !!(input.files && input.files.length);
+        scope.hasFile = scope.uploaded || !!(input.files && input.files.length);
+      }
+    },
+
+    /** @returns {Promise<string|null>} photo_id или null, если нужно уйти на фолбэк */
+    async uploadToStore(file, scope) {
+      try {
+        const ticketResponse = await window.fetchPost(scope.ticketUrl);
+        if (!ticketResponse.ok) return null;
+
+        const ticket = await ticketResponse.json();
+        if (!ticket.enabled || !ticket.upload_url || !ticket.token) return null;
+
+        const form = new FormData();
+        form.append('photo', file, file.name || 'solution.jpg');
+
+        const uploaded = await fetch(ticket.upload_url, {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + ticket.token },
+          body: form,
+        });
+        if (!uploaded.ok) return null;
+
+        const body = await uploaded.json();
+        return body.photo_id || null;
+      } catch (e) {
+        return null;
       }
     },
 

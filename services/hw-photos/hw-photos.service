@@ -1,0 +1,24 @@
+[Unit]
+Description=hw-photos (PALOMATIKA homework solution photos)
+After=network.target
+
+[Service]
+Type=simple
+User=dev
+Group=dev
+WorkingDirectory=/home/dev/hw-photos
+EnvironmentFile=/home/dev/.agent-secrets/hw-photos.env
+ExecStart=/usr/bin/node /home/dev/hw-photos/server.js
+Restart=always
+RestartSec=3
+# Фото домашки — единственный артефакт проверки: пишем только в свой каталог.
+ReadWritePaths=/home/dev/hw-photos-data
+ProtectSystem=full
+PrivateTmp=true
+NoNewPrivileges=true
+# earlyoom на этой машине жаден — сервису хватает немного, но убивать его нежелательно
+OOMScoreAdjust=-200
+MemoryMax=512M
+
+[Install]
+WantedBy=multi-user.target

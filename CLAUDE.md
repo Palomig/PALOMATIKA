@@ -75,6 +75,7 @@
 | `storage/app/tasks/ege/` | JSON файлы заданий ЕГЭ |
 | `public/images/tasks/` | Изображения к заданиям |
 | `.claude/tasks.json` | Kanban задачи проекта |
+| `services/hw-photos/` | Микросервис фото решений домашки (рантайм на dev-VPS, см. его README) |
 
 ---
 
