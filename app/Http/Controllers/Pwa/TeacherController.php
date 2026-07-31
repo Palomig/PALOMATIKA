@@ -15,6 +15,9 @@ use App\Models\StudentNote;
 use App\Models\TeacherStudent;
 use App\Models\User;
 use App\Services\AuditLogger;
+use App\Services\EgeTaskDataService;
+use App\Services\EgeVariantBuilderService;
+use App\Services\EgeVariantPoolService;
 use App\Services\HomeworkPhotoStore;
 use App\Services\OgeVariantPoolService;
 use App\Services\TaskDataService;
@@ -744,6 +747,10 @@ class TeacherController extends Controller
                     $pool = $this->buildVprPool($grade);
                     $variant = $pool->getOrCreateVariant($student, 'mixed');
                     $title = "Мини-ВПР {$grade} класс";
+                } elseif ($this->isEgeGrade($student)) {
+                    // Десятым и одиннадцатым раньше прилетал ОГЭ — их экзамен ЕГЭ.
+                    $variant = $this->buildEgePool()->getOrCreateVariant($student);
+                    $title = 'Вариант ЕГЭ';
                 } else {
                     $variant = $this->poolService->getOrCreateVariant($student, 'mixed');
                     $title = 'Мини-вариант ОГЭ';
@@ -1144,6 +1151,20 @@ class TeacherController extends Controller
         $taskData = new VprTaskDataService($grade);
         $builder = new VprVariantBuilderService($taskData);
         return new VprVariantPoolService($taskData, $builder);
+    }
+
+    private function isEgeGrade(User $student): bool
+    {
+        $grade = (int) ($student->grade_num ?? 0);
+
+        return $grade >= 10 && $grade <= 11;
+    }
+
+    private function buildEgePool(): EgeVariantPoolService
+    {
+        $taskData = app(EgeTaskDataService::class);
+
+        return new EgeVariantPoolService($taskData, new EgeVariantBuilderService($taskData));
     }
 
     public function topicTasks(int $topicNumber): \Illuminate\Http\JsonResponse

@@ -21,6 +21,24 @@
     <p style="font-size:14px;color:var(--muted);font-weight:600;">{{ $grade }} класс · 20 заданий</p>
   </div>
 
+  {{-- LESSON TILE — прикреплённым ученикам и админу (превью).
+       Урок один для всех классов, не только для ОГЭ. --}}
+  @if(!empty($showLessonTile))
+    <div style="margin-bottom:20px;">
+      @include('pwa.student.partials.lesson-tile')
+    </div>
+  @endif
+
+  {{-- Домашка от учителя — так же, как у ОГЭ и ВПР --}}
+  @if($hasTeacher ?? false)
+  <a href="{{ route('pwa.student.homework') }}"
+     style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px;
+            padding:14px;border-radius:14px;text-decoration:none;font-size:14px;font-weight:800;
+            color:var(--text);background:var(--surface);border:1px solid var(--border);">
+    📖 Домашка
+  </a>
+  @endif
+
   {{-- Тумблер на ОГЭ (повторение) для 10–11 классов --}}
   @if(in_array((int)($user->grade_num ?? 0), [10, 11], true))
   <a href="{{ route('pwa.student.oge-dashboard') }}"
