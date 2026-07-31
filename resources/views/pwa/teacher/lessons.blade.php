@@ -58,6 +58,50 @@
     </div>
   </div>
 
+  @if($activeSessions->isNotEmpty())
+    <div class="day-head today">Активные уроки</div>
+    <div class="lessons-stack" x-data="activeSessions()">
+      @foreach($activeSessions as $session)
+        @php
+          $students = $session->participants->map(fn($p) => $p->student?->name ?? 'Ученик')->filter()->implode(', ');
+          $isLive = $session->status === 'live';
+        @endphp
+        <section class="lesson-slot">
+          <div class="lesson-slot-head">
+            <div>
+              <div class="lesson-slot-title">
+                {{ $session->join_code ? 'Код: ' . $session->join_code : 'Урок #' . $session->id }}
+              </div>
+              <div class="lesson-slot-subtitle">
+                {{ $students ?: 'Без учеников' }}
+                @if($session->starts_at)
+                  · {{ $session->starts_at->format('d.m H:i') }}
+                @endif
+              </div>
+            </div>
+            <div class="lesson-slot-meta">
+              @if($isLive)
+                <span class="status-tag green">идёт</span>
+              @else
+                <span class="status-tag yellow">черновик</span>
+              @endif
+            </div>
+          </div>
+          <div class="lesson-slot-actions" style="margin-top:12px;">
+            <a href="/lessons/{{ $session->id }}" class="btn btn-surface">Открыть</a>
+            <button class="btn btn-surface"
+                    style="color:var(--red)"
+                    :disabled="ending === {{ $session->id }}"
+                    @click="endSession({{ $session->id }})">
+              <span x-show="ending !== {{ $session->id }}">Завершить</span>
+              <span x-show="ending === {{ $session->id }}" x-cloak>…</span>
+            </button>
+          </div>
+        </section>
+      @endforeach
+    </div>
+  @endif
+
   @forelse($days as $day)
     <div class="day-head {{ $day['is_today'] ? 'today' : '' }}">{{ $day['label'] }}</div>
     <div class="lessons-stack">
@@ -122,6 +166,36 @@
 </div>
 
 <script>
+  function activeSessions() {
+    return {
+      ending: null,
+      csrf() {
+        return document.querySelector('meta[name=csrf-token]').content;
+      },
+      async endSession(id) {
+        if (this.ending) return;
+        if (!confirm('Завершить урок?')) return;
+        this.ending = id;
+        try {
+          const r = await fetch('/lessons/' + id + '/end', {
+            method: 'POST',
+            headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': this.csrf() },
+            credentials: 'include',
+          });
+          if (r.ok) { window.location.reload(); }
+          else {
+            const d = await r.json().catch(() => ({}));
+            alert(d.error || 'Ошибка завершения');
+            this.ending = null;
+          }
+        } catch (e) {
+          alert('Ошибка сети');
+          this.ending = null;
+        }
+      },
+    };
+  }
+
   function lessonsBoard() {
     return {
       creating: false,

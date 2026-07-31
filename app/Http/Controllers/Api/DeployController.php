@@ -64,6 +64,8 @@ class DeployController extends Controller
         'user:flush-sessions',
         'redesign:backup-puzzles',
         'logs:tail',
+        'lesson:archive-stale',
+        'lesson-sessions:auto-close',
     ];
 
     /**

@@ -174,8 +174,8 @@ class LessonSessionService
 
     public function end(LessonSession $session): LessonSession
     {
-        if ($session->status !== LessonSession::STATUS_LIVE) {
-            throw new DomainException("Сессия в статусе {$session->status}, завершить нельзя");
+        if ($session->status === LessonSession::STATUS_ENDED) {
+            throw new DomainException("Сессия уже завершена");
         }
         $session->update([
             'status'  => LessonSession::STATUS_ENDED,

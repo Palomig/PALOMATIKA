@@ -94,8 +94,15 @@ class TeacherController extends Controller
     {
         $user = $request->user();
 
+        $activeSessions = LessonSession::where('teacher_id', $user->id)
+            ->whereIn('status', [LessonSession::STATUS_LIVE, LessonSession::STATUS_DRAFT])
+            ->with('participants.student')
+            ->orderByDesc('starts_at')
+            ->get();
+
         return view('pwa.teacher.lessons', [
-            'days' => $this->buildUpcomingLessonDays($user),
+            'days'           => $this->buildUpcomingLessonDays($user),
+            'activeSessions' => $activeSessions,
         ]);
     }
 
