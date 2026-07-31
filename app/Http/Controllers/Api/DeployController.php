@@ -73,6 +73,8 @@ class DeployController extends Controller
         'users:telegram-status',
         'redesign:backup-puzzles',
         'logs:tail',
+        'lesson:archive-stale',
+        'lesson-sessions:auto-close',
     ];
 
     /**
