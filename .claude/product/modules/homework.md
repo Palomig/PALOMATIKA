@@ -208,7 +208,15 @@ student_notes.homework_assignment_id   ← заметки учителя по э
 - `tests/Feature/HomeworkPhotoStoreTest.php` — внешнее хранилище: тикет, приём `photo_id`, отказ подделки и чужой задачи, фолбэк, подписанные ссылки
 - `tests/Feature/HomeworkMultiPageSubmitTest.php` — многостраничные решения: порядок страниц, лимит 10, сохранность страниц первой попытки, доступ учителя
 - `tests/Feature/HomeworkReviewAndDebtTest.php` — заметки, «проверено», долги (появление, снятие, чужих учеников не задевает)
+- `tests/browser/homework-photo-smoke.mjs` — **браузерный** смоук сдачи (Alpine: сжатие, загрузка страниц, photo_ids vs фолбэк). Обязателен после правок `homework-topic-practice.blade.php`: phpunit и curl этот слой не видят, из-за чего 31.07 на прод уехала поломка со «загружаем…» навсегда
 - `services/hw-photos/test/smoke.mjs` — сам сервис (15 проверок: загрузка, подписи, миниатюры, отказы). Гоняется по живому сервису: `node test/smoke.mjs [base_url]`
+
+## Ловушки клиентской части (31.07.2026)
+
+Сдача фото держится на Alpine-компоненте `taskPhotos()` во вью ученика. Две грабли, на которых уже поскользнулись:
+
+- **`$el` внутри метода — это не форма.** В обработчике `@change` Alpine подставляет в `$el` сам инпут, поэтому `this.$el.querySelector('input[type=file]')` возвращает `null`. Элементы формы брать только через `$refs` (`photoInput`, `photoIds`).
+- **Мутировать надо реактивную ссылку.** `pages.push(obj)` кладёт сырой объект; правки по старой ссылке (`obj.uploading = false`) Alpine не видит, и строка залипает на «загружаем…». Работать с `this.pages[this.pages.length - 1]`.
 
 ## Известные неровности
 
