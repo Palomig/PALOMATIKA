@@ -22,6 +22,7 @@ use App\Services\HomeworkPhotoStore;
 use App\Services\OgeVariantPoolService;
 use App\Services\TaskDataService;
 use App\Services\VariantTaskNumberResolver;
+use App\Support\TaskConditionFormatter;
 use App\Services\VprTaskDataService;
 use App\Services\VprVariantBuilderService;
 use App\Services\VprVariantPoolService;
@@ -398,12 +399,13 @@ class TeacherController extends Controller
             $def = $taskMap[$taskNum] ?? [];
             $inner = is_array($def['task'] ?? null) ? $def['task'] : [];
 
-            $instructionText = trim((string) (($def['instruction'] ?? $inner['instruction'] ?? '') ?: ''));
-            $conditionText = trim((string) (($inner['text'] ?? $def['text'] ?? $inner['prompt'] ?? $inner['question'] ?? $inner['condition'] ?? $inner['body'] ?? $inner['content'] ?? '') ?: ''));
-            if ($instructionText !== '' && $conditionText !== '') {
-                if (preg_replace('/\s+/u', ' ', mb_strtolower($instructionText)) === preg_replace('/\s+/u', ' ', mb_strtolower($conditionText))) $instructionText = '';
-            }
-            $taskText = $conditionText !== '' ? $conditionText : $instructionText;
+            $condition = TaskConditionFormatter::compose(
+                (string) (($def['instruction'] ?? $inner['instruction'] ?? '') ?: ''),
+                (string) (($inner['text'] ?? $def['text'] ?? $inner['prompt'] ?? $inner['question'] ?? $inner['condition'] ?? $inner['body'] ?? $inner['content'] ?? '') ?: ''),
+                (string) (($def['expression'] ?? $inner['expression'] ?? '') ?: '')
+            );
+            $instructionText = $condition['instruction'];
+            $taskText = $condition['text'];
             $rawOptions = $def['options'] ?? $inner['options'] ?? null;
             $taskOptions = is_array($rawOptions) ? array_values($rawOptions) : [];
 
@@ -411,7 +413,7 @@ class TeacherController extends Controller
                 'task_number' => $taskNum,
                 'task_instruction' => $instructionText,
                 'task_text' => $taskText,
-                'task_expression' => (string) (($def['expression'] ?? $inner['expression'] ?? '') ?: ''),
+                'task_expression' => $condition['expression'],
                 'task_svg' => (string) (($def['svg'] ?? $inner['svg'] ?? '') ?: ''),
                 'task_image' => (string) (($def['image'] ?? $inner['image'] ?? '') ?: ''),
                 'task_options' => $taskOptions,
