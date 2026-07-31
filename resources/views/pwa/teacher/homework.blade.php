@@ -96,6 +96,61 @@
   .badge-debt { background: rgba(234,179,8,.2); color: #fcd34d; }
   .badge-reviewed { background: rgba(34,197,94,.14); color: #86efac; }
 
+  .check-card {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 12px; padding: 12px 14px; margin-bottom: 8px;
+    text-decoration: none; color: inherit;
+    opacity: 0; animation: fadeUp 0.3s ease calc(var(--i, 0) * 0.04s) forwards;
+  }
+  .check-card:active { background: var(--surface2); }
+  .check-card.is-done { border-left-color: var(--border); opacity: .72; }
+  .check-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent); flex-shrink: 0;
+  }
+  .check-body { flex: 1; min-width: 0; }
+  .check-head { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .check-name { font-size: 14px; font-weight: 800; color: var(--text); }
+  .check-grade {
+    font-size: 9px; font-weight: 800; color: var(--muted);
+    background: var(--surface2); border-radius: 5px; padding: 2px 6px; margin-left: 4px;
+  }
+  .check-title { font-size: 12px; font-weight: 700; color: var(--muted); margin-top: 3px; overflow-wrap: anywhere; }
+  .check-meta { font-size: 11px; font-weight: 600; color: var(--muted); margin-top: 3px; }
+  .check-go { color: var(--muted); font-size: 20px; flex-shrink: 0; }
+
+  .stat-row { display: flex; gap: 8px; margin-bottom: 14px; }
+  .stat-box {
+    flex: 1; text-align: center; padding: 14px 6px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  }
+  .stat-num { font-family: var(--display); font-size: 22px; color: var(--text); }
+  .stat-label { font-size: 10px; font-weight: 700; color: var(--muted); margin-top: 2px; }
+  .stat-bar { height: 6px; border-radius: 3px; background: var(--surface2); margin-top: 8px; overflow: hidden; }
+  .stat-bar-fill { height: 100%; background: var(--green); }
+  .debtor-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 12px 14px; margin-bottom: 8px;
+  }
+  .sec-label { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin: 16px 0 8px; }
+  .empty-state { text-align: center; padding: 36px 16px; color: var(--muted); font-size: 13px; font-weight: 600; }
+  .empty-icon { font-size: 32px; margin-bottom: 8px; }
+
+  .links-toggle {
+    width: 100%; border: 1px dashed var(--border); background: none;
+    color: var(--muted); border-radius: 10px; padding: 10px 12px;
+    font-size: 12px; font-weight: 800; cursor: pointer;
+  }
+  .assign-cta {
+    border: none; border-radius: 10px; padding: 8px 14px;
+    background: var(--purple-bg); border: 1px solid var(--purple-bd); color: var(--purple);
+    font-size: 12px; font-weight: 800; cursor: pointer; white-space: nowrap;
+  }
+  .assign-cta:active { opacity: .75; }
+
   .toast {
     position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
     background: var(--green); color: #000; font-weight: 700; font-size: 13px;
@@ -219,7 +274,7 @@
   <div class="topbar">
     <a href="{{ route('pwa.teacher.dashboard') }}" class="back">←</a>
     <div class="topbar-title">Домашка</div>
-    <div style="width:34px;"></div>
+    <button class="assign-cta" @click="openAssignAny()">Выдать ДЗ</button>
   </div>
 
   @if(session('success'))
@@ -230,174 +285,156 @@
   @endif
 
   <div class="hw-tabs">
-    <div class="hw-tab" :class="tab === 'current' && 'active'" @click="tab = 'current'">
-      <div>Сейчас</div>
-      <div class="hw-tab-sub">{{ $todayLabel }}</div>
+    <div class="hw-tab" :class="tab === 'new' && 'active'" @click="tab = 'new'">
+      <div>Новые</div>
+      <div class="hw-tab-sub">{{ $pending->count() ?: '—' }}</div>
     </div>
-    <div class="hw-tab" :class="tab === 'prev' && 'active'" @click="tab = 'prev'">
-      <div>Прошлый</div>
-      <div class="hw-tab-sub">{{ $prevDayLabel ?: '—' }}</div>
+    <div class="hw-tab" :class="tab === 'done' && 'active'" @click="tab = 'done'">
+      <div>Проверенные</div>
+      <div class="hw-tab-sub">{{ $reviewed->count() ?: '—' }}</div>
     </div>
-    <div class="hw-tab" :class="tab === 'all' && 'active'" @click="tab = 'all'">
-      <div>Все</div>
-      <div class="hw-tab-sub">{{ $allStudents->count() }} уч.</div>
+    <div class="hw-tab" :class="tab === 'stats' && 'active'" @click="tab = 'stats'">
+      <div>Статистика</div>
+      <div class="hw-tab-sub">{{ $stats['students_submitted'] }}/{{ $stats['students_total'] }}</div>
     </div>
   </div>
 
-  <div x-show="tab === 'current'" x-cloak>
-    @forelse($currentStudents as $i => $s)
-      <div class="student-row {{ $s['linked'] ? '' : 'student-unlinked' }}" style="--i:{{ $i }}">
-        <div>
-          <div class="student-name">
-            @if($s['linked'])
-              {{ $s['student_alias'] ?? $s['student_name'] }}
-            @else
-              {{ $s['evrium_name'] }}
-            @endif
+  {{-- Новые: работы, где ученик что-то сдал, а «проверено» ещё не нажато. --}}
+  <div x-show="tab === 'new'" x-cloak>
+    @forelse($pending as $i => $row)
+      <a class="check-card" href="{{ route('pwa.teacher.homework.submissions', $row['assignment']) }}" style="--i:{{ $i }}">
+        <span class="check-dot"></span>
+        <div class="check-body">
+          <div class="check-head">
+            <span class="check-name">{{ $row['name'] }}</span>
+            @if($row['grade'])<span class="check-grade">{{ $row['grade'] }} класс</span>@endif
+            @if($row['is_debt'])<span class="hw-status-badge badge-debt">долг</span>@endif
           </div>
-          <div class="student-sub">{{ $s['time_start'] }}{{ $s['time_end'] ? ' – ' . $s['time_end'] : '' }}
-            @if($s['linked'])
-              <span class="link-badge">{{ $s['evrium_name'] }}</span>
-            @else
-              <span class="link-badge" style="color:var(--red);">не привязан</span>
-            @endif
+          <div class="check-title">{{ $row['title'] }}</div>
+          <div class="check-meta">
+            сдано {{ $row['submitted'] }} из {{ $row['total'] ?: $row['submitted'] }}
+            @if($row['at']) · {{ $row['at'] }} @endif
           </div>
         </div>
-        <div class="link-actions">
-          @if($s['linked'])
-            <button class="assign-btn" @click="openAssignMany(@js($s['student_ids'] ?? [$s['student_id']]), @js($s['student_alias'] ?? $s['student_name'] ?? $s['evrium_name']))">Дать ДЗ</button>
-            <button class="link-btn" @click="openLink(@js($s['evrium_name']), @js($s['time_start'] ?? ''), @js($s['time_end'] ?? ''), @js($s['lesson_date'] ?? ''))">+ профиль</button>
-          @else
-            <button class="link-btn" @click="openLink(@js($s['evrium_name']), @js($s['time_start'] ?? ''), @js($s['time_end'] ?? ''), @js($s['lesson_date'] ?? ''))">Привязать</button>
-          @endif
-        </div>
-      </div>
-      @if($s['linked'] && count($s['linked_profiles'] ?? []) > 0)
-        <div class="profile-stack" style="margin:-4px 0 10px 14px;">
-          @foreach($s['linked_profiles'] as $profile)
-            <div class="profile-chip">
-              {{ $profile['student_alias'] ?: $profile['student_name'] }}
-              @if($profile['last_active_at'])
-                <span>{{ $profile['last_active_at']->format('d.m H:i') }}</span>
-              @endif
-            </div>
-          @endforeach
-        </div>
-      @endif
+        <span class="check-go">›</span>
+      </a>
     @empty
-      <div class="empty-note">Нет уроков на сегодня.</div>
+      <div class="empty-state">
+        <div class="empty-icon">✅</div>
+        Непроверенных работ нет.
+      </div>
     @endforelse
   </div>
 
-  <div x-show="tab === 'prev'" x-cloak>
-    @forelse($prevStudents as $i => $s)
-      <div class="student-row {{ $s['linked'] ? '' : 'student-unlinked' }}" style="--i:{{ $i }}">
-        <div>
-          <div class="student-name">
-            @if($s['linked'])
-              {{ $s['student_alias'] ?? $s['student_name'] }}
-            @else
-              {{ $s['evrium_name'] }}
-            @endif
+  {{-- Проверенные: то же самое, но приглушённо и с датой проверки. --}}
+  <div x-show="tab === 'done'" x-cloak>
+    @forelse($reviewed as $i => $row)
+      <a class="check-card is-done" href="{{ route('pwa.teacher.homework.submissions', $row['assignment']) }}" style="--i:{{ $i }}">
+        <div class="check-body">
+          <div class="check-head">
+            <span class="check-name">{{ $row['name'] }}</span>
+            @if($row['grade'])<span class="check-grade">{{ $row['grade'] }} класс</span>@endif
           </div>
-          <div class="student-sub">{{ $s['time_start'] }}{{ $s['time_end'] ? ' – ' . $s['time_end'] : '' }}
-            @if($s['linked'])
-              <span class="link-badge">{{ $s['evrium_name'] }}</span>
-            @else
-              <span class="link-badge" style="color:var(--red);">не привязан</span>
-            @endif
-          </div>
+          <div class="check-title">{{ $row['title'] }}</div>
+          <div class="check-meta">проверено {{ $row['assignment']->reviewed_at?->format('d.m.Y') }}</div>
         </div>
-        <div class="link-actions">
-          @if($s['linked'])
-            <button class="assign-btn" @click="openAssignMany(@js($s['student_ids'] ?? [$s['student_id']]), @js($s['student_alias'] ?? $s['student_name'] ?? $s['evrium_name']))">Дать ДЗ</button>
-            <button class="link-btn" @click="openLink(@js($s['evrium_name']), @js($s['time_start'] ?? ''), @js($s['time_end'] ?? ''), @js($s['lesson_date'] ?? ''))">+ профиль</button>
-          @else
-            <button class="link-btn" @click="openLink(@js($s['evrium_name']), @js($s['time_start'] ?? ''), @js($s['time_end'] ?? ''), @js($s['lesson_date'] ?? ''))">Привязать</button>
-          @endif
-        </div>
-      </div>
-      @if($s['linked'] && count($s['linked_profiles'] ?? []) > 0)
-        <div class="profile-stack" style="margin:-4px 0 10px 14px;">
-          @foreach($s['linked_profiles'] as $profile)
-            <div class="profile-chip">
-              {{ $profile['student_alias'] ?: $profile['student_name'] }}
-              @if($profile['last_active_at'])
-                <span>{{ $profile['last_active_at']->format('d.m H:i') }}</span>
-              @endif
-            </div>
-          @endforeach
-        </div>
-      @endif
+        <span class="check-go">›</span>
+      </a>
     @empty
-      <div class="empty-note">Нет данных о прошлом уроке.</div>
+      <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        Пока ничего не проверено.
+      </div>
     @endforelse
   </div>
 
-  <div x-show="tab === 'all'" x-cloak>
-    @forelse($allStudents as $i => $s)
-      <div class="student-row" style="--i:{{ $i }}" x-data="{ editing: false }">
-        <div style="flex:1;min-width:0;">
-          <div class="student-name">{{ $s->student_alias ?? $s->name }}</div>
+  <div x-show="tab === 'stats'" x-cloak>
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-num">{{ $stats['students_submitted'] }}</div>
+        <div class="stat-label">сдали</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">{{ max($stats['students_total'] - $stats['students_submitted'], 0) }}</div>
+        <div class="stat-label">не сдали</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">{{ $stats['waiting_review'] }}</div>
+        <div class="stat-label">ждут проверки</div>
+      </div>
+    </div>
+
+    <div class="sec-label">По домашкам</div>
+    @forelse($stats['by_homework'] as $row)
+      <div class="hw-card">
+        <div class="hw-title">{{ $row['title'] }}</div>
+        <div class="hw-meta">{{ $row['assigned_at']?->format('d.m.Y') }}</div>
+        <div class="stat-bar">
+          <div class="stat-bar-fill" style="width: {{ $row['total'] > 0 ? round($row['submitted'] / $row['total'] * 100) : 0 }}%"></div>
+        </div>
+        <div class="hw-meta" style="margin-top:6px;">
+          сдали {{ $row['submitted'] }} из {{ $row['total'] }}@if($row['completed'] !== $row['submitted']) · доделали до конца {{ $row['completed'] }}@endif
+        </div>
+      </div>
+    @empty
+      <div class="empty-note">Домашек пока не было.</div>
+    @endforelse
+
+    <div class="sec-label">Кто не делает</div>
+    @forelse($stats['debtors'] as $row)
+      <div class="debtor-row">
+        <div>
+          <div class="student-name">{{ $row['name'] }}@if($row['grade'])<span class="check-grade">{{ $row['grade'] }} класс</span>@endif</div>
           <div class="student-sub">
-            {{ $s->name }}
-            @if($s->evrium_name)
-              <span class="link-badge">{{ $s->evrium_name }}</span>
-            @else
-              <span class="link-badge" style="color:var(--red);">не привязан</span>
-            @endif
-          </div>
-
-          <div class="link-form" x-show="editing" x-cloak>
-            <label>Имя (алиас)</label>
-            <input type="text" x-ref="alias{{ $s->id }}" value="{{ $s->student_alias ?? '' }}" placeholder="Отображаемое имя...">
-
-            <label>Привязка к расписанию (Эвриум)</label>
-            <select x-ref="evrium{{ $s->id }}">
-              <option value="">— не привязан —</option>
-              @foreach($allEvriumNames as $en)
-                <option value="{{ $en }}" {{ $s->evrium_name === $en ? 'selected' : '' }}>{{ $en }}</option>
-              @endforeach
-            </select>
-
-            <button class="link-save" @click="saveLink({{ $s->id }}, $refs.alias{{ $s->id }}.value, $refs.evrium{{ $s->id }}.value); editing = false">Сохранить</button>
+            не сдано работ: {{ $row['missed'] }}@if($row['untouched']) · не открывал: {{ $row['untouched'] }}@endif
           </div>
         </div>
-        <div style="display:flex;align-items:center;gap:6px;">
-          <button class="settings-btn" @click="editing = !editing" x-text="editing ? '✕' : '⚙'"></button>
-          <button class="assign-btn" @click="openAssign({{ $s->id }}, '{{ e($s->student_alias ?? $s->name) }}')">Дать ДЗ</button>
-        </div>
+        @if($row['debts'])<span class="hw-status-badge badge-debt">долгов: {{ $row['debts'] }}</span>@endif
       </div>
     @empty
-      <div class="empty-note">Нет учеников.</div>
+      <div class="empty-note">Все всё сдают.</div>
     @endforelse
   </div>
 
-  @if($recentHomework->count() > 0)
-  <div class="sec-label" style="margin-top: 16px;">Выданные ДЗ</div>
-  @foreach($recentHomework as $hw)
-    <div class="hw-card">
-      <div class="hw-title">{{ $hw->title }}</div>
-      <div class="hw-meta">{{ $hw->assigned_at?->format('d.m.Y H:i') }}</div>
-      @foreach($hw->assignments as $a)
-        <div style="margin-top: 4px; font-size: 12px; color: var(--text); display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-          {{ $a->student?->name ?? '?' }}
-          <span class="hw-status-badge {{ 'badge-' . $a->status }}">{{ $a->status }}</span>
-          @if($a->isDebt())
-            <span class="hw-status-badge badge-debt">долг</span>
-          @endif
-          @if($a->reviewed_at)
-            <span class="hw-status-badge badge-reviewed">проверено</span>
-          @endif
-          @if($hw->homework_type === 'topic_photo_practice')
-            <a href="{{ route('pwa.teacher.homework.submissions', $a) }}"
-               style="color: var(--accent); font-weight: 800; text-decoration: none;">решения →</a>
-          @endif
+  {{-- Привязки профилей живут только здесь, поэтому не выбрасываем — прячем. --}}
+  <div x-data="{ open: false }" style="margin-top: 18px;">
+    <button type="button" class="links-toggle" @click="open = !open"
+            x-text="open ? 'Скрыть привязки учеников' : 'Привязки учеников (' + {{ $allStudents->count() }} + ')'"></button>
+    <div x-show="open" x-cloak style="margin-top: 8px;">
+      @forelse($allStudents as $i => $s)
+        <div class="student-row" style="--i:{{ $i }}" x-data="{ editing: false }">
+          <div style="flex:1;min-width:0;">
+            <div class="student-name">{{ $s->student_alias ?? $s->name }}</div>
+            <div class="student-sub">
+              {{ $s->name }}
+              @if($s->evrium_name)
+                <span class="link-badge">{{ $s->evrium_name }}</span>
+              @endif
+            </div>
+
+            <div x-show="editing" x-cloak class="link-form">
+              <label>Как называть в приложении</label>
+              <input type="text" x-ref="alias{{ $s->id }}" value="{{ $s->student_alias }}" placeholder="{{ $s->name }}">
+              <label>Имя в расписании Evrium</label>
+              <select x-ref="evrium{{ $s->id }}">
+                <option value="">— не привязан —</option>
+                @foreach($allEvriumNames as $en)
+                  <option value="{{ $en }}" @selected($s->evrium_name === $en)>{{ $en }}</option>
+                @endforeach
+              </select>
+              <button class="link-save" @click="saveLink({{ $s->id }}, $refs.alias{{ $s->id }}.value, $refs.evrium{{ $s->id }}.value); editing = false">Сохранить</button>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <button class="settings-btn" @click="editing = !editing" x-text="editing ? '✕' : '⚙'"></button>
+            <button class="assign-btn" @click="openAssign({{ $s->id }}, '{{ e($s->student_alias ?? $s->name) }}')">Дать ДЗ</button>
+          </div>
         </div>
-      @endforeach
+      @empty
+        <div class="empty-note">Нет учеников.</div>
+      @endforelse
     </div>
-  @endforeach
-  @endif
+  </div>
 
   <template x-if="showAssign">
     <div class="fv-overlay" @click.self="showAssign = false">
@@ -563,7 +600,7 @@
 <script>
 function teacherHw() {
   return {
-    tab: 'current',
+    tab: 'new',
     showAssign: false,
     showLink: false,
     assignStudentId: null,
@@ -606,6 +643,14 @@ function teacherHw() {
       return this.isAssignVpr()
         ? 'Короткий вариант ВПР, автоматически сгенерирован под класс ученика'
         : '7 задач (4 алгебра + 3 геометрия), автоматически сгенерирован';
+    },
+
+    /** Резервная выдача: ученика выбираем прямо в шторке. */
+    openAssignAny() {
+      this.assignStudentId = null;
+      this.assignStudentIds = [];
+      this.assignName = 'выбранных учеников';
+      this.showAssign = true;
     },
 
     openAssign(studentId, name) {
