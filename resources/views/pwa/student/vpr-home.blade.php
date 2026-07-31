@@ -155,6 +155,12 @@
 @section('body')
 <div class="page" x-data="vprDashboardPage()">
 
+  {{-- LESSON TILE — прикреплённым ученикам и админу (превью).
+       Урок один для всех классов, не только для ОГЭ. --}}
+  @if(!empty($showLessonTile))
+    @include('pwa.student.partials.lesson-tile')
+  @endif
+
   {{-- OGE toggle for grade 8 --}}
   @if((int)($user->grade_num ?? 0) === 8)
   <a href="{{ route('pwa.student.oge-dashboard') }}"

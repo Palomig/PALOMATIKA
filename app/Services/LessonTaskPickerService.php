@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 
 /**
@@ -42,6 +43,68 @@ class LessonTaskPickerService
             $out[] = ['id' => $id, 'title' => $s['title']];
         }
         return $out;
+    }
+
+    /** Массивы (многочастные ответы ВПР) к строке не приводим — считаем пустыми. */
+    private static function scalar(mixed $value): string
+    {
+        return is_array($value) || is_object($value) ? '' : trim((string) $value);
+    }
+
+    /**
+     * Классы для picker'а — строго по наличию задач в банках.
+     *
+     * Иначе учитель видит вкладку «8 класс» и пустоту за ней: файлы ВПР 7–8
+     * лежат, но задач в них нет, а навыки алгебры выгружены только для 7-го.
+     *
+     * @return array<int, array{id:string,label:string,bank:string,grade:?int,banks:?array}>
+     */
+    public function availableClasses(): array
+    {
+        return Cache::remember('picker:classes:v2', now()->addHours(12), function () {
+            $classes = [];
+
+            foreach ([5, 6, 7, 8] as $grade) {
+                $banks = [];
+                if ($this->skills($grade) !== []) {
+                    $banks[] = ['bank' => 'alg-skill', 'label' => 'Навыки'];
+                }
+                if ($this->bankHasTasks('vpr', $grade)) {
+                    $banks[] = ['bank' => 'vpr', 'label' => 'ВПР'];
+                }
+                if ($banks === []) {
+                    continue;
+                }
+
+                $classes[] = [
+                    'id' => (string) $grade,
+                    'label' => $grade . ' класс',
+                    'bank' => $banks[0]['bank'],
+                    'grade' => $grade,
+                    'banks' => count($banks) > 1 ? $banks : null,
+                ];
+            }
+
+            $classes[] = ['id' => '9_oge', 'label' => '9 ОГЭ', 'bank' => 'oge', 'grade' => null, 'banks' => null];
+
+            if ($this->bankHasTasks('ege', null)) {
+                $classes[] = ['id' => 'ege', 'label' => '10–11 ЕГЭ', 'bank' => 'ege', 'grade' => 11, 'banks' => null];
+            }
+
+            return $classes;
+        });
+    }
+
+    /** Есть ли в банке хоть одна пригодная задача (ищем до первой находки). */
+    private function bankHasTasks(string $bank, ?int $grade): bool
+    {
+        foreach ($this->topics($bank, $grade) as $topic) {
+            if ($this->tasks($bank, array_filter(['topic_id' => $topic['id'], 'grade' => $grade])) !== []) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function grades(string $bank): array
@@ -347,16 +410,19 @@ class LessonTaskPickerService
 
         $result = [];
         foreach ($zadanie['tasks'] ?? [] as $task) {
-            $type = strtolower(trim((string) ($task['task_type'] ?? $zadanieType)));
-            $expression = (string) ($task['expression'] ?? $task['prompt'] ?? $task['question'] ?? $task['text'] ?? '');
+            $type = strtolower(trim(self::scalar($task['task_type'] ?? $zadanieType)));
+            $expression = self::scalar($task['expression'] ?? $task['prompt'] ?? $task['question'] ?? $task['text'] ?? '');
             // Банк ФИПИ: условие приходит размеченным. Для списка выбора
             // нужен короткий текст, поэтому разметку сводим к простому тексту.
             if ($expression === '') {
-                $expression = self::conditionFromHtml((string) ($task['html'] ?? ''));
+                $expression = self::conditionFromHtml(self::scalar($task['html'] ?? ''));
             }
-            $hasAnswer  = (string) ($task['answer'] ?? '') !== '';
-            $hasImage   = (string) ($task['svg'] ?? '') !== '' || (string) ($task['image'] ?? '') !== ''
-                || str_contains((string) ($task['html'] ?? ''), '<svg');
+            // У части задач ВПР ответ многочастный (`["в среду", "6"]`). Одной строкой
+            // его не проверить, поэтому для выбора такие задачи считаем «без ответа»:
+            // в урок/ДЗ они попадут только там, где автопроверка не нужна.
+            $hasAnswer  = self::scalar($task['answer'] ?? '') !== '';
+            $hasImage   = self::scalar($task['svg'] ?? '') !== '' || self::scalar($task['image'] ?? '') !== ''
+                || str_contains(self::scalar($task['html'] ?? ''), '<svg');
 
             // Поддерживаются:
             //   expression / word_problem: условие (формула или текст) + ответ (auto-check).

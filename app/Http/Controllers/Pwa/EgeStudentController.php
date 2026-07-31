@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Pwa\Concerns\NormalizesTaskImageViewer;
 use App\Http\Controllers\Traits\MiniAppHelpers;
 use App\Models\OgeAttempt;
+use App\Models\TeacherStudent;
 use App\Models\OgeAttemptScoring;
 use App\Models\OgeVariant;
 use App\Services\EgeTaskDataService;
@@ -52,7 +53,11 @@ class EgeStudentController extends Controller
             ];
         })->all();
 
-        return view('pwa.student.ege-home', compact('user', 'grade', 'activeList'));
+        $hasTeacher = TeacherStudent::where('student_id', $user->id)->exists();
+        // Урок и домашка — единый инструмент для всех классов, не только для ОГЭ.
+        $showLessonTile = $hasTeacher || $user->isAdmin();
+
+        return view('pwa.student.ege-home', compact('user', 'grade', 'activeList', 'hasTeacher', 'showLessonTile'));
     }
 
     public function startFull(Request $request, OgeAttemptService $attemptService)

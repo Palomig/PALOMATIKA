@@ -10,11 +10,20 @@
     </template>
   </div>
 
+  {{-- У 5–8 классов два банка: навыки алгебры и задания ВПР. --}}
+  <div class="tp-pills" x-show="cls && cls.banks" x-cloak style="margin-top:6px">
+    <template x-for="b in (cls?.banks || [])" :key="b.bank">
+      <button type="button" class="topic-pill" :class="{ active: bank === b.bank }"
+              @click="chooseBank(b.bank)" x-text="b.label"></button>
+    </template>
+  </div>
+
   <div x-show="loading" class="picker-group-label">загружаем…</div>
   <div x-show="error" style="color:var(--red);font-size:12px" x-text="error"></div>
 
-  {{-- ============ 9 ОГЭ: раздел → тема → спойлеры-задания ============ --}}
-  <div x-show="bank === 'oge'">
+  {{-- ====== Банки по темам (ОГЭ / ВПР / ЕГЭ): раздел → тема → задания ======
+       Разделы есть только у ОГЭ, у остальных сразу темы. ====== --}}
+  <div x-show="isTopicBank">
     {{-- Разделы (1я часть / 2я часть / Новые задания) --}}
     <div class="tp-pills" x-show="sections.length" style="margin-top:10px">
       <template x-for="s in sections" :key="s.id">
@@ -23,13 +32,17 @@
       </template>
     </div>
 
-    {{-- Темы раздела — номера, горизонтальная прокрутка как в базе --}}
-    <div class="topics-row" x-show="sectionId && topics.length" style="margin-top:10px">
+    {{-- Темы — номера, горизонтальная прокрутка как в базе.
+         У ОГЭ темы появляются после выбора раздела, у ВПР и ЕГЭ разделов нет. --}}
+    <div class="topics-row" x-show="topics.length && (sections.length === 0 || sectionId)" style="margin-top:10px">
       <template x-for="t in topics" :key="t.id">
         <button type="button" class="topic-pill" :class="{ active: topicId === String(t.id) }"
-                @click="chooseTopic(t.id)" x-text="Number(t.id)"></button>
+                @click="chooseTopic(t.id)" :title="t.title" x-text="Number(t.id)"></button>
       </template>
     </div>
+
+    {{-- Название выбранной темы: у ВПР и ЕГЭ по одному номеру не догадаться. --}}
+    <div class="picker-group-label" x-show="topicId && currentTopicTitle" x-text="currentTopicTitle" style="margin-top:6px"></div>
 
     {{-- Спойлеры-задания с карточками задач --}}
     <div class="task-list" x-show="topicId && !loading">
@@ -245,11 +258,10 @@
 // Таблица класс→банк — ЕДИНСТВЕННОЕ место «скрытого банка».
 // window.* вместо const: в homework партиал живёт внутри <template x-if>,
 // и скрипт может выполниться повторно при каждом открытии модалки.
-window.PICKER_CLASSES = window.PICKER_CLASSES || [
-  { id: '7',     label: '7 класс',  bank: 'alg-skill', grade: 7 },
-  { id: '8',     label: '8 класс',  bank: 'alg-skill', grade: 8 },
-  { id: '9_oge', label: '9 ОГЭ',    bank: 'oge',       grade: null },
-];
+// Один инструмент для всех классов. Список приходит с сервера и зависит от
+// того, где реально есть задачи: пустых вкладок быть не должно.
+window.PICKER_CLASSES = window.PICKER_CLASSES
+  || @json(app(App\Services\LessonTaskPickerService::class)->availableClasses());
 
 function taskPicker(config) {
   // Не в reactive-состоянии: запись из renderLatex во время рендера не должна
@@ -273,7 +285,14 @@ function taskPicker(config) {
     katexReady: !!window.katex,
     _reqId: 0,
 
-    get bank() { return this.cls?.bank; },
+    bankOverride: null,
+
+    get bank() { return this.bankOverride || this.cls?.bank; },
+    /** ОГЭ, ВПР и ЕГЭ ходят одинаково: тема → задания. */
+    get isTopicBank() { return ['oge', 'vpr', 'ege', 'alg-topic'].includes(this.bank); },
+    get currentTopicTitle() {
+      return this.topics.find(t => String(t.id) === String(this.topicId))?.title || '';
+    },
 
     // Alpine вызывает init() автоматически: «9 ОГЭ» выбран по умолчанию.
     init() {
@@ -294,17 +313,36 @@ function taskPicker(config) {
     // --- навигация (корзину selected НЕ трогаем — она глобальная) ---
     async chooseClass(c) {
       this.cls = c;
+      this.bankOverride = null;
       this.refs = { grade: c.grade || '', topic_id: '', skill_slug: '' };
       this.sections = []; this.sectionId = null;
       this.topics = []; this.topicId = null;
       this.strips = []; this.tasks = []; this.bucketKey = null;
       this.step = 'strips';
-      if (c.bank === 'oge') {
-        const d = await this.fetchOptions();
-        if (d) this.sections = d.sections || [];
+      await this.loadForBank();
+    },
+
+    /** Переключение банка внутри класса (навыки ↔ ВПР), класс и grade те же. */
+    async chooseBank(bank) {
+      this.bankOverride = bank;
+      this.refs = { grade: this.cls?.grade || '', topic_id: '', skill_slug: '' };
+      this.sections = []; this.sectionId = null;
+      this.topics = []; this.topicId = null;
+      this.strips = []; this.tasks = []; this.bucketKey = null;
+      this.step = 'strips';
+      await this.loadForBank();
+    },
+
+    async loadForBank() {
+      const d = await this.fetchOptions();
+      if (!d) return;
+
+      if (this.isTopicBank) {
+        // У ОГЭ сначала разделы, у ВПР и ЕГЭ их нет — сразу темы.
+        this.sections = d.sections || [];
+        this.topics = d.topics || [];
       } else {
-        const d = await this.fetchOptions();
-        if (d) this.strips = d.skills || [];
+        this.strips = d.skills || [];
       }
     },
     async chooseSection(id) {

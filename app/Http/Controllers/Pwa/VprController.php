@@ -124,13 +124,17 @@ class VprController extends Controller
         $newFipiCount = 0;
         $hasTeacher = TeacherStudent::where('student_id', $user->id)->exists();
 
+        // Урок и домашка — единый инструмент для всех классов, не только для ОГЭ.
+        $showLessonTile = $hasTeacher || $user->isAdmin();
+
         return view('pwa.student.vpr-home', compact(
             'user',
             'grade',
             'activeAttemptsList',
             'weakTopics',
             'newFipiCount',
-            'hasTeacher'
+            'hasTeacher',
+            'showLessonTile'
         ));
     }
 
