@@ -448,16 +448,18 @@ class TeacherController extends Controller
         return response()->json(['success' => true, 'alias' => $alias]);
     }
 
+    /**
+     * Экран домашки учителя — это экран ПРОВЕРКИ, а не расписания.
+     *
+     * Три вкладки: «Новые» (ученик что-то сдал, но работу ещё не отметили
+     * проверенной), «Проверенные» и «Статистика». Выдача ДЗ живёт на уроке,
+     * здесь остаётся резервной кнопкой.
+     */
     public function homework(Request $request)
     {
         $user = $request->user();
-        $scheduleData = $this->collectTeacherScheduleData($user);
-        $relations = $scheduleData['relations'];
-        $evriumSlots = $scheduleData['evriumSlots'];
-        $currentStudents = $scheduleData['currentStudents'];
-        $prevStudents = $scheduleData['prevStudents'];
-        $prevDayLabel = $scheduleData['prevDayLabel'];
 
+        $relations = TeacherStudent::where('teacher_id', $user->id)->get();
         $allStudentIds = $relations->pluck('student_id');
         $allStudents = User::whereIn('id', $allStudentIds)->select('id', 'name', 'grade_num')->orderBy('name')->get();
 
@@ -471,7 +473,8 @@ class TeacherController extends Controller
             ->mapWithKeys(fn (User $s) => [(int) $s->id => $s->grade_num !== null ? (int) $s->grade_num : null])
             ->all();
 
-        $allEvriumNames = collect($evriumSlots)->pluck('students')->flatten()->unique()->sort()->values()->all();
+        $allEvriumNames = collect($this->fetchEvriumSchedule($user->evrium_teacher_id))
+            ->pluck('students')->flatten()->unique()->sort()->values()->all();
         $profileLinkOptions = $this->collectProfileLinkOptions((int) $user->id);
         $topicOptions = collect($this->taskData->getAllTopicsMeta())
             ->map(fn (array $meta, string $topicId) => [
@@ -481,16 +484,127 @@ class TeacherController extends Controller
             ->sortBy('number')
             ->values();
 
-        $recentHomework = \App\Models\Homework::where('teacher_id', $user->id)
-            ->whereIn('homework_type', ['full_variant', 'topic_practice', 'topic_photo_practice'])
-            ->orderByDesc('assigned_at')
-            ->limit(30)
+        $assignments = HomeworkAssignment::query()
+            ->whereHas('homework', fn ($q) => $q->where('teacher_id', $user->id))
+            ->with(['homework:id,title,homework_type,topic_number,assigned_at', 'student:id,name,grade_num'])
+            ->withCount('topicTaskSubmissions')
+            ->withMax('topicTaskSubmissions', 'updated_at')
+            ->orderByDesc('id')
+            ->limit(300)
             ->get();
-        $recentHomework->load('assignments.student:id,name');
+
+        $aliases = $relMap->map(fn ($rel) => $rel->student_alias)->filter()->all();
+        $card = fn (HomeworkAssignment $a) => [
+            'assignment' => $a,
+            'name' => $aliases[$a->student_id] ?? $a->student?->name ?? 'Ученик',
+            'grade' => $a->student?->grade_num,
+            'title' => $a->homework?->title ?? 'Домашнее задание',
+            'done' => (int) $a->tasks_completed,
+            'total' => (int) $a->tasks_total,
+            'submitted' => (int) $a->topic_task_submissions_count,
+            // withMax отдаёт голую строку из БД, а не Carbon.
+            'at' => $this->humanSubmittedAt($a->topic_task_submissions_max_updated_at),
+            'is_debt' => $a->isDebt(),
+        ];
+
+        // Проверять есть что там, где ученик хоть одну задачу сдал.
+        $checkable = $assignments->filter(fn ($a) => $a->homework?->homework_type === 'topic_photo_practice');
+
+        $pending = $checkable
+            ->filter(fn ($a) => $a->topic_task_submissions_count > 0 && $a->reviewed_at === null)
+            ->sortByDesc(fn ($a) => $a->topic_task_submissions_max_updated_at)
+            ->map($card)->values();
+
+        $reviewed = $checkable
+            ->filter(fn ($a) => $a->reviewed_at !== null)
+            ->sortByDesc(fn ($a) => $a->reviewed_at)
+            ->take(50)
+            ->map($card)->values();
 
         return view('pwa.teacher.homework', compact(
-            'user', 'currentStudents', 'prevStudents', 'prevDayLabel', 'allStudents', 'allEvriumNames', 'profileLinkOptions', 'topicOptions', 'recentHomework', 'studentGrades'
-        ) + ['todayLabel' => $scheduleData['todayLabel']]);
+            'user', 'allStudents', 'allEvriumNames', 'profileLinkOptions', 'topicOptions', 'studentGrades',
+            'pending', 'reviewed'
+        ) + ['stats' => $this->homeworkStats($assignments, $aliases)]);
+    }
+
+    /**
+     * «Сегодня в 14:32» вместо diffForHumans: app.locale в проекте — `en`,
+     * и ученикам с учителем прилетало бы «9 seconds ago».
+     */
+    private function humanSubmittedAt(?string $raw): ?string
+    {
+        if ($raw === null) {
+            return null;
+        }
+
+        $at = Carbon::parse($raw);
+
+        if ($at->isToday()) {
+            return 'сегодня в ' . $at->format('H:i');
+        }
+        if ($at->isYesterday()) {
+            return 'вчера в ' . $at->format('H:i');
+        }
+
+        return $at->format('d.m') . ' в ' . $at->format('H:i');
+    }
+
+    /**
+     * Сводка по домашкам: кто сдал, кто нет и кто не делает раз за разом.
+     *
+     * @param  \Illuminate\Support\Collection<int, HomeworkAssignment>  $assignments
+     * @param  array<int, string>  $aliases
+     */
+    private function homeworkStats($assignments, array $aliases): array
+    {
+        $byHomework = $assignments
+            ->filter(fn ($a) => $a->homework !== null)
+            ->groupBy('homework_id')
+            ->map(function ($group) {
+                $first = $group->first();
+
+                return [
+                    'title' => $first->homework->title ?? 'Домашнее задание',
+                    'assigned_at' => $first->homework->assigned_at,
+                    'total' => $group->count(),
+                    'submitted' => $group->filter(fn ($a) => $a->topic_task_submissions_count > 0 || $a->status === 'completed')->count(),
+                    'completed' => $group->where('status', 'completed')->count(),
+                ];
+            })
+            ->sortByDesc(fn ($row) => $row['assigned_at'])
+            ->take(10)
+            ->values()
+            ->all();
+
+        // «Не делал несколько раз» — незакрытые работы, начиная со второй.
+        $debtors = $assignments
+            ->filter(fn ($a) => $a->status !== 'completed')
+            ->groupBy('student_id')
+            ->map(function ($group) use ($aliases) {
+                $first = $group->first();
+
+                return [
+                    'name' => $aliases[$first->student_id] ?? $first->student?->name ?? 'Ученик',
+                    'grade' => $first->student?->grade_num,
+                    'missed' => $group->count(),
+                    'debts' => $group->filter(fn ($a) => $a->debt_since !== null)->count(),
+                    'untouched' => $group->filter(fn ($a) => $a->topic_task_submissions_count === 0)->count(),
+                ];
+            })
+            ->filter(fn ($row) => $row['missed'] >= 2)
+            ->sortByDesc('missed')
+            ->values()
+            ->all();
+
+        $totals = $assignments->filter(fn ($a) => $a->homework?->homework_type === 'topic_photo_practice');
+
+        return [
+            'students_total' => $totals->count(),
+            'students_submitted' => $totals->filter(fn ($a) => $a->topic_task_submissions_count > 0)->count(),
+            'waiting_review' => $totals->filter(fn ($a) => $a->topic_task_submissions_count > 0 && $a->reviewed_at === null)->count(),
+            'by_homework' => $byHomework,
+            'debtors' => $debtors,
+        ];
     }
 
     public function assignHomework(Request $request)
@@ -778,7 +892,12 @@ class TeacherController extends Controller
             'reviewed_by' => $reviewed ? $user->id : null,
         ]);
 
-        return back()->with('success', $reviewed ? 'Отмечено как проверенное.' : 'Отметка «проверено» снята.');
+        if ($reviewed) {
+            // Работа уходит из «Новых» — возвращаться на её же экран незачем.
+            return redirect()->route('pwa.teacher.homework')->with('success', 'Проверено.');
+        }
+
+        return back()->with('success', 'Отметка «проверено» снята.');
     }
 
     /**
