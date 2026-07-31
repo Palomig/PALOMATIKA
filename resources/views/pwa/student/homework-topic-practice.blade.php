@@ -204,7 +204,7 @@
               <span class="photo-label-icon">📷</span>
               <span x-text="photoLabel()"></span>
               <input type="file" name="solution_photos[]" accept="image/*" multiple
-                     @change="pickPhotos($event)">
+                     x-ref="photoInput" @change="pickPhotos($event)">
             </label>
           </div>
           <div class="photo-hint" x-text="hintText()"></div>
@@ -283,8 +283,11 @@ function taskPhotos(ticketUrl) {
       const input = event.target;
       const picked = Array.from(input.files || []);
       // Инпут — только способ выбрать: файлы держим у себя, иначе повторный
-      // выбор затирает уже набранные страницы.
-      input.value = '';
+      // выбор затирает уже набранные страницы. Чистим только если сможем
+      // положить их обратно — без DataTransfer фолбэку нечего будет отправлять.
+      if (this.canRefillInput()) {
+        input.value = '';
+      }
 
       if (!picked.length) return;
 
@@ -294,14 +297,17 @@ function taskPhotos(ticketUrl) {
       this.preparing = true;
       try {
         for (const file of picked.slice(0, room)) {
-          const page = {
+          this.pages.push({
             key: this.nextKey++,
             name: file.name || 'страница',
             file,
             remoteId: null,
             uploading: true,
-          };
-          this.pages.push(page);
+          });
+
+          // Дальше работаем с реактивной ссылкой из pages: правки исходного
+          // объекта Alpine не видит, и строка залипает на «загружаем…».
+          const page = this.pages[this.pages.length - 1];
 
           try {
             page.file = await this.compressPhoto(file);
@@ -309,12 +315,20 @@ function taskPhotos(ticketUrl) {
             page.file = file;
           }
 
-          page.remoteId = await this.uploadToStore(page.file);
-          page.uploading = false;
+          try {
+            page.remoteId = await this.uploadToStore(page.file);
+          } finally {
+            // Строка страницы не должна залипнуть в «загружаем…», что бы ни случилось.
+            page.uploading = false;
+          }
         }
       } finally {
         this.preparing = false;
-        this.syncForm();
+        try {
+          this.syncForm();
+        } catch (e) {
+          // Форма важнее красоты: пусть уйдёт как есть, чем ученик застрянет.
+        }
       }
     },
 
@@ -323,13 +337,22 @@ function taskPhotos(ticketUrl) {
       this.syncForm();
     },
 
+    canRefillInput() {
+      return typeof DataTransfer !== 'undefined';
+    },
+
     /**
      * Приводит форму в соответствие набранным страницам: либо скрытые photo_ids
      * (всё уже в хранилище), либо файлы в инпуте (фолбэк).
+     *
+     * Элементы берём через $refs, а НЕ через $el: внутри обработчика @change
+     * Alpine подставляет в $el сам инпут, и поиск по форме возвращает null.
      */
     syncForm() {
       const holder = this.$refs.photoIds;
-      const input = this.$el.querySelector('input[type=file]');
+      const input = this.$refs.photoInput;
+      if (!holder || !input) return;
+
       holder.replaceChildren();
 
       if (this.allUploaded) {
@@ -340,13 +363,13 @@ function taskPhotos(ticketUrl) {
           hidden.value = page.remoteId;
           holder.appendChild(hidden);
         }
-        if (typeof DataTransfer !== 'undefined') {
+        if (this.canRefillInput()) {
           input.files = new DataTransfer().files;   // не гнать те же байты второй раз
         }
         return;
       }
 
-      if (typeof DataTransfer !== 'undefined') {
+      if (this.canRefillInput()) {
         const dt = new DataTransfer();
         for (const page of this.pages) {
           if (page.file) dt.items.add(page.file);
