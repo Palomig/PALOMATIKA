@@ -21,6 +21,7 @@ use App\Services\MiniAppTaskSanitizer;
 use App\Services\MiniVariantService;
 use App\Services\OgeAttemptService;
 use App\Services\StudentExamAccessService;
+use App\Support\TaskConditionFormatter;
 use App\Services\OgeVariantBuilderService;
 use App\Services\OgeVariantPoolService;
 use App\Services\TaskAnswerResolver;
@@ -1200,19 +1201,15 @@ class StudentController extends Controller
             $def = $taskMap[$taskNum] ?? [];
             $inner = is_array($def['task'] ?? null) ? $def['task'] : [];
 
-            $instructionText = trim((string) (($def['instruction'] ?? $inner['instruction'] ?? '') ?: ''));
-            $conditionText = trim((string) (($inner['text'] ?? $def['text'] ?? $inner['prompt'] ?? $inner['question'] ?? $inner['condition'] ?? $inner['body'] ?? $inner['content'] ?? '') ?: ''));
+            $condition = TaskConditionFormatter::compose(
+                (string) (($def['instruction'] ?? $inner['instruction'] ?? '') ?: ''),
+                (string) (($inner['text'] ?? $def['text'] ?? $inner['prompt'] ?? $inner['question'] ?? $inner['condition'] ?? $inner['body'] ?? $inner['content'] ?? '') ?: ''),
+                (string) (($def['expression'] ?? $inner['expression'] ?? '') ?: '')
+            );
 
-            if ($instructionText !== '' && $conditionText !== '') {
-                $normI = preg_replace('/\s+/u', ' ', mb_strtolower($instructionText));
-                $normC = preg_replace('/\s+/u', ' ', mb_strtolower($conditionText));
-                if ($normI === $normC) {
-                    $instructionText = '';
-                }
-            }
-
-            $taskText = $conditionText !== '' ? $conditionText : $instructionText;
-            $taskExpression = (string) (($def['expression'] ?? $inner['expression'] ?? '') ?: '');
+            $instructionText = $condition['instruction'];
+            $taskText = $condition['text'];
+            $taskExpression = $condition['expression'];
 
             $rawOptions = $def['options'] ?? $inner['options'] ?? null;
             $taskOptions = is_array($rawOptions) ? array_values($rawOptions) : [];
