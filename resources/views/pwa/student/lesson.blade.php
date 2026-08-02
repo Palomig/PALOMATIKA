@@ -3,11 +3,16 @@
 
 @push('katex')
 {{-- SDK Телеграма: на обычной странице безвреден, в мини-аппе даёт события
-     activated/deactivated — без них свёрнутый вебвью выглядит как «на уроке». --}}
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js"
+     activated/deactivated — без них свёрнутый вебвью выглядит как «на уроке».
+     Локальная копия, а не telegram.org: скрипт блокирующий, и поход на чужой
+     домен с мобильного держал страницу секундами. Версия KaTeX — 0.16.9, как на
+     остальных страницах: иначе у урока свой кэш шрифтов и js. --}}
+<script src="/js/telegram-web-app.js"></script>
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
         onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
 @endpush
 
@@ -121,7 +126,13 @@
     </div>
   </template>
 
-  <template x-if="tasks.length === 0">
+  {{-- До первого ответа сервера не показываем «задач нет» — это была ложная
+       надпись в первые секунды загрузки. --}}
+  <template x-if="!loaded">
+    <div style="text-align:center;color:var(--muted);padding:30px 0;">Загружаем урок…</div>
+  </template>
+
+  <template x-if="loaded && tasks.length === 0">
     <div style="text-align:center;color:var(--muted);padding:30px 0;">
       Учитель ещё не добавил задачи. Подожди немного.
     </div>
@@ -136,6 +147,7 @@
       sessionId,
       status: initialStatus,
       tasks: [],
+      loaded: false,       // пришёл первый ответ /state
       sending: {},
       pollTimer: null,
       lock: null,          // {locked_until, released_at, active} из state
@@ -350,6 +362,7 @@
         const r = await fetch(`/lessons/${this.sessionId}/state`, { headers: { 'Accept': 'application/json' }, credentials: 'include' });
         if (!r.ok) return;
         const d = await r.json();
+        this.loaded = true;
         this.status = d.session.status;
         if (this.status === 'ended') this.releaseWakeLock(); // урок кончился — экран гасим как обычно
         this.lock = d.lock || null;
@@ -360,11 +373,12 @@
         if (tj !== tasksJson && !typing) {
           tasksJson = tj;
           this.tasks = d.tasks;
+          // Re-render KaTeX только когда задачи реально изменились: обход всего
+          // body каждые 5 секунд заметно тормозил слабые телефоны.
+          this.$nextTick(() => {
+            if (window.renderMathInElement) window.renderMathInElement(document.body, { delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}], throwOnError: false });
+          });
         }
-        // Re-render KaTeX after data update (next tick)
-        this.$nextTick(() => {
-          if (window.renderMathInElement) window.renderMathInElement(document.body, { delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}], throwOnError: false });
-        });
       },
 
       async submitAnswer(taskId, answer) {
