@@ -2,12 +2,21 @@
 @section('title', 'Урок — palomatika')
 
 @push('katex')
-{{-- SDK Телеграма: на обычной странице безвреден, в мини-аппе даёт события
-     activated/deactivated — без них свёрнутый вебвью выглядит как «на уроке».
-     Локальная копия, а не telegram.org: скрипт блокирующий, и поход на чужой
-     домен с мобильного держал страницу секундами. Версия KaTeX — 0.16.9, как на
-     остальных страницах: иначе у урока свой кэш шрифтов и js. --}}
-<script src="/js/telegram-web-app.js"></script>
+{{-- SDK Телеграма нужен ТОЛЬКО внутри мини-аппа: там он даёт события
+     activated/deactivated, без которых свёрнутый вебвью выглядит как «на уроке».
+     В обычном браузере это мёртвый груз, поэтому грузим по признакам вебвью
+     (сервер их не видит: Телеграм передаёт свои параметры во фрагменте URL, да и
+     тот теряется при переходах внутри PWA). Глобалы вебвью живут на каждой
+     странице, так что проверка работает и после навигации.
+     document.write — намеренно: скрипт обязан выполниться до старта Alpine.
+     Версия KaTeX 0.16.9, как на остальных страницах: иначе у урока свой кэш. --}}
+<script>
+  if (window.TelegramWebviewProxy || window.TelegramWebviewProxyProto
+      || /Telegram/i.test(navigator.userAgent) || /tgWebApp/.test(location.hash)
+      || window.parent !== window) {
+    document.write('<scr' + 'ipt src="/js/telegram-web-app.js"></scr' + 'ipt>');
+  }
+</script>
 <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
