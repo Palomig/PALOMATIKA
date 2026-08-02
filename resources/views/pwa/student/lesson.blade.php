@@ -147,6 +147,7 @@
       tgActive: true,      // мини-апп не свёрнут (activated/deactivated)
       lastSentVisible: null, // дедуп: visibilitychange и tg-события могут дублироваться
       lastInteraction: Date.now(),
+      wakeLock: null,      // Screen Wake Lock: экран не гаснет, пока идёт урок
 
       async init() {
         await this.refreshState();
@@ -157,6 +158,38 @@
         setInterval(() => { this.nowTick = Date.now(); }, 1000);
         this.initActivityTracking();
         this.initBehaviorTracking();
+        this.initWakeLock();
+      },
+
+      // Экран не блокируется, пока ученик на странице урока (как в видеоплеере).
+      // Система сама снимает лок при уходе страницы в фон — поэтому берём заново
+      // при возврате. Часть вебвью отдаёт лок только после жеста, отсюда повтор
+      // по первому тачу (см. initActivityTracking).
+      initWakeLock() {
+        if (!('wakeLock' in navigator)) return;
+        this.requestWakeLock();
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'visible') this.requestWakeLock();
+        });
+      },
+
+      async requestWakeLock() {
+        if (!('wakeLock' in navigator)) return;
+        if (this.wakeLock || this.status === 'ended') return;
+        if (document.visibilityState !== 'visible') return;
+        try {
+          const lock = await navigator.wakeLock.request('screen');
+          lock.addEventListener('release', () => { this.wakeLock = null; });
+          this.wakeLock = lock;
+        } catch (e) {
+          this.wakeLock = null; // NotAllowedError: батарея на нуле, вебвью запретил
+        }
+      },
+
+      releaseWakeLock() {
+        const lock = this.wakeLock;
+        this.wakeLock = null;
+        if (lock) lock.release().catch(() => {});
       },
 
       // Отслеживание присутствия: сервер строит таймлайн present/away.
@@ -183,8 +216,10 @@
         }
 
         ['pointerdown', 'keydown', 'touchstart', 'scroll'].forEach((ev) =>
-          document.addEventListener(ev, () => { this.lastInteraction = Date.now(); },
-            { passive: true, capture: true }));
+          document.addEventListener(ev, () => {
+            this.lastInteraction = Date.now();
+            if (!this.wakeLock) this.requestWakeLock();
+          }, { passive: true, capture: true }));
 
         this.lastSentVisible = this.isOnPage();
         this.sendActivity(this.lastSentVisible);
@@ -316,6 +351,7 @@
         if (!r.ok) return;
         const d = await r.json();
         this.status = d.session.status;
+        if (this.status === 'ended') this.releaseWakeLock(); // урок кончился — экран гасим как обычно
         this.lock = d.lock || null;
         // tasks заменяем только при реальном изменении и не во время ввода:
         // иначе :value каждые 5с переприменяется и стирает недопечатанный ответ.
