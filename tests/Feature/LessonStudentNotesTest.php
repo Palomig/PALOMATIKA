@@ -7,6 +7,8 @@ use App\Models\StudentNote;
 use App\Models\User;
 use App\Services\LessonSessionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
 /**
@@ -137,6 +139,35 @@ class LessonStudentNotesTest extends TestCase
             ->json('participants');
 
         $this->assertSame(2, $participants[0]['notes_count']);
+    }
+
+    /**
+     * Прод-поломка 04.08.2026: api.deepseek.com не ответил за 15с, ConnectionException
+     * не ловился фолбэком — учитель получал «Не удалось сохранить», текст пропадал.
+     */
+    public function test_note_is_saved_when_tagging_api_times_out(): void
+    {
+        $teacher = $this->teacher();
+        $student = $this->student();
+        $session = $this->liveSessionWith($teacher, $student);
+
+        Http::fake(fn () => throw new ConnectionException('cURL error 28: Operation timed out'));
+
+        $this->actingAs($teacher)
+            ->postJson(self::BASE . "/lessons/{$session->id}/notes", [
+                'student_ids' => [$student->id],
+                'text' => 'Плохо понимает равнобедренные треугольники',
+            ])
+            ->assertOk()
+            ->assertJsonPath('kind', 'general')
+            ->assertJsonPath('topic_tag', null);
+
+        $this->assertDatabaseHas('student_notes', [
+            'student_id' => $student->id,
+            'teacher_id' => $teacher->id,
+            'body'       => 'Плохо понимает равнобедренные треугольники',
+            'kind'       => 'general',
+        ]);
     }
 
     public function test_state_counts_only_own_notes(): void
