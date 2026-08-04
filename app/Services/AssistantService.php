@@ -5,9 +5,12 @@ namespace App\Services;
 use App\Models\LessonSession;
 use App\Models\StudentNote;
 use App\Models\User;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use RuntimeException;
+use Throwable;
 
 /**
  * Клиент DeepSeek (OpenAI-совместимый Chat Completions с function calling)
@@ -122,20 +125,28 @@ class AssistantService
      * @param  array<int,array<string,mixed>>  $tools
      * @return array{content:?string,tool_calls:array<int,array{id:?string,name:string,arguments:array<string,mixed>}>}
      *
-     * @throws RuntimeException при HTTP-ошибке (в вызывающем коде — try/catch + fallback)
+     * @throws RuntimeException при HTTP-ошибке И при сетевой (таймаут, DNS, отказ
+     *                          соединения) — вызывающий код ловит один тип
      */
     public function chat(array $messages, array $tools = []): array
     {
-        $response = Http::withToken(config('services.deepseek.api_key'))
-            ->baseUrl(rtrim((string) config('services.deepseek.base_url'), '/'))
-            ->timeout(15)
-            ->retry(1, 200, throw: false)
-            ->post('/chat/completions', [
-                'model' => config('services.deepseek.model'),
-                'messages' => $messages,
-                'tools' => $tools ?: null,
-                'tool_choice' => $tools ? 'auto' : null,
-            ]);
+        try {
+            $response = Http::withToken(config('services.deepseek.api_key'))
+                ->baseUrl(rtrim((string) config('services.deepseek.base_url'), '/'))
+                ->timeout(15)
+                ->retry(1, 200, throw: false)
+                ->post('/chat/completions', [
+                    'model' => config('services.deepseek.model'),
+                    'messages' => $messages,
+                    'tools' => $tools ?: null,
+                    'tool_choice' => $tools ? 'auto' : null,
+                ]);
+        } catch (ConnectionException $e) {
+            // Таймаут/недоступность api.deepseek.com прилетает НЕ как RuntimeException
+            // (ConnectionException extends Exception) — приводим к контракту метода,
+            // иначе фолбэки вызывающих падают 500-й.
+            throw new RuntimeException('DeepSeek chat completion failed: ' . $e->getMessage(), 0, $e);
+        }
 
         if ($response->failed()) {
             throw new RuntimeException(
@@ -159,8 +170,9 @@ class AssistantService
      * Приватность: перед отправкой текст прогоняется через anonymize() (имена
      * участников → плейсхолдеры), но в БД пишется ОРИГИНАЛЬНЫЙ $text.
      *
-     * Fallback: если API упал (RuntimeException из chat()) — записи всё равно
-     * создаются с kind=general, topic_tag=null. Ничего не теряем и наружу не бросаем.
+     * Fallback: если тегирование упало по любой причине (API недоступен, таймаут,
+     * неожиданный ответ) — записи всё равно создаются с kind=general, topic_tag=null.
+     * Ничего не теряем и наружу не бросаем.
      *
      * @param  array<int,int>  $studentIds
      * @return array{kind:string,topic_tag:?string,notes:Collection<int,StudentNote>}
@@ -195,8 +207,14 @@ class AssistantService
                 $topicTag = is_string($tag) && trim($tag) !== '' ? trim($tag) : null;
                 break;
             }
-        } catch (RuntimeException) {
-            // API недоступен — оставляем дефолты (general / null), записи создаём.
+        } catch (Throwable $e) {
+            // Тегирование — украшение, заметка учителя важнее: что бы ни случилось
+            // с API (недоступен, таймаут, мусор в ответе), пишем с дефолтами
+            // general / null. Терять текст нельзя.
+            Log::warning('recordNote: тегирование заметки не удалось, пишу с дефолтами', [
+                'lesson_session_id' => $session->id,
+                'error' => $e->getMessage(),
+            ]);
         }
 
         $notes = collect($studentIds)->map(fn ($studentId) => StudentNote::create([

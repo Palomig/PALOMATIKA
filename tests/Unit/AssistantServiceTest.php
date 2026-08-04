@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Services\AssistantService;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
@@ -144,6 +145,18 @@ class AssistantServiceTest extends TestCase
         Http::fake([
             '*/chat/completions' => Http::response(['error' => 'boom'], 500),
         ]);
+
+        config()->set('services.deepseek.api_key', 'test-key');
+
+        $this->expectException(\RuntimeException::class);
+
+        (new AssistantService())->chat([['role' => 'user', 'content' => 'x']], []);
+    }
+
+    /** Сетевая ошибка (таймаут, DNS) тоже обязана приходить как RuntimeException. */
+    public function test_chat_throws_runtime_exception_on_connection_failure(): void
+    {
+        Http::fake(fn () => throw new ConnectionException('cURL error 28: Operation timed out'));
 
         config()->set('services.deepseek.api_key', 'test-key');
 
