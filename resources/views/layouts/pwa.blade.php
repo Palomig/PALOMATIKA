@@ -342,20 +342,34 @@
     navigator.serviceWorker.register('/sw.js').catch(() => {});
   }
 
-  // Android install prompt
-  let deferredPrompt;
+  // Установка PWA (Chrome/Android/десктоп). Событие прилетает один раз и в
+  // непредсказуемый момент — держим его на window и дублируем своими событиями,
+  // чтобы компоненты (кнопка в профиле) подхватили его независимо от порядка
+  // загрузки Alpine.
+  window.deferredInstallPrompt = null;
+
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
-    deferredPrompt = e;
+    window.deferredInstallPrompt = e;
     document.getElementById('pwa-install-btn')?.classList.remove('hidden');
+    window.dispatchEvent(new CustomEvent('pwa-installable'));
   });
 
-  window.installPwa = async () => {
-    if (!deferredPrompt) return;
-    deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    deferredPrompt = null;
+  window.addEventListener('appinstalled', () => {
+    window.deferredInstallPrompt = null;
     document.getElementById('pwa-install-btn')?.classList.add('hidden');
+    window.dispatchEvent(new CustomEvent('pwa-installed'));
+  });
+
+  // @returns 'accepted' | 'dismissed' | null (если приглашения нет)
+  window.installPwa = async () => {
+    const prompt = window.deferredInstallPrompt;
+    if (!prompt) return null;
+    prompt.prompt();
+    const { outcome } = await prompt.userChoice;
+    window.deferredInstallPrompt = null;
+    document.getElementById('pwa-install-btn')?.classList.add('hidden');
+    return outcome;
   };
 </script>
 

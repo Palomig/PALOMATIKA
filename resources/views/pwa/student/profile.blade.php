@@ -125,6 +125,10 @@
   </div>
   @endif
 
+  {{-- Установка PWA. Без обёртки с animation: transform на предке ломает
+       position:fixed у шторки с инструкцией. --}}
+  @include('pwa.shared.install-app')
+
   {{-- Referral link --}}
   <div class="ref-box">
     <div class="sec-label">Пригласи друга — получи 20%</div>
