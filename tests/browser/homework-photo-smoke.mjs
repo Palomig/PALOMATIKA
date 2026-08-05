@@ -95,12 +95,39 @@ if (!input) {
 }
 await input.uploadFile(...PHOTOS);
 
-// Ждём, пока страницы догрузятся в хранилище.
+// EARLY_SUBMIT=1 — ученик жмёт «Отправить», не дожидаясь загрузки фото (так и
+// ведут себя на телефоне). Форма обязана уйти сама, когда страницы догрузятся.
+if (process.env.EARLY_SUBMIT) {
+  console.log('   (жму «Отправить» сразу, не дожидаясь загрузки)');
+  await page.type('input[name=answer]', process.env.ANSWER || '12');
+  await Promise.all([
+    page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 180000 })
+      .catch(() => console.log('   НАВИГАЦИИ НЕ БЫЛО — раннее нажатие потеряно')),
+    page.click('.submit-btn'),
+  ]);
+  await new Promise(r => setTimeout(r, 1500));
+  console.log('раннее нажатие — итог:', JSON.stringify(await page.evaluate(() => ({
+    плашка: document.querySelector('.notice')?.textContent?.trim(),
+    состояния: [...document.querySelectorAll('.task-state')].map(e => e.textContent.trim()),
+  }))));
+  console.log(problems.length ? `\nJS-ОШИБКИ: ${problems.join(' | ')}` : '\nJS-ошибок не было');
+  await browser.close();
+  process.exit(0);
+}
+
+// Ждём, пока страницы догрузятся в хранилище. Состояние смотрим по разметке:
+// у Alpine 3 нет `__x`, и прежняя проверка проходила мгновенно, не дожидаясь
+// ничего — из-за этого смоук не видел, что кнопка ещё заблокирована.
 await page.waitForFunction(
-  () => !document.querySelector('form.task-form')?.__x?.$data?.preparing,
-  { timeout: 120000 },
-).catch(() => console.log('   (не дождался снятия preparing — смотрю состояние как есть)'));
-await new Promise(r => setTimeout(r, 3000));
+  () => {
+    const form = document.querySelector('form.task-form');
+    if (!form) return false;
+    const states = [...form.querySelectorAll('.page-row .page-state')].map(e => e.textContent.trim());
+    return states.length > 0 && states.every(s => s !== 'загружаем…');
+  },
+  { timeout: 180000, polling: 300 },
+).catch(() => console.log('   (не дождался конца загрузки — смотрю состояние как есть)'));
+await new Promise(r => setTimeout(r, 1500));
 
 const state = await page.evaluate(() => {
   const form = document.querySelector('form.task-form');
