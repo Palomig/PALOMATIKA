@@ -1,6 +1,11 @@
 @extends('layouts.pwa')
 @section('title', 'Домашка — palomatika')
 
+{{-- Условия приходят из банков с формулами в $…$ — без KaTeX ученик видит голый LaTeX. --}}
+@push('katex')
+@include('partials.head-katex')
+@endpush
+
 @push('styles')
   .topbar {
     display: flex; align-items: center; justify-content: space-between;
@@ -25,6 +30,8 @@
   .state-retry { color: #fcd34d; background: rgba(234,179,8,.2); }
   .state-done { color: #86efac; background: rgba(34,197,94,.2); }
   .task-text { color: var(--text); font-size: 14px; line-height: 1.45; overflow-wrap: anywhere; }
+  /* Формулы в условии мельче окружающего текста читаются плохо — как в тесте. */
+  .task-text .katex, .task-instruction .katex { font-size: 1.15em; }
   .task-instruction { color: var(--muted); font-size: 12px; font-weight: 700; margin-bottom: 6px; }
   .task-visual { margin: 4px 0 10px; display: flex; justify-content: center; }
   .task-visual svg { max-width: 100%; width: auto; height: auto; display: block; }
@@ -209,8 +216,11 @@
           </div>
           <div class="photo-hint" x-text="hintText()"></div>
 
-          <button class="submit-btn" type="submit" :disabled="busy || preparing"
-                  x-text="busy ? 'Отправляем…' : '{{ $needsRetry ? 'Отправить вторую попытку' : 'Отправить' }}'"></button>
+          {{-- Кнопку не гасим на время загрузки фото: с телефона снимок едет
+               десятки секунд, и мёртвая кнопка читается как «сдать нельзя».
+               Нажатие в этот момент запоминаем и отправляем форму сами. --}}
+          <button class="submit-btn" type="submit" :disabled="busy"
+                  x-text="busy ? 'Отправляем…' : (queuedSubmit ? 'Отправим, как догрузим фото…' : '{{ $needsRetry ? 'Отправить вторую попытку' : 'Отправить' }}')"></button>
         </form>
       @endif
     </div>
@@ -239,6 +249,24 @@
 const HW_PHOTO_MAX_SIDE = 1600;
 const HW_PHOTO_SKIP_BELOW = 900 * 1024;
 const HW_PHOTO_MAX_PAGES = {{ \App\Models\HomeworkSolutionPhoto::MAX_PER_ATTEMPT }};
+// Ни одно ожидание не должно быть бесконечным: в мобильном вебвью декодирование
+// 12-мегапиксельного снимка и загрузка по слабой сети иногда не завершаются
+// никогда. По таймауту просто идём дальше — фото уедет с формой как есть.
+const HW_PHOTO_DECODE_TIMEOUT = 20000;
+const HW_PHOTO_TICKET_TIMEOUT = 15000;
+const HW_PHOTO_UPLOAD_TIMEOUT = 90000;
+
+/** Ждёт промис не дольше ms; по таймауту отдаёт fallback, не ломая цепочку. */
+function hwWithTimeout(promise, ms, fallback = null) {
+  return new Promise(resolve => {
+    let done = false;
+    const finish = value => { if (!done) { done = true; resolve(value); } };
+    const timer = setTimeout(() => finish(fallback), ms);
+    Promise.resolve(promise)
+      .then(value => { clearTimeout(timer); finish(value); })
+      .catch(() => { clearTimeout(timer); finish(fallback); });
+  });
+}
 
 /**
  * Страницы решения одной задачи. Каждая страница — либо уже загруженная в
@@ -253,6 +281,8 @@ function taskPhotos(ticketUrl) {
     preparing: false,
     busy: false,
     nextKey: 1,
+    // Ученик нажал «Отправить», пока страницы ещё грузились: отправим за него.
+    queuedSubmit: false,
 
     get allUploaded() {
       return this.pages.length > 0 && this.pages.every(p => !!p.remoteId);
@@ -269,8 +299,14 @@ function taskPhotos(ticketUrl) {
       if (!this.pages.length) {
         return 'Если решение на нескольких страницах — прикрепи их все, до ' + HW_PHOTO_MAX_PAGES + '.';
       }
+      if (this.queuedSubmit) {
+        return 'Дожидаемся фото и отправляем — не закрывай страницу.';
+      }
       const left = HW_PHOTO_MAX_PAGES - this.pages.length;
       const base = 'Страниц: ' + this.pages.length + (left > 0 ? ', можно добавить ещё ' + left : ', это максимум');
+      if (this.preparing) {
+        return base + '. Фото ещё грузятся — можно жать «Отправить», отправим сами.';
+      }
       return this.allUploaded ? base + '. Все загружены.' : base + '.';
     },
 
@@ -329,11 +365,29 @@ function taskPhotos(ticketUrl) {
         } catch (e) {
           // Форма важнее красоты: пусть уйдёт как есть, чем ученик застрянет.
         }
+        this.flushQueuedSubmit();
+      }
+    },
+
+    /** Отправляет форму, если ученик нажал кнопку, пока фото ещё грузились. */
+    flushQueuedSubmit() {
+      if (!this.queuedSubmit || this.preparing || this.busy) return;
+      this.queuedSubmit = false;
+      const form = this.$el;
+      // requestSubmit прогоняет форму через тот же обработчик @submit; там, где
+      // его нет (старый WebView), отправляем напрямую — страницы уже набраны.
+      if (typeof form.requestSubmit === 'function') {
+        form.requestSubmit();
+      } else {
+        this.busy = true;
+        form.submit();
       }
     },
 
     removePage(index) {
       this.pages.splice(index, 1);
+      // Убрали последнюю страницу — отложенная отправка больше не нужна.
+      if (!this.pages.length) this.queuedSubmit = false;
       this.syncForm();
     },
 
@@ -381,8 +435,23 @@ function taskPhotos(ticketUrl) {
     /** @returns {Promise<string|null>} photo_id или null, если нужно уйти на фолбэк */
     async uploadToStore(file) {
       try {
-        const ticketResponse = await window.fetchPost(this.ticketUrl);
-        if (!ticketResponse.ok) return null;
+        // Не через window.fetchPost: тому нельзя передать signal, а тикет тоже
+        // должен уметь оборваться по сроку.
+        const ticketResponse = await this.withDeadline(
+          signal => fetch(this.ticketUrl, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': window._csrf,
+              'Accept': 'application/json',
+            },
+            body: '{}',
+            signal,
+          }),
+          HW_PHOTO_TICKET_TIMEOUT,
+        );
+        if (!ticketResponse || !ticketResponse.ok) return null;
 
         const ticket = await ticketResponse.json();
         if (!ticket.enabled || !ticket.upload_url || !ticket.token) return null;
@@ -390,12 +459,16 @@ function taskPhotos(ticketUrl) {
         const form = new FormData();
         form.append('photo', file, file.name || 'solution.jpg');
 
-        const uploaded = await fetch(ticket.upload_url, {
-          method: 'POST',
-          headers: { 'Authorization': 'Bearer ' + ticket.token },
-          body: form,
-        });
-        if (!uploaded.ok) return null;
+        const uploaded = await this.withDeadline(
+          signal => fetch(ticket.upload_url, {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + ticket.token },
+            body: form,
+            signal,
+          }),
+          HW_PHOTO_UPLOAD_TIMEOUT,
+        );
+        if (!uploaded || !uploaded.ok) return null;
 
         const body = await uploaded.json();
         return body.photo_id || null;
@@ -404,10 +477,27 @@ function taskPhotos(ticketUrl) {
       }
     },
 
+    /**
+     * Запрос с жёстким сроком: на слабой сети fetch может висеть до последнего,
+     * а ученик всё это время смотрит на «загружаем…». По сроку рвём соединение
+     * и уходим на фолбэк — файл уедет обычной отправкой формы.
+     */
+    async withDeadline(run, ms) {
+      const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+      const timer = setTimeout(() => controller?.abort(), ms);
+      try {
+        return await hwWithTimeout(run(controller?.signal), ms + 1000);
+      } finally {
+        clearTimeout(timer);
+      }
+    },
+
     async compressPhoto(file) {
       if (!file.type.startsWith('image/') || file.size <= HW_PHOTO_SKIP_BELOW) return file;
 
-      const source = await this.decodeImage(file);
+      // Декодирование большого снимка в мобильном вебвью иногда не возвращается
+      // вовсе — тогда шлём оригинал, лишь бы ученик не завис на «загружаем…».
+      const source = await hwWithTimeout(this.decodeImage(file), HW_PHOTO_DECODE_TIMEOUT);
       if (!source) return file;
 
       const scale = Math.min(1, HW_PHOTO_MAX_SIDE / Math.max(source.width, source.height));
@@ -458,7 +548,10 @@ function hwTopicPractice() {
 
     onTaskFormSubmit(event, scope) {
       if (scope.preparing) {
+        // Фото ещё в пути: не отбрасываем нажатие молча — запоминаем и
+        // отправляем сами, как только страницы догрузятся.
         event.preventDefault();
+        scope.queuedSubmit = true;
         return;
       }
       if (!scope.pages.length) {
