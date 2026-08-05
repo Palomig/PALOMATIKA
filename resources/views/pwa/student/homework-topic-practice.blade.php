@@ -372,8 +372,11 @@ function taskPhotos(ticketUrl) {
     /** Отправляет форму, если ученик нажал кнопку, пока фото ещё грузились. */
     flushQueuedSubmit() {
       if (!this.queuedSubmit || this.preparing || this.busy) return;
+      // $el здесь — инпут файла (мы внутри обработчика @change), а не форма;
+      // форму берём от самого инпута, как и остальные элементы — через $refs.
+      const form = this.$refs.photoInput?.form || this.$refs.photoIds?.closest('form');
+      if (!form) return;
       this.queuedSubmit = false;
-      const form = this.$el;
       // requestSubmit прогоняет форму через тот же обработчик @submit; там, где
       // его нет (старый WebView), отправляем напрямую — страницы уже набраны.
       if (typeof form.requestSubmit === 'function') {
