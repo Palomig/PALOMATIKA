@@ -81,6 +81,18 @@ return [
             'replace_placeholders' => true,
         ],
 
+        // Отправка фото домашки живёт наполовину в браузере ученика (сжатие,
+        // загрузка в hw-photos, отправка ответа) — в laravel.log от неё не
+        // остаётся ничего. Сюда клиент присылает свой след, чтобы сбой у
+        // конкретного телефона было видно, а не приходилось угадывать.
+        'hw_photos' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/hw-photos.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 14,
+            'replace_placeholders' => true,
+        ],
+
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),

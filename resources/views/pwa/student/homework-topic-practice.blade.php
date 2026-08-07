@@ -83,6 +83,17 @@
   }
   .page-drop:active { opacity: .6; }
   .photo-hint { font-size: 11px; color: var(--muted); font-weight: 700; }
+  .task-error {
+    display: grid; gap: 8px;
+    padding: 9px 11px; border-radius: 10px;
+    font-size: 12px; font-weight: 700; line-height: 1.4;
+    color: #fecaca; background: rgba(239,68,68,.14); border: 1px solid rgba(239,68,68,.24);
+  }
+  .task-error-btn {
+    border: 1px solid rgba(239,68,68,.4); background: none; color: #fecaca;
+    border-radius: 8px; padding: 7px 10px; font-weight: 800; font-size: 12px; cursor: pointer;
+  }
+  .task-error-btn:active { opacity: .65; }
 
   .hw-modal-overlay {
     position: fixed; inset: 0; z-index: 250;
@@ -118,7 +129,7 @@
 @endpush
 
 @section('body')
-<div class="page" x-data="hwTopicPractice()">
+<div class="page" x-data="hwTopicPractice()" @hw-need-photo="showPhotoModal = true">
   <div class="topbar">
     <a href="{{ route('pwa.student.homework') }}" class="back">←</a>
     <div class="topbar-title">Домашка</div>
@@ -183,15 +194,22 @@
       <div class="task-text">{!! $text !!}</div>
 
       @if(!$accepted)
+        {{-- action/method оставлены рабочими: без JS и в фолбэке с файлами
+             форма отправляется нативно, как раньше. --}}
         <form class="task-form" method="POST" action="{{ route('pwa.student.homework.topic.submit', [$assignment, $task]) }}" enctype="multipart/form-data"
-              x-data="taskPhotos('{{ route('pwa.student.homework.topic.photo-ticket', [$assignment, $task]) }}')"
-              @submit="onTaskFormSubmit($event, $data)">
+              x-ref="form"
+              x-data="taskPhotos({
+                submitUrl: '{{ route('pwa.student.homework.topic.submit', [$assignment, $task]) }}',
+                ticketUrl: '{{ route('pwa.student.homework.topic.photo-ticket', [$assignment, $task]) }}',
+                logUrl: '{{ route('pwa.student.homework.topic.photo-log', [$assignment, $task]) }}',
+                draftKey: 'hw-pages:{{ $assignment->id }}:{{ $task->id }}',
+              })"
+              x-init="restoreDraft()"
+              @submit.prevent="send()">
           @csrf
           {{-- Ответ возвращаем только той задаче, из которой пришла ошибка. --}}
-          <input class="task-input" type="text" name="answer" placeholder="Ответ" required
+          <input class="task-input" type="text" name="answer" placeholder="Ответ" required x-ref="answer"
                  value="{{ (int) session('answer_task_id') === (int) $task->id ? old('answer') : '' }}">
-          {{-- Сюда JS складывает id уже загруженных страниц; тогда файлы на сервер не идут. --}}
-          <div x-ref="photoIds" hidden></div>
 
           <template x-if="pages.length">
             <div class="page-list">
@@ -216,11 +234,22 @@
           </div>
           <div class="photo-hint" x-text="hintText()"></div>
 
+          {{-- Ошибка отправки должна быть видна у своей задачи и без перезагрузки:
+               в WebView ни редиректа, ни страницы-заглушки ученик не увидит. --}}
+          <template x-if="error">
+            <div class="task-error">
+              <div x-text="error"></div>
+              <template x-if="stale">
+                <button type="button" class="task-error-btn" @click="window.location.reload()">Обновить страницу</button>
+              </template>
+            </div>
+          </template>
+
           {{-- Кнопку не гасим на время загрузки фото: с телефона снимок едет
                десятки секунд, и мёртвая кнопка читается как «сдать нельзя».
-               Нажатие в этот момент запоминаем и отправляем форму сами. --}}
+               Нажатие в этот момент само дождётся догрузки внутри send(). --}}
           <button class="submit-btn" type="submit" :disabled="busy"
-                  x-text="busy ? 'Отправляем…' : (queuedSubmit ? 'Отправим, как догрузим фото…' : '{{ $needsRetry ? 'Отправить вторую попытку' : 'Отправить' }}')"></button>
+                  x-text="busy ? 'Отправляем…' : '{{ $needsRetry ? 'Отправить вторую попытку' : 'Отправить' }}'"></button>
         </form>
       @endif
     </div>
@@ -268,21 +297,39 @@ function hwWithTimeout(promise, ms, fallback = null) {
   });
 }
 
+const HW_PHOTO_SUBMIT_TIMEOUT = 30000;
+// Черновик страниц: photo_id живут в hw-photos, поэтому после сбоя, случайной
+// перезагрузки или протухшей сессии ученику не надо переснимать тетрадь.
+const HW_PHOTO_DRAFT_TTL = 24 * 60 * 60 * 1000;
+
 /**
  * Страницы решения одной задачи. Каждая страница — либо уже загруженная в
  * хранилище (есть remoteId), либо файл, который уйдёт на сервер обычной
  * отправкой. Смешивать нельзя: если хоть одна страница не загрузилась,
  * отправляем файлами всё — так учитель точно увидит решение целиком.
+ *
+ * Отправка — один явный сценарий: жмём кнопку → дожидаемся (и при нужде
+ * повторяем) загрузку страниц → одним fetch шлём ответ и photo_id → показываем
+ * результат. Нативной отправки формы в основном пути нет: в Telegram WebView
+ * редирект и ответ сервера ученику не видны, и любой сбой выглядит как тишина.
  */
-function taskPhotos(ticketUrl) {
+function taskPhotos(config) {
   return {
-    ticketUrl,
+    submitUrl: config.submitUrl,
+    ticketUrl: config.ticketUrl,
+    logUrl: config.logUrl,
+    draftKey: config.draftKey,
     pages: [],
     preparing: false,
     busy: false,
     nextKey: 1,
-    // Ученик нажал «Отправить», пока страницы ещё грузились: отправим за него.
-    queuedSubmit: false,
+    error: '',
+    // Сессия/токен протухли: помогает только перезагрузка, фото при этом целы.
+    stale: false,
+    // След того, что происходило на телефоне, — уедет на сервер вместе с итогом.
+    trail: [],
+    // Страница уходит на перезагрузку: кнопку обратно включать не надо.
+    leaving: false,
 
     get allUploaded() {
       return this.pages.length > 0 && this.pages.every(p => !!p.remoteId);
@@ -299,13 +346,13 @@ function taskPhotos(ticketUrl) {
       if (!this.pages.length) {
         return 'Если решение на нескольких страницах — прикрепи их все, до ' + HW_PHOTO_MAX_PAGES + '.';
       }
-      if (this.queuedSubmit) {
-        return 'Дожидаемся фото и отправляем — не закрывай страницу.';
+      if (this.busy) {
+        return 'Отправляем — не закрывай страницу.';
       }
       const left = HW_PHOTO_MAX_PAGES - this.pages.length;
       const base = 'Страниц: ' + this.pages.length + (left > 0 ? ', можно добавить ещё ' + left : ', это максимум');
       if (this.preparing) {
-        return base + '. Фото ещё грузятся — можно жать «Отправить», отправим сами.';
+        return base + '. Фото ещё грузятся — можно жать «Отправить», дождёмся сами.';
       }
       return this.allUploaded ? base + '. Все загружены.' : base + '.';
     },
@@ -330,6 +377,8 @@ function taskPhotos(ticketUrl) {
       const room = HW_PHOTO_MAX_PAGES - this.pages.length;
       if (room <= 0) return;
 
+      this.error = '';
+      this.note('picked', Math.min(picked.length, room) + ' шт.');
       this.preparing = true;
       try {
         for (const file of picked.slice(0, room)) {
@@ -360,38 +409,14 @@ function taskPhotos(ticketUrl) {
         }
       } finally {
         this.preparing = false;
-        try {
-          this.syncForm();
-        } catch (e) {
-          // Форма важнее красоты: пусть уйдёт как есть, чем ученик застрянет.
-        }
-        this.flushQueuedSubmit();
-      }
-    },
-
-    /** Отправляет форму, если ученик нажал кнопку, пока фото ещё грузились. */
-    flushQueuedSubmit() {
-      if (!this.queuedSubmit || this.preparing || this.busy) return;
-      // $el здесь — инпут файла (мы внутри обработчика @change), а не форма;
-      // форму берём от самого инпута, как и остальные элементы — через $refs.
-      const form = this.$refs.photoInput?.form || this.$refs.photoIds?.closest('form');
-      if (!form) return;
-      this.queuedSubmit = false;
-      // requestSubmit прогоняет форму через тот же обработчик @submit; там, где
-      // его нет (старый WebView), отправляем напрямую — страницы уже набраны.
-      if (typeof form.requestSubmit === 'function') {
-        form.requestSubmit();
-      } else {
-        this.busy = true;
-        form.submit();
+        this.saveDraft();
       }
     },
 
     removePage(index) {
       this.pages.splice(index, 1);
-      // Убрали последнюю страницу — отложенная отправка больше не нужна.
-      if (!this.pages.length) this.queuedSubmit = false;
-      this.syncForm();
+      this.error = '';
+      this.saveDraft();
     },
 
     canRefillInput() {
@@ -399,40 +424,237 @@ function taskPhotos(ticketUrl) {
     },
 
     /**
-     * Приводит форму в соответствие набранным страницам: либо скрытые photo_ids
-     * (всё уже в хранилище), либо файлы в инпуте (фолбэк).
+     * Отправка ответа.
      *
-     * Элементы берём через $refs, а НЕ через $el: внутри обработчика @change
-     * Alpine подставляет в $el сам инпут, и поиск по форме возвращает null.
+     * Один проход без скрытой магии: проверили ввод → догрузили недостающие
+     * страницы → отправили JSON → показали ответ сервера. Кнопку разблокируем
+     * в finally, что бы ни случилось: залипшая «Отправляем…» для ученика
+     * неотличима от поломки.
      */
-    syncForm() {
-      const holder = this.$refs.photoIds;
-      const input = this.$refs.photoInput;
-      if (!holder || !input) return;
+    async send() {
+      if (this.busy) return;
 
-      holder.replaceChildren();
+      this.error = '';
+      this.stale = false;
+      this.leaving = false;
 
-      if (this.allUploaded) {
-        for (const page of this.pages) {
-          const hidden = document.createElement('input');
-          hidden.type = 'hidden';
-          hidden.name = 'photo_ids[]';
-          hidden.value = page.remoteId;
-          holder.appendChild(hidden);
-        }
-        if (this.canRefillInput()) {
-          input.files = new DataTransfer().files;   // не гнать те же байты второй раз
-        }
+      const answer = (this.$refs.answer?.value || '').trim();
+      if (!answer) {
+        this.error = 'Впиши ответ.';
+        this.$refs.answer?.focus();
+        return;
+      }
+      if (!this.pages.length) {
+        // Модалка живёт во внешнем компоненте страницы — до него событие всплывёт.
+        this.$dispatch('hw-need-photo');
         return;
       }
 
-      if (this.canRefillInput()) {
-        const dt = new DataTransfer();
-        for (const page of this.pages) {
-          if (page.file) dt.items.add(page.file);
+      this.busy = true;
+      this.note('submit_start', this.pages.length + ' стр.');
+
+      try {
+        await this.ensureUploaded();
+
+        if (!this.allUploaded) {
+          // Хранилище недоступно — уходим обычной отправкой формы с файлами.
+          this.note('fallback_native');
+          this.report('fallback');
+          if (this.fillFallbackInput()) {
+            this.leaving = true;
+            this.$refs.form.submit();   // напрямую: обработчик @submit нам здесь не нужен
+            return;
+          }
+          this.error = 'Не получилось загрузить фото. Проверь интернет и попробуй ещё раз.';
+          return;
         }
-        input.files = dt.files;
+
+        const response = await this.withDeadline(
+          signal => fetch(this.submitUrl, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': window._csrf,
+              'Accept': 'application/json',
+              'X-Requested-With': 'XMLHttpRequest',
+            },
+            body: JSON.stringify({ answer, photo_ids: this.pages.map(p => p.remoteId) }),
+            signal,
+          }),
+          HW_PHOTO_SUBMIT_TIMEOUT,
+        );
+
+        if (!response) {
+          this.note('submit_timeout');
+          this.error = 'Сервер не ответил. Фото сохранены — попробуй отправить ещё раз.';
+          this.report('timeout');
+          return;
+        }
+
+        this.note('submit_http', response.status);
+
+        // 419/401 — протухшая сессия или CSRF-токен. Раньше это приезжало
+        // страницей-заглушкой, которую ученик в WebView просто не видел.
+        if (response.status === 419 || response.status === 401 || response.redirected) {
+          this.stale = true;
+          this.error = 'Страница устарела. Обнови её и отправь ещё раз — фото уже сохранены, переснимать не нужно.';
+          this.report('stale');
+          return;
+        }
+
+        const body = await response.json().catch(() => null);
+
+        if (!body) {
+          this.error = 'Сервер ответил непонятно (код ' + response.status + '). Попробуй ещё раз.';
+          this.report('bad_body');
+          return;
+        }
+
+        if (body.reload) {
+          // Состояние задачи изменилось, сообщение сервер положил во флеш.
+          this.dropDraft();
+          this.leaving = true;
+          this.report(body.ok ? 'ok' : 'retry');
+          window.location.reload();
+          return;
+        }
+
+        if (body.code === 'photo_rejected') {
+          // Эти photo_id больше ничего не стоят — повторная отправка тех же
+          // даст ту же ошибку, проще честно попросить фото заново.
+          this.pages = [];
+          this.dropDraft();
+        }
+
+        this.error = body.message || 'Не получилось отправить. Попробуй ещё раз.';
+        this.report('rejected');
+      } catch (e) {
+        this.note('submit_error', (e && e.name) === 'AbortError' ? 'оборвано' : (e && e.message));
+        this.error = 'Не получилось отправить ответ — похоже, пропал интернет. Фото сохранены, попробуй ещё раз.';
+        this.report('network');
+      } finally {
+        if (!this.leaving) this.busy = false;
       }
+    },
+
+    /** Дотягивает страницы, которые не доехали в хранилище с первого раза. */
+    async ensureUploaded() {
+      const pending = this.pages.filter(p => !p.remoteId && p.file);
+      if (!pending.length) return;
+
+      this.preparing = true;
+      try {
+        for (const page of pending) {
+          page.uploading = true;
+          try {
+            page.remoteId = await this.uploadToStore(page.file);
+            this.note(page.remoteId ? 'reupload_ok' : 'reupload_failed', page.name);
+          } finally {
+            page.uploading = false;
+          }
+        }
+      } finally {
+        this.preparing = false;
+        this.saveDraft();
+      }
+    },
+
+    /**
+     * Фолбэк: кладёт файлы обратно в инпут, чтобы форма ушла как обычный
+     * multipart. Работает, только когда файлы есть у всех страниц.
+     */
+    fillFallbackInput() {
+      const input = this.$refs.photoInput;
+      if (!input) return false;
+
+      const files = this.pages.map(p => p.file).filter(Boolean);
+      if (files.length !== this.pages.length) return false;
+
+      if (!this.canRefillInput()) {
+        // Без DataTransfer инпут держит то, что выбрал ученик, — этого хватит.
+        return !!(input.files && input.files.length);
+      }
+
+      const dt = new DataTransfer();
+      for (const file of files) dt.items.add(file);
+      input.files = dt.files;
+      return dt.files.length > 0;
+    },
+
+    restoreDraft() {
+      try {
+        const raw = localStorage.getItem(this.draftKey);
+        if (!raw) return;
+
+        const draft = JSON.parse(raw);
+        if (!draft || !Array.isArray(draft.pages) || Date.now() - (draft.at || 0) > HW_PHOTO_DRAFT_TTL) {
+          this.dropDraft();
+          return;
+        }
+
+        this.pages = draft.pages
+          .filter(p => p && p.remoteId)
+          .slice(0, HW_PHOTO_MAX_PAGES)
+          .map(p => ({
+            key: this.nextKey++,
+            name: p.name || 'страница',
+            file: null,          // байтов больше нет, но они уже в хранилище
+            remoteId: p.remoteId,
+            uploading: false,
+          }));
+      } catch (e) {
+        // Черновик — удобство, а не условие работы.
+      }
+    },
+
+    saveDraft() {
+      try {
+        const ready = this.pages
+          .filter(p => p.remoteId)
+          .map(p => ({ name: p.name, remoteId: p.remoteId }));
+
+        if (!ready.length) {
+          this.dropDraft();
+          return;
+        }
+        localStorage.setItem(this.draftKey, JSON.stringify({ at: Date.now(), pages: ready }));
+      } catch (e) {
+        // Приватный режим/переполненное хранилище — не повод ломать отправку.
+      }
+    },
+
+    dropDraft() {
+      try {
+        localStorage.removeItem(this.draftKey);
+      } catch (e) {}
+    },
+
+    note(step, detail) {
+      this.trail.push({
+        at: new Date().toTimeString().slice(0, 8),
+        step,
+        detail: detail == null ? '' : String(detail).slice(0, 200),
+      });
+      if (this.trail.length > 40) this.trail.shift();
+    },
+
+    /**
+     * Отдаёт накопленный след на сервер. Половина сценария выполняется на
+     * телефоне, и без этого следа сбой у ученика не оставляет вообще никаких
+     * следов — ни в базе, ни в логах.
+     */
+    report(outcome) {
+      const trail = this.trail.splice(0, this.trail.length);
+      if (!trail.length) return;
+
+      try {
+        window.fetchPost(this.logUrl, {
+          outcome,
+          trail,
+          ua: (navigator.userAgent || '').slice(0, 200),
+        }).catch(() => {});
+      } catch (e) {}
     },
 
     /** @returns {Promise<string|null>} photo_id или null, если нужно уйти на фолбэк */
@@ -454,10 +676,20 @@ function taskPhotos(ticketUrl) {
           }),
           HW_PHOTO_TICKET_TIMEOUT,
         );
-        if (!ticketResponse || !ticketResponse.ok) return null;
+        if (!ticketResponse) {
+          this.note('ticket_timeout');
+          return null;
+        }
+        if (!ticketResponse.ok) {
+          this.note('ticket_http', ticketResponse.status);
+          return null;
+        }
 
         const ticket = await ticketResponse.json();
-        if (!ticket.enabled || !ticket.upload_url || !ticket.token) return null;
+        if (!ticket.enabled || !ticket.upload_url || !ticket.token) {
+          this.note('ticket_off');
+          return null;
+        }
 
         const form = new FormData();
         form.append('photo', file, file.name || 'solution.jpg');
@@ -471,11 +703,20 @@ function taskPhotos(ticketUrl) {
           }),
           HW_PHOTO_UPLOAD_TIMEOUT,
         );
-        if (!uploaded || !uploaded.ok) return null;
+        if (!uploaded) {
+          this.note('upload_timeout', file.size);
+          return null;
+        }
+        if (!uploaded.ok) {
+          this.note('upload_http', uploaded.status);
+          return null;
+        }
 
         const body = await uploaded.json();
+        if (!body.photo_id) this.note('upload_no_id');
         return body.photo_id || null;
       } catch (e) {
+        this.note('upload_error', (e && e.name) === 'AbortError' ? 'оборвано' : (e && e.message));
         return null;
       }
     },
@@ -548,23 +789,6 @@ function taskPhotos(ticketUrl) {
 function hwTopicPractice() {
   return {
     showPhotoModal: false,
-
-    onTaskFormSubmit(event, scope) {
-      if (scope.preparing) {
-        // Фото ещё в пути: не отбрасываем нажатие молча — запоминаем и
-        // отправляем сами, как только страницы догрузятся.
-        event.preventDefault();
-        scope.queuedSubmit = true;
-        return;
-      }
-      if (!scope.pages.length) {
-        event.preventDefault();
-        this.showPhotoModal = true;
-        return;
-      }
-      // Отправка занимает секунды — блокируем повторные тапы.
-      scope.busy = true;
-    },
   };
 }
 </script>

@@ -11,13 +11,34 @@ description: "Use when deploying, managing CI/CD, clearing caches, running artis
 **Путь на сервере:** /home/c/cw95865/OGE/
 **Production URL:** https://cw95865.tmweb.ru
 
-## Автоматический CI/CD
+## Как код попадает на прод (с 2026-08-07)
 
-1. **Auto-merge:** Ветки `claude/*` автоматически мержатся в `main` после push
-2. **Auto-deploy:** После merge в `main` — автоматический FTP deploy
-3. **Post-deploy refresh:** Webhook вызывает `deploy:refresh`
+1. **Auto-merge:** ветки `claude/*` автоматически мержатся в `main` после push. Это единственное, что делает GitHub Actions.
+2. **Доставка — вручную, сразу после пуша:** `scripts/deploy-prod.sh` с dev-VPS.
 
-**ВАЖНО:** Любые изменения в ветках `claude/*` попадут на production автоматически!
+**Пуш в `claude/*` больше НЕ означает, что код на проде.** Автодеплой по FTP из
+Actions убран: он регулярно отваливался по таймауту, причём первый шаг мог
+помечаться зелёным без реального трансфера — `main` уезжал вперёд, а прод молча
+оставался на старом коде (так, например, `resources/views/learn/minus-factoring.blade.php`
+из мёржа 04.08 на прод не попал вовсе и обнаружился только сверкой хешей).
+
+```bash
+scripts/deploy-prod.sh              # от маркера на проде до origin/main
+scripts/deploy-prod.sh --dry-run    # только показать, что поедет
+scripts/deploy-prod.sh --base <sha> # если маркера ещё нет или он врёт
+```
+
+Скрипт: считает изменённые рантайм-файлы → заливает по FTP **только те, чей MD5
+на проде не совпал** (3 попытки) → сверяет каждый после заливки → обновляет
+маркер `storage/app/deployed-commit.txt` → зовёт `deploy:refresh`. При любом
+несошедшемся файле маркер не двигается и `deploy:refresh` не зовётся — «залито»
+всегда значит «проверено».
+
+Что скрипт НЕ делает: не удаляет с прода файлы, удалённые в репозитории (только
+печатает их списком) и не трогает `vendor/`, `tests/`, `docs/`, `*.md`, `.claude/`,
+`.github/`.
+
+**Секреты:** `TMW_PSW` — `/home/dev/.agent-secrets/timeweb.env`, `DEPLOY_WEBHOOK_SECRET` — `.mcp.json`.
 
 ## Post-deploy команда: `deploy:refresh`
 
@@ -35,10 +56,24 @@ php artisan deploy:refresh --no-cache   # Не прогревать кэши
 
 ## Webhook
 
-`POST /api/deploy/refresh` — вызывается GitHub Actions после FTP deploy.
-Требует заголовок `X-Deploy-Secret`.
+`POST /api/deploy/refresh` — зовётся из `scripts/deploy-prod.sh` после заливки.
+Требует заголовок `X-Deploy-Secret`. Он же прогоняет миграции: команды с флагами
+(`migrate --force`) whitelist не пропускает.
 
-## Ручной деплой
+## Заливка одного файла руками
+
+```bash
+set -a; . /home/dev/.agent-secrets/timeweb.env; set +a
+curl -T <файл> "ftp://cw95865.tmweb.ru/OGE/<путь>" --user "cw95865:$TMW_PSW" --ftp-create-dirs
+curl -s --user "cw95865:$TMW_PSW" ftp://cw95865.tmweb.ru/OGE/<путь> | md5sum   # сверка
+```
+
+Тем же FTP читаются логи прода — при разборе инцидента это единственный способ
+увидеть, что упало: `.../OGE/storage/logs/laravel.log`, `.../OGE/storage/logs/hw-photos.log`.
+Access-логи Timeweb в аккаунт не кладёт, а 419/413 и ошибки валидации в
+`laravel.log` не пишутся.
+
+## Деплой с самого сервера (если есть шелл)
 
 ```bash
 cd /home/c/cw95865/OGE

@@ -140,6 +140,7 @@ student_notes.homework_assignment_id   ← заметки учителя по э
 | GET | `/homework/{assignment}` | `StudentController::showTopicHomework` — открыть photo-practice ДЗ |
 | POST | `/homework/{assignment}/tasks/{homeworkTask}` | `StudentController::submitTopicHomeworkTask` — отправить ответ + `photo_id` (или файл, фолбэк) |
 | POST | `/homework/{assignment}/tasks/{homeworkTask}/photo-ticket` | `StudentController::homeworkPhotoTicket` — тикет на прямую загрузку фото в hw-photos |
+| POST | `/homework/{assignment}/tasks/{homeworkTask}/photo-log` | `StudentController::homeworkPhotoLog` — след отправки с телефона ученика в канал `hw_photos` |
 
 ### Parent
 - `parent/child-homework.blade.php` — родитель видит ДЗ ребёнка (детали — в `ParentAppController`)
@@ -161,7 +162,8 @@ student_notes.homework_assignment_id   ← заметки учителя по э
 6. **Ученик отправляет ответ + фото** (`submitTopicHomeworkTask`):
    - Ответ нормализуется (lowercase, whitespace removed) и сравнивается с `correct_answer`
    - Решение может занимать несколько страниц: принимаем **до 10 фото на попытку** (`HomeworkSolutionPhoto::MAX_PER_ATTEMPT`)
-   - Фото: браузер ужимает каждый снимок до ~1600px/JPEG и **грузит напрямую в сервис hw-photos на VPS** (см. `taskPhotos()` во вью). В форму уходят только `photo_ids[]`, файлы через хостинг не идут
+   - Фото: браузер ужимает каждый снимок до ~1600px/JPEG и **грузит напрямую в сервис hw-photos на VPS** (см. `taskPhotos()` во вью)
+   - **Отправка идёт одним `fetch` с JSON `{answer, photo_ids}`** (с 2026-08-07): нажали кнопку → дождались/повторили загрузку страниц → отправили → показали ответ сервера. Нативной отправки формы в основном пути нет
    - Фолбэк (сервис недоступен / нет JS): файлы приходят в Laravel как раньше и сохраняются в `storage/app/public/homework_solutions/{assignment_id}/`. Принимаем до 20 МБ каждый, форматы jpg/png/webp/heic/heif/gif/bmp — **HEIC обязателен, это формат камеры iPhone**
    - Смешанного режима нет: если хоть одна страница не загрузилась в сервис, вся задача уходит файлами — иначе учитель увидит решение кусками
    - При ошибке валидации ответ и `answer_task_id` возвращаются на страницу (плашка по-русски, попытка не тратится)
@@ -169,6 +171,37 @@ student_notes.homework_assignment_id   ← заметки учителя по э
    - Если неверный, попытка #1 → можно попробовать ещё раз (фото нужно прикреплять снова)
    - На попытке #2 (даже если неверно) → `accepted_at=now()` (учитель проверяет по фото)
 7. **`refreshTopicHomeworkProgress`** обновляет статус assignment (`completed` если все принято) и снимает долг, когда работу довели до конца
+
+### Контракт отправки (с 2026-08-07)
+
+Отправка из браузера идёт JSON'ом и получает JSON — раньше это был обычный
+POST формы с редиректом, и в Telegram WebView ученик не видел ни редиректа, ни
+419/413-заглушки: любой сбой выглядел как тишина, а в базе и `laravel.log` не
+оставалось следов. Ответ всегда один и тот же объект:
+
+| Поле | Смысл |
+|---|---|
+| `ok` | приняли ли отправку |
+| `reload` | состояние задачи изменилось, странице надо перечитать себя; сообщение сервер кладёт во флеш, и после перезагрузки его показывает обычная плашка |
+| `message` | готовый текст для ученика |
+| `code` | `validation` \| `photo_rejected` \| `store_failed` — по `photo_rejected` клиент выбрасывает свои `photo_id` и просит фото заново |
+
+No-JS и фолбэк с файлами по-прежнему получают redirect с флешками — контракт
+проверяется тестом `HomeworkPhotoJsonSubmitTest`.
+
+Загруженные `photo_id` клиент держит в `localStorage` (`hw-pages:{assignment}:{task}`,
+сутки): после протухшей сессии, обрыва или случайной перезагрузки ученику не надо
+переснимать тетрадь. Черновик стирается после успешной отправки.
+
+### Телеметрия отправки
+
+`POST /homework/{assignment}/tasks/{task}/photo-log` — клиент присылает след
+(`picked`, `upload_http`, `submit_start`, `submit_http`, `submit_error`, …) и
+свой User-Agent; всё уходит в отдельный канал `hw_photos`
+(`storage/logs/hw-photos.log`, 14 дней). Половина сценария выполняется на
+телефоне, и без этого лога сбой у ученика не оставляет следов вообще нигде —
+именно поэтому предыдущие попытки чинили вслепую. **Первое место, куда смотреть
+по жалобе «не отправляется».**
 
 ## Проверка учителем (с 2026-07-30)
 

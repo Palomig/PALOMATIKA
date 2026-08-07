@@ -1,10 +1,14 @@
-name: Auto Merge and Deploy
+# Только авто-мёрж в main. Деплой отсюда убран (2026-08-07): FTP Timeweb из
+# GitHub Actions регулярно отваливался по таймауту, причём первый шаг мог
+# помечаться зелёным без реального трансфера — в итоге main уезжал вперёд, а
+# прод молча оставался на старом коде. Доставка теперь ручная и проверяемая:
+# scripts/deploy-prod.sh с dev-VPS (заливка + сверка хешей + deploy:refresh).
+name: Auto Merge
 
 on:
   push:
     branches:
       - 'claude/**'
-      - 'main'
 
 jobs:
   auto-merge:
@@ -43,84 +47,3 @@ jobs:
           # Best-effort: never fail the pipeline if the branch moved concurrently.
           git push origin main:"$BRANCH_NAME" \
             || echo "::warning::Could not fast-forward $BRANCH_NAME to main (concurrent update?)"
-
-  deploy:
-    needs: auto-merge
-    # Run after auto-merge on claude/** push, OR directly on main push
-    if: |
-      always() && (needs.auto-merge.result == 'success' || github.ref == 'refs/heads/main')
-    runs-on: ubuntu-latest
-    concurrency:
-      group: production-deploy
-      cancel-in-progress: false
-
-    steps:
-      - name: Checkout main branch
-        uses: actions/checkout@v4
-        with:
-          ref: main
-
-      - name: Deploy to Timeweb via FTP
-        id: ftp-deploy
-        continue-on-error: true
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./
-          server-dir: /OGE/
-          dangerous-clean-slate: false
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/.github/**
-            **/.vscode/**
-            **/.idea/**
-            **/tests/**
-            **/phpunit.xml
-            **/*.md
-            **/.DS_Store
-            **/vendor/**
-            **/docs/oge_project_package.zip
-
-      - name: Wait 30s before retry
-        if: steps.ftp-deploy.outcome == 'failure'
-        run: sleep 30
-
-      - name: Deploy to Timeweb via FTP (retry)
-        if: steps.ftp-deploy.outcome == 'failure'
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./
-          server-dir: /OGE/
-          dangerous-clean-slate: false
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/.github/**
-            **/.vscode/**
-            **/.idea/**
-            **/tests/**
-            **/phpunit.xml
-            **/*.md
-            **/.DS_Store
-            **/vendor/**
-            **/docs/oge_project_package.zip
-
-      - name: Trigger deploy refresh webhook
-        continue-on-error: true
-        run: |
-          if [ -n "${{ secrets.DEPLOY_WEBHOOK_SECRET }}" ]; then
-            curl -s -X POST "https://cw95865.tmweb.ru/api/deploy/refresh" \
-              -H "X-Deploy-Secret: ${{ secrets.DEPLOY_WEBHOOK_SECRET }}" \
-              -H "Content-Type: application/json" \
-              --max-time 120
-          else
-            echo "DEPLOY_WEBHOOK_SECRET not configured, skipping webhook"
-          fi
