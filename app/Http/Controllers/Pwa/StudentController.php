@@ -34,6 +34,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class StudentController extends Controller
 {
@@ -1387,6 +1388,69 @@ class StudentController extends Controller
         return response()->json($ticket + ['enabled' => true]);
     }
 
+    /**
+     * След отправки фото со стороны браузера ученика.
+     *
+     * Половина сценария (сжатие, загрузка в hw-photos, сам fetch) выполняется
+     * на телефоне, и когда там что-то ломается, на сервере не остаётся никаких
+     * следов: в БД пусто, в laravel.log пусто. Без этого лога каждый разбор
+     * жалобы «не отправляется» превращается в угадывание.
+     */
+    public function homeworkPhotoLog(Request $request, HomeworkAssignment $assignment, HomeworkTopicTask $homeworkTask)
+    {
+        $user = $request->user();
+        abort_unless((int) $assignment->student_id === (int) $user->id, 403);
+        abort_unless((int) $homeworkTask->homework_id === (int) $assignment->homework_id, 404);
+
+        $trail = collect($request->input('trail', []))
+            ->take(40)
+            ->map(fn ($entry) => [
+                'at' => Str::limit((string) data_get($entry, 'at', ''), 20, ''),
+                'step' => Str::limit((string) data_get($entry, 'step', ''), 40, ''),
+                'detail' => Str::limit((string) data_get($entry, 'detail', ''), 200, ''),
+            ])
+            ->values()
+            ->all();
+
+        Log::channel('hw_photos')->info('homework photo submit trail', [
+            'outcome' => Str::limit((string) $request->input('outcome', ''), 40, ''),
+            'assignment' => $assignment->id,
+            'task' => $homeworkTask->id,
+            'task_order' => $homeworkTask->task_order,
+            'student' => $user->id,
+            'ua' => Str::limit((string) $request->input('ua', ''), 200, ''),
+            'trail' => $trail,
+        ]);
+
+        return response()->json(['ok' => true]);
+    }
+
+    /**
+     * Ответ на отправку задачи.
+     *
+     * Основной клиент отправляет ответ обычным fetch и ждёт JSON: у него нет
+     * нативной навигации, поэтому редирект он показать не может, а любой
+     * не-JSON ответ (419, 413, страница логина) для него неотличим от тишины.
+     * No-JS и фолбэк с файлами по-прежнему получают redirect с флешками.
+     *
+     * $reload — состояние задачи на сервере изменилось и страница должна
+     * перечитать себя; сообщение кладём во флеш, чтобы после перезагрузки его
+     * показала та же плашка, что и при обычной отправке.
+     */
+    private function homeworkTaskJson(Request $request, bool $ok, string $message, bool $reload, string $code = '')
+    {
+        if ($reload) {
+            $request->session()->flash($ok ? 'success' : 'error', $message);
+        }
+
+        return response()->json([
+            'ok' => $ok,
+            'reload' => $reload,
+            'message' => $message,
+            'code' => $code,
+        ]);
+    }
+
     public function submitTopicHomeworkTask(Request $request, HomeworkAssignment $assignment, HomeworkTopicTask $homeworkTask)
     {
         $user = $request->user();
@@ -1422,6 +1486,12 @@ class StudentController extends Controller
         ]);
 
         if ($validator->fails()) {
+            if ($request->expectsJson()) {
+                // Перезагружать нечего: ответ и фото у ученика на экране целы,
+                // ошибку показываем прямо под кнопкой.
+                return $this->homeworkTaskJson($request, false, $validator->errors()->first(), false, 'validation');
+            }
+
             // Ответ и id задачи возвращаем на страницу, чтобы ученик не вбивал его заново,
             // а плашка с ошибкой была видна именно у своей задачи.
             return back()
@@ -1439,6 +1509,10 @@ class StudentController extends Controller
         ]);
 
         if ($submission->exists && $submission->accepted_at !== null) {
+            if ($request->expectsJson()) {
+                return $this->homeworkTaskJson($request, true, 'Эта задача уже принята.', true);
+            }
+
             return back()->with('success', 'Эта задача уже принята.');
         }
 
@@ -1464,10 +1538,18 @@ class StudentController extends Controller
                         'student' => $user->id,
                     ]);
 
+                    $message = "Задача {$homeworkTask->task_order}: фото не подтвердилось хранилищем. Прикрепи его заново — попытка не потрачена.";
+
+                    if ($request->expectsJson()) {
+                        // Клиент по этому коду выбрасывает свои photo_id: они уже
+                        // ничего не стоят, и повторная отправка тех же даст то же самое.
+                        return $this->homeworkTaskJson($request, false, $message, false, 'photo_rejected');
+                    }
+
                     return back()
                         ->withInput()
                         ->with('answer_task_id', $homeworkTask->id)
-                        ->with('error', "Задача {$homeworkTask->task_order}: фото не подтвердилось хранилищем. Прикрепи его заново — попытка не потрачена.");
+                        ->with('error', $message);
                 }
             }
         } else {
@@ -1483,10 +1565,16 @@ class StudentController extends Controller
                     'error' => $e->getMessage(),
                 ]);
 
+                $message = "Задача {$homeworkTask->task_order}: не удалось сохранить фото. Попробуй отправить ещё раз — попытка не потрачена.";
+
+                if ($request->expectsJson()) {
+                    return $this->homeworkTaskJson($request, false, $message, false, 'store_failed');
+                }
+
                 return back()
                     ->withInput()
                     ->with('answer_task_id', $homeworkTask->id)
-                    ->with('error', "Задача {$homeworkTask->task_order}: не удалось сохранить фото. Попробуй отправить ещё раз — попытка не потрачена.");
+                    ->with('error', $message);
             }
         }
 
@@ -1528,12 +1616,21 @@ class StudentController extends Controller
         $this->refreshTopicHomeworkProgress($assignment);
 
         if (!$isCorrect && $attemptsCount === 1) {
-            return back()->with('error', "Задача {$homeworkTask->task_order}: ответ не совпал с правильным. Попробуй ещё раз, фото решения нужно прикрепить снова.");
+            $message = "Задача {$homeworkTask->task_order}: ответ не совпал с правильным. Попробуй ещё раз, фото решения нужно прикрепить снова.";
+
+            // Попытка засчитана — карточка задачи на странице уже другая, её надо перечитать.
+            return $request->expectsJson()
+                ? $this->homeworkTaskJson($request, false, $message, true)
+                : back()->with('error', $message);
         }
 
-        return back()->with('success', $isCorrect
+        $message = $isCorrect
             ? "Задача {$homeworkTask->task_order} принята: ответ верный."
-            : "Задача {$homeworkTask->task_order}: вторая попытка принята. Учитель посмотрит решение по фото.");
+            : "Задача {$homeworkTask->task_order}: вторая попытка принята. Учитель посмотрит решение по фото.";
+
+        return $request->expectsJson()
+            ? $this->homeworkTaskJson($request, true, $message, true)
+            : back()->with('success', $message);
     }
 
     private function homeworkAnswerMatches(?string $correctAnswer, string $answer): bool

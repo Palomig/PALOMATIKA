@@ -82,6 +82,9 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
         Route::get('/homework/{assignment}', [StudentController::class, 'showTopicHomework'])->name('pwa.student.homework.topic');
         Route::post('/homework/{assignment}/tasks/{homeworkTask}', [StudentController::class, 'submitTopicHomeworkTask'])->name('pwa.student.homework.topic.submit');
         Route::post('/homework/{assignment}/tasks/{homeworkTask}/photo-ticket', [StudentController::class, 'homeworkPhotoTicket'])->name('pwa.student.homework.topic.photo-ticket');
+        Route::post('/homework/{assignment}/tasks/{homeworkTask}/photo-log', [StudentController::class, 'homeworkPhotoLog'])
+            ->middleware('throttle:30,1')
+            ->name('pwa.student.homework.topic.photo-log');
 
         // Lesson endpoints (для polling в dashboard и страницы урока)
         Route::get('/lessons/active',          [StudentLessonController::class, 'active'])->name('pwa.student.lessons.active');
