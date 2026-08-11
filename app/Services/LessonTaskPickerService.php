@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\TaskTopic;
+
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 
@@ -461,12 +463,21 @@ class LessonTaskPickerService
 
     private function egeTopics(): array
     {
-        $base = storage_path('app/tasks/ege');
-        $ids = [];
-        if (File::isDirectory($base)) {
-            foreach (File::files($base) as $file) {
-                if (preg_match('/^topic_(\d{2})\.json$/', $file->getFilename(), $m)) {
-                    $ids[] = $m[1];
+        // Темы берутся из базы, если банк туда перенесён, и только иначе —
+        // из файлов. Список по файлам врал после переезда: у ФИПИ 19 номеров
+        // заданий, а файла topic_03 в прежнем банке не было вовсе, и тема
+        // «Стереометрия» у учителя просто отсутствовала.
+        $ids = TaskTopic::query()
+            ->where('bank', 'ege')->whereNull('grade')
+            ->orderBy('topic')->pluck('topic')->all();
+
+        if ($ids === []) {
+            $base = storage_path('app/tasks/ege');
+            if (File::isDirectory($base)) {
+                foreach (File::files($base) as $file) {
+                    if (preg_match('/^topic_(\d{2})\.json$/', $file->getFilename(), $m)) {
+                        $ids[] = $m[1];
+                    }
                 }
             }
         }
@@ -475,11 +486,11 @@ class LessonTaskPickerService
         $allMeta = method_exists($svc, 'getAllTopicsMeta') ? $svc->getAllTopicsMeta() : [];
         $result = [];
         foreach ($ids as $id) {
-            $title = $allMeta[$id]['title'] ?? null;
-            if (!$title) {
-                $data = $svc->getTopicData($id);
-                $title = $data['meta']['title'] ?? "Тема $id";
-            }
+            // Название сначала из самой темы: после переезда нумерация
+            // заданий ЕГЭ разошлась с прежней картой (13 звалось
+            // «Неравенствами», хотя у ФИПИ это уравнение).
+            $data = $svc->getTopicData($id);
+            $title = $data['meta']['title'] ?? ($allMeta[$id]['title'] ?? "Тема $id");
             $result[] = ['id' => $id, 'title' => (string) $title];
         }
         return $result;
