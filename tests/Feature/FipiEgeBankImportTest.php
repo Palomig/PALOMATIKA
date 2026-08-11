@@ -60,7 +60,7 @@ class FipiEgeBankImportTest extends TestCase
                 [
                     'guid' => 'AAAA0000000000000000000000000002',
                     'task_no' => 1, 'subtype_id' => 'p2', 'subtype_title' => 'Окружность',
-                    'html' => '<p>Рисунок: <img src="img/AAAA02/pic.png" alt="рисунок"></p>',
+                    'html' => '<p>Рисунок: <img class="fipi-figure" src="img/AAAA02/pic.png" alt="рисунок"></p>',
                     'images' => ['img/AAAA02/pic.png'],
                     'answer' => '12', 'answer_src' => 'codex',
                 ],
@@ -137,6 +137,8 @@ class FipiEgeBankImportTest extends TestCase
         $this->assertStringContainsString('src="/ege-bank/img/AAAA02/pic.png"',
             $withPicture->payload['html'],
             'относительный путь в PWA разрешался бы от адреса страницы и давал 404');
+        $this->assertStringContainsString('class="fipi-figure"', $withPicture->payload['html'],
+            'по классу шаблон отличает чертёж от обозначения внутри предложения');
     }
 
     public function test_topic_is_served_from_database_after_import(): void
