@@ -280,6 +280,13 @@ class EgeTaskDataService
      */
     public function topicDataExists(string $topicId): bool
     {
+        // Сначала база: после переезда файла темы может не быть вовсе —
+        // например, `topic_03.json` не существовало никогда, и тема
+        // «Стереометрия» показывалась как «данные не готовы».
+        if (app(TaskBankRepository::class)->hasData('ege', $topicId)) {
+            return true;
+        }
+
         return File::exists("{$this->basePath}/topic_{$topicId}.json");
     }
 
