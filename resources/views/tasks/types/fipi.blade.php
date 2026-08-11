@@ -53,6 +53,11 @@
 
 @once
     @push('styles')
+    {{-- Обёртка <style> обязательна: `head-config` выводит стек `styles`
+         ПОСЛЕ закрытия своего тега, и push без тега печатает правила текстом
+         поверх страницы. В PWA тот же стек лежит ВНУТРИ <style>, и там тег не
+         нужен — одноимённые стеки с разной семантикой легко перепутать. --}}
+    <style>
         /* Инлайновые SVG приходят с классами Tailwind (`max-w-[320px]`),
            ширину задают они; здесь только страховка от переполнения. */
         .fipi-condition svg, .fipi-options svg { max-width: 100%; height: auto; }
@@ -77,5 +82,6 @@
         .fipi-condition p:last-child { margin-bottom: 0; }
         .fipi-condition table { border-collapse: collapse; }
         .fipi-condition td { vertical-align: top; padding: 2px 6px; }
+    </style>
     @endpush
 @endonce

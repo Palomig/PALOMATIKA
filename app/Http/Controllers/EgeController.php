@@ -35,7 +35,8 @@ class EgeController extends Controller
             ]);
         }
 
-        return view('ege.index', compact('topics'));
+        // Витрина общая с ОГЭ: данные одинаковые, разница в подписях.
+        return view('topics.index', ['topics' => $topics, 'bank' => 'ege']);
     }
 
     /**
