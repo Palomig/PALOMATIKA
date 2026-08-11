@@ -38,6 +38,10 @@
             @include('ege.partials.types.expression', compact('zadanie', 'block', 'topicId'))
             @break
 
+        @case('fipi')
+            @include('ege.partials.types.fipi', compact('zadanie', 'block', 'topicId'))
+            @break
+
         @case('word_problem')
             @include('ege.partials.types.word-problem', compact('zadanie', 'block', 'topicId'))
             @break

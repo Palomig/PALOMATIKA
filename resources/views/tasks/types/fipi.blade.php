@@ -66,6 +66,10 @@
             background: #fff; border-radius: 8px; padding: 8px; margin: .4rem 0;
         }
         .fipi-condition img.fipi-inline, .fipi-options img.fipi-inline {
+            /* display обязателен: Tailwind Preflight делает картинки
+               блочными, и обозначения вроде «SABCD» вставали каждое с
+               новой строки, разрывая предложение. */
+            display: inline-block;
             background: #fff; border-radius: 3px; padding: 0 2px;
             height: 1.35em; width: auto; vertical-align: -0.28em;
         }
