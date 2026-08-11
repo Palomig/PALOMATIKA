@@ -57,6 +57,22 @@
            ширину задают они; здесь только страховка от переполнения. */
         .fipi-condition svg, .fipi-options svg { max-width: 100%; height: auto; }
         .fipi-condition img, .fipi-options img { max-width: 100%; height: auto; }
+        /* Растры ЕГЭ. Своих SVG для этого банка нет, и по решению Стаса
+           чертежи остаются картинками ФИПИ — а они чёрным по прозрачному и
+           на тёмном фоне интерфейса почти не читаются. Отсюда белая
+           подложка: чертёж выглядит вклеенным листом, обозначение внутри
+           предложения — просто набранным символом. */
+        .fipi-condition img.fipi-figure {
+            background: #fff; border-radius: 8px; padding: 8px; margin: .4rem 0;
+        }
+        .fipi-condition img.fipi-inline, .fipi-options img.fipi-inline {
+            /* display обязателен: Tailwind Preflight делает картинки
+               блочными, и обозначения вроде «SABCD» вставали каждое с
+               новой строки, разрывая предложение. */
+            display: inline-block;
+            background: #fff; border-radius: 3px; padding: 0 2px;
+            height: 1.35em; width: auto; vertical-align: -0.28em;
+        }
         .fipi-condition p { margin: 0 0 .6rem; }
         .fipi-condition p:last-child { margin-bottom: 0; }
         .fipi-condition table { border-collapse: collapse; }

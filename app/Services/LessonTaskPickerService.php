@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\TaskTopic;
+
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 
@@ -27,6 +29,18 @@ class LessonTaskPickerService
         'new'   => ['title' => 'Новые задания', 'topics' => ['09', '10', '15', '16', '17']],
     ];
 
+    /**
+     * Разделы профиля ЕГЭ: номера заданий 1–12 дают краткий ответ, 13–19 —
+     * развёрнутый. Формат ответа у них разный (число против корней на
+     * отрезке или множества промежутков), и учителю удобнее выбирать часть,
+     * а не листать девятнадцать номеров подряд — так же, как в ОГЭ.
+     */
+    public const EGE_SECTIONS = [
+        'part1' => ['title' => '1я часть', 'topics' => ['01', '02', '03', '04', '05', '06',
+                                                        '07', '08', '09', '10', '11', '12']],
+        'part2' => ['title' => '2я часть', 'topics' => ['13', '14', '15', '16', '17', '18', '19']],
+    ];
+
     /** Метка задания «Новые задания» внутри topic_XX.json (zadanie.label). */
     public const NEW_ZADANIE_LABEL = 'Новые задания';
 
@@ -35,11 +49,14 @@ class LessonTaskPickerService
      */
     public function sections(string $bank): array
     {
-        if ($bank !== 'oge') {
-            return [];
-        }
+        $map = match ($bank) {
+            'oge' => self::OGE_SECTIONS,
+            'ege' => self::EGE_SECTIONS,
+            default => [],
+        };
+
         $out = [];
-        foreach (self::OGE_SECTIONS as $id => $s) {
+        foreach ($map as $id => $s) {
             $out[] = ['id' => $id, 'title' => $s['title']];
         }
         return $out;
@@ -132,10 +149,11 @@ class LessonTaskPickerService
             default     => [],
         };
 
-        if ($bank === 'oge' && $section !== null && isset(self::OGE_SECTIONS[$section])) {
+        $sectionMap = $bank === 'oge' ? self::OGE_SECTIONS : ($bank === 'ege' ? self::EGE_SECTIONS : []);
+        if ($section !== null && isset($sectionMap[$section])) {
             $byId = array_column($topics, null, 'id');
             $topics = [];
-            foreach (self::OGE_SECTIONS[$section]['topics'] as $id) {
+            foreach ($sectionMap[$section]['topics'] as $id) {
                 if (isset($byId[$id])) {
                     $topics[] = $byId[$id];
                 }
@@ -461,12 +479,21 @@ class LessonTaskPickerService
 
     private function egeTopics(): array
     {
-        $base = storage_path('app/tasks/ege');
-        $ids = [];
-        if (File::isDirectory($base)) {
-            foreach (File::files($base) as $file) {
-                if (preg_match('/^topic_(\d{2})\.json$/', $file->getFilename(), $m)) {
-                    $ids[] = $m[1];
+        // Темы берутся из базы, если банк туда перенесён, и только иначе —
+        // из файлов. Список по файлам врал после переезда: у ФИПИ 19 номеров
+        // заданий, а файла topic_03 в прежнем банке не было вовсе, и тема
+        // «Стереометрия» у учителя просто отсутствовала.
+        $ids = TaskTopic::query()
+            ->where('bank', 'ege')->whereNull('grade')
+            ->orderBy('topic')->pluck('topic')->all();
+
+        if ($ids === []) {
+            $base = storage_path('app/tasks/ege');
+            if (File::isDirectory($base)) {
+                foreach (File::files($base) as $file) {
+                    if (preg_match('/^topic_(\d{2})\.json$/', $file->getFilename(), $m)) {
+                        $ids[] = $m[1];
+                    }
                 }
             }
         }
@@ -475,11 +502,11 @@ class LessonTaskPickerService
         $allMeta = method_exists($svc, 'getAllTopicsMeta') ? $svc->getAllTopicsMeta() : [];
         $result = [];
         foreach ($ids as $id) {
-            $title = $allMeta[$id]['title'] ?? null;
-            if (!$title) {
-                $data = $svc->getTopicData($id);
-                $title = $data['meta']['title'] ?? "Тема $id";
-            }
+            // Название сначала из самой темы: после переезда нумерация
+            // заданий ЕГЭ разошлась с прежней картой (13 звалось
+            // «Неравенствами», хотя у ФИПИ это уравнение).
+            $data = $svc->getTopicData($id);
+            $title = $data['meta']['title'] ?? ($allMeta[$id]['title'] ?? "Тема $id");
             $result[] = ['id' => $id, 'title' => (string) $title];
         }
         return $result;

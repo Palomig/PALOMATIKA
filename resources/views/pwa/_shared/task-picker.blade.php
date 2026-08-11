@@ -22,7 +22,7 @@
   <div x-show="error" style="color:var(--red);font-size:12px" x-text="error"></div>
 
   {{-- ====== Банки по темам (ОГЭ / ВПР / ЕГЭ): раздел → тема → задания ======
-       Разделы есть только у ОГЭ, у остальных сразу темы. ====== --}}
+       Разделы есть у ОГЭ и ЕГЭ (части экзамена), у ВПР сразу темы. ====== --}}
   <div x-show="isTopicBank">
     {{-- Разделы (1я часть / 2я часть / Новые задания) --}}
     <div class="tp-pills" x-show="sections.length" style="margin-top:10px">
@@ -33,7 +33,7 @@
     </div>
 
     {{-- Темы — номера, горизонтальная прокрутка как в базе.
-         У ОГЭ темы появляются после выбора раздела, у ВПР и ЕГЭ разделов нет. --}}
+         У ОГЭ и ЕГЭ темы появляются после выбора части, у ВПР — сразу. --}}
     <div class="topics-row" x-show="topics.length && (sections.length === 0 || sectionId)" style="margin-top:10px">
       <template x-for="t in topics" :key="t.id">
         <button type="button" class="topic-pill" :class="{ active: topicId === String(t.id) }"
@@ -338,7 +338,7 @@ function taskPicker(config) {
       if (!d) return;
 
       if (this.isTopicBank) {
-        // У ОГЭ сначала разделы, у ВПР и ЕГЭ их нет — сразу темы.
+        // У ОГЭ и ЕГЭ сначала разделы (части экзамена), у ВПР их нет.
         this.sections = d.sections || [];
         this.topics = d.topics || [];
       } else {

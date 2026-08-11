@@ -180,16 +180,30 @@ class EgeTaskDataService
     {
         $cacheKey = "ege_topic_data_{$topicId}";
 
-        return Cache::remember($cacheKey, 3600, function () use ($topicId) {
-            $filePath = "{$this->basePath}/topic_{$topicId}.json";
+        return Cache::remember($cacheKey, 3600, fn () => $this->readTopic($topicId));
+    }
 
-            if (!File::exists($filePath)) {
-                return [];
-            }
+    /**
+     * Тема из базы, а при её отсутствии — из JSON-файла, как раньше.
+     *
+     * Откат на файл нужен, чтобы выкладка кода и переезд данных были
+     * независимы: миграции и импорт на проде запускаются отдельно, и до
+     * этого момента сервис обязан работать по-старому. Тот же порядок уже
+     * действует для ОГЭ ({@see TaskDataService::readTopic}).
+     */
+    protected function readTopic(string $topicId): array
+    {
+        $repository = app(TaskBankRepository::class);
+        if ($repository->hasData('ege', $topicId)) {
+            return $repository->topicData('ege', $topicId);
+        }
 
-            $content = File::get($filePath);
-            return json_decode($content, true) ?? [];
-        });
+        $filePath = "{$this->basePath}/topic_{$topicId}.json";
+        if (!File::exists($filePath)) {
+            return [];
+        }
+
+        return json_decode(File::get($filePath), true) ?? [];
     }
 
     /**

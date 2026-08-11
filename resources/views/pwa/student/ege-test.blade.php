@@ -5,6 +5,11 @@
 @include('partials.head-katex')
 @endpush
 
+{{-- Панель символов под полем ответа: та же, что во второй части ОГЭ и во
+     вступительной работе. В части 2 профиля ответ бывает корнем с π или
+     множеством промежутков, а таких знаков на клавиатуре телефона нет. --}}
+@include('partials.math-answer-pad')
+
 @push('head')
 <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin>
@@ -220,6 +225,25 @@
   }
 
   /* KaTeX expression block */
+  /* Растры ФИПИ нарисованы чёрным по прозрачному: на тёмном экране их не
+     видно без белой подложки. Чертёж выглядит вклеенным листом, обозначение
+     внутри предложения («SABCD») — набранным символом; класс проставляет
+     экспорт по высоте растра. display обязателен: без него картинка блочная
+     и разрывает предложение. */
+  .q-fipi img { max-width: 100%; height: auto; }
+  .q-fipi img.fipi-figure {
+    display: block; background: #fff; border-radius: 10px;
+    padding: 8px; margin: 12px auto;
+  }
+  .q-fipi img.fipi-inline {
+    display: inline-block; background: #fff; border-radius: 3px;
+    padding: 0 2px; height: 1.35em; width: auto; vertical-align: -0.28em;
+  }
+  .q-fipi p { margin: 0 0 .6rem; }
+  .q-fipi p:last-child { margin-bottom: 0; }
+  .q-fipi table { border-collapse: collapse; }
+  .q-fipi td { vertical-align: top; padding: 2px 6px; }
+
   .q-expression {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -689,12 +713,19 @@
         </div>
 
         {{-- Instruction text --}}
+        {{-- У банка ФИПИ условие целиком лежит в `html`, и канонизатор
+             (MiniAppTaskCanonicalizer) раскладывает его в `text` и `svg`,
+             выставляя `html_condition`. Тогда заголовок задания над условием
+             не нужен — он повторял бы его дословно, — а сам текст идёт
+             обычным весом, а не подзаголовочным. Экран ОГЭ уже так умеет. --}}
         <div class="q-text q-anim" :style="'animation-delay: 0.05s; margin-top: 16px'"
+             x-show="!currentTask.html_condition"
              x-html="formatRichText(currentTask.instruction || currentTask.text || '')"></div>
 
         {{-- Task text (when instruction is a generic heading and task body is separate) --}}
         <template x-if="currentTask.instruction && currentTask.text && currentTask.text !== currentTask.instruction">
-          <div class="q-text q-anim" :style="'animation-delay: 0.07s; margin-top: 10px; font-size: 15px; font-weight: 600'"
+          <div class="q-text q-fipi q-anim"
+               :style="'animation-delay: 0.07s; margin-top: 10px; font-size: 15px; font-weight: ' + (currentTask.html_condition ? '400' : '600')"
                x-html="formatRichText(currentTask.text)"></div>
         </template>
 
@@ -793,7 +824,7 @@
           </template>
 
           {{-- Input type (expression, geometry, word_problem, etc.) --}}
-          <template x-if="normalizedOptions(currentTask).length === 0 && currentTask.type !== 'matching' && currentTask.type !== 'matching_signs'">
+          <template x-if="normalizedOptions(currentTask).length === 0 && currentTask.type !== 'matching' && currentTask.type !== 'matching_signs' && !hasMathAnswer(currentTask)">
             <div>
               <div class="answer-label">Введи ответ</div>
               <input class="answer-input"
@@ -804,6 +835,24 @@
                      x-model="answers[taskKey(currentTask)]"
                      x-ref="answerInput">
               <div class="answer-hint">Введи число и переходи дальше</div>
+            </div>
+          </template>
+
+          {{-- Часть 2: ответ не число, а корни уравнения на отрезке или
+               множество промежутков — поле с панелью символов и
+               предпросмотром набранного. --}}
+          <template x-if="normalizedOptions(currentTask).length === 0 && currentTask.type !== 'matching' && currentTask.type !== 'matching_signs' && hasMathAnswer(currentTask)">
+            <div>
+              <div class="answer-label">Введи ответ</div>
+              <input class="answer-input"
+                     type="text"
+                     inputmode="text"
+                     placeholder="Ответ"
+                     autocomplete="off"
+                     data-mathpad="ege2"
+                     x-model="answers[taskKey(currentTask)]"
+                     x-ref="answerInput">
+              <div class="answer-hint" x-text="answerHint(currentTask)"></div>
             </div>
           </template>
 
@@ -1117,6 +1166,19 @@
       taskKey(task) {
         const raw = Number(task?.attempt_task_number ?? task?.task_number ?? 0);
         return Number.isFinite(raw) && raw > 0 ? raw : 0;
+      },
+
+      // Часть 2 профиля (задания 13–19): ответ бывает корнем с π, точным
+      // радикалом или множеством промежутков — числовым полем его не ввести.
+      hasMathAnswer(task) {
+        return Number(this.displayTaskNumber(task)) >= 13;
+      },
+
+      answerHint(task) {
+        var number = Number(this.displayTaskNumber(task));
+        if (number === 13) return 'Корни через «;» по возрастанию, например π/6;π/2';
+        if (number === 15 || number === 18) return 'Промежутки со скобками, объединение через ∪';
+        return 'Ответ точный, не десятичный: корень пиши как √3';
       },
 
       displayTaskNumber(task) {

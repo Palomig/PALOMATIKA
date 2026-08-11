@@ -129,6 +129,10 @@ class StudentController extends Controller
             ]);
         }
 
+        if ($previewExam === 'ege') {
+            return redirect()->route('pwa.student.ege.home');
+        }
+
         if ($previewExam === 'oge') {
             $grade = 9;
         }

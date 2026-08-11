@@ -50,6 +50,7 @@ class DeployController extends Controller
         // импорт банка ФИПИ и отключение прежнего банка ОГЭ.
         'tasks:import-json',
         'tasks:import-fipi',
+        'tasks:import-fipi-ege',
         'tasks:dump-json',
         'tasks:retire-legacy',
         'tasks:attach-legacy-solutions',
