@@ -79,10 +79,10 @@
   </div>
 
   <div class="tiles-grid">
-    <a href="{{ route('pwa.student.ege.tasks') }}" class="tile-sm">
+    <a href="#" class="tile-sm" @click.prevent="showTaskBase = true">
       <div class="tile-sm-icon">📚</div>
       <div class="tile-sm-name">База заданий</div>
-      <div class="tile-sm-desc">Все задания ЕГЭ по номерам</div>
+      <div class="tile-sm-desc">1я и 2я части</div>
     </a>
     <a href="/practice" class="tile-sm">
       <div class="tile-sm-icon">🎮</div>
@@ -136,6 +136,36 @@
     @endforeach
   </div>
   @endif
+
+  {{-- Выбор части экзамена: 1–12 дают краткий ответ, 13–19 — развёрнутый,
+       и смотреть их вперемешку неудобно. Так же устроен вход в базу
+       заданий ОГЭ. --}}
+  <template x-if="showTaskBase">
+    <div class="fv-overlay" @click.self="showTaskBase = false">
+      <div class="fv-sheet">
+        <div class="fv-handle"></div>
+        <div class="fv-title">База заданий</div>
+
+        <a href="{{ route('pwa.student.ege.tasks', ['part' => 1]) }}" class="fv-option">
+          <div class="fv-opt-icon">📝</div>
+          <div>
+            <div class="fv-opt-name">1я часть</div>
+            <div class="fv-opt-desc">Задания 1–12 · краткий ответ</div>
+          </div>
+        </a>
+
+        <a href="{{ route('pwa.student.ege.tasks', ['part' => 2]) }}" class="fv-option">
+          <div class="fv-opt-icon">✍️</div>
+          <div>
+            <div class="fv-opt-name">2я часть</div>
+            <div class="fv-opt-desc">Задания 13–19 · развёрнутый ответ</div>
+          </div>
+        </a>
+
+        <button class="fv-cancel" @click="showTaskBase = false">Отмена</button>
+      </div>
+    </div>
+  </template>
 
   @if(count($activeList) > 1)
   <template x-if="showUnfinished">
@@ -215,6 +245,7 @@ function egeDashboardPage() {
     copied: false,
     refLink: '{{ url("/") }}?ref={{ $user->id }}',
     showUnfinished: false,
+    showTaskBase: false,
     startingMini: false,
     startingFull: false,
     grade: {{ $grade }},

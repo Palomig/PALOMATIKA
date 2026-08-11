@@ -119,12 +119,37 @@ class EgeFipiVariantTest extends TestCase
         ]);
 
         $this->actingAs($user)->get(route('pwa.student.ege.home'))
-            ->assertSee(route('pwa.student.ege.tasks'), false);
+            ->assertSee('ege-app/tasks', false);
 
         $this->actingAs($user)->get(route('pwa.student.ege.tasks'))
             ->assertOk()
             ->assertSee('База заданий ЕГЭ')
             ->assertSee('Выбери задание');
+    }
+
+    public function test_task_database_is_split_into_exam_parts(): void
+    {
+        $user = User::factory()->create([
+            'role' => 'student', 'grade_num' => 11, 'onboarding_completed_at' => now(),
+        ]);
+
+        // Вход в базу предлагает части, как в ОГЭ.
+        $this->actingAs($user)->get(route('pwa.student.ege.home'))
+            ->assertSee(route('pwa.student.ege.tasks', ['part' => 1]), false)
+            ->assertSee(route('pwa.student.ege.tasks', ['part' => 2]), false);
+
+        // В первой части номера 1–12, во второй 13–19: краткий ответ и
+        // развёрнутый смешивать нельзя, у них разный формат ответа.
+        // Ссылки сравниваем по фрагменту: в разметке «&» экранируется.
+        $first = $this->actingAs($user)->get(route('pwa.student.ege.tasks', ['part' => 1]))->getContent();
+        $this->assertStringContainsString('Задания 1–12 · краткий ответ', $first);
+        $this->assertStringContainsString('topic=12', $first);
+        $this->assertStringNotContainsString('topic=13', $first);
+
+        $second = $this->actingAs($user)->get(route('pwa.student.ege.tasks', ['part' => 2]))->getContent();
+        $this->assertStringContainsString('Задания 13–19 · развёрнутый ответ', $second);
+        $this->assertStringContainsString('topic=13', $second);
+        $this->assertStringNotContainsString('topic=12', $second);
     }
 
     public function test_test_screen_renders_the_condition(): void

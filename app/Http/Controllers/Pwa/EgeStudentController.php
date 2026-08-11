@@ -110,19 +110,27 @@ class EgeStudentController extends Controller
         $user = Auth::user();
         $taskData = new EgeTaskDataService();
 
+        // Часть экзамена: 1–12 дают краткий ответ, 13–19 — развёрнутый.
+        // Деление приходит от самого ФИПИ (qkind) и совпадает с номерами.
+        $part = $request->query('part') === '2' ? 2 : 1;
+        $partTopics = $part === 2
+            ? ['13', '14', '15', '16', '17', '18', '19']
+            : ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+
         $topicIds = collect(array_keys($taskData->getAllTopicsMeta()))
             ->map(fn ($topicId) => str_pad((string) $topicId, 2, '0', STR_PAD_LEFT))
+            ->filter(fn (string $topicId) => in_array($topicId, $partTopics, true))
             ->filter(fn (string $topicId) => $taskData->topicDataExists($topicId))
             ->values()
             ->all();
 
         if ($topicIds === []) {
-            $topicIds = ['01'];
+            $topicIds = [$partTopics[0]];
         }
 
         $maxTopic = max(array_map('intval', $topicIds));
 
-        $selected = str_pad((string) $request->query('topic', '1'), 2, '0', STR_PAD_LEFT);
+        $selected = str_pad((string) $request->query('topic', ltrim($topicIds[0], '0')), 2, '0', STR_PAD_LEFT);
         if (!in_array($selected, $topicIds, true)) {
             $selected = $topicIds[0];
         }
@@ -167,8 +175,12 @@ class EgeStudentController extends Controller
 
         $taskCount = array_sum(array_map(fn ($group) => count($group['tasks']), $zadaniya));
 
+        $partLabel = $part === 2 ? '2я часть' : '1я часть';
+        $partHint = $part === 2 ? 'Задания 13–19 · развёрнутый ответ' : 'Задания 1–12 · краткий ответ';
+
         return view('pwa.student.ege-tasks', compact(
-            'user', 'topicIds', 'selected', 'maxTopic', 'zadaniya', 'taskCount'
+            'user', 'topicIds', 'selected', 'maxTopic', 'zadaniya', 'taskCount',
+            'part', 'partLabel', 'partHint'
         ));
     }
 

@@ -76,11 +76,11 @@
     <a href="{{ route('pwa.student.ege.home') }}" class="back-btn">‹</a>
     <div style="flex:1;">
       <div style="font-family:var(--display);font-size:16px;color:var(--text);">База заданий ЕГЭ</div>
-      <div style="font-size:11px;color:var(--muted);font-weight:700;margin-top:1px;">Профиль · {{ $maxTopic }} заданий</div>
+      <div style="font-size:11px;color:var(--muted);font-weight:700;margin-top:1px;">{{ $partLabel }} · {{ $partHint }}</div>
     </div>
     <div style="background:var(--accent-bg);border:1px solid var(--accent-bd);color:var(--accent);
                 font-size:10px;font-weight:800;padding:4px 10px;border-radius:20px;letter-spacing:.08em;flex-shrink:0;">
-      ЕГЭ · ПРОФИЛЬ
+      ЕГЭ · {{ mb_strtoupper($partLabel) }}
     </div>
   </div>
 
@@ -89,7 +89,7 @@
   <div class="topics-row">
     @foreach($topicIds as $tid)
       <a class="topic-pill {{ $selected === $tid ? 'active' : '' }}"
-         href="{{ route('pwa.student.ege.tasks', ['topic' => (int)$tid]) }}">
+         href="{{ route('pwa.student.ege.tasks', ['topic' => (int)$tid, 'part' => $part]) }}">
         {{ (int)$tid }}
       </a>
     @endforeach
