@@ -222,7 +222,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/view-as/student/exam/{exam}', function (Request $request, string $exam) {
         abort_unless(in_array($request->user()?->role, ['teacher', 'admin'], true), 403);
-        abort_unless(in_array($exam, ['oge', 'vpr'], true), 404);
+        abort_unless(in_array($exam, ['oge', 'vpr', 'ege'], true), 404);
 
         $request->session()->put('view_as_exam', $exam);
         if ($exam === 'vpr' && !in_array((int) $request->session()->get('view_as_vpr_grade'), [5, 6, 7, 8], true)) {

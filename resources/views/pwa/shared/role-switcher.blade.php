@@ -31,6 +31,10 @@
               @csrf
               <button type="submit" class="pwa-context-switcher__btn @if($__rs_exam === 'oge') is-active @endif">ОГЭ</button>
             </form>
+            <form method="POST" action="{{ route('view-as.student.exam', ['exam' => 'ege']) }}">
+              @csrf
+              <button type="submit" class="pwa-context-switcher__btn @if($__rs_exam === 'ege') is-active @endif">ЕГЭ</button>
+            </form>
             <form method="POST" action="{{ route('view-as.student.exam', ['exam' => 'vpr']) }}">
               @csrf
               <button type="submit" class="pwa-context-switcher__btn @if($__rs_exam === 'vpr') is-active @endif">ВПР</button>

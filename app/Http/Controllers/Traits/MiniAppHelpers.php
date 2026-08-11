@@ -25,7 +25,7 @@ trait MiniAppHelpers
 
         $exam = (string) ($request->session()->get('view_as_exam') ?? 'oge');
 
-        return in_array($exam, ['oge', 'vpr'], true) ? $exam : 'oge';
+        return in_array($exam, ['oge', 'vpr', 'ege'], true) ? $exam : 'oge';
     }
 
     protected function resolveStudentViewVprGrade(Request $request, ?User $user): int
