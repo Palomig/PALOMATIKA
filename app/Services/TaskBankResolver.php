@@ -193,7 +193,7 @@ class TaskBankResolver
 
         $expression = (string) ($task['expression'] ?? $task['prompt'] ?? $task['question'] ?? $task['text'] ?? '');
         if ($expression === '' && $rawType === 'fipi') {
-            $expression = self::textFromHtml((string) ($task['html'] ?? ''));
+            $expression = self::conditionFromFipiHtml((string) ($task['html'] ?? ''));
         }
         if ($expression === '' && isset($zadanieContext['instruction'])) {
             $expression = (string) $zadanieContext['instruction'];
@@ -247,6 +247,13 @@ class TaskBankResolver
             $result['image_svg'] = $svg;
         }
         $imageUrl = (string) ($task['image'] ?? '');
+        if ($imageUrl === '' && $rawType === 'fipi') {
+            // У банка ЕГЭ чертёж — растр внутри разметки условия, а не
+            // отдельное поле и не инлайновый SVG, как в ОГЭ. Без этого урок
+            // показывал одно условие: `textFromHtml` вырезает все теги, и
+            // рисунок пропадал молча.
+            $imageUrl = self::figureFromHtml((string) ($task['html'] ?? ''));
+        }
         if ($imageUrl !== '') {
             $result['image_url'] = $imageUrl;
         }
@@ -302,6 +309,49 @@ class TaskBankResolver
         return trim($text);
     }
 
+    /**
+     * Условие задания ФИПИ для урока.
+     *
+     * Отличается от `textFromHtml` одним: обозначения, набранные растрами
+     * внутри предложения («SABCD», «AM = 2»), сохраняются. Вырезанные, они
+     * оставляют дыры — «На рёбрах и отмечены точки и соответственно,
+     * причём , .», — и условие становится нечитаемым. Экраны урока выводят
+     * его через `x-html`, поэтому картинка доедет.
+     *
+     * Самостоятельный чертёж (`fipi-figure`) здесь не нужен: он уезжает
+     * отдельным полем `image_url`.
+     */
+    private static function conditionFromFipiHtml(string $html): string
+    {
+        if ($html === '' || !str_contains($html, 'fipi-inline')) {
+            return self::textFromHtml($html);
+        }
+
+        $kept = [];
+        $prepared = preg_replace_callback(
+            '/<img\b[^>]*>/i',
+            static function (array $match) use (&$kept): string {
+                if (!str_contains($match[0], 'fipi-inline')) {
+                    return '';
+                }
+                $kept[] = $match[0];
+
+                // Маркер из редких символов, а не нулевой байт: strip_tags
+                // внутри textFromHtml вырезает NUL, и картинки терялись.
+                return '⟦' . (count($kept) - 1) . '⟧';
+            },
+            $html
+        ) ?? $html;
+
+        $text = self::textFromHtml($prepared);
+
+        return preg_replace_callback(
+            '/⟦(\d+)⟧/u',
+            static fn (array $match): string => $kept[(int) $match[1]] ?? '',
+            $text
+        ) ?? $text;
+    }
+
     /** Единственный встроенный SVG условия; несколько рисунков не склеиваем. */
     private static function singleSvgFromHtml(string $html): string
     {
@@ -311,6 +361,31 @@ class TaskBankResolver
         }
 
         return $match[0];
+    }
+
+    /**
+     * Адрес чертежа из разметки условия.
+     *
+     * Берётся только `fipi-figure` — самостоятельный рисунок. Растры с
+     * классом `fipi-inline` это обозначения внутри предложения («SABCD»,
+     * «AM = 2»), и показывать их как иллюстрацию к задаче бессмысленно.
+     */
+    private static function figureFromHtml(string $html): string
+    {
+        if ($html === '' || !preg_match_all('/<img\b[^>]*>/i', $html, $images)) {
+            return '';
+        }
+
+        foreach ($images[0] as $img) {
+            if (!str_contains($img, 'fipi-figure')) {
+                continue;
+            }
+            if (preg_match('/\bsrc="([^"]+)"/i', $img, $src)) {
+                return $src[1];
+            }
+        }
+
+        return '';
     }
 
     private function requireRefs(array $refs, array $required): void
