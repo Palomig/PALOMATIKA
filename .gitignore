@@ -61,3 +61,6 @@ public/qa-report.html
 /scripts/minimax-test-report.json
 /scripts/minimax-vision-report.json
 /scripts/minimax-vlm-report.json
+
+# Растры банка ЕГЭ: приезжают архивом при tasks:import-fipi-ege --images=…
+/public/ege-bank/
