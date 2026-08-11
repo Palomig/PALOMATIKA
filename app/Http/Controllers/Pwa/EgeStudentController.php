@@ -30,9 +30,13 @@ class EgeStudentController extends Controller
     public function home(Request $request)
     {
         $user  = Auth::user();
+        // Учитель в режиме просмотра видел «9 класс» — значение по умолчанию
+        // ОГЭ. Для ЕГЭ это 10–11, и подпись на экране должна совпадать с
+        // экзаменом, иначе она сбивает с толку первой же строкой.
         $grade = $this->supportsStudentViewContext($request, $user)
-            ? 9
-            : (int) ($user->grade_num ?? 9);
+            ? 11
+            : (int) ($user->grade_num ?? 11);
+        $gradeLabel = in_array($grade, [10, 11], true) ? (string) $grade : '10–11';
 
         $activeAttempts = OgeAttempt::where('student_id', $user->id)
             ->where('status', 'active')
@@ -57,7 +61,17 @@ class EgeStudentController extends Controller
         // Урок и домашка — единый инструмент для всех классов, не только для ОГЭ.
         $showLessonTile = $hasTeacher || $user->isAdmin();
 
-        return view('pwa.student.ege-home', compact('user', 'grade', 'activeList', 'hasTeacher', 'showLessonTile'));
+        // Последний номер задания — по самому банку, а не константой: на
+        // экране стояло «20 заданий», хотя в профиле их 19. Берём именно
+        // максимальный номер, а не количество тем: пока банк наполняется,
+        // какой-то номер может временно отсутствовать, и «1–17» соврало бы
+        // про сам экзамен.
+        $topics = array_keys((new EgeTaskDataService())->getAvailableTopics());
+        $taskCount = $topics ? max(array_map('intval', $topics)) : 19;
+
+        return view('pwa.student.ege-home', compact(
+            'user', 'grade', 'gradeLabel', 'taskCount', 'activeList', 'hasTeacher', 'showLessonTile'
+        ));
     }
 
     public function startFull(Request $request, OgeAttemptService $attemptService)

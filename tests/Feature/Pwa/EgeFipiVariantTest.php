@@ -86,6 +86,30 @@ class EgeFipiVariantTest extends TestCase
             ->assertSee('hasMathAnswer', false);
     }
 
+    public function test_home_screen_matches_the_other_banks(): void
+    {
+        $user = User::factory()->create([
+            'role' => 'student', 'grade_num' => 11, 'onboarding_completed_at' => now(),
+        ]);
+
+        $page = $this->actingAs($user)->get(route('pwa.student.ege.home'));
+
+        // Те же блоки, что на домашних экранах ОГЭ и ВПР: приветствие,
+        // полоса Premium, плитки разделов. Раньше здесь были заголовок и две
+        // кнопки — ученик попадал будто в другой продукт.
+        $page->assertOk()
+            ->assertSee('greeting-badge', false)
+            ->assertSee('premium-strip', false)
+            ->assertSee('tiles-grid', false)
+            ->assertSee('База заданий')
+            ->assertSee('ЕГЭ · 11 класс');
+
+        // Класс и число заданий берутся из данных, а не из констант ОГЭ:
+        // на экране стояло «9 класс · 20 заданий».
+        $page->assertDontSee('9 класс')
+            ->assertDontSee('20 заданий');
+    }
+
     public function test_test_screen_renders_the_condition(): void
     {
         $user = User::factory()->create([
