@@ -110,6 +110,23 @@ class EgeFipiVariantTest extends TestCase
             ->assertDontSee('20 заданий');
     }
 
+    public function test_task_database_is_a_screen_inside_the_app(): void
+    {
+        // Плитка «База заданий» раньше уводила на сайт (/ege), то есть из
+        // приложения наружу. У ОГЭ и ВПР это экран внутри PWA.
+        $user = User::factory()->create([
+            'role' => 'student', 'grade_num' => 11, 'onboarding_completed_at' => now(),
+        ]);
+
+        $this->actingAs($user)->get(route('pwa.student.ege.home'))
+            ->assertSee(route('pwa.student.ege.tasks'), false);
+
+        $this->actingAs($user)->get(route('pwa.student.ege.tasks'))
+            ->assertOk()
+            ->assertSee('База заданий ЕГЭ')
+            ->assertSee('Выбери задание');
+    }
+
     public function test_test_screen_renders_the_condition(): void
     {
         $user = User::factory()->create([
