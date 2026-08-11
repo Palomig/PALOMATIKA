@@ -64,7 +64,9 @@
                 <div class="tp-illus" x-show="cardSvg(t)" x-html="cardSvg(t)"></div>
                 <template x-if="cardImage(t)">
                   <div class="tp-illus">
-                    <img :src="'/images/tasks/' + Number(refs.topic_id) + '/' + t.image" alt="" loading="lazy">
+                    {{-- Путь из банка ЕГЭ уже абсолютный (/ege-bank/img/…),
+                         у ОГЭ — имя файла внутри папки темы. --}}
+                    <img :src="cardImageSrc(t)" alt="" loading="lazy">
                   </div>
                 </template>
                 <div class="task-item-text" x-show="t.text" x-text="t.text"></div>
@@ -207,6 +209,13 @@
   .task-picker .tp-illus svg { max-width:100%; max-height:160px; height:auto; }
   .task-picker .tp-illus img { max-width:100%; max-height:160px; height:auto; }
   .task-picker .task-item-text { font-size:13px; line-height:1.45; color:var(--text); white-space:pre-line; }
+  /* Растры банка ЕГЭ в карточке: обозначения внутри предложения строкой,
+     чертёж блоком. Оба чёрным по прозрачному — нужна белая подложка. */
+  .task-picker .tp-expr img.fipi-inline {
+    display: inline-block; background: #fff; border-radius: 3px;
+    padding: 0 2px; height: 1.25em; width: auto; vertical-align: -0.24em;
+  }
+  .task-picker .tp-illus img { background: #fff; border-radius: 6px; padding: 4px; }
   .task-picker .tp-expr { font-size:15px; white-space:normal; }
   .task-picker .answer-row { margin-top:8px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
   .task-picker .answer-label { font-size:10px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); white-space:nowrap; }
@@ -376,7 +385,9 @@ function taskPicker(config) {
       this.loading = true; this.error = '';
       try {
         const params = new URLSearchParams({ bank: this.bank });
-        if (this.bank === 'oge' && this.sectionId) params.set('section', this.sectionId);
+        // Раздел шлём для любого банка, где он есть: у ЕГЭ это части
+        // экзамена, и без параметра сервер отдавал все 19 номеров сразу.
+        if (this.sectionId) params.set('section', this.sectionId);
         for (const [k, v] of Object.entries(this.refs))
           if (v !== '' && v != null) params.set(k, v);
         const r = await fetch(`/lessons/picker-options?${params}`,
@@ -414,6 +425,13 @@ function taskPicker(config) {
     cardImage(t) {
       const img = t.image || '';
       return img !== '' && !img.startsWith('<svg') ? img : '';
+    },
+    cardImageSrc(t) {
+      const img = this.cardImage(t);
+      if (img === '') return '';
+      return img.startsWith('/') || img.startsWith('http')
+        ? img
+        : `/images/tasks/${Number(this.refs.topic_id)}/${img}`;
     },
 
     // --- глобальная корзина ---
