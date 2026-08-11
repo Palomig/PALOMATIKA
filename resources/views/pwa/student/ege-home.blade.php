@@ -1,78 +1,151 @@
 @extends('layouts.pwa')
-@section('title', 'ЕГЭ ' . $grade . ' класс — palomatika')
+@section('title', 'ЕГЭ ' . $gradeLabel . ' класс — palomatika')
+
+@push('styles')
+@include('pwa.student.partials.home-styles')
+@endpush
 
 @section('body')
-<div class="home-container" style="min-height:100dvh;padding:24px 20px;max-width:480px;margin:0 auto;">
+{{--
+  Домашний экран ЕГЭ. Раньше здесь были заголовок и две кнопки, тогда как
+  ОГЭ и ВПР показывали приветствие, незавершённые попытки и плитки
+  разделов — ученик попадал будто в другой продукт. Вёрстка и классы те же,
+  что у ВПР; отличается только содержимое плиток.
+--}}
+<div class="home-container" x-data="{ showUnfinished: false }">
 
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;">
-    <div style="font-family:var(--display);font-size:15px;color:var(--accent);">palomatika</div>
-    <div style="background:var(--accent-bg);border:1px solid var(--accent);color:var(--accent);
-                font-size:10px;font-weight:800;padding:4px 10px;border-radius:20px;letter-spacing:.08em;">
-      ЕГЭ · {{ $grade }} КЛАСС
-    </div>
-  </div>
-
-  <div style="text-align:center;padding:32px 0 40px;">
-    <div style="font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
-                color:var(--muted);margin-bottom:16px;">Математика</div>
-    <h1 style="font-family:var(--display);font-size:clamp(28px,8vw,40px);line-height:1.1;margin-bottom:8px;">
-      Подготовка к <em style="color:var(--accent);">ЕГЭ</em>
-    </h1>
-    <p style="font-size:14px;color:var(--muted);font-weight:600;">{{ $grade }} класс · 20 заданий</p>
-  </div>
-
-  {{-- LESSON TILE — прикреплённым ученикам и админу (превью).
-       Урок один для всех классов, не только для ОГЭ. --}}
+  {{-- Урок и домашка — единый инструмент для всех классов, не только ОГЭ. --}}
   @if(!empty($showLessonTile))
-    <div style="margin-bottom:20px;">
-      @include('pwa.student.partials.lesson-tile')
-    </div>
+    @include('pwa.student.partials.lesson-tile')
   @endif
 
-  {{-- Домашка от учителя — так же, как у ОГЭ и ВПР --}}
-  @if($hasTeacher ?? false)
-  <a href="{{ route('pwa.student.homework') }}"
-     style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px;
-            padding:14px;border-radius:14px;text-decoration:none;font-size:14px;font-weight:800;
-            color:var(--text);background:var(--surface);border:1px solid var(--border);">
-    📖 Домашка
-  </a>
-  @endif
-
-  {{-- Тумблер на ОГЭ (повторение) для 10–11 классов --}}
-  @if(in_array((int)($user->grade_num ?? 0), [10, 11], true))
+  {{-- Повторение ОГЭ доступно десятым-одиннадцатым классам. --}}
+  @if(in_array((int) ($user->grade_num ?? 0), [10, 11], true))
   <a href="{{ route('pwa.student.oge-dashboard') }}"
-     style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:20px;
+     style="display:flex;align-items:center;justify-content:center;gap:8px;
             padding:11px;border-radius:12px;text-decoration:none;font-size:13px;font-weight:700;
-            color:var(--accent);background:var(--accent-bg);border:1px solid var(--accent);">
+            color:var(--accent);background:var(--accent-bg);border:1px solid var(--accent-bd);">
     Переключиться на ОГЭ (повторение) →
   </a>
   @endif
 
+  <div class="greeting">
+    <div class="greeting-name">Привет, {{ $user->name ?? 'ученик' }}!</div>
+    <div class="greeting-badge">ЕГЭ · {{ $gradeLabel }} класс</div>
+  </div>
+
+  @if($user->hasTgPremium())
+    <a href="{{ route('pwa.student.profile') }}" class="premium-strip active">
+      <span class="premium-strip-dot"></span>
+      Premium · {{ now()->diffInDays($user->tg_premium_until) }} дн
+    </a>
+  @else
+    <a href="{{ route('pwa.student.profile') }}" class="premium-strip inactive">
+      <span class="premium-strip-dot"></span>
+      Нет Premium
+    </a>
+  @endif
+
   {{-- Незавершённые попытки --}}
-  @foreach($activeList as $att)
-  <a href="{{ route('pwa.student.ege.test', $att['id']) }}"
-     style="display:block;background:var(--surface);border:1.5px solid var(--accent);
-            border-radius:16px;padding:16px;margin-bottom:12px;text-decoration:none;">
-    <div style="font-size:13px;font-weight:800;color:var(--text);">{{ $att['title'] }}</div>
-    <div style="font-size:12px;color:var(--muted);margin-top:4px;">
-      Отвечено {{ $att['answeredCount'] }} из {{ $att['totalCount'] }} · Продолжить →
+  @if(count($activeList) === 1)
+  <a href="{{ route('pwa.student.ege.test', $activeList[0]['id']) }}" class="resume-banner">
+    <div class="resume-left">
+      <div class="resume-pulse"></div>
+      <div>
+        <div class="resume-title">{{ $activeList[0]['title'] }}</div>
+        <div class="resume-sub">
+          Отвечено {{ $activeList[0]['answeredCount'] }} из {{ $activeList[0]['totalCount'] }}
+        </div>
+      </div>
     </div>
+    <div class="resume-btn">Продолжить →</div>
   </a>
-  @endforeach
+  @elseif(count($activeList) > 1)
+  <div class="resume-banner" style="cursor:pointer" @click="showUnfinished = true">
+    <div class="resume-left">
+      <div class="resume-pulse"></div>
+      <div>
+        <div class="resume-title">У вас {{ count($activeList) }} незавершённых попыток</div>
+        <div class="resume-sub">Нажмите, чтобы выбрать</div>
+      </div>
+    </div>
+    <div class="resume-btn">Продолжить →</div>
+  </div>
+  @endif
 
-  <form method="POST" action="{{ route('pwa.student.ege.start') }}">
-    @csrf
-    <button type="submit"
-            style="width:100%;background:var(--accent);color:#fff;border:none;border-radius:14px;
-                   padding:18px;font-family:var(--body);font-size:16px;font-weight:800;cursor:pointer;">
-      Начать вариант ЕГЭ
-    </button>
-  </form>
+  {{-- Мини-варианта у ЕГЭ нет: профиль сдают целиком, и короткой формы
+       работы для него не заводили. Плитка одна, во всю ширину. --}}
+  <div class="tile-row">
+    <form method="POST" action="{{ route('pwa.student.ege.start') }}" style="flex:1">
+      @csrf
+      <button type="submit" class="tile-big tile-blue" style="width:100%;border:none;text-align:left;cursor:pointer">
+        <div class="tile-icon">📝</div>
+        <div class="tile-name">Полный вариант</div>
+        <div class="tile-desc">Задания 1–{{ $taskCount }}, как на экзамене</div>
+      </button>
+    </form>
+  </div>
 
-  {{-- История --}}
-  <a href="{{ route('pwa.student.history') }}"
-     style="display:block;text-align:center;margin-top:20px;font-size:13px;
-            color:var(--muted);font-weight:600;">История попыток</a>
+  <div class="tiles-grid">
+    <a href="{{ route('ege.index') }}" class="tile-sm">
+      <div class="tile-sm-icon">📚</div>
+      <div class="tile-sm-name">База заданий</div>
+      <div class="tile-sm-desc">Все задания ЕГЭ по номерам</div>
+    </a>
+    <a href="/practice" class="tile-sm">
+      <div class="tile-sm-icon">🎮</div>
+      <div class="tile-sm-name">Практика</div>
+      <div class="tile-sm-desc">Мини-игры и тренажёры</div>
+    </a>
+    @if($hasTeacher ?? false)
+    <a href="{{ route('pwa.student.homework') }}" class="tile-sm">
+      <div class="tile-sm-icon">📖</div>
+      <div class="tile-sm-name">Домашка</div>
+      <div class="tile-sm-desc">Задания от учителя</div>
+    </a>
+    @endif
+    <a href="{{ route('pwa.student.history') }}" class="tile-sm">
+      <div class="tile-sm-icon">📊</div>
+      <div class="tile-sm-name">История</div>
+      <div class="tile-sm-desc">Все попытки</div>
+    </a>
+    <a href="{{ route('pwa.student.profile') }}" class="tile-sm">
+      <div class="tile-sm-icon">👤</div>
+      <div class="tile-sm-name">Профиль</div>
+      <div class="tile-sm-desc">Premium · Рефералы</div>
+      @if($user->hasTgPremium())
+      <div class="tile-badge badge-purple tile-badge-top-right" style="font-size:8px;">Premium</div>
+      @endif
+    </a>
+    <a href="{{ route('pwa.student.tutor') }}" class="tile-sm">
+      <div class="tile-sm-icon">🎓</div>
+      <div class="tile-sm-name">Репетитор</div>
+      <div class="tile-sm-desc">Разбор с преподавателем</div>
+    </a>
+  </div>
+
+  {{-- Выбор незавершённой попытки, когда их несколько: та же шторка, что у ВПР --}}
+  <template x-if="showUnfinished">
+    <div class="fv-overlay" @click.self="showUnfinished = false">
+      <div class="fv-sheet">
+        <div class="fv-handle"></div>
+        <div class="fv-title">Незавершённые попытки</div>
+
+        @foreach($activeList as $att)
+        <a href="{{ route('pwa.student.ege.test', $att['id']) }}" class="fv-option">
+          <div class="fv-opt-icon">📝</div>
+          <div>
+            <div class="fv-opt-name">{{ $att['title'] }}</div>
+            <div class="fv-opt-desc">
+              Отвечено {{ $att['answeredCount'] }} из {{ $att['totalCount'] }}
+            </div>
+          </div>
+        </a>
+        @endforeach
+
+        <button class="fv-cancel" @click="showUnfinished = false">Отмена</button>
+      </div>
+    </div>
+  </template>
 </div>
 @endsection
