@@ -72,6 +72,26 @@ class TeacherPickerEgeBankTest extends TestCase
         $this->assertSame('Неравенство', collect($topics)->firstWhere('id', '15')['title']);
     }
 
+    public function test_ege_is_split_into_exam_parts(): void
+    {
+        $picker = app(LessonTaskPickerService::class);
+
+        $this->assertSame(['1я часть', '2я часть'],
+            array_column($picker->sections('ege'), 'title'),
+            'у ЕГЭ 19 номеров заданий: листать их подряд неудобно, как и в ОГЭ');
+
+        $part1 = array_column($picker->topics('ege', null, 'part1'), 'id');
+        $part2 = array_column($picker->topics('ege', null, 'part2'), 'id');
+
+        $this->assertSame(['01', '03'], $part1);
+        $this->assertSame(['15'], $part2, 'краткий и развёрнутый ответ разведены по частям');
+    }
+
+    public function test_vpr_has_no_sections(): void
+    {
+        $this->assertSame([], app(LessonTaskPickerService::class)->sections('vpr'));
+    }
+
     public function test_tasks_of_a_topic_are_offered_to_the_teacher(): void
     {
         $tasks = app(LessonTaskPickerService::class)->tasks('ege', ['topic_id' => '01']);
