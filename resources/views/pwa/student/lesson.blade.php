@@ -26,6 +26,16 @@
 @endpush
 
 @push('styles')
+  /* Растры банка ЕГЭ: чертёж отдельным блоком, обозначения внутри
+     предложения («SABCD», «AM = 2») — строкой. Оба чёрным по прозрачному,
+     поэтому на тёмном фоне нужна подложка; display обязателен, иначе
+     Tailwind-сброс делает их блочными и рвёт предложение. */
+  .lesson-task-expr img.fipi-inline,
+  .lesson-task-expr img.fipi-figure { background: #fff; border-radius: 4px; }
+  .lesson-task-expr img.fipi-inline {
+    display: inline-block; padding: 0 2px; height: 1.3em; width: auto; vertical-align: -0.26em;
+  }
+  .lesson-task-expr img.fipi-figure { display: block; max-width: 100%; padding: 6px; margin: 8px 0; }
   .lesson-task-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
   .lesson-task-card.is-answered { border-color: var(--accent); background: var(--accent-bg); }
   .lesson-task-num { font-family: var(--display); font-size: 18px; color: var(--accent); }
