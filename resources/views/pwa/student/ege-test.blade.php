@@ -220,6 +220,25 @@
   }
 
   /* KaTeX expression block */
+  /* Растры ФИПИ нарисованы чёрным по прозрачному: на тёмном экране их не
+     видно без белой подложки. Чертёж выглядит вклеенным листом, обозначение
+     внутри предложения («SABCD») — набранным символом; класс проставляет
+     экспорт по высоте растра. display обязателен: без него картинка блочная
+     и разрывает предложение. */
+  .q-fipi img { max-width: 100%; height: auto; }
+  .q-fipi img.fipi-figure {
+    display: block; background: #fff; border-radius: 10px;
+    padding: 8px; margin: 12px auto;
+  }
+  .q-fipi img.fipi-inline {
+    display: inline-block; background: #fff; border-radius: 3px;
+    padding: 0 2px; height: 1.35em; width: auto; vertical-align: -0.28em;
+  }
+  .q-fipi p { margin: 0 0 .6rem; }
+  .q-fipi p:last-child { margin-bottom: 0; }
+  .q-fipi table { border-collapse: collapse; }
+  .q-fipi td { vertical-align: top; padding: 2px 6px; }
+
   .q-expression {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -689,12 +708,19 @@
         </div>
 
         {{-- Instruction text --}}
+        {{-- У банка ФИПИ условие целиком лежит в `html`, и канонизатор
+             (MiniAppTaskCanonicalizer) раскладывает его в `text` и `svg`,
+             выставляя `html_condition`. Тогда заголовок задания над условием
+             не нужен — он повторял бы его дословно, — а сам текст идёт
+             обычным весом, а не подзаголовочным. Экран ОГЭ уже так умеет. --}}
         <div class="q-text q-anim" :style="'animation-delay: 0.05s; margin-top: 16px'"
+             x-show="!currentTask.html_condition"
              x-html="formatRichText(currentTask.instruction || currentTask.text || '')"></div>
 
         {{-- Task text (when instruction is a generic heading and task body is separate) --}}
         <template x-if="currentTask.instruction && currentTask.text && currentTask.text !== currentTask.instruction">
-          <div class="q-text q-anim" :style="'animation-delay: 0.07s; margin-top: 10px; font-size: 15px; font-weight: 600'"
+          <div class="q-text q-fipi q-anim"
+               :style="'animation-delay: 0.07s; margin-top: 10px; font-size: 15px; font-weight: ' + (currentTask.html_condition ? '400' : '600')"
                x-html="formatRichText(currentTask.text)"></div>
         </template>
 
