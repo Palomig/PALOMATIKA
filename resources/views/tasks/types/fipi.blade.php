@@ -67,8 +67,11 @@
            на тёмном фоне интерфейса почти не читаются. Отсюда белая
            подложка: чертёж выглядит вклеенным листом, обозначение внутри
            предложения — просто набранным символом. */
+        /* Как чертежи ОГЭ: во всю ширину колонки, до 460px. Растры ФИПИ
+           мелкие, в натуральном размере читаются плохо. */
         .fipi-condition img.fipi-figure {
-            background: #fff; border-radius: 8px; padding: 8px; margin: .4rem 0;
+            display: block; width: 100%; max-width: 460px; height: auto;
+            background: #fff; border-radius: 8px; padding: 8px; margin: .5rem 0;
         }
         .fipi-condition img.fipi-inline, .fipi-options img.fipi-inline {
             /* display обязателен: Tailwind Preflight делает картинки
@@ -80,6 +83,12 @@
         }
         .fipi-condition p { margin: 0 0 .6rem; }
         .fipi-condition p:last-child { margin-bottom: 0; }
+        /* Условие и чертёж — соседние ячейки таблицы; в узкой колонке
+           рисунок сжимается. На малой ширине раскладываем в столбик. */
+        @media (max-width: 700px) {
+            .fipi-condition table, .fipi-condition tbody,
+            .fipi-condition tr, .fipi-condition td { display: block; width: 100%; }
+        }
         .fipi-condition table { border-collapse: collapse; }
         .fipi-condition td { vertical-align: top; padding: 2px 6px; }
     </style>
