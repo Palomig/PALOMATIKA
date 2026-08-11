@@ -59,8 +59,13 @@ class TeacherLessonController extends Controller
             return response()->json(['error' => 'Unknown bank'], 422);
         }
 
+        // Разделы есть у ОГЭ (части и «новые») и у ЕГЭ (части экзамена);
+        // проверять только по ОГЭ нельзя — у банков они разные.
         $section = $request->query('section') ?: null;
-        if ($section !== null && !array_key_exists($section, LessonTaskPickerService::OGE_SECTIONS)) {
+        $knownSections = $bank === 'ege'
+            ? LessonTaskPickerService::EGE_SECTIONS
+            : LessonTaskPickerService::OGE_SECTIONS;
+        if ($section !== null && !array_key_exists($section, $knownSections)) {
             return response()->json(['error' => 'Unknown section'], 422);
         }
 

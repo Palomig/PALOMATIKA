@@ -92,6 +92,38 @@ class TeacherPickerEgeBankTest extends TestCase
         $this->assertSame([], app(LessonTaskPickerService::class)->sections('vpr'));
     }
 
+    public function test_task_card_carries_the_drawing(): void
+    {
+        // Чертёж банка ЕГЭ — растр внутри разметки условия; карточка выбора
+        // оставалась без рисунка, потому что искали только инлайновый SVG.
+        $group = TaskGroup::where('bank', 'ege')->where('topic', '01')->first();
+        $group->tasks()->update(['payload' => [
+            'id' => 1, 'status' => 'production', 'answer' => '7',
+            'html' => '<p>Условие.<img class="fipi-figure" src="/ege-bank/img/A/pic.png" alt="рисунок"></p>',
+        ]]);
+        Cache::flush();
+
+        $tasks = app(LessonTaskPickerService::class)->tasks('ege', ['topic_id' => '01']);
+
+        $this->assertSame('/ege-bank/img/A/pic.png', $tasks[0]['image']);
+    }
+
+    public function test_inline_labels_survive_in_the_card(): void
+    {
+        $group = TaskGroup::where('bank', 'ege')->where('topic', '15')->first();
+        $group->tasks()->update(['payload' => [
+            'id' => 1, 'status' => 'production', 'answer' => '7',
+            'html' => '<p>В пирамиде <img class="fipi-inline" src="/ege-bank/img/A/s.png" alt="рисунок">'
+                . ' сторона равна 8.</p>',
+        ]]);
+        Cache::flush();
+
+        $tasks = app(LessonTaskPickerService::class)->tasks('ege', ['topic_id' => '15']);
+
+        $this->assertStringContainsString('fipi-inline', $tasks[0]['expression'],
+            'без обозначений условие в карточке рассыпается');
+    }
+
     public function test_tasks_of_a_topic_are_offered_to_the_teacher(): void
     {
         $tasks = app(LessonTaskPickerService::class)->tasks('ege', ['topic_id' => '01']);

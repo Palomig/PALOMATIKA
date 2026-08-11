@@ -315,7 +315,9 @@ class LessonTaskPickerService
                         'id'             => $taskId,
                         'expression'     => $expression,
                         'text'           => (string) ($t['text'] ?? ''),
-                        'image'          => (string) ($t['image'] ?? ''),
+                        // У банка ЕГЭ чертёж — растр внутри разметки условия;
+                        // без этого карточка задачи оставалась без рисунка.
+                        'image'          => (string) ($t['image'] ?? self::figureFromHtml((string) ($t['html'] ?? ''))),
                         'answer'         => (string) ($t['answer'] ?? ''),
                         'image_svg'      => (string) ($t['svg'] ?? self::drawingFromHtml((string) ($t['html'] ?? ''))),
                         'group_key'      => $number,
@@ -397,14 +399,60 @@ class LessonTaskPickerService
         if ($html === '') {
             return '';
         }
-        $text = preg_replace('/<svg\\b.*?<\\/svg>/is', '', $html) ?? $html;
+
+        // Обозначения, набранные растрами внутри предложения («SABCD»,
+        // «AM = 2»), сохраняются: вырезанные, они оставляют в карточке дыры —
+        // «На рёбрах и отмечены точки и соответственно, причём , .».
+        // Маркер из редких символов, а не нулевой байт: strip_tags вырезает NUL.
+        $kept = [];
+        $prepared = preg_replace_callback(
+            '/<img\b[^>]*>/i',
+            static function (array $match) use (&$kept): string {
+                if (!str_contains($match[0], 'fipi-inline')) {
+                    return '';
+                }
+                $kept[] = $match[0];
+
+                return '⟦' . (count($kept) - 1) . '⟧';
+            },
+            $html
+        ) ?? $html;
+
+        $text = preg_replace('/<svg\b.*?<\/svg>/is', '', $prepared) ?? $prepared;
         $text = strip_tags(str_replace(['</p>', '</td>'], ' ', $text));
         $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $text = trim(preg_replace('/\s+/u', ' ', $text) ?? $text);
 
-        return trim(preg_replace('/\\s+/u', ' ', $text) ?? $text);
+        return preg_replace_callback(
+            '/⟦(\d+)⟧/u',
+            static fn (array $match): string => $kept[(int) $match[1]] ?? '',
+            $text
+        ) ?? $text;
     }
 
     /** Единственный чертёж из размеченного условия — для превью в списке. */
+    /**
+     * Адрес чертежа из разметки условия (банк ЕГЭ).
+     *
+     * Берётся только `fipi-figure` — самостоятельный рисунок. Растры
+     * `fipi-inline` это обозначения внутри предложения, иллюстрацией к
+     * задаче они не являются.
+     */
+    private static function figureFromHtml(string $html): string
+    {
+        if ($html === '' || !preg_match_all('/<img\b[^>]*>/i', $html, $images)) {
+            return '';
+        }
+
+        foreach ($images[0] as $img) {
+            if (str_contains($img, 'fipi-figure') && preg_match('/\bsrc="([^"]+)"/i', $img, $src)) {
+                return $src[1];
+            }
+        }
+
+        return '';
+    }
+
     private static function drawingFromHtml(string $html): string
     {
         if (substr_count($html, '<svg') !== 1
