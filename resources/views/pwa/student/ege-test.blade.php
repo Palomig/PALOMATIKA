@@ -5,6 +5,11 @@
 @include('partials.head-katex')
 @endpush
 
+{{-- Панель символов под полем ответа: та же, что во второй части ОГЭ и во
+     вступительной работе. В части 2 профиля ответ бывает корнем с π или
+     множеством промежутков, а таких знаков на клавиатуре телефона нет. --}}
+@include('partials.math-answer-pad')
+
 @push('head')
 <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin>
@@ -819,7 +824,7 @@
           </template>
 
           {{-- Input type (expression, geometry, word_problem, etc.) --}}
-          <template x-if="normalizedOptions(currentTask).length === 0 && currentTask.type !== 'matching' && currentTask.type !== 'matching_signs'">
+          <template x-if="normalizedOptions(currentTask).length === 0 && currentTask.type !== 'matching' && currentTask.type !== 'matching_signs' && !hasMathAnswer(currentTask)">
             <div>
               <div class="answer-label">Введи ответ</div>
               <input class="answer-input"
@@ -830,6 +835,24 @@
                      x-model="answers[taskKey(currentTask)]"
                      x-ref="answerInput">
               <div class="answer-hint">Введи число и переходи дальше</div>
+            </div>
+          </template>
+
+          {{-- Часть 2: ответ не число, а корни уравнения на отрезке или
+               множество промежутков — поле с панелью символов и
+               предпросмотром набранного. --}}
+          <template x-if="normalizedOptions(currentTask).length === 0 && currentTask.type !== 'matching' && currentTask.type !== 'matching_signs' && hasMathAnswer(currentTask)">
+            <div>
+              <div class="answer-label">Введи ответ</div>
+              <input class="answer-input"
+                     type="text"
+                     inputmode="text"
+                     placeholder="Ответ"
+                     autocomplete="off"
+                     data-mathpad="ege2"
+                     x-model="answers[taskKey(currentTask)]"
+                     x-ref="answerInput">
+              <div class="answer-hint" x-text="answerHint(currentTask)"></div>
             </div>
           </template>
 
@@ -1143,6 +1166,19 @@
       taskKey(task) {
         const raw = Number(task?.attempt_task_number ?? task?.task_number ?? 0);
         return Number.isFinite(raw) && raw > 0 ? raw : 0;
+      },
+
+      // Часть 2 профиля (задания 13–19): ответ бывает корнем с π, точным
+      // радикалом или множеством промежутков — числовым полем его не ввести.
+      hasMathAnswer(task) {
+        return Number(this.displayTaskNumber(task)) >= 13;
+      },
+
+      answerHint(task) {
+        var number = Number(this.displayTaskNumber(task));
+        if (number === 13) return 'Корни через «;» по возрастанию, например π/6;π/2';
+        if (number === 15 || number === 18) return 'Промежутки со скобками, объединение через ∪';
+        return 'Ответ точный, не десятичный: корень пиши как √3';
       },
 
       displayTaskNumber(task) {

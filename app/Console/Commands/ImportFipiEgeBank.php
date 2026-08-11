@@ -124,7 +124,7 @@ class ImportFipiEgeBank extends Command
             TaskGroup::query()->where('bank', self::BANK)->where('source', 'fipi')->delete();
 
             foreach ($plan as $topic => $groups) {
-                $this->upsertTopic($topic, $bank);
+                $this->upsertTopic($topic, $bank, $groups[0]['items'] ?? []);
                 $position = 0;
                 foreach ($groups as $group) {
                     $this->createGroup($topic, $group, $position++);
@@ -255,10 +255,22 @@ class ImportFipiEgeBank extends Command
         return count(File::allFiles($target));
     }
 
-    /** @param array<string, mixed> $bank */
-    private function upsertTopic(string $topic, array $bank): void
+    /**
+     * @param array<string, mixed> $bank
+     * @param array<int, array<string, mixed>> $items
+     */
+    private function upsertTopic(string $topic, array $bank, array $items = []): void
     {
         $meta = (new EgeTaskDataService())->getAllTopicsMeta()[$topic] ?? null;
+
+        // Название темы берётся из банка, а не из прежней карты: нумерация
+        // заданий ЕГЭ с тех пор сместилась, и тема 13 называлась
+        // «Неравенства», хотя у ФИПИ 13 — уравнение, а неравенство это 15.
+        // Цвет и иконку оставляем прежние: они к номеру не привязаны.
+        $title = $items[0]['task_title'] ?? null;
+        if ($title) {
+            $meta = array_merge($meta ?? [], ['title' => $title]);
+        }
 
         TaskTopic::query()->where('bank', self::BANK)->whereNull('grade')
             ->where('topic', $topic)->delete();

@@ -67,6 +67,7 @@ class FipiEgeBankImportTest extends TestCase
                 [
                     'guid' => 'AAAA0000000000000000000000000003',
                     'task_no' => 15, 'subtype_id' => 's1', 'subtype_title' => 'Неравенство',
+                    'task_title' => 'Неравенство',
                     'part2' => true,
                     'html' => '<p>Решите неравенство.</p>',
                     'answer' => '(0;1/64]∪[1/9;1/5)', 'answer_src' => 'calc',
@@ -150,6 +151,15 @@ class FipiEgeBankImportTest extends TestCase
         $this->assertNotEmpty($topic['blocks'] ?? [], 'тема должна собираться из базы');
         $task = $topic['blocks'][0]['zadaniya'][0]['tasks'][0];
         $this->assertSame('(0;1/64]∪[1/9;1/5)', $task['answer']);
+    }
+
+    public function test_topic_title_comes_from_the_bank(): void
+    {
+        $this->import();
+
+        $topic = TaskTopic::query()->where('bank', 'ege')->where('topic', '15')->first();
+        $this->assertSame('Неравенство', $topic->payload['meta']['title'],
+            'нумерация заданий ЕГЭ сместилась: прежняя карта звала 13 «Неравенствами»');
     }
 
     public function test_reimport_replaces_only_fipi_tasks(): void

@@ -67,6 +67,25 @@ class EgeFipiVariantTest extends TestCase
         $this->assertSame('61', $task['correct_answer']);
     }
 
+    public function test_part_two_gets_the_symbol_pad(): void
+    {
+        // Ответ части 2 — корни с π или множество промежутков; таких знаков
+        // на клавиатуре телефона нет, и без панели ученик их не наберёт.
+        $group = TaskGroup::where('bank', 'ege')->first();
+        $group->update(['topic' => '13']);
+        TaskTopic::where('bank', 'ege')->update(['topic' => '13']);
+
+        $user = User::factory()->create([
+            'role' => 'student', 'grade_num' => 11, 'onboarding_completed_at' => now(),
+        ]);
+        $page = $this->followRedirects(
+            $this->actingAs($user)->post(route('pwa.student.ege.start'))
+        );
+
+        $page->assertSee('data-mathpad="ege2"', false)
+            ->assertSee('hasMathAnswer', false);
+    }
+
     public function test_test_screen_renders_the_condition(): void
     {
         $user = User::factory()->create([
