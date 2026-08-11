@@ -69,8 +69,13 @@ class EgeStudentController extends Controller
         $topics = array_keys((new EgeTaskDataService())->getAvailableTopics());
         $taskCount = $topics ? max(array_map('intval', $topics)) : 19;
 
+        // Слабые темы по ЕГЭ пока не считаются: экран показывает блок только
+        // при непустом списке, как и ВПР до появления там статистики.
+        $weakTopics = [];
+
         return view('pwa.student.ege-home', compact(
-            'user', 'grade', 'gradeLabel', 'taskCount', 'activeList', 'hasTeacher', 'showLessonTile'
+            'user', 'grade', 'gradeLabel', 'taskCount', 'activeList',
+            'hasTeacher', 'showLessonTile', 'weakTopics'
         ));
     }
 
@@ -91,6 +96,80 @@ class EgeStudentController extends Controller
         ]);
 
         return redirect()->route('pwa.student.ege.test', $attempt->id);
+    }
+
+    /**
+     * База заданий ЕГЭ — внутренний раздел приложения.
+     *
+     * Плитка на домашнем экране раньше уводила на сайт (`/ege`), то есть из
+     * приложения наружу. У ОГЭ и ВПР это экран внутри PWA, здесь — такой же:
+     * пилюли номеров заданий, задачи со свёрнутыми группами и ответами.
+     */
+    public function taskDatabase(Request $request)
+    {
+        $user = Auth::user();
+        $taskData = new EgeTaskDataService();
+
+        $topicIds = collect(array_keys($taskData->getAllTopicsMeta()))
+            ->map(fn ($topicId) => str_pad((string) $topicId, 2, '0', STR_PAD_LEFT))
+            ->filter(fn (string $topicId) => $taskData->topicDataExists($topicId))
+            ->values()
+            ->all();
+
+        if ($topicIds === []) {
+            $topicIds = ['01'];
+        }
+
+        $maxTopic = max(array_map('intval', $topicIds));
+
+        $selected = str_pad((string) $request->query('topic', '1'), 2, '0', STR_PAD_LEFT);
+        if (!in_array($selected, $topicIds, true)) {
+            $selected = $topicIds[0];
+        }
+
+        $zadaniya = [];
+        foreach ($taskData->getBlocks($selected) as $block) {
+            foreach (($block['zadaniya'] ?? []) as $zadanie) {
+                $tasks = [];
+                foreach (($zadanie['tasks'] ?? []) as $task) {
+                    // Черновики (без ответа или с непроверяемым «Да») ученику
+                    // не показываем — как и в варианте.
+                    if (($task['status'] ?? 'production') !== 'production') {
+                        continue;
+                    }
+                    $html = trim((string) ($task['html'] ?? ''));
+                    $text = trim((string) ($task['text'] ?? ''));
+                    if ($html === '' && $text === '' && empty($task['svg']) && empty($task['image'])) {
+                        continue;
+                    }
+                    $tasks[] = [
+                        'id' => $task['id'] ?? null,
+                        'html' => $html !== '' ? $html : null,
+                        'text' => $text,
+                        'expression' => $task['expression'] ?? null,
+                        'svg' => $task['svg'] ?? null,
+                        'image' => $task['image'] ?? null,
+                        'options' => $task['options'] ?? null,
+                        'question' => $task['question'] ?? null,
+                        'answer' => $task['answer'] ?? null,
+                    ];
+                }
+                if ($tasks !== []) {
+                    $number = $zadanie['number'] ?? '';
+                    $instruction = trim((string) ($zadanie['instruction'] ?? ''));
+                    $zadaniya[] = [
+                        'title' => $instruction !== '' ? $instruction : "Задание {$number}",
+                        'tasks' => $tasks,
+                    ];
+                }
+            }
+        }
+
+        $taskCount = array_sum(array_map(fn ($group) => count($group['tasks']), $zadaniya));
+
+        return view('pwa.student.ege-tasks', compact(
+            'user', 'topicIds', 'selected', 'maxTopic', 'zadaniya', 'taskCount'
+        ));
     }
 
     public function test(Request $request, int $attemptId)

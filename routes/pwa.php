@@ -124,6 +124,7 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
         Route::prefix('ege-app')->name('pwa.student.ege.')->group(function () {
             Route::get('/',                   [EgeStudentController::class, 'home'])      ->name('home');
             Route::post('/full/start',        [EgeStudentController::class, 'startFull']) ->name('start');
+            Route::get('/tasks',              [EgeStudentController::class, 'taskDatabase'])->name('tasks');
             Route::get('/test/{attemptId}',   [EgeStudentController::class, 'test'])      ->name('test');
             Route::get('/results/{attemptId}',[EgeStudentController::class, 'results'])   ->name('results');
         });
