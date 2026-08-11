@@ -33,6 +33,24 @@ class FipiLessonTaskResolveTest extends TestCase
         Cache::flush();
     }
 
+    /**
+     * Схема восстанавливается после теста.
+     *
+     * `createMinimalSchema()` сносит базу целиком и поднимает свой урезанный
+     * набор таблиц: в нём у `users` нет ни `grade_num`, ни телеграм-полей.
+     * Без восстановления база оставалась такой для следующих тестов, и они
+     * падали на вставке пользователя — по отдельности проходя. Это и делало
+     * красным полный прогон.
+     */
+    protected function tearDown(): void
+    {
+        Artisan::call('migrate:fresh');
+        Cache::flush();
+        TaskBankRepository::forgetTableCheck();
+
+        parent::tearDown();
+    }
+
     private function createMinimalSchema(): void
     {
         Schema::dropAllTables();

@@ -27,10 +27,19 @@ class UserFactory extends Factory
         $attributes = [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
         ];
+
+        // `email_verified_at` — наследство первых версий, когда вход был по
+        // почте. Сейчас авторизация идёт через телеграм, и в части тестов
+        // таблица users поднимается урезанной — тогда вставка с этой колонкой
+        // валила прогон целиком («Unknown column email_verified_at»), причём
+        // только в связке: по отдельности тот же тест проходил. Ставим поле
+        // лишь там, где оно есть, — тем же приёмом, что и телеграм-колонки.
+        if ($this->usersTableHasColumn('email_verified_at')) {
+            $attributes['email_verified_at'] = now();
+        }
 
         // Привязанный телеграм — норма для живого аккаунта: ученик без него
         // упирается в обязательный экран /link-telegram.
@@ -47,8 +56,13 @@ class UserFactory extends Factory
 
     private function usersTableHasTelegramColumns(): bool
     {
+        return $this->usersTableHasColumn('telegram_chat_id');
+    }
+
+    private function usersTableHasColumn(string $column): bool
+    {
         try {
-            return Schema::hasTable('users') && Schema::hasColumn('users', 'telegram_chat_id');
+            return Schema::hasTable('users') && Schema::hasColumn('users', $column);
         } catch (\Throwable $e) {
             return false;
         }
@@ -64,7 +78,8 @@ class UserFactory extends Factory
     }
 
     /**
-     * Indicate that the model's email address should be unverified.
+     * Аккаунт без подтверждённой почты — состояние из первых версий, когда
+     * вход был по email. Оставлено для тестов, которые его ещё используют.
      */
     public function unverified(): static
     {
