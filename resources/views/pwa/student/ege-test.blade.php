@@ -231,13 +231,24 @@
      экспорт по высоте растра. display обязателен: без него картинка блочная
      и разрывает предложение. */
   .q-fipi img { max-width: 100%; height: auto; }
+  /* Как вынесенный чертёж в базе заданий ОГЭ: во всю ширину, до 460px. */
   .q-fipi img.fipi-figure {
-    display: block; background: #fff; border-radius: 10px;
-    padding: 8px; margin: 12px auto;
+    display: block; width: 100%; max-width: 460px; height: auto;
+    background: #fff; border-radius: 10px; padding: 8px; margin: 12px auto;
   }
   .q-fipi img.fipi-inline {
     display: inline-block; background: #fff; border-radius: 3px;
     padding: 0 2px; height: 1.35em; width: auto; vertical-align: -0.28em;
+  }
+
+  /* Условие и чертёж лежат в соседних ячейках таблицы: на телефоне рисунок
+     зажимается в узкую колонку и превращается в марку. Раскладываем в
+     столбик — так же, как в базе заданий ОГЭ. */
+  @media (max-width: 640px) {
+    .q-fipi table, .q-fipi tbody,
+    .q-fipi tr, .q-fipi td {
+      display: block; width: 100%; padding-left: 0; padding-right: 0;
+    }
   }
   .q-fipi p { margin: 0 0 .6rem; }
   .q-fipi p:last-child { margin-bottom: 0; }

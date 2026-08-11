@@ -56,13 +56,26 @@
 /* Растры банка ФИПИ: чёрным по прозрачному, на тёмном экране нужна
      подложка. Класс проставляет экспорт по натуральной высоте растра. */
   .fipi-condition img { max-width: 100%; height: auto; }
+  /* Чертёж — во всю ширину карточки, как вынесенный рисунок в базе
+     заданий ОГЭ (.fipi-drawing svg). Растры ФИПИ мелкие по натуральному
+     размеру, и без растяжения ученик видит марку вместо чертежа. */
   .fipi-condition img.fipi-figure {
-    display: block; background: #fff; border-radius: 10px;
-    padding: 8px; margin: 10px auto;
+    display: block; width: 100%; max-width: 460px; height: auto;
+    background: #fff; border-radius: 10px; padding: 8px; margin: 10px auto;
   }
   .fipi-condition img.fipi-inline {
     display: inline-block; background: #fff; border-radius: 3px;
     padding: 0 2px; height: 1.35em; width: auto; vertical-align: -0.28em;
+  }
+
+  /* Условие и чертёж лежат в соседних ячейках таблицы: на телефоне рисунок
+     зажимается в узкую колонку и превращается в марку. Раскладываем в
+     столбик — так же, как в базе заданий ОГЭ. */
+  @media (max-width: 640px) {
+    .fipi-condition table, .fipi-condition tbody,
+    .fipi-condition tr, .fipi-condition td {
+      display: block; width: 100%; padding-left: 0; padding-right: 0;
+    }
   }
   .fipi-condition p { margin: 0 0 .5rem; }
   .fipi-condition p:last-child { margin-bottom: 0; }
