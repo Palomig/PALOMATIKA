@@ -152,4 +152,45 @@ class TaskAnswerResolverTest extends TestCase
         $this->assertTrue($resolver->isCorrect('231', '231'));
         $this->assertFalse($resolver->isCorrect('2.45', '17'));
     }
+
+    /**
+     * Часть 2 профиля ЕГЭ: ответ — набор корней с π, и порядок их записи
+     * на экзамене не оценивается. Пока π не было в грамматике, эталон
+     * сверялся строкой, и та же тройка в другом порядке шла в ошибки —
+     * на проде так вело себя каждое из 45 заданий №13.
+     */
+    public function test_pi_root_sets_ignore_order(): void
+    {
+        $resolver = new TaskAnswerResolver();
+        $correct = '13π/4;23π/6;25π/6';
+
+        $this->assertTrue($resolver->isCorrect($correct, $correct));
+        $this->assertTrue($resolver->isCorrect('25π/6;13π/4;23π/6', $correct));
+        $this->assertTrue($resolver->isCorrect('13pi/4; 23pi/6; 25pi/6', $correct));
+
+        $this->assertFalse($resolver->isCorrect('13π/4;23π/6', $correct), 'потерянный корень');
+        $this->assertFalse($resolver->isCorrect('13π/4;23π/6;25π/6;π', $correct), 'лишний корень');
+        $this->assertFalse($resolver->isCorrect('10.2101;12.0428;13.0900', $correct), 'приближение вместо точного');
+    }
+
+    /** Границы промежутка с логарифмом сверяются числом, а не строкой. */
+    public function test_logarithmic_interval_bounds(): void
+    {
+        $resolver = new TaskAnswerResolver();
+        $correct = '(0;log_5(3)]∪[log_3(5);2)';
+
+        $this->assertTrue($resolver->isCorrect($correct, $correct));
+        $this->assertTrue($resolver->isCorrect('[log_3(5);2)∪(0;log_5(3)]', $correct));
+        $this->assertFalse($resolver->isCorrect('(0;log_5(3))∪[log_3(5);2)', $correct), 'другая скобка');
+    }
+
+    /** Обратная тригонометрия: запись отличается, значение одно. */
+    public function test_inverse_trigonometry_notations(): void
+    {
+        $resolver = new TaskAnswerResolver();
+
+        $this->assertTrue($resolver->isCorrect('arctan(5/3)', 'arctg(5/3)'));
+        $this->assertTrue($resolver->isCorrect('arctg(5/3)', 'arctg(5/3)'));
+        $this->assertFalse($resolver->isCorrect('arctg(3/5)', 'arctg(5/3)'));
+    }
 }
