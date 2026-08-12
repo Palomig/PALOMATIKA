@@ -67,6 +67,30 @@ class EgeFipiVariantTest extends TestCase
         $this->assertSame('61', $task['correct_answer']);
     }
 
+    /**
+     * Плитка «Полный вариант» отправляет fetch с `Accept: application/json`
+     * и ждёт `{redirect: …}` — как ВПР. Контроллер отвечал только редиректом:
+     * fetch шёл по нему сам, получал HTML страницы теста, и `res.json()`
+     * падал на «Unexpected token '<'». Ученик видел «Ошибка соединения», и
+     * вариант не запускался вовсе. Обычный POST (без Accept) при этом
+     * работал, поэтому тест обязан ходить именно как приложение.
+     */
+    public function test_start_answers_the_app_with_json(): void
+    {
+        $user = User::factory()->create([
+            'role' => 'student', 'grade_num' => 11, 'onboarding_completed_at' => now(),
+        ]);
+
+        $response = $this->actingAs($user)->postJson(route('pwa.student.ege.start'));
+
+        $response->assertOk();
+        $response->assertJsonStructure(['redirect']);
+
+        $redirect = $response->json('redirect');
+        $this->assertNotEmpty($redirect);
+        $this->actingAs($user)->get($redirect)->assertOk();
+    }
+
     public function test_part_two_gets_the_symbol_pad(): void
     {
         // Ответ части 2 — корни с π или множество промежутков; таких знаков

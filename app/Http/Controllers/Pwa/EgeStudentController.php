@@ -95,6 +95,15 @@ class EgeStudentController extends Controller
             'ip'         => $request->ip(),
         ]);
 
+        // Плитка «Полный вариант» дёргает этот адрес через fetch и ждёт JSON
+        // с адресом перехода — так же, как ВПР. Один редирект в ответе fetch
+        // проглатывал молча: браузер шёл по нему сам, получал HTML страницы
+        // теста, и `res.json()` падал на «Unexpected token '<'». Ученику это
+        // показывалось как «Ошибка соединения», и вариант не запускался.
+        if ($request->expectsJson()) {
+            return response()->json(['redirect' => route('pwa.student.ege.test', $attempt->id)]);
+        }
+
         return redirect()->route('pwa.student.ege.test', $attempt->id);
     }
 
