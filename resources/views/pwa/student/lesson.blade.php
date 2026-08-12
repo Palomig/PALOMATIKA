@@ -22,7 +22,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-        onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+        onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false}); window.lessonFitFormulas && window.lessonFitFormulas()"></script>
 @endpush
 
 @push('styles')
@@ -47,10 +47,17 @@
     font-size: 1.08em;
     display: inline-block;
     max-width: 100%;
+    /* Одной строкой: ширину под карточку подбирает кегль (fitFormulas). */
+    white-space: nowrap;
     overflow-x: auto;
     overflow-y: hidden;
     vertical-align: middle;
   }
+  /* Подпункты «а) б) в)» второй части — каждый со своей строки, маркер
+     выступает влево. Формула плюс прилипшая к ней точка — одним куском. */
+  .cond-lead, .cond-sub { display: block; }
+  .cond-sub { padding-left: 16px; text-indent: -16px; margin-top: 4px; }
+  .lesson-task-expr .nb { white-space: nowrap; }
   .lesson-task-image { width: 100%; display: flex; justify-content: center; background: var(--surface2); border-radius: 10px; padding: 12px; overflow: hidden; }
   .lesson-task-image svg, .lesson-task-image img { max-width: 100%; height: auto; max-height: 320px; }
   .lesson-answer-row { display: flex; gap: 8px; align-items: center; }
@@ -169,6 +176,50 @@
 </div>
 
 <script>
+  /**
+   * Довести формулы в карточках урока до ширины карточки.
+   *
+   * `renderMathInElement` кладёт `.katex` внутрь безымянного span, поэтому
+   * текст после формулы ищем от этой обёртки, а не от самой формулы.
+   * Пунктуацию, прилипшую к формуле, склеиваем с ней: рядом с неделимой
+   * коробкой браузеру можно переносить строку, и точка уезжала одна.
+   * Кегль уменьшаем ровно во столько раз, во сколько формула не влезла,
+   * но не мельче 11px.
+   */
+  window.lessonFitFormulas = function () {
+    const host = (k, root) => {
+      let n = k;
+      while (n.parentNode && n.parentNode !== root && !n.nextSibling) n = n.parentNode;
+      return n;
+    };
+    document.querySelectorAll('.lesson-task-expr').forEach((el) => {
+      const base = parseFloat(getComputedStyle(el).fontSize) || 18;
+      const floor = Math.min(1, 11 / base);
+      el.querySelectorAll('.katex').forEach((k) => {
+        const h = host(k, el);
+        if (!(h.parentNode && h.parentNode.classList && h.parentNode.classList.contains('nb'))) {
+          const next = h.nextSibling;
+          const m = next && next.nodeType === 3 ? next.textContent.match(/^[.,;:!?)]+/) : null;
+          if (m) {
+            const nb = document.createElement('span');
+            nb.className = 'nb';
+            h.parentNode.insertBefore(nb, h);
+            nb.appendChild(h);
+            nb.appendChild(document.createTextNode(m[0]));
+            next.textContent = next.textContent.slice(m[0].length);
+          }
+        }
+        k.style.fontSize = '';
+        const after = host(k, el).nextSibling;
+        const avail = el.clientWidth - (after && after.textContent.trim() ? 14 : 0);
+        const need = k.scrollWidth;
+        if (avail <= 0 || !need || need <= avail) return;
+        k.style.fontSize = (Math.max(floor, avail / need) * 100).toFixed(1) + '%';
+      });
+    });
+  };
+  window.addEventListener('resize', () => window.lessonFitFormulas());
+
   function studentLesson(sessionId, initialStatus) {
     let tasksJson = ''; // вне reactive: снапшот последних серверных tasks
 
@@ -406,6 +457,7 @@
           // body каждые 5 секунд заметно тормозил слабые телефоны.
           this.$nextTick(() => {
             if (window.renderMathInElement) window.renderMathInElement(document.body, { delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}], throwOnError: false });
+            if (window.lessonFitFormulas) window.lessonFitFormulas();
           });
         }
       },
@@ -439,9 +491,18 @@
 
       renderMath(text) {
         // KaTeX renders on init; just escape and return — auto-render walks DOM
-        const div = document.createElement('div');
-        div.textContent = text || '';
-        return div.innerHTML;
+        const esc = (t) => { const d = document.createElement('div'); d.textContent = t || ''; return d.innerHTML; };
+        const s = String(text || '');
+        // Подпункты «а) б) в)» лежат в банке отдельными абзацами, и при
+        // выпрямлении разметки перед каждым остаётся перевод строки. Прочие
+        // переносы там случайные (в ОГЭ рвут предложение посреди фразы),
+        // поэтому разбиваем только по подпунктам.
+        const parts = s.split(/\n(?=[ \t]*[абвгд]\))/);
+        if (parts.length < 2) return esc(s);
+        return parts
+          .map((part, i) => '<span class="' + (i === 0 ? 'cond-lead' : 'cond-sub') + '">'
+            + esc(part.trim()) + '</span>')
+          .join('');
       },
     };
   }
