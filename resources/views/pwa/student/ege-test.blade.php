@@ -863,7 +863,9 @@
                      data-mathpad="ege2"
                      x-model="answers[taskKey(currentTask)]"
                      x-ref="answerInput">
-              <div class="answer-hint" x-text="answerHint(currentTask)"></div>
+              {{-- Подсказки о форме записи здесь нет намеренно: панель
+                   символов вставляется сразу за полем ввода, и текст
+                   оказывался под кнопками — решение Стаса от 2026-08-12. --}}
             </div>
           </template>
 
@@ -1165,13 +1167,6 @@
       // радикалом или множеством промежутков — числовым полем его не ввести.
       hasMathAnswer(task) {
         return Number(this.displayTaskNumber(task)) >= 13;
-      },
-
-      answerHint(task) {
-        var number = Number(this.displayTaskNumber(task));
-        if (number === 13) return 'Корни через «;» по возрастанию, например π/6;π/2';
-        if (number === 15 || number === 18) return 'Промежутки со скобками, объединение через ∪';
-        return 'Ответ точный, не десятичный: корень пиши как √3';
       },
 
       displayTaskNumber(task) {
