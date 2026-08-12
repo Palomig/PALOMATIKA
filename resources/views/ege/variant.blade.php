@@ -5,7 +5,9 @@
     @include('partials.head-config')
     @include('partials.head-katex')
     <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap" rel="stylesheet">
-    @push('styles')
+    {{-- Без @push: страница самостоятельная, а `head-config` выводит стек
+         `styles` раньше по разметке — всё, что сюда добавляли, молча
+         пропадало, включая правила печати (`.no-print` печатался). --}}
     <style>
         .katex { font-size: 1.1em; }
 
@@ -42,7 +44,6 @@
             }
         }
     </style>
-    @endpush
 </head>
 <body class="min-h-screen bg-dark text-gray-200 ege-theme">
 
@@ -131,12 +132,7 @@
                     </div>
                     <div class="p-5">
                         @php $task = $taskData['task'] ?? []; @endphp
-                        @if(!empty($task['text']))
-                            <p class="text-gray-200 leading-relaxed latex-content">{{ $task['text'] }}</p>
-                        @endif
-                        @if(!empty($task['expression']))
-                            <p class="text-gray-200 text-lg mt-2 latex-content">${{ $task['expression'] }}$</p>
-                        @endif
+                        @include('ege.partials.variant-condition', ['task' => $task])
                     </div>
                     <div class="p-5 border-t border-dark-400/30">
                         <div class="flex items-center gap-4">
@@ -176,12 +172,7 @@
                     </div>
                     <div class="p-5">
                         @php $task = $taskData['task'] ?? []; @endphp
-                        @if(!empty($task['text']))
-                            <p class="text-gray-200 leading-relaxed latex-content">{{ $task['text'] }}</p>
-                        @endif
-                        @if(!empty($task['expression']))
-                            <p class="text-gray-200 text-lg mt-2 latex-content">${{ $task['expression'] }}$</p>
-                        @endif
+                        @include('ege.partials.variant-condition', ['task' => $task])
                         @if(!empty($task['interval']))
                             <p class="text-gray-300 mt-4 latex-content">
                                 <span class="text-fuchsia-400 font-medium">б)</span>

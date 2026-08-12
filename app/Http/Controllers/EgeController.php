@@ -26,12 +26,16 @@ class EgeController extends Controller
     {
         $topics = [];
 
-        foreach ($this->taskService->getAllTopicsMeta() as $topicId => $meta) {
-            $topics[$topicId] = array_merge($meta, [
-                'exists' => $this->taskService->topicDataExists($topicId),
-                'stats' => $this->taskService->topicDataExists($topicId)
-                    ? $this->taskService->getTopicStats($topicId)
-                    : null,
+        // Названия берём через getTopicMeta(): она читает банк, а к карте в
+        // сервисе откатывается, только пока темы нет в базе. Со списком
+        // getAllTopicsMeta() витрина показывала прежние названия, и задание,
+        // подписанное здесь «Графики», на своей странице открывалось как
+        // «Текстовая задача».
+        foreach (array_keys($this->taskService->getAllTopicsMeta()) as $topicId) {
+            $exists = $this->taskService->topicDataExists($topicId);
+            $topics[$topicId] = array_merge($this->taskService->getTopicMeta($topicId), [
+                'exists' => $exists,
+                'stats' => $exists ? $this->taskService->getTopicStats($topicId) : null,
             ]);
         }
 
@@ -187,20 +191,26 @@ class EgeController extends Controller
             ];
         }
 
-        // Генерируем по одному заданию на тему
+        // Генерируем по одному заданию на тему. Подтип перебирается, пока не
+        // найдётся задача: с фильтром production подтип может оказаться
+        // пустым (все задачи ещё черновики), и номер молча выпадал бы из
+        // варианта.
         $tasks = [];
         foreach ($zadaniyaByTopic as $topicId => $zadaniyaList) {
-            $randomZadanie = $zadaniyaList[array_rand($zadaniyaList)];
+            shuffle($zadaniyaList);
 
-            $tasksFromZadanie = $this->taskService->getRandomTasksFromZadanie(
-                $topicId,
-                $randomZadanie['block'],
-                $randomZadanie['zadanie'],
-                1
-            );
+            foreach ($zadaniyaList as $zadanie) {
+                $tasksFromZadanie = $this->taskService->getRandomTasksFromZadanie(
+                    $topicId,
+                    $zadanie['block'],
+                    $zadanie['zadanie'],
+                    1
+                );
 
-            if (!empty($tasksFromZadanie)) {
-                $tasks[] = $tasksFromZadanie[0];
+                if (!empty($tasksFromZadanie)) {
+                    $tasks[] = $tasksFromZadanie[0];
+                    break;
+                }
             }
         }
 
