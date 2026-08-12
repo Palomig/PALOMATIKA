@@ -3,9 +3,10 @@ namespace App\Services;
 
 class EgeVariantBuilderService
 {
+    /** Номера заданий профиля ЕГЭ: их 19, двадцатого не существует. */
     protected array $allTopics = [
         '01','02','03','04','05','06','07','08','09','10',
-        '11','12','13','14','15','16','17','18','19','20',
+        '11','12','13','14','15','16','17','18','19',
     ];
 
     public function __construct(private readonly EgeTaskDataService $taskData) {}

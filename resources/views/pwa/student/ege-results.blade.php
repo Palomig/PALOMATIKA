@@ -306,22 +306,11 @@
     $totalSeconds = $totalTime % 60;
     $timeFormatted = sprintf('%02d:%02d', $totalMinutes, $totalSeconds);
 
-    $topicNames = [
-        '06' => 'Дроби',
-        '07' => 'Числа',
-        '08' => 'Корни',
-        '09' => 'Уравнения',
-        '10' => 'Вероятность',
-        '11' => 'Графики',
-        '12' => 'Формулы',
-        '13' => 'Неравенства',
-        '14' => 'Прогрессии',
-        '15' => 'Треугольники',
-        '16' => 'Окружность',
-        '17' => 'Четырёхугольники',
-        '18' => 'Клетчатая бумага',
-        '19' => 'Высказывания',
-    ];
+    // Названия тем берём из самого варианта (`topic_title` пришёл из банка
+    // ФИПИ вместе с задачей). Здесь стояла карта ОГЭ, и разбор ошибок ЕГЭ
+    // называл неравенство «Треугольниками», а параметр — «Клетчатой бумагой»:
+    // номера заданий у двух экзаменов означают разное.
+    $topicNames = [];
 
     // Build slot => exam_number and locator maps from variant config
     $variantTasks = is_array($attempt->variant?->config_json['tasks'] ?? null)
@@ -341,6 +330,11 @@
             $z = $vt['zadanie_number'] ?? 'x';
             $i = $vt['task_id'] ?? $vt['task']['id'] ?? 'x';
             $locatorMap[$taskNum] = "t{$tid}-b{$b}-z{$z}-i{$i}";
+
+            $title = trim((string) ($vt['topic_title'] ?? ''));
+            if ($title !== '') {
+                $topicNames[str_pad((string) $taskNum, 2, '0', STR_PAD_LEFT)] = $title;
+            }
         }
     }
 

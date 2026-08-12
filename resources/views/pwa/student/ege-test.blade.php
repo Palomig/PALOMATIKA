@@ -719,7 +719,7 @@
         {{-- Meta --}}
         <div class="q-meta q-anim" :style="'animation-delay: 0s'">
           <div class="q-num" x-text="'Задание ' + displayTaskNumber(currentTask)"></div>
-          <div class="q-topic-badge" x-text="topicName(currentTask.topic_id)"></div>
+          <div class="q-topic-badge" x-text="topicName(currentTask)"></div>
           <div class="q-topic-badge" style="opacity:.8" x-text="'ID: ' + taskLocator(currentTask)"></div>
         </div>
 
@@ -948,24 +948,6 @@
 
 @push('scripts')
 <script>
-  // Topic name mapping
-  const TOPIC_NAMES = {
-    '06': 'Дроби и степени',
-    '07': 'Числа',
-    '08': 'Корни и степени',
-    '09': 'Уравнения',
-    '10': 'Вероятность',
-    '11': 'Графики',
-    '12': 'Формулы',
-    '13': 'Неравенства',
-    '14': 'Прогрессии',
-    '15': 'Треугольники',
-    '16': 'Окружность',
-    '17': 'Четырёхугольники',
-    '18': 'Клетчатая бумага',
-    '19': 'Высказывания',
-  };
-
   function testApp() {
     return {
       // Data from server
@@ -1205,9 +1187,13 @@
         return `t${tid}-b${b}-z${z}-i${i}`;
       },
 
-      topicName(topicId) {
-        const id = String(topicId).padStart(2, '0');
-        return TOPIC_NAMES[id] || ('Тема ' + id);
+      // Название темы приходит с самой задачей (`topic_title` — из банка
+      // ФИПИ). Своей карты здесь быть не должно: экран скопирован с ОГЭ, и
+      // его карта подписывала неравенство ЕГЭ «Треугольниками», а параметр —
+      // «Клетчатой бумагой». Нумерация заданий у двух экзаменов разная.
+      topicName(task) {
+        const title = String(task?.topic_title ?? '').trim();
+        return title !== '' ? title : ('Задание ' + this.displayTaskNumber(task));
       },
 
       resolveTaskImageSrc(task) {

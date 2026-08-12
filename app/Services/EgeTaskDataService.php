@@ -16,7 +16,12 @@ class EgeTaskDataService
     protected string $basePath;
 
     /**
-     * Метаданные заданий ЕГЭ (1-19)
+     * Метаданные заданий ЕГЭ (1-19) — запасные, если темы нет в базе.
+     *
+     * Названия обязаны совпадать с нумерацией ФИПИ: карта отстала от неё, и
+     * задание 10 значилось «Графики», хотя у ФИПИ 10 — текстовая задача, а
+     * графики это 11. Список тем на витрине брал названия отсюда, страница
+     * задания — из банка, и одно и то же задание называлось по-разному.
      */
     protected array $topicsMeta = [
         '01' => [
@@ -38,97 +43,97 @@ class EgeTaskDataService
             'icon' => 'cube',
         ],
         '04' => [
-            'title' => 'Вероятности',
+            'title' => 'Вероятность (простая)',
             'description' => 'Теория вероятностей',
             'color' => 'cyan',
             'icon' => 'dice',
         ],
         '05' => [
-            'title' => 'Вероятности (сложные)',
+            'title' => 'Вероятность (сложная)',
             'description' => 'Сложные задачи на вероятность',
             'color' => 'teal',
             'icon' => 'percent',
         ],
         '06' => [
-            'title' => 'Уравнения',
+            'title' => 'Уравнение',
             'description' => 'Простейшие уравнения',
             'color' => 'emerald',
             'icon' => 'equals',
         ],
         '07' => [
-            'title' => 'Значения функций',
-            'description' => 'Вычисление значений функций',
+            'title' => 'Преобразование выражений',
+            'description' => 'Вычисления и преобразования выражений',
             'color' => 'green',
             'icon' => 'function',
         ],
         '08' => [
-            'title' => 'Производные',
+            'title' => 'Производная и первообразная по графику',
             'description' => 'Производные и первообразные',
             'color' => 'lime',
             'icon' => 'trending-up',
         ],
         '09' => [
-            'title' => 'Текстовые задачи',
+            'title' => 'Прикладная задача с формулой',
             'description' => 'Физические и практические задачи',
             'color' => 'yellow',
             'icon' => 'calculator',
         ],
         '10' => [
-            'title' => 'Графики',
-            'description' => 'Чтение графиков и диаграмм',
+            'title' => 'Текстовая задача',
+            'description' => 'Движение, работа, проценты и смеси',
             'color' => 'amber',
             'icon' => 'chart-line',
         ],
         '11' => [
-            'title' => 'Прикладные задачи',
-            'description' => 'Задачи с прикладным содержанием',
+            'title' => 'Графики функций',
+            'description' => 'Чтение и анализ графиков',
             'color' => 'orange',
             'icon' => 'wrench',
         ],
         '12' => [
-            'title' => 'Наибольшее/наименьшее',
+            'title' => 'Наибольшее и наименьшее значение',
             'description' => 'Экстремумы функций',
             'color' => 'red',
             'icon' => 'maximize',
         ],
         '13' => [
-            'title' => 'Уравнения (сложные)',
+            'title' => 'Уравнение (часть 2)',
             'description' => 'Тригонометрические, показательные, логарифмические',
             'color' => 'rose',
             'icon' => 'sigma',
         ],
         '14' => [
-            'title' => 'Стереометрия (сложная)',
+            'title' => 'Стереометрия (часть 2)',
             'description' => 'Построения и вычисления в пространстве',
             'color' => 'pink',
             'icon' => 'box',
         ],
         '15' => [
-            'title' => 'Неравенства',
+            'title' => 'Неравенство',
             'description' => 'Логарифмические и показательные неравенства',
             'color' => 'fuchsia',
             'icon' => 'less-than',
         ],
         '16' => [
-            'title' => 'Экономические задачи',
+            'title' => 'Экономическая задача',
             'description' => 'Финансовая математика',
             'color' => 'violet',
             'icon' => 'dollar',
         ],
         '17' => [
-            'title' => 'Планиметрия (сложная)',
+            'title' => 'Планиметрия (часть 2)',
             'description' => 'Сложные планиметрические задачи',
             'color' => 'purple',
             'icon' => 'triangle',
         ],
         '18' => [
-            'title' => 'Параметры',
+            'title' => 'Задача с параметром',
             'description' => 'Задачи с параметрами',
             'color' => 'indigo',
             'icon' => 'variable',
         ],
         '19' => [
-            'title' => 'Числа и свойства',
+            'title' => 'Числа и их свойства',
             'description' => 'Теория чисел',
             'color' => 'blue',
             'icon' => 'hash',
@@ -207,12 +212,33 @@ class EgeTaskDataService
     }
 
     /**
-     * Получить блоки задания
+     * Получить блоки задания.
+     *
+     * `$status` фильтрует задачи по статусу из payload — так же, как это
+     * делает {@see getRandomTaskFromTopic} для варианта ученика. Без фильтра
+     * в выдачу попадают и черновики: у ЕГЭ это задачи, для которых ещё нет
+     * ответа, и в сгенерированном варианте они выглядят обычными.
      */
-    public function getBlocks(string $topicId): array
+    public function getBlocks(string $topicId, ?string $status = null): array
     {
         $data = $this->getTopicData($topicId);
-        return $data['blocks'] ?? [];
+        $blocks = $data['blocks'] ?? [];
+
+        if ($status === null) {
+            return $blocks;
+        }
+
+        foreach ($blocks as $bi => $block) {
+            foreach (($block['zadaniya'] ?? []) as $zi => $zadanie) {
+                $tasks = array_values(array_filter(
+                    $zadanie['tasks'] ?? [],
+                    static fn ($task) => ($task['status'] ?? 'production') === $status
+                ));
+                $blocks[$bi]['zadaniya'][$zi]['tasks'] = $tasks;
+            }
+        }
+
+        return $blocks;
     }
 
     /**
@@ -242,9 +268,9 @@ class EgeTaskDataService
     /**
      * Получить случайные задания из темы
      */
-    public function getRandomTasks(string $topicId, int $count = 1): array
+    public function getRandomTasks(string $topicId, int $count = 1, ?string $status = 'production'): array
     {
-        $blocks = $this->getBlocks($topicId);
+        $blocks = $this->getBlocks($topicId, $status);
         $meta = $this->getTopicMeta($topicId);
         $allTasks = [];
 
@@ -312,9 +338,9 @@ class EgeTaskDataService
     /**
      * Получить случайные задания из конкретного zadanie
      */
-    public function getRandomTasksFromZadanie(string $topicId, int $blockNumber, int $zadanieNumber, int $count = 1): array
+    public function getRandomTasksFromZadanie(string $topicId, int $blockNumber, int $zadanieNumber, int $count = 1, ?string $status = 'production'): array
     {
-        $blocks = $this->getBlocks($topicId);
+        $blocks = $this->getBlocks($topicId, $status);
         $meta = $this->getTopicMeta($topicId);
 
         foreach ($blocks as $block) {

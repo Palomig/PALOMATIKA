@@ -51,6 +51,7 @@ class DeployController extends Controller
         'tasks:import-json',
         'tasks:import-fipi',
         'tasks:import-fipi-ege',
+        'tasks:refresh-ege-meta',
         'tasks:dump-json',
         'tasks:retire-legacy',
         'tasks:attach-legacy-solutions',
