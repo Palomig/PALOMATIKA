@@ -40,7 +40,17 @@
   .lesson-task-card.is-answered { border-color: var(--accent); background: var(--accent-bg); }
   .lesson-task-num { font-family: var(--display); font-size: 18px; color: var(--accent); }
   .lesson-task-expr { font-size: 18px; color: var(--text); word-break: break-word; min-height: 24px; }
-  .lesson-task-expr .katex { font-size: 1.08em; }
+  /* Формула — неделимая коробка: у задач ЕГЭ строка рвалась посреди неё
+     («Решите неравенство log₁₆(x +» / «5) + …»). Ученик на уроке видит
+     те же карточки, что учитель на подготовке, — правило одно и то же. */
+  .lesson-task-expr .katex {
+    font-size: 1.08em;
+    display: inline-block;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    vertical-align: middle;
+  }
   .lesson-task-image { width: 100%; display: flex; justify-content: center; background: var(--surface2); border-radius: 10px; padding: 12px; overflow: hidden; }
   .lesson-task-image svg, .lesson-task-image img { max-width: 100%; height: auto; max-height: 320px; }
   .lesson-answer-row { display: flex; gap: 8px; align-items: center; }
