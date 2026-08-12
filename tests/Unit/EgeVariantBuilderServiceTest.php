@@ -36,10 +36,16 @@ class EgeVariantBuilderServiceTest extends TestCase
         return new EgeVariantBuilderService($taskData);
     }
 
-    public function test_build_returns_20_tasks(): void
+    /** В профиле 19 номеров заданий — двадцатого не существует. */
+    public function test_build_returns_a_task_per_exam_number(): void
     {
         $result = $this->makeService()->build('hash123');
-        $this->assertCount(20, $result['tasks']);
+
+        $this->assertCount(19, $result['tasks']);
+        $this->assertSame(
+            range(1, 19),
+            array_column($result['tasks'], 'task_number')
+        );
     }
 
     public function test_build_is_deterministic(): void
