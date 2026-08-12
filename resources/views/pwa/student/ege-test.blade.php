@@ -167,7 +167,13 @@
 
   /* ───── QUESTION AREA ───── */
   .test-question {
-    flex: 1;
+    /* Не растягивать на весь экран: с `flex: 1` пустое место уходило внутрь
+       области задания, и у короткого условия «Следующее» оказывалось у
+       нижнего края телефона — далеко от поля ответа. Теперь свободное место
+       остаётся ПОД панелью кнопок, и она идёт сразу за карточкой ответа.
+       Длинному условию поведение не меняется: страница по-прежнему
+       прокручивается целиком. */
+    flex: 0 1 auto;
     padding: 20px 16px;
     overflow-y: auto;
     display: flex;
@@ -386,13 +392,6 @@
     font-size: 14px;
     letter-spacing: 0;
     font-weight: 600;
-  }
-  .answer-hint {
-    font-size: 11px;
-    color: var(--muted);
-    font-weight: 600;
-    text-align: center;
-    margin-top: 8px;
   }
 
   /* ───── PHOTO UPLOAD ───── */
@@ -830,7 +829,6 @@
                      autocomplete="off"
                      x-model="answers[taskKey(currentTask)]"
                      x-ref="answerInput">
-              <div class="answer-hint" x-text="normalizedOptions(currentTask).length > 0 ? 'Введи цифры по порядку' : 'Введи буквы по порядку'"></div>
             </div>
           </template>
 
@@ -845,7 +843,9 @@
                      autocomplete="off"
                      x-model="answers[taskKey(currentTask)]"
                      x-ref="answerInput">
-              <div class="answer-hint">Введи число и переходи дальше</div>
+              {{-- Подписи под полем ответа в варианте ЕГЭ нет — решение
+                   Стаса от 2026-08-12. Формат ответа объясняет само
+                   условие ФИПИ («Ответ дайте в градусах»). --}}
             </div>
           </template>
 
