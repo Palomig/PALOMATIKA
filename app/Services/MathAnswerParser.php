@@ -10,9 +10,16 @@ namespace App\Services;
  * канонической записи. Поэтому и эталон, и ответ ученика приводятся к float
  * и сравниваются с допуском.
  *
- * Используется второй частью ОГЭ (TaskAnswerResolver) и вступительной работой
- * в 10 класс (Entrance10Service). Первой части не касается: там ответ — целое
- * число или последовательность цифр, и численная сверка ничего не добавляет.
+ * Используется второй частью ОГЭ (TaskAnswerResolver), второй частью профиля
+ * ЕГЭ и вступительной работой в 10 класс (Entrance10Service). Первой части не
+ * касается: там ответ — целое число или последовательность цифр, и численная
+ * сверка ничего не добавляет.
+ *
+ * Помимо радикалов понимает π, логарифмы и обратную тригонометрию — этим
+ * записан почти весь ответ части 2 профиля: «13π/4; 23π/6», «arctg(5/3)»,
+ * «(0; log_5(3)]». Банк один на оба экзамена не делится: правила сверки у
+ * них одни, расходится только словарь, поэтому имена добавляются сюда, а не
+ * во второй резолвер.
  */
 class MathAnswerParser
 {
@@ -20,6 +27,25 @@ class MathAnswerParser
     public const EPSILON = 1e-6;
 
     private const ROOT_WORDS = ['\\sqrt', 'sqrt', 'корень из', 'корень', 'root'];
+
+    /**
+     * Что вычислитель понимает помимо чисел и скобок.
+     *
+     * Логарифмы сюда не входят: `log_a(b)` и `lg` переписываются в `ln` ещё
+     * при разборе записи, поэтому до вычислителя доходит только `ln`.
+     * Порядок важен — имена ищутся по этому списку, и «arctg» обязан
+     * проверяться раньше «arc»-соседей с общим началом.
+     */
+    private const FUNCTIONS = ['arcsin', 'arccos', 'arctan', 'arctg', 'sqrt', 'ln'];
+
+    /** Константы: имя → значение. */
+    private const CONSTANTS = ['pi' => M_PI];
+
+    /**
+     * Признаки точного (не десятичного) ответа: по ним включается численная
+     * сверка. Радикал проверяется отдельно — {@see hasRadical}.
+     */
+    private const EXACT_FORM_MARKERS = ['π', 'pi', 'log', 'lg', 'ln', 'arcsin', 'arccos', 'arctan', 'arctg'];
 
     /**
      * Есть ли в записи радикал (в любой из принимаемых нотаций).
@@ -199,8 +225,31 @@ class MathAnswerParser
     public function needsNumericComparison(?string $raw): bool
     {
         return $this->hasRadical($raw)
+            || $this->hasExactForm($raw)
             || $this->looksLikeInterval($raw)
             || $this->looksLikeValueList($raw);
+    }
+
+    /**
+     * Есть ли в ответе π, логарифм или обратная тригонометрия.
+     *
+     * Такой ответ точный: сверять его строкой нельзя, потому что «arctg(5/3)»
+     * и «arctg 5/3» — одно и то же, а «13π/4; 23π/6» и та же пара в другом
+     * порядке — один ответ. Часть 2 профиля почти вся такая: из 980 боевых
+     * задач банка 67 записаны через π, log или arc, и до появления этих имён
+     * в грамматике все они сверялись дословно. В ОГЭ таких ответов нет ни
+     * одного, так что признак ничего там не меняет.
+     */
+    public function hasExactForm(?string $value): bool
+    {
+        $s = mb_strtolower((string) $value);
+        foreach (self::EXACT_FORM_MARKERS as $marker) {
+            if (str_contains($s, $marker)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -504,6 +553,16 @@ class MathAnswerParser
         $s = str_replace(['{,}', ','], '.', $s);
         $s = str_replace([':', '\\div'], '/', $s);
 
+        // π — константа, а не буква: «13π/4» и «4π» это обычные числа.
+        $s = str_replace(['\\pi', 'π'], 'pi', $s);
+        // Обратная тригонометрия приходит и из LaTeX: «\arcsin», а «arctg»
+        // в KaTeX набирается через \operatorname.
+        $s = str_replace(
+            ['\\operatorname{arctg}', '\\arcsin', '\\arccos', '\\arctan', '\\arctg', '\\log', '\\ln', '\\lg'],
+            ['arctg', 'arcsin', 'arccos', 'arctan', 'arctg', 'log', 'ln', 'lg'],
+            $s
+        );
+
         // Все написания корня — к одному символу.
         foreach (self::ROOT_WORDS as $word) {
             $s = str_replace($word, '√', $s);
@@ -523,18 +582,111 @@ class MathAnswerParser
             return null;
         }
 
-        $s = $this->insertImplicitMultiplication($s);
-
-        // Дальше допустимы только цифры, операции, скобки и слово sqrt.
-        if (preg_match('/[^0-9.+\-*\/^()sqrt]/', $s)) {
+        $s = $this->expandLogarithms($s);
+        if ($s === null) {
             return null;
         }
-        $letters = preg_replace('/sqrt/', '', $s) ?? $s;
-        if (preg_match('/[a-z]/', $letters)) {
+
+        $s = $this->insertImplicitMultiplication($s);
+
+        // Дальше допустимы только числа, операции, скобки и известные имена.
+        // Проверка «что осталось после вычёркивания имён» надёжнее прежнего
+        // набора символов: тот пропускал любую букву из слова sqrt, и «tar»
+        // доходило до вычислителя.
+        $probe = str_replace(
+            array_merge(self::FUNCTIONS, array_keys(self::CONSTANTS)),
+            '',
+            $s
+        );
+        if (preg_match('/[^0-9.+\-*\/^()]/', $probe)) {
             return null;
         }
 
         return $s;
+    }
+
+    /**
+     * Логарифмы — к натуральному: «log_3(84)» → «(ln(84)/ln(3))».
+     *
+     * Так вычислителю хватает одной функции вместо семейства с основанием.
+     * Основание пишут и подстрочно («log_3(…)»), и в фигурных скобках
+     * («log_{3}(…)» — к этому месту они уже стали круглыми). Без основания
+     * логарифм считается десятичным; в единственном таком ответе банка —
+     * «log(6^(2/log(3)))» — основание всё равно сокращается, и значение от
+     * выбора не зависит.
+     */
+    private function expandLogarithms(string $s): ?string
+    {
+        $guard = 0;
+        while (($pos = $this->findLogarithm($s)) !== null) {
+            if (++$guard > 20) {
+                return null;
+            }
+
+            [$offset, $name] = $pos;
+            $before = substr($s, 0, $offset);
+            $rest = substr($s, $offset + strlen($name));
+
+            $base = $name === 'lg' ? '(10)' : null;
+
+            if (str_starts_with($rest, '_')) {
+                $rest = substr($rest, 1);
+                if (str_starts_with($rest, '(')) {
+                    $close = $this->matchingParen($rest, 0);
+                    if ($close === null) {
+                        return null;
+                    }
+                    $base = substr($rest, 0, $close + 1);
+                    $rest = substr($rest, $close + 1);
+                } elseif (preg_match('/^\d+(?:\.\d+)?/', $rest, $m)) {
+                    $base = '(' . $m[0] . ')';
+                    $rest = substr($rest, strlen($m[0]));
+                } else {
+                    return null;
+                }
+            }
+
+            $base ??= '(10)';
+
+            // Аргумент обязан быть в скобках: «log_3 84» без них читается
+            // неоднозначно — «log_3(84)» это или «log_3(8)·4».
+            if (!str_starts_with($rest, '(')) {
+                return null;
+            }
+            $close = $this->matchingParen($rest, 0);
+            if ($close === null) {
+                return null;
+            }
+            $argument = substr($rest, 0, $close + 1);
+            $tail = substr($rest, $close + 1);
+
+            $s = $before . '(ln' . $argument . '/ln' . $base . ')' . $tail;
+        }
+
+        return $s;
+    }
+
+    /**
+     * Ближайший логарифм и его написание. «lg» и «log» ищутся вместе, чтобы
+     * левый по строке разбирался первым: у вложенных логарифмов внешний
+     * обязан раскрыться раньше внутреннего.
+     *
+     * @return array{0:int,1:string}|null
+     */
+    private function findLogarithm(string $s): ?array
+    {
+        $best = null;
+        foreach (['log', 'lg'] as $name) {
+            $pos = strpos($s, $name);
+            if ($pos === false) {
+                continue;
+            }
+            if ($best === null || $pos < $best[0]) {
+                $best = [$pos, $name];
+            }
+        }
+
+        return $best;
     }
 
     /** \frac{a}{b} → ((a)/(b)), включая вложенные. */
@@ -600,11 +752,17 @@ class MathAnswerParser
         return $s;
     }
 
-    /** «2sqrt(3)», «2(1+3)», «)(» → явное умножение. */
+    /** «2sqrt(3)», «13pi», «sqrt(2)pi», «2(1+3)», «)(» → явное умножение. */
     private function insertImplicitMultiplication(string $s): string
     {
-        $s = preg_replace('/(\d)(sqrt|\()/', '$1*$2', $s) ?? $s;
-        $s = preg_replace('/\)(\d|sqrt|\()/', ')*$1', $s) ?? $s;
+        // Длинные имена в чередовании идут первыми: иначе «arctg» совпало бы
+        // по началу с более коротким соседом и распалось на два токена.
+        $names = implode('|', array_merge(self::FUNCTIONS, array_keys(self::CONSTANTS)));
+
+        $s = preg_replace('/(\d)(' . $names . '|\()/', '$1*$2', $s) ?? $s;
+        $s = preg_replace('/\)(\d|' . $names . '|\()/', ')*$1', $s) ?? $s;
+        // «pi» — не функция, после неё может стоять множитель: «pi√3».
+        $s = preg_replace('/(pi)(\d|sqrt|\()/', '$1*$2', $s) ?? $s;
 
         return $s;
     }
@@ -705,9 +863,10 @@ class MathAnswerParser
                 $tokens[] = substr($expr, $start, $i - $start);
                 continue;
             }
-            if (substr($expr, $i, 4) === 'sqrt') {
-                $tokens[] = 'sqrt';
-                $i += 4;
+            $name = $this->matchName($expr, $i);
+            if ($name !== null) {
+                $tokens[] = $name;
+                $i += strlen($name);
                 continue;
             }
 
@@ -715,6 +874,18 @@ class MathAnswerParser
         }
 
         return $tokens;
+    }
+
+    /** Имя функции или константы, начинающееся на позиции $i. */
+    private function matchName(string $expr, int $i): ?string
+    {
+        foreach (array_merge(self::FUNCTIONS, array_keys(self::CONSTANTS)) as $name) {
+            if (substr($expr, $i, strlen($name)) === $name) {
+                return $name;
+            }
+        }
+
+        return null;
     }
 
     /** sum := product (('+' | '-') product)* */
@@ -806,7 +977,13 @@ class MathAnswerParser
         }
         $token = $tokens[$i];
 
-        if ($token === 'sqrt') {
+        if (isset(self::CONSTANTS[$token])) {
+            $i++;
+
+            return self::CONSTANTS[$token];
+        }
+
+        if (in_array($token, self::FUNCTIONS, true)) {
             $i++;
             if (($tokens[$i] ?? null) !== '(') {
                 return null;
@@ -817,11 +994,8 @@ class MathAnswerParser
                 return null;
             }
             $i++;
-            if ($inner < 0) {
-                return null;
-            }
 
-            return sqrt($inner);
+            return $this->applyFunction($token, $inner);
         }
 
         if ($token === '(') {
@@ -842,5 +1016,21 @@ class MathAnswerParser
         }
 
         return null;
+    }
+
+    /**
+     * Значение функции. Вне области определения — null: ответ не считается
+     * ни верным, ни неверным по числу, и сверка уходит на сравнение строк.
+     */
+    private function applyFunction(string $name, float $argument): ?float
+    {
+        return match ($name) {
+            'sqrt' => $argument < 0 ? null : sqrt($argument),
+            'ln' => $argument <= 0 ? null : log($argument),
+            'arcsin' => abs($argument) > 1 ? null : asin($argument),
+            'arccos' => abs($argument) > 1 ? null : acos($argument),
+            'arctan', 'arctg' => atan($argument),
+            default => null,
+        };
     }
 }

@@ -54,6 +54,19 @@ class MathAnswerParserTest extends TestCase
             'обыкновенная дробь' => ['1.5', '3/2'],
             'юникодный минус' => ['-√6', '−√6'],
             'дубли в перечислении' => ['√6', '√6; √6'],
+            // Часть 2 профиля ЕГЭ: π, логарифм и обратная тригонометрия.
+            'пи как множитель' => ['13π/4', '13*pi/4'],
+            'пи словом' => ['4π', '4pi'],
+            'пи в latex' => ['4π', '4\\pi'],
+            'корни в другом порядке' => ['13π/4;23π/6;25π/6', '25π/6;13π/4;23π/6'],
+            'отрицательные корни' => ['-5π/3;-3π/2;-π/2', '-π/2;-5π/3;-3π/2'],
+            'пи после корня' => ['8√2π', '8*sqrt(2)*pi'],
+            'логарифм с основанием' => ['log_3(84)', 'log_{3}(84)'],
+            'логарифм равен числу' => ['log_2(8)', '3'],
+            'десятичный логарифм' => ['lg(100)', '2'],
+            'арктангенс' => ['arctg(5/3)', 'arctan(5/3)'],
+            'арктангенс с корнем' => ['arctg(3√5/2)', 'arctg(3*sqrt(5)/2)'],
+            'арксинус с коэффициентом' => ['2arcsin(3√10/20)', '2*arcsin(3*sqrt(10)/20)'],
         ];
     }
 
@@ -78,6 +91,11 @@ class MathAnswerParserTest extends TestCase
             'лишний корень' => ['√6;-√6', '√6; -√6; 0'],
             'знак' => ['2√3', '-2√3'],
             'пустая строка' => ['2√3', ''],
+            'другая доля пи' => ['13π/4', '13π/6'],
+            'пи потеряно' => ['4π', '4'],
+            'приближение пи' => ['13π/4', '10.2101'],
+            'другое основание логарифма' => ['log_3(84)', 'log_2(84)'],
+            'арккосинус вместо арксинуса' => ['arcsin(0.5)', 'arccos(0.5)'],
         ];
     }
 
@@ -85,6 +103,74 @@ class MathAnswerParserTest extends TestCase
     {
         $this->assertNull($this->parser->setsMatch('2√3', 'не знаю'));
         $this->assertNull($this->parser->setsMatch('2√3', '2√3 кг'));
+    }
+
+    /**
+     * π, логарифмы и обратная тригонометрия — часть 2 профиля ЕГЭ. До их
+     * появления в грамматике `value()` возвращал null, сверка падала на
+     * сравнение строк, и «25π/6; 13π/4; 23π/6» считалось ошибкой только
+     * из-за порядка корней.
+     *
+     * @dataProvider exactValues
+     */
+    public function test_exact_notations_are_evaluated(string $source, float $expected): void
+    {
+        $value = $this->parser->value($source);
+
+        $this->assertNotNull($value, "«{$source}» должно разбираться");
+        $this->assertEqualsWithDelta($expected, $value, 1e-9, $source);
+    }
+
+    /** @return array<string, array{0:string,1:float}> */
+    public static function exactValues(): array
+    {
+        return [
+            'пи' => ['π', M_PI],
+            'кратное пи' => ['894π', 894 * M_PI],
+            'доля пи' => ['-35π/6', -35 * M_PI / 6],
+            'логарифм с основанием' => ['log_3(84)', log(84) / log(3)],
+            'натуральный логарифм' => ['ln(1)', 0.0],
+            'десятичный логарифм' => ['lg(1000)', 3.0],
+            'арктангенс' => ['arctg(5/3)', atan(5 / 3)],
+            'арккосинус' => ['arccos(37/45)', acos(37 / 45)],
+        ];
+    }
+
+    /** Основание вложенного логарифма сокращается — значение от него не зависит. */
+    public function test_logarithm_without_base_cancels_out(): void
+    {
+        $this->assertEqualsWithDelta(
+            2 * log(6) / log(3),
+            (float) $this->parser->value('log(6^(2/log(3)))'),
+            1e-9,
+        );
+    }
+
+    /** Вне области определения функция не даёт числа, а не даёт неверное. */
+    public function test_functions_outside_their_domain_are_not_numbers(): void
+    {
+        $this->assertNull($this->parser->value('ln(0)'));
+        $this->assertNull($this->parser->value('ln(-2)'));
+        $this->assertNull($this->parser->value('arcsin(2)'));
+        $this->assertNull($this->parser->value('arccos(-3)'));
+    }
+
+    /** Имя без аргумента в скобках неоднозначно: «log_3 84» это log_3(8)·4 или log_3(84). */
+    public function test_names_without_parentheses_are_rejected(): void
+    {
+        foreach (['log_3', 'log_3 84', 'arctg', 'arctg 5/3', 'tar', '2x'] as $junk) {
+            $this->assertNull($this->parser->value($junk), $junk);
+        }
+    }
+
+    public function test_has_exact_form_detects_pi_and_functions(): void
+    {
+        foreach (['13π/4', '4pi', 'log_3(84)', 'lg(100)', 'arctg(5/3)', 'arcsin(0.5)'] as $value) {
+            $this->assertTrue($this->parser->hasExactForm($value), $value);
+        }
+        foreach (['17', '1.5', '3/4', '-25', '12√6'] as $value) {
+            $this->assertFalse($this->parser->hasExactForm($value), $value);
+        }
     }
 
     public function test_negative_radicand_is_not_a_number(): void
