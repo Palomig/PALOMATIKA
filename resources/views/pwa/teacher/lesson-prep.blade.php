@@ -59,6 +59,13 @@
      отнимала у формулы 37px постоянно, а нужна раз в жизни задачи. */
   .lesson-task-meta { font-size: 11px; color: var(--muted); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   .lesson-task-meta-text { min-width: 0; }
+  /* Подпункты «а) б) в)» второй части: маркер выступает влево, продолжение
+     выравнивается под текстом — как в печатном варианте КИМ. Без этого
+     задание 19 читалось сплошной стеной. */
+  .cond-lead, .cond-sub { display: block; }
+  .cond-sub { padding-left: 16px; text-indent: -16px; margin-top: 4px; }
+  /* Формула плюс прилипшая к ней пунктуация — одним куском: см. glueTrailingPunctuation. */
+  .lesson-task-expr .nb { white-space: nowrap; }
   .lesson-task-answer { font-family: ui-monospace, monospace; color: var(--green); font-weight: 700; font-size: 13px; }
   .picker-row { display: flex; gap: 8px; flex-wrap: wrap; }
   .picker-row select, .picker-row input { background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px 10px; font-size: 13px; min-width: 90px; }
@@ -298,7 +305,7 @@
           <template x-if="!task.task_payload.image_svg && task.task_payload.image_url">
             <div class="lesson-task-image"><img :src="task.task_payload.image_url" alt=""></div>
           </template>
-          <div class="lesson-task-expr" x-html="renderLatex(task.task_payload.expression)"
+          <div class="lesson-task-expr" x-html="taskConditionHtml(task.task_payload.expression)"
                x-init="$nextTick(() => fitFormulas($el))"
                @resize.window.debounce.150ms="fitFormulas($el)"></div>
           <template x-if="task.task_payload.type === 'choice'">
@@ -625,20 +632,80 @@
        * Ниже 0.75 не опускаемся: мельче строки «ege · Ответ» читать уже нельзя,
        * и такая формула уходит в прокрутку — на банке ЕГЭ таких нет.
        */
+      /**
+       * Приклеить к формуле точку или запятую, которая идёт сразу за ней.
+       *
+       * Формула выводится неделимой коробкой, а рядом с такой коробкой
+       * браузеру можно переносить строку — и точка в конце предложения
+       * уезжала на следующую строку одна («…треугольника ABC» / «. Окружность
+       * с диаметром…»). Оборачиваем пару в неразрывный span.
+       */
+      glueTrailingPunctuation(el) {
+        if (!el || !el.querySelectorAll) return;
+        el.querySelectorAll('.katex').forEach((k) => {
+          const host = this.mathHost(k, el);
+          if (host.parentNode && host.parentNode.classList && host.parentNode.classList.contains('nb')) return;
+          const next = host.nextSibling;
+          if (!next || next.nodeType !== 3) return;
+          const m = next.textContent.match(/^[.,;:!?)]+/);
+          if (!m) return;
+          const nb = document.createElement('span');
+          nb.className = 'nb';
+          host.parentNode.insertBefore(nb, host);
+          nb.appendChild(host);
+          nb.appendChild(document.createTextNode(m[0]));
+          next.textContent = next.textContent.slice(m[0].length);
+        });
+      },
+
+      /**
+       * Внешний узел формулы.
+       *
+       * `renderMathInElement` кладёт `.katex` внутрь безымянного span, поэтому
+       * у самой формулы `nextSibling` всегда пуст — и текст после неё искать
+       * надо от этой обёртки, а не от `.katex`.
+       */
+      mathHost(k, root) {
+        let node = k;
+        while (node.parentNode && node.parentNode !== root && !node.nextSibling) node = node.parentNode;
+        return node;
+      },
+
       fitFormulas(el) {
         if (!el || !el.querySelectorAll) return;
+        this.glueTrailingPunctuation(el);
         const base = parseFloat(getComputedStyle(el).fontSize) || 15;
         const floor = Math.min(1, 11 / base);       // не мельче строки «ege · Ответ»
         el.querySelectorAll('.katex').forEach((k) => {
           k.style.fontSize = '';                    // сброс: замеряем натуральную ширину
           // Хвост после формулы («.», «при a = 5») тоже просит места: без
           // запаса точка в конце условия уезжала на отдельную строку.
-          const tail = k.nextSibling && k.nextSibling.textContent.trim() ? 14 : 0;
+          const after = this.mathHost(k, el).nextSibling;
+          const tail = after && after.textContent.trim() ? 14 : 0;
           const avail = el.clientWidth - tail;
           const need = k.scrollWidth;
           if (avail <= 0 || !need || need <= avail) return;
           k.style.fontSize = (Math.max(floor, avail / need) * 100).toFixed(1) + '%';
         });
+      },
+
+      /**
+       * Условие с подпунктами «а) б) в)» — каждый со своей строки.
+       *
+       * В банке они лежат отдельными абзацами, и при выпрямлении разметки
+       * перед каждым остаётся перевод строки. Остальные переносы там
+       * случайные — в ОГЭ они рвут предложение посреди фразы («Окружность\nс
+       * диаметром»), поэтому разбиваем ТОЛЬКО по подпунктам, а не по каждому
+       * переводу строки.
+       */
+      taskConditionHtml(expr) {
+        const s = String(expr || '');
+        const parts = s.split(/\n(?=[ \t]*[абвгд]\))/);
+        if (parts.length < 2) return this.renderLatex(s);
+        return parts
+          .map((part, i) => '<span class="' + (i === 0 ? 'cond-lead' : 'cond-sub') + '">'
+            + this.renderLatex(part.trim()) + '</span>')
+          .join('');
       },
 
       renderLatex(expr) {
