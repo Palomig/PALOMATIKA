@@ -8,14 +8,18 @@
 @endpush
 
 @push('styles')
-  .lesson-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .lesson-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 12px; display: flex; flex-direction: column; gap: 10px; }
   /* Picker как отдельный полноэкранный экран — не видно уже добавленных задач */
   .picker-overlay { position: fixed; inset: 0; z-index: 1000; background: var(--bg); overflow-y: auto; padding: 16px calc(16px + var(--safe-right, 0px)) calc(24px + var(--safe-bottom, 0px)) calc(16px + var(--safe-left, 0px)); }
   .picker-overlay-inner { max-width: 640px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
   .picker-overlay-head { position: sticky; top: -16px; z-index: 1; background: var(--bg); padding: 8px 0; margin: -8px 0 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--border); }
   .picker-overlay-head .title { font-size: 16px; font-weight: 700; color: var(--text); }
-  .lesson-task { display: flex; gap: 10px; align-items: flex-start; padding: 10px; background: var(--surface2); border-radius: 10px; }
-  .lesson-task-num { font-weight: 800; color: var(--accent); width: 24px; flex-shrink: 0; }
+  /* Отступы и колонки урезаны ради условия: на экране 390px обвязка
+     карточки съедала 162px из 390, и формуле оставалось меньше 60%
+     ширины — она не влезала в строку даже там, где сама по себе
+     короче экрана. */
+  .lesson-task { display: flex; gap: 6px; align-items: flex-start; padding: 8px; background: var(--surface2); border-radius: 10px; }
+  .lesson-task-num { font-weight: 800; color: var(--accent); width: 16px; font-size: 13px; flex-shrink: 0; }
   .lesson-task-body { flex: 1; min-width: 0; }
   .lesson-task-expr { font-size: 15px; color: var(--text); margin-bottom: 4px; word-break: break-word; }
   /* Формула — неделимая коробка. Иначе строка рвётся посреди неё, и у задач
@@ -27,6 +31,10 @@
   .lesson-task-expr .katex {
     display: inline-block;
     max-width: 100%;
+    /* Одной строкой: перенос внутри формулы читается плохо, а ширину под
+       карточку подбирает `fitFormulas()` кеглем. Прокрутка остаётся
+       страховкой для формул, которым не хватило и нижней границы кегля. */
+    white-space: nowrap;
     overflow-x: auto;
     overflow-y: hidden;
     /* У блока с прокруткой базовая линия — нижний край; без выравнивания
@@ -47,7 +55,10 @@
   .lesson-task-image svg, .lesson-task-image img { max-width: 250px; width: 100%; height: auto; max-height: 220px; }
   .lesson-task-options { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
   .lesson-task-option { padding: 3px 9px; border: 1px solid var(--border); border-radius: 8px; font-size: 12px; color: var(--muted); }
-  .lesson-task-meta { font-size: 11px; color: var(--muted); }
+  /* Кнопка удаления переехала сюда из строки с условием: там она
+     отнимала у формулы 37px постоянно, а нужна раз в жизни задачи. */
+  .lesson-task-meta { font-size: 11px; color: var(--muted); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .lesson-task-meta-text { min-width: 0; }
   .lesson-task-answer { font-family: ui-monospace, monospace; color: var(--green); font-weight: 700; font-size: 13px; }
   .picker-row { display: flex; gap: 8px; flex-wrap: wrap; }
   .picker-row select, .picker-row input { background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px 10px; font-size: 13px; min-width: 90px; }
@@ -287,7 +298,9 @@
           <template x-if="!task.task_payload.image_svg && task.task_payload.image_url">
             <div class="lesson-task-image"><img :src="task.task_payload.image_url" alt=""></div>
           </template>
-          <div class="lesson-task-expr" x-html="renderLatex(task.task_payload.expression)"></div>
+          <div class="lesson-task-expr" x-html="renderLatex(task.task_payload.expression)"
+               x-init="$nextTick(() => fitFormulas($el))"
+               @resize.window.debounce.150ms="fitFormulas($el)"></div>
           <template x-if="task.task_payload.type === 'choice'">
             <div class="lesson-task-options">
               <template x-for="(opt, oi) in task.task_payload.options" :key="opt.id">
@@ -296,13 +309,16 @@
             </div>
           </template>
           <div class="lesson-task-meta">
-            <span x-text="task.bank"></span>
-            · Ответ: <span class="lesson-task-answer" x-text="task.correct_answer || '(без автопроверки)'"></span>
-            <span class="personal-badge" x-show="task.assigned_student_id"
-                  x-text="'для ' + (task.assigned_name || '#' + task.assigned_student_id)"></span>
+            <span class="lesson-task-meta-text">
+              <span x-text="task.bank"></span>
+              · Ответ: <span class="lesson-task-answer" x-text="task.correct_answer || '(без автопроверки)'"></span>
+              <span class="personal-badge" x-show="task.assigned_student_id"
+                    x-text="'для ' + (task.assigned_name || '#' + task.assigned_student_id)"></span>
+            </span>
+            <button class="btn btn-icon btn-danger" x-show="status === 'draft'"
+                    @click="removeTask(task.id)" title="Убрать задачу из урока">×</button>
           </div>
         </div>
-        <button class="btn btn-icon btn-danger" x-show="status === 'draft'" @click="removeTask(task.id)">×</button>
       </div>
     </template>
 
@@ -599,6 +615,32 @@
         // чтобы можно было сразу добрать задачи из другого класса. Закрытие — кнопкой «Отмена».
       },
 
+      /**
+       * Ужать формулу до ширины карточки.
+       *
+       * Условие ЕГЭ — вводные слова плюс длинное выражение; даже с
+       * освобождённым местом самые длинные из них шире экрана. Перенос внутри
+       * формулы читается плохо, горизонтальная прокрутка прячет хвост, поэтому
+       * кегль уменьшается ровно во столько раз, во сколько формула не влезла.
+       * Ниже 0.75 не опускаемся: мельче строки «ege · Ответ» читать уже нельзя,
+       * и такая формула уходит в прокрутку — на банке ЕГЭ таких нет.
+       */
+      fitFormulas(el) {
+        if (!el || !el.querySelectorAll) return;
+        const base = parseFloat(getComputedStyle(el).fontSize) || 15;
+        const floor = Math.min(1, 11 / base);       // не мельче строки «ege · Ответ»
+        el.querySelectorAll('.katex').forEach((k) => {
+          k.style.fontSize = '';                    // сброс: замеряем натуральную ширину
+          // Хвост после формулы («.», «при a = 5») тоже просит места: без
+          // запаса точка в конце условия уезжала на отдельную строку.
+          const tail = k.nextSibling && k.nextSibling.textContent.trim() ? 14 : 0;
+          const avail = el.clientWidth - tail;
+          const need = k.scrollWidth;
+          if (avail <= 0 || !need || need <= avail) return;
+          k.style.fontSize = (Math.max(floor, avail / need) * 100).toFixed(1) + '%';
+        });
+      },
+
       renderLatex(expr) {
         if (!expr) return '';
         const s = String(expr);
@@ -645,6 +687,8 @@
             ],
             throwOnError: false,
           });
+          // Только теперь в DOM появились .katex — до auto-render мерить нечего.
+          this.$root.querySelectorAll('.lesson-task-expr').forEach((el) => this.fitFormulas(el));
         };
         typesetTimer = setTimeout(run, 60);
       },
