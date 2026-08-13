@@ -47,6 +47,25 @@
     border-radius: var(--r); padding: 14px 16px; margin-bottom: 10px;
   }
   .sub-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+  .sub-head-right { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .sub-head-right form { margin: 0; }
+
+  /* Вторая стадия проверки: что из этой домашки идёт в повестку урока. */
+  .review-counter {
+    margin-top: 10px; padding: 8px 11px; border-radius: 10px;
+    font-size: 12px; font-weight: 800;
+    color: var(--purple); background: var(--purple-bg); border: 1px solid var(--purple-bd);
+  }
+  .review-toggle {
+    border: 1px solid var(--border); background: var(--surface2); color: var(--muted);
+    border-radius: 8px; padding: 4px 9px; font-size: 11px; font-weight: 800;
+    cursor: pointer; white-space: nowrap; font-family: inherit;
+  }
+  .review-toggle:active { opacity: .75; }
+  .review-toggle.is-on { background: var(--purple); border-color: transparent; color: #fff; }
+  .review-resolved { font-size: 10px; font-weight: 800; color: var(--muted); white-space: nowrap; }
+  /* Кандидат на разбор: ученик ошибся или не приступил. Только подсказка. */
+  .sub-card.is-candidate { border-left: 3px solid var(--yellow-bd); }
   .sub-num { font-family: var(--display); font-size: 14px; color: var(--text); }
   .sub-state { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; padding: 3px 8px; border-radius: 6px; white-space: nowrap; }
   .state-wait { color: var(--muted); background: var(--surface2); }
@@ -228,6 +247,11 @@
       <span class="badge badge-progress">{{ $assignment->status }}</span>
     </div>
 
+    @php $pendingReview = $reviewItems->whereIn('status', \App\Models\HomeworkReviewItem::ACTIVE_STATUSES)->count(); @endphp
+    @if($pendingReview > 0)
+      <div class="review-counter">К разбору: {{ $pendingReview }}</div>
+    @endif
+
     <div class="summary-actions">
       <form method="POST" action="{{ route('pwa.teacher.homework.reviewed', $assignment) }}">
         @csrf
@@ -261,12 +285,32 @@
           $stateClass = 'state-wrong';
           $stateLabel = $submission->accepted_at ? 'Неверно' : 'Ещё пробует';
       }
+
+      $reviewItem = $reviewItems->get($task->id);
+      $isFlagged = $reviewItem !== null
+          && in_array($reviewItem->status, \App\Models\HomeworkReviewItem::ACTIVE_STATUSES, true);
+      $isResolved = $reviewItem !== null && $reviewItem->status === \App\Models\HomeworkReviewItem::STATUS_DONE;
+      // Кандидат — задача, где ученик ошибся или не приступил. Подсвечиваем,
+      // но не отмечаем: что разбирать, решает учитель.
+      $isCandidate = !$isFlagged && !$isResolved && ($submission === null || !$submission->is_correct);
     @endphp
 
-    <div class="sub-card">
+    <div class="sub-card {{ $isCandidate ? 'is-candidate' : '' }}">
       <div class="sub-head">
         <div class="sub-num">Задача {{ $task->task_order }}</div>
-        <div class="sub-state {{ $stateClass }}">{{ $stateLabel }}</div>
+        <div class="sub-head-right">
+          @if($isResolved)
+            <span class="review-resolved">разобрано {{ $reviewItem->resolved_at?->format('d.m') }}</span>
+          @endif
+          <form method="POST" action="{{ route('pwa.teacher.homework.review-toggle', [$assignment, $task]) }}">
+            @csrf
+            <input type="hidden" name="on" value="{{ $isFlagged ? 0 : 1 }}">
+            <button type="submit" class="review-toggle {{ $isFlagged ? 'is-on' : '' }}">
+              {{ $isFlagged ? '✓ Разобрать' : '+ Разобрать' }}
+            </button>
+          </form>
+          <div class="sub-state {{ $stateClass }}">{{ $stateLabel }}</div>
+        </div>
       </div>
 
       @if($hasInlineSvg)
