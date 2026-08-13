@@ -167,10 +167,56 @@
   .hw-card-text { font-size: 14px; color: var(--text); word-break: break-word; }
   .hw-deadline { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); font-weight: 700; margin-top: 10px; }
   .hw-deadline input { background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 8px 10px; font-size: 14px; }
+
+  /* Разбор домашки — вторая стадия проверки, приехавшая в урок */
+  .review-card { border-color: var(--purple-bd); }
+  .review-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; cursor: pointer; }
+  .review-title { font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .review-count { font-size: 11px; font-weight: 800; color: var(--purple); background: var(--purple-bg); border-radius: 6px; padding: 2px 7px; }
+  .review-count-muted { color: var(--muted); background: var(--surface2); }
+  .review-fold { border: none; background: none; color: var(--muted); font-size: 14px; cursor: pointer; padding: 4px 6px; }
+
+  .review-item { margin-top: 10px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface2); }
+  .review-item.is-done { opacity: .5; }
+  .review-item-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+  .review-item-actions { display: flex; gap: 6px; }
+  .review-who { font-size: 11px; font-weight: 800; color: var(--purple); text-transform: uppercase; letter-spacing: .04em; }
+  .review-mini { border: 1px solid var(--border); background: var(--surface); color: var(--muted); border-radius: 8px; padding: 3px 8px; font-size: 11px; font-weight: 700; cursor: pointer; }
+  .review-mini:active { opacity: .7; }
+  .review-visual { margin: 4px 0; display: flex; justify-content: center; }
+  .review-visual :is(svg, img) { max-width: 100%; height: auto; }
+  .review-text { font-size: 13px; line-height: 1.45; color: var(--text); word-break: break-word; }
+
+  .review-answers { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .review-chip { font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); color: var(--text); }
+  .review-chip.is-wrong { color: var(--red); border-color: var(--red-bd); background: var(--red-bg); }
+  .review-chip-label { color: var(--muted); font-weight: 600; }
+
+  .review-photos { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .review-photo { padding: 0; border: none; background: none; cursor: zoom-in; width: 84px; }
+  .review-photo img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); display: block; }
+  .review-photo:active img { opacity: .8; }
+
+  .review-note { display: block; margin-top: 8px; font-size: 12px; font-weight: 700; color: var(--yellow); }
+  .review-link { display: inline-block; margin-top: 8px; font-size: 11px; font-weight: 700; color: var(--muted); text-decoration: none; }
+
+  .review-queue { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--border); }
+  .review-queue-label { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+  .review-offer { display: flex; gap: 9px; align-items: flex-start; padding: 8px 10px; margin-bottom: 6px; border: 1px solid var(--border); border-radius: 10px; cursor: pointer; }
+  .review-offer.is-picked { border-color: var(--purple); background: var(--purple-bg); }
+  .review-offer input { margin-top: 3px; flex-shrink: 0; }
+  .review-offer-body { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .review-offer-text { font-size: 12px; color: var(--text); line-height: 1.4; word-break: break-word; }
+  .review-add { width: 100%; margin-top: 4px; padding: 10px; border: none; border-radius: 10px; background: var(--purple); color: #fff; font-family: var(--display); font-size: 13px; cursor: pointer; }
+  .review-add:disabled { opacity: .45; cursor: default; }
 @endpush
 
 @section('body')
-<div class="page" x-data="lessonPrep({{ $session->id }}, '{{ $session->status }}')" x-init="init()" @picker-add.window="onPickerAdd($event.detail.items)">
+<div class="page" x-data="lessonPrep({{ $session->id }}, '{{ $session->status }}')" x-init="init()"
+     @picker-add.window="onPickerAdd($event.detail.items)"
+     @keydown.escape.window="viewer && close()"
+     @keydown.arrow-left.window="viewer && step(-1)"
+     @keydown.arrow-right.window="viewer && step(1)">
   <div class="topbar">
     <a href="{{ route('pwa.teacher.lessons') }}" class="back-btn">‹</a>
     <div class="topbar-title">Урок #{{ $session->id }}</div>
@@ -288,6 +334,87 @@
 
   {{-- Тост после сохранения заметки --}}
   <div class="notes-toast" x-show="noteToast" x-cloak x-text="noteToast"></div>
+
+  {{--
+    Разбор домашки — вторая стадия проверки. В draft это очередь предложений
+    («что взять на урок»), в live — раскрытые карточки с тетрадью ученика.
+    В lesson_session_tasks эти пункты не попадают: там у строки есть поле
+    ответа, а разбор — это «смотрим на то, что уже написано».
+  --}}
+  <template x-if="reviewPending.length || reviewPlanned.length">
+    <div class="lesson-card review-card">
+      <div class="review-head" @click="reviewOpen = !reviewOpen">
+        <div class="review-title">
+          🔍 Разбор домашки
+          <span class="review-count" x-text="reviewPlanned.length + ' в уроке'"></span>
+          <span class="review-count review-count-muted" x-show="reviewPending.length"
+                x-text="'+' + reviewPending.length + ' предложено'"></span>
+        </div>
+        <button type="button" class="review-fold" x-text="reviewOpen ? '▾' : '▸'" aria-label="Свернуть"></button>
+      </div>
+
+      <div x-show="reviewOpen" x-cloak>
+        {{-- Уже в повестке урока --}}
+        <template x-for="card in reviewPlanned" :key="'rp-' + card.id">
+          <div class="review-item" :class="reviewDone.includes(card.id) ? 'is-done' : ''">
+            <div class="review-item-head">
+              <span class="review-who" x-text="card.student_name + ' · задача ' + card.task_order"></span>
+              <div class="review-item-actions">
+                <button type="button" class="review-mini" @click="markReviewDone(card.id)"
+                        x-show="!reviewDone.includes(card.id)">разобрано</button>
+                <button type="button" class="review-mini" @click="unplanReview(card.id)"
+                        x-show="status === 'draft'">убрать</button>
+              </div>
+            </div>
+
+            <div class="review-visual" x-show="card.svg" x-html="card.svg"></div>
+            <div class="review-text" x-html="card.text"></div>
+
+            <div class="review-answers">
+              <span class="review-chip"><span class="review-chip-label">эталон:</span> <span x-text="card.correct"></span></span>
+              <template x-if="card.first_answer !== null">
+                <span class="review-chip is-wrong"><span class="review-chip-label">ответил:</span> <span x-text="card.first_answer"></span></span>
+              </template>
+            </div>
+
+            <div class="review-photos" x-show="card.photos.length">
+              <template x-for="(p, pi) in card.photos" :key="'rpp-' + card.id + '-' + pi">
+                <button type="button" class="review-photo" @click="openReviewPhotos(card, pi)">
+                  <img :src="p.url" :alt="p.label" loading="lazy">
+                </button>
+              </template>
+            </div>
+
+            <div class="review-note" x-show="card.teacher_note" x-text="card.teacher_note"></div>
+            <a class="review-link" :href="card.homework_url" target="_blank" rel="noopener">вся домашка →</a>
+          </div>
+        </template>
+
+        {{-- Очередь предложений: отмеченное на проверке, но ещё не взятое в урок --}}
+        <template x-if="reviewPending.length && status !== 'ended'">
+          <div class="review-queue">
+            <div class="review-queue-label">Отмечено при проверке</div>
+            <template x-for="card in reviewPending" :key="'rq-' + card.id">
+              <label class="review-offer" :class="reviewPicked.includes(card.id) ? 'is-picked' : ''">
+                <input type="checkbox" :checked="reviewPicked.includes(card.id)"
+                       @change="toggleReviewPick(card.id)">
+                <span class="review-offer-body">
+                  <span class="review-who" x-text="card.student_name + ' · задача ' + card.task_order"></span>
+                  <span class="review-offer-text" x-html="card.text"></span>
+                  <span class="review-note" x-show="card.teacher_note" x-text="card.teacher_note"></span>
+                </span>
+              </label>
+            </template>
+            <button type="button" class="review-add" @click="planReview()"
+                    :disabled="!!(!reviewPicked.length || reviewBusy)"
+                    x-text="reviewBusy ? 'Добавляю…' : ('Добавить в урок' + (reviewPicked.length ? ' (' + reviewPicked.length + ')' : ''))"></button>
+          </div>
+        </template>
+      </div>
+    </div>
+  </template>
+
+  @include('pwa._shared.photo-viewer')
 
   {{-- Tasks list --}}
   <div class="lesson-card">
@@ -569,6 +696,17 @@
       noteText: '',
       noteStudentIds: [],
       noteSending: false,
+      // 🔍 Разбор домашки: pending — предложено, planned — уже в повестке урока
+      reviewPending: [],
+      reviewPlanned: [],
+      reviewPicked: [],
+      reviewOpen: true,
+      reviewBusy: false,
+      reviewDone: [],
+      // Просмотрщик тетради (контракт партиала pwa._shared.photo-viewer)
+      photos: [],
+      viewer: false,
+      vi: 0,
       noteToast: '',
       // «не понимает» в live-гриде
       duFor: null,
@@ -586,9 +724,78 @@
 
       async init() {
         await this.refreshState();
+        await this.refreshReview();
         this.startPolling();
         this.waitForKatex();
       },
+
+      /**
+       * Разбор домашки — вторая стадия: что учитель отметил на проверке и что
+       * уже поставил в повестку этого урока. Дёргается по действию, а не в
+       * polling: список меняется только руками учителя.
+       */
+      async refreshReview() {
+        const r = await fetch(`/lessons/${this.sessionId}/review-items`, {
+          headers: { Accept: 'application/json' }, credentials: 'include',
+        });
+        if (!r.ok) return;
+        const d = await r.json();
+        this.reviewPending = d.pending || [];
+        this.reviewPlanned = d.planned || [];
+        // Погашенные локально карточки не воскрешаем: урок ещё идёт.
+        this.reviewPicked = this.reviewPicked.filter(id => this.reviewPending.some(c => c.id === id));
+        this.typeset();
+      },
+
+      toggleReviewPick(id) {
+        const i = this.reviewPicked.indexOf(id);
+        if (i === -1) this.reviewPicked.push(id); else this.reviewPicked.splice(i, 1);
+      },
+
+      async planReview() {
+        if (!this.reviewPicked.length || this.reviewBusy) return;
+        this.reviewBusy = true;
+        try {
+          const r = await fetch(`/lessons/${this.sessionId}/review-items`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content, Accept: 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ item_ids: this.reviewPicked }),
+          });
+          if (!r.ok) { alert('Не удалось добавить разбор в урок'); return; }
+          this.reviewPicked = [];
+          await this.refreshReview();
+        } finally {
+          this.reviewBusy = false;
+        }
+      },
+
+      async unplanReview(id) {
+        const r = await fetch(`/lessons/${this.sessionId}/review-items/${id}`, {
+          method: 'DELETE',
+          headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content, Accept: 'application/json' },
+          credentials: 'include',
+        });
+        if (!r.ok) { alert('Не удалось убрать разбор'); return; }
+        await this.refreshReview();
+      },
+
+      /** «Разобрано» на уроке — визуальная отметка; в done пункт переводит конец урока. */
+      markReviewDone(id) {
+        if (!this.reviewDone.includes(id)) this.reviewDone.push(id);
+      },
+
+      /** Открыть тетрадь: фото берутся из конкретной карточки разбора. */
+      openReviewPhotos(card, index) {
+        this.photos = (card.photos || []).map(p => ({ src: p.url, full: p.full, label: p.label }));
+        if (!this.photos.length) return;
+        this.vi = index;
+        this.viewer = true;
+        document.body.style.overflow = 'hidden';
+      },
+      close() { this.viewer = false; document.body.style.overflow = ''; },
+      step(d) { this.vi = (this.vi + d + this.photos.length) % this.photos.length; },
 
       waitForKatex() {
         if (window.katex) { this.katexReady = true; return; }
