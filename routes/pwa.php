@@ -85,6 +85,7 @@ Route::domain('student.' . config('app.base_domain'))->group(function () {
         Route::post('/homework/{assignment}/tasks/{homeworkTask}/photo-log', [StudentController::class, 'homeworkPhotoLog'])
             ->middleware('throttle:30,1')
             ->name('pwa.student.homework.topic.photo-log');
+        Route::get('/homework/solution-photo/{photo}', [StudentController::class, 'homeworkSolutionPhoto'])->name('pwa.student.homework.solution-photo');
 
         // Lesson endpoints (для polling в dashboard и страницы урока)
         Route::get('/lessons/active',          [StudentLessonController::class, 'active'])->name('pwa.student.lessons.active');
