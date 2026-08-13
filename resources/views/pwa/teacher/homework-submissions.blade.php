@@ -1,6 +1,12 @@
 @extends('layouts.pwa')
 @section('title', 'Проверка домашки — palomatika')
 
+@push('katex')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/contrib/auto-render.min.js"></script>
+@endpush
+
 @push('styles')
   .topbar {
     display: flex; align-items: center; justify-content: space-between;
@@ -48,6 +54,7 @@
   .state-wrong { color: #fecaca; background: rgba(239,68,68,.2); }
 
   .sub-text { color: var(--text); font-size: 13px; line-height: 1.45; overflow-wrap: anywhere; }
+  .sub-text .katex { font-size: 1.05em; }
   .sub-visual { margin: 6px 0; display: flex; justify-content: center; }
   .sub-visual svg { max-width: 100%; width: auto; height: auto; display: block; }
 
@@ -62,15 +69,60 @@
 
   .attempt-label { margin: 12px 0 6px; font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
   .pages-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 8px; }
-  .page-tile { position: relative; display: block; }
+  .page-tile {
+    position: relative; display: block; width: 100%;
+    padding: 0; border: none; background: none; cursor: zoom-in;
+  }
   .page-tile img {
     width: 100%; aspect-ratio: 3 / 4; object-fit: cover;
     border-radius: 10px; border: 1px solid var(--border); display: block;
   }
+  .page-tile:active img { opacity: .8; }
   .page-tile-num {
     position: absolute; left: 6px; bottom: 6px;
     background: rgba(0,0,0,.65); color: #fff;
     font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 5px;
+  }
+
+  /* Просмотрщик тетради: фото открывается поверх страницы, а не в новой вкладке —
+     учитель не теряет место в списке задач. */
+  /* Выше кнопки багрепорта из layout (z-index 1100), но ниже её модалки (1150). */
+  .viewer {
+    position: fixed; inset: 0; z-index: 1120;
+    background: rgba(0,0,0,.95);
+    display: flex; align-items: center; justify-content: center;
+    padding: calc(56px + var(--safe-top)) 12px calc(56px + var(--safe-bottom));
+  }
+  .viewer-img {
+    max-width: 100%; max-height: 100%;
+    object-fit: contain; border-radius: 8px; display: block;
+  }
+  .viewer-bar {
+    position: absolute; top: 0; left: 0; right: 0;
+    display: flex; align-items: center; gap: 10px;
+    padding: calc(10px + var(--safe-top)) 12px 10px;
+    background: linear-gradient(rgba(0,0,0,.75), transparent);
+  }
+  .viewer-label { flex: 1; color: #fff; font-size: 12px; font-weight: 800; overflow-wrap: anywhere; }
+  .viewer-btn {
+    flex-shrink: 0; border: 1px solid rgba(255,255,255,.25); background: rgba(255,255,255,.1);
+    color: #fff; border-radius: 10px; cursor: pointer;
+    font-size: 12px; font-weight: 800; padding: 7px 11px; text-decoration: none; line-height: 1;
+  }
+  .viewer-btn:active { opacity: .7; }
+  .viewer-close { font-size: 16px; padding: 6px 11px; }
+  .viewer-nav {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 40px; height: 56px; border-radius: 10px;
+    border: 1px solid rgba(255,255,255,.2); background: rgba(0,0,0,.45);
+    color: #fff; font-size: 26px; line-height: 1; cursor: pointer;
+  }
+  .viewer-nav:active { opacity: .7; }
+  .viewer-prev { left: 8px; }
+  .viewer-next { right: 8px; }
+  .viewer-count {
+    position: absolute; left: 0; right: 0; bottom: calc(14px + var(--safe-bottom));
+    text-align: center; color: rgba(255,255,255,.75); font-size: 12px; font-weight: 800;
   }
   .no-photo { margin-top: 10px; font-size: 12px; color: var(--muted); font-weight: 700; }
 
@@ -108,8 +160,43 @@
 @php
   $isDebt = $assignment->isDebt();
   $isReviewed = $assignment->reviewed_at !== null;
+
+  // Плоский список всех страниц домашки: просмотрщик листает их подряд,
+  // поэтому индекс страницы известен уже при отрисовке плитки.
+  $viewerPhotos = [];
+  $viewerIndex = [];
+  foreach ($homework->topicTasks as $viewerTask) {
+      $viewerSubmission = $submissions->get($viewerTask->id);
+      if (!$viewerSubmission) {
+          continue;
+      }
+      foreach ($viewerSubmission->photos->groupBy('attempt_no') as $viewerAttemptNo => $viewerPages) {
+          foreach ($viewerPages->values() as $viewerPageNo => $viewerPhoto) {
+              $viewerIndex[$viewerPhoto->id] = count($viewerPhotos);
+              $viewerPhotos[] = [
+                  'src' => route('pwa.teacher.homework.solution-photo', [$viewerPhoto, 'w' => 1600]),
+                  'full' => route('pwa.teacher.homework.solution-photo', $viewerPhoto),
+                  'label' => 'Задача ' . $viewerTask->task_order
+                      . ' · ' . ((int) $viewerAttemptNo === 2 ? 'вторая попытка' : 'первая попытка')
+                      . ' · стр. ' . ($viewerPageNo + 1),
+              ];
+          }
+      }
+  }
 @endphp
-<div class="page" x-data="{ noteFor: null }">
+<div class="page"
+     x-data="{
+       noteFor: null,
+       photos: @js($viewerPhotos),
+       viewer: false,
+       vi: 0,
+       open(i) { this.vi = i; this.viewer = true; document.body.style.overflow = 'hidden'; },
+       close() { this.viewer = false; document.body.style.overflow = ''; },
+       step(d) { this.vi = (this.vi + d + this.photos.length) % this.photos.length; }
+     }"
+     @keydown.escape.window="viewer && close()"
+     @keydown.arrow-left.window="viewer && step(-1)"
+     @keydown.arrow-right.window="viewer && step(1)">
   <div class="topbar">
     <a href="{{ route('pwa.teacher.homework') }}" class="back">←</a>
     <div class="topbar-title">Проверка</div>
@@ -186,9 +273,9 @@
         <div class="sub-visual">{!! $svg !!}</div>
       @endif
 
-      <div class="sub-text">{!! $text !!}</div>
+      <div class="sub-text math-scope">{!! $text !!}</div>
 
-      <div class="answer-row">
+      <div class="answer-row math-scope">
         <span class="answer-chip"><span class="answer-chip-label">эталон:</span> {{ $task->correct_answer }}</span>
         @if($submission?->first_answer !== null)
           <span class="answer-chip {{ $submission->attempts_count === 1 && $submission->is_correct ? 'correct' : ($submission->second_answer !== null || !$submission->is_correct ? 'wrong' : '') }}">
@@ -216,10 +303,11 @@
         </div>
         <div class="pages-grid">
           @foreach($pages as $i => $photo)
-            <a class="page-tile" href="{{ route('pwa.teacher.homework.solution-photo', $photo) }}" target="_blank" rel="noopener">
+            <button type="button" class="page-tile" @click="open({{ $viewerIndex[$photo->id] }})"
+                    aria-label="Открыть страницу {{ $i + 1 }}">
               <img src="{{ route('pwa.teacher.homework.solution-photo', [$photo, 'w' => 400]) }}" alt="Страница решения {{ $i + 1 }}" loading="lazy">
               <span class="page-tile-num">{{ $i + 1 }}</span>
-            </a>
+            </button>
           @endforeach
         </div>
       @empty
@@ -283,5 +371,48 @@
       <div class="no-photo">Заметок пока нет. Всё записанное здесь появится и в карточке ученика.</div>
     @endif
   </div>
+
+  {{-- Просмотрщик страниц: живёт в DOM только когда открыт, чтобы полноразмерные фото не грузились заранее. --}}
+  <template x-if="viewer">
+    <div class="viewer" @click.self="close()">
+      <div class="viewer-bar">
+        <div class="viewer-label" x-text="photos[vi].label"></div>
+        <a class="viewer-btn" :href="photos[vi].full" target="_blank" rel="noopener">Оригинал</a>
+        <button type="button" class="viewer-btn viewer-close" @click="close()" aria-label="Закрыть">✕</button>
+      </div>
+
+      <img class="viewer-img" :src="photos[vi].src" :alt="photos[vi].label">
+
+      <template x-if="photos.length > 1">
+        <div>
+          <button type="button" class="viewer-nav viewer-prev" @click="step(-1)" aria-label="Предыдущая страница">‹</button>
+          <button type="button" class="viewer-nav viewer-next" @click="step(1)" aria-label="Следующая страница">›</button>
+          <div class="viewer-count" x-text="(vi + 1) + ' / ' + photos.length"></div>
+        </div>
+      </template>
+    </div>
+  </template>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+  // Условия задач приходят с LaTeX внутри $…$ — без этого учитель видит сырой код.
+  // Рендерим точечно по .math-scope, а не по всему body: в заметках учителя
+  // доллар — это доллар, ломать его KaTeX-ом нельзя.
+  document.addEventListener('DOMContentLoaded', function () {
+    if (typeof renderMathInElement !== 'function') return;
+    document.querySelectorAll('.math-scope').forEach(function (el) {
+      renderMathInElement(el, {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '\\[', right: '\\]', display: true },
+          { left: '\\(', right: '\\)', display: false },
+          { left: '$', right: '$', display: false }
+        ],
+        throwOnError: false
+      });
+    });
+  });
+</script>
+@endpush
